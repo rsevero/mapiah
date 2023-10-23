@@ -754,6 +754,48 @@ void main() {
     const failures = [
       'degre',
       'M',
+      'percent',
+      'percentage',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () {
+        final result = parser.parse(failure);
+        expect(result.runtimeType.toString(), 'Failure');
+      });
+    }
+  });
+
+  group('clino units', () {
+    final grammar = THGrammar();
+    final parser = grammar.buildFrom(grammar.clinoUnit()).end();
+
+    const successes = [
+      'degree',
+      'degrees',
+      'deg',
+      'minute',
+      'minutes',
+      'min',
+      'grad',
+      'grads',
+      'mil',
+      'mils',
+      'percent',
+      'percentage',
+    ];
+
+    for (var success in successes) {
+      test(success, () {
+        final result = parser.parse(success);
+        expect(result.runtimeType.toString(), contains('Success'));
+        expect(result.value, success.trim());
+      });
+    }
+
+    const failures = [
+      'degre',
+      'M',
     ];
 
     for (var failure in failures) {

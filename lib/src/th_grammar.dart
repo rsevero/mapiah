@@ -102,6 +102,7 @@ class THGrammar extends GrammarDefinition {
               stringIgnoreCase('yd'))
       .flatten();
 
+  /// Angle units
   Parser angleUnit() => (
 
           /// Degrees
@@ -118,4 +119,11 @@ class THGrammar extends GrammarDefinition {
               /// Mils
               stringIgnoreCase('mil').seq(stringIgnoreCase('s').optional()))
       .flatten();
+
+  /// Clino units
+  Parser clinoUnit() =>
+      ref0(angleUnit) |
+      stringIgnoreCase('percent')
+          .seq(stringIgnoreCase('age').optional())
+          .flatten();
 }
