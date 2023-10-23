@@ -126,4 +126,16 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('percent')
           .seq(stringIgnoreCase('age').optional())
           .flatten();
+
+  /// encoding
+  Parser encodingStartChar() => pattern('A-Za-z');
+  Parser encodingNonStartChar() => (ref0(keywordStartChar) | pattern('0-9-'));
+  Parser encodingName() =>
+      (ref0(encodingStartChar) & ref0(encodingNonStartChar).star())
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser encodingCommand() =>
+      stringIgnoreCase('encoding')
+          .trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      ref0(encodingName);
 }
