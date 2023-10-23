@@ -8,6 +8,14 @@ class THGrammar extends GrammarDefinition {
   /// Whitespace
   Parser thWhitespace() => (string('\\\n') | whitespace()).plus();
 
+  /// Quoted string
+  ///
+  /// The convertion of two double quotes in one will be done after grammar parsing.
+  Parser quotedString() => (char('"') &
+          (char('"').skip(before: char('"')) | pattern('^"')).star().flatten() &
+          char('"'))
+      .pick(1);
+
   /// Keyword
   Parser keywordStartChar() => pattern('A-Za-z0-9_/');
   Parser keywordNonStartChar() => (ref0(keywordStartChar) | char('-'));
@@ -65,8 +73,32 @@ class THGrammar extends GrammarDefinition {
   Parser dateTime() => noDateTime() | dateTimeRange() | singleDateTime();
 
   /// Person
-  Parser aString() => (char('"') &
-          (char('"').skip(before: char('"')) | pattern('^"')).star().flatten() &
-          char('"'))
-      .pick(1);
+  ///
+  /// The name/surname separation will be done outside this grammar.
+  Parser person() => ref0(quotedString);
+
+  /// Units
+  Parser unitLength() => (
+
+          /// centimeters and meters
+          stringIgnoreCase('centi')
+                  .optional()
+                  .seq(stringIgnoreCase('met'))
+                  .seq(stringIgnoreCase('er') | stringIgnoreCase('re'))
+                  .seq(stringIgnoreCase('s').optional()) |
+              stringIgnoreCase('m') |
+              stringIgnoreCase('cm') |
+
+              /// inches
+              stringIgnoreCase('inch').seq(stringIgnoreCase('es').optional()) |
+              stringIgnoreCase('in') |
+
+              /// feet
+              stringIgnoreCase('feet').seq(stringIgnoreCase('s').optional()) |
+              stringIgnoreCase('ft') |
+
+              /// yard
+              stringIgnoreCase('yard').seq(stringIgnoreCase('s').optional()) |
+              stringIgnoreCase('yd'))
+      .flatten();
 }

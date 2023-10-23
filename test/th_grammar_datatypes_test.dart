@@ -647,9 +647,9 @@ void main() {
     }
   });
 
-  group('aString', () {
+  group('quotedString', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.aString()).end();
+    final parser = grammar.buildFrom(grammar.quotedString()).end();
 
     const successes = {
       '"blaus"': 'blaus',
@@ -669,6 +669,53 @@ void main() {
       '"""Obs"" hein?',
       'blaus"',
       '"blaus',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () {
+        final result = parser.parse(failure);
+        expect(result.runtimeType.toString(), 'Failure');
+      });
+    }
+  });
+
+  group('length units', () {
+    final grammar = THGrammar();
+    final parser = grammar.buildFrom(grammar.unitLength()).end();
+
+    const successes = [
+      'meter',
+      'meters',
+      'metre',
+      'metres',
+      'm',
+      'M',
+      'centimeter',
+      'centimeters',
+      'CENTIMETRE',
+      'cEnTiMeTrEs',
+      'cm',
+      'inch',
+      'inches',
+      'in',
+      'feet',
+      'feets',
+      'ft',
+      'yard',
+      'yards',
+      'yd',
+    ];
+
+    for (var success in successes) {
+      test(success, () {
+        final result = parser.parse(success);
+        expect(result.runtimeType.toString(), contains('Success'));
+        expect(result.value, success.trim());
+      });
+    }
+
+    const failures = [
+      'inchs',
     ];
 
     for (var failure in failures) {
