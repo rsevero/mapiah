@@ -77,8 +77,8 @@ class THGrammar extends GrammarDefinition {
   /// The name/surname separation will be done outside this grammar.
   Parser person() => ref0(quotedString);
 
-  /// Units
-  Parser unitLength() => (
+  /// Length unit
+  Parser lengthUnit() => (
 
           /// centimeters and meters
           stringIgnoreCase('centi')
@@ -100,5 +100,22 @@ class THGrammar extends GrammarDefinition {
               /// yard
               stringIgnoreCase('yard').seq(stringIgnoreCase('s').optional()) |
               stringIgnoreCase('yd'))
+      .flatten();
+
+  Parser angleUnit() => (
+
+          /// Degrees
+          stringIgnoreCase('degree').seq(stringIgnoreCase('s').optional()) |
+              stringIgnoreCase('deg') |
+
+              /// Minutes
+              stringIgnoreCase('minute').seq(stringIgnoreCase('s').optional()) |
+              stringIgnoreCase('min') |
+
+              /// Grads
+              stringIgnoreCase('grad').seq(stringIgnoreCase('s').optional()) |
+
+              /// Mils
+              stringIgnoreCase('mil').seq(stringIgnoreCase('s').optional()))
       .flatten();
 }

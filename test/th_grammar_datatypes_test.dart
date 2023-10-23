@@ -681,7 +681,7 @@ void main() {
 
   group('length units', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.unitLength()).end();
+    final parser = grammar.buildFrom(grammar.lengthUnit()).end();
 
     const successes = [
       'meter',
@@ -716,6 +716,44 @@ void main() {
 
     const failures = [
       'inchs',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () {
+        final result = parser.parse(failure);
+        expect(result.runtimeType.toString(), 'Failure');
+      });
+    }
+  });
+
+  group('angle units', () {
+    final grammar = THGrammar();
+    final parser = grammar.buildFrom(grammar.angleUnit()).end();
+
+    const successes = [
+      'degree',
+      'degrees',
+      'deg',
+      'minute',
+      'minutes',
+      'min',
+      'grad',
+      'grads',
+      'mil',
+      'mils',
+    ];
+
+    for (var success in successes) {
+      test(success, () {
+        final result = parser.parse(success);
+        expect(result.runtimeType.toString(), contains('Success'));
+        expect(result.value, success.trim());
+      });
+    }
+
+    const failures = [
+      'degre',
+      'M',
     ];
 
     for (var failure in failures) {
