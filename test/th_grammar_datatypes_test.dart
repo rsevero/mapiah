@@ -1,4 +1,5 @@
 import 'package:petitparser/petitparser.dart';
+import 'package:petitparser/debug.dart';
 import 'package:th_parser/src/th_grammar.dart';
 import 'package:test/test.dart';
 
@@ -219,7 +220,6 @@ void main() {
     for (var success in successes.keys) {
       test(success, () {
         final result = parser.parse(success);
-        // print(result);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, successes[success]);
       });
@@ -362,7 +362,6 @@ void main() {
     for (var success in successes.keys) {
       test(success, () {
         final result = parser.parse(success);
-        // print(result);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, successes[success]);
       });
@@ -628,7 +627,6 @@ void main() {
     for (var success in mapSuccesses.keys) {
       test(success, () {
         final result = parser.parse(success);
-        // print(result);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, mapSuccesses[success]);
       });
@@ -654,27 +652,23 @@ void main() {
     final parser = grammar.buildFrom(grammar.aString()).end();
 
     const successes = {
+      '"blaus"': 'blaus',
       '""': '',
-      // '_secretKeywork49/',
-      // '  /strange39',
-      // '09992  ',
-      // ' cmyk-rgb  ',
+      '"""Obs"" hein?"': '""Obs"" hein?'
     };
 
     for (var success in successes.keys) {
       test(success, () {
         final result = parser.parse(success);
-        // print(result);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, successes[success]);
       });
     }
 
     const failures = [
-      // '2022.',
-      // '2022:02.9',
-      // '2022.02.13.11',
-      // '2022.02.13@',
+      '"""Obs"" hein?',
+      'blaus"',
+      '"blaus',
     ];
 
     for (var failure in failures) {

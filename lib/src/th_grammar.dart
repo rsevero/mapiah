@@ -65,5 +65,8 @@ class THGrammar extends GrammarDefinition {
   Parser dateTime() => noDateTime() | dateTimeRange() | singleDateTime();
 
   /// Person
-  Parser aString() => char('"') & any().star() & char('"');
+  Parser aString() => (char('"') &
+          (char('"').skip(before: char('"')) | pattern('^"')).star().flatten() &
+          char('"'))
+      .pick(1);
 }
