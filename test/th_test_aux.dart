@@ -4,6 +4,8 @@ import 'package:charset/charset.dart';
 
 import 'package:mapiah/src/th_grammar.dart';
 
+const thMaxEncodingLength = 20;
+
 Future<String> readTestFile(String aFilePath) async {
   try {
     // var currentDir = Directory.current.path;
@@ -60,9 +62,12 @@ Future<String> encodingNameFromFile(RandomAccessFile aRaf) async {
   var line = '';
   int byte;
   var priorChar = '';
+  var charsRead = 0;
 
   await aRaf.setPosition(0);
-  while ((byte = await aRaf.readByte()) != -1) {
+  while ((charsRead < thMaxEncodingLength) &
+      ((byte = await aRaf.readByte()) != -1)) {
+    charsRead++;
     // print("Byte: '$byte'");
     final char = utf8.decode([byte]);
 
