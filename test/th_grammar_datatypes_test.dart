@@ -1,9 +1,46 @@
 import 'package:petitparser/petitparser.dart';
 import 'package:petitparser/debug.dart';
-import 'package:th_parser/src/th_grammar.dart';
 import 'package:test/test.dart';
 
+import 'package:mapiah/src/th_grammar.dart';
+
 void main() {
+  group('comment', () {
+    final grammar = THGrammar();
+    final parser = grammar.buildFrom(grammar.comment()).end();
+
+    const successes = [
+      // '# comment',
+      // ' # comment with leading space',
+      '  # comment with leading and trailing spaces ',
+    ];
+
+    for (var success in successes) {
+      test(success, () {
+        final result = parser.parse(success);
+        trace(parser).parse('  # comment with leading and trailing spaces ');
+        expect(result.runtimeType.toString(), contains('Success'));
+        expect(result.value, success.trim());
+      });
+    }
+
+    const failures = [
+      // '-point',
+      // '_secret*Keywork49/',
+      // '/st+range39',
+      // '099.92',
+      // 'cmy,k-rgb',
+      // "OSGB'",
+    ];
+
+    for (var failure in failures) {
+      test(failure, () {
+        final result = parser.parse(failure);
+        expect(result.runtimeType.toString(), 'Failure');
+      });
+    }
+  });
+
   group('keyword', () {
     final grammar = THGrammar();
     final parser = grammar.buildFrom(grammar.keyword()).end();
@@ -655,6 +692,38 @@ void main() {
       '"blaus"': 'blaus',
       '""': '',
       '"""Obs"" hein?"': '""Obs"" hein?'
+    };
+
+    for (var success in successes.keys) {
+      test(success, () {
+        final result = parser.parse(success);
+        expect(result.runtimeType.toString(), contains('Success'));
+        expect(result.value, successes[success]);
+      });
+    }
+
+    const failures = [
+      '"""Obs"" hein?',
+      'blaus"',
+      '"blaus',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () {
+        final result = parser.parse(failure);
+        expect(result.runtimeType.toString(), 'Failure');
+      });
+    }
+  });
+
+  group('bracketString', () {
+    final grammar = THGrammar();
+    final parser = grammar.buildFrom(grammar.bracketString()).end();
+
+    const successes = {
+      '[blaus]': 'blaus',
+      '[]': '',
+      '[""Obs"" hein?]': '""Obs"" hein?'
     };
 
     for (var success in successes.keys) {

@@ -1,0 +1,66 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -136.0 -2408 3388 144.0
+##XTHERION## xth_me_area_zoom_to 50
+##XTHERION## xth_me_image_insert {0 1 0.17378008287493754} {0 {}} croquis/croqui-005.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP03 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+point 840.0 -1418.0 label -text "-5 m"
+
+point 1658.0 -980.0 label -text "550 m"
+
+point 728.0 -1420.0 label -text "+0 m"
+
+point 1242.0 -1230.0 water-flow -orientation 230.9
+
+point 1158.0 -1238.0 water-flow -orientation 230.9
+
+point 2418.0 -948.0 water-flow -orientation 280.1
+
+point 2366.0 -874.0 water-flow -orientation 280.1
+
+line wall -id prd01_SCP03 -subtype presumed
+  1172.0 -910.0
+  1034.0 -1018.0
+endline
+
+line wall -id prd03_SCP03 -subtype presumed
+  1758.0 -1030.0
+  2147.74 -1120.48 1834.24 -1042.2 2668.0 -1364.0
+  smooth off
+endline
+
+line wall -id prd02_SCP03
+  466.0 -2116.0
+  806.0 -1828.0 1145.29 -1508.92 1494.0 -1216.0
+  1544.0 -1174.0 1571.98 -1112.74 1620.0 -1070.0
+  1657.67 -1036.47 1712.18 -1035.73 1758.0 -1030.0
+  smooth off
+endline
+
+line wall -id prd04_SCP03
+  2660.0 -724.0
+  2558.0 -722.0 2260.0 -516.0 2160.0 -524.0
+  1909.04 -544.08 1302.0 -796.0 1172.0 -910.0
+  smooth off
+endline
+
+point 1639.0 -1024.0 station -subtype fixed -name C16@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1243.0 -898.0 station -subtype fixed -name C15@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1984.0 -589.0 station -subtype fixed -name C14@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2208.0 -606.0 station -subtype fixed -name C13@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2368.0 -637.0 station -subtype fixed -name C12@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2608.0 -804.0 station -subtype fixed -name C11@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2670.0 -783.0 station -subtype fixed -name C10@final_de_semana_24_e_25_de_outubro_de_2015
+
+endscrap
+
+

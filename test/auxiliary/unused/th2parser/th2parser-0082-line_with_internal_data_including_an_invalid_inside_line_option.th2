@@ -1,0 +1,8 @@
+line wall -id prd03_SCP03 -subtype presumed
+  1758.0 -1030.0
+  smooth on
+  2147.74 -1120.48 1834.24 -1042.2 2668.0 -1364.0
+  # The 'smooth off' option below is created by XTherion sometimes but
+  # has no real effect. TH2Parser discards it.
+  smooth off
+endline

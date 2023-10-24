@@ -1,4 +1,4 @@
-name: th_parser
+name: mapiah
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
@@ -8,6 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  charset: ^2.0.1
   intl: ^0.18.1
   petitparser: ^6.0.1
 

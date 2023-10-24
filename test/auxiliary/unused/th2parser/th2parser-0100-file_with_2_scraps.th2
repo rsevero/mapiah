@@ -1,0 +1,16 @@
+encoding utf-8
+scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+    point 521.0 -1840.0 entrance
+endscrap
+scrap poco_surubim_SCP02 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+    area clay -clip on
+        l85-3732--20
+    endarea
+    line border -id l85-3732--20 -close on -visibility off
+        3592.0 208.0
+        3539.45 249.03 3447.39 245.1 3392.0 208.0
+        3233.22 101.65 3066.45 -131.93 3204.0 -332.0
+        3266.87 -423.45 3365.54 -513.28 3476.0 -524.0
+        3929.86 -568.03 3743.42 89.77 3592.0 208.0
+    endline
+endscrap

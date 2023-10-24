@@ -1,0 +1,7 @@
+encoding utf-8
+scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+point 2596.0 -468.0 debris
+point 782.0 -1740.0 station -subtype fixed -name A2@final_de_semana_26_e_27_de_setembro_de_2015 -id A2
+point 2316.0 -548.0 label -text "200 m"
+point 2547.7069698300006 6236.61014023 station -name 5.18
+endscrap

@@ -1,0 +1,9 @@
+encoding utf-8
+scrap poco_surubim_SCP02
+    line border -close on
+        3592.0 208.0
+        3539.45 249.03 3447.39 245.1 3392.0 208.0
+        smooth on
+        3233.22 101.65 3066.45 -131.93 3204.0 -332.0
+    endline
+endscrap

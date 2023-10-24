@@ -1,0 +1,15 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
+##XTHERION## xth_me_area_zoom_to 100
+##XTHERION## xth_me_image_insert {1890 1 1.0} {1380 {}} croquis/croqui-006.jpg 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1.0} {28 {}} croquis/croqui-007.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+point 521.0 -1840.0 entrance
+
+point 572.0 -1822.0 station -name 4@final_de_semana_26_e_27_de_setembro_de_2015
+
+endscrap

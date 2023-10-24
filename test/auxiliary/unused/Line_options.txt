@@ -1,0 +1,35 @@
+Line options that affect the whole line, i.e., they only appear at the main line of the line command:
+
+* border <on/off>
+* clip <on/off>
+* close <on/off/auto>
+* context <point/line/area> <symbol-type>
+* direction <begin/end/both/none>
+* gradient <none/center>
+* head <begin/end/both/none>
+* height <value>
+* id <ext_keyword>
+* outline <in/out/none>
+* place <bottom/default/top>
+* reverse <on/off>
+* text <string>
+* visibility <on/off>
+
+
+Line options that affect only one line point (the one defined on the line below the option itself):
+
+* adjust <horizontal/vertical>
+* altitude <value>
+* direction point
+* gradient point
+* mark <keyword>
+* orientation/orient <number>
+* size <number>
+* smooth <on/off/auto>
+
+
+Line options that affect all line points below it:
+
+* l-size <number>
+* r-size <number>
+* subtype <keyword>

@@ -1,0 +1,154 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -136.0 -2440 3404 272.0
+##XTHERION## xth_me_area_zoom_to 50
+##XTHERION## xth_me_image_insert {0 1 0.1} {0 {}} croquis/croqui-003.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP05 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+point 1996.75 -934.25 continuation
+
+point 1844.0 -1124.0 continuation
+
+area clay
+  l22-2900--450
+endarea
+
+point 2440.0 -578.0 label -text "-2 m"
+
+line floor-step -close on
+  1972.25 -922.5
+  1966.1 -930.27 1992.94 -956.97 1998.75 -965.0
+  2009.18 -979.43 2039.75 -1004.0 2054.0 -990.75
+  2064.76 -980.75 2052.93 -966.3 2048.75 -957.0
+  2043.74 -945.87 2035.0 -938.75 2022.25 -931.0
+  2015.56 -926.94 1980.68 -911.85 1972.25 -922.5
+endline
+
+line floor-step -close on
+  1810.0 -1033.0
+  1784.56 -1042.44 1811.38 -1165.96 1861.0 -1161.0
+  1872.12 -1159.89 1870.17 -1140.14 1871.0 -1129.0
+  1873.34 -1097.7 1859.87 -1077.73 1839.0 -1055.0
+  1830.79 -1046.06 1821.38 -1028.78 1810.0 -1033.0
+endline
+
+point 934.0 -1546.0 label -text "935 m" -align center
+
+point 2292.0 -778.0 label -text "Primeiro cone" -align right
+
+point 1572.0 -1190.0 label -orientation 35 -text "Termoclina"
+
+point 1706.0 -1174.0 popcorn
+
+point 1580.0 -1126.0 popcorn
+
+point 1652.0 -1124.0 debris
+
+point 1668.0 -1098.0 debris
+
+point 1692.0 -1092.0 debris
+
+point 1718.0 -1092.0 debris
+
+point 1720.0 -1134.0 debris
+
+point 2268.0 -778.0 u:raft_cone
+
+line border -id l22-2900--450 -close on -visibility off
+  2342.0 -122.0
+  2348.37 -221.09 2430.99 -304.7 2504.0 -372.0
+  2555.89 -419.83 2630.99 -437.26 2700.0 -452.0
+  2983.83 -512.61 3042.32 -346.9 3232.0 -82.0
+  3254.14 -51.08 3270.81 16.69 3236.0 32.0
+  3117.07 84.3 2783.8 128.51 2654.0 134.0
+  2506.86 140.22 2322.76 177.1 2342.0 -122.0
+endline
+
+line wall -id prd03_SCP05
+  2474.0 4.0
+  2408.67 -96.0 2343.33 -196.0 2278.0 -296.0
+  smooth off
+  2260.67 -352.67 2253.37 -413.44 2226.0 -466.0
+  2185.94 -542.92 2117.37 -602.72 2078.0 -680.0
+  1965.44 -900.91 2076.92 -847.12 1928.0 -994.0
+  1876.34 -1044.96 1862.59 -1024.27 1800.0 -1036.0
+  1778.85 -1039.97 1759.2 -1050.32 1738.0 -1054.0
+  1617.68 -1074.87 1527.72 -1060.17 1414.0 -1134.0
+  smooth off
+  1312.0 -1220.0 1210.0 -1306.0 1108.0 -1392.0
+  smooth off
+  1087.33 -1392.0 1065.88 -1386.37 1046.0 -1392.0
+  1020.69 -1399.17 931.43 -1458.83 895.0 -1415.0
+  smooth off
+endline
+
+line wall -id prd02_SCP05
+  1738.0 -1192.0
+  1777.17 -1164.06 1831.6 -1176.88 1872.0 -1154.0
+  1906.61 -1134.4 1930.83 -1099.96 1964.0 -1078.0
+  1980.72 -1066.93 2005.67 -1070.03 2020.0 -1056.0
+  2038.97 -1037.43 2037.05 -1002.3 2058.0 -986.0
+  2130.0 -930.0 2180.48 -943.09 2254.0 -890.0
+  2407.78 -778.94 2330.22 -813.85 2456.0 -698.0
+  2476.01 -679.57 2499.77 -665.67 2522.0 -650.0
+  2581.1 -608.34 2640.0 -582.0 2700.0 -526.0
+  2716.34 -510.75 2743.62 -511.23 2760.0 -496.0
+  2938.43 -330.09 2960.0 -272.0 2986.0 -228.0
+  smooth off
+endline
+
+line wall -id prd01_SCP05 -subtype presumed
+  663.0 -1614.0
+  821.0 -1804.0 1142.0 -1870.0 1738.0 -1192.0
+  smooth off
+endline
+
+point 2018.0 -953.0 station -subtype fixed -name C36@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2079.0 -901.0 station -subtype fixed -name C35@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2145.0 -774.0 station -subtype fixed -name C34@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2246.0 -712.0 station -subtype fixed -name C33@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2273.0 -562.0 station -subtype fixed -name C32@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2453.0 -386.0 station -subtype fixed -name C31@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2608.0 -106.0 station -subtype fixed -name C30@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2010.0 -1014.0 station -subtype fixed -name C38@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1906.0 -1079.0 station -subtype fixed -name C37@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1401.0 -1249.0 station -subtype fixed -name C39@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1684.0 -1126.0 station -subtype fixed -name B13@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1092.0 -1431.0 station -subtype fixed -name C40@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 911.0 -1474.0 station -subtype fixed -name C3@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 994.0 -1451.0 station -subtype fixed -name C2@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1044.0 -1422.0 station -subtype fixed -name C1@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2630.0 -150.0 label -text "1.100 m"
+
+line floor-step
+  2009.5 -892.5
+  2008.5 -926.5 2050.25 -970.75 2089.25 -964.75
+  smooth off
+endline
+
+line ceiling-step -reverse on
+  2012.25 -886.0
+  2050.5 -879.0 2098.75 -915.0 2098.5 -959.5
+  smooth off
+endline
+
+endscrap
+
+

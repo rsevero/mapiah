@@ -1,0 +1,117 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -136.0 -3348 2476 144.0
+##XTHERION## xth_me_area_zoom_to 50
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 {}} croquis/croqui-000.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP08 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+line wall -subtype presumed
+  1346.0 -1288.0
+  1287.08 -1175.62 1189.99 -1064.19 1234.0 -924.0
+  1255.68 -854.95 1323.71 -806.86 1346.0 -738.0
+  1399.48 -572.77 1352.0 -572.0 1368.0 -498.0
+  1381.94 -433.52 1450.0 -408.0 1424.0 -326.0
+  smooth off
+endline
+
+point 1170.0 -1874.0 raft
+
+point 1062.0 -1974.0 raft
+
+point 1330.0 -1958.0 raft
+
+point 1250.0 -2034.0 raft
+
+point 1166.0 -2002.0 raft
+
+point 1206.0 -2080.0 raft
+
+point 1102.0 -2060.0 raft
+
+point 1020.0 -2102.0 raft
+
+point 1312.0 -2090.0 raft
+
+point 1242.0 -1882.0 raft
+
+point 1260.0 -1976.0 raft
+
+point 1132.0 -1924.0 raft
+
+point 1264.0 -1820.0 raft
+
+point 1328.0 -1858.0 raft
+
+point 1310.0 -1720.0 raft
+
+point 1164.0 -1800.0 raft
+
+point 1092.0 -1870.0 raft
+
+point 1002.0 -1900.0 raft
+
+point 980.0 -2018.0 raft
+
+point 930.0 -2106.0 raft
+
+point 1336.0 -388.0 u:raft_cone
+
+point 1142.0 -496.0 u:raft_cone
+
+point 1300.0 -634.0 u:raft_cone
+
+point 1078.0 -1096.0 u:raft_cone
+
+point 1294.0 -1458.0 u:raft_cone
+
+point 988.0 -1744.0 u:raft_cone
+
+point 1020.0 -1358.0 water-flow -orientation 181.1
+
+point 1064.0 -1278.0 water-flow -orientation 181.1
+
+point 1138.0 -784.0 water-flow -orientation 181.1
+
+point 1176.0 -688.0 water-flow -orientation 181.1
+
+point 1246.0 -468.0 label -text "1.517 m"
+
+point 1140.0 -1626.0 label -text "-2 m"
+
+line wall -id prd02_SCP08 -subtype presumed
+  1048.0 -924.0
+  1048.0 -924.0 856.0 -1774.0 874.0 -2124.0
+  smooth off
+endline
+
+line wall
+  1146.0 -318.0
+  1146.0 -382.0 1078.63 -450.32 1078.0 -522.0
+  1076.74 -663.94 1124.0 -688.0 1106.0 -782.0
+  1096.39 -832.21 1052.0 -862.0 1048.0 -924.0
+  smooth off
+endline
+
+line wall -id prd01_SCP08 -subtype presumed
+  1418.0 -2132.0
+  1414.0 -1578.0 1464.0 -1502.0 1346.0 -1288.0
+  smooth off
+endline
+
+point 1192.0 -1952.0 station -subtype fixed -name E6@final_de_semana_30_de_julho_de_2016
+
+point 1242.0 -1620.0 station -subtype fixed -name E5@final_de_semana_30_de_julho_de_2016
+
+point 1172.0 -924.0 station -subtype fixed -name E4@final_de_semana_30_de_julho_de_2016
+
+point 1264.0 -708.0 station -subtype fixed -name E3@final_de_semana_30_de_julho_de_2016
+
+point 1188.0 -594.0 station -subtype fixed -name E2@final_de_semana_30_de_julho_de_2016
+
+point 1246.0 -414.0 station -subtype fixed -name E1@final_de_semana_30_de_julho_de_2016
+
+endscrap
+
+

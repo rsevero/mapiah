@@ -1,7 +1,9 @@
 import 'package:petitparser/petitparser.dart';
 import 'package:petitparser/debug.dart';
-import 'package:th_parser/src/th_grammar.dart';
 import 'package:test/test.dart';
+
+import 'package:mapiah/src/th_grammar.dart';
+import 'th_test_aux.dart';
 
 void main() {
   group('encoding', () {
@@ -9,14 +11,33 @@ void main() {
     final parser = grammar.buildFrom(grammar.encodingCommand()).end();
 
     const successes = {
-      'encoding UTF-8': ['encoding', 'UTF-8'],
-      'encoding  UTF-8    ': ['encoding', 'UTF-8'],
-      ' encoding UTF-8 ': ['encoding', 'UTF-8'],
+      'th2parser-0011-encoding_with_trailing_space.th2': [
+        'encoding',
+        'UTF-8',
+        null,
+      ],
+      'th2parser-0012-encoding_with_trailing_comment.th2': [
+        'encoding',
+        'UTF-8',
+        '# end of line comment',
+      ],
+      'th2parser-0013-iso8859-1_encoding.th2': [
+        'encoding',
+        'ISO8859-1',
+        '# ISO8859-1 comment: àáâãäåç'
+      ],
+      'th2parser-0019-encoding_only.th2': [
+        'encoding',
+        'UTF-8',
+        null,
+      ],
     };
 
     for (var success in successes.keys) {
-      test(success, () {
-        final result = parser.parse(success);
+      test(success, () async {
+        var content = await readTestFile(success);
+        // trace(parser).parse(content);
+        final result = parser.parse(content);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, successes[success]);
       });

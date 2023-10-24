@@ -1,0 +1,188 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -248.0 -3360 2348 144.0
+##XTHERION## xth_me_area_zoom_to 50
+##XTHERION## xth_me_image_insert {0 1 0.1} {0 {}} croquis/croqui-002.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP06 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+area debris
+  l72-1946--508
+endarea
+
+line border -id l72-1946--508 -close on -visibility off
+  1692.0 -620.0
+  1685.81 -664.42 1700.58 -710.68 1718.0 -752.0
+  1771.06 -877.82 1819.84 -1008.93 1902.0 -1118.0
+  1965.04 -1201.69 2191.9 -1310.12 2200.0 -1064.0
+  2205.17 -906.76 2186.85 -726.75 2086.0 -606.0
+  1952.15 -445.73 1718.0 -433.48 1692.0 -620.0
+endline
+
+point 1558.0 -1474.0 raft
+
+point 1616.0 -1458.0 raft
+
+point 1602.0 -1388.0 raft
+
+point 1510.0 -1392.0 raft
+
+point 1466.0 -1436.0 raft
+
+point 1502.0 -1500.0 raft
+
+point 1522.0 -1544.0 raft
+
+point 1624.0 -1530.0 raft
+
+point 1632.0 -1598.0 raft
+
+point 1578.0 -1624.0 raft
+
+point 1516.0 -1648.0 raft
+
+point 1440.0 -1584.0 raft
+
+point 1450.0 -1656.0 raft
+
+line wall -id prd02_SCP06
+  1780.0 -664.0
+  1735.68 -728.42 1606.14 -882.86 1560.0 -946.0
+  1522.0 -998.0 1538.86 -1141.11 1548.0 -1194.0
+  1552.31 -1218.93 1586.8 -1245.48 1572.0 -1266.0
+  1548.08 -1299.16 1484.14 -1314.46 1446.0 -1312.0
+  1384.0 -1308.0 1294.28 -1352.43 1206.0 -1392.0
+  1032.0 -1470.0 908.01 -1691.72 882.0 -1712.0
+  820.82 -1759.69 747.81 -1790.18 678.0 -1824.0
+  536.13 -1892.73 562.24 -1840.95 416.0 -1944.0
+  360.38 -1983.2 315.71 -2036.22 262.0 -2078.0
+  177.58 -2143.66 88.67 -2203.33 2.0 -2266.0
+  smooth off
+endline
+
+line wall -id prd01_SCP06 -subtype presumed
+  146.0 -2852.0
+  706.0 -2286.0 987.45 -2342.94 1626.0 -1686.0
+  1737.82 -1570.97 1960.0 -1280.0 2062.0 -1106.0
+  smooth off
+endline
+
+point 1880.0 -940.0 label -text "1.260 m"
+
+point 774.0 -2080.0 label -text "1.150 m"
+
+point 1098.0 -1740.0 paleo-material
+
+point 1012.0 -1614.0 paleo-material
+
+point 1312.0 -1816.0 water-flow -orientation 233.2
+
+point 1214.0 -1846.0 water-flow -orientation 233.2
+
+point 1296.0 -1424.0 u:raft_cone
+
+point 1148.0 -1478.0 u:raft_cone
+
+point 1202.0 -1528.0 u:raft_cone
+
+point 1306.0 -1566.0 u:raft_cone
+
+point 1238.0 -1590.0 u:raft_cone
+
+point 1122.0 -1638.0 u:raft_cone
+
+point 1222.0 -1742.0 u:raft_cone
+
+point 1110.0 -2022.0 u:raft_cone
+
+point 1050.0 -1960.0 u:raft_cone
+
+point 1104.0 -1886.0 u:raft_cone
+
+point 992.0 -1788.0 u:raft_cone
+
+point 984.0 -1854.0 u:raft_cone
+
+point 934.0 -1866.0 u:raft_cone
+
+point 952.0 -1926.0 u:raft_cone
+
+point 866.0 -1928.0 u:raft_cone
+
+point 824.0 -2074.0 u:raft_cone
+
+point 844.0 -1774.0 u:raft_cone
+
+point 804.0 -1804.0 u:raft_cone
+
+point 760.0 -1908.0 u:raft_cone
+
+point 666.0 -1952.0 u:raft_cone
+
+point 706.0 -2020.0 u:raft_cone
+
+point 632.0 -2026.0 u:raft_cone
+
+point 718.0 -2250.0 u:raft_cone
+
+point 736.0 -2136.0 u:raft_cone
+
+point 652.0 -2182.0 u:raft_cone
+
+point 458.0 -2158.0 u:raft_cone
+
+point 376.0 -2164.0 u:raft_cone
+
+point 540.0 -2410.0 u:raft_cone
+
+point 568.0 -2296.0 u:raft_cone
+
+point 480.0 -2310.0 u:raft_cone
+
+point 422.0 -2458.0 u:raft_cone
+
+point 538.0 -2024.0 water-flow -orientation 231.3
+
+point 540.0 -1960.0 water-flow -orientation 231.3
+
+point 46.0 -2402.0 station -subtype fixed -name C30@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 286.0 -2260.0 station -subtype fixed -name C29@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 502.0 -2218.0 station -subtype fixed -name C28@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 774.0 -2028.0 station -subtype fixed -name C27@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 906.0 -1784.0 station -subtype fixed -name C26@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1096.0 -1588.0 station -subtype fixed -name C25@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1228.0 -1448.0 station -subtype fixed -name C24@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1444.0 -1504.0 station -subtype fixed -name C23@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1710.0 -1348.0 station -subtype fixed -name C22@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1606.0 -1020.0 station -subtype fixed -name C21@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1704.0 -954.0 station -subtype fixed -name C20@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1756.0 -882.0 station -subtype fixed -name C18@final_de_semana_24_e_25_de_outubro_de_2015
+
+area clay
+  l59-330--2070
+endarea
+
+line border -id l59-330--2070 -close on -visibility off
+  150.0 -2064.0
+  -199.22 -2109.81 -111.14 -2409.39 -80.0 -2628.0
+  -33.63 -2953.52 -34.58 -3150.66 430.0 -3016.0
+  506.65 -2993.78 525.81 -2885.39 552.0 -2810.0
+  576.23 -2740.25 581.96 -2663.74 578.0 -2590.0
+  563.68 -2323.36 570.39 -2008.85 150.0 -2064.0
+endline
+
+endscrap
+
+

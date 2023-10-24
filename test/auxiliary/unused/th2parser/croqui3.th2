@@ -1,0 +1,77 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -136.0 -2312 3308 144.0
+##XTHERION## xth_me_area_zoom_to 50
+##XTHERION## xth_me_image_insert {0 1 0.1} {0 {}} croquis/croqui-004.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP04 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+line wall -id prd02_SCP04
+  3086.0 -1854.0
+  2957.55 -1653.77 2971.22 -1657.87 2830.0 -1494.0
+  2800.75 -1460.06 2775.81 -1420.04 2738.0 -1396.0
+  2680.53 -1359.46 2611.81 -1344.59 2550.0 -1316.0
+  2521.67 -1302.9 2195.34 -1152.47 2118.0 -1092.0
+  2010.57 -1007.99 1965.63 -923.08 1874.0 -824.0
+  1830.19 -776.63 1724.33 -684.31 1674.0 -626.0
+  1647.07 -594.8 1566.7 -477.46 1516.0 -448.0
+  1425.1 -395.18 1423.57 -439.9 1324.0 -458.0
+  1252.48 -471.0 1233.9 -442.31 1170.0 -406.0
+  smooth off
+endline
+
+line wall -id prd01_SCP04 -subtype presumed
+  1160.0 -1006.0
+  1275.33 -1044.67 1400.7 -1029.66 1506.0 -1122.0
+  1636.0 -1236.0 1856.0 -1588.0 1948.0 -1598.0
+  2007.34 -1604.45 2202.0 -1692.0 2378.0 -1766.0
+  smooth off
+endline
+
+line rock-border -close on
+  1418.0 -530.0
+  1404.0 -526.0 1399.31 -594.44 1394.0 -608.0
+  1379.41 -645.24 1370.93 -639.53 1360.0 -678.0
+  1349.06 -716.48 1338.1 -758.04 1340.0 -798.0
+  1340.81 -814.98 1355.0 -836.0 1368.0 -846.0
+  1399.72 -870.4 1410.05 -866.1 1450.0 -868.0
+  1471.0 -869.0 1488.36 -860.23 1496.0 -848.0
+  1506.0 -832.0 1513.92 -823.54 1520.0 -784.0
+  1526.08 -744.47 1517.42 -705.45 1524.0 -666.0
+  1530.0 -630.0 1532.0 -649.99 1526.0 -614.0
+  1524.0 -602.0 1508.83 -578.64 1490.0 -564.0
+  1458.42 -539.44 1456.47 -540.99 1418.0 -530.0
+endline
+
+point 1226.0 -540.0 station -subtype fixed -name C11@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1290.0 -524.0 station -subtype fixed -name C10@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1432.0 -464.0 station -subtype fixed -name C9@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1566.0 -558.0 station -subtype fixed -name C8@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1606.0 -642.0 station -subtype fixed -name C7@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 1874.0 -892.0 station -subtype fixed -name C6@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2018.0 -1126.0 station -subtype fixed -name C5@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2710.0 -1424.0 station -subtype fixed -name C4@final_de_semana_24_e_25_de_outubro_de_2015
+
+point 2292.0 -1442.0 water-flow -orientation 284.6
+
+point 2350.0 -1429.0 water-flow -orientation 284.6
+
+point 2710.0 -1470.0 label -text "850 m"
+
+point 1226.0 -580.0 label -text "700 m"
+
+point 1670.0 -798.0 label -text "-5 m"
+
+point 534.0 -582.0 label -text "-8 m"
+
+endscrap
+
+

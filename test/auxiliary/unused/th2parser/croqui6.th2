@@ -1,0 +1,108 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -136.0 -3364 2372 144.0
+##XTHERION## xth_me_area_zoom_to 50
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 {}} croquis/croqui-001.jpg 0 {}
+
+
+
+scrap poco_surubim_SCP07 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+
+point 650.0 -2152.0 water-flow -orientation 217.0
+
+point 632.0 -2082.0 water-flow -orientation 217.0
+
+point 1956.0 -592.0 water-flow -orientation 184.6
+
+point 2002.0 -550.0 water-flow -orientation 184.6
+
+point 600.0 -1484.0 water-flow -orientation 205.5
+
+point 672.0 -1464.0 water-flow -orientation 205.5
+
+point 1834.0 -1220.0 label -text "1.370 m"
+
+point 768.0 -1452.0 label -text "1.300 m"
+
+point 1072.0 -1490.0 label -text "-3 m"
+
+area debris
+  l24-452--1520
+endarea
+
+line border -id l24-452--1520 -close on -visibility off
+  572.0 -2428.0
+  957.26 -2452.29 1101.78 -1927.13 916.0 -1704.0
+  844.46 -1618.08 723.77 -1583.74 616.0 -1554.0
+  533.09 -1531.12 427.17 -1498.88 358.0 -1550.0
+  108.07 -1734.73 -38.26 -2389.52 572.0 -2428.0
+endline
+
+area water
+endarea
+
+line wall -id prd04_SCP07
+  1252.0 -1252.0
+  772.0 -1320.0 765.75 -1229.69 628.0 -1374.0
+  460.0 -1550.0 430.0 -1632.0 334.0 -1788.0
+  smooth off
+endline
+
+line wall -id prd03_SCP07 -subtype presumed
+  1920.0 -180.0
+  1860.0 -508.0 1909.89 -1192.41 1670.0 -1270.0
+  1537.31 -1312.92 1468.0 -1192.0 1252.0 -1252.0
+  smooth off
+endline
+
+line wall -id prd02_SCP07
+  1956.0 -1430.0
+  1980.0 -1408.0 1968.53 -1367.6 1986.0 -1342.0
+  2018.17 -1294.84 2075.37 -1266.49 2102.0 -1216.0
+  2218.29 -995.54 2160.28 -1008.47 2182.0 -800.0
+  2185.9 -762.53 2208.0 -727.68 2208.0 -690.0
+  2208.0 -622.77 2178.29 -557.13 2182.0 -490.0
+  smooth off
+  2237.23 -262.19 2228.52 -359.9 2232.0 -200.0
+  smooth off
+endline
+
+point 784.0 -1704.0 u:raft_cone
+
+point 680.0 -1802.0 u:raft_cone
+
+point 2132.0 -872.0 u:raft_cone
+
+point 1932.0 -930.0 u:raft_cone
+
+point 2076.0 -1044.0 u:raft_cone
+
+point 1908.0 -1114.0 u:raft_cone
+
+point 1582.0 -1344.0 u:raft_cone
+
+point 1408.0 -1484.0 u:raft_cone
+
+line wall -id prd01_SCP07 -subtype presumed
+  624.0 -2254.0
+  788.0 -2042.0 908.69 -1911.54 1112.0 -1748.0
+  1274.29 -1617.46 1590.0 -1724.0 1956.0 -1430.0
+  smooth off
+endline
+
+point 1948.0 -1254.0 station -subtype fixed -name E10@final_de_semana_30_de_julho_de_2016
+
+point 1990.0 -968.0 station -subtype fixed -name E9@final_de_semana_30_de_julho_de_2016
+
+point 2098.0 -690.0 station -subtype fixed -name E8@final_de_semana_30_de_julho_de_2016
+
+point 1222.0 -1374.0 station -subtype fixed -name ET13@final_de_semana_30_de_julho_de_2016
+
+point 1468.0 -1408.0 station -subtype fixed -name ET12@final_de_semana_30_de_julho_de_2016
+
+point 1576.0 -1476.0 station -subtype fixed -name ET11@final_de_semana_30_de_julho_de_2016
+
+point 766.0 -1392.0 station -subtype fixed -name C17@final_de_semana_30_de_julho_de_2016
+
+endscrap
+
+

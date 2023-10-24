@@ -1,0 +1,3 @@
+encoding utf-8
+scrap araras14 -projection [elevation:alternative 273 grad]
+endscrap

@@ -1,5 +1,8 @@
 import 'package:petitparser/petitparser.dart';
 
+const thCommentChar = '#';
+const thDefaultEncoding = 'UTF-8';
+
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
   @override
@@ -7,14 +10,28 @@ class THGrammar extends GrammarDefinition {
 
   /// Whitespace
   Parser thWhitespace() => (string('\\\n') | whitespace()).plus();
+  Parser thWhitespaceNoLineBreak() =>
+      (string('\\\n') | (char('\n').not() & whitespace())).plus();
 
   /// Quoted string
   ///
-  /// The convertion of two double quotes in one will be done after grammar parsing.
+  /// TODO: The convertion of two double quotes in one will be done after grammar
+  /// parsing.
   Parser quotedString() => (char('"') &
           (char('"').skip(before: char('"')) | pattern('^"')).star().flatten() &
           char('"'))
       .pick(1);
+
+  /// Bracket string
+  Parser bracketString() =>
+      (char('[') & pattern('^]').star().flatten() & char(']')).pick(1);
+
+  /// Comment
+  Parser comment() => char(thCommentChar)
+      .seq(pattern('^\n').star())
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => value.trim());
 
   /// Keyword
   Parser keywordStartChar() => pattern('A-Za-z0-9_/');
@@ -41,19 +58,26 @@ class THGrammar extends GrammarDefinition {
   Parser noDateTime() =>
       char('-').flatten().trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser singleDateTime() =>
-      // Year
+
+      /// Year
       (ref0(year) &
-              // Month: optional
+
+              /// Month: optional
               (ref0(dotTwoDigits) &
-                      // Day: optional
+
+                      /// Day: optional
                       (ref0(dotTwoDigits) &
-                              // Hour: optional
+
+                              /// Hour: optional
                               (ref0(atTwoDigits) &
-                                      // Minutes: optional
+
+                                      /// Minutes: optional
                                       (ref0(colonTwoDigits) &
-                                              // Seconds: optional
+
+                                              /// Seconds: optional
                                               (ref0(colonTwoDigits) &
-                                                      // Fractional seconds: optional
+
+                                                      /// Fractional seconds: optional
                                                       (ref0(dotTwoDigits)
                                                               .optional())
                                                           .optional())
@@ -74,7 +98,7 @@ class THGrammar extends GrammarDefinition {
 
   /// Person
   ///
-  /// The name/surname separation will be done outside this grammar.
+  /// TODO: The name/surname separation will be done outside this grammar.
   Parser person() => ref0(quotedString);
 
   /// Length unit
@@ -133,9 +157,11 @@ class THGrammar extends GrammarDefinition {
   Parser encodingName() =>
       (ref0(encodingStartChar) & ref0(encodingNonStartChar).star())
           .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => value.toUpperCase());
   Parser encodingCommand() =>
       stringIgnoreCase('encoding')
           .trim(ref0(thWhitespace), ref0(thWhitespace)) &
-      ref0(encodingName);
+      ref0(encodingName).trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      ref0(comment).optional();
 }

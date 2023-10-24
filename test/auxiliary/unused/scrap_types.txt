@@ -1,0 +1,10 @@
+author
+copyright
+cs
+flip
+projection
+sketch
+station-names
+stations
+title
+walls
