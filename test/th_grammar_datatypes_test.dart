@@ -18,7 +18,7 @@ void main() {
     for (var success in successes) {
       test(success, () {
         final result = parser.parse(success);
-        trace(parser).parse('  # comment with leading and trailing spaces ');
+        // trace(parser).parse('  # comment with leading and trailing spaces ');
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, success.trim());
       });
