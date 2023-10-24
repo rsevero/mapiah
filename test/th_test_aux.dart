@@ -38,6 +38,13 @@ Future<String> decodeFile(RandomAccessFile aRaf, String encoding) async {
     case 'ISO8859-1':
       fileContentDecoded = latin1.decode(fileContentRaw);
     default:
+      // Therion ISO charset names don´t have a hiphen after ISO but charset.dart
+      // expects one.
+      var isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
+      var isoResult = isoRegex.firstMatch(encoding);
+      if (isoResult != null) {
+        encoding = 'ISO-${isoResult[1]}';
+      }
       var encoder = Charset.getByName(encoding);
       if (encoder == null) {
         fileContentDecoded = utf8.decode(fileContentRaw);
