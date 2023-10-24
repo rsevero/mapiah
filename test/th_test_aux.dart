@@ -9,12 +9,12 @@ Future<String> readTestFile(String aFilePath) async {
     // var currentDir = Directory.current.path;
     // print(currentDir);
 
-    var file = File("./test/auxiliary/$aFilePath");
-    var raf = await file.open();
+    final file = File("./test/auxiliary/$aFilePath");
+    final raf = await file.open();
 
-    var encoding = await encodingNameFromFile(raf);
+    final encoding = await encodingNameFromFile(raf);
 
-    var contents = await decodeFile(raf, encoding);
+    final contents = await decodeFile(raf, encoding);
     await raf.close();
 
     return contents;
@@ -26,8 +26,8 @@ Future<String> readTestFile(String aFilePath) async {
 
 Future<String> decodeFile(RandomAccessFile aRaf, String encoding) async {
   await aRaf.setPosition(0);
-  var fileSize = await aRaf.length();
-  var fileContentRaw = await aRaf.read(fileSize);
+  final fileSize = await aRaf.length();
+  final fileContentRaw = await aRaf.read(fileSize);
   String fileContentDecoded = '';
 
   switch (encoding) {
@@ -40,12 +40,12 @@ Future<String> decodeFile(RandomAccessFile aRaf, String encoding) async {
     default:
       // Therion ISO charset names don´t have a hyphen after ISO but
       // charset.dart expects one.
-      var isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
-      var isoResult = isoRegex.firstMatch(encoding);
+      final isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
+      final isoResult = isoRegex.firstMatch(encoding);
       if (isoResult != null) {
         encoding = 'ISO-${isoResult[1]}';
       }
-      var encoder = Charset.getByName(encoding);
+      final encoder = Charset.getByName(encoding);
       if (encoder == null) {
         fileContentDecoded = utf8.decode(fileContentRaw);
       } else {
@@ -64,7 +64,7 @@ Future<String> encodingNameFromFile(RandomAccessFile aRaf) async {
   await aRaf.setPosition(0);
   while ((byte = await aRaf.readByte()) != -1) {
     // print("Byte: '$byte'");
-    var char = utf8.decode([byte]);
+    final char = utf8.decode([byte]);
 
     if (isEncodingDelimiter(priorChar, char)) {
       break;
@@ -78,7 +78,7 @@ Future<String> encodingNameFromFile(RandomAccessFile aRaf) async {
   final encodingRegex =
       RegExp(r'^\s*encoding\s+([a-zA-Z0-9-]+)', caseSensitive: false);
 
-  var encoding = encodingRegex.firstMatch(line);
+  final encoding = encodingRegex.firstMatch(line);
   // print("Encoding object: '$encoding");
   if (encoding == null) {
     return thDefaultEncoding;
