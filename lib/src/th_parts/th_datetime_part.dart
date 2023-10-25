@@ -32,7 +32,7 @@ class THDatetime {
     fractionalSeconds: null,
   );
 
-  String singleDateToString(THDatetimePart date) {
+  String _singleDateToString(THDatetimePart date) {
     var result = '';
 
     if (date.year == null) {
@@ -86,10 +86,10 @@ class THDatetime {
       return '-';
     }
 
-    var result = singleDateToString(start);
+    var result = _singleDateToString(start);
 
     if (end.year != null) {
-      result += ' - ${singleDateToString(end)}';
+      result += ' - ${_singleDateToString(end)}';
     }
 
     return result;

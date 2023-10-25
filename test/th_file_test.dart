@@ -2,7 +2,7 @@
 // import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
-import 'th_test_aux.dart';
+// import 'th_test_aux.dart';
 
 import 'package:mapiah/src/th_elements/th_element.dart';
 
