@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:charset/charset.dart';
 
-import 'package:mapiah/src/th_grammar.dart';
+import 'package:mapiah/src/th_definitions.dart';
 
 const thMaxEncodingLength = 20;
 

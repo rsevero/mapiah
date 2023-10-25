@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-typedef THDatetimeType = ({
+typedef THDatetimePart = ({
   int? year,
   int? month,
   int? day,
@@ -12,7 +12,7 @@ typedef THDatetimeType = ({
 
 /// Holds a date time value or interval
 class THDatetime {
-  THDatetimeType start = (
+  THDatetimePart start = (
     year: null,
     month: null,
     day: null,
@@ -22,7 +22,7 @@ class THDatetime {
     fractionalSeconds: null,
   );
 
-  THDatetimeType end = (
+  THDatetimePart end = (
     year: null,
     month: null,
     day: null,
@@ -32,7 +32,7 @@ class THDatetime {
     fractionalSeconds: null,
   );
 
-  String singleDateToString(THDatetimeType date) {
+  String singleDateToString(THDatetimePart date) {
     var result = '';
 
     if (date.year == null) {

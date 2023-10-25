@@ -1,7 +1,6 @@
 import 'package:petitparser/petitparser.dart';
 
-const thCommentChar = '#';
-const thDefaultEncoding = 'UTF-8';
+import 'package:mapiah/src/th_definitions.dart';
 
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
@@ -25,6 +24,13 @@ class THGrammar extends GrammarDefinition {
   /// Bracket string
   Parser bracketString() =>
       (char('[') & pattern('^]').star().flatten() & char(']')).pick(1);
+
+  /// Number
+  Parser number() => (pattern('-+')
+          .optional()
+          .seq(digit().plus().seq((char('.').seq(digit().plus())).optional())))
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Comment
   Parser comment() => char(thCommentChar)
@@ -160,8 +166,41 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => value.toUpperCase());
   Parser encodingCommand() =>
-      stringIgnoreCase('encoding')
-          .trim(ref0(thWhitespace), ref0(thWhitespace)) &
-      ref0(encodingName).trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      stringIgnoreCase('encoding') &
+      ref0(encodingName) &
       ref0(comment).optional();
+
+  /// TODO: input
+  /// TODO: survey
+  /// TODO: centreline
+
+  /// Scrap
+  Parser projectionSpecification() =>
+      // type: none
+      ((stringIgnoreCase('none') |
+
+              // type: plan with optional index
+              (stringIgnoreCase('plan')
+                  .seq((char(':').seq(ref0(keyword))).optional())) |
+
+              // type: elevation with optional index
+              (stringIgnoreCase('elevation')
+                  .seq((char(':').seq(ref0(keyword))).optional())) |
+
+              // type: elevation with view direction
+              (char('[') &
+                      (stringIgnoreCase('elevation') &
+                          ref0(number) &
+                          angleUnit().optional()) &
+                      char(']'))
+                  .pick(1) |
+
+              // type: extended with optional index
+              stringIgnoreCase('extended')
+                  .seq((char(':').seq(ref0(keyword))).optional())))
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser projectionOption() =>
+      stringIgnoreCase('projection') & ref0(projectionSpecification);
+  Parser scrap() => stringIgnoreCase('scrap') & ref0(keyword);
 }
