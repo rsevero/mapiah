@@ -10,7 +10,7 @@ void main() {
     var aTHFile = THFile();
 
     test("THFile", () {
-      expect(aTHFile.id, -1);
+      expect(aTHFile.index, -1);
       expect(aTHFile.elements.length, 0);
     });
   });

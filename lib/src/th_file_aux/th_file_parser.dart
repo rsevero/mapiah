@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_unknown_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_same_line_comment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
-import 'package:mapiah/src/th_elements/th_unknown_command.dart';
+import 'package:mapiah/src/th_elements/th_unrezognized_command.dart';
 import 'package:meta/meta.dart';
 import 'package:charset/charset.dart';
 import 'package:petitparser/petitparser.dart';
@@ -121,8 +121,8 @@ class THFileParser {
             _currentElement, aElement.sublist(current + 1, current + 1));
         current += 2;
       default:
-        newOption =
-            THUnknownCommandOption(_currentElement, aElement.sublist(current));
+        newOption = THUnrecognizedCommandOption(
+            _currentElement, aElement.sublist(current));
         current = aElement.length;
     }
     _currentElement.addOption(newOption);
@@ -131,7 +131,7 @@ class THFileParser {
   }
 
   void injectUnknown(List<dynamic> aElement) {
-    THUnknownCommand(_currentParent, aElement);
+    THUnrecognizedCommand(_currentParent, aElement);
   }
 
   @useResult

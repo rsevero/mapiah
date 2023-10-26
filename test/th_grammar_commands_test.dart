@@ -11,55 +11,78 @@ void main() {
       'th2parser-0011-encoding_with_trailing_space.th2': {
         'length': 0,
         'encoding': 'UTF-8',
-        'parsed': [
-          'encoding',
-          'UTF-8',
-          null,
-        ],
+        'results': [],
       },
       'th2parser-0012-encoding_with_trailing_comment.th2': {
         'length': 1,
         'encoding': 'UTF-8',
-        'parsed': [
-          'encoding',
-          'UTF-8',
-          '# end of line comment',
+        'results': [
+          {
+            'index': 0,
+            'type': 'samelinecomment',
+            'asString': '# end of line comment'
+          },
         ],
       },
       'th2parser-0013-iso8859-1_encoding.th2': {
         'length': 1,
         'encoding': 'ISO8859-1',
-        'parsed': ['encoding', 'ISO8859-1', '# ISO8859-1 comment: àáâãäåç'],
+        'results': [
+          {
+            'index': 0,
+            'type': 'samelinecomment',
+            'asString': '# ISO8859-1 comment: àáâãäåç'
+          }
+        ],
       },
       'th2parser-0014-iso8859-2_encoding.th2': {
         'length': 1,
         'encoding': 'ISO8859-2',
-        'parsed': ['encoding', 'ISO8859-2', '# ISO8859-2 comment: ŕáâăäĺç'],
+        'results': [
+          {
+            'index': 0,
+            'type': 'samelinecomment',
+            'asString': '# ISO8859-2 comment: ŕáâăäĺç'
+          }
+        ],
       },
       'th2parser-0015-iso8859-15_encoding.th2': {
         'length': 1,
         'encoding': 'ISO8859-15',
-        'parsed': ['encoding', 'ISO8859-15', '# ISO8859-15 comment: àáâãäåç€'],
+        'results': [
+          {
+            'index': 0,
+            'type': 'samelinecomment',
+            'asString': '# ISO8859-15 comment: àáâãäåç€'
+          }
+        ],
       },
       'th2parser-0019-encoding_only.th2': {
         'length': 0,
         'encoding': 'UTF-8',
-        'parsed': [
-          'encoding',
-          'UTF-8',
-          null,
-        ],
+        'results': [],
       },
     };
 
+    var id = 1;
     for (var success in successes.keys) {
-      test(success, () async {
+      test("$id - $success", () async {
         final aTHFile = await parser.parse(success);
-        final result = successes[success];
+        final expectations = successes[success]!;
+        // print(expectations);
+        // print(expectations.runtimeType);
+        // print(expectations['results'].runtimeType);
         expect(aTHFile, isA<THFile>());
-        expect(aTHFile.elements.length, result!['length']);
-        // expect(result.value, successes[success]);
+        expect(aTHFile.encoding, expectations['encoding']);
+        expect(aTHFile.elements.length, expectations['length']);
+        for (var result in (expectations['results'] as List)) {
+          expect(
+              aTHFile.elementByIndex(result['index'])!.type(), result['type']);
+          expect(aTHFile.elementByIndex(result['index'])!.toString(),
+              result['asString']);
+        }
       });
+      id++;
     }
 
     const failures = [

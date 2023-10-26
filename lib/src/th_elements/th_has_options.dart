@@ -53,4 +53,19 @@ mixin THHasOptions on THElement {
     assert(_optionsMap.containsKey(aType));
     return (_optionsMap.remove(aType) != null);
   }
+
+  @override
+  String toString() {
+    var asString = '';
+
+    for (var aType in _optionsList) {
+      asString += " ${optionByType(aType).toString()}";
+    }
+
+    if (asString.isNotEmpty) {
+      asString = asString.substring(1);
+    }
+
+    return asString;
+  }
 }

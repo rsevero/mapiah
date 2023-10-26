@@ -33,7 +33,7 @@ abstract class THElement {
   }
 
   String type() {
-    return runtimeType.toString().substring(2);
+    return runtimeType.toString().substring(2).toLowerCase();
   }
 }
 
