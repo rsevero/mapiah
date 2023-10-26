@@ -28,7 +28,7 @@ class THGrammar extends GrammarDefinition {
 
   /// Bracket string
   Parser bracketStringTemplate(content) =>
-      (char('[') & content() & char(']')).pick(1);
+      (char('[') & content & char(']')).pick(1);
   Parser bracketStringGeneral() =>
       bracketStringTemplate(pattern('^]').star().flatten());
 
@@ -216,7 +216,7 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('projection') & ref0(projectionSpecification);
   Parser scaleOption() => stringIgnoreCase('scale') & ref0(scaleSpecification);
   Parser scaleSpecification() =>
-      ref0(number) | ref1(bracketStringTemplate, scaleNumber);
+      ref0(number) | bracketStringTemplate(scaleNumber());
   Parser scaleNumber() =>
       (ref0(number) & lengthUnit()) |
       (ref0(number) & ref0(number) & lengthUnit()) |

@@ -8,4 +8,19 @@ class THUnrecognizedCommand extends THElement {
   get value {
     return _value;
   }
+
+  @override
+  String toString() {
+    var asString = '';
+
+    for (var item in _value) {
+      asString += " $item";
+    }
+
+    if (asString.isNotEmpty) {
+      asString = asString.substring(1);
+    }
+
+    return super.toString();
+  }
 }

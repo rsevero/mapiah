@@ -54,16 +54,11 @@ mixin THHasOptions on THElement {
     return (_optionsMap.remove(aType) != null);
   }
 
-  @override
-  String toString() {
+  String optionsAsString() {
     var asString = '';
 
     for (var aType in _optionsList) {
       asString += " ${optionByType(aType).toString()}";
-    }
-
-    if (asString.isNotEmpty) {
-      asString = asString.substring(1);
     }
 
     return asString;

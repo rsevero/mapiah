@@ -3,7 +3,6 @@ import 'package:petitparser/petitparser.dart';
 import 'package:test/test.dart';
 
 import 'package:mapiah/src/th_file_aux/th_grammar.dart';
-// import 'th_test_aux.dart';
 
 void main() {
   group('comment', () {
@@ -11,8 +10,8 @@ void main() {
     final parser = grammar.buildFrom(grammar.comment()).end();
 
     const successes = [
-      // '# comment',
-      // ' # comment with leading space',
+      '# comment',
+      ' # comment with leading space',
       '  # comment with leading and trailing spaces ',
     ];
 

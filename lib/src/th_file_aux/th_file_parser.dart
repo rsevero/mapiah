@@ -7,7 +7,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_comman
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_same_line_comment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
-import 'package:mapiah/src/th_elements/th_unrezognized_command.dart';
+import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:meta/meta.dart';
 import 'package:charset/charset.dart';
 import 'package:petitparser/petitparser.dart';
