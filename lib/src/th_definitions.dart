@@ -2,3 +2,4 @@
 const thCommentChar = '#';
 const thDefaultEncoding = 'UTF-8';
 const thDecimalSeparator = '.';
+const thMaxEncodingLength = 20;

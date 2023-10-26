@@ -5,7 +5,12 @@ import 'package:mapiah/src/th_definitions.dart';
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
   @override
-  Parser start() => keyword().end();
+  Parser start() => th2Structure().end();
+
+  /// TH2 Structure
+  Parser th2Structure() =>
+      encodingCommand().optional() & (comment() | th2Command()).star();
+  Parser th2Command() => scrapCommand();
 
   /// Whitespace
   Parser thWhitespace() => (string('\\\n') | whitespace()).plus();
@@ -22,9 +27,10 @@ class THGrammar extends GrammarDefinition {
       .pick(1);
 
   /// Bracket string
-  Parser bracketString(content) => (char('[') & content & char(']')).pick(1);
+  Parser bracketStringTemplate(content) =>
+      (char('[') & content() & char(']')).pick(1);
   Parser bracketStringGeneral() =>
-      bracketString(pattern('^]').star().flatten());
+      bracketStringTemplate(pattern('^]').star().flatten());
 
   /// Number
   Parser number() =>
@@ -127,7 +133,8 @@ class THGrammar extends GrammarDefinition {
               /// yard
               (stringIgnoreCase('yard') & stringIgnoreCase('s').optional()) |
               stringIgnoreCase('yd'))
-      .flatten();
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Angle units
   Parser angleUnit() => (
@@ -145,13 +152,18 @@ class THGrammar extends GrammarDefinition {
 
               /// Mils
               (stringIgnoreCase('mil') & stringIgnoreCase('s').optional()))
-      .flatten();
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Clino units
   Parser clinoUnit() =>
       ref0(angleUnit) |
       (stringIgnoreCase('percent') & stringIgnoreCase('age').optional())
-          .flatten();
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// Command template
+  Parser commandTemplate(command) => (command) & ref0(comment).optional();
 
   /// encoding
   Parser encodingStartChar() => pattern('A-Za-z');
@@ -171,7 +183,10 @@ class THGrammar extends GrammarDefinition {
   /// TODO: centreline
 
   /// Scrap
+  Parser scrap() => ref1(commandTemplate, scrapCommand);
+  Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
+  Parser scrapOptions() => projectionOption() | scaleOption();
   Parser projectionSpecification() =>
       // type: none
       ((stringIgnoreCase('none') |
@@ -201,7 +216,7 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('projection') & ref0(projectionSpecification);
   Parser scaleOption() => stringIgnoreCase('scale') & ref0(scaleSpecification);
   Parser scaleSpecification() =>
-      ref0(number) | ref1(bracketString, scaleNumber);
+      ref0(number) | ref1(bracketStringTemplate, scaleNumber);
   Parser scaleNumber() =>
       (ref0(number) & lengthUnit()) |
       (ref0(number) & ref0(number) & lengthUnit()) |

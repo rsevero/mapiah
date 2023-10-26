@@ -2,7 +2,7 @@ import 'package:mapiah/src/th_definitions.dart';
 
 /// Base class for all elements that form a THFile, including THFile itself.
 abstract class THElement {
-  late final int _id;
+  late final int _index;
   late final THFile _thFile;
   late THParent parent;
 
@@ -21,15 +21,19 @@ abstract class THElement {
   /// this constructor but the [Generic private constructor].
   THElement.withParent(this.parent) {
     _thFile = parent.thFile;
-    parent.addElement(this);
+    parent._addElement(this);
   }
 
-  get id {
-    return _id;
+  get index {
+    return _index;
   }
 
   get thFile {
     return _thFile;
+  }
+
+  String type() {
+    return runtimeType.toString().substring(2);
   }
 }
 
@@ -39,9 +43,9 @@ abstract class THElement {
 mixin THParent on THElement {
   final List<THElement> _children = [];
 
-  int addElement(THElement aElement) {
+  int _addElement(THElement aElement) {
     _children.add(aElement);
-    return aElement.id;
+    return aElement.index;
   }
 }
 
@@ -51,13 +55,13 @@ mixin THParent on THElement {
 /// THElement parameterless private constructor.
 class THFile extends THElement with THParent {
   final Map<int, THElement> _elements = {};
-  var _nextID = 0;
+  var _nextIndex = 0;
 
   var encoding = thDefaultEncoding;
   var readFromFilename = '';
 
   THFile() : super._() {
-    _id = -1;
+    _index = -1;
     parent = this;
     _thFile = this;
   }
@@ -67,21 +71,21 @@ class THFile extends THElement with THParent {
   }
 
   @override
-  int addElement(THElement aElement) {
-    aElement._id = _nextID;
-    _elements[_nextID] = aElement;
-    _nextID++;
+  int _addElement(THElement aElement) {
+    aElement._index = _nextIndex;
+    _elements[_nextIndex] = aElement;
+    _nextIndex++;
 
-    return super.addElement(aElement);
+    return super._addElement(aElement);
   }
 
-  bool hasElementByID(int aID) {
-    return _elements.containsKey(aID);
+  bool hasElementByIndex(int aIndex) {
+    return _elements.containsKey(aIndex);
   }
 
-  THElement? elementByID(int aID) {
-    if (_elements.containsKey(aID)) {
-      return _elements[aID];
+  THElement? elementByIndex(int aIndex) {
+    if (_elements.containsKey(aIndex)) {
+      return _elements[aIndex];
     } else {
       return null;
     }
