@@ -27,15 +27,14 @@ class THGrammar extends GrammarDefinition {
       bracketString(pattern('^]').star().flatten());
 
   /// Number
-  Parser number() => (pattern('-+')
+  Parser number() =>
+      (pattern('-+').optional() & digit().plus() & char('.') & digit().plus())
           .optional()
-          .seq(digit().plus().seq((char('.').seq(digit().plus())).optional())))
-      .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Comment
-  Parser comment() => char(thCommentChar)
-      .seq(pattern('^\n').star())
+  Parser comment() => (char(thCommentChar) & pattern('^\n').star())
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => value.trim());
@@ -59,9 +58,9 @@ class THGrammar extends GrammarDefinition {
   /// Date
   Parser year() => digit().repeat(2, 4).flatten();
   Parser twoDigits() => digit().repeat(1, 2).flatten();
-  Parser dotTwoDigits() => char('.').seq(ref0(twoDigits)).pick(1);
-  Parser atTwoDigits() => char('@').seq(ref0(twoDigits)).pick(1);
-  Parser colonTwoDigits() => char(':').seq(ref0(twoDigits)).pick(1);
+  Parser dotTwoDigits() => (char('.') & ref0(twoDigits)).pick(1);
+  Parser atTwoDigits() => (char('@') & ref0(twoDigits)).pick(1);
+  Parser colonTwoDigits() => (char(':') & ref0(twoDigits)).pick(1);
   Parser noDateTime() =>
       char('-').flatten().trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser singleDateTime() =>
@@ -96,9 +95,7 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser dateTimeRange() =>
       ref0(singleDateTime) &
-      (char('-')
-          .trim(ref0(thWhitespace), ref0(thWhitespace))
-          .seq(
+      ((char('-').trim(ref0(thWhitespace), ref0(thWhitespace)) &
               ref0(singleDateTime).trim(ref0(thWhitespace), ref0(thWhitespace)))
           .pick(1));
   Parser dateTime() => noDateTime() | dateTimeRange() | singleDateTime();
@@ -112,24 +109,23 @@ class THGrammar extends GrammarDefinition {
   Parser lengthUnit() => (
 
           /// centimeters and meters
-          stringIgnoreCase('centi')
-                  .optional()
-                  .seq(stringIgnoreCase('met'))
-                  .seq(stringIgnoreCase('er') | stringIgnoreCase('re'))
-                  .seq(stringIgnoreCase('s').optional()) |
+          (stringIgnoreCase('centi').optional() &
+                  stringIgnoreCase('met') &
+                  (stringIgnoreCase('er') | stringIgnoreCase('re')) &
+                  stringIgnoreCase('s').optional()) |
               stringIgnoreCase('m') |
               stringIgnoreCase('cm') |
 
               /// inches
-              stringIgnoreCase('inch').seq(stringIgnoreCase('es').optional()) |
+              (stringIgnoreCase('inch') & stringIgnoreCase('es').optional()) |
               stringIgnoreCase('in') |
 
               /// feet
-              stringIgnoreCase('feet').seq(stringIgnoreCase('s').optional()) |
+              (stringIgnoreCase('feet') & stringIgnoreCase('s').optional()) |
               stringIgnoreCase('ft') |
 
               /// yard
-              stringIgnoreCase('yard').seq(stringIgnoreCase('s').optional()) |
+              (stringIgnoreCase('yard') & stringIgnoreCase('s').optional()) |
               stringIgnoreCase('yd'))
       .flatten();
 
@@ -137,25 +133,24 @@ class THGrammar extends GrammarDefinition {
   Parser angleUnit() => (
 
           /// Degrees
-          stringIgnoreCase('degree').seq(stringIgnoreCase('s').optional()) |
+          (stringIgnoreCase('degree') & stringIgnoreCase('s').optional()) |
               stringIgnoreCase('deg') |
 
               /// Minutes
-              stringIgnoreCase('minute').seq(stringIgnoreCase('s').optional()) |
+              (stringIgnoreCase('minute') & stringIgnoreCase('s').optional()) |
               stringIgnoreCase('min') |
 
               /// Grads
-              stringIgnoreCase('grad').seq(stringIgnoreCase('s').optional()) |
+              (stringIgnoreCase('grad') & stringIgnoreCase('s').optional()) |
 
               /// Mils
-              stringIgnoreCase('mil').seq(stringIgnoreCase('s').optional()))
+              (stringIgnoreCase('mil') & stringIgnoreCase('s').optional()))
       .flatten();
 
   /// Clino units
   Parser clinoUnit() =>
       ref0(angleUnit) |
-      stringIgnoreCase('percent')
-          .seq(stringIgnoreCase('age').optional())
+      (stringIgnoreCase('percent') & stringIgnoreCase('age').optional())
           .flatten();
 
   /// encoding
@@ -182,12 +177,12 @@ class THGrammar extends GrammarDefinition {
       ((stringIgnoreCase('none') |
 
               // type: plan with optional index
-              (stringIgnoreCase('plan')
-                  .seq((char(':').seq(ref0(keyword))).optional())) |
+              ((stringIgnoreCase('plan') &
+                  ((char(':') & ref0(keyword))).optional())) |
 
               // type: elevation with optional index
-              (stringIgnoreCase('elevation')
-                  .seq((char(':').seq(ref0(keyword))).optional())) |
+              ((stringIgnoreCase('elevation') &
+                  ((char(':') & ref0(keyword))).optional())) |
 
               // type: elevation with view direction
               (char('[') &
@@ -198,12 +193,25 @@ class THGrammar extends GrammarDefinition {
                   .pick(1) |
 
               // type: extended with optional index
-              stringIgnoreCase('extended')
-                  .seq((char(':').seq(ref0(keyword))).optional())))
+              (stringIgnoreCase('extended') &
+                  ((char(':') & ref0(keyword))).optional())))
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser projectionOption() =>
       stringIgnoreCase('projection') & ref0(projectionSpecification);
   Parser scaleOption() => stringIgnoreCase('scale') & ref0(scaleSpecification);
-  Parser scaleSpecification() => ref0(number);
+  Parser scaleSpecification() =>
+      ref0(number) | ref1(bracketString, scaleNumber);
+  Parser scaleNumber() =>
+      (ref0(number) & lengthUnit()) |
+      (ref0(number) & ref0(number) & lengthUnit()) |
+      (ref0(number) &
+          ref0(number) &
+          ref0(number) &
+          ref0(number) &
+          ref0(number) &
+          ref0(number) &
+          ref0(number) &
+          ref0(number) &
+          lengthUnit().optional());
 }
