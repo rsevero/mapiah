@@ -1,4 +1,4 @@
-import "dart:math";
+import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
 import "package:mapiah/src/th_definitions.dart";
 
@@ -11,6 +11,10 @@ class THDoublePart {
   }
 
   THDoublePart.fromString(String aValueString) {
+    fromString(aValueString);
+  }
+
+  void fromString(String aValueString) {
     aValueString = aValueString.trim();
 
     var dotPosition = aValueString.indexOf(thDecimalSeparator);
@@ -18,6 +22,11 @@ class THDoublePart {
         (dotPosition > 0) ? aValueString.length - (dotPosition + 1) : 0;
 
     value = double.parse(aValueString);
+  }
+
+  void fromValue(double aValue, int aDecimalPositions) {
+    value = aValue;
+    decimalPositions = aDecimalPositions;
   }
 
   set decimalPositions(int aDecimalPositions) {
@@ -34,20 +43,16 @@ class THDoublePart {
     return _decimalPositions;
   }
 
-  /// Based on [https://stackoverflow.com/questions/28419255/how-do-you-round-a-double-in-dart-to-a-given-degree-of-precision-after-the-decim/67497099#67497099]
   @override
   String toString() {
-    String numbersAfterDecimal = value.toString().split('.')[1];
+    double incrementValue = numerics.positiveEpsilonOf(value);
 
-    if (numbersAfterDecimal != '0') {
-      int existingNumberOfDecimal = numbersAfterDecimal.length;
-      double incrementValue = 1 / (10 * pow(10, existingNumberOfDecimal));
-      if (value < 0) {
-        value -= incrementValue;
-      } else {
-        value += incrementValue;
-      }
+    if (value < 0) {
+      value -= incrementValue;
+    } else {
+      value += incrementValue;
     }
+
     var asString = value.toStringAsFixed(decimalPositions);
 
     return asString;
