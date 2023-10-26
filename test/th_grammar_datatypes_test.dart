@@ -719,7 +719,7 @@ void main() {
 
   group('bracketString', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.bracketString()).end();
+    final parser = grammar.buildFrom(grammar.bracketStringGeneral()).end();
 
     const successes = {
       '[blaus]': 'blaus',

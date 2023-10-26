@@ -22,8 +22,9 @@ class THGrammar extends GrammarDefinition {
       .pick(1);
 
   /// Bracket string
-  Parser bracketString() =>
-      (char('[') & pattern('^]').star().flatten() & char(']')).pick(1);
+  Parser bracketString(content) => (char('[') & content & char(']')).pick(1);
+  Parser bracketStringGeneral() =>
+      bracketString(pattern('^]').star().flatten());
 
   /// Number
   Parser number() => (pattern('-+')
@@ -175,6 +176,7 @@ class THGrammar extends GrammarDefinition {
   /// TODO: centreline
 
   /// Scrap
+  Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
   Parser projectionSpecification() =>
       // type: none
       ((stringIgnoreCase('none') |
@@ -202,5 +204,6 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser projectionOption() =>
       stringIgnoreCase('projection') & ref0(projectionSpecification);
-  Parser scrap() => stringIgnoreCase('scrap') & ref0(keyword);
+  Parser scaleOption() => stringIgnoreCase('scale') & ref0(scaleSpecification);
+  Parser scaleSpecification() => ref0(number);
 }
