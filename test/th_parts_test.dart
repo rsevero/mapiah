@@ -43,6 +43,7 @@ void main() {
       {'value': 2.3456789, 'decimalPositions': 7, 'asString': '2.3456789'},
       {'value': 2.275, 'decimalPositions': 3, 'asString': '2.275'},
       {'value': 312, 'decimalPositions': 0, 'asString': '312'},
+      {'value': 312.0, 'decimalPositions': 1, 'asString': '312.0'},
       {'value': 312.00, 'decimalPositions': 2, 'asString': '312.00'},
     ];
     var id = 1;

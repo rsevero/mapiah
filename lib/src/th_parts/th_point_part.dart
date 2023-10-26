@@ -1,12 +1,16 @@
 import "package:mapiah/src/th_parts/th_double_part.dart";
 
 class THPointPart {
-  late double x;
-  late double y;
-  late double decimalPositionsX;
-  late double decimalPositionsY;
+  late final THDoublePart x;
+  late final THDoublePart y;
 
-  THPointPart(this.x, this.y, this.decimalPositionsX, this.decimalPositionsY);
+  THPointPart(aX, aY, aXDecimalPositions, aYDecimalPositions) {
+    x = THDoublePart(aX, aXDecimalPositions);
+    y = THDoublePart(aY, aYDecimalPositions);
+  }
 
-  THPointPart.fromStrings(String aXAsString, String aYAsString) {}
+  THPointPart.fromStrings(String aXAsString, String aYAsString) {
+    x = THDoublePart.fromString(aXAsString);
+    y = THDoublePart.fromString(aYAsString);
+  }
 }
