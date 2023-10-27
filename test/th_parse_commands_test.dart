@@ -68,7 +68,7 @@ void main() {
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.toFile(file);
+        final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -115,7 +115,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.toFile(file);
+        final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }

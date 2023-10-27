@@ -8,7 +8,7 @@ import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 class THFileWriter {
   var _prefix = '';
 
-  String toFile(THElement aTHElement) {
+  String serialize(THElement aTHElement) {
     var asString = '';
     final type = aTHElement.type();
 
@@ -48,7 +48,7 @@ class THFileWriter {
     var asString = '';
 
     for (final aChild in (aTHParent).children) {
-      asString += toFile(aChild);
+      asString += serialize(aChild);
     }
 
     return asString;

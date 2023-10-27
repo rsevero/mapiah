@@ -53,7 +53,7 @@ scrap poco_surubim_SCP01
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
 
-        final asFile = writer.toFile(file);
+        final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
