@@ -1,0 +1,4 @@
+scrap myTestScrap
+    scrap myWronglyPlacedScrap
+    endscrap
+endscrap

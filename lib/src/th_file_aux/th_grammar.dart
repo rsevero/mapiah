@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:petitparser/petitparser.dart';
 
 import 'package:mapiah/src/th_definitions.dart';
@@ -8,42 +10,46 @@ class THGrammar extends GrammarDefinition {
   Parser start() => th2Structure().end();
 
   /// TH2 Structure
-  Parser th2Structure() =>
-      encodingCommand().optional() & (comment() | th2Command()).star();
-  Parser th2Command() => scrapCommand();
+  Parser th2Structure() => encoding() | th2Command() | fullLineComment();
+  Parser th2Command() => scrap();
 
   /// Whitespace
-  Parser thWhitespace() => (string('\\\n') | whitespace()).plus();
-  Parser thWhitespaceNoLineBreak() =>
-      (string('\\\n') | (char('\n').not() & whitespace())).plus();
+  Parser thWhitespace() => anyOf(' \t').plus();
 
   /// Quoted string
   ///
   /// TODO: The convertion of two double quotes in one will be done after grammar
   /// parsing.
-  Parser quotedString() => (char('"') &
-          (char('"').skip(before: char('"')) | pattern('^"')).star().flatten() &
-          char('"'))
+  Parser quotedString() => (char(thQuote) &
+          (char(thQuote).skip(before: char(thQuote)) | pattern('^$thQuote'))
+              .star()
+              .flatten() &
+          char(thQuote))
       .pick(1);
 
   /// Bracket string
   Parser bracketStringTemplate(content) =>
-      (char('[') & content & char(']')).pick(1);
+      (char('[').trim(ref0(thWhitespace), ref0(thWhitespace)) &
+              content &
+              char(']').trim(ref0(thWhitespace), ref0(thWhitespace)))
+          .pick(1);
   Parser bracketStringGeneral() =>
       bracketStringTemplate(pattern('^]').star().flatten());
 
   /// Number
-  Parser number() =>
-      (pattern('-+').optional() & digit().plus() & char('.') & digit().plus())
-          .optional()
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser number() => (pattern('-+').optional() &
+          digit().plus() &
+          (char('.') & digit().plus()).optional())
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Comment
-  Parser comment() => (char(thCommentChar) & pattern('^\n').star())
+  Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
-      .map((value) => value.trim());
+      .map((value) => [commentType, value.trim()]));
+  Parser fullLineComment() => commentTemplate('fulllinecomment').star();
+  Parser endLineComment() => commentTemplate('samelinecomment');
 
   /// Keyword
   Parser keywordStartChar() => pattern('A-Za-z0-9_/');
@@ -163,7 +169,8 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Command template
-  Parser commandTemplate(command) => (command) & ref0(comment).optional();
+  Parser commandTemplate(command) =>
+      ref0(command) & ref0(endLineComment).optional();
 
   /// encoding
   Parser encodingStartChar() => pattern('A-Za-z');
@@ -173,10 +180,8 @@ class THGrammar extends GrammarDefinition {
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => value.toUpperCase());
-  Parser encodingCommand() =>
-      stringIgnoreCase('encoding') &
-      ref0(encodingName) &
-      ref0(comment).optional();
+  Parser encodingCommand() => stringIgnoreCase('encoding') & ref0(encodingName);
+  Parser encoding() => ref1(commandTemplate, encodingCommand);
 
   /// TODO: input
   /// TODO: survey
@@ -186,7 +191,8 @@ class THGrammar extends GrammarDefinition {
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
-  Parser scrapOptions() => projectionOption() | scaleOption();
+  Parser scrapOptions() =>
+      projectionOption().optional() & scaleOption().optional();
   Parser projectionSpecification() =>
       // type: none
       ((stringIgnoreCase('none') |
@@ -213,8 +219,11 @@ class THGrammar extends GrammarDefinition {
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser projectionOption() =>
-      stringIgnoreCase('projection') & ref0(projectionSpecification);
-  Parser scaleOption() => stringIgnoreCase('scale') & ref0(scaleSpecification);
+      stringIgnoreCase('projection').skip(before: char('-')) &
+      ref0(projectionSpecification);
+  Parser scaleOption() =>
+      stringIgnoreCase('scale').skip(before: char('-')) &
+      ref0(scaleSpecification);
   Parser scaleSpecification() =>
       ref0(number) | bracketStringTemplate(scaleNumber());
   Parser scaleNumber() =>

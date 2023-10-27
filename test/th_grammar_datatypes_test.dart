@@ -7,7 +7,7 @@ import 'package:mapiah/src/th_file_aux/th_grammar.dart';
 void main() {
   group('comment', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.comment()).end();
+    final parser = grammar.buildFrom(grammar.endLineComment()).end();
 
     const successes = [
       '# comment',
@@ -18,19 +18,18 @@ void main() {
     for (var success in successes) {
       test(success, () {
         final result = parser.parse(success);
-        // trace(parser).parse('  # comment with leading and trailing spaces ');
         expect(result.runtimeType.toString(), contains('Success'));
-        expect(result.value, success.trim());
+        expect(result.value[1], success.trim());
       });
     }
 
     const failures = [
-      // '-point',
-      // '_secret*Keywork49/',
-      // '/st+range39',
-      // '099.92',
-      // 'cmy,k-rgb',
-      // "OSGB'",
+      '-point',
+      '_secret*Keywork49/',
+      '/st+range39',
+      '099.92',
+      'cmy,k-rgb',
+      "OSGB'",
     ];
 
     for (var failure in failures) {
@@ -372,36 +371,16 @@ void main() {
           ]
         ]
       ],
-      '2021.12.23 -\\\n2022.02.9@2:30 ': [
-        [
-          '2021',
-          [
-            '12',
-            ['23', null]
-          ]
-        ],
-        [
-          '2022',
-          [
-            '02',
-            [
-              '9',
-              [
-                '2',
-                ['30', null]
-              ]
-            ]
-          ]
-        ]
-      ],
     };
 
+    var id = 1;
     for (var success in successes.keys) {
-      test(success, () {
+      test("$id - $success", () {
         final result = parser.parse(success);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, successes[success]);
       });
+      id++;
     }
 
     const failures = [
@@ -637,36 +616,16 @@ void main() {
           ]
         ]
       ],
-      '2021.12.23 -\\\n2022.02.9@2:30 ': [
-        [
-          '2021',
-          [
-            '12',
-            ['23', null]
-          ]
-        ],
-        [
-          '2022',
-          [
-            '02',
-            [
-              '9',
-              [
-                '2',
-                ['30', null]
-              ]
-            ]
-          ]
-        ]
-      ],
     };
 
+    int id = 1;
     for (var success in mapSuccesses.keys) {
-      test(success, () {
+      test("$id - $success", () {
         final result = parser.parse(success);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, mapSuccesses[success]);
       });
+      id++;
     }
 
     const mapFailures = [

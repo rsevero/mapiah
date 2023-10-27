@@ -6,15 +6,17 @@ mixin THHasOptions on THElement {
   final List<String> _optionsList = [];
   final Map<String, THCommandOption> _optionsMap = {};
 
-  bool addOption(THCommandOption aOption) {
-    final type = aOption.type;
-    if (_optionsList.contains(type) | _optionsMap.containsKey(type)) {
-      return false;
+  void addUpdateOption(THCommandOption aOption) {
+    final type = aOption.type();
+    // if (_optionsList.contains(type) | _optionsMap.containsKey(type)) {
+    //   return false;
+    // }
+    if (!_optionsList.contains(type)) {
+      _optionsList.add(type);
     }
-    _optionsList.add(aOption.type());
-    _optionsMap[aOption.type()] = aOption;
+    _optionsMap[type] = aOption;
 
-    return true;
+    // return true;
   }
 
   @useResult
@@ -25,18 +27,6 @@ mixin THHasOptions on THElement {
   @useResult
   THCommandOption? optionByType(String aType) {
     return _optionsMap[aType];
-  }
-
-  @useResult
-  bool updateOption(THCommandOption aOption) {
-    final type = aOption.type();
-    if (hasOption(type)) {
-      assert(_optionsList.contains(type));
-      _optionsMap[type] = aOption;
-      return true;
-    } else {
-      return addOption(aOption);
-    }
   }
 
   @useResult

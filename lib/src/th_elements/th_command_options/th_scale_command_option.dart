@@ -7,4 +7,17 @@ class THScaleCommandOption extends THCommandOption {
   String type() {
     return 'scale';
   }
+
+  @override
+  String valueToString() {
+    var asString = '';
+
+    final valueCount = value.length;
+
+    switch (valueCount) {
+      // case 1:
+    }
+
+    return asString;
+  }
 }

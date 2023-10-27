@@ -4,8 +4,8 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
+import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
-import 'package:mapiah/src/th_elements/th_same_line_comment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:meta/meta.dart';
@@ -18,116 +18,97 @@ import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_definitions.dart';
 
 class THFileParser {
-  final grammar = THGrammar();
-  late Parser parser;
-  var contents = '';
-  THFile _parsedTHFile = THFile();
+  final _grammar = THGrammar();
+  late Parser _parser;
+  late List<String> _splittedContents;
+  late THFile _parsedTHFile;
   late THParent _currentParent;
   late THHasOptions _currentElement;
-
-  THFileParser() {
-    parser = grammar.buildFrom(grammar.start());
-    _currentParent = _parsedTHFile;
-  }
-
-  @useResult
-  Future<THFile> parse(String aFilePath) async {
-    _parsedTHFile = THFile();
-    _currentParent = _parsedTHFile;
-
-    try {
-      final file = File("./test/auxiliary/$aFilePath");
-      final raf = await file.open();
-
-      _parsedTHFile.encoding = await encodingNameFromFile(raf);
-
-      contents = await decodeFile(raf, _parsedTHFile.encoding);
-      await raf.close();
-    } catch (e) {
-      stderr.writeln('failed to read file: \n$e');
-    }
-
-    injectContents();
-
-    return _parsedTHFile;
-  }
+  bool _runTraceParser = false;
 
   void injectContents() {
-    // trace(parser!).parse(contents);
-    final parsedContents = parser.parse(contents);
-    // print("parsedContents.value: '${parsedContents.value}");
-    // print(
-    //     "parsedContents.value.runtime type: '${parsedContents.value.runtimeType}'");
-    // print(
-    //     "parsedContents.value[0].runtime type: '${parsedContents.value[0].runtimeType}'");
-    for (List<dynamic> element in parsedContents.value) {
+    for (String line in _splittedContents) {
+      if (_runTraceParser) {
+        trace(_parser).parse(line);
+      }
+      final parsedContents = _parser.parse(line);
+      if (parsedContents.isFailure) {
+        injectUnknown([line]);
+        continue;
+      }
+      // print("parsedContents.value: '${parsedContents.value}");
+      // print(
+      //     "parsedContents.value.runtime type: '${parsedContents.value.runtimeType}'");
+      final element = parsedContents.value[0];
       // print("element: '$element'");
       if (element.isEmpty) {
         break;
       }
+      // print("element[0]: '${element[0]}'");
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
         case 'encoding':
-          injectEncoding(element);
+          // Does nothing as encoding has already been parsed at parsed().
+          break;
         case 'scrap':
           injectScrap(element);
+        case 'fulllinecomment':
+          injectComment(element);
+          continue;
         default:
           injectUnknown(element);
+          continue;
       }
+      injectComment(parsedContents.value[1]);
     }
   }
 
-  void injectEncoding(List<dynamic> aElement) {
-    // Don't do much as encoding has a special parsing procedure inside parse().
-    injectSameLineComment(aElement);
-  }
-
   void injectScrap(List<dynamic> aElement) {
-    final elementSize = aElement.length - 1;
+    final elementSize = aElement.length;
     assert(elementSize >= 2);
     final newScrap = THScrap(_currentParent, aElement[1]);
 
     _currentElement = newScrap;
     _currentParent = newScrap;
 
-    var index = 2;
-    while (index < elementSize) {
-      index = scrapOptionFromElement(aElement, index);
-    }
-
-    injectSameLineComment(aElement);
+    scrapOptionFromElement(aElement[2]);
   }
 
-  void injectSameLineComment(List<dynamic> aElement) {
-    final lastItem = aElement[aElement.length - 1];
-    if (lastItem == null) {
+  void injectComment(List<dynamic>? aElement) {
+    if (aElement == null) {
       return;
     }
 
-    THSameLineComment(_currentParent, lastItem);
+    switch (aElement[0]) {
+      case 'fulllinecomment':
+        THComment(_currentParent, aElement[1], false);
+      case 'samelinecomment':
+        THComment(_currentParent, aElement[1], true);
+      default:
+        THUnrecognizedCommand(_currentParent, aElement);
+    }
   }
 
-  int scrapOptionFromElement(List<dynamic> aElement, int current) {
-    final optionType = aElement[current].toString().toLowerCase();
-    THCommandOption newOption;
+  void scrapOptionFromElement(List<dynamic> aElement) {
+    // if (aElement == null) {
+    //   return;
+    // }
+    for (var aOption in aElement) {
+      if (aOption == null) {
+        continue;
+      }
+      final optionType = aElement[0].toString().toLowerCase();
+      THCommandOption newOption;
 
-    switch (optionType) {
-      case ('projection'):
-        newOption = THProjectionCommandOption(
-            _currentElement, aElement.sublist(current + 1, current + 1));
-        current += 2;
-      case ('scale'):
-        newOption = THScaleCommandOption(
-            _currentElement, aElement.sublist(current + 1, current + 1));
-        current += 2;
-      default:
-        newOption = THUnrecognizedCommandOption(
-            _currentElement, aElement.sublist(current));
-        current = aElement.length;
+      switch (optionType) {
+        case ('projection'):
+          newOption = THProjectionCommandOption(_currentElement, aElement[1]);
+        case ('scale'):
+          newOption = THScaleCommandOption(_currentElement, aElement[1]);
+        default:
+          newOption = THUnrecognizedCommandOption(_currentElement, aElement[1]);
+      }
     }
-    _currentElement.addOption(newOption);
-
-    return current;
   }
 
   void injectUnknown(List<dynamic> aElement) {
@@ -210,5 +191,87 @@ class THFileParser {
     } else {
       return (((priorChar + char) == lineDelimiter) | (char == thCommentChar));
     }
+  }
+
+  @useResult
+  Future<THFile> parse(String aFilePath, {Parser? startParser}) async {
+    if (startParser == null) {
+      _parser = _grammar.buildFrom(_grammar.start());
+      _runTraceParser = false;
+    } else {
+      _parser = _grammar.buildFrom(startParser);
+      _runTraceParser = true;
+    }
+
+    _parsedTHFile = THFile();
+    _currentParent = _parsedTHFile;
+
+    try {
+      final file = File("./test/auxiliary/$aFilePath");
+      final raf = await file.open();
+
+      _parsedTHFile.encoding = await encodingNameFromFile(raf);
+
+      var contents = await decodeFile(raf, _parsedTHFile.encoding);
+
+      splitContents(contents);
+
+      await raf.close();
+    } catch (e) {
+      stderr.writeln('failed to read file: \n$e');
+    }
+
+    injectContents();
+
+    return _parsedTHFile;
+  }
+
+  void splitContents(String aContents) {
+    _splittedContents = [];
+    var lastLine = '';
+    while (aContents.isNotEmpty) {
+      var lineBreakIndex = aContents.indexOf(thLineBreak);
+      if (lineBreakIndex == -1) {
+        lastLine += aContents;
+        break;
+      }
+      var newLine = aContents.substring(0, lineBreakIndex);
+      aContents = aContents.substring(lineBreakIndex + 1);
+      var quoteCount = countCharOccurrences(newLine, thQuote);
+
+      // Joining lines that end with a line break inside a quoted string, i.e.,
+      // the line break belongs to the string content.
+      while (quoteCount.isOdd & aContents.isNotEmpty) {
+        lineBreakIndex = aContents.indexOf(thLineBreak);
+        newLine += aContents.substring(0, lineBreakIndex);
+        aContents = aContents.substring(lineBreakIndex + 1);
+        quoteCount = countCharOccurrences(newLine, thQuote);
+      }
+
+      // Joining next line if this line ends with a backslash.
+      final lastChar = newLine.substring(newLine.length - 1);
+      if (lastChar == thBackslash) {
+        lastLine = newLine.substring(0, newLine.length - 1);
+      } else {
+        _splittedContents.add("$lastLine$newLine");
+        lastLine = '';
+      }
+    }
+
+    // Dealing with files that don´t finish with a line break or with
+    // unterminated quoted strings.
+    if (lastLine.isNotEmpty) {
+      _splittedContents.add(lastLine);
+    }
+  }
+
+  int countCharOccurrences(String text, String charToCount) {
+    int count = 0;
+    for (int i = 0; i < text.length; i++) {
+      if (text[i] == charToCount) {
+        count++;
+      }
+    }
+    return count;
   }
 }

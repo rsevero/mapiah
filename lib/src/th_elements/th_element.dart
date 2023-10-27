@@ -70,6 +70,10 @@ class THFile extends THElement with THParent {
     return _elements;
   }
 
+  int countElements() {
+    return _elements.length;
+  }
+
   @override
   int _addElement(THElement aElement) {
     aElement._index = _nextIndex;
