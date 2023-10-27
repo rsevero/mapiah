@@ -5,13 +5,4 @@ class THScrap extends THElement with THHasOptions, THParent {
   var id = '';
 
   THScrap(super.parent, this.id) : super.withParent();
-
-  @override
-  String toString() {
-    var asString = "${type()} $id";
-
-    asString += optionsAsString();
-
-    return asString;
-  }
 }

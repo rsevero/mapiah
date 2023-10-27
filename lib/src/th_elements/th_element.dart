@@ -5,6 +5,7 @@ abstract class THElement {
   late final int _index;
   late final THFile _thFile;
   late THParent parent;
+  String? sameLineComment;
 
   /// Generic private constructor.
   ///
@@ -24,16 +25,20 @@ abstract class THElement {
     parent._addElement(this);
   }
 
-  get index {
+  int get index {
     return _index;
   }
 
-  get thFile {
+  THFile get thFile {
     return _thFile;
   }
 
   String type() {
     return runtimeType.toString().substring(2).toLowerCase();
+  }
+
+  void removeSameLineComment() {
+    sameLineComment = null;
   }
 }
 
@@ -46,6 +51,10 @@ mixin THParent on THElement {
   int _addElement(THElement aElement) {
     _children.add(aElement);
     return aElement.index;
+  }
+
+  List<THElement> get children {
+    return _children;
   }
 }
 

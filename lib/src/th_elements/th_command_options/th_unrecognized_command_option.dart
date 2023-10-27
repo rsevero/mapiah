@@ -5,6 +5,6 @@ class THUnrecognizedCommandOption extends THCommandOption {
 
   @override
   String type() {
-    return 'unrecognizedOption';
+    return 'UnrecognizedCommandOption';
   }
 }

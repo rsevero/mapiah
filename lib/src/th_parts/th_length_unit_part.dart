@@ -1,8 +1,8 @@
 enum THLengthUnit {
-  meter,
   centimeter,
-  inch,
   feet,
+  inch,
+  meter,
   yard,
 }
 
@@ -10,21 +10,29 @@ class THLengthUnitPart {
   late THLengthUnit unit;
 
   static const unitNames = {
-    'meter': THLengthUnit.meter,
-    'meters': THLengthUnit.meter,
-    'm': THLengthUnit.meter,
     'centimeter': THLengthUnit.centimeter,
     'centimeters': THLengthUnit.centimeter,
     'cm': THLengthUnit.centimeter,
-    'inch': THLengthUnit.inch,
-    'inches': THLengthUnit.inch,
-    'in': THLengthUnit.inch,
     'feet': THLengthUnit.feet,
     'feets': THLengthUnit.feet,
     'ft': THLengthUnit.feet,
+    'in': THLengthUnit.inch,
+    'inch': THLengthUnit.inch,
+    'inches': THLengthUnit.inch,
+    'm': THLengthUnit.meter,
+    'meter': THLengthUnit.meter,
+    'meters': THLengthUnit.meter,
     'yard': THLengthUnit.yard,
     'yards': THLengthUnit.yard,
     'yd': THLengthUnit.yard,
+  };
+
+  static const textRepresentations = {
+    THLengthUnit.centimeter: 'cm',
+    THLengthUnit.feet: 'ft',
+    THLengthUnit.inch: 'in',
+    THLengthUnit.meter: 'm',
+    THLengthUnit.yard: 'yd',
   };
 
   THLengthUnitPart(this.unit);
@@ -45,6 +53,11 @@ class THLengthUnitPart {
     unit = unitNames[aUnitString]!;
 
     return true;
+  }
+
+  @override
+  String toString() {
+    return textRepresentations[unit]!;
   }
 
   static bool isUnit(String aUnitString) {

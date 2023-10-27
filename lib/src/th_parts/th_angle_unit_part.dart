@@ -1,24 +1,31 @@
 enum THAngleUnit {
   degree,
-  minute,
   grad,
   mil,
+  minute,
 }
 
 class THAngleUnitPart {
   late THAngleUnit unit;
 
   static const unitNames = {
+    'deg': THAngleUnit.degree,
     'degree': THAngleUnit.degree,
     'degrees': THAngleUnit.degree,
-    'deg': THAngleUnit.degree,
-    'minute': THAngleUnit.minute,
-    'minutes': THAngleUnit.minute,
-    'min': THAngleUnit.minute,
     'grad': THAngleUnit.grad,
     'grads': THAngleUnit.grad,
     'mil': THAngleUnit.mil,
     'mils': THAngleUnit.mil,
+    'min': THAngleUnit.minute,
+    'minute': THAngleUnit.minute,
+    'minutes': THAngleUnit.minute,
+  };
+
+  static const textRepresentations = {
+    THAngleUnit.degree: 'deg',
+    THAngleUnit.grad: 'grad',
+    THAngleUnit.mil: 'mil',
+    THAngleUnit.minute: 'minute',
   };
 
   THAngleUnitPart(this.unit);
@@ -39,6 +46,11 @@ class THAngleUnitPart {
     unit = unitNames[aUnitString]!;
 
     return true;
+  }
+
+  @override
+  String toString() {
+    return textRepresentations[unit]!;
   }
 
   static bool isUnit(String aUnitString) {

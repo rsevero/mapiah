@@ -1,3 +1,4 @@
+import 'package:mapiah/src/th_file_aux/th_file_writer.dart';
 import 'package:mapiah/src/th_file_aux/th_grammar.dart';
 import 'package:petitparser/petitparser.dart';
 // import 'package:petitparser/debug.dart';
@@ -8,63 +9,52 @@ import 'package:mapiah/src/th_elements/th_element.dart';
 
 void main() {
   group('initial', () {
-    var myTHFile = THFile();
+    final file = THFile();
 
     test("THFile", () {
-      expect(myTHFile.index, -1);
-      expect(myTHFile.elements.length, 0);
+      expect(file.index, -1);
+      expect(file.elements.length, 0);
     });
   });
 
   group('line breaks', () {
-    var myTHParser = THFileParser();
-    var myGrammar = THGrammar();
+    final parser = THFileParser();
+    final writer = THFileWriter();
 
     var successes = [
       {
         'file': 'th2parser-0000-line_breaks.th2',
-        'countElements': 1,
-        'results': [
-          {
-            'index': 0,
-            'asString': 'scrap poco_surubim_SCP01',
-          }
-        ],
+        'countElements': 2,
+        'asFile': """encoding UTF-8
+scrap poco_surubim_SCP01
+""",
       },
       {
         'file': 'th2parser-0001-no_linebreak_at_file_end.th2',
-        'countElements': 1,
-        'results': [
-          {
-            'index': 0,
-            'asString': 'scrap poco_surubim_SCP01',
-          }
-        ],
+        'countElements': 2,
+        'asFile': """encoding UTF-8
+scrap poco_surubim_SCP01
+""",
       },
       {
-        'file': 'th2parser-0002-backslashending.th2',
-        'countElements': 1,
-        'results': [
-          {
-            'index': 0,
-            'asString': 'scrap poco_surubim_SCP01',
-          }
-        ],
+        'file': 'th2parser-0002-backslash_ending.th2',
+        'countElements': 2,
+        'asFile': """encoding UTF-8
+scrap poco_surubim_SCP01
+""",
       }
     ];
 
     for (var success in successes) {
       test(success['file'], () async {
-        final myTHFile = await myTHParser.parse(success['file'] as String);
+        final file = await parser.parse(success['file'] as String);
         // final myTHFile = await myTHParser.parse(success['file'] as String,
         //     startParser: myGrammar.start());
+        expect(file, isA<THFile>());
+        expect(file.countElements(), success['countElements']);
 
-        expect(myTHFile.countElements(), success['countElements']);
-
-        for (var result in (success['results'] as List)) {
-          expect(myTHFile.elementByIndex(result['index']).toString(),
-              result['asString']);
-        }
+        final asFile = writer.toFile(file);
+        expect(asFile, success['asFile']);
       });
     }
   });

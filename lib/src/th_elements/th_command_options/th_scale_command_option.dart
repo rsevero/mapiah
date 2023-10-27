@@ -3,7 +3,9 @@ import 'package:mapiah/src/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
 
 class THScaleCommandOption extends THCommandOption {
-  THScaleCommandOption(super.parent, super.value);
+  THScaleCommandOption(aParent, aValue) : super(aParent, []) {
+    value = aValue;
+  }
 
   @override
   String type() {
@@ -30,39 +32,39 @@ class THScaleCommandOption extends THCommandOption {
   }
 
   // @override
-  set value(List<dynamic> aValue) {
-    final newValueList = [];
+  set value(List<dynamic> aValueList) {
+    value.clear();
 
     var hasUnit = false;
-    for (var value in aValue) {
+    for (var aValue in aValueList) {
       if (hasUnit) {
         throw 'Unsupported scale option parameter after unit.';
       }
 
       // Properly set parameters
-      if (value is THDoublePart) {
-        newValueList.add(value);
+      if (aValue is THDoublePart) {
+        value.add(aValue);
         continue;
-      } else if (value is THLengthUnitPart) {
-        newValueList.add(value);
+      } else if (aValue is THLengthUnitPart) {
+        value.add(aValue);
         hasUnit = true;
         continue;
       }
 
       // String parameters
-      var isDouble = double.tryParse(value);
+      var isDouble = double.tryParse(aValue);
       if ((isDouble == null) & !hasUnit) {
-        if (!THLengthUnitPart.isUnit(value)) {
+        if (!THLengthUnitPart.isUnit(aValue)) {
           throw 'Unknwon length unit.';
         }
 
-        final newUnit = THLengthUnitPart.fromString(value);
-        newValueList.add(newUnit);
+        final newUnit = THLengthUnitPart.fromString(aValue);
+        value.add(newUnit);
         hasUnit = true;
         continue;
       }
-      final newDouble = THDoublePart.fromString(value);
-      newValueList.add(newDouble);
+      final newDouble = THDoublePart.fromString(aValue);
+      value.add(newDouble);
     }
   }
 }

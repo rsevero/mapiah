@@ -1,8 +1,13 @@
 /// Constants and others definitioons that should be generally available.
 const thCommentChar = '#';
-const thDefaultEncoding = 'UTF-8';
 const thDecimalSeparator = '.';
-const thMaxEncodingLength = 20;
 const thBackslash = '\\';
 const thLineBreak = '\n';
 const thQuote = '"';
+
+const thIndentation = '  ';
+
+const thMaxEncodingLength = 20;
+const thMaxFileLineLength = 80;
+
+const thDefaultEncoding = 'UTF-8';

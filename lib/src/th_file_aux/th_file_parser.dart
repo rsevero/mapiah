@@ -1,21 +1,23 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
+import 'package:mapiah/src/th_elements/th_element.dart';
+import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
+import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
+import 'package:mapiah/src/th_file_aux/th_grammar.dart';
 import 'package:meta/meta.dart';
 import 'package:charset/charset.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:petitparser/debug.dart';
-
-import 'package:mapiah/src/th_file_aux/th_grammar.dart';
-import 'package:mapiah/src/th_elements/th_element.dart';
-import 'package:mapiah/src/th_definitions.dart';
 
 class THFileParser {
   final _grammar = THGrammar();
@@ -23,17 +25,17 @@ class THFileParser {
   late List<String> _splittedContents;
   late THFile _parsedTHFile;
   late THParent _currentParent;
-  late THHasOptions _currentElement;
+  late THElement _currentElement;
   bool _runTraceParser = false;
 
-  void injectContents() {
+  void _injectContents() {
     for (String line in _splittedContents) {
       if (_runTraceParser) {
         trace(_parser).parse(line);
       }
       final parsedContents = _parser.parse(line);
       if (parsedContents.isFailure) {
-        injectUnknown([line]);
+        _injectUnknown([line]);
         continue;
       }
       // print("parsedContents.value: '${parsedContents.value}");
@@ -48,22 +50,32 @@ class THFileParser {
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
         case 'encoding':
-          // Does nothing as encoding has already been parsed at parsed().
-          break;
-        case 'scrap':
-          injectScrap(element);
+          _injectEncoding();
+        case 'endscrap':
+          _injectEndscrap(element);
         case 'fulllinecomment':
-          injectComment(element);
+          _injectComment(element);
           continue;
+        case 'scrap':
+          _injectScrap(element);
         default:
-          injectUnknown(element);
+          _injectUnknown(element);
           continue;
       }
-      injectComment(parsedContents.value[1]);
+      _injectComment(parsedContents.value[1]);
     }
   }
 
-  void injectScrap(List<dynamic> aElement) {
+  void _injectEncoding() {
+    _currentElement = THEncoding(_currentParent);
+  }
+
+  void _injectEndscrap(List<dynamic> aElement) {
+    _currentParent = _currentParent.parent;
+    _currentElement = THEndscrap(_currentParent);
+  }
+
+  void _injectScrap(List<dynamic> aElement) {
     final elementSize = aElement.length;
     assert(elementSize >= 2);
     final newScrap = THScrap(_currentParent, aElement[1]);
@@ -71,25 +83,25 @@ class THFileParser {
     _currentElement = newScrap;
     _currentParent = newScrap;
 
-    scrapOptionFromElement(aElement[2]);
+    _scrapOptionFromElement(aElement[2]);
   }
 
-  void injectComment(List<dynamic>? aElement) {
+  void _injectComment(List<dynamic>? aElement) {
     if (aElement == null) {
       return;
     }
 
     switch (aElement[0]) {
       case 'fulllinecomment':
-        THComment(_currentParent, aElement[1], false);
+        THComment(_currentParent, aElement[1]);
       case 'samelinecomment':
-        THComment(_currentParent, aElement[1], true);
+        _currentElement.sameLineComment = aElement[1];
       default:
         THUnrecognizedCommand(_currentParent, aElement);
     }
   }
 
-  void scrapOptionFromElement(List<dynamic> aElement) {
+  void _scrapOptionFromElement(List<dynamic> aElement) {
     // if (aElement == null) {
     //   return;
     // }
@@ -98,25 +110,26 @@ class THFileParser {
         continue;
       }
       final optionType = aOption[0].toString().toLowerCase();
-      THCommandOption newOption;
+
+      final hasOptions = _currentElement as THHasOptions;
 
       switch (optionType) {
         case ('projection'):
-          newOption = THProjectionCommandOption(_currentElement, aOption[1]);
+          THProjectionCommandOption(hasOptions, aOption[1]);
         case ('scale'):
-          newOption = THScaleCommandOption(_currentElement, aOption[1]);
+          THScaleCommandOption(hasOptions, aOption[1]);
         default:
-          newOption = THUnrecognizedCommandOption(_currentElement, aOption[1]);
+          THUnrecognizedCommandOption(hasOptions, aOption[1]);
       }
     }
   }
 
-  void injectUnknown(List<dynamic> aElement) {
+  void _injectUnknown(List<dynamic> aElement) {
     THUnrecognizedCommand(_currentParent, aElement);
   }
 
   @useResult
-  Future<String> decodeFile(RandomAccessFile aRaf, String encoding) async {
+  Future<String> _decodeFile(RandomAccessFile aRaf, String encoding) async {
     await aRaf.setPosition(0);
     final fileSize = await aRaf.length();
     final fileContentRaw = await aRaf.read(fileSize);
@@ -149,7 +162,7 @@ class THFileParser {
   }
 
   @useResult
-  Future<String> encodingNameFromFile(RandomAccessFile aRaf) async {
+  Future<String> _encodingNameFromFile(RandomAccessFile aRaf) async {
     var line = '';
     int byte;
     var priorChar = '';
@@ -162,7 +175,7 @@ class THFileParser {
       // print("Byte: '$byte'");
       final char = utf8.decode([byte]);
 
-      if (isEncodingDelimiter(priorChar, char)) {
+      if (_isEncodingDelimiter(priorChar, char)) {
         break;
       }
 
@@ -184,7 +197,7 @@ class THFileParser {
   }
 
   @useResult
-  bool isEncodingDelimiter(String priorChar, String char,
+  bool _isEncodingDelimiter(String priorChar, String char,
       [String lineDelimiter = '\n']) {
     if (lineDelimiter.length == 1) {
       return ((char == lineDelimiter) | (char == thCommentChar));
@@ -210,23 +223,23 @@ class THFileParser {
       final file = File("./test/auxiliary/$aFilePath");
       final raf = await file.open();
 
-      _parsedTHFile.encoding = await encodingNameFromFile(raf);
+      _parsedTHFile.encoding = await _encodingNameFromFile(raf);
 
-      var contents = await decodeFile(raf, _parsedTHFile.encoding);
+      var contents = await _decodeFile(raf, _parsedTHFile.encoding);
 
-      splitContents(contents);
+      _splitContents(contents);
 
       await raf.close();
     } catch (e) {
       stderr.writeln('failed to read file: \n$e');
     }
 
-    injectContents();
+    _injectContents();
 
     return _parsedTHFile;
   }
 
-  void splitContents(String aContents) {
+  void _splitContents(String aContents) {
     _splittedContents = [];
     var lastLine = '';
     while (aContents.isNotEmpty) {
@@ -237,7 +250,7 @@ class THFileParser {
       }
       var newLine = aContents.substring(0, lineBreakIndex);
       aContents = aContents.substring(lineBreakIndex + 1);
-      var quoteCount = countCharOccurrences(newLine, thQuote);
+      var quoteCount = THFileAux.countCharOccurrences(newLine, thQuote);
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
       // the line break belongs to the string content.
@@ -245,7 +258,7 @@ class THFileParser {
         lineBreakIndex = aContents.indexOf(thLineBreak);
         newLine += aContents.substring(0, lineBreakIndex);
         aContents = aContents.substring(lineBreakIndex + 1);
-        quoteCount = countCharOccurrences(newLine, thQuote);
+        quoteCount = THFileAux.countCharOccurrences(newLine, thQuote);
       }
 
       // Joining next line if this line ends with a backslash.
@@ -263,15 +276,5 @@ class THFileParser {
     if (lastLine.isNotEmpty) {
       _splittedContents.add(lastLine);
     }
-  }
-
-  int countCharOccurrences(String text, String charToCount) {
-    int count = 0;
-    for (int i = 0; i < text.length; i++) {
-      if (text[i] == charToCount) {
-        count++;
-      }
-    }
-    return count;
   }
 }

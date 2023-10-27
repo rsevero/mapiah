@@ -1,8 +1,8 @@
 enum THClinoUnit {
   degree,
-  minute,
   grad,
   mil,
+  minute,
   percent,
 }
 
@@ -10,18 +10,26 @@ class THClinoUnitPart {
   late THClinoUnit unit;
 
   static const unitNames = {
+    'deg': THClinoUnit.degree,
     'degree': THClinoUnit.degree,
     'degrees': THClinoUnit.degree,
-    'deg': THClinoUnit.degree,
-    'minute': THClinoUnit.minute,
-    'minutes': THClinoUnit.minute,
-    'min': THClinoUnit.minute,
     'grad': THClinoUnit.grad,
     'grads': THClinoUnit.grad,
     'mil': THClinoUnit.mil,
     'mils': THClinoUnit.mil,
+    'min': THClinoUnit.minute,
+    'minute': THClinoUnit.minute,
+    'minutes': THClinoUnit.minute,
     'percent': THClinoUnit.percent,
     'percentage': THClinoUnit.percent,
+  };
+
+  static const textRepresentations = {
+    THClinoUnit.degree: 'deg',
+    THClinoUnit.grad: 'grad',
+    THClinoUnit.mil: 'mil',
+    THClinoUnit.minute: 'minute',
+    THClinoUnit.percent: 'percent',
   };
 
   THClinoUnitPart(this.unit);
@@ -42,6 +50,11 @@ class THClinoUnitPart {
     unit = unitNames[aUnitString]!;
 
     return true;
+  }
+
+  @override
+  String toString() {
+    return textRepresentations[unit]!;
   }
 
   static bool isUnit(String aUnitString) {

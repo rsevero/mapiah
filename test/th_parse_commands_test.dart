@@ -1,150 +1,123 @@
+import 'package:mapiah/src/th_elements/th_element.dart';
+import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
+import 'package:mapiah/src/th_file_aux/th_file_writer.dart';
+import 'package:mapiah/src/th_file_aux/th_grammar.dart';
+import 'package:test/test.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:petitparser/debug.dart';
-import 'package:mapiah/src/th_file_aux/th_grammar.dart';
-
-import 'package:mapiah/src/th_elements/th_element.dart';
-import 'package:test/test.dart';
-
-import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
 
 void main() {
   group('encoding', () {
     final parser = THFileParser();
-    final grammar = THGrammar();
+    final writer = THFileWriter();
 
-    const successes = {
-      'th2parser-0011-encoding_with_trailing_space.th2': {
-        'length': 0,
-        'encoding': 'UTF-8',
-        'results': [],
-      },
-      'th2parser-0012-encoding_with_trailing_comment.th2': {
+    const successes = [
+      {
+        'file': 'th2parser-0011-encoding_with_trailing_space.th2',
         'length': 1,
         'encoding': 'UTF-8',
-        'results': [
-          {
-            'index': 0,
-            'type': 'samelinecomment',
-            'asString': '# end of line comment'
-          },
-        ],
+        'asFile': '''encoding UTF-8
+''',
       },
-      'th2parser-0013-iso8859-1_encoding.th2': {
+      {
+        'file': 'th2parser-0012-encoding_with_trailing_comment.th2',
         'length': 1,
+        'encoding': 'UTF-8',
+        'asFile': '''encoding UTF-8 # end of line comment
+''',
+      },
+      {
+        'file': 'th2parser-0013-iso8859-1_encoding.th2',
+        'length': 2,
         'encoding': 'ISO8859-1',
-        'results': [
-          {
-            'index': 0,
-            'type': 'fulllinecomment',
-            'asString': '# ISO8859-1 comment: àáâãäåç'
-          }
-        ],
+        'asFile': '''encoding ISO8859-1
+# ISO8859-1 comment: àáâãäåç
+''',
       },
-      'th2parser-0014-iso8859-2_encoding.th2': {
-        'length': 1,
+      {
+        'file': 'th2parser-0014-iso8859-2_encoding.th2',
+        'length': 2,
         'encoding': 'ISO8859-2',
-        'results': [
-          {
-            'index': 0,
-            'type': 'fulllinecomment',
-            'asString': '# ISO8859-2 comment: ŕáâăäĺç'
-          }
-        ],
+        'asFile': '''encoding ISO8859-2
+# ISO8859-2 comment: ŕáâăäĺç
+''',
       },
-      'th2parser-0015-iso8859-15_encoding.th2': {
-        'length': 1,
+      {
+        'file': 'th2parser-0015-iso8859-15_encoding.th2',
+        'length': 2,
         'encoding': 'ISO8859-15',
-        'results': [
-          {
-            'index': 0,
-            'type': 'fulllinecomment',
-            'asString': '# ISO8859-15 comment: àáâãäåç€'
-          }
-        ],
+        'asFile': '''encoding ISO8859-15
+# ISO8859-15 comment: àáâãäåç€
+''',
       },
-      'th2parser-0019-encoding_only.th2': {
-        'length': 0,
+      {
+        'file': 'th2parser-0019-encoding_only.th2',
+        'length': 1,
         'encoding': 'UTF-8',
-        'results': [],
+        'asFile': '''encoding UTF-8
+''',
       },
-    };
+    ];
 
-    var id = 1;
-    for (var success in successes.keys) {
-      test("$id - $success", () async {
-        final aTHFile = await parser.parse(success);
+    for (var success in successes) {
+      test(success, () async {
+        final file = await parser.parse((success['file'] as String));
         // final aTHFile =
         //     await parser.parse(success, startParser: grammar.start());
-        final expectations = successes[success]!;
-        // print(expectations);
-        // print(expectations.runtimeType);
-        // print(expectations['results'].runtimeType);
-        expect(aTHFile, isA<THFile>());
-        expect(aTHFile.encoding, expectations['encoding']);
-        expect(aTHFile.elements.length, expectations['length']);
-        for (var result in (expectations['results'] as List)) {
-          expect(
-              aTHFile.elementByIndex(result['index'])!.type(), result['type']);
-          expect(aTHFile.elementByIndex(result['index'])!.toString(),
-              result['asString']);
-        }
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.toFile(file);
+        expect(asFile, success['asFile']);
       });
-      id++;
     }
   });
 
   group('scrap', () {
     final parser = THFileParser();
-    final grammar = THGrammar();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
 
-    const successes = {
-      'th2parser-0060-scrap_without_endscrap-parse_failure.th2': {
+    const successes = [
+      {
+        'file': 'th2parser-0012-encoding_with_trailing_comment.th2',
         'length': 1,
         'encoding': 'UTF-8',
-        'results': [
-          {
-            'index': 0,
-            'type': 'scrap',
-            'asString':
-                'scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]'
-          },
-        ],
+        'asFile': 'encoding UTF-8 # end of line comment\n',
       },
-      'th2parser-0012-encoding_with_trailing_comment.th2': {
+      {
+        'file': 'th2parser-0060-scrap_without_endscrap-parse_failure.th2',
         'length': 1,
         'encoding': 'UTF-8',
-        'results': [
-          {
-            'index': 0,
-            'type': 'samelinecomment',
-            'asString': '# end of line comment'
-          },
-        ],
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
+  0.0 m]
+''',
       },
-    };
+      {
+        'file': 'th2parser-0064-scrap_and_endscrap_simplier_scale.th2',
+        'length': 2,
+        'encoding': 'UTF-8',
+        'asFile': '''encoding UTF-8
+scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 m]
+endscrap
+''',
+      },
+    ];
 
-    var id = 1;
-    for (var success in successes.keys) {
-      test("$id - $success", () async {
-        final aTHFile = await parser.parse(success);
-        // await parser.parse(success, startParser: grammar.scrapCommand());
-        final expectations = successes[success]!;
-        if (expectations != null) {
-          // print(expectations);
-          // print(expectations.runtimeType);
-          // print(expectations['results'].runtimeType);
-          expect(aTHFile, isA<THFile>());
-          expect(aTHFile.encoding, expectations['encoding']);
-          expect(aTHFile.elements.length, expectations['length']);
-          for (var result in (expectations['results'] as List)) {
-            expect(aTHFile.elementByIndex(result['index'])!.type(),
-                result['type']);
-            expect(aTHFile.elementByIndex(result['index'])!.toString(),
-                result['asString']);
-          }
-        }
+    for (var success in successes) {
+      test(success, () async {
+        final file = await parser.parse((success['file'] as String));
+        // final aTHFile =
+        //     await parser.parse(success, startParser: grammar.start());
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.toFile(file);
+        expect(asFile, success['asFile']);
       });
-      id++;
     }
   });
 }

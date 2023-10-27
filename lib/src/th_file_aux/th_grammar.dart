@@ -11,7 +11,7 @@ class THGrammar extends GrammarDefinition {
 
   /// TH2 Structure
   Parser th2Structure() => encoding() | th2Command() | fullLineComment();
-  Parser th2Command() => scrap();
+  Parser th2Command() => scrap() | endscrap();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(' \t').plus();
@@ -48,7 +48,8 @@ class THGrammar extends GrammarDefinition {
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [commentType, value.trim()]));
-  Parser fullLineComment() => commentTemplate('fulllinecomment').star();
+  Parser fullLineComment() =>
+      commentTemplate('fulllinecomment').map((value) => [value]);
   Parser endLineComment() => commentTemplate('samelinecomment');
 
   /// Keyword
@@ -238,4 +239,9 @@ class THGrammar extends GrammarDefinition {
           ref0(number) &
           ref0(number) &
           lengthUnit().optional());
+
+  /// Endscrap
+  Parser endscrap() => ref1(commandTemplate, endscrapCommand);
+  Parser endscrapCommand() =>
+      stringIgnoreCase('endscrap').map((value) => [value]);
 }

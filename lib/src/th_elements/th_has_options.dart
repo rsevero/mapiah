@@ -8,15 +8,11 @@ mixin THHasOptions on THElement {
 
   void addUpdateOption(THCommandOption aOption) {
     final type = aOption.type();
-    // if (_optionsList.contains(type) | _optionsMap.containsKey(type)) {
-    //   return false;
-    // }
+
     if (!_optionsList.contains(type)) {
       _optionsList.add(type);
     }
     _optionsMap[type] = aOption;
-
-    // return true;
   }
 
   @useResult
@@ -50,6 +46,8 @@ mixin THHasOptions on THElement {
     for (var aType in _optionsList) {
       asString += " ${optionByType(aType).toString()}";
     }
+
+    asString = asString.trim();
 
     return asString;
   }
