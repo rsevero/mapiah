@@ -72,9 +72,9 @@ void main() {
     var id = 1;
     for (var success in successes.keys) {
       test("$id - $success", () async {
-        // final aTHFile = await parser.parse(success);
-        final aTHFile =
-            await parser.parse(success, startParser: grammar.start());
+        final aTHFile = await parser.parse(success);
+        // final aTHFile =
+        //     await parser.parse(success, startParser: grammar.start());
         final expectations = successes[success]!;
         // print(expectations);
         // print(expectations.runtimeType);

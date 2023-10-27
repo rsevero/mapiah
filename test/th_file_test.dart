@@ -55,9 +55,9 @@ void main() {
 
     for (var success in successes) {
       test(success['file'], () async {
-        // final myTHFile = await myTHParser.parse(success['file'] as String);
-        final myTHFile = await myTHParser.parse(success['file'] as String,
-            startParser: myGrammar.start());
+        final myTHFile = await myTHParser.parse(success['file'] as String);
+        // final myTHFile = await myTHParser.parse(success['file'] as String,
+        //     startParser: myGrammar.start());
 
         expect(myTHFile.countElements(), success['countElements']);
 

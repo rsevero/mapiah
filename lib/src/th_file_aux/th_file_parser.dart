@@ -97,16 +97,16 @@ class THFileParser {
       if (aOption == null) {
         continue;
       }
-      final optionType = aElement[0].toString().toLowerCase();
+      final optionType = aOption[0].toString().toLowerCase();
       THCommandOption newOption;
 
       switch (optionType) {
         case ('projection'):
-          newOption = THProjectionCommandOption(_currentElement, aElement[1]);
+          newOption = THProjectionCommandOption(_currentElement, aOption[1]);
         case ('scale'):
-          newOption = THScaleCommandOption(_currentElement, aElement[1]);
+          newOption = THScaleCommandOption(_currentElement, aOption[1]);
         default:
-          newOption = THUnrecognizedCommandOption(_currentElement, aElement[1]);
+          newOption = THUnrecognizedCommandOption(_currentElement, aOption[1]);
       }
     }
   }
