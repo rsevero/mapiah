@@ -59,15 +59,31 @@ void main() {
 
     for (var success in successes) {
       test(success, () async {
-        final file = await parser.parse((success['file'] as String));
-        // final aTHFile =
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) =
         //     await parser.parse(success, startParser: grammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
         final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
+      });
+    }
+
+    var failures = [
+      'th_file_parser-00062-scrap_with_encoding_inside-error.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, errors) = await parser.parse(failure);
+        // final (file, isSuccessful, errors) =
+        //     await parser.parse(success, startParser: grammar.start());
+        expect(isSuccessful, false);
+        print(errors.toString());
       });
     }
   });
@@ -116,9 +132,11 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final file = await parser.parse((success['file'] as String));
-        // final file = await parser.parse((success['file'] as String),
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
         //     startParser: grammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -207,9 +225,11 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final file = await parser.parse((success['file'] as String));
-        // final file = await parser.parse((success['file'] as String),
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
         //     startParser: grammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -248,9 +268,11 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final file = await parser.parse((success['file'] as String));
-        // final file = await parser.parse((success['file'] as String),
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
         //     startParser: grammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -280,9 +302,11 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final file = await parser.parse((success['file'] as String));
-        // final file = await parser.parse((success['file'] as String),
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
         //     startParser: grammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -312,9 +336,11 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final file = await parser.parse((success['file'] as String));
-        // final file = await parser.parse((success['file'] as String),
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
         //     startParser: grammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);

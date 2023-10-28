@@ -32,7 +32,7 @@ class THAngleUnitPart {
 
   THAngleUnitPart.fromString(String aUnitString) {
     if (!isUnit(aUnitString)) {
-      throw 'Unknwon angle unit.';
+      throw 'Unknown angle unit.';
     }
 
     fromString(aUnitString);

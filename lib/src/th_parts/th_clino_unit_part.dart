@@ -36,7 +36,7 @@ class THClinoUnitPart {
 
   THClinoUnitPart.fromString(String aUnitString) {
     if (!isUnit(aUnitString)) {
-      throw 'Unknwon clino unit.';
+      throw 'Unknown clino unit.';
     }
 
     fromString(aUnitString);

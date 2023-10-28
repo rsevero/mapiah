@@ -31,20 +31,29 @@ import 'package:petitparser/debug.dart';
 class THFileParser {
   final _grammar = THGrammar();
   late Parser _parser;
+  late Parser _parserFirst;
   late List<String> _splittedContents;
   late THFile _parsedTHFile;
   late THParent _currentParent;
   late THElement _currentElement;
   bool _runTraceParser = false;
+  final List<String> _parseErrors = [];
 
   void _injectContents() {
+    var isFirst = true;
+    var currentParser = _parserFirst;
     for (String line in _splittedContents) {
       if (_runTraceParser) {
-        trace(_parser).parse(line);
+        trace(currentParser).parse(line);
       }
-      final parsedContents = _parser.parse(line);
-      if (parsedContents.isFailure) {
-        _injectUnknown([line]);
+      final parsedContents = currentParser.parse(line);
+      if (isFirst) {
+        isFirst = false;
+        currentParser = _parser;
+      }
+      if (parsedContents is Failure) {
+        _addError('petitparser returned a "Failure"', '_injectContents()',
+            'Line being parsed: "$line"');
         continue;
       }
       // print("parsedContents.value: '${parsedContents.value}");
@@ -192,6 +201,12 @@ class THFileParser {
     aCommandOption.value = aSpec.toString();
   }
 
+  void _addError(String aErrorMessage, String aLocation, String aLocalInfo) {
+    var errorMessage =
+        "'$aErrorMessage' at '$aLocation' with '$aLocalInfo' local info.";
+    _parseErrors.add(errorMessage);
+  }
+
   void _specScaleCommandOption(
       THScaleCommandOption aCommandOption, List<dynamic> aSpec) {
     aCommandOption.numericSpecifications.clear();
@@ -200,13 +215,15 @@ class THFileParser {
     var hasUnit = false;
     for (var aValue in aSpec) {
       if (hasUnit) {
-        throw 'Unsupported scale option parameter after unit.';
+        _addError('Unsupported scale option parameter after unit',
+            '_specScaleCommandOption', aSpec.toString());
       }
 
       var isDouble = double.tryParse(aValue);
       if ((isDouble == null) && !hasUnit) {
         if (!THLengthUnitPart.isUnit(aValue)) {
-          throw 'Unknown length unit.';
+          _addError('Unknown length unit', '_specScaleCommandOption',
+              aSpec.toString());
         }
 
         final newUnit = THLengthUnitPart.fromString(aValue);
@@ -344,12 +361,15 @@ class THFileParser {
   }
 
   @useResult
-  Future<THFile> parse(String aFilePath, {Parser? startParser}) async {
+  Future<(THFile, bool, List<String>)> parse(String aFilePath,
+      {Parser? startParser}) async {
     if (startParser == null) {
       _parser = _grammar.buildFrom(_grammar.start());
+      _parserFirst = _grammar.buildFrom(_grammar.startFirst());
       _runTraceParser = false;
     } else {
       _parser = _grammar.buildFrom(startParser);
+      _parserFirst = _parser;
       _runTraceParser = true;
     }
 
@@ -373,7 +393,7 @@ class THFileParser {
 
     _injectContents();
 
-    return _parsedTHFile;
+    return (_parsedTHFile, _parseErrors.isEmpty, _parseErrors);
   }
 
   void _splitContents(String aContents) {

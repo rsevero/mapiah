@@ -45,9 +45,11 @@ scrap poco_surubim_SCP01
 
     for (var success in successes) {
       test(success['file'], () async {
-        final file = await parser.parse(success['file'] as String);
-        // final myTHFile = await myTHParser.parse(success['file'] as String,
+        final (file, isSuccessful, _) =
+            await parser.parse(success['file'] as String);
+        // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
         //     startParser: myGrammar.start());
+        expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
 

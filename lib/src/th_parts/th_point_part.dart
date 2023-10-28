@@ -16,7 +16,7 @@ class THPointPart {
 
   THPointPart.fromStringList(List<dynamic> aList) {
     if (aList.length != 2) {
-      throw 'Unssupported string list length.';
+      throw 'Unsupported string list length.';
     }
     x = THDoublePart.fromString(aList[0].toString());
     y = THDoublePart.fromString(aList[1].toString());

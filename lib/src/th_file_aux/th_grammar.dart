@@ -8,7 +8,8 @@ class THGrammar extends GrammarDefinition {
   Parser start() => th2Structure().end();
 
   /// TH2 Structure
-  Parser th2Structure() => encoding() | th2Command() | fullLineComment();
+  Parser startFirst() => (encoding() | th2Structure()).end();
+  Parser th2Structure() => th2Command() | fullLineComment();
   Parser th2Command() => scrap() | endscrap();
 
   /// Whitespace
