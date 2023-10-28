@@ -83,7 +83,7 @@ void main() {
         // final (file, isSuccessful, errors) =
         //     await parser.parse(success, startParser: grammar.start());
         expect(isSuccessful, false);
-        print(errors.toString());
+        // print(errors.toString());
       });
     }
   });

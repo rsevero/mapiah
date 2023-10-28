@@ -375,6 +375,7 @@ class THFileParser {
 
     _parsedTHFile = THFile();
     _currentParent = _parsedTHFile;
+    _parseErrors.clear();
 
     try {
       final file = File("./test/auxiliary/$aFilePath");
@@ -392,6 +393,11 @@ class THFileParser {
     }
 
     _injectContents();
+
+    if (_currentParent != _parsedTHFile) {
+      _addError('Multiline commmands left open at end of file', 'parse',
+          'Unclosed multiline command: "${_currentParent.toString()}"');
+    }
 
     return (_parsedTHFile, _parseErrors.isEmpty, _parseErrors);
   }

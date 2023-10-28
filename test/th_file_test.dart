@@ -22,30 +22,33 @@ void main() {
     var successes = [
       {
         'file': 'th_file_parser-00000-line_breaks.th2',
-        'countElements': 2,
+        'countElements': 3,
         'asFile': """encoding UTF-8
 scrap poco_surubim_SCP01
+endscrap
 """,
       },
       {
         'file': 'th_file_parser-00001-no_linebreak_at_file_end.th2',
-        'countElements': 2,
+        'countElements': 3,
         'asFile': """encoding UTF-8
 scrap poco_surubim_SCP01
+endscrap
 """,
       },
       {
         'file': 'th_file_parser-00002-backslash_ending.th2',
-        'countElements': 2,
+        'countElements': 3,
         'asFile': """encoding UTF-8
 scrap poco_surubim_SCP01
+endscrap
 """,
-      }
+      },
     ];
 
     for (var success in successes) {
       test(success['file'], () async {
-        final (file, isSuccessful, _) =
+        final (file, isSuccessful, errors) =
             await parser.parse(success['file'] as String);
         // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
         //     startParser: myGrammar.start());
