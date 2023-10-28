@@ -162,6 +162,16 @@ scrap poco_surubim_SCP01 -projection [elevation 10]
 endscrap
 ''',
       },
+      {
+        'file':
+            'th2parser-0073-scrap_and_endscrap_projection_extended_with_index.th2',
+        'length': 2,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -projection extended:strange_index
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
