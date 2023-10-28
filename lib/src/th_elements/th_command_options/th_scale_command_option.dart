@@ -3,68 +3,38 @@ import 'package:mapiah/src/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
 
 class THScaleCommandOption extends THCommandOption {
-  THScaleCommandOption(aParent, aValue) : super(aParent, []) {
-    value = aValue;
-  }
+  List<THDoublePart> numericSpecifications = [];
+  THLengthUnitPart? unitValue;
+
+  THScaleCommandOption(super.parent);
 
   @override
-  String type() {
+  String optionType() {
     return 'scale';
   }
 
   @override
-  String valueToString() {
+  String specToString() {
     var asString = '';
 
-    for (final aValue in value) {
+    if (numericSpecifications.isEmpty) {
+      return asString;
+    }
+
+    for (var aValue in numericSpecifications) {
       asString += " ${aValue.toString()}";
     }
 
-    if (asString.isNotEmpty) {
-      asString = asString.substring(1);
+    if (unitValue != null) {
+      asString += " ${unitValue.toString()}";
     }
 
-    if (value.length > 1) {
+    asString = asString.trim();
+
+    if (asString.contains(' ')) {
       asString = "[$asString]";
     }
 
     return asString;
-  }
-
-  // @override
-  set value(List<dynamic> aValueList) {
-    value.clear();
-
-    var hasUnit = false;
-    for (var aValue in aValueList) {
-      if (hasUnit) {
-        throw 'Unsupported scale option parameter after unit.';
-      }
-
-      // Properly set parameters
-      if (aValue is THDoublePart) {
-        value.add(aValue);
-        continue;
-      } else if (aValue is THLengthUnitPart) {
-        value.add(aValue);
-        hasUnit = true;
-        continue;
-      }
-
-      // String parameters
-      var isDouble = double.tryParse(aValue);
-      if ((isDouble == null) & !hasUnit) {
-        if (!THLengthUnitPart.isUnit(aValue)) {
-          throw 'Unknwon length unit.';
-        }
-
-        final newUnit = THLengthUnitPart.fromString(aValue);
-        value.add(newUnit);
-        hasUnit = true;
-        continue;
-      }
-      final newDouble = THDoublePart.fromString(aValue);
-      value.add(newDouble);
-    }
   }
 }

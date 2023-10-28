@@ -72,7 +72,7 @@ class THFileWriter {
       aLine = aLine.trim();
       var maxLength = thMaxFileLineLength - _prefix.length;
 
-      while ((aLine.isNotEmpty) & (aLine.length > maxLength)) {
+      while ((aLine.isNotEmpty) && (aLine.length > maxLength)) {
         var breakPos = aLine.lastIndexOf(' ', maxLength) + 1;
         var part = aLine.substring(0, breakPos);
 

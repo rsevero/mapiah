@@ -126,4 +126,56 @@ endscrap
       });
     }
   });
+
+  group('projection', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th2parser-0070-scrap_and_endscrap_projection_none.th2',
+        'length': 2,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -projection none
+endscrap
+''',
+      },
+      {
+        'file':
+            'th2parser-0071-scrap_and_endscrap_projection_elevation_complete.th2',
+        'length': 2,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -projection [elevation 10 deg]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th2parser-0072-scrap_and_endscrap_projection_elevation_semi_complete.th2',
+        'length': 2,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -projection [elevation 10]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final file = await parser.parse((success['file'] as String));
+        // final file = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
 }

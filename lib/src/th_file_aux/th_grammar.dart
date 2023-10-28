@@ -194,7 +194,7 @@ class THGrammar extends GrammarDefinition {
       projectionOption().optional() & scaleOption().optional();
   Parser projectionSpecification() =>
       // type: none
-      ((stringIgnoreCase('none') |
+      (stringIgnoreCase('none').map((value) => [value]) |
 
               // type: plan with optional index
               ((stringIgnoreCase('plan') &
@@ -207,6 +207,7 @@ class THGrammar extends GrammarDefinition {
               // type: elevation with view direction
               (char('[') &
                       (stringIgnoreCase('elevation') &
+                          ((char(':') & ref0(keyword))).optional() &
                           ref0(number) &
                           angleUnit().optional()) &
                       char(']'))
@@ -214,8 +215,7 @@ class THGrammar extends GrammarDefinition {
 
               // type: extended with optional index
               (stringIgnoreCase('extended') &
-                  ((char(':') & ref0(keyword))).optional())))
-          .flatten()
+                  ((char(':') & ref0(keyword))).optional()))
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser projectionOption() =>
       stringIgnoreCase('projection').skip(before: char('-')) &

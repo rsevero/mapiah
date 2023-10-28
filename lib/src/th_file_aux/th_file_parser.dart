@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
@@ -13,6 +14,9 @@ import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 import 'package:mapiah/src/th_file_aux/th_grammar.dart';
+import 'package:mapiah/src/th_parts/th_angle_unit_part.dart';
+import 'package:mapiah/src/th_parts/th_double_part.dart';
+import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
 import 'package:meta/meta.dart';
 import 'package:charset/charset.dart';
 import 'package:petitparser/petitparser.dart';
@@ -69,11 +73,6 @@ class THFileParser {
     _currentElement = THEncoding(_currentParent);
   }
 
-  void _injectEndscrap(List<dynamic> aElement) {
-    _currentParent = _currentParent.parent;
-    _currentElement = THEndscrap(_currentParent);
-  }
-
   void _injectScrap(List<dynamic> aElement) {
     final elementSize = aElement.length;
     assert(elementSize >= 2);
@@ -83,6 +82,11 @@ class THFileParser {
     _currentParent = newScrap;
 
     _scrapOptionFromElement(aElement[2]);
+  }
+
+  void _injectEndscrap(List<dynamic> aElement) {
+    _currentParent = _currentParent.parent;
+    _currentElement = THEndscrap(_currentParent);
   }
 
   void _injectComment(List<dynamic>? aElement) {
@@ -110,15 +114,93 @@ class THFileParser {
       }
       final optionType = aOption[0].toString().toLowerCase();
 
-      final hasOptions = _currentElement as THHasOptions;
+      final newOption = THCommandOption.scrapOption(
+          optionType, _currentElement as THHasOptions);
 
       switch (optionType) {
-        case ('projection'):
-          THProjectionCommandOption(hasOptions, aOption[1]);
-        case ('scale'):
-          THScaleCommandOption(hasOptions, aOption[1]);
+        case 'projection':
+          _specProjectionCommandOption(
+              newOption as THProjectionCommandOption, aOption[1]);
+        case 'scale':
+          _specScaleCommandOption(
+              newOption as THScaleCommandOption, aOption[1]);
         default:
-          THUnrecognizedCommandOption(hasOptions, aOption[1]);
+          _specUnrecognizedCommandOption(
+              newOption as THUnrecognizedCommandOption, aOption[1]);
+      }
+    }
+  }
+
+  void _specUnrecognizedCommandOption(
+      THUnrecognizedCommandOption aCommandOption, List<dynamic> aSpec) {
+    aCommandOption.value = aSpec.toString();
+  }
+
+  void _specScaleCommandOption(
+      THScaleCommandOption aCommandOption, List<dynamic> aSpec) {
+    aCommandOption.numericSpecifications.clear();
+    aCommandOption.unitValue = null;
+
+    var hasUnit = false;
+    for (var aValue in aSpec) {
+      if (hasUnit) {
+        throw 'Unsupported scale option parameter after unit.';
+      }
+
+      var isDouble = double.tryParse(aValue);
+      if ((isDouble == null) && !hasUnit) {
+        if (!THLengthUnitPart.isUnit(aValue)) {
+          throw 'Unknown length unit.';
+        }
+
+        final newUnit = THLengthUnitPart.fromString(aValue);
+        aCommandOption.unitValue = newUnit;
+        hasUnit = true;
+        continue;
+      }
+
+      final newDouble = THDoublePart.fromString(aValue);
+      aCommandOption.numericSpecifications.add(newDouble);
+    }
+  }
+
+  void _specProjectionCommandOption(
+      THProjectionCommandOption aCommandOption, List<dynamic> aSpec) {
+    aCommandOption.projectionType = null;
+    aCommandOption.projectionIndex = null;
+    aCommandOption.elevationAngleValue = null;
+    aCommandOption.elevationAngleUnit = null;
+
+    if (aSpec.isEmpty) {
+      return;
+    }
+
+    final String type = aSpec[0];
+    if (!THProjectionCommandOption.typeNames.containsKey(type)) {
+      return;
+    }
+
+    aCommandOption.projectionType = THProjectionCommandOption.typeNames[type];
+
+    if (aSpec.length == 1) {
+      return;
+    }
+
+    if (aSpec[1] != null) {
+      aCommandOption.projectionIndex = aSpec[1];
+    }
+    if (aCommandOption.projectionType == THProjectionTypes.elevation) {
+      if (aSpec[2] != null) {
+        var newDouble = double.tryParse(aSpec[2]);
+        if (newDouble != null) {
+          aCommandOption.elevationAngleValue =
+              THDoublePart.fromString(aSpec[2]);
+        }
+      }
+
+      if ((aSpec[3] != null) && (THAngleUnitPart.isUnit(aSpec[3]))) {
+        aCommandOption.elevationAngleUnit =
+            THAngleUnitPart.fromString(aSpec[3]);
       }
     }
   }
@@ -253,7 +335,7 @@ class THFileParser {
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
       // the line break belongs to the string content.
-      while (quoteCount.isOdd & aContents.isNotEmpty) {
+      while (quoteCount.isOdd && aContents.isNotEmpty) {
         lineBreakIndex = aContents.indexOf(thLineBreak);
         newLine += aContents.substring(0, lineBreakIndex);
         aContents = aContents.substring(lineBreakIndex + 1);

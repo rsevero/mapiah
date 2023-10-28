@@ -7,7 +7,7 @@ mixin THHasOptions on THElement {
   final Map<String, THCommandOption> _optionsMap = {};
 
   void addUpdateOption(THCommandOption aOption) {
-    final type = aOption.type();
+    final type = aOption.optionType();
 
     if (!_optionsList.contains(type)) {
       _optionsList.add(type);
@@ -40,11 +40,16 @@ mixin THHasOptions on THElement {
     return (_optionsMap.remove(aType) != null);
   }
 
+  List<String> optionsList() {
+    return _optionsList;
+  }
+
   String optionsAsString() {
     var asString = '';
 
-    for (var aType in _optionsList) {
-      asString += " ${optionByType(aType).toString()}";
+    for (var aType in optionsList()) {
+      final spec = optionByType(aType)!.specToString();
+      asString += " -$aType $spec";
     }
 
     asString = asString.trim();

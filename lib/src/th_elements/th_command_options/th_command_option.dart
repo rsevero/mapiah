@@ -1,22 +1,28 @@
+import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 
 abstract class THCommandOption {
-  final List<dynamic> value;
   final THHasOptions parent;
-  int index = -2;
 
-  THCommandOption(this.parent, this.value) {
+  THCommandOption(this.parent) {
     parent.addUpdateOption(this);
   }
 
-  String type();
+  String optionType();
 
-  String valueToString() {
-    return value.toString();
-  }
+  String specToString();
 
-  @override
-  String toString() {
-    return "-${type()} ${valueToString()}";
+  factory THCommandOption.scrapOption(
+      String aOptionType, THHasOptions aParent) {
+    switch (aOptionType.toLowerCase()) {
+      case 'projection':
+        return THProjectionCommandOption(aParent);
+      case 'scale':
+        return THScaleCommandOption(aParent);
+      default:
+        return THUnrecognizedCommandOption(aParent);
+    }
   }
 }

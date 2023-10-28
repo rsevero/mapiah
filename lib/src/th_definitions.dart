@@ -11,3 +11,5 @@ const thMaxEncodingLength = 20;
 const thMaxFileLineLength = 80;
 
 const thDefaultEncoding = 'UTF-8';
+
+const THNullValueAsString = '!!! property has null value !!!';
