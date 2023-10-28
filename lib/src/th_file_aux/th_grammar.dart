@@ -10,7 +10,7 @@ class THGrammar extends GrammarDefinition {
   /// TH2 Structure
   Parser startFirst() => (encoding() | th2Structure()).end();
   Parser th2Structure() => th2Command() | fullLineComment();
-  Parser th2Command() => scrap() | endscrap();
+  Parser th2Command() => endscrap() | multiLineComment() | scrap();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
@@ -190,6 +190,20 @@ class THGrammar extends GrammarDefinition {
   /// Command template
   Parser commandTemplate(command) =>
       ref0(command) & ref0(endLineComment).optional();
+
+  /// multiline comment
+  Parser multiLineComment() => ref1(commandTemplate, multiLineCommentCommand);
+  Parser multiLineCommentCommand() =>
+      stringIgnoreCase('comment').map((value) => [value]);
+  Parser multiLineCommentContent() =>
+      endMultiLineComment() | multiLineCommentLine();
+  Parser multiLineCommentLine() => any().star().flatten().map((value) => [
+        ['multilinecommentline', value]
+      ]);
+  Parser endMultiLineComment() =>
+      ref1(commandTemplate, endMultiLineCommentCommand);
+  Parser endMultiLineCommentCommand() =>
+      stringIgnoreCase('endcomment').map((value) => [value]);
 
   /// encoding
   Parser encodingStartChar() => pattern('A-Za-z');

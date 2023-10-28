@@ -49,7 +49,9 @@ mixin THParent on THElement {
   final List<THElement> _children = [];
 
   int _addElement(THElement aElement) {
+    _thFile._includeElementInFile(aElement);
     _children.add(aElement);
+
     return aElement.index;
   }
 
@@ -64,10 +66,10 @@ mixin THParent on THElement {
 /// THElement parameterless private constructor.
 class THFile extends THElement with THParent {
   final Map<int, THElement> _elements = {};
-  var _nextIndex = 0;
+  var filename = '';
 
   var encoding = thDefaultEncoding;
-  var readFromFilename = '';
+  var _nextIndex = 0;
 
   THFile() : super._() {
     _index = -1;
@@ -83,13 +85,10 @@ class THFile extends THElement with THParent {
     return _elements.length;
   }
 
-  @override
-  int _addElement(THElement aElement) {
+  void _includeElementInFile(THElement aElement) {
     aElement._index = _nextIndex;
     _elements[_nextIndex] = aElement;
     _nextIndex++;
-
-    return super._addElement(aElement);
   }
 
   bool hasElementByIndex(int aIndex) {

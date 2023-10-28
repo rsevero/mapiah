@@ -2,6 +2,7 @@ import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 
@@ -14,10 +15,15 @@ class THFileWriter {
 
     switch (type) {
       case 'comment':
-        asString += "${(aTHElement as THComment).content}\n";
+        asString += '${(aTHElement as THComment).content}\n';
+      case 'emptyline':
+        asString += '\n';
       case 'encoding':
         final newLine = 'encoding ${(aTHElement as THEncoding).encoding}';
         asString += _prepareLine(newLine, aTHElement);
+      case 'endcomment':
+        _reducePrefix();
+        asString += _prepareLine('endcomment', aTHElement);
       case 'endscrap':
         _reducePrefix();
         asString += _prepareLine('endscrap', aTHElement);
@@ -29,6 +35,10 @@ class THFileWriter {
           asString += newLine;
         }
         asString += _childrenAsString(aTHFile);
+      case 'multilinecomment':
+        asString += _prepareLine('comment', aTHElement);
+        _increasePrefix();
+        asString += _childrenAsString(aTHElement as THMultiLineComment);
       case 'scrap':
         final aTHScrap = aTHElement as THScrap;
         final newLine =
@@ -55,7 +65,7 @@ class THFileWriter {
   }
 
   void _increasePrefix() {
-    _prefix = "$thIndentation$_prefix";
+    _prefix += thIndentation;
   }
 
   void _reducePrefix() {
@@ -105,6 +115,7 @@ class THFileWriter {
         if (isFirst) {
           isFirst = false;
           _increasePrefix();
+          _increasePrefix();
           maxLength = thMaxFileLineLength - _prefix.length;
         } else {
           splitLine += _prefix;
@@ -120,6 +131,7 @@ class THFileWriter {
       }
 
       newLine = splitLine;
+      _reducePrefix();
       _reducePrefix();
     }
 

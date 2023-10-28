@@ -11,9 +11,12 @@ import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_op
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
+import 'package:mapiah/src/th_elements/th_empty_line.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_endcomment.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
@@ -30,8 +33,10 @@ import 'package:petitparser/debug.dart';
 
 class THFileParser {
   final _grammar = THGrammar();
-  late Parser _parser;
+  late Parser _parserMain;
   late Parser _parserFirst;
+  late Parser _currentParser;
+  late Parser _multiLineCommentContentParser;
   late List<String> _splittedContents;
   late THFile _parsedTHFile;
   late THParent _currentParent;
@@ -41,15 +46,19 @@ class THFileParser {
 
   void _injectContents() {
     var isFirst = true;
-    var currentParser = _parserFirst;
+    _currentParser = _parserFirst;
     for (String line in _splittedContents) {
-      if (_runTraceParser) {
-        trace(currentParser).parse(line);
+      if (line.isEmpty) {
+        _injectEmptyLine();
+        continue;
       }
-      final parsedContents = currentParser.parse(line);
+      if (_runTraceParser) {
+        trace(_currentParser).parse(line);
+      }
+      final parsedContents = _currentParser.parse(line);
       if (isFirst) {
         isFirst = false;
-        currentParser = _parser;
+        _currentParser = _parserMain;
       }
       if (parsedContents is Failure) {
         _addError('petitparser returned a "Failure"', '_injectContents()',
@@ -62,17 +71,26 @@ class THFileParser {
       final element = parsedContents.value[0];
       // print("element: '$element'");
       if (element.isEmpty) {
-        break;
+        _addError('element.isEmpty', '_injectContents()',
+            'Line being parsed: "$line"');
+        continue;
       }
       // print("element[0]: '${element[0]}'");
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
+        case 'comment':
+          _injectMultiLineComment();
         case 'encoding':
           _injectEncoding();
+        case 'endcomment':
+          _injectEndComment();
         case 'endscrap':
           _injectEndscrap(element);
         case 'fulllinecomment':
           _injectComment(element);
+          continue;
+        case 'multilinecommentline':
+          _injectMultiLineCommentContent(element);
           continue;
         case 'scrap':
           _injectScrap(element);
@@ -82,6 +100,27 @@ class THFileParser {
       }
       _injectComment(parsedContents.value[1]);
     }
+  }
+
+  void _injectEmptyLine() {
+    _currentElement = THEmptyLine(_currentParent);
+  }
+
+  void _injectMultiLineCommentContent(List<dynamic> aElement) {
+    final content = (aElement.isEmpty) ? '' : aElement[1].toString();
+    _currentElement = THComment(_currentParent, content);
+  }
+
+  void _injectEndComment() {
+    _currentParent = _currentParent.parent;
+    _currentElement = THEndcomment(_currentParent);
+    _currentParser = _parserMain;
+  }
+
+  void _injectMultiLineComment() {
+    _currentParent = THMultiLineComment(_currentParent);
+    _currentElement = _currentParent;
+    _currentParser = _multiLineCommentContentParser;
   }
 
   void _injectEncoding() {
@@ -364,16 +403,19 @@ class THFileParser {
   Future<(THFile, bool, List<String>)> parse(String aFilePath,
       {Parser? startParser}) async {
     if (startParser == null) {
-      _parser = _grammar.buildFrom(_grammar.start());
+      _parserMain = _grammar.buildFrom(_grammar.start());
       _parserFirst = _grammar.buildFrom(_grammar.startFirst());
       _runTraceParser = false;
     } else {
-      _parser = _grammar.buildFrom(startParser);
-      _parserFirst = _parser;
+      _parserMain = _grammar.buildFrom(startParser);
+      _parserFirst = _parserMain;
       _runTraceParser = true;
     }
+    _multiLineCommentContentParser =
+        _grammar.buildFrom(_grammar.multiLineCommentContent());
 
     _parsedTHFile = THFile();
+    _parsedTHFile.filename = aFilePath;
     _currentParent = _parsedTHFile;
     _parseErrors.clear();
 
@@ -413,6 +455,11 @@ class THFileParser {
       }
       var newLine = aContents.substring(0, lineBreakIndex);
       aContents = aContents.substring(lineBreakIndex + 1);
+      if (newLine.isEmpty) {
+        _splittedContents.add("$lastLine$newLine");
+        lastLine = '';
+        continue;
+      }
       var quoteCount = THFileAux.countCharOccurrences(newLine, thQuote);
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
