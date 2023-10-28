@@ -21,21 +21,21 @@ void main() {
 
     var successes = [
       {
-        'file': 'th2parser-0000-line_breaks.th2',
+        'file': 'th_file_parser-00000-line_breaks.th2',
         'countElements': 2,
         'asFile': """encoding UTF-8
 scrap poco_surubim_SCP01
 """,
       },
       {
-        'file': 'th2parser-0001-no_linebreak_at_file_end.th2',
+        'file': 'th_file_parser-00001-no_linebreak_at_file_end.th2',
         'countElements': 2,
         'asFile': """encoding UTF-8
 scrap poco_surubim_SCP01
 """,
       },
       {
-        'file': 'th2parser-0002-backslash_ending.th2',
+        'file': 'th_file_parser-00002-backslash_ending.th2',
         'countElements': 2,
         'asFile': """encoding UTF-8
 scrap poco_surubim_SCP01

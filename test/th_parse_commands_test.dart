@@ -10,21 +10,21 @@ void main() {
 
     const successes = [
       {
-        'file': 'th2parser-0011-encoding_with_trailing_space.th2',
+        'file': 'th_file_parser-00011-encoding_with_trailing_space.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
 ''',
       },
       {
-        'file': 'th2parser-0012-encoding_with_trailing_comment.th2',
+        'file': 'th_file_parser-00012-encoding_with_trailing_comment.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8 # end of line comment
 ''',
       },
       {
-        'file': 'th2parser-0013-iso8859-1_encoding.th2',
+        'file': 'th_file_parser-00013-iso8859-1_encoding.th2',
         'length': 2,
         'encoding': 'ISO8859-1',
         'asFile': '''encoding ISO8859-1
@@ -32,7 +32,7 @@ void main() {
 ''',
       },
       {
-        'file': 'th2parser-0014-iso8859-2_encoding.th2',
+        'file': 'th_file_parser-00014-iso8859-2_encoding.th2',
         'length': 2,
         'encoding': 'ISO8859-2',
         'asFile': '''encoding ISO8859-2
@@ -40,7 +40,7 @@ void main() {
 ''',
       },
       {
-        'file': 'th2parser-0015-iso8859-15_encoding.th2',
+        'file': 'th_file_parser-00015-iso8859-15_encoding.th2',
         'length': 2,
         'encoding': 'ISO8859-15',
         'asFile': '''encoding ISO8859-15
@@ -48,7 +48,7 @@ void main() {
 ''',
       },
       {
-        'file': 'th2parser-0019-encoding_only.th2',
+        'file': 'th_file_parser-00019-encoding_only.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
@@ -78,13 +78,13 @@ void main() {
 
     const successes = [
       {
-        'file': 'th2parser-0012-encoding_with_trailing_comment.th2',
+        'file': 'th_file_parser-00012-encoding_with_trailing_comment.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFile': 'encoding UTF-8 # end of line comment\n',
       },
       {
-        'file': 'th2parser-0060-scrap_without_endscrap-parse_failure.th2',
+        'file': 'th_file_parser-00060-scrap_without_endscrap-parse_failure.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
@@ -93,7 +93,7 @@ scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
 ''',
       },
       {
-        'file': 'th2parser-0064-scrap_and_endscrap_simplier_scale.th2',
+        'file': 'th_file_parser-00064-scrap_and_endscrap_simplier_scale.th2',
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
@@ -102,7 +102,7 @@ endscrap
 ''',
       },
       {
-        'file': 'th2parser-0065-scrap_and_endscrap_simpliest_scale.th2',
+        'file': 'th_file_parser-00065-scrap_and_endscrap_simpliest_scale.th2',
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
@@ -134,7 +134,7 @@ endscrap
 
     const successes = [
       {
-        'file': 'th2parser-0070-scrap_and_endscrap_projection_none.th2',
+        'file': 'th_file_parser-00070-scrap_and_endscrap_projection_none.th2',
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
@@ -144,7 +144,7 @@ endscrap
       },
       {
         'file':
-            'th2parser-0071-scrap_and_endscrap_projection_elevation_complete.th2',
+            'th_file_parser-00071-scrap_and_endscrap_projection_elevation_complete.th2',
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
@@ -154,7 +154,7 @@ endscrap
       },
       {
         'file':
-            'th2parser-0072-scrap_and_endscrap_projection_elevation_semi_complete.th2',
+            'th_file_parser-00072-scrap_and_endscrap_projection_elevation_semi_complete.th2',
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
@@ -164,7 +164,7 @@ endscrap
       },
       {
         'file':
-            'th2parser-0073-scrap_and_endscrap_projection_extended_with_index.th2',
+            'th_file_parser-00073-scrap_and_endscrap_projection_extended_with_index.th2',
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8

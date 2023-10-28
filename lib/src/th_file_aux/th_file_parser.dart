@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:dart_numerics/dart_numerics.dart';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
@@ -118,6 +120,8 @@ class THFileParser {
           optionType, _currentElement as THHasOptions);
 
       switch (optionType) {
+        case 'cs':
+          _specCSCommandOption(newOption as THCSCommandOption, aOption[1]);
         case 'projection':
           _specProjectionCommandOption(
               newOption as THProjectionCommandOption, aOption[1]);
@@ -128,6 +132,13 @@ class THFileParser {
           _specUnrecognizedCommandOption(
               newOption as THUnrecognizedCommandOption, aOption[1]);
       }
+    }
+  }
+
+  void _specCSCommandOption(
+      THCSCommandOption aCommandOption, List<dynamic> aSpec) {
+    if (aSpec[0] != null) {
+      aCommandOption.coordinateSystem = aSpec[0].toString();
     }
   }
 
