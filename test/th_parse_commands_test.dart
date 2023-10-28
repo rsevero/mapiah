@@ -1,10 +1,7 @@
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
 import 'package:mapiah/src/th_file_aux/th_file_writer.dart';
-import 'package:mapiah/src/th_file_aux/th_grammar.dart';
 import 'package:test/test.dart';
-import 'package:petitparser/petitparser.dart';
-import 'package:petitparser/debug.dart';
 
 void main() {
   group('encoding', () {

@@ -1,4 +1,3 @@
-import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 
 abstract class THCommandOption {

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
