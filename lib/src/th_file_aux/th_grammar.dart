@@ -1,4 +1,3 @@
-
 import 'package:petitparser/petitparser.dart';
 
 import 'package:mapiah/src/th_definitions.dart';
@@ -225,7 +224,8 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('scale').skip(before: char('-')) &
       ref0(scaleSpecification);
   Parser scaleSpecification() =>
-      ref0(number) | bracketStringTemplate(scaleNumber());
+      ref0(number).map((value) => [value]) |
+      bracketStringTemplate(scaleNumber());
   Parser scaleNumber() =>
       (ref0(number) & lengthUnit()) |
       (ref0(number) & ref0(number) & lengthUnit()) |
