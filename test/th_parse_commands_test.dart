@@ -85,12 +85,13 @@ void main() {
         'asFile': 'encoding UTF-8 # end of line comment\n',
       },
       {
-        'file': 'th_file_parser-00060-scrap_without_endscrap-parse_failure.th2',
-        'length': 1,
+        'file': 'th_file_parser-00061-scrap_and_endscrap.th2',
+        'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
   0.0 m]
+endscrap
 ''',
       },
       {
@@ -170,6 +171,35 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap poco_surubim_SCP01 -projection extended:strange_index
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-00290-scrap_with_projection_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras12 -projection none
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00291-scrap_with_projection_option_with_index.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras13 -projection plan:main
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00292-scrap_with_projection_option_with_elevation_with_direction.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras14 -projection [elevation:alternative 273 grad]
 endscrap
 ''',
       },
