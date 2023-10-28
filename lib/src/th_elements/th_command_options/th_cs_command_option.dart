@@ -1,7 +1,8 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_parts/th_cs_part.dart';
 
 class THCSCommandOption extends THCommandOption {
-  String? coordinateSystem;
+  THCSPart? coordinateSystem;
 
   THCSCommandOption(super.parent);
 
@@ -12,7 +13,8 @@ class THCSCommandOption extends THCommandOption {
 
   @override
   String specToString() {
-    var asString = (coordinateSystem == null) ? '' : coordinateSystem!.trim();
+    var asString =
+        (coordinateSystem == null) ? '' : coordinateSystem.toString();
 
     return asString;
   }

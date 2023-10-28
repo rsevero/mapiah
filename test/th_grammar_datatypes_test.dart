@@ -833,4 +833,52 @@ void main() {
       });
     }
   });
+
+  group('coordinate systems', () {
+    final grammar = THGrammar();
+    final parser = grammar.buildFrom(grammar.csSpecs()).end();
+
+    const successes = [
+      'UTM23',
+      'UTM2',
+      'UTM47S',
+      'UTM9S',
+      'UTM51N',
+      'UTM7N',
+      'lat-long',
+      'long-lat',
+      'EPSG:4258',
+      'EPSG:25837',
+      'ESRI:4322',
+      'ETRS31',
+      'iJTSK03',
+      'JTSK',
+      'OSGB:TA',
+      'OSGB:HL',
+    ];
+
+    for (var success in successes) {
+      test(success, () {
+        final result = parser.parse(success);
+        // trace(parser).parse(success);
+        expect(result.runtimeType.toString(), contains('Success'));
+        expect(result.value, success.trim());
+      });
+    }
+
+    const failures = [
+      'EPSP-43356',
+      'OSGB:HI',
+      'JTSK,',
+      'ETRS21',
+      'ETRS43',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () {
+        final result = parser.parse(failure);
+        expect(result.runtimeType.toString(), 'Failure');
+      });
+    }
+  });
 }

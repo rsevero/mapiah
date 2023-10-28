@@ -17,6 +17,7 @@ import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 import 'package:mapiah/src/th_file_aux/th_grammar.dart';
 import 'package:mapiah/src/th_parts/th_angle_unit_part.dart';
+import 'package:mapiah/src/th_parts/th_cs_part.dart';
 import 'package:mapiah/src/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
 import 'package:meta/meta.dart';
@@ -138,7 +139,10 @@ class THFileParser {
   void _specCSCommandOption(
       THCSCommandOption aCommandOption, List<dynamic> aSpec) {
     if (aSpec[0] != null) {
-      aCommandOption.coordinateSystem = aSpec[0].toString();
+      if (THCSPart.isCS(aSpec[0])) {
+        final aCS = THCSPart(aSpec[0]);
+        aCommandOption.coordinateSystem = aCS;
+      }
     }
   }
 

@@ -191,8 +191,38 @@ class THGrammar extends GrammarDefinition {
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
   Parser scrapOptions() =>
-      projectionOption().optional() & scaleOption().optional();
-  Parser projectionSpecification() =>
+      csOption().optional() &
+      projectionOption().optional() &
+      scaleOption().optional();
+
+  /// CS Option
+  Parser csOption() =>
+      stringIgnoreCase('cs').skip(before: char('-')) & ref0(csSpec);
+  Parser csSpecs() =>
+      (csUtm() | csStrings() | csJtsk() | csEpsgEsri() | csEtrs() | csOsgb())
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser csSpec() => csSpecs().map((value) => [value]);
+  Parser csUtm() => (string('UTM') &
+          ((pattern('1-6') & digit()) | digit()) &
+          pattern('NS').optional())
+      .flatten();
+  Parser csStrings() =>
+      (string('lat-long') | string('long-lat') | string('S-MERC')).flatten();
+  Parser csJtsk() =>
+      (char('i').optional() & string('JTSK') & string('03').optional())
+          .flatten();
+  Parser csEpsgEsri() =>
+      ((string('EPSG') | string('ESRI')) & char(':') & digit().plus())
+          .flatten();
+  Parser csEtrs() => (string('ETRS') &
+          ((char('2') & pattern('89')) | (char('3') & pattern('0-7')))
+              .optional())
+      .flatten();
+  Parser csOsgb() =>
+      (string('OSGB:') & pattern('HNOST') & pattern('A-HJ-Z')).flatten();
+
+  /// Projection Option
+  Parser projectionSpec() =>
       // type: none
       ((stringIgnoreCase('none') &
                   ((char(':') & ref0(keyword)).pick(1)).optional()) |
@@ -220,11 +250,12 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser projectionOption() =>
       stringIgnoreCase('projection').skip(before: char('-')) &
-      ref0(projectionSpecification);
+      ref0(projectionSpec);
+
+  /// Scale option
   Parser scaleOption() =>
-      stringIgnoreCase('scale').skip(before: char('-')) &
-      ref0(scaleSpecification);
-  Parser scaleSpecification() =>
+      stringIgnoreCase('scale').skip(before: char('-')) & ref0(scaleSpec);
+  Parser scaleSpec() =>
       ref0(number).map((value) => [value]) |
       bracketStringTemplate(scaleNumber());
   Parser scaleNumber() =>
