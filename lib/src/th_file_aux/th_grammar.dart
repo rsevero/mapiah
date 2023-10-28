@@ -167,6 +167,11 @@ class THGrammar extends GrammarDefinition {
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
+  /// Comma separated list of keywords
+  Parser csvKeyword() => (keyword() & (char(',') & keyword()).star())
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+
   /// Command template
   Parser commandTemplate(command) =>
       ref0(command) & ref0(endLineComment).optional();
@@ -193,7 +198,8 @@ class THGrammar extends GrammarDefinition {
   Parser scrapOptions() =>
       csOption().optional() &
       projectionOption().optional() &
-      scaleOption().optional();
+      scaleOption().optional() &
+      stationsOption().optional();
 
   /// CS Option
   Parser csOption() =>
@@ -270,6 +276,11 @@ class THGrammar extends GrammarDefinition {
           ref0(number) &
           ref0(number) &
           lengthUnit().optional());
+
+  /// -stations
+  Parser stationsOption() =>
+      stringIgnoreCase('stations').skip(before: char('-')) &
+      ref0(csvKeyword).map((value) => [value]);
 
   /// Endscrap
   Parser endscrap() => ref1(commandTemplate, endscrapCommand);

@@ -116,8 +116,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final file = await parser.parse((success['file'] as String));
-        // final aTHFile =
-        //     await parser.parse(success, startParser: grammar.start());
+        // final file = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -192,17 +192,57 @@ endscrap
 
   group('scrap -cs', () {
     final parser = THFileParser();
-    final grammar = THGrammar();
+    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
       {
-        'file':
-            'th_file_parser-02073-scrap_and_endscrap_projection_extended_with_index.th2',
+        'file': 'th_file_parser-00220-scrap_with_cs_option.th2',
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap poco_surubim_SCP01 -cs lat-long
+scrap araras1 -cs long-lat
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02073-scrap_and_endscrap_cs.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -cs EPSG:3857
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final file = await parser.parse((success['file'] as String));
+        // final file = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('scrap -stations', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-00230-scrap_with_stations_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras2 -stations a2,c4
 endscrap
 ''',
       },

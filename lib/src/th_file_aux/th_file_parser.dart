@@ -6,6 +6,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
@@ -129,10 +130,25 @@ class THFileParser {
         case 'scale':
           _specScaleCommandOption(
               newOption as THScaleCommandOption, aOption[1]);
+        case 'stations':
+          _specStationsCommandOption(
+              newOption as THStationsCommandOption, aOption[1]);
         default:
           _specUnrecognizedCommandOption(
               newOption as THUnrecognizedCommandOption, aOption[1]);
       }
+    }
+  }
+
+  void _specStationsCommandOption(
+      THStationsCommandOption aCommandOption, List<dynamic> aSpec) {
+    if (aSpec.isEmpty) {
+      return;
+    }
+    var stations = aSpec[0].toString().split(',');
+
+    for (final station in stations) {
+      aCommandOption.stations.add(station);
     }
   }
 
