@@ -12,7 +12,7 @@ class THGrammar extends GrammarDefinition {
   Parser th2Command() => scrap() | endscrap();
 
   /// Whitespace
-  Parser thWhitespace() => anyOf(' \t').plus();
+  Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
 
   /// Quoted string
   ///
@@ -23,7 +23,17 @@ class THGrammar extends GrammarDefinition {
               .star()
               .flatten() &
           char(thQuote))
-      .pick(1);
+      .pick(1)
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// Unquoted string
+  Parser unquotedString() => noneOf('$thWhitespaceChars$thQuote')
+      .plus()
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// Any string
+  Parser anyString() => quotedString() | unquotedString();
 
   /// Bracket string
   Parser bracketStringTemplate(content) =>
@@ -40,6 +50,10 @@ class THGrammar extends GrammarDefinition {
           (char('.') & digit().plus()).optional())
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// Point
+  Parser point() =>
+      number().repeat(2, 2).trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Comment
   Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
@@ -191,7 +205,7 @@ class THGrammar extends GrammarDefinition {
   /// TODO: survey
   /// TODO: centreline
 
-  /// Scrap
+  /// scrap
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
@@ -199,9 +213,10 @@ class THGrammar extends GrammarDefinition {
       csOption().optional() &
       projectionOption().optional() &
       scaleOption().optional() &
+      sketchOption().optional() &
       stationsOption().optional();
 
-  /// CS Option
+  /// -cs
   Parser csOption() =>
       stringIgnoreCase('cs').skip(before: char('-')) & ref0(csSpec);
   Parser csSpecs() =>
@@ -227,7 +242,7 @@ class THGrammar extends GrammarDefinition {
   Parser csOsgb() =>
       (string('OSGB:') & pattern('HNOST') & pattern('A-HJ-Z')).flatten();
 
-  /// Projection Option
+  /// -projection
   Parser projectionSpec() =>
       // type: none
       ((stringIgnoreCase('none') &
@@ -258,7 +273,7 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('projection').skip(before: char('-')) &
       ref0(projectionSpec);
 
-  /// Scale option
+  /// -scale
   Parser scaleOption() =>
       stringIgnoreCase('scale').skip(before: char('-')) & ref0(scaleSpec);
   Parser scaleSpec() =>
@@ -276,6 +291,12 @@ class THGrammar extends GrammarDefinition {
           ref0(number) &
           ref0(number) &
           lengthUnit().optional());
+
+  /// -sketch
+  Parser sketchOption() =>
+      stringIgnoreCase('sketch').skip(before: char('-')) & ref0(sketchSpec);
+  Parser sketchSpec() =>
+      (anyString() & point()).trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// -stations
   Parser stationsOption() =>

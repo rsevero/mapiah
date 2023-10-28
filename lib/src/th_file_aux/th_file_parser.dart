@@ -6,6 +6,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
@@ -21,6 +22,7 @@ import 'package:mapiah/src/th_parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/th_parts/th_cs_part.dart';
 import 'package:mapiah/src/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
+import 'package:mapiah/src/th_parts/th_point_part.dart';
 import 'package:meta/meta.dart';
 import 'package:charset/charset.dart';
 import 'package:petitparser/petitparser.dart';
@@ -130,6 +132,9 @@ class THFileParser {
         case 'scale':
           _specScaleCommandOption(
               newOption as THScaleCommandOption, aOption[1]);
+        case 'sketch':
+          _specSketchCommandOption(
+              newOption as THSketchCommandOption, aOption[1]);
         case 'stations':
           _specStationsCommandOption(
               newOption as THStationsCommandOption, aOption[1]);
@@ -138,6 +143,26 @@ class THFileParser {
               newOption as THUnrecognizedCommandOption, aOption[1]);
       }
     }
+  }
+
+  void _specSketchCommandOption(
+      THSketchCommandOption aCommandOption, List<dynamic> aSpec) {
+    if (aSpec.isEmpty) {
+      return;
+    }
+
+    if ((aSpec[0] == null) ||
+        (aSpec[1] == null) ||
+        (aSpec[1] is! List) ||
+        ((aSpec[1] as List).length != 2)) {
+      return;
+    }
+
+    aCommandOption.filename = aSpec[0];
+
+    final aPoint = THPointPart.fromStringList(aSpec[1]);
+
+    aCommandOption.point = aPoint;
   }
 
   void _specStationsCommandOption(

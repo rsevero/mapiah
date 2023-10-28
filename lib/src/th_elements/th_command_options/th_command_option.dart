@@ -1,6 +1,7 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
@@ -25,6 +26,8 @@ abstract class THCommandOption {
         return THProjectionCommandOption(aParent);
       case 'scale':
         return THScaleCommandOption(aParent);
+      case 'sketch':
+        return THSketchCommandOption(aParent);
       case 'stations':
         return THStationsCommandOption(aParent);
       default:

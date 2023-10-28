@@ -262,4 +262,36 @@ endscrap
       });
     }
   });
+
+  group('scrap -sketch', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-00300-scrap_with_sketch_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras15 -sketch ./FrozenDeep_p.xvi 12 32
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final file = await parser.parse((success['file'] as String));
+        // final file = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
 }

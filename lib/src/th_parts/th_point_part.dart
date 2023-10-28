@@ -13,4 +13,12 @@ class THPointPart {
     x = THDoublePart.fromString(aXAsString);
     y = THDoublePart.fromString(aYAsString);
   }
+
+  THPointPart.fromStringList(List<dynamic> aList) {
+    if (aList.length != 2) {
+      throw 'Unssupported string list length.';
+    }
+    x = THDoublePart.fromString(aList[0].toString());
+    y = THDoublePart.fromString(aList[1].toString());
+  }
 }
