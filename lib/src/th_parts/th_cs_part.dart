@@ -1,12 +1,17 @@
 import 'dart:collection';
 
 import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
+import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 class THCSPart {
   late String _name;
+  late bool forOutputOnly;
 
   static final _csList =
       HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
+
+  static final _csNotForOutput =
+      HashSet<String>.from(['lat-long', 'long-lat', 'JTSK']);
 
   static final _csRegexes = [
     RegExp(r'^(UTM\d{1,2}(N|S)?)?'),
@@ -16,11 +21,15 @@ class THCSPart {
     RegExp(r'^(OSGB:[HNOST][A-HJ-Z])$'),
   ];
 
-  THCSPart(String aCS) {
+  THCSPart(String aCS, this.forOutputOnly) {
     name = aCS;
   }
 
-  static bool isCS(String aCS) {
+  static bool isCS(String aCS, bool forOutput) {
+    if (forOutput && _csNotForOutput.contains(aCS)) {
+      return false;
+    }
+
     if (_csList.contains(aCS)) {
       return true;
     }
@@ -35,8 +44,10 @@ class THCSPart {
   }
 
   set name(String aCS) {
-    if (!THCSPart.isCS(aCS)) {
-      throw THConvertFromStringException(runtimeType.toString(), aCS);
+    if (!THCSPart.isCS(aCS, forOutputOnly)) {
+      var message = forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
+      message = "Unsupported THCSPart '$aCS' in '$message' mode.";
+      throw THCustomException(message);
     }
 
     _name = aCS;

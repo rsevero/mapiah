@@ -262,7 +262,7 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THCSCommandOption');
     }
 
-    THCSCommandOption(_currentHasOptions, aSpec[0]);
+    THCSCommandOption(_currentHasOptions, aSpec[0], false);
   }
 
   void _injectUnrecognizedCommandOption(List<dynamic> aSpec) {

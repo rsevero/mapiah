@@ -4,8 +4,8 @@ import 'package:mapiah/src/th_parts/th_cs_part.dart';
 class THCSCommandOption extends THCommandOption {
   late THCSPart cs;
 
-  THCSCommandOption(super.parent, String aCSString) {
-    cs = THCSPart(aCSString);
+  THCSCommandOption(super.parent, String aCSString, bool forOutputOnly) {
+    cs = THCSPart(aCSString, forOutputOnly);
   }
 
   @override
