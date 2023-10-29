@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_flip_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
@@ -200,6 +201,8 @@ class THFileParser {
         switch (optionType) {
           case 'cs':
             _injectCSCommandOption(aOption[1]);
+          case 'flip':
+            _injectFlipCommandOption(aOption[1]);
           case 'projection':
             _injectProjectionCommandOption(aOption[1]);
           case 'scale':
@@ -214,9 +217,23 @@ class THFileParser {
             _injectUnrecognizedCommandOption(aOption[1]);
         }
       } catch (e, s) {
-        _addError(e.toString(), '_scrapOptionFromElement', aOption.toString());
+        _addError("$e\n\nTrace:\n\n$s", '_scrapOptionFromElement',
+            aOption.toString());
       }
     }
+  }
+
+  void _injectFlipCommandOption(List<dynamic> aSpec) {
+    if (aSpec.isEmpty) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THFlipCommandOption', '> 0', aSpec);
+    }
+
+    if (aSpec[0] == null) {
+      throw THCreateObjectFromNullValueException('THFlipCommandOption');
+    }
+
+    THFlipCommandOption.fromString(_currentHasOptions, aSpec[0]);
   }
 
   void _injectWallsCommandOption(List<dynamic> aSpec) {

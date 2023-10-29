@@ -226,6 +226,7 @@ class THGrammar extends GrammarDefinition {
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
   Parser scrapOptions() =>
       csOption().optional() &
+      flipOption().optional() &
       projectionOption().optional() &
       scaleOption().optional() &
       sketchOption().optional() &
@@ -257,6 +258,15 @@ class THGrammar extends GrammarDefinition {
       .flatten();
   Parser csOsgb() =>
       (string('OSGB:') & pattern('HNOST') & pattern('A-HJ-Z')).flatten();
+
+  /// -flip
+  Parser flipOption() =>
+      stringIgnoreCase('flip').skip(before: char('-')) &
+      ref0(flipOptions).map((value) => [value]);
+  Parser flipOptions() => (stringIgnoreCase('none') |
+          stringIgnoreCase('horizontal') |
+          stringIgnoreCase('vertical'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// -projection
   Parser projectionSpec() =>
