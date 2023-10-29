@@ -1,8 +1,8 @@
-class THElementByIndexMissingException implements Exception {
+class THNoElementByIndexException implements Exception {
   String filename;
   int index;
 
-  THElementByIndexMissingException(this.filename, this.index);
+  THNoElementByIndexException(this.filename, this.index);
 
   @override
   String toString() {

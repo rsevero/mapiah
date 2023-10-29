@@ -1,5 +1,9 @@
 import 'package:mapiah/src/th_definitions.dart';
-import 'package:mapiah/src/th_exceptions/th_element_by_index_missing.dart';
+import 'package:mapiah/src/th_elements/th_has_id.dart';
+import 'package:mapiah/src/th_exceptions/th_duplicate_id_exception.dart';
+import 'package:mapiah/src/th_exceptions/th_id_with_space_exception.dart';
+import 'package:mapiah/src/th_exceptions/th_no_element_by_index_exception.dart';
+import 'package:mapiah/src/th_exceptions/th_no_element_by_id_exception.dart';
 
 /// Base class for all elements that form a THFile, including THFile itself.
 abstract class THElement {
@@ -69,6 +73,8 @@ class THFile extends THElement with THParent {
   final Map<int, THElement> _elements = {};
   var filename = 'unnamed file';
 
+  final Map<String, THHasID> _elementByID = {};
+
   var encoding = thDefaultEncoding;
   var _nextIndex = 0;
 
@@ -90,6 +96,33 @@ class THFile extends THElement with THParent {
     aElement._index = _nextIndex;
     _elements[_nextIndex] = aElement;
     _nextIndex++;
+    final elementType = aElement.type();
+    if (aElement is THHasID) {
+      final newID = _completeElementID(elementType, (aElement as THHasID).id);
+      if (_elementByID.containsKey(newID)) {
+        throw THDuplicateIDException(newID, filename);
+      }
+      _elementByID[newID] = (aElement as THHasID);
+    }
+  }
+
+  String _completeElementID(String elementType, String aID) {
+    if (aID.contains(' ')) {
+      throw THIDWithSpaceException(elementType, aID);
+    }
+    return '$elementType|$aID';
+  }
+
+  bool hasElementByID(String elementType, String aID) {
+    return _elementByID.containsKey(_completeElementID(elementType, aID));
+  }
+
+  THHasID elementByID(String elementType, String aID) {
+    if (!hasElementByID(elementType, aID)) {
+      throw THNoElementByIDException(elementType, aID, filename);
+    }
+
+    return _elementByID[_completeElementID(elementType, aID)]!;
   }
 
   bool hasElementByIndex(int aIndex) {
@@ -98,7 +131,7 @@ class THFile extends THElement with THParent {
 
   THElement elementByIndex(int aIndex) {
     if (!hasElementByIndex(aIndex)) {
-      throw THElementByIndexMissingException(_thFile.filename, aIndex);
+      throw THNoElementByIndexException(filename, aIndex);
     }
 
     return _elements[aIndex]!;
