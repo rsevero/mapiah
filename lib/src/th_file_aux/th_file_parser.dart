@@ -6,6 +6,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_flip_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_walls_command_option.dart';
@@ -209,6 +210,8 @@ class THFileParser {
             _injectScaleCommandOption(aOption[1]);
           case 'sketch':
             _injectSketchCommandOption(aOption[1]);
+          case 'station-names':
+            _injectStationNamesCommandOption(aOption[1]);
           case 'stations':
             _injectStationsCommandOption(aOption[1]);
           case 'walls':
@@ -274,6 +277,15 @@ class THFileParser {
     }
 
     THSketchCommandOption.fromString(_currentHasOptions, aSpec[0], aSpec[1]);
+  }
+
+  void _injectStationNamesCommandOption(List<dynamic> aSpec) {
+    if (aSpec.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THStationNamesCommandOption', '== 2', aSpec);
+    }
+
+    THStationNamesCommandOption(_currentHasOptions, aSpec[0], aSpec[1]);
   }
 
   void _injectStationsCommandOption(List<dynamic> aSpec) {

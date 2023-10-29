@@ -230,6 +230,7 @@ class THGrammar extends GrammarDefinition {
       projectionOption().optional() &
       scaleOption().optional() &
       sketchOption().optional() &
+      stationNamesOption().optional() &
       stationsOption().optional() &
       wallsOption().optional();
 
@@ -323,6 +324,15 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('sketch').skip(before: char('-')) & ref0(sketchSpec);
   Parser sketchSpec() =>
       (anyString() & point()).trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// -station-names
+  Parser stationNamesOption() =>
+      stringIgnoreCase('station-names').skip(before: char('-')) &
+      ref0(stationNamesSpec);
+  Parser stationNamesSpec() => ((string('[]') | pattern('^[] \t').plus())
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace)))
+      .repeat(2, 2);
 
   /// -stations
   Parser stationsOption() =>
