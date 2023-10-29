@@ -1,6 +1,7 @@
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
 import "package:mapiah/src/th_definitions.dart";
+import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
 
 class THDoublePart {
   late double value;
@@ -17,11 +18,15 @@ class THDoublePart {
   void fromString(String aValueString) {
     aValueString = aValueString.trim();
 
-    var dotPosition = aValueString.indexOf(thDecimalSeparator);
+    final aDouble = double.tryParse(aValueString);
+    if (aDouble == null) {
+      throw THConvertFromStringException('THDoublePart', aValueString);
+    }
+    value = aDouble;
+
+    final dotPosition = aValueString.indexOf(thDecimalSeparator);
     decimalPositions =
         (dotPosition > 0) ? aValueString.length - (dotPosition + 1) : 0;
-
-    value = double.parse(aValueString);
   }
 
   void fromValue(double aValue, int aDecimalPositions) {

@@ -1,5 +1,7 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/th_parts/th_angle_unit_part.dart';
+import 'package:mapiah/src/th_parts/th_clino_unit_part.dart';
 import 'package:mapiah/src/th_parts/th_double_part.dart';
 
 enum THProjectionTypes {
@@ -10,26 +12,52 @@ enum THProjectionTypes {
 }
 
 class THProjectionCommandOption extends THCommandOption {
-  THProjectionTypes? projectionType;
-  String? projectionIndex;
-  THDoublePart? elevationAngleValue;
-  THAngleUnitPart? elevationAngleUnit;
+  late THProjectionTypes type;
+  String index;
+  THDoublePart? elevationAngle;
+  THAngleUnitPart? elevationUnit;
 
-  static const typeNames = {
+  static const stringToType = {
     'elevation': THProjectionTypes.elevation,
     'extended': THProjectionTypes.extended,
     'none': THProjectionTypes.none,
     'plan': THProjectionTypes.plan,
   };
 
-  static const textRepresentations = {
+  static const typeToString = {
     THProjectionTypes.elevation: 'elevation',
     THProjectionTypes.extended: 'extended',
     THProjectionTypes.none: 'none',
     THProjectionTypes.plan: 'plan',
   };
 
-  THProjectionCommandOption(super.parent);
+  THProjectionCommandOption(super.parent, this.type,
+      {this.index = '', this.elevationAngle, this.elevationUnit});
+
+  THProjectionCommandOption.fromString(super.parent, String aType,
+      {this.index = '', this.elevationAngle, this.elevationUnit}) {
+    typeFromString(aType);
+  }
+
+  static bool isType(String aType) {
+    return stringToType.containsKey(aType);
+  }
+
+  void typeFromString(String aType) {
+    if (!THProjectionCommandOption.isType(aType)) {
+      throw THConvertFromStringException(runtimeType.toString(), aType);
+    }
+
+    type = stringToType[aType]!;
+  }
+
+  void elevationAngleFromString(String aAngle) {
+    elevationAngle = THDoublePart.fromString(aAngle);
+  }
+
+  void elevationUnitFromString(String aUnit) {
+    elevationUnit = THAngleUnitPart.fromString(aUnit);
+  }
 
   @override
   String optionType() {
@@ -40,21 +68,17 @@ class THProjectionCommandOption extends THCommandOption {
   String specToString() {
     var asString = '';
 
-    if (projectionType == null) {
-      return asString;
+    asString += THProjectionCommandOption.typeToString[type]!;
+
+    if (index.isNotEmpty && index.trim().isNotEmpty) {
+      asString += ':${index.trim()}';
     }
 
-    asString += THProjectionCommandOption.textRepresentations[projectionType]!;
-
-    if (projectionIndex != null) {
-      asString += ":$projectionIndex";
-    }
-
-    if (projectionType == THProjectionTypes.elevation) {
-      if (elevationAngleValue != null) {
-        asString += " ${elevationAngleValue.toString()}";
-        if (elevationAngleUnit != null) {
-          asString += " ${elevationAngleUnit.toString()}";
+    if (type == THProjectionTypes.elevation) {
+      if (elevationAngle != null) {
+        asString += " ${elevationAngle.toString()}";
+        if (elevationUnit != null) {
+          asString += " ${elevationUnit.toString()}";
         }
       }
     }

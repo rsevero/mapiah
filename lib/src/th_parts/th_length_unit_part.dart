@@ -1,3 +1,5 @@
+import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
+
 enum THLengthUnit {
   centimeter,
   feet,
@@ -38,21 +40,15 @@ class THLengthUnitPart {
   THLengthUnitPart(this.unit);
 
   THLengthUnitPart.fromString(String aUnitString) {
-    if (!isUnit(aUnitString)) {
-      throw 'Unknown unit';
-    }
-
     fromString(aUnitString);
   }
 
-  bool fromString(String aUnitString) {
+  void fromString(String aUnitString) {
     if (!isUnit(aUnitString)) {
-      return false;
+      throw THConvertFromStringException('THLengthUnitPart', aUnitString);
     }
 
     unit = stringToUnit[aUnitString]!;
-
-    return true;
   }
 
   @override

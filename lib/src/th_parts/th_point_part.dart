@@ -1,3 +1,4 @@
+import 'package:mapiah/src/th_exceptions/th_convert_from_list_exception.dart';
 import "package:mapiah/src/th_parts/th_double_part.dart";
 
 class THPointPart {
@@ -16,8 +17,9 @@ class THPointPart {
 
   THPointPart.fromStringList(List<dynamic> aList) {
     if (aList.length != 2) {
-      throw 'Unsupported string list length.';
+      throw THConvertFromListException('THPointPart', aList);
     }
+
     x = THDoublePart.fromString(aList[0].toString());
     y = THDoublePart.fromString(aList[1].toString());
   }

@@ -1,4 +1,5 @@
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_exceptions/th_element_by_index_missing.dart';
 
 /// Base class for all elements that form a THFile, including THFile itself.
 abstract class THElement {
@@ -66,7 +67,7 @@ mixin THParent on THElement {
 /// THElement parameterless private constructor.
 class THFile extends THElement with THParent {
   final Map<int, THElement> _elements = {};
-  var filename = '';
+  var filename = 'unnamed file';
 
   var encoding = thDefaultEncoding;
   var _nextIndex = 0;
@@ -95,11 +96,11 @@ class THFile extends THElement with THParent {
     return _elements.containsKey(aIndex);
   }
 
-  THElement? elementByIndex(int aIndex) {
-    if (_elements.containsKey(aIndex)) {
-      return _elements[aIndex];
-    } else {
-      return null;
+  THElement elementByIndex(int aIndex) {
+    if (!hasElementByIndex(aIndex)) {
+      throw THElementByIndexMissingException(_thFile.filename, aIndex);
     }
+
+    return _elements[aIndex]!;
   }
 }

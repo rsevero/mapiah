@@ -1,7 +1,9 @@
 import 'dart:collection';
 
+import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
+
 class THCSPart {
-  late String _coordinateSystem;
+  late String _name;
 
   static final _csList =
       HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
@@ -15,11 +17,7 @@ class THCSPart {
   ];
 
   THCSPart(String aCS) {
-    if (!THCSPart.isCS(aCS)) {
-      throw 'Unknown coordinate system.';
-    }
-
-    coordinateSystem = aCS;
+    name = aCS;
   }
 
   static bool isCS(String aCS) {
@@ -36,20 +34,20 @@ class THCSPart {
     return false;
   }
 
-  set coordinateSystem(String aCS) {
+  set name(String aCS) {
     if (!THCSPart.isCS(aCS)) {
-      return;
+      throw THConvertFromStringException(runtimeType.toString(), aCS);
     }
 
-    _coordinateSystem = aCS;
+    _name = aCS;
   }
 
-  String get coordinateSystem {
-    return _coordinateSystem;
+  String get name {
+    return _name;
   }
 
   @override
   String toString() {
-    return coordinateSystem;
+    return name;
   }
 }

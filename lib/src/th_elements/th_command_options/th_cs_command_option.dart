@@ -2,9 +2,11 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_parts/th_cs_part.dart';
 
 class THCSCommandOption extends THCommandOption {
-  THCSPart? coordinateSystem;
+  late THCSPart cs;
 
-  THCSCommandOption(super.parent);
+  THCSCommandOption(super.parent, String aCSString) {
+    cs = THCSPart(aCSString);
+  }
 
   @override
   String optionType() {
@@ -13,9 +15,6 @@ class THCSCommandOption extends THCommandOption {
 
   @override
   String specToString() {
-    var asString =
-        (coordinateSystem == null) ? '' : coordinateSystem.toString();
-
-    return asString;
+    return cs.toString();
   }
 }

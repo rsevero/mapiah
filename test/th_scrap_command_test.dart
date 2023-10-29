@@ -22,8 +22,8 @@ void main() {
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 m]
+scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
+    0.0 m ]
 endscrap
 ''',
       },
@@ -32,7 +32,7 @@ endscrap
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
-scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 m]
+scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 m ]
 endscrap
 ''',
       },
@@ -246,6 +246,40 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap araras15 -sketch ./FrozenDeep_p.xvi 12 32
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('scrap -walls', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-00250-scrap_with_walls_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras4 -walls off
 endscrap
 ''',
       },

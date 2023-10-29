@@ -1,3 +1,5 @@
+import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
+
 enum THAngleUnit {
   degree,
   grad,
@@ -31,21 +33,15 @@ class THAngleUnitPart {
   THAngleUnitPart(this.unit);
 
   THAngleUnitPart.fromString(String aUnitString) {
-    if (!isUnit(aUnitString)) {
-      throw 'Unknown angle unit.';
-    }
-
     fromString(aUnitString);
   }
 
-  bool fromString(String aUnitString) {
+  void fromString(String aUnitString) {
     if (!isUnit(aUnitString)) {
-      return false;
+      throw THConvertFromStringException('THAngleUnitPart', aUnitString);
     }
 
     unit = stringToUnit[aUnitString]!;
-
-    return true;
   }
 
   @override

@@ -229,7 +229,8 @@ class THGrammar extends GrammarDefinition {
       projectionOption().optional() &
       scaleOption().optional() &
       sketchOption().optional() &
-      stationsOption().optional();
+      stationsOption().optional() &
+      wallsOption().optional();
 
   /// -cs
   Parser csOption() =>
@@ -317,6 +318,15 @@ class THGrammar extends GrammarDefinition {
   Parser stationsOption() =>
       stringIgnoreCase('stations').skip(before: char('-')) &
       ref0(csvKeyword).map((value) => [value]);
+
+  /// -walls
+  Parser wallsOption() =>
+      stringIgnoreCase('walls').skip(before: char('-')) &
+      ref0(wallsOptions).map((value) => [value]);
+  Parser wallsOptions() => (stringIgnoreCase('on') |
+          stringIgnoreCase('off') |
+          stringIgnoreCase('auto'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Endscrap
   Parser endscrap() => ref1(commandTemplate, endscrapCommand);
