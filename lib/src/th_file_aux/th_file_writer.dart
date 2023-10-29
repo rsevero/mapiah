@@ -2,6 +2,7 @@ import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
@@ -15,7 +16,7 @@ class THFileWriter {
 
     switch (type) {
       case 'comment':
-        asString += '${(aTHElement as THComment).content}\n';
+        asString += '# ${(aTHElement as THComment).content}\n';
       case 'emptyline':
         asString += '\n';
       case 'encoding':
@@ -39,6 +40,8 @@ class THFileWriter {
         asString += _prepareLine('comment', aTHElement);
         _increasePrefix();
         asString += _childrenAsString(aTHElement as THMultiLineComment);
+      case 'multilinecommentcontent':
+        asString += '${(aTHElement as THMultilineCommentContent).content}\n';
       case 'scrap':
         final aTHScrap = aTHElement as THScrap;
         final newLine =
@@ -136,7 +139,7 @@ class THFileWriter {
     }
 
     if (aTHElement.sameLineComment != null) {
-      newLine += " ${aTHElement.sameLineComment}";
+      newLine += " # ${aTHElement.sameLineComment}";
     }
 
     newLine += '\n';

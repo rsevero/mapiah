@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
@@ -16,6 +15,7 @@ import 'package:mapiah/src/th_elements/th_encoding.dart';
 import 'package:mapiah/src/th_elements/th_endcomment.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
@@ -26,11 +26,8 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_with_list_parameter_exception.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 import 'package:mapiah/src/th_file_aux/th_grammar.dart';
-import 'package:mapiah/src/th_parts/th_angle_unit_part.dart';
-import 'package:mapiah/src/th_parts/th_cs_part.dart';
 import 'package:mapiah/src/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
-import 'package:mapiah/src/th_parts/th_point_part.dart';
 import 'package:meta/meta.dart';
 import 'package:charset/charset.dart';
 import 'package:petitparser/petitparser.dart';
@@ -114,7 +111,7 @@ class THFileParser {
 
   void _injectMultiLineCommentContent(List<dynamic> aElement) {
     final content = (aElement.isEmpty) ? '' : aElement[1].toString();
-    _currentElement = THComment(_currentParent, content);
+    _currentElement = THMultilineCommentContent(_currentParent, content);
   }
 
   void _injectEndComment() {
@@ -152,6 +149,27 @@ class THFileParser {
   void _injectComment(List<dynamic>? aElement) {
     if (aElement == null) {
       return;
+    }
+
+    if (aElement.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THComment', '== 2', aElement);
+    }
+
+    if (aElement[0] is! String) {
+      throw THCustomException(
+          "Need string as comment type. Received '${aElement[0]}'.");
+    }
+
+    if (aElement[1] is! String) {
+      throw THCustomException(
+          "Need string as comment content. Received '${aElement[1]}'.");
+    }
+
+    if (aElement[1].indexOf('# ') == 0) {
+      aElement[1] = aElement[1].substring(2);
+    } else if (aElement[1].indexOf('#') == 0) {
+      aElement[1] = aElement[1].substring(1);
     }
 
     switch (aElement[0]) {
