@@ -9,7 +9,7 @@ enum THLengthUnit {
 class THLengthUnitPart {
   late THLengthUnit unit;
 
-  static const unitNames = {
+  static const stringToUnit = {
     'centimeter': THLengthUnit.centimeter,
     'centimeters': THLengthUnit.centimeter,
     'cm': THLengthUnit.centimeter,
@@ -27,7 +27,7 @@ class THLengthUnitPart {
     'yd': THLengthUnit.yard,
   };
 
-  static const textRepresentations = {
+  static const unitToString = {
     THLengthUnit.centimeter: 'cm',
     THLengthUnit.feet: 'ft',
     THLengthUnit.inch: 'in',
@@ -50,17 +50,17 @@ class THLengthUnitPart {
       return false;
     }
 
-    unit = unitNames[aUnitString]!;
+    unit = stringToUnit[aUnitString]!;
 
     return true;
   }
 
   @override
   String toString() {
-    return textRepresentations[unit]!;
+    return unitToString[unit]!;
   }
 
   static bool isUnit(String aUnitString) {
-    return unitNames.containsKey(aUnitString);
+    return stringToUnit.containsKey(aUnitString);
   }
 }

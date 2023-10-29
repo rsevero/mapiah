@@ -9,7 +9,7 @@ enum THClinoUnit {
 class THClinoUnitPart {
   late THClinoUnit unit;
 
-  static const unitNames = {
+  static const stringToUnit = {
     'deg': THClinoUnit.degree,
     'degree': THClinoUnit.degree,
     'degrees': THClinoUnit.degree,
@@ -24,7 +24,7 @@ class THClinoUnitPart {
     'percentage': THClinoUnit.percent,
   };
 
-  static const textRepresentations = {
+  static const unitToString = {
     THClinoUnit.degree: 'deg',
     THClinoUnit.grad: 'grad',
     THClinoUnit.mil: 'mil',
@@ -47,17 +47,17 @@ class THClinoUnitPart {
       return false;
     }
 
-    unit = unitNames[aUnitString]!;
+    unit = stringToUnit[aUnitString]!;
 
     return true;
   }
 
   @override
   String toString() {
-    return textRepresentations[unit]!;
+    return unitToString[unit]!;
   }
 
   static bool isUnit(String aUnitString) {
-    return unitNames.containsKey(aUnitString);
+    return stringToUnit.containsKey(aUnitString);
   }
 }

@@ -8,7 +8,7 @@ enum THAngleUnit {
 class THAngleUnitPart {
   late THAngleUnit unit;
 
-  static const unitNames = {
+  static const stringToUnit = {
     'deg': THAngleUnit.degree,
     'degree': THAngleUnit.degree,
     'degrees': THAngleUnit.degree,
@@ -21,7 +21,7 @@ class THAngleUnitPart {
     'minutes': THAngleUnit.minute,
   };
 
-  static const textRepresentations = {
+  static const unitToString = {
     THAngleUnit.degree: 'deg',
     THAngleUnit.grad: 'grad',
     THAngleUnit.mil: 'mil',
@@ -43,17 +43,17 @@ class THAngleUnitPart {
       return false;
     }
 
-    unit = unitNames[aUnitString]!;
+    unit = stringToUnit[aUnitString]!;
 
     return true;
   }
 
   @override
   String toString() {
-    return textRepresentations[unit]!;
+    return unitToString[unit]!;
   }
 
   static bool isUnit(String aUnitString) {
-    return unitNames.containsKey(aUnitString);
+    return stringToUnit.containsKey(aUnitString);
   }
 }
