@@ -82,13 +82,12 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Date
-  Parser year() => digit().repeat(2, 4).flatten();
-  Parser twoDigits() => digit().repeat(1, 2).flatten();
+  Parser year() => digit().repeat(4, 4).flatten();
+  Parser twoDigits() => digit().repeat(2, 2).flatten();
   Parser dotTwoDigits() => (char('.') & ref0(twoDigits)).pick(1);
   Parser atTwoDigits() => (char('@') & ref0(twoDigits)).pick(1);
   Parser colonTwoDigits() => (char(':') & ref0(twoDigits)).pick(1);
-  Parser noDateTime() =>
-      char('-').flatten().trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser noDateTime() => char('-').trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser singleDateTime() =>
 
       /// Year
@@ -118,18 +117,18 @@ class THGrammar extends GrammarDefinition {
                                   .optional())
                           .optional())
                   .optional())
+          .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser dateTimeRange() =>
       ref0(singleDateTime) &
-      ((char('-').trim(ref0(thWhitespace), ref0(thWhitespace)) &
-              ref0(singleDateTime).trim(ref0(thWhitespace), ref0(thWhitespace)))
-          .pick(1));
-  Parser dateTime() => noDateTime() | dateTimeRange() | singleDateTime();
+      char('-').trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      ref0(singleDateTime);
+  Parser dateTime() =>
+      noDateTime() | dateTimeRange().flatten() | singleDateTime();
 
   /// Person
-  ///
-  /// TODO: The name/surname separation will be done outside this grammar.
-  Parser person() => ref0(quotedString);
+  Parser person() =>
+      (unquotedString().repeat(2, 2).flatten() | ref0(quotedString));
 
   /// Length unit
   Parser lengthUnit() => (
@@ -225,6 +224,7 @@ class THGrammar extends GrammarDefinition {
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
   Parser scrapOptions() =>
+      authorOption().optional() &
       csOption().optional() &
       flipOption().optional() &
       projectionOption().optional() &
@@ -233,6 +233,11 @@ class THGrammar extends GrammarDefinition {
       stationNamesOption().optional() &
       stationsOption().optional() &
       wallsOption().optional();
+
+  /// -author
+  Parser authorOption() =>
+      stringIgnoreCase('author').skip(before: char('-')) & ref0(authorOptions);
+  Parser authorOptions() => dateTime() & person();
 
   /// -cs
   Parser csOption() =>

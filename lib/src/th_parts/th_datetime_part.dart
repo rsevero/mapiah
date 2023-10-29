@@ -1,97 +1,68 @@
-import 'package:intl/intl.dart';
-
-typedef THDatetimePart = ({
-  int? year,
-  int? month,
-  int? day,
-  int? hour,
-  int? minute,
-  int? second,
-  int? fractionalSeconds,
-});
+import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 /// Holds a date time value or interval
-class THDatetime {
-  THDatetimePart start = (
-    year: null,
-    month: null,
-    day: null,
-    hour: null,
-    minute: null,
-    second: null,
-    fractionalSeconds: null,
-  );
+class THDatetimePart {
+  late String _datetime;
+  late bool _isRange;
+  late bool _isEmpty;
 
-  THDatetimePart end = (
-    year: null,
-    month: null,
-    day: null,
-    hour: null,
-    minute: null,
-    second: null,
-    fractionalSeconds: null,
-  );
+  static final _datetimeRegex = RegExp(
+      r'^(?<year>\d{4}(\.(?<month>(0[1-9]|1[0-2]))(\.(?<day>(0[1-9]|[12][0-9]|3[01]))(\@(?<hour>(0[0-9]|1[0-9]|2[0-4]))(\:(?<minute>(0[0-9]|[1-5][0-9]))(\:(?<second>(0[0-9]|[1-5][0-9]))(\.(?<fractional>(0[0-9]|[1-5][0-9])))?)?)?)?)?)?)$');
 
-  String _singleDateToString(THDatetimePart date) {
-    var result = '';
+  THDatetimePart(String aDatetime) {
+    datetime = aDatetime;
+  }
 
-    if (date.year == null) {
-      return '-';
+  bool get isRange {
+    return _isRange;
+  }
+
+  bool get isEmpty {
+    return _isEmpty;
+  }
+
+  set datetime(String aDate) {
+    aDate = aDate.trim();
+
+    _isRange = false;
+    if (aDate == '-') {
+      _isEmpty = true;
+      _datetime = '-';
+      return;
+    } else {
+      _isEmpty = false;
     }
-    var year = (start.year! < 1000) ? date.year! + 2000 : date.year;
-    result += year.toString();
 
-    NumberFormat twoDigitsFormatter = NumberFormat("00");
+    final parts = aDate.split('-');
 
-    if (date.month == null) {
-      return result;
+    var newDatetime = '';
+
+    if ((parts.length == 1) || (parts.length == 2)) {
+      parts[0] = parts[0].trim();
+      if (!_datetimeRegex.hasMatch(parts[0])) {
+        throw THCustomException(
+            "Can´t parse start of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$aDate'");
+      }
+      newDatetime = parts[0];
+      if (parts.length == 2) {
+        parts[1] = parts[1].trim();
+        if (!_datetimeRegex.hasMatch(parts[1])) {
+          throw THCustomException(
+              "Can´t parse end of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$aDate'");
+        }
+        newDatetime += ' - ${parts[1]}';
+        _isRange = true;
+      }
+    } else {
+      throw THCustomException(
+          "Can´t parse datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]) from '$aDate'");
     }
-    result += ".${twoDigitsFormatter.format(date.month)}";
 
-    if (date.day == null) {
-      return result;
-    }
-    result += ".${twoDigitsFormatter.format(date.day)}";
-
-    if (date.hour == null) {
-      return result;
-    }
-    result += "@${twoDigitsFormatter.format(date.hour)}";
-
-    if (date.minute == null) {
-      return result;
-    }
-    result += ":${twoDigitsFormatter.format(date.minute)}";
-
-    if (date.second == null) {
-      return result;
-    }
-    result += ":${twoDigitsFormatter.format(date.second)}";
-
-    if (date.fractionalSeconds == null) {
-      return result;
-    }
-    var fractional = (date.fractionalSeconds! > 99)
-        ? date.fractionalSeconds.toString()
-        : twoDigitsFormatter.format(date.fractionalSeconds);
-
-    result += ".$fractional";
-
-    return result;
+    _datetime = newDatetime;
   }
 
   @override
   String toString() {
-    if (start.year == null) {
-      return '-';
-    }
-
-    var result = _singleDateToString(start);
-
-    if (end.year != null) {
-      result += ' - ${_singleDateToString(end)}';
-    }
-
-    return result;
+    return _datetime;
   }
 }

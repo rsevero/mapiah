@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_flip_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
@@ -185,21 +186,18 @@ class THFileParser {
   }
 
   void _scrapOptionFromElement(List<dynamic> aElement) {
-    // if (aElement == null) {
-    //   return;
-    // }
     for (var aOption in aElement) {
       if (aOption == null) {
         continue;
       }
       final optionType = aOption[0].toString().toLowerCase();
 
-      // final newOption = THCommandOption.scrapOption(
-      //     optionType, _currentElement as THHasOptions);
       _currentHasOptions = _currentElement as THHasOptions;
 
       try {
         switch (optionType) {
+          case 'author':
+            _injectAuthorCommandOption(aOption[1]);
           case 'cs':
             _injectCSCommandOption(aOption[1]);
           case 'flip':
@@ -304,6 +302,15 @@ class THFileParser {
     THStationsCommandOption(_currentHasOptions, stations);
   }
 
+  void _injectAuthorCommandOption(List<dynamic> aSpec) {
+    if (aSpec.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THAuthorCommandOption', '== 2', aSpec);
+    }
+
+    THAuthorCommandOption.fromString(_currentHasOptions, aSpec[0], aSpec[1]);
+  }
+
   void _injectCSCommandOption(List<dynamic> aSpec) {
     if (aSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THCSCommandOption');
@@ -313,9 +320,9 @@ class THFileParser {
   }
 
   void _injectUnrecognizedCommandOption(List<dynamic> aSpec) {
-    // throw THCustomException(
-    //     "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${aSpec.toString()}'\n\n");
-    THUnrecognizedCommandOption(_currentHasOptions, aSpec.toString());
+    throw THCustomException(
+        "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${aSpec.toString()}'\n\n");
+    // THUnrecognizedCommandOption(_currentHasOptions, aSpec.toString());
   }
 
   void _addError(String aErrorMessage, String aLocation, String aLocalInfo) {
