@@ -178,21 +178,25 @@ class THFileParser {
       //     optionType, _currentElement as THHasOptions);
       _currentHasOptions = _currentElement as THHasOptions;
 
-      switch (optionType) {
-        case 'cs':
-          _injectCSCommandOption(aOption[1]);
-        case 'projection':
-          _injectProjectionCommandOption(aOption[1]);
-        case 'scale':
-          _injectScaleCommandOption(aOption[1]);
-        case 'sketch':
-          _injectSketchCommandOption(aOption[1]);
-        case 'stations':
-          _injectStationsCommandOption(aOption[1]);
-        case 'walls':
-          _injectWallsCommandOption(aOption[1]);
-        default:
-          _injectUnrecognizedCommandOption(aOption[1]);
+      try {
+        switch (optionType) {
+          case 'cs':
+            _injectCSCommandOption(aOption[1]);
+          case 'projection':
+            _injectProjectionCommandOption(aOption[1]);
+          case 'scale':
+            _injectScaleCommandOption(aOption[1]);
+          case 'sketch':
+            _injectSketchCommandOption(aOption[1]);
+          case 'stations':
+            _injectStationsCommandOption(aOption[1]);
+          case 'walls':
+            _injectWallsCommandOption(aOption[1]);
+          default:
+            _injectUnrecognizedCommandOption(aOption[1]);
+        }
+      } catch (e, s) {
+        _addError(e.toString(), '_scrapOptionFromElement', aOption.toString());
       }
     }
   }
