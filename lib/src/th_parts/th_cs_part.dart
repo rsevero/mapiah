@@ -6,9 +6,7 @@ class THCSPart {
   late String _name;
 
   static final _csList =
-      HashSet<String>.from(['LAT-LONG', 'LONG-LAT', 'S-MERC']);
-
-  static final _csLowerCase = HashSet<String>.from(['LAT-LONG', 'LONG-LAT']);
+      HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
 
   static final _csRegexes = [
     RegExp(r'^(UTM\d{1,2}(N|S)?)?'),
@@ -23,7 +21,6 @@ class THCSPart {
   }
 
   static bool isCS(String aCS) {
-    aCS = aCS.toUpperCase();
     if (_csList.contains(aCS)) {
       return true;
     }
@@ -42,11 +39,11 @@ class THCSPart {
       throw THConvertFromStringException(runtimeType.toString(), aCS);
     }
 
-    _name = aCS.toUpperCase();
+    _name = aCS;
   }
 
   String get name {
-    return _csLowerCase.contains(_name) ? _name.toLowerCase() : _name;
+    return _name;
   }
 
   @override
