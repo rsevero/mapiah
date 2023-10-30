@@ -10,6 +10,9 @@ import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 class THFileWriter {
   var _prefix = '';
 
+  static final _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
+  static final _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
+
   String serialize(THElement aTHElement) {
     var asString = '';
     final type = aTHElement.type();
@@ -75,7 +78,22 @@ class THFileWriter {
     _prefix = _prefix.substring(thIndentation.length);
   }
 
+  String _encodeDoubleQuotes(String aString) {
+    final encoded =
+        aString.replaceAll(_doubleQuotePairRegex, thDoubleQuotePairEncoded);
+
+    return encoded;
+  }
+
+  String _decodeDoubleQuotes(String aString) {
+    final decoded =
+        aString.replaceAll(_doubleQuotePairEncodedRegex, thDoubleQuotePair);
+
+    return decoded;
+  }
+
   String _prepareLine(String aLine, THElement aTHElement) {
+    aLine = _encodeDoubleQuotes(aLine);
     var newLine = '$_prefix$aLine';
 
     // Breaking long lines
@@ -101,15 +119,15 @@ class THFileWriter {
         }
 
         // Dealing with parts that broke a quoted string.
-        final quoteCount = THFileAux.countCharOccurrences(part, thQuote);
+        final quoteCount = THFileAux.countCharOccurrences(part, thDoubleQuote);
         if (quoteCount.isOdd) {
-          breakPos = aLine.lastIndexOf(thQuote, breakPos);
+          breakPos = aLine.lastIndexOf(thDoubleQuote, breakPos);
           part = aLine.substring(0, breakPos);
 
           // Dealing with parts that consumed no actual content take 2: quoted
           // strings.
           if (part.trim() == '') {
-            breakPos = aLine.indexOf(thQuote, breakPos);
+            breakPos = aLine.indexOf(thDoubleQuote, breakPos);
             part = aLine.substring(0, breakPos);
           }
         }
@@ -143,6 +161,7 @@ class THFileWriter {
     }
 
     newLine += '\n';
+    newLine = _decodeDoubleQuotes(newLine);
 
     return newLine;
   }

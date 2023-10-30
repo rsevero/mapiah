@@ -95,13 +95,24 @@ endscrap
     final writer = THFileWriter();
 
     const successes = [
+//       {
+//         'file': 'th_file_parser-00270-scrap_with_copyright_option.th2',
+//         'length': 3,
+//         'encoding': 'UTF-8',
+//         'asFile': r'''encoding UTF-8
+// scrap araras9 -copyright 2022.02.13@14:50:52 \
+//     "Todos os diretos reservados pra mim®"
+// endscrap
+// ''',
+//       },
       {
-        'file': 'th_file_parser-00270-scrap_with_copyright_option.th2',
+        'file':
+            'th_file_parser-00271-scrap_with_copyright_option_with_embeded_quotes.th2',
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras9 -copyright 2022.02.13@14:50:52 \
-    "Todos os diretos reservados pra mim®"
+scrap araras9 -copyright 2022.02.13 \
+    "Todos os diretos reservados pra ""Rodrigo Severo""®"
 endscrap
 ''',
       },

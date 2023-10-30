@@ -65,7 +65,7 @@ class THFileParser {
 
   final List<String> _parseErrors = [];
 
-  static final _doubleQuoteRegex = RegExp(thDoubleQuote);
+  static final _doubleQuoteRegex = RegExp(thDoubleQuotePair);
 
   THFileParser() {
     _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
@@ -334,8 +334,10 @@ class THFileParser {
           'THSketchCommandOption (1)', '== 2', _currentSpec[1]);
     }
 
+    final filename = _parseTHString(_currentSpec[0]);
+
     THSketchCommandOption.fromString(
-        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+        _currentHasOptions, filename, _currentSpec[1]);
   }
 
   void _injectStationNamesCommandOption() {
@@ -380,8 +382,10 @@ class THFileParser {
           'THCopyrightCommandOption', '== 2', _currentSpec);
     }
 
+    final message = _parseTHString(_currentSpec[1]);
+
     THCopyrightCommandOption.fromString(
-        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+        _currentHasOptions, _currentSpec[0], message);
   }
 
   void _injectCSCommandOption() {
@@ -404,7 +408,7 @@ class THFileParser {
   }
 
   String _parseTHString(String aString) {
-    final parsed = aString.replaceAll(_doubleQuoteRegex, thQuote);
+    final parsed = aString.replaceAll(_doubleQuoteRegex, thDoubleQuote);
 
     return parsed;
   }
@@ -627,7 +631,7 @@ class THFileParser {
         lastLine = '';
         continue;
       }
-      var quoteCount = THFileAux.countCharOccurrences(newLine, thQuote);
+      var quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
       // the line break belongs to the string content.
@@ -635,7 +639,7 @@ class THFileParser {
         lineBreakIndex = aContents.indexOf(thLineBreak);
         newLine += aContents.substring(0, lineBreakIndex);
         aContents = aContents.substring(lineBreakIndex + 1);
-        quoteCount = THFileAux.countCharOccurrences(newLine, thQuote);
+        quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
       }
 
       // Joining next line if this line ends with a backslash.

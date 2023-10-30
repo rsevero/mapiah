@@ -13,6 +13,14 @@ class THTitleCommandOption extends THCommandOption {
     return 'title';
   }
 
+  set title(String aTitle) {
+    _title.content = aTitle;
+  }
+
+  String get title {
+    return _title.content;
+  }
+
   @override
   String specToFile() {
     return _title.toFile();

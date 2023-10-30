@@ -34,16 +34,17 @@ class THGrammar extends GrammarDefinition {
   ///
   /// No convertion of two double quotes in one being done, i.e., the user will
   /// see each double quote (") being represented by a pair of double quotes ("").
-  Parser quotedString() => (char(thQuote) &
-          (char(thQuote).skip(before: char(thQuote)) | pattern('^$thQuote'))
+  Parser quotedString() => (char(thDoubleQuote) &
+          (char(thDoubleQuote).skip(before: char(thDoubleQuote)) |
+                  pattern('^$thDoubleQuote'))
               .star()
               .flatten() &
-          char(thQuote))
+          char(thDoubleQuote))
       .pick(1)
       .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Unquoted string
-  Parser unquotedString() => noneOf('$thWhitespaceChars$thQuote')
+  Parser unquotedString() => noneOf('$thWhitespaceChars$thDoubleQuote')
       .plus()
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));

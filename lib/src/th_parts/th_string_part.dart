@@ -5,7 +5,7 @@ class THStringPart {
 
   THStringPart(this.content);
 
-  static final _quoteRegex = RegExp(thQuote);
+  static final _quoteRegex = RegExp(thDoubleQuote);
 
   @override
   String toString() {
@@ -15,8 +15,8 @@ class THStringPart {
   String toFile() {
     var asString = content;
 
-    if ((content.contains(' ')) || (content.contains(thQuote))) {
-      asString = asString.replaceAll(_quoteRegex, thDoubleQuote);
+    if ((content.contains(' ')) || (content.contains(thDoubleQuote))) {
+      asString = asString.replaceAll(_quoteRegex, thDoubleQuotePair);
       asString = '"$asString"';
     }
 

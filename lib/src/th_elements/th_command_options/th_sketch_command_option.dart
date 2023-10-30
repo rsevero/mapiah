@@ -1,19 +1,31 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_parts/th_point_part.dart';
+import 'package:mapiah/src/th_parts/th_string_part.dart';
 
 class THSketchCommandOption extends THCommandOption {
-  String filename;
+  late THStringPart _filename;
   late THPointPart point;
 
-  THSketchCommandOption(super.parent, this.filename, this.point);
+  THSketchCommandOption(super.parent, String aFilename, this.point) {
+    _filename = THStringPart(aFilename);
+  }
 
   THSketchCommandOption.fromString(
-      super.parent, this.filename, List<dynamic> aPointList) {
+      super.parent, String aFilename, List<dynamic> aPointList) {
+    _filename = THStringPart(aFilename);
     pointFromStringList(aPointList);
   }
 
   void pointFromStringList(List<dynamic> aList) {
     point = THPointPart.fromStringList(aList);
+  }
+
+  set filename(String aFilename) {
+    _filename.content = aFilename;
+  }
+
+  String get filename {
+    return _filename.content;
   }
 
   @override
@@ -25,7 +37,8 @@ class THSketchCommandOption extends THCommandOption {
   String specToFile() {
     var asString = '';
 
-    asString = "$filename ${point.x.toString()} ${point.y.toString()}";
+    asString =
+        "${_filename.toFile()} ${point.x.toString()} ${point.y.toString()}";
 
     return asString;
   }
