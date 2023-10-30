@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
@@ -57,7 +58,9 @@ class THFileParser {
   late THHasOptions _currentHasOptions;
   late List<dynamic> _currentOptions;
   late List<dynamic> _currentSpec;
+  final _parsedOptions = HashSet<String>();
   bool _runTraceParser = false;
+
   final List<String> _parseErrors = [];
 
   THFileParser() {
@@ -225,12 +228,19 @@ class THFileParser {
   }
 
   void _scrapOptionFromElement(List<dynamic> aElement) {
+    _parsedOptions.clear();
     for (_currentOptions in aElement) {
       if (_currentOptions.length != 2) {
         throw THOptionsListWrongLengthError();
       }
 
       final optionType = _currentOptions[0].toString().toLowerCase();
+
+      if (_parsedOptions.contains(optionType)) {
+        _addError("Duplicated option '$optionType' in scrap.",
+            '_scrapOptionFromElement', aElement.toString());
+      }
+      _parsedOptions.add(optionType);
 
       _currentSpec = _currentOptions[1];
 

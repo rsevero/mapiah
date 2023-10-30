@@ -546,6 +546,8 @@ endscrap
     const failures = [
       'th_file_parser-00062-scrap_with_encoding_inside-failure.th2',
       'th_file_parser-00063-scrap_with_another_scrap_inside-failute.th2',
+      'th_file_parser-02100-scrap_with_multiple_flip_options_failure.th2',
+      'th_file_parser-02101-scrap_with_multiple_identical_flip_options_failure.th2',
     ];
 
     for (var failure in failures) {
