@@ -223,16 +223,16 @@ class THGrammar extends GrammarDefinition {
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
-  Parser scrapOptions() =>
-      authorOption().optional() &
-      csOption().optional() &
-      flipOption().optional() &
-      projectionOption().optional() &
-      scaleOption().optional() &
-      sketchOption().optional() &
-      stationNamesOption().optional() &
-      stationsOption().optional() &
-      wallsOption().optional();
+  Parser scrapOptions() => (authorOption() |
+          csOption() |
+          flipOption() |
+          projectionOption() |
+          scaleOption() |
+          sketchOption() |
+          stationNamesOption() |
+          stationsOption() |
+          wallsOption())
+      .star();
 
   /// -author
   Parser authorOption() =>

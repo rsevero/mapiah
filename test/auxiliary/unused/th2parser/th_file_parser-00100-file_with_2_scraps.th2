@@ -1,8 +1,8 @@
 encoding utf-8
-scrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+scrap poco_surubim_SCP01 -scale [3308.0 88.1888 0.0 m] -title "Buraco das Araras - Salão Seco"
     point 521.0 -1840.0 entrance
 endscrap
-scrap poco_surubim_SCP02 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+scrap poco_surubim_SCP02 -scale [-2396.0 -2346.0 m]
     area clay -clip on
         l85-3732--20
     endarea

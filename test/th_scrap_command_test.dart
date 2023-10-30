@@ -467,4 +467,40 @@ endscrap
       });
     }
   });
+
+  group('scrap MULTIPLE OPTIONS', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file':
+            'th_file_parser-02075-scrap_and_endscrap_projection_flip_sketch.th2',
+        'length': 3,
+        'encoding': 'ISO8859-15',
+        'asFile': r'''encoding ISO8859-15
+scrap poco_surubim_SCP01 -projection [elevation 10] -flip horizontal -sketch \
+    ./FrozenDeep_p.xvi 12 32
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
 }
