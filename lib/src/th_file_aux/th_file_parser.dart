@@ -39,10 +39,17 @@ import 'package:petitparser/debug.dart';
 
 class THFileParser {
   final _grammar = THGrammar();
-  late Parser _parserMain;
-  late Parser _parserFirst;
+
+  late final Parser _th2FileParser;
+  late final Parser _th2FileFirstLineParser;
+  late final Parser _scrapParser;
+  late final Parser _multiLineCommentContentParser;
+
+  final List<Parser> _parentParsers = [];
+
+  late Parser _rootParser;
   late Parser _currentParser;
-  late Parser _multiLineCommentContentParser;
+
   late List<String> _splittedContents;
   late THFile _parsedTHFile;
   late THParent _currentParent;
@@ -53,9 +60,36 @@ class THFileParser {
   bool _runTraceParser = false;
   final List<String> _parseErrors = [];
 
+  THFileParser() {
+    _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
+    _th2FileFirstLineParser =
+        _grammar.buildFrom(_grammar.th2FileFirstLineStart());
+    _scrapParser = _grammar.buildFrom(_grammar.scrapStart());
+    _multiLineCommentContentParser =
+        _grammar.buildFrom(_grammar.multiLineCommentStart());
+  }
+
+  void _addChildParser(Parser newParser) {
+    _parentParsers.add(_currentParser);
+    _currentParser = newParser;
+  }
+
+  void _returnToParentParser() {
+    assert(_parentParsers.isNotEmpty);
+    _currentParser = _parentParsers.removeLast();
+  }
+
+  void _resetParsersLineage() {
+    _parentParsers.clear();
+    _currentParser = _rootParser;
+  }
+
+  void _newRootParser(Parser newRootParser) {
+    _rootParser = newRootParser;
+  }
+
   void _injectContents() {
     var isFirst = true;
-    _currentParser = _parserFirst;
     for (String line in _splittedContents) {
       if (line.isEmpty) {
         _injectEmptyLine();
@@ -67,7 +101,7 @@ class THFileParser {
       final parsedContents = _currentParser.parse(line);
       if (isFirst) {
         isFirst = false;
-        _currentParser = _parserMain;
+        _resetParsersLineage();
       }
       if (parsedContents is Failure) {
         _addError('petitparser returned a "Failure"', '_injectContents()',
@@ -87,17 +121,17 @@ class THFileParser {
       // print("element[0]: '${element[0]}'");
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
-        case 'comment':
-          _injectMultiLineComment();
         case 'encoding':
           _injectEncoding();
-        case 'endcomment':
-          _injectEndComment();
+        case 'endmultilinecomment':
+          _injectEndMultiLineComment();
         case 'endscrap':
           _injectEndscrap(element);
         case 'fulllinecomment':
           _injectComment(element);
           continue;
+        case 'multilinecomment':
+          _injectStartMultiLineComment();
         case 'multilinecommentline':
           _injectMultiLineCommentContent(element);
           continue;
@@ -120,16 +154,16 @@ class THFileParser {
     _currentElement = THMultilineCommentContent(_currentParent, content);
   }
 
-  void _injectEndComment() {
+  void _injectEndMultiLineComment() {
     _currentParent = _currentParent.parent;
     _currentElement = THEndcomment(_currentParent);
-    _currentParser = _parserMain;
+    _returnToParentParser();
   }
 
-  void _injectMultiLineComment() {
+  void _injectStartMultiLineComment() {
     _currentParent = THMultiLineComment(_currentParent);
     _currentElement = _currentParent;
-    _currentParser = _multiLineCommentContentParser;
+    _addChildParser(_multiLineCommentContentParser);
   }
 
   void _injectEncoding() {
@@ -145,11 +179,13 @@ class THFileParser {
     _currentParent = newScrap;
 
     _scrapOptionFromElement(aElement[2]);
+    _addChildParser(_scrapParser);
   }
 
   void _injectEndscrap(List<dynamic> aElement) {
     _currentParent = _currentParent.parent;
     _currentElement = THEndscrap(_currentParent);
+    _returnToParentParser();
   }
 
   void _injectComment(List<dynamic>? aElement) {
@@ -194,9 +230,9 @@ class THFileParser {
         throw THOptionsListWrongLengthError();
       }
 
-      final optionType = _currentOptions![0].toString().toLowerCase();
+      final optionType = _currentOptions[0].toString().toLowerCase();
 
-      _currentSpec = _currentOptions![1];
+      _currentSpec = _currentOptions[1];
 
       _currentHasOptions = _currentElement as THHasOptions;
 
@@ -488,18 +524,17 @@ class THFileParser {
 
   @useResult
   Future<(THFile, bool, List<String>)> parse(String aFilePath,
-      {Parser? startParser}) async {
-    if (startParser == null) {
-      _parserMain = _grammar.buildFrom(_grammar.start());
-      _parserFirst = _grammar.buildFrom(_grammar.startFirst());
+      {Parser? alternateStartParser}) async {
+    if (alternateStartParser == null) {
+      _newRootParser(_th2FileFirstLineParser);
+      _resetParsersLineage();
+      _newRootParser(_th2FileParser);
       _runTraceParser = false;
     } else {
-      _parserMain = _grammar.buildFrom(startParser);
-      _parserFirst = _parserMain;
+      _newRootParser(alternateStartParser);
+      _resetParsersLineage();
       _runTraceParser = true;
     }
-    _multiLineCommentContentParser =
-        _grammar.buildFrom(_grammar.multiLineCommentContent());
 
     _parsedTHFile = THFile();
     _parsedTHFile.filename = aFilePath;

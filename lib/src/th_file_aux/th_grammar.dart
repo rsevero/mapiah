@@ -5,20 +5,35 @@ import 'package:mapiah/src/th_definitions.dart';
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
   @override
-  Parser start() => th2Structure().end();
+  Parser start() => any().star();
+
+  // .th file
+  Parser thFileStart() => th2Structure().end();
+
+  // scrap contents
+  Parser scrapStart() => scrapStructure().end();
+
+  // multiline commment
+  Parser multiLineCommentStart() =>
+      endMultiLineComment() | multiLineCommentLine();
 
   /// TH2 Structure
-  Parser startFirst() => (encoding() | th2Structure()).end();
+  Parser th2FileFirstLineStart() => (encoding() | th2Structure()).end();
   Parser th2Structure() => th2Command() | fullLineComment();
-  Parser th2Command() => endscrap() | multiLineComment() | scrap();
+  Parser th2Command() => multiLineComment() | scrap();
+
+  /// scrap contents
+  Parser scrapStructure() =>
+      scrapContent() | fullLineComment() | multiLineComment();
+  Parser scrapContent() => endscrap();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
 
   /// Quoted string
   ///
-  /// TODO: The convertion of two double quotes in one will be done after grammar
-  /// parsing.
+  /// No convertion of two double quotes in one being done, i.e., the user will
+  /// see each double quote (") being represented by a pair of double quotes ("").
   Parser quotedString() => (char(thQuote) &
           (char(thQuote).skip(before: char(thQuote)) | pattern('^$thQuote'))
               .star()
@@ -193,16 +208,14 @@ class THGrammar extends GrammarDefinition {
   /// multiline comment
   Parser multiLineComment() => ref1(commandTemplate, multiLineCommentCommand);
   Parser multiLineCommentCommand() =>
-      stringIgnoreCase('comment').map((value) => [value]);
-  Parser multiLineCommentContent() =>
-      endMultiLineComment() | multiLineCommentLine();
+      stringIgnoreCase('comment').map((value) => ['multilinecomment']);
   Parser multiLineCommentLine() => any().star().flatten().map((value) => [
         ['multilinecommentline', value]
       ]);
   Parser endMultiLineComment() =>
       ref1(commandTemplate, endMultiLineCommentCommand);
   Parser endMultiLineCommentCommand() =>
-      stringIgnoreCase('endcomment').map((value) => [value]);
+      stringIgnoreCase('endcomment').map((value) => ['endmultilinecomment']);
 
   /// encoding
   Parser encodingStartChar() => pattern('A-Za-z');
