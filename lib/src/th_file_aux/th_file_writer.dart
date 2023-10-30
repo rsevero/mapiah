@@ -10,8 +10,8 @@ import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 class THFileWriter {
   var _prefix = '';
 
-  static final _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
-  static final _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
+  final _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
+  final _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
 
   String serialize(THElement aTHElement) {
     var asString = '';
