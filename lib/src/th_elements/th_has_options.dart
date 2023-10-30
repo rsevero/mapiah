@@ -48,7 +48,7 @@ mixin THHasOptions on THElement {
     var asString = '';
 
     for (var aType in optionsList()) {
-      final spec = optionByType(aType)!.specToString();
+      final spec = optionByType(aType)!.specToFile();
       asString += " -$aType $spec";
     }
 

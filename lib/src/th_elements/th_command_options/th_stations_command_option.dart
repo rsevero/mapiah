@@ -11,7 +11,7 @@ class THStationsCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     var asString = '';
 
     for (final station in stations) {

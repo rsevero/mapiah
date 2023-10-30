@@ -20,7 +20,7 @@ class THAuthorCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     return '$datetime $person';
   }
 }

@@ -9,5 +9,5 @@ abstract class THCommandOption {
 
   String optionType();
 
-  String specToString();
+  String specToFile();
 }

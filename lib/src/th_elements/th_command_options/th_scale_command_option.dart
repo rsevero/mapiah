@@ -23,7 +23,7 @@ class THScaleCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     var asString = '';
 
     for (var aValue in _numericSpecifications) {

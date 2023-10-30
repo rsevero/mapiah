@@ -4,6 +4,7 @@ const thDecimalSeparator = '.';
 const thBackslash = '\\';
 const thLineBreak = '\n';
 const thQuote = '"';
+const thDoubleQuote = '""';
 const thWhitespaceChars = ' \t';
 
 const thIndentation = '  ';

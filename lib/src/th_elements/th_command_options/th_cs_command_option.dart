@@ -14,7 +14,7 @@ class THCSCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     return cs.toString();
   }
 }

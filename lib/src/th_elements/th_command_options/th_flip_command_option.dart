@@ -48,7 +48,7 @@ class THFlipCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     return modeToString[mode]!;
   }
 }

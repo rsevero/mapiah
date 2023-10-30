@@ -64,7 +64,7 @@ class THProjectionCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     var asString = '';
 
     asString += THProjectionCommandOption.typeToString[type]!;

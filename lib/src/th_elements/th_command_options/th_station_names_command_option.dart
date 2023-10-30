@@ -42,7 +42,7 @@ class THStationNamesCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     return '$_prefix $_suffix';
   }
 }

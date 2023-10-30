@@ -18,7 +18,7 @@ class THCopyrightCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     return '$datetime "$message"';
   }
 }

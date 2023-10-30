@@ -22,7 +22,7 @@ class THSketchCommandOption extends THCommandOption {
   }
 
   @override
-  String specToString() {
+  String specToFile() {
     var asString = '';
 
     asString = "$filename ${point.x.toString()} ${point.y.toString()}";

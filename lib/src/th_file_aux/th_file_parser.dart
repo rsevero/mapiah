@@ -11,6 +11,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_optio
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_title_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_walls_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
@@ -63,6 +64,8 @@ class THFileParser {
   bool _runTraceParser = false;
 
   final List<String> _parseErrors = [];
+
+  static final _doubleQuoteRegex = RegExp(thDoubleQuote);
 
   THFileParser() {
     _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
@@ -267,6 +270,8 @@ class THFileParser {
             _injectStationNamesCommandOption();
           case 'stations':
             _injectStationsCommandOption();
+          case 'title':
+            _injectTitleCommandOption();
           case 'walls':
             _injectWallsCommandOption();
           default:
@@ -385,6 +390,23 @@ class THFileParser {
     }
 
     THCSCommandOption(_currentHasOptions, _currentSpec[0], false);
+  }
+
+  void _injectTitleCommandOption() {
+    if (_currentSpec.length != 1) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THTitleCommandOption', '== 1', _currentSpec);
+    }
+
+    final stringContent = _parseTHString(_currentSpec[0]);
+
+    THTitleCommandOption(_currentHasOptions, stringContent);
+  }
+
+  String _parseTHString(String aString) {
+    final parsed = aString.replaceAll(_doubleQuoteRegex, thQuote);
+
+    return parsed;
   }
 
   void _injectUnrecognizedCommandOption() {

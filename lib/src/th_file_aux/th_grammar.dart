@@ -245,6 +245,7 @@ class THGrammar extends GrammarDefinition {
           sketchOption() |
           stationNamesOption() |
           stationsOption() |
+          titleOption() |
           wallsOption())
       .star();
 
@@ -363,6 +364,11 @@ class THGrammar extends GrammarDefinition {
   Parser stationsOption() =>
       stringIgnoreCase('stations').skip(before: char('-')) &
       ref0(csvKeyword).map((value) => [value]);
+
+  /// -title
+  Parser titleOption() =>
+      stringIgnoreCase('title').skip(before: char('-')) & ref0(titleOptions);
+  Parser titleOptions() => anyString().map((value) => [value]);
 
   /// -walls
   Parser wallsOption() =>
