@@ -22,6 +22,7 @@ import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
+import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_without_list.dart';
@@ -47,7 +48,7 @@ class THFileParser {
   late THParent _currentParent;
   late THElement _currentElement;
   late THHasOptions _currentHasOptions;
-  List<dynamic>? _currentOptions;
+  late List<dynamic> _currentOptions;
   late List<dynamic> _currentSpec;
   bool _runTraceParser = false;
   final List<String> _parseErrors = [];
@@ -189,11 +190,9 @@ class THFileParser {
 
   void _scrapOptionFromElement(List<dynamic> aElement) {
     for (_currentOptions in aElement) {
-      if (_currentOptions == null) {
-        continue;
+      if (_currentOptions.length != 2) {
+        throw THOptionsListWrongLengthError();
       }
-
-      assert(_currentOptions!.length == 2);
 
       final optionType = _currentOptions![0].toString().toLowerCase();
 

@@ -1,0 +1,1 @@
+class THOptionsListWrongLengthError extends Error {}
