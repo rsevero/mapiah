@@ -47,6 +47,8 @@ class THFileParser {
   late THParent _currentParent;
   late THElement _currentElement;
   late THHasOptions _currentHasOptions;
+  List<dynamic>? _currentOptions;
+  late List<dynamic> _currentSpec;
   bool _runTraceParser = false;
   final List<String> _parseErrors = [];
 
@@ -186,113 +188,120 @@ class THFileParser {
   }
 
   void _scrapOptionFromElement(List<dynamic> aElement) {
-    for (var aOption in aElement) {
-      if (aOption == null) {
+    for (_currentOptions in aElement) {
+      if (_currentOptions == null) {
         continue;
       }
-      final optionType = aOption[0].toString().toLowerCase();
+
+      assert(_currentOptions!.length == 2);
+
+      final optionType = _currentOptions![0].toString().toLowerCase();
+
+      _currentSpec = _currentOptions![1];
 
       _currentHasOptions = _currentElement as THHasOptions;
 
       try {
         switch (optionType) {
           case 'author':
-            _injectAuthorCommandOption(aOption[1]);
+            _injectAuthorCommandOption();
           case 'cs':
-            _injectCSCommandOption(aOption[1]);
+            _injectCSCommandOption();
           case 'flip':
-            _injectFlipCommandOption(aOption[1]);
+            _injectFlipCommandOption();
           case 'projection':
-            _injectProjectionCommandOption(aOption[1]);
+            _injectProjectionCommandOption();
           case 'scale':
-            _injectScaleCommandOption(aOption[1]);
+            _injectScaleCommandOption();
           case 'sketch':
-            _injectSketchCommandOption(aOption[1]);
+            _injectSketchCommandOption();
           case 'station-names':
-            _injectStationNamesCommandOption(aOption[1]);
+            _injectStationNamesCommandOption();
           case 'stations':
-            _injectStationsCommandOption(aOption[1]);
+            _injectStationsCommandOption();
           case 'walls':
-            _injectWallsCommandOption(aOption[1]);
+            _injectWallsCommandOption();
           default:
-            _injectUnrecognizedCommandOption(aOption[1]);
+            _injectUnrecognizedCommandOption();
         }
       } catch (e, s) {
         _addError("$e\n\nTrace:\n\n$s", '_scrapOptionFromElement',
-            aOption.toString());
+            _currentOptions.toString());
       }
     }
   }
 
-  void _injectFlipCommandOption(List<dynamic> aSpec) {
-    if (aSpec.isEmpty) {
+  void _injectFlipCommandOption() {
+    if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THFlipCommandOption', '> 0', aSpec);
+          'THFlipCommandOption', '> 0', _currentSpec);
     }
 
-    if (aSpec[0] == null) {
+    if (_currentSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THFlipCommandOption');
     }
 
-    THFlipCommandOption.fromString(_currentHasOptions, aSpec[0]);
+    THFlipCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
   }
 
-  void _injectWallsCommandOption(List<dynamic> aSpec) {
-    if (aSpec.isEmpty) {
+  void _injectWallsCommandOption() {
+    if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THWallsCommandOption', '> 0', aSpec);
+          'THWallsCommandOption', '> 0', _currentSpec);
     }
 
-    if (aSpec[0] == null) {
+    if (_currentSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THWallsCommandOption');
     }
 
-    THWallsCommandOption.fromString(_currentHasOptions, aSpec[0]);
+    THWallsCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
   }
 
-  void _injectSketchCommandOption(List<dynamic> aSpec) {
-    if (aSpec.isEmpty) {
+  void _injectSketchCommandOption() {
+    if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THSketchCommandOption (0)', '== 2', aSpec);
+          'THSketchCommandOption (0)', '== 2', _currentSpec);
     }
 
-    if (aSpec[0] == null) {
+    if (_currentSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THSketchCommandOption (0)');
     }
 
-    if (aSpec[1] == null) {
+    if (_currentSpec[1] == null) {
       throw THCreateObjectFromNullValueException('THSketchCommandOption (1)');
     }
 
-    if (aSpec[1] is! List) {
+    if (_currentSpec[1] is! List) {
       throw THCreateObjectWithoutListException(
-          'THSketchCommandOption', aSpec[1]);
+          'THSketchCommandOption', _currentSpec[1]);
     }
 
-    if ((aSpec[1] as List).length != 2) {
+    if ((_currentSpec[1] as List).length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THSketchCommandOption (1)', '== 2', aSpec[1]);
+          'THSketchCommandOption (1)', '== 2', _currentSpec[1]);
     }
 
-    THSketchCommandOption.fromString(_currentHasOptions, aSpec[0], aSpec[1]);
+    THSketchCommandOption.fromString(
+        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
   }
 
-  void _injectStationNamesCommandOption(List<dynamic> aSpec) {
-    if (aSpec.length != 2) {
+  void _injectStationNamesCommandOption() {
+    if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THStationNamesCommandOption', '== 2', aSpec);
+          'THStationNamesCommandOption', '== 2', _currentSpec);
     }
 
-    THStationNamesCommandOption(_currentHasOptions, aSpec[0], aSpec[1]);
+    THStationNamesCommandOption(
+        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
   }
 
-  void _injectStationsCommandOption(List<dynamic> aSpec) {
-    if (aSpec.length != 1) {
+  void _injectStationsCommandOption() {
+    if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THStationsCommandOption (0)', '== 1', aSpec);
+          'THStationsCommandOption (0)', '== 1', _currentSpec);
     }
 
-    final stations = aSpec[0].toString().split(',');
+    final stations = _currentSpec[0].toString().split(',');
 
     if (stations.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
@@ -302,26 +311,27 @@ class THFileParser {
     THStationsCommandOption(_currentHasOptions, stations);
   }
 
-  void _injectAuthorCommandOption(List<dynamic> aSpec) {
-    if (aSpec.length != 2) {
+  void _injectAuthorCommandOption() {
+    if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THAuthorCommandOption', '== 2', aSpec);
+          'THAuthorCommandOption', '== 2', _currentSpec);
     }
 
-    THAuthorCommandOption.fromString(_currentHasOptions, aSpec[0], aSpec[1]);
+    THAuthorCommandOption.fromString(
+        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
   }
 
-  void _injectCSCommandOption(List<dynamic> aSpec) {
-    if (aSpec[0] == null) {
+  void _injectCSCommandOption() {
+    if (_currentSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THCSCommandOption');
     }
 
-    THCSCommandOption(_currentHasOptions, aSpec[0], false);
+    THCSCommandOption(_currentHasOptions, _currentSpec[0], false);
   }
 
-  void _injectUnrecognizedCommandOption(List<dynamic> aSpec) {
+  void _injectUnrecognizedCommandOption() {
     throw THCustomException(
-        "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${aSpec.toString()}'\n\n");
+        "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${_currentSpec.toString()}'\n\n");
     // THUnrecognizedCommandOption(_currentHasOptions, aSpec.toString());
   }
 
@@ -331,21 +341,21 @@ class THFileParser {
     _parseErrors.add(errorMessage);
   }
 
-  void _injectScaleCommandOption(List<dynamic> aSpec) {
-    if (aSpec.isEmpty) {
+  void _injectScaleCommandOption() {
+    if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THScaleCommandOption', '> 0', aSpec);
+          'THScaleCommandOption', '> 0', _currentSpec);
     }
 
     final List<THDoublePart> values = [];
     THLengthUnitPart? unit;
     bool unitFound = false;
 
-    for (final aValue in aSpec) {
+    for (final aValue in _currentSpec) {
       if (unitFound) {
         throw THCustomWithListParameterException(
             "Unknown element after unit found when creating a THScaleCommandOption object.",
-            aSpec);
+            _currentSpec);
       }
       final newDouble = double.tryParse(aValue);
 
@@ -364,33 +374,33 @@ class THFileParser {
     THScaleCommandOption(_currentHasOptions, values, unit);
   }
 
-  void _injectProjectionCommandOption(List<dynamic> aSpec) {
-    if (aSpec.isEmpty) {
+  void _injectProjectionCommandOption() {
+    if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THProjectionCommandOption', '> 0', aSpec);
+          'THProjectionCommandOption', '> 0', _currentSpec);
     }
 
-    if (aSpec[0] == null) {
+    if (_currentSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THProjectionCommandOption');
     }
 
-    final newProjectionOption =
-        THProjectionCommandOption.fromString(_currentHasOptions, aSpec[0]);
+    final newProjectionOption = THProjectionCommandOption.fromString(
+        _currentHasOptions, _currentSpec[0]);
 
-    if (aSpec.length == 1) {
+    if (_currentSpec.length == 1) {
       return;
     }
 
-    if (aSpec[1] != null) {
-      newProjectionOption.index = aSpec[1];
+    if (_currentSpec[1] != null) {
+      newProjectionOption.index = _currentSpec[1];
     }
     if (newProjectionOption.type == THProjectionTypes.elevation) {
-      if (aSpec[2] != null) {
-        newProjectionOption.elevationAngleFromString(aSpec[2]);
+      if (_currentSpec[2] != null) {
+        newProjectionOption.elevationAngleFromString(_currentSpec[2]);
       }
 
-      if (aSpec[3] != null) {
-        newProjectionOption.elevationUnitFromString(aSpec[3]);
+      if (_currentSpec[3] != null) {
+        newProjectionOption.elevationUnitFromString(_currentSpec[3]);
       }
     }
   }
