@@ -72,19 +72,5 @@ void main() {
         expect(asFile, success['asFile']);
       });
     }
-
-    var failures = [
-      'th_file_parser-00062-scrap_with_encoding_inside-error.th2',
-    ];
-
-    for (var failure in failures) {
-      test(failure, () async {
-        final (_, isSuccessful, errors) = await parser.parse(failure);
-        // final (file, isSuccessful, errors) =
-        //     await parser.parse(success, startParser: grammar.start());
-        expect(isSuccessful, false);
-        // print(errors.toString());
-      });
-    }
   });
 }

@@ -537,4 +537,22 @@ endscrap
       });
     }
   });
+
+  group('scrap failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-00062-scrap_with_encoding_inside-failure.th2',
+      'th_file_parser-00063-scrap_with_another_scrap_inside-failute.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
 }
