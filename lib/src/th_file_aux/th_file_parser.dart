@@ -65,7 +65,10 @@ class THFileParser {
 
   final List<String> _parseErrors = [];
 
-  static final _doubleQuoteRegex = RegExp(thDoubleQuotePair);
+  final _doubleQuoteRegex = RegExp(thDoubleQuotePair);
+  final _encodingRegex =
+      RegExp(r'^\s*encoding\s+([a-zA-Z0-9-]+)', caseSensitive: false);
+  final _isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
 
   THFileParser() {
     _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
@@ -510,8 +513,7 @@ class THFileParser {
       default:
         // Therion ISO charset names don´t have a hyphen after ISO but
         // charset.dart expects one.
-        final isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
-        final isoResult = isoRegex.firstMatch(encoding);
+        final isoResult = _isoRegex.firstMatch(encoding);
         if (isoResult != null) {
           encoding = 'ISO-${isoResult[1]}';
         }
@@ -549,10 +551,7 @@ class THFileParser {
     }
     // print("Line: '$line'");
 
-    final encodingRegex =
-        RegExp(r'^\s*encoding\s+([a-zA-Z0-9-]+)', caseSensitive: false);
-
-    final encoding = encodingRegex.firstMatch(line);
+    final encoding = _encodingRegex.firstMatch(line);
     // print("Encoding object: '$encoding");
     if (encoding == null) {
       return thDefaultEncoding;
