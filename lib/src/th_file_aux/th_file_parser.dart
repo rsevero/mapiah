@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_flip_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
@@ -250,6 +251,8 @@ class THFileParser {
         switch (optionType) {
           case 'author':
             _injectAuthorCommandOption();
+          case 'copyright':
+            _injectCopyrightCommandOption();
           case 'cs':
             _injectCSCommandOption();
           case 'flip':
@@ -363,6 +366,16 @@ class THFileParser {
     }
 
     THAuthorCommandOption.fromString(
+        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+  }
+
+  void _injectCopyrightCommandOption() {
+    if (_currentSpec.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THCopyrightCommandOption', '== 2', _currentSpec);
+    }
+
+    THCopyrightCommandOption.fromString(
         _currentHasOptions, _currentSpec[0], _currentSpec[1]);
   }
 

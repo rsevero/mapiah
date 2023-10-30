@@ -237,6 +237,7 @@ class THGrammar extends GrammarDefinition {
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
   Parser scrapOptions() => (authorOption() |
+          copyrightOption() |
           csOption() |
           flipOption() |
           projectionOption() |
@@ -251,6 +252,12 @@ class THGrammar extends GrammarDefinition {
   Parser authorOption() =>
       stringIgnoreCase('author').skip(before: char('-')) & ref0(authorOptions);
   Parser authorOptions() => dateTime() & person();
+
+  /// -copyright
+  Parser copyrightOption() =>
+      stringIgnoreCase('copyright').skip(before: char('-')) &
+      ref0(copyrightOptions);
+  Parser copyrightOptions() => dateTime() & anyString();
 
   /// -cs
   Parser csOption() =>

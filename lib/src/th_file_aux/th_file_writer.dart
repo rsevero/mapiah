@@ -103,7 +103,7 @@ class THFileWriter {
         // Dealing with parts that broke a quoted string.
         final quoteCount = THFileAux.countCharOccurrences(part, thQuote);
         if (quoteCount.isOdd) {
-          breakPos = aLine.lastIndexOf(thQuote, breakPos) + 1;
+          breakPos = aLine.lastIndexOf(thQuote, breakPos);
           part = aLine.substring(0, breakPos);
 
           // Dealing with parts that consumed no actual content take 2: quoted
