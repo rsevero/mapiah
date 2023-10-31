@@ -1,5 +1,5 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
-import 'package:mapiah/src/th_parts/th_string_part.dart';
+import 'package:mapiah/src/th_elements/th_parts/th_string_part.dart';
 
 class THTitleCommandOption extends THCommandOption {
   late THStringPart _title;

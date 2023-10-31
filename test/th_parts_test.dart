@@ -1,7 +1,7 @@
 // import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
-import 'package:mapiah/src/th_parts/th_double_part.dart';
+import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 
 void main() {
   group('THDoublePart from double', () {

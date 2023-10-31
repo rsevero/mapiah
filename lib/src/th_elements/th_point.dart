@@ -1,7 +1,7 @@
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_parts/th_point_part.dart';
+import 'package:mapiah/src/th_elements/th_parts/th_point_part.dart';
 
 class THPoint extends THElement with THHasOptions {
   late THPointPart point;

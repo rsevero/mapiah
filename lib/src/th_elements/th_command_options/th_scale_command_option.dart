@@ -1,7 +1,7 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_exceptions/th_convert_from_list_exception.dart';
-import 'package:mapiah/src/th_parts/th_double_part.dart';
-import 'package:mapiah/src/th_parts/th_length_unit_part.dart';
+import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
+import 'package:mapiah/src/th_elements/th_parts/th_length_unit_part.dart';
 
 class THScaleCommandOption extends THCommandOption {
   List<THDoublePart> _numericSpecifications;
