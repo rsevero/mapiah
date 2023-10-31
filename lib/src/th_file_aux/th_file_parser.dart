@@ -6,6 +6,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_author_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
@@ -304,6 +305,8 @@ class THFileParser {
 
   void _pointNonMultipleChoiceOptions(String aOptionType) {
     switch (aOptionType) {
+      case 'orientation':
+        _injectOrientationCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
       default:
@@ -418,6 +421,16 @@ class THFileParser {
     }
 
     THSubtypeCommandOption((_currentHasOptions as THPoint), _currentSpec[0]);
+  }
+
+  void _injectOrientationCommandOption() {
+    if (_currentSpec.length != 1) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THOrientationCommandOption', '== 1', _currentSpec);
+    }
+
+    THOrientationCommandOption.fromString(
+        (_currentHasOptions as THPoint), _currentSpec[0]);
   }
 
   void _injectCopyrightCommandOption() {

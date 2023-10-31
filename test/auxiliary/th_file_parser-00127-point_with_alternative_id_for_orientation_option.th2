@@ -1,2 +1,4 @@
 encoding utf-8
+scrap test
 point 4122 9321 electric-light -orient 297.0
+endscrap

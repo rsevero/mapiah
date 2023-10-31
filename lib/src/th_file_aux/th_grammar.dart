@@ -511,7 +511,15 @@ class THGrammar extends GrammarDefinition {
       (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
           .pick(1)
           .optional();
-  Parser pointOptions() => (subtypeOption()).star();
+  Parser pointOptions() => (orientationOption() | subtypeOption()).star();
+
+  /// point -orientation
+  Parser orientationOption() =>
+      (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
+          .skip(before: char('-'))
+          .map((value) => 'orientation') &
+      ref0(orientationOptions);
+  Parser orientationOptions() => number().map((value) => [value]);
 
   /// point -subtype
   Parser subtypeOption() =>
