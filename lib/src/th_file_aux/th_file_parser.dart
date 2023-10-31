@@ -11,6 +11,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_optio
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_subtype_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_title_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
@@ -185,10 +186,26 @@ class THFileParser {
 
     _checkParsedListAsPoint('_injectPoint', aElement[1]);
 
+    assert(aElement[2] is List);
+    assert(aElement[2].length == 2);
+
     final newPoint =
-        THPoint.fromString(_currentParent, aElement[1], aElement[2]);
+        THPoint.fromString(_currentParent, aElement[1], aElement[2][0]);
 
     _currentElement = newPoint;
+
+    _parsedOptions.clear();
+
+    try {
+      // Including subtype defined with type (type:subtype).
+      if (aElement[2][1] != null) {
+        THSubtypeCommandOption(newPoint, aElement[2][1]);
+        _parsedOptions.add('subtype');
+      }
+    } catch (e, s) {
+      _addError("$e\n\nTrace:\n\n$s", '_pointOptionFromElement',
+          aElement[2][1].toString());
+    }
 
     _optionFromElement(aElement[3], _pointNonMultipleChoiceOptions);
   }
@@ -201,6 +218,7 @@ class THFileParser {
     _currentElement = newScrap;
     _currentParent = newScrap;
 
+    _parsedOptions.clear();
     _optionFromElement(aElement[2], _scrapNonMultipleChoiceOptions);
     _addChildParser(_scrapParser);
   }
@@ -249,7 +267,6 @@ class THFileParser {
 
   void _optionFromElement(
       List<dynamic> aElement, Function(String) nonMultipleChoiceOptions) {
-    _parsedOptions.clear();
     for (_currentOptions in aElement) {
       if (_currentOptions.length != 2) {
         throw THOptionsListWrongLengthError();
@@ -258,14 +275,17 @@ class THFileParser {
       final optionType = _currentOptions[0].toString().toLowerCase();
 
       if (_parsedOptions.contains(optionType)) {
-        _addError("Duplicated option '$optionType' in scrap.",
-            '_scrapOptionFromElement', aElement.toString());
+        final elementType = _currentElement.type;
+        _addError("Duplicated option '$optionType' in $elementType.",
+            '_optionFromElement', aElement.toString());
+        continue;
       }
-      _parsedOptions.add(optionType);
 
       _currentSpec = _currentOptions[1];
 
       _currentHasOptions = _currentElement as THHasOptions;
+
+      _parsedOptions.add(optionType);
 
       try {
         if (THMultipleChoiceOption.hasOptionType(
@@ -276,7 +296,7 @@ class THFileParser {
 
         nonMultipleChoiceOptions(optionType);
       } catch (e, s) {
-        _addError("$e\n\nTrace:\n\n$s", '_scrapOptionFromElement',
+        _addError("$e\n\nTrace:\n\n$s", '_optionFromElement',
             _currentOptions.toString());
       }
     }
@@ -284,6 +304,8 @@ class THFileParser {
 
   void _pointNonMultipleChoiceOptions(String aOptionType) {
     switch (aOptionType) {
+      case 'subtype':
+        _injectSubtypeCommandOption();
       default:
         _injectUnrecognizedCommandOption();
     }
@@ -387,6 +409,15 @@ class THFileParser {
 
     THAuthorCommandOption.fromString(
         _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+  }
+
+  void _injectSubtypeCommandOption() {
+    if (_currentSpec.length != 1) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THSubtypeCommandOption', '== 1', _currentSpec);
+    }
+
+    THSubtypeCommandOption((_currentHasOptions as THPoint), _currentSpec[0]);
   }
 
   void _injectCopyrightCommandOption() {

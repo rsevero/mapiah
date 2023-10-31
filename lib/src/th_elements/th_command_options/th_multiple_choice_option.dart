@@ -41,18 +41,18 @@ class THMultipleChoiceOption extends THCommandOption {
       THHasOptions aOptionParent, String aOptionType, String aChoice)
       : _optionType = aOptionType,
         super(aOptionParent) {
-    if (!hasOptionType(optionParent.type, aOptionType)) {
+    if (!hasOptionType(parentOption.type, aOptionType)) {
       throw THCustomException(
-          "Unsupported option type '$optionType' for a '${optionParent.type}'");
+          "Unsupported option type '$optionType' for a '${parentOption.type}'");
     }
 
     choice = aChoice;
   }
 
   set choice(String aChoice) {
-    if (!hasOptionChoice(optionParent.type, optionType, aChoice)) {
+    if (!hasOptionChoice(parentOption.type, optionType, aChoice)) {
       throw THCustomException(
-          "Unsupported choice '$aChoice' in a '$optionType' option for a '${optionParent.type}' element.");
+          "Unsupported choice '$aChoice' in a '$optionType' option for a '${parentOption.type}' element.");
     }
 
     _choice = aChoice;

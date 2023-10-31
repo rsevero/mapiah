@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point 432 911 air-draught:winter -subtype winter
+endcrap

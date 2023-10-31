@@ -1,10 +1,10 @@
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 
 abstract class THCommandOption {
-  final THHasOptions optionParent;
+  final THHasOptions parentOption;
 
-  THCommandOption(this.optionParent) {
-    optionParent.addUpdateOption(this);
+  THCommandOption(this.parentOption) {
+    parentOption.addUpdateOption(this);
   }
 
   String get optionType;
