@@ -21,6 +21,7 @@ import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
+import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';
@@ -141,6 +142,8 @@ class THFileParser {
         case 'multilinecommentline':
           _injectMultiLineCommentContent(element);
           continue;
+        case 'point':
+          _injectPoint(element);
         case 'scrap':
           _injectScrap(element);
         default:
@@ -176,6 +179,16 @@ class THFileParser {
     _currentElement = THEncoding(_currentParent);
   }
 
+  void _injectPoint(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+    assert(elementSize >= 2);
+    // final newPoint = THPoint(_currentParent, aElement[1]);
+
+    // _currentElement = newPoint;
+
+    // _optionFromElement(aElement[2], _pointNonMultipleChoiceOptions);
+  }
+
   void _injectScrap(List<dynamic> aElement) {
     final elementSize = aElement.length;
     assert(elementSize >= 2);
@@ -184,7 +197,7 @@ class THFileParser {
     _currentElement = newScrap;
     _currentParent = newScrap;
 
-    _scrapOptionFromElement(aElement[2]);
+    _optionFromElement(aElement[2], _scrapNonMultipleChoiceOptions);
     _addChildParser(_scrapParser);
   }
 
@@ -230,7 +243,8 @@ class THFileParser {
     }
   }
 
-  void _scrapOptionFromElement(List<dynamic> aElement) {
+  void _optionFromElement(
+      List<dynamic> aElement, Function(String) nonMultipleChoiceOptions) {
     _parsedOptions.clear();
     for (_currentOptions in aElement) {
       if (_currentOptions.length != 2) {
@@ -256,32 +270,36 @@ class THFileParser {
           continue;
         }
 
-        switch (optionType) {
-          case 'author':
-            _injectAuthorCommandOption();
-          case 'copyright':
-            _injectCopyrightCommandOption();
-          case 'cs':
-            _injectCSCommandOption();
-          case 'projection':
-            _injectProjectionCommandOption();
-          case 'scale':
-            _injectScaleCommandOption();
-          case 'sketch':
-            _injectSketchCommandOption();
-          case 'station-names':
-            _injectStationNamesCommandOption();
-          case 'stations':
-            _injectStationsCommandOption();
-          case 'title':
-            _injectTitleCommandOption();
-          default:
-            _injectUnrecognizedCommandOption();
-        }
+        nonMultipleChoiceOptions(optionType);
       } catch (e, s) {
         _addError("$e\n\nTrace:\n\n$s", '_scrapOptionFromElement',
             _currentOptions.toString());
       }
+    }
+  }
+
+  void _scrapNonMultipleChoiceOptions(String aOptionType) {
+    switch (aOptionType) {
+      case 'author':
+        _injectAuthorCommandOption();
+      case 'copyright':
+        _injectCopyrightCommandOption();
+      case 'cs':
+        _injectCSCommandOption();
+      case 'projection':
+        _injectProjectionCommandOption();
+      case 'scale':
+        _injectScaleCommandOption();
+      case 'sketch':
+        _injectSketchCommandOption();
+      case 'station-names':
+        _injectStationNamesCommandOption();
+      case 'stations':
+        _injectStationsCommandOption();
+      case 'title':
+        _injectTitleCommandOption();
+      default:
+        _injectUnrecognizedCommandOption();
     }
   }
 
