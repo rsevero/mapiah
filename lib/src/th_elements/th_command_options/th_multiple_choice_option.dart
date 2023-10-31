@@ -9,8 +9,18 @@ class THMultipleChoiceOption extends THCommandOption {
   late String _choice;
   static final _supportedOptions = {
     'scrap': {
+      'flip': {
+        'hasDefault': true,
+        'default': 'none',
+        'choices': <String>{
+          'none',
+          'horizontal',
+          'vertical',
+        }
+      },
       'walls': {
         'hasDefault': false,
+        'default': '',
         'choices': <String>{
           'on',
           'off',
@@ -50,6 +60,26 @@ class THMultipleChoiceOption extends THCommandOption {
 
   String get choice {
     return _choice;
+  }
+
+  static bool hasDefaultChoice(String aParentType, String aOptionType) {
+    if (!hasOptionType(aParentType, aOptionType)) {
+      throw THCustomException(
+          "Unsupported option type '$aOptionType' for a '$aParentType' in 'hasDefaultChoice'");
+    }
+
+    return (_supportedOptions[aParentType]![aOptionType]!['hasDefault']
+        as bool);
+  }
+
+  static String defaultChoice(String aParentType, String aOptionType) {
+    if (!hasDefaultChoice(aParentType, aOptionType)) {
+      throw THCustomException(
+          "Unsupported option type '$aOptionType' for a '$aParentType' in 'defaultChoice'");
+    }
+
+    return (_supportedOptions[aParentType]![aOptionType]!['defaultChoice']
+        as String);
   }
 
   static bool hasOptionChoice(

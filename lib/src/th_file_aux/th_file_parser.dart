@@ -5,7 +5,6 @@ import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_flip_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
@@ -13,8 +12,6 @@ import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_title_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_unrecognized_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_walls_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_empty_line.dart';
@@ -266,8 +263,6 @@ class THFileParser {
             _injectCopyrightCommandOption();
           case 'cs':
             _injectCSCommandOption();
-          case 'flip':
-            _injectFlipCommandOption();
           case 'projection':
             _injectProjectionCommandOption();
           case 'scale':
@@ -280,8 +275,6 @@ class THFileParser {
             _injectStationsCommandOption();
           case 'title':
             _injectTitleCommandOption();
-          // case 'walls':
-          //   _injectWallsCommandOption();
           default:
             _injectUnrecognizedCommandOption();
         }
@@ -304,32 +297,6 @@ class THFileParser {
     }
 
     THMultipleChoiceOption(_currentHasOptions, aOptionType, _currentSpec[0]);
-  }
-
-  void _injectFlipCommandOption() {
-    if (_currentSpec.isEmpty) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THFlipCommandOption', '> 0', _currentSpec);
-    }
-
-    if (_currentSpec[0] == null) {
-      throw THCreateObjectFromNullValueException('THFlipCommandOption');
-    }
-
-    THFlipCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
-  }
-
-  void _injectWallsCommandOption() {
-    if (_currentSpec.isEmpty) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THWallsCommandOption', '> 0', _currentSpec);
-    }
-
-    if (_currentSpec[0] == null) {
-      throw THCreateObjectFromNullValueException('THWallsCommandOption');
-    }
-
-    THWallsCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectSketchCommandOption() {
