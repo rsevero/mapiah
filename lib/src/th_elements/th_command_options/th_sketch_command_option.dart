@@ -37,8 +37,7 @@ class THSketchCommandOption extends THCommandOption {
   String specToFile() {
     var asString = '';
 
-    asString =
-        "${_filename.toFile()} ${point.x.toString()} ${point.y.toString()}";
+    asString = "${_filename.toFile()} ${point.toString()}";
 
     return asString;
   }

@@ -181,12 +181,16 @@ class THFileParser {
 
   void _injectPoint(List<dynamic> aElement) {
     final elementSize = aElement.length;
-    assert(elementSize >= 2);
-    // final newPoint = THPoint(_currentParent, aElement[1]);
+    assert(elementSize >= 3);
 
-    // _currentElement = newPoint;
+    _checkParsedListAsPoint('_injectPoint', aElement[1]);
 
-    // _optionFromElement(aElement[2], _pointNonMultipleChoiceOptions);
+    final newPoint =
+        THPoint.fromString(_currentParent, aElement[1], aElement[2]);
+
+    _currentElement = newPoint;
+
+    _optionFromElement(aElement[3], _pointNonMultipleChoiceOptions);
   }
 
   void _injectScrap(List<dynamic> aElement) {
@@ -278,6 +282,13 @@ class THFileParser {
     }
   }
 
+  void _pointNonMultipleChoiceOptions(String aOptionType) {
+    switch (aOptionType) {
+      default:
+        _injectUnrecognizedCommandOption();
+    }
+  }
+
   void _scrapNonMultipleChoiceOptions(String aOptionType) {
     switch (aOptionType) {
       case 'author':
@@ -317,6 +328,13 @@ class THFileParser {
     THMultipleChoiceOption(_currentHasOptions, aOptionType, _currentSpec[0]);
   }
 
+  void _checkParsedListAsPoint(String objectType, List<dynamic> aList) {
+    if (aList.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          objectType, '== 2', _currentSpec[1]);
+    }
+  }
+
   void _injectSketchCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
@@ -327,19 +345,7 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THSketchCommandOption (0)');
     }
 
-    if (_currentSpec[1] == null) {
-      throw THCreateObjectFromNullValueException('THSketchCommandOption (1)');
-    }
-
-    if (_currentSpec[1] is! List) {
-      throw THCreateObjectWithoutListException(
-          'THSketchCommandOption', _currentSpec[1]);
-    }
-
-    if ((_currentSpec[1] as List).length != 2) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THSketchCommandOption (1)', '== 2', _currentSpec[1]);
-    }
+    _checkParsedListAsPoint('THSketchCommandOption (1)', _currentSpec[1]);
 
     final filename = _parseTHString(_currentSpec[0]);
 

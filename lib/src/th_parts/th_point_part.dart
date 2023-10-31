@@ -23,4 +23,9 @@ class THPointPart {
     x = THDoublePart.fromString(aList[0].toString());
     y = THDoublePart.fromString(aList[1].toString());
   }
+
+  @override
+  String toString() {
+    return "${x.toString()} ${y.toString()}";
+  }
 }
