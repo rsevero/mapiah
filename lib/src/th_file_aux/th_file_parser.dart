@@ -116,6 +116,7 @@ class THFileParser {
         _resetParsersLineage();
       }
       if (parsedContents is Failure) {
+        trace(_currentParser).parse(line);
         _addError('petitparser returned a "Failure"', '_injectContents()',
             'Line being parsed: "$line"');
         continue;

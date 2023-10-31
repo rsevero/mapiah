@@ -8,6 +8,33 @@ class THMultipleChoiceOption extends THCommandOption {
   late final String _optionType;
   late String _choice;
   static final _supportedOptions = {
+    'point': {
+      'align': {
+        'hasDefault': false,
+        'choices': <String>{
+          'center',
+          'top',
+          'bottom',
+          'left',
+          'right',
+          'top-left',
+          'top-right',
+          'bottom-left',
+          'bottom-right',
+        },
+        'alternateChoices': {
+          'c': 'center',
+          't': 'top',
+          'b': 'bottom',
+          'l': 'left',
+          'r': 'right',
+          'tl': 'top-left',
+          'tr': 'top-right',
+          'bl': 'bottom-left',
+          'br': 'bottom-right',
+        },
+      },
+    },
     'scrap': {
       'flip': {
         'hasDefault': true,
@@ -16,16 +43,17 @@ class THMultipleChoiceOption extends THCommandOption {
           'none',
           'horizontal',
           'vertical',
-        }
+        },
+        'alternateChoices': <String, String>{},
       },
       'walls': {
         'hasDefault': false,
-        'default': '',
         'choices': <String>{
           'on',
           'off',
           'auto',
-        }
+        },
+        'alternateChoices': <String, String>{},
       },
     },
   };
@@ -50,6 +78,8 @@ class THMultipleChoiceOption extends THCommandOption {
   }
 
   set choice(String aChoice) {
+    aChoice = _mainChoice(parentOption.type, optionType, aChoice);
+
     if (!hasOptionChoice(parentOption.type, optionType, aChoice)) {
       throw THCustomException(
           "Unsupported choice '$aChoice' in a '$optionType' option for a '${parentOption.type}' element.");
@@ -88,9 +118,23 @@ class THMultipleChoiceOption extends THCommandOption {
       return false;
     }
 
+    aChoice = _mainChoice(aParentType, aOptionType, aChoice);
+
     return (_supportedOptions[aParentType]![aOptionType]!['choices']
             as LinkedHashSet)
         .contains(aChoice);
+  }
+
+  static String _mainChoice(
+      String aParentType, String aOptionType, String aChoice) {
+    final alternateChoiceMap =
+        _supportedOptions[aParentType]![aOptionType]!['alternateChoices']
+            as Map<String, String>;
+    if (alternateChoiceMap.containsKey(aChoice)) {
+      aChoice = alternateChoiceMap[aChoice]!;
+    }
+
+    return aChoice;
   }
 
   static bool hasOptionType(String aParentType, String aOptionType) {

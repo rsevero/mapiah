@@ -511,7 +511,32 @@ class THGrammar extends GrammarDefinition {
       (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
           .pick(1)
           .optional();
-  Parser pointOptions() => (orientationOption() | subtypeOption()).star();
+  Parser pointOptions() =>
+      (alignOption() | orientationOption() | subtypeOption()).star();
+
+  /// point -align
+  Parser alignOption() =>
+      stringIgnoreCase('align').skip(before: char('-')) & ref0(alignOptions);
+  Parser alignOptions() => (stringIgnoreCase('bottom-left') |
+          stringIgnoreCase('bottom-right') |
+          stringIgnoreCase('bottom,') |
+          stringIgnoreCase('bl') |
+          stringIgnoreCase('br') |
+          stringIgnoreCase('b') |
+          stringIgnoreCase('center,') |
+          stringIgnoreCase('c') |
+          stringIgnoreCase('left,') |
+          stringIgnoreCase('l') |
+          stringIgnoreCase('right,') |
+          stringIgnoreCase('r') |
+          stringIgnoreCase('top-left') |
+          stringIgnoreCase('top-right') |
+          stringIgnoreCase('top,') |
+          stringIgnoreCase('tl') |
+          stringIgnoreCase('tr') |
+          stringIgnoreCase('t'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
 
   /// point -orientation
   Parser orientationOption() =>
