@@ -24,6 +24,7 @@ import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
+import 'package:mapiah/src/th_elements/th_point_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';
@@ -308,6 +309,8 @@ class THFileParser {
     switch (aOptionType) {
       case 'orientation':
         _injectOrientationCommandOption();
+      case 'scale':
+        _injectPointScaleCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
       default:
@@ -326,7 +329,7 @@ class THFileParser {
       case 'projection':
         _injectProjectionCommandOption();
       case 'scale':
-        _injectScaleCommandOption();
+        _injectScrapScaleCommandOption();
       case 'sketch':
         _injectSketchCommandOption();
       case 'station-names':
@@ -424,6 +427,24 @@ class THFileParser {
     THSubtypeCommandOption((_currentHasOptions as THPoint), _currentSpec[0]);
   }
 
+  void _injectPointScaleCommandOption() {
+    if (_currentSpec.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THPointScaleCommandOption', '== 2', _currentSpec);
+    }
+
+    switch (_currentSpec[0]) {
+      case 'numeric':
+        THPointScaleCommandOption.sizeAsNumberFromString(
+            (_currentHasOptions as THPoint), _currentSpec[1]);
+      case 'text':
+        THPointScaleCommandOption.sizeAsText(
+            (_currentHasOptions as THPoint), _currentSpec[1]);
+      default:
+        throw THCustomException("Unknown point scale mode '_currentSpec[0]'");
+    }
+  }
+
   void _injectOrientationCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
@@ -483,7 +504,7 @@ class THFileParser {
     _parseErrors.add(errorMessage);
   }
 
-  void _injectScaleCommandOption() {
+  void _injectScrapScaleCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
           'THScaleCommandOption', '> 0', _currentSpec);

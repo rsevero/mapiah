@@ -11,13 +11,13 @@ class THMultipleChoicePart {
     'point|scale': {
       'hasDefault': true,
       'default': 'normal',
-      'choices': <String>{'tiny', 'small', 'normal', 'large', 'huge'},
+      'choices': <String>{'xs', 's', 'm', 'l', 'xl'},
       'alternateChoices': {
-        'xs': 'tiny',
-        's': 'small',
-        'm': 'normal',
-        'l': 'large',
-        'xl': 'huge',
+        'tiny': 'xs',
+        'small': 's',
+        'normal': 'm',
+        'large': 'l',
+        'huge': 'xl',
       },
     },
   };
@@ -61,5 +61,10 @@ class THMultipleChoicePart {
     }
 
     _choice = _mainChoice(aChoice);
+  }
+
+  @override
+  String toString() {
+    return _choice;
   }
 }

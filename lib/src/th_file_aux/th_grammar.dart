@@ -242,7 +242,7 @@ class THGrammar extends GrammarDefinition {
           csOption() |
           flipOption() |
           projectionOption() |
-          scaleOption() |
+          scrapScaleOption() |
           sketchOption() |
           stationNamesOption() |
           stationsOption() |
@@ -328,12 +328,12 @@ class THGrammar extends GrammarDefinition {
       ref0(projectionSpec);
 
   /// scrap -scale
-  Parser scaleOption() =>
-      stringIgnoreCase('scale').skip(before: char('-')) & ref0(scaleSpec);
-  Parser scaleSpec() =>
+  Parser scrapScaleOption() =>
+      stringIgnoreCase('scale').skip(before: char('-')) & ref0(scrapScaleSpec);
+  Parser scrapScaleSpec() =>
       ref0(number).map((value) => [value]) |
-      bracketStringTemplate(scaleNumber());
-  Parser scaleNumber() =>
+      bracketStringTemplate(scrapScaleNumber());
+  Parser scrapScaleNumber() =>
       (ref0(number) & lengthUnit()) |
       (ref0(number) & ref0(number) & lengthUnit()) |
       (ref0(number) &
@@ -511,8 +511,11 @@ class THGrammar extends GrammarDefinition {
       (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
           .pick(1)
           .optional();
-  Parser pointOptions() =>
-      (alignOption() | orientationOption() | subtypeOption()).star();
+  Parser pointOptions() => (alignOption() |
+          orientationOption() |
+          pointScaleOption() |
+          subtypeOption())
+      .star();
 
   /// point -align
   Parser alignOption() =>
@@ -545,6 +548,27 @@ class THGrammar extends GrammarDefinition {
           .map((value) => 'orientation') &
       ref0(orientationOptions);
   Parser orientationOptions() => number().map((value) => [value]);
+
+  /// point -scale
+  Parser pointScaleOption() =>
+      stringIgnoreCase('scale').skip(before: char('-')) &
+      ref0(pointScaleOptions);
+  Parser pointScaleOptions() =>
+      (stringIgnoreCase('tiny') |
+              stringIgnoreCase('xs') |
+              stringIgnoreCase('small') |
+              stringIgnoreCase('s') |
+              stringIgnoreCase('normal') |
+              stringIgnoreCase('m') |
+              stringIgnoreCase('large') |
+              stringIgnoreCase('l') |
+              stringIgnoreCase('huge') |
+              stringIgnoreCase('xl'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['text', value]) |
+      number()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['numeric', value]);
 
   /// point -subtype
   Parser subtypeOption() =>

@@ -1,2 +1,4 @@
 encoding utf-8
+scrap test
 point 717.49 552.12 date -scale 2.84
+endscrap
