@@ -15,7 +15,7 @@ class THFileWriter {
 
   String serialize(THElement aTHElement) {
     var asString = '';
-    final type = aTHElement.type();
+    final type = aTHElement.type;
 
     switch (type) {
       case 'comment':

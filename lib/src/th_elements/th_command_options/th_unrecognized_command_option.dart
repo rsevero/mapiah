@@ -7,7 +7,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   THUnrecognizedCommandOption(super.parent, this.value);
 
   @override
-  String optionType() {
+  String get optionType {
     return 'UnrecognizedCommandOption';
   }
 

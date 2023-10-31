@@ -38,7 +38,7 @@ abstract class THElement {
     return _thFile;
   }
 
-  String type() {
+  String get type {
     return runtimeType.toString().substring(2).toLowerCase();
   }
 
@@ -96,7 +96,7 @@ class THFile extends THElement with THParent {
     aElement._index = _nextIndex;
     _elements[_nextIndex] = aElement;
     _nextIndex++;
-    final elementType = aElement.type();
+    final elementType = aElement.type;
     if (aElement is THHasID) {
       final newID = _completeElementID(elementType, (aElement as THHasID).id);
       if (_elementByID.containsKey(newID)) {

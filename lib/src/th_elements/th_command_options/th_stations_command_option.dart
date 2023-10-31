@@ -6,7 +6,7 @@ class THStationsCommandOption extends THCommandOption {
   THStationsCommandOption(super.parent, this.stations);
 
   @override
-  String optionType() {
+  String get optionType {
     return 'stations';
   }
 

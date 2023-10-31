@@ -37,7 +37,7 @@ class THStationNamesCommandOption extends THCommandOption {
   }
 
   @override
-  String optionType() {
+  String get optionType {
     return 'station-names';
   }
 

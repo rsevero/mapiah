@@ -6,6 +6,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_author_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_flip_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
@@ -108,6 +109,7 @@ class THFileParser {
       if (_runTraceParser) {
         trace(_currentParser).parse(line);
       }
+
       final parsedContents = _currentParser.parse(line);
       if (isFirst) {
         isFirst = false;
@@ -118,17 +120,14 @@ class THFileParser {
             'Line being parsed: "$line"');
         continue;
       }
-      // print("parsedContents.value: '${parsedContents.value}");
-      // print(
-      //     "parsedContents.value.runtime type: '${parsedContents.value.runtimeType}'");
+
       final element = parsedContents.value[0];
-      // print("element: '$element'");
       if (element.isEmpty) {
         _addError('element.isEmpty', '_injectContents()',
             'Line being parsed: "$line"');
         continue;
       }
-      // print("element[0]: '${element[0]}'");
+
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
         case 'encoding':
@@ -254,6 +253,12 @@ class THFileParser {
       _currentHasOptions = _currentElement as THHasOptions;
 
       try {
+        if (THMultipleChoiceOption.hasOptionType(
+            _currentHasOptions.type, optionType)) {
+          _injectMultipleChoiceCommandOption(optionType);
+          continue;
+        }
+
         switch (optionType) {
           case 'author':
             _injectAuthorCommandOption();
@@ -275,8 +280,8 @@ class THFileParser {
             _injectStationsCommandOption();
           case 'title':
             _injectTitleCommandOption();
-          case 'walls':
-            _injectWallsCommandOption();
+          // case 'walls':
+          //   _injectWallsCommandOption();
           default:
             _injectUnrecognizedCommandOption();
         }
@@ -285,6 +290,20 @@ class THFileParser {
             _currentOptions.toString());
       }
     }
+  }
+
+  void _injectMultipleChoiceCommandOption(String aOptionType) {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.type}'");
+    }
+
+    if (_currentSpec[0] is! String) {
+      throw THCustomException(
+          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.type}'");
+    }
+
+    THMultipleChoiceOption(_currentHasOptions, aOptionType, _currentSpec[0]);
   }
 
   void _injectFlipCommandOption() {

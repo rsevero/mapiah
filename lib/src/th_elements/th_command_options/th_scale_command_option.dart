@@ -10,7 +10,7 @@ class THScaleCommandOption extends THCommandOption {
   THScaleCommandOption(super.parent, this._numericSpecifications, [this.unit]);
 
   @override
-  String optionType() {
+  String get optionType {
     return 'scale';
   }
 

@@ -25,7 +25,7 @@ class THCopyrightCommandOption extends THCommandOption {
   }
 
   @override
-  String optionType() {
+  String get optionType {
     return 'copyright';
   }
 

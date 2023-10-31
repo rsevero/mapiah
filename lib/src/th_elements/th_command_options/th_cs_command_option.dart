@@ -9,7 +9,7 @@ class THCSCommandOption extends THCommandOption {
   }
 
   @override
-  String optionType() {
+  String get optionType {
     return 'cs';
   }
 

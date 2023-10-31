@@ -7,7 +7,7 @@ mixin THHasOptions on THElement {
   final Map<String, THCommandOption> _optionsMap = {};
 
   void addUpdateOption(THCommandOption aOption) {
-    final type = aOption.optionType();
+    final type = aOption.optionType;
 
     if (!_optionsList.contains(type)) {
       _optionsList.add(type);

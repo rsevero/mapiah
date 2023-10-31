@@ -43,7 +43,7 @@ class THFlipCommandOption extends THCommandOption {
   }
 
   @override
-  String optionType() {
+  String get optionType {
     return 'flip';
   }
 
