@@ -8,7 +8,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.d
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_scrap_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
@@ -513,7 +513,7 @@ class THFileParser {
       }
     }
 
-    THScaleCommandOption(_currentHasOptions, values, unit);
+    THScrapScaleCommandOption(_currentHasOptions, values, unit);
   }
 
   void _injectProjectionCommandOption() {

@@ -3,11 +3,12 @@ import 'package:mapiah/src/th_exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_length_unit_part.dart';
 
-class THScaleCommandOption extends THCommandOption {
+class THScrapScaleCommandOption extends THCommandOption {
   List<THDoublePart> _numericSpecifications;
   THLengthUnitPart? unit;
 
-  THScaleCommandOption(super.parent, this._numericSpecifications, [this.unit]);
+  THScrapScaleCommandOption(super.parent, this._numericSpecifications,
+      [this.unit]);
 
   @override
   String get optionType {
