@@ -9,6 +9,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_o
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
@@ -324,6 +325,8 @@ class THFileParser {
         _injectContextCommandOption();
       case 'dist':
         _injectDistCommandOption();
+      case 'id':
+        _injectIDCommandOption();
       case 'from':
         _injectFromCommandOption();
       case 'orientation':
@@ -439,6 +442,15 @@ class THFileParser {
     }
 
     THFromCommandOption(_currentHasOptions, _currentSpec[0]);
+  }
+
+  void _injectIDCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'id' option for a '${_currentHasOptions.type}'");
+    }
+
+    THIDCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectSketchCommandOption() {

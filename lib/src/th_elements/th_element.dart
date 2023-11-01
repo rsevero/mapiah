@@ -1,5 +1,6 @@
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
+import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_duplicate_id_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_id_with_space_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_no_element_by_index_exception.dart';
@@ -73,7 +74,8 @@ class THFile extends THElement with THParent {
   final Map<int, THElement> _elements = {};
   var filename = 'unnamed file';
 
-  final Map<String, THHasID> _elementByID = {};
+  final Map<String, THElement> _elementByID = {};
+  final Map<THElement, String> _idByElement = {};
 
   var encoding = thDefaultEncoding;
   var _nextIndex = 0;
@@ -96,13 +98,8 @@ class THFile extends THElement with THParent {
     aElement._index = _nextIndex;
     _elements[_nextIndex] = aElement;
     _nextIndex++;
-    final elementType = aElement.type;
     if (aElement is THHasID) {
-      final newID = _completeElementID(elementType, (aElement as THHasID).id);
-      if (_elementByID.containsKey(newID)) {
-        throw THDuplicateIDException(newID, filename);
-      }
-      _elementByID[newID] = (aElement as THHasID);
+      addElementWithID(aElement, (aElement as THHasID).id);
     }
   }
 
@@ -113,11 +110,84 @@ class THFile extends THElement with THParent {
     return '$elementType|$aID';
   }
 
+  void removeElementIDByElement(THElement aElement) {
+    final aElementType = aElement.type;
+
+    if (!_idByElement.containsKey(aElement)) {
+      throw THCustomException(
+          "Element '$aElement' of type '$aElementType' has no registered ID.");
+    }
+
+    final aID = _idByElement[aElement];
+
+    if (!_elementByID.containsKey(aID)) {
+      throw THCustomException(
+          "ID '$aID' gotten from element '$aElement' of type '$aElementType' is not registered.");
+    }
+
+    _idByElement.remove(aElement);
+    _elementByID.remove(aID);
+  }
+
+  void removeElementIDByElementTypeID(String aElementType, String aID) {
+    final completeID = _completeElementID(aElementType, aID);
+
+    if (!_elementByID.containsKey(completeID)) {
+      throw THCustomException(
+          "ID '$aID' is not registered for type '$aElementType'.");
+    }
+
+    final aElement = _elementByID[completeID];
+
+    if (!_idByElement.containsKey(aElement)) {
+      throw THCustomException(
+          "Element '$aElement' of type '$aElementType' has no registered ID.");
+    }
+
+    _idByElement.remove(aElement);
+    _elementByID.remove(aID);
+  }
+
+  void updateElementID(THElement aElement, String newID) {
+    final aElementType = aElement.type;
+    final newCompleteID = _completeElementID(aElementType, newID);
+
+    if (!_idByElement.containsKey(aElement)) {
+      throw THCustomException(
+          "Element '$aElement' of type '$aElementType' had no registered ID.");
+    }
+    final oldCompleteID = _idByElement[aElement];
+
+    if (_elementByID.containsKey(newCompleteID)) {
+      throw THCustomException(
+          "Duplicate '$aElementType' element with ID '$newID'.");
+    }
+
+    _elementByID.remove(oldCompleteID);
+    _elementByID[newCompleteID] = aElement;
+
+    _idByElement[aElement] = newCompleteID;
+  }
+
+  void addElementWithID(THElement aElement, String aID) {
+    final newCompleteID = _completeElementID(aElement.type, aID);
+
+    if (_elementByID.containsKey(newCompleteID)) {
+      throw THDuplicateIDException(newCompleteID, filename);
+    }
+    _elementByID[newCompleteID] = aElement;
+
+    if (_idByElement.containsKey(aElement)) {
+      throw THCustomException("'${aElement.type}' already included.");
+    }
+    _idByElement[aElement] = newCompleteID;
+  }
+
   bool hasElementByID(String elementType, String aID) {
     return _elementByID.containsKey(_completeElementID(elementType, aID));
   }
 
-  THHasID elementByID(String elementType, String aID) {
+  THElement elementByID(String elementType, String aID) {
     if (!hasElementByID(elementType, aID)) {
       throw THNoElementByIDException(elementType, aID, filename);
     }

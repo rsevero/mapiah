@@ -515,6 +515,7 @@ class THGrammar extends GrammarDefinition {
           clipOption() |
           contextOption() |
           distOption() |
+          idOption() |
           fromOption() |
           orientationOption() |
           placeOption() |
@@ -569,6 +570,13 @@ class THGrammar extends GrammarDefinition {
               .map((value) => [value]) |
           bracketStringTemplate(number() & lengthUnit()))
       .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// point -id
+  Parser idOption() =>
+      stringIgnoreCase('id').skip(before: char('-')) & ref0(idOptions);
+  Parser idOptions() => extKeyword()
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
 
   /// point -from
   Parser fromOption() =>
