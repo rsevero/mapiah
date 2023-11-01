@@ -506,8 +506,8 @@ endscrap
     final writer = THFileWriter();
 
     const failures = [
-      // 'th_file_parser-02261-point_with_option_name_with_unsupported_point_type_failure.th2',
-      // 'th_file_parser-02262-point_with_option_name_without_reference_failure.th2',
+      'th_file_parser-02261-point_with_option_name_with_unsupported_point_type_failure.th2',
+      'th_file_parser-02262-point_with_option_name_without_reference_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -686,6 +686,58 @@ endscrap
 
     const failures = [
       'th_file_parser-00132-point_with_invalid_scale_value_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -scrap', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02270-point_with_option_section.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 782.0 -1740.0 section -scrap end_tunnel
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -scrap failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02271-point_with_option_section_on_invalid_point_type_failure.th2',
     ];
 
     for (var failure in failures) {

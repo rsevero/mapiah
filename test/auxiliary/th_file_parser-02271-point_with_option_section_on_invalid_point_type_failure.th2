@@ -1,0 +1,4 @@
+encoding UTF-8
+scrap test
+point 782.0 -1740.0 blocks -scrap end_tunnel
+endscrap

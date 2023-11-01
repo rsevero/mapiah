@@ -15,6 +15,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_com
 import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_scrap_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
@@ -343,6 +344,8 @@ class THFileParser {
         _injectOrientationCommandOption();
       case 'scale':
         _injectPointScaleCommandOption();
+      case 'scrap':
+        _injectScrapCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
       default:
@@ -564,6 +567,15 @@ class THFileParser {
       default:
         throw THCustomException("Unknown point scale mode '_currentSpec[0]'");
     }
+  }
+
+  void _injectScrapCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'scrap' option for a '${_currentHasOptions.type}'");
+    }
+
+    THScrapCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectOrientationCommandOption() {

@@ -1,9 +1,17 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_elements/th_point.dart';
+import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 class THExtendCommandOption extends THCommandOption {
   late String station;
 
-  THExtendCommandOption(super.parentOption, this.station);
+  THExtendCommandOption(super.parentOption, this.station) {
+    if ((parentOption is! THPoint) ||
+        ((parentOption as THPoint).pointType != 'station')) {
+      throw THCustomException(
+          "Option 'extend' only valid for points of type 'station'.");
+    }
+  }
 
   @override
   String get optionType => 'extend';

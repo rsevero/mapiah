@@ -529,6 +529,7 @@ class THGrammar extends GrammarDefinition {
           orientationOption() |
           placeOption() |
           pointScaleOption() |
+          scrapOption() |
           subtypeOption() |
           visibilityOption())
       .star();
@@ -650,6 +651,12 @@ class THGrammar extends GrammarDefinition {
       number()
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => ['numeric', value]);
+
+  /// point -scrap
+  Parser scrapOption() =>
+      stringIgnoreCase('scrap').skip(before: char('-')) &
+      ref0(scrapOptionOptions);
+  Parser scrapOptionOptions() => reference().map((value) => [value]);
 
   /// point -subtype
   Parser subtypeOption() =>
