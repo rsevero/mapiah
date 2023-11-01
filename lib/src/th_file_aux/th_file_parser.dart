@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_context_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
@@ -319,6 +320,8 @@ class THFileParser {
     switch (aOptionType) {
       case 'clip':
         _injectClipCommandOption();
+      case 'context':
+        _injectContextCommandOption();
       case 'dist':
         _injectDistCommandOption();
       case 'from':
@@ -417,6 +420,16 @@ class THFileParser {
         throw THCustomException(
             "Unsupported parameters for a 'point' 'dist' option: '${_currentSpec[0]}'.");
     }
+  }
+
+  void _injectContextCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'context' option for a '${_currentHasOptions.type}'");
+    }
+
+    THContextCommandOption(
+        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
   }
 
   void _injectFromCommandOption() {

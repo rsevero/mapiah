@@ -1,2 +1,4 @@
 encoding utf-8
+scrap test
 point 361 648 height -context scrap extra-info
+endscrap

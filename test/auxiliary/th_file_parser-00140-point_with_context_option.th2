@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point -104.04 75 date -context line fault
+endscrap

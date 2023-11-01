@@ -136,13 +136,13 @@ class THPoint extends THElement with THHasOptions {
     pointType = aPointType;
   }
 
-  static bool hasType(String aPointType) {
-    return THPoint._pointTypes.contains(aPointType);
+  static bool hasPointType(String aPointType) {
+    return _pointTypes.contains(aPointType);
   }
 
   set pointType(String aPointType) {
-    if (!THPoint.hasType(aPointType)) {
-      throw THCustomException("Unrecognized THPoint type '$aPointType'");
+    if (!hasPointType(aPointType)) {
+      throw THCustomException("Unrecognized THPoint type '$aPointType'.");
     }
 
     _pointType = aPointType;

@@ -513,6 +513,7 @@ class THGrammar extends GrammarDefinition {
           .optional();
   Parser pointOptions() => (alignOption() |
           clipOption() |
+          contextOption() |
           distOption() |
           fromOption() |
           orientationOption() |
@@ -552,6 +553,13 @@ class THGrammar extends GrammarDefinition {
   Parser clipOptions() => (stringIgnoreCase('on') | stringIgnoreCase('off'))
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+
+  /// point -context
+  Parser contextOption() =>
+      stringIgnoreCase('context').skip(before: char('-')) &
+      ref0(contextOptions);
+  Parser contextOptions() =>
+      (keyword() & keyword()).trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// point -dist
   Parser distOption() =>
