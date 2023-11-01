@@ -145,8 +145,74 @@ endscrap
     final writer = THFileWriter();
 
     const failures = [
-      // 'th_file_parser-02231-point_with_invalid_clip_option_failure.th2',
+      'th_file_parser-02231-point_with_invalid_clip_option_failure.th2',
       'th_file_parser-02232-point_with_clip_option_on_invalid_point_type_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -dist', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-00150-point_with_dist_option.th2',
+        'length': 6,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -4882 -2163 extra -dist 18
+endscrap
+
+
+''',
+      },
+      {
+        'file': 'th_file_parser-00151-point_with_dist_option_with_unit.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -4381 -253 extra -dist [ 2450 cm ]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -dist failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-00152-point_with_invalid_dist_option_unsupported_unit_failure.th2',
+      'th_file_parser-00153-point_with_invalid_dist_option_no_number_failure.th2',
+      'th_file_parser-00154-point_with_invalid_type_for_dist_option_failure.th2',
     ];
 
     for (var failure in failures) {

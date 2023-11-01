@@ -1,2 +1,4 @@
 encoding utf-8
+scrap test
 point 1454 2646 extra -dist [2450 metros]
+endscrap
