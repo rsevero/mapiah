@@ -104,6 +104,59 @@ endscrap
     }
   });
 
+  group('point -clip', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02230-point_with_clip_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 122.0031 321.9712 mud -clip off
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -clip failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      // 'th_file_parser-02231-point_with_invalid_clip_option_failure.th2',
+      'th_file_parser-02232-point_with_clip_option_on_invalid_point_type_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('point -orientation', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
@@ -158,6 +211,58 @@ endscrap
     const failures = [
       'th_file_parser-00128-point_with_invalid_orientation_option_value_failure.th2',
       'th_file_parser-00129-point_with_orientation_option_with_unit_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -place', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02210-point_with_place_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 122.0031 321.9712 vegetable-debris -place bottom
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -place failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02211-point_with_invalid_place_option_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -285,6 +390,58 @@ endscrap
       'th_file_parser-00125-point_with_subtype_for_type_with_no_support_failure.th2',
       'th_file_parser-00126-point_outside_scrap_failure.th2',
       'th_file_parser-00127-point_duplicate_index_with_type_as_option_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -visibility', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02220-point_with_visibility_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 122.0031 321.9712 masonry -visibility on
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -visibility failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02221-point_with_invalid_visibility_option_failure.th2',
     ];
 
     for (var failure in failures) {

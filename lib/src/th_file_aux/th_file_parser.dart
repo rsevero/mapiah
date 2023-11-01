@@ -3,9 +3,10 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_scale_command_option.dart';
@@ -210,7 +211,7 @@ class THFileParser {
           aElement[2][1].toString());
     }
 
-    _optionFromElement(aElement[3], _pointNonMultipleChoiceOptions);
+    _optionFromElement(aElement[3], _pointRegularOptions);
   }
 
   void _injectScrap(List<dynamic> aElement) {
@@ -222,7 +223,7 @@ class THFileParser {
     _currentParent = newScrap;
 
     _parsedOptions.clear();
-    _optionFromElement(aElement[2], _scrapNonMultipleChoiceOptions);
+    _optionFromElement(aElement[2], _scrapRegularOptions);
     _addChildParser(_scrapParser);
   }
 
@@ -269,7 +270,7 @@ class THFileParser {
   }
 
   void _optionFromElement(
-      List<dynamic> aElement, Function(String) nonMultipleChoiceOptions) {
+      List<dynamic> aElement, Function(String) createRegularOption) {
     for (_currentOptions in aElement) {
       if (_currentOptions.length != 2) {
         throw THOptionsListWrongLengthError();
@@ -285,19 +286,24 @@ class THFileParser {
       }
 
       _currentSpec = _currentOptions[1];
-
       _currentHasOptions = _currentElement as THHasOptions;
-
       _parsedOptions.add(optionType);
 
       try {
-        if (THMultipleChoiceOption.hasOptionType(
+        if (createRegularOption(optionType)) {
+          continue;
+        }
+
+        if (THMultipleChoiceCommandOption.hasOptionType(
             _currentHasOptions.type, optionType)) {
           _injectMultipleChoiceCommandOption(optionType);
           continue;
         }
 
-        nonMultipleChoiceOptions(optionType);
+        final errorMessage =
+            "Unrecognized command option '$optionType'. This should never happen.";
+        assert(false, errorMessage);
+        throw UnsupportedError(errorMessage);
       } catch (e, s) {
         _addError("$e\n\nTrace:\n\n$s", '_optionFromElement',
             _currentOptions.toString());
@@ -305,8 +311,12 @@ class THFileParser {
     }
   }
 
-  void _pointNonMultipleChoiceOptions(String aOptionType) {
+  bool _pointRegularOptions(String aOptionType) {
+    var optionIdentified = true;
+
     switch (aOptionType) {
+      case 'clip':
+        _injectClipCommandOption();
       case 'orientation':
         _injectOrientationCommandOption();
       case 'scale':
@@ -314,11 +324,15 @@ class THFileParser {
       case 'subtype':
         _injectSubtypeCommandOption();
       default:
-        _injectUnrecognizedCommandOption();
+        optionIdentified = false;
     }
+
+    return optionIdentified;
   }
 
-  void _scrapNonMultipleChoiceOptions(String aOptionType) {
+  bool _scrapRegularOptions(String aOptionType) {
+    var optionIdentified = true;
+
     switch (aOptionType) {
       case 'author':
         _injectAuthorCommandOption();
@@ -339,8 +353,10 @@ class THFileParser {
       case 'title':
         _injectTitleCommandOption();
       default:
-        _injectUnrecognizedCommandOption();
+        optionIdentified = false;
     }
+
+    return optionIdentified;
   }
 
   void _injectMultipleChoiceCommandOption(String aOptionType) {
@@ -354,7 +370,8 @@ class THFileParser {
           "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.type}'");
     }
 
-    THMultipleChoiceOption(_currentHasOptions, aOptionType, _currentSpec[0]);
+    THMultipleChoiceCommandOption(
+        _currentHasOptions, aOptionType, _currentSpec[0]);
   }
 
   void _checkParsedListAsPoint(String objectType, List<dynamic> aList) {
@@ -362,6 +379,20 @@ class THFileParser {
       throw THCreateObjectFromListWithWrongLengthException(
           objectType, '== 2', _currentSpec[1]);
     }
+  }
+
+  void _injectClipCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'clip' option for a '${_currentHasOptions.type}'");
+    }
+
+    if (_currentSpec[0] is! String) {
+      throw THCustomException(
+          "One string parameter required to create a 'clip' option for a '${_currentHasOptions.type}'");
+    }
+
+    THClipCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectSketchCommandOption() {

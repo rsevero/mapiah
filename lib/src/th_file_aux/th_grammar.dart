@@ -512,9 +512,12 @@ class THGrammar extends GrammarDefinition {
           .pick(1)
           .optional();
   Parser pointOptions() => (alignOption() |
+          clipOption() |
           orientationOption() |
+          placeOption() |
           pointScaleOption() |
-          subtypeOption())
+          subtypeOption() |
+          visibilityOption())
       .star();
 
   /// point -align
@@ -541,6 +544,13 @@ class THGrammar extends GrammarDefinition {
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
+  /// point -clip
+  Parser clipOption() =>
+      stringIgnoreCase('clip').skip(before: char('-')) & ref0(clipOptions);
+  Parser clipOptions() => (stringIgnoreCase('on') | stringIgnoreCase('off'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
+
   /// point -orientation
   Parser orientationOption() =>
       (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
@@ -548,6 +558,15 @@ class THGrammar extends GrammarDefinition {
           .map((value) => 'orientation') &
       ref0(orientationOptions);
   Parser orientationOptions() => number().map((value) => [value]);
+
+  /// point -place
+  Parser placeOption() =>
+      stringIgnoreCase('place').skip(before: char('-')) & ref0(placeOptions);
+  Parser placeOptions() => (stringIgnoreCase('bottom') |
+          stringIgnoreCase('default') |
+          stringIgnoreCase('top,'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
 
   /// point -scale
   Parser pointScaleOption() =>
@@ -575,4 +594,13 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('subtype').skip(before: char('-')) &
       ref0(subtypeOptions);
   Parser subtypeOptions() => unquotedString().map((value) => [value]);
+
+  /// point -visibility
+  Parser visibilityOption() =>
+      stringIgnoreCase('visibility').skip(before: char('-')) &
+      ref0(visibilityOptions);
+  Parser visibilityOptions() =>
+      (stringIgnoreCase('on') | stringIgnoreCase('off'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => [value]);
 }

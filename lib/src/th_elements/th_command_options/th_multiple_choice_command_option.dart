@@ -4,7 +4,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
-class THMultipleChoiceOption extends THCommandOption {
+class THMultipleChoiceCommandOption extends THCommandOption {
   late final String _optionType;
   late String _choice;
   static final _supportedOptions = {
@@ -33,6 +33,34 @@ class THMultipleChoiceOption extends THCommandOption {
           'bl': 'bottom-left',
           'br': 'bottom-right',
         },
+      },
+      'clip': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+      },
+      'place': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'bottom',
+          'default',
+          'top',
+        },
+        'alternateChoices': <String, String>{},
+      },
+      'visibility': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
       },
     },
     'scrap': {
@@ -65,7 +93,7 @@ class THMultipleChoiceOption extends THCommandOption {
   ///    _optionType set before setting 'optionParent' in [THCommandOption]
   ///    because of the call to 'addUpdateOption' inside THCommandOption
   ///    constructor.
-  THMultipleChoiceOption(
+  THMultipleChoiceCommandOption(
       THHasOptions aOptionParent, String aOptionType, String aChoice)
       : _optionType = aOptionType,
         super(aOptionParent) {
