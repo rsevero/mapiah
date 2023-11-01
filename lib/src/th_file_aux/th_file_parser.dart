@@ -7,6 +7,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
@@ -320,6 +321,8 @@ class THFileParser {
         _injectClipCommandOption();
       case 'dist':
         _injectDistCommandOption();
+      case 'from':
+        _injectFromCommandOption();
       case 'orientation':
         _injectOrientationCommandOption();
       case 'scale':
@@ -414,6 +417,15 @@ class THFileParser {
         throw THCustomException(
             "Unsupported parameters for a 'point' 'dist' option: '${_currentSpec[0]}'.");
     }
+  }
+
+  void _injectFromCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'dist' option for a '${_currentHasOptions.type}'");
+    }
+
+    THFromCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectSketchCommandOption() {

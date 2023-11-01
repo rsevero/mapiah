@@ -17,7 +17,7 @@ class THDistCommandOption extends THCommandOption {
     }
     if ((parentOption as THPoint).pointType != 'extra') {
       throw THCustomException(
-          "Pption 'dist' only valid for points of type 'extra'.");
+          "Option 'dist' only valid for points of type 'extra'.");
     }
     if (aUnit != null) {
       unitFromString(aUnit);
@@ -28,7 +28,7 @@ class THDistCommandOption extends THCommandOption {
       [String? aUnit]) {
     if ((parentOption as THPoint).pointType != 'extra') {
       throw THCustomException(
-          "Pption 'dist' only valid for points of type 'extra'.");
+          "Option 'dist' only valid for points of type 'extra'.");
     }
     distance = THDoublePart.fromString(aDistance);
     if (aUnit != null) {
