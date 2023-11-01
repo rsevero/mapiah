@@ -276,6 +276,81 @@ endscrap
     }
   });
 
+  group('point -extend', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file':
+            'th_file_parser-00160-point_with_extend_option_without_previous_station.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -2675 2206 station -extend
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00161-point_with_extend_option_with_previous_station.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -3218 -2379 station -extend previous a12
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00162-point_with_extend_option_with_alternate_previous_station.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -4747 -2577 station -extend previous c33
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -extend failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-00163-point_with_extend_option_with_alternate_previous_missing_station_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('point -from', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

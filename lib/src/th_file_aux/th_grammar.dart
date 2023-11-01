@@ -98,10 +98,9 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Station reference
-  Parser stationReferenceNonStartChar() =>
-      (ref0(extKeywordNonStartChar) | char('@'));
-  Parser stationReference() =>
-      (ref0(keywordStartChar) & ref0(stationReferenceNonStartChar).star())
+  Parser referenceNonStartChar() => (ref0(extKeywordNonStartChar) | char('@'));
+  Parser reference() =>
+      (ref0(keywordStartChar) & ref0(referenceNonStartChar).star())
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
@@ -524,6 +523,7 @@ class THGrammar extends GrammarDefinition {
           contextOption() |
           distOption() |
           idOption() |
+          extendOption() |
           fromOption() |
           nameOption() |
           orientationOption() |
@@ -580,6 +580,18 @@ class THGrammar extends GrammarDefinition {
           bracketStringTemplate(number() & lengthUnit()))
       .trim(ref0(thWhitespace), ref0(thWhitespace));
 
+  /// point -extend
+  Parser extendOption() =>
+      stringIgnoreCase('extend').skip(before: char('-')) & ref0(extendOptions);
+  Parser extendOptions() =>
+      ((stringIgnoreCase('prev') & stringIgnoreCase('ious').optional())
+                  .flatten() &
+              reference())
+          .pick(1)
+          .optional()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => [value]);
+
   /// point -id
   Parser idOption() =>
       stringIgnoreCase('id').skip(before: char('-')) & ref0(idOptions);
@@ -597,7 +609,7 @@ class THGrammar extends GrammarDefinition {
   /// point -name
   Parser nameOption() =>
       stringIgnoreCase('name').skip(before: char('-')) & ref0(nameOptions);
-  Parser nameOptions() => stationReference()
+  Parser nameOptions() => reference()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 

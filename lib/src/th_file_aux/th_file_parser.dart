@@ -8,6 +8,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_context_command_opt
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
@@ -289,7 +290,12 @@ class THFileParser {
         continue;
       }
 
-      _currentSpec = _currentOptions[1];
+      // This "if null" is here to deal with command options that have optional
+      // extra data, i.e, they might be defined alone. In these situations
+      // _currentOptions[1] will be simply null. As we need a list in
+      // _currentSpec we create a list with a null inside to represent the
+      // null value we received from the parser.
+      _currentSpec = _currentOptions[1] ?? [null];
       _currentHasOptions = _currentElement as THHasOptions;
       _parsedOptions.add(optionType);
 
@@ -327,6 +333,8 @@ class THFileParser {
         _injectDistCommandOption();
       case 'id':
         _injectIDCommandOption();
+      case 'extend':
+        _injectExtendCommandOption();
       case 'from':
         _injectFromCommandOption();
       case 'name':
@@ -444,6 +452,19 @@ class THFileParser {
     }
 
     THFromCommandOption(_currentHasOptions, _currentSpec[0]);
+  }
+
+  void _injectExtendCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'extend' option for a '${_currentHasOptions.type}'");
+    }
+
+    if (_currentSpec[0] == null) {
+      THExtendCommandOption(_currentHasOptions, '');
+    } else {
+      THExtendCommandOption(_currentHasOptions, _currentSpec[0]);
+    }
   }
 
   void _injectIDCommandOption() {

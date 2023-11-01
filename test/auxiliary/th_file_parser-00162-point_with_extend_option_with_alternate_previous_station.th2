@@ -1,2 +1,4 @@
 encoding utf-8
+scrap test
 point -4747 -2577 station -extend prev c33
+endscrap
