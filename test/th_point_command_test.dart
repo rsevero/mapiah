@@ -380,6 +380,69 @@ endscrap
     }
   });
 
+  group('point -name', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02263-point_with_only_option_name.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 782.0 -1740.0 station -name A2@final_de_semana
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02260-point_with_option_name.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 782.0 -1740.0 station -subtype fixed -name A2@final_de_semana -id A2
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -name failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      // 'th_file_parser-02261-point_with_option_name_with_unsupported_point_type_failure.th2',
+      // 'th_file_parser-02262-point_with_option_name_without_reference_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('point -orientation', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

@@ -97,6 +97,14 @@ class THGrammar extends GrammarDefinition {
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
+  /// Station reference
+  Parser stationReferenceNonStartChar() =>
+      (ref0(extKeywordNonStartChar) | char('@'));
+  Parser stationReference() =>
+      (ref0(keywordStartChar) & ref0(stationReferenceNonStartChar).star())
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+
   /// Date
   Parser year() => digit().repeat(4, 4).flatten();
   Parser twoDigits() => digit().repeat(2, 2).flatten();
@@ -517,6 +525,7 @@ class THGrammar extends GrammarDefinition {
           distOption() |
           idOption() |
           fromOption() |
+          nameOption() |
           orientationOption() |
           placeOption() |
           pointScaleOption() |
@@ -582,6 +591,13 @@ class THGrammar extends GrammarDefinition {
   Parser fromOption() =>
       stringIgnoreCase('from').skip(before: char('-')) & ref0(fromOptions);
   Parser fromOptions() => extKeyword()
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
+
+  /// point -name
+  Parser nameOption() =>
+      stringIgnoreCase('name').skip(before: char('-')) & ref0(nameOptions);
+  Parser nameOptions() => stationReference()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 

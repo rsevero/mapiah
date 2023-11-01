@@ -11,6 +11,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_scale_command_option.dart';
@@ -201,7 +202,6 @@ class THFileParser {
         THPoint.fromString(_currentParent, aElement[1], aElement[2][0]);
 
     _currentElement = newPoint;
-
     _parsedOptions.clear();
 
     try {
@@ -329,6 +329,8 @@ class THFileParser {
         _injectIDCommandOption();
       case 'from':
         _injectFromCommandOption();
+      case 'name':
+        _injectNameCommandOption();
       case 'orientation':
         _injectOrientationCommandOption();
       case 'scale':
@@ -451,6 +453,15 @@ class THFileParser {
     }
 
     THIDCommandOption(_currentHasOptions, _currentSpec[0]);
+  }
+
+  void _injectNameCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'name' option for a '${_currentHasOptions.type}'");
+    }
+
+    THNameCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectSketchCommandOption() {
