@@ -21,6 +21,8 @@ class THScrapScaleCommandOption extends THCommandOption {
     if ((length != 1) && (length != 2) && (length != 8)) {
       throw THConvertFromListException('THScaleCommandOption', aList);
     }
+
+    _numericSpecifications = aList;
   }
 
   @override

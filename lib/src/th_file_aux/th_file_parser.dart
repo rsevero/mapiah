@@ -44,7 +44,6 @@ import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_null_value_exception.dart';
-import 'package:mapiah/src/th_exceptions/th_create_object_without_list.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_with_list_parameter_exception.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';

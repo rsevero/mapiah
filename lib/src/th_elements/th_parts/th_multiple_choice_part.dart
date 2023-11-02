@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 class THMultipleChoicePart {

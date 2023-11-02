@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 class THCSPart {
