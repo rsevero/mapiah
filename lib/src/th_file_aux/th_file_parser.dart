@@ -178,8 +178,8 @@ class THFileParser {
   }
 
   void _injectEndMultiLineComment() {
-    _currentParent = _currentParent.parent;
     _currentElement = THEndcomment(_currentParent);
+    _currentParent = _currentParent.parent;
     _returnToParentParser();
   }
 
@@ -236,8 +236,8 @@ class THFileParser {
   }
 
   void _injectEndscrap(List<dynamic> aElement) {
-    _currentParent = _currentParent.parent;
     _currentElement = THEndscrap(_currentParent);
+    _currentParent = _currentParent.parent;
     _returnToParentParser();
   }
 
