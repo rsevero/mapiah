@@ -3,6 +3,34 @@ import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_point_part.dart';
 
+// Description: Point is a command for drawing a point map symbol.
+// Syntax: point <x> <y> <type> [OPTIONS]
+// Context: scrap
+// Arguments:
+// • <x> and <y> are the drawing coordinates of an object.
+// • <type> determines the type of an object. The following types are supported:
+// special objects: dimensions7 , section8 , station9 ;
+// labels: altitude10 , date11 , height12 , label, passage-height13 , remark, station-
+// name14 ;
+// symbolic passage fills: 15 bedrock, blocks, clay, debris, guano, ice, mudcrack, mud,
+// pebbles, raft, sand, snow, water;
+// speleothems: anastomosis, aragonite, cave-pearl, clay-tree, crystal, curtains,
+// curtain, disc-pillar, disc-stalactite, disc-stalagmite, disc-pillars, disc-
+// stalactites, disc-stalagmites, disk, flowstone, flute, gypsum-flower, gyp-
+// sum, helictites, helictite, karren, moonmilk, pendant, pillar-with-curtains,
+// pillars-with-curtains, pillar, popcorn, raft-cone, rimstone-dam, rimstone-
+// pool, scallop, soda-straw, stalactite-stalagmite, stalactites-stalagmites,
+// stalactite, stalactites, stalagmite, stalagmites, volcano, wall-calcite;
+// equipment: anchor, bridge, camp, fixed-ladder, gate, handrail, masonry, name-
+// plate, no-equipment, no-wheelchair, rope-ladder, rope, steps, traverse, via-
+// ferrata, walkway, wheelchair;
+// passage ends: breakdown-choke, clay-choke, continuation, entrance, flowstone-
+// choke, low-end, narrow-end;
+// others: air-draught16 , altar, archeo-excavation, archeo-material, audio, bat,
+// bones, danger, dig, electric-light, ex-voto, extra17 , gradient, human-bones,
+// ice-pillar, ice-stalactite, ice-stalagmite, map-connection18 , paleo-material,
+// photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
+// water-drip, water-flow.
 class THPoint extends THElement with THHasOptions {
   late THPointPart point;
   late String _pointType;

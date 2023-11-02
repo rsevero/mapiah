@@ -4,6 +4,9 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// dist <distance> . valid for extra points, specifies the distance to the nearest station
+// (or station specified using -from option. If not specified, appropriate value from LRUD
+// data is used.
 class THDistCommandOption extends THCommandOption with THHasLength {
   THDistCommandOption(super.parentOption, THDoublePart aDistance,
       [String? aUnit]) {

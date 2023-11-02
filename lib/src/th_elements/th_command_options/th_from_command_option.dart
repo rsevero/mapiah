@@ -2,6 +2,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// from <station> . valid for extra points, specifies reference station.
 class THFromCommandOption extends THCommandOption {
   String station;
 

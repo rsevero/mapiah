@@ -2,6 +2,9 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_multiple_choice_part.dart';
 
+// scale . symbol scale, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
+// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
+// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0.
 class THPointScaleCommandOption extends THCommandOption {
   late THMultipleChoicePart _textSize;
   late THDoublePart _numericSize;

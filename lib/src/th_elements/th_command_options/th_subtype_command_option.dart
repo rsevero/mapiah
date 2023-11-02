@@ -4,6 +4,15 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// subtype <keyword> . determines the object’s subtype. The following subtypes for
+// given types are supported:
+// station: 21 temporary (default), painted, natural, fixed;
+// air-draught: winter, summer, undefined (default);
+// water-flow: permanent (default), intermittent, paleo.
+// The subtype may be specified also directly in <type> specification using ‘:’ as a
+// separator.22
+// Any subtype specification can be used with user defined type (u). In this case you need
+// also to define corresponding metapost symbol (see the chapter New map symbols).
 class THSubtypeCommandOption extends THCommandOption {
   late String _subtype;
 

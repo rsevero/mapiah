@@ -4,6 +4,10 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// height: according to the sign of the value (positive, negative or unsigned), this type of
+// symbol represents chimney height, pit depth or step height in general. The numeric
+// value can be optionally followed by ‘?’, if the value is presumed and units can be added
+// (e.g. -value [40? ft]).
 class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
   late bool isPresumed;
 

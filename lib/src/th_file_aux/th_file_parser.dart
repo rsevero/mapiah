@@ -37,7 +37,7 @@ import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
-import 'package:mapiah/src/th_elements/th_point_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_point_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';

@@ -4,6 +4,10 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// altitude: the value specified is the altitude difference from the nearest station. The
+// value will be set to 0 if defined as ‘-’, ‘.’, ‘nan’, ‘NAN’ or ‘NaN’. If the altitude value is
+// prefixed by ‘fix’ (e.g. -value [fix 1300]), this value is used as an absolute altitude.
+// The value can optionally be followed by length units.
 class THAltitudeValueCommandOption extends THValueCommandOption
     with THHasLength {
   var isNan = false;

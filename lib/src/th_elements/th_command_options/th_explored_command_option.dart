@@ -4,6 +4,9 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// explored <length> . if the point type is continuation, you can specify length of pas-
+// sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
+// statistics.
 class THExploredCommandOption extends THCommandOption with THHasLength {
   THExploredCommandOption(super.parentOption, THDoublePart aDistance,
       [String? aUnit]) {

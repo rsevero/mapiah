@@ -1,5 +1,6 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 
+// id <ext_keyword> . ID of the symbol.
 class THIDCommandOption extends THCommandOption {
   late String _thID;
 

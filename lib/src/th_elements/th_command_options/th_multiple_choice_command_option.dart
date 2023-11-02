@@ -9,6 +9,9 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   late String _choice;
   static final _supportedOptions = {
     'point': {
+//       align . alignment of the symbol or text. The following values are accepted: center, c,
+// top, t, bottom, b, left, l, right, r, top-left, tl, top-right, tr, bottom-left, bl, bottom-right,
+// br.
       'align': {
         'hasDefault': false,
         'choices': <String>{
@@ -34,6 +37,10 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'br': 'bottom-right',
         },
       },
+
+//       clip <on/off> . specify whether a symbol is clipped by the scrap border. You cannot
+// specify this option for the following symbols: station, station-name, label, remark,
+// date, altitude, height, passage-height.
       'clip': {
         'hasDefault': true,
         'default': 'default',
@@ -43,6 +50,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         },
         'alternateChoices': <String, String>{},
       },
+
+      // place <bottom/default/top> . changes displaying order in the map.
       'place': {
         'hasDefault': true,
         'default': 'default',
@@ -53,6 +62,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         },
         'alternateChoices': <String, String>{},
       },
+
+      // visibility <on/off> . displays/hides the symbol.
       'visibility': {
         'hasDefault': true,
         'default': 'default',
