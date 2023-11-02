@@ -8,6 +8,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_context_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_dimensions_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_explored_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_option.dart';
@@ -738,6 +739,21 @@ class THFileParser {
     final specs = _currentSpec[1];
 
     switch (parseType) {
+      case 'two_numbers_with_optional_unit':
+        if ((specs[0] == null) ||
+            (specs[0] is! String) ||
+            (specs[1] == null) ||
+            (specs[1] is! String)) {
+          throw THCustomException("Need 2 string values.");
+        }
+
+        final unit = ((specs[2] != null) &&
+                (specs[2] is String) &&
+                ((specs[2] as String).isNotEmpty))
+            ? specs[2].toString()
+            : '';
+        THDimensionsValueCommandOption.fromString(
+            _currentHasOptions, specs[0], specs[1], unit);
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectDimensionsValueCommandOption'.");
