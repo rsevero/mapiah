@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point 1758 -1030 altitude -value [fix 1300]
+endscrap

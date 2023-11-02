@@ -11,6 +11,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_explored_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_height_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
@@ -354,6 +355,8 @@ class THFileParser {
         _injectSubtypeCommandOption();
       case 'text':
         _injectTextCommandOption();
+      case 'value':
+        _injectValueCommandOption();
       default:
         optionIdentified = false;
     }
@@ -652,6 +655,77 @@ class THFileParser {
     final stringContent = _parseTHString(_currentSpec[0]);
 
     THTextCommandOption(_currentHasOptions, stringContent);
+  }
+
+  void _injectValueCommandOption() {
+    if (_currentSpec.length < 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THValueCommandOption', '>= 2', _currentSpec);
+    }
+
+    final pointType = (_currentHasOptions as THPoint).pointType;
+    switch (pointType) {
+      case 'altitude':
+        _injectAltitudeValueCommandOption();
+      case 'date':
+        _injectDateValueCommandOption();
+      case 'dimensions':
+        _injectDimensionsValueCommandOption();
+      case 'height':
+        _injectHeightValueCommandOption();
+      case 'passage-height':
+        _injectPassageHeightValueCommandOption();
+      default:
+        throw THCustomException(
+            "Unsupported point type '$pointType' for option 'value'.");
+    }
+  }
+
+  void _injectAltitudeValueCommandOption() {
+    throw UnimplementedError('_injectAltitudeValueCommandOption');
+  }
+
+  void _injectDateValueCommandOption() {
+    throw UnimplementedError('_injectDateValueCommandOption');
+  }
+
+  void _injectDimensionsValueCommandOption() {
+    throw UnimplementedError('_injectDimensionsValueCommandOption');
+  }
+
+  void _injectHeightValueCommandOption() {
+    final parseType = _currentSpec[0].toString();
+    final specs = _currentSpec[1];
+
+    switch (parseType) {
+      case 'single_number':
+        THHeightValueCommandOption.fromString(_currentHasOptions, specs, false);
+      case 'number_with_something_else':
+        if ((specs[0] == null) || (specs[0] is! String)) {
+          throw THCustomException("Need a string value.");
+        }
+        var hasFix = false;
+        String value = specs[0];
+        if (value.contains('?')) {
+          hasFix = true;
+          value = value.substring(0, value.length - 1);
+        }
+
+        final unit = ((specs[1] != null) &&
+                (specs[1] is String) &&
+                ((specs[1] as String).isNotEmpty))
+            ? specs[1].toString()
+            : '';
+        THHeightValueCommandOption.fromString(
+            _currentHasOptions, value, hasFix, unit);
+      default:
+        throw THCustomException(
+            "Unssuported parse type '$parseType' in '_injectHeightValueCommandOption'.");
+    }
+  }
+
+  void _injectPassageHeightValueCommandOption() {
+    throw UnimplementedError('_injectPassageHeightValueCommandOption');
   }
 
   String _parseTHString(String aString) {

@@ -67,6 +67,23 @@ class THGrammar extends GrammarDefinition {
           (char('.') & digit().plus()).optional())
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser numberWithSuffix(something) => (pattern('-+').optional() &
+          digit().plus() &
+          (char('.') & digit().plus()).optional() &
+          something)
+      .flatten()
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser plusNumber() =>
+      (char('+') & digit().plus() & (char('.') & digit().plus()).optional())
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser minusNumber() =>
+      (char('-') & digit().plus() & (char('.') & digit().plus()).optional())
+          .flatten()
+          .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// NaN
+  Parser nan() => (pattern('-.') | stringIgnoreCase('NaN'));
 
   /// Point data
   Parser pointData() =>
@@ -533,6 +550,7 @@ class THGrammar extends GrammarDefinition {
           scrapOption() |
           subtypeOption() |
           textOption() |
+          valueOption() |
           visibilityOption())
       .star();
 
@@ -680,6 +698,32 @@ class THGrammar extends GrammarDefinition {
   Parser textOption() =>
       stringIgnoreCase('text').skip(before: char('-')) & ref0(textOptions);
   Parser textOptions() => anyString().map((value) => [value]);
+
+  /// scrap -value
+  Parser valueOption() =>
+      stringIgnoreCase('value').skip(before: char('-')) & ref0(valueOptions);
+  Parser valueOptions() => (number()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['single_number', value]) |
+      bracketStringTemplate(
+              numberWithSuffix(char('?').optional()) & lengthUnit().optional())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['number_with_something_else', value]) |
+      bracketStringTemplate(plusNumber() & minusNumber())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['plus_number_minus_number', value]) |
+      nan()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['nan', value]) |
+      bracketStringTemplate(stringIgnoreCase('fix') & number() & lengthUnit().optional())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['fix_number', value]) |
+      bracketStringTemplate(number() & number() & lengthUnit().optional())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['two_numbers_with_optional_unit', value]) |
+      dateTime()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['datetime', value]));
 
   /// point -visibility
   Parser visibilityOption() =>

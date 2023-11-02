@@ -943,6 +943,314 @@ endscrap
     }
   });
 
+  group('point -value (altitude)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-00170-point_with_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -2885 604 altitude -value 46
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00353-altitude_point_with_value_option_set_as_nan.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1758 -1030 altitude -value NaN
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02321-altitude_point_with_value_option_with_fix.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1758 -1030 altitude -value [fix 1300]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -value failures (altitude)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02320-altitude_point_with_invalid_value_option-failure.th2',
+      'th_file_parser-02330-height_point_with_value_option_set_as_nan-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -value (date)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file':
+            'th_file_parser-00380-point_of_type_date_with_date_only_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 2282.0 80 date -value 2022.2.5 -scale xs -align bottom-left
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -value failures (date)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02340-point_of_type_date_with_invalid_date_value_option-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -value (dimensions)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02360-dimensions_point_with_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1758 -1030 dimensions -value [ 7 3.3 ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02361-dimensions_point_with_value_option_with_unit.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1758 -1030 dimensions -value [ 7 3.3 yd ]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -value failures (dimensions)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02362-dimensions_point_with_value_option_with_unit_without_brackets_failure.th2',
+      'th_file_parser-02363-anchor_point_with_value_option_with_unit_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -value (height)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02350-height_point_with_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -2885 604 height -value [ 40? ft ]
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02353-height_point_with_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -2885 604 height -value 40
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -value failures (height)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02351-height_point_with_invalid_value_option-failure.th2',
+      'th_file_parser-02352-passage-height_point_with_invalid_value_option-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('point -value (passage-height)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file':
+            'th_file_parser-02310-passage_height_point_with_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -3081 799 passage-height -value [ +6 -71 inches ]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -value failures (passage-height)', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-00185-passage_height_point_with_value_option_without_brackets-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('point -visibility', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

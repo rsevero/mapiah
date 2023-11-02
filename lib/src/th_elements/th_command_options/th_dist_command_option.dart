@@ -10,9 +10,9 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     if ((parentOption is! THPoint) ||
         ((parentOption as THPoint).pointType != 'extra')) {
       throw THCustomException(
-          "'dist' command option only supported on points of type 'extra'.");
+          "'$optionType'command option only supported on points of type 'extra'.");
     }
-    distance = aDistance;
+    length = aDistance;
     if (aUnit != null) {
       unitFromString(aUnit);
     }
@@ -23,9 +23,9 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     if ((parentOption is! THPoint) ||
         ((parentOption as THPoint).pointType != 'extra')) {
       throw THCustomException(
-          "'dist' command option only supported on points of type 'extra'.");
+          "'$optionType' command option only supported on points of type 'extra'.");
     }
-    distance = THDoublePart.fromString(aDistance);
+    length = THDoublePart.fromString(aDistance);
     if (aUnit != null) {
       unitFromString(aUnit);
     }

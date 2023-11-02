@@ -1,2 +1,4 @@
 encoding utf-8
+scrap test
 point 2282.0 80 date -value 2022.2.5 -scale xs -align bottom-left
+endscrap

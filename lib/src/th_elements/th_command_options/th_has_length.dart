@@ -3,7 +3,7 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_length_unit_part.dart';
 
 mixin THHasLength on THCommandOption {
-  late THDoublePart distance;
+  late THDoublePart length;
   final _unit = THLengthUnitPart.fromString('m');
   bool unitSet = false;
 
@@ -19,9 +19,9 @@ mixin THHasLength on THCommandOption {
   @override
   String specToFile() {
     if (unitSet) {
-      return "[ $distance $_unit ]";
+      return "[ $length $_unit ]";
     } else {
-      return distance.toString();
+      return length.toString();
     }
   }
 }

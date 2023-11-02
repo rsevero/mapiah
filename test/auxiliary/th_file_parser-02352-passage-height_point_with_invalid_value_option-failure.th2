@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point -2885 604 passage-height -value [40? ft]
+endscrap
