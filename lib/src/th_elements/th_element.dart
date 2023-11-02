@@ -30,7 +30,7 @@ abstract class THElement {
   /// this constructor but the [Generic private constructor].
   THElement.withParent(this.parent) {
     _thFile = parent.thFile;
-    parent._addElement(this);
+    parent._addElementToParent(this);
   }
 
   int get mapiahID {
@@ -50,7 +50,7 @@ abstract class THElement {
   }
 
   void delete() {
-    thFile.deleteElement(this);
+    thFile._deleteElement(this);
   }
 }
 
@@ -66,8 +66,18 @@ mixin THParent on THElement {
   final Map<String, THElement> _elementByCompleteTHID = {};
   final Map<THElement, String> _completeTHIDByElement = {};
 
-  int _addElement(THElement aElement) {
-    _thFile._includeElementInFile(aElement);
+  @override
+  void delete() {
+    final childrenList = children.toList();
+    for (final aChild in childrenList) {
+      aChild.delete();
+    }
+
+    thFile._deleteElement(this);
+  }
+
+  int _addElementToParent(THElement aElement) {
+    _thFile._addElementToFile(aElement);
     _children.add(aElement);
 
     return aElement.mapiahID;
@@ -77,7 +87,7 @@ mixin THParent on THElement {
     return _children;
   }
 
-  void _deleteElement(THElement aElement) {
+  void _deleteElementFromParent(THElement aElement) {
     if (!_children.remove(aElement)) {
       throw THCustomException("'$aElement' not found.");
     }
@@ -177,12 +187,12 @@ mixin THParent on THElement {
     return _completeTHIDByElement.containsKey(aElement);
   }
 
-  THElement elementByTHID(String elementType, String aTHID) {
-    if (!hasElementByTHID(elementType, aTHID)) {
+  THElement elementByTHID(String aElementType, String aTHID) {
+    if (!hasElementByTHID(aElementType, aTHID)) {
       throw THCustomException("No element with thID '$aTHID' found.");
     }
 
-    return _elementByCompleteTHID[_completeElementTHID(elementType, aTHID)]!;
+    return _elementByCompleteTHID[_completeElementTHID(aElementType, aTHID)]!;
   }
 }
 
@@ -195,10 +205,10 @@ class THFile extends THElement with THParent {
   var filename = 'unnamed file';
 
   var encoding = thDefaultEncoding;
-  var _nexMapiahID = 0;
+  var _nexMapiahID = 1;
 
   THFile() : super._() {
-    _mapiahID = -1;
+    _mapiahID = 0;
     parent = this;
     _thFile = this;
   }
@@ -211,7 +221,7 @@ class THFile extends THElement with THParent {
     return _elementByMapiahID.length;
   }
 
-  void _includeElementInFile(THElement aElement) {
+  void _addElementToFile(THElement aElement) {
     aElement._mapiahID = _nexMapiahID;
     _elementByMapiahID[_nexMapiahID] = aElement;
     _nexMapiahID++;
@@ -220,15 +230,28 @@ class THFile extends THElement with THParent {
     }
   }
 
-  void deleteElement(THElement aElement) {
-    if (aElement.parent != this) {
-      aElement.parent._deleteElement(aElement);
+  void deleteElementByMapiahID(int aMapiahID) {
+    elementByMapiahID(aMapiahID).delete();
+  }
+
+  void deleteElementByTHID(String aElementType, String aTHID) {
+    elementByTHID(aElementType, aTHID).delete();
+  }
+
+  void _deleteElement(THElement aElement) {
+    if (aElement == this) {
+      final childrenList = children.toList();
+      for (final aChild in childrenList) {
+        aChild.delete();
+      }
+      return;
     }
 
     if (aElement.thFile != this) {
       throw THCustomException(
           "Trying to delete element '$aElement' that is not from this THFile.");
     }
+    aElement.parent._deleteElementFromParent(aElement);
     _elementByMapiahID.remove(aElement.mapiahID);
   }
 
