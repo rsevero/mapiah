@@ -1,21 +1,20 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 class THIDCommandOption extends THCommandOption {
-  late String _id;
+  late String _thID;
 
-  THIDCommandOption(super.parentOption, String aID) {
-    parentOption.thFile.addElementWithID(parentOption, aID);
-    _id = aID;
+  THIDCommandOption(super.parentOption, String aTHID) {
+    parentOption.thFile.addElementWithTHID(parentOption, aTHID);
+    _thID = aTHID;
   }
 
-  set id(String aID) {
-    parentOption.thFile.updateElementID(parentOption, aID);
-    _id = aID;
+  set thID(String aTHID) {
+    parentOption.thFile.updateElementTHID(parentOption, aTHID);
+    _thID = aTHID;
   }
 
-  String get id {
-    return _id;
+  String get thID {
+    return _thID;
   }
 
   @override
@@ -23,6 +22,6 @@ class THIDCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    return _id;
+    return _thID;
   }
 }

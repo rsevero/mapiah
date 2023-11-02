@@ -1,8 +1,8 @@
-class THNoElementByIndexException implements Exception {
+class THNoElementByMapiahIDException implements Exception {
   String filename;
   int index;
 
-  THNoElementByIndexException(this.filename, this.index);
+  THNoElementByMapiahIDException(this.filename, this.index);
 
   @override
   String toString() {

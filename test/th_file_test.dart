@@ -10,7 +10,7 @@ void main() {
     final file = THFile();
 
     test("THFile", () {
-      expect(file.index, -1);
+      expect(file.mapiahID, -1);
       expect(file.elements.length, 0);
     });
   });
