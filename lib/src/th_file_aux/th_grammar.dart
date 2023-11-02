@@ -523,6 +523,7 @@ class THGrammar extends GrammarDefinition {
           contextOption() |
           distOption() |
           idOption() |
+          exploredOption() |
           extendOption() |
           fromOption() |
           nameOption() |
@@ -576,6 +577,16 @@ class THGrammar extends GrammarDefinition {
   Parser distOption() =>
       stringIgnoreCase('dist').skip(before: char('-')) & ref0(distOptions);
   Parser distOptions() => (number()
+              .trim(ref0(thWhitespace), ref0(thWhitespace))
+              .map((value) => [value]) |
+          bracketStringTemplate(number() & lengthUnit()))
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// point -explored
+  Parser exploredOption() =>
+      stringIgnoreCase('explored').skip(before: char('-')) &
+      ref0(exploredOptions);
+  Parser exploredOptions() => (number()
               .trim(ref0(thWhitespace), ref0(thWhitespace))
               .map((value) => [value]) |
           bracketStringTemplate(number() & lengthUnit()))

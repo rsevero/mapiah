@@ -8,6 +8,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_context_command_opt
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_explored_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
@@ -334,6 +335,8 @@ class THFileParser {
         _injectDistCommandOption();
       case 'id':
         _injectIDCommandOption();
+      case 'explored':
+        _injectExploredCommandOption();
       case 'extend':
         _injectExtendCommandOption();
       case 'from':
@@ -435,6 +438,24 @@ class THFileParser {
       default:
         throw THCustomException(
             "Unsupported parameters for a 'point' 'dist' option: '${_currentSpec[0]}'.");
+    }
+  }
+
+  void _injectExploredCommandOption() {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a 'explored' option for a '${_currentHasOptions.type}'");
+    }
+
+    switch (_currentSpec.length) {
+      case 1:
+        THExploredCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+      case 2:
+        THExploredCommandOption.fromString(
+            _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+      default:
+        throw THCustomException(
+            "Unsupported parameters for a 'point' 'explored' option: '${_currentSpec[0]}'.");
     }
   }
 

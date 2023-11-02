@@ -276,6 +276,72 @@ endscrap
     }
   });
 
+  group('point -explored', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-02280-point_with_explored_option.th2',
+        'length': 6,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -4882 -2163 continuation -explored 18
+endscrap
+
+
+''',
+      },
+      {
+        'file': 'th_file_parser-02281-point_with_explored_option_with_unit.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -4381 -253 continuation -explored [ 2450 cm ]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point -explored failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-02282-point_with_invalid_explored_option_unsupported_unit_failure.th2',
+      'th_file_parser-02283-point_with_invalid_explored_option_no_number_failure.th2',
+      'th_file_parser-02284-point_with_invalid_type_for_explored_option_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('point -extend', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

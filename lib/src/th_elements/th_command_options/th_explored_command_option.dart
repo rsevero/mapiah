@@ -4,17 +4,17 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
-class THDistCommandOption extends THCommandOption with THHasLength {
-  THDistCommandOption(super.parentOption, THDoublePart aDistance,
+class THExploredCommandOption extends THCommandOption with THHasLength {
+  THExploredCommandOption(super.parentOption, THDoublePart aDistance,
       [String? aUnit]) {
     if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'extra')) {
+        ((parentOption as THPoint).pointType != 'continuation')) {
       throw THCustomException(
-          "'dist' command option only supported on points of type 'extra'.");
+          "'explored' command option only supported on points of type 'continuation'.");
     }
     if ((parentOption as THPoint).pointType != 'extra') {
       throw THCustomException(
-          "Option 'dist' only valid for points of type 'extra'.");
+          "Option 'explored' only valid for points of type 'continuation'.");
     }
     distance = aDistance;
     if (aUnit != null) {
@@ -22,11 +22,11 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     }
   }
 
-  THDistCommandOption.fromString(super.parentOption, String aDistance,
+  THExploredCommandOption.fromString(super.parentOption, String aDistance,
       [String? aUnit]) {
-    if ((parentOption as THPoint).pointType != 'extra') {
+    if ((parentOption as THPoint).pointType != 'continuation') {
       throw THCustomException(
-          "Option 'dist' only valid for points of type 'extra'.");
+          "Option 'explored' only valid for points of type 'continuation'.");
     }
     distance = THDoublePart.fromString(aDistance);
     if (aUnit != null) {
@@ -35,5 +35,5 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   }
 
   @override
-  String get optionType => 'dist';
+  String get optionType => 'explored';
 }
