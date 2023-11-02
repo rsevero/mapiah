@@ -3,7 +3,7 @@ import 'package:mapiah/src/th_definitions.dart';
 class THStringPart {
   String content;
 
-  THStringPart(this.content);
+  THStringPart([this.content = '']);
 
   static final _quoteRegex = RegExp(thDoubleQuote);
 
@@ -15,7 +15,9 @@ class THStringPart {
   String toFile() {
     var asString = content;
 
-    if ((content.contains(' ')) || (content.contains(thDoubleQuote))) {
+    if (content.isEmpty) {
+      asString = r'""';
+    } else if ((content.contains(' ')) || (content.contains(thDoubleQuote))) {
       asString = asString.replaceAll(_quoteRegex, thDoubleQuotePair);
       asString = '"$asString"';
     }

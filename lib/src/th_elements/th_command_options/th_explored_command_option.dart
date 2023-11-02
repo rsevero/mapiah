@@ -12,10 +12,6 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
       throw THCustomException(
           "'explored' command option only supported on points of type 'continuation'.");
     }
-    if ((parentOption as THPoint).pointType != 'extra') {
-      throw THCustomException(
-          "Option 'explored' only valid for points of type 'continuation'.");
-    }
     distance = aDistance;
     if (aUnit != null) {
       unitFromString(aUnit);
@@ -24,9 +20,10 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
 
   THExploredCommandOption.fromString(super.parentOption, String aDistance,
       [String? aUnit]) {
-    if ((parentOption as THPoint).pointType != 'continuation') {
+    if ((parentOption is! THPoint) ||
+        ((parentOption as THPoint).pointType != 'continuation')) {
       throw THCustomException(
-          "Option 'explored' only valid for points of type 'continuation'.");
+          "'explored' command option only supported on points of type 'continuation'.");
     }
     distance = THDoublePart.fromString(aDistance);
     if (aUnit != null) {

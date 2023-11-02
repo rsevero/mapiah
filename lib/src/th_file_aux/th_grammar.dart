@@ -532,6 +532,7 @@ class THGrammar extends GrammarDefinition {
           pointScaleOption() |
           scrapOption() |
           subtypeOption() |
+          textOption() |
           visibilityOption())
       .star();
 
@@ -674,6 +675,11 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('subtype').skip(before: char('-')) &
       ref0(subtypeOptions);
   Parser subtypeOptions() => unquotedString().map((value) => [value]);
+
+  /// scrap -text
+  Parser textOption() =>
+      stringIgnoreCase('text').skip(before: char('-')) & ref0(textOptions);
+  Parser textOptions() => anyString().map((value) => [value]);
 
   /// point -visibility
   Parser visibilityOption() =>

@@ -22,6 +22,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_sketch_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_station_names_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_stations_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_subtype_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_text_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_title_command_option.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
@@ -351,6 +352,8 @@ class THFileParser {
         _injectScrapCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
+      case 'text':
+        _injectTextCommandOption();
       default:
         optionIdentified = false;
     }
@@ -638,6 +641,17 @@ class THFileParser {
     final stringContent = _parseTHString(_currentSpec[0]);
 
     THTitleCommandOption(_currentHasOptions, stringContent);
+  }
+
+  void _injectTextCommandOption() {
+    if (_currentSpec.length != 1) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          'THTextCommandOption', '== 1', _currentSpec);
+    }
+
+    final stringContent = _parseTHString(_currentSpec[0]);
+
+    THTextCommandOption(_currentHasOptions, stringContent);
   }
 
   String _parseTHString(String aString) {
