@@ -1,2 +1,4 @@
 encoding utf-8
-point -3081 799 passage-height -value [+6 -71 inches]
+scrap test
+point -3081 799 passage-height -value [+6 -71]
+endscrap

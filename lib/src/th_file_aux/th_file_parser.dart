@@ -18,6 +18,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.d
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_passage_height_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_scale_command_option.dart';
@@ -796,6 +797,12 @@ class THFileParser {
     final specs = _currentSpec[1];
 
     switch (parseType) {
+      case 'single_number':
+        THPassageHeightValueCommandOption.fromString(
+            _currentHasOptions, specs, '');
+      case 'plus_number_minus_number':
+        THPassageHeightValueCommandOption.fromString(
+            _currentHasOptions, specs[0], specs[1]);
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectPassageHeightValueCommandOption'.");

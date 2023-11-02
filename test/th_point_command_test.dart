@@ -1222,7 +1222,18 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -3081 799 passage-height -value [ +6 -71 inches ]
+  point -3081 799 passage-height -value [ +6 -71 ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02312-passage_height_point_with_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -3081 799 passage-height -value +6
 endscrap
 ''',
       },
@@ -1252,6 +1263,7 @@ endscrap
 
     const failures = [
       'th_file_parser-00185-passage_height_point_with_value_option_without_brackets-failure.th2',
+      'th_file_parser-02311-passage_height_point_with_value_option_with_invalid_unit-failure.th2',
     ];
 
     for (var failure in failures) {
