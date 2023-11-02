@@ -5,10 +5,10 @@ import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
-  late bool hasFix;
+  late bool isPresumed;
 
   THHeightValueCommandOption(
-      super.parentOption, THDoublePart aHeight, this.hasFix,
+      super.parentOption, THDoublePart aHeight, this.isPresumed,
       [String? aUnit]) {
     if ((parentOption is! THPoint) ||
         ((parentOption as THPoint).pointType != 'height')) {
@@ -22,7 +22,7 @@ class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
   }
 
   THHeightValueCommandOption.fromString(
-      super.parentOption, String aHeight, this.hasFix,
+      super.parentOption, String aHeight, this.isPresumed,
       [String? aUnit]) {
     if ((parentOption is! THPoint) ||
         ((parentOption as THPoint).pointType != 'height')) {
@@ -39,8 +39,8 @@ class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
   String specToFile() {
     var asString = length.toString();
 
-    if (unitSet || hasFix) {
-      if (hasFix) {
+    if (unitSet || isPresumed) {
+      if (isPresumed) {
         asString += '?';
       }
 

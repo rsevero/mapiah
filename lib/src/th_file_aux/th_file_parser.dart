@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_context_command_option.dart';
@@ -682,15 +683,65 @@ class THFileParser {
   }
 
   void _injectAltitudeValueCommandOption() {
-    throw UnimplementedError('_injectAltitudeValueCommandOption');
+    final parseType = _currentSpec[0].toString();
+    final specs = _currentSpec[1];
+
+    switch (parseType) {
+      case 'fix_number':
+        if ((specs[1] == null) || (specs[1] is! String)) {
+          throw THCustomException("Need a string value.");
+        }
+
+        final unit = ((specs[2] != null) &&
+                (specs[2] is String) &&
+                ((specs[2] as String).isNotEmpty))
+            ? specs[2].toString()
+            : '';
+        THAltitudeValueCommandOption.fromString(
+            _currentHasOptions, specs[1], true, unit);
+      case 'nan':
+        THAltitudeValueCommandOption.fromNan(_currentHasOptions);
+      case 'number_with_something_else':
+        if ((specs[0] == null) || (specs[0] is! String)) {
+          throw THCustomException("Need a string value.");
+        }
+
+        final unit = ((specs[1] != null) &&
+                (specs[1] is String) &&
+                ((specs[1] as String).isNotEmpty))
+            ? specs[1].toString()
+            : '';
+        THAltitudeValueCommandOption.fromString(
+            _currentHasOptions, specs[0], false, unit);
+      case 'single_number':
+        THAltitudeValueCommandOption.fromString(
+            _currentHasOptions, specs, false);
+      default:
+        throw THCustomException(
+            "Unsuported parse type '$parseType' in '_injectAltitudeValueCommandOption'.");
+    }
   }
 
   void _injectDateValueCommandOption() {
-    throw UnimplementedError('_injectDateValueCommandOption');
+    final parseType = _currentSpec[0].toString();
+    final specs = _currentSpec[1];
+
+    switch (parseType) {
+      default:
+        throw THCustomException(
+            "Unsuported parse type '$parseType' in '_injectDateValueCommandOption'.");
+    }
   }
 
   void _injectDimensionsValueCommandOption() {
-    throw UnimplementedError('_injectDimensionsValueCommandOption');
+    final parseType = _currentSpec[0].toString();
+    final specs = _currentSpec[1];
+
+    switch (parseType) {
+      default:
+        throw THCustomException(
+            "Unsuported parse type '$parseType' in '_injectDimensionsValueCommandOption'.");
+    }
   }
 
   void _injectHeightValueCommandOption() {
@@ -698,16 +749,14 @@ class THFileParser {
     final specs = _currentSpec[1];
 
     switch (parseType) {
-      case 'single_number':
-        THHeightValueCommandOption.fromString(_currentHasOptions, specs, false);
       case 'number_with_something_else':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
         }
-        var hasFix = false;
+        var isPresumed = false;
         String value = specs[0];
         if (value.contains('?')) {
-          hasFix = true;
+          isPresumed = true;
           value = value.substring(0, value.length - 1);
         }
 
@@ -717,15 +766,24 @@ class THFileParser {
             ? specs[1].toString()
             : '';
         THHeightValueCommandOption.fromString(
-            _currentHasOptions, value, hasFix, unit);
+            _currentHasOptions, value, isPresumed, unit);
+      case 'single_number':
+        THHeightValueCommandOption.fromString(_currentHasOptions, specs, false);
       default:
         throw THCustomException(
-            "Unssuported parse type '$parseType' in '_injectHeightValueCommandOption'.");
+            "Unsuported parse type '$parseType' in '_injectHeightValueCommandOption'.");
     }
   }
 
   void _injectPassageHeightValueCommandOption() {
-    throw UnimplementedError('_injectPassageHeightValueCommandOption');
+    final parseType = _currentSpec[0].toString();
+    final specs = _currentSpec[1];
+
+    switch (parseType) {
+      default:
+        throw THCustomException(
+            "Unsuported parse type '$parseType' in '_injectPassageHeightValueCommandOption'.");
+    }
   }
 
   String _parseTHString(String aString) {

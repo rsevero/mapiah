@@ -977,7 +977,18 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 1758 -1030 altitude -value [fix 1300]
+  point 1758 -1030 altitude -value [ fix 1300 ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02322-altitude_point_with_value_option_with_fix.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1758 -1030 altitude -value [ fix 1300 m ]
 endscrap
 ''',
       },
