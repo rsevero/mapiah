@@ -34,8 +34,10 @@ import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_empty_line.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
 import 'package:mapiah/src/th_elements/th_endcomment.dart';
+import 'package:mapiah/src/th_elements/th_endline.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
@@ -59,10 +61,11 @@ import 'package:petitparser/debug.dart';
 class THFileParser {
   final _grammar = THGrammar();
 
-  late final Parser _th2FileParser;
-  late final Parser _th2FileFirstLineParser;
-  late final Parser _scrapParser;
+  late final Parser _lineContentParser;
   late final Parser _multiLineCommentContentParser;
+  late final Parser _scrapContentParser;
+  late final Parser _th2FileFirstLineParser;
+  late final Parser _th2FileParser;
 
   final List<Parser> _parentParsers = [];
 
@@ -87,12 +90,13 @@ class THFileParser {
   final _isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
 
   THFileParser() {
-    _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
-    _th2FileFirstLineParser =
-        _grammar.buildFrom(_grammar.th2FileFirstLineStart());
-    _scrapParser = _grammar.buildFrom(_grammar.scrapStart());
+    _lineContentParser = _grammar.buildFrom(_grammar.lineStart());
     _multiLineCommentContentParser =
         _grammar.buildFrom(_grammar.multiLineCommentStart());
+    _scrapContentParser = _grammar.buildFrom(_grammar.scrapStart());
+    _th2FileFirstLineParser =
+        _grammar.buildFrom(_grammar.th2FileFirstLineStart());
+    _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
   }
 
   void _addChildParser(Parser newParser) {
@@ -117,7 +121,7 @@ class THFileParser {
   void _injectContents() {
     var isFirst = true;
     for (String line in _splittedContents) {
-      if (line.isEmpty) {
+      if (line.trim().isEmpty) {
         _injectEmptyLine();
         continue;
       }
@@ -150,11 +154,15 @@ class THFileParser {
           _injectEncoding();
         case 'endmultilinecomment':
           _injectEndMultiLineComment();
+        case 'endline':
+          _injectEndline(element);
         case 'endscrap':
           _injectEndscrap(element);
         case 'fulllinecomment':
           _injectComment(element);
           continue;
+        case 'line':
+          _injectLine(element);
         case 'multilinecomment':
           _injectStartMultiLineComment();
         case 'multilinecommentline':
@@ -236,11 +244,35 @@ class THFileParser {
 
     _parsedOptions.clear();
     _optionFromElement(aElement[2], _scrapRegularOptions);
-    _addChildParser(_scrapParser);
+    _addChildParser(_scrapContentParser);
   }
 
   void _injectEndscrap(List<dynamic> aElement) {
     _currentElement = THEndscrap(_currentParent);
+    _currentParent = _currentParent.parent;
+    _returnToParentParser();
+  }
+
+  void _injectLine(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+
+    assert(elementSize >= 2);
+    assert(aElement[1] is List);
+    assert(aElement[1].length == 2);
+    assert(aElement[1][0] is String);
+
+    final newLine = THLine(_currentParent, aElement[1][0]);
+
+    _currentElement = newLine;
+    _currentParent = newLine;
+
+    _parsedOptions.clear();
+    _optionFromElement(aElement[2], _lineRegularOptions);
+    _addChildParser(_lineContentParser);
+  }
+
+  void _injectEndline(List<dynamic> aElement) {
+    _currentElement = THEndline(_currentParent);
     _currentParent = _currentParent.parent;
     _returnToParentParser();
   }
@@ -360,6 +392,35 @@ class THFileParser {
         _injectTextCommandOption();
       case 'value':
         _injectValueCommandOption();
+      default:
+        optionIdentified = false;
+    }
+
+    return optionIdentified;
+  }
+
+  bool _lineRegularOptions(String aOptionType) {
+    var optionIdentified = true;
+
+    switch (aOptionType) {
+      // case 'author':
+      //   _injectAuthorCommandOption();
+      // case 'copyright':
+      //   _injectCopyrightCommandOption();
+      // case 'cs':
+      //   _injectCSCommandOption();
+      // case 'projection':
+      //   _injectProjectionCommandOption();
+      // case 'scale':
+      //   _injectScrapScaleCommandOption();
+      // case 'sketch':
+      //   _injectSketchCommandOption();
+      // case 'station-names':
+      //   _injectStationNamesCommandOption();
+      // case 'stations':
+      //   _injectStationsCommandOption();
+      // case 'title':
+      //   _injectTitleCommandOption();
       default:
         optionIdentified = false;
     }

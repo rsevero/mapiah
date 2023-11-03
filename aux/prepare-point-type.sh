@@ -1,14 +1,16 @@
 #!/bin/bash
 
 # Text to add before and after each line
-before_text="'"
-after_text="',"
+# before_text="'"
+# after_text="',"
+before_text="stringIgnoreCase('"
+after_text="') |"
 
 # Input file (modify this as needed)
-input_file="area-types.txt"
+input_file="line-types.txt"
 
 # Output file (modify this as needed)
-output_file="tharea.txt"
+output_file="line-grammar.txt"
 
 # Use sed to add text before and after each line
 sed "s/.*/${before_text}&${after_text}/" "$input_file" > "$output_file"

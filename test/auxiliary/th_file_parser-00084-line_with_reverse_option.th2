@@ -1,0 +1,5 @@
+encoding UTF-8
+scrap test
+	line wall -reverse on
+	endline
+endscrap

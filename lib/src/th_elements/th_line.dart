@@ -7,7 +7,7 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 // general rule is that the free space is on the left, rock on the right. Examples: the lower
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
-class THLine extends THElement with THHasOptions {
+class THLine extends THElement with THHasOptions, THParent {
   late String _lineType;
 
   static final _lineTypes = <String>{

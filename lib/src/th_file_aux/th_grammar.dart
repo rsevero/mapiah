@@ -13,6 +13,9 @@ class THGrammar extends GrammarDefinition {
   // scrap contents
   Parser scrapStart() => scrapStructure().end();
 
+  // line contents
+  Parser lineStart() => lineStructure().end();
+
   // multiline commment
   Parser multiLineCommentStart() =>
       endMultiLineComment() | multiLineCommentLine();
@@ -25,7 +28,12 @@ class THGrammar extends GrammarDefinition {
   /// scrap contents
   Parser scrapStructure() =>
       scrapContent() | fullLineComment() | multiLineComment();
-  Parser scrapContent() => endscrap() | point();
+  Parser scrapContent() => endscrap() | point() | line();
+
+  /// line contents
+  Parser lineStructure() =>
+      lineContent() | fullLineComment() | multiLineComment();
+  Parser lineContent() => endline();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
@@ -228,7 +236,8 @@ class THGrammar extends GrammarDefinition {
 
   /// Command template
   Parser commandTemplate(command) =>
-      ref0(command) & ref0(endLineComment).optional();
+      ref0(command).trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      ref0(endLineComment).optional();
 
   /// multiline comment
   Parser multiLineComment() => ref1(commandTemplate, multiLineCommentCommand);
@@ -736,4 +745,59 @@ class THGrammar extends GrammarDefinition {
       (stringIgnoreCase('on') | stringIgnoreCase('off'))
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => [value]);
+
+  /// line
+  Parser line() => ref1(commandTemplate, lineCommand);
+  Parser lineCommand() => lineRequired() & lineOptions();
+  Parser lineRequired() => stringIgnoreCase('line') & lineType();
+  Parser lineType() =>
+      (stringIgnoreCase('abyss-entrance') |
+              stringIgnoreCase('arrow') |
+              stringIgnoreCase('border') |
+              stringIgnoreCase('ceiling-meander') |
+              stringIgnoreCase('ceiling-step') |
+              stringIgnoreCase('chimney') |
+              stringIgnoreCase('contour') |
+              stringIgnoreCase('dripline') |
+              stringIgnoreCase('fault') |
+              stringIgnoreCase('fixed-ladder') |
+              stringIgnoreCase('floor-meander') |
+              stringIgnoreCase('floor-step') |
+              stringIgnoreCase('flowstone') |
+              stringIgnoreCase('gradient') |
+              stringIgnoreCase('handrail') |
+              stringIgnoreCase('joint') |
+              stringIgnoreCase('label') |
+              stringIgnoreCase('low-ceiling') |
+              stringIgnoreCase('map-connection') |
+              stringIgnoreCase('moonmilk') |
+              stringIgnoreCase('overhang') |
+              stringIgnoreCase('pit-chimney') |
+              stringIgnoreCase('pitch') |
+              stringIgnoreCase('pit') |
+              stringIgnoreCase('rimstone-dam') |
+              stringIgnoreCase('rimstone-pool') |
+              stringIgnoreCase('rock-border') |
+              stringIgnoreCase('rock-edge') |
+              stringIgnoreCase('rope-ladder') |
+              stringIgnoreCase('rope') |
+              stringIgnoreCase('section') |
+              stringIgnoreCase('slope') |
+              stringIgnoreCase('steps') |
+              stringIgnoreCase('survey') |
+              stringIgnoreCase('u') |
+              stringIgnoreCase('via-ferrata') |
+              stringIgnoreCase('walk-way') |
+              stringIgnoreCase('wall') |
+              stringIgnoreCase('water-flow'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
+          .pick(1)
+          .optional();
+  Parser lineOptions() => (any()).star();
+
+  /// Endline
+  Parser endline() => ref1(commandTemplate, endlineCommand);
+  Parser endlineCommand() =>
+      stringIgnoreCase('endline').map((value) => [value]);
 }

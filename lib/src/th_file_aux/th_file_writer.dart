@@ -2,6 +2,7 @@ import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
@@ -29,6 +30,9 @@ class THFileWriter {
       case 'endcomment':
         _reducePrefix();
         asString += _prepareLine('endcomment', aTHElement);
+      case 'endline':
+        _reducePrefix();
+        asString += _prepareLine('endline', aTHElement);
       case 'endscrap':
         _reducePrefix();
         asString += _prepareLine('endscrap', aTHElement);
@@ -40,6 +44,13 @@ class THFileWriter {
           asString += newLine;
         }
         asString += _childrenAsString(aTHFile);
+      case 'line':
+        final aTHLine = aTHElement as THLine;
+        final newLine =
+            "line ${aTHLine.lineType} ${aTHLine.optionsAsString()}".trim();
+        asString += _prepareLine(newLine, aTHLine);
+        _increasePrefix();
+        asString += _childrenAsString(aTHLine);
       case 'multilinecomment':
         asString += _prepareLine('comment', aTHElement);
         _increasePrefix();
