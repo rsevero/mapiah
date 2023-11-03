@@ -1,0 +1,38 @@
+encoding  utf-8
+
+# Arquivo .th raiz da árvore de arquivos
+source line_options_testing.th
+
+layout exploracao
+  scale 1 100
+  debug station-names
+  language pt
+  #grid bottom
+  #grid-size 100 100 10 m
+  code tex-map
+  \framethickness=0.5mm
+  sketches on
+  legend on
+  legend-width 21 cm
+  legend-columns 3
+  #symbol-hide group centerline
+  symbol-show point station
+endlayout
+
+#language pt
+
+# Selecionando qual mapa deve ser desenhado: deve ser um mapa cujo tipo de projeção seja igual
+# ao do formato de saída abaixo.
+#select modelo_MP@modelo_SRV
+
+# Opção para exportar o mapa em formato PDF
+export map -projection plan -layout exploracao -output line_options_testing.pdf
+
+# Opção para exportar o perfil retificado em PDF
+#export map -projection extended -layout exploracao -output modelo-perfil.pdf
+
+# Opção para exportar a aranha em PDF
+#export map -layout-debug station-names -layout aranha -output modelo-aranha.pdf
+
+# Opção para exportar um kml
+#export model -format kml -o modelo.kml

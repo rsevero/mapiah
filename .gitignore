@@ -6,3 +6,5 @@
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
 pubspec.lock
 therion.log
+aux/line_options_testing/.xtherion.dat
+aux/line_options_testing/line_options_testing.pdf

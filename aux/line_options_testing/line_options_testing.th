@@ -1,0 +1,34 @@
+encoding utf-8
+survey modelo_line_options_testing -title "Line options testing"
+
+centreline
+data normal from to length compass clino
+a1 a2 10 90 0
+endcentreline
+
+input line_options_testing.th2
+
+# Definição do mapa em si
+  #input a.th
+  #input b.th
+  #join l1@a:0 l3@b:end
+  #join l2@a:end l2@b:end
+
+  # Mapa para aranha
+  #map mModeloAranha -proj plan
+  #  a
+  #  b
+  #endmap
+
+# Mapa completo
+  #input a-1p.th2
+  #input b-1p.th2
+  #input b-2p.th2
+  #map mModelop -proj plan
+  #  a-1p@a
+  #  break
+  #  b-1p@b [-17 0 m] below
+  #  b-2p@b [-17 0 m] none
+  #endmap
+
+endsurvey
