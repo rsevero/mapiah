@@ -8,6 +8,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_context_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_copyright_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_cs_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_date_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dimensions_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_explored_command_option.dart';
@@ -700,6 +701,7 @@ class THFileParser {
             : '';
         THAltitudeValueCommandOption.fromString(
             _currentHasOptions, specs[1], true, unit);
+      case 'hyphen':
       case 'nan':
         THAltitudeValueCommandOption.fromNan(_currentHasOptions);
       case 'number_with_something_else':
@@ -728,6 +730,12 @@ class THFileParser {
     final specs = _currentSpec[1];
 
     switch (parseType) {
+      case 'datetime':
+      case 'hyphen':
+        if (specs is! String) {
+          throw THCustomException("Need a string value.");
+        }
+        THDateValueCommandOption.fromString(_currentHasOptions, specs);
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectDateValueCommandOption'.");

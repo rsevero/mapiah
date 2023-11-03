@@ -122,11 +122,11 @@ class THGrammar extends GrammarDefinition {
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
   /// Date
-  Parser year() => digit().repeat(4, 4).flatten();
-  Parser twoDigits() => digit().repeat(2, 2).flatten();
-  Parser dotTwoDigits() => (char('.') & ref0(twoDigits)).pick(1);
-  Parser atTwoDigits() => (char('@') & ref0(twoDigits)).pick(1);
-  Parser colonTwoDigits() => (char(':') & ref0(twoDigits)).pick(1);
+  Parser year() => digit().repeat(4, 4);
+  Parser twoDigits() => digit().repeat(2, 2);
+  Parser dotTwoDigits() => char('.') & ref0(twoDigits);
+  Parser atTwoDigits() => char('@') & ref0(twoDigits);
+  Parser colonTwoDigits() => char(':') & ref0(twoDigits);
   Parser noDateTime() => char('-').trim(ref0(thWhitespace), ref0(thWhitespace));
   Parser singleDateTime() =>
 
@@ -702,7 +702,13 @@ class THGrammar extends GrammarDefinition {
   /// scrap -value
   Parser valueOption() =>
       stringIgnoreCase('value').skip(before: char('-')) & ref0(valueOptions);
-  Parser valueOptions() => (number()
+  Parser valueOptions() => (char('-')
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['hyphen', value]) |
+      dateTime()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['datetime', value]) |
+      number()
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => ['single_number', value]) |
       bracketStringTemplate(
@@ -720,10 +726,7 @@ class THGrammar extends GrammarDefinition {
           .map((value) => ['fix_number', value]) |
       bracketStringTemplate(number() & number() & lengthUnit().optional())
           .trim(ref0(thWhitespace), ref0(thWhitespace))
-          .map((value) => ['two_numbers_with_optional_unit', value]) |
-      dateTime()
-          .trim(ref0(thWhitespace), ref0(thWhitespace))
-          .map((value) => ['datetime', value]));
+          .map((value) => ['two_numbers_with_optional_unit', value]));
 
   /// point -visibility
   Parser visibilityOption() =>

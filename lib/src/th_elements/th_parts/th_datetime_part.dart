@@ -1,6 +1,9 @@
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 /// Holds a date time value or interval
+/// date . a date (or a time interval) specification in the format
+/// YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]
+/// or ‘-’ to leave a date unspecified.
 class THDatetimePart {
   late String _datetime;
   late bool _isRange;

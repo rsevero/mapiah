@@ -992,6 +992,16 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': 'th_file_parser-00174-altitude_point_with_hyphen.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 3852 -2159 altitude -value NaN
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -1042,7 +1052,29 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2282.0 80 date -value 2022.2.5 -scale xs -align bottom-left
+  point 2282.0 80 date -value 2022.02.05
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00381-point_of_type_date_with_date_value_and_other_options.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 2282.0 80 date -value 2022.02.05 -scale xs -align bottom-left
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00382-point_of_type_date_with_date_option_as_hyphen.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 2282.0 80 date -value -
 endscrap
 ''',
       },
