@@ -61,11 +61,6 @@ mixin THParent on THElement {
   // Here are registered all children.
   final List<THElement> _children = [];
 
-  // Here are registered all items with a Therion ID (the one mentioned in
-  // Therion Book).
-  final Map<String, THElement> _elementByCompleteTHID = {};
-  final Map<THElement, String> _completeTHIDByElement = {};
-
   @override
   void delete() {
     final childrenList = children.toList();
@@ -92,9 +87,42 @@ mixin THParent on THElement {
       throw THCustomException("'$aElement' not found.");
     }
 
-    if (hasTHIDByElement(aElement)) {
-      deleteElementTHIDByElement(aElement);
+    if (thFile.hasTHIDByElement(aElement)) {
+      thFile.deleteElementTHIDByElement(aElement);
     }
+  }
+}
+
+/// THFile represents the complete contents of a .th or .th2 file.
+///
+/// It should be defined in the same file as THElement so it can access
+/// THElement parameterless private constructor.
+class THFile extends THElement with THParent {
+  final Map<int, THElement> _elementByMapiahID = {};
+  var filename = 'unnamed file';
+
+  var encoding = thDefaultEncoding;
+  var _nexMapiahID = 1;
+
+  // Here are registered all items with a Therion ID (thID), the one mentioned
+  // in Therion Book. These thIDs should be unique inside a survey. As Mapiah
+  // doesn´t deals with surveys yet, it will guarantee that thIDs are unique
+  // inside a THFile for now.
+  final Map<String, THElement> _elementByCompleteTHID = {};
+  final Map<THElement, String> _completeTHIDByElement = {};
+
+  THFile() : super._() {
+    _mapiahID = 0;
+    parent = this;
+    _thFile = this;
+  }
+
+  Map<int, THElement> get elements {
+    return _elementByMapiahID;
+  }
+
+  int countElements() {
+    return _elementByMapiahID.length;
   }
 
   String _completeElementTHID(String elementType, String aTHID) {
@@ -193,32 +221,6 @@ mixin THParent on THElement {
     }
 
     return _elementByCompleteTHID[_completeElementTHID(aElementType, aTHID)]!;
-  }
-}
-
-/// THFile represents the complete contents of a .th or .th2 file.
-///
-/// It should be defined in the same file as THElement so it can access
-/// THElement parameterless private constructor.
-class THFile extends THElement with THParent {
-  final Map<int, THElement> _elementByMapiahID = {};
-  var filename = 'unnamed file';
-
-  var encoding = thDefaultEncoding;
-  var _nexMapiahID = 1;
-
-  THFile() : super._() {
-    _mapiahID = 0;
-    parent = this;
-    _thFile = this;
-  }
-
-  Map<int, THElement> get elements {
-    return _elementByMapiahID;
-  }
-
-  int countElements() {
-    return _elementByMapiahID.length;
   }
 
   void _addElementToFile(THElement aElement) {
