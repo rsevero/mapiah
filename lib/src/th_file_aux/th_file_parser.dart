@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option.dart';
@@ -38,11 +39,13 @@ import 'package:mapiah/src/th_elements/th_endline.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
+import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_point_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
+import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_empty_list_exception.dart';
@@ -77,6 +80,7 @@ class THFileParser {
   late THParent _currentParent;
   late THElement _currentElement;
   late THHasOptions _currentHasOptions;
+  THLineSegment? _lastLineSegment;
   late List<dynamic> _currentOptions;
   late List<dynamic> _currentSpec;
   final _parsedOptions = HashSet<String>();
@@ -150,6 +154,8 @@ class THFileParser {
 
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
+        case 'beziercurvelinesegment':
+          _injectBezierCurveLineSegment(element);
         case 'encoding':
           _injectEncoding();
         case 'endmultilinecomment':
@@ -163,6 +169,8 @@ class THFileParser {
           continue;
         case 'line':
           _injectLine(element);
+        case 'straightlinesegment':
+          _injectStraightLineSegment(element);
         case 'multilinecomment':
           _injectStartMultiLineComment();
         case 'multilinecommentline':
@@ -209,7 +217,7 @@ class THFileParser {
     final elementSize = aElement.length;
     assert(elementSize >= 3);
 
-    _checkParsedListAsPoint('_injectPoint', aElement[1]);
+    _checkParsedListAsPoint(aElement[1]);
 
     assert(aElement[2] is List);
     assert(aElement[2].length == 2);
@@ -232,6 +240,64 @@ class THFileParser {
     }
 
     _optionFromElement(aElement[3], _pointRegularOptions);
+  }
+
+  void _injectBezierCurveLineSegment(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+    assert(elementSize == 2);
+
+    final pointList = aElement[1];
+    assert(pointList is List);
+    assert(pointList.length == 3);
+    assert(pointList[0][0] is String);
+    assert(pointList[0][0] == 'controlpoint1');
+    assert(pointList[0][1] is List);
+    assert(pointList[0][1].length == 2);
+    assert(pointList[1][0] is String);
+    assert(pointList[1][0] == 'controlpoint2');
+    assert(pointList[1][1] is List);
+    assert(pointList[1][1].length == 2);
+    assert(pointList[2][0] is String);
+    assert(pointList[2][0] == 'endpoint');
+    assert(pointList[2][1] is List);
+    assert(pointList[2][1].length == 2);
+
+    final controlPoint1 = pointList[0][1];
+    final controlPoint2 = pointList[1][1];
+    final endPoint = pointList[2][1];
+
+    _checkParsedListAsPoint(controlPoint1);
+    _checkParsedListAsPoint(controlPoint2);
+    _checkParsedListAsPoint(endPoint);
+
+    final newBezierCurveLineSegment = THBezierCurveLineSegment.fromString(
+        _currentParent, controlPoint1, controlPoint2, endPoint);
+
+    _currentElement = newBezierCurveLineSegment;
+    _lastLineSegment = newBezierCurveLineSegment;
+  }
+
+  void _injectStraightLineSegment(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+    assert(elementSize == 2);
+
+    final pointList = aElement[1];
+    assert(pointList is List);
+    assert(pointList.length == 2);
+    assert(pointList[0] is String);
+    assert(pointList[0] == 'endpoint');
+    assert(pointList[1] is List);
+    assert(pointList[1].length == 2);
+
+    final endPoint = pointList[1];
+
+    _checkParsedListAsPoint(endPoint);
+
+    final newStraightLineSegment =
+        THStraightLineSegment.fromString(_currentParent, endPoint);
+
+    _currentElement = newStraightLineSegment;
+    _lastLineSegment = newStraightLineSegment;
   }
 
   void _injectScrap(List<dynamic> aElement) {
@@ -283,8 +349,7 @@ class THFileParser {
     }
 
     if (aElement.length != 2) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THComment', '== 2', aElement);
+      throw THCreateObjectFromListWithWrongLengthException('== 2', aElement);
     }
 
     if (aElement[0] is! String) {
@@ -472,10 +537,10 @@ class THFileParser {
         _currentHasOptions, aOptionType, _currentSpec[0]);
   }
 
-  void _checkParsedListAsPoint(String objectType, List<dynamic> aList) {
+  void _checkParsedListAsPoint(List<dynamic> aList) {
     if (aList.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          objectType, '== 2', _currentSpec[1]);
+          '== 2', _currentSpec[1]);
     }
   }
 
@@ -582,14 +647,14 @@ class THFileParser {
   void _injectSketchCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THSketchCommandOption (0)', '== 2', _currentSpec);
+          '== 2', _currentSpec);
     }
 
     if (_currentSpec[0] == null) {
       throw THCreateObjectFromNullValueException('THSketchCommandOption (0)');
     }
 
-    _checkParsedListAsPoint('THSketchCommandOption (1)', _currentSpec[1]);
+    _checkParsedListAsPoint(_currentSpec[1]);
 
     final filename = _parseTHString(_currentSpec[0]);
 
@@ -600,7 +665,7 @@ class THFileParser {
   void _injectStationNamesCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THStationNamesCommandOption', '== 2', _currentSpec);
+          '== 2', _currentSpec);
     }
 
     THStationNamesCommandOption(
@@ -610,14 +675,13 @@ class THFileParser {
   void _injectStationsCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THStationsCommandOption (0)', '== 1', _currentSpec);
+          '== 1', _currentSpec);
     }
 
     final stations = _currentSpec[0].toString().split(',');
 
     if (stations.isEmpty) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THStationsCommandOption (1)', '> 0', stations);
+      throw THCreateObjectFromListWithWrongLengthException('> 0', stations);
     }
 
     THStationsCommandOption(_currentHasOptions, stations);
@@ -626,7 +690,7 @@ class THFileParser {
   void _injectAuthorCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THAuthorCommandOption', '== 2', _currentSpec);
+          '== 2', _currentSpec);
     }
 
     THAuthorCommandOption.fromString(
@@ -636,7 +700,7 @@ class THFileParser {
   void _injectSubtypeCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THSubtypeCommandOption', '== 1', _currentSpec);
+          '== 1', _currentSpec);
     }
 
     THSubtypeCommandOption((_currentHasOptions as THPoint), _currentSpec[0]);
@@ -645,7 +709,7 @@ class THFileParser {
   void _injectPointScaleCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THPointScaleCommandOption', '== 2', _currentSpec);
+          '== 2', _currentSpec);
     }
 
     switch (_currentSpec[0]) {
@@ -672,7 +736,7 @@ class THFileParser {
   void _injectOrientationCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THOrientationCommandOption', '== 1', _currentSpec);
+          '== 1', _currentSpec);
     }
 
     THOrientationCommandOption.fromString(
@@ -682,7 +746,7 @@ class THFileParser {
   void _injectCopyrightCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THCopyrightCommandOption', '== 2', _currentSpec);
+          '== 2', _currentSpec);
     }
 
     final message = _parseTHString(_currentSpec[1]);
@@ -702,7 +766,7 @@ class THFileParser {
   void _injectTitleCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THTitleCommandOption', '== 1', _currentSpec);
+          '== 1', _currentSpec);
     }
 
     final stringContent = _parseTHString(_currentSpec[0]);
@@ -713,7 +777,7 @@ class THFileParser {
   void _injectTextCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THTextCommandOption', '== 1', _currentSpec);
+          '== 1', _currentSpec);
     }
 
     final stringContent = _parseTHString(_currentSpec[0]);
@@ -724,7 +788,7 @@ class THFileParser {
   void _injectValueCommandOption() {
     if (_currentSpec.length < 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          'THValueCommandOption', '>= 2', _currentSpec);
+          '>= 2', _currentSpec);
     }
 
     final pointType = (_currentHasOptions as THPoint).pointType;
@@ -897,8 +961,7 @@ class THFileParser {
 
   void _injectScrapScaleCommandOption() {
     if (_currentSpec.isEmpty) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THScaleCommandOption', '> 0', _currentSpec);
+      throw THCreateObjectFromListWithWrongLengthException('> 0', _currentSpec);
     }
 
     final List<THDoublePart> values = [];
@@ -930,8 +993,7 @@ class THFileParser {
 
   void _injectProjectionCommandOption() {
     if (_currentSpec.isEmpty) {
-      throw THCreateObjectFromListWithWrongLengthException(
-          'THProjectionCommandOption', '> 0', _currentSpec);
+      throw THCreateObjectFromListWithWrongLengthException('> 0', _currentSpec);
     }
 
     if (_currentSpec[0] == null) {

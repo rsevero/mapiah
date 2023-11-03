@@ -28,12 +28,13 @@ class THGrammar extends GrammarDefinition {
   /// scrap contents
   Parser scrapStructure() =>
       scrapContent() | fullLineComment() | multiLineComment();
-  Parser scrapContent() => endscrap() | point() | line();
+  Parser scrapContent() => point() | line() | endscrap();
 
   /// line contents
   Parser lineStructure() =>
       lineContent() | fullLineComment() | multiLineComment();
-  Parser lineContent() => endline();
+  Parser lineContent() =>
+      bezierCurveLineSegment() | straightLineSegment() | endline();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
@@ -796,8 +797,30 @@ class THGrammar extends GrammarDefinition {
           .optional();
   Parser lineOptions() => (any()).star();
 
-  /// Endline
+  /// endline
   Parser endline() => ref1(commandTemplate, endlineCommand);
   Parser endlineCommand() =>
       stringIgnoreCase('endline').map((value) => [value]);
+
+  /// lineSegment
+  Parser straightLineSegment() =>
+      ref1(commandTemplate, straightLineSegmentCommand);
+  Parser straightLineSegmentCommand() => pointData()
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => ['endpoint', value])
+      .map((value) => ['straightlinesegment', value]);
+
+  /// bezierCurve
+  Parser bezierCurveLineSegment() =>
+      ref1(commandTemplate, bezierCurveLineSegmentCommand);
+  Parser bezierCurveLineSegmentCommand() => (pointData()
+              .trim(ref0(thWhitespace), ref0(thWhitespace))
+              .map((value) => ['controlpoint1', value]) &
+          pointData()
+              .trim(ref0(thWhitespace), ref0(thWhitespace))
+              .map((value) => ['controlpoint2', value]) &
+          pointData()
+              .trim(ref0(thWhitespace), ref0(thWhitespace))
+              .map((value) => ['endpoint', value]))
+      .map((value) => ['beziercurvelinesegment', value]);
 }

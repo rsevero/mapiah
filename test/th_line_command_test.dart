@@ -35,6 +35,73 @@ endscrap
 
 ''',
       },
+      {
+        'file':
+            'th_file_parser-02373-line_with_only_straight_line_segments.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1
+  line wall
+    355.0 1065.0
+    291.0 499.0
+    450.0 600.0
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02372-line_with_segment_and_bezier_curve.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
+  line wall
+    355.0 1065.0
+    291.0 499.0
+    450.0 600.0 589.72 521.11 650.0 600.0
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02370-line_with_segments_and_bezier_curves.th2',
+        'length': 32,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+
+
+
+scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
+
+  line wall
+    355.0 1065.0
+    291.0 499.0
+    1124.0 503.0
+    1139.0 1079.0
+    355.0 1065.0
+  endline
+
+  point 1050.0 900.0 station -name a2
+
+  point 450.0 900.0 station -name a1
+
+  line chimney
+    450.0 900.0
+    450.0 600.0
+    450.0 600.0 589.72 521.11 650.0 600.0
+    731.0 706.0 649.0 898.0 649.0 898.0
+    649.0 898.0 751.0 930.0 850.0 900.0
+    774.0 854.0 850.0 600.0 850.0 600.0
+    1050.0 600.0
+    1050.0 900.0
+  endline
+
+endscrap
+
+
+''',
+      },
     ];
 
     for (var success in successes) {

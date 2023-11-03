@@ -158,9 +158,10 @@ class THPoint extends THElement with THHasOptions {
     pointType = aPointType;
   }
 
-  THPoint.fromString(super.parent, List<dynamic> aList, String aPointType)
+  THPoint.fromString(
+      super.parent, List<dynamic> aPointDataList, String aPointType)
       : super.withParent() {
-    point = THPointPart.fromStringList(aList);
+    point = THPointPart.fromStringList(aPointDataList);
     pointType = aPointType;
   }
 

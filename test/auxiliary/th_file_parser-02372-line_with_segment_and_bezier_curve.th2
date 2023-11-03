@@ -1,0 +1,8 @@
+encoding  utf-8
+scrap scrap1 -scale [0 0 1600 0 0.0 0.0 40.64 0.0 m]
+line wall
+  355.0 1065.0
+  291.0 499.0
+450.0 600.0 589.72 521.11 650.0 600.0
+endline
+endscrap

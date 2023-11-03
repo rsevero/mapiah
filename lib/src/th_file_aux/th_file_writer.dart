@@ -1,4 +1,5 @@
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
@@ -7,6 +8,7 @@ import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
+import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 
 class THFileWriter {
@@ -20,6 +22,12 @@ class THFileWriter {
     final type = aTHElement.type;
 
     switch (type) {
+      case 'beziercurvelinesegment':
+        final aTHBezierCurveLineSegment =
+            aTHElement as THBezierCurveLineSegment;
+        final newLine =
+            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
+        asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
       case 'comment':
         asString += '# ${(aTHElement as THComment).content}\n';
       case 'emptyline':
@@ -70,6 +78,10 @@ class THFileWriter {
         asString += _prepareLine(newLine, aTHScrap);
         _increasePrefix();
         asString += _childrenAsString(aTHScrap);
+      case 'straightlinesegment':
+        final aTHStraightLineSegment = aTHElement as THStraightLineSegment;
+        final newLine = aTHStraightLineSegment.endPoint.toString();
+        asString += _prepareLine(newLine, aTHStraightLineSegment);
       default:
         final newLine = "Unrecognized element: '$aTHElement'";
         asString += _prepareLine(newLine, aTHElement);

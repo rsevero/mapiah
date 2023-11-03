@@ -1,0 +1,8 @@
+encoding  utf-8
+scrap scrap1
+line wall
+  355.0 1065.0
+  291.0 499.0
+  450.0 600.0
+endline
+endscrap
