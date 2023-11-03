@@ -1,11 +1,5 @@
-mixin THHasTHID {
-  abstract String _thID;
+abstract class THHasTHID {
+  String get thID;
 
-  String get thID {
-    return _thID;
-  }
-
-  set thID(String aTHID) {
-    _thID = aTHID;
-  }
+  set thID(String aTHID);
 }

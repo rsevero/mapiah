@@ -21,7 +21,9 @@ import "package:mapiah/src/th_elements/th_has_options.dart";
 // which are specified both in the scrap as point map symbols and in centreline data. If the
 // scrap doesn’t contain at least two survey stations with the -name reference, you have to
 // use the -scale option for calibrating the scrap. (This is usual for cross sections.)
-class THScrap extends THElement with THHasOptions, THParent, THHasTHID {
+class THScrap extends THElement
+    with THHasOptions, THParent
+    implements THHasTHID {
   String _thID;
   THScrap(super.parent, this._thID) : super.withParent();
 
