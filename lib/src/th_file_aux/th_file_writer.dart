@@ -55,7 +55,7 @@ class THFileWriter {
       case 'scrap':
         final aTHScrap = aTHElement as THScrap;
         final newLine =
-            "scrap ${aTHScrap.id} ${aTHScrap.optionsAsString()}".trim();
+            "scrap ${aTHScrap.thID} ${aTHScrap.optionsAsString()}".trim();
         asString += _prepareLine(newLine, aTHScrap);
         _increasePrefix();
         asString += _childrenAsString(aTHScrap);

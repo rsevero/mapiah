@@ -10,7 +10,7 @@ class THIDCommandOption extends THCommandOption {
   }
 
   set thID(String aTHID) {
-    parentOption.thFile.updateElementTHID(parentOption, aTHID);
+    parentOption.thFile.updateTHID(parentOption, aTHID);
     _thID = aTHID;
   }
 

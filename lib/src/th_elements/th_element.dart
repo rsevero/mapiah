@@ -143,7 +143,7 @@ mixin THParent on THElement {
     _elementByCompleteTHID.remove(completeTHID);
   }
 
-  void updateElementTHID(THElement aElement, String newTHID) {
+  void updateTHID(THElement aElement, String newTHID) {
     final aElementType = aElement.type;
     final newCompleteTHID = _completeElementTHID(aElementType, newTHID);
 
@@ -225,8 +225,8 @@ class THFile extends THElement with THParent {
     aElement._mapiahID = _nexMapiahID;
     _elementByMapiahID[_nexMapiahID] = aElement;
     _nexMapiahID++;
-    if (aElement is THHasID) {
-      addElementWithTHID(aElement, (aElement as THHasID).id);
+    if (aElement is THHasTHID) {
+      addElementWithTHID(aElement, (aElement as THHasTHID).thID);
     }
   }
 
