@@ -98,18 +98,20 @@ mixin THParent on THElement {
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
 class THFile extends THElement with THParent {
+  /// This is the internal, Mapiah-only IDs used to identify each element only
+  /// during this run. This value is never saved anywhere.
   final Map<int, THElement> _elementByMapiahID = {};
   var filename = 'unnamed file';
 
   var encoding = thDefaultEncoding;
   var _nexMapiahID = 1;
 
-  // Here are registered all items with a Therion ID (thID), the one mentioned
-  // in Therion Book. These thIDs should be unique inside a survey. As Mapiah
-  // doesn´t deals with surveys yet, it will guarantee that thIDs are unique
-  // inside a THFile for now.
-  final Map<String, THElement> _elementByCompleteTHID = {};
-  final Map<THElement, String> _completeTHIDByElement = {};
+  /// Here are registered all items with a Therion ID (thID), the one mentioned
+  /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
+  /// doesn´t deals with surveys yet, it will guarantee that thIDs are unique
+  /// inside a THFile for now.
+  final Map<String, THElement> _elementByTHID = {};
+  final Map<THElement, String> _thIDByElement = {};
 
   THFile() : super._() {
     _mapiahID = 0;
@@ -125,94 +127,81 @@ class THFile extends THElement with THParent {
     return _elementByMapiahID.length;
   }
 
-  String _completeElementTHID(String elementType, String aTHID) {
-    if (aTHID.contains(' ')) {
-      throw THIDWithSpaceException(elementType, aTHID);
-    }
-    return '$elementType|$aTHID';
-  }
-
   void deleteElementTHIDByElement(THElement aElement) {
     final aElementType = aElement.type;
 
-    if (!_completeTHIDByElement.containsKey(aElement)) {
+    if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' has no registered thID.");
     }
 
-    final aCompleteTHID = _completeTHIDByElement[aElement];
+    final aTHID = _thIDByElement[aElement];
 
-    if (!_elementByCompleteTHID.containsKey(aCompleteTHID)) {
+    if (!_elementByTHID.containsKey(aTHID)) {
       throw THCustomException(
-          "thID '$aCompleteTHID' gotten from element '$aElement' of type '$aElementType' is not registered.");
+          "thID '$aTHID' gotten from element '$aElement' of type '$aElementType' is not registered.");
     }
 
-    _completeTHIDByElement.remove(aElement);
-    _elementByCompleteTHID.remove(aCompleteTHID);
+    _thIDByElement.remove(aElement);
+    _elementByTHID.remove(aTHID);
   }
 
   void deleteElementTHIDByElementTypeAndTHID(
       String aElementType, String aTHID) {
-    final completeTHID = _completeElementTHID(aElementType, aTHID);
-
-    if (!_elementByCompleteTHID.containsKey(completeTHID)) {
+    if (!_elementByTHID.containsKey(aTHID)) {
       throw THCustomException(
           "thID '$aTHID' is not registered for type '$aElementType'.");
     }
 
-    final aElement = _elementByCompleteTHID[completeTHID];
+    final aElement = _elementByTHID[aTHID];
 
-    if (!_completeTHIDByElement.containsKey(aElement)) {
+    if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' has no registered thID.");
     }
 
-    _completeTHIDByElement.remove(aElement);
-    _elementByCompleteTHID.remove(completeTHID);
+    _thIDByElement.remove(aElement);
+    _elementByTHID.remove(aTHID);
   }
 
   void updateTHID(THElement aElement, String newTHID) {
     final aElementType = aElement.type;
-    final newCompleteTHID = _completeElementTHID(aElementType, newTHID);
 
-    if (!_completeTHIDByElement.containsKey(aElement)) {
+    if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' had no registered thID.");
     }
-    final oldCompleteTHID = _completeTHIDByElement[aElement];
+    final oldTHID = _thIDByElement[aElement];
 
-    if (_elementByCompleteTHID.containsKey(newCompleteTHID)) {
+    if (_elementByTHID.containsKey(newTHID)) {
       throw THCustomException(
           "Duplicate '$aElementType' element with thID '$newTHID'.");
     }
 
-    _elementByCompleteTHID.remove(oldCompleteTHID);
-    _elementByCompleteTHID[newCompleteTHID] = aElement;
+    _elementByTHID.remove(oldTHID);
+    _elementByTHID[newTHID] = aElement;
 
-    _completeTHIDByElement[aElement] = newCompleteTHID;
+    _thIDByElement[aElement] = newTHID;
   }
 
   void addElementWithTHID(THElement aElement, String aTHID) {
-    final newCompleteTHID = _completeElementTHID(aElement.type, aTHID);
-
-    if (_elementByCompleteTHID.containsKey(newCompleteTHID)) {
-      throw THCustomException("Duplicate thID: '$newCompleteTHID'.");
+    if (_elementByTHID.containsKey(aTHID)) {
+      throw THCustomException("Duplicate thID: '$aTHID'.");
     }
-    _elementByCompleteTHID[newCompleteTHID] = aElement;
+    _elementByTHID[aTHID] = aElement;
 
-    if (_completeTHIDByElement.containsKey(aElement)) {
+    if (_thIDByElement.containsKey(aElement)) {
       throw THCustomException("'${aElement.type}' already included.");
     }
-    _completeTHIDByElement[aElement] = newCompleteTHID;
+    _thIDByElement[aElement] = aTHID;
   }
 
   bool hasElementByTHID(String elementType, String aTHID) {
-    return _elementByCompleteTHID
-        .containsKey(_completeElementTHID(elementType, aTHID));
+    return _elementByTHID.containsKey(aTHID);
   }
 
   bool hasTHIDByElement(THElement aElement) {
-    return _completeTHIDByElement.containsKey(aElement);
+    return _thIDByElement.containsKey(aElement);
   }
 
   THElement elementByTHID(String aElementType, String aTHID) {
@@ -220,7 +209,7 @@ class THFile extends THElement with THParent {
       throw THCustomException("No element with thID '$aTHID' found.");
     }
 
-    return _elementByCompleteTHID[_completeElementTHID(aElementType, aTHID)]!;
+    return _elementByTHID[aTHID]!;
   }
 
   void _addElementToFile(THElement aElement) {
