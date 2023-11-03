@@ -1,6 +1,8 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
+// station-names <prefix> <suffix> . adds given prefix/suffix to all survey stations
+// in the current scrap. Saves some typing.
 class THStationNamesCommandOption extends THCommandOption {
   late String _prefix;
   late String _suffix;

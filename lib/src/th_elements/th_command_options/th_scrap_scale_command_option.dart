@@ -3,6 +3,17 @@ import 'package:mapiah/src/th_exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_length_unit_part.dart';
 
+// scale <specification> . is used to pre-scale (convert coordinates from pixels to
+// meters) the scrap data. If scrap projection is none, this is the only transformation that
+// is done with coordinates. The <specification> has four forms:
+// 1. <number> . <number> meters per drawing unit.
+// 2. [<number> <length units>] . <number> <length units> per drawing unit.
+// 3. [<num1> <num2> <length units>] . <num1> drawing units corresponds to <num2>
+// <length units> in reality.
+// 4. [<num1> ... <num8> [<length units>]] . this is the most general format, where
+// you specify, in order, the x and y coordinates of two points in the scrap and two points
+// in reality. Optionally, you can also specify units for the coordinates of the ‘points in
+// reality’. This form allows you to apply both scaling and rotation to the scrap.
 class THScrapScaleCommandOption extends THCommandOption {
   List<THDoublePart> _numericSpecifications;
   THLengthUnitPart? unit;

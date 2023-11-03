@@ -2,6 +2,8 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_parts/th_point_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_string_part.dart';
 
+// sketch <filename> <x> <y> . underlying sketch bitmap specification (lower left cor-
+// ner coordinates).
 class THSketchCommandOption extends THCommandOption {
   late THStringPart _filename;
   late THPointPart point;
