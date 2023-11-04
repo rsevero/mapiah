@@ -24,11 +24,11 @@ class THTextCommandOption extends THCommandOption with THHasText {
     'continuation'
   };
 
-  THTextCommandOption(super.parentOption, String aText) {
-    if ((parentOption is! THPoint) ||
-        (!_supportedPointTypes.contains((parentOption as THPoint).pointType))) {
+  THTextCommandOption(super.optionParent, String aText) {
+    if ((optionParent is! THPoint) ||
+        (!_supportedPointTypes.contains((optionParent as THPoint).plaType))) {
       throw THCustomException(
-          "'text' command option not supported on points of type '${(parentOption as THPoint).pointType}'.");
+          "'text' command option not supported on points of type '${(optionParent as THPoint).plaType}'.");
     }
     text = aText;
   }

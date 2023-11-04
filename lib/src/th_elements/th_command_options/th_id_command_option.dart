@@ -4,13 +4,13 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 class THIDCommandOption extends THCommandOption {
   late String _thID;
 
-  THIDCommandOption(super.parentOption, String aTHID) {
-    parentOption.thFile.addElementWithTHID(parentOption, aTHID);
+  THIDCommandOption(super.optionParent, String aTHID) {
+    optionParent.thFile.addElementWithTHID(optionParent, aTHID);
     _thID = aTHID;
   }
 
   set thID(String aTHID) {
-    parentOption.thFile.updateTHID(parentOption, aTHID);
+    optionParent.thFile.updateTHID(optionParent, aTHID);
     _thID = aTHID;
   }
 

@@ -1,5 +1,6 @@
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_point_part.dart';
 
@@ -31,7 +32,7 @@ import 'package:mapiah/src/th_elements/th_parts/th_point_part.dart';
 // ice-pillar, ice-stalactite, ice-stalagmite, map-connection18 , paleo-material,
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
-class THPoint extends THElement with THHasOptions {
+class THPoint extends THElement with THHasOptions implements THHasPLAType {
   late THPointPart point;
   late String _pointType;
 
@@ -155,21 +156,22 @@ class THPoint extends THElement with THHasOptions {
   };
 
   THPoint(super.parent, this.point, String aPointType) : super.withParent() {
-    pointType = aPointType;
+    plaType = aPointType;
   }
 
   THPoint.fromString(
       super.parent, List<dynamic> aPointDataList, String aPointType)
       : super.withParent() {
     point = THPointPart.fromStringList(aPointDataList);
-    pointType = aPointType;
+    plaType = aPointType;
   }
 
   static bool hasPointType(String aPointType) {
     return _pointTypes.contains(aPointType);
   }
 
-  set pointType(String aPointType) {
+  @override
+  set plaType(String aPointType) {
     if (!hasPointType(aPointType)) {
       throw THCustomException("Unrecognized THPoint type '$aPointType'.");
     }
@@ -177,7 +179,8 @@ class THPoint extends THElement with THHasOptions {
     _pointType = aPointType;
   }
 
-  String get pointType {
+  @override
+  String get plaType {
     return _pointType;
   }
 }

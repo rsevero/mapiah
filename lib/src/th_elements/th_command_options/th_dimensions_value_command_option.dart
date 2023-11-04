@@ -13,10 +13,10 @@ class THDimensionsValueCommandOption extends THValueCommandOption {
   bool unitSet = false;
 
   THDimensionsValueCommandOption(
-      super.parentOption, THDoublePart aAbove, THDoublePart aBelow,
+      super.optionParent, THDoublePart aAbove, THDoublePart aBelow,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'dimensions')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'dimensions')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'dimensions'.");
     }
@@ -28,10 +28,10 @@ class THDimensionsValueCommandOption extends THValueCommandOption {
   }
 
   THDimensionsValueCommandOption.fromString(
-      super.parentOption, String aAbove, String aBelow,
+      super.optionParent, String aAbove, String aBelow,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'dimensions')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'dimensions')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'dimensions'.");
     }

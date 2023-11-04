@@ -7,16 +7,16 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 class THNameCommandOption extends THCommandOption {
   late String reference;
 
-  THNameCommandOption(super.parentOption, this.reference) {
-    if (parentOption is THPoint) {
-      final parentAsPoint = parentOption as THPoint;
-      if ((parentOption as THPoint).pointType != 'station') {
+  THNameCommandOption(super.optionParent, this.reference) {
+    if (optionParent is THPoint) {
+      final parentAsPoint = optionParent as THPoint;
+      if ((optionParent as THPoint).plaType != 'station') {
         throw THCustomException(
-            "Unsupported point type '${parentAsPoint.pointType}' 'name' option.");
+            "Unsupported point type '${parentAsPoint.plaType}' 'name' option.");
       }
     } else {
       throw THCustomException(
-          "Unsupported parent command type '${parentOption.elementType}' for 'name' option.");
+          "Unsupported parent command type '${optionParent.elementType}' for 'name' option.");
     }
   }
 

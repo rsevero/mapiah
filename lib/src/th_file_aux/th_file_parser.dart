@@ -38,6 +38,7 @@ import 'package:mapiah/src/th_elements/th_endcomment.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
@@ -420,7 +421,7 @@ class THFileParser {
         }
 
         if (THMultipleChoiceCommandOption.hasOptionType(
-            _currentHasOptions.elementType, optionType)) {
+            _currentHasOptions, optionType)) {
           _injectMultipleChoiceCommandOption(optionType);
           continue;
         }
@@ -802,7 +803,7 @@ class THFileParser {
           '>= 2', _currentSpec);
     }
 
-    final pointType = (_currentHasOptions as THPoint).pointType;
+    final pointType = (_currentHasOptions as THPoint).plaType;
     switch (pointType) {
       case 'altitude':
         _injectAltitudeValueCommandOption();

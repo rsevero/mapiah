@@ -7,9 +7,9 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 class THDateValueCommandOption extends THValueCommandOption {
   late THDatetimePart _date;
 
-  THDateValueCommandOption.fromString(super.parentOption, String aDate) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'date')) {
+  THDateValueCommandOption.fromString(super.optionParent, String aDate) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'date')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'date'.");
     }

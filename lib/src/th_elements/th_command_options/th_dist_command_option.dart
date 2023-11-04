@@ -8,10 +8,10 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 // (or station specified using -from option. If not specified, appropriate value from LRUD
 // data is used.
 class THDistCommandOption extends THCommandOption with THHasLength {
-  THDistCommandOption(super.parentOption, THDoublePart aDistance,
+  THDistCommandOption(super.optionParent, THDoublePart aDistance,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'extra')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'extra')) {
       throw THCustomException(
           "'$optionType'command option only supported on points of type 'extra'.");
     }
@@ -21,10 +21,10 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     }
   }
 
-  THDistCommandOption.fromString(super.parentOption, String aDistance,
+  THDistCommandOption.fromString(super.optionParent, String aDistance,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'extra')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'extra')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'extra'.");
     }

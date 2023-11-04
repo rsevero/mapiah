@@ -12,10 +12,10 @@ class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
   late bool isPresumed;
 
   THHeightValueCommandOption(
-      super.parentOption, THDoublePart aHeight, this.isPresumed,
+      super.optionParent, THDoublePart aHeight, this.isPresumed,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'height')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'height')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'height'.");
     }
@@ -26,10 +26,10 @@ class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
   }
 
   THHeightValueCommandOption.fromString(
-      super.parentOption, String aHeight, this.isPresumed,
+      super.optionParent, String aHeight, this.isPresumed,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'height')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'height')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'height'.");
     }

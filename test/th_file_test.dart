@@ -156,11 +156,11 @@ endcomment
 
       final pointStation = file.elementByMapiahID(22);
       expect(pointStation, isA<THPoint>());
-      expect((pointStation as THPoint).pointType, 'station');
+      expect((pointStation as THPoint).plaType, 'station');
 
       final pointGuano = file.elementByTHID('point', 'P1');
       expect(pointGuano, isA<THPoint>());
-      expect((pointGuano as THPoint).pointType, 'guano');
+      expect((pointGuano as THPoint).plaType, 'guano');
 
       var countDeletedElements = 1;
       pointGuano.delete();

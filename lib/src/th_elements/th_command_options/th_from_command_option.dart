@@ -6,9 +6,9 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 class THFromCommandOption extends THCommandOption {
   String station;
 
-  THFromCommandOption(super.parentOption, this.station) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'extra')) {
+  THFromCommandOption(super.optionParent, this.station) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'extra')) {
       throw THCustomException(
           "Option 'dist' only valid for points of type 'extra'.");
     }

@@ -93,13 +93,13 @@ class THSubtypeCommandOption extends THCommandOption {
     },
   };
 
-  THSubtypeCommandOption(super.parentOption, String aSubtype) {
+  THSubtypeCommandOption(super.optionParent, String aSubtype) {
     subtype = aSubtype;
   }
 
   set subtype(String aSubtype) {
-    if (parentOption is THPoint) {
-      final pointType = (parentOption as THPoint).pointType;
+    if (optionParent is THPoint) {
+      final pointType = (optionParent as THPoint).plaType;
       final allowedSubtypes = _allowedSubtypes['point']!;
       if ((pointType != 'u') &&
           (!allowedSubtypes.containsKey(pointType) ||
@@ -109,8 +109,8 @@ class THSubtypeCommandOption extends THCommandOption {
         throw THCustomException(
             "Unsupported subtype '$aSubtype' in option type '$optionType' for a point of type '$pointType' object.");
       }
-    } else if (parentOption is THLine) {
-      final lineType = (parentOption as THLine).lineType;
+    } else if (optionParent is THLine) {
+      final lineType = (optionParent as THLine).plaType;
       final allowedSubtypes = _allowedSubtypes['line']!;
       if ((lineType != 'u') &&
           (!allowedSubtypes.containsKey(lineType) ||
@@ -121,7 +121,7 @@ class THSubtypeCommandOption extends THCommandOption {
       }
     } else {
       throw THCustomException(
-          "Unsupported element of type '${parentOption.elementType}' in option type '$optionType'.");
+          "Unsupported element of type '${optionParent.elementType}' in option type '$optionType'.");
     }
 
     _subtype = aSubtype;

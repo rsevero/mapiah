@@ -1,5 +1,6 @@
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 // Description: Line is a command for drawing a line symbol on the map. Each line symbol
@@ -7,7 +8,9 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 // general rule is that the free space is on the left, rock on the right. Examples: the lower
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
-class THLine extends THElement with THHasOptions, THParent {
+class THLine extends THElement
+    with THHasOptions, THParent
+    implements THHasPLAType {
   late String _lineType;
 
   static final _lineTypes = <String>{
@@ -53,14 +56,15 @@ class THLine extends THElement with THHasOptions, THParent {
   };
 
   THLine(super.parent, String aLineType) : super.withParent() {
-    lineType = aLineType;
+    plaType = aLineType;
   }
 
   static bool hasLineType(String aLineType) {
     return _lineTypes.contains(aLineType);
   }
 
-  set lineType(String aLineType) {
+  @override
+  set plaType(String aLineType) {
     if (!hasLineType(aLineType)) {
       throw THCustomException("Unrecognized THLine type '$aLineType'.");
     }
@@ -68,7 +72,8 @@ class THLine extends THElement with THHasOptions, THParent {
     _lineType = aLineType;
   }
 
-  String get lineType {
+  @override
+  String get plaType {
     return _lineType;
   }
 }

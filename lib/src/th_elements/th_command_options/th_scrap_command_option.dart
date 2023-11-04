@@ -7,9 +7,9 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 class THScrapCommandOption extends THCommandOption {
   late String reference;
 
-  THScrapCommandOption(super.parentOption, this.reference) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'section')) {
+  THScrapCommandOption(super.optionParent, this.reference) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'section')) {
       throw THCustomException(
           "Option 'scrap' only valid for points of type 'section'.");
     }

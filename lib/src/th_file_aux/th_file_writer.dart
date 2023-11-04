@@ -55,7 +55,7 @@ class THFileWriter {
       case 'line':
         final aTHLine = aTHElement as THLine;
         final newLine =
-            "line ${aTHLine.lineType} ${aTHLine.optionsAsString()}".trim();
+            "line ${aTHLine.plaType} ${aTHLine.optionsAsString()}".trim();
         asString += _prepareLine(newLine, aTHLine);
         _increasePrefix();
         asString += _childrenAsString(aTHLine);
@@ -68,7 +68,7 @@ class THFileWriter {
       case 'point':
         final aTHPoint = aTHElement as THPoint;
         final newLine =
-            'point ${aTHPoint.point} ${aTHPoint.pointType} ${aTHPoint.optionsAsString()}'
+            'point ${aTHPoint.point} ${aTHPoint.plaType} ${aTHPoint.optionsAsString()}'
                 .trim();
         asString += _prepareLine(newLine, aTHPoint);
       case 'scrap':

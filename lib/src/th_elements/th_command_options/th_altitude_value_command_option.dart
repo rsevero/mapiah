@@ -14,10 +14,10 @@ class THAltitudeValueCommandOption extends THValueCommandOption
   late bool isFix;
 
   THAltitudeValueCommandOption(
-      super.parentOption, THDoublePart aHeight, this.isFix,
+      super.optionParent, THDoublePart aHeight, this.isFix,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'altitude')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'altitude')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'altitude'.");
     }
@@ -28,10 +28,10 @@ class THAltitudeValueCommandOption extends THValueCommandOption
   }
 
   THAltitudeValueCommandOption.fromString(
-      super.parentOption, String aHeight, this.isFix,
+      super.optionParent, String aHeight, this.isFix,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'altitude')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'altitude')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'altitude'.");
     }
@@ -41,9 +41,9 @@ class THAltitudeValueCommandOption extends THValueCommandOption
     }
   }
 
-  THAltitudeValueCommandOption.fromNan(super.parentOption) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'altitude')) {
+  THAltitudeValueCommandOption.fromNan(super.optionParent) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'altitude')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'altitude'.");
     }

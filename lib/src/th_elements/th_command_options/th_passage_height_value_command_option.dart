@@ -21,9 +21,9 @@ class THPassageHeightValueCommandOption extends THValueCommandOption {
   late bool _plusHasSign;
 
   THPassageHeightValueCommandOption.fromString(
-      super.parentOption, String aPlusNumber, String aMinusNumber) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'passage-height')) {
+      super.optionParent, String aPlusNumber, String aMinusNumber) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'passage-height')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'passage-height'.");
     }

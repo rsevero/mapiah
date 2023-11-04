@@ -1,8 +1,9 @@
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
-class THArea extends THElement with THHasOptions {
+class THArea extends THElement with THHasOptions implements THHasPLAType {
   late String _areaType;
 
   static final _areaTypes = <String>{
@@ -30,14 +31,15 @@ class THArea extends THElement with THHasOptions {
   };
 
   THArea(super.parent, String aAreaType) : super.withParent() {
-    areaType = aAreaType;
+    plaType = aAreaType;
   }
 
   static bool hasAreaType(String aAreaType) {
     return _areaTypes.contains(aAreaType);
   }
 
-  set areaType(String aAreaType) {
+  @override
+  set plaType(String aAreaType) {
     if (!hasAreaType(aAreaType)) {
       throw THCustomException("Unrecognized THArea type '$aAreaType'.");
     }
@@ -45,7 +47,8 @@ class THArea extends THElement with THHasOptions {
     _areaType = aAreaType;
   }
 
-  String get areaType {
+  @override
+  String get plaType {
     return _areaType;
   }
 }

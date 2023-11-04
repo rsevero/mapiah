@@ -8,10 +8,10 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 // sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
 // statistics.
 class THExploredCommandOption extends THCommandOption with THHasLength {
-  THExploredCommandOption(super.parentOption, THDoublePart aDistance,
+  THExploredCommandOption(super.optionParent, THDoublePart aDistance,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'continuation')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'continuation')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'continuation'.");
     }
@@ -21,10 +21,10 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
     }
   }
 
-  THExploredCommandOption.fromString(super.parentOption, String aDistance,
+  THExploredCommandOption.fromString(super.optionParent, String aDistance,
       [String? aUnit]) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'continuation')) {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'continuation')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'continuation'.");
     }
