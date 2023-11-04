@@ -193,6 +193,28 @@ scrap araras10 -flip horizontal
 endscrap
 ''',
       },
+      {
+        'file':
+            'th_file_parser-02100-scrap_with_multiple_flip_options_failure.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -projection [ elevation 10 ] -flip vertical -sketch \
+    ./FrozenDeep_p.xvi 12 32
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02101-scrap_with_multiple_identical_flip_options_failure.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP01 -flip horizontal -projection [ elevation 10 ] -sketch \
+    ./FrozenDeep_p.xvi 12 32
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -247,7 +269,7 @@ endscrap
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap poco_surubim_SCP01 -projection [elevation 10 deg]
+scrap poco_surubim_SCP01 -projection [ elevation 10 deg ]
 endscrap
 ''',
       },
@@ -257,7 +279,7 @@ endscrap
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap poco_surubim_SCP01 -projection [elevation 10]
+scrap poco_surubim_SCP01 -projection [ elevation 10 ]
 endscrap
 ''',
       },
@@ -296,7 +318,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras14 -projection [elevation:alternative 273 grad]
+scrap araras14 -projection [ elevation:alternative 273 grad ]
 endscrap
 ''',
       },
@@ -560,7 +582,7 @@ endscrap
         'length': 3,
         'encoding': 'ISO8859-15',
         'asFile': r'''encoding ISO8859-15
-scrap poco_surubim_SCP01 -projection [elevation 10] -flip horizontal -sketch \
+scrap poco_surubim_SCP01 -projection [ elevation 10 ] -flip horizontal -sketch \
     ./FrozenDeep_p.xvi 12 32
 endscrap
 ''',
@@ -626,8 +648,6 @@ endscrap
     const failures = [
       'th_file_parser-00062-scrap_with_encoding_inside-failure.th2',
       'th_file_parser-00063-scrap_with_another_scrap_inside-failute.th2',
-      'th_file_parser-02100-scrap_with_multiple_flip_options_failure.th2',
-      'th_file_parser-02101-scrap_with_multiple_identical_flip_options_failure.th2',
     ];
 
     for (var failure in failures) {

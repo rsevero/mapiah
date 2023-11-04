@@ -95,7 +95,7 @@ class THProjectionCommandOption extends THCommandOption {
     asString = asString.trim();
 
     if (asString.contains(' ')) {
-      asString = "[$asString]";
+      asString = "[ $asString ]";
     }
 
     return asString;

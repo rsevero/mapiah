@@ -3,7 +3,7 @@ survey modelo_line_options_testing -title "Line options testing"
 
 centreline
 data normal from to length compass clino
-a1 a2 10 90 0
+a1 a2 10 90 -31
 endcentreline
 
 input line_options_testing.th2

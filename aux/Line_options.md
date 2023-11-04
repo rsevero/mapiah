@@ -4,23 +4,23 @@ Understanding line options described at the Therion Book.
 
 ## Line options
 
-These affect the whole line, i.e., they only appear at the main line of the line command:
+These affect the whole line but they can appear both inside line data (among line segments) or at the main line command:
 
 - anchors <on/off> - rope
-- border <on/off> - slope
-- clip <on/off> - all - same as point
-- close <on/**off**/auto> - all
+- border* <on/off> - slope
+- clip* <on/off> - all - same as point
+- close* <on/**off**/auto> - all
 - context <point/line/area> <symbol-type> - all - same as point
-- head <begin/end/both/none> - arrow
+- head* <begin/end/both/none> - arrow
 - height <value> - pit, wall:pit
-- id <ext_keyword> - all - same as point
-- outline <in/out/none> -all
-- place <bottom/default/top> - all - same as point
+- id* <ext_keyword> - all - same as point
+- outline* <in/out/none> - all
+- place* <bottom/default/top> - all - same as point
 - rebelays <on/off> - rope
-- reverse <on/**off**> - all
-- scale - all
-- text <string> - labe
-- visibility <on/off> - all - same as point
+- reverse* <on/**off**> - all
+- scale* - all
+- text <string> - label
+- visibility* <on/off> - all - same as point
 
 ## Line point options
 
@@ -38,7 +38,7 @@ Affects only the line point defined immediately before (above) the option itself
 - mark <keyword> - all
 - orientation/orient <number> - slope
 - size <number> - synonym of l-size
-- smooth <on/off/auto> - all
+- smooth <on/off/auto> - all -
 
 ### All subsequent points
 

@@ -1,10 +1,10 @@
 encoding  utf-8
-##XTHERION## xth_me_area_adjust 0 0 1600 1200
+##XTHERION## xth_me_area_adjust -132.0 -132.0 1271.0 1211.0
 ##XTHERION## xth_me_area_zoom_to 100
 
 
 
-scrap scrap1 -scale [0 0 1600 0 0.0 0.0 40.64 0.0 m]
+scrap scrap1 -projection plan -scale [0 0 1600 0 0.0 0.0 40.64 0.0 m]
 
 line wall -close on
   355.0 1065.0
@@ -20,13 +20,19 @@ point 1050.0 900.0 station -name a2
 
 point 450.0 900.0 station -name a1
 
-line chimney -scale xs
+point 630.0 899.0 anchor
+
+line wall -subtype pit
   450.0 900.0
-  450.0 600.0
-  650.0 600.0
+  subtype ice
+  450.0 900.0 597.0 657.0 450.0 601.0
+  smooth off
+  564.25 535.47 650.0 600.0 650.0 600.0
+  smooth off
   650.0 900.0
   850.0 900.0
   850.0 600.0
+  subtype presumed
   1050.0 600.0
   1050.0 900.0
 endline

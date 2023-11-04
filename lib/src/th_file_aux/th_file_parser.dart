@@ -83,7 +83,7 @@ class THFileParser {
   THLineSegment? _lastLineSegment;
   late List<dynamic> _currentOptions;
   late List<dynamic> _currentSpec;
-  final _parsedOptions = HashSet<String>();
+  // final _parsedOptions = HashSet<String>();
   bool _runTraceParser = false;
 
   final List<String> _parseErrors = [];
@@ -226,13 +226,13 @@ class THFileParser {
         THPoint.fromString(_currentParent, aElement[1], aElement[2][0]);
 
     _currentElement = newPoint;
-    _parsedOptions.clear();
+    // _parsedOptions.clear();
 
     try {
       // Including subtype defined with type (type:subtype).
       if (aElement[2][1] != null) {
         THSubtypeCommandOption(newPoint, aElement[2][1]);
-        _parsedOptions.add('subtype');
+        // _parsedOptions.add('subtype');
       }
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_pointOptionFromElement',
@@ -308,7 +308,7 @@ class THFileParser {
     _currentElement = newScrap;
     _currentParent = newScrap;
 
-    _parsedOptions.clear();
+    // _parsedOptions.clear();
     _optionFromElement(aElement[2], _scrapRegularOptions);
     _addChildParser(_scrapContentParser);
   }
@@ -332,7 +332,7 @@ class THFileParser {
     _currentElement = newLine;
     _currentParent = newLine;
 
-    _parsedOptions.clear();
+    // _parsedOptions.clear();
     _optionFromElement(aElement[2], _lineRegularOptions);
     _addChildParser(_lineContentParser);
   }
@@ -387,12 +387,12 @@ class THFileParser {
 
       final optionType = _currentOptions[0].toString().toLowerCase();
 
-      if (_parsedOptions.contains(optionType)) {
-        final elementType = _currentElement.type;
-        _addError("Duplicated option '$optionType' in $elementType.",
-            '_optionFromElement', aElement.toString());
-        continue;
-      }
+      // if (_parsedOptions.contains(optionType)) {
+      //   final elementType = _currentElement.type;
+      //   _addError("Duplicated option '$optionType' in $elementType.",
+      //       '_optionFromElement', aElement.toString());
+      //   continue;
+      // }
 
       // This "if null" is here to deal with command options that have optional
       // extra data, i.e, they might be defined alone. In these situations
@@ -401,7 +401,7 @@ class THFileParser {
       // null value we received from the parser.
       _currentSpec = _currentOptions[1] ?? [null];
       _currentHasOptions = _currentElement as THHasOptions;
-      _parsedOptions.add(optionType);
+      // _parsedOptions.add(optionType);
 
       try {
         if (createRegularOption(optionType)) {
