@@ -235,12 +235,9 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   set choice(String aChoice) {
-    aChoice = _mainChoice(optionParent, optionType, aChoice);
+    aChoice = _mainChoice(aChoice);
 
-    final aPLAType = (optionParent is THHasPLAType)
-        ? (optionParent as THHasPLAType).plaType
-        : '';
-    if (!hasOptionChoice(optionParent, aPLAType, optionType, aChoice)) {
+    if (!hasOptionChoice(aChoice)) {
       throw THCustomException(
           "Unsupported choice '$aChoice' in a '$optionType' option for a '${optionParent.elementType}' element.");
     }
@@ -252,43 +249,32 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     return _choice;
   }
 
-  static bool hasDefaultChoice(THHasOptions aOptionParent, String aOptionType) {
-    if (!hasOptionType(aOptionParent, aOptionType)) {
-      throw THCustomException(
-          "Unsupported option type '$aOptionType' in 'hasDefaultChoice'");
-    }
-
-    return (_supportedOptions[aOptionParent.elementType]![aOptionType]![
+  bool hasDefaultChoice() {
+    return (_supportedOptions[optionParent.elementType]![optionType]![
         'hasDefault'] as bool);
   }
 
-  static String defaultChoice(THHasOptions aOptionParent, String aOptionType) {
-    if (!hasDefaultChoice(aOptionParent, aOptionType)) {
+  String defaultChoice() {
+    if (!hasDefaultChoice()) {
       throw THCustomException(
-          "Unsupported option type '$aOptionType' in 'defaultChoice'");
+          "Unsupported option type '$optionType' in 'defaultChoice'");
     }
 
-    return (_supportedOptions[aOptionParent.elementType]![aOptionType]![
+    return (_supportedOptions[optionParent.elementType]![optionType]![
         'defaultChoice'] as String);
   }
 
-  static bool hasOptionChoice(THHasOptions aOptionParent, String aPLAType,
-      String aOptionType, String aChoice) {
-    if (!hasOptionType(aOptionParent, aOptionType)) {
-      return false;
-    }
+  bool hasOptionChoice(String aChoice) {
+    aChoice = _mainChoice(aChoice);
 
-    aChoice = _mainChoice(aOptionParent, aOptionType, aChoice);
-
-    return (_supportedOptions[aOptionParent.elementType]![aOptionType]![
-            'choices'] as LinkedHashSet)
+    return (_supportedOptions[optionParent.elementType]![optionType]!['choices']
+            as LinkedHashSet)
         .contains(aChoice);
   }
 
-  static String _mainChoice(
-      THHasOptions aOptionParent, String aOptionType, String aChoice) {
-    final alternateChoiceMap = _supportedOptions[aOptionParent.elementType]![
-        aOptionType]!['alternateChoices'] as Map<String, String>;
+  String _mainChoice(String aChoice) {
+    final alternateChoiceMap = _supportedOptions[optionParent.elementType]![
+        optionType]!['alternateChoices'] as Map<String, String>;
     if (alternateChoiceMap.containsKey(aChoice)) {
       aChoice = alternateChoiceMap[aChoice]!;
     }
