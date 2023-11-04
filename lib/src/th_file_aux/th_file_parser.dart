@@ -333,6 +333,17 @@ class THFileParser {
     _currentParent = newLine;
 
     // _parsedOptions.clear();
+
+    try {
+      // Including subtype defined with type (type:subtype).
+      if (aElement[1][1] != null) {
+        THSubtypeCommandOption(newLine, aElement[1][1]);
+        // _parsedOptions.add('subtype');
+      }
+    } catch (e, s) {
+      _addError("$e\n\nTrace:\n\n$s", '_injectLine', aElement[1][1].toString());
+    }
+
     _optionFromElement(aElement[2], _lineRegularOptions);
     _addChildParser(_lineContentParser);
   }
