@@ -16,7 +16,7 @@ class THNameCommandOption extends THCommandOption {
       }
     } else {
       throw THCustomException(
-          "Unsupported parent command type '${parentOption.commandType}' for 'name' option.");
+          "Unsupported parent command type '${parentOption.elementType}' for 'name' option.");
     }
   }
 

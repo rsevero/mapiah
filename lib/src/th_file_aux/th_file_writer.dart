@@ -19,7 +19,7 @@ class THFileWriter {
 
   String serialize(THElement aTHElement) {
     var asString = '';
-    final type = aTHElement.commandType;
+    final type = aTHElement.elementType;
 
     switch (type) {
       case 'beziercurvelinesegment':

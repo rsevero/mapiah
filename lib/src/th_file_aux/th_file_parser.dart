@@ -420,7 +420,7 @@ class THFileParser {
         }
 
         if (THMultipleChoiceCommandOption.hasOptionType(
-            _currentHasOptions.commandType, optionType)) {
+            _currentHasOptions.elementType, optionType)) {
           _injectMultipleChoiceCommandOption(optionType);
           continue;
         }
@@ -536,12 +536,12 @@ class THFileParser {
   void _injectMultipleChoiceCommandOption(String aOptionType) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.commandType}'");
+          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
     }
 
     THMultipleChoiceCommandOption(
@@ -558,12 +558,12 @@ class THFileParser {
   void _injectClipCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'clip' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a 'clip' option for a '${_currentHasOptions.commandType}'");
+          "One string parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
     }
 
     THClipCommandOption(_currentHasOptions, _currentSpec[0]);
@@ -572,7 +572,7 @@ class THFileParser {
   void _injectDistCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'dist' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'");
     }
 
     switch (_currentSpec.length) {
@@ -590,7 +590,7 @@ class THFileParser {
   void _injectExploredCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'explored' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'explored' option for a '${_currentHasOptions.elementType}'");
     }
 
     switch (_currentSpec.length) {
@@ -608,7 +608,7 @@ class THFileParser {
   void _injectContextCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'context' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'context' option for a '${_currentHasOptions.elementType}'");
     }
 
     THContextCommandOption(
@@ -618,7 +618,7 @@ class THFileParser {
   void _injectFromCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'dist' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'");
     }
 
     THFromCommandOption(_currentHasOptions, _currentSpec[0]);
@@ -627,7 +627,7 @@ class THFileParser {
   void _injectExtendCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'extend' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'extend' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] == null) {
@@ -640,7 +640,7 @@ class THFileParser {
   void _injectIDCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'id' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'id' option for a '${_currentHasOptions.elementType}'");
     }
 
     THIDCommandOption(_currentHasOptions, _currentSpec[0]);
@@ -649,7 +649,7 @@ class THFileParser {
   void _injectNameCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'name' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'name' option for a '${_currentHasOptions.elementType}'");
     }
 
     THNameCommandOption(_currentHasOptions, _currentSpec[0]);
@@ -738,7 +738,7 @@ class THFileParser {
   void _injectScrapCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'scrap' option for a '${_currentHasOptions.commandType}'");
+          "One parameter required to create a 'scrap' option for a '${_currentHasOptions.elementType}'");
     }
 
     THScrapCommandOption(_currentHasOptions, _currentSpec[0]);

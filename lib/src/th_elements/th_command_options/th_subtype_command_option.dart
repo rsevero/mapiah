@@ -121,7 +121,7 @@ class THSubtypeCommandOption extends THCommandOption {
       }
     } else {
       throw THCustomException(
-          "Unsupported element of type '${parentOption.commandType}' in option type '$optionType'.");
+          "Unsupported element of type '${parentOption.elementType}' in option type '$optionType'.");
     }
 
     _subtype = aSubtype;

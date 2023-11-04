@@ -236,20 +236,20 @@ class THMultipleChoiceCommandOption extends THCommandOption {
       THHasOptions aOptionParent, String aOptionType, String aChoice)
       : _optionType = aOptionType,
         super(aOptionParent) {
-    if (!hasOptionType(parentOption.commandType, aOptionType)) {
+    if (!hasOptionType(parentOption.elementType, aOptionType)) {
       throw THCustomException(
-          "Unsupported option type '$optionType' for a '${parentOption.commandType}'");
+          "Unsupported option type '$optionType' for a '${parentOption.elementType}'");
     }
 
     choice = aChoice;
   }
 
   set choice(String aChoice) {
-    aChoice = _mainChoice(parentOption.commandType, optionType, aChoice);
+    aChoice = _mainChoice(parentOption.elementType, optionType, aChoice);
 
-    if (!hasOptionChoice(parentOption.commandType, optionType, aChoice)) {
+    if (!hasOptionChoice(parentOption.elementType, optionType, aChoice)) {
       throw THCustomException(
-          "Unsupported choice '$aChoice' in a '$optionType' option for a '${parentOption.commandType}' element.");
+          "Unsupported choice '$aChoice' in a '$optionType' option for a '${parentOption.elementType}' element.");
     }
 
     _choice = aChoice;
@@ -269,33 +269,33 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         as bool);
   }
 
-  static String defaultChoice(String aParentCommandType, String aOptionType) {
-    if (!hasDefaultChoice(aParentCommandType, aOptionType)) {
+  static String defaultChoice(String aParentElementType, String aOptionType) {
+    if (!hasDefaultChoice(aParentElementType, aOptionType)) {
       throw THCustomException(
-          "Unsupported option type '$aOptionType' for a '$aParentCommandType' in 'defaultChoice'");
+          "Unsupported option type '$aOptionType' for a '$aParentElementType' in 'defaultChoice'");
     }
 
-    return (_supportedOptions[aParentCommandType]![aOptionType]![
+    return (_supportedOptions[aParentElementType]![aOptionType]![
         'defaultChoice'] as String);
   }
 
   static bool hasOptionChoice(
-      String aParentCommandType, String aOptionType, String aChoice) {
-    if (!hasOptionType(aParentCommandType, aOptionType)) {
+      String aParentElementType, String aOptionType, String aChoice) {
+    if (!hasOptionType(aParentElementType, aOptionType)) {
       return false;
     }
 
-    aChoice = _mainChoice(aParentCommandType, aOptionType, aChoice);
+    aChoice = _mainChoice(aParentElementType, aOptionType, aChoice);
 
-    return (_supportedOptions[aParentCommandType]![aOptionType]!['choices']
+    return (_supportedOptions[aParentElementType]![aOptionType]!['choices']
             as LinkedHashSet)
         .contains(aChoice);
   }
 
   static String _mainChoice(
-      String aParentCommandType, String aOptionType, String aChoice) {
+      String aParentElementType, String aOptionType, String aChoice) {
     final alternateChoiceMap =
-        _supportedOptions[aParentCommandType]![aOptionType]!['alternateChoices']
+        _supportedOptions[aParentElementType]![aOptionType]!['alternateChoices']
             as Map<String, String>;
     if (alternateChoiceMap.containsKey(aChoice)) {
       aChoice = alternateChoiceMap[aChoice]!;
@@ -304,17 +304,17 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     return aChoice;
   }
 
-  static bool hasOptionType(String aParentCommandType, String aOptionType) {
-    if (!_supportedOptions.containsKey(aParentCommandType)) {
+  static bool hasOptionType(String aParentElementType, String aOptionType) {
+    if (!_supportedOptions.containsKey(aParentElementType)) {
       return false;
     }
 
-    if (!_supportedOptions[aParentCommandType]!.containsKey(aOptionType)) {
+    if (!_supportedOptions[aParentElementType]!.containsKey(aOptionType)) {
       return false;
     }
 
     final optionTypeDefinition =
-        (_supportedOptions[aParentCommandType]![aOptionType]);
+        (_supportedOptions[aParentElementType]![aOptionType]);
     final typesSupported =
         optionTypeDefinition!['typesSupported'] as Set<String>;
 

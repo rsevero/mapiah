@@ -27,7 +27,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
       }
     } else {
       throw THCustomException(
-          "Unsupported parent command type '${parentOption.commandType}' for 'clip' option.");
+          "Unsupported parent command type '${parentOption.elementType}' for 'clip' option.");
     }
   }
 }

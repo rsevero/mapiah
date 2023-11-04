@@ -41,7 +41,7 @@ abstract class THElement {
     return _thFile;
   }
 
-  String get commandType {
+  String get elementType {
     return runtimeType.toString().substring(2).toLowerCase();
   }
 
@@ -128,18 +128,18 @@ class THFile extends THElement with THParent {
   }
 
   void deleteElementTHIDByElement(THElement aElement) {
-    final aCommandType = aElement.commandType;
+    final aElementType = aElement.elementType;
 
     if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
-          "Element '$aElement' of type '$aCommandType' has no registered thID.");
+          "Element '$aElement' of type '$aElementType' has no registered thID.");
     }
 
     final aTHID = _thIDByElement[aElement];
 
     if (!_elementByTHID.containsKey(aTHID)) {
       throw THCustomException(
-          "thID '$aTHID' gotten from element '$aElement' of type '$aCommandType' is not registered.");
+          "thID '$aTHID' gotten from element '$aElement' of type '$aElementType' is not registered.");
     }
 
     _thIDByElement.remove(aElement);
@@ -165,17 +165,17 @@ class THFile extends THElement with THParent {
   }
 
   void updateTHID(THElement aElement, String newTHID) {
-    final aCommandType = aElement.commandType;
+    final aElementType = aElement.elementType;
 
     if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
-          "Element '$aElement' of type '$aCommandType' had no registered thID.");
+          "Element '$aElement' of type '$aElementType' had no registered thID.");
     }
     final oldTHID = _thIDByElement[aElement];
 
     if (_elementByTHID.containsKey(newTHID)) {
       throw THCustomException(
-          "Duplicate '$aCommandType' element with thID '$newTHID'.");
+          "Duplicate '$aElementType' element with thID '$newTHID'.");
     }
 
     _elementByTHID.remove(oldTHID);
@@ -191,7 +191,7 @@ class THFile extends THElement with THParent {
     _elementByTHID[aTHID] = aElement;
 
     if (_thIDByElement.containsKey(aElement)) {
-      throw THCustomException("'${aElement.commandType}' already included.");
+      throw THCustomException("'${aElement.elementType}' already included.");
     }
     _thIDByElement[aElement] = aTHID;
   }
