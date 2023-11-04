@@ -3,12 +3,15 @@ import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
+import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 
 class THFileWriter {
@@ -22,12 +25,6 @@ class THFileWriter {
     final type = aTHElement.elementType;
 
     switch (type) {
-      case 'beziercurvelinesegment':
-        final aTHBezierCurveLineSegment =
-            aTHElement as THBezierCurveLineSegment;
-        final newLine =
-            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
-        asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
       case 'comment':
         asString += '# ${(aTHElement as THComment).content}\n';
       case 'emptyline':
@@ -59,6 +56,8 @@ class THFileWriter {
         asString += _prepareLine(newLine, aTHLine);
         _increasePrefix();
         asString += _childrenAsString(aTHLine);
+      case 'linesegment':
+        asString += _serializeLineSegment(aTHElement);
       case 'multilinecomment':
         asString += _prepareLine('comment', aTHElement);
         _increasePrefix();
@@ -78,13 +77,33 @@ class THFileWriter {
         asString += _prepareLine(newLine, aTHScrap);
         _increasePrefix();
         asString += _childrenAsString(aTHScrap);
-      case 'straightlinesegment':
-        final aTHStraightLineSegment = aTHElement as THStraightLineSegment;
-        final newLine = aTHStraightLineSegment.endPoint.toString();
-        asString += _prepareLine(newLine, aTHStraightLineSegment);
       default:
         final newLine = "Unrecognized element: '$aTHElement'";
         asString += _prepareLine(newLine, aTHElement);
+    }
+
+    return asString;
+  }
+
+  String _serializeLineSegment(THElement aTHElement) {
+    final thType = aTHElement.runtimeType.toString();
+    var asString = '';
+
+    switch (thType) {
+      case 'THBezierCurveLineSegment':
+        final aTHBezierCurveLineSegment =
+            aTHElement as THBezierCurveLineSegment;
+        final newLine =
+            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
+        asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
+        asString += _linePointOptionsAsString(aTHBezierCurveLineSegment);
+      case 'THStraightLineSegment':
+        final aTHStraightLineSegment = aTHElement as THStraightLineSegment;
+        final newLine = aTHStraightLineSegment.endPoint.toString();
+        asString += _prepareLine(newLine, aTHStraightLineSegment);
+        asString += _linePointOptionsAsString(aTHStraightLineSegment);
+      default:
+        throw THCustomException("Unrecognized line segment type: '$thType'.");
     }
 
     return asString;
@@ -194,5 +213,21 @@ class THFileWriter {
     newLine = _decodeDoubleQuotes(newLine);
 
     return newLine;
+  }
+
+  String _linePointOptionsAsString(THLineSegment aLineSegment) {
+    var asString = '';
+
+    _increasePrefix();
+    final aTHHasOptions = aLineSegment as THHasOptions;
+    for (final aLinePointOptionType in aTHHasOptions.optionsList()) {
+      asString += "$aLinePointOptionType ";
+      asString +=
+          aTHHasOptions.optionByType(aLinePointOptionType)!.specToFile().trim();
+      asString = "$_prefix${asString.trim()}}\n";
+    }
+    _reducePrefix();
+
+    return asString;
   }
 }

@@ -38,7 +38,6 @@ import 'package:mapiah/src/th_elements/th_endcomment.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
-import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
@@ -170,6 +169,8 @@ class THFileParser {
           continue;
         case 'line':
           _injectLine(element);
+        case 'linesegmentoption':
+          _injectLineSegmentOption(element);
         case 'straightlinesegment':
           _injectStraightLineSegment(element);
         case 'multilinecomment':
@@ -274,7 +275,7 @@ class THFileParser {
     final newBezierCurveLineSegment = THBezierCurveLineSegment.fromString(
         _currentParent, controlPoint1, controlPoint2, endPoint);
 
-    _currentElement = newBezierCurveLineSegment;
+    // _currentElement = newBezierCurveLineSegment;
     _lastLineSegment = newBezierCurveLineSegment;
   }
 
@@ -297,7 +298,7 @@ class THFileParser {
     final newStraightLineSegment =
         THStraightLineSegment.fromString(_currentParent, endPoint);
 
-    _currentElement = newStraightLineSegment;
+    // _currentElement = newStraightLineSegment;
     _lastLineSegment = newStraightLineSegment;
   }
 
@@ -318,6 +319,31 @@ class THFileParser {
     _currentElement = THEndscrap(_currentParent);
     _currentParent = _currentParent.parent;
     _returnToParentParser();
+  }
+
+  /// All line options (the ones that should be on the "line" line in the .th2
+  /// file) can also appear as linepoint options (the ones that appear
+  /// intermixed with line segments between the "line" and "endline" lines).
+  /// Here we deall with them all, registering the line options that appeared as
+  /// linepoint options in the line options list and keeping the linepoint
+  /// options registered with the appropriate line segment.
+  void _injectLineSegmentOption(List<dynamic> aElement) {
+    if (_lastLineSegment == null) {
+      throw THCustomException(
+          "Line segment option '${aElement[0]}' without a line segment.");
+    }
+
+    final elementSize = aElement.length;
+
+    assert(elementSize == 2);
+    assert(aElement[1] is List);
+    assert(aElement[1].length == 1);
+    assert(aElement[1][0] is List);
+
+    _optionFromElement(aElement[1], _lineSegmentRegularOptions);
+
+    /// Reverting the change made by _lineSegmentRegularOptions().
+    _currentHasOptions = _currentElement as THHasOptions;
   }
 
   void _injectLine(List<dynamic> aElement) {
@@ -347,6 +373,7 @@ class THFileParser {
 
     _optionFromElement(aElement[2], _lineRegularOptions);
     _addChildParser(_lineContentParser);
+    _lastLineSegment = null;
   }
 
   void _injectEndline(List<dynamic> aElement) {
@@ -476,12 +503,53 @@ class THFileParser {
     return optionIdentified;
   }
 
+  bool _lineSegmentRegularOptions(String aOptionType) {
+    var optionIdentified = _lineRegularOptions(aOptionType);
+
+    if (optionIdentified) {
+      return true;
+    }
+
+    if (THMultipleChoiceCommandOption.hasOptionType(
+        _currentHasOptions, aOptionType)) {
+      _injectMultipleChoiceCommandOption(aOptionType);
+      return true;
+    }
+
+    /// Changing _currentHasOptions to the line segment that is the parent of
+    /// of the linepoint option. This change will be reverted by
+    /// _injectLineSegmentOption().
+    _currentHasOptions = _lastLineSegment as THHasOptions;
+    switch (aOptionType) {
+      // case 'copyright':
+      //   _injectCopyrightCommandOption();
+      // case 'cs':
+      //   _injectCSCommandOption();
+      // case 'projection':
+      //   _injectProjectionCommandOption();
+      // case 'scale':
+      //   _injectScrapScaleCommandOption();
+      // case 'sketch':
+      //   _injectSketchCommandOption();
+      // case 'station-names':
+      //   _injectStationNamesCommandOption();
+      // case 'stations':
+      //   _injectStationsCommandOption();
+      // case 'title':
+      //   _injectTitleCommandOption();
+      default:
+        optionIdentified = false;
+    }
+
+    return optionIdentified;
+  }
+
   bool _lineRegularOptions(String aOptionType) {
     var optionIdentified = true;
 
     switch (aOptionType) {
-      // case 'author':
-      //   _injectAuthorCommandOption();
+      case 'clip':
+        _injectClipCommandOption();
       // case 'copyright':
       //   _injectCopyrightCommandOption();
       // case 'cs':

@@ -39,6 +39,18 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         },
       },
 
+      // clip <on/off> . specify whether a symbol is clipped by the scrap border.
+      'clip': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
       // close <on/off/auto> . determines whether a line is closed or not
       'close': {
         'hasDefault': true,
@@ -47,6 +59,75 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'on',
           'off',
           'auto',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
+      // head <begin/end/both/none> . can be used only with the arrow type and indicates
+      // where to put an arrow head. End is default.
+      'head': {
+        'hasDefault': true,
+        'default': 'end',
+        'choices': <String>{
+          'begin',
+          'end',
+          'both',
+          'none',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{
+          'arrow',
+        },
+      },
+
+      // rebelays <on/off> . this option can be specified only with the ‘rope’ line type.
+      'rebelays': {
+        'hasDefault': true,
+        'default': 'off',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{
+          'rope',
+        },
+      },
+
+      // reverse <on/off> . whether points are given in reverse order.
+      'reverse': {
+        'hasDefault': true,
+        'default': 'off',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
+      // visibility <on/off> . displays/hides the symbol.
+      'visibility': {
+        'hasDefault': true,
+        'default': 'on',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+    },
+    'linesegment': {
+      // adjust <horizontal/vertical> . shifts the line point to be aligned horizontally/ver-
+      // tically with the previous point. It can’t be set on the first point. The result is a
+      // horizontal/vertical line segment. This option is not allowed in the plan projection.
+      'adjust': {
+        'hasDefault': false,
+        'choices': <String>{
+          'horizontal',
+          'vertical',
         },
         'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
@@ -88,35 +169,18 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         },
       },
 
-      // head <begin/end/both/none> . can be used only with the arrow type and indicates
-      // where to put an arrow head. End is default.
-      'head': {
+      // smooth <on/off/auto> . whether the line is smooth at the given point. Auto is
+      // default.
+      'smooth': {
         'hasDefault': true,
-        'default': 'end',
-        'choices': <String>{
-          'begin',
-          'end',
-          'both',
-          'none',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'arrow',
-        },
-      },
-
-      // rebelays <on/off> . this option can be specified only with the ‘rope’ line type.
-      'rebelays': {
-        'hasDefault': true,
-        'default': 'off',
+        'default': 'auto',
         'choices': <String>{
           'on',
           'off',
+          'auto',
         },
         'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'rope',
-        },
+        'plaTypesSupported': <String>{},
       },
     },
     'point': {

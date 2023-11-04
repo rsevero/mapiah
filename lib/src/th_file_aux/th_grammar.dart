@@ -238,6 +238,16 @@ class THGrammar extends GrammarDefinition {
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));
 
+  /// on/off options;
+  Parser onOffOptions() => (stringIgnoreCase('on') | stringIgnoreCase('off'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+
+  /// on/off/auto options;
+  Parser onOffAutoOptions() => (stringIgnoreCase('on') |
+          stringIgnoreCase('off') |
+          stringIgnoreCase('auto'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace));
+
   /// Command template
   Parser commandTemplate(command) =>
       ref0(command).trim(ref0(thWhitespace), ref0(thWhitespace)) &
@@ -412,10 +422,7 @@ class THGrammar extends GrammarDefinition {
   Parser wallsOption() =>
       stringIgnoreCase('walls').skip(before: char('-')) &
       ref0(wallsOptions).map((value) => [value]);
-  Parser wallsOptions() => (stringIgnoreCase('on') |
-          stringIgnoreCase('off') |
-          stringIgnoreCase('auto'))
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser wallsOptions() => ref0(onOffAutoOptions);
 
   /// Endscrap
   Parser endscrap() => ref1(commandTemplate, endscrapCommand);
@@ -594,9 +601,9 @@ class THGrammar extends GrammarDefinition {
   /// point -clip
   Parser clipOption() =>
       stringIgnoreCase('clip').skip(before: char('-')) & ref0(clipOptions);
-  Parser clipOptions() => (stringIgnoreCase('on') | stringIgnoreCase('off'))
-      .trim(ref0(thWhitespace), ref0(thWhitespace))
-      .map((value) => [value]);
+  Parser clipLineSegmentOption() =>
+      stringIgnoreCase('clip') & ref0(clipOptions);
+  Parser clipOptions() => ref0(onOffOptions).map((value) => [value]);
 
   /// point -context
   Parser contextOption() =>
@@ -639,6 +646,7 @@ class THGrammar extends GrammarDefinition {
   /// point -id
   Parser idOption() =>
       stringIgnoreCase('id').skip(before: char('-')) & ref0(idOptions);
+  Parser idLineSegmentOption() => stringIgnoreCase('id') & ref0(idOptions);
   Parser idOptions() => extKeyword()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
@@ -745,10 +753,9 @@ class THGrammar extends GrammarDefinition {
   Parser visibilityOption() =>
       stringIgnoreCase('visibility').skip(before: char('-')) &
       ref0(visibilityOptions);
-  Parser visibilityOptions() =>
-      (stringIgnoreCase('on') | stringIgnoreCase('off'))
-          .trim(ref0(thWhitespace), ref0(thWhitespace))
-          .map((value) => [value]);
+  Parser visibilityLineSegmentOption() =>
+      stringIgnoreCase('visibility') & ref0(visibilityOptions);
+  Parser visibilityOptions() => ref0(onOffOptions).map((value) => [value]);
 
   /// line
   Parser line() => ref1(commandTemplate, lineCommand);
@@ -798,7 +805,15 @@ class THGrammar extends GrammarDefinition {
       (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
           .pick(1)
           .optional();
-  Parser lineOptions() => (closeOption()).star();
+  Parser lineOptions() => (anchorsOption() |
+          borderOption() |
+          clipOption() |
+          closeOption() |
+          headOption() |
+          rebelaysOption() |
+          reverseOption() |
+          visibilityOption())
+      .star();
 
   /// endline
   Parser endline() => ref1(commandTemplate, endlineCommand);
@@ -829,16 +844,112 @@ class THGrammar extends GrammarDefinition {
 
   /// line segment options
   Parser lineSegmentOptions() =>
-      (closeLineSegmentOption()).map((value) => ['linesegmentoption', value]);
+      ((adjustLineSegmentOption() |
+                  anchorsLineSegmentOption() |
+                  borderLineSegmentOption() |
+                  clipLineSegmentOption() |
+                  closeLineSegmentOption() |
+                  directionLineSegmentOption() |
+                  gradientLineSegmentOption() |
+                  headLineSegmentOption() |
+                  rebelaysLineSegmentOption() |
+                  reverseLineSegmentOption() |
+                  smoothLineSegmentOption() |
+                  visibilityLineSegmentOption())
+              .trim(ref0(thWhitespace), ref0(thWhitespace)))
+          .map((value) => [
+                'linesegmentoption',
+                [value]
+              ]) &
+      ref0(endLineComment).optional();
+
+  /// line -adjust
+  Parser adjustOption() =>
+      stringIgnoreCase('adjust').skip(before: char('-')) & ref0(adjustOptions);
+  Parser adjustLineSegmentOption() =>
+      stringIgnoreCase('adjust') & ref0(adjustOptions);
+  Parser adjustOptions() => ref0(onOffOptions).map((value) => [value]);
+
+  /// line -anchors
+  Parser anchorsOption() =>
+      ref0(anchorsCommandID).skip(before: char('-')) & ref0(anchorsOptions);
+  Parser anchorsLineSegmentOption() =>
+      ref0(anchorsCommandID) & ref0(anchorsOptions);
+  Parser anchorsCommandID() => stringIgnoreCase('anchors');
+  Parser anchorsOptions() => ref0(onOffOptions).map((value) => [value]);
+
+  /// line -border
+  Parser borderOption() =>
+      stringIgnoreCase('border').skip(before: char('-')) & ref0(borderOptions);
+  Parser borderLineSegmentOption() =>
+      stringIgnoreCase('border') & ref0(borderOptions);
+  Parser borderOptions() => ref0(onOffOptions).map((value) => [value]);
 
   /// line -close
   Parser closeOption() =>
       stringIgnoreCase('close').skip(before: char('-')) & ref0(closeOptions);
   Parser closeLineSegmentOption() =>
       stringIgnoreCase('close') & ref0(closeOptions);
-  Parser closeOptions() => (stringIgnoreCase('on') |
-          stringIgnoreCase('off') |
-          stringIgnoreCase('auto'))
+  Parser closeOptions() => ref0(onOffAutoOptions).map((value) => [value]);
+
+  /// line -direction
+  Parser directionOption() =>
+      stringIgnoreCase('direction').skip(before: char('-')) &
+      ref0(directionOptions);
+  Parser directionLineSegmentOption() =>
+      stringIgnoreCase('direction') & ref0(directionOptions);
+  Parser directionOptions() => (stringIgnoreCase('begin') |
+          stringIgnoreCase('end') |
+          stringIgnoreCase('both') |
+          stringIgnoreCase('none') |
+          stringIgnoreCase('point'))
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+
+  /// line -gradient
+  Parser gradientOption() =>
+      stringIgnoreCase('gradient').skip(before: char('-')) &
+      ref0(gradientOptions);
+  Parser gradientLineSegmentOption() =>
+      stringIgnoreCase('gradient') & ref0(gradientOptions);
+  Parser gradientOptions() => (stringIgnoreCase('none') |
+          stringIgnoreCase('center') |
+          stringIgnoreCase('point'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
+
+  /// line -head
+  Parser headOption() =>
+      stringIgnoreCase('head').skip(before: char('-')) & ref0(headOptions);
+  Parser headLineSegmentOption() =>
+      stringIgnoreCase('head') & ref0(headOptions);
+  Parser headOptions() => (stringIgnoreCase('begin') |
+          stringIgnoreCase('end') |
+          stringIgnoreCase('both') |
+          stringIgnoreCase('none'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
+
+  /// line -rebelays
+  Parser rebelaysOption() =>
+      stringIgnoreCase('rebelays').skip(before: char('-')) &
+      ref0(rebelaysOptions);
+  Parser rebelaysLineSegmentOption() =>
+      stringIgnoreCase('rebelays') & ref0(rebelaysOptions);
+  Parser rebelaysOptions() => ref0(onOffOptions).map((value) => [value]);
+
+  /// line -reverse
+  Parser reverseOption() =>
+      stringIgnoreCase('reverse').skip(before: char('-')) &
+      ref0(reverseOptions);
+  Parser reverseLineSegmentOption() =>
+      stringIgnoreCase('reverse') & ref0(reverseOptions);
+  Parser reverseOptions() => ref0(onOffOptions).map((value) => [value]);
+
+  /// line -smooth
+  Parser smoothOption() =>
+      stringIgnoreCase('smooth').skip(before: char('-')) & ref0(smoothOptions);
+  Parser smoothLineSegmentOption() =>
+      stringIgnoreCase('smooth') & ref0(smoothOptions);
+  Parser smoothOptions() => ref0(onOffAutoOptions).map((value) => [value]);
 }

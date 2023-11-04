@@ -1,0 +1,8 @@
+encoding utf-8
+scrap test
+line slope
+    1758 -1030
+    border auto
+    2147.74 -1120.48
+endline
+endscrap
