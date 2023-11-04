@@ -1,6 +1,6 @@
 encoding utf-8
 scrap test
-line contour -context line extra
+line contour -close final
   2802	-969
   3804	3512
 endline

@@ -8,10 +8,23 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   late final String _optionType;
   late String _choice;
   static final _supportedOptions = {
+    'line': {
+      // close <on/off/auto> . determines whether a line is closed or not
+      'close': {
+        'hasDefault': true,
+        'default': 'off',
+        'choices': <String>{
+          'on',
+          'off',
+          'auto',
+        },
+        'alternateChoices': <String, String>{},
+      },
+    },
     'point': {
-//       align . alignment of the symbol or text. The following values are accepted: center, c,
-// top, t, bottom, b, left, l, right, r, top-left, tl, top-right, tr, bottom-left, bl, bottom-right,
-// br.
+      // align . alignment of the symbol or text. The following values are accepted: center, c,
+      // top, t, bottom, b, left, l, right, r, top-left, tl, top-right, tr, bottom-left, bl, bottom-right,
+      // br.
       'align': {
         'hasDefault': false,
         'choices': <String>{
@@ -38,9 +51,9 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         },
       },
 
-//       clip <on/off> . specify whether a symbol is clipped by the scrap border. You cannot
-// specify this option for the following symbols: station, station-name, label, remark,
-// date, altitude, height, passage-height.
+      // clip <on/off> . specify whether a symbol is clipped by the scrap border. You cannot
+      // specify this option for the following symbols: station, station-name, label, remark,
+      // date, altitude, height, passage-height.
       'clip': {
         'hasDefault': true,
         'default': 'default',

@@ -795,7 +795,7 @@ class THGrammar extends GrammarDefinition {
       (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
           .pick(1)
           .optional();
-  Parser lineOptions() => (any()).star();
+  Parser lineOptions() => (closeOption()).star();
 
   /// endline
   Parser endline() => ref1(commandTemplate, endlineCommand);
@@ -823,4 +823,13 @@ class THGrammar extends GrammarDefinition {
               .trim(ref0(thWhitespace), ref0(thWhitespace))
               .map((value) => ['endpoint', value]))
       .map((value) => ['beziercurvelinesegment', value]);
+
+  /// line -close
+  Parser closeOption() =>
+      stringIgnoreCase('close').skip(before: char('-')) & ref0(closeOptions);
+  Parser closeOptions() => (stringIgnoreCase('on') |
+          stringIgnoreCase('off') |
+          stringIgnoreCase('auto'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
 }
