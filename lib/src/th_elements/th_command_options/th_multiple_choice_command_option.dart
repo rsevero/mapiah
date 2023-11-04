@@ -297,19 +297,20 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   static bool hasOptionType(THHasOptions aOptionParent, String aOptionType) {
-    final aParentElementType = aOptionParent.elementType;
-    if (!_supportedOptions.containsKey(aParentElementType)) {
+    final aOptionParentElementType = aOptionParent.elementType;
+    if (!_supportedOptions.containsKey(aOptionParentElementType)) {
       return false;
     }
 
-    if (!_supportedOptions[aParentElementType]!.containsKey(aOptionType)) {
+    if (!_supportedOptions[aOptionParentElementType]!
+        .containsKey(aOptionType)) {
       return false;
     }
 
     if (aOptionParent is THHasPLAType) {
       final aPLAType = (aOptionParent as THHasPLAType).plaType;
 
-      final plaTypesSupported = _supportedOptions[aParentElementType]![
+      final plaTypesSupported = _supportedOptions[aOptionParentElementType]![
           aOptionType]!['plaTypesSupported'] as Set<String>;
 
       if (plaTypesSupported.isEmpty) {
