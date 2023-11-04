@@ -22,19 +22,18 @@ point 450.0 900.0 station -name a1
 
 point 630.0 899.0 anchor
 
-line wall -subtype pit
-  450.0 900.0
-  subtype ice
-  450.0 900.0 597.0 657.0 450.0 601.0
+line wall -close on -subtype pit
+  448.0 1005.0
+  448.0 1005.0 597.0 657.0 450.0 601.0
   smooth off
   564.25 535.47 650.0 600.0 650.0 600.0
   smooth off
   650.0 900.0
   850.0 900.0
   850.0 600.0
-  subtype presumed
   1050.0 600.0
   1050.0 900.0
+  448.0 1005.0
 endline
 
 endscrap

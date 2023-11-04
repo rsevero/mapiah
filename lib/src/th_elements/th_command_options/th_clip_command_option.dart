@@ -19,9 +19,15 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
 
   THClipCommandOption(THHasOptions aOptionParent, String aChoice)
       : super(aOptionParent, 'clip', aChoice) {
-    if (_unsupportedPointTypes.contains((parentOption as THPoint).pointType)) {
+    if (parentOption is THPoint) {
+      final parentAsPoint = parentOption as THPoint;
+      if (_unsupportedPointTypes.contains(parentAsPoint.pointType)) {
+        throw THCustomException(
+            "Unsupported point type '${parentAsPoint.pointType}' 'clip' option.");
+      }
+    } else {
       throw THCustomException(
-          "Unsupported point type '${aOptionParent.type}' 'clip' option.");
+          "Unsupported parent command type '${parentOption.commandType}' for 'clip' option.");
     }
   }
 }

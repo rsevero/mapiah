@@ -9,6 +9,35 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   late String _choice;
   static final _supportedOptions = {
     'line': {
+      // anchors <on/off> . this option can be specified only with the ‘rope’ line type.
+      'anchors': {
+        'hasDefault': true,
+        'default': 'off',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'rope',
+        },
+      },
+
+      // border <on/off> . this option can be specified only with the ‘slope’ symbol type. It
+      // switches on/off the border line of the slope.
+      'border': {
+        'hasDefault': true,
+        'default': 'off',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'slope',
+        },
+      },
+
       // close <on/off/auto> . determines whether a line is closed or not
       'close': {
         'hasDefault': true,
@@ -19,6 +48,74 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'auto',
         },
         'alternateChoices': <String, String>{},
+        'typesSupported': <String>{},
+      },
+
+      // direction <begin/end/both/none/point> . can be used only with the section type.
+      // It indicates where to put a direction arrow on the section line. None is default.
+      'direction': {
+        'hasDefault': true,
+        'default': 'none',
+        'choices': <String>{
+          'begin',
+          'end',
+          'both',
+          'none',
+          'point',
+        },
+        'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'section',
+        },
+      },
+
+      // gradient <none/center/point> . can be used only with the contour type and indi-
+      // cates where to put a gradient mark on the contour line. If there is no gradient speci-
+      // fication, behaviour is symbol-set dependent (e.g. no tick in UIS, tick in the middle in
+      // SKBB).
+      'gradient': {
+        'hasDefault': true,
+        'default': 'none',
+        'choices': <String>{
+          'none',
+          'center',
+          'point',
+        },
+        'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'contour',
+        },
+      },
+
+      // head <begin/end/both/none> . can be used only with the arrow type and indicates
+      // where to put an arrow head. End is default.
+      'head': {
+        'hasDefault': true,
+        'default': 'end',
+        'choices': <String>{
+          'begin',
+          'end',
+          'both',
+          'none',
+        },
+        'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'arrow',
+        },
+      },
+
+      // rebelays <on/off> . this option can be specified only with the ‘rope’ line type.
+      'rebelays': {
+        'hasDefault': true,
+        'default': 'off',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'rope',
+        },
       },
     },
     'point': {
@@ -49,6 +146,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'bl': 'bottom-left',
           'br': 'bottom-right',
         },
+        'typesSupported': <String>{},
       },
 
       // clip <on/off> . specify whether a symbol is clipped by the scrap border. You cannot
@@ -62,6 +160,16 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'off',
         },
         'alternateChoices': <String, String>{},
+        'typesSupported': <String>{
+          'station',
+          'station-name',
+          'label',
+          'remark',
+          'date',
+          'altitude',
+          'height',
+          'passage-height',
+        },
       },
 
       // place <bottom/default/top> . changes displaying order in the map.
@@ -74,6 +182,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'top',
         },
         'alternateChoices': <String, String>{},
+        'typesSupported': <String>{},
       },
 
       // visibility <on/off> . displays/hides the symbol.
@@ -85,6 +194,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'off',
         },
         'alternateChoices': <String, String>{},
+        'typesSupported': <String>{},
       },
     },
     'scrap': {
@@ -98,6 +208,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'vertical',
         },
         'alternateChoices': <String, String>{},
+        'typesSupported': <String>{},
       },
 
       // walls <on/off/auto> . specify if the scrap should be used in 3D model reconstruction
@@ -109,6 +220,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           'auto',
         },
         'alternateChoices': <String, String>{},
+        'typesSupported': <String>{},
       },
     },
   };
@@ -124,20 +236,20 @@ class THMultipleChoiceCommandOption extends THCommandOption {
       THHasOptions aOptionParent, String aOptionType, String aChoice)
       : _optionType = aOptionType,
         super(aOptionParent) {
-    if (!hasOptionType(parentOption.type, aOptionType)) {
+    if (!hasOptionType(parentOption.commandType, aOptionType)) {
       throw THCustomException(
-          "Unsupported option type '$optionType' for a '${parentOption.type}'");
+          "Unsupported option type '$optionType' for a '${parentOption.commandType}'");
     }
 
     choice = aChoice;
   }
 
   set choice(String aChoice) {
-    aChoice = _mainChoice(parentOption.type, optionType, aChoice);
+    aChoice = _mainChoice(parentOption.commandType, optionType, aChoice);
 
-    if (!hasOptionChoice(parentOption.type, optionType, aChoice)) {
+    if (!hasOptionChoice(parentOption.commandType, optionType, aChoice)) {
       throw THCustomException(
-          "Unsupported choice '$aChoice' in a '$optionType' option for a '${parentOption.type}' element.");
+          "Unsupported choice '$aChoice' in a '$optionType' option for a '${parentOption.commandType}' element.");
     }
 
     _choice = aChoice;
@@ -157,33 +269,33 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         as bool);
   }
 
-  static String defaultChoice(String aParentType, String aOptionType) {
-    if (!hasDefaultChoice(aParentType, aOptionType)) {
+  static String defaultChoice(String aParentCommandType, String aOptionType) {
+    if (!hasDefaultChoice(aParentCommandType, aOptionType)) {
       throw THCustomException(
-          "Unsupported option type '$aOptionType' for a '$aParentType' in 'defaultChoice'");
+          "Unsupported option type '$aOptionType' for a '$aParentCommandType' in 'defaultChoice'");
     }
 
-    return (_supportedOptions[aParentType]![aOptionType]!['defaultChoice']
-        as String);
+    return (_supportedOptions[aParentCommandType]![aOptionType]![
+        'defaultChoice'] as String);
   }
 
   static bool hasOptionChoice(
-      String aParentType, String aOptionType, String aChoice) {
-    if (!hasOptionType(aParentType, aOptionType)) {
+      String aParentCommandType, String aOptionType, String aChoice) {
+    if (!hasOptionType(aParentCommandType, aOptionType)) {
       return false;
     }
 
-    aChoice = _mainChoice(aParentType, aOptionType, aChoice);
+    aChoice = _mainChoice(aParentCommandType, aOptionType, aChoice);
 
-    return (_supportedOptions[aParentType]![aOptionType]!['choices']
+    return (_supportedOptions[aParentCommandType]![aOptionType]!['choices']
             as LinkedHashSet)
         .contains(aChoice);
   }
 
   static String _mainChoice(
-      String aParentType, String aOptionType, String aChoice) {
+      String aParentCommandType, String aOptionType, String aChoice) {
     final alternateChoiceMap =
-        _supportedOptions[aParentType]![aOptionType]!['alternateChoices']
+        _supportedOptions[aParentCommandType]![aOptionType]!['alternateChoices']
             as Map<String, String>;
     if (alternateChoiceMap.containsKey(aChoice)) {
       aChoice = alternateChoiceMap[aChoice]!;
@@ -192,12 +304,24 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     return aChoice;
   }
 
-  static bool hasOptionType(String aParentType, String aOptionType) {
-    if (!_supportedOptions.containsKey(aParentType)) {
+  static bool hasOptionType(String aParentCommandType, String aOptionType) {
+    if (!_supportedOptions.containsKey(aParentCommandType)) {
       return false;
     }
 
-    return _supportedOptions[aParentType]!.containsKey(aOptionType);
+    if (!_supportedOptions[aParentCommandType]!.containsKey(aOptionType)) {
+      return false;
+    }
+
+    final optionTypeDefinition =
+        (_supportedOptions[aParentCommandType]![aOptionType]);
+    final typesSupported =
+        optionTypeDefinition!['typesSupported'] as Set<String>;
+
+    // if (typesSupported.isNotEmpty) {
+    //   return
+    // }
+    return true;
   }
 
   @override

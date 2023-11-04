@@ -34,7 +34,10 @@ class THGrammar extends GrammarDefinition {
   Parser lineStructure() =>
       lineContent() | fullLineComment() | multiLineComment();
   Parser lineContent() =>
-      bezierCurveLineSegment() | straightLineSegment() | endline();
+      bezierCurveLineSegment() |
+      straightLineSegment() |
+      lineSegmentOptions() |
+      endline();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
@@ -802,7 +805,7 @@ class THGrammar extends GrammarDefinition {
   Parser endlineCommand() =>
       stringIgnoreCase('endline').map((value) => [value]);
 
-  /// lineSegment
+  /// straightLineSegment
   Parser straightLineSegment() =>
       ref1(commandTemplate, straightLineSegmentCommand);
   Parser straightLineSegmentCommand() => pointData()
@@ -824,9 +827,15 @@ class THGrammar extends GrammarDefinition {
               .map((value) => ['endpoint', value]))
       .map((value) => ['beziercurvelinesegment', value]);
 
+  /// line segment options
+  Parser lineSegmentOptions() =>
+      (closeLineSegmentOption()).map((value) => ['linesegmentoption', value]);
+
   /// line -close
   Parser closeOption() =>
       stringIgnoreCase('close').skip(before: char('-')) & ref0(closeOptions);
+  Parser closeLineSegmentOption() =>
+      stringIgnoreCase('close') & ref0(closeOptions);
   Parser closeOptions() => (stringIgnoreCase('on') |
           stringIgnoreCase('off') |
           stringIgnoreCase('auto'))

@@ -8,10 +8,15 @@ class THNameCommandOption extends THCommandOption {
   late String reference;
 
   THNameCommandOption(super.parentOption, this.reference) {
-    if ((parentOption is! THPoint) ||
-        ((parentOption as THPoint).pointType != 'station')) {
+    if (parentOption is THPoint) {
+      final parentAsPoint = parentOption as THPoint;
+      if ((parentOption as THPoint).pointType != 'station') {
+        throw THCustomException(
+            "Unsupported point type '${parentAsPoint.pointType}' 'name' option.");
+      }
+    } else {
       throw THCustomException(
-          "Unsupported point type '${parentOption.type}' for option 'name'.");
+          "Unsupported parent command type '${parentOption.commandType}' for 'name' option.");
     }
   }
 
