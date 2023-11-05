@@ -609,6 +609,147 @@ endscrap
     }
   });
 
+  group('line -direction', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03070-line_with_direction_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line section -direction begin
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('line -direction failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03072-line_with_direction_option_set_to_point_invalid-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('linepoint -direction', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03071-linepoint_with_direction_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line section -direction begin
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03073-linepoint_with_direction_option_set_to_point.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line section
+    1758 -1030
+      direction point
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03075-linepoint_with_direction_option_last_point.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line section
+    1758 -1030
+    2147.74 -1120.48
+      direction point
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, errors) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint -direction failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03074-linepoint_with_direction_option_unsupported_line_type-failure.th2',
+      'th_file_parser-03076-linepoint_with_direction_option_before_first_point_invalid-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('line -head', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

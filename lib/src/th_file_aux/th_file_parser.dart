@@ -365,8 +365,9 @@ class THFileParser {
   /// options registered with the appropriate line segment.
   void _injectLineSegmentOption(List<dynamic> aElement) {
     if (_lastLineSegment == null) {
-      throw THCustomException(
-          "Line segment option '${aElement[0]}' without a line segment.");
+      _addError("Line segment option without a line segment.",
+          '_injectLineSegmentOption', aElement.toString());
+      return;
     }
 
     final elementSize = aElement.length;
@@ -560,6 +561,25 @@ class THFileParser {
       return true;
     }
 
+    /// Changing _currentHasOptions to the line segment that is the parent of
+    /// of the linepoint option. This change will be reverted by
+    /// _injectLineSegmentOption().
+    _currentHasOptions = _lastLineSegment as THHasOptions;
+    optionIdentified = true;
+    switch (aOptionType) {
+      case 'direction':
+        _injectDirectionCommandOption();
+      case 'gradient':
+        _injectGradientCommandOption();
+      default:
+        optionIdentified = false;
+    }
+    _currentHasOptions = _currentElement as THHasOptions;
+
+    if (optionIdentified) {
+      return true;
+    }
+
     if (THMultipleChoiceCommandOption.hasOptionType(
         _currentHasOptions, aOptionType)) {
       _injectMultipleChoiceCommandOption(aOptionType);
@@ -570,26 +590,6 @@ class THFileParser {
     /// of the linepoint option. This change will be reverted by
     /// _injectLineSegmentOption().
     _currentHasOptions = _lastLineSegment as THHasOptions;
-    switch (aOptionType) {
-      // case 'copyright':
-      //   _injectCopyrightCommandOption();
-      // case 'cs':
-      //   _injectCSCommandOption();
-      // case 'projection':
-      //   _injectProjectionCommandOption();
-      // case 'scale':
-      //   _injectScrapScaleCommandOption();
-      // case 'sketch':
-      //   _injectSketchCommandOption();
-      // case 'station-names':
-      //   _injectStationNamesCommandOption();
-      // case 'stations':
-      //   _injectStationsCommandOption();
-      // case 'title':
-      //   _injectTitleCommandOption();
-      default:
-        optionIdentified = false;
-    }
 
     return optionIdentified;
   }
@@ -600,22 +600,6 @@ class THFileParser {
     switch (aOptionType) {
       case 'clip':
         _injectClipCommandOption();
-      // case 'copyright':
-      //   _injectCopyrightCommandOption();
-      // case 'cs':
-      //   _injectCSCommandOption();
-      // case 'projection':
-      //   _injectProjectionCommandOption();
-      // case 'scale':
-      //   _injectScrapScaleCommandOption();
-      // case 'sketch':
-      //   _injectSketchCommandOption();
-      // case 'station-names':
-      //   _injectStationNamesCommandOption();
-      // case 'stations':
-      //   _injectStationsCommandOption();
-      // case 'title':
-      //   _injectTitleCommandOption();
       default:
         optionIdentified = false;
     }
@@ -650,6 +634,54 @@ class THFileParser {
     }
 
     return optionIdentified;
+  }
+
+  void _injectDirectionCommandOption() {
+    final aOptionType = 'direction';
+
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    if (_currentSpec[0] is! String) {
+      throw THCustomException(
+          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    if (_currentSpec[0] == 'point') {
+      _currentHasOptions = _lastLineSegment as THHasOptions;
+      THMultipleChoiceCommandOption(
+          _currentHasOptions, aOptionType, _currentSpec[0]);
+    } else {
+      _currentHasOptions = _currentElement as THHasOptions;
+      THMultipleChoiceCommandOption(
+          _currentHasOptions, aOptionType, _currentSpec[0]);
+    }
+  }
+
+  void _injectGradientCommandOption() {
+    final aOptionType = 'gradient';
+
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    if (_currentSpec[0] is! String) {
+      throw THCustomException(
+          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    if (_currentSpec[0] == 'point') {
+      _currentHasOptions = _lastLineSegment as THHasOptions;
+      THMultipleChoiceCommandOption(
+          _currentHasOptions, aOptionType, _currentSpec[0]);
+    } else {
+      _currentHasOptions = _currentElement as THHasOptions;
+      THMultipleChoiceCommandOption(
+          _currentHasOptions, aOptionType, _currentSpec[0]);
+    }
   }
 
   void _injectMultipleChoiceCommandOption(String aOptionType) {

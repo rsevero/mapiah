@@ -250,6 +250,13 @@ class THGrammar extends GrammarDefinition {
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
+  /// begin/end/both/none options;
+  Parser beginEndBothNoneOptions() =>
+      stringIgnoreCase('begin') |
+      stringIgnoreCase('end') |
+      stringIgnoreCase('both') |
+      stringIgnoreCase('none');
+
   /// Command template
   Parser commandTemplate(command) =>
       ref0(command).trim(ref0(thWhitespace), ref0(thWhitespace)) &
@@ -808,6 +815,8 @@ class THGrammar extends GrammarDefinition {
           borderOption() |
           clipOption() |
           closeOption() |
+          directionOption() |
+          gradientOption() |
           headOption() |
           rebelaysOption() |
           reverseOption() |
@@ -892,37 +901,38 @@ class THGrammar extends GrammarDefinition {
   Parser directionOption() =>
       stringIgnoreCase('direction').skip(before: char('-')) &
       ref0(directionOptions);
-  Parser directionLineSegmentOption() =>
-      stringIgnoreCase('direction') & ref0(directionOptions);
-  Parser directionOptions() => (stringIgnoreCase('begin') |
-          stringIgnoreCase('end') |
-          stringIgnoreCase('both') |
-          stringIgnoreCase('none') |
-          stringIgnoreCase('point'))
+  Parser directionOptions() => ref0(beginEndBothNoneOptions)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+  Parser directionLineSegmentOption() =>
+      stringIgnoreCase('direction') & ref0(directionLineSegmentOptions);
+  Parser directionLineSegmentOptions() =>
+      (ref0(beginEndBothNoneOptions) | stringIgnoreCase('point'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => [value]);
 
   /// line -gradient
   Parser gradientOption() =>
       stringIgnoreCase('gradient').skip(before: char('-')) &
       ref0(gradientOptions);
-  Parser gradientLineSegmentOption() =>
-      stringIgnoreCase('gradient') & ref0(gradientOptions);
-  Parser gradientOptions() => (stringIgnoreCase('none') |
-          stringIgnoreCase('center') |
-          stringIgnoreCase('point'))
+  Parser gradientGeneralOptions() =>
+      stringIgnoreCase('none') | stringIgnoreCase('center');
+  Parser gradientOptions() => ref0(gradientGeneralOptions)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+  Parser gradientLineSegmentOption() =>
+      stringIgnoreCase('gradient') & ref0(gradientLineSegmentOptions);
+  Parser gradientLineSegmentOptions() =>
+      (ref0(beginEndBothNoneOptions) | stringIgnoreCase('point'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => [value]);
 
   /// line -head
   Parser headOption() =>
       stringIgnoreCase('head').skip(before: char('-')) & ref0(headOptions);
   Parser headLineSegmentOption() =>
       stringIgnoreCase('head') & ref0(headOptions);
-  Parser headOptions() => (stringIgnoreCase('begin') |
-          stringIgnoreCase('end') |
-          stringIgnoreCase('both') |
-          stringIgnoreCase('none'))
+  Parser headOptions() => ref0(beginEndBothNoneOptions)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 

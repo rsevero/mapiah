@@ -64,6 +64,40 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         'plaTypesSupported': <String>{},
       },
 
+      // direction <begin/end/both/none/point> . can be used only with the section type.
+      // It indicates where to put a direction arrow on the section line. None is default.
+      'direction': {
+        'hasDefault': true,
+        'default': 'none',
+        'choices': <String>{
+          'begin',
+          'end',
+          'both',
+          'none',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{
+          'section',
+        },
+      },
+
+      // gradient <none/center/point> . can be used only with the contour type and indi-
+      // cates where to put a gradient mark on the contour line. If there is no gradient speci-
+      // fication, behaviour is symbol-set dependent (e.g. no tick in UIS, tick in the middle in
+      // SKBB).
+      'gradient': {
+        'hasDefault': true,
+        'default': 'none',
+        'choices': <String>{
+          'none',
+          'center',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{
+          'contour',
+        },
+      },
+
       // head <begin/end/both/none> . can be used only with the arrow type and indicates
       // where to put an arrow head. End is default.
       'head': {

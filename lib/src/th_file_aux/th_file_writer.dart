@@ -224,7 +224,7 @@ class THFileWriter {
       asString += "$aLinePointOptionType ";
       asString +=
           aTHHasOptions.optionByType(aLinePointOptionType)!.specToFile().trim();
-      asString = "$_prefix${asString.trim()}}\n";
+      asString = "$_prefix${asString.trim()}\n";
     }
     _reducePrefix();
 
