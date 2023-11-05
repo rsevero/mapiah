@@ -140,7 +140,7 @@ endscrap
 scrap scrap1
   line slope -border on
     355.0 1065.0 # Comment on data line
-    450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line Comment that Mapiah will join with the comment on the line above
+    450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line | Comment that Mapiah will join with the comment on the line above
     291.0 499.0
   endline
 endscrap
@@ -468,14 +468,14 @@ endscrap
 
     const successes = [
       {
-        'file': 'th_file_parser-03000-linepoint_with_border_option.th2',
+        'file': 'th_file_parser-03010-linepoint_with_close_option.th2',
         'length': 7,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line slope -border on
-    1758 -1030
-    2147.74 -1120.48
+  line contour -close off
+    2802 -969
+    3804 3512
   endline
 endscrap
 ''',
@@ -505,8 +505,7 @@ endscrap
     final writer = THFileWriter();
 
     const failures = [
-      'th_file_parser-03001-linepoint_with_border_option_invalid_line_type-failure.th2',
-      'th_file_parser-03002-linepoint_with_invalid_border_option-failure.th2',
+      'th_file_parser-03011-linepoint_with_invalid_close_option-failure.th2',
     ];
 
     for (var failure in failures) {

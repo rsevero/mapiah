@@ -1,0 +1,8 @@
+encoding utf-8
+scrap test
+line contour
+  2802	-969
+  3804	3512
+close off
+endline
+endscrap

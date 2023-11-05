@@ -460,7 +460,7 @@ class THFileParser {
           _currentElement.sameLineComment = aElement[1];
         } else {
           _currentElement.sameLineComment =
-              '${_currentElement.sameLineComment!} ${aElement[1]}';
+              '${_currentElement.sameLineComment!} | ${aElement[1]}';
         }
       default:
         THUnrecognizedCommand(_currentParent, aElement);
