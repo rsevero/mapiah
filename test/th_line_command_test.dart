@@ -102,6 +102,50 @@ endscrap
 
 ''',
       },
+      {
+        'file': 'th_file_parser-02374-line_with_comment_in_data_line.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1
+  line wall
+    355.0 1065.0 # Comment on data line
+    450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line
+    291.0 499.0
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02375-line_with_comment_in_line_option_in_line_data.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1
+  line slope -border on
+    355.0 1065.0 # Comment on data line
+    450.0 600.0 589.72 521.11 650.0 600.0 # Comment that Mapiah will move to the data line above
+    291.0 499.0
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02376-line_with_comment_in_line_option_in_line_data_to_join.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1
+  line slope -border on
+    355.0 1065.0 # Comment on data line
+    450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line Comment that Mapiah will join with the comment on the line above
+    291.0 499.0
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -407,6 +451,62 @@ endscrap
 
     const failures = [
       'th_file_parser-02381-line_with_invalid_close_option-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
+  group('linepoint -close', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03000-linepoint_with_border_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line slope -border on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint -close failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03001-linepoint_with_border_option_invalid_line_type-failure.th2',
+      'th_file_parser-03002-linepoint_with_invalid_border_option-failure.th2',
     ];
 
     for (var failure in failures) {

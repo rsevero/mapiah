@@ -1,0 +1,9 @@
+encoding  utf-8
+scrap scrap1
+line slope
+  355.0 1065.0 # Comment on data line
+  450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line
+border on #Comment that Mapiah will join with the comment on the line above
+291.0 499.0
+endline
+endscrap

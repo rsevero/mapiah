@@ -1,0 +1,8 @@
+encoding  utf-8
+scrap scrap1
+line wall
+  355.0 1065.0 # Comment on data line
+  450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line
+291.0 499.0
+endline
+endscrap

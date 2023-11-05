@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
@@ -76,6 +77,8 @@ class THFileParser {
   late Parser _currentParser;
 
   late List<String> _splittedContents;
+  late Result<dynamic> _parsedContents;
+  late List<dynamic>? _commentContentToParse;
   late THFile _parsedTHFile;
   late THParent _currentParent;
   late THElement _currentElement;
@@ -133,33 +136,41 @@ class THFileParser {
         trace(_currentParser).parse(line);
       }
 
-      final parsedContents = _currentParser.parse(line);
+      _parsedContents = _currentParser.parse(line);
       if (isFirst) {
         isFirst = false;
         _resetParsersLineage();
       }
-      if (parsedContents is Failure) {
+      if (_parsedContents is Failure) {
         // trace(_currentParser).parse(line);
         _addError('petitparser returned a "Failure"', '_injectContents()',
             'Line being parsed: "$line"');
         continue;
       }
 
-      /// 'parsedContents' holds the complete result of the grammar parsing on
+      /// '_parsedContents' holds the complete result of the grammar parsing on
       /// 'line'.
       /// 'element' holds the the 'command' part of the parsed line, i.e., the
       /// content minus the eventual comment.
-      final element = parsedContents.value[0];
+      final element = _parsedContents.value[0];
       if (element.isEmpty) {
         _addError('element.isEmpty', '_injectContents()',
             'Line being parsed: "$line"');
         continue;
       }
 
+      _commentContentToParse = ((_parsedContents.value is List) &&
+              ((_parsedContents.value as List).length > 1))
+          ? _parsedContents.value[1]
+          : null;
+
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
         case 'beziercurvelinesegment':
           _injectBezierCurveLineSegment(element);
+
+          /// Line data injects same line comment by themselves.
+          continue;
         case 'encoding':
           _injectEncoding();
         case 'endmultilinecomment':
@@ -169,14 +180,21 @@ class THFileParser {
         case 'endscrap':
           _injectEndscrap(element);
         case 'fulllinecomment':
-          _injectComment(element);
+          _commentContentToParse = element;
+          _injectComment();
           continue;
         case 'line':
           _injectLine(element);
         case 'linesegmentoption':
           _injectLineSegmentOption(element);
+
+          /// Line data injects same line comment by themselves.
+          continue;
         case 'straightlinesegment':
           _injectStraightLineSegment(element);
+
+          /// Line data injects same line comment by themselves.
+          continue;
         case 'multilinecomment':
           _injectStartMultiLineComment();
         case 'multilinecommentline':
@@ -191,8 +209,8 @@ class THFileParser {
           continue;
       }
 
-      /// The second part of 'parsedContents' holds the comment, if any.
-      _injectComment(parsedContents.value[1]);
+      /// The second part of '_parsedContents' holds the comment, if any.
+      _injectComment();
     }
   }
 
@@ -283,6 +301,12 @@ class THFileParser {
 
     // _currentElement = newBezierCurveLineSegment;
     _lastLineSegment = newBezierCurveLineSegment;
+
+    /// Same line comments should be inserted in the line segment itself and not
+    /// in the line command that includes this line segment.
+    _currentElement = newBezierCurveLineSegment;
+    _injectComment();
+    _currentElement = newBezierCurveLineSegment.parent;
   }
 
   void _injectStraightLineSegment(List<dynamic> aElement) {
@@ -306,6 +330,12 @@ class THFileParser {
 
     // _currentElement = newStraightLineSegment;
     _lastLineSegment = newStraightLineSegment;
+
+    /// Same line comments should be inserted in the line segment itself and not
+    /// in the line command that includes this line segment.
+    _currentElement = newStraightLineSegment;
+    _injectComment();
+    _currentElement = newStraightLineSegment.parent;
   }
 
   void _injectScrap(List<dynamic> aElement) {
@@ -348,6 +378,13 @@ class THFileParser {
 
     _optionFromElement(aElement[1], _lineSegmentRegularOptions);
 
+    /// Same line comments should be inserted in the line segment to which this
+    /// line segment option is related and not in the line command that includes
+    /// this line segment option.
+    _currentElement = _lastLineSegment!;
+    _injectComment();
+    _currentElement = _lastLineSegment!.parent;
+
     /// Reverting the change made by _lineSegmentRegularOptions().
     _currentHasOptions = _currentElement as THHasOptions;
   }
@@ -388,7 +425,8 @@ class THFileParser {
     _returnToParentParser();
   }
 
-  void _injectComment(List<dynamic>? aElement) {
+  void _injectComment() {
+    final aElement = _commentContentToParse;
     if (aElement == null) {
       return;
     }
@@ -417,7 +455,13 @@ class THFileParser {
       case 'fulllinecomment':
         THComment(_currentParent, aElement[1]);
       case 'samelinecomment':
-        _currentElement.sameLineComment = aElement[1];
+        if ((_currentElement.sameLineComment == null) ||
+            _currentElement.sameLineComment!.isEmpty) {
+          _currentElement.sameLineComment = aElement[1];
+        } else {
+          _currentElement.sameLineComment =
+              '${_currentElement.sameLineComment!} ${aElement[1]}';
+        }
       default:
         THUnrecognizedCommand(_currentParent, aElement);
     }
