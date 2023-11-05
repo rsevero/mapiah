@@ -660,6 +660,57 @@ endscrap
     }
   });
 
+  group('line -rebelays', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03060-line_with_rebelays_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line rope -rebelays on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03061-linepoint_with_rebelays_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line rope -rebelays on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
   group('line -reverse', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
@@ -686,6 +737,57 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap test
   line arrow -reverse on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('line -visibility', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03050-line_with_visibility_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line arrow -visibility on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03051-linepoint_with_visibility_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line arrow -visibility on
     1758 -1030
     2147.74 -1120.48
   endline
