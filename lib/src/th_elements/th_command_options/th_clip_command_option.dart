@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
@@ -19,13 +20,16 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
 
   THClipCommandOption(THHasOptions aOptionParent, String aChoice)
       : super(aOptionParent, 'clip', aChoice) {
+    /// The -clip option is supported only for some point types.
     if (optionParent is THPoint) {
       final parentAsPoint = optionParent as THPoint;
       if (_unsupportedPointTypes.contains(parentAsPoint.plaType)) {
         throw THCustomException(
             "Unsupported point type '${parentAsPoint.plaType}' 'clip' option.");
       }
-    } else {
+
+      /// But it is supported for all line types.
+    } else if (optionParent is! THLine) {
       throw THCustomException(
           "Unsupported parent command type '${optionParent.elementType}' for 'clip' option.");
     }
