@@ -594,6 +594,8 @@ class THFileParser {
     switch (aOptionType) {
       case 'clip':
         _injectClipCommandOption();
+      case 'subtype':
+        _injectSubtypeCommandOption();
       default:
         optionIdentified = false;
     }
@@ -842,7 +844,7 @@ class THFileParser {
           '== 1', _currentSpec);
     }
 
-    THSubtypeCommandOption((_currentHasOptions as THPoint), _currentSpec[0]);
+    THSubtypeCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectPointScaleCommandOption() {

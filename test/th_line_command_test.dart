@@ -1090,6 +1090,103 @@ endscrap
     }
   });
 
+  group('linepoint -subtype', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03100-linepoint_with_subtype_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line water-flow -subtype conjectural
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03104-linepoint_with_subtype_option_as_first_line_data.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line water-flow -subtype conjectural
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03105-line_with_subtype_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line water-flow -subtype conjectural
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03106-line_with_subtype_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line water-flow -subtype conjectural
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint -subtype failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03102-linepoint_with_subtype_option_for_unsupported_type-failure.th2',
+      'th_file_parser-03101-line_with_subtype_option_unsupported_type-failure.th2',
+      'th_file_parser-03103-line_with_subtype_option_unsupported_type-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('line -visibility', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
