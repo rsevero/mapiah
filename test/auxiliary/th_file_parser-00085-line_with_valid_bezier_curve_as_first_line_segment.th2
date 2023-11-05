@@ -1,0 +1,7 @@
+encoding UTF-8
+scrap test
+	line floor-step
+  650.0 900.0 827.81 933.28 850.0 900.0
+  650.0 900.0
+	endline
+endscrap

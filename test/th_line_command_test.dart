@@ -146,6 +146,34 @@ scrap scrap1
 endscrap
 ''',
       },
+      {
+        'file':
+            'th_file_parser-00083-line_with_valid_straight_line_segment_as_first_line_segment.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line floor-step
+    650.0 900.0
+    650.0 900.0 827.81 933.28 850.0 900.0
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00085-line_with_valid_bezier_curve_as_first_line_segment.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line floor-step
+    650.0 900.0 827.81 933.28 850.0 900.0
+    650.0 900.0
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
