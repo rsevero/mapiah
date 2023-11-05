@@ -872,10 +872,12 @@ class THGrammar extends GrammarDefinition {
       ref0(endLineComment).optional();
 
   /// line -adjust
-  Parser adjustOption() =>
-      stringIgnoreCase('adjust').skip(before: char('-')) & ref0(onOffOptions);
   Parser adjustLineSegmentOption() =>
-      stringIgnoreCase('adjust') & ref0(onOffOptions);
+      stringIgnoreCase('adjust') & ref0(adjustOptions);
+  Parser adjustOptions() =>
+      (stringIgnoreCase('horizontal') | stringIgnoreCase('vertical'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => [value]);
 
   /// line -anchors
   Parser anchorsOption() =>
@@ -949,9 +951,6 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('reverse') & ref0(onOffOptions);
 
   /// line -smooth
-  Parser smoothOption() =>
-      stringIgnoreCase('smooth').skip(before: char('-')) &
-      ref0(onOffAutoOptions);
   Parser smoothLineSegmentOption() =>
       stringIgnoreCase('smooth') & ref0(onOffAutoOptions);
 }
