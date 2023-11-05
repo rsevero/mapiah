@@ -364,12 +364,6 @@ class THFileParser {
   /// linepoint options in the line options list and keeping the linepoint
   /// options registered with the appropriate line segment.
   void _injectLineSegmentOption(List<dynamic> aElement) {
-    if (_lastLineSegment == null) {
-      _addError("Line segment option without a line segment.",
-          '_injectLineSegmentOption', aElement.toString());
-      return;
-    }
-
     final elementSize = aElement.length;
 
     assert(elementSize == 2);
@@ -380,11 +374,16 @@ class THFileParser {
     _optionFromElement(aElement[1], _lineSegmentRegularOptions);
 
     /// Same line comments should be inserted in the line segment to which this
-    /// line segment option is related and not in the line command that includes
-    /// this line segment option.
-    _currentElement = _lastLineSegment!;
+    /// line segment option is related if there is a linepoint before it and not
+    /// in the line command that includes this line segment option. If there is
+    /// no linepoint before it, include it in the line it belongs to.
+    if (_lastLineSegment != null) {
+      _currentElement = _lastLineSegment!;
+    }
     _injectComment();
-    _currentElement = _lastLineSegment!.parent;
+    if (_lastLineSegment != null) {
+      _currentElement = _lastLineSegment!.parent;
+    }
 
     /// Reverting the change made by _lineSegmentRegularOptions().
     _currentHasOptions = _currentElement as THHasOptions;
@@ -561,10 +560,6 @@ class THFileParser {
       return true;
     }
 
-    /// Changing _currentHasOptions to the line segment that is the parent of
-    /// of the linepoint option. This change will be reverted by
-    /// _injectLineSegmentOption().
-    _currentHasOptions = _lastLineSegment as THHasOptions;
     optionIdentified = true;
     switch (aOptionType) {
       case 'direction':
@@ -574,7 +569,6 @@ class THFileParser {
       default:
         optionIdentified = false;
     }
-    _currentHasOptions = _currentElement as THHasOptions;
 
     if (optionIdentified) {
       return true;
@@ -648,6 +642,15 @@ class THFileParser {
     }
 
     if (_currentSpec[0] == 'point') {
+      if (_lastLineSegment == null) {
+        _addError("Line segment option without a line segment.",
+            '_injectMultipleChoiceWithPointChoiceCommandOption', aOptionType);
+        return;
+      }
+
+      /// Changing _currentHasOptions to the line segment that is the parent of
+      /// of the linepoint option. This change will be reverted by
+      /// _injectLineSegmentOption().
       _currentHasOptions = _lastLineSegment as THHasOptions;
       THMultipleChoiceCommandOption(
           _currentHasOptions, aOptionType, _currentSpec[0]);

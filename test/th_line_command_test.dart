@@ -313,6 +313,20 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file':
+            'th_file_parser-03006-linepoint_with_border_option_before_first_point.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line slope -border on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -709,6 +723,20 @@ scrap test
     1758 -1030
     2147.74 -1120.48
       direction point
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03077-linepoint_with_direction_option_before_first_point_valid.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line section -direction both
+    1758 -1030
+    2147.74 -1120.48
   endline
 endscrap
 ''',
