@@ -708,6 +708,23 @@ endscrap
     }
   });
 
+  group('linepoint -close failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03011-linepoint_with_invalid_close_option-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('line -direction', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
@@ -1016,6 +1033,63 @@ endscrap
     }
   });
 
+  group('linepoint -smooth', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03090-linepoint_with_adjust_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line arrow
+    1758 -1030
+      smooth on
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint -smooth failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03091-line_with_smooth_option_invalid-failure.th2',
+      'th_file_parser-03092-linepoint_with_invalid_smooth_option-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('line -visibility', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
@@ -1063,23 +1137,6 @@ endscrap
 
         final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
-      });
-    }
-  });
-
-  group('linepoint -close failures', () {
-    final parser = THFileParser();
-    // final grammar = THGrammar();
-    final writer = THFileWriter();
-
-    const failures = [
-      'th_file_parser-03011-linepoint_with_invalid_close_option-failure.th2',
-    ];
-
-    for (var failure in failures) {
-      test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
-        expect(isSuccessful, false);
       });
     }
   });
