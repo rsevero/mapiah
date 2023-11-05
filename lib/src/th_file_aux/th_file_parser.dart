@@ -568,9 +568,9 @@ class THFileParser {
     optionIdentified = true;
     switch (aOptionType) {
       case 'direction':
-        _injectDirectionCommandOption();
+        _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
       case 'gradient':
-        _injectGradientCommandOption();
+        _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
       default:
         optionIdentified = false;
     }
@@ -636,33 +636,7 @@ class THFileParser {
     return optionIdentified;
   }
 
-  void _injectDirectionCommandOption() {
-    final aOptionType = 'direction';
-
-    if (_currentSpec.isEmpty) {
-      throw THCustomException(
-          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
-    }
-
-    if (_currentSpec[0] is! String) {
-      throw THCustomException(
-          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
-    }
-
-    if (_currentSpec[0] == 'point') {
-      _currentHasOptions = _lastLineSegment as THHasOptions;
-      THMultipleChoiceCommandOption(
-          _currentHasOptions, aOptionType, _currentSpec[0]);
-    } else {
-      _currentHasOptions = _currentElement as THHasOptions;
-      THMultipleChoiceCommandOption(
-          _currentHasOptions, aOptionType, _currentSpec[0]);
-    }
-  }
-
-  void _injectGradientCommandOption() {
-    final aOptionType = 'gradient';
-
+  void _injectMultipleChoiceWithPointChoiceCommandOption(String aOptionType) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
           "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
