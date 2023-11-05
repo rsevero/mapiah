@@ -53,6 +53,8 @@ mixin THHasOptions on THElement {
     var asString = '';
 
     for (var aType in optionsList()) {
+      /// subtype option is serialized in the ':subtype' format, not in the
+      /// -subtype <subtype> format.
       if (aType == 'subtype') {
         continue;
       }
