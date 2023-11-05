@@ -1102,7 +1102,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line water-flow -subtype conjectural
+  line water-flow:conjectural
     1758 -1030
     2147.74 -1120.48
   endline
@@ -1116,7 +1116,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line water-flow -subtype conjectural
+  line water-flow:conjectural
     1758 -1030
     2147.74 -1120.48
   endline
@@ -1129,7 +1129,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line water-flow -subtype conjectural
+  line water-flow:conjectural
     1758 -1030
     2147.74 -1120.48
   endline
@@ -1142,7 +1142,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line water-flow -subtype conjectural
+  line water-flow:conjectural
     1758 -1030
     2147.74 -1120.48
   endline

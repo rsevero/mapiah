@@ -4,6 +4,7 @@ import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
+import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
@@ -50,12 +51,7 @@ class THFileWriter {
         }
         asString += _childrenAsString(aTHFile);
       case 'line':
-        final aTHLine = aTHElement as THLine;
-        final newLine =
-            "line ${aTHLine.plaType} ${aTHLine.optionsAsString()}".trim();
-        asString += _prepareLine(newLine, aTHLine);
-        _increasePrefix();
-        asString += _childrenAsString(aTHLine);
+        asString += _serializeLine(aTHElement);
       case 'linesegment':
         asString += _serializeLineSegment(aTHElement);
       case 'multilinecomment':
@@ -65,11 +61,7 @@ class THFileWriter {
       case 'multilinecommentcontent':
         asString += '${(aTHElement as THMultilineCommentContent).content}\n';
       case 'point':
-        final aTHPoint = aTHElement as THPoint;
-        final newLine =
-            'point ${aTHPoint.point} ${aTHPoint.plaType} ${aTHPoint.optionsAsString()}'
-                .trim();
-        asString += _prepareLine(newLine, aTHPoint);
+        asString += _serializePoint(aTHElement);
       case 'scrap':
         final aTHScrap = aTHElement as THScrap;
         final newLine =
@@ -83,6 +75,33 @@ class THFileWriter {
     }
 
     return asString;
+  }
+
+  String _serializeLine(THElement aTHElement) {
+    final aTHLine = aTHElement as THLine;
+    var newLine = "line ${aTHLine.plaType}";
+    if (aTHLine.optionIsSet('subtype')) {
+      newLine += ":${aTHLine.optionByType('subtype')!.specToFile()}";
+    }
+    newLine += " ${aTHLine.optionsAsString()}";
+    newLine = newLine.trim();
+    var asString = _prepareLine(newLine, aTHLine);
+    _increasePrefix();
+    asString += _childrenAsString(aTHLine);
+
+    return asString;
+  }
+
+  String _serializePoint(THElement aTHElement) {
+    final aTHPoint = aTHElement as THPoint;
+    var newLine = "point ${aTHPoint.point} ${aTHPoint.plaType}";
+    if (aTHPoint.optionIsSet('subtype')) {
+      newLine += ":${aTHPoint.optionByType('subtype')!.specToFile()}";
+    }
+    newLine += " ${aTHPoint.optionsAsString()}";
+    newLine = newLine.trim();
+
+    return _prepareLine(newLine, aTHPoint);
   }
 
   String _serializeLineSegment(THElement aTHElement) {

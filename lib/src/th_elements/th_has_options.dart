@@ -16,28 +16,33 @@ mixin THHasOptions on THElement {
   }
 
   @useResult
-  bool hasOption(String aType) {
-    return _optionsMap.containsKey(aType);
+  bool hasOption(String aOptionType) {
+    return _optionsMap.containsKey(aOptionType);
   }
 
   @useResult
-  THCommandOption? optionByType(String aType) {
-    return _optionsMap[aType];
+  bool optionIsSet(String aOptionType) {
+    return _optionsMap.containsKey(aOptionType);
   }
 
   @useResult
-  bool deleteOption(String aType) {
-    if (!hasOption(aType)) {
+  THCommandOption? optionByType(String aOptionType) {
+    return _optionsMap[aOptionType];
+  }
+
+  @useResult
+  bool deleteOption(String aOptionType) {
+    if (!hasOption(aOptionType)) {
       return false;
     }
 
-    assert(_optionsList.contains(aType));
-    if (!_optionsList.remove(aType)) {
+    assert(_optionsList.contains(aOptionType));
+    if (!_optionsList.remove(aOptionType)) {
       return false;
     }
 
-    assert(_optionsMap.containsKey(aType));
-    return (_optionsMap.remove(aType) != null);
+    assert(_optionsMap.containsKey(aOptionType));
+    return (_optionsMap.remove(aOptionType) != null);
   }
 
   List<String> optionsList() {
@@ -48,6 +53,9 @@ mixin THHasOptions on THElement {
     var asString = '';
 
     for (var aType in optionsList()) {
+      if (aType == 'subtype') {
+        continue;
+      }
       final spec = optionByType(aType)!.specToFile();
       asString += " -$aType $spec";
     }

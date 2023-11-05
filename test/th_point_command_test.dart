@@ -481,7 +481,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 station -subtype fixed -id A2
+  point 782.0 -1740.0 station:fixed -id A2
 endscrap
 ''',
       },
@@ -543,7 +543,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 station -subtype fixed -name A2@final_de_semana -id A2
+  point 782.0 -1740.0 station:fixed -name A2@final_de_semana -id A2
 endscrap
 ''',
       },
@@ -826,7 +826,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 43 336 water-flow -subtype paleo
+  point 43 336 water-flow:paleo
 endscrap
 ''',
       },
@@ -836,7 +836,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 43 336 water-flow -subtype paleo
+  point 43 336 water-flow:paleo
 endscrap
 ''',
       },
