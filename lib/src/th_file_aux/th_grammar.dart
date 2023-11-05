@@ -247,7 +247,8 @@ class THGrammar extends GrammarDefinition {
   Parser onOffAutoOptions() => (stringIgnoreCase('on') |
           stringIgnoreCase('off') |
           stringIgnoreCase('auto'))
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
 
   /// Command template
   Parser commandTemplate(command) =>
@@ -422,8 +423,7 @@ class THGrammar extends GrammarDefinition {
   /// scrap -walls
   Parser wallsOption() =>
       stringIgnoreCase('walls').skip(before: char('-')) &
-      ref0(wallsOptions).map((value) => [value]);
-  Parser wallsOptions() => ref0(onOffAutoOptions);
+      ref0(onOffAutoOptions);
 
   /// Endscrap
   Parser endscrap() => ref1(commandTemplate, endscrapCommand);
@@ -883,10 +883,10 @@ class THGrammar extends GrammarDefinition {
 
   /// line -close
   Parser closeOption() =>
-      stringIgnoreCase('close').skip(before: char('-')) & ref0(closeOptions);
+      stringIgnoreCase('close').skip(before: char('-')) &
+      ref0(onOffAutoOptions);
   Parser closeLineSegmentOption() =>
-      stringIgnoreCase('close') & ref0(closeOptions);
-  Parser closeOptions() => ref0(onOffAutoOptions).map((value) => [value]);
+      stringIgnoreCase('close') & ref0(onOffAutoOptions);
 
   /// line -direction
   Parser directionOption() =>
@@ -940,8 +940,8 @@ class THGrammar extends GrammarDefinition {
 
   /// line -smooth
   Parser smoothOption() =>
-      stringIgnoreCase('smooth').skip(before: char('-')) & ref0(smoothOptions);
+      stringIgnoreCase('smooth').skip(before: char('-')) &
+      ref0(onOffAutoOptions);
   Parser smoothLineSegmentOption() =>
-      stringIgnoreCase('smooth') & ref0(smoothOptions);
-  Parser smoothOptions() => ref0(onOffAutoOptions).map((value) => [value]);
+      stringIgnoreCase('smooth') & ref0(onOffAutoOptions);
 }
