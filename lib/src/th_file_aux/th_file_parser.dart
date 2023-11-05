@@ -145,6 +145,10 @@ class THFileParser {
         continue;
       }
 
+      /// 'parsedContents' holds the complete result of the grammar parsing on
+      /// 'line'.
+      /// 'element' holds the the 'command' part of the parsed line, i.e., the
+      /// content minus the eventual comment.
       final element = parsedContents.value[0];
       if (element.isEmpty) {
         _addError('element.isEmpty', '_injectContents()',
@@ -186,6 +190,8 @@ class THFileParser {
           _injectUnknown(element);
           continue;
       }
+
+      /// The second part of 'parsedContents' holds the comment, if any.
       _injectComment(parsedContents.value[1]);
     }
   }
