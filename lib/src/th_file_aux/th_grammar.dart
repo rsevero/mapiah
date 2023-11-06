@@ -863,6 +863,7 @@ class THGrammar extends GrammarDefinition {
                   directionLineSegmentOption() |
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |
+                  markLineSegmentOption() |
                   rebelaysLineSegmentOption() |
                   reverseLineSegmentOption() |
                   smoothLineSegmentOption() |
@@ -941,6 +942,11 @@ class THGrammar extends GrammarDefinition {
   Parser headOptions() => ref0(beginEndBothNoneOptions)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+
+  /// linepoint -mark
+  Parser markLineSegmentOption() =>
+      stringIgnoreCase('mark') & ref0(markOptions);
+  Parser markOptions() => keyword().map((value) => [value]);
 
   /// line -rebelays
   Parser rebelaysOption() =>

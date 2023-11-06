@@ -18,6 +18,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_height_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_mark_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
@@ -553,6 +554,23 @@ class THFileParser {
     return optionIdentified;
   }
 
+  void _optionParentAsTHLineSegment() {
+    if (_lastLineSegment == null) {
+      _addError("Line segment option without a line segment.",
+          '_optionParentAsTHLineSegment', _currentElement.toString());
+      return;
+    }
+
+    /// Changing _currentHasOptions to the line segment that is the parent of
+    /// of the linepoint option. This change will be reverted by
+    /// _injectLineSegmentOption().
+    _currentHasOptions = _lastLineSegment as THHasOptions;
+  }
+
+  void _optionParentAsCurrentElement() {
+    _currentHasOptions = _currentElement as THHasOptions;
+  }
+
   bool _lineSegmentRegularOptions(String aOptionType) {
     var optionIdentified = _lineRegularOptions(aOptionType);
 
@@ -566,6 +584,8 @@ class THFileParser {
         _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
       case 'gradient':
         _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
+      case 'mark':
+        _injectMarkCommandOption();
       default:
         optionIdentified = false;
     }
@@ -574,18 +594,22 @@ class THFileParser {
       return true;
     }
 
+    /// Here we create the options found in [LINE DATA] that, in reality, are
+    /// line options, not line segment options.
+    /// The actual line segment options are created in _optionFromElement().
     if (THMultipleChoiceCommandOption.hasOptionType(
         _currentHasOptions, aOptionType)) {
+      _optionParentAsCurrentElement();
       _injectMultipleChoiceCommandOption(aOptionType);
       return true;
     }
 
-    /// Changing _currentHasOptions to the line segment that is the parent of
-    /// of the linepoint option. This change will be reverted by
+    /// Setting optionParent so actual line segment options are properly created
+    /// in _optionFromElement(). This change will be reverted by
     /// _injectLineSegmentOption().
-    _currentHasOptions = _lastLineSegment as THHasOptions;
+    _optionParentAsTHLineSegment();
 
-    return optionIdentified;
+    return false;
   }
 
   bool _lineRegularOptions(String aOptionType) {
@@ -644,20 +668,11 @@ class THFileParser {
     }
 
     if (_currentSpec[0] == 'point') {
-      if (_lastLineSegment == null) {
-        _addError("Line segment option without a line segment.",
-            '_injectMultipleChoiceWithPointChoiceCommandOption', aOptionType);
-        return;
-      }
-
-      /// Changing _currentHasOptions to the line segment that is the parent of
-      /// of the linepoint option. This change will be reverted by
-      /// _injectLineSegmentOption().
-      _currentHasOptions = _lastLineSegment as THHasOptions;
+      _optionParentAsTHLineSegment();
       THMultipleChoiceCommandOption(
           _currentHasOptions, aOptionType, _currentSpec[0]);
     } else {
-      _currentHasOptions = _currentElement as THHasOptions;
+      _optionParentAsCurrentElement();
       THMultipleChoiceCommandOption(
           _currentHasOptions, aOptionType, _currentSpec[0]);
     }
@@ -826,6 +841,16 @@ class THFileParser {
     }
 
     THStationsCommandOption(_currentHasOptions, stations);
+  }
+
+  void _injectMarkCommandOption() {
+    if (_currentSpec.length != 1) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          '== 2', _currentSpec);
+    }
+
+    _optionParentAsTHLineSegment();
+    THMarkCommandOption(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectAuthorCommandOption() {
