@@ -574,7 +574,7 @@ class THGrammar extends GrammarDefinition {
           nameOption() |
           orientationOption() |
           placeOption() |
-          pointScaleOption() |
+          plScaleOption() |
           scrapOption() |
           subtypeOption() |
           textOption() |
@@ -689,11 +689,12 @@ class THGrammar extends GrammarDefinition {
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
-  /// point -scale
-  Parser pointScaleOption() =>
-      stringIgnoreCase('scale').skip(before: char('-')) &
-      ref0(pointScaleOptions);
-  Parser pointScaleOptions() =>
+  /// point/line -scale
+  Parser plScaleOption() =>
+      stringIgnoreCase('scale').skip(before: char('-')) & ref0(plScaleOptions);
+  Parser plLineSegmentScaleOption() =>
+      stringIgnoreCase('scale') & ref0(plScaleOptions);
+  Parser plScaleOptions() =>
       (stringIgnoreCase('tiny') |
               stringIgnoreCase('xs') |
               stringIgnoreCase('small') |
@@ -822,6 +823,7 @@ class THGrammar extends GrammarDefinition {
           headOption() |
           rebelaysOption() |
           reverseOption() |
+          plScaleOption() |
           subtypeOption() |
           visibilityOption())
       .star();
@@ -863,6 +865,7 @@ class THGrammar extends GrammarDefinition {
                   directionLineSegmentOption() |
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |
+                  plLineSegmentScaleOption() |
                   markLineSegmentOption() |
                   rebelaysLineSegmentOption() |
                   reverseLineSegmentOption() |

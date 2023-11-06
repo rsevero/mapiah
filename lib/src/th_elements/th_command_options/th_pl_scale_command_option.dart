@@ -2,31 +2,40 @@ import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_multiple_choice_part.dart';
 
-// scale . symbol scale, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
-// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
-// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0.
-class THPointScaleCommandOption extends THCommandOption {
+/// Therion Book says for points:
+/// scale . symbol scale, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
+/// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
+/// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0.
+///
+/// And for lines:
+/// scale . scale for labels, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
+/// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
+/// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0. Absolute font sizes (in points) can be
+/// assigned to named sizes using fonts-setup in the layout configuration section.
+///
+/// Does the final part of the 'lines' definition means that scale for lines
+/// should accept random keywords?
+class THPLScaleCommandOption extends THCommandOption {
   late THMultipleChoicePart _textSize;
   late THDoublePart _numericSize;
   late bool _isNumeric;
 
   static const _scaleMultipleChoiceName = 'point|scale';
 
-  THPointScaleCommandOption._(super.parentOption);
+  THPLScaleCommandOption._(super.parentOption);
 
-  THPointScaleCommandOption.sizeAsText(
-      super.parentOption, String aTextScaleSize) {
+  THPLScaleCommandOption.sizeAsText(super.parentOption, String aTextScaleSize) {
     _textSize = THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
     _isNumeric = false;
   }
 
-  THPointScaleCommandOption.sizeAsNumber(
+  THPLScaleCommandOption.sizeAsNumber(
       super.parentOption, THDoublePart aNumericScaleSize) {
     _numericSize = aNumericScaleSize;
     _isNumeric = true;
   }
 
-  THPointScaleCommandOption.sizeAsNumberFromString(
+  THPLScaleCommandOption.sizeAsNumberFromString(
       super.parentOption, String aNumericScaleSize) {
     _numericSize = THDoublePart.fromString(aNumericScaleSize);
     _isNumeric = true;

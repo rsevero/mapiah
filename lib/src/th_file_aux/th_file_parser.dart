@@ -45,7 +45,7 @@ import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_point_scale_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_pl_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
@@ -880,10 +880,10 @@ class THFileParser {
 
     switch (_currentSpec[0]) {
       case 'numeric':
-        THPointScaleCommandOption.sizeAsNumberFromString(
+        THPLScaleCommandOption.sizeAsNumberFromString(
             (_currentHasOptions as THPoint), _currentSpec[1]);
       case 'text':
-        THPointScaleCommandOption.sizeAsText(
+        THPLScaleCommandOption.sizeAsText(
             (_currentHasOptions as THPoint), _currentSpec[1]);
       default:
         throw THCustomException("Unknown point scale mode '_currentSpec[0]'");

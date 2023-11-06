@@ -26,7 +26,7 @@ endlayout
 #select modelo_MP@modelo_SRV
 
 # Opção para exportar o mapa em formato PDF
-export map -projection plan -layout exploracao -output line_options_testing.pdf
+export map -projection elevation -layout exploracao -output line_options_testing.pdf
 
 # Opção para exportar o perfil retificado em PDF
 #export map -projection extended -layout exploracao -output modelo-perfil.pdf
