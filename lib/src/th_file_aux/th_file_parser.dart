@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_altitude_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_author_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_clip_command_option.dart';
@@ -576,6 +577,8 @@ class THFileParser {
 
     optionIdentified = true;
     switch (aOptionType) {
+      case 'altitude':
+        _injectAltitudeCommandOption();
       case 'direction':
         _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
       case 'gradient':
@@ -970,6 +973,45 @@ class THFileParser {
       default:
         throw THCustomException(
             "Unsupported point type '$pointType' for option 'value'.");
+    }
+  }
+
+  void _injectAltitudeCommandOption() {
+    final parseType = _currentSpec[0].toString();
+    final specs = _currentSpec[1];
+
+    _optionParentAsTHLineSegment();
+    switch (parseType) {
+      case 'fix_number':
+        if ((specs[1] == null) || (specs[1] is! String)) {
+          throw THCustomException("Need a string value.");
+        }
+        final unit = ((specs[2] != null) &&
+                (specs[2] is String) &&
+                ((specs[2] as String).isNotEmpty))
+            ? specs[2].toString()
+            : '';
+        THAltitudeCommandOption.fromString(
+            _currentHasOptions, specs[1], true, unit);
+      case 'hyphen':
+      case 'nan':
+        THAltitudeCommandOption.fromNan(_currentHasOptions);
+      case 'number_with_something_else':
+        if ((specs[0] == null) || (specs[0] is! String)) {
+          throw THCustomException("Need a string value.");
+        }
+        final unit = ((specs[1] != null) &&
+                (specs[1] is String) &&
+                ((specs[1] as String).isNotEmpty))
+            ? specs[1].toString()
+            : '';
+        THAltitudeCommandOption.fromString(
+            _currentHasOptions, specs[0], false, unit);
+      case 'single_number':
+        THAltitudeCommandOption.fromString(_currentHasOptions, specs, false);
+      default:
+        throw THCustomException(
+            "Unsuported parse type '$parseType' in '_injectAltitudeCommandOption'.");
     }
   }
 

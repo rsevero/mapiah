@@ -267,6 +267,137 @@ endscrap
     }
   });
 
+  group('linepoint -altitude', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file':
+            'th_file_parser-03130-wall_line_with_altitude_linepoint_option_with_hyphen.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line wall
+    0 0
+      altitude NaN
+    100 100
+  endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03131-linepoint_with_altitude_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line wall
+    1758 -1030
+      altitude [ 4 m ]
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03133-linepoint_with_altitude_option_with_fix.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line wall
+    1758 -1030
+      altitude [ fix 1510 ft ]
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03134-altitude_point_with_value_option_set_as_nan.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line wall
+    1758 -1030
+      altitude NaN
+    123 432
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03135-linepoint_with_altitude_option_set_as_nan.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line wall
+    1758 -1030
+      altitude NaN
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03136-altitude_point_with_value_option_with_fix.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line wall
+    0 0
+      altitude [ fix 1300 m ]
+    100 100
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint -altitude failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03132-linepoint_with_altitude_option_with_invalid_line_type-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('line -anchors', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

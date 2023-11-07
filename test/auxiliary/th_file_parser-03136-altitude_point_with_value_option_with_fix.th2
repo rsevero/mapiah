@@ -1,0 +1,8 @@
+encoding utf-8
+scrap test
+line wall
+	0 0
+altitude [fix 1300 meters]
+	100 100
+endline
+endscrap
