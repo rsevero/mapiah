@@ -1,5 +1,6 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_has_length.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_value_command_option.dart';
+import 'package:mapiah/src/th_elements/th_has_altitude.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
@@ -9,12 +10,9 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 // prefixed by ‘fix’ (e.g. -value [fix 1300]), this value is used as an absolute altitude.
 // The value can optionally be followed by length units.
 class THAltitudeValueCommandOption extends THValueCommandOption
-    with THHasLength {
-  var isNan = false;
-  late bool isFix;
-
+    with THHasLength, THHasAltitude {
   THAltitudeValueCommandOption(
-      super.optionParent, THDoublePart aHeight, this.isFix,
+      super.optionParent, THDoublePart aHeight, bool aIsFix,
       [String? aUnit]) {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'altitude')) {
@@ -22,13 +20,14 @@ class THAltitudeValueCommandOption extends THValueCommandOption
           "'$optionType' command option only supported on points of type 'altitude'.");
     }
     length = aHeight;
+    isFix = aIsFix;
     if ((aUnit != null) && (aUnit.isNotEmpty)) {
       unitFromString(aUnit);
     }
   }
 
   THAltitudeValueCommandOption.fromString(
-      super.optionParent, String aHeight, this.isFix,
+      super.optionParent, String aHeight, bool aIsFix,
       [String? aUnit]) {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'altitude')) {
@@ -36,6 +35,7 @@ class THAltitudeValueCommandOption extends THValueCommandOption
           "'$optionType' command option only supported on points of type 'altitude'.");
     }
     length = THDoublePart.fromString(aHeight);
+    isFix = aIsFix;
     if ((aUnit != null) && (aUnit.isNotEmpty)) {
       unitFromString(aUnit);
     }
@@ -49,27 +49,5 @@ class THAltitudeValueCommandOption extends THValueCommandOption
     }
     length = THDoublePart.fromString('0');
     isNan = true;
-  }
-
-  @override
-  String specToFile() {
-    if (isNan) {
-      return 'NaN';
-    }
-
-    var asString = length.toString();
-
-    if (unitSet || isFix) {
-      if (isFix) {
-        asString = "fix $asString";
-      }
-
-      if (unitSet) {
-        asString += " $unit";
-      }
-      return "[ $asString ]";
-    }
-
-    return asString;
   }
 }

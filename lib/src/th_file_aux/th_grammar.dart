@@ -861,6 +861,7 @@ class THGrammar extends GrammarDefinition {
   /// line segment options
   Parser lineSegmentOptions() =>
       ((adjustLineSegmentOption() |
+                  altitudeLineSegmentOption() |
                   anchorsLineSegmentOption() |
                   borderLineSegmentOption() |
                   clipLineSegmentOption() |
@@ -890,6 +891,26 @@ class THGrammar extends GrammarDefinition {
       (stringIgnoreCase('horizontal') | stringIgnoreCase('vertical'))
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => [value]);
+
+  /// line -altitude
+  Parser altitudeLineSegmentOption() =>
+      stringIgnoreCase('altitude') & ref0(valueOptions);
+  Parser altitudeOptions() => (char('-')
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['hyphen', value]) |
+      number()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['single_number', value]) |
+      nan()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['nan', value]) |
+      bracketStringTemplate(
+              stringIgnoreCase('fix') & number() & lengthUnit().optional())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['fix_number', value]) |
+      bracketStringTemplate(number() & number() & lengthUnit().optional())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['two_numbers_with_optional_unit', value]));
 
   /// line -anchors
   Parser anchorsOption() =>

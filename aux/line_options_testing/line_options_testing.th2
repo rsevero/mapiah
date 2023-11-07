@@ -31,14 +31,14 @@ line rope
   647.0 829.0
 endline
 
-line ceiling-step -scale xs
+line wall
   448.0 1005.0
   650.0 900.0 827.81 933.28 850.0 900.0
-  smooth off
+  altitude 4
   650.0 900.0
   872.19 866.72 850.0 600.0 850.0 600.0
-  smooth off
   1050.0 600.0
+  altitude 7.51
   1050.0 900.0
 endline
 
