@@ -11,7 +11,7 @@ class THContextCommandOption extends THCommandOption {
   late String _elementType;
   late String _symbolType;
 
-  static final _supportedElementTypes = <String>{'point', 'line', 'area,'};
+  static final _supportedElementTypes = <String>{'point', 'line', 'area'};
 
   THContextCommandOption(
       super.parentOption, String aElementType, String aSymbolType) {

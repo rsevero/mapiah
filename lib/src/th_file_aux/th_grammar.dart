@@ -616,6 +616,8 @@ class THGrammar extends GrammarDefinition {
   Parser contextOption() =>
       stringIgnoreCase('context').skip(before: char('-')) &
       ref0(contextOptions);
+  Parser contextLineSegmentOption() =>
+      stringIgnoreCase('context') & ref0(contextOptions);
   Parser contextOptions() =>
       (keyword() & keyword()).trim(ref0(thWhitespace), ref0(thWhitespace));
 
@@ -818,6 +820,7 @@ class THGrammar extends GrammarDefinition {
           borderOption() |
           clipOption() |
           closeOption() |
+          contextOption() |
           directionOption() |
           gradientOption() |
           headOption() |
@@ -862,6 +865,7 @@ class THGrammar extends GrammarDefinition {
                   borderLineSegmentOption() |
                   clipLineSegmentOption() |
                   closeLineSegmentOption() |
+                  contextLineSegmentOption() |
                   directionLineSegmentOption() |
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |

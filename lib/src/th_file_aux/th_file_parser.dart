@@ -1,7 +1,5 @@
-import 'dart:collection';
 import 'dart:io';
 import 'dart:convert';
-import 'dart:math';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
@@ -403,8 +401,6 @@ class THFileParser {
     _currentElement = newLine;
     _currentParent = newLine;
 
-    // _parsedOptions.clear();
-
     try {
       // Including subtype defined with type (type:subtype).
       if (aElement[1][1] != null) {
@@ -618,6 +614,8 @@ class THFileParser {
     switch (aOptionType) {
       case 'clip':
         _injectClipCommandOption();
+      case 'context':
+        _injectContextCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
       default:
