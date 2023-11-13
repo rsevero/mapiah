@@ -574,7 +574,7 @@ class THGrammar extends GrammarDefinition {
           nameOption() |
           orientationOption() |
           placeOption() |
-          plScaleOption() |
+          pointScaleOption() |
           scrapOption() |
           subtypeOption() |
           textOption() |
@@ -695,12 +695,13 @@ class THGrammar extends GrammarDefinition {
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
-  /// point/line -scale
-  Parser plScaleOption() =>
-      stringIgnoreCase('scale').skip(before: char('-')) & ref0(plScaleOptions);
-  Parser plLineSegmentScaleOption() =>
-      stringIgnoreCase('scale') & ref0(plScaleOptions);
-  Parser plScaleOptions() =>
+  /// point -scale
+  Parser pointScaleOption() =>
+      stringIgnoreCase('scale').skip(before: char('-')) &
+      ref0(pointScaleOptions);
+  Parser pointLineSegmentScaleOption() =>
+      stringIgnoreCase('scale') & ref0(pointScaleOptions);
+  Parser pointScaleOptions() =>
       (stringIgnoreCase('tiny') |
               stringIgnoreCase('xs') |
               stringIgnoreCase('small') |
@@ -712,7 +713,7 @@ class THGrammar extends GrammarDefinition {
               stringIgnoreCase('huge') |
               stringIgnoreCase('xl'))
           .trim(ref0(thWhitespace), ref0(thWhitespace))
-          .map((value) => ['text', value]) |
+          .map((value) => ['multiplechoice', value]) |
       number()
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => ['numeric', value]);
@@ -830,7 +831,7 @@ class THGrammar extends GrammarDefinition {
           headOption() |
           rebelaysOption() |
           reverseOption() |
-          plScaleOption() |
+          lineScaleOption() |
           subtypeOption() |
           visibilityOption())
       .star();
@@ -874,7 +875,7 @@ class THGrammar extends GrammarDefinition {
                   directionLineSegmentOption() |
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |
-                  plLineSegmentScaleOption() |
+                  lineLineSegmentScaleOption() |
                   lsizeLineSegmentOption() |
                   markLineSegmentOption() |
                   orientationLineSegmentOption() |
@@ -976,6 +977,31 @@ class THGrammar extends GrammarDefinition {
   Parser headOptions() => ref0(beginEndBothNoneOptions)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+
+  /// line -scale
+  Parser lineScaleOption() =>
+      stringIgnoreCase('scale').skip(before: char('-')) &
+      ref0(lineScaleOptions);
+  Parser lineLineSegmentScaleOption() =>
+      stringIgnoreCase('scale') & ref0(lineScaleOptions);
+  Parser lineScaleOptions() =>
+      (stringIgnoreCase('tiny') |
+              stringIgnoreCase('xs') |
+              stringIgnoreCase('small') |
+              stringIgnoreCase('s') |
+              stringIgnoreCase('normal') |
+              stringIgnoreCase('m') |
+              stringIgnoreCase('large') |
+              stringIgnoreCase('l') |
+              stringIgnoreCase('huge') |
+              stringIgnoreCase('xl'))
+          .skip(after: ref0(thWhitespace).plus())
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['multiplechoice', value]) |
+      number()
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => ['numeric', value]) |
+      extKeyword().map((value) => ['text', value]);
 
   /// linepoint l-size/size
   Parser lsizeLineSegmentOption() =>

@@ -1,48 +1,53 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_elements/th_line.dart';
+import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_multiple_choice_part.dart';
+import 'package:mapiah/src/th_elements/th_point.dart';
+import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 /// Therion Book says for points:
 /// scale . symbol scale, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
 /// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
 /// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0.
-///
-/// And for lines:
-/// scale . scale for labels, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
-/// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
-/// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0. Absolute font sizes (in points) can be
-/// assigned to named sizes using fonts-setup in the layout configuration section.
-///
-/// Does the final part of the 'lines' definition means that scale for lines
-/// should accept random keywords?
-class THPLScaleCommandOption extends THCommandOption {
-  late THMultipleChoicePart _textSize;
+class THPointScaleCommandOption extends THCommandOption {
+  late THMultipleChoicePart _multipleChoiceSize;
   late THDoublePart _numericSize;
   late bool _isNumeric;
 
   static const _scaleMultipleChoiceName = 'point|scale';
 
-  THPLScaleCommandOption._(super.parentOption);
-
-  THPLScaleCommandOption.sizeAsText(super.parentOption, String aTextScaleSize) {
-    _textSize = THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
+  THPointScaleCommandOption.sizeAsMultipleChoice(
+      super.optionParent, String aTextScaleSize) {
+    if (optionParent is! THPoint) {
+      throw THCustomException("Only available for 'point'.");
+    }
+    _multipleChoiceSize =
+        THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
     _isNumeric = false;
   }
 
-  THPLScaleCommandOption.sizeAsNumber(
-      super.parentOption, THDoublePart aNumericScaleSize) {
+  THPointScaleCommandOption.sizeAsNumber(
+      super.optionParent, THDoublePart aNumericScaleSize) {
+    if (optionParent is! THPoint) {
+      throw THCustomException("Only available for 'point'.");
+    }
     _numericSize = aNumericScaleSize;
     _isNumeric = true;
   }
 
-  THPLScaleCommandOption.sizeAsNumberFromString(
-      super.parentOption, String aNumericScaleSize) {
+  THPointScaleCommandOption.sizeAsNumberFromString(
+      super.optionParent, String aNumericScaleSize) {
+    if (optionParent is! THPoint) {
+      throw THCustomException("Only available for 'point'.");
+    }
     _numericSize = THDoublePart.fromString(aNumericScaleSize);
     _isNumeric = true;
   }
 
   set sizeAsText(String aTextScaleSize) {
-    _textSize = THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
+    _multipleChoiceSize =
+        THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
     _isNumeric = false;
   }
 
@@ -64,7 +69,7 @@ class THPLScaleCommandOption extends THCommandOption {
     if (isNumeric) {
       return _numericSize;
     } else {
-      return _textSize;
+      return _multipleChoiceSize;
     }
   }
 
@@ -76,7 +81,7 @@ class THPLScaleCommandOption extends THCommandOption {
     if (isNumeric) {
       return _numericSize.toString();
     } else {
-      return _textSize.toString();
+      return _multipleChoiceSize.toString();
     }
   }
 }

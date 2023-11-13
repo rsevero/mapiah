@@ -17,12 +17,14 @@ import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_height_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_line_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_lsize_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_mark_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_passage_height_value_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_point_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_scrap_scale_command_option.dart';
@@ -45,7 +47,6 @@ import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
 import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_pl_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
@@ -625,6 +626,8 @@ class THFileParser {
         _injectClipCommandOption();
       case 'context':
         _injectContextCommandOption();
+      case 'scale':
+        _injectLineScaleCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
       default:
@@ -897,13 +900,36 @@ class THFileParser {
 
     switch (_currentSpec[0]) {
       case 'numeric':
-        THPLScaleCommandOption.sizeAsNumberFromString(
-            (_currentHasOptions as THPoint), _currentSpec[1]);
-      case 'text':
-        THPLScaleCommandOption.sizeAsText(
-            (_currentHasOptions as THPoint), _currentSpec[1]);
+        THPointScaleCommandOption.sizeAsNumberFromString(
+            _currentHasOptions, _currentSpec[1]);
+      case 'multiplechoice':
+        THPointScaleCommandOption.sizeAsMultipleChoice(
+            _currentHasOptions, _currentSpec[1]);
       default:
-        throw THCustomException("Unknown point scale mode '_currentSpec[0]'");
+        throw THCustomException(
+            "Unknown point scale mode '${_currentSpec[0]}'");
+    }
+  }
+
+  void _injectLineScaleCommandOption() {
+    if (_currentSpec.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          '== 2', _currentSpec);
+    }
+
+    switch (_currentSpec[0]) {
+      case 'numeric':
+        THLineScaleCommandOption.sizeAsNumberFromString(
+            _currentHasOptions, _currentSpec[1]);
+      case 'multiplechoice':
+        THLineScaleCommandOption.sizeAsMultipleChoice(
+            _currentHasOptions, _currentSpec[1]);
+      case 'text':
+        THLineScaleCommandOption.sizeAsText(
+            _currentHasOptions, _currentSpec[1]);
+      default:
+        throw THCustomException(
+            "Unknown point scale mode '${_currentSpec[0]}'");
     }
   }
 

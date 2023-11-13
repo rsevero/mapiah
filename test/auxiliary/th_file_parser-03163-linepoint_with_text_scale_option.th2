@@ -1,0 +1,8 @@
+encoding utf-8
+scrap test
+line label
+    1758 -1030
+    2147.74 -1120.48
+scale my_font_size
+endline
+endscrap
