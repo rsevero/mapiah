@@ -1158,6 +1158,20 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': 'th_file_parser-03142-linepoint_with_size_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line slope
+    1758 -1030
+      l-size 12
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
