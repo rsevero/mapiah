@@ -732,12 +732,14 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('subtype') & ref0(subtypeOptions);
   Parser subtypeOptions() => unquotedString().map((value) => [value]);
 
-  /// scrap -text
+  /// point/line -text
   Parser textOption() =>
       stringIgnoreCase('text').skip(before: char('-')) & ref0(textOptions);
+  Parser textLineSegmentOption() =>
+      stringIgnoreCase('text') & ref0(textOptions);
   Parser textOptions() => anyString().map((value) => [value]);
 
-  /// scrap -value
+  /// point -value
   Parser valueOption() =>
       stringIgnoreCase('value').skip(before: char('-')) & ref0(valueOptions);
   Parser valueOptions() => (char('-')
@@ -833,6 +835,7 @@ class THGrammar extends GrammarDefinition {
           reverseOption() |
           lineScaleOption() |
           subtypeOption() |
+          textOption() |
           visibilityOption())
       .star();
 
@@ -883,6 +886,7 @@ class THGrammar extends GrammarDefinition {
                   reverseLineSegmentOption() |
                   smoothLineSegmentOption() |
                   subtypeLineSegmentOption() |
+                  textLineSegmentOption() |
                   visibilityLineSegmentOption())
               .trim(ref0(thWhitespace), ref0(thWhitespace)))
           .map((value) => [

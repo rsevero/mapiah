@@ -630,6 +630,8 @@ class THFileParser {
         _injectLineScaleCommandOption();
       case 'subtype':
         _injectSubtypeCommandOption();
+      case 'text':
+        _injectTextCommandOption();
       default:
         optionIdentified = false;
     }
