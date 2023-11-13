@@ -871,6 +871,7 @@ class THGrammar extends GrammarDefinition {
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |
                   plLineSegmentScaleOption() |
+                  lsizeLineSegmentOption() |
                   markLineSegmentOption() |
                   rebelaysLineSegmentOption() |
                   reverseLineSegmentOption() |
@@ -968,6 +969,15 @@ class THGrammar extends GrammarDefinition {
   Parser headLineSegmentOption() =>
       stringIgnoreCase('head') & ref0(headOptions);
   Parser headOptions() => ref0(beginEndBothNoneOptions)
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
+
+  /// linepoint l-size/size
+  Parser lsizeLineSegmentOption() =>
+      (stringIgnoreCase('l-size') | stringIgnoreCase('size'))
+          .map((value) => 'l-size') &
+      ref0(lsizeOptions);
+  Parser lsizeOptions() => number()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 

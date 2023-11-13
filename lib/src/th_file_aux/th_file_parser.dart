@@ -17,6 +17,7 @@ import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_opti
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_height_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_lsize_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_mark_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_name_command_option.dart';
@@ -583,6 +584,8 @@ class THFileParser {
         _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
       case 'gradient':
         _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
+      case 'l-size':
+        _injectLSizeCommandOption();
       case 'mark':
         _injectMarkCommandOption();
       default:
@@ -842,6 +845,16 @@ class THFileParser {
     }
 
     THStationsCommandOption(_currentHasOptions, stations);
+  }
+
+  void _injectLSizeCommandOption() {
+    if (_currentSpec.length != 1) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          '== 2', _currentSpec);
+    }
+
+    _optionParentAsTHLineSegment();
+    THLSizeCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectMarkCommandOption() {
