@@ -1,4 +1,7 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_elements/th_line.dart';
+import 'package:mapiah/src/th_elements/th_line_segment.dart';
+import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 
@@ -7,11 +10,27 @@ import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 class THOrientationCommandOption extends THCommandOption {
   late THDoublePart _azimuth;
 
-  THOrientationCommandOption(super.parentOption, THDoublePart aAzimuth) {
+  THOrientationCommandOption(super.optionParent, THDoublePart aAzimuth) {
+    if (optionParent is THLineSegment) {
+      if ((optionParent.parent is! THLine) ||
+          ((optionParent.parent as THLine).plaType != 'slope')) {
+        throw THCustomException("Only available for 'slope' lines.");
+      }
+    } else if (optionParent is! THPoint) {
+      throw THCustomException("Only available for 'point' and 'slope' lines.");
+    }
     azimuth = aAzimuth;
   }
 
   THOrientationCommandOption.fromString(super.parentOption, String aAzimuth) {
+    if (optionParent is THLineSegment) {
+      if ((optionParent.parent is! THLine) ||
+          ((optionParent.parent as THLine).plaType != 'slope')) {
+        throw THCustomException("Only available for 'slope' lines.");
+      }
+    } else if (optionParent is! THPoint) {
+      throw THCustomException("Only available for 'point' and 'slope' lines.");
+    }
     azimuthFromString = aAzimuth;
   }
 

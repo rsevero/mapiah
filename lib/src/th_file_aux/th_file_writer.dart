@@ -4,7 +4,6 @@ import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
-import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_multiline_comment_content.dart';
@@ -240,10 +239,10 @@ class THFileWriter {
     _increasePrefix();
     final aTHHasOptions = aLineSegment as THHasOptions;
     for (final aLinePointOptionType in aTHHasOptions.optionsList()) {
-      asString += "$aLinePointOptionType ";
-      asString +=
+      var newLine = "$aLinePointOptionType ";
+      newLine +=
           aTHHasOptions.optionByType(aLinePointOptionType)!.specToFile().trim();
-      asString = "$_prefix${asString.trim()}\n";
+      asString += "$_prefix${newLine.trim()}\n";
     }
     _reducePrefix();
 

@@ -1,7 +1,6 @@
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_exceptions/th_id_with_space_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_no_element_by_mapiah_id_exception.dart';
 
 /// Base class for all elements that form a THFile, including THFile itself.

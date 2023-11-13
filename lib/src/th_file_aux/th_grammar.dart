@@ -680,6 +680,10 @@ class THGrammar extends GrammarDefinition {
           .skip(before: char('-'))
           .map((value) => 'orientation') &
       ref0(orientationOptions);
+  Parser orientationLineSegmentOption() =>
+      (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
+          .map((value) => 'orientation') &
+      ref0(orientationOptions);
   Parser orientationOptions() => number().map((value) => [value]);
 
   /// point -place
@@ -873,6 +877,7 @@ class THGrammar extends GrammarDefinition {
                   plLineSegmentScaleOption() |
                   lsizeLineSegmentOption() |
                   markLineSegmentOption() |
+                  orientationLineSegmentOption() |
                   rebelaysLineSegmentOption() |
                   reverseLineSegmentOption() |
                   smoothLineSegmentOption() |

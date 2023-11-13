@@ -1264,6 +1264,79 @@ endscrap
     }
   });
 
+  group('linepoint orientation', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-03150-linepoint_with_orientation_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line slope
+    1758 -1030
+      orientation 173.01
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03151-linepoint_with_orientation_and_lsize_options.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line slope
+    1758 -1030
+      l-size 12
+      orientation 173.01
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse((success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+        //     startParser: grammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint orientation failures', () {
+    final parser = THFileParser();
+    // final grammar = THGrammar();
+    final writer = THFileWriter();
+
+    const failures = [
+      'th_file_parser-03152-linepoint_with_invalid_orientation_option-failure.th2',
+      'th_file_parser-03153-linepoint_with_orientation_option_on_non-slope_line-failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final (_, isSuccessful, error) = await parser.parse(failure);
+        expect(isSuccessful, false);
+      });
+    }
+  });
+
   group('line -rebelays', () {
     final parser = THFileParser();
     // final grammar = THGrammar();

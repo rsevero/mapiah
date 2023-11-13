@@ -588,6 +588,9 @@ class THFileParser {
         _injectLSizeCommandOption();
       case 'mark':
         _injectMarkCommandOption();
+      case 'orientation':
+        _optionParentAsTHLineSegment();
+        _injectOrientationCommandOption();
       default:
         optionIdentified = false;
     }
@@ -919,8 +922,7 @@ class THFileParser {
           '== 1', _currentSpec);
     }
 
-    THOrientationCommandOption.fromString(
-        (_currentHasOptions as THPoint), _currentSpec[0]);
+    THOrientationCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectCopyrightCommandOption() {

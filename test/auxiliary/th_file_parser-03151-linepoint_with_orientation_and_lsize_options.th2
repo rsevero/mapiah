@@ -1,0 +1,9 @@
+encoding utf-8
+scrap test
+line slope
+    1758 -1030
+l-size 12
+    orientation 173.01
+    2147.74 -1120.48
+endline
+endscrap
