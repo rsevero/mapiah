@@ -6,7 +6,7 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 // context <point/line/area> <symbol-type> . (to be used with symbol-hide and
 // symbol-show layout options) symbol will be hidden/shown according to rules for spec-
-// ified <symbol-type>.23
+// ified <symbol-type>.
 class THContextCommandOption extends THCommandOption {
   late String _elementType;
   late String _symbolType;
