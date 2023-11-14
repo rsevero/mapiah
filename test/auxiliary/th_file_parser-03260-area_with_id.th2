@@ -1,0 +1,5 @@
+encoding utf-8
+scrap test
+area water -id area51
+endarea
+endscrap
