@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_area.dart';
+import 'package:mapiah/src/th_elements/th_area_border.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
@@ -39,6 +41,7 @@ import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_empty_line.dart';
 import 'package:mapiah/src/th_elements/th_encoding.dart';
+import 'package:mapiah/src/th_elements/th_endarea.dart';
 import 'package:mapiah/src/th_elements/th_endcomment.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';
 import 'package:mapiah/src/th_elements/th_endscrap.dart';
@@ -68,6 +71,7 @@ import 'package:petitparser/debug.dart';
 class THFileParser {
   final _grammar = THGrammar();
 
+  late final Parser _areaContentParser;
   late final Parser _lineContentParser;
   late final Parser _multiLineCommentContentParser;
   late final Parser _scrapContentParser;
@@ -100,6 +104,7 @@ class THFileParser {
   final _isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
 
   THFileParser() {
+    _areaContentParser = _grammar.buildFrom(_grammar.areaStart());
     _lineContentParser = _grammar.buildFrom(_grammar.lineStart());
     _multiLineCommentContentParser =
         _grammar.buildFrom(_grammar.multiLineCommentStart());
@@ -169,6 +174,10 @@ class THFileParser {
 
       final elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
+        case 'area':
+          _injectArea(element);
+        case 'areaborder':
+          _injectAreaBorder(element);
         case 'beziercurvelinesegment':
           _injectBezierCurveLineSegment(element);
 
@@ -176,15 +185,19 @@ class THFileParser {
           continue;
         case 'encoding':
           _injectEncoding();
+        case 'endarea':
+          _injectEndarea();
         case 'endmultilinecomment':
           _injectEndMultiLineComment();
         case 'endline':
-          _injectEndline(element);
+          _injectEndline();
         case 'endscrap':
-          _injectEndscrap(element);
+          _injectEndscrap();
         case 'fulllinecomment':
           _commentContentToParse = element;
           _injectComment();
+
+          /// Full line commments have no same line comments.
           continue;
         case 'line':
           _injectLine(element);
@@ -202,6 +215,8 @@ class THFileParser {
           _injectStartMultiLineComment();
         case 'multilinecommentline':
           _injectMultiLineCommentContent(element);
+
+          /// Multiline commments have no same line comments.
           continue;
         case 'point':
           _injectPoint(element);
@@ -312,6 +327,16 @@ class THFileParser {
     _currentElement = newBezierCurveLineSegment.parent;
   }
 
+  void _injectAreaBorder(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+    assert(elementSize == 2);
+
+    final areaBorderID = aElement[1];
+    assert(areaBorderID is String);
+
+    THAreaBorder(_currentParent, areaBorderID);
+  }
+
   void _injectStraightLineSegment(List<dynamic> aElement) {
     final elementSize = aElement.length;
     assert(elementSize == 2);
@@ -354,7 +379,7 @@ class THFileParser {
     _addChildParser(_scrapContentParser);
   }
 
-  void _injectEndscrap(List<dynamic> aElement) {
+  void _injectEndscrap() {
     _currentElement = THEndscrap(_currentParent);
     _currentParent = _currentParent.parent;
     _returnToParentParser();
@@ -392,6 +417,32 @@ class THFileParser {
     _currentHasOptions = _currentElement as THHasOptions;
   }
 
+  void _injectArea(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+
+    assert(elementSize >= 2);
+    assert(aElement[1] is List);
+    assert(aElement[1].length == 2);
+    assert(aElement[1][0] is String);
+
+    final newArea = THArea(_currentParent, aElement[1][0]);
+
+    _currentElement = newArea;
+    _currentParent = newArea;
+
+    try {
+      // Including subtype defined with type (type:subtype).
+      if ((aElement[1][1] != null) && (aElement[1][0] == 'u')) {
+        THSubtypeCommandOption(newArea, aElement[1][1]);
+      }
+    } catch (e, s) {
+      _addError("$e\n\nTrace:\n\n$s", '_injectArea', aElement[1][1].toString());
+    }
+
+    _optionFromElement(aElement[2], _areaRegularOptions);
+    _addChildParser(_areaContentParser);
+  }
+
   void _injectLine(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
@@ -409,7 +460,6 @@ class THFileParser {
       // Including subtype defined with type (type:subtype).
       if (aElement[1][1] != null) {
         THSubtypeCommandOption(newLine, aElement[1][1]);
-        // _parsedOptions.add('subtype');
       }
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_injectLine', aElement[1][1].toString());
@@ -420,7 +470,13 @@ class THFileParser {
     _lastLineSegment = null;
   }
 
-  void _injectEndline(List<dynamic> aElement) {
+  void _injectEndarea() {
+    _currentElement = THEndarea(_currentParent);
+    _currentParent = _currentParent.parent;
+    _returnToParentParser();
+  }
+
+  void _injectEndline() {
     _currentElement = THEndline(_currentParent);
     _currentParent = _currentParent.parent;
     _returnToParentParser();
@@ -617,6 +673,25 @@ class THFileParser {
     _optionParentAsTHLineSegment();
 
     return false;
+  }
+
+  bool _areaRegularOptions(String aOptionType) {
+    var optionIdentified = true;
+
+    switch (aOptionType) {
+      case 'clip':
+        _injectClipCommandOption();
+      case 'context':
+        _injectContextCommandOption();
+      case 'endarea':
+        _injectEndarea();
+      case 'id':
+        _injectIDCommandOption();
+      default:
+        optionIdentified = false;
+    }
+
+    return optionIdentified;
   }
 
   bool _lineRegularOptions(String aOptionType) {

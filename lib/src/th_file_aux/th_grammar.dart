@@ -46,7 +46,7 @@ class THGrammar extends GrammarDefinition {
   Parser areaStructure() =>
       areaContent() | fullLineComment() | multiLineComment();
   Parser areaContent() =>
-      borderLineReference() | areaCommandLikeOptions() | endarea();
+      endarea() | areaCommandLikeOptions() | borderLineReference();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
@@ -1118,7 +1118,12 @@ class THGrammar extends GrammarDefinition {
           placeCommandLikeOption() |
           visibilityCommandLikeOption()) &
       endLineComment().optional();
-  Parser borderLineReference() => reference().end();
+
+  /// area border reference
+  Parser borderLineReference() =>
+      ref1(commandTemplate, borderLineReferenceCommand);
+  Parser borderLineReferenceCommand() =>
+      reference().end().map((value) => ['areaborder', value]);
 
   /// endarea
   Parser endarea() => ref1(commandTemplate, endareaCommand);

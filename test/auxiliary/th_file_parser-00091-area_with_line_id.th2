@@ -1,3 +1,6 @@
+encoding UTF-8
+scrap test
 area clay -clip on
   l85-3732--20
 endarea
+endscrap

@@ -3,7 +3,9 @@ import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
-class THArea extends THElement with THHasOptions implements THHasPLAType {
+class THArea extends THElement
+    with THHasOptions, THParent
+    implements THHasPLAType {
   late String _areaType;
 
   static final _areaTypes = <String>{

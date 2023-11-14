@@ -22,7 +22,7 @@ point 450.0 900.0 station -name a1
 
 point 576.0 757.0 altitude -value 4
 
-area water -id area2
+area u:blaus
   l10-1000-1035
   l11-814-1102
 clip off

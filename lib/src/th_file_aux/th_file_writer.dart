@@ -1,4 +1,6 @@
 import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_area.dart';
+import 'package:mapiah/src/th_elements/th_area_border.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
@@ -25,6 +27,11 @@ class THFileWriter {
     final type = aTHElement.elementType;
 
     switch (type) {
+      case 'area':
+        asString += _serializeArea(aTHElement);
+      case 'areaborder':
+        final newLine = (aTHElement as THAreaBorder).id;
+        asString += _prepareLine(newLine, aTHElement);
       case 'comment':
         asString += '# ${(aTHElement as THComment).content}\n';
       case 'emptyline':
@@ -32,6 +39,9 @@ class THFileWriter {
       case 'encoding':
         final newLine = 'encoding ${(aTHElement as THEncoding).encoding}';
         asString += _prepareLine(newLine, aTHElement);
+      case 'endarea':
+        _reducePrefix();
+        asString += _prepareLine('endarea', aTHElement);
       case 'endcomment':
         _reducePrefix();
         asString += _prepareLine('endcomment', aTHElement);
@@ -72,6 +82,21 @@ class THFileWriter {
         final newLine = "Unrecognized element: '$aTHElement'";
         asString += _prepareLine(newLine, aTHElement);
     }
+
+    return asString;
+  }
+
+  String _serializeArea(THElement aTHElement) {
+    final aTHArea = aTHElement as THArea;
+    var newLine = "area ${aTHArea.plaType}";
+    if (aTHArea.optionIsSet('subtype')) {
+      newLine += ":${aTHArea.optionByType('subtype')!.specToFile()}";
+    }
+    newLine += " ${aTHArea.optionsAsString()}";
+    newLine = newLine.trim();
+    var asString = _prepareLine(newLine, aTHArea);
+    _increasePrefix();
+    asString += _childrenAsString(aTHArea);
 
     return asString;
   }

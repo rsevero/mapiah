@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
@@ -118,6 +119,12 @@ class THSubtypeCommandOption extends THCommandOption {
                   .contains(aSubtype))) {
         throw THCustomException(
             "Unsupported subtype '$aSubtype' in option type '$optionType' for a line of type '$lineType' object.");
+      }
+    } else if (optionParent is THArea) {
+      final areaType = (optionParent as THArea).plaType;
+      if (areaType != 'u') {
+        throw THCustomException(
+            "Unsupported subtype '$aSubtype' in option type '$optionType' for an area of type '$areaType' object.");
       }
     } else {
       throw THCustomException(
