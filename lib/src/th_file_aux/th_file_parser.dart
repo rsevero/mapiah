@@ -629,6 +629,8 @@ class THFileParser {
         _injectContextCommandOption();
       case 'height':
         _injectHeightCommandOption();
+      case 'id':
+        _injectIDCommandOption();
       case 'scale':
         _injectLineScaleCommandOption();
       case 'subtype':

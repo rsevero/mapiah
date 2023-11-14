@@ -646,31 +646,31 @@ class THGrammar extends GrammarDefinition {
   Parser extendOptions() =>
       ((stringIgnoreCase('prev') & stringIgnoreCase('ious').optional())
                   .flatten() &
-              reference())
+              ref0(reference))
           .pick(1)
           .optional()
           .trim(ref0(thWhitespace), ref0(thWhitespace))
           .map((value) => [value]);
 
-  /// point -id
+  /// point/line -id
   Parser idOption() =>
       stringIgnoreCase('id').skip(before: char('-')) & ref0(idOptions);
   Parser idLineSegmentOption() => stringIgnoreCase('id') & ref0(idOptions);
-  Parser idOptions() => extKeyword()
+  Parser idOptions() => ref0(extKeyword)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
   /// point -from
   Parser fromOption() =>
       stringIgnoreCase('from').skip(before: char('-')) & ref0(fromOptions);
-  Parser fromOptions() => extKeyword()
+  Parser fromOptions() => ref0(extKeyword)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
   /// point -name
   Parser nameOption() =>
       stringIgnoreCase('name').skip(before: char('-')) & ref0(nameOptions);
-  Parser nameOptions() => reference()
+  Parser nameOptions() => ref0(reference)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
@@ -832,6 +832,7 @@ class THGrammar extends GrammarDefinition {
           gradientOption() |
           headOption() |
           heightOption() |
+          idOption() |
           rebelaysOption() |
           reverseOption() |
           lineScaleOption() |
@@ -880,6 +881,7 @@ class THGrammar extends GrammarDefinition {
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |
                   heightLineSegmentOption() |
+                  idLineSegmentOption() |
                   lineLineSegmentScaleOption() |
                   lsizeLineSegmentOption() |
                   markLineSegmentOption() |
