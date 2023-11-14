@@ -16,6 +16,9 @@ class THGrammar extends GrammarDefinition {
   // line contents
   Parser lineStart() => lineStructure().end();
 
+  // area contents
+  Parser areaStart() => areaStructure().end();
+
   // multiline commment
   Parser multiLineCommentStart() =>
       endMultiLineComment() | multiLineCommentLine();
@@ -28,7 +31,7 @@ class THGrammar extends GrammarDefinition {
   /// scrap contents
   Parser scrapStructure() =>
       scrapContent() | fullLineComment() | multiLineComment();
-  Parser scrapContent() => point() | line() | endscrap();
+  Parser scrapContent() => point() | line() | area() | endscrap();
 
   /// line contents
   Parser lineStructure() =>
@@ -38,6 +41,12 @@ class THGrammar extends GrammarDefinition {
       straightLineSegment() |
       lineSegmentOptions() |
       endline();
+
+  /// area contents
+  Parser areaStructure() =>
+      areaContent() | fullLineComment() | multiLineComment();
+  Parser areaContent() =>
+      borderLineReference() | areaCommandLikeOptions() | endarea();
 
   /// Whitespace
   Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
@@ -97,11 +106,11 @@ class THGrammar extends GrammarDefinition {
   /// NaN
   Parser nan() => (pattern('-.') | stringIgnoreCase('NaN'));
 
-  /// Point data
+  /// point data
   Parser pointData() =>
       number().repeat(2, 2).trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Comment
+  /// comment
   Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace))
@@ -110,7 +119,7 @@ class THGrammar extends GrammarDefinition {
       commentTemplate('fulllinecomment').map((value) => [value]);
   Parser endLineComment() => commentTemplate('samelinecomment');
 
-  /// Keyword
+  /// keyword
   Parser keywordStartChar() => pattern('A-Za-z0-9_/');
   Parser keywordNonStartChar() => (ref0(keywordStartChar) | char('-'));
   Parser keyword() =>
@@ -118,7 +127,7 @@ class THGrammar extends GrammarDefinition {
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Extkeyword
+  /// extkeyword
   Parser extKeywordNonStartChar() =>
       (ref0(keywordNonStartChar) | pattern("+*.,'"));
   Parser extKeyword() =>
@@ -126,14 +135,14 @@ class THGrammar extends GrammarDefinition {
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Station reference
+  /// reference
   Parser referenceNonStartChar() => (ref0(extKeywordNonStartChar) | char('@'));
   Parser reference() =>
       (ref0(keywordStartChar) & ref0(referenceNonStartChar).star())
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Date
+  /// date
   Parser year() => digit().repeat(4, 4);
   Parser twoDigits() => digit().repeat(2, 2);
   Parser dotTwoDigits() => char('.') & ref0(twoDigits);
@@ -178,11 +187,11 @@ class THGrammar extends GrammarDefinition {
   Parser dateTime() =>
       noDateTime() | dateTimeRange().flatten() | singleDateTime();
 
-  /// Person
+  /// person
   Parser person() =>
       (unquotedString().repeat(2, 2).flatten() | ref0(quotedString));
 
-  /// Length unit
+  /// length unit
   Parser lengthUnit() => (
 
           /// centimeters and meters
@@ -207,7 +216,7 @@ class THGrammar extends GrammarDefinition {
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Angle units
+  /// angle units
   Parser angleUnit() => (
 
           /// Degrees
@@ -226,14 +235,14 @@ class THGrammar extends GrammarDefinition {
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Clino units
+  /// clino units
   Parser clinoUnit() =>
       ref0(angleUnit) |
       (stringIgnoreCase('percent') & stringIgnoreCase('age').optional())
           .flatten()
           .trim(ref0(thWhitespace), ref0(thWhitespace));
 
-  /// Comma separated list of keywords
+  /// comma separated list of keywords
   Parser csvKeyword() => (keyword() & (char(',') & keyword()).star())
       .flatten()
       .trim(ref0(thWhitespace), ref0(thWhitespace));
@@ -686,12 +695,14 @@ class THGrammar extends GrammarDefinition {
       ref0(orientationOptions);
   Parser orientationOptions() => number().map((value) => [value]);
 
-  /// point -place
+  /// point/line/area -place
   Parser placeOption() =>
       stringIgnoreCase('place').skip(before: char('-')) & ref0(placeOptions);
+  Parser placeCommandLikeOption() =>
+      stringIgnoreCase('place') & ref0(placeOptions);
   Parser placeOptions() => (stringIgnoreCase('bottom') |
           stringIgnoreCase('default') |
-          stringIgnoreCase('top,'))
+          stringIgnoreCase('top'))
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
 
@@ -833,6 +844,8 @@ class THGrammar extends GrammarDefinition {
           headOption() |
           heightOption() |
           idOption() |
+          outlineOption() |
+          placeOption() |
           rebelaysOption() |
           reverseOption() |
           lineScaleOption() |
@@ -845,6 +858,39 @@ class THGrammar extends GrammarDefinition {
   Parser endline() => ref1(commandTemplate, endlineCommand);
   Parser endlineCommand() =>
       stringIgnoreCase('endline').map((value) => [value]);
+
+  /// line segment options
+  Parser lineSegmentOptions() =>
+      ((adjustLineSegmentOption() |
+                  altitudeLineSegmentOption() |
+                  anchorsLineSegmentOption() |
+                  borderLineSegmentOption() |
+                  clipLineSegmentOption() |
+                  closeLineSegmentOption() |
+                  contextLineSegmentOption() |
+                  directionLineSegmentOption() |
+                  gradientLineSegmentOption() |
+                  headLineSegmentOption() |
+                  heightLineSegmentOption() |
+                  idLineSegmentOption() |
+                  lineLineSegmentScaleOption() |
+                  lsizeLineSegmentOption() |
+                  markLineSegmentOption() |
+                  orientationLineSegmentOption() |
+                  outlineLineSegmentOption() |
+                  placeCommandLikeOption() |
+                  rebelaysLineSegmentOption() |
+                  reverseLineSegmentOption() |
+                  smoothLineSegmentOption() |
+                  subtypeLineSegmentOption() |
+                  textLineSegmentOption() |
+                  visibilityLineSegmentOption())
+              .trim(ref0(thWhitespace), ref0(thWhitespace)))
+          .map((value) => [
+                'linesegmentoption',
+                [value]
+              ]) &
+      ref0(endLineComment).optional();
 
   /// straightLineSegment
   Parser straightLineSegment() =>
@@ -867,37 +913,6 @@ class THGrammar extends GrammarDefinition {
               .trim(ref0(thWhitespace), ref0(thWhitespace))
               .map((value) => ['endpoint', value]))
       .map((value) => ['beziercurvelinesegment', value]);
-
-  /// line segment options
-  Parser lineSegmentOptions() =>
-      ((adjustLineSegmentOption() |
-                  altitudeLineSegmentOption() |
-                  anchorsLineSegmentOption() |
-                  borderLineSegmentOption() |
-                  clipLineSegmentOption() |
-                  closeLineSegmentOption() |
-                  contextLineSegmentOption() |
-                  directionLineSegmentOption() |
-                  gradientLineSegmentOption() |
-                  headLineSegmentOption() |
-                  heightLineSegmentOption() |
-                  idLineSegmentOption() |
-                  lineLineSegmentScaleOption() |
-                  lsizeLineSegmentOption() |
-                  markLineSegmentOption() |
-                  orientationLineSegmentOption() |
-                  rebelaysLineSegmentOption() |
-                  reverseLineSegmentOption() |
-                  smoothLineSegmentOption() |
-                  subtypeLineSegmentOption() |
-                  textLineSegmentOption() |
-                  visibilityLineSegmentOption())
-              .trim(ref0(thWhitespace), ref0(thWhitespace)))
-          .map((value) => [
-                'linesegmentoption',
-                [value]
-              ]) &
-      ref0(endLineComment).optional();
 
   /// line -adjust
   Parser adjustLineSegmentOption() =>
@@ -1032,6 +1047,18 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('mark') & ref0(markOptions);
   Parser markOptions() => keyword().map((value) => [value]);
 
+  /// line -outline
+  Parser outlineOption() =>
+      stringIgnoreCase('outline').skip(before: char('-')) &
+      ref0(outlineOptions);
+  Parser outlineLineSegmentOption() =>
+      stringIgnoreCase('outline') & ref0(outlineOptions);
+  Parser outlineOptions() => (stringIgnoreCase('in') |
+          stringIgnoreCase('out') |
+          stringIgnoreCase('none'))
+      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .map((value) => [value]);
+
   /// line -rebelays
   Parser rebelaysOption() =>
       stringIgnoreCase('rebelays').skip(before: char('-')) & ref0(onOffOptions);
@@ -1047,4 +1074,44 @@ class THGrammar extends GrammarDefinition {
   /// line -smooth
   Parser smoothLineSegmentOption() =>
       stringIgnoreCase('smooth') & ref0(onOffAutoOptions);
+
+  /// area
+  Parser area() => ref1(commandTemplate, areaCommand);
+  Parser areaCommand() => areaRequired() & areaOptions();
+  Parser areaRequired() => stringIgnoreCase('area') & areaType();
+  Parser areaType() =>
+      (stringIgnoreCase('bedrock') |
+              stringIgnoreCase('blocks') |
+              stringIgnoreCase('clay') |
+              stringIgnoreCase('debris') |
+              stringIgnoreCase('flowstone') |
+              stringIgnoreCase('ice') |
+              stringIgnoreCase('moonmilk') |
+              stringIgnoreCase('mudcrack') |
+              stringIgnoreCase('pebbles') |
+              stringIgnoreCase('pillar-with-curtains') |
+              stringIgnoreCase('pillars-with-curtains') |
+              stringIgnoreCase('pillars') |
+              stringIgnoreCase('pillar') |
+              stringIgnoreCase('sand') |
+              stringIgnoreCase('snow') |
+              stringIgnoreCase('stalactite-stalagmite') |
+              stringIgnoreCase('stalactite') |
+              stringIgnoreCase('stalagmite') |
+              stringIgnoreCase('sump') |
+              stringIgnoreCase('u') |
+              stringIgnoreCase('water'))
+          .trim(ref0(thWhitespace), ref0(thWhitespace)) &
+      (char(':') & ref0(keyword).trim(ref0(thWhitespace), ref0(thWhitespace)))
+          .pick(1)
+          .optional();
+  Parser areaOptions() => (any()).star();
+  Parser areaCommandLikeOptions() =>
+      (any()).star() & endLineComment().optional();
+  Parser borderLineReference() => reference().end();
+
+  /// endarea
+  Parser endarea() => ref1(commandTemplate, endareaCommand);
+  Parser endareaCommand() =>
+      stringIgnoreCase('endarea').map((value) => [value]);
 }

@@ -1,5 +1,5 @@
 encoding  utf-8
-##XTHERION## xth_me_area_adjust -136.0 -136.0 1276.0 1216.0
+##XTHERION## xth_me_area_adjust -136.0 -136.0 1276.0 1270.0
 ##XTHERION## xth_me_area_zoom_to 50
 
 
@@ -20,7 +20,36 @@ point 1050.0 900.0 station -name a2
 
 point 450.0 900.0 station -name a1
 
-point 576.0 757.0 altitude -altitude 4
+point 576.0 757.0 altitude -value 4
+
+area water -id area2
+  l10-1000-1035
+  l11-814-1102
+clip off
+endarea
+
+line rimstone-dam -id l11-814-1102 -close on
+  816.0 1100.0
+  796.0 1000.0
+  840.0 958.0
+  876.0 978.0
+  958.0 1026.0
+  924.0 1116.0
+  816.0 1100.0
+endline
+
+line rimstone-pool -id l10-1000-1035 -close on
+  959.0 1133.0
+  959.0 1133.0 941.69 1036.85 912.5 1009.5
+  883.31 982.15 889.5 958.5 889.5 958.5
+  smooth off
+  889.5 958.5 881.37 925.17 917.0 907.0
+  952.63 888.83 990.5 907.0 990.5 907.0
+  smooth off
+  990.5 907.0 1025.34 918.59 1028.0 958.5
+  1032.61 1027.72 959.0 1133.0 959.0 1133.0
+  smooth off
+endline
 
 line rope
   343.0 553.0
@@ -33,16 +62,14 @@ endline
 
 line slope
   448.0 1005.0
-  650.0 900.0 827.81 933.28 850.0 900.0
+  650.0 900.0 938.81 971.28 961.0 938.0
   smooth off
-  altitude 4
   650.0 900.0
   872.19 866.72 850.0 600.0 850.0 600.0
   orientation 28.2
   smooth off
   l-size 40.0
   1050.0 600.0
-  altitude 7.51
   1050.0 900.0
 endline
 

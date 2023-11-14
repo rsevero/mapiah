@@ -9,11 +9,49 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   late final String _optionType;
   late String _choice;
   static final _supportedOptions = {
+    'area': {
+      // clip <on/off> . specify whether a symbol is clipped by the scrap border.
+      'clip': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
+      // place <bottom/default/top> . changes displaying order in the map.
+      'place': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'bottom',
+          'default',
+          'top',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
+      // visibility <on/off> . displays/hides the symbol.
+      'visibility': {
+        'hasDefault': true,
+        'default': 'on',
+        'choices': <String>{
+          'on',
+          'off',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+    },
     'line': {
       // anchors <on/off> . this option can be specified only with the ‘rope’ line type.
       'anchors': {
         'hasDefault': true,
-        'default': 'off',
+        'default': 'on',
         'choices': <String>{
           'on',
           'off',
@@ -115,10 +153,37 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         },
       },
 
+      // outline <in/out/none> . determines whether the line serves as a border line for a
+      // scrap. Default value is ‘out’ for walls, ‘none’ for all other lines. Use -outline in for
+      // large pillars etc.
+      'outline': {
+        'hasDefault': false,
+        'choices': <String>{
+          'in',
+          'out',
+          'none',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
+      // place <bottom/default/top> . changes displaying order in the map.
+      'place': {
+        'hasDefault': true,
+        'default': 'default',
+        'choices': <String>{
+          'bottom',
+          'default',
+          'top',
+        },
+        'alternateChoices': <String, String>{},
+        'plaTypesSupported': <String>{},
+      },
+
       // rebelays <on/off> . this option can be specified only with the ‘rope’ line type.
       'rebelays': {
         'hasDefault': true,
-        'default': 'off',
+        'default': 'on',
         'choices': <String>{
           'on',
           'off',
