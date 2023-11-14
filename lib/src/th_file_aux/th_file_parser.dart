@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
-import 'package:mapiah/src/th_elements/th_area_border.dart';
+import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_altitude_value_command_option.dart';
@@ -176,8 +176,8 @@ class THFileParser {
       switch (elementType) {
         case 'area':
           _injectArea(element);
-        case 'areaborder':
-          _injectAreaBorder(element);
+        case 'areaborderthid':
+          _injectAreaBorderTHID(element);
         case 'beziercurvelinesegment':
           _injectBezierCurveLineSegment(element);
 
@@ -327,14 +327,14 @@ class THFileParser {
     _currentElement = newBezierCurveLineSegment.parent;
   }
 
-  void _injectAreaBorder(List<dynamic> aElement) {
+  void _injectAreaBorderTHID(List<dynamic> aElement) {
     final elementSize = aElement.length;
     assert(elementSize == 2);
 
     final areaBorderID = aElement[1];
     assert(areaBorderID is String);
 
-    THAreaBorder(_currentParent, areaBorderID);
+    THAreaBorderTHID(_currentParent, areaBorderID);
   }
 
   void _injectStraightLineSegment(List<dynamic> aElement) {

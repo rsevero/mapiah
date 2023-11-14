@@ -1123,7 +1123,7 @@ class THGrammar extends GrammarDefinition {
   Parser borderLineReference() =>
       ref1(commandTemplate, borderLineReferenceCommand);
   Parser borderLineReferenceCommand() =>
-      reference().end().map((value) => ['areaborder', value]);
+      reference().end().map((value) => ['areaborderthid', value]);
 
   /// endarea
   Parser endarea() => ref1(commandTemplate, endareaCommand);

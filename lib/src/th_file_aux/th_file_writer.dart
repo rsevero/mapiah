@@ -1,6 +1,6 @@
 import 'package:mapiah/src/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
-import 'package:mapiah/src/th_elements/th_area_border.dart';
+import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_comment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
@@ -29,8 +29,8 @@ class THFileWriter {
     switch (type) {
       case 'area':
         asString += _serializeArea(aTHElement);
-      case 'areaborder':
-        final newLine = (aTHElement as THAreaBorder).id;
+      case 'areaborderthid':
+        final newLine = (aTHElement as THAreaBorderTHID).id;
         asString += _prepareLine(newLine, aTHElement);
       case 'comment':
         asString += '# ${(aTHElement as THComment).content}\n';
