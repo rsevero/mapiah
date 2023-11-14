@@ -8,10 +8,11 @@ import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 // symbol represents chimney height, pit depth or step height in general. The numeric
 // value can be optionally followed by ‘?’, if the value is presumed and units can be added
 // (e.g. -value [40? ft]).
-class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
+class THPointHeightValueCommandOption extends THValueCommandOption
+    with THHasLength {
   late bool isPresumed;
 
-  THHeightValueCommandOption(
+  THPointHeightValueCommandOption(
       super.optionParent, THDoublePart aHeight, this.isPresumed,
       [String? aUnit]) {
     if ((optionParent is! THPoint) ||
@@ -25,7 +26,7 @@ class THHeightValueCommandOption extends THValueCommandOption with THHasLength {
     }
   }
 
-  THHeightValueCommandOption.fromString(
+  THPointHeightValueCommandOption.fromString(
       super.optionParent, String aHeight, this.isPresumed,
       [String? aUnit]) {
     if ((optionParent is! THPoint) ||

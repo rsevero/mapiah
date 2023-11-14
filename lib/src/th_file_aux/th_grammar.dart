@@ -831,6 +831,7 @@ class THGrammar extends GrammarDefinition {
           directionOption() |
           gradientOption() |
           headOption() |
+          heightOption() |
           rebelaysOption() |
           reverseOption() |
           lineScaleOption() |
@@ -878,6 +879,7 @@ class THGrammar extends GrammarDefinition {
                   directionLineSegmentOption() |
                   gradientLineSegmentOption() |
                   headLineSegmentOption() |
+                  heightLineSegmentOption() |
                   lineLineSegmentScaleOption() |
                   lsizeLineSegmentOption() |
                   markLineSegmentOption() |
@@ -981,6 +983,13 @@ class THGrammar extends GrammarDefinition {
   Parser headOptions() => ref0(beginEndBothNoneOptions)
       .trim(ref0(thWhitespace), ref0(thWhitespace))
       .map((value) => [value]);
+
+  /// line -height
+  Parser heightOption() =>
+      stringIgnoreCase('height').skip(before: char('-')) & ref0(heightOptions);
+  Parser heightLineSegmentOption() =>
+      stringIgnoreCase('height') & ref0(heightOptions);
+  Parser heightOptions() => ref0(number).map((value) => [value]);
 
   /// line -scale
   Parser lineScaleOption() =>

@@ -15,7 +15,8 @@ import 'package:mapiah/src/th_elements/th_command_options/th_dist_command_option
 import 'package:mapiah/src/th_elements/th_command_options/th_explored_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_extend_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_from_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_height_value_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_line_height_command_option.dart';
+import 'package:mapiah/src/th_elements/th_command_options/th_point_height_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_id_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_line_scale_command_option.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_lsize_command_option.dart';
@@ -626,6 +627,8 @@ class THFileParser {
         _injectClipCommandOption();
       case 'context':
         _injectContextCommandOption();
+      case 'height':
+        _injectHeightCommandOption();
       case 'scale':
         _injectLineScaleCommandOption();
       case 'subtype':
@@ -762,10 +765,19 @@ class THFileParser {
     }
   }
 
-  void _injectContextCommandOption() {
+  void _injectHeightCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'context' option for a '${_currentHasOptions.elementType}'");
+          "One parameter required to create a 'height' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    THLineHeightCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+  }
+
+  void _injectContextCommandOption() {
+    if (_currentSpec.length != 2) {
+      throw THCustomException(
+          "Two parameteres are required to create a 'context' option for a '${_currentHasOptions.elementType}'");
     }
 
     THContextCommandOption(
@@ -1163,10 +1175,11 @@ class THFileParser {
                 ((specs[1] as String).isNotEmpty))
             ? specs[1].toString()
             : '';
-        THHeightValueCommandOption.fromString(
+        THPointHeightValueCommandOption.fromString(
             _currentHasOptions, value, isPresumed, unit);
       case 'single_number':
-        THHeightValueCommandOption.fromString(_currentHasOptions, specs, false);
+        THPointHeightValueCommandOption.fromString(
+            _currentHasOptions, specs, false);
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectHeightValueCommandOption'.");
