@@ -1,7 +1,7 @@
 name: mapiah
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/rsevero/mapiah.git
 
 environment:
   sdk: ^3.1.4
@@ -11,8 +11,13 @@ dependencies:
   charset: ^2.0.1
   dart_numerics: ^0.0.6
   intl: ^0.18.1
-  meta: ^1.11.0
+  meta: ^1.9.1
   petitparser: ^6.0.1
+  get: ^4.6.1
+  file_picker: ^6.1.1
+  open_file: ^3.3.2
+  flutter:
+    sdk: flutter
 
 dev_dependencies:
   lints: ^2.0.0

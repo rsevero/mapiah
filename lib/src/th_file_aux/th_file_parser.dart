@@ -1471,7 +1471,7 @@ class THFileParser {
     _parseErrors.clear();
 
     try {
-      final file = File("./test/auxiliary/$aFilePath");
+      final file = File(aFilePath);
       final raf = await file.open();
 
       _parsedTHFile.encoding = await _encodingNameFromFile(raf);

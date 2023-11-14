@@ -8,6 +8,8 @@ import 'package:test/test.dart';
 import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 
+import 'th_test_aux.dart';
+
 void main() {
   group('initial', () {
     final file = THFile();
@@ -52,7 +54,7 @@ endscrap
     for (var success in successes) {
       test(success['file'], () async {
         final (file, isSuccessful, errors) =
-            await parser.parse(success['file'] as String);
+            await parser.parse(THTestAux.testPath(success['file'] as String));
         // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
         //     startParser: myGrammar.start());
         expect(isSuccessful, true);
@@ -141,7 +143,7 @@ endcomment
 
     test("${success['file']} in parts", () async {
       final (file, isSuccessful, errors) =
-          await parser.parse(success['file'] as String);
+          await parser.parse(THTestAux.testPath(success['file'] as String));
       // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
       //     startParser: myGrammar.start());
       expect(isSuccessful, true);
@@ -192,7 +194,7 @@ endcomment
 
     test("${success['file']} as once", () async {
       final (file, isSuccessful, errors) =
-          await parser.parse(success['file'] as String);
+          await parser.parse(THTestAux.testPath(success['file'] as String));
       // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
       //     startParser: myGrammar.start());
       expect(isSuccessful, true);

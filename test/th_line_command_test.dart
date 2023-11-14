@@ -5,6 +5,8 @@ import 'package:mapiah/src/th_file_aux/th_grammar.dart';
 import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
+import 'th_test_aux.dart';
+
 void main() {
   group('line', () {
     final parser = THFileParser();
@@ -179,8 +181,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse(THTestAux.testPath(success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -204,7 +206,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -235,8 +238,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -261,7 +264,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -367,8 +371,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -392,7 +396,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -422,8 +427,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -448,7 +453,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -478,8 +484,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -504,7 +510,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -548,8 +555,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -574,7 +581,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -604,8 +612,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -630,7 +638,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -660,8 +669,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -685,7 +694,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -715,8 +725,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -740,7 +750,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -770,8 +781,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -795,7 +806,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -825,8 +837,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -850,7 +862,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -880,8 +893,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -918,8 +931,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -956,8 +969,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -981,7 +994,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1055,8 +1069,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, errors) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1081,7 +1095,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1124,8 +1139,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1175,8 +1190,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1200,7 +1215,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1243,8 +1259,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1268,7 +1284,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1313,8 +1330,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1338,7 +1355,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1369,8 +1387,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1394,7 +1412,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1441,8 +1460,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1467,7 +1486,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1510,8 +1530,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1535,7 +1555,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1578,8 +1599,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1603,7 +1624,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1646,8 +1668,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1697,8 +1719,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1736,8 +1758,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1762,7 +1784,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1844,8 +1867,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1869,7 +1892,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -1939,8 +1963,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1966,7 +1990,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -2009,8 +2034,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -2036,7 +2061,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(failure);
+        final (_, isSuccessful, error) =
+            await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
       });
     }
@@ -2079,8 +2105,8 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         final (file, isSuccessful, _) =
-            await parser.parse((success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
+            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        // final (file, isSuccessful, errors) = await parser.parse((THTestAux.testPath(success['file'] as String)),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
