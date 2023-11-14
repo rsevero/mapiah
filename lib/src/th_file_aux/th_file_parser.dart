@@ -178,6 +178,8 @@ class THFileParser {
           _injectArea(element);
         case 'areaborderthid':
           _injectAreaBorderTHID(element);
+        case 'areacommandlikeoption':
+          _injectAreaCommandLikeOption(element);
         case 'beziercurvelinesegment':
           _injectBezierCurveLineSegment(element);
 
@@ -201,8 +203,8 @@ class THFileParser {
           continue;
         case 'line':
           _injectLine(element);
-        case 'linesegmentoption':
-          _injectLineSegmentOption(element);
+        case 'linecommandlikeoption':
+          _injectLineCommandLikeOption(element);
 
           /// Line data injects same line comment by themselves.
           continue;
@@ -385,13 +387,24 @@ class THFileParser {
     _returnToParentParser();
   }
 
+  void _injectAreaCommandLikeOption(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+
+    assert(elementSize == 2);
+    assert(aElement[1] is List);
+    assert(aElement[1].length == 1);
+    assert(aElement[1][0] is List);
+
+    _optionFromElement(aElement[1], _areaRegularOptions);
+  }
+
   /// All line options (the ones that should be on the "line" line in the .th2
   /// file) can also appear as linepoint options (the ones that appear
   /// intermixed with line segments between the "line" and "endline" lines).
   /// Here we deall with them all, registering the line options that appeared as
   /// linepoint options in the line options list and keeping the linepoint
   /// options registered with the appropriate line segment.
-  void _injectLineSegmentOption(List<dynamic> aElement) {
+  void _injectLineCommandLikeOption(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
     assert(elementSize == 2);

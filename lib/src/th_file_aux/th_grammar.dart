@@ -887,7 +887,7 @@ class THGrammar extends GrammarDefinition {
                   visibilityCommandLikeOption())
               .trim(ref0(thWhitespace), ref0(thWhitespace)))
           .map((value) => [
-                'linesegmentoption',
+                'linecommandlikeoption',
                 [value]
               ]) &
       ref0(endLineComment).optional();
@@ -1113,10 +1113,14 @@ class THGrammar extends GrammarDefinition {
       .star();
   Parser areaCommandLikeOptions() =>
       (clipCommandLikeOption() |
-          contextCommandLikeOption() |
-          idCommandLikeOption() |
-          placeCommandLikeOption() |
-          visibilityCommandLikeOption()) &
+              contextCommandLikeOption() |
+              idCommandLikeOption() |
+              placeCommandLikeOption() |
+              visibilityCommandLikeOption())
+          .map((value) => [
+                'areaCommandLikeOption',
+                [value]
+              ]) &
       endLineComment().optional();
 
   /// area border reference
