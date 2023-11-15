@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 
 import 'package:mapiah/src/th_elements/th_element.dart';
+import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
 
 class TH2FileDisplayPage extends StatelessWidget {
-  final THFile file;
+  final String filename;
+  final FileLoadingController controller = Get.put(FileLoadingController());
 
-  TH2FileDisplayPage({required this.file});
+  TH2FileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
+    controller.loadFile(filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -19,11 +21,17 @@ class TH2FileDisplayPage extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
       ),
-      body: Center(
-        child: CustomPaint(
-          painter: TH2FilePainter(file),
-        ),
-      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Center(
+            child: CustomPaint(
+              painter: TH2FilePainter(controller.parsedFile),
+            ),
+          );
+        }
+      }),
     );
   }
 }
@@ -41,5 +49,56 @@ class TH2FilePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class FileLoadingController extends GetxController {
+  var isLoading = false.obs;
+  RxList<String> errorMessages = RxList<String>();
+  final parser = THFileParser();
+  THFile parsedFile = THFile();
+
+  void loadFile(String aFilename) async {
+    isLoading.value = true;
+    errorMessages.clear();
+
+    final (file, isSuccessful, errors) = await parser.parse(aFilename);
+    isLoading.value = false;
+
+    if (isSuccessful) {
+      parsedFile = file;
+    } else {
+      errorMessages.addAll(errors);
+      await Get.dialog(
+        ErrorDialog(errorMessages: errorMessages),
+      );
+      Get.back(); // Close the file display page
+    }
+  }
+}
+
+class ErrorDialog extends StatelessWidget {
+  final List<String> errorMessages;
+
+  ErrorDialog({required this.errorMessages});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Parsing errors'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: errorMessages.map((message) => Text(message)).toList(),
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text('Close'),
+          onPressed: () {
+            Get.back(); // Close the dialog
+          },
+        ),
+      ],
+    );
   }
 }

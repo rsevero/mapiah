@@ -43,11 +43,7 @@ class HomePage extends StatelessWidget {
         if (pickedFilePath == null) {
           return;
         }
-        final parser = THFileParser();
-        final (file, isSuccessful, errors) = await parser.parse(pickedFilePath);
-        if (isSuccessful) {
-          Get.to(() => TH2FileDisplayPage(file: file));
-        }
+        Get.to(() => TH2FileDisplayPage(filename: pickedFilePath));
       } else {
         // User canceled the picker
         print('No file selected.');
