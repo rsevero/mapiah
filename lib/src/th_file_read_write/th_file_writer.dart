@@ -1,4 +1,4 @@
-import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
@@ -15,7 +15,7 @@ import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_xtherion_config.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
+import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 
 class THFileWriter {
   var _prefix = '';

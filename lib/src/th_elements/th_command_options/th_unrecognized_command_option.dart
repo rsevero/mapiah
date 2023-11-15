@@ -1,4 +1,4 @@
-import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 
 class THUnrecognizedCommandOption extends THCommandOption {

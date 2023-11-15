@@ -1,5 +1,5 @@
 import 'package:mapiah/src/pages/th2_file_display_page.dart';
-import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
+import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 4,
         title: Text('Mapiah'),
         actions: <Widget>[
           IconButton(

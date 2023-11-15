@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:mapiah/src/th_definitions.dart';
+import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
@@ -60,8 +60,8 @@ import 'package:mapiah/src/th_exceptions/th_create_object_from_empty_list_except
 import 'package:mapiah/src/th_exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_with_list_parameter_exception.dart';
-import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
-import 'package:mapiah/src/th_file_aux/th_grammar.dart';
+import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
+import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_parts/th_length_unit_part.dart';
 import 'package:meta/meta.dart';

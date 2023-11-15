@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:mapiah/src/th_elements/th_element.dart';
-import 'package:mapiah/src/th_file_aux/th_file_parser.dart';
+import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 
 class TH2FileDisplayPage extends StatelessWidget {
   final String filename;
