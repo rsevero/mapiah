@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
@@ -58,7 +59,7 @@ abstract class THElement {
 /// Mixin that provides parenting capabilities.
 mixin THParent on THElement {
   // Here are registered all children.
-  final List<THElement> _children = [];
+  final _children = <THElement>[].obs;
 
   @override
   void delete() {

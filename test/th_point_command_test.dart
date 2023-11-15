@@ -20,7 +20,7 @@ void main() {
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2596.0 -468.0 debris
+  point 296.0 468.0 debris
 endscrap
 ''',
       },

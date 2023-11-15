@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 
-class TH2FileDisplayPage extends StatelessWidget {
+class THFileDisplayPage extends StatelessWidget {
   final String filename;
   final FileLoadingController controller = Get.put(FileLoadingController());
 
-  TH2FileDisplayPage({required this.filename});
+  THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +27,11 @@ class TH2FileDisplayPage extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         } else {
           return Center(
-            child: CustomPaint(
-              painter: TH2FilePainter(controller.parsedFile),
-            ),
+            child: THFileWidget(controller.parsedFile),
           );
         }
       }),
     );
-  }
-}
-
-class TH2FilePainter extends CustomPainter {
-  final THFile file;
-
-  TH2FilePainter(this.file);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Add your drawing logic here based on the file's content
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
   }
 }
 

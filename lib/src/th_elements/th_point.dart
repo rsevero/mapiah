@@ -183,4 +183,36 @@ class THPoint extends THElement with THHasOptions implements THHasPLAType {
   String get plaType {
     return _pointType;
   }
+
+  double get x {
+    return point.x.value;
+  }
+
+  double get y {
+    return point.y.value;
+  }
+
+  set x(double aValue) {
+    point.x.value = aValue;
+  }
+
+  set y(double aValue) {
+    point.y.value = aValue;
+  }
+
+  int get xDecimalPositions {
+    return point.x.decimalPositions;
+  }
+
+  int get yDecimalPositions {
+    return point.y.decimalPositions;
+  }
+
+  set xDecimalPositions(int aDecimalPositions) {
+    point.x.decimalPositions = aDecimalPositions;
+  }
+
+  set yDecimalPositions(int aDecimalPositions) {
+    point.y.decimalPositions = aDecimalPositions;
+  }
 }

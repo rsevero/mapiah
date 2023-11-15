@@ -1,12 +1,11 @@
 import 'package:mapiah/src/pages/th2_file_display_page.dart';
-import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-class HomePage extends StatelessWidget {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +43,7 @@ class HomePage extends StatelessWidget {
         if (pickedFilePath == null) {
           return;
         }
-        Get.to(() => TH2FileDisplayPage(filename: pickedFilePath));
+        Get.to(() => THFileDisplayPage(filename: pickedFilePath));
       } else {
         // User canceled the picker
         print('No file selected.');
