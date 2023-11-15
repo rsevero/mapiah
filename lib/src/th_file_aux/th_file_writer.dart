@@ -13,6 +13,7 @@ import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/th_elements/th_xtherion_config.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_file_aux/th_file_aux.dart';
 
@@ -78,6 +79,10 @@ class THFileWriter {
         asString += _prepareLine(newLine, aTHScrap);
         _increasePrefix();
         asString += _childrenAsString(aTHScrap);
+      case 'xtherionconfig':
+        final xtherionconfig = aTHElement as THXTherionConfig;
+        asString +=
+            "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
       default:
         final newLine = "Unrecognized element: '$aTHElement'";
         asString += _prepareLine(newLine, aTHElement);

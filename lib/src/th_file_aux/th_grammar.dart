@@ -25,7 +25,7 @@ class THGrammar extends GrammarDefinition {
 
   /// TH2 Structure
   Parser th2FileFirstLineStart() => (encoding() | th2Structure()).end();
-  Parser th2Structure() => th2Command() | fullLineComment();
+  Parser th2Structure() => xtherionConfig() | th2Command() | fullLineComment();
   Parser th2Command() => multiLineComment() | scrap();
 
   /// scrap contents
@@ -1133,4 +1133,14 @@ class THGrammar extends GrammarDefinition {
   Parser endarea() => ref1(commandTemplate, endareaCommand);
   Parser endareaCommand() =>
       stringIgnoreCase('endarea').map((value) => [value]);
+
+  /// xtherion config
+  Parser xtherionConfig() => (stringIgnoreCase('##XTHERION##')
+              .trim(ref0(thWhitespace), ref0(thWhitespace)) &
+          (keyword() &
+              any()
+                  .plus()
+                  .flatten()
+                  .trim(ref0(thWhitespace), ref0(thWhitespace))))
+      .map((value) => [value]);
 }

@@ -54,6 +54,7 @@ import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_unrecognized_command.dart';
+import 'package:mapiah/src/th_elements/th_xtherion_config.dart';
 import 'package:mapiah/src/th_errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_create_object_from_null_value_exception.dart';
@@ -145,6 +146,7 @@ class THFileParser {
       }
 
       _parsedContents = _currentParser.parse(line);
+      // trace(_currentParser).parse(line);
       if (isFirst) {
         isFirst = false;
         _resetParsersLineage();
@@ -224,6 +226,8 @@ class THFileParser {
           _injectPoint(element);
         case 'scrap':
           _injectScrap(element);
+        case '##xtherion##':
+          _injectXTherionSetting(element);
         default:
           _injectUnknown(element);
           continue;
@@ -257,6 +261,16 @@ class THFileParser {
 
   void _injectEncoding() {
     _currentElement = THEncoding(_currentParent);
+  }
+
+  void _injectXTherionSetting(List<dynamic> aElement) {
+    final elementSize = aElement.length;
+
+    assert(elementSize == 2);
+    assert(aElement[1] is List);
+    assert(aElement[1].length == 2);
+
+    THXTherionConfig(_currentParent, aElement[1][0], aElement[1][1]);
   }
 
   void _injectPoint(List<dynamic> aElement) {

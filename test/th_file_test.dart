@@ -67,6 +67,53 @@ endscrap
     }
   });
 
+  group('xtherion config', () {
+    final parser = THFileParser();
+    final writer = THFileWriter();
+
+    var successes = [
+      {
+        'file': 'th_file_parser-00020-xtherionsetting_only.th2',
+        'countElements': 2,
+        'asFile': """encoding UTF-8
+##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
+""",
+      },
+      {
+        'file': 'th_file_parser-00035-xtherionimagesetting_only.th2',
+        'countElements': 2,
+        'asFile': """encoding UTF-8
+##XTHERION## xth_me_image_insert {-36 1 1.0} {28 {}} croquis/croqui-007.jpg 0 {}
+""",
+      },
+      {
+        'file': 'th_file_parser-00040-adding_several_xtherionsettings.th2',
+        'countElements': 5,
+        'asFile': """encoding UTF-8
+##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
+##XTHERION## xth_me_area_zoom_to 100
+##XTHERION## xth_me_image_insert {1890 1 1.0} {1380 {}} croquis/croqui-006.jpg 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1.0} {28 {}} croquis/croqui-007.jpg 0 {}
+""",
+      },
+    ];
+
+    for (var success in successes) {
+      test(success['file'], () async {
+        final (file, isSuccessful, errors) =
+            await parser.parse(THTestAux.testPath(success['file'] as String));
+        // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
+        //     startParser: myGrammar.start());
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.countElements(), success['countElements']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
   group('delete elements', () {
     final parser = THFileParser();
     final writer = THFileWriter();
