@@ -1,4 +1,8 @@
 /// Constants and others definitioons that should be generally available.
+
+const thDebugPath =
+    '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
+
 const thCommentChar = '#';
 const thDecimalSeparator = '.';
 const thBackslash = '\\';
@@ -20,7 +24,8 @@ const thDefaultEncoding = 'UTF-8';
 
 const thNullValueAsString = '!!! property has null value !!!';
 
-const thCanvasMargin = 0.1;
+const thCanvasVisibleMargin = 0.1;
+const thCanvasOutOfSightMargin = 2.0;
 
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');

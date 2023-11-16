@@ -1,14 +1,14 @@
 name: mapiah
-description: A starting point for Dart libraries or applications.
-version: 0.0.1
+description: Graphical interface for Therion cave mapping software written in Flutter.
+version: 0.0.1+1
 repository: https://github.com/rsevero/mapiah.git
 
 environment:
-  sdk: ^3.1.4
+  sdk: '>=3.1.5 <4.0.0'
 
 # Add regular dependencies here.
 dependencies:
-  analyzer: ^6.2.0
+  analyzer: ^6.0.0
   charset: ^2.0.1
   dart_numerics: ^0.0.6
   file_picker: ^6.1.1
@@ -20,11 +20,15 @@ dependencies:
   open_file: ^3.3.2
   package_info_plus: ^4.2.0
   petitparser: ^6.0.1
-  window_manager: ^0.3.7
 
 dev_dependencies:
-  lints: ^3.0.0
-  test: ^1.21.0
+  flutter_lints: ^2.0.0
+  test:
+  flutter_test:
+    sdk: flutter
+
+dependency_overrides:
+  test_api: 0.6.1
 
 flutter:
   uses-material-design: true

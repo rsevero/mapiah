@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
-import 'package:mapiah/src/pages/th2_file_display_page.dart';
-
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapiah/src/pages/th2_file_display_page.dart';
+import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Home extends StatelessWidget {
@@ -36,8 +36,7 @@ class Home extends StatelessWidget {
         dialogTitle: 'Select a TH2 file',
         type: FileType.custom,
         allowedExtensions: ['th2'],
-        initialDirectory:
-            kDebugMode ? '/home/rodrigo/devel/mapiah/test/auxiliary' : './',
+        initialDirectory: kDebugMode ? thDebugPath : './',
       );
 
       if (result != null) {

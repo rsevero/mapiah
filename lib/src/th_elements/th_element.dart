@@ -204,9 +204,9 @@ class THFile extends THElement with THParent {
       } else if (element is THLine) {
         for (final aLineSegment in element.children) {
           if (aLineSegment is THStraightLineSegment) {
-            _comparePoint(aLineSegment.x, aLineSegment.y);
+            _comparePoint(aLineSegment.endPointX, aLineSegment.endPointY);
           } else if (aLineSegment is THBezierCurveLineSegment) {
-            _comparePoint(aLineSegment.x, aLineSegment.y);
+            _comparePoint(aLineSegment.endPointX, aLineSegment.endPointY);
             _comparePoint(
                 aLineSegment.controlPoint1X, aLineSegment.controlPoint1Y);
             _comparePoint(
