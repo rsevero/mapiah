@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:meta/meta.dart';
@@ -36,12 +37,12 @@ mixin THHasOptions on THElement {
       return false;
     }
 
-    assert(_optionsList.contains(aOptionType));
+    if (kDebugMode) assert(_optionsList.contains(aOptionType));
     if (!_optionsList.remove(aOptionType)) {
       return false;
     }
 
-    assert(_optionsMap.containsKey(aOptionType));
+    if (kDebugMode) assert(_optionsMap.containsKey(aOptionType));
     return (_optionsMap.remove(aOptionType) != null);
   }
 

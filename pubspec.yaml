@@ -20,6 +20,7 @@ dependencies:
   open_file: ^3.3.2
   package_info_plus: ^4.2.0
   petitparser: ^6.0.1
+  window_manager: ^0.3.7
 
 dev_dependencies:
   lints: ^3.0.0

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapiah/src/th_controllers/th_file_controller.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
-import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 
 class THPointWidget extends StatelessWidget {
   final THPoint point;
@@ -13,12 +13,12 @@ class THPointWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Ensure the CanvasSizeController is available for the entire app
-    final THFileController sizeController = Get.put(THFileController());
+    final THFileController thFileController = Get.put(THFileController());
 
     // Use Obx to reactively build the widget when canvas size changes
     return Obx(() {
       // Now you can use the size in your CustomPaint
-      final Size size = sizeController.canvasSize.value;
+      final Size size = thFileController.canvasSize.value;
       return CustomPaint(
         painter: THPointPainter(point),
         size: size,
@@ -30,6 +30,8 @@ class THPointWidget extends StatelessWidget {
 class THPointPainter extends CustomPainter {
   final THPoint point;
 
+  final THFileController thFileController = Get.put(THFileController());
+
   THPointPainter(this.point);
 
   @override
@@ -38,6 +40,10 @@ class THPointPainter extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
+
+    canvas.scale(thFileController.canvasScale.value);
+    canvas.translate(thFileController.canvasOffset.value.dx,
+        thFileController.canvasOffset.value.dy);
 
     final center = Offset(point.x, point.y);
     canvas.drawCircle(center, 5, paint);

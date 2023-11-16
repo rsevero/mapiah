@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapiah/src/th_controllers/th_file_controller.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
-import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 import 'package:mapiah/src/th_widgets/th_point_widget.dart';
 
 class THScrapWidget extends StatelessWidget {

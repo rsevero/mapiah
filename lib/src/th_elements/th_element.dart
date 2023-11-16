@@ -4,7 +4,6 @@ import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';
-import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
@@ -203,13 +202,15 @@ class THFile extends THElement with THParent {
       if (element is THPoint) {
         _comparePoint(element.x, element.y);
       } else if (element is THLine) {
-        for (final aChild in element.children) {
-          if (aChild is THStraightLineSegment) {
-            _comparePoint(aChild.x, aChild.y);
-          } else if (aChild is THBezierCurveLineSegment) {
-            _comparePoint(aChild.x, aChild.y);
-            _comparePoint(aChild.controlPoint1X, aChild.controlPoint1Y);
-            _comparePoint(aChild.controlPoint2X, aChild.controlPoint2Y);
+        for (final aLineSegment in element.children) {
+          if (aLineSegment is THStraightLineSegment) {
+            _comparePoint(aLineSegment.x, aLineSegment.y);
+          } else if (aLineSegment is THBezierCurveLineSegment) {
+            _comparePoint(aLineSegment.x, aLineSegment.y);
+            _comparePoint(
+                aLineSegment.controlPoint1X, aLineSegment.controlPoint1Y);
+            _comparePoint(
+                aLineSegment.controlPoint2X, aLineSegment.controlPoint2Y);
           }
         }
       }

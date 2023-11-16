@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
@@ -121,7 +122,7 @@ class THFileParser {
   }
 
   void _returnToParentParser() {
-    assert(_parentParsers.isNotEmpty);
+    if (kDebugMode) assert(_parentParsers.isNotEmpty);
     _currentParser = _parentParsers.removeLast();
   }
 
@@ -266,21 +267,25 @@ class THFileParser {
   void _injectXTherionSetting(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
-    assert(elementSize == 2);
-    assert(aElement[1] is List);
-    assert(aElement[1].length == 2);
+    if (kDebugMode) {
+      assert(elementSize == 2);
+      assert(aElement[1] is List);
+      assert(aElement[1].length == 2);
+    }
 
     THXTherionConfig(_currentParent, aElement[1][0], aElement[1][1]);
   }
 
   void _injectPoint(List<dynamic> aElement) {
     final elementSize = aElement.length;
-    assert(elementSize >= 3);
+    if (kDebugMode) assert(elementSize >= 3);
 
     _checkParsedListAsPoint(aElement[1]);
 
-    assert(aElement[2] is List);
-    assert(aElement[2].length == 2);
+    if (kDebugMode) {
+      assert(aElement[2] is List);
+      assert(aElement[2].length == 2);
+    }
 
     final newPoint =
         THPoint.fromString(_currentParent, aElement[1], aElement[2][0]);
@@ -304,23 +309,25 @@ class THFileParser {
 
   void _injectBezierCurveLineSegment(List<dynamic> aElement) {
     final elementSize = aElement.length;
-    assert(elementSize == 2);
+    if (kDebugMode) assert(elementSize == 2);
 
     final pointList = aElement[1];
-    assert(pointList is List);
-    assert(pointList.length == 3);
-    assert(pointList[0][0] is String);
-    assert(pointList[0][0] == 'controlpoint1');
-    assert(pointList[0][1] is List);
-    assert(pointList[0][1].length == 2);
-    assert(pointList[1][0] is String);
-    assert(pointList[1][0] == 'controlpoint2');
-    assert(pointList[1][1] is List);
-    assert(pointList[1][1].length == 2);
-    assert(pointList[2][0] is String);
-    assert(pointList[2][0] == 'endpoint');
-    assert(pointList[2][1] is List);
-    assert(pointList[2][1].length == 2);
+    if (kDebugMode) {
+      assert(pointList is List);
+      assert(pointList.length == 3);
+      assert(pointList[0][0] is String);
+      assert(pointList[0][0] == 'controlpoint1');
+      assert(pointList[0][1] is List);
+      assert(pointList[0][1].length == 2);
+      assert(pointList[1][0] is String);
+      assert(pointList[1][0] == 'controlpoint2');
+      assert(pointList[1][1] is List);
+      assert(pointList[1][1].length == 2);
+      assert(pointList[2][0] is String);
+      assert(pointList[2][0] == 'endpoint');
+      assert(pointList[2][1] is List);
+      assert(pointList[2][1].length == 2);
+    }
 
     final controlPoint1 = pointList[0][1];
     final controlPoint2 = pointList[1][1];
@@ -345,10 +352,10 @@ class THFileParser {
 
   void _injectAreaBorderTHID(List<dynamic> aElement) {
     final elementSize = aElement.length;
-    assert(elementSize == 2);
+    if (kDebugMode) assert(elementSize == 2);
 
     final areaBorderID = aElement[1];
-    assert(areaBorderID is String);
+    if (kDebugMode) assert(areaBorderID is String);
 
     THAreaBorderTHID(_currentParent, areaBorderID);
   }
@@ -358,12 +365,14 @@ class THFileParser {
     assert(elementSize == 2);
 
     final pointList = aElement[1];
-    assert(pointList is List);
-    assert(pointList.length == 2);
-    assert(pointList[0] is String);
-    assert(pointList[0] == 'endpoint');
-    assert(pointList[1] is List);
-    assert(pointList[1].length == 2);
+    if (kDebugMode) {
+      assert(pointList is List);
+      assert(pointList.length == 2);
+      assert(pointList[0] is String);
+      assert(pointList[0] == 'endpoint');
+      assert(pointList[1] is List);
+      assert(pointList[1].length == 2);
+    }
 
     final endPoint = pointList[1];
 
@@ -384,7 +393,7 @@ class THFileParser {
 
   void _injectScrap(List<dynamic> aElement) {
     final elementSize = aElement.length;
-    assert(elementSize >= 2);
+    if (kDebugMode) assert(elementSize >= 2);
     final newScrap = THScrap(_currentParent, aElement[1]);
 
     _currentElement = newScrap;
@@ -404,10 +413,12 @@ class THFileParser {
   void _injectAreaCommandLikeOption(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
-    assert(elementSize == 2);
-    assert(aElement[1] is List);
-    assert(aElement[1].length == 1);
-    assert(aElement[1][0] is List);
+    if (kDebugMode) {
+      assert(elementSize == 2);
+      assert(aElement[1] is List);
+      assert(aElement[1].length == 1);
+      assert(aElement[1][0] is List);
+    }
 
     _optionFromElement(aElement[1], _areaRegularOptions);
   }
@@ -421,10 +432,12 @@ class THFileParser {
   void _injectLineCommandLikeOption(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
-    assert(elementSize == 2);
-    assert(aElement[1] is List);
-    assert(aElement[1].length == 1);
-    assert(aElement[1][0] is List);
+    if (kDebugMode) {
+      assert(elementSize == 2);
+      assert(aElement[1] is List);
+      assert(aElement[1].length == 1);
+      assert(aElement[1][0] is List);
+    }
 
     _optionFromElement(aElement[1], _lineSegmentRegularOptions);
 
@@ -447,10 +460,12 @@ class THFileParser {
   void _injectArea(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
-    assert(elementSize >= 2);
-    assert(aElement[1] is List);
-    assert(aElement[1].length == 2);
-    assert(aElement[1][0] is String);
+    if (kDebugMode) {
+      assert(elementSize >= 2);
+      assert(aElement[1] is List);
+      assert(aElement[1].length == 2);
+      assert(aElement[1][0] is String);
+    }
 
     final newArea = THArea(_currentParent, aElement[1][0]);
 
@@ -473,10 +488,12 @@ class THFileParser {
   void _injectLine(List<dynamic> aElement) {
     final elementSize = aElement.length;
 
-    assert(elementSize >= 2);
-    assert(aElement[1] is List);
-    assert(aElement[1].length == 2);
-    assert(aElement[1][0] is String);
+    if (kDebugMode) {
+      assert(elementSize >= 2);
+      assert(aElement[1] is List);
+      assert(aElement[1].length == 2);
+      assert(aElement[1][0] is String);
+    }
 
     final newLine = THLine(_currentParent, aElement[1][0]);
 
@@ -589,7 +606,7 @@ class THFileParser {
 
         final errorMessage =
             "Unrecognized command option '$optionType'. This should never happen.";
-        assert(false, errorMessage);
+        if (kDebugMode) assert(false, errorMessage);
         throw UnsupportedError(errorMessage);
       } catch (e, s) {
         _addError("$e\n\nTrace:\n\n$s", '_optionFromElement',
