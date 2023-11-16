@@ -21,4 +21,36 @@ mixin THLineSegment on THElement implements THHasPLAType {
   String get elementType {
     return 'linesegment';
   }
+
+  double get x {
+    return endPoint.x.value;
+  }
+
+  double get y {
+    return endPoint.y.value;
+  }
+
+  set x(double aValue) {
+    endPoint.x.value = aValue;
+  }
+
+  set y(double aValue) {
+    endPoint.y.value = aValue;
+  }
+
+  int get xDecimalPositions {
+    return endPoint.x.decimalPositions;
+  }
+
+  int get yDecimalPositions {
+    return endPoint.y.decimalPositions;
+  }
+
+  set xDecimalPositions(int aDecimalPositions) {
+    endPoint.x.decimalPositions = aDecimalPositions;
+  }
+
+  set yDecimalPositions(int aDecimalPositions) {
+    endPoint.y.decimalPositions = aDecimalPositions;
+  }
 }

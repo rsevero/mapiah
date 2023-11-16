@@ -1,6 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
+import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
+import 'package:mapiah/src/th_elements/th_line.dart';
+import 'package:mapiah/src/th_elements/th_line_segment.dart';
+import 'package:mapiah/src/th_elements/th_point.dart';
+import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_exceptions/th_no_element_by_mapiah_id_exception.dart';
 
@@ -106,6 +112,12 @@ class THFile extends THElement with THParent {
   var encoding = thDefaultEncoding;
   var _nexMapiahID = 1;
 
+  late double _minX;
+  late double _minY;
+  late double _maxX;
+  late double _maxY;
+  late bool _isFirst;
+
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
   /// doesn´t deals with surveys yet, it will guarantee that thIDs are unique
@@ -162,6 +174,48 @@ class THFile extends THElement with THParent {
 
     _thIDByElement.remove(aElement);
     _elementByTHID.remove(aTHID);
+  }
+
+  void _comparePoint(double aX, double aY) {
+    if (_isFirst) {
+      _minX = aX;
+      _minY = aY;
+      _maxX = aX;
+      _maxY = aY;
+      _isFirst = false;
+    } else {
+      if (aX < _minX) {
+        _minX = aX;
+      } else if (aX > _maxX) {
+        _maxX = aX;
+      }
+      if (aY < _minY) {
+        _minY = aY;
+      } else if (aY > _maxY) {
+        _maxY = aY;
+      }
+    }
+  }
+
+  Rect boundingBox() {
+    _isFirst = true;
+    for (final element in _elementByMapiahID.values) {
+      if (element is THPoint) {
+        _comparePoint(element.x, element.y);
+      } else if (element is THLine) {
+        for (final aChild in element.children) {
+          if (aChild is THStraightLineSegment) {
+            _comparePoint(aChild.x, aChild.y);
+          } else if (aChild is THBezierCurveLineSegment) {
+            _comparePoint(aChild.x, aChild.y);
+            _comparePoint(aChild.controlPoint1X, aChild.controlPoint1Y);
+            _comparePoint(aChild.controlPoint2X, aChild.controlPoint2Y);
+          }
+        }
+      }
+    }
+
+    return Rect.fromLTRB(_minX, _minY, _maxX, _maxY);
   }
 
   void updateTHID(THElement aElement, String newTHID) {
