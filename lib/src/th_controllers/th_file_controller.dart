@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
 
@@ -24,6 +25,12 @@ class THFileController extends GetxController {
   // Method to update the canvas size
   void updateCanvasSize(Size newSize) {
     canvasSize.value = newSize;
+  }
+
+  void onPanUpdate(DragUpdateDetails details) {
+    print(
+        "canvasOffsetDrawing pre: ${canvasOffsetDrawing.value} - delta: ${details.delta}\n");
+    canvasOffsetDrawing.value += details.delta;
   }
 
   void updateCanvasScale(double newScale) {
