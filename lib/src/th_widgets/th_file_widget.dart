@@ -39,36 +39,42 @@ class THFileWidget extends StatelessWidget {
       builder: (context, constraints) {
         final canvasWidth = constraints.maxWidth;
         final canvasHeight = constraints.maxHeight;
-        thFileController.updateCanvasSize(Size(
-            canvasWidth * (thCanvasOutOfSightMargin + 1),
-            canvasHeight * (thCanvasOutOfSightMargin + 1)));
+        thFileController.updateCanvasSize(Size(canvasWidth, canvasHeight));
 
-        if (thFileController.canvasScaleOffsetUndefined) {
-          final double dataWidth =
-              (numerics.almostEqual(_dataBoundingBox.width, 0)
-                  ? 1.0
-                  : _dataBoundingBox.width);
-          final double dataHeight =
-              (numerics.almostEqual(_dataBoundingBox.height, 0)
-                  ? 1.0
-                  : _dataBoundingBox.height);
-          final double widthScale =
-              (canvasWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth;
-          final double heightScale =
-              (canvasHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight;
-          final scale = widthScale < heightScale ? widthScale : heightScale;
-          thFileController.updateCanvasScale(scale);
+        // if (thFileController.canvasScaleOffsetUndefined) {
+        final double dataWidth =
+            (numerics.almostEqual(_dataBoundingBox.width, 0.0)
+                ? 1.0
+                : _dataBoundingBox.width);
+        final double dataHeight =
+            (numerics.almostEqual(_dataBoundingBox.height, 0.0)
+                ? 1.0
+                : _dataBoundingBox.height);
+        final double widthScale =
+            (canvasWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth;
+        final double heightScale =
+            (canvasHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight;
+        final scale = (widthScale < heightScale) ? widthScale : heightScale;
+        thFileController.updateCanvasScale(scale);
 
-          final double xOffset = -(_dataBoundingBox.left -
-              ((canvasWidth - (_dataBoundingBox.width * scale)) / 2) -
-              (thCanvasOutOfSightMargin / 2 * canvasWidth));
-          final double yOffset = -(_dataBoundingBox.top -
-              ((canvasHeight - (_dataBoundingBox.height * scale)) / 2) -
-              (thCanvasOutOfSightMargin / 2 * canvasHeight));
-          thFileController.updateCanvasOffset(Offset(xOffset, yOffset));
+        // final double xOffset = -(_dataBoundingBox.left -
+        //     ((canvasWidth - (_dataBoundingBox.width * scale)) / 2.0 / scale));
+        // final double yOffset = -(_dataBoundingBox.top -
+        //     ((canvasHeight - (_dataBoundingBox.height * scale)) / 2.0 / scale));
+        double xOffset = dataWidth * scale;
+        xOffset = canvasWidth - xOffset;
+        xOffset /= 2.0;
+        xOffset = _dataBoundingBox.left - (xOffset / scale);
+        xOffset = -xOffset;
+        double yOffset = dataHeight * scale;
+        yOffset = canvasHeight - yOffset;
+        yOffset /= 2.0;
+        yOffset = _dataBoundingBox.top - (yOffset / scale);
+        yOffset = -yOffset;
+        thFileController.updateCanvasOffsetDrawing(Offset(xOffset, yOffset));
 
-          thFileController.canvasScaleOffsetUndefined = false;
-        }
+        thFileController.canvasScaleOffsetUndefined = false;
+        // }
 
         return SingleChildScrollView(
           controller: verticalController,
@@ -142,8 +148,8 @@ class THFilePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(thFileController.canvasScale.value);
-    canvas.translate(thFileController.canvasOffset.value.dx,
-        thFileController.canvasOffset.value.dy);
+    canvas.translate(thFileController.canvasOffsetDrawing.value.dx,
+        thFileController.canvasOffsetDrawing.value.dy);
 
     var newPath = Path();
     for (final paintAction in _paintActions) {

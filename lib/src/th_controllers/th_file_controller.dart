@@ -7,7 +7,7 @@ class THFileController extends GetxController {
 
   var canvasScale = 1.0.obs;
 
-  var canvasOffset = Offset.zero.obs;
+  var canvasOffsetDrawing = Offset.zero.obs;
 
   var canvasScaleOffsetUndefined = true;
 
@@ -20,8 +20,8 @@ class THFileController extends GetxController {
     canvasScale.value = newScale;
   }
 
-  void updateCanvasOffset(Offset newOffset) {
-    canvasOffset.value = newOffset;
+  void updateCanvasOffsetDrawing(Offset newOffset) {
+    canvasOffsetDrawing.value = newOffset;
   }
 
   void updateCanvasScaleOffsetUndefined(bool newValue) {
