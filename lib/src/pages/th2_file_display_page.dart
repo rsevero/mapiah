@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapiah/src/th_controllers/th_file_controller.dart';
 
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
@@ -7,13 +8,15 @@ import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 
 class THFileDisplayPage extends StatelessWidget {
   final String filename;
-  final FileLoadingController controller = Get.put(FileLoadingController());
+  final FileLoadingController fileLoadingController =
+      Get.put(FileLoadingController());
+  final THFileController thFileController = Get.put(THFileController());
 
   THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
-    controller.loadFile(filename);
+    fileLoadingController.loadFile(filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -23,14 +26,48 @@ class THFileDisplayPage extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (fileLoadingController.isLoading.value) {
           return Center(child: CircularProgressIndicator());
         } else {
           return Center(
-            child: THFileWidget(controller.parsedFile),
+            child: Stack(children: [
+              THFileWidget(fileLoadingController.parsedFile),
+              _buildFloatingActionButtons(),
+            ]),
           );
         }
       }),
+    );
+  }
+
+  Widget _buildFloatingActionButtons() {
+    return Positioned(
+      right: 16.0,
+      bottom: 16.0,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _zoomButton(Icons.zoom_in, () {
+            thFileController.zoomIn();
+          }),
+          SizedBox(height: 8.0),
+          _zoomButton(Icons.zoom_out_map, () {
+            thFileController.zoomShowAll();
+          }),
+          SizedBox(height: 8.0),
+          _zoomButton(Icons.zoom_out, () {
+            thFileController.zoomOut();
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _zoomButton(IconData icon, VoidCallback onPressed) {
+    return FloatingActionButton(
+      mini: true,
+      child: Icon(icon),
+      onPressed: onPressed,
     );
   }
 }

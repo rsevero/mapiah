@@ -1,10 +1,6 @@
-import 'dart:math';
-
-import 'package:dart_numerics/dart_numerics.dart' as numerics;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_controllers/th_file_controller.dart';
-import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';
@@ -19,13 +15,10 @@ class THFileWidget extends StatelessWidget {
   final THFile file;
   final List<THPaintAction> _paintActions = [];
   final THFileController thFileController = Get.put(THFileController());
-  late final Rect _dataBoundingBox;
-
-  final ScrollController horizontalController = ScrollController();
-  final ScrollController verticalController = ScrollController();
 
   THFileWidget(this.file) : super(key: ObjectKey(file)) {
-    _dataBoundingBox = file.boundingBox();
+    thFileController.updateDataBoundingBox(file.boundingBox());
+    thFileController.canvasScaleOffsetUndefined = true;
     for (final child in file.children) {
       if (child is THScrap) {
         _addScrapPaintActions(child);
@@ -37,57 +30,17 @@ class THFileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final canvasWidth = constraints.maxWidth;
-        final canvasHeight = constraints.maxHeight;
-        thFileController.updateCanvasSize(Size(canvasWidth, canvasHeight));
+        thFileController.updateCanvasSize(
+            Size(constraints.maxWidth, constraints.maxHeight));
 
-        // if (thFileController.canvasScaleOffsetUndefined) {
-        final double dataWidth =
-            (numerics.almostEqual(_dataBoundingBox.width, 0.0)
-                ? 1.0
-                : _dataBoundingBox.width);
-        final double dataHeight =
-            (numerics.almostEqual(_dataBoundingBox.height, 0.0)
-                ? 1.0
-                : _dataBoundingBox.height);
-        final double widthScale =
-            (canvasWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth;
-        final double heightScale =
-            (canvasHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight;
-        final scale = (widthScale < heightScale) ? widthScale : heightScale;
-        thFileController.updateCanvasScale(scale);
+        if (thFileController.canvasScaleOffsetUndefined) {
+          thFileController.zoomShowAll();
+        }
 
-        // final double xOffset = -(_dataBoundingBox.left -
-        //     ((canvasWidth - (_dataBoundingBox.width * scale)) / 2.0 / scale));
-        // final double yOffset = -(_dataBoundingBox.top -
-        //     ((canvasHeight - (_dataBoundingBox.height * scale)) / 2.0 / scale));
-        double xOffset = dataWidth * scale;
-        xOffset = canvasWidth - xOffset;
-        xOffset /= 2.0;
-        xOffset = _dataBoundingBox.left - (xOffset / scale);
-        xOffset = -xOffset;
-        double yOffset = dataHeight * scale;
-        yOffset = canvasHeight - yOffset;
-        yOffset /= 2.0;
-        yOffset = _dataBoundingBox.top - (yOffset / scale);
-        yOffset = -yOffset;
-        thFileController.updateCanvasOffsetDrawing(Offset(xOffset, yOffset));
-
-        thFileController.canvasScaleOffsetUndefined = false;
-        // }
-
-        return SingleChildScrollView(
-          controller: verticalController,
-          scrollDirection: Axis.vertical,
-          child: SingleChildScrollView(
-            controller: horizontalController,
-            scrollDirection: Axis.horizontal,
-            child: Obx(
-              () => CustomPaint(
-                painter: THFilePainter(_paintActions),
-                size: thFileController.canvasSize.value,
-              ),
-            ),
+        return Obx(
+          () => CustomPaint(
+            painter: THFilePainter(_paintActions),
+            size: thFileController.canvasSize.value,
           ),
         );
       },
