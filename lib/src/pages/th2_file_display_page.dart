@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_controllers/th_file_controller.dart';
-
-import 'package:mapiah/src/th_elements/th_element.dart';
-import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/th_controllers/th_file_loading_controller.dart';
 import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 
 class THFileDisplayPage extends StatelessWidget {
   final String filename;
-  final FileLoadingController fileLoadingController =
-      Get.put(FileLoadingController());
+  final THFileLoadingController thFileLoadingController =
+      Get.put(THFileLoadingController());
   final THFileController thFileController = Get.put(THFileController());
 
   THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
-    fileLoadingController.loadFile(filename);
+    thFileLoadingController.loadFile(filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -26,12 +24,12 @@ class THFileDisplayPage extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (fileLoadingController.isLoading.value) {
+        if (thFileLoadingController.isLoading.value) {
           return Center(child: CircularProgressIndicator());
         } else {
           return Center(
             child: Stack(children: [
-              THFileWidget(fileLoadingController.parsedFile),
+              THFileWidget(thFileLoadingController.parsedFile),
               _buildFloatingActionButtons(),
             ]),
           );
@@ -69,31 +67,6 @@ class THFileDisplayPage extends StatelessWidget {
       child: Icon(icon),
       onPressed: onPressed,
     );
-  }
-}
-
-class FileLoadingController extends GetxController {
-  var isLoading = false.obs;
-  RxList<String> errorMessages = RxList<String>();
-  final parser = THFileParser();
-  THFile parsedFile = THFile();
-
-  void loadFile(String aFilename) async {
-    isLoading.value = true;
-    errorMessages.clear();
-
-    final (file, isSuccessful, errors) = await parser.parse(aFilename);
-    isLoading.value = false;
-
-    if (isSuccessful) {
-      parsedFile = file;
-    } else {
-      errorMessages.addAll(errors);
-      await Get.dialog(
-        ErrorDialog(errorMessages: errorMessages),
-      );
-      Get.back(); // Close the file display page
-    }
   }
 }
 
