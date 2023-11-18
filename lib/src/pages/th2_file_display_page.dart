@@ -18,6 +18,7 @@ class THFileDisplayPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
+        elevation: 4,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Get.back(),
