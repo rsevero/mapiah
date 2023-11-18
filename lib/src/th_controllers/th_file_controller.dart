@@ -1,5 +1,3 @@
-import 'dart:ui';
-import 'package:dart_numerics/dart_numerics.dart' as numerics;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
@@ -8,19 +6,22 @@ class THFileController extends GetxController {
   // Reactive canvas size
   var canvasSize = Size.zero.obs;
 
-  var canvasScale = 1.0.obs;
+  var canvasScale = 1.0;
 
-  var canvasOffsetDrawing = Offset.zero.obs;
+  var canvasOffsetDrawing = Offset.zero;
 
   var canvasScaleOffsetUndefined = true;
 
-  var dataWidth = 0.0.obs;
-  var dataHeight = 0.0.obs;
+  var dataWidth = 0.0;
+  var dataHeight = 0.0;
 
-  var dataBoundingBox = Rect.zero.obs;
+  var dataBoundingBox = Rect.zero;
 
   var xCenter = 0.0;
   var yCenter = 0.0;
+
+  var trigger = false.obs;
+  var shouldRepaint = false;
 
   // Method to update the canvas size
   void updateCanvasSize(Size newSize) {
@@ -28,17 +29,19 @@ class THFileController extends GetxController {
   }
 
   void onPanUpdate(DragUpdateDetails details) {
-    print(
-        "canvasOffsetDrawing pre: ${canvasOffsetDrawing.value} - delta: ${details.delta}\n");
-    canvasOffsetDrawing.value += details.delta;
+    // print(
+    //     "canvasOffsetDrawing pre: $canvasOffsetDrawing - delta: ${details.delta} - ${DateTime.now()}\n");
+    canvasOffsetDrawing += (details.delta / canvasScale);
+    shouldRepaint = true;
+    trigger.value = !trigger.value;
   }
 
   void updateCanvasScale(double newScale) {
-    canvasScale.value = newScale;
+    canvasScale = newScale;
   }
 
   void updateCanvasOffsetDrawing(Offset newOffset) {
-    canvasOffsetDrawing.value = newOffset;
+    canvasOffsetDrawing = newOffset;
   }
 
   void updateCanvasScaleOffsetUndefined(bool newValue) {
@@ -47,57 +50,55 @@ class THFileController extends GetxController {
 
   void zoomIn() {
     _setCenterFromCurrent();
-    canvasScale.value *= thZoomFactor;
+    canvasScale *= thZoomFactor;
     _calculateCanvasOffset();
   }
 
   void zoomOut() {
     _setCenterFromCurrent();
-    canvasScale.value /= thZoomFactor;
+    canvasScale /= thZoomFactor;
     _calculateCanvasOffset();
   }
 
   void updateDataWidth(double newWidth) {
-    dataWidth.value = newWidth;
+    dataWidth = newWidth;
   }
 
   void updateDataHeight(double newHeight) {
-    dataHeight.value = newHeight;
+    dataHeight = newHeight;
   }
 
   void updateDataBoundingBox(Rect newBoundingBox) {
-    dataBoundingBox.value = newBoundingBox;
+    dataBoundingBox = newBoundingBox;
   }
 
   void _getFileDrawingSize() {
-    dataWidth.value = (dataBoundingBox.value.width < thMinimumSizeForDrawing)
+    dataWidth = (dataBoundingBox.width < thMinimumSizeForDrawing)
         ? thMinimumSizeForDrawing
-        : dataBoundingBox.value.width;
+        : dataBoundingBox.width;
 
-    dataHeight.value = (dataBoundingBox.value.height < thMinimumSizeForDrawing)
+    dataHeight = (dataBoundingBox.height < thMinimumSizeForDrawing)
         ? thMinimumSizeForDrawing
-        : dataBoundingBox.value.height;
+        : dataBoundingBox.height;
   }
 
   void _calculateCanvasOffset() {
-    final xOffset =
-        -(xCenter - (canvasSize.value.width / 2.0 / canvasScale.value));
-    final yOffset =
-        -(yCenter - (canvasSize.value.height / 2.0 / canvasScale.value));
+    final xOffset = -(xCenter - (canvasSize.value.width / 2.0 / canvasScale));
+    final yOffset = -(yCenter - (canvasSize.value.height / 2.0 / canvasScale));
 
-    canvasOffsetDrawing.value = Offset(xOffset, yOffset);
+    canvasOffsetDrawing = Offset(xOffset, yOffset);
   }
 
   void _setCenterFromDrawing() {
-    xCenter = dataBoundingBox.value.left + (dataBoundingBox.value.width / 2.0);
-    yCenter = dataBoundingBox.value.top + (dataBoundingBox.value.height / 2.0);
+    xCenter = dataBoundingBox.left + (dataBoundingBox.width / 2.0);
+    yCenter = dataBoundingBox.top + (dataBoundingBox.height / 2.0);
   }
 
   void _setCenterFromCurrent() {
-    xCenter = -(canvasOffsetDrawing.value.dx -
-        (canvasSize.value.width / 2.0 / canvasScale.value));
-    yCenter = -(canvasOffsetDrawing.value.dy -
-        (canvasSize.value.height / 2.0 / canvasScale.value));
+    xCenter = -(canvasOffsetDrawing.dx -
+        (canvasSize.value.width / 2.0 / canvasScale));
+    yCenter = -(canvasOffsetDrawing.dy -
+        (canvasSize.value.height / 2.0 / canvasScale));
   }
 
   void zoomShowAll() {
@@ -107,11 +108,11 @@ class THFileController extends GetxController {
     _getFileDrawingSize();
 
     final double widthScale =
-        (canvasWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth.value;
+        (canvasWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth;
     final double heightScale =
-        (canvasHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight.value;
+        (canvasHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight;
     final scale = (widthScale < heightScale) ? widthScale : heightScale;
-    canvasScale.value = scale;
+    canvasScale = scale;
 
     _setCenterFromDrawing();
     _calculateCanvasOffset();

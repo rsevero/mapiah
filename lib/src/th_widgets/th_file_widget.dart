@@ -40,11 +40,13 @@ class THFileWidget extends StatelessWidget {
         return GestureDetector(
           onPanUpdate: thFileController.onPanUpdate,
           child: Obx(
-            () => CustomPaint(
-              painter: THFilePainter(
-                  _paintActions, thFileController.canvasOffsetDrawing.value),
-              size: thFileController.canvasSize.value,
-            ),
+            () {
+              thFileController.trigger.value;
+              return CustomPaint(
+                painter: THFilePainter(_paintActions),
+                size: thFileController.canvasSize.value,
+              );
+            },
           ),
         );
       },
@@ -96,17 +98,17 @@ class THFileWidget extends StatelessWidget {
 
 class THFilePainter extends CustomPainter {
   final List<THPaintAction> _paintActions;
-  final Offset offset;
 
   final THFileController thFileController = Get.put(THFileController());
 
-  THFilePainter(List<THPaintAction> aPaintActionsList, this.offset)
+  THFilePainter(List<THPaintAction> aPaintActionsList)
       : _paintActions = aPaintActionsList;
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.scale(thFileController.canvasScale.value);
-    canvas.translate(offset.dx, offset.dy);
+    canvas.scale(thFileController.canvasScale);
+    canvas.translate(thFileController.canvasOffsetDrawing.dx,
+        thFileController.canvasOffsetDrawing.dy);
 
     var newPath = Path();
     for (final paintAction in _paintActions) {
@@ -142,6 +144,12 @@ class THFilePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant oldDelegate) {
+    // print(
+    //     "shouldRepaint with ${thFileController.shouldRepaint}: ${DateTime.now()}\n");
+    if (thFileController.shouldRepaint) {
+      thFileController.shouldRepaint = false;
+      return true;
+    }
     return false;
   }
 }
