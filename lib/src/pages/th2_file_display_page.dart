@@ -24,11 +24,11 @@ class THFileDisplayPage extends StatelessWidget {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.save_alt_outlined),
             onPressed: () => thFileDisplayPageController.saveTH2File(),
           ),
           IconButton(
-            icon: Icon(Icons.save_as),
+            icon: Icon(Icons.save_as_outlined),
             onPressed: () => thFileDisplayPageController.saveAsTH2File(),
           ),
           IconButton(
