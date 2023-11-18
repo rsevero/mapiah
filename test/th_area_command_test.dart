@@ -21,7 +21,6 @@ void main() {
         'asFile': r'''encoding UTF-8
 scrap test
   area clay -clip on
-
   endarea
 endscrap
 ''',
@@ -47,7 +46,6 @@ scrap test
   area clay -clip on
     l85-3732--20
   endarea
-
   line border -id l85-3732--20 -close on -visibility off
     3592.0 208.0
     3539.45 249.03 3447.39 245.1 3392.0 208.0

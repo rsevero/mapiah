@@ -19,13 +19,14 @@ dependencies:
   meta: ^1.9.1
   open_file: ^3.3.2
   package_info_plus: ^4.2.0
+  path_provider: ^2.1.1
   petitparser: ^6.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
-  test:
   flutter_test:
     sdk: flutter
+  test: null
 
 dependency_overrides:
   test_api: 0.6.1

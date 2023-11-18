@@ -229,8 +229,6 @@ endscrap
 scrap test
   point -4882 -2163 extra -dist 18
 endscrap
-
-
 ''',
       },
       {
@@ -296,8 +294,6 @@ endscrap
 scrap test
   point -4882 -2163 continuation -explored 18
 endscrap
-
-
 ''',
       },
       {

@@ -34,7 +34,6 @@ scrap test
   line wall
   endline
 endscrap
-
 ''',
       },
       {
@@ -71,11 +70,7 @@ endscrap
         'length': 32,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-
-
-
 scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
-
   line wall
     355.0 1065.0
     291.0 499.0
@@ -83,11 +78,8 @@ scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
     1139.0 1079.0
     355.0 1065.0
   endline
-
   point 1050.0 900.0 station -name a2
-
   point 450.0 900.0 station -name a1
-
   line chimney
     450.0 900.0
     450.0 600.0
@@ -98,10 +90,7 @@ scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
     1050.0 600.0
     1050.0 900.0
   endline
-
 endscrap
-
-
 ''',
       },
       {

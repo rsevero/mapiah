@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:charset/charset.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
@@ -23,9 +27,16 @@ class THFileWriter {
   final _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
   final _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
 
-  String serialize(THElement aTHElement) {
+  bool _includeEmptyLines = false;
+  bool _insideMultiLineComment = false;
+
+  String serialize(THElement aTHElement, {bool? includeEmptyLines}) {
     var asString = '';
     final type = aTHElement.elementType;
+
+    if (includeEmptyLines != null) {
+      _includeEmptyLines = includeEmptyLines;
+    }
 
     switch (type) {
       case 'area':
@@ -36,7 +47,9 @@ class THFileWriter {
       case 'comment':
         asString += '# ${(aTHElement as THComment).content}\n';
       case 'emptyline':
-        asString += '\n';
+        if (_includeEmptyLines || _insideMultiLineComment) {
+          asString += '\n';
+        }
       case 'encoding':
         final newLine = 'encoding ${(aTHElement as THEncoding).encoding}';
         asString += _prepareLine(newLine, aTHElement);
@@ -45,6 +58,7 @@ class THFileWriter {
         asString += _prepareLine('endarea', aTHElement);
       case 'endcomment':
         _reducePrefix();
+        _insideMultiLineComment = false;
         asString += _prepareLine('endcomment', aTHElement);
       case 'endline':
         _reducePrefix();
@@ -67,6 +81,7 @@ class THFileWriter {
       case 'multilinecomment':
         asString += _prepareLine('comment', aTHElement);
         _increasePrefix();
+        _insideMultiLineComment = true;
         asString += _childrenAsString(aTHElement as THMultiLineComment);
       case 'multilinecommentcontent':
         asString += '${(aTHElement as THMultilineCommentContent).content}\n';
@@ -230,14 +245,15 @@ class THFileWriter {
         }
 
         aLine = aLine.substring(breakPos);
+        splitLine += _prefix;
+
         if (isFirst) {
           isFirst = false;
           _increasePrefix();
           _increasePrefix();
           maxLength = thMaxFileLineLength - _prefix.length;
-        } else {
-          splitLine += _prefix;
         }
+
         splitLine += part;
         if (aLine.isNotEmpty) {
           splitLine += '\\\n';
@@ -277,5 +293,28 @@ class THFileWriter {
     _reducePrefix();
 
     return asString;
+  }
+
+  Future<List<int>> toBytes(THFile aTHFile,
+      {bool includeEmptyLines = false}) async {
+    final encoding = aTHFile.encoding;
+    late List<int> fileContentEncoded;
+    var fileContent = serialize(aTHFile, includeEmptyLines: includeEmptyLines);
+    switch (encoding) {
+      case 'UTF-8':
+        fileContentEncoded = utf8.encode(fileContent);
+      case 'ASCII':
+        fileContentEncoded = ascii.encode(fileContent);
+      case 'ISO8859-1':
+        fileContentEncoded = latin1.encode(fileContent);
+      default:
+        final encoder = Charset.getByName(encoding);
+        if (encoder == null) {
+          fileContentEncoded = utf8.encode(fileContent);
+        } else {
+          fileContentEncoded = encoder.encode(fileContent);
+        }
+    }
+    return fileContentEncoded;
   }
 }

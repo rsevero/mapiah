@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_controllers/th_file_controller.dart';
-import 'package:mapiah/src/th_controllers/th_file_loading_controller.dart';
+import 'package:mapiah/src/th_controllers/th_file_display_page_controller.dart';
 import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 
 class THFileDisplayPage extends StatelessWidget {
   final String filename;
-  final THFileLoadingController thFileLoadingController =
-      Get.put(THFileLoadingController());
+  final THFileDisplayPageController thFileDisplayPageController =
+      Get.put(THFileDisplayPageController());
   final THFileController thFileController = Get.put(THFileController());
 
   THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
-    thFileLoadingController.loadFile(filename);
+    thFileDisplayPageController.loadFile(filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -22,14 +22,28 @@ class THFileDisplayPage extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Get.back(),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () => thFileDisplayPageController.saveTH2File(),
+          ),
+          IconButton(
+            icon: Icon(Icons.save_as),
+            onPressed: () => thFileDisplayPageController.saveAsTH2File(),
+          ),
+          IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () => Get.back(),
+          ),
+        ],
       ),
       body: Obx(() {
-        if (thFileLoadingController.isLoading.value) {
+        if (thFileDisplayPageController.isLoading.value) {
           return Center(child: CircularProgressIndicator());
         } else {
           return Center(
             child: Stack(children: [
-              THFileWidget(thFileLoadingController.parsedFile),
+              THFileWidget(thFileDisplayPageController.thFile),
               _buildFloatingActionButtons(),
             ]),
           );

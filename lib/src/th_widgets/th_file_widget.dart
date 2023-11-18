@@ -43,7 +43,16 @@ class THFileWidget extends StatelessWidget {
             () {
               thFileController.trigger.value;
               return CustomPaint(
-                painter: THFilePainter(_paintActions),
+                /// Creating another CustomPaint as child of this CustomPaint
+                /// because CustomPaint creates 3 layers, from bottom to top:
+                /// painter, child and foregroundPainter.
+                /// The actual drawing is paint as the middle layer (child) so
+                /// I can put grids below it (as the main CustomPaint painter)
+                /// and a scale aboveit.
+                child: CustomPaint(
+                  painter: THFilePainter(_paintActions),
+                  size: thFileController.canvasSize.value,
+                ),
                 size: thFileController.canvasSize.value,
               );
             },
