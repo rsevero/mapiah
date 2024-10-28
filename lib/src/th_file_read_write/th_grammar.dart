@@ -679,9 +679,11 @@ class THGrammar extends GrammarDefinition {
   /// point -name
   Parser nameOption() =>
       stringIgnoreCase('name').skip(before: char('-')) & ref0(nameOptions);
-  Parser nameOptions() => ref0(reference)
-      .trim(ref0(thWhitespace), ref0(thWhitespace))
-      .map((value) => [value]);
+  Parser nameOptions() =>
+      ref0(reference)
+          .trim(ref0(thWhitespace), ref0(thWhitespace))
+          .map((value) => [value]) |
+      ref0(quotedString).map((value) => [value]);
 
   /// point -orientation
   Parser orientationOption() =>
