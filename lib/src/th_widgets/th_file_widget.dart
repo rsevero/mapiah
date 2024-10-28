@@ -48,7 +48,7 @@ class THFileWidget extends StatelessWidget {
                 /// painter, child and foregroundPainter.
                 /// The actual drawing is paint as the middle layer (child) so
                 /// I can put grids below it (as the main CustomPaint painter)
-                /// and a scale aboveit.
+                /// and a scale above it.
                 child: CustomPaint(
                   painter: THFilePainter(_paintActions),
                   size: thFileController.canvasSize.value,
