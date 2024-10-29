@@ -3,60 +3,89 @@ import 'package:get/get.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
 
 class THFileController extends GetxController {
-  // Reactive canvas size
-  var canvasSize = Size.zero.obs;
+  // 'screen' is related to actual pixels on the screen.
+  // 'canvas' is the virtual canvas used to draw.
+  // 'data' is the actual data to be drawn.
+  // 'canvas' and 'data' are on the same scale. They are both scaled and
+  // translated to be shown on the screen.
 
-  var canvasScale = 1.0;
+  Rx<Size> screenSize = Size.zero.obs;
 
-  var canvasOffsetDrawing = Offset.zero;
+  Size canvasSize = Size.zero;
 
-  var canvasScaleOffsetUndefined = true;
+  double canvasScale = 1.0;
 
-  var dataWidth = 0.0;
-  var dataHeight = 0.0;
+  Offset canvasTranslation = Offset.zero;
 
-  var dataBoundingBox = Rect.zero;
+  bool canvasScaleTranslationUndefined = true;
 
-  var xCenter = 0.0;
-  var yCenter = 0.0;
+  double dataWidth = 0.0;
+  double dataHeight = 0.0;
 
-  var trigger = false.obs;
-  var shouldRepaint = false;
+  Rect dataBoundingBox = Rect.zero;
 
-  // Method to update the canvas size
-  void updateCanvasSize(Size newSize) {
-    canvasSize.value = newSize;
+  double canvasCenterX = 0.0;
+  double canvasCenterY = 0.0;
+
+  RxBool trigger = false.obs;
+  bool shouldRepaint = false;
+
+  void updateScreenSize(Size newSize) {
+    screenSize.value = newSize;
+    canvasSize = newSize / canvasScale;
+  }
+
+  Offset screenToCanvas(Offset screenCoordinate) {
+    // Apply the inverse of the translation
+    final double canvasX =
+        (screenCoordinate.dx / canvasScale) - canvasTranslation.dx;
+    final double canvasY =
+        -((screenCoordinate.dy / canvasScale) - canvasTranslation.dy);
+
+    return Offset(canvasX, canvasY);
+  }
+
+  Offset canvasToScreen(Offset canvasCoordinate) {
+    // Apply the translation and scaling
+    final double screenX =
+        (canvasCoordinate.dx - canvasTranslation.dx) * canvasScale;
+    final double screenY =
+        -((canvasCoordinate.dy - canvasTranslation.dy) * canvasScale);
+
+    return Offset(screenX, screenY);
   }
 
   void onPanUpdate(DragUpdateDetails details) {
-    // print(
-    //     "canvasOffsetDrawing pre: $canvasOffsetDrawing - delta: ${details.delta} - ${DateTime.now()}\n");
-    canvasOffsetDrawing += (details.delta / canvasScale);
+    canvasTranslation += (details.delta / canvasScale);
+    _setCanvasCenterFromCurrent();
     shouldRepaint = true;
     trigger.value = !trigger.value;
   }
 
   void updateCanvasScale(double newScale) {
     canvasScale = newScale;
+    canvasSize = screenSize.value / canvasScale;
   }
 
   void updateCanvasOffsetDrawing(Offset newOffset) {
-    canvasOffsetDrawing = newOffset;
+    canvasTranslation = newOffset;
   }
 
   void updateCanvasScaleOffsetUndefined(bool newValue) {
-    canvasScaleOffsetUndefined = newValue;
+    canvasScaleTranslationUndefined = newValue;
   }
 
   void zoomIn() {
-    _setCenterFromCurrent();
+    // _setCenterFromCurrent();
     canvasScale *= thZoomFactor;
+    canvasSize = screenSize.value / canvasScale;
     _calculateCanvasOffset();
   }
 
   void zoomOut() {
-    _setCenterFromCurrent();
+    // _setCenterFromCurrent();
     canvasScale /= thZoomFactor;
+    canvasSize = screenSize.value / canvasScale;
     _calculateCanvasOffset();
   }
 
@@ -83,40 +112,46 @@ class THFileController extends GetxController {
   }
 
   void _calculateCanvasOffset() {
-    final xOffset = -(xCenter - (canvasSize.value.width / 2.0 / canvasScale));
-    final yOffset = -(yCenter - (canvasSize.value.height / 2.0 / canvasScale));
+    final xOffset = (canvasSize.width / 2.0) - canvasCenterX;
+    final yOffset = (canvasSize.height / 2.0) + canvasCenterY;
 
-    canvasOffsetDrawing = Offset(xOffset, yOffset);
+    canvasTranslation = Offset(xOffset, yOffset);
   }
 
-  void _setCenterFromDrawing() {
-    xCenter = dataBoundingBox.left + (dataBoundingBox.width / 2.0);
-    yCenter = dataBoundingBox.top + (dataBoundingBox.height / 2.0);
+  void _setCanvasCenterToDrawingCenter() {
+    print("Current center: $canvasCenterX, $canvasCenterY");
+    canvasCenterX = (dataBoundingBox.left + dataBoundingBox.right) / 2.0;
+    canvasCenterY = (dataBoundingBox.top + dataBoundingBox.bottom) / 2.0;
+    print(
+        "New center to center drawing in canvas: $canvasCenterX, $canvasCenterY");
   }
 
-  void _setCenterFromCurrent() {
-    xCenter = -(canvasOffsetDrawing.dx -
-        (canvasSize.value.width / 2.0 / canvasScale));
-    yCenter = -(canvasOffsetDrawing.dy -
-        (canvasSize.value.height / 2.0 / canvasScale));
+  void _setCanvasCenterFromCurrent() {
+    print("Current center: $canvasCenterX, $canvasCenterY");
+    canvasCenterX =
+        -(canvasTranslation.dx - (screenSize.value.width / 2.0 / canvasScale));
+    canvasCenterY = -(-canvasTranslation.dy +
+        (screenSize.value.height / 2.0 / canvasScale));
+    print("New center: $canvasCenterX, $canvasCenterY");
   }
 
   void zoomShowAll() {
-    final double canvasWidth = canvasSize.value.width;
-    final double canvasHeight = canvasSize.value.height;
+    final double screenWidth = screenSize.value.width;
+    final double screenHeight = screenSize.value.height;
 
     _getFileDrawingSize();
 
     final double widthScale =
-        (canvasWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth;
+        (screenWidth * (1.0 - thCanvasVisibleMargin)) / dataWidth;
     final double heightScale =
-        (canvasHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight;
+        (screenHeight * (1.0 - thCanvasVisibleMargin)) / dataHeight;
     final scale = (widthScale < heightScale) ? widthScale : heightScale;
     canvasScale = scale;
+    canvasSize = screenSize.value / canvasScale;
 
-    _setCenterFromDrawing();
+    _setCanvasCenterToDrawingCenter();
     _calculateCanvasOffset();
 
-    canvasScaleOffsetUndefined = false;
+    canvasScaleTranslationUndefined = false;
   }
 }

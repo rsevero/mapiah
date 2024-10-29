@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_controllers/th_file_controller.dart';
+import 'package:mapiah/src/th_definitions/th_paints.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';
@@ -18,7 +19,7 @@ class THFileWidget extends StatelessWidget {
 
   THFileWidget(this.file) : super(key: ObjectKey(file)) {
     thFileController.updateDataBoundingBox(file.boundingBox());
-    thFileController.canvasScaleOffsetUndefined = true;
+    thFileController.canvasScaleTranslationUndefined = true;
     for (final child in file.children) {
       if (child is THScrap) {
         _addScrapPaintActions(child);
@@ -30,10 +31,10 @@ class THFileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        thFileController.updateCanvasSize(
+        thFileController.updateScreenSize(
             Size(constraints.maxWidth, constraints.maxHeight));
 
-        if (thFileController.canvasScaleOffsetUndefined) {
+        if (thFileController.canvasScaleTranslationUndefined) {
           thFileController.zoomShowAll();
         }
 
@@ -51,9 +52,9 @@ class THFileWidget extends StatelessWidget {
                 /// and a scale above it.
                 child: CustomPaint(
                   painter: THFilePainter(_paintActions),
-                  size: thFileController.canvasSize.value,
+                  size: thFileController.screenSize.value,
                 ),
-                size: thFileController.canvasSize.value,
+                size: thFileController.screenSize.value,
               );
             },
           ),
@@ -115,9 +116,20 @@ class THFilePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Transformations are applied on the order they are defined.
     canvas.scale(thFileController.canvasScale);
-    canvas.translate(thFileController.canvasOffsetDrawing.dx,
-        thFileController.canvasOffsetDrawing.dy);
+    // // Drawing canvas border
+    // canvas.drawRect(
+    //     Rect.fromPoints(
+    //         Offset(0, 0),
+    //         Offset(
+    //           thFileController.canvasSize.width,
+    //           thFileController.canvasSize.height,
+    //         )),
+    //     THPaints.thPaint7);
+    canvas.translate(thFileController.canvasTranslation.dx,
+        thFileController.canvasTranslation.dy);
+    canvas.scale(1, -1);
 
     var newPath = Path();
     for (final paintAction in _paintActions) {
@@ -149,6 +161,50 @@ class THFilePainter extends CustomPainter {
           canvas.drawPath(newPath, paintAction.paint);
       }
     }
+
+    // Rect.fromLTWH(
+    //   thFileController.canvasOffsetDrawing.dx,
+    //   thFileController.canvasOffsetDrawing.dy,
+    //   thFileController.canvasSize.value.width,
+    //   thFileController.canvasSize.value.height,
+    // ),
+    // THPaints.thPaint7);
+
+    // // Drawing canvas border
+    // canvas.drawRect(
+    //     Rect.fromPoints(
+    //         thFileController.screenToCanvas(Offset(0, 0)),
+    //         thFileController.screenToCanvas(Offset(
+    //           thFileController.screenSize.value.width,
+    //           thFileController.screenSize.value.height,
+    //         ))),
+    //     THPaints.thPaint9);
+
+    // // Canvas center after transformation
+    // canvas.drawCircle(
+    //     Offset(thFileController.canvasCenterX, thFileController.canvasCenterY),
+    //     3,
+    //     THPaints.thPaint5);
+
+    // // Drawing center
+    // canvas.drawCircle(
+    //     Offset(thFileController.dataBoundingBox.center.dx,
+    //         thFileController.dataBoundingBox.center.dy),
+    //     2,
+    //     THPaints.thPaint2);
+
+    // // Drawing bounding box
+    // canvas.drawRect(thFileController.dataBoundingBox, THPaints.thPaint2);
+
+    // print("screenSize: ${thFileController.screenSize}");
+    // print("dataWidth: ${thFileController.dataWidth}");
+    // print("dataHeight: ${thFileController.dataHeight}");
+    // print("dataBoundingBox: ${thFileController.dataBoundingBox}");
+    // print("canvasTranslation: ${thFileController.canvasTranslation}");
+    // print("canvasSize: ${thFileController.canvasSize}");
+    // print("canvasScale: ${thFileController.canvasScale}");
+    // print(
+    //     "canvasCenter: ${thFileController.canvasCenterX}, ${thFileController.canvasCenterY}");
   }
 
   @override
