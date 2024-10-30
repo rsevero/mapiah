@@ -130,8 +130,8 @@ class THFileController extends GetxController {
     print("Current center: $canvasCenterX, $canvasCenterY");
     canvasCenterX =
         -(canvasTranslation.dx - (screenSize.value.width / 2.0 / canvasScale));
-    canvasCenterY = -(-canvasTranslation.dy +
-        (screenSize.value.height / 2.0 / canvasScale));
+    canvasCenterY =
+        canvasTranslation.dy - (screenSize.value.height / 2.0 / canvasScale);
     print("New center: $canvasCenterX, $canvasCenterY");
   }
 
