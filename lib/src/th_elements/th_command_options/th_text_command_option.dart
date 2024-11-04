@@ -1,7 +1,6 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_elements/th_has_text.dart';
-import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 // text . text of the label, remark or continuation. It may contain following formatting

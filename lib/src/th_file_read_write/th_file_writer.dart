@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:charset/charset.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';

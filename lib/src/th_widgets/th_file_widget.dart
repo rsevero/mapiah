@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/th_controllers/th_file_controller.dart';
-import 'package:mapiah/src/th_definitions/th_paints.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';

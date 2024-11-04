@@ -1,5 +1,4 @@
 import 'package:mapiah/src/th_elements/th_element.dart';
-import 'package:mapiah/src/th_elements/th_has_id.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
