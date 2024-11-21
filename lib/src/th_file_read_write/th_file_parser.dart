@@ -1527,17 +1527,27 @@ class THFileParser {
     return (_parsedTHFile, _parseErrors.isEmpty, _parseErrors);
   }
 
+  (int index, int length) _findLineBreak(String aContent) {
+    final windowsResult = aContent.indexOf(thWindowsLineBreak);
+    if (windowsResult != -1) return (windowsResult, 2);
+
+    final unixResult = aContent.indexOf(thUnixLineBreak);
+    if (unixResult != -1) return (unixResult, 1);
+    
+    return (-1, 0);
+  }
+
   void _splitContents(String aContents) {
     _splittedContents = [];
     var lastLine = '';
     while (aContents.isNotEmpty) {
-      var lineBreakIndex = aContents.indexOf(thLineBreak);
+      var (lineBreakIndex, lineBreakLength) = _findLineBreak(aContents);
       if (lineBreakIndex == -1) {
         lastLine += aContents;
         break;
       }
       var newLine = aContents.substring(0, lineBreakIndex);
-      aContents = aContents.substring(lineBreakIndex + 1);
+      aContents = aContents.substring(lineBreakIndex + lineBreakLength);
       if (newLine.isEmpty) {
         _splittedContents.add("$lastLine$newLine");
         lastLine = '';
@@ -1548,9 +1558,9 @@ class THFileParser {
       // Joining lines that end with a line break inside a quoted string, i.e.,
       // the line break belongs to the string content.
       while (quoteCount.isOdd && aContents.isNotEmpty) {
-        lineBreakIndex = aContents.indexOf(thLineBreak);
+        (lineBreakIndex, lineBreakLength) = _findLineBreak(aContents);
         newLine += aContents.substring(0, lineBreakIndex);
-        aContents = aContents.substring(lineBreakIndex + 1);
+        aContents = aContents.substring(lineBreakIndex + lineBreakLength);
         quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
       }
 
