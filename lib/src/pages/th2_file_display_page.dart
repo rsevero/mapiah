@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/stores/th_file_display_page_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/th_widgets/th_file_widget.dart';
+import 'package:mapiah/src/widgets/th_file_widget.dart';
 import 'package:provider/provider.dart';
 
 class THFileDisplayPage extends StatelessWidget {

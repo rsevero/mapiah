@@ -1,6 +1,6 @@
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
-import 'package:mapiah/src/th_definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
 
 class THDoublePart {

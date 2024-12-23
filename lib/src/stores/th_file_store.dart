@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/th_definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_store.g.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/th_definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
 import 'package:mapiah/src/th_elements/th_line.dart';

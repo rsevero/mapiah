@@ -1,4 +1,4 @@
-import 'package:mapiah/src/th_definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 
 /// Holds a date time value or interval

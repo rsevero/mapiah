@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/th_definitions/th_paints.dart';
+import 'package:mapiah/src/definitions/th_paints.dart';
 
 sealed class THPaintAction {
   final Paint _paint;

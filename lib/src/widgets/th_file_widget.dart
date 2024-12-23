@@ -9,7 +9,7 @@ import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_elements/th_scrap.dart';
 import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/th_widgets/th_paint_action.dart';
+import 'package:mapiah/src/widgets/th_paint_action.dart';
 
 class THFileWidget extends StatelessWidget {
   final THFile file;

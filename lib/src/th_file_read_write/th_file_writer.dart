@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:charset/charset.dart';
-import 'package:mapiah/src/th_definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_area.dart';
 import 'package:mapiah/src/th_elements/th_area_border_thid.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';

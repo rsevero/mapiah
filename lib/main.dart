@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/pages/home.dart';
 import 'package:mapiah/src/stores/th_file_display_page_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/th_definitions/color_schemes.orange_brown.dart';
+import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
 import 'package:provider/provider.dart';
 
 void main() {
