@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:mapiah/src/th_controllers/th_file_controller.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_endline.dart';
@@ -14,11 +14,11 @@ import 'package:mapiah/src/th_widgets/th_paint_action.dart';
 class THFileWidget extends StatelessWidget {
   final THFile file;
   final List<THPaintAction> _paintActions = [];
-  final THFileController thFileController = Get.put(THFileController());
+  final THFileStore thFileStore;
 
-  THFileWidget(this.file) : super(key: ObjectKey(file)) {
-    thFileController.updateDataBoundingBox(file.boundingBox());
-    thFileController.canvasScaleTranslationUndefined = true;
+  THFileWidget(this.file, this.thFileStore) : super(key: ObjectKey(file)) {
+    thFileStore.updateDataBoundingBox(file.boundingBox());
+    thFileStore.setCanvasScaleTranslationUndefined(true);
     for (final child in file.children) {
       if (child is THScrap) {
         _addScrapPaintActions(child);
@@ -30,18 +30,18 @@ class THFileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        thFileController.updateScreenSize(
+        thFileStore.updateScreenSize(
             Size(constraints.maxWidth, constraints.maxHeight));
 
-        if (thFileController.canvasScaleTranslationUndefined) {
-          thFileController.zoomShowAll();
+        if (thFileStore.canvasScaleTranslationUndefined) {
+          thFileStore.zoomShowAll();
         }
 
         return GestureDetector(
-          onPanUpdate: thFileController.onPanUpdate,
-          child: Obx(
-            () {
-              thFileController.trigger.value;
+          onPanUpdate: thFileStore.onPanUpdate,
+          child: Observer(
+            builder: (context) {
+              thFileStore.trigger;
               return CustomPaint(
                 /// Creating another CustomPaint as child of this CustomPaint
                 /// because CustomPaint creates 3 layers, from bottom to top:
@@ -50,10 +50,10 @@ class THFileWidget extends StatelessWidget {
                 /// I can put grids below it (as the main CustomPaint painter)
                 /// and a scale above it.
                 child: CustomPaint(
-                  painter: THFilePainter(_paintActions),
-                  size: thFileController.screenSize.value,
+                  painter: THFilePainter(_paintActions, thFileStore),
+                  size: thFileStore.screenSize,
                 ),
-                size: thFileController.screenSize.value,
+                size: thFileStore.screenSize,
               );
             },
           ),
@@ -107,16 +107,14 @@ class THFileWidget extends StatelessWidget {
 
 class THFilePainter extends CustomPainter {
   final List<THPaintAction> _paintActions;
+  final THFileStore thFileStore;
 
-  final THFileController thFileController = Get.put(THFileController());
-
-  THFilePainter(List<THPaintAction> aPaintActionsList)
-      : _paintActions = aPaintActionsList;
+  THFilePainter(this._paintActions, this.thFileStore);
 
   @override
   void paint(Canvas canvas, Size size) {
     // Transformations are applied on the order they are defined.
-    canvas.scale(thFileController.canvasScale);
+    canvas.scale(thFileStore.canvasScale);
     // // Drawing canvas border
     // canvas.drawRect(
     //     Rect.fromPoints(
@@ -126,8 +124,8 @@ class THFilePainter extends CustomPainter {
     //           thFileController.canvasSize.height,
     //         )),
     //     THPaints.thPaint7);
-    canvas.translate(thFileController.canvasTranslation.dx,
-        thFileController.canvasTranslation.dy);
+    canvas.translate(
+        thFileStore.canvasTranslation.dx, thFileStore.canvasTranslation.dy);
     canvas.scale(1, -1);
 
     var newPath = Path();
@@ -210,8 +208,8 @@ class THFilePainter extends CustomPainter {
   bool shouldRepaint(covariant oldDelegate) {
     // print(
     //     "shouldRepaint with ${thFileController.shouldRepaint}: ${DateTime.now()}\n");
-    if (thFileController.shouldRepaint) {
-      thFileController.shouldRepaint = false;
+    if (thFileStore.shouldRepaint) {
+      thFileStore.setShouldRepaint(false);
       return true;
     }
     return false;

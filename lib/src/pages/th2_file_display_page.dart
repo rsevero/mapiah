@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:mapiah/src/stores/th_file_display_page_store.dart';
-import 'package:mapiah/src/th_controllers/th_file_controller.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/th_widgets/th_file_widget.dart';
 import 'package:provider/provider.dart';
 
 class THFileDisplayPage extends StatelessWidget {
   final String filename;
   late final THFileDisplayPageStore thFileDisplayPageStore;
-  final THFileController thFileController = Get.put(THFileController());
+  late final THFileStore thFileStore;
 
   THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
+    thFileStore = Provider.of<THFileStore>(context);
     thFileDisplayPageStore = Provider.of<THFileDisplayPageStore>(context);
     thFileDisplayPageStore.loadFile(context, filename);
     return Scaffold(
@@ -40,18 +41,20 @@ class THFileDisplayPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Observer(builder: (context) {
-        if (thFileDisplayPageStore.isLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          return Center(
-            child: Stack(children: [
-              THFileWidget(thFileDisplayPageStore.thFile),
-              _buildFloatingActionButtons(),
-            ]),
-          );
-        }
-      }),
+      body: Observer(
+        builder: (context) {
+          if (thFileDisplayPageStore.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Center(
+              child: Stack(children: [
+                THFileWidget(thFileDisplayPageStore.thFile, thFileStore),
+                _buildFloatingActionButtons(),
+              ]),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -63,15 +66,15 @@ class THFileDisplayPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _zoomButton(Icons.zoom_in, () {
-            thFileController.zoomIn();
+            thFileStore.zoomIn();
           }),
           SizedBox(height: 8.0),
           _zoomButton(Icons.zoom_out_map, () {
-            thFileController.zoomShowAll();
+            thFileStore.zoomShowAll();
           }),
           SizedBox(height: 8.0),
           _zoomButton(Icons.zoom_out, () {
-            thFileController.zoomOut();
+            thFileStore.zoomOut();
           }),
         ],
       ),
