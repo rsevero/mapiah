@@ -1,4 +1,4 @@
-import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
+import 'package:mapiah/src/th_elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/th_elements/parts/th_string_part.dart';
 
 mixin THHasText on THCommandOption {

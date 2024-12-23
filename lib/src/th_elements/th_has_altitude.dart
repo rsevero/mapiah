@@ -1,5 +1,5 @@
-import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
-import 'package:mapiah/src/th_elements/th_command_options/th_has_length.dart';
+import 'package:mapiah/src/th_elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/th_elements/command_options/th_has_length.dart';
 
 // altitude: the value specified is the altitude difference from the nearest station. The
 // value will be set to 0 if defined as ‘-’, ‘.’, ‘nan’, ‘NAN’ or ‘NaN’. If the altitude value is
