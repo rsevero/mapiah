@@ -1,6 +1,6 @@
 // date: -value <date> sets the date for the date point.
 import 'package:mapiah/src/th_elements/th_command_options/th_value_command_option.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_datetime_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 

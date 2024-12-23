@@ -3,7 +3,7 @@ import 'package:mapiah/src/th_elements/th_line.dart';
 import 'package:mapiah/src/th_elements/th_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_double_part.dart';
 
 // orientation/orient <number> . defines the orientation of the symbol. If not speci-
 // fied, it’s oriented to north. 0 ≤ number < 360.

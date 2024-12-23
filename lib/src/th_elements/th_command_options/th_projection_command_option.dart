@@ -1,7 +1,7 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
 import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_angle_unit_part.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_angle_unit_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_double_part.dart';
 
 enum THProjectionTypes {
   elevation,

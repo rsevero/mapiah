@@ -1,7 +1,7 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_has_length.dart';
 import 'package:mapiah/src/th_elements/th_command_options/th_value_command_option.dart';
 import 'package:mapiah/src/th_elements/th_has_altitude.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_double_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_double_part.dart';
 import 'package:mapiah/src/th_elements/th_point.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
 

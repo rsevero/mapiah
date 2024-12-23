@@ -1,5 +1,5 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_cs_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_cs_part.dart';
 
 // cs <coordinate system> . assumes that (calibrated) local scrap coordinates are given
 // in specified coordinate system. It is useful for absolute placing of imported sketches

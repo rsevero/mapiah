@@ -2,7 +2,7 @@ import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_elements/th_has_options.dart';
 import 'package:mapiah/src/th_elements/th_has_platype.dart';
 import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_point_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_point_part.dart';
 
 // Description: Point is a command for drawing a point map symbol.
 // Syntax: point <x> <y> <type> [OPTIONS]

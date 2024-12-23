@@ -1,6 +1,6 @@
 import 'package:mapiah/src/th_elements/th_command_options/th_command_option.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_datetime_part.dart';
-import 'package:mapiah/src/th_elements/th_parts/th_person_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_datetime_part.dart';
+import 'package:mapiah/src/th_elements/parts/th_person_part.dart';
 
 // author <date> <person> . author of the data and its creation date
 class THAuthorCommandOption extends THCommandOption {
