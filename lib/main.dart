@@ -4,11 +4,11 @@ import 'package:mapiah/src/pages/home.dart';
 import 'package:mapiah/src/th_definitions/color_schemes.orange_brown.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MapiahApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MapiahApp extends StatelessWidget {
+  const MapiahApp({super.key});
 
   @override
   Widget build(BuildContext context) {
