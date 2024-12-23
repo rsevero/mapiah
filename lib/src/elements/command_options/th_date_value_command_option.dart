@@ -2,7 +2,7 @@
 import 'package:mapiah/src/elements/command_options/th_value_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THDateValueCommandOption extends THValueCommandOption {
   late THDatetimePart _date;

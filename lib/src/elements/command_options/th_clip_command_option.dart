@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/command_options/th_multiple_choice_command_o
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THClipCommandOption extends THMultipleChoiceCommandOption {
   static final _unsupportedPointTypes = HashSet.from({

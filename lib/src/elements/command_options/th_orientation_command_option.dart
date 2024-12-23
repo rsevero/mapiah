@@ -2,7 +2,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 // orientation/orient <number> . defines the orientation of the symbol. If not speci-

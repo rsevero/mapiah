@@ -2,7 +2,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // dist <distance> . valid for extra points, specifies the distance to the nearest station
 // (or station specified using -from option. If not specified, appropriate value from LRUD

@@ -1,5 +1,5 @@
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // station-names <prefix> <suffix> . adds given prefix/suffix to all survey stations
 // in the current scrap. Saves some typing.

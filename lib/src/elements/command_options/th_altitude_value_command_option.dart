@@ -3,7 +3,7 @@ import 'package:mapiah/src/elements/command_options/th_value_command_option.dart
 import 'package:mapiah/src/elements/th_has_altitude.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // altitude: the value specified is the altitude difference from the nearest station. The
 // value will be set to 0 if defined as ‘-’, ‘.’, ‘nan’, ‘NAN’ or ‘NaN’. If the altitude value is

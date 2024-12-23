@@ -5,8 +5,8 @@ import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_exceptions/th_no_element_by_mapiah_id_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 
 /// Base class for all elements that form a THFile, including THFile itself.
 abstract class THElement {

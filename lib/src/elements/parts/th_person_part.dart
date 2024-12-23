@@ -1,4 +1,4 @@
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THPersonPart {
   late String firstname;

@@ -1,7 +1,7 @@
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // Description: Line is a command for drawing a line symbol on the map. Each line symbol
 // is oriented and its visualization may depend on its orientation (e.g. pitch edge ticks). The

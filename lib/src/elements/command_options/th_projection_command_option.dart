@@ -1,5 +1,5 @@
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
+import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 

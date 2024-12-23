@@ -1,4 +1,4 @@
-import 'package:mapiah/src/th_exceptions/th_convert_from_string_exception.dart';
+import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
 enum THAngleUnit {
   degree,

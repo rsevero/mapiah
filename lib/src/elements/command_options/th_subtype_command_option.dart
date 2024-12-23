@@ -4,7 +4,7 @@ import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // subtype <keyword> . determines the object’s subtype. The following subtypes for
 // given types are supported:

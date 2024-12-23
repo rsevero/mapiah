@@ -1,6 +1,6 @@
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THAreaBorderTHID extends THElement {
   late String id;

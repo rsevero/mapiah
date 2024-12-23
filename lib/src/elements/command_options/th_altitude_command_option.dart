@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // altitude <value> . can be specified only with the wall type. This option creates an
 // altitude label on the wall. All altitudes are exported as a difference against grid Z

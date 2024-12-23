@@ -1,7 +1,7 @@
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/th_exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 // height <value> . height of pit or wall:pit; available in METAPOST as a numeric
 // variable ATTR__height.
