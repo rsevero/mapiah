@@ -16,6 +16,7 @@ dependencies:
   file_picker: ^6.1.1
   flutter:
     sdk: flutter
+  flutter_mobx: ^2.3.0
   get: ^4.6.1
   intl: ^0.18.1
   meta: ^1.9.1

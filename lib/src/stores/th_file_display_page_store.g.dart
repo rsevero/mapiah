@@ -27,6 +27,24 @@ mixin _$THFileDisplayPageStore on THFileDisplayPageStoreBase, Store {
     });
   }
 
+  late final _$_thFileAtom =
+      Atom(name: 'THFileDisplayPageStoreBase._thFile', context: context);
+
+  THFile get thFile {
+    _$_thFileAtom.reportRead();
+    return super._thFile;
+  }
+
+  @override
+  THFile get _thFile => thFile;
+
+  @override
+  set _thFile(THFile value) {
+    _$_thFileAtom.reportWrite(value, super._thFile, () {
+      super._thFile = value;
+    });
+  }
+
   late final _$loadFileAsyncAction =
       AsyncAction('THFileDisplayPageStoreBase.loadFile', context: context);
 

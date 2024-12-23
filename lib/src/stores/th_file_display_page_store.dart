@@ -15,8 +15,10 @@ abstract class THFileDisplayPageStoreBase with Store {
   @readonly
   bool _isLoading = false;
 
-  List<String> errorMessages = <String>[];
+  @readonly
   THFile _thFile = THFile();
+
+  List<String> errorMessages = <String>[];
 
   @action
   Future<void> loadFile(String aFilename) async {

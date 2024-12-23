@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
+import 'package:mapiah/src/stores/th_file_display_page_store.dart';
 import 'package:mapiah/src/th_controllers/th_file_controller.dart';
-import 'package:mapiah/src/th_controllers/th_file_display_page_controller.dart';
 import 'package:mapiah/src/th_widgets/th_file_widget.dart';
+import 'package:provider/provider.dart';
 
 class THFileDisplayPage extends StatelessWidget {
   final String filename;
-  final THFileDisplayPageController thFileDisplayPageController =
-      Get.put(THFileDisplayPageController());
+  late final THFileDisplayPageStore thFileDisplayPageStore;
   final THFileController thFileController = Get.put(THFileController());
 
   THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
-    thFileDisplayPageController.loadFile(filename);
+    thFileDisplayPageStore = Provider.of<THFileDisplayPageStore>(context);
+    thFileDisplayPageStore.loadFile(filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -26,11 +28,11 @@ class THFileDisplayPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save_alt_outlined),
-            onPressed: () => thFileDisplayPageController.saveTH2File(),
+            onPressed: () => thFileDisplayPageStore.saveTH2File(),
           ),
           IconButton(
             icon: Icon(Icons.save_as_outlined),
-            onPressed: () => thFileDisplayPageController.saveAsTH2File(),
+            onPressed: () => thFileDisplayPageStore.saveAsTH2File(),
           ),
           IconButton(
             icon: Icon(Icons.close),
@@ -38,13 +40,13 @@ class THFileDisplayPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Obx(() {
-        if (thFileDisplayPageController.isLoading.value) {
+      body: Observer(builder: (context) {
+        if (thFileDisplayPageStore.isLoading) {
           return Center(child: CircularProgressIndicator());
         } else {
           return Center(
             child: Stack(children: [
-              THFileWidget(thFileDisplayPageController.thFile),
+              THFileWidget(thFileDisplayPageStore.thFile),
               _buildFloatingActionButtons(),
             ]),
           );
