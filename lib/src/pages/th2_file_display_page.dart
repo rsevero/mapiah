@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
 import 'package:mapiah/src/stores/th_file_display_page_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/th_widgets/th_file_widget.dart';
@@ -24,7 +23,7 @@ class THFileDisplayPage extends StatelessWidget {
         elevation: 4,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Get.back(),
+          onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
           IconButton(
@@ -37,7 +36,7 @@ class THFileDisplayPage extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.close),
-            onPressed: () => Get.back(),
+            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),

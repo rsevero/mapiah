@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mapiah/src/pages/home.dart';
 import 'package:mapiah/src/stores/th_file_display_page_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
@@ -24,7 +23,7 @@ class MapiahApp extends StatelessWidget {
           create: (context) => THFileStore(),
         ),
       ],
-      child: GetMaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
         darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),

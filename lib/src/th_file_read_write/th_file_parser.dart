@@ -1330,6 +1330,7 @@ class THFileParser {
     return parsed;
   }
 
+  // ignore: unused_element
   void _injectUnrecognizedCommandOption() {
     throw THCustomException(
         "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${_currentSpec.toString()}'\n\n");

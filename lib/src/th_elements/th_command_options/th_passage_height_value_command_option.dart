@@ -96,8 +96,6 @@ class THPassageHeightValueCommandOption extends THValueCommandOption {
         return _plusNumber!.toString();
       case THPassageHeightModes.distanceToCeilingAndDistanceToFloor:
         return "[ +${_plusNumber!.toString()} ${_minusNumber!.toString()} ]";
-      default:
-        throw THCustomException("Unknown passage-height mode.");
     }
   }
 }

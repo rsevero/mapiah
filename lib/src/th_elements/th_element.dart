@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mapiah/src/th_definitions/th_definitions.dart';
 import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/th_elements/th_has_id.dart';
@@ -64,7 +63,7 @@ abstract class THElement {
 /// Mixin that provides parenting capabilities.
 mixin THParent on THElement {
   // Here are registered all children.
-  final _children = <THElement>[].obs;
+  final _children = <THElement>[];
 
   @override
   void delete() {
