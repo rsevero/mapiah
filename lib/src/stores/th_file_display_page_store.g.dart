@@ -49,8 +49,8 @@ mixin _$THFileDisplayPageStore on THFileDisplayPageStoreBase, Store {
       AsyncAction('THFileDisplayPageStoreBase.loadFile', context: context);
 
   @override
-  Future<void> loadFile(String aFilename) {
-    return _$loadFileAsyncAction.run(() => super.loadFile(aFilename));
+  Future<void> loadFile(BuildContext context, String aFilename) {
+    return _$loadFileAsyncAction.run(() => super.loadFile(context, aFilename));
   }
 
   @override

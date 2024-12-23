@@ -16,7 +16,7 @@ class THFileDisplayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     thFileDisplayPageStore = Provider.of<THFileDisplayPageStore>(context);
-    thFileDisplayPageStore.loadFile(filename);
+    thFileDisplayPageStore.loadFile(context, filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -83,32 +83,6 @@ class THFileDisplayPage extends StatelessWidget {
       mini: true,
       child: Icon(icon),
       onPressed: onPressed,
-    );
-  }
-}
-
-class ErrorDialog extends StatelessWidget {
-  final List<String> errorMessages;
-
-  ErrorDialog({required this.errorMessages});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Parsing errors'),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: errorMessages.map((message) => Text(message)).toList(),
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text('Close'),
-          onPressed: () {
-            Get.back(); // Close the dialog
-          },
-        ),
-      ],
     );
   }
 }

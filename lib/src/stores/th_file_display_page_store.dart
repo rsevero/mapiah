@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/aux/error_dialog.dart';
 import 'package:mapiah/src/th_elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
@@ -21,7 +23,7 @@ abstract class THFileDisplayPageStoreBase with Store {
   List<String> errorMessages = <String>[];
 
   @action
-  Future<void> loadFile(String aFilename) async {
+  Future<void> loadFile(BuildContext context, String aFilename) async {
     final parser = THFileParser();
     _isLoading = true;
     errorMessages.clear();
@@ -33,10 +35,12 @@ abstract class THFileDisplayPageStoreBase with Store {
       _thFile = parsedFile;
     } else {
       errorMessages.addAll(errors);
-      // await Get.dialog(
-      //   ErrorDialog(errorMessages: errorMessages),
-      // );
-      // Get.back(); // Close the file display page
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ErrorDialog(errorMessages: errorMessages);
+        },
+      );
     }
   }
 
