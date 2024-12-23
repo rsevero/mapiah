@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/th_elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/th_elements/th_element.dart';
-import 'package:mapiah/src/th_elements/th_endline.dart';
-import 'package:mapiah/src/th_elements/th_line.dart';
-import 'package:mapiah/src/th_elements/th_line_segment.dart';
-import 'package:mapiah/src/th_elements/th_point.dart';
-import 'package:mapiah/src/th_elements/th_scrap.dart';
-import 'package:mapiah/src/th_elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_endline.dart';
+import 'package:mapiah/src/elements/th_line.dart';
+import 'package:mapiah/src/elements/th_line_segment.dart';
+import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/elements/th_scrap.dart';
+import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/widgets/th_paint_action.dart';
 
 class THFileWidget extends StatelessWidget {

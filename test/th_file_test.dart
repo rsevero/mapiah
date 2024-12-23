@@ -1,12 +1,12 @@
-import 'package:mapiah/src/th_elements/th_multilinecomment.dart';
-import 'package:mapiah/src/th_elements/th_point.dart';
-import 'package:mapiah/src/th_elements/th_scrap.dart';
+import 'package:mapiah/src/elements/th_multilinecomment.dart';
+import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 // import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
-import 'package:mapiah/src/th_elements/th_element.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 
 import 'th_test_aux.dart';
 
