@@ -28,11 +28,11 @@ part 'th_scrap.mapper.dart';
 class THScrap extends THElement
     with THScrapMappable, THHasOptions, THParent
     implements THHasTHID {
-  late String _thID;
+  String _thID;
 
-  THScrap(super.parent, String thID) : super.withParent() {
-    _thID = thID;
-  }
+  THScrap(super.parent, String thID)
+      : _thID = thID,
+        super.withParent();
 
   @override
   String get thID {
