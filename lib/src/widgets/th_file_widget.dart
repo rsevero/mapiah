@@ -131,10 +131,10 @@ class THFilePainter extends CustomPainter {
     var newPath = Path();
     for (final paintAction in _paintActions) {
       switch (paintAction.runtimeType) {
-        case THPointPaintAction:
+        case THPointPaintAction _:
           final pointPaintAction = paintAction as THPointPaintAction;
           canvas.drawCircle(pointPaintAction.center, 5, paintAction.paint);
-        case THBezierCurvePaintAction:
+        case THBezierCurvePaintAction _:
           final bezierCurvePaintAction =
               paintAction as THBezierCurvePaintAction;
           newPath.cubicTo(
@@ -144,17 +144,17 @@ class THFilePainter extends CustomPainter {
               bezierCurvePaintAction.controlPoint2Y,
               bezierCurvePaintAction.endPointX,
               bezierCurvePaintAction.endPointY);
-        case THStraightLinePaintAction:
+        case THStraightLinePaintAction _:
           final straightLinePaintAction =
               paintAction as THStraightLinePaintAction;
           newPath.lineTo(straightLinePaintAction.endPointX,
               straightLinePaintAction.endPointY);
-        case THMoveStartPathPaintAction:
+        case THMoveStartPathPaintAction _:
           final moveStartPathPaintAction =
               paintAction as THMoveStartPathPaintAction;
           newPath = Path()
             ..moveTo(moveStartPathPaintAction.x, moveStartPathPaintAction.y);
-        case THEndPathPaintAction:
+        case THEndPathPaintAction _:
           canvas.drawPath(newPath, paintAction.paint);
       }
     }
