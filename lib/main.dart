@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/pages/home.dart';
+import 'package:mapiah/src/pages/mapiah_home.dart';
 import 'package:mapiah/src/stores/th_file_display_page_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
@@ -28,7 +28,7 @@ class MapiahApp extends StatelessWidget {
         theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
         darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
         title: 'Mapiah',
-        home: Home(),
+        home: MapiahHome(),
       ),
     );
   }

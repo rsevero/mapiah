@@ -5,7 +5,7 @@ import 'package:mapiah/src/pages/th2_file_display_page.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-class Home extends StatelessWidget {
+class MapiahHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
