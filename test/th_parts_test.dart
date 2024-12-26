@@ -25,8 +25,8 @@ void main() {
       test(
           "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
           () {
-        var aTHDoublePart =
-            THDoublePart(success['value'], success['decimalPositions']);
+        var aTHDoublePart = THDoublePart(
+            success['value'] as double, success['decimalPositions'] as int);
         expect(aTHDoublePart.value, success['value']);
         expect(aTHDoublePart.decimalPositions, success['decimalPositions']);
         expect(aTHDoublePart.toString(), success['asString']);

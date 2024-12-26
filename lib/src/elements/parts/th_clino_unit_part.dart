@@ -1,3 +1,8 @@
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'th_clino_unit_part.mapper.dart';
+
+@MappableEnum()
 enum THClinoUnit {
   degree,
   grad,
@@ -6,7 +11,8 @@ enum THClinoUnit {
   percent,
 }
 
-class THClinoUnitPart {
+@MappableClass()
+class THClinoUnitPart with THClinoUnitPartMappable {
   late THClinoUnit unit;
 
   static const stringToUnit = {

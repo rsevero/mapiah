@@ -1,6 +1,10 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 
-class THStringPart {
+part 'th_string_part.mapper.dart';
+
+@MappableClass()
+class THStringPart with THStringPartMappable {
   String content;
 
   THStringPart([this.content = '']);

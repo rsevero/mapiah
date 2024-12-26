@@ -1,6 +1,10 @@
+import "package:dart_mappable/dart_mappable.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
-class THComment extends THElement {
+part 'th_comment.mapper.dart';
+
+@MappableClass()
+class THComment extends THElement with THCommentMappable {
   String content;
 
   THComment(super.parent, this.content) : super.withParent();

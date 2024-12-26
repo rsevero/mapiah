@@ -1,25 +1,25 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+
+part 'th_datetime_part.mapper.dart';
 
 /// Holds a date time value or interval
 /// date . a date (or a time interval) specification in the format
 /// YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]
 /// or ‘-’ to leave a date unspecified.
-class THDatetimePart {
+@MappableClass()
+class THDatetimePart with THDatetimePartMappable {
   late String _datetime;
   late bool _isRange;
   late bool _isEmpty;
 
-  THDatetimePart(String aDatetime) {
-    datetime = aDatetime;
+  THDatetimePart(String datetime) {
+    _datetime = datetime;
   }
 
-  bool get isRange {
-    return _isRange;
-  }
-
-  bool get isEmpty {
-    return _isEmpty;
+  String get datetime {
+    return _datetime;
   }
 
   set datetime(String aDate) {
@@ -28,7 +28,7 @@ class THDatetimePart {
     _isRange = false;
     if (aDate == '-') {
       _isEmpty = true;
-      _datetime = '-';
+      datetime = '-';
       return;
     } else {
       _isEmpty = false;
@@ -60,6 +60,14 @@ class THDatetimePart {
     }
 
     _datetime = newDatetime;
+  }
+
+  bool get isRange {
+    return _isRange;
+  }
+
+  bool get isEmpty {
+    return _isEmpty;
   }
 
   @override

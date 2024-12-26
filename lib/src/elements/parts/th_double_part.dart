@@ -1,18 +1,36 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
-class THDoublePart {
+part 'th_double_part.mapper.dart';
+
+@MappableClass()
+class THDoublePart with THDoublePartMappable {
   late double value;
   late int _decimalPositions;
 
-  THDoublePart(aValue, aDecimalPositions) : value = aValue {
-    decimalPositions = aDecimalPositions;
+  THDoublePart(this.value, int decimalPositions) {
+    this.decimalPositions = decimalPositions;
   }
 
   THDoublePart.fromString(String aValueString) {
     fromString(aValueString);
+  }
+
+  set decimalPositions(int aDecimalPositions) {
+    if (aDecimalPositions < 0) {
+      aDecimalPositions = 0;
+    } else if (aDecimalPositions > 20) {
+      aDecimalPositions = 20;
+    }
+
+    _decimalPositions = aDecimalPositions;
+  }
+
+  int get decimalPositions {
+    return _decimalPositions;
   }
 
   void fromString(String aValueString) {
@@ -32,20 +50,6 @@ class THDoublePart {
   void fromValue(double aValue, int aDecimalPositions) {
     value = aValue;
     decimalPositions = aDecimalPositions;
-  }
-
-  set decimalPositions(int aDecimalPositions) {
-    if (aDecimalPositions < 0) {
-      aDecimalPositions = 0;
-    } else if (aDecimalPositions > 20) {
-      aDecimalPositions = 20;
-    }
-
-    _decimalPositions = aDecimalPositions;
-  }
-
-  int get decimalPositions {
-    return _decimalPositions;
   }
 
   @override

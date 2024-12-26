@@ -1,5 +1,9 @@
+import "package:dart_mappable/dart_mappable.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
-class THEndscrap extends THElement {
+part 'th_endscrap.mapper.dart';
+
+@MappableClass()
+class THEndscrap extends THElement with THEndscrapMappable {
   THEndscrap(super.parent) : super.withParent();
 }

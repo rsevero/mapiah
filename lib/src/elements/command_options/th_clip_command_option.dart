@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/command_options/th_multiple_choice_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -7,7 +8,11 @@ import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-class THClipCommandOption extends THMultipleChoiceCommandOption {
+part 'th_clip_command_option.mapper.dart';
+
+@MappableClass()
+class THClipCommandOption extends THMultipleChoiceCommandOption
+    with THClipCommandOptionMappable {
   static final _unsupportedPointTypes = HashSet.from({
     'altitude',
     'date',
@@ -19,14 +24,22 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
     'station',
   });
 
-  THClipCommandOption(THHasOptions aOptionParent, String aChoice)
-      : super(aOptionParent, 'clip', aChoice) {
+  THClipCommandOption(super.optionParent, super.optionType, super.choice) {
+    _checkParentType();
+  }
+
+  THClipCommandOption.fromChoice(THHasOptions optionParent, String choice)
+      : super(optionParent, 'clip', choice) {
+    _checkParentType();
+  }
+
+  void _checkParentType() {
     /// The -clip option is supported only for some point types.
     if (optionParent is THPoint) {
-      final parentAsPoint = optionParent as THPoint;
-      if (_unsupportedPointTypes.contains(parentAsPoint.plaType)) {
+      final parentPoint = optionParent as THPoint;
+      if (_unsupportedPointTypes.contains(parentPoint.plaType)) {
         throw THCustomException(
-            "Unsupported point type '${parentAsPoint.plaType}' 'clip' option.");
+            "Unsupported point type '${parentPoint.plaType}' 'clip' option.");
       }
 
       /// But it is supported for all line and area types.

@@ -1,5 +1,9 @@
+import "package:dart_mappable/dart_mappable.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
-class THEmptyLine extends THElement {
+part 'th_empty_line.mapper.dart';
+
+@MappableClass()
+class THEmptyLine extends THElement with THEmptyLineMappable {
   THEmptyLine(super.parent) : super.withParent();
 }

@@ -1,3 +1,4 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -8,8 +9,11 @@ import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 
+part 'th_element.mapper.dart';
+
 /// Base class for all elements that form a THFile, including THFile itself.
-abstract class THElement {
+@MappableClass()
+abstract class THElement with THElementMappable {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
   late final int _mapiahID;
@@ -101,14 +105,18 @@ mixin THParent on THElement {
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile extends THElement with THParent {
+@MappableClass()
+class THFile extends THElement with THFileMappable, THParent {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
+  ///
+  /// Not to be confused with the thID, which is the ID used by Therion, the
+  /// ones mentioned in Therion Book.
   final Map<int, THElement> _elementByMapiahID = {};
   var filename = 'unnamed file';
 
   var encoding = thDefaultEncoding;
-  var _nexMapiahID = 1;
+  var _nextMapiahID = 1;
 
   late double _minX;
   late double _minY;
@@ -120,6 +128,9 @@ class THFile extends THElement with THParent {
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
   /// doesn´t deals with surveys yet, it will guarantee that thIDs are unique
   /// inside a THFile for now.
+  ///
+  /// Not to be confused with Mapiah IDs, which are internal and unique only
+  /// during a run.
   final Map<String, THElement> _elementByTHID = {};
   final Map<THElement, String> _thIDByElement = {};
 
@@ -218,14 +229,18 @@ class THFile extends THElement with THParent {
     return Rect.fromLTRB(_minX, _minY, _maxX, _maxY);
   }
 
+  /// Updates the thID of a given element of the THFile.
+  /// @param aElement The element to have its thID updated.
+  /// @param newTHID The new thID to be set.
+  /// @throws THCustomException If the element has no registered thID.
   void updateTHID(THElement aElement, String newTHID) {
-    final aElementType = aElement.elementType;
+    final String aElementType = aElement.elementType;
 
     if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' had no registered thID.");
     }
-    final oldTHID = _thIDByElement[aElement];
+    final String oldTHID = _thIDByElement[aElement]!;
 
     if (_elementByTHID.containsKey(newTHID)) {
       throw THCustomException(
@@ -267,9 +282,9 @@ class THFile extends THElement with THParent {
   }
 
   void _addElementToFile(THElement aElement) {
-    aElement._mapiahID = _nexMapiahID;
-    _elementByMapiahID[_nexMapiahID] = aElement;
-    _nexMapiahID++;
+    aElement._mapiahID = _nextMapiahID;
+    _elementByMapiahID[_nextMapiahID] = aElement;
+    _nextMapiahID++;
     if (aElement is THHasTHID) {
       addElementWithTHID(aElement, (aElement as THHasTHID).thID);
     }

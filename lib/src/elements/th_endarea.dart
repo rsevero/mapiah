@@ -1,5 +1,9 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
-class THEndarea extends THElement {
+part 'th_endarea.mapper.dart';
+
+@MappableClass()
+class THEndarea extends THElement with THEndareaMappable {
   THEndarea(super.parent) : super.withParent();
 }

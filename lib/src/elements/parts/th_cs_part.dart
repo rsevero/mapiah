@@ -1,10 +1,19 @@
 import 'dart:collection';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-class THCSPart {
+part 'th_cs_part.mapper.dart';
+
+@MappableClass()
+class THCSPart with THCSPartMappable {
   late String _name;
-  late bool forOutputOnly;
+  late final bool _forOutputOnly;
+
+  THCSPart(String name, bool forOutputOnly) {
+    this.name = name;
+    _forOutputOnly = forOutputOnly;
+  }
 
   static final _csList =
       HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
@@ -19,10 +28,6 @@ class THCSPart {
     RegExp(r'^(ETRS(2[89]|3[0-7])?)$'),
     RegExp(r'^(OSGB:[HNOST][A-HJ-Z])$'),
   ];
-
-  THCSPart(String aCS, this.forOutputOnly) {
-    name = aCS;
-  }
 
   static bool isCS(String aCS, bool forOutput) {
     if (forOutput && _csNotForOutput.contains(aCS)) {
@@ -42,9 +47,14 @@ class THCSPart {
     return false;
   }
 
+  @override
+  String toString() {
+    return _name;
+  }
+
   set name(String aCS) {
-    if (!THCSPart.isCS(aCS, forOutputOnly)) {
-      var message = forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
+    if (!THCSPart.isCS(aCS, _forOutputOnly)) {
+      var message = _forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
       message = "Unsupported THCSPart '$aCS' in '$message' mode.";
       throw THCustomException(message);
     }
@@ -56,8 +66,7 @@ class THCSPart {
     return _name;
   }
 
-  @override
-  String toString() {
-    return name;
+  bool get forOutputOnly {
+    return _forOutputOnly;
   }
 }

@@ -1,11 +1,16 @@
 import 'dart:collection';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-class THMultipleChoiceCommandOption extends THCommandOption {
+part 'th_multiple_choice_command_option.mapper.dart';
+
+@MappableClass()
+class THMultipleChoiceCommandOption extends THCommandOption
+    with THMultipleChoiceCommandOptionMappable {
   late final String _optionType;
   late String _choice;
   static final _supportedOptions = {
@@ -386,15 +391,13 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   ///    because of the call to 'addUpdateOption' inside THCommandOption
   ///    constructor.
   THMultipleChoiceCommandOption(
-      THHasOptions aOptionParent, String aOptionType, String aChoice)
-      : _optionType = aOptionType,
-        super(aOptionParent) {
-    if (!hasOptionType(aOptionParent, aOptionType)) {
+      super.optionParent, String optionType, String choice) {
+    if (!hasOptionType(optionParent, optionType)) {
       throw THCustomException(
           "Unsupported option type '$optionType' for a '${optionParent.elementType}'");
     }
-
-    choice = aChoice;
+    _optionType = optionType;
+    this.choice = choice;
   }
 
   set choice(String aChoice) {
@@ -408,9 +411,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     _choice = aChoice;
   }
 
-  String get choice {
-    return _choice;
-  }
+  String get choice => _choice;
 
   bool hasDefaultChoice() {
     return (_supportedOptions[optionParent.elementType]![optionType]![
@@ -473,9 +474,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   @override
-  String get optionType {
-    return _optionType;
-  }
+  String get optionType => _optionType;
 
   @override
   String specToFile() {

@@ -1,8 +1,12 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-class THAreaBorderTHID extends THElement {
+part 'th_area_border_thid.mapper.dart';
+
+@MappableClass()
+class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
   late String id;
 
   THAreaBorderTHID(THParent parent, this.id) : super.withParent(parent) {

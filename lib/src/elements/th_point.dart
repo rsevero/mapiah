@@ -1,8 +1,11 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/elements/parts/th_point_part.dart';
+
+part 'th_point.mapper.dart';
 
 // Description: Point is a command for drawing a point map symbol.
 // Syntax: point <x> <y> <type> [OPTIONS]
@@ -32,7 +35,10 @@ import 'package:mapiah/src/elements/parts/th_point_part.dart';
 // ice-pillar, ice-stalactite, ice-stalagmite, map-connection18 , paleo-material,
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
-class THPoint extends THElement with THHasOptions implements THHasPLAType {
+@MappableClass()
+class THPoint extends THElement
+    with THPointMappable, THHasOptions
+    implements THHasPLAType {
   late THPointPart point;
   late String _pointType;
 
@@ -155,23 +161,22 @@ class THPoint extends THElement with THHasOptions implements THHasPLAType {
     'wheelchair',
   };
 
-  THPoint(super.parent, this.point, String aPointType) : super.withParent() {
-    plaType = aPointType;
+  THPoint(super.parent, this.point, String pointType) : super.withParent() {
+    plaType = pointType;
   }
 
   THPoint.fromString(
-      super.parent, List<dynamic> aPointDataList, String aPointType)
+      super.parent, List<dynamic> aPointDataList, String pointType)
       : super.withParent() {
     point = THPointPart.fromStringList(aPointDataList);
-    plaType = aPointType;
+    plaType = pointType;
   }
 
   static bool hasPointType(String aPointType) {
     return _pointTypes.contains(aPointType);
   }
 
-  @override
-  set plaType(String aPointType) {
+  set pointType(String aPointType) {
     if (!hasPointType(aPointType)) {
       throw THCustomException("Unrecognized THPoint type '$aPointType'.");
     }
@@ -179,9 +184,18 @@ class THPoint extends THElement with THHasOptions implements THHasPLAType {
     _pointType = aPointType;
   }
 
+  String get pointType {
+    return _pointType;
+  }
+
+  @override
+  set plaType(String aPointType) {
+    pointType = aPointType;
+  }
+
   @override
   String get plaType {
-    return _pointType;
+    return pointType;
   }
 
   double get x {

@@ -1,5 +1,9 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
+part 'th_angle_unit_part.mapper.dart';
+
+@MappableEnum()
 enum THAngleUnit {
   degree,
   grad,
@@ -7,7 +11,8 @@ enum THAngleUnit {
   minute,
 }
 
-class THAngleUnitPart {
+@MappableClass()
+class THAngleUnitPart with THAngleUnitPartMappable {
   late THAngleUnit unit;
 
   static const stringToUnit = {

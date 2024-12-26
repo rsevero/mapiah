@@ -847,7 +847,7 @@ class THFileParser {
           "One string parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THClipCommandOption(_currentHasOptions, _currentSpec[0]);
+    THClipCommandOption.fromChoice(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectDistCommandOption() {
@@ -1103,7 +1103,7 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THCSCommandOption');
     }
 
-    THCSCommandOption(_currentHasOptions, _currentSpec[0], false);
+    THCSCommandOption.fromString(_currentHasOptions, _currentSpec[0], false);
   }
 
   void _injectTitleCommandOption() {

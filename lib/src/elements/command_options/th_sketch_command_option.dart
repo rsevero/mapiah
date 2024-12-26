@@ -1,15 +1,21 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
+import 'package:mapiah/src/elements/th_has_options.dart';
+
+part 'th_sketch_command_option.mapper.dart';
 
 // sketch <filename> <x> <y> . underlying sketch bitmap specification (lower left cor-
 // ner coordinates).
-class THSketchCommandOption extends THCommandOption {
+@MappableClass()
+class THSketchCommandOption extends THCommandOption
+    with THSketchCommandOptionMappable {
   late THStringPart _filename;
   late THPointPart point;
 
-  THSketchCommandOption(super.parent, String aFilename, this.point) {
-    _filename = THStringPart(aFilename);
+  THSketchCommandOption(super.parent, String filename, this.point) {
+    _filename = THStringPart(filename);
   }
 
   THSketchCommandOption.fromString(

@@ -1,8 +1,12 @@
 import 'dart:collection';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-class THMultipleChoicePart {
+part 'th_multiple_choice_part.mapper.dart';
+
+@MappableClass()
+class THMultipleChoicePart with THMultipleChoicePartMappable {
   late String _choice;
   late String _multipleChoiceName;
 
@@ -21,14 +25,14 @@ class THMultipleChoicePart {
     },
   };
 
-  THMultipleChoicePart(String aMultipleChoiceName, String aChoice) {
-    if (!_choices.containsKey(aMultipleChoiceName)) {
+  THMultipleChoicePart(String multipleChoiceName, String choice) {
+    if (!_choices.containsKey(multipleChoiceName)) {
       throw THCustomException(
-          "Unknown multiple choice part '$aMultipleChoiceName'.");
+          "Unknown multiple choice part '$multipleChoiceName'.");
     }
 
-    _multipleChoiceName = aMultipleChoiceName;
-    choice = aChoice;
+    _multipleChoiceName = multipleChoiceName;
+    this.choice = choice;
   }
 
   String _mainChoice(String aChoice) {
@@ -65,5 +69,9 @@ class THMultipleChoicePart {
   @override
   String toString() {
     return _choice;
+  }
+
+  String get multipleChoiceName {
+    return _multipleChoiceName;
   }
 }

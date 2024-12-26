@@ -1,10 +1,14 @@
 import 'dart:collection';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+
+part 'th_subtype_command_option.mapper.dart';
 
 // subtype <keyword> . determines the object’s subtype. The following subtypes for
 // given types are supported:
@@ -15,7 +19,9 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 // separator.22
 // Any subtype specification can be used with user defined type (u). In this case you need
 // also to define corresponding metapost symbol (see the chapter New map symbols).
-class THSubtypeCommandOption extends THCommandOption {
+@MappableClass()
+class THSubtypeCommandOption extends THCommandOption
+    with THSubtypeCommandOptionMappable {
   late String _subtype;
 
   static final _allowedSubtypes = {
@@ -94,8 +100,8 @@ class THSubtypeCommandOption extends THCommandOption {
     },
   };
 
-  THSubtypeCommandOption(super.optionParent, String aSubtype) {
-    subtype = aSubtype;
+  THSubtypeCommandOption(super.optionParent, String subtype) {
+    this.subtype = subtype;
   }
 
   set subtype(String aSubtype) {

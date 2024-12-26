@@ -1,9 +1,15 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/parts/th_person_part.dart';
+import 'package:mapiah/src/elements/th_has_options.dart';
+
+part 'th_author_command_option.mapper.dart';
 
 // author <date> <person> . author of the data and its creation date
-class THAuthorCommandOption extends THCommandOption {
+@MappableClass()
+class THAuthorCommandOption extends THCommandOption
+    with THAuthorCommandOptionMappable {
   late THDatetimePart datetime;
   late THPersonPart person;
 

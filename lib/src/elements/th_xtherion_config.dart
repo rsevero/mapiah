@@ -1,6 +1,10 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
-class THXTherionConfig extends THElement {
+part 'th_xtherion_config.mapper.dart';
+
+@MappableClass()
+class THXTherionConfig extends THElement with THXTherionConfigMappable {
   String name;
   String value;
 

@@ -1,5 +1,9 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
+part 'th_length_unit_part.mapper.dart';
+
+@MappableEnum()
 enum THLengthUnit {
   centimeter,
   feet,
@@ -8,7 +12,8 @@ enum THLengthUnit {
   yard,
 }
 
-class THLengthUnitPart {
+@MappableClass()
+class THLengthUnitPart with THLengthUnitPartMappable {
   late THLengthUnit unit;
 
   static const stringToUnit = {

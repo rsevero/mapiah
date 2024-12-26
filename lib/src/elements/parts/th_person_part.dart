@@ -1,6 +1,10 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-class THPersonPart {
+part 'th_person_part.mapper.dart';
+
+@MappableClass()
+class THPersonPart with THPersonPartMappable {
   late String firstname;
   late String surname;
 

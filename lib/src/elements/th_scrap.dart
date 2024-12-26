@@ -1,6 +1,9 @@
+import "package:dart_mappable/dart_mappable.dart";
 import "package:mapiah/src/elements/th_element.dart";
 import "package:mapiah/src/elements/th_has_id.dart";
 import "package:mapiah/src/elements/th_has_options.dart";
+
+part 'th_scrap.mapper.dart';
 
 // Description: Scrap is a piece of 2D map, which doesn’t contain overlapping passages
 // (i.e. all the passages may be drawn on the paper without overlapping). For small and
@@ -21,11 +24,15 @@ import "package:mapiah/src/elements/th_has_options.dart";
 // which are specified both in the scrap as point map symbols and in centreline data. If the
 // scrap doesn’t contain at least two survey stations with the -name reference, you have to
 // use the -scale option for calibrating the scrap. (This is usual for cross sections.)
+@MappableClass()
 class THScrap extends THElement
-    with THHasOptions, THParent
+    with THScrapMappable, THHasOptions, THParent
     implements THHasTHID {
-  String _thID;
-  THScrap(super.parent, this._thID) : super.withParent();
+  late String _thID;
+
+  THScrap(super.parent, String thID) : super.withParent() {
+    _thID = thID;
+  }
 
   @override
   String get thID {

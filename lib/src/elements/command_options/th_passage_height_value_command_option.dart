@@ -1,8 +1,13 @@
-import 'package:mapiah/src/elements/command_options/th_value_command_option.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
+part 'th_passage_height_value_command_option.mapper.dart';
+
+@MappableEnum()
 enum THPassageHeightModes {
   height,
   depth,
@@ -14,20 +19,40 @@ enum THPassageHeightModes {
 // of the ceiling), -<number> (the depth of the floor or water depth), <number> (the dis-
 // tance between floor and ceiling) and [+<number> -<number>] (the distance to ceiling
 // and distance to floor).
-class THPassageHeightValueCommandOption extends THValueCommandOption {
+@MappableClass()
+class THPassageHeightValueCommandOption extends THCommandOption
+    with THPassageHeightValueCommandOptionMappable {
   late THDoublePart? _plusNumber;
   late THDoublePart? _minusNumber;
   late THPassageHeightModes _mode;
   late bool _plusHasSign;
 
+  THPassageHeightValueCommandOption(
+      super.optionParent,
+      THDoublePart? plusNumber,
+      THDoublePart? minusNumber,
+      THPassageHeightModes mode,
+      bool plusHasSign) {
+    _checkOptionParent();
+
+    _plusNumber = plusNumber;
+    _minusNumber = minusNumber;
+    _mode = mode;
+    _plusHasSign = plusHasSign;
+  }
+
   THPassageHeightValueCommandOption.fromString(
-      super.optionParent, String aPlusNumber, String aMinusNumber) {
+      super.optionParent, String plusNumber, String minusNumber) {
+    _checkOptionParent();
+    plusAndMinusNumbersFromString(plusNumber, minusNumber);
+  }
+
+  void _checkOptionParent() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'passage-height')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'passage-height'.");
     }
-    plusAndMinusNumbersFromString(aPlusNumber, aMinusNumber);
   }
 
   void _setMode() {
@@ -98,4 +123,15 @@ class THPassageHeightValueCommandOption extends THValueCommandOption {
         return "[ +${_plusNumber!.toString()} ${_minusNumber!.toString()} ]";
     }
   }
+
+  @override
+  String get optionType => 'value';
+
+  THDoublePart? get plusNumber => _plusNumber;
+
+  THDoublePart? get minusNumber => _minusNumber;
+
+  THPassageHeightModes get mode => _mode;
+
+  bool get plusHasSign => _plusHasSign;
 }

@@ -1,22 +1,22 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_point_part.dart';
 
+part 'th_bezier_curve_line_segment.mapper.dart';
+
 // [[LINE DATA] specify the coordinates of a Bézier curve arc:
 // <c1x> <c1y> <c2x> <c2y> <x> <y>, where c indicates the control point.
+@MappableClass()
 class THBezierCurveLineSegment extends THElement
-    with THHasOptions, THLineSegment
-    implements THHasPLAType {
+    with THBezierCurveLineSegmentMappable, THHasOptions, THLineSegment {
   late THPointPart controlPoint1;
   late THPointPart controlPoint2;
 
   THBezierCurveLineSegment(super.parent, this.controlPoint1, this.controlPoint2,
-      THPointPart aEndPoint)
-      : super.withParent() {
-    endPoint = aEndPoint;
-  }
+      THPointPart endPoint)
+      : super.withParent();
 
   THBezierCurveLineSegment.fromString(
       super.parent,

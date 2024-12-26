@@ -1,44 +1,50 @@
-import 'package:mapiah/src/elements/command_options/th_value_command_option.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
+part 'th_dimensions_value_command_option.mapper.dart';
+
 // dimensions: -value [<above> <below> [<units>]] specifies passage dimensions a-
 // bove/below centerline plane used in 3D model.
-class THDimensionsValueCommandOption extends THValueCommandOption {
+@MappableClass()
+class THDimensionsValueCommandOption extends THCommandOption
+    with THDimensionsValueCommandOptionMappable {
   late THDoublePart _above;
   late THDoublePart _below;
-  final _unit = THLengthUnitPart.fromString('m');
+  final THLengthUnitPart _unit = THLengthUnitPart.fromString('m');
   bool unitSet = false;
 
   THDimensionsValueCommandOption(
-      super.optionParent, THDoublePart aAbove, THDoublePart aBelow,
-      [String? aUnit]) {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'dimensions')) {
-      throw THCustomException(
-          "'$optionType' command option only supported on points of type 'dimensions'.");
-    }
-    _above = aAbove;
-    _below = aBelow;
-    if ((aUnit != null) && (aUnit.isNotEmpty)) {
-      unitFromString(aUnit);
+      super.optionParent, THDoublePart above, THDoublePart below,
+      [String? unit]) {
+    _checkOptionParent();
+    _above = above;
+    _below = below;
+    if ((unit != null) && (unit.isNotEmpty)) {
+      unitFromString(unit);
     }
   }
 
   THDimensionsValueCommandOption.fromString(
       super.optionParent, String aAbove, String aBelow,
       [String? aUnit]) {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'dimensions')) {
-      throw THCustomException(
-          "'$optionType' command option only supported on points of type 'dimensions'.");
-    }
+    _checkOptionParent();
     aboveFromString = aAbove;
     belowFromString = aBelow;
     if ((aUnit != null) && (aUnit.isNotEmpty)) {
       unitFromString(aUnit);
+    }
+  }
+
+  void _checkOptionParent() {
+    if ((optionParent is! THPoint) ||
+        ((optionParent as THPoint).plaType != 'dimensions')) {
+      throw THCustomException(
+          "'$optionType' command option only supported on points of type 'dimensions'.");
     }
   }
 
@@ -67,4 +73,13 @@ class THDimensionsValueCommandOption extends THValueCommandOption {
 
     return asString;
   }
+
+  @override
+  String get optionType => 'value';
+
+  THDoublePart get above => _above;
+
+  THDoublePart get below => _below;
+
+  String get unit => _unit.toString();
 }

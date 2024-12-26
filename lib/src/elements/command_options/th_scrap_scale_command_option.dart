@@ -1,7 +1,11 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+
+part 'th_scrap_scale_command_option.mapper.dart';
 
 // scale <specification> . is used to pre-scale (convert coordinates from pixels to
 // meters) the scrap data. If scrap projection is none, this is the only transformation that
@@ -14,12 +18,16 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // you specify, in order, the x and y coordinates of two points in the scrap and two points
 // in reality. Optionally, you can also specify units for the coordinates of the ‘points in
 // reality’. This form allows you to apply both scaling and rotation to the scrap.
-class THScrapScaleCommandOption extends THCommandOption {
+@MappableClass()
+class THScrapScaleCommandOption extends THCommandOption
+    with THScrapScaleCommandOptionMappable {
   List<THDoublePart> _numericSpecifications;
   THLengthUnitPart? unit;
 
-  THScrapScaleCommandOption(super.parent, this._numericSpecifications,
-      [this.unit]);
+  THScrapScaleCommandOption(
+      super.parent, List<THDoublePart> numericSpecifications,
+      [this.unit])
+      : _numericSpecifications = numericSpecifications;
 
   @override
   String get optionType {
