@@ -113,10 +113,10 @@ class THFile extends THElement with THFileMappable, THParent {
   /// Not to be confused with the thID, which is the ID used by Therion, the
   /// ones mentioned in Therion Book.
   final Map<int, THElement> _elementByMapiahID = {};
-  var filename = 'unnamed file';
+  String filename = 'unnamed file';
 
-  var encoding = thDefaultEncoding;
-  var _nextMapiahID = 1;
+  String encoding = thDefaultEncoding;
+  int _nextMapiahID = 1;
 
   late double _minX;
   late double _minY;
@@ -149,7 +149,7 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   void deleteElementTHIDByElement(THElement aElement) {
-    final aElementType = aElement.elementType;
+    final String aElementType = aElement.elementType;
 
     if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
@@ -174,7 +174,7 @@ class THFile extends THElement with THFileMappable, THParent {
           "thID '$aTHID' is not registered for type '$aElementType'.");
     }
 
-    final aElement = _elementByTHID[aTHID];
+    final THElement aElement = _elementByTHID[aTHID]!;
 
     if (!_thIDByElement.containsKey(aElement)) {
       throw THCustomException(
