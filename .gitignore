@@ -7,8 +7,8 @@
 pubspec.lock
 
 therion.log
-aux/line_options_testing/.xtherion.dat
-aux/line_options_testing/line_options_testing.pdf
+auxiliary/line_options_testing/.xtherion.dat
+auxiliary/line_options_testing/line_options_testing.pdf
 
 # Generated files
 .flutter-plugins
