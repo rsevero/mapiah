@@ -8,7 +8,8 @@ const thDebugPath =
 const thCommentChar = '#';
 const thDecimalSeparator = '.';
 const thBackslash = '\\';
-const thLineBreak = '\n';
+const thUnixLineBreak = '\n';
+const thWindowsLineBreak = '\r\n';
 const thDoubleQuote = '"';
 const thDoubleQuotePair = r'""';
 

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/aux/error_dialog.dart';
+import 'package:mapiah/src/auxiliary/error_dialog.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
