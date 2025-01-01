@@ -23,6 +23,9 @@ class THEndlineMapper extends ClassMapperBase<THEndline> {
 
   static THParent _$parent(THEndline v) => v.parent;
   static const Field<THEndline, THParent> _f$parent = Field('parent', _$parent);
+  static int _$parentMapiahID(THEndline v) => v.parentMapiahID;
+  static const Field<THEndline, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THEndline v) => v.sameLineComment;
   static const Field<THEndline, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -30,6 +33,7 @@ class THEndlineMapper extends ClassMapperBase<THEndline> {
   @override
   final MappableFields<THEndline> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

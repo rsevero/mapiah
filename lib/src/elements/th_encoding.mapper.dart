@@ -24,6 +24,9 @@ class THEncodingMapper extends ClassMapperBase<THEncoding> {
   static THParent _$parent(THEncoding v) => v.parent;
   static const Field<THEncoding, THParent> _f$parent =
       Field('parent', _$parent);
+  static int _$parentMapiahID(THEncoding v) => v.parentMapiahID;
+  static const Field<THEncoding, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THEncoding v) => v.sameLineComment;
   static const Field<THEncoding, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -31,6 +34,7 @@ class THEncodingMapper extends ClassMapperBase<THEncoding> {
   @override
   final MappableFields<THEncoding> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

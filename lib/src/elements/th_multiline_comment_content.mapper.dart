@@ -29,6 +29,9 @@ class THMultilineCommentContentMapper
   static String _$content(THMultilineCommentContent v) => v.content;
   static const Field<THMultilineCommentContent, String> _f$content =
       Field('content', _$content);
+  static int _$parentMapiahID(THMultilineCommentContent v) => v.parentMapiahID;
+  static const Field<THMultilineCommentContent, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THMultilineCommentContent v) =>
       v.sameLineComment;
   static const Field<THMultilineCommentContent, String> _f$sameLineComment =
@@ -38,6 +41,7 @@ class THMultilineCommentContentMapper
   final MappableFields<THMultilineCommentContent> fields = const {
     #parent: _f$parent,
     #content: _f$content,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

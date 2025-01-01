@@ -26,6 +26,9 @@ class THAreaMapper extends ClassMapperBase<THArea> {
   static String _$_areaType(THArea v) => v._areaType;
   static const Field<THArea, String> _f$_areaType =
       Field('_areaType', _$_areaType, key: 'areaType');
+  static int _$parentMapiahID(THArea v) => v.parentMapiahID;
+  static const Field<THArea, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THArea v) => v.sameLineComment;
   static const Field<THArea, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -34,6 +37,7 @@ class THAreaMapper extends ClassMapperBase<THArea> {
   final MappableFields<THArea> fields = const {
     #parent: _f$parent,
     #_areaType: _f$_areaType,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

@@ -24,6 +24,9 @@ class THMultiLineCommentMapper extends ClassMapperBase<THMultiLineComment> {
   static THParent _$parent(THMultiLineComment v) => v.parent;
   static const Field<THMultiLineComment, THParent> _f$parent =
       Field('parent', _$parent);
+  static int _$parentMapiahID(THMultiLineComment v) => v.parentMapiahID;
+  static const Field<THMultiLineComment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THMultiLineComment v) => v.sameLineComment;
   static const Field<THMultiLineComment, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -31,6 +34,7 @@ class THMultiLineCommentMapper extends ClassMapperBase<THMultiLineComment> {
   @override
   final MappableFields<THMultiLineComment> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

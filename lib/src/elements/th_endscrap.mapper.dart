@@ -24,6 +24,9 @@ class THEndscrapMapper extends ClassMapperBase<THEndscrap> {
   static THParent _$parent(THEndscrap v) => v.parent;
   static const Field<THEndscrap, THParent> _f$parent =
       Field('parent', _$parent);
+  static int _$parentMapiahID(THEndscrap v) => v.parentMapiahID;
+  static const Field<THEndscrap, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THEndscrap v) => v.sameLineComment;
   static const Field<THEndscrap, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -31,6 +34,7 @@ class THEndscrapMapper extends ClassMapperBase<THEndscrap> {
   @override
   final MappableFields<THEndscrap> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

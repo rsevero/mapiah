@@ -29,6 +29,9 @@ class THXTherionConfigMapper extends ClassMapperBase<THXTherionConfig> {
   static String _$value(THXTherionConfig v) => v.value;
   static const Field<THXTherionConfig, String> _f$value =
       Field('value', _$value);
+  static int _$parentMapiahID(THXTherionConfig v) => v.parentMapiahID;
+  static const Field<THXTherionConfig, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THXTherionConfig v) => v.sameLineComment;
   static const Field<THXTherionConfig, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -38,6 +41,7 @@ class THXTherionConfigMapper extends ClassMapperBase<THXTherionConfig> {
     #parent: _f$parent,
     #name: _f$name,
     #value: _f$value,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

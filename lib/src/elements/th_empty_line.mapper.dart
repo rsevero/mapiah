@@ -24,6 +24,9 @@ class THEmptyLineMapper extends ClassMapperBase<THEmptyLine> {
   static THParent _$parent(THEmptyLine v) => v.parent;
   static const Field<THEmptyLine, THParent> _f$parent =
       Field('parent', _$parent);
+  static int _$parentMapiahID(THEmptyLine v) => v.parentMapiahID;
+  static const Field<THEmptyLine, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THEmptyLine v) => v.sameLineComment;
   static const Field<THEmptyLine, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -31,6 +34,7 @@ class THEmptyLineMapper extends ClassMapperBase<THEmptyLine> {
   @override
   final MappableFields<THEmptyLine> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

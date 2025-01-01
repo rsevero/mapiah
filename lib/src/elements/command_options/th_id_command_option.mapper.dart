@@ -24,17 +24,18 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   static THHasOptions _$optionParent(THIDCommandOption v) => v.optionParent;
   static const Field<THIDCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
-  static String _$thID(THIDCommandOption v) => v.thID;
-  static const Field<THIDCommandOption, String> _f$thID = Field('thID', _$thID);
+  static String _$_thID(THIDCommandOption v) => v._thID;
+  static const Field<THIDCommandOption, String> _f$_thID =
+      Field('_thID', _$_thID, key: 'thID');
 
   @override
   final MappableFields<THIDCommandOption> fields = const {
     #optionParent: _f$optionParent,
-    #thID: _f$thID,
+    #_thID: _f$_thID,
   };
 
   static THIDCommandOption _instantiate(DecodingData data) {
-    return THIDCommandOption(data.dec(_f$optionParent), data.dec(_f$thID));
+    return THIDCommandOption(data.dec(_f$optionParent), data.dec(_f$_thID));
   }
 
   @override
@@ -115,7 +116,7 @@ class _THIDCommandOptionCopyWithImpl<$R, $Out>
   @override
   THIDCommandOption $make(CopyWithData data) => THIDCommandOption(
       data.get(#optionParent, or: $value.optionParent),
-      data.get(#thID, or: $value.thID));
+      data.get(#thID, or: $value._thID));
 
   @override
   THIDCommandOptionCopyWith<$R2, THIDCommandOption, $Out2> $chain<$R2, $Out2>(

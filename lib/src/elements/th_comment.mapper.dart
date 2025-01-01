@@ -26,6 +26,9 @@ class THCommentMapper extends ClassMapperBase<THComment> {
   static String _$content(THComment v) => v.content;
   static const Field<THComment, String> _f$content =
       Field('content', _$content);
+  static int _$parentMapiahID(THComment v) => v.parentMapiahID;
+  static const Field<THComment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THComment v) => v.sameLineComment;
   static const Field<THComment, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -34,6 +37,7 @@ class THCommentMapper extends ClassMapperBase<THComment> {
   final MappableFields<THComment> fields = const {
     #parent: _f$parent,
     #content: _f$content,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

@@ -378,7 +378,7 @@ class THFileParser {
 
     _checkParsedListAsPoint(endPoint);
 
-    final newStraightLineSegment =
+    final THStraightLineSegment newStraightLineSegment =
         THStraightLineSegment.fromString(_currentParent, endPoint);
 
     // _currentElement = newStraightLineSegment;
@@ -486,7 +486,7 @@ class THFileParser {
   }
 
   void _injectLine(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
 
     if (kDebugMode) {
       assert(elementSize >= 2);
@@ -495,7 +495,7 @@ class THFileParser {
       assert(aElement[1][0] is String);
     }
 
-    final newLine = THLine(_currentParent, aElement[1][0]);
+    final THLine newLine = THLine(_currentParent, aElement[1][0]);
 
     _currentElement = newLine;
     _currentParent = newLine;
@@ -575,7 +575,7 @@ class THFileParser {
         throw THOptionsListWrongLengthError();
       }
 
-      final optionType = _currentOptions[0].toString().toLowerCase();
+      final String optionType = _currentOptions[0].toString().toLowerCase();
 
       // if (_parsedOptions.contains(optionType)) {
       //   final elementType = _currentElement.type;
@@ -1533,7 +1533,7 @@ class THFileParser {
 
     final unixResult = aContent.indexOf(thUnixLineBreak);
     if (unixResult != -1) return (unixResult, 1);
-    
+
     return (-1, 0);
   }
 

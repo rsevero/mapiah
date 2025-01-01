@@ -21,15 +21,20 @@ class THElementMapper extends ClassMapperBase<THElement> {
   @override
   final String id = 'THElement';
 
-  static THParent _$parent(THElement v) => v.parent;
-  static const Field<THElement, THParent> _f$parent = Field('parent', _$parent);
+  static int _$parentMapiahID(THElement v) => v.parentMapiahID;
+  static const Field<THElement, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
+  static THFile _$_thFile(THElement v) => v._thFile;
+  static const Field<THElement, THFile> _f$_thFile =
+      Field('_thFile', _$_thFile);
   static String? _$sameLineComment(THElement v) => v.sameLineComment;
   static const Field<THElement, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
 
   @override
   final MappableFields<THElement> fields = const {
-    #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
+    #_thFile: _f$_thFile,
     #sameLineComment: _f$sameLineComment,
   };
 
@@ -76,9 +81,9 @@ class THFileMapper extends ClassMapperBase<THFile> {
   @override
   final String id = 'THFile';
 
-  static THParent _$parent(THFile v) => v.parent;
-  static const Field<THFile, THParent> _f$parent =
-      Field('parent', _$parent, mode: FieldMode.member);
+  static int _$parentMapiahID(THFile v) => v.parentMapiahID;
+  static const Field<THFile, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THFile v) => v.sameLineComment;
   static const Field<THFile, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -91,7 +96,7 @@ class THFileMapper extends ClassMapperBase<THFile> {
 
   @override
   final MappableFields<THFile> fields = const {
-    #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
     #filename: _f$filename,
     #encoding: _f$encoding,

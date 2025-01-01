@@ -9,9 +9,7 @@ part 'th_id_command_option.mapper.dart';
 class THIDCommandOption extends THCommandOption with THIDCommandOptionMappable {
   late String _thID;
 
-  THIDCommandOption(super.optionParent, String thID) {
-    this.thID = thID;
-  }
+  THIDCommandOption(super.optionParent, String thID) : _thID = thID;
 
   set thID(String aTHID) {
     optionParent.thFile.updateTHID(optionParent, aTHID);

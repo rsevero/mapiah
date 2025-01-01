@@ -19,7 +19,7 @@ abstract class THElement with THElementMappable {
   late final int _mapiahID;
 
   late final THFile _thFile;
-  late THParent parent;
+  late int parentMapiahID;
 
   String? sameLineComment;
 
@@ -31,13 +31,20 @@ abstract class THElement with THElementMappable {
   /// Special descendants: THFile.
   THElement._();
 
+  /// Constructor that sets the parentMapiahID and the thFile.
+  /// Necessary for dart_mappable.
+  THElement.withParentMapiahIDTHFile(this.parentMapiahID, this._thFile) {
+    parent._addElementToParent(this);
+  }
+
   /// Main constructor.
   ///
   /// Main constructor that sets all essential properties. Any change made here
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
-  THElement.withParent(this.parent) {
-    _thFile = parent.thFile;
+  THElement.withParent(THParent parent)
+      : parentMapiahID = parent.mapiahID,
+        _thFile = parent.thFile {
     parent._addElementToParent(this);
   }
 
@@ -49,6 +56,10 @@ abstract class THElement with THElementMappable {
     return _thFile;
   }
 
+  THParent get parent {
+    return _thFile.elementByMapiahID(parentMapiahID) as THParent;
+  }
+
   String get elementType {
     return runtimeType.toString().substring(2).toLowerCase();
   }
@@ -58,7 +69,7 @@ abstract class THElement with THElementMappable {
   }
 
   void delete() {
-    thFile._deleteElement(this);
+    _thFile._deleteElement(this);
   }
 }
 
@@ -76,7 +87,7 @@ mixin THParent on THElement {
       aChild.delete();
     }
 
-    thFile._deleteElement(this);
+    _thFile._deleteElement(this);
   }
 
   int _addElementToParent(THElement aElement) {
@@ -95,8 +106,8 @@ mixin THParent on THElement {
       throw THCustomException("'$aElement' not found.");
     }
 
-    if (thFile.hasTHIDByElement(aElement)) {
-      thFile.deleteElementTHIDByElement(aElement);
+    if (_thFile.hasTHIDByElement(aElement)) {
+      _thFile.deleteElementTHIDByElement(aElement);
     }
   }
 }
@@ -116,7 +127,7 @@ class THFile extends THElement with THFileMappable, THParent {
   String filename = 'unnamed file';
 
   String encoding = thDefaultEncoding;
-  int _nextMapiahID = 1;
+  int _nextMapiahID = 0;
 
   late double _minX;
   late double _minY;
@@ -132,12 +143,11 @@ class THFile extends THElement with THFileMappable, THParent {
   /// Not to be confused with Mapiah IDs, which are internal and unique only
   /// during a run.
   final Map<String, THElement> _elementByTHID = {};
-  final Map<THElement, String> _thIDByElement = {};
+  final Map<int, String> _thIDByMapiahID = {};
 
   THFile() : super._() {
-    _mapiahID = 0;
-    parent = this;
     _thFile = this;
+    _addElementToFile(this);
   }
 
   Map<int, THElement> get elements {
@@ -148,22 +158,36 @@ class THFile extends THElement with THFileMappable, THParent {
     return _elementByMapiahID.length;
   }
 
+  String thidByElement(THElement aElement) {
+    return thidByMapiahID(aElement.mapiahID);
+  }
+
+  String thidByMapiahID(int aMapiahID) {
+    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
+      throw THCustomException(
+          "Element with mapiahID '$aMapiahID' has no registered thID.");
+    }
+
+    return _thIDByMapiahID[aMapiahID]!;
+  }
+
   void deleteElementTHIDByElement(THElement aElement) {
     final String aElementType = aElement.elementType;
+    final int aMapiahID = aElement._mapiahID;
 
-    if (!_thIDByElement.containsKey(aElement)) {
+    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' has no registered thID.");
     }
 
-    final aTHID = _thIDByElement[aElement];
+    final String aTHID = _thIDByMapiahID[aMapiahID]!;
 
     if (!_elementByTHID.containsKey(aTHID)) {
       throw THCustomException(
           "thID '$aTHID' gotten from element '$aElement' of type '$aElementType' is not registered.");
     }
 
-    _thIDByElement.remove(aElement);
+    _thIDByMapiahID.remove(aMapiahID);
     _elementByTHID.remove(aTHID);
   }
 
@@ -175,13 +199,14 @@ class THFile extends THElement with THFileMappable, THParent {
     }
 
     final THElement aElement = _elementByTHID[aTHID]!;
+    final int aMapiahID = aElement._mapiahID;
 
-    if (!_thIDByElement.containsKey(aElement)) {
+    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' has no registered thID.");
     }
 
-    _thIDByElement.remove(aElement);
+    _thIDByMapiahID.remove(aMapiahID);
     _elementByTHID.remove(aTHID);
   }
 
@@ -235,12 +260,13 @@ class THFile extends THElement with THFileMappable, THParent {
   /// @throws THCustomException If the element has no registered thID.
   void updateTHID(THElement aElement, String newTHID) {
     final String aElementType = aElement.elementType;
+    final int aMapiahID = aElement._mapiahID;
 
-    if (!_thIDByElement.containsKey(aElement)) {
+    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' had no registered thID.");
     }
-    final String oldTHID = _thIDByElement[aElement]!;
+    final String oldTHID = _thIDByMapiahID[aMapiahID]!;
 
     if (_elementByTHID.containsKey(newTHID)) {
       throw THCustomException(
@@ -250,7 +276,7 @@ class THFile extends THElement with THFileMappable, THParent {
     _elementByTHID.remove(oldTHID);
     _elementByTHID[newTHID] = aElement;
 
-    _thIDByElement[aElement] = newTHID;
+    _thIDByMapiahID[aMapiahID] = newTHID;
   }
 
   void addElementWithTHID(THElement aElement, String aTHID) {
@@ -259,10 +285,11 @@ class THFile extends THElement with THFileMappable, THParent {
     }
     _elementByTHID[aTHID] = aElement;
 
-    if (_thIDByElement.containsKey(aElement)) {
+    final int aMapiahID = aElement.mapiahID;
+    if (_thIDByMapiahID.containsKey(aMapiahID)) {
       throw THCustomException("'${aElement.elementType}' already included.");
     }
-    _thIDByElement[aElement] = aTHID;
+    _thIDByMapiahID[aMapiahID] = aTHID;
   }
 
   bool hasElementByTHID(String elementType, String aTHID) {
@@ -270,7 +297,7 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   bool hasTHIDByElement(THElement aElement) {
-    return _thIDByElement.containsKey(aElement);
+    return _thIDByMapiahID.containsKey(aElement._mapiahID);
   }
 
   THElement elementByTHID(String aElementType, String aTHID) {
@@ -300,7 +327,7 @@ class THFile extends THElement with THFileMappable, THParent {
 
   void _deleteElement(THElement aElement) {
     if (aElement == this) {
-      final childrenList = children.toList();
+      final List<THElement> childrenList = children.toList();
       for (final aChild in childrenList) {
         aChild.delete();
       }
@@ -320,7 +347,9 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   THElement elementByMapiahID(int aMapiahID) {
-    if (!hasElementByMapiahID(aMapiahID)) {
+    if (aMapiahID == 0) {
+      return _thFile;
+    } else if (!hasElementByMapiahID(aMapiahID)) {
       throw THNoElementByMapiahIDException(filename, aMapiahID);
     }
 

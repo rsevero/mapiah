@@ -28,6 +28,9 @@ class THUnrecognizedCommandMapper
   static List<dynamic> _$_value(THUnrecognizedCommand v) => v._value;
   static const Field<THUnrecognizedCommand, List<dynamic>> _f$_value =
       Field('_value', _$_value, key: 'value');
+  static int _$parentMapiahID(THUnrecognizedCommand v) => v.parentMapiahID;
+  static const Field<THUnrecognizedCommand, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THUnrecognizedCommand v) =>
       v.sameLineComment;
   static const Field<THUnrecognizedCommand, String> _f$sameLineComment =
@@ -37,6 +40,7 @@ class THUnrecognizedCommandMapper
   final MappableFields<THUnrecognizedCommand> fields = const {
     #parent: _f$parent,
     #_value: _f$_value,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

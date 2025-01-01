@@ -24,6 +24,9 @@ class THEndcommentMapper extends ClassMapperBase<THEndcomment> {
   static THParent _$parent(THEndcomment v) => v.parent;
   static const Field<THEndcomment, THParent> _f$parent =
       Field('parent', _$parent);
+  static int _$parentMapiahID(THEndcomment v) => v.parentMapiahID;
+  static const Field<THEndcomment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THEndcomment v) => v.sameLineComment;
   static const Field<THEndcomment, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -31,6 +34,7 @@ class THEndcommentMapper extends ClassMapperBase<THEndcomment> {
   @override
   final MappableFields<THEndcomment> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

@@ -23,6 +23,9 @@ class THEndareaMapper extends ClassMapperBase<THEndarea> {
 
   static THParent _$parent(THEndarea v) => v.parent;
   static const Field<THEndarea, THParent> _f$parent = Field('parent', _$parent);
+  static int _$parentMapiahID(THEndarea v) => v.parentMapiahID;
+  static const Field<THEndarea, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THEndarea v) => v.sameLineComment;
   static const Field<THEndarea, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -30,6 +33,7 @@ class THEndareaMapper extends ClassMapperBase<THEndarea> {
   @override
   final MappableFields<THEndarea> fields = const {
     #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

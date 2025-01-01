@@ -29,6 +29,9 @@ class THStraightLineSegmentMapper
   static THPointPart _$endPoint(THStraightLineSegment v) => v.endPoint;
   static const Field<THStraightLineSegment, THPointPart> _f$endPoint =
       Field('endPoint', _$endPoint);
+  static int _$parentMapiahID(THStraightLineSegment v) => v.parentMapiahID;
+  static const Field<THStraightLineSegment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THStraightLineSegment v) =>
       v.sameLineComment;
   static const Field<THStraightLineSegment, String> _f$sameLineComment =
@@ -38,6 +41,7 @@ class THStraightLineSegmentMapper
   final MappableFields<THStraightLineSegment> fields = const {
     #parent: _f$parent,
     #endPoint: _f$endPoint,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

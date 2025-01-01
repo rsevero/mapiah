@@ -26,6 +26,9 @@ class THAreaBorderTHIDMapper extends ClassMapperBase<THAreaBorderTHID> {
       Field('parent', _$parent);
   static String _$id(THAreaBorderTHID v) => v.id;
   static const Field<THAreaBorderTHID, String> _f$id = Field('id', _$id);
+  static int _$parentMapiahID(THAreaBorderTHID v) => v.parentMapiahID;
+  static const Field<THAreaBorderTHID, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THAreaBorderTHID v) => v.sameLineComment;
   static const Field<THAreaBorderTHID, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -34,6 +37,7 @@ class THAreaBorderTHIDMapper extends ClassMapperBase<THAreaBorderTHID> {
   final MappableFields<THAreaBorderTHID> fields = const {
     #parent: _f$parent,
     #id: _f$id,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

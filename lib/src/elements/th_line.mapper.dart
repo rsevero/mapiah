@@ -26,6 +26,9 @@ class THLineMapper extends ClassMapperBase<THLine> {
   static String _$lineType(THLine v) => v.lineType;
   static const Field<THLine, String> _f$lineType =
       Field('lineType', _$lineType);
+  static int _$parentMapiahID(THLine v) => v.parentMapiahID;
+  static const Field<THLine, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THLine v) => v.sameLineComment;
   static const Field<THLine, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -34,6 +37,7 @@ class THLineMapper extends ClassMapperBase<THLine> {
   final MappableFields<THLine> fields = const {
     #parent: _f$parent,
     #lineType: _f$lineType,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

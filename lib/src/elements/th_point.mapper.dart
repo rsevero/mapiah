@@ -29,6 +29,9 @@ class THPointMapper extends ClassMapperBase<THPoint> {
   static String _$pointType(THPoint v) => v.pointType;
   static const Field<THPoint, String> _f$pointType =
       Field('pointType', _$pointType);
+  static int _$parentMapiahID(THPoint v) => v.parentMapiahID;
+  static const Field<THPoint, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THPoint v) => v.sameLineComment;
   static const Field<THPoint, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -38,6 +41,7 @@ class THPointMapper extends ClassMapperBase<THPoint> {
     #parent: _f$parent,
     #point: _f$point,
     #pointType: _f$pointType,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 

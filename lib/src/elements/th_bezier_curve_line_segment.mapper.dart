@@ -38,6 +38,9 @@ class THBezierCurveLineSegmentMapper
   static THPointPart _$endPoint(THBezierCurveLineSegment v) => v.endPoint;
   static const Field<THBezierCurveLineSegment, THPointPart> _f$endPoint =
       Field('endPoint', _$endPoint);
+  static int _$parentMapiahID(THBezierCurveLineSegment v) => v.parentMapiahID;
+  static const Field<THBezierCurveLineSegment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THBezierCurveLineSegment v) =>
       v.sameLineComment;
   static const Field<THBezierCurveLineSegment, String> _f$sameLineComment =
@@ -49,6 +52,7 @@ class THBezierCurveLineSegmentMapper
     #controlPoint1: _f$controlPoint1,
     #controlPoint2: _f$controlPoint2,
     #endPoint: _f$endPoint,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 
