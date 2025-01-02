@@ -234,11 +234,11 @@ class THFile extends THElement with THFileMappable, THParent {
 
   Rect boundingBox() {
     _isFirst = true;
-    for (final element in _elementByMapiahID.values) {
+    for (final THElement element in _elementByMapiahID.values) {
       if (element is THPoint) {
         _comparePoint(element.x, element.y);
       } else if (element is THLine) {
-        for (final aLineSegment in element.children) {
+        for (final THElement aLineSegment in element.children) {
           if (aLineSegment is THStraightLineSegment) {
             _comparePoint(aLineSegment.endPointX, aLineSegment.endPointY);
           } else if (aLineSegment is THBezierCurveLineSegment) {

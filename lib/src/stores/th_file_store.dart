@@ -121,8 +121,8 @@ abstract class THFileStoreBase with Store {
 
   @action
   void _calculateCanvasOffset() {
-    final xOffset = (_canvasSize.width / 2.0) - _canvasCenterX;
-    final yOffset = (_canvasSize.height / 2.0) + _canvasCenterY;
+    final double xOffset = (_canvasSize.width / 2.0) - _canvasCenterX;
+    final double yOffset = (_canvasSize.height / 2.0) + _canvasCenterY;
 
     _canvasTranslation = Offset(xOffset, yOffset);
   }
@@ -171,7 +171,7 @@ abstract class THFileStoreBase with Store {
         (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
     final double heightScale =
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
-    final scale = (widthScale < heightScale) ? widthScale : heightScale;
+    final double scale = (widthScale < heightScale) ? widthScale : heightScale;
     _canvasScale = scale;
     _canvasSize = _screenSize / _canvasScale;
 

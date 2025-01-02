@@ -19,7 +19,7 @@ class THFileWidget extends StatelessWidget {
   THFileWidget(this.file, this.thFileStore) : super(key: ObjectKey(file)) {
     thFileStore.updateDataBoundingBox(file.boundingBox());
     thFileStore.setCanvasScaleTranslationUndefined(true);
-    for (final child in file.children) {
+    for (final THElement child in file.children) {
       if (child is THScrap) {
         _addScrapPaintActions(child);
       }
@@ -69,31 +69,35 @@ class THFileWidget extends StatelessWidget {
         _paintActions.add(newPointPaintAction);
       } else if (child is THLine) {
         var isFirst = true;
-        for (final lineSegment in child.children) {
+        for (final THElement lineSegment in child.children) {
           if (lineSegment is THEndline) {
             continue;
           }
           if (isFirst) {
-            final initialLineSegment = lineSegment as THLineSegment;
-            final newMovePaintAction = THMoveStartPathPaintAction(
-                initialLineSegment.endPointX, initialLineSegment.endPointY);
+            final THLineSegment initialLineSegment =
+                lineSegment as THLineSegment;
+            final THMoveStartPathPaintAction newMovePaintAction =
+                THMoveStartPathPaintAction(
+                    initialLineSegment.endPointX, initialLineSegment.endPointY);
             _paintActions.add(newMovePaintAction);
             isFirst = false;
             continue;
           }
 
           if (lineSegment is THStraightLineSegment) {
-            final newStraightLinePaintAction = THStraightLinePaintAction(
-                lineSegment.endPointX, lineSegment.endPointY);
+            final THStraightLinePaintAction newStraightLinePaintAction =
+                THStraightLinePaintAction(
+                    lineSegment.endPointX, lineSegment.endPointY);
             _paintActions.add(newStraightLinePaintAction);
           } else if (lineSegment is THBezierCurveLineSegment) {
-            final newBezierCurvePaintAction = THBezierCurvePaintAction(
-                lineSegment.endPointX,
-                lineSegment.endPointY,
-                lineSegment.controlPoint1X,
-                lineSegment.controlPoint1Y,
-                lineSegment.controlPoint2X,
-                lineSegment.controlPoint2Y);
+            final THBezierCurvePaintAction newBezierCurvePaintAction =
+                THBezierCurvePaintAction(
+                    lineSegment.endPointX,
+                    lineSegment.endPointY,
+                    lineSegment.controlPoint1X,
+                    lineSegment.controlPoint1Y,
+                    lineSegment.controlPoint2X,
+                    lineSegment.controlPoint2Y);
             _paintActions.add(newBezierCurvePaintAction);
           }
         }
