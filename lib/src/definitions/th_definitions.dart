@@ -33,6 +33,8 @@ const thCanvasOutOfSightMargin = 2.0;
 const thZoomFactor = numerics.sqrt2;
 const thMinimumSizeForDrawing = 10.0;
 
+const int thThFileNoParentID = -1;
+
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 

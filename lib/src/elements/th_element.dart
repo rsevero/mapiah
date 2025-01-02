@@ -147,6 +147,7 @@ class THFile extends THElement with THFileMappable, THParent {
 
   THFile() : super._() {
     _thFile = this;
+    parentMapiahID = thThFileNoParentID;
     _addElementToFile(this);
   }
 
