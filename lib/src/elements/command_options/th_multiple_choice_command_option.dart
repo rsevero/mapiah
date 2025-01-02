@@ -392,11 +392,11 @@ class THMultipleChoiceCommandOption extends THCommandOption
   ///    constructor.
   THMultipleChoiceCommandOption(
       super.optionParent, String optionType, String choice) {
+    _optionType = optionType;
     if (!hasOptionType(optionParent, optionType)) {
       throw THCustomException(
           "Unsupported option type '$optionType' for a '${optionParent.elementType}'");
     }
-    _optionType = optionType;
     this.choice = choice;
   }
 
@@ -437,8 +437,9 @@ class THMultipleChoiceCommandOption extends THCommandOption
   }
 
   String _mainChoice(String aChoice) {
-    final alternateChoiceMap = _supportedOptions[optionParent.elementType]![
-        optionType]!['alternateChoices'] as Map<String, String>;
+    final Map<String, String> alternateChoiceMap = _supportedOptions[
+            optionParent.elementType]![optionType]!['alternateChoices']
+        as Map<String, String>;
     if (alternateChoiceMap.containsKey(aChoice)) {
       aChoice = alternateChoiceMap[aChoice]!;
     }
@@ -447,7 +448,7 @@ class THMultipleChoiceCommandOption extends THCommandOption
   }
 
   static bool hasOptionType(THHasOptions aOptionParent, String aOptionType) {
-    final aOptionParentElementType = aOptionParent.elementType;
+    final String aOptionParentElementType = aOptionParent.elementType;
     if (!_supportedOptions.containsKey(aOptionParentElementType)) {
       return false;
     }
@@ -458,10 +459,11 @@ class THMultipleChoiceCommandOption extends THCommandOption
     }
 
     if (aOptionParent is THHasPLAType) {
-      final aPLAType = (aOptionParent as THHasPLAType).plaType;
+      final String aPLAType = (aOptionParent as THHasPLAType).plaType;
 
-      final plaTypesSupported = _supportedOptions[aOptionParentElementType]![
-          aOptionType]!['plaTypesSupported'] as Set<String>;
+      final Set<String> plaTypesSupported = _supportedOptions[
+              aOptionParentElementType]![aOptionType]!['plaTypesSupported']
+          as Set<String>;
 
       if (plaTypesSupported.isEmpty) {
         return true;
