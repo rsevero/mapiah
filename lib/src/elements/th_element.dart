@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
-import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -235,20 +234,18 @@ class THFile extends THElement with THFileMappable, THParent {
   Rect boundingBox() {
     _isFirst = true;
     for (final THElement element in _elementByMapiahID.values) {
-      if (element is THPoint) {
-        _comparePoint(element.x, element.y);
-      } else if (element is THLine) {
-        for (final THElement aLineSegment in element.children) {
-          if (aLineSegment is THStraightLineSegment) {
-            _comparePoint(aLineSegment.endPointX, aLineSegment.endPointY);
-          } else if (aLineSegment is THBezierCurveLineSegment) {
-            _comparePoint(aLineSegment.endPointX, aLineSegment.endPointY);
-            _comparePoint(
-                aLineSegment.controlPoint1X, aLineSegment.controlPoint1Y);
-            _comparePoint(
-                aLineSegment.controlPoint2X, aLineSegment.controlPoint2Y);
-          }
-        }
+      switch (element) {
+        case THPoint _:
+          _comparePoint(element.x, element.y);
+          break;
+        case THStraightLineSegment _:
+          _comparePoint(element.endPointX, element.endPointY);
+          break;
+        case THBezierCurveLineSegment _:
+          _comparePoint(element.endPointX, element.endPointY);
+          _comparePoint(element.controlPoint1X, element.controlPoint1Y);
+          _comparePoint(element.controlPoint2X, element.controlPoint2Y);
+          break;
       }
     }
 
