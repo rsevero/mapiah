@@ -126,7 +126,7 @@ class THFile extends THElement with THFileMappable, THParent {
   String filename = 'unnamed file';
 
   String encoding = thDefaultEncoding;
-  int _nextMapiahID = 0;
+  int _nextMapiahID = 1;
 
   late double _minX;
   late double _minY;
@@ -146,8 +146,8 @@ class THFile extends THElement with THFileMappable, THParent {
 
   THFile() : super._() {
     _thFile = this;
-    parentMapiahID = thThFileNoParentID;
-    _addElementToFile(this);
+    parentMapiahID = thTHFileNoParentID;
+    _mapiahID = 0;
   }
 
   Map<int, THElement> get elements {
@@ -316,6 +316,9 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   void deleteElementByMapiahID(int aMapiahID) {
+    if (aMapiahID == 0) {
+      throw THCustomException("Cannot delete THFile.");
+    }
     elementByMapiahID(aMapiahID).delete();
   }
 
@@ -324,6 +327,9 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   void _deleteElement(THElement aElement) {
+    if (aElement is THFile) {
+      throw THCustomException("Cannot delete THFile.");
+    }
     if (aElement == this) {
       final List<THElement> childrenList = children.toList();
       for (final aChild in childrenList) {
@@ -341,6 +347,9 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   bool hasElementByMapiahID(int aMapiahID) {
+    if (aMapiahID == 0) {
+      return true;
+    }
     return _elementByMapiahID.containsKey(aMapiahID);
   }
 
