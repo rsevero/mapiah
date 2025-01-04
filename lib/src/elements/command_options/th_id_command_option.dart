@@ -17,7 +17,9 @@ class THIDCommandOption extends THCommandOption with THIDCommandOptionMappable {
 
   THIDCommandOption(THHasOptions optionParent, String thID)
       : _thID = thID,
-        super(optionParent, _thisOptionType);
+        super(optionParent, _thisOptionType) {
+    optionParent.thFile.addElementWithTHID(optionParent, thID);
+  }
 
   set thID(String aTHID) {
     optionParent.thFile.updateTHID(optionParent, aTHID);
