@@ -134,32 +134,23 @@ class THFilePainter extends CustomPainter {
         thFileStore.canvasTranslation.dx, thFileStore.canvasTranslation.dy);
     canvas.scale(1, -1);
 
-    var newPath = Path();
-    for (final paintAction in _paintActions) {
-      switch (paintAction.runtimeType) {
+    Path newPath = Path();
+    for (final THPaintAction paintAction in _paintActions) {
+      switch (paintAction) {
         case THPointPaintAction _:
-          final pointPaintAction = paintAction as THPointPaintAction;
-          canvas.drawCircle(pointPaintAction.center, 5, paintAction.paint);
+          canvas.drawCircle(paintAction.center, 5, paintAction.paint);
         case THBezierCurvePaintAction _:
-          final bezierCurvePaintAction =
-              paintAction as THBezierCurvePaintAction;
           newPath.cubicTo(
-              bezierCurvePaintAction.controlPoint1X,
-              bezierCurvePaintAction.controlPoint1Y,
-              bezierCurvePaintAction.controlPoint2X,
-              bezierCurvePaintAction.controlPoint2Y,
-              bezierCurvePaintAction.endPointX,
-              bezierCurvePaintAction.endPointY);
+              paintAction.controlPoint1X,
+              paintAction.controlPoint1Y,
+              paintAction.controlPoint2X,
+              paintAction.controlPoint2Y,
+              paintAction.endPointX,
+              paintAction.endPointY);
         case THStraightLinePaintAction _:
-          final straightLinePaintAction =
-              paintAction as THStraightLinePaintAction;
-          newPath.lineTo(straightLinePaintAction.endPointX,
-              straightLinePaintAction.endPointY);
+          newPath.lineTo(paintAction.endPointX, paintAction.endPointY);
         case THMoveStartPathPaintAction _:
-          final moveStartPathPaintAction =
-              paintAction as THMoveStartPathPaintAction;
-          newPath = Path()
-            ..moveTo(moveStartPathPaintAction.x, moveStartPathPaintAction.y);
+          newPath = Path()..moveTo(paintAction.x, paintAction.y);
         case THEndPathPaintAction _:
           canvas.drawPath(newPath, paintAction.paint);
       }
