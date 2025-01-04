@@ -11,9 +11,9 @@ part 'th_multiple_choice_command_option.mapper.dart';
 @MappableClass()
 class THMultipleChoiceCommandOption extends THCommandOption
     with THMultipleChoiceCommandOptionMappable {
-  late final String _optionType;
   late String _choice;
-  static final _supportedOptions = {
+  static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
+      {
     'area': {
       // clip <on/off> . specify whether a symbol is clipped by the scrap border.
       'clip': {
@@ -383,21 +383,20 @@ class THMultipleChoiceCommandOption extends THCommandOption
     },
   };
 
-  /// Did some shenanigans in this constructor:
-  ///
-  /// 1. Used a initializer list instead of the regular 'super.' and 'this.' in
-  ///    the parameter list to change the order of the initialization as I need
-  ///    _optionType set before setting 'optionParent' in [THCommandOption]
-  ///    because of the call to 'addUpdateOption' inside THCommandOption
-  ///    constructor.
   THMultipleChoiceCommandOption(
-      super.optionParent, String optionType, String choice) {
-    _optionType = optionType;
+    super.optionParent,
+    super.optionType,
+    String choice,
+  ) {
+    _checkOptionParent();
+    this.choice = choice;
+  }
+
+  void _checkOptionParent() {
     if (!hasOptionType(optionParent, optionType)) {
       throw THCustomException(
           "Unsupported option type '$optionType' for a '${optionParent.elementType}'");
     }
-    this.choice = choice;
   }
 
   set choice(String aChoice) {
@@ -474,9 +473,6 @@ class THMultipleChoiceCommandOption extends THCommandOption
 
     return true;
   }
-
-  @override
-  String get optionType => _optionType;
 
   @override
   String specToFile() {

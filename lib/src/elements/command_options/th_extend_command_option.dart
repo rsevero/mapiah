@@ -11,9 +11,12 @@ part 'th_extend_command_option.mapper.dart';
 @MappableClass()
 class THExtendCommandOption extends THCommandOption
     with THExtendCommandOptionMappable {
+  static const String _thisOptionType = 'extend';
   String station;
 
-  THExtendCommandOption(super.optionParent, this.station) {
+  /// Constructor necessary for dart_mappable support.
+  THExtendCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.station) {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'station')) {
       throw THCustomException(
@@ -21,15 +24,16 @@ class THExtendCommandOption extends THCommandOption
     }
   }
 
-  @override
-  String get optionType => 'extend';
+  THExtendCommandOption(THHasOptions optionParent, this.station)
+      : super(optionParent, _thisOptionType) {
+    if ((optionParent is! THPoint) || (optionParent.plaType != 'station')) {
+      throw THCustomException(
+          "Option 'extend' only valid for points of type 'station'.");
+    }
+  }
 
   @override
   String specToFile() {
-    if (station.isNotEmpty) {
-      return "previous $station";
-    } else {
-      return '';
-    }
+    return station.isEmpty ? '' : "previous $station";
   }
 }

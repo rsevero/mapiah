@@ -14,13 +14,17 @@ part 'th_lsize_command_option.mapper.dart';
 @MappableClass()
 class THLSizeCommandOption extends THCommandOption
     with THLSizeCommandOptionMappable {
+  static const String _thisOptionType = 'l-size';
   late THDoublePart number;
 
-  THLSizeCommandOption(super.optionParent, this.number) {
+  /// Constructor necessary for dart_mappable support.
+  THLSizeCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.number) {
     _checkOptionParent();
   }
 
-  THLSizeCommandOption.fromString(super.optionParent, String aNumber) {
+  THLSizeCommandOption.fromString(THHasOptions optionParent, String aNumber)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     number = THDoublePart.fromString(aNumber);
   }
@@ -32,9 +36,6 @@ class THLSizeCommandOption extends THCommandOption
           "'l-size' option only supported for 'slope' lines.");
     }
   }
-
-  @override
-  String get optionType => 'l-size';
 
   @override
   String specToFile() {

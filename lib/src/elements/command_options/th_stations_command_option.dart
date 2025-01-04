@@ -10,20 +10,21 @@ part 'th_stations_command_option.mapper.dart';
 @MappableClass()
 class THStationsCommandOption extends THCommandOption
     with THStationsCommandOptionMappable {
+  static const String _thisOptionType = 'stations';
   List<String> stations;
 
-  THStationsCommandOption(super.parent, this.stations);
+  /// Constructor necessary for dart_mappable support.
+  THStationsCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.stations);
 
-  @override
-  String get optionType {
-    return 'stations';
-  }
+  THStationsCommandOption(THHasOptions optionParent, this.stations)
+      : super(optionParent, _thisOptionType);
 
   @override
   String specToFile() {
-    var asString = '';
+    String asString = '';
 
-    for (final station in stations) {
+    for (final String station in stations) {
       asString += ",$station";
     }
 

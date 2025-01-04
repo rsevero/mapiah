@@ -10,22 +10,26 @@ part 'th_copyright_command_option.mapper.dart';
 @MappableClass()
 class THCopyrightCommandOption extends THCommandOption
     with THCopyrightCommandOptionMappable, THHasText {
+  static const String _thisOptionType = 'copyright';
   late THDatetimePart datetime;
 
+  /// Constructor necessary for dart_mappable support.
+  THCopyrightCommandOption.withExplicitOptionType(super.optionParent,
+      super.optionType, this.datetime, String copyrightMessage) {
+    text = copyrightMessage;
+  }
+
   THCopyrightCommandOption(
-      super.parent, this.datetime, String copyrightMessage) {
+      THHasOptions optionParent, this.datetime, String copyrightMessage)
+      : super(optionParent, _thisOptionType) {
     text = copyrightMessage;
   }
 
   THCopyrightCommandOption.fromString(
-      super.parent, String aDatetime, String aText) {
+      THHasOptions optionParent, String aDatetime, String aText)
+      : super(optionParent, _thisOptionType) {
     datetime = THDatetimePart(aDatetime);
     text = aText;
-  }
-
-  @override
-  String get optionType {
-    return 'copyright';
   }
 
   @override

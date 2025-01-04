@@ -11,23 +11,32 @@ part 'th_name_command_option.mapper.dart';
 @MappableClass()
 class THNameCommandOption extends THCommandOption
     with THNameCommandOptionMappable {
+  static const String _thisOptionType = 'name';
   late String reference;
 
-  THNameCommandOption(super.optionParent, this.reference) {
+  /// Constructor necessary for dart_mappable support.
+  THNameCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.reference) {
+    _checkOptionParent();
+  }
+
+  THNameCommandOption(THHasOptions optionParent, this.reference)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
+  }
+
+  void _checkOptionParent() {
     if (optionParent is THPoint) {
-      final parentAsPoint = optionParent as THPoint;
-      if ((optionParent as THPoint).plaType != 'station') {
+      final THPoint parentPoint = optionParent as THPoint;
+      if (parentPoint.plaType != 'station') {
         throw THCustomException(
-            "Unsupported point type '${parentAsPoint.plaType}' 'name' option.");
+            "Unsupported point type '${parentPoint.plaType}' 'name' option.");
       }
     } else {
       throw THCustomException(
           "Unsupported parent command type '${optionParent.elementType}' for 'name' option.");
     }
   }
-
-  @override
-  String get optionType => 'name';
 
   @override
   String specToFile() {

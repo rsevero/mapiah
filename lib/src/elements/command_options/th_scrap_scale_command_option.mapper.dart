@@ -28,7 +28,10 @@ class THScrapScaleCommandOptionMapper
   static THHasOptions _$optionParent(THScrapScaleCommandOption v) =>
       v.optionParent;
   static const Field<THScrapScaleCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THScrapScaleCommandOption v) => v.optionType;
+  static const Field<THScrapScaleCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static List<THDoublePart> _$_numericSpecifications(
           THScrapScaleCommandOption v) =>
       v._numericSpecifications;
@@ -43,13 +46,17 @@ class THScrapScaleCommandOptionMapper
   @override
   final MappableFields<THScrapScaleCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #_numericSpecifications: _f$_numericSpecifications,
     #unit: _f$unit,
   };
 
   static THScrapScaleCommandOption _instantiate(DecodingData data) {
-    return THScrapScaleCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$_numericSpecifications), data.dec(_f$unit));
+    return THScrapScaleCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$_numericSpecifications),
+        data.dec(_f$unit));
   }
 
   @override
@@ -118,6 +125,7 @@ abstract class THScrapScaleCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       List<THDoublePart>? numericSpecifications,
       THLengthUnitPart? unit});
   THScrapScaleCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -146,18 +154,21 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           List<THDoublePart>? numericSpecifications,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (numericSpecifications != null)
           #numericSpecifications: numericSpecifications,
         if (unit != $none) #unit: unit
       }));
   @override
   THScrapScaleCommandOption $make(CopyWithData data) =>
-      THScrapScaleCommandOption(
+      THScrapScaleCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#numericSpecifications, or: $value._numericSpecifications),
           data.get(#unit, or: $value.unit));
 

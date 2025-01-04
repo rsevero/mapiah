@@ -25,7 +25,10 @@ class THSketchCommandOptionMapper
 
   static THHasOptions _$optionParent(THSketchCommandOption v) => v.optionParent;
   static const Field<THSketchCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THSketchCommandOption v) => v.optionType;
+  static const Field<THSketchCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$filename(THSketchCommandOption v) => v.filename;
   static const Field<THSketchCommandOption, String> _f$filename =
       Field('filename', _$filename);
@@ -36,13 +39,17 @@ class THSketchCommandOptionMapper
   @override
   final MappableFields<THSketchCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #filename: _f$filename,
     #point: _f$point,
   };
 
   static THSketchCommandOption _instantiate(DecodingData data) {
-    return THSketchCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$filename), data.dec(_f$point));
+    return THSketchCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$filename),
+        data.dec(_f$point));
   }
 
   @override
@@ -104,7 +111,11 @@ abstract class THSketchCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THPointPartCopyWith<$R, THPointPart, THPointPart> get point;
   @override
-  $R call({THHasOptions? optionParent, String? filename, THPointPart? point});
+  $R call(
+      {THHasOptions? optionParent,
+      String? optionType,
+      String? filename,
+      THPointPart? point});
   THSketchCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -121,17 +132,24 @@ class _THSketchCommandOptionCopyWithImpl<$R, $Out>
   THPointPartCopyWith<$R, THPointPart, THPointPart> get point =>
       $value.point.copyWith.$chain((v) => call(point: v));
   @override
-  $R call({THHasOptions? optionParent, String? filename, THPointPart? point}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          String? filename,
+          THPointPart? point}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (filename != null) #filename: filename,
         if (point != null) #point: point
       }));
   @override
-  THSketchCommandOption $make(CopyWithData data) => THSketchCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#filename, or: $value.filename),
-      data.get(#point, or: $value.point));
+  THSketchCommandOption $make(CopyWithData data) =>
+      THSketchCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#filename, or: $value.filename),
+          data.get(#point, or: $value.point));
 
   @override
   THSketchCommandOptionCopyWith<$R2, THSketchCommandOption, $Out2>

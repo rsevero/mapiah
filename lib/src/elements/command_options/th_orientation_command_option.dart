@@ -14,14 +14,19 @@ part 'th_orientation_command_option.mapper.dart';
 @MappableClass()
 class THOrientationCommandOption extends THCommandOption
     with THOrientationCommandOptionMappable {
+  static const String _thisOptionType = 'orientation';
   late THDoublePart _azimuth;
 
-  THOrientationCommandOption(super.optionParent, THDoublePart azimuth) {
+  /// Constructor necessary for dart_mappable support.
+  THOrientationCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, THDoublePart azimuth) {
     _checkOptionParent(optionParent);
     this.azimuth = azimuth;
   }
 
-  THOrientationCommandOption.fromString(super.optionParent, String azimuth) {
+  THOrientationCommandOption.fromString(
+      THHasOptions optionParent, String azimuth)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent(optionParent);
     azimuthFromString = azimuth;
   }
@@ -47,7 +52,7 @@ class THOrientationCommandOption extends THCommandOption
   }
 
   set azimuthFromString(String aAzimuth) {
-    final aDouble = THDoublePart.fromString(aAzimuth);
+    final THDoublePart aDouble = THDoublePart.fromString(aAzimuth);
 
     azimuth = aDouble;
   }
@@ -55,9 +60,6 @@ class THOrientationCommandOption extends THCommandOption
   THDoublePart get azimuth {
     return _azimuth;
   }
-
-  @override
-  String get optionType => 'orientation';
 
   @override
   String specToFile() {

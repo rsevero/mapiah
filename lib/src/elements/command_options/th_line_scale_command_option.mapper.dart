@@ -84,6 +84,9 @@ class THLineScaleCommandOptionMapper
       v.optionParent;
   static const Field<THLineScaleCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THLineScaleCommandOption v) => v.optionType;
+  static const Field<THLineScaleCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THMultipleChoicePart _$multipleChoiceSize(
           THLineScaleCommandOption v) =>
       v.multipleChoiceSize;
@@ -104,6 +107,7 @@ class THLineScaleCommandOptionMapper
   @override
   final MappableFields<THLineScaleCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #multipleChoiceSize: _f$multipleChoiceSize,
     #numericSize: _f$numericSize,
     #type: _f$type,
@@ -111,8 +115,9 @@ class THLineScaleCommandOptionMapper
   };
 
   static THLineScaleCommandOption _instantiate(DecodingData data) {
-    return THLineScaleCommandOption(
+    return THLineScaleCommandOption.withExplicitOptionType(
         data.dec(_f$optionParent),
+        data.dec(_f$optionType),
         data.dec(_f$multipleChoiceSize),
         data.dec(_f$numericSize),
         data.dec(_f$type),
@@ -182,6 +187,7 @@ abstract class THLineScaleCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THMultipleChoicePart? multipleChoiceSize,
       THDoublePart? numericSize,
       THLineScaleCommandOptionType? type,
@@ -209,24 +215,28 @@ class _THLineScaleCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THMultipleChoicePart? multipleChoiceSize,
           THDoublePart? numericSize,
           THLineScaleCommandOptionType? type,
           String? textSize}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (multipleChoiceSize != null) #multipleChoiceSize: multipleChoiceSize,
         if (numericSize != null) #numericSize: numericSize,
         if (type != null) #type: type,
         if (textSize != null) #textSize: textSize
       }));
   @override
-  THLineScaleCommandOption $make(CopyWithData data) => THLineScaleCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#multipleChoiceSize, or: $value.multipleChoiceSize),
-      data.get(#numericSize, or: $value.numericSize),
-      data.get(#type, or: $value.type),
-      data.get(#textSize, or: $value.textSize));
+  THLineScaleCommandOption $make(CopyWithData data) =>
+      THLineScaleCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#multipleChoiceSize, or: $value.multipleChoiceSize),
+          data.get(#numericSize, or: $value.numericSize),
+          data.get(#type, or: $value.type),
+          data.get(#textSize, or: $value.textSize));
 
   @override
   THLineScaleCommandOptionCopyWith<$R2, THLineScaleCommandOption, $Out2>

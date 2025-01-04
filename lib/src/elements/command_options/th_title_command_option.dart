@@ -9,13 +9,17 @@ part 'th_title_command_option.mapper.dart';
 @MappableClass()
 class THTitleCommandOption extends THCommandOption
     with THTitleCommandOptionMappable, THHasText {
-  THTitleCommandOption(super.parent, String text) {
+  static const String _thisOptionType = 'title';
+
+  /// Constructor necessary for dart_mappable support.
+  THTitleCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String text) {
     this.text = text;
   }
 
-  @override
-  String get optionType {
-    return 'title';
+  THTitleCommandOption(THHasOptions optionParent, String text)
+      : super(optionParent, _thisOptionType) {
+    this.text = text;
   }
 
   @override

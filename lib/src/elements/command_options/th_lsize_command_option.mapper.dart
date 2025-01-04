@@ -25,6 +25,9 @@ class THLSizeCommandOptionMapper extends ClassMapperBase<THLSizeCommandOption> {
   static THHasOptions _$optionParent(THLSizeCommandOption v) => v.optionParent;
   static const Field<THLSizeCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THLSizeCommandOption v) => v.optionType;
+  static const Field<THLSizeCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$number(THLSizeCommandOption v) => v.number;
   static const Field<THLSizeCommandOption, THDoublePart> _f$number =
       Field('number', _$number);
@@ -32,11 +35,15 @@ class THLSizeCommandOptionMapper extends ClassMapperBase<THLSizeCommandOption> {
   @override
   final MappableFields<THLSizeCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #number: _f$number,
   };
 
   static THLSizeCommandOption _instantiate(DecodingData data) {
-    return THLSizeCommandOption(data.dec(_f$optionParent), data.dec(_f$number));
+    return THLSizeCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$number));
   }
 
   @override
@@ -98,7 +105,8 @@ abstract class THLSizeCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get number;
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? number});
+  $R call(
+      {THHasOptions? optionParent, String? optionType, THDoublePart? number});
   THLSizeCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -115,15 +123,21 @@ class _THLSizeCommandOptionCopyWithImpl<$R, $Out>
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get number =>
       $value.number.copyWith.$chain((v) => call(number: v));
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? number}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          THDoublePart? number}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (number != null) #number: number
       }));
   @override
-  THLSizeCommandOption $make(CopyWithData data) => THLSizeCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#number, or: $value.number));
+  THLSizeCommandOption $make(CopyWithData data) =>
+      THLSizeCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#number, or: $value.number));
 
   @override
   THLSizeCommandOptionCopyWith<$R2, THLSizeCommandOption, $Out2>

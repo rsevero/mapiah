@@ -14,32 +14,34 @@ part 'th_explored_command_option.mapper.dart';
 @MappableClass()
 class THExploredCommandOption extends THCommandOption
     with THExploredCommandOptionMappable, THHasLength {
-  THExploredCommandOption(super.optionParent, THDoublePart length,
+  static const String _thisOptionType = 'explored';
+
+  /// Constructor necessary for dart_mappable support.
+  THExploredCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, THDoublePart length,
       [String? unit]) {
-    _checkoptionParent();
+    _checkOptionParent();
     this.length = length;
     if (unit != null) {
       unitFromString(unit);
     }
   }
 
-  THExploredCommandOption.fromString(super.optionParent, String distance,
-      [String? aUnit]) {
-    _checkoptionParent();
+  THExploredCommandOption.fromString(THHasOptions optionParent, String distance,
+      [String? aUnit])
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
     length = THDoublePart.fromString(distance);
     if (aUnit != null) {
       unitFromString(aUnit);
     }
   }
 
-  void _checkoptionParent() {
+  void _checkOptionParent() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'continuation')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'continuation'.");
     }
   }
-
-  @override
-  String get optionType => 'explored';
 }

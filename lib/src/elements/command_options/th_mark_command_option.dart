@@ -10,14 +10,19 @@ part 'th_mark_command_option.mapper.dart';
 @MappableClass()
 class THMarkCommandOption extends THCommandOption
     with THMarkCommandOptionMappable {
+  static const String _thisOptionType = 'mark';
   late String _mark;
 
-  THMarkCommandOption(super.optionParent, String mark) {
+  /// Constructor necessary for dart_mappable support.
+  THMarkCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String mark) {
     this.mark = mark;
   }
 
-  @override
-  String get optionType => 'mark';
+  THMarkCommandOption(THHasOptions optionParent, String mark)
+      : super(optionParent, _thisOptionType) {
+    this.mark = mark;
+  }
 
   set mark(String aMark) {
     if (!thKeywordRegex.hasMatch(aMark)) {

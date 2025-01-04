@@ -10,20 +10,22 @@ part 'th_author_command_option.mapper.dart';
 @MappableClass()
 class THAuthorCommandOption extends THCommandOption
     with THAuthorCommandOptionMappable {
+  static const String _thisOptionType = 'author';
   late THDatetimePart datetime;
   late THPersonPart person;
 
-  THAuthorCommandOption(super.parent, this.datetime, this.person);
+  /// Constructor necessary for dart_mappable support.
+  THAuthorCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.datetime, this.person);
+
+  THAuthorCommandOption(THHasOptions optionParent, this.datetime, this.person)
+      : super(optionParent, _thisOptionType);
 
   THAuthorCommandOption.fromString(
-      super.parent, String aDatetime, String aPerson) {
+      THHasOptions optionParent, String aDatetime, String aPerson)
+      : super(optionParent, _thisOptionType) {
     datetime = THDatetimePart(aDatetime);
     person = THPersonPart.fromString(aPerson);
-  }
-
-  @override
-  String get optionType {
-    return 'author';
   }
 
   @override

@@ -25,7 +25,10 @@ class THContextCommandOptionMapper
   static THHasOptions _$optionParent(THContextCommandOption v) =>
       v.optionParent;
   static const Field<THContextCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parentOption');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THContextCommandOption v) => v.optionType;
+  static const Field<THContextCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$elementType(THContextCommandOption v) => v.elementType;
   static const Field<THContextCommandOption, String> _f$elementType =
       Field('elementType', _$elementType);
@@ -36,13 +39,17 @@ class THContextCommandOptionMapper
   @override
   final MappableFields<THContextCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #elementType: _f$elementType,
     #symbolType: _f$symbolType,
   };
 
   static THContextCommandOption _instantiate(DecodingData data) {
-    return THContextCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$elementType), data.dec(_f$symbolType));
+    return THContextCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$elementType),
+        data.dec(_f$symbolType));
   }
 
   @override
@@ -104,7 +111,10 @@ abstract class THContextCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
   $R call(
-      {THHasOptions? optionParent, String? elementType, String? symbolType});
+      {THHasOptions? optionParent,
+      String? optionType,
+      String? elementType,
+      String? symbolType});
   THContextCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -121,18 +131,22 @@ class _THContextCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           String? elementType,
           String? symbolType}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (elementType != null) #elementType: elementType,
         if (symbolType != null) #symbolType: symbolType
       }));
   @override
-  THContextCommandOption $make(CopyWithData data) => THContextCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#elementType, or: $value.elementType),
-      data.get(#symbolType, or: $value.symbolType));
+  THContextCommandOption $make(CopyWithData data) =>
+      THContextCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#elementType, or: $value.elementType),
+          data.get(#symbolType, or: $value.symbolType));
 
   @override
   THContextCommandOptionCopyWith<$R2, THContextCommandOption, $Out2>

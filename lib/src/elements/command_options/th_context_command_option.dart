@@ -14,13 +14,22 @@ part 'th_context_command_option.mapper.dart';
 @MappableClass()
 class THContextCommandOption extends THCommandOption
     with THContextCommandOptionMappable {
+  static const String _thisOptionType = 'context';
   late String _elementType;
   late String _symbolType;
 
-  static final _supportedElementTypes = <String>{'point', 'line', 'area'};
+  static const _supportedElementTypes = <String>{'point', 'line', 'area'};
+
+  /// Constructor necessary for dart_mappable support.
+  THContextCommandOption.withExplicitOptionType(super.optionParent,
+      super.optionType, String elementType, String symbolType) {
+    this.elementType = elementType;
+    this.symbolType = symbolType;
+  }
 
   THContextCommandOption(
-      super.parentOption, String elementType, String symbolType) {
+      THHasOptions optionParent, String elementType, String symbolType)
+      : super(optionParent, _thisOptionType) {
     this.elementType = elementType;
     this.symbolType = symbolType;
   }
@@ -59,9 +68,6 @@ class THContextCommandOption extends THCommandOption
   String get symbolType {
     return _symbolType;
   }
-
-  @override
-  String get optionType => 'context';
 
   @override
   String specToFile() {

@@ -13,7 +13,8 @@ part 'th_clip_command_option.mapper.dart';
 @MappableClass()
 class THClipCommandOption extends THMultipleChoiceCommandOption
     with THClipCommandOptionMappable {
-  static final _unsupportedPointTypes = HashSet.from({
+  static const _thisOptionType = 'clip';
+  static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
     'altitude',
     'date',
     'height',
@@ -24,19 +25,20 @@ class THClipCommandOption extends THMultipleChoiceCommandOption
     'station',
   });
 
+  /// Constructor necessary for dart_mappable support.
   THClipCommandOption(super.optionParent, super.optionType, super.choice) {
-    _checkParentType();
+    _checkOptionParent();
   }
 
   THClipCommandOption.fromChoice(THHasOptions optionParent, String choice)
-      : super(optionParent, 'clip', choice) {
-    _checkParentType();
+      : super(optionParent, _thisOptionType, choice) {
+    _checkOptionParent();
   }
 
-  void _checkParentType() {
+  void _checkOptionParent() {
     /// The -clip option is supported only for some point types.
     if (optionParent is THPoint) {
-      final parentPoint = optionParent as THPoint;
+      final THPoint parentPoint = optionParent as THPoint;
       if (_unsupportedPointTypes.contains(parentPoint.plaType)) {
         throw THCustomException(
             "Unsupported point type '${parentPoint.plaType}' 'clip' option.");

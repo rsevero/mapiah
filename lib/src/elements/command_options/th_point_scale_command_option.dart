@@ -15,46 +15,52 @@ part 'th_point_scale_command_option.mapper.dart';
 @MappableClass()
 class THPointScaleCommandOption extends THCommandOption
     with THPointScaleCommandOptionMappable {
+  static const String _thisOptionType = 'scale';
   late THMultipleChoicePart _multipleChoiceSize;
   late THDoublePart _numericSize;
   late bool _isNumeric;
 
   static const _scaleMultipleChoiceName = 'point|scale';
 
-  THPointScaleCommandOption(
+  /// Constructor necessary for dart_mappable support.
+  THPointScaleCommandOption.withExplicitOptionType(
       super.optionParent,
+      super.optionType,
       THMultipleChoicePart multipleChoiceSize,
       THDoublePart numericSize,
       bool isNumeric)
       : _multipleChoiceSize = multipleChoiceSize,
         _numericSize = numericSize,
         _isNumeric = isNumeric {
-    _checkoptionParent();
+    _checkOptionParent();
   }
 
   THPointScaleCommandOption.sizeAsMultipleChoice(
-      super.optionParent, String aTextScaleSize) {
-    _checkoptionParent();
+      THHasOptions optionParent, String aTextScaleSize)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
     _multipleChoiceSize =
         THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
     _isNumeric = false;
   }
 
   THPointScaleCommandOption.sizeAsNumber(
-      super.optionParent, THDoublePart aNumericScaleSize) {
-    _checkoptionParent();
+      THHasOptions optionParent, THDoublePart aNumericScaleSize)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
     _numericSize = aNumericScaleSize;
     _isNumeric = true;
   }
 
   THPointScaleCommandOption.sizeAsNumberFromString(
-      super.optionParent, String aNumericScaleSize) {
-    _checkoptionParent();
+      THHasOptions optionParent, String aNumericScaleSize)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
     _numericSize = THDoublePart.fromString(aNumericScaleSize);
     _isNumeric = true;
   }
 
-  void _checkoptionParent() {
+  void _checkOptionParent() {
     if (optionParent is! THPoint) {
       throw THCustomException("Only available for 'point'.");
     }
@@ -87,9 +93,6 @@ class THPointScaleCommandOption extends THCommandOption
       return _multipleChoiceSize;
     }
   }
-
-  @override
-  String get optionType => 'scale';
 
   @override
   String specToFile() {

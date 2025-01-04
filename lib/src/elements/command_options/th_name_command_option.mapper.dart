@@ -24,6 +24,9 @@ class THNameCommandOptionMapper extends ClassMapperBase<THNameCommandOption> {
   static THHasOptions _$optionParent(THNameCommandOption v) => v.optionParent;
   static const Field<THNameCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THNameCommandOption v) => v.optionType;
+  static const Field<THNameCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$reference(THNameCommandOption v) => v.reference;
   static const Field<THNameCommandOption, String> _f$reference =
       Field('reference', _$reference);
@@ -31,12 +34,13 @@ class THNameCommandOptionMapper extends ClassMapperBase<THNameCommandOption> {
   @override
   final MappableFields<THNameCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #reference: _f$reference,
   };
 
   static THNameCommandOption _instantiate(DecodingData data) {
-    return THNameCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$reference));
+    return THNameCommandOption.withExplicitOptionType(data.dec(_f$optionParent),
+        data.dec(_f$optionType), data.dec(_f$reference));
   }
 
   @override
@@ -95,7 +99,7 @@ extension THNameCommandOptionValueCopy<$R, $Out>
 abstract class THNameCommandOptionCopyWith<$R, $In extends THNameCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? reference});
+  $R call({THHasOptions? optionParent, String? optionType, String? reference});
   THNameCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -109,15 +113,21 @@ class _THNameCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THNameCommandOption> $mapper =
       THNameCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? reference}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          String? reference}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (reference != null) #reference: reference
       }));
   @override
-  THNameCommandOption $make(CopyWithData data) => THNameCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#reference, or: $value.reference));
+  THNameCommandOption $make(CopyWithData data) =>
+      THNameCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#reference, or: $value.reference));
 
   @override
   THNameCommandOptionCopyWith<$R2, THNameCommandOption, $Out2>

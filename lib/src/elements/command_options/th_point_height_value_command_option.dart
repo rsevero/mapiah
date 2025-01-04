@@ -15,16 +15,14 @@ part 'th_point_height_value_command_option.mapper.dart';
 @MappableClass()
 class THPointHeightValueCommandOption extends THCommandOption
     with THPointHeightValueCommandOptionMappable, THHasLength {
+  static const String _thisOptionType = 'value';
   late bool isPresumed;
 
-  THPointHeightValueCommandOption(
-      super.optionParent, THDoublePart length, this.isPresumed,
+  /// Constructor necessary for dart_mappable support.
+  THPointHeightValueCommandOption.withExplicitOptionType(super.optionParent,
+      super.optionType, THDoublePart length, this.isPresumed,
       [String? unit]) {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'height')) {
-      throw THCustomException(
-          "'$optionType' command option only supported on points of type 'height'.");
-    }
+    _checkOptionParent();
     this.length = length;
     if ((unit != null) && (unit.isNotEmpty)) {
       unitFromString(unit);
@@ -32,16 +30,21 @@ class THPointHeightValueCommandOption extends THCommandOption
   }
 
   THPointHeightValueCommandOption.fromString(
-      super.optionParent, String aHeight, this.isPresumed,
-      [String? aUnit]) {
+      THHasOptions optionParent, String aHeight, this.isPresumed,
+      [String? aUnit])
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
+    length = THDoublePart.fromString(aHeight);
+    if ((aUnit != null) && (aUnit.isNotEmpty)) {
+      unitFromString(aUnit);
+    }
+  }
+
+  void _checkOptionParent() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'height')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'height'.");
-    }
-    length = THDoublePart.fromString(aHeight);
-    if ((aUnit != null) && (aUnit.isNotEmpty)) {
-      unitFromString(aUnit);
     }
   }
 
@@ -62,7 +65,4 @@ class THPointHeightValueCommandOption extends THCommandOption
 
     return asString;
   }
-
-  @override
-  String get optionType => 'value';
 }

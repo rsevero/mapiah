@@ -25,6 +25,9 @@ class THExtendCommandOptionMapper
   static THHasOptions _$optionParent(THExtendCommandOption v) => v.optionParent;
   static const Field<THExtendCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THExtendCommandOption v) => v.optionType;
+  static const Field<THExtendCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$station(THExtendCommandOption v) => v.station;
   static const Field<THExtendCommandOption, String> _f$station =
       Field('station', _$station);
@@ -32,12 +35,15 @@ class THExtendCommandOptionMapper
   @override
   final MappableFields<THExtendCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #station: _f$station,
   };
 
   static THExtendCommandOption _instantiate(DecodingData data) {
-    return THExtendCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$station));
+    return THExtendCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$station));
   }
 
   @override
@@ -98,7 +104,7 @@ abstract class THExtendCommandOptionCopyWith<
     $In extends THExtendCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? station});
+  $R call({THHasOptions? optionParent, String? optionType, String? station});
   THExtendCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -112,15 +118,18 @@ class _THExtendCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THExtendCommandOption> $mapper =
       THExtendCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? station}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? station}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (station != null) #station: station
       }));
   @override
-  THExtendCommandOption $make(CopyWithData data) => THExtendCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#station, or: $value.station));
+  THExtendCommandOption $make(CopyWithData data) =>
+      THExtendCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#station, or: $value.station));
 
   @override
   THExtendCommandOptionCopyWith<$R2, THExtendCommandOption, $Out2>

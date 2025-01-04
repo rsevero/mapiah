@@ -28,6 +28,9 @@ class THLineHeightCommandOptionMapper
       v.optionParent;
   static const Field<THLineHeightCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THLineHeightCommandOption v) => v.optionType;
+  static const Field<THLineHeightCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$height(THLineHeightCommandOption v) => v.height;
   static const Field<THLineHeightCommandOption, THDoublePart> _f$height =
       Field('height', _$height);
@@ -35,12 +38,15 @@ class THLineHeightCommandOptionMapper
   @override
   final MappableFields<THLineHeightCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #height: _f$height,
   };
 
   static THLineHeightCommandOption _instantiate(DecodingData data) {
-    return THLineHeightCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$height));
+    return THLineHeightCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$height));
   }
 
   @override
@@ -104,7 +110,8 @@ abstract class THLineHeightCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get height;
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? height});
+  $R call(
+      {THHasOptions? optionParent, String? optionType, THDoublePart? height});
   THLineHeightCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -122,15 +129,20 @@ class _THLineHeightCommandOptionCopyWithImpl<$R, $Out>
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get height =>
       $value.height.copyWith.$chain((v) => call(height: v));
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? height}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          THDoublePart? height}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (height != null) #height: height
       }));
   @override
   THLineHeightCommandOption $make(CopyWithData data) =>
-      THLineHeightCommandOption(
+      THLineHeightCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#height, or: $value.height));
 
   @override

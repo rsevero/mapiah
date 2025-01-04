@@ -24,7 +24,8 @@ part 'th_text_command_option.mapper.dart';
 @MappableClass()
 class THTextCommandOption extends THCommandOption
     with THTextCommandOptionMappable, THHasText {
-  static final _supportedTypes = {
+  static const String _thisOptionType = 'text';
+  static final Map<String, Set<String>> _supportedTypes = {
     'point': {
       'label',
       'remark',
@@ -35,10 +36,23 @@ class THTextCommandOption extends THCommandOption
     },
   };
 
-  THTextCommandOption(super.optionParent, String text) {
-    final parentType = optionParent.elementType;
+  /// Constructor necessary for dart_mappable support.
+  THTextCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String text) {
+    _checkOptionParent();
+    this.text = text;
+  }
+
+  THTextCommandOption(THHasOptions optionParent, String text)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
+    this.text = text;
+  }
+
+  void _checkOptionParent() {
+    final String parentType = optionParent.elementType;
     if (_supportedTypes.containsKey(parentType)) {
-      final plaType = (optionParent as THHasPLAType).plaType;
+      final String plaType = (optionParent as THHasPLAType).plaType;
       if (!_supportedTypes[parentType]!.contains(plaType)) {
         throw THCustomException(
             "'text' command option not supported on elements of type '$parentType' and plaType '$plaType'.");
@@ -47,11 +61,7 @@ class THTextCommandOption extends THCommandOption
       throw THCustomException(
           "'text' command option not supported on elements of type '$parentType'.");
     }
-    this.text = text;
   }
-
-  @override
-  String get optionType => 'text';
 
   @override
   String specToFile() {

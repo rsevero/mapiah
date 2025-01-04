@@ -26,7 +26,10 @@ class THStationNamesCommandOptionMapper
   static THHasOptions _$optionParent(THStationNamesCommandOption v) =>
       v.optionParent;
   static const Field<THStationNamesCommandOption, THHasOptions>
-      _f$optionParent = Field('optionParent', _$optionParent, key: 'parent');
+      _f$optionParent = Field('optionParent', _$optionParent);
+  static String _$optionType(THStationNamesCommandOption v) => v.optionType;
+  static const Field<THStationNamesCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$preffix(THStationNamesCommandOption v) => v.preffix;
   static const Field<THStationNamesCommandOption, String> _f$preffix =
       Field('preffix', _$preffix);
@@ -37,13 +40,17 @@ class THStationNamesCommandOptionMapper
   @override
   final MappableFields<THStationNamesCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #preffix: _f$preffix,
     #suffix: _f$suffix,
   };
 
   static THStationNamesCommandOption _instantiate(DecodingData data) {
-    return THStationNamesCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$preffix), data.dec(_f$suffix));
+    return THStationNamesCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$preffix),
+        data.dec(_f$suffix));
   }
 
   @override
@@ -106,7 +113,11 @@ abstract class THStationNamesCommandOptionCopyWith<
     $In extends THStationNamesCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? preffix, String? suffix});
+  $R call(
+      {THHasOptions? optionParent,
+      String? optionType,
+      String? preffix,
+      String? suffix});
   THStationNamesCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -123,16 +134,22 @@ class _THStationNamesCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THStationNamesCommandOption> $mapper =
       THStationNamesCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? preffix, String? suffix}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          String? preffix,
+          String? suffix}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (preffix != null) #preffix: preffix,
         if (suffix != null) #suffix: suffix
       }));
   @override
   THStationNamesCommandOption $make(CopyWithData data) =>
-      THStationNamesCommandOption(
+      THStationNamesCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#preffix, or: $value.preffix),
           data.get(#suffix, or: $value.suffix));
 

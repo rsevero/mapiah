@@ -28,6 +28,9 @@ class THOrientationCommandOptionMapper
       v.optionParent;
   static const Field<THOrientationCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THOrientationCommandOption v) => v.optionType;
+  static const Field<THOrientationCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$azimuth(THOrientationCommandOption v) => v.azimuth;
   static const Field<THOrientationCommandOption, THDoublePart> _f$azimuth =
       Field('azimuth', _$azimuth);
@@ -35,12 +38,15 @@ class THOrientationCommandOptionMapper
   @override
   final MappableFields<THOrientationCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #azimuth: _f$azimuth,
   };
 
   static THOrientationCommandOption _instantiate(DecodingData data) {
-    return THOrientationCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$azimuth));
+    return THOrientationCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$azimuth));
   }
 
   @override
@@ -104,7 +110,8 @@ abstract class THOrientationCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get azimuth;
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? azimuth});
+  $R call(
+      {THHasOptions? optionParent, String? optionType, THDoublePart? azimuth});
   THOrientationCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -123,15 +130,20 @@ class _THOrientationCommandOptionCopyWithImpl<$R, $Out>
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get azimuth =>
       $value.azimuth.copyWith.$chain((v) => call(azimuth: v));
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? azimuth}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          THDoublePart? azimuth}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (azimuth != null) #azimuth: azimuth
       }));
   @override
   THOrientationCommandOption $make(CopyWithData data) =>
-      THOrientationCommandOption(
+      THOrientationCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#azimuth, or: $value.azimuth));
 
   @override

@@ -16,8 +16,11 @@ part 'th_altitude_value_command_option.mapper.dart';
 @MappableClass()
 class THAltitudeValueCommandOption extends THCommandOption
     with THAltitudeValueCommandOptionMappable, THHasLength, THHasAltitude {
-  THAltitudeValueCommandOption(
-      super.optionParent, THDoublePart length, bool isFix,
+  static const String _thisOptionType = 'value';
+
+  /// Constructor necessary for dart_mappable support.
+  THAltitudeValueCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, THDoublePart length, bool isFix,
       [String? unit]) {
     _checkOptionParent(optionParent);
     this.length = length;
@@ -27,9 +30,22 @@ class THAltitudeValueCommandOption extends THCommandOption
     }
   }
 
+  THAltitudeValueCommandOption(
+      THHasOptions optionParent, THDoublePart length, bool isFix,
+      [String? unit])
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent(optionParent);
+    this.length = length;
+    this.isFix = isFix;
+    if ((unit != null) && (unit.isNotEmpty)) {
+      unitFromString(unit);
+    }
+  }
+
   THAltitudeValueCommandOption.fromString(
-      super.optionParent, String aHeight, bool aIsFix,
-      [String? aUnit]) {
+      THHasOptions optionParent, String aHeight, bool aIsFix,
+      [String? aUnit])
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent(optionParent);
     length = THDoublePart.fromString(aHeight);
     isFix = aIsFix;
@@ -38,7 +54,8 @@ class THAltitudeValueCommandOption extends THCommandOption
     }
   }
 
-  THAltitudeValueCommandOption.fromNan(super.optionParent) {
+  THAltitudeValueCommandOption.fromNan(THHasOptions optionParent)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent(optionParent);
     length = THDoublePart.fromString('0');
     isNan = true;
@@ -51,7 +68,4 @@ class THAltitudeValueCommandOption extends THCommandOption
           "'$optionType' command option only supported on points and they should be of type 'altitude'.");
     }
   }
-
-  @override
-  String get optionType => 'value';
 }

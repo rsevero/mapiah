@@ -8,14 +8,15 @@ part 'th_unrecognized_command_option.mapper.dart';
 @MappableClass()
 class THUnrecognizedCommandOption extends THCommandOption
     with THUnrecognizedCommandOptionMappable {
+  static const String _thisOptionType = 'UnrecognizedCommandOption';
   String? value;
 
-  THUnrecognizedCommandOption(super.parent, this.value);
+  /// Constructor necessary for dart_mappable support.
+  THUnrecognizedCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.value);
 
-  @override
-  String get optionType {
-    return 'UnrecognizedCommandOption';
-  }
+  THUnrecognizedCommandOption(THHasOptions optionParent, this.value)
+      : super(optionParent, _thisOptionType);
 
   @override
   String specToFile() {

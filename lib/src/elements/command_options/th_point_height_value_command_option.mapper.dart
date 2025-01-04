@@ -28,6 +28,9 @@ class THPointHeightValueCommandOptionMapper
       v.optionParent;
   static const Field<THPointHeightValueCommandOption, THHasOptions>
       _f$optionParent = Field('optionParent', _$optionParent);
+  static String _$optionType(THPointHeightValueCommandOption v) => v.optionType;
+  static const Field<THPointHeightValueCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$length(THPointHeightValueCommandOption v) => v.length;
   static const Field<THPointHeightValueCommandOption, THDoublePart> _f$length =
       Field('length', _$length);
@@ -41,14 +44,19 @@ class THPointHeightValueCommandOptionMapper
   @override
   final MappableFields<THPointHeightValueCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #length: _f$length,
     #isPresumed: _f$isPresumed,
     #unit: _f$unit,
   };
 
   static THPointHeightValueCommandOption _instantiate(DecodingData data) {
-    return THPointHeightValueCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$length), data.dec(_f$isPresumed), data.dec(_f$unit));
+    return THPointHeightValueCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$length),
+        data.dec(_f$isPresumed),
+        data.dec(_f$unit));
   }
 
   @override
@@ -116,6 +124,7 @@ abstract class THPointHeightValueCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THDoublePart? length,
       bool? isPresumed,
       String? unit});
@@ -140,19 +149,22 @@ class _THPointHeightValueCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDoublePart? length,
           bool? isPresumed,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (length != null) #length: length,
         if (isPresumed != null) #isPresumed: isPresumed,
         if (unit != $none) #unit: unit
       }));
   @override
   THPointHeightValueCommandOption $make(CopyWithData data) =>
-      THPointHeightValueCommandOption(
+      THPointHeightValueCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#length, or: $value.length),
           data.get(#isPresumed, or: $value.isPresumed),
           data.get(#unit, or: $value.unit));

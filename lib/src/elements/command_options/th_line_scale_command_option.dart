@@ -18,15 +18,18 @@ enum THLineScaleCommandOptionType { multiplechoice, text, numeric }
 @MappableClass()
 class THLineScaleCommandOption extends THCommandOption
     with THLineScaleCommandOptionMappable {
+  static const String _thisOptionType = 'scale';
   late THMultipleChoicePart _multipleChoiceSize;
   late THDoublePart _numericSize;
   late THLineScaleCommandOptionType _type;
   late String _textSize;
 
-  static const _scaleMultipleChoiceName = 'point|scale';
+  static const String _scaleMultipleChoiceName = 'point|scale';
 
-  THLineScaleCommandOption(
+  /// Constructor necessary for dart_mappable support.
+  THLineScaleCommandOption.withExplicitOptionType(
     super.optionParent,
+    super.optionType,
     THMultipleChoicePart multipleChoiceSize,
     THDoublePart numericSize,
     THLineScaleCommandOptionType type,
@@ -40,28 +43,33 @@ class THLineScaleCommandOption extends THCommandOption
   }
 
   THLineScaleCommandOption.sizeAsMultipleChoice(
-      super.optionParent, String aTextScaleSize) {
+      THHasOptions optionParent, String aTextScaleSize)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     _multipleChoiceSize =
         THMultipleChoicePart(_scaleMultipleChoiceName, aTextScaleSize);
     _type = THLineScaleCommandOptionType.multiplechoice;
   }
 
-  THLineScaleCommandOption.sizeAsText(super.optionParent, String aTextScale) {
+  THLineScaleCommandOption.sizeAsText(
+      THHasOptions optionParent, String aTextScale)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     _textSize = aTextScale;
     _type = THLineScaleCommandOptionType.text;
   }
 
   THLineScaleCommandOption.sizeAsNumber(
-      super.optionParent, THDoublePart aNumericScaleSize) {
+      THHasOptions optionParent, THDoublePart aNumericScaleSize)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     _numericSize = aNumericScaleSize;
     _type = THLineScaleCommandOptionType.numeric;
   }
 
   THLineScaleCommandOption.sizeAsNumberFromString(
-      super.optionParent, String aNumericScaleSize) {
+      THHasOptions optionParent, String aNumericScaleSize)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     _numericSize = THDoublePart.fromString(aNumericScaleSize);
     _type = THLineScaleCommandOptionType.numeric;
@@ -104,9 +112,6 @@ class THLineScaleCommandOption extends THCommandOption
         return _textSize;
     }
   }
-
-  @override
-  String get optionType => 'scale';
 
   @override
   String specToFile() {

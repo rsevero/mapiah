@@ -24,6 +24,9 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   static THHasOptions _$optionParent(THIDCommandOption v) => v.optionParent;
   static const Field<THIDCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THIDCommandOption v) => v.optionType;
+  static const Field<THIDCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$_thID(THIDCommandOption v) => v._thID;
   static const Field<THIDCommandOption, String> _f$_thID =
       Field('_thID', _$_thID, key: 'thID');
@@ -31,11 +34,13 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   @override
   final MappableFields<THIDCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #_thID: _f$_thID,
   };
 
   static THIDCommandOption _instantiate(DecodingData data) {
-    return THIDCommandOption(data.dec(_f$optionParent), data.dec(_f$_thID));
+    return THIDCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$_thID));
   }
 
   @override
@@ -94,7 +99,7 @@ extension THIDCommandOptionValueCopy<$R, $Out>
 abstract class THIDCommandOptionCopyWith<$R, $In extends THIDCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? thID});
+  $R call({THHasOptions? optionParent, String? optionType, String? thID});
   THIDCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -108,15 +113,18 @@ class _THIDCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THIDCommandOption> $mapper =
       THIDCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? thID}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? thID}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (thID != null) #thID: thID
       }));
   @override
-  THIDCommandOption $make(CopyWithData data) => THIDCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#thID, or: $value._thID));
+  THIDCommandOption $make(CopyWithData data) =>
+      THIDCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#thID, or: $value._thID));
 
   @override
   THIDCommandOptionCopyWith<$R2, THIDCommandOption, $Out2> $chain<$R2, $Out2>(

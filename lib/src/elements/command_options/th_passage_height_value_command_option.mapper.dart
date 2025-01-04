@@ -84,6 +84,10 @@ class THPassageHeightValueCommandOptionMapper
       v.optionParent;
   static const Field<THPassageHeightValueCommandOption, THHasOptions>
       _f$optionParent = Field('optionParent', _$optionParent);
+  static String _$optionType(THPassageHeightValueCommandOption v) =>
+      v.optionType;
+  static const Field<THPassageHeightValueCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart? _$plusNumber(THPassageHeightValueCommandOption v) =>
       v.plusNumber;
   static const Field<THPassageHeightValueCommandOption, THDoublePart>
@@ -104,6 +108,7 @@ class THPassageHeightValueCommandOptionMapper
   @override
   final MappableFields<THPassageHeightValueCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #plusNumber: _f$plusNumber,
     #minusNumber: _f$minusNumber,
     #mode: _f$mode,
@@ -111,8 +116,9 @@ class THPassageHeightValueCommandOptionMapper
   };
 
   static THPassageHeightValueCommandOption _instantiate(DecodingData data) {
-    return THPassageHeightValueCommandOption(
+    return THPassageHeightValueCommandOption.withExplicitOptionType(
         data.dec(_f$optionParent),
+        data.dec(_f$optionType),
         data.dec(_f$plusNumber),
         data.dec(_f$minusNumber),
         data.dec(_f$mode),
@@ -186,6 +192,7 @@ abstract class THPassageHeightValueCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THDoublePart? plusNumber,
       THDoublePart? minusNumber,
       THPassageHeightModes? mode,
@@ -214,12 +221,14 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           Object? plusNumber = $none,
           Object? minusNumber = $none,
           THPassageHeightModes? mode,
           bool? plusHasSign}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (plusNumber != $none) #plusNumber: plusNumber,
         if (minusNumber != $none) #minusNumber: minusNumber,
         if (mode != null) #mode: mode,
@@ -227,8 +236,9 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THPassageHeightValueCommandOption $make(CopyWithData data) =>
-      THPassageHeightValueCommandOption(
+      THPassageHeightValueCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#plusNumber, or: $value.plusNumber),
           data.get(#minusNumber, or: $value.minusNumber),
           data.get(#mode, or: $value.mode),

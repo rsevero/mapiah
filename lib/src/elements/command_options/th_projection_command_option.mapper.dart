@@ -83,7 +83,10 @@ class THProjectionCommandOptionMapper
   static THHasOptions _$optionParent(THProjectionCommandOption v) =>
       v.optionParent;
   static const Field<THProjectionCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THProjectionCommandOption v) => v.optionType;
+  static const Field<THProjectionCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THProjectionTypes _$type(THProjectionCommandOption v) => v.type;
   static const Field<THProjectionCommandOption, THProjectionTypes> _f$type =
       Field('type', _$type);
@@ -102,6 +105,7 @@ class THProjectionCommandOptionMapper
   @override
   final MappableFields<THProjectionCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #type: _f$type,
     #index: _f$index,
     #elevationAngle: _f$elevationAngle,
@@ -109,8 +113,8 @@ class THProjectionCommandOptionMapper
   };
 
   static THProjectionCommandOption _instantiate(DecodingData data) {
-    return THProjectionCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$type),
+    return THProjectionCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$type),
         index: data.dec(_f$index),
         elevationAngle: data.dec(_f$elevationAngle),
         elevationUnit: data.dec(_f$elevationUnit));
@@ -181,6 +185,7 @@ abstract class THProjectionCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THProjectionTypes? type,
       String? index,
       THDoublePart? elevationAngle,
@@ -208,12 +213,14 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THProjectionTypes? type,
           String? index,
           Object? elevationAngle = $none,
           Object? elevationUnit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (type != null) #type: type,
         if (index != null) #index: index,
         if (elevationAngle != $none) #elevationAngle: elevationAngle,
@@ -221,8 +228,9 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THProjectionCommandOption $make(CopyWithData data) =>
-      THProjectionCommandOption(
+      THProjectionCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#type, or: $value.type),
           index: data.get(#index, or: $value.index),
           elevationAngle: data.get(#elevationAngle, or: $value.elevationAngle),

@@ -26,6 +26,9 @@ class THSubtypeCommandOptionMapper
       v.optionParent;
   static const Field<THSubtypeCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THSubtypeCommandOption v) => v.optionType;
+  static const Field<THSubtypeCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$subtype(THSubtypeCommandOption v) => v.subtype;
   static const Field<THSubtypeCommandOption, String> _f$subtype =
       Field('subtype', _$subtype);
@@ -33,12 +36,15 @@ class THSubtypeCommandOptionMapper
   @override
   final MappableFields<THSubtypeCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #subtype: _f$subtype,
   };
 
   static THSubtypeCommandOption _instantiate(DecodingData data) {
-    return THSubtypeCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$subtype));
+    return THSubtypeCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$subtype));
   }
 
   @override
@@ -99,7 +105,7 @@ abstract class THSubtypeCommandOptionCopyWith<
     $In extends THSubtypeCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? subtype});
+  $R call({THHasOptions? optionParent, String? optionType, String? subtype});
   THSubtypeCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -114,15 +120,18 @@ class _THSubtypeCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THSubtypeCommandOption> $mapper =
       THSubtypeCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? subtype}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? subtype}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (subtype != null) #subtype: subtype
       }));
   @override
-  THSubtypeCommandOption $make(CopyWithData data) => THSubtypeCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#subtype, or: $value.subtype));
+  THSubtypeCommandOption $make(CopyWithData data) =>
+      THSubtypeCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#subtype, or: $value.subtype));
 
   @override
   THSubtypeCommandOptionCopyWith<$R2, THSubtypeCommandOption, $Out2>

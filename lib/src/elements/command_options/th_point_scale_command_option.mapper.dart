@@ -29,6 +29,9 @@ class THPointScaleCommandOptionMapper
       v.optionParent;
   static const Field<THPointScaleCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THPointScaleCommandOption v) => v.optionType;
+  static const Field<THPointScaleCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THMultipleChoicePart _$_multipleChoiceSize(
           THPointScaleCommandOption v) =>
       v._multipleChoiceSize;
@@ -47,14 +50,16 @@ class THPointScaleCommandOptionMapper
   @override
   final MappableFields<THPointScaleCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #_multipleChoiceSize: _f$_multipleChoiceSize,
     #_numericSize: _f$_numericSize,
     #_isNumeric: _f$_isNumeric,
   };
 
   static THPointScaleCommandOption _instantiate(DecodingData data) {
-    return THPointScaleCommandOption(
+    return THPointScaleCommandOption.withExplicitOptionType(
         data.dec(_f$optionParent),
+        data.dec(_f$optionType),
         data.dec(_f$_multipleChoiceSize),
         data.dec(_f$_numericSize),
         data.dec(_f$_isNumeric));
@@ -125,6 +130,7 @@ abstract class THPointScaleCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THMultipleChoicePart? multipleChoiceSize,
       THDoublePart? numericSize,
       bool? isNumeric});
@@ -151,19 +157,22 @@ class _THPointScaleCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THMultipleChoicePart? multipleChoiceSize,
           THDoublePart? numericSize,
           bool? isNumeric}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (multipleChoiceSize != null) #multipleChoiceSize: multipleChoiceSize,
         if (numericSize != null) #numericSize: numericSize,
         if (isNumeric != null) #isNumeric: isNumeric
       }));
   @override
   THPointScaleCommandOption $make(CopyWithData data) =>
-      THPointScaleCommandOption(
+      THPointScaleCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#multipleChoiceSize, or: $value._multipleChoiceSize),
           data.get(#numericSize, or: $value._numericSize),
           data.get(#isNumeric, or: $value._isNumeric));

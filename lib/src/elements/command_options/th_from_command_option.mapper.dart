@@ -24,6 +24,9 @@ class THFromCommandOptionMapper extends ClassMapperBase<THFromCommandOption> {
   static THHasOptions _$optionParent(THFromCommandOption v) => v.optionParent;
   static const Field<THFromCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THFromCommandOption v) => v.optionType;
+  static const Field<THFromCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$station(THFromCommandOption v) => v.station;
   static const Field<THFromCommandOption, String> _f$station =
       Field('station', _$station);
@@ -31,11 +34,13 @@ class THFromCommandOptionMapper extends ClassMapperBase<THFromCommandOption> {
   @override
   final MappableFields<THFromCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #station: _f$station,
   };
 
   static THFromCommandOption _instantiate(DecodingData data) {
-    return THFromCommandOption(data.dec(_f$optionParent), data.dec(_f$station));
+    return THFromCommandOption.withExplicitOptionType(data.dec(_f$optionParent),
+        data.dec(_f$optionType), data.dec(_f$station));
   }
 
   @override
@@ -94,7 +99,7 @@ extension THFromCommandOptionValueCopy<$R, $Out>
 abstract class THFromCommandOptionCopyWith<$R, $In extends THFromCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? station});
+  $R call({THHasOptions? optionParent, String? optionType, String? station});
   THFromCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -108,15 +113,18 @@ class _THFromCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THFromCommandOption> $mapper =
       THFromCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? station}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? station}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (station != null) #station: station
       }));
   @override
-  THFromCommandOption $make(CopyWithData data) => THFromCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#station, or: $value.station));
+  THFromCommandOption $make(CopyWithData data) =>
+      THFromCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#station, or: $value.station));
 
   @override
   THFromCommandOptionCopyWith<$R2, THFromCommandOption, $Out2>

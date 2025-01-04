@@ -26,7 +26,10 @@ class THAuthorCommandOptionMapper
 
   static THHasOptions _$optionParent(THAuthorCommandOption v) => v.optionParent;
   static const Field<THAuthorCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THAuthorCommandOption v) => v.optionType;
+  static const Field<THAuthorCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDatetimePart _$datetime(THAuthorCommandOption v) => v.datetime;
   static const Field<THAuthorCommandOption, THDatetimePart> _f$datetime =
       Field('datetime', _$datetime);
@@ -37,13 +40,17 @@ class THAuthorCommandOptionMapper
   @override
   final MappableFields<THAuthorCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #datetime: _f$datetime,
     #person: _f$person,
   };
 
   static THAuthorCommandOption _instantiate(DecodingData data) {
-    return THAuthorCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$datetime), data.dec(_f$person));
+    return THAuthorCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$datetime),
+        data.dec(_f$person));
   }
 
   @override
@@ -108,6 +115,7 @@ abstract class THAuthorCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THDatetimePart? datetime,
       THPersonPart? person});
   THAuthorCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -131,18 +139,22 @@ class _THAuthorCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDatetimePart? datetime,
           THPersonPart? person}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (datetime != null) #datetime: datetime,
         if (person != null) #person: person
       }));
   @override
-  THAuthorCommandOption $make(CopyWithData data) => THAuthorCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#datetime, or: $value.datetime),
-      data.get(#person, or: $value.person));
+  THAuthorCommandOption $make(CopyWithData data) =>
+      THAuthorCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#datetime, or: $value.datetime),
+          data.get(#person, or: $value.person));
 
   @override
   THAuthorCommandOptionCopyWith<$R2, THAuthorCommandOption, $Out2>

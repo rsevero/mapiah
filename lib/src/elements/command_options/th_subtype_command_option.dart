@@ -22,9 +22,11 @@ part 'th_subtype_command_option.mapper.dart';
 @MappableClass()
 class THSubtypeCommandOption extends THCommandOption
     with THSubtypeCommandOptionMappable {
+  static const String _thisOptionType = 'subtype';
   late String _subtype;
 
-  static final _allowedSubtypes = {
+  static final Map<String, Map<String, Map<String, Object>>> _allowedSubtypes =
+      {
     'point': {
       'air-draught': {
         'default': 'undefined',
@@ -100,14 +102,22 @@ class THSubtypeCommandOption extends THCommandOption
     },
   };
 
-  THSubtypeCommandOption(super.optionParent, String subtype) {
+  /// Constructor necessary for dart_mappable support.
+  THSubtypeCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String subtype) {
+    this.subtype = subtype;
+  }
+
+  THSubtypeCommandOption(THHasOptions optionParent, String subtype)
+      : super(optionParent, _thisOptionType) {
     this.subtype = subtype;
   }
 
   set subtype(String aSubtype) {
     if (optionParent is THPoint) {
-      final pointType = (optionParent as THPoint).plaType;
-      final allowedSubtypes = _allowedSubtypes['point']!;
+      final String pointType = (optionParent as THPoint).plaType;
+      final Map<String, Map<String, Object>> allowedSubtypes =
+          _allowedSubtypes['point']!;
       if ((pointType != 'u') &&
           (!allowedSubtypes.containsKey(pointType) ||
               !(allowedSubtypes[pointType]!['subtypes']
@@ -117,8 +127,9 @@ class THSubtypeCommandOption extends THCommandOption
             "Unsupported subtype '$aSubtype' in option type '$optionType' for a point of type '$pointType' object.");
       }
     } else if (optionParent is THLine) {
-      final lineType = (optionParent as THLine).plaType;
-      final allowedSubtypes = _allowedSubtypes['line']!;
+      final String lineType = (optionParent as THLine).plaType;
+      final Map<String, Map<String, Object>> allowedSubtypes =
+          _allowedSubtypes['line']!;
       if ((lineType != 'u') &&
           (!allowedSubtypes.containsKey(lineType) ||
               !(allowedSubtypes[lineType]!['subtypes'] as LinkedHashSet<String>)
@@ -127,7 +138,7 @@ class THSubtypeCommandOption extends THCommandOption
             "Unsupported subtype '$aSubtype' in option type '$optionType' for a line of type '$lineType' object.");
       }
     } else if (optionParent is THArea) {
-      final areaType = (optionParent as THArea).plaType;
+      final String areaType = (optionParent as THArea).plaType;
       if (areaType != 'u') {
         throw THCustomException(
             "Unsupported subtype '$aSubtype' in option type '$optionType' for an area of type '$areaType' object.");
@@ -143,9 +154,6 @@ class THSubtypeCommandOption extends THCommandOption
   String get subtype {
     return _subtype;
   }
-
-  @override
-  String get optionType => 'subtype';
 
   @override
   String specToFile() {

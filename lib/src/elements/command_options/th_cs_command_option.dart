@@ -5,24 +5,22 @@ import 'package:mapiah/src/elements/th_has_options.dart';
 
 part 'th_cs_command_option.mapper.dart';
 
-// cs <coordinate system> . assumes that (calibrated) local scrap coordinates are given
+// cs <coordinate system> assumes that (calibrated) local scrap coordinates are given
 // in specified coordinate system. It is useful for absolute placing of imported sketches
 // where no survey stations are specified.
 @MappableClass()
 class THCSCommandOption extends THCommandOption with THCSCommandOptionMappable {
+  static const String _thisOptionType = 'cs';
   late THCSPart cs;
 
-  @MappableConstructor()
-  THCSCommandOption(super.optionParent, this.cs);
+  /// Constructor necessary for dart_mappable support.
+  THCSCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.cs);
 
   THCSCommandOption.fromString(
-      super.optionParent, String aCSString, bool forOutputOnly) {
+      THHasOptions optionParent, String aCSString, bool forOutputOnly)
+      : super(optionParent, _thisOptionType) {
     cs = THCSPart(aCSString, forOutputOnly);
-  }
-
-  @override
-  String get optionType {
-    return 'cs';
   }
 
   @override

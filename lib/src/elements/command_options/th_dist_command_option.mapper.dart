@@ -25,6 +25,9 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
   static THHasOptions _$optionParent(THDistCommandOption v) => v.optionParent;
   static const Field<THDistCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THDistCommandOption v) => v.optionType;
+  static const Field<THDistCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$length(THDistCommandOption v) => v.length;
   static const Field<THDistCommandOption, THDoublePart> _f$length =
       Field('length', _$length);
@@ -35,13 +38,14 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
   @override
   final MappableFields<THDistCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #length: _f$length,
     #unit: _f$unit,
   };
 
   static THDistCommandOption _instantiate(DecodingData data) {
-    return THDistCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$length), data.dec(_f$unit));
+    return THDistCommandOption.withExplicitOptionType(data.dec(_f$optionParent),
+        data.dec(_f$optionType), data.dec(_f$length), data.dec(_f$unit));
   }
 
   @override
@@ -101,7 +105,11 @@ abstract class THDistCommandOptionCopyWith<$R, $In extends THDistCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length;
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? length, String? unit});
+  $R call(
+      {THHasOptions? optionParent,
+      String? optionType,
+      THDoublePart? length,
+      String? unit});
   THDistCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -120,18 +128,22 @@ class _THDistCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDoublePart? length,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (length != null) #length: length,
         if (unit != $none) #unit: unit
       }));
   @override
-  THDistCommandOption $make(CopyWithData data) => THDistCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#length, or: $value.length),
-      data.get(#unit, or: $value.unit));
+  THDistCommandOption $make(CopyWithData data) =>
+      THDistCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#length, or: $value.length),
+          data.get(#unit, or: $value.unit));
 
   @override
   THDistCommandOptionCopyWith<$R2, THDistCommandOption, $Out2>

@@ -11,13 +11,17 @@ part 'th_date_value_command_option.mapper.dart';
 @MappableClass()
 class THDateValueCommandOption extends THCommandOption
     with THDateValueCommandOptionMappable {
+  static const String _thisOptionType = 'value';
   late THDatetimePart date;
 
-  THDateValueCommandOption(super.optionParent, this.date) {
+  /// Constructor necessary for dart_mappable support.
+  THDateValueCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.date) {
     _checkOptionParent();
   }
 
-  THDateValueCommandOption.fromString(super.optionParent, String date) {
+  THDateValueCommandOption.fromString(THHasOptions optionParent, String date)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     this.date = THDatetimePart(date);
   }
@@ -38,7 +42,4 @@ class THDateValueCommandOption extends THCommandOption
   String specToFile() {
     return date.toString();
   }
-
-  @override
-  String get optionType => 'value';
 }

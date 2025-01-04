@@ -7,9 +7,17 @@ part 'th_id_command_option.mapper.dart';
 // id <ext_keyword> . ID of the symbol.
 @MappableClass()
 class THIDCommandOption extends THCommandOption with THIDCommandOptionMappable {
+  static const String _thisOptionType = 'id';
   late String _thID;
 
-  THIDCommandOption(super.optionParent, String thID) : _thID = thID;
+  /// Constructor necessary for dart_mappable support.
+  THIDCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String thID)
+      : _thID = thID;
+
+  THIDCommandOption(THHasOptions optionParent, String thID)
+      : _thID = thID,
+        super(optionParent, _thisOptionType);
 
   set thID(String aTHID) {
     optionParent.thFile.updateTHID(optionParent, aTHID);
@@ -19,9 +27,6 @@ class THIDCommandOption extends THCommandOption with THIDCommandOptionMappable {
   String get thID {
     return _thID;
   }
-
-  @override
-  String get optionType => 'id';
 
   @override
   String specToFile() {

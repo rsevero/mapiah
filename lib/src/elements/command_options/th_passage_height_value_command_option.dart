@@ -22,13 +22,16 @@ enum THPassageHeightModes {
 @MappableClass()
 class THPassageHeightValueCommandOption extends THCommandOption
     with THPassageHeightValueCommandOptionMappable {
+  static const String _thisOptionType = 'value';
   late THDoublePart? _plusNumber;
   late THDoublePart? _minusNumber;
   late THPassageHeightModes _mode;
   late bool _plusHasSign;
 
-  THPassageHeightValueCommandOption(
+  /// Constructor necessary for dart_mappable support.
+  THPassageHeightValueCommandOption.withExplicitOptionType(
       super.optionParent,
+      super.optionType,
       THDoublePart? plusNumber,
       THDoublePart? minusNumber,
       THPassageHeightModes mode,
@@ -42,7 +45,8 @@ class THPassageHeightValueCommandOption extends THCommandOption
   }
 
   THPassageHeightValueCommandOption.fromString(
-      super.optionParent, String plusNumber, String minusNumber) {
+      THHasOptions optionParent, String plusNumber, String minusNumber)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     plusAndMinusNumbersFromString(plusNumber, minusNumber);
   }
@@ -123,9 +127,6 @@ class THPassageHeightValueCommandOption extends THCommandOption
         return "[ +${_plusNumber!.toString()} ${_minusNumber!.toString()} ]";
     }
   }
-
-  @override
-  String get optionType => 'value';
 
   THDoublePart? get plusNumber => _plusNumber;
 

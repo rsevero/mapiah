@@ -25,17 +25,22 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
   static THHasOptions _$optionParent(THCSCommandOption v) => v.optionParent;
   static const Field<THCSCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THCSCommandOption v) => v.optionType;
+  static const Field<THCSCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THCSPart _$cs(THCSCommandOption v) => v.cs;
   static const Field<THCSCommandOption, THCSPart> _f$cs = Field('cs', _$cs);
 
   @override
   final MappableFields<THCSCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #cs: _f$cs,
   };
 
   static THCSCommandOption _instantiate(DecodingData data) {
-    return THCSCommandOption(data.dec(_f$optionParent), data.dec(_f$cs));
+    return THCSCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$cs));
   }
 
   @override
@@ -95,7 +100,7 @@ abstract class THCSCommandOptionCopyWith<$R, $In extends THCSCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THCSPartCopyWith<$R, THCSPart, THCSPart> get cs;
   @override
-  $R call({THHasOptions? optionParent, THCSPart? cs});
+  $R call({THHasOptions? optionParent, String? optionType, THCSPart? cs});
   THCSCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -112,15 +117,18 @@ class _THCSCommandOptionCopyWithImpl<$R, $Out>
   THCSPartCopyWith<$R, THCSPart, THCSPart> get cs =>
       $value.cs.copyWith.$chain((v) => call(cs: v));
   @override
-  $R call({THHasOptions? optionParent, THCSPart? cs}) =>
+  $R call({THHasOptions? optionParent, String? optionType, THCSPart? cs}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (cs != null) #cs: cs
       }));
   @override
-  THCSCommandOption $make(CopyWithData data) => THCSCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#cs, or: $value.cs));
+  THCSCommandOption $make(CopyWithData data) =>
+      THCSCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#cs, or: $value.cs));
 
   @override
   THCSCommandOptionCopyWith<$R2, THCSCommandOption, $Out2> $chain<$R2, $Out2>(

@@ -23,7 +23,10 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
 
   static THHasOptions _$optionParent(THTitleCommandOption v) => v.optionParent;
   static const Field<THTitleCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THTitleCommandOption v) => v.optionType;
+  static const Field<THTitleCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$text(THTitleCommandOption v) => v.text;
   static const Field<THTitleCommandOption, String> _f$text =
       Field('text', _$text);
@@ -31,11 +34,13 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
   @override
   final MappableFields<THTitleCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #text: _f$text,
   };
 
   static THTitleCommandOption _instantiate(DecodingData data) {
-    return THTitleCommandOption(data.dec(_f$optionParent), data.dec(_f$text));
+    return THTitleCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$text));
   }
 
   @override
@@ -96,7 +101,7 @@ abstract class THTitleCommandOptionCopyWith<
     $In extends THTitleCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? text});
+  $R call({THHasOptions? optionParent, String? optionType, String? text});
   THTitleCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -110,15 +115,18 @@ class _THTitleCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THTitleCommandOption> $mapper =
       THTitleCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? text}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? text}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (text != null) #text: text
       }));
   @override
-  THTitleCommandOption $make(CopyWithData data) => THTitleCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#text, or: $value.text));
+  THTitleCommandOption $make(CopyWithData data) =>
+      THTitleCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#text, or: $value.text));
 
   @override
   THTitleCommandOptionCopyWith<$R2, THTitleCommandOption, $Out2>

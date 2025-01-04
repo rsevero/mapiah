@@ -12,20 +12,24 @@ part 'th_line_height_command_option.mapper.dart';
 @MappableClass()
 class THLineHeightCommandOption extends THCommandOption
     with THLineHeightCommandOptionMappable {
+  static const String _thisOptionType = 'height';
   late THDoublePart height;
 
-  THLineHeightCommandOption(super.optionParent, this.height) {
+  /// Constructor necessary for dart_mappable support.
+  THLineHeightCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.height) {
     _checkOptionParent();
   }
 
-  THLineHeightCommandOption.fromString(super.optionParent, String height) {
+  THLineHeightCommandOption.fromString(THHasOptions optionParent, String height)
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     this.height = THDoublePart.fromString(height);
   }
 
   void _checkOptionParent() {
     if (optionParent is THLine) {
-      final platype = (optionParent as THLine).plaType;
+      final String platype = (optionParent as THLine).plaType;
       if ((platype != 'pit') && (platype != 'wall')) {
         throw THCustomException(
             "Only available for 'pit' and 'wall:pit' lines.");
@@ -34,9 +38,6 @@ class THLineHeightCommandOption extends THCommandOption
       throw THCustomException("Only available for lines.");
     }
   }
-
-  @override
-  String get optionType => 'height';
 
   @override
   String specToFile() {

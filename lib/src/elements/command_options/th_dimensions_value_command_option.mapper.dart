@@ -28,6 +28,9 @@ class THDimensionsValueCommandOptionMapper
       v.optionParent;
   static const Field<THDimensionsValueCommandOption, THHasOptions>
       _f$optionParent = Field('optionParent', _$optionParent);
+  static String _$optionType(THDimensionsValueCommandOption v) => v.optionType;
+  static const Field<THDimensionsValueCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$above(THDimensionsValueCommandOption v) => v.above;
   static const Field<THDimensionsValueCommandOption, THDoublePart> _f$above =
       Field('above', _$above);
@@ -44,6 +47,7 @@ class THDimensionsValueCommandOptionMapper
   @override
   final MappableFields<THDimensionsValueCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #above: _f$above,
     #below: _f$below,
     #unit: _f$unit,
@@ -51,8 +55,12 @@ class THDimensionsValueCommandOptionMapper
   };
 
   static THDimensionsValueCommandOption _instantiate(DecodingData data) {
-    return THDimensionsValueCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$above), data.dec(_f$below), data.dec(_f$unit));
+    return THDimensionsValueCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$above),
+        data.dec(_f$below),
+        data.dec(_f$unit));
   }
 
   @override
@@ -120,6 +128,7 @@ abstract class THDimensionsValueCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THDoublePart? above,
       THDoublePart? below,
       String? unit});
@@ -147,19 +156,22 @@ class _THDimensionsValueCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDoublePart? above,
           THDoublePart? below,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (above != null) #above: above,
         if (below != null) #below: below,
         if (unit != $none) #unit: unit
       }));
   @override
   THDimensionsValueCommandOption $make(CopyWithData data) =>
-      THDimensionsValueCommandOption(
+      THDimensionsValueCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#above, or: $value.above),
           data.get(#below, or: $value.below),
           data.get(#unit, or: $value.unit));

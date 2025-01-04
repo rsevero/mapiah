@@ -24,6 +24,9 @@ class THTextCommandOptionMapper extends ClassMapperBase<THTextCommandOption> {
   static THHasOptions _$optionParent(THTextCommandOption v) => v.optionParent;
   static const Field<THTextCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THTextCommandOption v) => v.optionType;
+  static const Field<THTextCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$text(THTextCommandOption v) => v.text;
   static const Field<THTextCommandOption, String> _f$text =
       Field('text', _$text);
@@ -31,11 +34,13 @@ class THTextCommandOptionMapper extends ClassMapperBase<THTextCommandOption> {
   @override
   final MappableFields<THTextCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #text: _f$text,
   };
 
   static THTextCommandOption _instantiate(DecodingData data) {
-    return THTextCommandOption(data.dec(_f$optionParent), data.dec(_f$text));
+    return THTextCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$text));
   }
 
   @override
@@ -94,7 +99,7 @@ extension THTextCommandOptionValueCopy<$R, $Out>
 abstract class THTextCommandOptionCopyWith<$R, $In extends THTextCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? text});
+  $R call({THHasOptions? optionParent, String? optionType, String? text});
   THTextCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -108,15 +113,18 @@ class _THTextCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THTextCommandOption> $mapper =
       THTextCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? text}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? text}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (text != null) #text: text
       }));
   @override
-  THTextCommandOption $make(CopyWithData data) => THTextCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#text, or: $value.text));
+  THTextCommandOption $make(CopyWithData data) =>
+      THTextCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#text, or: $value.text));
 
   @override
   THTextCommandOptionCopyWith<$R2, THTextCommandOption, $Out2>

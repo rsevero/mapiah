@@ -13,13 +13,15 @@ part 'th_dimensions_value_command_option.mapper.dart';
 @MappableClass()
 class THDimensionsValueCommandOption extends THCommandOption
     with THDimensionsValueCommandOptionMappable {
+  static const String _thisOptionType = 'value';
   late THDoublePart _above;
   late THDoublePart _below;
   final THLengthUnitPart _unit = THLengthUnitPart.fromString('m');
   bool unitSet = false;
 
-  THDimensionsValueCommandOption(
-      super.optionParent, THDoublePart above, THDoublePart below,
+  /// Constructor necessary for dart_mappable support.
+  THDimensionsValueCommandOption.withExplicitOptionType(super.optionParent,
+      super.optionType, THDoublePart above, THDoublePart below,
       [String? unit]) {
     _checkOptionParent();
     _above = above;
@@ -30,8 +32,9 @@ class THDimensionsValueCommandOption extends THCommandOption
   }
 
   THDimensionsValueCommandOption.fromString(
-      super.optionParent, String aAbove, String aBelow,
-      [String? aUnit]) {
+      THHasOptions optionParent, String aAbove, String aBelow,
+      [String? aUnit])
+      : super(optionParent, _thisOptionType) {
     _checkOptionParent();
     aboveFromString = aAbove;
     belowFromString = aBelow;
@@ -73,9 +76,6 @@ class THDimensionsValueCommandOption extends THCommandOption
 
     return asString;
   }
-
-  @override
-  String get optionType => 'value';
 
   THDoublePart get above => _above;
 

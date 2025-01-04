@@ -11,18 +11,27 @@ part 'th_scrap_command_option.mapper.dart';
 @MappableClass()
 class THScrapCommandOption extends THCommandOption
     with THScrapCommandOptionMappable {
+  static const String _thisOptionType = 'scrap';
   late String reference;
 
-  THScrapCommandOption(super.optionParent, this.reference) {
+  /// Constructor necessary for dart_mappable support.
+  THScrapCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.reference) {
+    _checkOptionParent();
+  }
+
+  THScrapCommandOption(THHasOptions optionParent, this.reference)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
+  }
+
+  void _checkOptionParent() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'section')) {
       throw THCustomException(
           "Option 'scrap' only valid for points of type 'section'.");
     }
   }
-
-  @override
-  String get optionType => 'scrap';
 
   @override
   String specToFile() {

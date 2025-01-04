@@ -11,15 +11,19 @@ part 'th_sketch_command_option.mapper.dart';
 @MappableClass()
 class THSketchCommandOption extends THCommandOption
     with THSketchCommandOptionMappable {
+  static const String _thisOptionType = 'sketch';
   late THStringPart _filename;
   late THPointPart point;
 
-  THSketchCommandOption(super.parent, String filename, this.point) {
+  /// Constructor necessary for dart_mappable support.
+  THSketchCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String filename, this.point) {
     _filename = THStringPart(filename);
   }
 
   THSketchCommandOption.fromString(
-      super.parent, String aFilename, List<dynamic> aPointList) {
+      THHasOptions optionParent, String aFilename, List<dynamic> aPointList)
+      : super(optionParent, _thisOptionType) {
     _filename = THStringPart(aFilename);
     pointFromStringList(aPointList);
   }
@@ -37,13 +41,8 @@ class THSketchCommandOption extends THCommandOption
   }
 
   @override
-  String get optionType {
-    return 'sketch';
-  }
-
-  @override
   String specToFile() {
-    var asString = '';
+    String asString = '';
 
     asString = "${_filename.toFile()} ${point.toString()}";
 

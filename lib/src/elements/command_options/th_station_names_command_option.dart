@@ -10,13 +10,22 @@ part 'th_station_names_command_option.mapper.dart';
 @MappableClass()
 class THStationNamesCommandOption extends THCommandOption
     with THStationNamesCommandOptionMappable {
+  static const String _thisOptionType = 'station-names';
   late String _prefix;
   late String _suffix;
 
-  THStationNamesCommandOption(super.parent, String preffix, String suffix) {
+  /// Constructor necessary for dart_mappable support.
+  THStationNamesCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, String preffix, String suffix) {
     this.preffix = preffix;
     this.suffix = suffix;
   }
+
+  THStationNamesCommandOption(
+      THHasOptions optionParent, String preffix, String suffix)
+      : _prefix = preffix,
+        _suffix = suffix,
+        super(optionParent, _thisOptionType);
 
   set preffix(String aPreffix) {
     if (aPreffix.contains(' ')) {
@@ -42,11 +51,6 @@ class THStationNamesCommandOption extends THCommandOption
 
   String get suffix {
     return _suffix;
-  }
-
-  @override
-  String get optionType {
-    return 'station-names';
   }
 
   @override

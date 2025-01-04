@@ -26,7 +26,10 @@ class THStationsCommandOptionMapper
   static THHasOptions _$optionParent(THStationsCommandOption v) =>
       v.optionParent;
   static const Field<THStationsCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THStationsCommandOption v) => v.optionType;
+  static const Field<THStationsCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static List<String> _$stations(THStationsCommandOption v) => v.stations;
   static const Field<THStationsCommandOption, List<String>> _f$stations =
       Field('stations', _$stations);
@@ -34,12 +37,15 @@ class THStationsCommandOptionMapper
   @override
   final MappableFields<THStationsCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #stations: _f$stations,
   };
 
   static THStationsCommandOption _instantiate(DecodingData data) {
-    return THStationsCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$stations));
+    return THStationsCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$stations));
   }
 
   @override
@@ -101,7 +107,8 @@ abstract class THStationsCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get stations;
   @override
-  $R call({THHasOptions? optionParent, List<String>? stations});
+  $R call(
+      {THHasOptions? optionParent, String? optionType, List<String>? stations});
   THStationsCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -120,15 +127,21 @@ class _THStationsCommandOptionCopyWithImpl<$R, $Out>
       ListCopyWith($value.stations, (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(stations: v));
   @override
-  $R call({THHasOptions? optionParent, List<String>? stations}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          List<String>? stations}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (stations != null) #stations: stations
       }));
   @override
-  THStationsCommandOption $make(CopyWithData data) => THStationsCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#stations, or: $value.stations));
+  THStationsCommandOption $make(CopyWithData data) =>
+      THStationsCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#stations, or: $value.stations));
 
   @override
   THStationsCommandOptionCopyWith<$R2, THStationsCommandOption, $Out2>

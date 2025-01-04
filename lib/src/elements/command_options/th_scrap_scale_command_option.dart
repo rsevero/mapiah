@@ -21,21 +21,24 @@ part 'th_scrap_scale_command_option.mapper.dart';
 @MappableClass()
 class THScrapScaleCommandOption extends THCommandOption
     with THScrapScaleCommandOptionMappable {
+  static const String _thisOptionType = 'scale';
   List<THDoublePart> _numericSpecifications;
   THLengthUnitPart? unit;
 
-  THScrapScaleCommandOption(
-      super.parent, List<THDoublePart> numericSpecifications,
+  /// Constructor necessary for dart_mappable support.
+  THScrapScaleCommandOption.withExplicitOptionType(super.optionParent,
+      super.optionType, List<THDoublePart> numericSpecifications,
       [this.unit])
       : _numericSpecifications = numericSpecifications;
 
-  @override
-  String get optionType {
-    return 'scale';
-  }
+  THScrapScaleCommandOption(
+      THHasOptions optionParent, List<THDoublePart> numericSpecifications,
+      [this.unit])
+      : _numericSpecifications = numericSpecifications,
+        super(optionParent, _thisOptionType);
 
   set numericSpecifications(List<THDoublePart> aList) {
-    final length = aList.length;
+    final int length = aList.length;
 
     if ((length != 1) && (length != 2) && (length != 8)) {
       throw THConvertFromListException('THScaleCommandOption', aList);
@@ -46,7 +49,7 @@ class THScrapScaleCommandOption extends THCommandOption
 
   @override
   String specToFile() {
-    var asString = '';
+    String asString = '';
 
     for (var aValue in _numericSpecifications) {
       asString += ' ${aValue.toString()}';

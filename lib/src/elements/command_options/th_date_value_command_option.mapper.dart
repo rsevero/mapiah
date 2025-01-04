@@ -28,6 +28,9 @@ class THDateValueCommandOptionMapper
       v.optionParent;
   static const Field<THDateValueCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THDateValueCommandOption v) => v.optionType;
+  static const Field<THDateValueCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDatetimePart _$date(THDateValueCommandOption v) => v.date;
   static const Field<THDateValueCommandOption, THDatetimePart> _f$date =
       Field('date', _$date);
@@ -35,12 +38,13 @@ class THDateValueCommandOptionMapper
   @override
   final MappableFields<THDateValueCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #date: _f$date,
   };
 
   static THDateValueCommandOption _instantiate(DecodingData data) {
-    return THDateValueCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$date));
+    return THDateValueCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$date));
   }
 
   @override
@@ -102,7 +106,8 @@ abstract class THDateValueCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get date;
   @override
-  $R call({THHasOptions? optionParent, THDatetimePart? date});
+  $R call(
+      {THHasOptions? optionParent, String? optionType, THDatetimePart? date});
   THDateValueCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -120,15 +125,21 @@ class _THDateValueCommandOptionCopyWithImpl<$R, $Out>
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get date =>
       $value.date.copyWith.$chain((v) => call(date: v));
   @override
-  $R call({THHasOptions? optionParent, THDatetimePart? date}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          THDatetimePart? date}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (date != null) #date: date
       }));
   @override
-  THDateValueCommandOption $make(CopyWithData data) => THDateValueCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#date, or: $value.date));
+  THDateValueCommandOption $make(CopyWithData data) =>
+      THDateValueCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#date, or: $value.date));
 
   @override
   THDateValueCommandOptionCopyWith<$R2, THDateValueCommandOption, $Out2>

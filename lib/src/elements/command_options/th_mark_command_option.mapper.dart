@@ -24,6 +24,9 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
   static THHasOptions _$optionParent(THMarkCommandOption v) => v.optionParent;
   static const Field<THMarkCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THMarkCommandOption v) => v.optionType;
+  static const Field<THMarkCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String _$mark(THMarkCommandOption v) => v.mark;
   static const Field<THMarkCommandOption, String> _f$mark =
       Field('mark', _$mark);
@@ -31,11 +34,13 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
   @override
   final MappableFields<THMarkCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #mark: _f$mark,
   };
 
   static THMarkCommandOption _instantiate(DecodingData data) {
-    return THMarkCommandOption(data.dec(_f$optionParent), data.dec(_f$mark));
+    return THMarkCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$mark));
   }
 
   @override
@@ -94,7 +99,7 @@ extension THMarkCommandOptionValueCopy<$R, $Out>
 abstract class THMarkCommandOptionCopyWith<$R, $In extends THMarkCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? mark});
+  $R call({THHasOptions? optionParent, String? optionType, String? mark});
   THMarkCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -108,15 +113,18 @@ class _THMarkCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THMarkCommandOption> $mapper =
       THMarkCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? mark}) =>
+  $R call({THHasOptions? optionParent, String? optionType, String? mark}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (mark != null) #mark: mark
       }));
   @override
-  THMarkCommandOption $make(CopyWithData data) => THMarkCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#mark, or: $value.mark));
+  THMarkCommandOption $make(CopyWithData data) =>
+      THMarkCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#mark, or: $value.mark));
 
   @override
   THMarkCommandOptionCopyWith<$R2, THMarkCommandOption, $Out2>

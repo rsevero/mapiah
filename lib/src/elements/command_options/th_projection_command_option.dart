@@ -28,6 +28,7 @@ enum THProjectionTypes {
 @MappableClass()
 class THProjectionCommandOption extends THCommandOption
     with THProjectionCommandOptionMappable {
+  static const String _thisOptionType = 'projection';
   late THProjectionTypes type;
   String index;
   THDoublePart? elevationAngle;
@@ -47,11 +48,18 @@ class THProjectionCommandOption extends THCommandOption
     THProjectionTypes.plan: 'plan',
   };
 
-  THProjectionCommandOption(super.parent, this.type,
+  /// Constructor necessary for dart_mappable support.
+  THProjectionCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.type,
       {this.index = '', this.elevationAngle, this.elevationUnit});
 
-  THProjectionCommandOption.fromString(super.parent, String aType,
-      {this.index = '', this.elevationAngle, this.elevationUnit}) {
+  THProjectionCommandOption.fromString(
+    THHasOptions optionParent,
+    String aType, {
+    this.index = '',
+    this.elevationAngle,
+    this.elevationUnit,
+  }) : super(optionParent, _thisOptionType) {
     typeFromString(aType);
   }
 
@@ -76,13 +84,8 @@ class THProjectionCommandOption extends THCommandOption
   }
 
   @override
-  String get optionType {
-    return 'projection';
-  }
-
-  @override
   String specToFile() {
-    var asString = '';
+    String asString = '';
 
     asString += THProjectionCommandOption.typeToString[type]!;
 

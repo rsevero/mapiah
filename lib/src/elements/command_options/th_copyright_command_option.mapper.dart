@@ -27,7 +27,10 @@ class THCopyrightCommandOptionMapper
   static THHasOptions _$optionParent(THCopyrightCommandOption v) =>
       v.optionParent;
   static const Field<THCopyrightCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent, key: 'parent');
+      Field('optionParent', _$optionParent);
+  static String _$optionType(THCopyrightCommandOption v) => v.optionType;
+  static const Field<THCopyrightCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDatetimePart _$datetime(THCopyrightCommandOption v) => v.datetime;
   static const Field<THCopyrightCommandOption, THDatetimePart> _f$datetime =
       Field('datetime', _$datetime);
@@ -39,13 +42,17 @@ class THCopyrightCommandOptionMapper
   @override
   final MappableFields<THCopyrightCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #datetime: _f$datetime,
     #copyrightMessage: _f$copyrightMessage,
   };
 
   static THCopyrightCommandOption _instantiate(DecodingData data) {
-    return THCopyrightCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$datetime), data.dec(_f$copyrightMessage));
+    return THCopyrightCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$datetime),
+        data.dec(_f$copyrightMessage));
   }
 
   @override
@@ -109,6 +116,7 @@ abstract class THCopyrightCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THDatetimePart? datetime,
       String? copyrightMessage});
   THCopyrightCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -130,18 +138,22 @@ class _THCopyrightCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDatetimePart? datetime,
           String? copyrightMessage}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (datetime != null) #datetime: datetime,
         if (copyrightMessage != null) #copyrightMessage: copyrightMessage
       }));
   @override
-  THCopyrightCommandOption $make(CopyWithData data) => THCopyrightCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#datetime, or: $value.datetime),
-      data.get(#copyrightMessage, or: $value.copyrightMessage));
+  THCopyrightCommandOption $make(CopyWithData data) =>
+      THCopyrightCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#datetime, or: $value.datetime),
+          data.get(#copyrightMessage, or: $value.copyrightMessage));
 
   @override
   THCopyrightCommandOptionCopyWith<$R2, THCopyrightCommandOption, $Out2>

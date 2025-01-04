@@ -28,6 +28,9 @@ class THAltitudeValueCommandOptionMapper
       v.optionParent;
   static const Field<THAltitudeValueCommandOption, THHasOptions>
       _f$optionParent = Field('optionParent', _$optionParent);
+  static String _$optionType(THAltitudeValueCommandOption v) => v.optionType;
+  static const Field<THAltitudeValueCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$length(THAltitudeValueCommandOption v) => v.length;
   static const Field<THAltitudeValueCommandOption, THDoublePart> _f$length =
       Field('length', _$length);
@@ -41,14 +44,19 @@ class THAltitudeValueCommandOptionMapper
   @override
   final MappableFields<THAltitudeValueCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #length: _f$length,
     #isFix: _f$isFix,
     #unit: _f$unit,
   };
 
   static THAltitudeValueCommandOption _instantiate(DecodingData data) {
-    return THAltitudeValueCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$length), data.dec(_f$isFix), data.dec(_f$unit));
+    return THAltitudeValueCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$length),
+        data.dec(_f$isFix),
+        data.dec(_f$unit));
   }
 
   @override
@@ -114,6 +122,7 @@ abstract class THAltitudeValueCommandOptionCopyWith<
   @override
   $R call(
       {THHasOptions? optionParent,
+      String? optionType,
       THDoublePart? length,
       bool? isFix,
       String? unit});
@@ -138,19 +147,22 @@ class _THAltitudeValueCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDoublePart? length,
           bool? isFix,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (length != null) #length: length,
         if (isFix != null) #isFix: isFix,
         if (unit != $none) #unit: unit
       }));
   @override
   THAltitudeValueCommandOption $make(CopyWithData data) =>
-      THAltitudeValueCommandOption(
+      THAltitudeValueCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#length, or: $value.length),
           data.get(#isFix, or: $value.isFix),
           data.get(#unit, or: $value.unit));

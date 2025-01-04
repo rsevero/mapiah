@@ -14,31 +14,34 @@ part 'th_dist_command_option.mapper.dart';
 @MappableClass()
 class THDistCommandOption extends THCommandOption
     with THDistCommandOptionMappable, THHasLength {
-  THDistCommandOption(super.optionParent, THDoublePart length, [String? unit]) {
-    _checkoptionParent();
+  static const String _thisOptionType = 'dist';
+
+  /// Constructor necessary for dart_mappable support.
+  THDistCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, THDoublePart length,
+      [String? unit]) {
+    _checkOptionParent();
     this.length = length;
     if (unit != null) {
       unitFromString(unit);
     }
   }
 
-  THDistCommandOption.fromString(super.optionParent, String distance,
-      [String? aUnit]) {
-    _checkoptionParent();
+  THDistCommandOption.fromString(THHasOptions optionParent, String distance,
+      [String? aUnit])
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
     length = THDoublePart.fromString(distance);
     if (aUnit != null) {
       unitFromString(aUnit);
     }
   }
 
-  void _checkoptionParent() {
+  void _checkOptionParent() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'extra')) {
       throw THCustomException(
           "'$optionType' command option only supported on points of type 'extra'.");
     }
   }
-
-  @override
-  String get optionType => 'dist';
 }

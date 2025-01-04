@@ -28,6 +28,9 @@ class THExploredCommandOptionMapper
       v.optionParent;
   static const Field<THExploredCommandOption, THHasOptions> _f$optionParent =
       Field('optionParent', _$optionParent);
+  static String _$optionType(THExploredCommandOption v) => v.optionType;
+  static const Field<THExploredCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static THDoublePart _$length(THExploredCommandOption v) => v.length;
   static const Field<THExploredCommandOption, THDoublePart> _f$length =
       Field('length', _$length);
@@ -38,13 +41,17 @@ class THExploredCommandOptionMapper
   @override
   final MappableFields<THExploredCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #length: _f$length,
     #unit: _f$unit,
   };
 
   static THExploredCommandOption _instantiate(DecodingData data) {
-    return THExploredCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$length), data.dec(_f$unit));
+    return THExploredCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent),
+        data.dec(_f$optionType),
+        data.dec(_f$length),
+        data.dec(_f$unit));
   }
 
   @override
@@ -106,7 +113,11 @@ abstract class THExploredCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length;
   @override
-  $R call({THHasOptions? optionParent, THDoublePart? length, String? unit});
+  $R call(
+      {THHasOptions? optionParent,
+      String? optionType,
+      THDoublePart? length,
+      String? unit});
   THExploredCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -126,18 +137,22 @@ class _THExploredCommandOptionCopyWithImpl<$R, $Out>
   @override
   $R call(
           {THHasOptions? optionParent,
+          String? optionType,
           THDoublePart? length,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (length != null) #length: length,
         if (unit != $none) #unit: unit
       }));
   @override
-  THExploredCommandOption $make(CopyWithData data) => THExploredCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#length, or: $value.length),
-      data.get(#unit, or: $value.unit));
+  THExploredCommandOption $make(CopyWithData data) =>
+      THExploredCommandOption.withExplicitOptionType(
+          data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#length, or: $value.length),
+          data.get(#unit, or: $value.unit));
 
   @override
   THExploredCommandOptionCopyWith<$R2, THExploredCommandOption, $Out2>

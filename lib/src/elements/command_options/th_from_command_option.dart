@@ -10,18 +10,27 @@ part 'th_from_command_option.mapper.dart';
 @MappableClass()
 class THFromCommandOption extends THCommandOption
     with THFromCommandOptionMappable {
+  static const String _thisOptionType = 'from';
   String station;
 
-  THFromCommandOption(super.optionParent, this.station) {
+  /// Constructor necessary for dart_mappable support.
+  THFromCommandOption.withExplicitOptionType(
+      super.optionParent, super.optionType, this.station) {
+    _checkOptionParent();
+  }
+
+  THFromCommandOption(THHasOptions optionParent, this.station)
+      : super(optionParent, _thisOptionType) {
+    _checkOptionParent();
+  }
+
+  void _checkOptionParent() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'extra')) {
       throw THCustomException(
           "Option 'dist' only valid for points of type 'extra'.");
     }
   }
-
-  @override
-  String get optionType => 'from';
 
   @override
   String specToFile() {

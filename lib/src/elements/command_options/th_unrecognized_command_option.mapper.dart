@@ -26,7 +26,10 @@ class THUnrecognizedCommandOptionMapper
   static THHasOptions _$optionParent(THUnrecognizedCommandOption v) =>
       v.optionParent;
   static const Field<THUnrecognizedCommandOption, THHasOptions>
-      _f$optionParent = Field('optionParent', _$optionParent, key: 'parent');
+      _f$optionParent = Field('optionParent', _$optionParent);
+  static String _$optionType(THUnrecognizedCommandOption v) => v.optionType;
+  static const Field<THUnrecognizedCommandOption, String> _f$optionType =
+      Field('optionType', _$optionType);
   static String? _$value(THUnrecognizedCommandOption v) => v.value;
   static const Field<THUnrecognizedCommandOption, String> _f$value =
       Field('value', _$value);
@@ -34,12 +37,13 @@ class THUnrecognizedCommandOptionMapper
   @override
   final MappableFields<THUnrecognizedCommandOption> fields = const {
     #optionParent: _f$optionParent,
+    #optionType: _f$optionType,
     #value: _f$value,
   };
 
   static THUnrecognizedCommandOption _instantiate(DecodingData data) {
-    return THUnrecognizedCommandOption(
-        data.dec(_f$optionParent), data.dec(_f$value));
+    return THUnrecognizedCommandOption.withExplicitOptionType(
+        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$value));
   }
 
   @override
@@ -102,7 +106,7 @@ abstract class THUnrecognizedCommandOptionCopyWith<
     $In extends THUnrecognizedCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? value});
+  $R call({THHasOptions? optionParent, String? optionType, String? value});
   THUnrecognizedCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -119,15 +123,20 @@ class _THUnrecognizedCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THUnrecognizedCommandOption> $mapper =
       THUnrecognizedCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, Object? value = $none}) =>
+  $R call(
+          {THHasOptions? optionParent,
+          String? optionType,
+          Object? value = $none}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
+        if (optionType != null) #optionType: optionType,
         if (value != $none) #value: value
       }));
   @override
   THUnrecognizedCommandOption $make(CopyWithData data) =>
-      THUnrecognizedCommandOption(
+      THUnrecognizedCommandOption.withExplicitOptionType(
           data.get(#optionParent, or: $value.optionParent),
+          data.get(#optionType, or: $value.optionType),
           data.get(#value, or: $value.value));
 
   @override
