@@ -153,11 +153,11 @@ abstract class THFileStoreBase with Store {
   }
 
   void _setCanvasCenterToDrawingCenter() {
-    print("Current center: $_canvasCenterX, $_canvasCenterY");
+    // print("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (_dataBoundingBox.left + _dataBoundingBox.right) / 2.0;
     _canvasCenterY = (_dataBoundingBox.top + _dataBoundingBox.bottom) / 2.0;
-    print(
-        "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
+    // print(
+    //     "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
 
   @action
