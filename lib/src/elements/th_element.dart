@@ -327,9 +327,6 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   void _deleteElement(THElement aElement) {
-    if (aElement is THFile) {
-      throw THCustomException("Cannot delete THFile.");
-    }
     if (aElement == this) {
       final List<THElement> childrenList = children.toList();
       for (final aChild in childrenList) {
