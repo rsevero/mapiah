@@ -136,7 +136,7 @@ class THFileParser {
   }
 
   void _injectContents() {
-    var isFirst = true;
+    bool isFirst = true;
     for (String line in _splittedContents) {
       if (line.trim().isEmpty) {
         _injectEmptyLine();
@@ -175,7 +175,7 @@ class THFileParser {
           ? _parsedContents.value[1]
           : null;
 
-      final elementType = (element[0] as String).toLowerCase();
+      final String elementType = (element[0] as String).toLowerCase();
       switch (elementType) {
         case 'area':
           _injectArea(element);
@@ -265,7 +265,7 @@ class THFileParser {
   }
 
   void _injectXTherionSetting(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
 
     if (kDebugMode) {
       assert(elementSize == 2);
@@ -277,7 +277,7 @@ class THFileParser {
   }
 
   void _injectPoint(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
     if (kDebugMode) assert(elementSize >= 3);
 
     _checkParsedListAsPoint(aElement[1]);
@@ -308,7 +308,7 @@ class THFileParser {
   }
 
   void _injectBezierCurveLineSegment(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
     if (kDebugMode) assert(elementSize == 2);
 
     final pointList = aElement[1];
@@ -351,7 +351,7 @@ class THFileParser {
   }
 
   void _injectAreaBorderTHID(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
     if (kDebugMode) assert(elementSize == 2);
 
     final areaBorderID = aElement[1];
@@ -361,7 +361,7 @@ class THFileParser {
   }
 
   void _injectStraightLineSegment(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
     assert(elementSize == 2);
 
     final pointList = aElement[1];
@@ -392,7 +392,7 @@ class THFileParser {
   }
 
   void _injectScrap(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
     if (kDebugMode) assert(elementSize >= 2);
     final newScrap = THScrap(_currentParent, aElement[1]);
 
@@ -411,7 +411,7 @@ class THFileParser {
   }
 
   void _injectAreaCommandLikeOption(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
 
     if (kDebugMode) {
       assert(elementSize == 2);
@@ -430,7 +430,7 @@ class THFileParser {
   /// linepoint options in the line options list and keeping the linepoint
   /// options registered with the appropriate line segment.
   void _injectLineCommandLikeOption(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
 
     if (kDebugMode) {
       assert(elementSize == 2);
@@ -458,7 +458,7 @@ class THFileParser {
   }
 
   void _injectArea(List<dynamic> aElement) {
-    final elementSize = aElement.length;
+    final int elementSize = aElement.length;
 
     if (kDebugMode) {
       assert(elementSize >= 2);
@@ -467,7 +467,7 @@ class THFileParser {
       assert(aElement[1][0] is String);
     }
 
-    final newArea = THArea(_currentParent, aElement[1][0]);
+    final THArea newArea = THArea(_currentParent, aElement[1][0]);
 
     _currentElement = newArea;
     _currentParent = newArea;
@@ -527,7 +527,7 @@ class THFileParser {
   }
 
   void _injectComment() {
-    final aElement = _commentContentToParse;
+    final List<dynamic>? aElement = _commentContentToParse;
     if (aElement == null) {
       return;
     }
@@ -604,7 +604,7 @@ class THFileParser {
           continue;
         }
 
-        final errorMessage =
+        final String errorMessage =
             "Unrecognized command option '$optionType'. This should never happen.";
         if (kDebugMode) assert(false, errorMessage);
         throw UnsupportedError(errorMessage);
@@ -616,7 +616,7 @@ class THFileParser {
   }
 
   bool _pointRegularOptions(String aOptionType) {
-    var optionIdentified = true;
+    bool optionIdentified = true;
 
     switch (aOptionType) {
       case 'clip':
