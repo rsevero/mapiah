@@ -63,16 +63,18 @@ class THFileWidget extends StatelessWidget {
   }
 
   void _addScrapPaintActions(THScrap aScrap) {
-    for (final child in aScrap.children) {
+    for (final THElement child in aScrap.children) {
       if (child is THPoint) {
-        final newPointPaintAction = THPointPaintAction(child.x, child.y);
+        final THPointPaintAction newPointPaintAction =
+            THPointPaintAction(child.x, child.y);
         _paintActions.add(newPointPaintAction);
       } else if (child is THLine) {
-        var isFirst = true;
+        bool isFirst = true;
         for (final THElement lineSegment in child.children) {
           if (lineSegment is THEndline) {
             continue;
           }
+
           if (isFirst) {
             final THLineSegment initialLineSegment =
                 lineSegment as THLineSegment;

@@ -171,8 +171,8 @@ abstract class THFileStoreBase with Store {
         (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
     final double heightScale =
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
-    final double scale = (widthScale < heightScale) ? widthScale : heightScale;
-    _canvasScale = scale;
+
+    _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
     _canvasSize = _screenSize / _canvasScale;
 
     _setCanvasCenterToDrawingCenter();
