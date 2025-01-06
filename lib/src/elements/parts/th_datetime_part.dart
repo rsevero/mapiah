@@ -15,7 +15,7 @@ class THDatetimePart with THDatetimePartMappable {
   late bool _isEmpty;
 
   THDatetimePart(String datetime) {
-    _datetime = datetime;
+    this.datetime = datetime;
   }
 
   String get datetime {
@@ -28,15 +28,15 @@ class THDatetimePart with THDatetimePartMappable {
     _isRange = false;
     if (aDate == '-') {
       _isEmpty = true;
-      datetime = '-';
+      _datetime = '-';
       return;
     } else {
       _isEmpty = false;
     }
 
-    final parts = aDate.split('-');
+    final List<String> parts = aDate.split('-');
 
-    var newDatetime = '';
+    String newDatetime = '';
 
     if ((parts.length == 1) || (parts.length == 2)) {
       parts[0] = parts[0].trim();

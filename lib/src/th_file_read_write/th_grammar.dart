@@ -5,7 +5,7 @@ import 'package:mapiah/src/definitions/th_definitions.dart';
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
   @override
-  Parser start() => any().star();
+  Parser start() => thFileStart().star();
 
   // .th file
   Parser thFileStart() => th2Structure().end();
@@ -57,63 +57,52 @@ class THGrammar extends GrammarDefinition {
   /// see each double quote (") being represented by a pair of double quotes ("").
   Parser quotedString() => (char(thDoubleQuote) &
           (char(thDoubleQuote).skip(before: char(thDoubleQuote)) |
-                  pattern('^$thDoubleQuote'))
-              .star()
+                  noneOf(thDoubleQuote))
+              .plus()
               .flatten() &
           char(thDoubleQuote))
-      .pick(1)
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+      .pick(1);
 
   /// Unquoted string
-  Parser unquotedString() => noneOf('$thWhitespaceChars$thDoubleQuote')
-      .plus()
-      .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser unquotedString() => noneOf('$thWhitespaceChars$thDoubleQuote').plus();
 
   /// Any string
   Parser anyString() => quotedString() | unquotedString();
 
   /// Bracket string
   Parser bracketStringTemplate(content) =>
-      (char('[').trim(ref0(thWhitespace), ref0(thWhitespace)) &
-              content &
-              char(']').trim(ref0(thWhitespace), ref0(thWhitespace)))
-          .pick(1);
-  Parser bracketStringGeneral() =>
-      bracketStringTemplate(pattern('^]').star().flatten());
+      (char('[') & content & char(']')).pick(1);
+  Parser bracketStringGeneral() => bracketStringTemplate(pattern('^]').star());
 
   /// Number
   Parser number() => (pattern('-+').optional() &
           digit().plus() &
           (char('.') & digit().plus()).optional())
       .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+      .trim();
   Parser numberWithSuffix(something) => (pattern('-+').optional() &
           digit().plus() &
           (char('.') & digit().plus()).optional() &
           something)
       .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+      .trim();
   Parser plusNumber() =>
       (char('+') & digit().plus() & (char('.') & digit().plus()).optional())
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+          .trim();
   Parser minusNumber() =>
       (char('-') & digit().plus() & (char('.') & digit().plus()).optional())
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+          .trim();
 
   /// NaN
   Parser nan() => (pattern('-.') | stringIgnoreCase('NaN'));
 
   /// point data
-  Parser pointData() =>
-      number().repeat(2, 2).trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser pointData() => number().repeat(2, 2).trim();
 
   /// comment
   Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
       .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .trim()
       .map((value) => [commentType, value.trim()]));
   Parser fullLineComment() =>
       commentTemplate('fulllinecomment').map((value) => [value]);
@@ -123,24 +112,17 @@ class THGrammar extends GrammarDefinition {
   Parser keywordStartChar() => pattern('A-Za-z0-9_/');
   Parser keywordNonStartChar() => (ref0(keywordStartChar) | char('-'));
   Parser keyword() =>
-      (ref0(keywordStartChar) & ref0(keywordNonStartChar).star())
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+      (keywordStartChar() & keywordNonStartChar().star()).flatten().trim();
 
   /// extkeyword
-  Parser extKeywordNonStartChar() =>
-      (ref0(keywordNonStartChar) | pattern("+*.,'"));
+  Parser extKeywordNonStartChar() => (keywordNonStartChar() | pattern("+*.,'"));
   Parser extKeyword() =>
-      (ref0(keywordStartChar) & ref0(extKeywordNonStartChar).star())
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+      (keywordStartChar() & extKeywordNonStartChar().star()).flatten().trim();
 
   /// reference
   Parser referenceNonStartChar() => (ref0(extKeywordNonStartChar) | char('@'));
   Parser reference() =>
-      (ref0(keywordStartChar) & ref0(referenceNonStartChar).star())
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+      (keywordStartChar() & referenceNonStartChar().star()).flatten().trim();
 
   /// date
   Parser year() => digit().repeat(4, 4);
@@ -148,48 +130,49 @@ class THGrammar extends GrammarDefinition {
   Parser dotTwoDigits() => char('.') & ref0(twoDigits);
   Parser atTwoDigits() => char('@') & ref0(twoDigits);
   Parser colonTwoDigits() => char(':') & ref0(twoDigits);
-  Parser noDateTime() => char('-').trim(ref0(thWhitespace), ref0(thWhitespace));
-  Parser singleDateTime() =>
+  Parser noDateTime() => char('-').trim();
+  Parser singleDateTime() => singleDateTimeBase().flatten().trim();
+  Parser singleDateTimeBase() =>
 
       /// Year
-      (ref0(year) &
+      (year() &
 
-              /// Month: optional
-              (ref0(dotTwoDigits) &
+          /// Month: optional
+          (dotTwoDigits() &
 
-                      /// Day: optional
-                      (ref0(dotTwoDigits) &
+                  /// Day: optional
+                  (dotTwoDigits() &
 
-                              /// Hour: optional
-                              (ref0(atTwoDigits) &
+                          /// Hour: optional
+                          (atTwoDigits() &
 
-                                      /// Minutes: optional
-                                      (ref0(colonTwoDigits) &
+                                  /// Minutes: optional
+                                  (colonTwoDigits() &
 
-                                              /// Seconds: optional
-                                              (ref0(colonTwoDigits) &
+                                          /// Seconds: optional
+                                          (colonTwoDigits() &
 
-                                                      /// Fractional seconds: optional
-                                                      (ref0(dotTwoDigits)
-                                                              .optional())
-                                                          .optional())
-                                                  .optional())
-                                          .optional())
-                                  .optional())
-                          .optional())
-                  .optional())
-          .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+                                                  /// Fractional seconds: optional
+                                                  (dotTwoDigits().optional())
+                                                      .optional())
+                                              .optional())
+                                      .optional())
+                              .optional())
+                      .optional())
+              .optional());
   Parser dateTimeRange() =>
-      ref0(singleDateTime) &
-      char('-').trim(ref0(thWhitespace), ref0(thWhitespace)) &
-      ref0(singleDateTime);
-  Parser dateTime() =>
-      noDateTime() | dateTimeRange().flatten() | singleDateTime();
+      (singleDateTimeBase() & char('-').trim() & singleDateTimeBase())
+          .flatten()
+          .trim();
+  Parser dateTime() => dateTimeRange() | singleDateTime() | noDateTime();
 
   /// person
   Parser person() =>
-      (unquotedString().repeat(2, 2).flatten() | ref0(quotedString));
+      unquotedString()
+          .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
+          .flatten()
+          .trim() |
+      quotedString();
 
   /// length unit
   Parser lengthUnit() => (
@@ -268,8 +251,7 @@ class THGrammar extends GrammarDefinition {
 
   /// Command template
   Parser commandTemplate(command) =>
-      ref0(command).trim(ref0(thWhitespace), ref0(thWhitespace)) &
-      ref0(endLineComment).optional();
+      ref0(command).trim() & ref0(endLineComment).optional();
 
   /// multiline comment
   Parser multiLineComment() => ref1(commandTemplate, multiLineCommentCommand);

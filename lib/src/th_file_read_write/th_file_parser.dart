@@ -569,7 +569,9 @@ class THFileParser {
   }
 
   void _optionFromElement(
-      List<dynamic> aElement, Function(String) createRegularOption) {
+    List<dynamic> aElement,
+    Function(String) createRegularOption,
+  ) {
     for (_currentOptions in aElement) {
       if (_currentOptions.length != 2) {
         throw THOptionsListWrongLengthError();
@@ -672,7 +674,7 @@ class THFileParser {
   }
 
   bool _lineSegmentRegularOptions(String aOptionType) {
-    var optionIdentified = _lineRegularOptions(aOptionType);
+    bool optionIdentified = _lineRegularOptions(aOptionType);
 
     if (optionIdentified) {
       return true;
@@ -720,7 +722,7 @@ class THFileParser {
   }
 
   bool _areaRegularOptions(String aOptionType) {
-    var optionIdentified = true;
+    bool optionIdentified = true;
 
     switch (aOptionType) {
       case 'clip':
@@ -739,7 +741,7 @@ class THFileParser {
   }
 
   bool _lineRegularOptions(String aOptionType) {
-    var optionIdentified = true;
+    bool optionIdentified = true;
 
     switch (aOptionType) {
       case 'clip':
@@ -764,7 +766,7 @@ class THFileParser {
   }
 
   bool _scrapRegularOptions(String aOptionType) {
-    var optionIdentified = true;
+    bool optionIdentified = true;
 
     switch (aOptionType) {
       case 'author':
@@ -1485,17 +1487,16 @@ class THFileParser {
 
   @useResult
   Future<(THFile, bool, List<String>)> parse(String aFilePath,
-      {Parser? alternateStartParser}) async {
+      {Parser? alternateStartParser, bool trace = false}) async {
     if (alternateStartParser == null) {
       _newRootParser(_th2FileFirstLineParser);
       _resetParsersLineage();
       _newRootParser(_th2FileParser);
-      _runTraceParser = false;
     } else {
       _newRootParser(alternateStartParser);
       _resetParsersLineage();
-      _runTraceParser = true;
     }
+    _runTraceParser = trace;
 
     _parsedTHFile = THFile();
     _parsedTHFile.filename = aFilePath;
