@@ -193,27 +193,18 @@ void main() {
     }
   });
 
-  group('dateTimeRange', () {
+  group('dateTime', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.dateTimeRange());
-
+    final parser =
+        grammar.buildFrom(grammar.dateTimeRange().flatten().trim().end());
     const successes = {
-      '2022.02.13@11:27:32 - 2022.02.13@11:58:00': [
-        '2022.02.13@11:27:32',
-        '-',
-        '2022.02.13@11:58:00'
-      ],
-      '2022.02.13@11:27:32-2022.02.13@11:58:00': [
-        '2022.02.13@11:27:32',
-        '-',
-        '2022.02.13@11:58:00'
-      ],
-      '2021.12.23@08:30:01 - 2022.02.09@02:30:07': [
-        '2021.12.23@08:30:01',
-        '-',
-        '2022.02.09@02:30:07'
-      ],
-      '2021.12.23 - 2022.02.09@02:30 ': ['2021.12.23', '-', '2022.02.09@02:30'],
+      '2022.02.13@11:27:32 - 2022.02.13@11:58:00':
+          '2022.02.13@11:27:32 - 2022.02.13@11:58:00',
+      '2022.02.13@11:27:32-2022.02.13@11:58:00':
+          '2022.02.13@11:27:32-2022.02.13@11:58:00',
+      '2021.12.23@08:30:01 - 2022.02.09@02:30:07':
+          '2021.12.23@08:30:01 - 2022.02.09@02:30:07',
+      '2021.12.23 - 2022.02.09@02:30 ': '2021.12.23 - 2022.02.09@02:30',
     };
 
     var id = 1;
@@ -237,6 +228,7 @@ void main() {
     for (var failure in failures) {
       test(failure, () {
         final result = parser.parse(failure);
+        // trace(parser).parse(failure);
         expect(result.runtimeType.toString(), 'Failure');
       });
     }
@@ -288,7 +280,7 @@ void main() {
           '2022.02.13@11:27:32 - 2022.02.13@11:58:00',
       '2021.12.23@08:30:01 - 2022.02.09@02:30:07':
           '2021.12.23@08:30:01 - 2022.02.09@02:30:07',
-      '2021.12.23 - 2022.02.09@02:30 ': '2021.12.23 - 2022.02.09@02:30 ',
+      '2021.12.23 - 2022.02.09@02:30 ': '2021.12.23 - 2022.02.09@02:30',
     };
 
     int id = 1;
@@ -355,7 +347,7 @@ void main() {
 
   group('bracketString', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.bracketStringGeneral()).end();
+    final parser = grammar.buildFrom(grammar.bracketStringGeneral().end());
 
     const successes = {
       '[blaus]': 'blaus',

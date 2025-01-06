@@ -58,7 +58,7 @@ class THGrammar extends GrammarDefinition {
   Parser quotedString() => (char(thDoubleQuote) &
           (char(thDoubleQuote).skip(before: char(thDoubleQuote)) |
                   noneOf(thDoubleQuote))
-              .plus()
+              .star()
               .flatten() &
           char(thDoubleQuote))
       .pick(1);
@@ -70,9 +70,9 @@ class THGrammar extends GrammarDefinition {
   Parser anyString() => quotedString() | unquotedString();
 
   /// Bracket string
-  Parser bracketStringTemplate(content) =>
-      (char('[') & content & char(']')).pick(1);
-  Parser bracketStringGeneral() => bracketStringTemplate(pattern('^]').star());
+  Parser bracketStringTemplate(Parser content) =>
+      (char('[') & content.flatten() & char(']')).pick(1);
+  Parser bracketStringGeneral() => bracketStringTemplate(noneOf('[]').star());
 
   /// Number
   Parser number() => (pattern('-+').optional() &
@@ -120,16 +120,16 @@ class THGrammar extends GrammarDefinition {
       (keywordStartChar() & extKeywordNonStartChar().star()).flatten().trim();
 
   /// reference
-  Parser referenceNonStartChar() => (ref0(extKeywordNonStartChar) | char('@'));
+  Parser referenceNonStartChar() => (extKeywordNonStartChar() | char('@'));
   Parser reference() =>
       (keywordStartChar() & referenceNonStartChar().star()).flatten().trim();
 
   /// date
   Parser year() => digit().repeat(4, 4);
   Parser twoDigits() => digit().repeat(2, 2);
-  Parser dotTwoDigits() => char('.') & ref0(twoDigits);
-  Parser atTwoDigits() => char('@') & ref0(twoDigits);
-  Parser colonTwoDigits() => char(':') & ref0(twoDigits);
+  Parser dotTwoDigits() => char('.') & twoDigits();
+  Parser atTwoDigits() => char('@') & twoDigits();
+  Parser colonTwoDigits() => char(':') & twoDigits();
   Parser noDateTime() => char('-').trim();
   Parser singleDateTime() => singleDateTimeBase().flatten().trim();
   Parser singleDateTimeBase() =>
@@ -161,10 +161,9 @@ class THGrammar extends GrammarDefinition {
                       .optional())
               .optional());
   Parser dateTimeRange() =>
-      (singleDateTimeBase() & char('-').trim() & singleDateTimeBase())
-          .flatten()
-          .trim();
-  Parser dateTime() => dateTimeRange() | singleDateTime() | noDateTime();
+      (singleDateTimeBase() & char('-').trim() & singleDateTimeBase());
+  Parser dateTime() =>
+      dateTimeRange().flatten().trim() | singleDateTime() | noDateTime();
 
   /// person
   Parser person() =>

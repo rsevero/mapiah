@@ -32,7 +32,8 @@ abstract class THElement with THElementMappable {
 
   /// Constructor that sets the parentMapiahID and the thFile.
   /// Necessary for dart_mappable.
-  THElement.withParentMapiahIDTHFile(this.parentMapiahID, this._thFile) {
+  THElement.withParentMapiahIDTHFile(this.parentMapiahID, THFile thFile) {
+    _thFile = thFile;
     parent._addElementToParent(this);
   }
 
