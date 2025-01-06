@@ -11,17 +11,17 @@ class THCSPart with THCSPartMappable {
   late final bool _forOutputOnly;
 
   THCSPart(String name, bool forOutputOnly) {
-    this.name = name;
     _forOutputOnly = forOutputOnly;
+    this.name = name;
   }
 
-  static final _csList =
+  static final HashSet<String> _csList =
       HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
 
-  static final _csNotForOutput =
+  static final HashSet<String> _csNotForOutput =
       HashSet<String>.from(['lat-long', 'long-lat', 'JTSK']);
 
-  static final _csRegexes = [
+  static final List<RegExp> _csRegexes = [
     RegExp(r'^(UTM\d{1,2}(N|S)?)?'),
     RegExp(r'^((EPSG|ESRI):\d+)$'),
     RegExp(r'^(i?JTSK(03)?)$'),
@@ -38,7 +38,7 @@ class THCSPart with THCSPartMappable {
       return true;
     }
 
-    for (final regex in _csRegexes) {
+    for (final RegExp regex in _csRegexes) {
       if (regex.hasMatch(aCS)) {
         return true;
       }
@@ -54,7 +54,7 @@ class THCSPart with THCSPartMappable {
 
   set name(String aCS) {
     if (!THCSPart.isCS(aCS, _forOutputOnly)) {
-      var message = _forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
+      String message = _forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
       message = "Unsupported THCSPart '$aCS' in '$message' mode.";
       throw THCustomException(message);
     }

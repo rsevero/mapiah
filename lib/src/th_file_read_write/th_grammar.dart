@@ -197,7 +197,7 @@ class THGrammar extends GrammarDefinition {
               (stringIgnoreCase('yard') & stringIgnoreCase('s').optional()) |
               stringIgnoreCase('yd'))
       .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+      .trim();
 
   /// angle units
   Parser angleUnit() => (
@@ -216,30 +216,29 @@ class THGrammar extends GrammarDefinition {
               /// Mils
               (stringIgnoreCase('mil') & stringIgnoreCase('s').optional()))
       .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+      .trim();
 
   /// clino units
   Parser clinoUnit() =>
       ref0(angleUnit) |
       (stringIgnoreCase('percent') & stringIgnoreCase('age').optional())
           .flatten()
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
+          .trim();
 
   /// comma separated list of keywords
-  Parser csvKeyword() => (keyword() & (char(',') & keyword()).star())
-      .flatten()
-      .trim(ref0(thWhitespace), ref0(thWhitespace));
+  Parser csvKeyword() =>
+      (keyword() & (char(',') & keyword()).star()).flatten().trim();
 
   /// on/off options;
   Parser onOffOptions() => (stringIgnoreCase('on') | stringIgnoreCase('off'))
-      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .trim()
       .map((value) => [value]);
 
   /// on/off/auto options;
   Parser onOffAutoOptions() => (stringIgnoreCase('on') |
           stringIgnoreCase('off') |
           stringIgnoreCase('auto'))
-      .trim(ref0(thWhitespace), ref0(thWhitespace))
+      .trim()
       .map((value) => [value]);
 
   /// begin/end/both/none options;
@@ -310,17 +309,18 @@ class THGrammar extends GrammarDefinition {
 
   /// scrap -cs
   Parser csOption() =>
-      stringIgnoreCase('cs').skip(before: char('-')) & ref0(csSpec);
+      stringIgnoreCase('cs').skip(before: char('-')) & csSpec();
+  Parser csSpec() => csSpecs().map((value) => [value]);
+
   Parser csSpecs() =>
       (csUtm() | csStrings() | csJtsk() | csEpsgEsri() | csEtrs() | csOsgb())
-          .trim(ref0(thWhitespace), ref0(thWhitespace));
-  Parser csSpec() => csSpecs().map((value) => [value]);
+          .trim();
   Parser csUtm() => (string('UTM') &
           ((pattern('1-6') & digit()) | digit()) &
           pattern('NS').optional())
       .flatten();
   Parser csStrings() =>
-      (string('lat-long') | string('long-lat') | string('S-MERC')).flatten();
+      (string('lat-long') | string('long-lat') | string('S-MERC'));
   Parser csJtsk() =>
       (char('i').optional() & string('JTSK') & string('03').optional())
           .flatten();
