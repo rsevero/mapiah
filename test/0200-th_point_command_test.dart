@@ -1,7 +1,7 @@
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
+// import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
@@ -61,7 +61,7 @@ endscrap
 
   group('point -align', () {
     final parser = THFileParser();
-    final grammar = THGrammar();
+    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
