@@ -894,7 +894,7 @@ class THGrammar extends GrammarDefinition {
   /// line -height
   Parser heightOption() => stringIgnoreCase('height') & heightOptions();
   Parser heightCommandLikeOption() => heightOption();
-  Parser heightOptions() => number().map((value) => [value]);
+  Parser heightOptions() => number().trim().map((value) => [value]);
 
   /// line -scale
   Parser lineScaleOption() => stringIgnoreCase('scale') & lineScaleOptions();
