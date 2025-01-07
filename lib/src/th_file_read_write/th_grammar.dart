@@ -718,7 +718,7 @@ class THGrammar extends GrammarDefinition {
 
   /// point -value
   Parser valueOption() =>
-      stringIgnoreCase('value').skip(before: char('-')) & ref0(valueOptions);
+      stringIgnoreCase('value').skip(before: char('-')) & valueOptions();
   Parser valueOptions() => (char('-').trim().map((value) => ['hyphen', value]) |
       dateTime().trim().map((value) => ['datetime', value]) |
       number().trim().map((value) => ['single_number', value]) |
@@ -730,8 +730,9 @@ class THGrammar extends GrammarDefinition {
           .trim()
           .map((value) => ['plus_number_minus_number', value]) |
       nan().trim().map((value) => ['nan', value]) |
-      bracketStringTemplate(
-              stringIgnoreCase('fix') & number() & lengthUnit().optional())
+      bracketStringTemplate(stringIgnoreCase('fix') &
+              number().trim() &
+              lengthUnit().optional())
           .trim()
           .map((value) => ['fix_number', value]) |
       bracketStringTemplate(number() & number() & lengthUnit().optional())
@@ -876,7 +877,7 @@ class THGrammar extends GrammarDefinition {
 
   /// line -altitude
   Parser altitudeCommandLikeOption() =>
-      stringIgnoreCase('altitude') & ref0(valueOptions);
+      stringIgnoreCase('altitude') & valueOptions();
   Parser altitudeOptions() =>
       (char('-').trim().map((value) => ['hyphen', value]) |
           number().trim().map((value) => ['single_number', value]) |
