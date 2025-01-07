@@ -735,7 +735,8 @@ class THGrammar extends GrammarDefinition {
               lengthUnit().optional())
           .trim()
           .map((value) => ['fix_number', value]) |
-      bracketStringTemplate(number() & number() & lengthUnit().optional())
+      bracketStringTemplate(
+              number().trim() & number().trim() & lengthUnit().optional())
           .trim()
           .map((value) => ['two_numbers_with_optional_unit', value]));
 
