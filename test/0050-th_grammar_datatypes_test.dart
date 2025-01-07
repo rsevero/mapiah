@@ -1,6 +1,4 @@
-// import 'package:petitparser/debug.dart';
 import 'package:petitparser/petitparser.dart';
-// import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
@@ -187,7 +185,6 @@ void main() {
     for (var failure in failures) {
       test(failure, () {
         final result = parser.parse(failure);
-        // trace(parser).parse(failure);
         expect(result.runtimeType.toString(), 'Failure');
       });
     }
@@ -228,7 +225,6 @@ void main() {
     for (var failure in failures) {
       test(failure, () {
         final result = parser.parse(failure);
-        // trace(parser).parse(failure);
         expect(result.runtimeType.toString(), 'Failure');
       });
     }
@@ -287,30 +283,11 @@ void main() {
     for (var success in mapSuccesses.keys) {
       test("$id - $success", () {
         final result = parser.parse(success);
-        // trace(parser).parse(success);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, mapSuccesses[success]);
       });
       id++;
     }
-
-    // const mapFailures = [
-    //   '2022.',
-    //   '2022:02.9',
-    //   '2022.02.13.11',
-    //   '2022.02.13@',
-    //   '2022.2.5',
-    //   '2022.02.9@2:30',
-    //   '2021.12.23@8:30:1 - 2022.2.09@2:30:7',
-    //   '2021.12.23 - 2022.02.9@2:30 ',
-    // ];
-
-    // for (var failure in mapFailures) {
-    //   test(failure, () {
-    //     final result = parser.parse(failure);
-    //     expect(result.runtimeType.toString(), 'Failure');
-    //   });
-    // }
   });
 
   group('quotedString', () {
@@ -530,7 +507,6 @@ void main() {
     for (var success in successes) {
       test(success, () {
         final result = parser.parse(success);
-        // trace(parser).parse(success);
         expect(result.runtimeType.toString(), contains('Success'));
         expect(result.value, success.trim());
       });

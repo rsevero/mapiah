@@ -1,8 +1,6 @@
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-// import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
-// import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
@@ -10,7 +8,6 @@ import 'th_test_aux.dart';
 void main() {
   group('scrap -author', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -79,8 +76,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -94,7 +89,6 @@ endscrap
 
   group('scrap -copyright', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -125,8 +119,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -140,7 +132,6 @@ endscrap
 
   group('scrap -cs', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -168,8 +159,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -183,7 +172,6 @@ endscrap
 
   group('scrap -flip', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -224,8 +212,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -244,17 +230,13 @@ endscrap
       test(failure, () async {
         final (_, isSuccessful, errors) =
             await parser.parse(THTestAux.testPath(failure));
-        // final (file, isSuccessful, errors) =
-        //     await parser.parse(success, startParser: grammar.start());
         expect(isSuccessful, false);
-        // print(errors.toString());
       });
     }
   });
 
   group('scrap -projection', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -332,8 +314,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -347,7 +327,6 @@ endscrap
 
   group('scrap -scale', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -391,8 +370,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -406,7 +383,6 @@ endscrap
 
   group('scrap -sketch', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -425,8 +401,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -440,7 +414,6 @@ endscrap
 
   group('scrap -station-names', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -459,8 +432,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -474,7 +445,6 @@ endscrap
 
   group('scrap -stations', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -493,8 +463,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -508,7 +476,6 @@ endscrap
 
   group('scrap -title', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -527,8 +494,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -542,7 +507,6 @@ endscrap
 
   group('scrap -walls', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -561,8 +525,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -576,7 +538,6 @@ endscrap
 
   group('scrap MULTIPLE OPTIONS', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -597,8 +558,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -612,7 +571,6 @@ endscrap
 
   group('scrap NO OPTIONS', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
     final writer = THFileWriter();
 
     const successes = [
@@ -631,8 +589,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -646,7 +602,6 @@ endscrap
 
   group('scrap failures', () {
     final parser = THFileParser();
-    // final grammar = THGrammar();
 
     const failures = [
       'th_file_parser-00062-scrap_with_encoding_inside-failure.th2',

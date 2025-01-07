@@ -2,7 +2,6 @@ import 'package:mapiah/src/elements/th_multilinecomment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-// import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
@@ -65,8 +64,6 @@ endscrap
       test(success['file'], () async {
         final (file, isSuccessful, errors) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
-        //     startParser: myGrammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
@@ -112,8 +109,6 @@ endscrap
       test(success['file'], () async {
         final (file, isSuccessful, errors) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
-        //     startParser: myGrammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
@@ -201,8 +196,6 @@ endcomment
     test("${success['file']} in parts", () async {
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
-      // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
-      //     startParser: myGrammar.start());
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
@@ -252,8 +245,6 @@ endcomment
     test("${success['file']} as once", () async {
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
-      // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
-      //     startParser: myGrammar.start());
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
@@ -306,8 +297,6 @@ endscrap
     test("${success['file']} as once", () async {
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
-      // final (file, isSuccessful, errors) = await parser.parse(success['file'] as String,
-      //     startParser: myGrammar.start());
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);

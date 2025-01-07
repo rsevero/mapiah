@@ -1,7 +1,6 @@
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-// import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
@@ -50,8 +49,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) =
-        //     await parser.parse(success, startParser: grammar.start());
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
