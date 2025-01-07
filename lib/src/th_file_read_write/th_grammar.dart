@@ -627,7 +627,7 @@ class THGrammar extends GrammarDefinition {
   Parser extendOptions() =>
       ((stringIgnoreCase('prev') & stringIgnoreCase('ious').optional())
                   .flatten() &
-              ref0(reference))
+              reference())
           .pick(1)
           .optional()
           .trim()
@@ -635,21 +635,21 @@ class THGrammar extends GrammarDefinition {
 
   /// point/line -id
   Parser idOption() =>
-      stringIgnoreCase('id').skip(before: char('-')) & ref0(idOptions);
-  Parser idCommandLikeOption() => stringIgnoreCase('id') & ref0(idOptions);
-  Parser idOptions() => ref0(extKeyword).trim().map((value) => [value]);
+      stringIgnoreCase('id').skip(before: char('-')) & idOptions();
+  Parser idCommandLikeOption() => stringIgnoreCase('id') & idOptions();
+  Parser idOptions() => extKeyword().trim().map((value) => [value]);
 
   /// point -from
   Parser fromOption() =>
-      stringIgnoreCase('from').skip(before: char('-')) & ref0(fromOptions);
-  Parser fromOptions() => ref0(extKeyword).trim().map((value) => [value]);
+      stringIgnoreCase('from').skip(before: char('-')) & fromOptions();
+  Parser fromOptions() => extKeyword().trim().map((value) => [value]);
 
   /// point -name
   Parser nameOption() =>
-      stringIgnoreCase('name').skip(before: char('-')) & ref0(nameOptions);
+      stringIgnoreCase('name').skip(before: char('-')) & nameOptions();
   Parser nameOptions() =>
-      ref0(reference).trim().map((value) => [value]) |
-      ref0(quotedString).map((value) => [value]);
+      reference().trim().map((value) => [value]) |
+      quotedString().trim().map((value) => [value]);
 
   /// point -orientation
   Parser orientationOption() =>
@@ -703,11 +703,11 @@ class THGrammar extends GrammarDefinition {
 
   /// point/line -subtype
   Parser subtypeOption() =>
-      stringIgnoreCase('subtype').skip(before: char('-')) &
-      ref0(subtypeOptions);
+      stringIgnoreCase('subtype').skip(before: char('-')) & subtypeOptions();
   Parser subtypeCommandLikeOption() =>
-      stringIgnoreCase('subtype') & ref0(subtypeOptions);
-  Parser subtypeOptions() => unquotedString().map((value) => [value]);
+      stringIgnoreCase('subtype') & subtypeOptions();
+  Parser subtypeOptions() =>
+      unquotedString().flatten().trim().map((value) => [value]);
 
   /// point/line -text
   Parser textOption() =>

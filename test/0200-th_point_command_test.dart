@@ -492,8 +492,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) = await parser
-            .parse(THTestAux.testPath(success['file'] as String), trace: true);
+        final (file, isSuccessful, _) =
+            await parser.parse(THTestAux.testPath(success['file'] as String));
         // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
         //     startParser: grammar.start());
         expect(isSuccessful, true);
