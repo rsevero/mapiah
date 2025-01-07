@@ -656,12 +656,12 @@ class THGrammar extends GrammarDefinition {
       (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
           .skip(before: char('-'))
           .map((value) => 'orientation') &
-      ref0(orientationOptions);
+      orientationOptions();
   Parser orientationCommandLikeOption() =>
       (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
           .map((value) => 'orientation') &
-      ref0(orientationOptions);
-  Parser orientationOptions() => number().map((value) => [value]);
+      orientationOptions();
+  Parser orientationOptions() => number().trim().map((value) => [value]);
 
   /// point/line/area -place
   Parser placeOption() =>

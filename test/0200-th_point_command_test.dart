@@ -648,7 +648,6 @@ endscrap
   group('point -orientation failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00128-point_with_invalid_orientation_option_value_failure.th2',
