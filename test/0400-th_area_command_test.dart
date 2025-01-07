@@ -1,8 +1,8 @@
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
-import 'package:petitparser/debug.dart';
+// import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
+// import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
@@ -78,7 +78,6 @@ endscrap
   group('area failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00093-area_with_invalid_type-failure.th2',
@@ -143,7 +142,6 @@ endscrap
   group('area -clip failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03232-area_with_invalid_command_like_clip_option-failure.th2',
@@ -315,7 +313,6 @@ endscrap
   group('area -place failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03222-area_with_invalid_command_like_place_option-failure.th2',
@@ -381,7 +378,6 @@ endscrap
   group('area -visibility failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03242-area_with_invalid_command_like_visibility_option-failure.th2',
