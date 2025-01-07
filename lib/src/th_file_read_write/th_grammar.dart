@@ -356,13 +356,10 @@ class THGrammar extends GrammarDefinition {
                   ((char(':') & keyword()).pick(1)).optional())) |
 
               // type: elevation with view direction
-              (char('[') &
-                      (stringIgnoreCase('elevation') &
-                          ((char(':') & keyword()).pick(1)).optional() &
-                          number() &
-                          angleUnit().optional()) &
-                      char(']'))
-                  .pick(1) |
+              (bracketStringTemplate(stringIgnoreCase('elevation') &
+                  ((char(':') & keyword()).pick(1)).optional() &
+                  number().trim() &
+                  angleUnit().optional())) |
 
               // type: extended with optional index
               (stringIgnoreCase('extended') &
