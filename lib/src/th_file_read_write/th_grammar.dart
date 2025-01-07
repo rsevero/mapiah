@@ -584,12 +584,11 @@ class THGrammar extends GrammarDefinition {
 
   /// point -clip
   Parser clipOption() => stringIgnoreCase('clip') & onOffOptions();
-  Parser clipCommandLikeOption() => stringIgnoreCase('clip') & onOffOptions();
+  Parser clipCommandLikeOption() => clipOption();
 
   /// point -context
   Parser contextOption() => stringIgnoreCase('context') & contextOptions();
-  Parser contextCommandLikeOption() =>
-      stringIgnoreCase('context') & contextOptions();
+  Parser contextCommandLikeOption() => contextOption();
   Parser contextOptions() => (keyword() & keyword()).trim();
 
   /// point -dist
@@ -617,7 +616,7 @@ class THGrammar extends GrammarDefinition {
 
   /// point/line -id
   Parser idOption() => stringIgnoreCase('id') & idOptions();
-  Parser idCommandLikeOption() => stringIgnoreCase('id') & idOptions();
+  Parser idCommandLikeOption() => idOption();
   Parser idOptions() => extKeyword().trim().map((value) => [value]);
 
   /// point -from
@@ -635,15 +634,12 @@ class THGrammar extends GrammarDefinition {
       (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
           .map((value) => 'orientation') &
       orientationOptions();
-  Parser orientationCommandLikeOption() =>
-      (stringIgnoreCase('orientation') | stringIgnoreCase('orient'))
-          .map((value) => 'orientation') &
-      orientationOptions();
+  Parser orientationCommandLikeOption() => orientationOption();
   Parser orientationOptions() => number().trim().map((value) => [value]);
 
   /// point/line/area -place
   Parser placeOption() => stringIgnoreCase('place') & placeOptions();
-  Parser placeCommandLikeOption() => stringIgnoreCase('place') & placeOptions();
+  Parser placeCommandLikeOption() => placeOption();
   Parser placeOptions() => (stringIgnoreCase('bottom') |
           stringIgnoreCase('default') |
           stringIgnoreCase('top'))
@@ -675,14 +671,13 @@ class THGrammar extends GrammarDefinition {
 
   /// point/line -subtype
   Parser subtypeOption() => stringIgnoreCase('subtype') & subtypeOptions();
-  Parser subtypeCommandLikeOption() =>
-      stringIgnoreCase('subtype') & subtypeOptions();
+  Parser subtypeCommandLikeOption() => subtypeOption();
   Parser subtypeOptions() =>
       unquotedString().flatten().trim().map((value) => [value]);
 
   /// point/line -text
   Parser textOption() => stringIgnoreCase('text') & textOptions();
-  Parser textCommandLikeOption() => stringIgnoreCase('text') & textOptions();
+  Parser textCommandLikeOption() => textOption();
   Parser textOptions() => anyString().map((value) => [value]);
 
   /// point -value
@@ -710,8 +705,7 @@ class THGrammar extends GrammarDefinition {
 
   /// point -visibility
   Parser visibilityOption() => stringIgnoreCase('visibility') & onOffOptions();
-  Parser visibilityCommandLikeOption() =>
-      stringIgnoreCase('visibility') & onOffOptions();
+  Parser visibilityCommandLikeOption() => visibilityOption();
 
   /// line
   Parser line() => ref1(commandTemplate, lineCommand);
@@ -860,18 +854,16 @@ class THGrammar extends GrammarDefinition {
 
   /// line -anchors
   Parser anchorsOption() => ref0(anchorsCommandID) & onOffOptions();
-  Parser anchorsCommandLikeOption() => ref0(anchorsCommandID) & onOffOptions();
+  Parser anchorsCommandLikeOption() => anchorsOption();
   Parser anchorsCommandID() => stringIgnoreCase('anchors');
 
   /// line -border
   Parser borderOption() => stringIgnoreCase('border') & onOffOptions();
-  Parser borderCommandLikeOption() =>
-      stringIgnoreCase('border') & onOffOptions();
+  Parser borderCommandLikeOption() => borderOption();
 
   /// line -close
   Parser closeOption() => stringIgnoreCase('close') & onOffAutoOptions();
-  Parser closeCommandLikeOption() =>
-      stringIgnoreCase('close') & onOffAutoOptions();
+  Parser closeCommandLikeOption() => closeOption();
 
   /// line -direction
   Parser directionOption() =>
@@ -900,20 +892,18 @@ class THGrammar extends GrammarDefinition {
 
   /// line -head
   Parser headOption() => stringIgnoreCase('head') & headOptions();
-  Parser headCommandLikeOption() => stringIgnoreCase('head') & headOptions();
+  Parser headCommandLikeOption() => headOption();
   Parser headOptions() =>
       ref0(beginEndBothNoneOptions).trim().map((value) => [value]);
 
   /// line -height
   Parser heightOption() => stringIgnoreCase('height') & heightOptions();
-  Parser heightCommandLikeOption() =>
-      stringIgnoreCase('height') & heightOptions();
+  Parser heightCommandLikeOption() => heightOption();
   Parser heightOptions() => number().map((value) => [value]);
 
   /// line -scale
   Parser lineScaleOption() => stringIgnoreCase('scale') & lineScaleOptions();
-  Parser lineScaleCommandLikeOption() =>
-      stringIgnoreCase('scale') & lineScaleOptions();
+  Parser lineScaleCommandLikeOption() => lineScaleOption();
   Parser lineScaleOptions() =>
       (stringIgnoreCase('tiny') |
               stringIgnoreCase('xs') |
@@ -945,8 +935,7 @@ class THGrammar extends GrammarDefinition {
 
   /// line -outline
   Parser outlineOption() => stringIgnoreCase('outline') & outlineOptions();
-  Parser outlineCommandLikeOption() =>
-      stringIgnoreCase('outline') & outlineOptions();
+  Parser outlineCommandLikeOption() => outlineOption();
   Parser outlineOptions() => (stringIgnoreCase('in') |
           stringIgnoreCase('out') |
           stringIgnoreCase('none'))
@@ -955,13 +944,11 @@ class THGrammar extends GrammarDefinition {
 
   /// line -rebelays
   Parser rebelaysOption() => stringIgnoreCase('rebelays') & onOffOptions();
-  Parser rebelaysCommandLikeOption() =>
-      stringIgnoreCase('rebelays') & onOffOptions();
+  Parser rebelaysCommandLikeOption() => rebelaysOption();
 
   /// line -reverse
   Parser reverseOption() => stringIgnoreCase('reverse') & onOffOptions();
-  Parser reverseCommandLikeOption() =>
-      stringIgnoreCase('reverse') & onOffOptions();
+  Parser reverseCommandLikeOption() => reverseOption();
 
   /// line -smooth
   Parser smoothCommandLikeOption() =>
