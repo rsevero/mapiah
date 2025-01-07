@@ -143,7 +143,6 @@ endscrap
   group('point -clip failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02231-point_with_invalid_clip_option_failure.th2',
@@ -197,7 +196,6 @@ endscrap
   group('point -context failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00141-point_with_invalid_context_type_failure.th2',
@@ -261,7 +259,6 @@ endscrap
   group('point -dist failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00152-point_with_invalid_dist_option_unsupported_unit_failure.th2',
@@ -326,7 +323,6 @@ endscrap
   group('point -explored failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02282-point_with_invalid_explored_option_unsupported_unit_failure.th2',
@@ -404,7 +400,6 @@ endscrap
   group('point -extend failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00163-point_with_extend_option_with_alternate_previous_missing_station_failure.th2',
@@ -457,7 +452,6 @@ endscrap
   group('point -from failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02241-point_with_from_option_on_invalid_point_type_failure.th2',
@@ -510,7 +504,6 @@ endscrap
   group('point -id failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02250-point_with_incomplete_option_id_failure.th2',
@@ -583,7 +576,6 @@ endscrap
   group('point -name failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02261-point_with_option_name_with_unsupported_point_type_failure.th2',
@@ -701,7 +693,6 @@ endscrap
   group('point -place failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02211-point_with_invalid_place_option_failure.th2',
@@ -764,7 +755,6 @@ endscrap
   group('point -scale failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00132-point_with_invalid_scale_value_failure.th2',
@@ -817,7 +807,6 @@ endscrap
   group('point -scrap failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02271-point_with_option_section_on_invalid_point_type_failure.th2',
@@ -880,7 +869,6 @@ endscrap
   group('point -subtype failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00124-point_with_invalid_subtype_for_type_failure.th2',
@@ -946,7 +934,6 @@ endscrap
   group('point -text failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02291-point_with_faulty_title_option_failure.th2',
@@ -1044,7 +1031,6 @@ endscrap
   group('point -value failures (altitude)', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02320-altitude_point_with_invalid_value_option-failure.th2',
@@ -1121,7 +1107,6 @@ endscrap
   group('point -value failures (date)', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02340-point_of_type_date_with_invalid_date_value_option-failure.th2',
@@ -1185,7 +1170,6 @@ endscrap
   group('point -value failures (dimensions)', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02362-dimensions_point_with_value_option_with_unit_without_brackets_failure.th2',
@@ -1249,7 +1233,6 @@ endscrap
   group('point -value failures (height)', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02351-height_point_with_invalid_value_option-failure.th2',
@@ -1315,7 +1298,6 @@ endscrap
   group('point -value failures (passage-height)', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00185-passage_height_point_with_value_option_without_brackets-failure.th2',
@@ -1369,7 +1351,6 @@ endscrap
   group('point -visibility failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02221-point_with_invalid_visibility_option_failure.th2',

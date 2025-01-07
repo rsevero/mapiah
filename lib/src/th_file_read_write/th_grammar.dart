@@ -88,10 +88,10 @@ class THGrammar extends GrammarDefinition {
       .flatten();
   Parser plusNumber() =>
       (char('+') & digit().plus() & (char('.') & digit().plus()).optional())
-          .trim();
+          .flatten();
   Parser minusNumber() =>
       (char('-') & digit().plus() & (char('.') & digit().plus()).optional())
-          .trim();
+          .flatten();
 
   /// NaN
   Parser nan() => (pattern('-.') | stringIgnoreCase('NaN'));
@@ -726,7 +726,7 @@ class THGrammar extends GrammarDefinition {
               numberWithSuffix(char('?').optional()) & lengthUnit().optional())
           .trim()
           .map((value) => ['number_with_something_else', value]) |
-      bracketStringTemplate(plusNumber() & minusNumber())
+      bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
           .trim()
           .map((value) => ['plus_number_minus_number', value]) |
       nan().trim().map((value) => ['nan', value]) |
