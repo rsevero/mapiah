@@ -1,8 +1,8 @@
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
-import 'package:petitparser/debug.dart';
+// import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
+// import 'package:petitparser/debug.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
@@ -187,7 +187,6 @@ endscrap
   group('line failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-00082-line_with_invalid_type-failure.th2',
@@ -244,7 +243,6 @@ endscrap
   group('linepoint -adjust failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03081-line_with_adjust_option_invalid-failure.th2',
@@ -377,7 +375,6 @@ endscrap
   group('linepoint -altitude failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03132-linepoint_with_altitude_option_with_invalid_line_type-failure.th2',
@@ -433,7 +430,6 @@ endscrap
   group('line -anchors failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02394-line_with_anchors_option_invalid_line_type-failure.th2',
@@ -490,7 +486,6 @@ endscrap
   group('linepoint -anchors failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02391-linepoint_with_anchors_option_invalid_line_type-failure.th2',
@@ -561,7 +556,6 @@ endscrap
   group('line -border failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03004-line_with_border_option_invalid_line_type-failure.th2',
@@ -618,7 +612,6 @@ endscrap
   group('linepoint -border failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03001-linepoint_with_border_option_invalid_line_type-failure.th2',
@@ -675,7 +668,6 @@ endscrap
   group('line -clip failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03021-line_with_invalid_clip_option-failure.th2',
@@ -731,7 +723,6 @@ endscrap
   group('linepoint -clip failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03026-linepoint_with_invalid_clip_option-failure.th2',
@@ -787,7 +778,6 @@ endscrap
   group('line -close failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-02381-line_with_invalid_close_option-failure.th2',
@@ -843,7 +833,6 @@ endscrap
   group('linepoint -close failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03011-linepoint_with_invalid_close_option-failure.th2',
@@ -975,7 +964,6 @@ endscrap
   group('line -direction failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03072-line_with_direction_option_set_to_point_invalid-failure.th2',
@@ -1075,7 +1063,6 @@ endscrap
   group('linepoint -direction failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03074-linepoint_with_direction_option_unsupported_line_type-failure.th2',
@@ -1196,7 +1183,6 @@ endscrap
   group('line -height failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03182-line_with_height_option_on_invalid_line_type-failure.th2',
@@ -1265,7 +1251,6 @@ endscrap
   group('line -id failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03192-line_with_invalid_id-failure.th2',
@@ -1336,7 +1321,6 @@ endscrap
   group('linepoint l-size failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03141-linepoint_with_lsize_option_on_non_slope-failure.th2',
@@ -1393,7 +1377,6 @@ endscrap
   group('linepoint -mark failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03111-linepoint_with_invalid_mark_option-failure.th2',
@@ -1466,7 +1449,6 @@ endscrap
   group('linepoint orientation failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03152-linepoint_with_invalid_orientation_option-failure.th2',
@@ -1536,7 +1518,6 @@ endscrap
   group('line -outline failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03212-linepoint_with_invalid_outline_option-failure.th2',
@@ -1605,7 +1586,6 @@ endscrap
   group('line -place failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03202-linepoint_with_invalid_place_option-failure.th2',
@@ -1764,7 +1744,6 @@ endscrap
   group('linepoint -smooth failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03091-line_with_smooth_option_invalid-failure.th2',
@@ -1873,7 +1852,6 @@ endscrap
   group('line -scale failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03165-linepoint_with_scale_option_and_invalid_line_type-failure.th2',
@@ -1969,7 +1947,6 @@ endscrap
   group('linepoint -subtype failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03102-linepoint_with_subtype_option_for_unsupported_type-failure.th2',
@@ -2040,7 +2017,6 @@ endscrap
   group('line -text failures', () {
     final parser = THFileParser();
     // final grammar = THGrammar();
-    final writer = THFileWriter();
 
     const failures = [
       'th_file_parser-03171-line_with_invalid_text_option-failure.th2',
