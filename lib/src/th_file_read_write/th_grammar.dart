@@ -71,21 +71,20 @@ class THGrammar extends GrammarDefinition {
 
   /// Bracket string
   Parser bracketStringTemplate(Parser content) =>
-      (char('[') & content.flatten() & char(']')).pick(1);
-  Parser bracketStringGeneral() => bracketStringTemplate(noneOf('[]').star());
+      (char('[') & content & char(']')).pick(1);
+  Parser bracketStringGeneral() =>
+      bracketStringTemplate(noneOf('[]').star().flatten());
 
   /// Number
   Parser number() => (pattern('-+').optional() &
           digit().plus() &
           (char('.') & digit().plus()).optional())
-      .flatten()
-      .trim();
+      .flatten();
   Parser numberWithSuffix(something) => (pattern('-+').optional() &
           digit().plus() &
           (char('.') & digit().plus()).optional() &
           something)
-      .flatten()
-      .trim();
+      .flatten();
   Parser plusNumber() =>
       (char('+') & digit().plus() & (char('.') & digit().plus()).optional())
           .trim();
@@ -97,7 +96,10 @@ class THGrammar extends GrammarDefinition {
   Parser nan() => (pattern('-.') | stringIgnoreCase('NaN'));
 
   /// point data
-  Parser pointData() => number().repeat(2, 2).trim();
+  Parser pointData() => number()
+      .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
+      .trim()
+      .map((value) => [value.elements[0], value.elements[1]]);
 
   /// comment
   Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
@@ -281,7 +283,7 @@ class THGrammar extends GrammarDefinition {
   /// scrap
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
-  Parser scrapRequired() => stringIgnoreCase('scrap') & ref0(keyword);
+  Parser scrapRequired() => stringIgnoreCase('scrap') & keyword();
   Parser scrapOptions() => (authorOption() |
           copyrightOption() |
           csOption() |
@@ -346,28 +348,28 @@ class THGrammar extends GrammarDefinition {
   Parser projectionSpec() =>
       // type: none
       ((stringIgnoreCase('none') &
-                  ((char(':') & ref0(keyword)).pick(1)).optional()) |
+                  ((char(':') & keyword()).pick(1)).optional()) |
 
               // type: plan with optional index
               ((stringIgnoreCase('plan') &
-                  ((char(':') & ref0(keyword)).pick(1)).optional())) |
+                  ((char(':') & keyword()).pick(1)).optional())) |
 
               // type: elevation with optional index
               ((stringIgnoreCase('elevation') &
-                  ((char(':') & ref0(keyword)).pick(1)).optional())) |
+                  ((char(':') & keyword()).pick(1)).optional())) |
 
               // type: elevation with view direction
               (char('[') &
                       (stringIgnoreCase('elevation') &
-                          ((char(':') & ref0(keyword)).pick(1)).optional() &
-                          ref0(number) &
+                          ((char(':') & keyword()).pick(1)).optional() &
+                          number() &
                           angleUnit().optional()) &
                       char(']'))
                   .pick(1) |
 
               // type: extended with optional index
               (stringIgnoreCase('extended') &
-                  ((char(':') & ref0(keyword)).pick(1)).optional()))
+                  ((char(':') & keyword()).pick(1)).optional()))
           .trim();
   Parser projectionOption() =>
       stringIgnoreCase('projection').skip(before: char('-')) &
@@ -377,19 +379,19 @@ class THGrammar extends GrammarDefinition {
   Parser scrapScaleOption() =>
       stringIgnoreCase('scale').skip(before: char('-')) & ref0(scrapScaleSpec);
   Parser scrapScaleSpec() =>
-      ref0(number).map((value) => [value]) |
+      number().map((value) => [value]) |
       bracketStringTemplate(scrapScaleNumber());
   Parser scrapScaleNumber() =>
-      (ref0(number) & lengthUnit()) |
-      (ref0(number) & ref0(number) & lengthUnit()) |
-      (ref0(number) &
-          ref0(number) &
-          ref0(number) &
-          ref0(number) &
-          ref0(number) &
-          ref0(number) &
-          ref0(number) &
-          ref0(number) &
+      (number() & lengthUnit()) |
+      (number() & number() & lengthUnit()) |
+      (number() &
+          number() &
+          number() &
+          number() &
+          number() &
+          number() &
+          number() &
+          number() &
           lengthUnit().optional());
 
   /// scrap -sketch
@@ -428,126 +430,125 @@ class THGrammar extends GrammarDefinition {
   Parser point() => ref1(commandTemplate, pointCommand);
   Parser pointCommand() => pointRequired() & pointOptions();
   Parser pointRequired() =>
-      stringIgnoreCase('point') & ref0(pointData) & pointType();
+      stringIgnoreCase('point') & pointData() & pointType();
   Parser pointType() =>
       (stringIgnoreCase('air-draught') |
-              stringIgnoreCase('altar') |
-              stringIgnoreCase('altitude') |
-              stringIgnoreCase('anastomosis') |
-              stringIgnoreCase('anchor') |
-              stringIgnoreCase('aragonite') |
-              stringIgnoreCase('archeo-excavation') |
-              stringIgnoreCase('archeo-material') |
-              stringIgnoreCase('audio') |
-              stringIgnoreCase('bat') |
-              stringIgnoreCase('bedrock') |
-              stringIgnoreCase('blocks') |
-              stringIgnoreCase('bones') |
-              stringIgnoreCase('breakdown-choke') |
-              stringIgnoreCase('bridge') |
-              stringIgnoreCase('camp') |
-              stringIgnoreCase('cave-pearl') |
-              stringIgnoreCase('clay-choke') |
-              stringIgnoreCase('clay-tree') |
-              stringIgnoreCase('clay') |
-              stringIgnoreCase('continuation') |
-              stringIgnoreCase('crystal') |
-              stringIgnoreCase('curtains') |
-              stringIgnoreCase('curtain') |
-              stringIgnoreCase('danger') |
-              stringIgnoreCase('date') |
-              stringIgnoreCase('debris') |
-              stringIgnoreCase('dig') |
-              stringIgnoreCase('dimensions') |
-              stringIgnoreCase('disc-pillars') |
-              stringIgnoreCase('disc-pillar') |
-              stringIgnoreCase('disc-stalactites') |
-              stringIgnoreCase('disc-stalactite') |
-              stringIgnoreCase('disc-stalagmites') |
-              stringIgnoreCase('disc-stalagmite') |
-              stringIgnoreCase('disk') |
-              stringIgnoreCase('electric-light') |
-              stringIgnoreCase('entrance') |
-              stringIgnoreCase('ex-voto') |
-              stringIgnoreCase('extra') |
-              stringIgnoreCase('fixed-ladder') |
-              stringIgnoreCase('flowstone-choke') |
-              stringIgnoreCase('flowstone') |
-              stringIgnoreCase('flute') |
-              stringIgnoreCase('gate') |
-              stringIgnoreCase('gradient') |
-              stringIgnoreCase('guano') |
-              stringIgnoreCase('gypsum-flower') |
-              stringIgnoreCase('gypsum') |
-              stringIgnoreCase('handrail') |
-              stringIgnoreCase('height') |
-              stringIgnoreCase('helictites') |
-              stringIgnoreCase('helictite') |
-              stringIgnoreCase('human-bones') |
-              stringIgnoreCase('ice-pillar') |
-              stringIgnoreCase('ice-stalactite') |
-              stringIgnoreCase('ice-stalagmite') |
-              stringIgnoreCase('ice') |
-              stringIgnoreCase('karren') |
-              stringIgnoreCase('label') |
-              stringIgnoreCase('low-end') |
-              stringIgnoreCase('map-connection') |
-              stringIgnoreCase('masonry') |
-              stringIgnoreCase('moonmilk') |
-              stringIgnoreCase('mudcrack') |
-              stringIgnoreCase('mud') |
-              stringIgnoreCase('name-plate') |
-              stringIgnoreCase('narrow-end') |
-              stringIgnoreCase('no-equipment') |
-              stringIgnoreCase('no-wheelchair') |
-              stringIgnoreCase('paleo-material') |
-              stringIgnoreCase('passage-height') |
-              stringIgnoreCase('pebbles') |
-              stringIgnoreCase('pendant') |
-              stringIgnoreCase('photo') |
-              stringIgnoreCase('pillars-with-curtains') |
-              stringIgnoreCase('pillar-with-curtains') |
-              stringIgnoreCase('pillar') |
-              stringIgnoreCase('popcorn') |
-              stringIgnoreCase('raft-cone') |
-              stringIgnoreCase('raft') |
-              stringIgnoreCase('remark') |
-              stringIgnoreCase('rimstone-dam') |
-              stringIgnoreCase('rimstone-pool') |
-              stringIgnoreCase('root') |
-              stringIgnoreCase('rope-ladder') |
-              stringIgnoreCase('rope') |
-              stringIgnoreCase('sand') |
-              stringIgnoreCase('scallop') |
-              stringIgnoreCase('section') |
-              stringIgnoreCase('seed-germination') |
-              stringIgnoreCase('sink') |
-              stringIgnoreCase('snow') |
-              stringIgnoreCase('soda-straw') |
-              stringIgnoreCase('spring') |
-              stringIgnoreCase('stalactite-stalagmite') |
-              stringIgnoreCase('stalactites-stalagmites') |
-              stringIgnoreCase('stalactites') |
-              stringIgnoreCase('stalactite') |
-              stringIgnoreCase('stalagmites') |
-              stringIgnoreCase('stalagmite') |
-              stringIgnoreCase('station-name') |
-              stringIgnoreCase('station') |
-              stringIgnoreCase('steps') |
-              stringIgnoreCase('traverse') |
-              stringIgnoreCase('tree-trunk') |
-              (stringIgnoreCase('u') & (char(':') & ref0(keyword)).pick(1)) |
-              stringIgnoreCase('vegetable-debris') |
-              stringIgnoreCase('via-ferrata') |
-              stringIgnoreCase('volcano') |
-              stringIgnoreCase('walkway') |
-              stringIgnoreCase('wall-calcite') |
-              stringIgnoreCase('water-drip') |
-              stringIgnoreCase('water-flow') |
-              stringIgnoreCase('water') |
-              stringIgnoreCase('wheelchair'))
-          .trim() &
-      (char(':') & ref0(keyword).trim()).pick(1).optional();
+          stringIgnoreCase('altar') |
+          stringIgnoreCase('altitude') |
+          stringIgnoreCase('anastomosis') |
+          stringIgnoreCase('anchor') |
+          stringIgnoreCase('aragonite') |
+          stringIgnoreCase('archeo-excavation') |
+          stringIgnoreCase('archeo-material') |
+          stringIgnoreCase('audio') |
+          stringIgnoreCase('bat') |
+          stringIgnoreCase('bedrock') |
+          stringIgnoreCase('blocks') |
+          stringIgnoreCase('bones') |
+          stringIgnoreCase('breakdown-choke') |
+          stringIgnoreCase('bridge') |
+          stringIgnoreCase('camp') |
+          stringIgnoreCase('cave-pearl') |
+          stringIgnoreCase('clay-choke') |
+          stringIgnoreCase('clay-tree') |
+          stringIgnoreCase('clay') |
+          stringIgnoreCase('continuation') |
+          stringIgnoreCase('crystal') |
+          stringIgnoreCase('curtains') |
+          stringIgnoreCase('curtain') |
+          stringIgnoreCase('danger') |
+          stringIgnoreCase('date') |
+          stringIgnoreCase('debris') |
+          stringIgnoreCase('dig') |
+          stringIgnoreCase('dimensions') |
+          stringIgnoreCase('disc-pillars') |
+          stringIgnoreCase('disc-pillar') |
+          stringIgnoreCase('disc-stalactites') |
+          stringIgnoreCase('disc-stalactite') |
+          stringIgnoreCase('disc-stalagmites') |
+          stringIgnoreCase('disc-stalagmite') |
+          stringIgnoreCase('disk') |
+          stringIgnoreCase('electric-light') |
+          stringIgnoreCase('entrance') |
+          stringIgnoreCase('ex-voto') |
+          stringIgnoreCase('extra') |
+          stringIgnoreCase('fixed-ladder') |
+          stringIgnoreCase('flowstone-choke') |
+          stringIgnoreCase('flowstone') |
+          stringIgnoreCase('flute') |
+          stringIgnoreCase('gate') |
+          stringIgnoreCase('gradient') |
+          stringIgnoreCase('guano') |
+          stringIgnoreCase('gypsum-flower') |
+          stringIgnoreCase('gypsum') |
+          stringIgnoreCase('handrail') |
+          stringIgnoreCase('height') |
+          stringIgnoreCase('helictites') |
+          stringIgnoreCase('helictite') |
+          stringIgnoreCase('human-bones') |
+          stringIgnoreCase('ice-pillar') |
+          stringIgnoreCase('ice-stalactite') |
+          stringIgnoreCase('ice-stalagmite') |
+          stringIgnoreCase('ice') |
+          stringIgnoreCase('karren') |
+          stringIgnoreCase('label') |
+          stringIgnoreCase('low-end') |
+          stringIgnoreCase('map-connection') |
+          stringIgnoreCase('masonry') |
+          stringIgnoreCase('moonmilk') |
+          stringIgnoreCase('mudcrack') |
+          stringIgnoreCase('mud') |
+          stringIgnoreCase('name-plate') |
+          stringIgnoreCase('narrow-end') |
+          stringIgnoreCase('no-equipment') |
+          stringIgnoreCase('no-wheelchair') |
+          stringIgnoreCase('paleo-material') |
+          stringIgnoreCase('passage-height') |
+          stringIgnoreCase('pebbles') |
+          stringIgnoreCase('pendant') |
+          stringIgnoreCase('photo') |
+          stringIgnoreCase('pillars-with-curtains') |
+          stringIgnoreCase('pillar-with-curtains') |
+          stringIgnoreCase('pillar') |
+          stringIgnoreCase('popcorn') |
+          stringIgnoreCase('raft-cone') |
+          stringIgnoreCase('raft') |
+          stringIgnoreCase('remark') |
+          stringIgnoreCase('rimstone-dam') |
+          stringIgnoreCase('rimstone-pool') |
+          stringIgnoreCase('root') |
+          stringIgnoreCase('rope-ladder') |
+          stringIgnoreCase('rope') |
+          stringIgnoreCase('sand') |
+          stringIgnoreCase('scallop') |
+          stringIgnoreCase('section') |
+          stringIgnoreCase('seed-germination') |
+          stringIgnoreCase('sink') |
+          stringIgnoreCase('snow') |
+          stringIgnoreCase('soda-straw') |
+          stringIgnoreCase('spring') |
+          stringIgnoreCase('stalactite-stalagmite') |
+          stringIgnoreCase('stalactites-stalagmites') |
+          stringIgnoreCase('stalactites') |
+          stringIgnoreCase('stalactite') |
+          stringIgnoreCase('stalagmites') |
+          stringIgnoreCase('stalagmite') |
+          stringIgnoreCase('station-name') |
+          stringIgnoreCase('station') |
+          stringIgnoreCase('steps') |
+          stringIgnoreCase('traverse') |
+          stringIgnoreCase('tree-trunk') |
+          (stringIgnoreCase('u') & (char(':') & keyword()).pick(1)) |
+          stringIgnoreCase('vegetable-debris') |
+          stringIgnoreCase('via-ferrata') |
+          stringIgnoreCase('volcano') |
+          stringIgnoreCase('walkway') |
+          stringIgnoreCase('wall-calcite') |
+          stringIgnoreCase('water-drip') |
+          stringIgnoreCase('water-flow') |
+          stringIgnoreCase('water') |
+          stringIgnoreCase('wheelchair')) &
+      (char(':') & keyword()).pick(1).optional().trim();
   Parser pointOptions() => (alignOption() |
           clipOption() |
           contextOption() |
@@ -789,7 +790,7 @@ class THGrammar extends GrammarDefinition {
               stringIgnoreCase('wall') |
               stringIgnoreCase('water-flow'))
           .trim() &
-      (char(':') & ref0(keyword).trim()).pick(1).optional();
+      (char(':') & keyword().trim()).pick(1).optional();
   Parser lineOptions() => (anchorsOption() |
           borderOption() |
           clipOption() |
@@ -949,7 +950,7 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('height').skip(before: char('-')) & ref0(heightOptions);
   Parser heightCommandLikeOption() =>
       stringIgnoreCase('height') & ref0(heightOptions);
-  Parser heightOptions() => ref0(number).map((value) => [value]);
+  Parser heightOptions() => number().map((value) => [value]);
 
   /// line -scale
   Parser lineScaleOption() =>
@@ -1041,7 +1042,7 @@ class THGrammar extends GrammarDefinition {
               stringIgnoreCase('u') |
               stringIgnoreCase('water'))
           .trim() &
-      (char(':') & ref0(keyword).trim()).pick(1).optional();
+      (char(':') & keyword().trim()).pick(1).optional();
   Parser areaOptions() => (clipOption() |
           contextOption() |
           idOption() |
