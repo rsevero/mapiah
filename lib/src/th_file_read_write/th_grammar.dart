@@ -100,7 +100,7 @@ class THGrammar extends GrammarDefinition {
   Parser pointData() => number()
       .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
       .trim()
-      .map((value) => [value.elements[0], value.elements[1]]);
+      .map((value) => value.elements);
 
   /// comment
   Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
@@ -371,19 +371,19 @@ class THGrammar extends GrammarDefinition {
   /// scrap -scale
   Parser scrapScaleOption() => stringIgnoreCase('scale') & scrapScaleSpec();
   Parser scrapScaleSpec() =>
-      number().map((value) => [value]) |
-      bracketStringTemplate(scrapScaleNumber());
+      number().trim().map((value) => [value]) |
+      bracketStringTemplate(scrapScaleNumber()).trim();
   Parser scrapScaleNumber() =>
-      (number() & lengthUnit()) |
-      (number() & number() & lengthUnit()) |
-      (number() &
-          number() &
-          number() &
-          number() &
-          number() &
-          number() &
-          number() &
-          number() &
+      (number().trim() & lengthUnit()) |
+      (number().trim() & number().trim() & lengthUnit()) |
+      (number().trim() &
+          number().trim() &
+          number().trim() &
+          number().trim() &
+          number().trim() &
+          number().trim() &
+          number().trim() &
+          number().trim() &
           lengthUnit().optional());
 
   /// scrap -sketch
