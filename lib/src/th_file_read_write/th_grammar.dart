@@ -67,7 +67,8 @@ class THGrammar extends GrammarDefinition {
   Parser unquotedString() => noneOf('$thWhitespaceChars$thDoubleQuote').plus();
 
   /// Any string
-  Parser anyString() => quotedString() | unquotedString();
+  Parser anyString() =>
+      quotedString().trim() | unquotedString().flatten().trim();
 
   /// Bracket string
   Parser bracketStringTemplate(Parser content) =>
@@ -711,9 +712,8 @@ class THGrammar extends GrammarDefinition {
 
   /// point/line -text
   Parser textOption() =>
-      stringIgnoreCase('text').skip(before: char('-')) & ref0(textOptions);
-  Parser textCommandLikeOption() =>
-      stringIgnoreCase('text') & ref0(textOptions);
+      stringIgnoreCase('text').skip(before: char('-')) & textOptions();
+  Parser textCommandLikeOption() => stringIgnoreCase('text') & textOptions();
   Parser textOptions() => anyString().map((value) => [value]);
 
   /// point -value
