@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_endline.dart';
@@ -14,11 +14,12 @@ import 'package:mapiah/src/widgets/th_paint_action.dart';
 class THFileWidget extends StatelessWidget {
   final THFile file;
   final List<THPaintAction> _paintActions = [];
-  final THFileStore thFileStore;
+  final THFileDisplayStore thFileDisplayStore;
 
-  THFileWidget(this.file, this.thFileStore) : super(key: ObjectKey(file)) {
-    thFileStore.updateDataBoundingBox(file.boundingBox());
-    thFileStore.setCanvasScaleTranslationUndefined(true);
+  THFileWidget(this.file, this.thFileDisplayStore)
+      : super(key: ObjectKey(file)) {
+    thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
+    thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
     for (final THElement child in file.children) {
       if (child is THScrap) {
         _addScrapPaintActions(child);
@@ -30,18 +31,18 @@ class THFileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        thFileStore.updateScreenSize(
+        thFileDisplayStore.updateScreenSize(
             Size(constraints.maxWidth, constraints.maxHeight));
 
-        if (thFileStore.canvasScaleTranslationUndefined) {
-          thFileStore.zoomShowAll();
+        if (thFileDisplayStore.canvasScaleTranslationUndefined) {
+          thFileDisplayStore.zoomShowAll();
         }
 
         return GestureDetector(
-          onPanUpdate: thFileStore.onPanUpdate,
+          onPanUpdate: thFileDisplayStore.onPanUpdate,
           child: Observer(
             builder: (context) {
-              thFileStore.trigger;
+              thFileDisplayStore.trigger;
               return CustomPaint(
                 /// Creating another CustomPaint as child of this CustomPaint
                 /// because CustomPaint creates 3 layers, from bottom to top:
@@ -50,10 +51,10 @@ class THFileWidget extends StatelessWidget {
                 /// I can put grids below it (as the main CustomPaint painter)
                 /// and a scale above it.
                 child: CustomPaint(
-                  painter: THFilePainter(_paintActions, thFileStore),
-                  size: thFileStore.screenSize,
+                  painter: THFilePainter(_paintActions, thFileDisplayStore),
+                  size: thFileDisplayStore.screenSize,
                 ),
-                size: thFileStore.screenSize,
+                size: thFileDisplayStore.screenSize,
               );
             },
           ),
@@ -113,7 +114,7 @@ class THFileWidget extends StatelessWidget {
 
 class THFilePainter extends CustomPainter {
   final List<THPaintAction> _paintActions;
-  final THFileStore thFileStore;
+  final THFileDisplayStore thFileStore;
 
   THFilePainter(this._paintActions, this.thFileStore);
 

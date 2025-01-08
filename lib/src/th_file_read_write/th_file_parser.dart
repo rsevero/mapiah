@@ -394,7 +394,7 @@ class THFileParser {
   void _injectScrap(List<dynamic> aElement) {
     final int elementSize = aElement.length;
     if (kDebugMode) assert(elementSize >= 2);
-    final newScrap = THScrap(_currentParent, aElement[1]);
+    final THScrap newScrap = THScrap(_currentParent, aElement[1]);
 
     _currentElement = newScrap;
     _currentParent = newScrap;
@@ -1529,10 +1529,10 @@ class THFileParser {
   }
 
   (int index, int length) _findLineBreak(String aContent) {
-    final windowsResult = aContent.indexOf(thWindowsLineBreak);
+    final int windowsResult = aContent.indexOf(thWindowsLineBreak);
     if (windowsResult != -1) return (windowsResult, 2);
 
-    final unixResult = aContent.indexOf(thUnixLineBreak);
+    final int unixResult = aContent.indexOf(thUnixLineBreak);
     if (unixResult != -1) return (unixResult, 1);
 
     return (-1, 0);
@@ -1540,33 +1540,37 @@ class THFileParser {
 
   void _splitContents(String aContents) {
     _splittedContents = [];
-    var lastLine = '';
+    String lastLine = '';
     while (aContents.isNotEmpty) {
       var (lineBreakIndex, lineBreakLength) = _findLineBreak(aContents);
       if (lineBreakIndex == -1) {
         lastLine += aContents;
         break;
       }
-      var newLine = aContents.substring(0, lineBreakIndex);
+      String newLine = aContents.substring(0, lineBreakIndex);
       aContents = aContents.substring(lineBreakIndex + lineBreakLength);
       if (newLine.isEmpty) {
         _splittedContents.add("$lastLine$newLine");
         lastLine = '';
         continue;
       }
-      var quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
+      int quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
       // the line break belongs to the string content.
       while (quoteCount.isOdd && aContents.isNotEmpty) {
         (lineBreakIndex, lineBreakLength) = _findLineBreak(aContents);
+        if (lineBreakIndex == -1) {
+          newLine += aContents;
+          break;
+        }
         newLine += aContents.substring(0, lineBreakIndex);
         aContents = aContents.substring(lineBreakIndex + lineBreakLength);
         quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
       }
 
       // Joining next line if this line ends with a backslash.
-      final lastChar = newLine.substring(newLine.length - 1);
+      final String lastChar = newLine.substring(newLine.length - 1);
       if (lastChar == thBackslash) {
         lastLine = newLine.substring(0, newLine.length - 1);
       } else {

@@ -39,8 +39,8 @@ part 'th_point.mapper.dart';
 class THPoint extends THElement
     with THPointMappable, THHasOptions
     implements THHasPLAType {
-  late final THPointPositionPart position;
-  late final String _pointType;
+  late THPointPositionPart position;
+  late String _pointType;
 
   static final _pointTypes = <String>{
     'air-draught',

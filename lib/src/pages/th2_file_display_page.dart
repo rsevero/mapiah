@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/stores/th_file_display_page_store.dart';
+import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 import 'package:provider/provider.dart';
 
 class THFileDisplayPage extends StatelessWidget {
   final String filename;
-  late final THFileDisplayPageStore thFileDisplayPageStore;
   late final THFileStore thFileStore;
+  late final THFileDisplayStore thFileDisplayStore;
 
   THFileDisplayPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
+    thFileDisplayStore = Provider.of<THFileDisplayStore>(context);
     thFileStore = Provider.of<THFileStore>(context);
-    thFileDisplayPageStore = Provider.of<THFileDisplayPageStore>(context);
-    thFileDisplayPageStore.loadFile(context, filename);
+    thFileStore.loadFile(context, filename);
     return Scaffold(
       appBar: AppBar(
         title: Text('File Display'),
@@ -28,11 +28,11 @@ class THFileDisplayPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save_alt_outlined),
-            onPressed: () => thFileDisplayPageStore.saveTH2File(),
+            onPressed: () => thFileStore.saveTH2File(),
           ),
           IconButton(
             icon: Icon(Icons.save_as_outlined),
-            onPressed: () => thFileDisplayPageStore.saveAsTH2File(),
+            onPressed: () => thFileStore.saveAsTH2File(),
           ),
           IconButton(
             icon: Icon(Icons.close),
@@ -42,12 +42,12 @@ class THFileDisplayPage extends StatelessWidget {
       ),
       body: Observer(
         builder: (context) {
-          if (thFileDisplayPageStore.isLoading) {
+          if (thFileStore.isLoading) {
             return Center(child: CircularProgressIndicator());
           } else {
             return Center(
               child: Stack(children: [
-                THFileWidget(thFileDisplayPageStore.thFile, thFileStore),
+                THFileWidget(thFileStore.thFile, thFileDisplayStore),
                 _buildFloatingActionButtons(),
               ]),
             );
@@ -65,15 +65,15 @@ class THFileDisplayPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _zoomButton(Icons.zoom_in, () {
-            thFileStore.zoomIn();
+            thFileDisplayStore.zoomIn();
           }),
           SizedBox(height: 8.0),
           _zoomButton(Icons.zoom_out_map, () {
-            thFileStore.zoomShowAll();
+            thFileDisplayStore.zoomShowAll();
           }),
           SizedBox(height: 8.0),
           _zoomButton(Icons.zoom_out, () {
-            thFileStore.zoomOut();
+            thFileDisplayStore.zoomOut();
           }),
         ],
       ),

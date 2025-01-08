@@ -41,7 +41,7 @@ class THScrap extends THElement
 
   @override
   set thID(String aTHID) {
-    parent.thFile.updateTHID(this, aTHID);
+    thFile.updateTHID(this, aTHID);
     _thID = aTHID;
   }
 }

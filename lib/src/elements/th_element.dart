@@ -32,8 +32,8 @@ abstract class THElement with THElementMappable {
 
   /// Constructor that sets the parentMapiahID and the thFile.
   /// Necessary for dart_mappable.
-  THElement.withParentMapiahIDTHFile(this.parentMapiahID, THFile thFile) {
-    _thFile = thFile;
+  THElement.withParentMapiahIDTHFile(this.parentMapiahID, THFile thFile)
+      : _thFile = thFile {
     parent._addElementToParent(this);
   }
 
@@ -291,7 +291,7 @@ class THFile extends THElement with THFileMappable, THParent {
     _thIDByMapiahID[aMapiahID] = aTHID;
   }
 
-  bool hasElementByTHID(String elementType, String aTHID) {
+  bool hasElementByTHID(String aTHID) {
     return _elementByTHID.containsKey(aTHID);
   }
 
@@ -299,12 +299,45 @@ class THFile extends THElement with THFileMappable, THParent {
     return _thIDByMapiahID.containsKey(aElement._mapiahID);
   }
 
-  THElement elementByTHID(String aElementType, String aTHID) {
-    if (!hasElementByTHID(aElementType, aTHID)) {
+  THElement elementByTHID(String aTHID) {
+    if (!hasElementByTHID(aTHID)) {
       throw THCustomException("No element with thID '$aTHID' found.");
     }
 
     return _elementByTHID[aTHID]!;
+  }
+
+  void substituteElement(THElement aElement) {
+    final int aMapiahID = aElement.mapiahID;
+    final THElement oldElement = elementByMapiahID(aMapiahID);
+
+    if (aElement.elementType != oldElement.elementType) {
+      throw THCustomException(
+          "Cannot substitute element of type '${oldElement.elementType}' with element of type '${aElement.elementType}'.");
+    }
+
+    final THParent parent = oldElement.parent;
+    final int index = parent.children.indexOf(oldElement);
+
+    aElement._thFile = this;
+    parent._children[index] = aElement;
+    _elementByMapiahID[aMapiahID] = aElement;
+
+    if (aElement is THHasTHID) {
+      final String oldTHID = (oldElement as THHasTHID).thID;
+      final String newTHID = (aElement as THHasTHID).thID;
+
+      if (_elementByTHID.containsKey(oldTHID)) {
+        _elementByTHID.remove(oldTHID);
+      }
+      if (_elementByTHID.containsKey(newTHID)) {
+        throw THCustomException(
+            "Duplicate thID in _elementByTHID: '$newTHID'.");
+      }
+
+      _elementByTHID[newTHID] = aElement;
+      _thIDByMapiahID[aMapiahID] = newTHID;
+    }
   }
 
   void _addElementToFile(THElement aElement) {
@@ -323,8 +356,8 @@ class THFile extends THElement with THFileMappable, THParent {
     elementByMapiahID(aMapiahID).delete();
   }
 
-  void deleteElementByTHID(String aElementType, String aTHID) {
-    elementByTHID(aElementType, aTHID).delete();
+  void deleteElementByTHID(String aTHID) {
+    elementByTHID(aTHID).delete();
   }
 
   void _deleteElement(THElement aElement) {

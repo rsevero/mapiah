@@ -203,14 +203,14 @@ endcomment
       var asFile = writer.serialize(file);
       expect(asFile, success['asFile']);
 
-      expect(file.hasElementByTHID('scrap', 'poco_surubim_SCP01'), true);
-      expect(file.hasElementByTHID('scrap', 'test'), false);
+      expect(file.hasElementByTHID('poco_surubim_SCP01'), true);
+      expect(file.hasElementByTHID('test'), false);
 
       final pointStation = file.elementByMapiahID(25);
       expect(pointStation, isA<THPoint>());
       expect((pointStation as THPoint).plaType, 'station');
 
-      final pointGuano = file.elementByTHID('point', 'P1');
+      final pointGuano = file.elementByTHID('P1');
       expect(pointGuano, isA<THPoint>());
       expect((pointGuano as THPoint).plaType, 'guano');
 
@@ -232,9 +232,9 @@ endcomment
       asFile = writer.serialize(file);
       expect(asFile, success['asFile3']);
 
-      var scrap = file.elementByTHID('scrap', 'poco_surubim_SCP01');
+      var scrap = file.elementByTHID('poco_surubim_SCP01');
       countDeletedElements += (scrap as THScrap).children.length + 1;
-      file.deleteElementByTHID('scrap', 'poco_surubim_SCP01');
+      file.deleteElementByTHID('poco_surubim_SCP01');
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
 

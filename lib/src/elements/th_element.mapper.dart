@@ -24,8 +24,9 @@ class THElementMapper extends ClassMapperBase<THElement> {
   static int _$parentMapiahID(THElement v) => v.parentMapiahID;
   static const Field<THElement, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
-  static THFile _$thFile(THElement v) => v.thFile;
-  static const Field<THElement, THFile> _f$thFile = Field('thFile', _$thFile);
+  static THFile _$_thFile(THElement v) => v._thFile;
+  static const Field<THElement, THFile> _f$_thFile =
+      Field('_thFile', _$_thFile, key: 'thFile');
   static String? _$sameLineComment(THElement v) => v.sameLineComment;
   static const Field<THElement, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
@@ -33,7 +34,7 @@ class THElementMapper extends ClassMapperBase<THElement> {
   @override
   final MappableFields<THElement> fields = const {
     #parentMapiahID: _f$parentMapiahID,
-    #thFile: _f$thFile,
+    #_thFile: _f$_thFile,
     #sameLineComment: _f$sameLineComment,
   };
 

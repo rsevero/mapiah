@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
-import 'package:mapiah/src/stores/th_file_display_page_store.dart';
+import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +17,10 @@ class MapiahApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (context) => THFileDisplayPageStore(),
+          create: (context) => THFileStore(),
         ),
         Provider(
-          create: (context) => THFileStore(),
+          create: (context) => THFileDisplayStore(),
         ),
       ],
       child: MaterialApp(

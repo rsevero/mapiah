@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/auxiliary/error_dialog.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_store.g.dart';
@@ -7,177 +13,69 @@ part 'th_file_store.g.dart';
 class THFileStore = THFileStoreBase with _$THFileStore;
 
 abstract class THFileStoreBase with Store {
-  // 'screen' is related to actual pixels on the screen.
-  // 'canvas' is the virtual canvas used to draw.
-  // 'data' is the actual data to be drawn.
-  // 'canvas' and 'data' are on the same scale. They are both scaled and
-  // translated to be shown on the screen.
+  @readonly
+  bool _isLoading = false;
 
   @readonly
-  Size _screenSize = Size.zero;
+  THFile _thFile = THFile();
 
-  Size _canvasSize = Size.zero;
-
-  @readonly
-  double _canvasScale = 1.0;
-
-  @readonly
-  Offset _canvasTranslation = Offset.zero;
-
-  @readonly
-  bool _canvasScaleTranslationUndefined = true;
-
-  double _dataWidth = 0.0;
-  double _dataHeight = 0.0;
-
-  Rect _dataBoundingBox = Rect.zero;
-
-  double _canvasCenterX = 0.0;
-  double _canvasCenterY = 0.0;
-
-  @readonly
-  bool _trigger = false;
-
-  @readonly
-  bool _shouldRepaint = false;
+  List<String> errorMessages = <String>[];
 
   @action
-  void updateScreenSize(Size newSize) {
-    _screenSize = newSize;
-    _canvasSize = newSize / _canvasScale;
+  Future<void> loadFile(BuildContext context, String aFilename) async {
+    final parser = THFileParser();
+    _isLoading = true;
+    errorMessages.clear();
+
+    final (parsedFile, isSuccessful, errors) = await parser.parse(aFilename);
+    _isLoading = false;
+
+    if (isSuccessful) {
+      _thFile = parsedFile;
+    } else {
+      errorMessages.addAll(errors);
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ErrorDialog(errorMessages: errorMessages);
+        },
+      );
+    }
   }
 
-  Offset screenToCanvas(Offset screenCoordinate) {
-    // Apply the inverse of the translation
-    final double canvasX =
-        (screenCoordinate.dx / _canvasScale) - _canvasTranslation.dx;
-    final double canvasY =
-        -((screenCoordinate.dy / _canvasScale) - _canvasTranslation.dy);
-
-    return Offset(canvasX, canvasY);
+  Future<File?> saveTH2File() async {
+    final file = await _localFile();
+    final encodedContent = await _encodedFileContents();
+    return await file.writeAsBytes(encodedContent, flush: true);
   }
 
-  Offset canvasToScreen(Offset canvasCoordinate) {
-    // Apply the translation and scaling
-    final double screenX =
-        (canvasCoordinate.dx - _canvasTranslation.dx) * _canvasScale;
-    final double screenY =
-        -((canvasCoordinate.dy - _canvasTranslation.dy) * _canvasScale);
-
-    return Offset(screenX, screenY);
+  Future<List<int>> _encodedFileContents() async {
+    final thFileWriter = THFileWriter();
+    return await thFileWriter.toBytes(_thFile);
   }
 
-  @action
-  void onPanUpdate(DragUpdateDetails details) {
-    _canvasTranslation += (details.delta / _canvasScale);
-    _setCanvasCenterFromCurrent();
-    _shouldRepaint = true;
-    _trigger = !_trigger;
+  Future<File?> saveAsTH2File() async {
+    String? filePath = await FilePicker.platform.saveFile(
+      dialogTitle: 'Please select an output file:',
+      fileName: _thFile.filename,
+    );
+
+    if (filePath != null) {
+      final file = File(filePath);
+      final encodedContent = await _encodedFileContents();
+      return await file.writeAsBytes(encodedContent, flush: true);
+    }
+
+    return null;
+  }
+
+  Future<File> _localFile() async {
+    final filename = _thFile.filename;
+    return File(filename);
   }
 
   @action
-  void setShouldRepaint(bool value) {
-    _shouldRepaint = value;
-  }
-
-  void _setCanvasCenterFromCurrent() {
-    print("Current center: $_canvasCenterX, $_canvasCenterY");
-    _canvasCenterX =
-        -(_canvasTranslation.dx - (_screenSize.width / 2.0 / _canvasScale));
-    _canvasCenterY =
-        _canvasTranslation.dy - (_screenSize.height / 2.0 / _canvasScale);
-    print("New center: $_canvasCenterX, $_canvasCenterY");
-  }
-
-  @action
-  void updateCanvasScale(double newScale) {
-    _canvasScale = newScale;
-    _canvasSize = _screenSize / _canvasScale;
-  }
-
-  @action
-  void updateCanvasOffsetDrawing(Offset newOffset) {
-    _canvasTranslation = newOffset;
-  }
-
-  @action
-  void setCanvasScaleTranslationUndefined(bool isUndefined) {
-    _canvasScaleTranslationUndefined = isUndefined;
-  }
-
-  @action
-  void zoomIn() {
-    _canvasScale *= thZoomFactor;
-    _canvasSize = _screenSize / _canvasScale;
-    _calculateCanvasOffset();
-  }
-
-  @action
-  void zoomOut() {
-    _canvasScale /= thZoomFactor;
-    _canvasSize = _screenSize / _canvasScale;
-    _calculateCanvasOffset();
-  }
-
-  @action
-  void _calculateCanvasOffset() {
-    final double xOffset = (_canvasSize.width / 2.0) - _canvasCenterX;
-    final double yOffset = (_canvasSize.height / 2.0) + _canvasCenterY;
-
-    _canvasTranslation = Offset(xOffset, yOffset);
-  }
-
-  @action
-  void updateDataWidth(double newWidth) {
-    _dataWidth = newWidth;
-  }
-
-  @action
-  void updateDataHeight(double newHeight) {
-    _dataHeight = newHeight;
-  }
-
-  @action
-  void updateDataBoundingBox(Rect newBoundingBox) {
-    _dataBoundingBox = newBoundingBox;
-  }
-
-  void _getFileDrawingSize() {
-    _dataWidth = (_dataBoundingBox.width < thMinimumSizeForDrawing)
-        ? thMinimumSizeForDrawing
-        : _dataBoundingBox.width;
-
-    _dataHeight = (_dataBoundingBox.height < thMinimumSizeForDrawing)
-        ? thMinimumSizeForDrawing
-        : _dataBoundingBox.height;
-  }
-
-  void _setCanvasCenterToDrawingCenter() {
-    // print("Current center: $_canvasCenterX, $_canvasCenterY");
-    _canvasCenterX = (_dataBoundingBox.left + _dataBoundingBox.right) / 2.0;
-    _canvasCenterY = (_dataBoundingBox.top + _dataBoundingBox.bottom) / 2.0;
-    // print(
-    //     "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
-  }
-
-  @action
-  void zoomShowAll() {
-    final double screenWidth = _screenSize.width;
-    final double screenHeight = _screenSize.height;
-
-    _getFileDrawingSize();
-
-    final double widthScale =
-        (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
-    final double heightScale =
-        (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
-
-    _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
-    _canvasSize = _screenSize / _canvasScale;
-
-    _setCanvasCenterToDrawingCenter();
-    _calculateCanvasOffset();
-
-    _canvasScaleTranslationUndefined = false;
+  void substituteElement(THElement newElement) {
+    _thFile.substituteElement(newElement);
   }
 }
