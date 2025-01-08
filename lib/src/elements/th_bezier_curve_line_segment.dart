@@ -2,7 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/parts/th_point_part.dart';
+import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 
 part 'th_bezier_curve_line_segment.mapper.dart';
 
@@ -11,11 +11,11 @@ part 'th_bezier_curve_line_segment.mapper.dart';
 @MappableClass()
 class THBezierCurveLineSegment extends THElement
     with THBezierCurveLineSegmentMappable, THHasOptions, THLineSegment {
-  late THPointPart controlPoint1;
-  late THPointPart controlPoint2;
+  late THPointPositionPart controlPoint1;
+  late THPointPositionPart controlPoint2;
 
   THBezierCurveLineSegment(super.parent, this.controlPoint1, this.controlPoint2,
-      THPointPart endPoint)
+      THPointPositionPart endPoint)
       : super.withParent();
 
   THBezierCurveLineSegment.fromString(
@@ -24,9 +24,9 @@ class THBezierCurveLineSegment extends THElement
       List<dynamic> aControlPoint2List,
       List<dynamic> aEndPointList)
       : super.withParent() {
-    controlPoint1 = THPointPart.fromStringList(aControlPoint1List);
-    controlPoint2 = THPointPart.fromStringList(aControlPoint2List);
-    endPoint = THPointPart.fromStringList(aEndPointList);
+    controlPoint1 = THPointPositionPart.fromStringList(aControlPoint1List);
+    controlPoint2 = THPointPositionPart.fromStringList(aControlPoint2List);
+    endPoint = THPointPositionPart.fromStringList(aEndPointList);
   }
 
   double get controlPoint1X {

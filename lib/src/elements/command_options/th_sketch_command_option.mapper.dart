@@ -15,7 +15,7 @@ class THSketchCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THSketchCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THPointPartMapper.ensureInitialized();
+      THPointPositionPartMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -32,8 +32,8 @@ class THSketchCommandOptionMapper
   static String _$filename(THSketchCommandOption v) => v.filename;
   static const Field<THSketchCommandOption, String> _f$filename =
       Field('filename', _$filename);
-  static THPointPart _$point(THSketchCommandOption v) => v.point;
-  static const Field<THSketchCommandOption, THPointPart> _f$point =
+  static THPointPositionPart _$point(THSketchCommandOption v) => v.point;
+  static const Field<THSketchCommandOption, THPointPositionPart> _f$point =
       Field('point', _$point);
 
   @override
@@ -109,13 +109,14 @@ abstract class THSketchCommandOptionCopyWith<
     $R,
     $In extends THSketchCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get point;
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get point;
   @override
   $R call(
       {THHasOptions? optionParent,
       String? optionType,
       String? filename,
-      THPointPart? point});
+      THPointPositionPart? point});
   THSketchCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -129,14 +130,14 @@ class _THSketchCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THSketchCommandOption> $mapper =
       THSketchCommandOptionMapper.ensureInitialized();
   @override
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get point =>
-      $value.point.copyWith.$chain((v) => call(point: v));
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get point => $value.point.copyWith.$chain((v) => call(point: v));
   @override
   $R call(
           {THHasOptions? optionParent,
           String? optionType,
           String? filename,
-          THPointPart? point}) =>
+          THPointPositionPart? point}) =>
       $apply(FieldCopyWithData({
         if (optionParent != null) #optionParent: optionParent,
         if (optionType != null) #optionType: optionType,

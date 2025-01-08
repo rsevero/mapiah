@@ -1,11 +1,11 @@
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/parts/th_point_part.dart';
+import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 mixin THLineSegment on THElement implements THHasPLAType {
-  late THPointPart endPoint;
+  late THPointPositionPart endPoint;
 
   @override
   set plaType(String aLineType) {

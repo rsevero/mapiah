@@ -16,7 +16,7 @@ class THBezierCurveLineSegmentMapper
       MapperContainer.globals
           .use(_instance = THBezierCurveLineSegmentMapper._());
       THElementMapper.ensureInitialized();
-      THPointPartMapper.ensureInitialized();
+      THPointPositionPartMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -27,17 +27,18 @@ class THBezierCurveLineSegmentMapper
   static THParent _$parent(THBezierCurveLineSegment v) => v.parent;
   static const Field<THBezierCurveLineSegment, THParent> _f$parent =
       Field('parent', _$parent);
-  static THPointPart _$controlPoint1(THBezierCurveLineSegment v) =>
+  static THPointPositionPart _$controlPoint1(THBezierCurveLineSegment v) =>
       v.controlPoint1;
-  static const Field<THBezierCurveLineSegment, THPointPart> _f$controlPoint1 =
-      Field('controlPoint1', _$controlPoint1);
-  static THPointPart _$controlPoint2(THBezierCurveLineSegment v) =>
+  static const Field<THBezierCurveLineSegment, THPointPositionPart>
+      _f$controlPoint1 = Field('controlPoint1', _$controlPoint1);
+  static THPointPositionPart _$controlPoint2(THBezierCurveLineSegment v) =>
       v.controlPoint2;
-  static const Field<THBezierCurveLineSegment, THPointPart> _f$controlPoint2 =
-      Field('controlPoint2', _$controlPoint2);
-  static THPointPart _$endPoint(THBezierCurveLineSegment v) => v.endPoint;
-  static const Field<THBezierCurveLineSegment, THPointPart> _f$endPoint =
-      Field('endPoint', _$endPoint);
+  static const Field<THBezierCurveLineSegment, THPointPositionPart>
+      _f$controlPoint2 = Field('controlPoint2', _$controlPoint2);
+  static THPointPositionPart _$endPoint(THBezierCurveLineSegment v) =>
+      v.endPoint;
+  static const Field<THBezierCurveLineSegment, THPointPositionPart>
+      _f$endPoint = Field('endPoint', _$endPoint);
   static int _$parentMapiahID(THBezierCurveLineSegment v) => v.parentMapiahID;
   static const Field<THBezierCurveLineSegment, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
@@ -121,15 +122,18 @@ abstract class THBezierCurveLineSegmentCopyWith<
     $R,
     $In extends THBezierCurveLineSegment,
     $Out> implements THElementCopyWith<$R, $In, $Out> {
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get controlPoint1;
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get controlPoint2;
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get endPoint;
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get controlPoint1;
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get controlPoint2;
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get endPoint;
   @override
   $R call(
       {THParent? parent,
-      THPointPart? controlPoint1,
-      THPointPart? controlPoint2,
-      THPointPart? endPoint});
+      THPointPositionPart? controlPoint1,
+      THPointPositionPart? controlPoint2,
+      THPointPositionPart? endPoint});
   THBezierCurveLineSegmentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -144,20 +148,22 @@ class _THBezierCurveLineSegmentCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THBezierCurveLineSegment> $mapper =
       THBezierCurveLineSegmentMapper.ensureInitialized();
   @override
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get controlPoint1 =>
-      $value.controlPoint1.copyWith.$chain((v) => call(controlPoint1: v));
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get controlPoint1 =>
+          $value.controlPoint1.copyWith.$chain((v) => call(controlPoint1: v));
   @override
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get controlPoint2 =>
-      $value.controlPoint2.copyWith.$chain((v) => call(controlPoint2: v));
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get controlPoint2 =>
+          $value.controlPoint2.copyWith.$chain((v) => call(controlPoint2: v));
   @override
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get endPoint =>
-      $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get endPoint => $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
   @override
   $R call(
           {THParent? parent,
-          THPointPart? controlPoint1,
-          THPointPart? controlPoint2,
-          THPointPart? endPoint}) =>
+          THPointPositionPart? controlPoint1,
+          THPointPositionPart? controlPoint2,
+          THPointPositionPart? endPoint}) =>
       $apply(FieldCopyWithData({
         if (parent != null) #parent: parent,
         if (controlPoint1 != null) #controlPoint1: controlPoint1,

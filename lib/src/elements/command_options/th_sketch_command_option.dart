@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_point_part.dart';
+import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 
@@ -13,7 +13,7 @@ class THSketchCommandOption extends THCommandOption
     with THSketchCommandOptionMappable {
   static const String _thisOptionType = 'sketch';
   late THStringPart _filename;
-  late THPointPart point;
+  late THPointPositionPart point;
 
   /// Constructor necessary for dart_mappable support.
   THSketchCommandOption.withExplicitOptionType(
@@ -29,7 +29,7 @@ class THSketchCommandOption extends THCommandOption
   }
 
   void pointFromStringList(List<dynamic> aList) {
-    point = THPointPart.fromStringList(aList);
+    point = THPointPositionPart.fromStringList(aList);
   }
 
   set filename(String aFilename) {

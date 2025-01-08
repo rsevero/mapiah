@@ -15,7 +15,7 @@ class THStraightLineSegmentMapper
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THStraightLineSegmentMapper._());
       THElementMapper.ensureInitialized();
-      THPointPartMapper.ensureInitialized();
+      THPointPositionPartMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -26,8 +26,8 @@ class THStraightLineSegmentMapper
   static THParent _$parent(THStraightLineSegment v) => v.parent;
   static const Field<THStraightLineSegment, THParent> _f$parent =
       Field('parent', _$parent);
-  static THPointPart _$endPoint(THStraightLineSegment v) => v.endPoint;
-  static const Field<THStraightLineSegment, THPointPart> _f$endPoint =
+  static THPointPositionPart _$endPoint(THStraightLineSegment v) => v.endPoint;
+  static const Field<THStraightLineSegment, THPointPositionPart> _f$endPoint =
       Field('endPoint', _$endPoint);
   static int _$parentMapiahID(THStraightLineSegment v) => v.parentMapiahID;
   static const Field<THStraightLineSegment, int> _f$parentMapiahID =
@@ -106,9 +106,10 @@ abstract class THStraightLineSegmentCopyWith<
     $R,
     $In extends THStraightLineSegment,
     $Out> implements THElementCopyWith<$R, $In, $Out> {
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get endPoint;
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get endPoint;
   @override
-  $R call({THParent? parent, THPointPart? endPoint});
+  $R call({THParent? parent, THPointPositionPart? endPoint});
   THStraightLineSegmentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -122,10 +123,10 @@ class _THStraightLineSegmentCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THStraightLineSegment> $mapper =
       THStraightLineSegmentMapper.ensureInitialized();
   @override
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get endPoint =>
-      $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get endPoint => $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
   @override
-  $R call({THParent? parent, THPointPart? endPoint}) =>
+  $R call({THParent? parent, THPointPositionPart? endPoint}) =>
       $apply(FieldCopyWithData({
         if (parent != null) #parent: parent,
         if (endPoint != null) #endPoint: endPoint

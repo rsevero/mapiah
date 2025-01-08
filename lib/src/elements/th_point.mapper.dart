@@ -14,7 +14,7 @@ class THPointMapper extends ClassMapperBase<THPoint> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THPointMapper._());
       THElementMapper.ensureInitialized();
-      THPointPartMapper.ensureInitialized();
+      THPointPositionPartMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,8 +24,9 @@ class THPointMapper extends ClassMapperBase<THPoint> {
 
   static THParent _$parent(THPoint v) => v.parent;
   static const Field<THPoint, THParent> _f$parent = Field('parent', _$parent);
-  static THPointPart _$point(THPoint v) => v.point;
-  static const Field<THPoint, THPointPart> _f$point = Field('point', _$point);
+  static THPointPositionPart _$point(THPoint v) => v.point;
+  static const Field<THPoint, THPointPositionPart> _f$point =
+      Field('point', _$point);
   static String _$pointType(THPoint v) => v.pointType;
   static const Field<THPoint, String> _f$pointType =
       Field('pointType', _$pointType);
@@ -99,9 +100,10 @@ extension THPointValueCopy<$R, $Out> on ObjectCopyWith<$R, THPoint, $Out> {
 
 abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get point;
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get point;
   @override
-  $R call({THParent? parent, THPointPart? point, String? pointType});
+  $R call({THParent? parent, THPointPositionPart? point, String? pointType});
   THPointCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -114,10 +116,10 @@ class _THPointCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THPoint> $mapper =
       THPointMapper.ensureInitialized();
   @override
-  THPointPartCopyWith<$R, THPointPart, THPointPart> get point =>
-      $value.point.copyWith.$chain((v) => call(point: v));
+  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+      get point => $value.point.copyWith.$chain((v) => call(point: v));
   @override
-  $R call({THParent? parent, THPointPart? point, String? pointType}) =>
+  $R call({THParent? parent, THPointPositionPart? point, String? pointType}) =>
       $apply(FieldCopyWithData({
         if (parent != null) #parent: parent,
         if (point != null) #point: point,

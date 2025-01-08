@@ -3,7 +3,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/elements/parts/th_point_part.dart';
+import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 
 part 'th_point.mapper.dart';
 
@@ -39,7 +39,7 @@ part 'th_point.mapper.dart';
 class THPoint extends THElement
     with THPointMappable, THHasOptions
     implements THHasPLAType {
-  late THPointPart point;
+  late THPointPositionPart point;
   late String _pointType;
 
   static final _pointTypes = <String>{
@@ -168,7 +168,7 @@ class THPoint extends THElement
   THPoint.fromString(
       super.parent, List<dynamic> aPointDataList, String pointType)
       : super.withParent() {
-    point = THPointPart.fromStringList(aPointDataList);
+    point = THPointPositionPart.fromStringList(aPointDataList);
     plaType = pointType;
   }
 
