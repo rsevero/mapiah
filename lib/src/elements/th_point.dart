@@ -39,8 +39,8 @@ part 'th_point.mapper.dart';
 class THPoint extends THElement
     with THPointMappable, THHasOptions
     implements THHasPLAType {
-  late THPointPositionPart point;
-  late String _pointType;
+  late final THPointPositionPart position;
+  late final String _pointType;
 
   static final _pointTypes = <String>{
     'air-draught',
@@ -161,14 +161,14 @@ class THPoint extends THElement
     'wheelchair',
   };
 
-  THPoint(super.parent, this.point, String pointType) : super.withParent() {
+  THPoint(super.parent, this.position, String pointType) : super.withParent() {
     plaType = pointType;
   }
 
   THPoint.fromString(
       super.parent, List<dynamic> aPointDataList, String pointType)
       : super.withParent() {
-    point = THPointPositionPart.fromStringList(aPointDataList);
+    position = THPointPositionPart.fromStringList(aPointDataList);
     plaType = pointType;
   }
 
@@ -199,34 +199,34 @@ class THPoint extends THElement
   }
 
   double get x {
-    return point.x.value;
+    return position.x.value;
   }
 
   double get y {
-    return point.y.value;
+    return position.y.value;
   }
 
   set x(double aValue) {
-    point.x.value = aValue;
+    position.x.value = aValue;
   }
 
   set y(double aValue) {
-    point.y.value = aValue;
+    position.y.value = aValue;
   }
 
   int get xDecimalPositions {
-    return point.x.decimalPositions;
+    return position.x.decimalPositions;
   }
 
   int get yDecimalPositions {
-    return point.y.decimalPositions;
+    return position.y.decimalPositions;
   }
 
   set xDecimalPositions(int aDecimalPositions) {
-    point.x.decimalPositions = aDecimalPositions;
+    position.x.decimalPositions = aDecimalPositions;
   }
 
   set yDecimalPositions(int aDecimalPositions) {
-    point.y.decimalPositions = aDecimalPositions;
+    position.y.decimalPositions = aDecimalPositions;
   }
 }

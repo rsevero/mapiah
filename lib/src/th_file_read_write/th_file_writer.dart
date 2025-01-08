@@ -137,7 +137,7 @@ class THFileWriter {
 
   String _serializePoint(THElement aTHElement) {
     final aTHPoint = aTHElement as THPoint;
-    var newLine = "point ${aTHPoint.point} ${aTHPoint.plaType}";
+    var newLine = "point ${aTHPoint.position} ${aTHPoint.plaType}";
     if (aTHPoint.optionIsSet('subtype')) {
       newLine += ":${aTHPoint.optionByType('subtype')!.specToFile()}";
     }

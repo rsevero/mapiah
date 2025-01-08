@@ -24,9 +24,9 @@ class THPointMapper extends ClassMapperBase<THPoint> {
 
   static THParent _$parent(THPoint v) => v.parent;
   static const Field<THPoint, THParent> _f$parent = Field('parent', _$parent);
-  static THPointPositionPart _$point(THPoint v) => v.point;
-  static const Field<THPoint, THPointPositionPart> _f$point =
-      Field('point', _$point);
+  static THPointPositionPart _$position(THPoint v) => v.position;
+  static const Field<THPoint, THPointPositionPart> _f$position =
+      Field('position', _$position);
   static String _$pointType(THPoint v) => v.pointType;
   static const Field<THPoint, String> _f$pointType =
       Field('pointType', _$pointType);
@@ -40,7 +40,7 @@ class THPointMapper extends ClassMapperBase<THPoint> {
   @override
   final MappableFields<THPoint> fields = const {
     #parent: _f$parent,
-    #point: _f$point,
+    #position: _f$position,
     #pointType: _f$pointType,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
@@ -48,7 +48,7 @@ class THPointMapper extends ClassMapperBase<THPoint> {
 
   static THPoint _instantiate(DecodingData data) {
     return THPoint(
-        data.dec(_f$parent), data.dec(_f$point), data.dec(_f$pointType));
+        data.dec(_f$parent), data.dec(_f$position), data.dec(_f$pointType));
   }
 
   @override
@@ -101,9 +101,9 @@ extension THPointValueCopy<$R, $Out> on ObjectCopyWith<$R, THPoint, $Out> {
 abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get point;
+      get position;
   @override
-  $R call({THParent? parent, THPointPositionPart? point, String? pointType});
+  $R call({THParent? parent, THPointPositionPart? position, String? pointType});
   THPointCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -117,18 +117,21 @@ class _THPointCopyWithImpl<$R, $Out>
       THPointMapper.ensureInitialized();
   @override
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get point => $value.point.copyWith.$chain((v) => call(point: v));
+      get position => $value.position.copyWith.$chain((v) => call(position: v));
   @override
-  $R call({THParent? parent, THPointPositionPart? point, String? pointType}) =>
+  $R call(
+          {THParent? parent,
+          THPointPositionPart? position,
+          String? pointType}) =>
       $apply(FieldCopyWithData({
         if (parent != null) #parent: parent,
-        if (point != null) #point: point,
+        if (position != null) #position: position,
         if (pointType != null) #pointType: pointType
       }));
   @override
   THPoint $make(CopyWithData data) => THPoint(
       data.get(#parent, or: $value.parent),
-      data.get(#point, or: $value.point),
+      data.get(#position, or: $value.position),
       data.get(#pointType, or: $value.pointType));
 
   @override
