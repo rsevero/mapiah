@@ -1,10 +1,4 @@
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-
-part 'move_point_command.mapper.dart';
+part of 'command.dart';
 
 @MappableClass()
 class MovePointCommand extends Command with MovePointCommandMappable {
@@ -20,10 +14,9 @@ class MovePointCommand extends Command with MovePointCommandMappable {
     super.oppositeCommandJson,
     int pointMapiahID,
     THPointPositionPart newPosition,
-  ) : super.withOppositeCommandJson() {
-    _pointMapiahID = pointMapiahID;
-    _newPosition = newPosition;
-  }
+  )   : _pointMapiahID = pointMapiahID,
+        _newPosition = newPosition,
+        super.withOppositeCommandJson();
 
   MovePointCommand(
     int pointMapiahID,
@@ -33,14 +26,7 @@ class MovePointCommand extends Command with MovePointCommandMappable {
         super(_thisDescription);
 
   @override
-  void actualExecute(THFile thFile) {
-    final THPoint newPoint = _currentPoint.copyWith(position: _newPosition);
-
-    thFile.substituteElement(newPoint);
-  }
-
-  @override
-  String createOppositeCommandJson(THFile thFile) {
+  String _createOppositeCommandJson(THFile thFile) {
     _currentPoint = thFile.elementByMapiahID(_pointMapiahID) as THPoint;
     final MovePointCommand oppositeCommand = MovePointCommand(
       _pointMapiahID,
@@ -48,6 +34,13 @@ class MovePointCommand extends Command with MovePointCommandMappable {
     );
 
     return oppositeCommand.toJson();
+  }
+
+  @override
+  void _actualExecute(THFile thFile) {
+    final THPoint newPoint = _currentPoint.copyWith(position: _newPosition);
+
+    thFile.substituteElement(newPoint);
   }
 
   int get pointMapiahID => _pointMapiahID;
