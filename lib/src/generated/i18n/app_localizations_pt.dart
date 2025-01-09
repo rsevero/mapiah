@@ -9,7 +9,12 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get aboutMapiah => 'Sobre o Mapiah';
+  String aboutMapiahDialogMapiahVersion(Object version) {
+    return 'Versão $version';
+  }
+
+  @override
+  String get aboutMapiahDialogWindowTitle => 'Sobre o Mapiah';
 
   @override
   String get appTitle => 'Mapiah';
@@ -18,7 +23,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get close => 'Fechar';
 
   @override
-  String get initialPresentation => 'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
+  String get initialPagePresentation => 'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
+
+  @override
+  String get fileEditWindowWindowTitle => 'Edição de arquivo';
 
   @override
   String languageName(String language) {
@@ -35,13 +43,8 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String mapiahVersion(Object version) {
-    return 'Versão $version';
-  }
-
-  @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
-  String get selectTH2File => 'Selecione um arquivo TH2';
+  String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
 }

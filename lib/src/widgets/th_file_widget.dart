@@ -160,56 +160,10 @@ class THFilePainter extends CustomPainter {
           canvas.drawPath(newPath, paintAction.paint);
       }
     }
-
-    // Rect.fromLTWH(
-    //   thFileController.canvasOffsetDrawing.dx,
-    //   thFileController.canvasOffsetDrawing.dy,
-    //   thFileController.canvasSize.value.width,
-    //   thFileController.canvasSize.value.height,
-    // ),
-    // THPaints.thPaint7);
-
-    // // Drawing canvas border
-    // canvas.drawRect(
-    //     Rect.fromPoints(
-    //         thFileController.screenToCanvas(Offset(0, 0)),
-    //         thFileController.screenToCanvas(Offset(
-    //           thFileController.screenSize.value.width,
-    //           thFileController.screenSize.value.height,
-    //         ))),
-    //     THPaints.thPaint9);
-
-    // // Canvas center after transformation
-    // canvas.drawCircle(
-    //     Offset(thFileController.canvasCenterX, thFileController.canvasCenterY),
-    //     3,
-    //     THPaints.thPaint5);
-
-    // // Drawing center
-    // canvas.drawCircle(
-    //     Offset(thFileController.dataBoundingBox.center.dx,
-    //         thFileController.dataBoundingBox.center.dy),
-    //     2,
-    //     THPaints.thPaint2);
-
-    // // Drawing bounding box
-    // canvas.drawRect(thFileController.dataBoundingBox, THPaints.thPaint2);
-
-    // print("screenSize: ${thFileController.screenSize}");
-    // print("dataWidth: ${thFileController.dataWidth}");
-    // print("dataHeight: ${thFileController.dataHeight}");
-    // print("dataBoundingBox: ${thFileController.dataBoundingBox}");
-    // print("canvasTranslation: ${thFileController.canvasTranslation}");
-    // print("canvasSize: ${thFileController.canvasSize}");
-    // print("canvasScale: ${thFileController.canvasScale}");
-    // print(
-    //     "canvasCenter: ${thFileController.canvasCenterX}, ${thFileController.canvasCenterY}");
   }
 
   @override
   bool shouldRepaint(covariant oldDelegate) {
-    // print(
-    //     "shouldRepaint with ${thFileController.shouldRepaint}: ${DateTime.now()}\n");
     if (thFileStore.shouldRepaint) {
       thFileStore.setShouldRepaint(false);
       return true;

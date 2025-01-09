@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
@@ -19,7 +20,7 @@ class THFileDisplayPage extends StatelessWidget {
     thFileStore.loadFile(context, filename);
     return Scaffold(
       appBar: AppBar(
-        title: Text('File Display'),
+        title: Text(AppLocalizations.of(context).fileEditWindowWindowTitle),
         elevation: 4,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

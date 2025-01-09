@@ -1,12 +1,13 @@
 {
     "@@locale" : "pt",
 
-    "aboutMapiah": "Sobre o Mapiah",
+    "aboutMapiahDialogMapiahVersion": "Versão {version}",
+    "aboutMapiahDialogWindowTitle": "Sobre o Mapiah",
     "appTitle": "Mapiah",
     "close": "Fechar",
-    "initialPresentation": "Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion",
+    "initialPagePresentation": "Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion",
+    "fileEditWindowWindowTitle": "Edição de arquivo",
     "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
-    "mapiahVersion": "Versão {version}",
     "parsingErrors": "Erros na interpretação do arquivo",
-    "selectTH2File": "Selecione um arquivo TH2"
+    "th2FilePickSelectTH2File": "Selecione um arquivo TH2"
 }

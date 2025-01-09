@@ -95,11 +95,17 @@ abstract class AppLocalizations {
     Locale('pt')
   ];
 
-  /// The label for the about dialog
+  /// The version of Mapiah for the About dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String aboutMapiahDialogMapiahVersion(Object version);
+
+  /// The title for the About dialog
   ///
   /// In en, this message translates to:
   /// **'About Mapiah'**
-  String get aboutMapiah;
+  String get aboutMapiahDialogWindowTitle;
 
   /// The title of the application
   ///
@@ -113,23 +119,23 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
-  /// The initial presentation of the application
+  /// The initial page presentation of the application
   ///
   /// In en, this message translates to:
   /// **'Mapiah: an user-friendly graphical interface for cave mapping with Therion'**
-  String get initialPresentation;
+  String get initialPagePresentation;
+
+  /// The title for the file edit window
+  ///
+  /// In en, this message translates to:
+  /// **'File edit'**
+  String get fileEditWindowWindowTitle;
 
   /// The name of the language based on the language code. Translate only 'System' and your language name. Leave the other values as they are.
   ///
   /// In en, this message translates to:
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
-
-  /// The version of Mapiah
-  ///
-  /// In en, this message translates to:
-  /// **'Version {version}'**
-  String mapiahVersion(Object version);
 
   /// The label for the parsing errors dialog
   ///
@@ -141,7 +147,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Select a TH2 file'**
-  String get selectTH2File;
+  String get th2FilePickSelectTH2File;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

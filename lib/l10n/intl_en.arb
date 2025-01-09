@@ -1,9 +1,18 @@
 {
   "@@locale" : "en",
 
-  "aboutMapiah": "About Mapiah",
-  "@aboutMapiah": {
-    "description": "The label for the about dialog",
+  "aboutMapiahDialogMapiahVersion": "Version {version}",
+  "@aboutMapiahDialogMapiahVersion": {
+    "description": "The version of Mapiah for the About dialog",
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
+  },
+
+  "aboutMapiahDialogWindowTitle": "About Mapiah",
+  "@aboutMapiahDialogWindowTitle": {
+    "description": "The title for the About dialog",
     "type": "text"
   },
 
@@ -19,9 +28,15 @@
     "type": "text"
   },
 
-  "initialPresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
-  "@initialPresentation": {
-    "description": "The initial presentation of the application",
+  "initialPagePresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
+  "@initialPagePresentation": {
+    "description": "The initial page presentation of the application",
+    "type": "text"
+  },
+
+  "fileEditWindowWindowTitle": "File edit",
+  "@fileEditWindowWindowTitle": {
+    "description": "The title for the file edit window",
     "type": "text"
   },
 
@@ -34,23 +49,14 @@
     }
   },
 
-  "mapiahVersion": "Version {version}",
-  "@mapiahVersion": {
-    "description": "The version of Mapiah",
-    "type": "text",
-    "placeholders": {
-      "version": {}
-    }
-  },
-
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",
     "type": "text"
   } ,
 
-  "selectTH2File": "Select a TH2 file",
-  "@selectTH2File": {
+  "th2FilePickSelectTH2File": "Select a TH2 file",
+  "@th2FilePickSelectTH2File": {
     "description": "The label for the TH2 file selection dialog",
     "type": "text"
   }

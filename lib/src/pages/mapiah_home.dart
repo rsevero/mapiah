@@ -29,8 +29,8 @@ class MapiahHome extends StatelessWidget {
           _buildLanguageDropdown(settingsStore, context),
         ],
       ),
-      body:
-          Center(child: Text(AppLocalizations.of(context).initialPresentation)),
+      body: Center(
+          child: Text(AppLocalizations.of(context).initialPagePresentation)),
     );
   }
 
@@ -83,7 +83,7 @@ class MapiahHome extends StatelessWidget {
   void _pickTh2File(BuildContext context) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        dialogTitle: AppLocalizations.of(context).selectTH2File,
+        dialogTitle: AppLocalizations.of(context).th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2'],
         initialDirectory: kDebugMode ? thDebugPath : './',
@@ -120,11 +120,13 @@ class MapiahHome extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).aboutMapiah),
+          title:
+              Text(AppLocalizations.of(context).aboutMapiahDialogWindowTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(AppLocalizations.of(context).mapiahVersion(version)),
+                Text(AppLocalizations.of(context)
+                    .aboutMapiahDialogMapiahVersion(version)),
                 SizedBox(height: 16),
               ],
             ),
