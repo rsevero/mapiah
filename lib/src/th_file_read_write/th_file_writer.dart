@@ -30,8 +30,8 @@ class THFileWriter {
   bool _insideMultiLineComment = false;
 
   String serialize(THElement aTHElement, {bool? includeEmptyLines}) {
-    var asString = '';
-    final type = aTHElement.elementType;
+    String asString = '';
+    final String type = aTHElement.elementType;
 
     if (includeEmptyLines != null) {
       _includeEmptyLines = includeEmptyLines;
@@ -67,9 +67,10 @@ class THFileWriter {
         asString += _prepareLine('endscrap', aTHElement);
       case 'file':
         _prefix = '';
-        final aTHFile = aTHElement as THFile;
-        if (aTHFile.children[0] is! THEncoding) {
-          final newLine = 'encoding ${aTHFile.encoding}\n';
+        final THFile aTHFile = aTHElement as THFile;
+        if (aTHFile.elementByMapiahID(aTHFile.childrenMapiahID[0])
+            is! THEncoding) {
+          final String newLine = 'encoding ${aTHFile.encoding}\n';
           asString += newLine;
         }
         asString += _childrenAsString(aTHFile);
@@ -87,18 +88,18 @@ class THFileWriter {
       case 'point':
         asString += _serializePoint(aTHElement);
       case 'scrap':
-        final aTHScrap = aTHElement as THScrap;
-        final newLine =
+        final THScrap aTHScrap = aTHElement as THScrap;
+        final String newLine =
             "scrap ${aTHScrap.thID} ${aTHScrap.optionsAsString()}".trim();
         asString += _prepareLine(newLine, aTHScrap);
         _increasePrefix();
         asString += _childrenAsString(aTHScrap);
       case 'xtherionconfig':
-        final xtherionconfig = aTHElement as THXTherionConfig;
+        final THXTherionConfig xtherionconfig = aTHElement as THXTherionConfig;
         asString +=
             "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
       default:
-        final newLine = "Unrecognized element: '$aTHElement'";
+        final String newLine = "Unrecognized element: '$aTHElement'";
         asString += _prepareLine(newLine, aTHElement);
     }
 
@@ -153,15 +154,16 @@ class THFileWriter {
 
     switch (thType) {
       case 'THBezierCurveLineSegment':
-        final aTHBezierCurveLineSegment =
+        final THBezierCurveLineSegment aTHBezierCurveLineSegment =
             aTHElement as THBezierCurveLineSegment;
-        final newLine =
+        final String newLine =
             "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
         asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
         asString += _linePointOptionsAsString(aTHBezierCurveLineSegment);
       case 'THStraightLineSegment':
-        final aTHStraightLineSegment = aTHElement as THStraightLineSegment;
-        final newLine = aTHStraightLineSegment.endPoint.toString();
+        final THStraightLineSegment aTHStraightLineSegment =
+            aTHElement as THStraightLineSegment;
+        final String newLine = aTHStraightLineSegment.endPoint.toString();
         asString += _prepareLine(newLine, aTHStraightLineSegment);
         asString += _linePointOptionsAsString(aTHStraightLineSegment);
       default:
@@ -172,10 +174,11 @@ class THFileWriter {
   }
 
   String _childrenAsString(THParent aTHParent) {
-    var asString = '';
+    String asString = '';
+    final THFile thFile = aTHParent.thFile;
 
-    for (final aChild in (aTHParent).children) {
-      asString += serialize(aChild);
+    for (final int aChildMapiahID in (aTHParent).childrenMapiahID) {
+      asString += serialize(thFile.elementByMapiahID(aChildMapiahID));
     }
 
     return asString;

@@ -77,14 +77,14 @@ abstract class THElement with THElementMappable {
 ///
 /// Mixin that provides parenting capabilities.
 mixin THParent on THElement {
-  // Here are registered all children.
-  final _children = <THElement>[];
+  // Here are registered all children mapiah IDs.
+  final List<int> _childrenMapiahID = <int>[];
 
   @override
   void delete() {
-    final childrenList = children.toList();
-    for (final aChild in childrenList) {
-      aChild.delete();
+    final List<int> childrenList = childrenMapiahID.toList();
+    for (final int aChildMapiahID in childrenList) {
+      thFile.deleteElementByMapiahID(aChildMapiahID);
     }
 
     _thFile._deleteElement(this);
@@ -92,17 +92,17 @@ mixin THParent on THElement {
 
   int _addElementToParent(THElement aElement) {
     _thFile._addElementToFile(aElement);
-    _children.add(aElement);
+    _childrenMapiahID.add(aElement.mapiahID);
 
     return aElement.mapiahID;
   }
 
-  List<THElement> get children {
-    return _children;
+  List<int> get childrenMapiahID {
+    return _childrenMapiahID;
   }
 
   void _deleteElementFromParent(THElement aElement) {
-    if (!_children.remove(aElement)) {
+    if (!_childrenMapiahID.remove(aElement.mapiahID)) {
       throw THCustomException("'$aElement' not found.");
     }
 
@@ -316,11 +316,7 @@ class THFile extends THElement with THFileMappable, THParent {
           "Cannot substitute element of type '${oldElement.elementType}' with element of type '${aElement.elementType}'.");
     }
 
-    final THParent parent = oldElement.parent;
-    final int index = parent.children.indexOf(oldElement);
-
     aElement._thFile = this;
-    parent._children[index] = aElement;
     _elementByMapiahID[aMapiahID] = aElement;
 
     if (aElement is THHasTHID) {
@@ -362,9 +358,8 @@ class THFile extends THElement with THFileMappable, THParent {
 
   void _deleteElement(THElement aElement) {
     if (aElement == this) {
-      final List<THElement> childrenList = children.toList();
-      for (final aChild in childrenList) {
-        aChild.delete();
+      for (final int aChildMapiahID in childrenMapiahID) {
+        elementByMapiahID(aChildMapiahID).delete();
       }
       return;
     }

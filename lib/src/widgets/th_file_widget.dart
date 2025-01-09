@@ -20,7 +20,8 @@ class THFileWidget extends StatelessWidget {
       : super(key: ObjectKey(file)) {
     thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
     thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
-    for (final THElement child in file.children) {
+    for (final int childMapiahID in file.childrenMapiahID) {
+      final THElement child = file.elementByMapiahID(childMapiahID);
       if (child is THScrap) {
         _addScrapPaintActions(child);
       }
@@ -64,14 +65,17 @@ class THFileWidget extends StatelessWidget {
   }
 
   void _addScrapPaintActions(THScrap aScrap) {
-    for (final THElement child in aScrap.children) {
+    for (final int childMapiahID in aScrap.childrenMapiahID) {
+      final THElement child = file.elementByMapiahID(childMapiahID);
       if (child is THPoint) {
         final THPointPaintAction newPointPaintAction =
             THPointPaintAction(child.x, child.y);
         _paintActions.add(newPointPaintAction);
       } else if (child is THLine) {
         bool isFirst = true;
-        for (final THElement lineSegment in child.children) {
+        for (final int lineSegmentMapiahID in child.childrenMapiahID) {
+          final THElement lineSegment =
+              file.elementByMapiahID(lineSegmentMapiahID);
           if (lineSegment is THEndline) {
             continue;
           }
