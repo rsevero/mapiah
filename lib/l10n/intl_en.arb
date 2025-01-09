@@ -25,9 +25,9 @@
     "type": "text"
   },
 
-  "languageName": "{language, select, en {English} pt {Português} other {Unknown}}",
+  "languageName": "{language, select, sys {System} en {English} pt {Português} other {Unknown}}",
   "@languageName": {
-    "description": "The name of the language based on the language code",
+    "description": "The name of the language based on the language code. Translate only 'System' and your language name. Leave the other values as they are.",
     "type": "text",
     "placeholders": {
       "language": {}

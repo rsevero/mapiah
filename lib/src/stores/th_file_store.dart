@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/error_dialog.dart';
+import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
@@ -37,7 +37,7 @@ abstract class THFileStoreBase with Store {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return ErrorDialog(errorMessages: errorMessages);
+          return THErrorDialog(errorMessages: errorMessages);
         },
       );
     }

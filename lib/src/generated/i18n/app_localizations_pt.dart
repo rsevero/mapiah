@@ -25,6 +25,7 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       language,
       {
+        'sys': 'Sistema',
         'en': 'English',
         'pt': 'Português',
         'other': 'Desconhecido',

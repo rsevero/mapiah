@@ -36,6 +36,11 @@ class MapiahHome extends StatelessWidget {
 
   Widget _buildLanguageDropdown(
       THSettingsStore settingsStore, BuildContext context) {
+    final List<String> localeIDs = [
+      'sys',
+      ...AppLocalizations.supportedLocales.map((locale) => locale.languageCode),
+    ];
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return PopupMenuButton<String>(
@@ -43,23 +48,20 @@ class MapiahHome extends StatelessWidget {
             settingsStore.setLocaleID(newValue);
           },
           itemBuilder: (BuildContext context) {
-            return AppLocalizations.supportedLocales
-                .map<PopupMenuEntry<String>>((Locale locale) {
+            return localeIDs.map<PopupMenuEntry<String>>((String localeID) {
               return PopupMenuItem<String>(
-                value: locale.languageCode,
+                value: localeID,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 300),
                   child: Row(
                     children: [
-                      if (locale.languageCode ==
-                          settingsStore.locale.languageCode) ...[
+                      if (localeID == settingsStore.localeID) ...[
                         Icon(Icons.check,
                             color: Theme.of(context).colorScheme.primary),
                         const SizedBox(width: 8),
                       ] else
                         const SizedBox(width: 32),
-                      Text(AppLocalizations.of(context)
-                          .languageName(locale.languageCode)),
+                      Text(AppLocalizations.of(context).languageName(localeID)),
                     ],
                   ),
                 ),

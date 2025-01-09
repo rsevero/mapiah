@@ -119,10 +119,10 @@ abstract class AppLocalizations {
   /// **'Mapiah: an user-friendly graphical interface for cave mapping with Therion'**
   String get initialPresentation;
 
-  /// The name of the language based on the language code
+  /// The name of the language based on the language code. Translate only 'System' and your language name. Leave the other values as they are.
   ///
   /// In en, this message translates to:
-  /// **'{language, select, en {English} pt {Português} other {Unknown}}'**
+  /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
   /// The version of Mapiah

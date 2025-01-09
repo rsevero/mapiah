@@ -48,3 +48,10 @@ final RegExp thExtKeywordRegex =
 // or ‘-’ to leave a date unspecified.
 final RegExp thDatetimeRegex = RegExp(
     r'^(?<year>\d{4}(\.(?<month>(0[1-9]|1[0-2]))(\.(?<day>(0[1-9]|[12][0-9]|3[01]))(\@(?<hour>(0[0-9]|1[0-9]|2[0-4]))(\:(?<minute>(0[0-9]|[1-5][0-9]))(\:(?<second>(0[0-9]|[1-5][0-9]))(\.(?<fractional>(0[0-9]|[1-5][0-9])))?)?)?)?)?)?)$');
+
+const String thConfigDirectory = 'Config';
+const String thMainDirectory = 'Mapiah';
+const String thProjectsDirectory = 'Projects';
+
+const String thMainConfigFilename = 'mapiah.toml';
+const String thDefaultLocaleID = 'sys';
