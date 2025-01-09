@@ -49,8 +49,19 @@ class MapiahHome extends StatelessWidget {
                 value: locale.languageCode,
                 child: SizedBox(
                   width: 200,
-                  child: Text(AppLocalizations.of(context)
-                      .languageName(locale.languageCode)),
+                  child: Row(
+                    children: [
+                      if (locale.languageCode ==
+                          settingsStore.locale.languageCode) ...[
+                        Icon(Icons.check,
+                            color: Theme.of(context).colorScheme.primary),
+                        const SizedBox(width: 8),
+                      ] else
+                        const SizedBox(width: 32),
+                      Text(AppLocalizations.of(context)
+                          .languageName(locale.languageCode)),
+                    ],
+                  ),
                 ),
               );
             }).toList();
