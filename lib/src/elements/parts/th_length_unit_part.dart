@@ -35,11 +35,11 @@ class THLengthUnitPart with THLengthUnitPartMappable {
   };
 
   static const unitToString = {
-    THLengthUnit.centimeter: 'cm',
-    THLengthUnit.feet: 'ft',
-    THLengthUnit.inch: 'in',
-    THLengthUnit.meter: 'm',
-    THLengthUnit.yard: 'yd',
+    THLengthUnit.centimeter: 'centimeter',
+    THLengthUnit.feet: 'feet',
+    THLengthUnit.inch: 'inch',
+    THLengthUnit.meter: 'meter',
+    THLengthUnit.yard: 'yard',
   };
 
   THLengthUnitPart(this.unit);

@@ -53,7 +53,7 @@ endscrap
         'length': 8,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
+scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 meter ]
   line wall
     355.0 1065.0
     291.0 499.0
@@ -67,7 +67,7 @@ endscrap
         'length': 32,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 m ]
+scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 meter ]
   line wall
     355.0 1065.0
     291.0 499.0
@@ -276,7 +276,7 @@ endscrap
 scrap test
   line wall
     1758 -1030
-      altitude [ 4 m ]
+      altitude [ 4 meter ]
     2147.74 -1120.48
   endline
 endscrap
@@ -291,7 +291,7 @@ endscrap
 scrap test
   line wall
     1758 -1030
-      altitude [ fix 1510 ft ]
+      altitude [ fix 1510 feet ]
     2147.74 -1120.48
   endline
 endscrap
@@ -336,7 +336,7 @@ endscrap
 scrap test
   line wall
     0 0
-      altitude [ fix 1300 m ]
+      altitude [ fix 1300 meter ]
     100 100
   endline
 endscrap

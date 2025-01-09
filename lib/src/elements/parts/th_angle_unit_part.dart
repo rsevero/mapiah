@@ -32,7 +32,7 @@ class THAngleUnitPart with THAngleUnitPartMappable {
     THAngleUnit.degree: 'deg',
     THAngleUnit.grad: 'grad',
     THAngleUnit.mil: 'mil',
-    THAngleUnit.minute: 'minute',
+    THAngleUnit.minute: 'min',
   };
 
   THAngleUnitPart(this.unit);

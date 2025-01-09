@@ -34,7 +34,7 @@ class THClinoUnitPart with THClinoUnitPartMappable {
     THClinoUnit.degree: 'deg',
     THClinoUnit.grad: 'grad',
     THClinoUnit.mil: 'mil',
-    THClinoUnit.minute: 'minute',
+    THClinoUnit.minute: 'min',
     THClinoUnit.percent: 'percent',
   };
 

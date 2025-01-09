@@ -342,7 +342,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 m ]
+    0.0 meter ]
 endscrap
 ''',
       },
@@ -351,7 +351,7 @@ endscrap
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 m ]
+scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 meter ]
 endscrap
 ''',
       },
@@ -559,7 +559,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap s8-1p -projection plan -author 2016.05.29 "Adolpho Milhommen" -scale [ 0 0 \
-    96 0 0 0 200 0 in ]
+    96 0 0 0 200 0 inch ]
 endscrap
 ''',
       },

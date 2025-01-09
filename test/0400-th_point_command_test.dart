@@ -216,7 +216,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -4381 -253 extra -dist [ 2450 cm ]
+  point -4381 -253 extra -dist [ 2450 centimeter ]
 endscrap
 ''',
       },
@@ -276,7 +276,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -4381 -253 continuation -explored [ 2450 cm ]
+  point -4381 -253 continuation -explored [ 2450 centimeter ]
 endscrap
 ''',
       },
@@ -930,7 +930,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 1758 -1030 altitude -value [ fix 1300 m ]
+  point 1758 -1030 altitude -value [ fix 1300 meter ]
 endscrap
 ''',
       },
@@ -1071,7 +1071,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 1758 -1030 dimensions -value [ 7 3.3 yd ]
+  point 1758 -1030 dimensions -value [ 7 3.3 yard ]
 endscrap
 ''',
       },
@@ -1120,7 +1120,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -2885 604 height -value [ 40? ft ]
+  point -2885 604 height -value [ 40? feet ]
 endscrap
 ''',
       },

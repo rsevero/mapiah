@@ -32,7 +32,7 @@ The scrap below is really complex.
 Take care!!
 endcomment
 scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 m ]
+    0.0 meter ]
   comment
 
 Another comment block.
