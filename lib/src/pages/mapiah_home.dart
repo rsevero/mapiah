@@ -47,8 +47,8 @@ class MapiahHome extends StatelessWidget {
                 .map<PopupMenuEntry<String>>((Locale locale) {
               return PopupMenuItem<String>(
                 value: locale.languageCode,
-                child: SizedBox(
-                  width: 200,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 300),
                   child: Row(
                     children: [
                       if (locale.languageCode ==
