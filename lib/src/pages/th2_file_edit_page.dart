@@ -6,12 +6,12 @@ import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 import 'package:provider/provider.dart';
 
-class THFileDisplayPage extends StatelessWidget {
+class THFileEditPage extends StatelessWidget {
   final String filename;
   late final THFileStore thFileStore;
   late final THFileDisplayStore thFileDisplayStore;
 
-  THFileDisplayPage({required this.filename});
+  THFileEditPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {

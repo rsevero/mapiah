@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_display_page.dart';
+import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -98,8 +98,7 @@ class MapiahHome extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  THFileDisplayPage(filename: pickedFilePath)),
+              builder: (context) => THFileEditPage(filename: pickedFilePath)),
         );
       } else {
         // User canceled the picker
