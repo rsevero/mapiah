@@ -16,7 +16,11 @@ abstract class THSettingsStoreBase with Store {
     _initialize();
   }
 
-  void _initialize() {}
+  void _initialize() {
+    final Locale systemLocale =
+        WidgetsBinding.instance.platformDispatcher.locale;
+    setLocaleID(systemLocale.languageCode);
+  }
 
   @action
   void setLocaleID(String aLocaleID) {
