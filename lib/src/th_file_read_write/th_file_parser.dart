@@ -1504,12 +1504,12 @@ class THFileParser {
     _parseErrors.clear();
 
     try {
-      final file = File(aFilePath);
-      final raf = await file.open();
+      final File file = File(aFilePath);
+      final RandomAccessFile raf = await file.open();
 
       _parsedTHFile.encoding = await _encodingNameFromFile(raf);
 
-      var contents = await _decodeFile(raf, _parsedTHFile.encoding);
+      String contents = await _decodeFile(raf, _parsedTHFile.encoding);
 
       _splitContents(contents);
 

@@ -174,7 +174,7 @@ class THGrammar extends GrammarDefinition {
           .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
           .flatten()
           .trim() |
-      quotedString();
+      quotedString().trim();
 
   /// length unit
   Parser lengthUnit() => (

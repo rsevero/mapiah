@@ -552,6 +552,17 @@ scrap poco_surubim_SCP01 -projection [ elevation 10 ] -flip horizontal -sketch \
 endscrap
 ''',
       },
+      {
+        'file':
+            '2025-01-09-th_file_parser-scrap_with_projection_author_scale.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap s8-1p -projection plan -author 2016.05.29 Adolpho Milhommen -scale [ 0 0 \
+    96 0 0 0 200 0 in ]
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -560,7 +571,7 @@ endscrap
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
-        expect(file.encoding, (success['encoding'] as String));
+        expect(file.encoding, success['encoding']);
         expect(file.countElements(), success['length']);
 
         final asFile = writer.serialize(file);

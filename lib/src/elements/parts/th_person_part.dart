@@ -12,7 +12,7 @@ class THPersonPart with THPersonPartMappable {
 
   THPersonPart.fromString(String aName) {
     if (aName.contains('/')) {
-      final names = aName.split('/');
+      final List<String> names = aName.split('/');
       if (names.length != 2) {
         throw THCustomException(
             "Only one slash ('/') allowed in person name at THPersonPart: '$aName'");
