@@ -1,9 +1,21 @@
 {
   "@@locale" : "en",
 
+  "aboutMapiah": "About Mapiah",
+  "@aboutMapiah": {
+    "description": "The label for the about dialog",
+    "type": "text"
+  },
+
   "appTitle": "Mapiah",
   "@appTitle": {
     "description": "The title of the application",
+    "type": "text"
+  },
+
+  "close": "Close",
+  "@close": {
+    "description": "The label for the close button",
     "type": "text"
   },
 
@@ -22,24 +34,6 @@
     }
   },
 
-  "selectTH2File": "Select a TH2 file",
-  "@selectTH2File": {
-    "description": "The label for the TH2 file selection dialog",
-    "type": "text"
-  },
-
-  "aboutMapiah": "About Mapiah",
-  "@aboutMapiah": {
-    "description": "The label for the about dialog",
-    "type": "text"
-  },
-
-  "close": "Close",
-  "@close": {
-    "description": "The label for the close button",
-    "type": "text"
-  },
-
   "mapiahVersion": "Version {version}",
   "@mapiahVersion": {
     "description": "The version of Mapiah",
@@ -47,5 +41,17 @@
     "placeholders": {
       "version": {}
     }
+  },
+
+  "parsingErrors": "Parsing errors",
+  "@parsingErrors": {
+    "description": "The label for the parsing errors dialog",
+    "type": "text"
+  } ,
+
+  "selectTH2File": "Select a TH2 file",
+  "@selectTH2File": {
+    "description": "The label for the TH2 file selection dialog",
+    "type": "text"
   }
 }

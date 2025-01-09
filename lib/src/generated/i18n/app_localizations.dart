@@ -95,11 +95,23 @@ abstract class AppLocalizations {
     Locale('pt')
   ];
 
+  /// The label for the about dialog
+  ///
+  /// In en, this message translates to:
+  /// **'About Mapiah'**
+  String get aboutMapiah;
+
   /// The title of the application
   ///
   /// In en, this message translates to:
   /// **'Mapiah'**
   String get appTitle;
+
+  /// The label for the close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
 
   /// The initial presentation of the application
   ///
@@ -113,29 +125,23 @@ abstract class AppLocalizations {
   /// **'{language, select, en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
-  /// The label for the TH2 file selection dialog
-  ///
-  /// In en, this message translates to:
-  /// **'Select a TH2 file'**
-  String get selectTH2File;
-
-  /// The label for the about dialog
-  ///
-  /// In en, this message translates to:
-  /// **'About Mapiah'**
-  String get aboutMapiah;
-
-  /// The label for the close button
-  ///
-  /// In en, this message translates to:
-  /// **'Close'**
-  String get close;
-
   /// The version of Mapiah
   ///
   /// In en, this message translates to:
   /// **'Version {version}'**
   String mapiahVersion(Object version);
+
+  /// The label for the parsing errors dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Parsing errors'**
+  String get parsingErrors;
+
+  /// The label for the TH2 file selection dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Select a TH2 file'**
+  String get selectTH2File;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

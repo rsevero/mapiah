@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class ErrorDialog extends StatelessWidget {
   final List<String> errorMessages;
@@ -8,7 +9,7 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Parsing errors'),
+      title: Text(AppLocalizations.of(context).parsingErrors),
       content: SingleChildScrollView(
         child: ListBody(
           children: errorMessages.map((message) => Text(message)).toList(),
