@@ -17,6 +17,8 @@ abstract class THSettingsStoreBase with Store {
   @readonly
   Locale _locale = Locale('en');
 
+  bool _readingConfigFile = false;
+
   THSettingsStoreBase() {
     _initialize();
   }
@@ -27,6 +29,8 @@ abstract class THSettingsStoreBase with Store {
 
   Future<void> _readConfigFile() async {
     try {
+      _readingConfigFile = true;
+
       final Directory configDirectory = await ThDirectoryHelper.config();
       final File file = File(configDirectory.path + thMainConfigFilename);
       final String contents = await file.readAsString();
@@ -47,6 +51,8 @@ abstract class THSettingsStoreBase with Store {
       }
 
       setLocaleID(localeID);
+
+      _readingConfigFile = false;
     } catch (e) {
       print('Error reading config file: $e');
     }
@@ -74,6 +80,10 @@ abstract class THSettingsStoreBase with Store {
   }
 
   void _saveConfigFile() async {
+    if (_readingConfigFile) {
+      return;
+    }
+
     try {
       final Map<String, dynamic> config = {
         'Main': {'Locale': _localeID}
