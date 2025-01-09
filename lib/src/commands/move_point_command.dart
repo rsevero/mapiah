@@ -20,10 +20,11 @@ class MovePointCommand extends Command with MovePointCommandMappable {
 
   MovePointCommand(
     int pointMapiahID,
-    THPointPositionPart newPosition,
-  )   : _pointMapiahID = pointMapiahID,
+    THPointPositionPart newPosition, {
+    super.description = _thisDescription,
+  })  : _pointMapiahID = pointMapiahID,
         _newPosition = newPosition,
-        super(_thisDescription);
+        super();
 
   @override
   String _createOppositeCommandJson(THFile thFile) {
@@ -31,6 +32,7 @@ class MovePointCommand extends Command with MovePointCommandMappable {
     final MovePointCommand oppositeCommand = MovePointCommand(
       _pointMapiahID,
       _currentPoint.position,
+      description: description,
     );
 
     return oppositeCommand.toJson();

@@ -23,12 +23,13 @@ abstract class Command with CommandMappable {
       : _description = description,
         _oppositeCommandJson = oppositeCommandJson;
 
-  Command(String description) : _description = description;
+  Command({required String description}) : _description = description;
 
   /// User presentable description of the command.
   String get description => _description;
 
-  /// JSON representation of the state before the command was executed.
+  /// JSON representation of the opposite command, i.e., the one to use on
+  /// undo/redo.
   String get oppositeCommandJson => _oppositeCommandJson;
 
   void execute(THFile thFile) {
