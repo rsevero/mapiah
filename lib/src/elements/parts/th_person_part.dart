@@ -43,7 +43,7 @@ class THPersonPart with THPersonPartMappable {
     if (firstname.contains(' ') || surname.contains(' ')) {
       return '"$firstname/$surname"';
     } else {
-      return '$firstname $surname';
+      return '"$firstname $surname"';
     }
   }
 }

@@ -16,7 +16,7 @@ void main() {
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras5 -author 2022.02.13@11:27:32 Rodrigo Severo
+scrap araras5 -author 2022.02.13@11:27:32 "Rodrigo Severo"
 endscrap
 ''',
       },
@@ -26,7 +26,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras6 -author 2022.02.13@11:27:32.12 Rodrigo Severo
+scrap araras6 -author 2022.02.13@11:27:32.12 "Rodrigo Severo"
 endscrap
 ''',
       },
@@ -36,7 +36,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras7 -author 2022.02.13@11:27:32 - 2022.02.13@11:58:00 Rodrigo Severo
+scrap araras7 -author 2022.02.13@11:27:32 - 2022.02.13@11:58:00 "Rodrigo Severo"
 endscrap
 ''',
       },
@@ -56,7 +56,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras7 -author 2022.02.13@11:27:32 - 2022.02.13@11:58:00 Rodrigo Severo
+scrap araras7 -author 2022.02.13@11:27:32 - 2022.02.13@11:58:00 "Rodrigo Severo"
 endscrap
 ''',
       },
@@ -66,7 +66,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras7 -author - Rodrigo Severo
+scrap araras7 -author - "Rodrigo Severo"
 endscrap
 ''',
       },
@@ -558,7 +558,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap s8-1p -projection plan -author 2016.05.29 Adolpho Milhommen -scale [ 0 0 \
+scrap s8-1p -projection plan -author 2016.05.29 "Adolpho Milhommen" -scale [ 0 0 \
     96 0 0 0 200 0 in ]
 endscrap
 ''',
