@@ -1,0 +1,24 @@
+{
+  "@@locale" : "en",
+
+  "appTitle": "Mapiah",
+  "@appTitle": {
+    "description": "The title of the application",
+    "type": "text"
+  },
+
+  "initialPresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
+  "@initialPresentation": {
+    "description": "The initial presentation of the application",
+    "type": "text"
+  },
+
+  "languageName": "{language, select, en {English} pt {Português} other {Unknown}}",
+  "@languageName": {
+    "description": "The name of the language based on the language code",
+    "type": "text",
+    "placeholders": {
+      "language": {}
+    }
+  }
+}

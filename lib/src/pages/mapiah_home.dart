@@ -1,17 +1,22 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/pages/th2_file_display_page.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/pages/th2_file_display_page.dart';
+import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
 class MapiahHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final THSettingsStore settingsStore = Provider.of<THSettingsStore>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 4,
-        title: Text('Mapiah'),
+        title: Text(AppLocalizations.of(context).appTitle),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.file_open_outlined),
@@ -21,11 +26,44 @@ class MapiahHome extends StatelessWidget {
             icon: Icon(Icons.info_outline),
             onPressed: () => _showAboutDialog(context),
           ),
+          _buildLanguageDropdown(settingsStore, context),
         ],
       ),
-      body: Center(
-        child: Text('Welcome to Mapiah!'),
-      ),
+      body:
+          Center(child: Text(AppLocalizations.of(context).initialPresentation)),
+    );
+  }
+
+  Widget _buildLanguageDropdown(
+      THSettingsStore settingsStore, BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return PopupMenuButton<String>(
+          onSelected: (String newValue) {
+            settingsStore.setLocaleID(newValue);
+          },
+          itemBuilder: (BuildContext context) {
+            return AppLocalizations.supportedLocales
+                .map<PopupMenuEntry<String>>((Locale locale) {
+              return PopupMenuItem<String>(
+                value: locale.languageCode,
+                child: SizedBox(
+                  width: 200,
+                  child: Text(AppLocalizations.of(context)
+                      .languageName(locale.languageCode)),
+                ),
+              );
+            }).toList();
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Icon(Icons.language),
+              Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        );
+      },
     );
   }
 
