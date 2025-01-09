@@ -81,7 +81,7 @@ class MapiahHome extends StatelessWidget {
   void _pickTh2File(BuildContext context) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        dialogTitle: 'Select a TH2 file',
+        dialogTitle: AppLocalizations.of(context).selectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2'],
         initialDirectory: kDebugMode ? thDebugPath : './',
@@ -118,18 +118,18 @@ class MapiahHome extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('About Mapiah'),
+          title: Text(AppLocalizations.of(context).aboutMapiah),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Version: $version'),
+                Text(AppLocalizations.of(context).mapiahVersion(version)),
                 SizedBox(height: 16),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Close'),
+              child: Text(AppLocalizations.of(context).close),
               onPressed: () {
                 Navigator.of(context).pop();
               },

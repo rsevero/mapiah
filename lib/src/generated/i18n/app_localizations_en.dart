@@ -26,4 +26,18 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get selectTH2File => 'Select a TH2 file';
+
+  @override
+  String get aboutMapiah => 'About Mapiah';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String mapiahVersion(Object version) {
+    return 'Version $version';
+  }
 }

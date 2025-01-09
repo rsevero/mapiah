@@ -20,5 +20,32 @@
     "placeholders": {
       "language": {}
     }
+  },
+
+  "selectTH2File": "Select a TH2 file",
+  "@selectTH2File": {
+    "description": "The label for the TH2 file selection dialog",
+    "type": "text"
+  },
+
+  "aboutMapiah": "About Mapiah",
+  "@aboutMapiah": {
+    "description": "The label for the about dialog",
+    "type": "text"
+  },
+
+  "close": "Close",
+  "@close": {
+    "description": "The label for the close button",
+    "type": "text"
+  },
+
+  "mapiahVersion": "Version {version}",
+  "@mapiahVersion": {
+    "description": "The version of Mapiah",
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
   }
 }

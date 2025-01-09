@@ -112,6 +112,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{language, select, en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
+
+  /// The label for the TH2 file selection dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Select a TH2 file'**
+  String get selectTH2File;
+
+  /// The label for the about dialog
+  ///
+  /// In en, this message translates to:
+  /// **'About Mapiah'**
+  String get aboutMapiah;
+
+  /// The label for the close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// The version of Mapiah
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String mapiahVersion(Object version);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

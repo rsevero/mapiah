@@ -21,9 +21,23 @@ class AppLocalizationsPt extends AppLocalizations {
       {
         'en': 'English',
         'pt': 'Português',
-        'other': 'Unknown',
+        'other': 'Desconhecido',
       },
     );
     return '$_temp0';
+  }
+
+  @override
+  String get selectTH2File => 'Selecione um arquivo TH2';
+
+  @override
+  String get aboutMapiah => 'Sobre o Mapiah';
+
+  @override
+  String get close => 'Fechar';
+
+  @override
+  String mapiahVersion(Object version) {
+    return 'Versão $version';
   }
 }
