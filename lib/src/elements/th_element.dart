@@ -382,7 +382,7 @@ class THFile extends THElement with THFileMappable, THParent {
   THElement elementByMapiahID(int aMapiahID) {
     if (aMapiahID == 0) {
       return _thFile;
-    } else if (!hasElementByMapiahID(aMapiahID)) {
+    } else if (!_elementByMapiahID.containsKey(aMapiahID)) {
       throw THNoElementByMapiahIDException(filename, aMapiahID);
     }
 
