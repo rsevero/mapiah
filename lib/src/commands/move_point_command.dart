@@ -29,6 +29,9 @@ class MovePointCommand extends Command with MovePointCommandMappable {
   @override
   String _createOppositeCommandJson(THFile thFile) {
     _currentPoint = thFile.elementByMapiahID(_pointMapiahID) as THPoint;
+
+    /// The original description is kept for the opposite command so the message
+    /// on undo and redo are the same.
     final MovePointCommand oppositeCommand = MovePointCommand(
       _pointMapiahID,
       _currentPoint.position,

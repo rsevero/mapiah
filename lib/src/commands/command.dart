@@ -37,6 +37,9 @@ abstract class Command with CommandMappable {
     _actualExecute(thFile);
   }
 
+  /// The description for the opposite command should be the description of
+  /// the original command so the message on undo and redo are the same even
+  /// if the original command and the opposite commands are different.
   String _createOppositeCommandJson(THFile thFile);
 
   void _actualExecute(THFile thFile);
