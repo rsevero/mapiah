@@ -5,18 +5,16 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
-import 'package:provider/provider.dart';
 
 class THFileEditPage extends StatelessWidget {
   final String filename;
-  late final THFileDisplayStore thFileDisplayStore;
 
   THFileEditPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
     final THFileStore thFileStore = getIt<THFileStore>();
-    thFileDisplayStore = Provider.of<THFileDisplayStore>(context);
+
     thFileStore.loadFile(context, filename);
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +46,7 @@ class THFileEditPage extends StatelessWidget {
           } else {
             return Center(
               child: Stack(children: [
-                THFileWidget(thFileStore.thFile, thFileDisplayStore),
+                THFileWidget(thFileStore.thFile),
                 _buildFloatingActionButtons(),
               ]),
             );
@@ -59,6 +57,8 @@ class THFileEditPage extends StatelessWidget {
   }
 
   Widget _buildFloatingActionButtons() {
+    final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+
     return Positioned(
       right: 16.0,
       bottom: 16.0,

@@ -16,10 +16,8 @@ import 'package:mapiah/src/widgets/th_paint_action.dart';
 
 class THFileWidget extends StatefulWidget {
   final THFile file;
-  final THFileDisplayStore thFileDisplayStore;
 
-  THFileWidget(this.file, this.thFileDisplayStore)
-      : super(key: ObjectKey(file));
+  THFileWidget(this.file) : super(key: ObjectKey(file));
 
   @override
   State<THFileWidget> createState() => _THFileWidgetState();
@@ -28,13 +26,14 @@ class THFileWidget extends StatefulWidget {
 class _THFileWidgetState extends State<THFileWidget> {
   final List<THPaintAction> _paintActions = [];
   THPointInterface? _selectedPointElement;
+  final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
 
   @override
   void initState() {
     super.initState();
     final THFile file = widget.file;
-    widget.thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
-    widget.thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
+    thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
+    thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
     final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
     for (final int childMapiahID in fileChildrenMapiahIDs) {
       final THElement child = file.elementByMapiahID(childMapiahID);
@@ -76,11 +75,11 @@ class _THFileWidgetState extends State<THFileWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        widget.thFileDisplayStore.updateScreenSize(
+        thFileDisplayStore.updateScreenSize(
             Size(constraints.maxWidth, constraints.maxHeight));
 
-        if (widget.thFileDisplayStore.canvasScaleTranslationUndefined) {
-          widget.thFileDisplayStore.zoomShowAll();
+        if (thFileDisplayStore.canvasScaleTranslationUndefined) {
+          thFileDisplayStore.zoomShowAll();
         }
 
         return GestureDetector(
@@ -90,7 +89,7 @@ class _THFileWidgetState extends State<THFileWidget> {
           onPanEnd: _onPanEnd,
           child: Observer(
             builder: (context) {
-              widget.thFileDisplayStore.trigger;
+              thFileDisplayStore.trigger;
               return CustomPaint(
                 /// Creating another CustomPaint as child of this CustomPaint
                 /// because CustomPaint creates 3 layers, from bottom to top:
@@ -99,11 +98,10 @@ class _THFileWidgetState extends State<THFileWidget> {
                 /// I can put grids below it (as the main CustomPaint painter)
                 /// and a scale above it.
                 child: CustomPaint(
-                  painter:
-                      THFilePainter(_paintActions, widget.thFileDisplayStore),
-                  size: widget.thFileDisplayStore.screenSize,
+                  painter: THFilePainter(_paintActions, thFileDisplayStore),
+                  size: thFileDisplayStore.screenSize,
                 ),
-                size: widget.thFileDisplayStore.screenSize,
+                size: thFileDisplayStore.screenSize,
               );
             },
           ),
