@@ -6,20 +6,20 @@ part 'th_point_position_part.mapper.dart';
 
 @MappableClass()
 class THPointPositionPart with THPointPositionPartMappable {
-  late final THDoublePart x;
-  late final THDoublePart y;
+  late final THDoublePart xDoublePart;
+  late final THDoublePart yDoublePart;
 
-  THPointPositionPart.fromTHDoubleParts(this.x, this.y);
+  THPointPositionPart.fromTHDoubleParts(this.xDoublePart, this.yDoublePart);
 
   THPointPositionPart(
       double aX, double aY, int aXDecimalPositions, int aYDecimalPositions) {
-    x = THDoublePart(aX, aXDecimalPositions);
-    y = THDoublePart(aY, aYDecimalPositions);
+    xDoublePart = THDoublePart(aX, aXDecimalPositions);
+    yDoublePart = THDoublePart(aY, aYDecimalPositions);
   }
 
   THPointPositionPart.fromStrings(String aXAsString, String aYAsString) {
-    x = THDoublePart.fromString(aXAsString);
-    y = THDoublePart.fromString(aYAsString);
+    xDoublePart = THDoublePart.fromString(aXAsString);
+    yDoublePart = THDoublePart.fromString(aYAsString);
   }
 
   THPointPositionPart.fromStringList(List<dynamic> aList) {
@@ -27,12 +27,24 @@ class THPointPositionPart with THPointPositionPartMappable {
       throw THConvertFromListException('THPointPart', aList);
     }
 
-    x = THDoublePart.fromString(aList[0].toString());
-    y = THDoublePart.fromString(aList[1].toString());
+    xDoublePart = THDoublePart.fromString(aList[0].toString());
+    yDoublePart = THDoublePart.fromString(aList[1].toString());
   }
 
   @override
   String toString() {
-    return "${x.toString()} ${y.toString()}";
+    return "${xDoublePart.toString()} ${yDoublePart.toString()}";
+  }
+
+  double get x => xDoublePart.value;
+
+  double get y => yDoublePart.value;
+
+  set x(double newX) {
+    xDoublePart.value = newX;
+  }
+
+  set y(double newY) {
+    yDoublePart.value = newY;
   }
 }

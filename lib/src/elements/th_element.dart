@@ -240,10 +240,10 @@ class THFile extends THElement with THFileMappable, THParent {
           _comparePoint(element.x, element.y);
           break;
         case THStraightLineSegment _:
-          _comparePoint(element.endPointX, element.endPointY);
+          _comparePoint(element.x, element.y);
           break;
         case THBezierCurveLineSegment _:
-          _comparePoint(element.endPointX, element.endPointY);
+          _comparePoint(element.x, element.y);
           _comparePoint(element.controlPoint1X, element.controlPoint1Y);
           _comparePoint(element.controlPoint2X, element.controlPoint2Y);
           break;

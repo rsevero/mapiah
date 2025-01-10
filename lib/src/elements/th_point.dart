@@ -1,4 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
@@ -38,7 +40,7 @@ part 'th_point.mapper.dart';
 @MappableClass()
 class THPoint extends THElement
     with THPointMappable, THHasOptions
-    implements THHasPLAType {
+    implements THHasPLAType, THPointInterface {
   late THPointPositionPart position;
   late String _pointType;
 
@@ -162,7 +164,7 @@ class THPoint extends THElement
   };
 
   THPoint(super.parent, this.position, String pointType) : super.withParent() {
-    plaType = pointType;
+    _pointType = pointType;
   }
 
   THPoint.fromString(
@@ -172,16 +174,16 @@ class THPoint extends THElement
     plaType = pointType;
   }
 
-  static bool hasPointType(String aPointType) {
-    return _pointTypes.contains(aPointType);
+  static bool hasPointType(String pointType) {
+    return _pointTypes.contains(pointType);
   }
 
-  set pointType(String aPointType) {
-    if (!hasPointType(aPointType)) {
-      throw THCustomException("Unrecognized THPoint type '$aPointType'.");
+  set pointType(String pointType) {
+    if (!hasPointType(pointType)) {
+      throw THCustomException("Unrecognized THPoint type '$pointType'.");
     }
 
-    _pointType = aPointType;
+    _pointType = pointType;
   }
 
   String get pointType {
@@ -189,8 +191,8 @@ class THPoint extends THElement
   }
 
   @override
-  set plaType(String aPointType) {
-    pointType = aPointType;
+  set plaType(String pointType) {
+    _pointType = pointType;
   }
 
   @override
@@ -198,35 +200,59 @@ class THPoint extends THElement
     return pointType;
   }
 
+  @override
   double get x {
-    return position.x.value;
+    return position.xDoublePart.value;
   }
 
+  @override
   double get y {
-    return position.y.value;
+    return position.yDoublePart.value;
   }
 
-  set x(double aValue) {
-    position.x.value = aValue;
+  @override
+  set x(double x) {
+    position.xDoublePart.value = x;
   }
 
-  set y(double aValue) {
-    position.y.value = aValue;
+  @override
+  set y(double y) {
+    position.yDoublePart.value = y;
+  }
+
+  @override
+  THDoublePart get xDoublePart {
+    return position.xDoublePart;
+  }
+
+  @override
+  THDoublePart get yDoublePart {
+    return position.yDoublePart;
+  }
+
+  @override
+  set xDoublePart(THDoublePart xDoublePart) {
+    position.xDoublePart = xDoublePart;
+  }
+
+  @override
+  set yDoublePart(THDoublePart yDoublePart) {
+    position.yDoublePart = yDoublePart;
   }
 
   int get xDecimalPositions {
-    return position.x.decimalPositions;
+    return position.xDoublePart.decimalPositions;
   }
 
   int get yDecimalPositions {
-    return position.y.decimalPositions;
+    return position.yDoublePart.decimalPositions;
   }
 
-  set xDecimalPositions(int aDecimalPositions) {
-    position.x.decimalPositions = aDecimalPositions;
+  set xDecimalPositions(int decimalPositions) {
+    position.xDoublePart.decimalPositions = decimalPositions;
   }
 
-  set yDecimalPositions(int aDecimalPositions) {
-    position.y.decimalPositions = aDecimalPositions;
+  set yDecimalPositions(int decimalPositions) {
+    position.yDoublePart.decimalPositions = decimalPositions;
   }
 }

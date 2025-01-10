@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -11,39 +12,81 @@ import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/widgets/th_paint_action.dart';
 
-class THFileWidget extends StatelessWidget {
+class THFileWidget extends StatefulWidget {
   final THFile file;
-  final List<THPaintAction> _paintActions = [];
   final THFileDisplayStore thFileDisplayStore;
 
   THFileWidget(this.file, this.thFileDisplayStore)
-      : super(key: ObjectKey(file)) {
-    thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
-    thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
-    for (final int childMapiahID in file.childrenMapiahID) {
-      final THElement child = file.elementByMapiahID(childMapiahID);
+      : super(key: ObjectKey(file));
+
+  @override
+  State<THFileWidget> createState() => _THFileWidgetState();
+}
+
+class _THFileWidgetState extends State<THFileWidget> {
+  final List<THPaintAction> _paintActions = [];
+  THPointInterface? _selectedPointElement;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.thFileDisplayStore.updateDataBoundingBox(widget.file.boundingBox());
+    widget.thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
+    for (final int childMapiahID in widget.file.childrenMapiahID) {
+      final THElement child = widget.file.elementByMapiahID(childMapiahID);
       if (child is THScrap) {
         _addScrapPaintActions(child);
       }
     }
   }
 
+  void _onPanStart(DragStartDetails details) {
+    final Offset localPosition = details.localPosition;
+    for (final THPaintAction action in _paintActions) {
+      if (action is THPointPaintAction && action.contains(localPosition)) {
+        setState(() {
+          _selectedPointElement = action.element as THPointInterface;
+        });
+        break;
+      }
+    }
+  }
+
+  void _onPanUpdate(DragUpdateDetails details) {
+    if (_selectedPointElement != null) {
+      setState(() {
+        _selectedPointElement!.x += details.delta.dx;
+        _selectedPointElement!.y += details.delta.dy;
+      });
+      // widget.thFileDisplayStore.updatePointPosition(_selectedPointElement!);
+    }
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    setState(() {
+      _selectedPointElement = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        thFileDisplayStore.updateScreenSize(
+        widget.thFileDisplayStore.updateScreenSize(
             Size(constraints.maxWidth, constraints.maxHeight));
 
-        if (thFileDisplayStore.canvasScaleTranslationUndefined) {
-          thFileDisplayStore.zoomShowAll();
+        if (widget.thFileDisplayStore.canvasScaleTranslationUndefined) {
+          widget.thFileDisplayStore.zoomShowAll();
         }
 
         return GestureDetector(
-          onPanUpdate: thFileDisplayStore.onPanUpdate,
+          // onPanUpdate: thFileDisplayStore.onPanUpdate,
+          onPanStart: _onPanStart,
+          onPanUpdate: _onPanUpdate,
+          onPanEnd: _onPanEnd,
           child: Observer(
             builder: (context) {
-              thFileDisplayStore.trigger;
+              widget.thFileDisplayStore.trigger;
               return CustomPaint(
                 /// Creating another CustomPaint as child of this CustomPaint
                 /// because CustomPaint creates 3 layers, from bottom to top:
@@ -52,10 +95,11 @@ class THFileWidget extends StatelessWidget {
                 /// I can put grids below it (as the main CustomPaint painter)
                 /// and a scale above it.
                 child: CustomPaint(
-                  painter: THFilePainter(_paintActions, thFileDisplayStore),
-                  size: thFileDisplayStore.screenSize,
+                  painter:
+                      THFilePainter(_paintActions, widget.thFileDisplayStore),
+                  size: widget.thFileDisplayStore.screenSize,
                 ),
-                size: thFileDisplayStore.screenSize,
+                size: widget.thFileDisplayStore.screenSize,
               );
             },
           ),
@@ -66,16 +110,16 @@ class THFileWidget extends StatelessWidget {
 
   void _addScrapPaintActions(THScrap aScrap) {
     for (final int childMapiahID in aScrap.childrenMapiahID) {
-      final THElement child = file.elementByMapiahID(childMapiahID);
+      final THElement child = widget.file.elementByMapiahID(childMapiahID);
       if (child is THPoint) {
         final THPointPaintAction newPointPaintAction =
-            THPointPaintAction(child.x, child.y);
+            THPointPaintAction(child);
         _paintActions.add(newPointPaintAction);
       } else if (child is THLine) {
         bool isFirst = true;
         for (final int lineSegmentMapiahID in child.childrenMapiahID) {
           final THElement lineSegment =
-              file.elementByMapiahID(lineSegmentMapiahID);
+              widget.file.elementByMapiahID(lineSegmentMapiahID);
           if (lineSegment is THEndline) {
             continue;
           }
@@ -84,8 +128,7 @@ class THFileWidget extends StatelessWidget {
             final THLineSegment initialLineSegment =
                 lineSegment as THLineSegment;
             final THMoveStartPathPaintAction newMovePaintAction =
-                THMoveStartPathPaintAction(
-                    initialLineSegment.endPointX, initialLineSegment.endPointY);
+                THMoveStartPathPaintAction(initialLineSegment);
             _paintActions.add(newMovePaintAction);
             isFirst = false;
             continue;
@@ -93,18 +136,11 @@ class THFileWidget extends StatelessWidget {
 
           if (lineSegment is THStraightLineSegment) {
             final THStraightLinePaintAction newStraightLinePaintAction =
-                THStraightLinePaintAction(
-                    lineSegment.endPointX, lineSegment.endPointY);
+                THStraightLinePaintAction(lineSegment);
             _paintActions.add(newStraightLinePaintAction);
           } else if (lineSegment is THBezierCurveLineSegment) {
             final THBezierCurvePaintAction newBezierCurvePaintAction =
-                THBezierCurvePaintAction(
-                    lineSegment.endPointX,
-                    lineSegment.endPointY,
-                    lineSegment.controlPoint1X,
-                    lineSegment.controlPoint1Y,
-                    lineSegment.controlPoint2X,
-                    lineSegment.controlPoint2Y);
+                THBezierCurvePaintAction(lineSegment);
             _paintActions.add(newBezierCurvePaintAction);
           }
         }

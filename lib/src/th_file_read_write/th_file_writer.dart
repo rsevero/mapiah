@@ -157,13 +157,14 @@ class THFileWriter {
         final THBezierCurveLineSegment aTHBezierCurveLineSegment =
             aTHElement as THBezierCurveLineSegment;
         final String newLine =
-            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
+            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPointPosition}";
         asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
         asString += _linePointOptionsAsString(aTHBezierCurveLineSegment);
       case 'THStraightLineSegment':
         final THStraightLineSegment aTHStraightLineSegment =
             aTHElement as THStraightLineSegment;
-        final String newLine = aTHStraightLineSegment.endPoint.toString();
+        final String newLine =
+            aTHStraightLineSegment.endPointPosition.toString();
         asString += _prepareLine(newLine, aTHStraightLineSegment);
         asString += _linePointOptionsAsString(aTHStraightLineSegment);
       default:

@@ -15,81 +15,79 @@ class THBezierCurveLineSegment extends THElement
   late THPointPositionPart controlPoint2;
 
   THBezierCurveLineSegment(super.parent, this.controlPoint1, this.controlPoint2,
-      THPointPositionPart endPoint)
+      THPointPositionPart endPointPosition)
       : super.withParent();
 
-  THBezierCurveLineSegment.fromString(
-      super.parent,
-      List<dynamic> aControlPoint1List,
-      List<dynamic> aControlPoint2List,
-      List<dynamic> aEndPointList)
+  THBezierCurveLineSegment.fromString(super.parent, List<dynamic> controlPoint1,
+      List<dynamic> controlPoint2, List<dynamic> endPointPosition)
       : super.withParent() {
-    controlPoint1 = THPointPositionPart.fromStringList(aControlPoint1List);
-    controlPoint2 = THPointPositionPart.fromStringList(aControlPoint2List);
-    endPoint = THPointPositionPart.fromStringList(aEndPointList);
+    this.controlPoint1 = THPointPositionPart.fromStringList(controlPoint1);
+    this.controlPoint2 = THPointPositionPart.fromStringList(controlPoint2);
+    this.endPointPosition =
+        THPointPositionPart.fromStringList(endPointPosition);
   }
 
   double get controlPoint1X {
-    return controlPoint1.x.value;
+    return controlPoint1.xDoublePart.value;
   }
 
   double get controlPoint1Y {
-    return controlPoint1.y.value;
+    return controlPoint1.yDoublePart.value;
   }
 
-  set controlPoint1X(double aValue) {
-    controlPoint1.x.value = aValue;
+  set controlPoint1X(double x) {
+    controlPoint1.xDoublePart.value = x;
   }
 
-  set controlPoint1Y(double aValue) {
-    controlPoint1.y.value = aValue;
+  set controlPoint1Y(double y) {
+    controlPoint1.yDoublePart.value = y;
   }
 
   int get controlPoint1XDecimalPositions {
-    return controlPoint1.x.decimalPositions;
+    return controlPoint1.xDoublePart.decimalPositions;
   }
 
   int get controlPoint1YDecimalPositions {
-    return controlPoint1.y.decimalPositions;
+    return controlPoint1.yDoublePart.decimalPositions;
   }
 
-  set controlPoint1XDecimalPositions(int aDecimalPositions) {
-    controlPoint1.x.decimalPositions = aDecimalPositions;
+  set controlPoint1XDecimalPositions(int decimalPositions) {
+    controlPoint1.xDoublePart.decimalPositions = decimalPositions;
   }
 
-  set controlPoint1YDecimalPositions(int aDecimalPositions) {
-    controlPoint1.y.decimalPositions = aDecimalPositions;
+  set controlPoint1YDecimalPositions(int decimalPositions) {
+    controlPoint1.yDoublePart.decimalPositions = decimalPositions;
   }
 
   double get controlPoint2X {
-    return controlPoint2.x.value;
+    return controlPoint2.xDoublePart.value;
   }
 
   double get controlPoint2Y {
-    return controlPoint2.y.value;
+    return controlPoint2.yDoublePart.value;
   }
 
-  set controlPoint2X(double aValue) {
-    controlPoint2.x.value = aValue;
+  set controlPoint2X(double x) {
+    controlPoint2.xDoublePart.value = x;
   }
 
-  set controlPoint2Y(double aValue) {
-    controlPoint2.y.value = aValue;
+  set controlPoint2Y(double y) {
+    controlPoint2.yDoublePart.value = y;
   }
 
   int get controlPoint2XDecimalPositions {
-    return controlPoint2.x.decimalPositions;
+    return controlPoint2.xDoublePart.decimalPositions;
   }
 
   int get controlPoint2YDecimalPositions {
-    return controlPoint2.y.decimalPositions;
+    return controlPoint2.yDoublePart.decimalPositions;
   }
 
-  set controlPoint2XDecimalPositions(int aDecimalPositions) {
-    controlPoint2.x.decimalPositions = aDecimalPositions;
+  set controlPoint2XDecimalPositions(int decimalPositions) {
+    controlPoint2.xDoublePart.decimalPositions = decimalPositions;
   }
 
-  set controlPoint2YDecimalPositions(int aDecimalPositions) {
-    endPoint.y.decimalPositions = aDecimalPositions;
+  set controlPoint2YDecimalPositions(int decimalPositions) {
+    controlPoint2.yDoublePart.decimalPositions = decimalPositions;
   }
 }

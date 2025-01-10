@@ -26,9 +26,10 @@ class THStraightLineSegmentMapper
   static THParent _$parent(THStraightLineSegment v) => v.parent;
   static const Field<THStraightLineSegment, THParent> _f$parent =
       Field('parent', _$parent);
-  static THPointPositionPart _$endPoint(THStraightLineSegment v) => v.endPoint;
-  static const Field<THStraightLineSegment, THPointPositionPart> _f$endPoint =
-      Field('endPoint', _$endPoint);
+  static THPointPositionPart _$endPointPosition(THStraightLineSegment v) =>
+      v.endPointPosition;
+  static const Field<THStraightLineSegment, THPointPositionPart>
+      _f$endPointPosition = Field('endPointPosition', _$endPointPosition);
   static int _$parentMapiahID(THStraightLineSegment v) => v.parentMapiahID;
   static const Field<THStraightLineSegment, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
@@ -40,13 +41,14 @@ class THStraightLineSegmentMapper
   @override
   final MappableFields<THStraightLineSegment> fields = const {
     #parent: _f$parent,
-    #endPoint: _f$endPoint,
+    #endPointPosition: _f$endPointPosition,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 
   static THStraightLineSegment _instantiate(DecodingData data) {
-    return THStraightLineSegment(data.dec(_f$parent), data.dec(_f$endPoint));
+    return THStraightLineSegment(
+        data.dec(_f$parent), data.dec(_f$endPointPosition));
   }
 
   @override
@@ -107,9 +109,9 @@ abstract class THStraightLineSegmentCopyWith<
     $In extends THStraightLineSegment,
     $Out> implements THElementCopyWith<$R, $In, $Out> {
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get endPoint;
+      get endPointPosition;
   @override
-  $R call({THParent? parent, THPointPositionPart? endPoint});
+  $R call({THParent? parent, THPointPositionPart? endPointPosition});
   THStraightLineSegmentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -124,17 +126,18 @@ class _THStraightLineSegmentCopyWithImpl<$R, $Out>
       THStraightLineSegmentMapper.ensureInitialized();
   @override
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get endPoint => $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
+      get endPointPosition => $value.endPointPosition.copyWith
+          .$chain((v) => call(endPointPosition: v));
   @override
-  $R call({THParent? parent, THPointPositionPart? endPoint}) =>
+  $R call({THParent? parent, THPointPositionPart? endPointPosition}) =>
       $apply(FieldCopyWithData({
         if (parent != null) #parent: parent,
-        if (endPoint != null) #endPoint: endPoint
+        if (endPointPosition != null) #endPointPosition: endPointPosition
       }));
   @override
   THStraightLineSegment $make(CopyWithData data) => THStraightLineSegment(
       data.get(#parent, or: $value.parent),
-      data.get(#endPoint, or: $value.endPoint));
+      data.get(#endPointPosition, or: $value.endPointPosition));
 
   @override
   THStraightLineSegmentCopyWith<$R2, THStraightLineSegment, $Out2>

@@ -1,15 +1,17 @@
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
-mixin THLineSegment on THElement implements THHasPLAType {
-  late THPointPositionPart endPoint;
+mixin THLineSegment on THElement implements THHasPLAType, THPointInterface {
+  late THPointPositionPart endPointPosition;
 
   @override
-  set plaType(String aLineType) {
-    (parent as THLine).plaType = aLineType;
+  set plaType(String lineType) {
+    (parent as THLine).plaType = lineType;
   }
 
   @override
@@ -22,35 +24,59 @@ mixin THLineSegment on THElement implements THHasPLAType {
     return 'linesegment';
   }
 
-  double get endPointX {
-    return endPoint.x.value;
+  @override
+  double get x {
+    return endPointPosition.xDoublePart.value;
   }
 
-  double get endPointY {
-    return endPoint.y.value;
+  @override
+  double get y {
+    return endPointPosition.yDoublePart.value;
   }
 
-  set endPointX(double aValue) {
-    endPoint.x.value = aValue;
+  @override
+  set x(double x) {
+    endPointPosition.xDoublePart.value = x;
   }
 
-  set endPointY(double aValue) {
-    endPoint.y.value = aValue;
+  @override
+  set y(double y) {
+    endPointPosition.yDoublePart.value = y;
+  }
+
+  @override
+  THDoublePart get xDoublePart {
+    return endPointPosition.xDoublePart;
+  }
+
+  @override
+  THDoublePart get yDoublePart {
+    return endPointPosition.yDoublePart;
+  }
+
+  @override
+  set xDoublePart(THDoublePart doublePart) {
+    endPointPosition.xDoublePart = doublePart;
+  }
+
+  @override
+  set yDoublePart(THDoublePart doublePart) {
+    endPointPosition.yDoublePart = doublePart;
   }
 
   int get endPointXDecimalPositions {
-    return endPoint.x.decimalPositions;
+    return endPointPosition.xDoublePart.decimalPositions;
   }
 
   int get endPointYDecimalPositions {
-    return endPoint.y.decimalPositions;
+    return endPointPosition.yDoublePart.decimalPositions;
   }
 
-  set endPointXDecimalPositions(int aDecimalPositions) {
-    endPoint.x.decimalPositions = aDecimalPositions;
+  set endPointXDecimalPositions(int decimalPositions) {
+    endPointPosition.xDoublePart.decimalPositions = decimalPositions;
   }
 
-  set endPointYDecimalPositions(int aDecimalPositions) {
-    endPoint.y.decimalPositions = aDecimalPositions;
+  set endPointYDecimalPositions(int decimalPositions) {
+    endPointPosition.yDoublePart.decimalPositions = decimalPositions;
   }
 }
