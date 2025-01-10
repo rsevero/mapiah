@@ -45,6 +45,43 @@ mixin _$THSettingsStore on THSettingsStoreBase, Store {
     });
   }
 
+  late final _$_selectionToleranceAtom =
+      Atom(name: 'THSettingsStoreBase._selectionTolerance', context: context);
+
+  double get selectionTolerance {
+    _$_selectionToleranceAtom.reportRead();
+    return super._selectionTolerance;
+  }
+
+  @override
+  double get _selectionTolerance => selectionTolerance;
+
+  @override
+  set _selectionTolerance(double value) {
+    _$_selectionToleranceAtom.reportWrite(value, super._selectionTolerance, () {
+      super._selectionTolerance = value;
+    });
+  }
+
+  late final _$_selectionToleranceSquaredAtom = Atom(
+      name: 'THSettingsStoreBase._selectionToleranceSquared', context: context);
+
+  double get selectionToleranceSquared {
+    _$_selectionToleranceSquaredAtom.reportRead();
+    return super._selectionToleranceSquared;
+  }
+
+  @override
+  double get _selectionToleranceSquared => selectionToleranceSquared;
+
+  @override
+  set _selectionToleranceSquared(double value) {
+    _$_selectionToleranceSquaredAtom
+        .reportWrite(value, super._selectionToleranceSquared, () {
+      super._selectionToleranceSquared = value;
+    });
+  }
+
   late final _$THSettingsStoreBaseActionController =
       ActionController(name: 'THSettingsStoreBase', context: context);
 

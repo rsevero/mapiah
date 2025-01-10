@@ -55,3 +55,10 @@ const String thProjectsDirectory = 'Projects';
 
 const String thMainConfigFilename = 'mapiah.toml';
 const String thDefaultLocaleID = 'sys';
+
+const double thDefaultSelectionTolerance = 10.0;
+
+const String thMainConfigSection = 'Main';
+const String thMainConfigLocale = 'Locale';
+const String thFileEditConfigSection = 'FileEdit';
+const String thFileEditConfigSelectionTolerance = 'SelectionTolerance';

@@ -11,13 +11,20 @@ part 'th_settings_store.g.dart';
 class THSettingsStore = THSettingsStoreBase with _$THSettingsStore;
 
 abstract class THSettingsStoreBase with Store {
+  bool _readingConfigFile = false;
+
   @readonly
   String _localeID = thDefaultLocaleID;
 
   @readonly
   Locale _locale = Locale('en');
 
-  bool _readingConfigFile = false;
+  @readonly
+  double _selectionTolerance = thDefaultSelectionTolerance;
+
+  @readonly
+  double _selectionToleranceSquared =
+      thDefaultSelectionTolerance * thDefaultSelectionTolerance;
 
   THSettingsStoreBase() {
     _initialize();
@@ -36,21 +43,33 @@ abstract class THSettingsStoreBase with Store {
       final String contents = await file.readAsString();
       final Map<String, dynamic> config = TomlDocument.parse(contents).toMap();
 
-      final Map<String, dynamic> mainConfig = config.containsKey('Main')
-          ? config['Main'] as Map<String, dynamic>
-          : {};
+      final Map<String, dynamic> mainConfig =
+          config.containsKey(thMainConfigSection)
+              ? config[thMainConfigSection] as Map<String, dynamic>
+              : {};
+      final Map<String, dynamic> fileEditConfig =
+          config.containsKey(thFileEditConfigSection)
+              ? config[thFileEditConfigSection] as Map<String, dynamic>
+              : {};
 
-      String localeID = '';
+      String localeID = thDefaultLocaleID;
+      double selectionTolerance = thDefaultSelectionTolerance;
 
-      if (mainConfig.isEmpty) {
-        localeID = thDefaultLocaleID;
-      } else {
-        localeID = mainConfig.containsKey('Locale')
-            ? mainConfig['Locale']
-            : thDefaultLocaleID;
+      if (mainConfig.isNotEmpty) {
+        if (mainConfig.containsKey(thMainConfigLocale)) {
+          localeID = mainConfig[thMainConfigLocale];
+        }
+      }
+
+      if (fileEditConfig.isNotEmpty) {
+        if (fileEditConfig.containsKey(thFileEditConfigSelectionTolerance)) {
+          selectionTolerance =
+              fileEditConfig[thFileEditConfigSelectionTolerance];
+        }
       }
 
       setLocaleID(localeID);
+      setSelectionTolerance(selectionTolerance);
 
       _readingConfigFile = false;
     } catch (e) {
@@ -79,6 +98,11 @@ abstract class THSettingsStoreBase with Store {
     }
   }
 
+  void setSelectionTolerance(double aSelectionTolerance) {
+    _selectionTolerance = aSelectionTolerance;
+    _selectionToleranceSquared = aSelectionTolerance * aSelectionTolerance;
+  }
+
   void _saveConfigFile() async {
     if (_readingConfigFile) {
       return;
@@ -86,7 +110,7 @@ abstract class THSettingsStoreBase with Store {
 
     try {
       final Map<String, dynamic> config = {
-        'Main': {'Locale': _localeID}
+        thMainConfigSection: {thMainConfigLocale: _localeID}
       };
       final String contents = TomlDocument.fromMap(config).toString();
 
