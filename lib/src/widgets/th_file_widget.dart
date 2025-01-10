@@ -11,6 +11,7 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:mapiah/src/widgets/th_paint_action.dart';
 
@@ -27,6 +28,7 @@ class _THFileWidgetState extends State<THFileWidget> {
   final List<THPaintAction> _paintActions = [];
   THPointInterface? _selectedPointElement;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+  final THFileStore thFileStore = getIt<THFileStore>();
 
   @override
   void initState() {
@@ -61,7 +63,8 @@ class _THFileWidgetState extends State<THFileWidget> {
         _selectedPointElement!.x += details.delta.dx;
         _selectedPointElement!.y += details.delta.dy;
       });
-      // widget.thFileDisplayStore.updatePointPosition(_selectedPointElement!);
+      thFileStore.updatePointPosition(
+          _selectedPointElement! as THPoint, details.delta);
     }
   }
 

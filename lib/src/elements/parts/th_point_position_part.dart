@@ -9,17 +9,15 @@ class THPointPositionPart with THPointPositionPartMappable {
   late final THDoublePart xDoublePart;
   late final THDoublePart yDoublePart;
 
-  THPointPositionPart.fromTHDoubleParts(this.xDoublePart, this.yDoublePart);
-
   THPointPositionPart(
-      double aX, double aY, int aXDecimalPositions, int aYDecimalPositions) {
-    xDoublePart = THDoublePart(aX, aXDecimalPositions);
-    yDoublePart = THDoublePart(aY, aYDecimalPositions);
+      double x, double y, int xDecimalPositions, int yDecimalPositions) {
+    xDoublePart = THDoublePart(x, xDecimalPositions);
+    yDoublePart = THDoublePart(y, yDecimalPositions);
   }
 
-  THPointPositionPart.fromStrings(String aXAsString, String aYAsString) {
-    xDoublePart = THDoublePart.fromString(aXAsString);
-    yDoublePart = THDoublePart.fromString(aYAsString);
+  THPointPositionPart.fromStrings(String xAsString, String yAsString) {
+    xDoublePart = THDoublePart.fromString(xAsString);
+    yDoublePart = THDoublePart.fromString(yAsString);
   }
 
   THPointPositionPart.fromStringList(List<dynamic> aList) {
@@ -40,11 +38,15 @@ class THPointPositionPart with THPointPositionPartMappable {
 
   double get y => yDoublePart.value;
 
-  set x(double newX) {
-    xDoublePart.value = newX;
+  int get xDecimalPositions => xDoublePart.decimalPositions;
+
+  int get yDecimalPositions => yDoublePart.decimalPositions;
+
+  set x(double x) {
+    xDoublePart.value = x;
   }
 
-  set y(double newY) {
-    yDoublePart.value = newY;
+  set y(double y) {
+    yDoublePart.value = y;
   }
 }

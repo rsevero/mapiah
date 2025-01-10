@@ -4,7 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/commands/command.dart';
+import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_controller.dart';
@@ -101,4 +103,15 @@ abstract class THFileStoreBase with Store {
   }
 
   UndoRedoController get undoRedoController => _undoRedoController;
+
+  @action
+  void updatePointPosition(THPoint point, Offset delta) {
+    final THPointPositionPart newPosition = point.position.copyWith(
+      x: point.x + delta.dx,
+      y: point.y + delta.dy,
+    );
+    final MovePointCommand command =
+        MovePointCommand(point.mapiahID, newPosition);
+    _undoRedoController.execute(command);
+  }
 }

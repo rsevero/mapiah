@@ -13,7 +13,6 @@ class THPointPositionPartMapper extends ClassMapperBase<THPointPositionPart> {
   static THPointPositionPartMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THPointPositionPartMapper._());
-      THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,22 +20,36 @@ class THPointPositionPartMapper extends ClassMapperBase<THPointPositionPart> {
   @override
   final String id = 'THPointPositionPart';
 
+  static double _$x(THPointPositionPart v) => v.x;
+  static const Field<THPointPositionPart, double> _f$x = Field('x', _$x);
+  static double _$y(THPointPositionPart v) => v.y;
+  static const Field<THPointPositionPart, double> _f$y = Field('y', _$y);
+  static int _$xDecimalPositions(THPointPositionPart v) => v.xDecimalPositions;
+  static const Field<THPointPositionPart, int> _f$xDecimalPositions =
+      Field('xDecimalPositions', _$xDecimalPositions);
+  static int _$yDecimalPositions(THPointPositionPart v) => v.yDecimalPositions;
+  static const Field<THPointPositionPart, int> _f$yDecimalPositions =
+      Field('yDecimalPositions', _$yDecimalPositions);
   static THDoublePart _$xDoublePart(THPointPositionPart v) => v.xDoublePart;
   static const Field<THPointPositionPart, THDoublePart> _f$xDoublePart =
-      Field('xDoublePart', _$xDoublePart);
+      Field('xDoublePart', _$xDoublePart, mode: FieldMode.member);
   static THDoublePart _$yDoublePart(THPointPositionPart v) => v.yDoublePart;
   static const Field<THPointPositionPart, THDoublePart> _f$yDoublePart =
-      Field('yDoublePart', _$yDoublePart);
+      Field('yDoublePart', _$yDoublePart, mode: FieldMode.member);
 
   @override
   final MappableFields<THPointPositionPart> fields = const {
+    #x: _f$x,
+    #y: _f$y,
+    #xDecimalPositions: _f$xDecimalPositions,
+    #yDecimalPositions: _f$yDecimalPositions,
     #xDoublePart: _f$xDoublePart,
     #yDoublePart: _f$yDoublePart,
   };
 
   static THPointPositionPart _instantiate(DecodingData data) {
-    return THPointPositionPart.fromTHDoubleParts(
-        data.dec(_f$xDoublePart), data.dec(_f$yDoublePart));
+    return THPointPositionPart(data.dec(_f$x), data.dec(_f$y),
+        data.dec(_f$xDecimalPositions), data.dec(_f$yDecimalPositions));
   }
 
   @override
@@ -94,9 +107,8 @@ extension THPointPositionPartValueCopy<$R, $Out>
 
 abstract class THPointPositionPartCopyWith<$R, $In extends THPointPositionPart,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get xDoublePart;
-  THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get yDoublePart;
-  $R call({THDoublePart? xDoublePart, THDoublePart? yDoublePart});
+  $R call(
+      {double? x, double? y, int? xDecimalPositions, int? yDecimalPositions});
   THPointPositionPartCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -110,22 +122,23 @@ class _THPointPositionPartCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THPointPositionPart> $mapper =
       THPointPositionPartMapper.ensureInitialized();
   @override
-  THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get xDoublePart =>
-      $value.xDoublePart.copyWith.$chain((v) => call(xDoublePart: v));
-  @override
-  THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get yDoublePart =>
-      $value.yDoublePart.copyWith.$chain((v) => call(yDoublePart: v));
-  @override
-  $R call({THDoublePart? xDoublePart, THDoublePart? yDoublePart}) =>
+  $R call(
+          {double? x,
+          double? y,
+          int? xDecimalPositions,
+          int? yDecimalPositions}) =>
       $apply(FieldCopyWithData({
-        if (xDoublePart != null) #xDoublePart: xDoublePart,
-        if (yDoublePart != null) #yDoublePart: yDoublePart
+        if (x != null) #x: x,
+        if (y != null) #y: y,
+        if (xDecimalPositions != null) #xDecimalPositions: xDecimalPositions,
+        if (yDecimalPositions != null) #yDecimalPositions: yDecimalPositions
       }));
   @override
-  THPointPositionPart $make(CopyWithData data) =>
-      THPointPositionPart.fromTHDoubleParts(
-          data.get(#xDoublePart, or: $value.xDoublePart),
-          data.get(#yDoublePart, or: $value.yDoublePart));
+  THPointPositionPart $make(CopyWithData data) => THPointPositionPart(
+      data.get(#x, or: $value.x),
+      data.get(#y, or: $value.y),
+      data.get(#xDecimalPositions, or: $value.xDecimalPositions),
+      data.get(#yDecimalPositions, or: $value.yDecimalPositions));
 
   @override
   THPointPositionPartCopyWith<$R2, THPointPositionPart, $Out2>

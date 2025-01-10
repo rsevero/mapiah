@@ -11,11 +11,11 @@ import 'package:mapiah/src/stores/th_settings_store.dart';
 final GetIt getIt = GetIt.instance;
 
 void main() {
-  setup();
+  _setup();
   runApp(MapiahApp());
 }
 
-void setup() {
+void _setup() {
   getIt.registerSingleton<THSettingsStore>(THSettingsStore());
   getIt.registerSingleton<THFileStore>(THFileStore());
   getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());

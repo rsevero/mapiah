@@ -101,6 +101,17 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   @override
+  void updatePointPosition(THPoint point, Offset delta) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.updatePointPosition');
+    try {
+      return super.updatePointPosition(point, delta);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 
