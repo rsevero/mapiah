@@ -16,12 +16,11 @@ sealed class THPaintAction {
   bool contains(Offset localPosition);
 }
 
-class THPointPaintAction extends THPaintAction with THPaintActionElement {
-  final Offset center;
-
+class THPointPaintAction extends THPaintAction
+    with THPaintActionPositionElement {
   THPointPaintAction(THPoint point, [Paint? paint])
-      : center = Offset(point.x, point.y),
-        super(paint ?? genericPointPaint) {
+      : super(paint ?? genericPointPaint) {
+    position = Offset(point.x, point.y);
     element = point;
   }
 
@@ -29,21 +28,17 @@ class THPointPaintAction extends THPaintAction with THPaintActionElement {
 
   @override
   bool contains(Offset localPosition) {
-    return (center - localPosition).distanceSquared <
+    return (position - localPosition).distanceSquared <
         100; // TODO - substitute with THSettingsStore.selectionToleranceSquared
   }
 }
 
 class THStraightLinePaintAction extends THPaintAction
-    with THPaintActionElement {
-  final double endPointX;
-  final double endPointY;
-
+    with THPaintActionPositionElement {
   THStraightLinePaintAction(THStraightLineSegment lineSegment, [Paint? aPaint])
-      : endPointX = lineSegment.endPointPosition.xDoublePart.value,
-        endPointY = lineSegment.endPointPosition.yDoublePart.value,
-        super(aPaint ?? genericLinePaint) {
-    element = lineSegment;
+      : super(aPaint ?? genericLinePaint) {
+    position = Offset(lineSegment.x, lineSegment.y);
+    element = lineSegment as THElement;
   }
 
   static Paint get genericLinePaint => THPaints.thPaint2;
@@ -54,8 +49,8 @@ class THStraightLinePaintAction extends THPaintAction
   }
 }
 
-class THBezierCurvePaintAction extends THStraightLinePaintAction
-    with THPaintActionElement {
+class THBezierCurvePaintAction extends THPaintAction
+    with THPaintActionPositionElement {
   final double controlPoint1X;
   final double controlPoint1Y;
   final double controlPoint2X;
@@ -63,24 +58,27 @@ class THBezierCurvePaintAction extends THStraightLinePaintAction
 
   THBezierCurvePaintAction(THBezierCurveLineSegment lineSegment,
       [Paint? aPaint])
-      : controlPoint1X = lineSegment.controlPoint1.xDoublePart.value,
-        controlPoint1Y = lineSegment.controlPoint1.yDoublePart.value,
-        controlPoint2X = lineSegment.controlPoint2.xDoublePart.value,
-        controlPoint2Y = lineSegment.controlPoint2.yDoublePart.value,
-        super(lineSegment as THStraightLineSegment,
-            aPaint ?? THStraightLinePaintAction.genericLinePaint);
+      : controlPoint1X = lineSegment.controlPoint1.x,
+        controlPoint1Y = lineSegment.controlPoint1.y,
+        controlPoint2X = lineSegment.controlPoint2.x,
+        controlPoint2Y = lineSegment.controlPoint2.y,
+        super(aPaint ?? THStraightLinePaintAction.genericLinePaint) {
+    position = Offset(lineSegment.x, lineSegment.y);
+    element = lineSegment as THElement;
+  }
+
+  @override
+  bool contains(Offset localPosition) {
+    return false; // TODO - implement
+  }
 }
 
 class THMoveStartPathPaintAction extends THPaintAction
-    with THPaintActionElement {
-  final double x;
-  final double y;
-
-  THMoveStartPathPaintAction(THPointInterface element)
-      : x = element.x,
-        y = element.y,
-        super(genericMovePaint) {
-    this.element = element as THElement;
+    with THPaintActionPositionElement {
+  THMoveStartPathPaintAction(THPointInterface pointPositionElement)
+      : super(genericMovePaint) {
+    position = Offset(pointPositionElement.x, pointPositionElement.y);
+    element = pointPositionElement as THElement;
   }
 
   static Paint get genericMovePaint => THPaints.thPaint3;
@@ -102,12 +100,23 @@ class THEndPathPaintAction extends THPaintAction {
   }
 }
 
-mixin THPaintActionElement {
+mixin THPaintActionPositionElement {
   late final THElement _element;
+  late final Offset _position;
 
   THElement get element => _element;
+
+  Offset get position => _position;
 
   set element(THElement element) {
     _element = element;
   }
+
+  set position(Offset position) {
+    _position = position;
+  }
+
+  double get x => _position.dx;
+
+  double get y => _position.dy;
 }

@@ -129,11 +129,11 @@ class THFile extends THElement with THFileMappable, THParent {
   String encoding = thDefaultEncoding;
   int _nextMapiahID = 1;
 
-  late double _minX;
-  late double _minY;
-  late double _maxX;
-  late double _maxY;
-  late bool _isFirst;
+  double _minX = 0.0;
+  double _minY = 0.0;
+  double _maxX = 0.0;
+  double _maxY = 0.0;
+  bool _isFirst = true;
 
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah

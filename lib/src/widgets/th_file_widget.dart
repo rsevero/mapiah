@@ -30,10 +30,12 @@ class _THFileWidgetState extends State<THFileWidget> {
   @override
   void initState() {
     super.initState();
-    widget.thFileDisplayStore.updateDataBoundingBox(widget.file.boundingBox());
+    final THFile file = widget.file;
+    widget.thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
     widget.thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
-    for (final int childMapiahID in widget.file.childrenMapiahID) {
-      final THElement child = widget.file.elementByMapiahID(childMapiahID);
+    final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
+    for (final int childMapiahID in fileChildrenMapiahIDs) {
+      final THElement child = file.elementByMapiahID(childMapiahID);
       if (child is THScrap) {
         _addScrapPaintActions(child);
       }
@@ -108,18 +110,21 @@ class _THFileWidgetState extends State<THFileWidget> {
     );
   }
 
-  void _addScrapPaintActions(THScrap aScrap) {
-    for (final int childMapiahID in aScrap.childrenMapiahID) {
-      final THElement child = widget.file.elementByMapiahID(childMapiahID);
+  void _addScrapPaintActions(THScrap scrap) {
+    final THFile file = widget.file;
+    final List<int> scrapChildrenMapiahIDs = scrap.childrenMapiahID;
+    for (final int childMapiahID in scrapChildrenMapiahIDs) {
+      final THElement child = file.elementByMapiahID(childMapiahID);
       if (child is THPoint) {
         final THPointPaintAction newPointPaintAction =
             THPointPaintAction(child);
         _paintActions.add(newPointPaintAction);
       } else if (child is THLine) {
         bool isFirst = true;
-        for (final int lineSegmentMapiahID in child.childrenMapiahID) {
+        final List<int> lineChildrenMapiahIDs = child.childrenMapiahID;
+        for (final int lineSegmentMapiahID in lineChildrenMapiahIDs) {
           final THElement lineSegment =
-              widget.file.elementByMapiahID(lineSegmentMapiahID);
+              file.elementByMapiahID(lineSegmentMapiahID);
           if (lineSegment is THEndline) {
             continue;
           }
@@ -179,17 +184,17 @@ class THFilePainter extends CustomPainter {
     for (final THPaintAction paintAction in _paintActions) {
       switch (paintAction) {
         case THPointPaintAction _:
-          canvas.drawCircle(paintAction.center, 5, paintAction.paint);
+          canvas.drawCircle(paintAction.position, 5, paintAction.paint);
         case THBezierCurvePaintAction _:
           newPath.cubicTo(
               paintAction.controlPoint1X,
               paintAction.controlPoint1Y,
               paintAction.controlPoint2X,
               paintAction.controlPoint2Y,
-              paintAction.endPointX,
-              paintAction.endPointY);
+              paintAction.x,
+              paintAction.y);
         case THStraightLinePaintAction _:
-          newPath.lineTo(paintAction.endPointX, paintAction.endPointY);
+          newPath.lineTo(paintAction.x, paintAction.y);
         case THMoveStartPathPaintAction _:
           newPath = Path()..moveTo(paintAction.x, paintAction.y);
         case THEndPathPaintAction _:
