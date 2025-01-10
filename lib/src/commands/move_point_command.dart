@@ -1,44 +1,50 @@
 part of 'command.dart';
 
 @MappableClass()
-class MovePointCommand extends Command with MovePointCommandMappable {
+final class MovePointCommand extends Command with MovePointCommandMappable {
   late final int _pointMapiahID;
   late final THPointPositionPart _newPosition;
   late final THPoint _currentPoint;
 
   static const String _thisDescription = 'Move Point';
+  static const CommandType _thisType = CommandType.movePoint;
 
   /// Used by dart_mappable.
   MovePointCommand.withDescription(
+    super.type,
     super.description,
     super.oppositeCommandJson,
     int pointMapiahID,
     THPointPositionPart newPosition,
   )   : _pointMapiahID = pointMapiahID,
         _newPosition = newPosition,
-        super.withOppositeCommandJson();
+        super.withUndoRedo();
 
   MovePointCommand(
     int pointMapiahID,
     THPointPositionPart newPosition, {
+    super.type = _thisType,
     super.description = _thisDescription,
   })  : _pointMapiahID = pointMapiahID,
         _newPosition = newPosition,
         super();
 
   @override
-  String _createOppositeCommandJson(THFile thFile) {
+  UndoRedoCommand _createUndoRedo(THFile thFile) {
     _currentPoint = thFile.elementByMapiahID(_pointMapiahID) as THPoint;
 
-    /// The original description is kept for the opposite command so the message
-    /// on undo and redo are the same.
-    final MovePointCommand oppositeCommand = MovePointCommand(
+    /// The original description is kept for the undo/redo command so the
+    /// message on undo and redo are the same.
+    final MovePointCommand undoRedoCommand = MovePointCommand(
       _pointMapiahID,
       _currentPoint.position,
       description: description,
     );
 
-    return oppositeCommand.toJson();
+    return UndoRedoCommand(
+        type: undoRedoCommand.type,
+        description: description,
+        json: undoRedoCommand.toJson());
   }
 
   @override

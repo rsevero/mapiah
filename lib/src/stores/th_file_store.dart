@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
+import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
+import 'package:mapiah/src/undo_redo/undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_store.g.dart';
@@ -21,9 +23,12 @@ abstract class THFileStoreBase with Store {
 
   List<String> errorMessages = <String>[];
 
+  late final UndoRedoController _undoRedoController;
+
   @action
   Future<void> loadFile(BuildContext context, String aFilename) async {
     final parser = THFileParser();
+
     _isLoading = true;
     errorMessages.clear();
 
@@ -32,6 +37,7 @@ abstract class THFileStoreBase with Store {
 
     if (isSuccessful) {
       _thFile = parsedFile;
+      _undoRedoController = UndoRedoController(_thFile);
     } else {
       errorMessages.addAll(errors);
       await showDialog(
@@ -78,4 +84,21 @@ abstract class THFileStoreBase with Store {
   void substituteElement(THElement newElement) {
     _thFile.substituteElement(newElement);
   }
+
+  @action
+  void execute(Command command) {
+    _undoRedoController.execute(command);
+  }
+
+  @action
+  void undo() {
+    _undoRedoController.undo();
+  }
+
+  @action
+  void redo() {
+    _undoRedoController.redo();
+  }
+
+  UndoRedoController get undoRedoController => _undoRedoController;
 }
