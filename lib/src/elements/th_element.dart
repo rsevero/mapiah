@@ -124,7 +124,7 @@ class THFile extends THElement with THFileMappable, THParent {
   /// Not to be confused with the thID, which is the ID used by Therion, the
   /// ones mentioned in Therion Book.
   final Map<int, THElement> _elementByMapiahID = {};
-  String filename = 'unnamed file';
+  String filename = '';
 
   String encoding = thDefaultEncoding;
   int _nextMapiahID = 1;

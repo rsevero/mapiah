@@ -82,15 +82,44 @@ mixin _$THSettingsStore on THSettingsStoreBase, Store {
     });
   }
 
+  late final _$_pointRadiusAtom =
+      Atom(name: 'THSettingsStoreBase._pointRadius', context: context);
+
+  double get pointRadius {
+    _$_pointRadiusAtom.reportRead();
+    return super._pointRadius;
+  }
+
+  @override
+  double get _pointRadius => pointRadius;
+
+  @override
+  set _pointRadius(double value) {
+    _$_pointRadiusAtom.reportWrite(value, super._pointRadius, () {
+      super._pointRadius = value;
+    });
+  }
+
   late final _$THSettingsStoreBaseActionController =
       ActionController(name: 'THSettingsStoreBase', context: context);
 
   @override
-  void setLocaleID(String aLocaleID) {
+  void setLocaleID(String localeID) {
     final _$actionInfo = _$THSettingsStoreBaseActionController.startAction(
         name: 'THSettingsStoreBase.setLocaleID');
     try {
-      return super.setLocaleID(aLocaleID);
+      return super.setLocaleID(localeID);
+    } finally {
+      _$THSettingsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPointRadius(double pointRadius) {
+    final _$actionInfo = _$THSettingsStoreBaseActionController.startAction(
+        name: 'THSettingsStoreBase.setPointRadius');
+    try {
+      return super.setPointRadius(pointRadius);
     } finally {
       _$THSettingsStoreBaseActionController.endAction(_$actionInfo);
     }

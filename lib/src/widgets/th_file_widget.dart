@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -10,6 +11,7 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:mapiah/src/widgets/th_paint_action.dart';
 
 class THFileWidget extends StatefulWidget {
@@ -181,10 +183,12 @@ class THFilePainter extends CustomPainter {
     canvas.scale(1, -1);
 
     Path newPath = Path();
+    final double pointRadius = getIt<THSettingsStore>().pointRadius;
     for (final THPaintAction paintAction in _paintActions) {
       switch (paintAction) {
         case THPointPaintAction _:
-          canvas.drawCircle(paintAction.position, 5, paintAction.paint);
+          canvas.drawCircle(
+              paintAction.position, pointRadius, paintAction.paint);
         case THBezierCurvePaintAction _:
           newPath.cubicTo(
               paintAction.controlPoint1X,

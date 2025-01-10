@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_paints.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_settings_store.dart';
 
 sealed class THPaintAction {
   final Paint _paint;
@@ -29,7 +31,7 @@ class THPointPaintAction extends THPaintAction
   @override
   bool contains(Offset localPosition) {
     return (position - localPosition).distanceSquared <
-        100; // TODO - substitute with THSettingsStore.selectionToleranceSquared
+        getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
 
@@ -45,7 +47,8 @@ class THStraightLinePaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return false; // TODO - implement
+    return (position - localPosition).distanceSquared <
+        getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
 
@@ -69,7 +72,8 @@ class THBezierCurvePaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return false; // TODO - implement
+    return (position - localPosition).distanceSquared <
+        getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
 
@@ -85,7 +89,8 @@ class THMoveStartPathPaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return false; // TODO - implement
+    return (position - localPosition).distanceSquared <
+        getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
 
@@ -96,7 +101,7 @@ class THEndPathPaintAction extends THPaintAction {
 
   @override
   bool contains(Offset localPosition) {
-    return false; // TODO - implement
+    return false;
   }
 }
 

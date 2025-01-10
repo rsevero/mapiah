@@ -17,7 +17,7 @@ abstract class THSettingsStoreBase with Store {
   String _localeID = thDefaultLocaleID;
 
   @readonly
-  Locale _locale = Locale('en');
+  Locale _locale = Locale(thEnglishLocaleID);
 
   @readonly
   double _selectionTolerance = thDefaultSelectionTolerance;
@@ -25,6 +25,9 @@ abstract class THSettingsStoreBase with Store {
   @readonly
   double _selectionToleranceSquared =
       thDefaultSelectionTolerance * thDefaultSelectionTolerance;
+
+  @readonly
+  double _pointRadius = thDefaultPointRadius;
 
   THSettingsStoreBase() {
     _initialize();
@@ -54,6 +57,7 @@ abstract class THSettingsStoreBase with Store {
 
       String localeID = thDefaultLocaleID;
       double selectionTolerance = thDefaultSelectionTolerance;
+      double pointRadius = thDefaultPointRadius;
 
       if (mainConfig.isNotEmpty) {
         if (mainConfig.containsKey(thMainConfigLocale)) {
@@ -66,10 +70,14 @@ abstract class THSettingsStoreBase with Store {
           selectionTolerance =
               fileEditConfig[thFileEditConfigSelectionTolerance];
         }
+        if (fileEditConfig.containsKey(thFileEditConfigPointRadius)) {
+          pointRadius = fileEditConfig[thFileEditConfigPointRadius];
+        }
       }
 
       setLocaleID(localeID);
       setSelectionTolerance(selectionTolerance);
+      setPointRadius(pointRadius);
 
       _readingConfigFile = false;
     } catch (e) {
@@ -84,23 +92,40 @@ abstract class THSettingsStoreBase with Store {
   }
 
   @action
-  void setLocaleID(String aLocaleID) {
-    final bool saveConfigFile = _localeID != aLocaleID;
+  void setLocaleID(String localeID) {
+    final bool saveConfigFile = _localeID != localeID;
 
-    _localeID = aLocaleID;
-    if (aLocaleID == 'sys') {
-      aLocaleID = _getSystemLocaleID();
+    _localeID = localeID;
+    if (localeID == thDefaultLocaleID) {
+      localeID = _getSystemLocaleID();
     }
-    _locale = Locale(aLocaleID);
+    _locale = Locale(localeID);
 
     if (saveConfigFile) {
       _saveConfigFile();
     }
   }
 
-  void setSelectionTolerance(double aSelectionTolerance) {
-    _selectionTolerance = aSelectionTolerance;
-    _selectionToleranceSquared = aSelectionTolerance * aSelectionTolerance;
+  void setSelectionTolerance(double selectionTolerance) {
+    final bool saveConfigFile = _selectionTolerance != selectionTolerance;
+
+    _selectionTolerance = selectionTolerance;
+    _selectionToleranceSquared = selectionTolerance * selectionTolerance;
+
+    if (saveConfigFile) {
+      _saveConfigFile();
+    }
+  }
+
+  @action
+  void setPointRadius(double pointRadius) {
+    final bool saveConfigFile = _pointRadius != pointRadius;
+
+    _pointRadius = pointRadius;
+
+    if (saveConfigFile) {
+      _saveConfigFile();
+    }
   }
 
   void _saveConfigFile() async {
@@ -110,7 +135,11 @@ abstract class THSettingsStoreBase with Store {
 
     try {
       final Map<String, dynamic> config = {
-        thMainConfigSection: {thMainConfigLocale: _localeID}
+        thMainConfigSection: {thMainConfigLocale: _localeID},
+        thFileEditConfigSection: {
+          thFileEditConfigSelectionTolerance: _selectionTolerance,
+          thFileEditConfigPointRadius: _pointRadius,
+        },
       };
       final String contents = TomlDocument.fromMap(config).toString();
 
