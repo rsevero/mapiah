@@ -18,6 +18,7 @@ void main() {
 
 void setup() {
   getIt.registerSingleton<THSettingsStore>(THSettingsStore());
+  getIt.registerSingleton<THFileStore>(THFileStore());
 }
 
 class MapiahApp extends StatelessWidget {
@@ -29,9 +30,6 @@ class MapiahApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        Provider(
-          create: (context) => THFileStore(),
-        ),
         Provider(
           create: (context) => THFileDisplayStore(),
         ),

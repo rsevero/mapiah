@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
@@ -8,15 +9,14 @@ import 'package:provider/provider.dart';
 
 class THFileEditPage extends StatelessWidget {
   final String filename;
-  late final THFileStore thFileStore;
   late final THFileDisplayStore thFileDisplayStore;
 
   THFileEditPage({required this.filename});
 
   @override
   Widget build(BuildContext context) {
+    final THFileStore thFileStore = getIt<THFileStore>();
     thFileDisplayStore = Provider.of<THFileDisplayStore>(context);
-    thFileStore = Provider.of<THFileStore>(context);
     thFileStore.loadFile(context, filename);
     return Scaffold(
       appBar: AppBar(
