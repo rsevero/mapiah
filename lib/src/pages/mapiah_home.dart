@@ -1,17 +1,17 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
 
 class MapiahHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final THSettingsStore settingsStore = Provider.of<THSettingsStore>(context);
+    final THSettingsStore settingsStore = getIt<THSettingsStore>();
 
     return Scaffold(
       appBar: AppBar(

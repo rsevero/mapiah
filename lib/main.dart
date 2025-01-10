@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
@@ -8,8 +9,15 @@ import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:provider/provider.dart';
 
+final GetIt getIt = GetIt.instance;
+
 void main() {
+  setup();
   runApp(MapiahApp());
+}
+
+void setup() {
+  getIt.registerSingleton<THSettingsStore>(THSettingsStore());
 }
 
 class MapiahApp extends StatelessWidget {
@@ -17,11 +25,10 @@ class MapiahApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final THSettingsStore settingsStore = getIt<THSettingsStore>();
+
     return MultiProvider(
       providers: [
-        Provider(
-          create: (context) => THSettingsStore(),
-        ),
         Provider(
           create: (context) => THFileStore(),
         ),
@@ -29,24 +36,18 @@ class MapiahApp extends StatelessWidget {
           create: (context) => THFileDisplayStore(),
         ),
       ],
-      child: Consumer<THSettingsStore>(
-        builder: (context, settingsStore, child) {
-          return Observer(
-            builder: (context) => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme:
-                  ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-              darkTheme:
-                  ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-              onGenerateTitle: (context) =>
-                  AppLocalizations.of(context).appTitle,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              locale: settingsStore.locale,
-              supportedLocales: AppLocalizations.supportedLocales,
-              home: MapiahHome(),
-            ),
-          );
-        },
+      child: Observer(
+        builder: (context) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+          darkTheme:
+              ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+          onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          locale: settingsStore.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MapiahHome(),
+        ),
       ),
     );
   }
