@@ -11,8 +11,13 @@ class UndoRedoController {
 
   void execute(Command command) {
     final UndoRedoCommand undo = command.execute(_thFile);
+
+    if (_redo.isNotEmpty) {
+      _undo.addAll(_redo);
+      _redo.clear();
+    }
+
     _undo.add(undo);
-    _redo.clear();
   }
 
   void undo() {
