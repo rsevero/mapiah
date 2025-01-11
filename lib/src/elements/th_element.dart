@@ -17,7 +17,7 @@ abstract class THElement with THElementMappable {
   // value is never saved anywhere.
   late final int _mapiahID;
 
-  late final THFile _thFile;
+  late THFile _thFile;
   late int parentMapiahID;
 
   String? sameLineComment;
@@ -307,21 +307,21 @@ class THFile extends THElement with THFileMappable, THParent {
     return _elementByTHID[aTHID]!;
   }
 
-  void substituteElement(THElement aElement) {
-    final int aMapiahID = aElement.mapiahID;
+  void substituteElement(THElement newElement) {
+    final int aMapiahID = newElement.mapiahID;
     final THElement oldElement = elementByMapiahID(aMapiahID);
 
-    if (aElement.elementType != oldElement.elementType) {
+    if (newElement.elementType != oldElement.elementType) {
       throw THCustomException(
-          "Cannot substitute element of type '${oldElement.elementType}' with element of type '${aElement.elementType}'.");
+          "Cannot substitute element of type '${oldElement.elementType}' with element of type '${newElement.elementType}'.");
     }
 
-    aElement._thFile = this;
-    _elementByMapiahID[aMapiahID] = aElement;
+    newElement._thFile = this;
+    _elementByMapiahID[aMapiahID] = newElement;
 
-    if (aElement is THHasTHID) {
+    if (newElement is THHasTHID) {
       final String oldTHID = (oldElement as THHasTHID).thID;
-      final String newTHID = (aElement as THHasTHID).thID;
+      final String newTHID = (newElement as THHasTHID).thID;
 
       if (_elementByTHID.containsKey(oldTHID)) {
         _elementByTHID.remove(oldTHID);
@@ -331,7 +331,7 @@ class THFile extends THElement with THFileMappable, THParent {
             "Duplicate thID in _elementByTHID: '$newTHID'.");
       }
 
-      _elementByTHID[newTHID] = aElement;
+      _elementByTHID[newTHID] = newElement;
       _thIDByMapiahID[aMapiahID] = newTHID;
     }
   }

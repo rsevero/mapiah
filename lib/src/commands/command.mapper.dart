@@ -22,21 +22,16 @@ class CommandMapper extends ClassMapperBase<Command> {
   @override
   final String id = 'Command';
 
-  static CommandType _$_type(Command v) => v._type;
-  static const Field<Command, CommandType> _f$_type =
-      Field('_type', _$_type, key: 'type');
-  static String _$_description(Command v) => v._description;
-  static const Field<Command, String> _f$_description =
-      Field('_description', _$_description, key: 'description');
-  static UndoRedoCommand _$_undoRedo(Command v) => v._undoRedo;
-  static const Field<Command, UndoRedoCommand> _f$_undoRedo =
-      Field('_undoRedo', _$_undoRedo, key: 'undoRedo');
+  static CommandType _$type(Command v) => v.type;
+  static const Field<Command, CommandType> _f$type = Field('type', _$type);
+  static String _$description(Command v) => v.description;
+  static const Field<Command, String> _f$description =
+      Field('description', _$description);
 
   @override
   final MappableFields<Command> fields = const {
-    #_type: _f$_type,
-    #_description: _f$_description,
-    #_undoRedo: _f$_undoRedo,
+    #type: _f$type,
+    #description: _f$description,
   };
 
   static Command _instantiate(DecodingData data) {
@@ -63,7 +58,7 @@ mixin CommandMappable {
 
 abstract class CommandCopyWith<$R, $In extends Command, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({CommandType? type, String? description, UndoRedoCommand? undoRedo});
+  $R call({CommandType? type, String? description});
   CommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -117,8 +112,8 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = MovePointCommandMapper._());
       CommandMapper.ensureInitialized();
-      CommandTypeMapper.ensureInitialized();
       THPointPositionPartMapper.ensureInitialized();
+      CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -126,39 +121,31 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
   @override
   final String id = 'MovePointCommand';
 
-  static CommandType _$_type(MovePointCommand v) => v._type;
-  static const Field<MovePointCommand, CommandType> _f$_type =
-      Field('_type', _$_type, key: 'type');
-  static String _$_description(MovePointCommand v) => v._description;
-  static const Field<MovePointCommand, String> _f$_description =
-      Field('_description', _$_description, key: 'description');
-  static UndoRedoCommand _$_undoRedo(MovePointCommand v) => v._undoRedo;
-  static const Field<MovePointCommand, UndoRedoCommand> _f$_undoRedo =
-      Field('_undoRedo', _$_undoRedo, key: 'oppositeCommandJson');
-  static int _$_pointMapiahID(MovePointCommand v) => v._pointMapiahID;
-  static const Field<MovePointCommand, int> _f$_pointMapiahID =
-      Field('_pointMapiahID', _$_pointMapiahID, key: 'pointMapiahID');
-  static THPointPositionPart _$_newPosition(MovePointCommand v) =>
-      v._newPosition;
-  static const Field<MovePointCommand, THPointPositionPart> _f$_newPosition =
-      Field('_newPosition', _$_newPosition, key: 'newPosition');
+  static int _$pointMapiahID(MovePointCommand v) => v.pointMapiahID;
+  static const Field<MovePointCommand, int> _f$pointMapiahID =
+      Field('pointMapiahID', _$pointMapiahID);
+  static THPointPositionPart _$newPosition(MovePointCommand v) => v.newPosition;
+  static const Field<MovePointCommand, THPointPositionPart> _f$newPosition =
+      Field('newPosition', _$newPosition);
+  static CommandType _$type(MovePointCommand v) => v.type;
+  static const Field<MovePointCommand, CommandType> _f$type =
+      Field('type', _$type, opt: true, def: CommandType.movePoint);
+  static String _$description(MovePointCommand v) => v.description;
+  static const Field<MovePointCommand, String> _f$description =
+      Field('description', _$description, opt: true, def: 'Move Point');
 
   @override
   final MappableFields<MovePointCommand> fields = const {
-    #_type: _f$_type,
-    #_description: _f$_description,
-    #_undoRedo: _f$_undoRedo,
-    #_pointMapiahID: _f$_pointMapiahID,
-    #_newPosition: _f$_newPosition,
+    #pointMapiahID: _f$pointMapiahID,
+    #newPosition: _f$newPosition,
+    #type: _f$type,
+    #description: _f$description,
   };
 
   static MovePointCommand _instantiate(DecodingData data) {
-    return MovePointCommand.withDescription(
-        data.dec(_f$_type),
-        data.dec(_f$_description),
-        data.dec(_f$_undoRedo),
-        data.dec(_f$_pointMapiahID),
-        data.dec(_f$_newPosition));
+    return MovePointCommand(
+        data.dec(_f$pointMapiahID), data.dec(_f$newPosition),
+        type: data.dec(_f$type), description: data.dec(_f$description));
   }
 
   @override
@@ -216,14 +203,13 @@ extension MovePointCommandValueCopy<$R, $Out>
 abstract class MovePointCommandCopyWith<$R, $In extends MovePointCommand, $Out>
     implements CommandCopyWith<$R, $In, $Out> {
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get _newPosition;
+      get newPosition;
   @override
   $R call(
-      {CommandType? type,
-      String? description,
-      UndoRedoCommand? undoRedo,
-      int? pointMapiahID,
-      THPointPositionPart? newPosition});
+      {int? pointMapiahID,
+      THPointPositionPart? newPosition,
+      CommandType? type,
+      String? description});
   MovePointCommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -238,29 +224,26 @@ class _MovePointCommandCopyWithImpl<$R, $Out>
       MovePointCommandMapper.ensureInitialized();
   @override
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get _newPosition =>
-          $value._newPosition.copyWith.$chain((v) => call(newPosition: v));
+      get newPosition =>
+          $value.newPosition.copyWith.$chain((v) => call(newPosition: v));
   @override
   $R call(
-          {CommandType? type,
-          String? description,
-          UndoRedoCommand? undoRedo,
-          int? pointMapiahID,
-          THPointPositionPart? newPosition}) =>
+          {int? pointMapiahID,
+          THPointPositionPart? newPosition,
+          CommandType? type,
+          String? description}) =>
       $apply(FieldCopyWithData({
-        if (type != null) #type: type,
-        if (description != null) #description: description,
-        if (undoRedo != null) #undoRedo: undoRedo,
         if (pointMapiahID != null) #pointMapiahID: pointMapiahID,
-        if (newPosition != null) #newPosition: newPosition
+        if (newPosition != null) #newPosition: newPosition,
+        if (type != null) #type: type,
+        if (description != null) #description: description
       }));
   @override
-  MovePointCommand $make(CopyWithData data) => MovePointCommand.withDescription(
-      data.get(#type, or: $value._type),
-      data.get(#description, or: $value._description),
-      data.get(#undoRedo, or: $value._undoRedo),
-      data.get(#pointMapiahID, or: $value._pointMapiahID),
-      data.get(#newPosition, or: $value._newPosition));
+  MovePointCommand $make(CopyWithData data) => MovePointCommand(
+      data.get(#pointMapiahID, or: $value.pointMapiahID),
+      data.get(#newPosition, or: $value.newPosition),
+      type: data.get(#type, or: $value.type),
+      description: data.get(#description, or: $value.description));
 
   @override
   MovePointCommandCopyWith<$R2, MovePointCommand, $Out2> $chain<$R2, $Out2>(

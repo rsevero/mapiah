@@ -6,28 +6,15 @@ final class MovePointCommand extends Command with MovePointCommandMappable {
   late final THPointPositionPart _newPosition;
   late final THPoint _currentPoint;
 
-  static const String _thisDescription = 'Move Point';
-  static const CommandType _thisType = CommandType.movePoint;
-
-  /// Used by dart_mappable.
-  MovePointCommand.withDescription(
-    super.type,
-    super.description,
-    super.oppositeCommandJson,
-    int pointMapiahID,
-    THPointPositionPart newPosition,
-  )   : _pointMapiahID = pointMapiahID,
-        _newPosition = newPosition,
-        super.withUndoRedo();
-
   MovePointCommand(
     int pointMapiahID,
     THPointPositionPart newPosition, {
-    super.type = _thisType,
-    super.description = _thisDescription,
-  })  : _pointMapiahID = pointMapiahID,
-        _newPosition = newPosition,
-        super();
+    super.type = CommandType.movePoint,
+    super.description = 'Move Point',
+  }) : super() {
+    _pointMapiahID = pointMapiahID;
+    _newPosition = newPosition;
+  }
 
   @override
   UndoRedoCommand _createUndoRedo(THFile thFile) {

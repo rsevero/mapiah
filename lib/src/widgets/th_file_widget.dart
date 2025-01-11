@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/definitions/th_paints.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -25,53 +28,19 @@ class THFileWidget extends StatefulWidget {
 }
 
 class _THFileWidgetState extends State<THFileWidget> {
-  final List<THPaintAction> _paintActions = [];
+  final LinkedHashMap<int, THPaintAction> _paintActions =
+      LinkedHashMap<int, THPaintAction>();
   THPointInterface? _selectedPointElement;
+  THPointInterface? _originalSelectedPointElement;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   final THFileStore thFileStore = getIt<THFileStore>();
+  late final THFile file = widget.file;
 
   @override
   void initState() {
     super.initState();
-    final THFile file = widget.file;
     thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
     thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
-    final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
-    for (final int childMapiahID in fileChildrenMapiahIDs) {
-      final THElement child = file.elementByMapiahID(childMapiahID);
-      if (child is THScrap) {
-        _addScrapPaintActions(child);
-      }
-    }
-  }
-
-  void _onPanStart(DragStartDetails details) {
-    final Offset localPosition = details.localPosition;
-    for (final THPaintAction action in _paintActions) {
-      if (action is THPointPaintAction && action.contains(localPosition)) {
-        setState(() {
-          _selectedPointElement = action.element as THPointInterface;
-        });
-        break;
-      }
-    }
-  }
-
-  void _onPanUpdate(DragUpdateDetails details) {
-    if (_selectedPointElement != null) {
-      setState(() {
-        _selectedPointElement!.x += details.delta.dx;
-        _selectedPointElement!.y += details.delta.dy;
-      });
-      thFileStore.updatePointPosition(
-          _selectedPointElement! as THPoint, details.delta);
-    }
-  }
-
-  void _onPanEnd(DragEndDetails details) {
-    setState(() {
-      _selectedPointElement = null;
-    });
   }
 
   @override
@@ -83,6 +52,14 @@ class _THFileWidgetState extends State<THFileWidget> {
 
         if (thFileDisplayStore.canvasScaleTranslationUndefined) {
           thFileDisplayStore.zoomShowAll();
+        }
+
+        final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
+        for (final int childMapiahID in fileChildrenMapiahIDs) {
+          final THElement child = file.elementByMapiahID(childMapiahID);
+          if (child is THScrap) {
+            _addScrapPaintActions(child);
+          }
         }
 
         return GestureDetector(
@@ -101,7 +78,7 @@ class _THFileWidgetState extends State<THFileWidget> {
                 /// I can put grids below it (as the main CustomPaint painter)
                 /// and a scale above it.
                 child: CustomPaint(
-                  painter: THFilePainter(_paintActions, thFileDisplayStore),
+                  painter: THFilePainter(_paintActions.values),
                   size: thFileDisplayStore.screenSize,
                 ),
                 size: thFileDisplayStore.screenSize,
@@ -113,21 +90,65 @@ class _THFileWidgetState extends State<THFileWidget> {
     );
   }
 
+  void _onPanStart(DragStartDetails details) {
+    final Offset localPosition = details.localPosition;
+    final Iterable<THPaintAction> paintActions = _paintActions.values;
+
+    for (final THPaintAction action in paintActions) {
+      if (action is THPointPaintAction && action.contains(localPosition)) {
+        setState(() {
+          _selectedPointElement = action.element as THPointInterface;
+          _originalSelectedPointElement = _selectedPointElement;
+        });
+        break;
+      }
+    }
+  }
+
+  void _onPanUpdate(DragUpdateDetails details) {
+    if (_selectedPointElement == null) {
+      return;
+    }
+
+    final Offset localPositionOnCanvas =
+        thFileDisplayStore.screenToCanvas(details.localPosition);
+
+    setState(() {
+      _selectedPointElement!.x = localPositionOnCanvas.dx;
+      _selectedPointElement!.y = localPositionOnCanvas.dy;
+    });
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    thFileStore.updatePointPosition(_originalSelectedPointElement! as THPoint,
+        (_originalSelectedPointElement! as THPoint).position);
+    setState(() {
+      _selectedPointElement = null;
+      _originalSelectedPointElement = null;
+    });
+  }
+
   void _addScrapPaintActions(THScrap scrap) {
     final THFile file = widget.file;
     final List<int> scrapChildrenMapiahIDs = scrap.childrenMapiahID;
+    _paintActions.clear();
+
     for (final int childMapiahID in scrapChildrenMapiahIDs) {
       final THElement child = file.elementByMapiahID(childMapiahID);
+
       if (child is THPoint) {
         final THPointPaintAction newPointPaintAction =
             THPointPaintAction(child);
-        _paintActions.add(newPointPaintAction);
+
+        _paintActions[childMapiahID] = newPointPaintAction;
       } else if (child is THLine) {
-        bool isFirst = true;
         final List<int> lineChildrenMapiahIDs = child.childrenMapiahID;
+        bool isFirst = true;
+
         for (final int lineSegmentMapiahID in lineChildrenMapiahIDs) {
           final THElement lineSegment =
               file.elementByMapiahID(lineSegmentMapiahID);
+
           if (lineSegment is THEndline) {
             continue;
           }
@@ -137,7 +158,8 @@ class _THFileWidgetState extends State<THFileWidget> {
                 lineSegment as THLineSegment;
             final THMoveStartPathPaintAction newMovePaintAction =
                 THMoveStartPathPaintAction(initialLineSegment);
-            _paintActions.add(newMovePaintAction);
+
+            _paintActions[lineSegmentMapiahID] = newMovePaintAction;
             isFirst = false;
             continue;
           }
@@ -145,15 +167,17 @@ class _THFileWidgetState extends State<THFileWidget> {
           if (lineSegment is THStraightLineSegment) {
             final THStraightLinePaintAction newStraightLinePaintAction =
                 THStraightLinePaintAction(lineSegment);
-            _paintActions.add(newStraightLinePaintAction);
+
+            _paintActions[lineSegmentMapiahID] = newStraightLinePaintAction;
           } else if (lineSegment is THBezierCurveLineSegment) {
             final THBezierCurvePaintAction newBezierCurvePaintAction =
                 THBezierCurvePaintAction(lineSegment);
-            _paintActions.add(newBezierCurvePaintAction);
+
+            _paintActions[lineSegmentMapiahID] = newBezierCurvePaintAction;
           }
         }
         if (!isFirst) {
-          _paintActions.add(THEndPathPaintAction());
+          _paintActions[-childMapiahID] = THEndPathPaintAction();
         }
       }
     }
@@ -161,15 +185,21 @@ class _THFileWidgetState extends State<THFileWidget> {
 }
 
 class THFilePainter extends CustomPainter {
-  final List<THPaintAction> _paintActions;
-  final THFileDisplayStore thFileStore;
+  final Iterable<THPaintAction> _paintActions;
+  late final THFileDisplayStore thFileDisplayStore;
+  late final THFileStore thFileStore;
+  late final THSettingsStore thSettingsStore;
 
-  THFilePainter(this._paintActions, this.thFileStore);
+  THFilePainter(this._paintActions) {
+    thFileDisplayStore = getIt<THFileDisplayStore>();
+    thFileStore = getIt<THFileStore>();
+    thSettingsStore = getIt<THSettingsStore>();
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
     // Transformations are applied on the order they are defined.
-    canvas.scale(thFileStore.canvasScale);
+    canvas.scale(thFileDisplayStore.canvasScale);
     // // Drawing canvas border
     // canvas.drawRect(
     //     Rect.fromPoints(
@@ -179,17 +209,22 @@ class THFilePainter extends CustomPainter {
     //           thFileController.canvasSize.height,
     //         )),
     //     THPaints.thPaint7);
-    canvas.translate(
-        thFileStore.canvasTranslation.dx, thFileStore.canvasTranslation.dy);
+    canvas.translate(thFileDisplayStore.canvasTranslation.dx,
+        thFileDisplayStore.canvasTranslation.dy);
     canvas.scale(1, -1);
 
     Path newPath = Path();
-    final double pointRadius = getIt<THSettingsStore>().pointRadius;
+    final double pointRadius = thSettingsStore.pointRadius;
     for (final THPaintAction paintAction in _paintActions) {
       switch (paintAction) {
         case THPointPaintAction _:
-          canvas.drawCircle(
-              paintAction.position, pointRadius, paintAction.paint);
+          final Paint pointPaint =
+              (paintAction.element as THPoint).plaType == 'continuation'
+                  ? THPaints.thPaint8
+                  : paintAction.paint;
+          // canvas.drawCircle(
+          //     paintAction.position, pointRadius, paintAction.paint);
+          canvas.drawCircle(paintAction.position, pointRadius, pointPaint);
         case THBezierCurvePaintAction _:
           newPath.cubicTo(
               paintAction.controlPoint1X,
@@ -210,8 +245,8 @@ class THFilePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant oldDelegate) {
-    if (thFileStore.shouldRepaint) {
-      thFileStore.setShouldRepaint(false);
+    if (thFileDisplayStore.shouldRepaint) {
+      thFileDisplayStore.setShouldRepaint(false);
       return true;
     }
     return false;

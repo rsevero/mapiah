@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_controller.dart';
@@ -27,19 +29,22 @@ abstract class THFileStoreBase with Store {
 
   late final UndoRedoController _undoRedoController;
 
+  late final THFileDisplayStore _thFileDisplayStore;
+
   @action
-  Future<void> loadFile(BuildContext context, String aFilename) async {
-    final parser = THFileParser();
+  Future<void> loadFile(BuildContext context, String filename) async {
+    final THFileParser parser = THFileParser();
 
     _isLoading = true;
     errorMessages.clear();
 
-    final (parsedFile, isSuccessful, errors) = await parser.parse(aFilename);
+    final (parsedFile, isSuccessful, errors) = await parser.parse(filename);
     _isLoading = false;
 
     if (isSuccessful) {
       _thFile = parsedFile;
       _undoRedoController = UndoRedoController(_thFile);
+      _thFileDisplayStore = getIt<THFileDisplayStore>();
     } else {
       errorMessages.addAll(errors);
       await showDialog(
@@ -105,13 +110,10 @@ abstract class THFileStoreBase with Store {
   UndoRedoController get undoRedoController => _undoRedoController;
 
   @action
-  void updatePointPosition(THPoint point, Offset delta) {
-    final THPointPositionPart newPosition = point.position.copyWith(
-      x: point.x + delta.dx,
-      y: point.y + delta.dy,
-    );
+  void updatePointPosition(THPoint point, THPointPositionPart newPosition) {
     final MovePointCommand command =
         MovePointCommand(point.mapiahID, newPosition);
     _undoRedoController.execute(command);
+    _thFileDisplayStore.setShouldRepaint(true);
   }
 }

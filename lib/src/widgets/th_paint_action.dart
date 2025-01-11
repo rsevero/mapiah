@@ -6,6 +6,7 @@ import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 
 sealed class THPaintAction {
@@ -30,7 +31,7 @@ class THPointPaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return (position - localPosition).distanceSquared <
+    return (positionOnScreen - localPosition).distanceSquared <
         getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
@@ -47,7 +48,7 @@ class THStraightLinePaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return (position - localPosition).distanceSquared <
+    return (positionOnScreen - localPosition).distanceSquared <
         getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
@@ -72,7 +73,7 @@ class THBezierCurvePaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return (position - localPosition).distanceSquared <
+    return (positionOnScreen - localPosition).distanceSquared <
         getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
@@ -89,7 +90,7 @@ class THMoveStartPathPaintAction extends THPaintAction
 
   @override
   bool contains(Offset localPosition) {
-    return (position - localPosition).distanceSquared <
+    return (positionOnScreen - localPosition).distanceSquared <
         getIt<THSettingsStore>().selectionToleranceSquared;
   }
 }
@@ -108,10 +109,13 @@ class THEndPathPaintAction extends THPaintAction {
 mixin THPaintActionPositionElement {
   late final THElement _element;
   late final Offset _position;
+  late final Offset _positionOnScreen;
 
   THElement get element => _element;
 
   Offset get position => _position;
+
+  Offset get positionOnScreen => _positionOnScreen;
 
   set element(THElement element) {
     _element = element;
@@ -119,6 +123,7 @@ mixin THPaintActionPositionElement {
 
   set position(Offset position) {
     _position = position;
+    _positionOnScreen = getIt<THFileDisplayStore>().canvasToScreen(position);
   }
 
   double get x => _position.dx;

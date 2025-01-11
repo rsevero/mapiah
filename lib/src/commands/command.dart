@@ -16,20 +16,14 @@ part "move_point_command.dart";
 /// actions that should support undo must be impmentend as a command.
 @MappableClass()
 abstract class Command with CommandMappable {
-  final CommandType _type;
-  final String _description;
+  late final CommandType _type;
+  late final String _description;
   late final UndoRedoCommand _undoRedo;
 
-  /// Used by dart_mappable.
-  Command.withUndoRedo(
-      CommandType type, String description, UndoRedoCommand undoRedo)
-      : _type = type,
-        _description = description,
-        _undoRedo = undoRedo;
-
-  Command({required CommandType type, required String description})
-      : _type = type,
-        _description = description;
+  Command({required CommandType type, required String description}) {
+    _type = type;
+    _description = description;
+  }
 
   /// User presentable description of the command.
   String get description => _description;

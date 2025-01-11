@@ -49,8 +49,8 @@ mixin _$THFileStore on THFileStoreBase, Store {
       AsyncAction('THFileStoreBase.loadFile', context: context);
 
   @override
-  Future<void> loadFile(BuildContext context, String aFilename) {
-    return _$loadFileAsyncAction.run(() => super.loadFile(context, aFilename));
+  Future<void> loadFile(BuildContext context, String filename) {
+    return _$loadFileAsyncAction.run(() => super.loadFile(context, filename));
   }
 
   late final _$THFileStoreBaseActionController =
@@ -101,11 +101,11 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   @override
-  void updatePointPosition(THPoint point, Offset delta) {
+  void updatePointPosition(THPoint point, THPointPositionPart newPosition) {
     final _$actionInfo = _$THFileStoreBaseActionController.startAction(
         name: 'THFileStoreBase.updatePointPosition');
     try {
-      return super.updatePointPosition(point, delta);
+      return super.updatePointPosition(point, newPosition);
     } finally {
       _$THFileStoreBaseActionController.endAction(_$actionInfo);
     }
