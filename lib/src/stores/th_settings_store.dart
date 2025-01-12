@@ -23,10 +23,6 @@ abstract class THSettingsStoreBase with Store {
   double _selectionTolerance = thDefaultSelectionTolerance;
 
   @readonly
-  double _selectionToleranceSquared =
-      thDefaultSelectionTolerance * thDefaultSelectionTolerance;
-
-  @readonly
   double _pointRadius = thDefaultPointRadius;
 
   @readonly
@@ -114,11 +110,11 @@ abstract class THSettingsStoreBase with Store {
     }
   }
 
+  @action
   void setSelectionTolerance(double selectionTolerance) {
     final bool saveConfigFile = _selectionTolerance != selectionTolerance;
 
     _selectionTolerance = selectionTolerance;
-    _selectionToleranceSquared = selectionTolerance * selectionTolerance;
 
     if (saveConfigFile) {
       _saveConfigFile();

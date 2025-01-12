@@ -7,7 +7,6 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
-import 'package:mapiah/src/stores/th_settings_store.dart';
 
 sealed class THPaintAction {
   final Paint _paint;
@@ -16,7 +15,7 @@ sealed class THPaintAction {
 
   Paint get paint => _paint;
 
-  bool contains(Offset localPosition);
+  bool contains(Offset localPositionOnCanvas);
 }
 
 class THPointPaintAction extends THPaintAction
@@ -30,9 +29,9 @@ class THPointPaintAction extends THPaintAction
   static Paint get genericPointPaint => THPaints.thPaint1;
 
   @override
-  bool contains(Offset localPosition) {
-    return (positionOnScreen - localPosition).distanceSquared <
-        getIt<THSettingsStore>().selectionToleranceSquared;
+  bool contains(Offset localPositionOnCanvas) {
+    return (position - localPositionOnCanvas).distanceSquared <
+        getIt<THFileDisplayStore>().selectionToleranceSquaredOnCanvas;
   }
 }
 
@@ -47,9 +46,9 @@ class THStraightLinePaintAction extends THPaintAction
   static Paint get genericLinePaint => THPaints.thPaint2;
 
   @override
-  bool contains(Offset localPosition) {
-    return (positionOnScreen - localPosition).distanceSquared <
-        getIt<THSettingsStore>().selectionToleranceSquared;
+  bool contains(Offset localPositionOnCanvas) {
+    return (position - localPositionOnCanvas).distanceSquared <
+        getIt<THFileDisplayStore>().selectionToleranceSquaredOnCanvas;
   }
 }
 
@@ -72,9 +71,9 @@ class THBezierCurvePaintAction extends THPaintAction
   }
 
   @override
-  bool contains(Offset localPosition) {
-    return (positionOnScreen - localPosition).distanceSquared <
-        getIt<THSettingsStore>().selectionToleranceSquared;
+  bool contains(Offset localPositionOnCanvas) {
+    return (position - localPositionOnCanvas).distanceSquared <
+        getIt<THFileDisplayStore>().selectionToleranceSquaredOnCanvas;
   }
 }
 
@@ -89,9 +88,9 @@ class THMoveStartPathPaintAction extends THPaintAction
   static Paint get genericMovePaint => THPaints.thPaint3;
 
   @override
-  bool contains(Offset localPosition) {
-    return (positionOnScreen - localPosition).distanceSquared <
-        getIt<THSettingsStore>().selectionToleranceSquared;
+  bool contains(Offset localPositionOnCanvas) {
+    return (position - localPositionOnCanvas).distanceSquared <
+        getIt<THFileDisplayStore>().selectionToleranceSquaredOnCanvas;
   }
 }
 
@@ -101,7 +100,7 @@ class THEndPathPaintAction extends THPaintAction {
   static Paint get genericEndPaint => THPaints.thPaint4;
 
   @override
-  bool contains(Offset localPosition) {
+  bool contains(Offset localPositionOnCanvas) {
     return false;
   }
 }
@@ -109,13 +108,10 @@ class THEndPathPaintAction extends THPaintAction {
 mixin THPaintActionPositionElement {
   late final THElement _element;
   late final Offset _position;
-  late final Offset _positionOnScreen;
 
   THElement get element => _element;
 
   Offset get position => _position;
-
-  Offset get positionOnScreen => _positionOnScreen;
 
   set element(THElement element) {
     _element = element;
@@ -123,8 +119,6 @@ mixin THPaintActionPositionElement {
 
   set position(Offset position) {
     _position = position;
-    _positionOnScreen =
-        getIt<THFileDisplayStore>().offsetCanvasToScreen(position);
   }
 
   double get x => _position.dx;

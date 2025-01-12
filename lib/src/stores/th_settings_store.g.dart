@@ -63,25 +63,6 @@ mixin _$THSettingsStore on THSettingsStoreBase, Store {
     });
   }
 
-  late final _$_selectionToleranceSquaredAtom = Atom(
-      name: 'THSettingsStoreBase._selectionToleranceSquared', context: context);
-
-  double get selectionToleranceSquared {
-    _$_selectionToleranceSquaredAtom.reportRead();
-    return super._selectionToleranceSquared;
-  }
-
-  @override
-  double get _selectionToleranceSquared => selectionToleranceSquared;
-
-  @override
-  set _selectionToleranceSquared(double value) {
-    _$_selectionToleranceSquaredAtom
-        .reportWrite(value, super._selectionToleranceSquared, () {
-      super._selectionToleranceSquared = value;
-    });
-  }
-
   late final _$_pointRadiusAtom =
       Atom(name: 'THSettingsStoreBase._pointRadius', context: context);
 
@@ -127,6 +108,17 @@ mixin _$THSettingsStore on THSettingsStoreBase, Store {
         name: 'THSettingsStoreBase.setLocaleID');
     try {
       return super.setLocaleID(localeID);
+    } finally {
+      _$THSettingsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectionTolerance(double selectionTolerance) {
+    final _$actionInfo = _$THSettingsStoreBaseActionController.startAction(
+        name: 'THSettingsStoreBase.setSelectionTolerance');
+    try {
+      return super.setSelectionTolerance(selectionTolerance);
     } finally {
       _$THSettingsStoreBaseActionController.endAction(_$actionInfo);
     }

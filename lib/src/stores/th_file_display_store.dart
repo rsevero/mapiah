@@ -41,6 +41,13 @@ abstract class THFileDisplayStoreBase with Store {
   @readonly
   bool _shouldRepaint = false;
 
+  double lineThicknessOnCanvas = thDefaultLineThickness;
+
+  double pointRadiusOnCanvas = thDefaultPointRadius;
+
+  double selectionToleranceSquaredOnCanvas =
+      thDefaultSelectionTolerance * thDefaultSelectionTolerance;
+
   @action
   void updateScreenSize(Size newSize) {
     _screenSize = newSize;

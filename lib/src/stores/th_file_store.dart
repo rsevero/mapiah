@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
@@ -110,9 +109,14 @@ abstract class THFileStoreBase with Store {
   UndoRedoController get undoRedoController => _undoRedoController;
 
   @action
-  void updatePointPosition(THPoint point, THPointPositionPart newPosition) {
-    final MovePointCommand command =
-        MovePointCommand(point.mapiahID, newPosition);
+  void updatePointPosition(
+    THPoint originalPoint,
+    THPoint newPoint,
+  ) {
+    final MovePointCommand command = MovePointCommand(
+        pointMapiahID: originalPoint.mapiahID,
+        originalPosition: originalPoint.position,
+        newPosition: newPoint.position);
     _undoRedoController.execute(command);
     _thFileDisplayStore.setShouldRepaint(true);
   }

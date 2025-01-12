@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
+import 'package:mapiah/src/stores/multiple_store_reactions.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
@@ -19,6 +20,7 @@ void _setup() {
   getIt.registerSingleton<THSettingsStore>(THSettingsStore());
   getIt.registerSingleton<THFileStore>(THFileStore());
   getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());
+  getIt.registerSingleton<MultipleStoreReactions>(MultipleStoreReactions());
 }
 
 class MapiahApp extends StatelessWidget {

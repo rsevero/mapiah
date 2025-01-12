@@ -30,8 +30,8 @@ class THFileWidget extends StatefulWidget {
 class _THFileWidgetState extends State<THFileWidget> {
   final LinkedHashMap<int, THPaintAction> _paintActions =
       LinkedHashMap<int, THPaintAction>();
-  THPointInterface? _selectedPointElement;
-  THPointInterface? _originalSelectedPointElement;
+  THElement? _selectedElement;
+  THElement? _originalSelectedElement;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   final THFileStore thFileStore = getIt<THFileStore>();
   late final THFile file = widget.file;
@@ -91,14 +91,16 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _onPanStart(DragStartDetails details) {
-    final Offset localPosition = details.localPosition;
+    final Offset localPositionOnCanvas =
+        thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
     final Iterable<THPaintAction> paintActions = _paintActions.values;
 
     for (final THPaintAction action in paintActions) {
-      if (action is THPointPaintAction && action.contains(localPosition)) {
+      if (action is THPointPaintAction &&
+          action.contains(localPositionOnCanvas)) {
         setState(() {
-          _selectedPointElement = action.element as THPointInterface;
-          _originalSelectedPointElement = _selectedPointElement;
+          _selectedElement = action.element;
+          _originalSelectedElement = _selectedElement!.copyWith();
         });
         break;
       }
@@ -106,7 +108,7 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
-    if (_selectedPointElement == null) {
+    if (_selectedElement == null) {
       return;
     }
 
@@ -114,17 +116,17 @@ class _THFileWidgetState extends State<THFileWidget> {
         thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
 
     setState(() {
-      _selectedPointElement!.x = localPositionOnCanvas.dx;
-      _selectedPointElement!.y = localPositionOnCanvas.dy;
+      (_selectedElement! as THPointInterface).x = localPositionOnCanvas.dx;
+      (_selectedElement! as THPointInterface).y = localPositionOnCanvas.dy;
     });
   }
 
   void _onPanEnd(DragEndDetails details) {
-    thFileStore.updatePointPosition(_originalSelectedPointElement! as THPoint,
-        (_originalSelectedPointElement! as THPoint).position);
+    thFileStore.updatePointPosition(
+        _originalSelectedElement! as THPoint, _selectedElement! as THPoint);
     setState(() {
-      _selectedPointElement = null;
-      _originalSelectedPointElement = null;
+      _selectedElement = null;
+      _originalSelectedElement = null;
     });
   }
 
