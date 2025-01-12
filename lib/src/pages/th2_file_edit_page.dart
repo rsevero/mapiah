@@ -1,3 +1,4 @@
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
@@ -22,6 +23,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final List<String> loadErrors;
   late final Future<THFileStoreCreateResult> thFileStoreCreateResult;
+  TH2FileEditMode mode = TH2FileEditMode.view;
+  bool _thFileStoreLoaded = false;
 
   @override
   void initState() {
@@ -41,8 +44,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 snapshot.hasData &&
                 snapshot.data!.isSuccessful;
 
-        if (fileReady) {
+        if (fileReady && !_thFileStoreLoaded) {
           thFileStore = snapshot.data!.thFileStore;
+          _thFileStoreLoaded = true;
         }
 
         return Scaffold(
@@ -152,7 +156,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             FloatingActionButton(
               onPressed: () {},
               tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
-              child: Icon(Icons.zoom_out_map),
+              child: SvgPicture.asset('assets/icons/zoom_plus_minus.svg'),
             ),
           ],
         ),
@@ -160,3 +164,5 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     );
   }
 }
+
+enum TH2FileEditMode { view, edit }

@@ -39,6 +39,14 @@ class _THFileWidgetState extends State<THFileWidget> {
     super.initState();
     thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
     thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
+
+    final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
+    for (final int childMapiahID in fileChildrenMapiahIDs) {
+      final THElement child = file.elementByMapiahID(childMapiahID);
+      if (child is THScrap) {
+        _addScrapPaintActions(child);
+      }
+    }
   }
 
   @override
@@ -50,14 +58,6 @@ class _THFileWidgetState extends State<THFileWidget> {
 
         if (thFileDisplayStore.canvasScaleTranslationUndefined) {
           thFileDisplayStore.zoomShowAll();
-        }
-
-        final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
-        for (final int childMapiahID in fileChildrenMapiahIDs) {
-          final THElement child = file.elementByMapiahID(childMapiahID);
-          if (child is THScrap) {
-            _addScrapPaintActions(child);
-          }
         }
 
         return GestureDetector(
@@ -93,11 +93,7 @@ class _THFileWidgetState extends State<THFileWidget> {
           action.contains(localPositionOnCanvas)) {
         setState(() {
           _selectedElement = action.element;
-
           _originalSelectedElement = (_selectedElement! as THPoint).clone();
-          bool ident = identical((_selectedElement! as THPoint).position,
-              (_originalSelectedElement! as THPoint).position);
-          print("ident: $ident");
         });
         break;
       }
@@ -119,6 +115,9 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _onPanEnd(DragEndDetails details) {
+    if (_selectedElement == null) {
+      return;
+    }
     thFileStore.updatePointPosition(
         _originalSelectedElement! as THPoint, _selectedElement! as THPoint);
     setState(() {
