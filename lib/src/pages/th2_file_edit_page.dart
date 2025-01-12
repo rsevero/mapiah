@@ -56,7 +56,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             actions: <Widget>[
               if (fileReady) ...[
                 IconButton(
-                  icon: Icon(Icons.save_alt_outlined),
+                  icon: Icon(Icons.save_outlined),
                   onPressed: () => thFileStore.saveTH2File(),
                 ),
                 IconButton(

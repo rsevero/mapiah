@@ -7,11 +7,13 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final THSettingsStore settingsStore = getIt<THSettingsStore>();
+    setWindowTitle(AppLocalizations.of(context).appTitle);
 
     return Scaffold(
       appBar: AppBar(
