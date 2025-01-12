@@ -156,8 +156,9 @@ abstract class THSettingsStoreBase with Store {
       final Map<String, dynamic> config = {
         thMainConfigSection: {thMainConfigLocale: _localeID},
         thFileEditConfigSection: {
-          thFileEditConfigSelectionTolerance: _selectionTolerance,
+          thFileEditConfigLineThickness: _lineThickness,
           thFileEditConfigPointRadius: _pointRadius,
+          thFileEditConfigSelectionTolerance: _selectionTolerance,
         },
       };
       final String contents = TomlDocument.fromMap(config).toString();
