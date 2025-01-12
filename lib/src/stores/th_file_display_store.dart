@@ -47,7 +47,7 @@ abstract class THFileDisplayStoreBase with Store {
     _canvasSize = newSize / _canvasScale;
   }
 
-  Offset screenToCanvas(Offset screenCoordinate) {
+  Offset offsetScreenToCanvas(Offset screenCoordinate) {
     // Apply the inverse of the translation
     final double canvasX =
         (screenCoordinate.dx / _canvasScale) - _canvasTranslation.dx;
@@ -57,7 +57,7 @@ abstract class THFileDisplayStoreBase with Store {
     return Offset(canvasX, canvasY);
   }
 
-  Offset canvasToScreen(Offset canvasCoordinate) {
+  Offset offsetCanvasToScreen(Offset canvasCoordinate) {
     // Apply the translation and scaling
     final double screenX =
         (_canvasTranslation.dx + canvasCoordinate.dx) * _canvasScale;
@@ -65,6 +65,14 @@ abstract class THFileDisplayStoreBase with Store {
         (_canvasTranslation.dy - canvasCoordinate.dy) * _canvasScale;
 
     return Offset(screenX, screenY);
+  }
+
+  double scaleScreenToCanvas(double screenValue) {
+    return screenValue / _canvasScale;
+  }
+
+  double scaleCanvasToScreen(double canvasValue) {
+    return canvasValue * _canvasScale;
   }
 
   @action

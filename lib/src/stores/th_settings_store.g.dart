@@ -100,6 +100,24 @@ mixin _$THSettingsStore on THSettingsStoreBase, Store {
     });
   }
 
+  late final _$_lineThicknessAtom =
+      Atom(name: 'THSettingsStoreBase._lineThickness', context: context);
+
+  double get lineThickness {
+    _$_lineThicknessAtom.reportRead();
+    return super._lineThickness;
+  }
+
+  @override
+  double get _lineThickness => lineThickness;
+
+  @override
+  set _lineThickness(double value) {
+    _$_lineThicknessAtom.reportWrite(value, super._lineThickness, () {
+      super._lineThickness = value;
+    });
+  }
+
   late final _$THSettingsStoreBaseActionController =
       ActionController(name: 'THSettingsStoreBase', context: context);
 
@@ -120,6 +138,17 @@ mixin _$THSettingsStore on THSettingsStoreBase, Store {
         name: 'THSettingsStoreBase.setPointRadius');
     try {
       return super.setPointRadius(pointRadius);
+    } finally {
+      _$THSettingsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLineThickness(double lineThickness) {
+    final _$actionInfo = _$THSettingsStoreBaseActionController.startAction(
+        name: 'THSettingsStoreBase.setLineThickness');
+    try {
+      return super.setLineThickness(lineThickness);
     } finally {
       _$THSettingsStoreBaseActionController.endAction(_$actionInfo);
     }

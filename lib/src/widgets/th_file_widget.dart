@@ -111,7 +111,7 @@ class _THFileWidgetState extends State<THFileWidget> {
     }
 
     final Offset localPositionOnCanvas =
-        thFileDisplayStore.screenToCanvas(details.localPosition);
+        thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
 
     setState(() {
       _selectedPointElement!.x = localPositionOnCanvas.dx;
@@ -214,7 +214,10 @@ class THFilePainter extends CustomPainter {
     canvas.scale(1, -1);
 
     Path newPath = Path();
-    final double pointRadius = thSettingsStore.pointRadius;
+    final double pointRadius =
+        thFileDisplayStore.scaleScreenToCanvas(thSettingsStore.pointRadius);
+    final double lineThickness =
+        thFileDisplayStore.scaleScreenToCanvas(thSettingsStore.lineThickness);
     for (final THPaintAction paintAction in _paintActions) {
       switch (paintAction) {
         case THPointPaintAction _:
@@ -224,7 +227,8 @@ class THFilePainter extends CustomPainter {
                   : paintAction.paint;
           // canvas.drawCircle(
           //     paintAction.position, pointRadius, paintAction.paint);
-          canvas.drawCircle(paintAction.position, pointRadius, pointPaint);
+          canvas.drawCircle(paintAction.position, pointRadius,
+              pointPaint..strokeWidth = lineThickness);
         case THBezierCurvePaintAction _:
           newPath.cubicTo(
               paintAction.controlPoint1X,
@@ -238,7 +242,8 @@ class THFilePainter extends CustomPainter {
         case THMoveStartPathPaintAction _:
           newPath = Path()..moveTo(paintAction.x, paintAction.y);
         case THEndPathPaintAction _:
-          canvas.drawPath(newPath, paintAction.paint);
+          canvas.drawPath(
+              newPath, paintAction.paint..strokeWidth = lineThickness);
       }
     }
   }

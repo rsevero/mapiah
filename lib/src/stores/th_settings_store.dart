@@ -29,6 +29,9 @@ abstract class THSettingsStoreBase with Store {
   @readonly
   double _pointRadius = thDefaultPointRadius;
 
+  @readonly
+  double _lineThickness = thDefaultLineThickness;
+
   THSettingsStoreBase() {
     _initialize();
   }
@@ -58,6 +61,7 @@ abstract class THSettingsStoreBase with Store {
       String localeID = thDefaultLocaleID;
       double selectionTolerance = thDefaultSelectionTolerance;
       double pointRadius = thDefaultPointRadius;
+      double lineThickness = thDefaultLineThickness;
 
       if (mainConfig.isNotEmpty) {
         if (mainConfig.containsKey(thMainConfigLocale)) {
@@ -73,11 +77,15 @@ abstract class THSettingsStoreBase with Store {
         if (fileEditConfig.containsKey(thFileEditConfigPointRadius)) {
           pointRadius = fileEditConfig[thFileEditConfigPointRadius];
         }
+        if (fileEditConfig.containsKey(thFileEditConfigLineThickness)) {
+          lineThickness = fileEditConfig[thFileEditConfigLineThickness];
+        }
       }
 
       setLocaleID(localeID);
       setSelectionTolerance(selectionTolerance);
       setPointRadius(pointRadius);
+      setLineThickness(lineThickness);
 
       _readingConfigFile = false;
     } catch (e) {
@@ -122,6 +130,17 @@ abstract class THSettingsStoreBase with Store {
     final bool saveConfigFile = _pointRadius != pointRadius;
 
     _pointRadius = pointRadius;
+
+    if (saveConfigFile) {
+      _saveConfigFile();
+    }
+  }
+
+  @action
+  void setLineThickness(double lineThickness) {
+    final bool saveConfigFile = _lineThickness != lineThickness;
+
+    _lineThickness = lineThickness;
 
     if (saveConfigFile) {
       _saveConfigFile();

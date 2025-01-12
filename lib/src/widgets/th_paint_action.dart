@@ -123,7 +123,8 @@ mixin THPaintActionPositionElement {
 
   set position(Offset position) {
     _position = position;
-    _positionOnScreen = getIt<THFileDisplayStore>().canvasToScreen(position);
+    _positionOnScreen =
+        getIt<THFileDisplayStore>().offsetCanvasToScreen(position);
   }
 
   double get x => _position.dx;
