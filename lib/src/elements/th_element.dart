@@ -159,75 +159,74 @@ class THFile extends THElement with THFileMappable, THParent {
     return _elementByMapiahID.length;
   }
 
-  String thidByElement(THElement aElement) {
-    return thidByMapiahID(aElement.mapiahID);
+  String thidByElement(THElement element) {
+    return thidByMapiahID(element.mapiahID);
   }
 
-  String thidByMapiahID(int aMapiahID) {
-    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
+  String thidByMapiahID(int mapiahID) {
+    if (!_thIDByMapiahID.containsKey(mapiahID)) {
       throw THCustomException(
-          "Element with mapiahID '$aMapiahID' has no registered thID.");
+          "Element with mapiahID '$mapiahID' has no registered thID.");
     }
 
-    return _thIDByMapiahID[aMapiahID]!;
+    return _thIDByMapiahID[mapiahID]!;
   }
 
-  void deleteElementTHIDByElement(THElement aElement) {
-    final String aElementType = aElement.elementType;
-    final int aMapiahID = aElement._mapiahID;
+  void deleteElementTHIDByElement(THElement element) {
+    final String elementType = element.elementType;
+    final int mapiahID = element._mapiahID;
 
-    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
+    if (!_thIDByMapiahID.containsKey(mapiahID)) {
+      throw THCustomException(
+          "Element '$element' of type '$elementType' has no registered thID.");
+    }
+
+    final String thID = _thIDByMapiahID[mapiahID]!;
+
+    if (!_elementByTHID.containsKey(thID)) {
+      throw THCustomException(
+          "thID '$thID' gotten from element '$element' of type '$elementType' is not registered.");
+    }
+
+    _thIDByMapiahID.remove(mapiahID);
+    _elementByTHID.remove(thID);
+  }
+
+  void deleteElementTHIDByElementTypeAndTHID(String aElementType, String thID) {
+    if (!_elementByTHID.containsKey(thID)) {
+      throw THCustomException(
+          "thID '$thID' is not registered for type '$aElementType'.");
+    }
+
+    final THElement aElement = _elementByTHID[thID]!;
+    final int mapiahID = aElement._mapiahID;
+
+    if (!_thIDByMapiahID.containsKey(mapiahID)) {
       throw THCustomException(
           "Element '$aElement' of type '$aElementType' has no registered thID.");
     }
 
-    final String aTHID = _thIDByMapiahID[aMapiahID]!;
-
-    if (!_elementByTHID.containsKey(aTHID)) {
-      throw THCustomException(
-          "thID '$aTHID' gotten from element '$aElement' of type '$aElementType' is not registered.");
-    }
-
-    _thIDByMapiahID.remove(aMapiahID);
-    _elementByTHID.remove(aTHID);
+    _thIDByMapiahID.remove(mapiahID);
+    _elementByTHID.remove(thID);
   }
 
-  void deleteElementTHIDByElementTypeAndTHID(
-      String aElementType, String aTHID) {
-    if (!_elementByTHID.containsKey(aTHID)) {
-      throw THCustomException(
-          "thID '$aTHID' is not registered for type '$aElementType'.");
-    }
-
-    final THElement aElement = _elementByTHID[aTHID]!;
-    final int aMapiahID = aElement._mapiahID;
-
-    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
-      throw THCustomException(
-          "Element '$aElement' of type '$aElementType' has no registered thID.");
-    }
-
-    _thIDByMapiahID.remove(aMapiahID);
-    _elementByTHID.remove(aTHID);
-  }
-
-  void _comparePoint(double aX, double aY) {
+  void _comparePoint(double x, double y) {
     if (_isFirst) {
-      _minX = aX;
-      _minY = aY;
-      _maxX = aX;
-      _maxY = aY;
+      _minX = x;
+      _minY = y;
+      _maxX = x;
+      _maxY = y;
       _isFirst = false;
     } else {
-      if (aX < _minX) {
-        _minX = aX;
-      } else if (aX > _maxX) {
-        _maxX = aX;
+      if (x < _minX) {
+        _minX = x;
+      } else if (x > _maxX) {
+        _maxX = x;
       }
-      if (aY < _minY) {
-        _minY = aY;
-      } else if (aY > _maxY) {
-        _maxY = aY;
+      if (y < _minY) {
+        _minY = y;
+      } else if (y > _maxY) {
+        _maxY = y;
       }
     }
   }
@@ -257,15 +256,15 @@ class THFile extends THElement with THFileMappable, THParent {
   /// @param aElement The element to have its thID updated.
   /// @param newTHID The new thID to be set.
   /// @throws THCustomException If the element has no registered thID.
-  void updateTHID(THElement aElement, String newTHID) {
-    final String aElementType = aElement.elementType;
-    final int aMapiahID = aElement._mapiahID;
+  void updateTHID(THElement element, String newTHID) {
+    final String aElementType = element.elementType;
+    final int mapiahID = element._mapiahID;
 
-    if (!_thIDByMapiahID.containsKey(aMapiahID)) {
+    if (!_thIDByMapiahID.containsKey(mapiahID)) {
       throw THCustomException(
-          "Element '$aElement' of type '$aElementType' had no registered thID.");
+          "Element '$element' of type '$aElementType' had no registered thID.");
     }
-    final String oldTHID = _thIDByMapiahID[aMapiahID]!;
+    final String oldTHID = _thIDByMapiahID[mapiahID]!;
 
     if (_elementByTHID.containsKey(newTHID)) {
       throw THCustomException(
@@ -273,43 +272,43 @@ class THFile extends THElement with THFileMappable, THParent {
     }
 
     _elementByTHID.remove(oldTHID);
-    _elementByTHID[newTHID] = aElement;
+    _elementByTHID[newTHID] = element;
 
-    _thIDByMapiahID[aMapiahID] = newTHID;
+    _thIDByMapiahID[mapiahID] = newTHID;
   }
 
-  void addElementWithTHID(THElement aElement, String aTHID) {
-    if (_elementByTHID.containsKey(aTHID)) {
-      throw THCustomException("Duplicate thID: '$aTHID'.");
+  void addElementWithTHID(THElement element, String thID) {
+    if (_elementByTHID.containsKey(thID)) {
+      throw THCustomException("Duplicate thID: '$thID'.");
     }
-    _elementByTHID[aTHID] = aElement;
+    _elementByTHID[thID] = element;
 
-    final int aMapiahID = aElement.mapiahID;
+    final int aMapiahID = element.mapiahID;
     if (_thIDByMapiahID.containsKey(aMapiahID)) {
-      throw THCustomException("'${aElement.elementType}' already included.");
+      throw THCustomException("'${element.elementType}' already included.");
     }
-    _thIDByMapiahID[aMapiahID] = aTHID;
+    _thIDByMapiahID[aMapiahID] = thID;
   }
 
-  bool hasElementByTHID(String aTHID) {
-    return _elementByTHID.containsKey(aTHID);
+  bool hasElementByTHID(String thID) {
+    return _elementByTHID.containsKey(thID);
   }
 
-  bool hasTHIDByElement(THElement aElement) {
-    return _thIDByMapiahID.containsKey(aElement._mapiahID);
+  bool hasTHIDByElement(THElement element) {
+    return _thIDByMapiahID.containsKey(element._mapiahID);
   }
 
-  THElement elementByTHID(String aTHID) {
-    if (!hasElementByTHID(aTHID)) {
-      throw THCustomException("No element with thID '$aTHID' found.");
+  THElement elementByTHID(String thID) {
+    if (!hasElementByTHID(thID)) {
+      throw THCustomException("No element with thID '$thID' found.");
     }
 
-    return _elementByTHID[aTHID]!;
+    return _elementByTHID[thID]!;
   }
 
   void substituteElement(THElement newElement) {
-    final int aMapiahID = newElement.mapiahID;
-    final THElement oldElement = elementByMapiahID(aMapiahID);
+    final int mapiahID = newElement.mapiahID;
+    final THElement oldElement = elementByMapiahID(mapiahID);
 
     if (newElement.elementType != oldElement.elementType) {
       throw THCustomException(
@@ -317,7 +316,7 @@ class THFile extends THElement with THFileMappable, THParent {
     }
 
     newElement._thFile = this;
-    _elementByMapiahID[aMapiahID] = newElement;
+    _elementByMapiahID[mapiahID] = newElement;
 
     if (newElement is THHasTHID) {
       final String oldTHID = (oldElement as THHasTHID).thID;
@@ -332,60 +331,60 @@ class THFile extends THElement with THFileMappable, THParent {
       }
 
       _elementByTHID[newTHID] = newElement;
-      _thIDByMapiahID[aMapiahID] = newTHID;
+      _thIDByMapiahID[mapiahID] = newTHID;
     }
   }
 
-  void _addElementToFile(THElement aElement) {
-    aElement._mapiahID = _nextMapiahID;
-    _elementByMapiahID[_nextMapiahID] = aElement;
+  void _addElementToFile(THElement element) {
+    element._mapiahID = _nextMapiahID;
+    _elementByMapiahID[_nextMapiahID] = element;
     _nextMapiahID++;
-    if (aElement is THHasTHID) {
-      addElementWithTHID(aElement, (aElement as THHasTHID).thID);
+    if (element is THHasTHID) {
+      addElementWithTHID(element, (element as THHasTHID).thID);
     }
   }
 
-  void deleteElementByMapiahID(int aMapiahID) {
-    if (aMapiahID == 0) {
+  void deleteElementByMapiahID(int mapiahID) {
+    if (mapiahID == 0) {
       throw THCustomException("Cannot delete THFile.");
     }
-    elementByMapiahID(aMapiahID).delete();
+    elementByMapiahID(mapiahID).delete();
   }
 
-  void deleteElementByTHID(String aTHID) {
-    elementByTHID(aTHID).delete();
+  void deleteElementByTHID(String thID) {
+    elementByTHID(thID).delete();
   }
 
-  void _deleteElement(THElement aElement) {
-    if (aElement == this) {
-      for (final int aChildMapiahID in childrenMapiahID) {
-        elementByMapiahID(aChildMapiahID).delete();
+  void _deleteElement(THElement element) {
+    if (element == this) {
+      for (final int childMapiahID in childrenMapiahID) {
+        elementByMapiahID(childMapiahID).delete();
       }
       return;
     }
 
-    if (aElement.thFile != this) {
+    if (element.thFile != this) {
       throw THCustomException(
-          "Trying to delete element '$aElement' that is not from this THFile.");
+          "Trying to delete element '$element' that is not from this THFile.");
     }
-    aElement.parent._deleteElementFromParent(aElement);
-    _elementByMapiahID.remove(aElement.mapiahID);
+    element.parent._deleteElementFromParent(element);
+    _elementByMapiahID.remove(element.mapiahID);
   }
 
-  bool hasElementByMapiahID(int aMapiahID) {
-    if (aMapiahID == 0) {
+  bool hasElementByMapiahID(int mapiahID) {
+    if (mapiahID == 0) {
       return true;
     }
-    return _elementByMapiahID.containsKey(aMapiahID);
+    return _elementByMapiahID.containsKey(mapiahID);
   }
 
-  THElement elementByMapiahID(int aMapiahID) {
-    if (aMapiahID == 0) {
+  THElement elementByMapiahID(int mapiahID) {
+    if (mapiahID == 0) {
       return _thFile;
-    } else if (!_elementByMapiahID.containsKey(aMapiahID)) {
-      throw THNoElementByMapiahIDException(filename, aMapiahID);
+    } else if (!_elementByMapiahID.containsKey(mapiahID)) {
+      throw THNoElementByMapiahIDException(filename, mapiahID);
     }
 
-    return _elementByMapiahID[aMapiahID]!;
+    return _elementByMapiahID[mapiahID]!;
   }
 }
