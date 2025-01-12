@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
-class THFileEditPage extends StatelessWidget {
+class TH2FileEditPage extends StatefulWidget {
   final String filename;
 
-  THFileEditPage({required this.filename});
+  TH2FileEditPage({required this.filename});
+
+  @override
+  State<TH2FileEditPage> createState() => _TH2FileEditPageState();
+}
+
+class _TH2FileEditPageState extends State<TH2FileEditPage> {
+  bool _isHovered = false;
+  final THFileStore thFileStore = getIt<THFileStore>();
+  final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+  late final Future<List<String>> loadErrors;
+
+  @override
+  void initState() {
+    super.initState();
+    loadErrors = thFileStore.loadFile(widget.filename);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final THFileStore thFileStore = getIt<THFileStore>();
-
-    thFileStore.loadFile(context, filename);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).fileEditWindowWindowTitle),
@@ -39,53 +52,87 @@ class THFileEditPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Observer(
-        builder: (context) {
-          if (thFileStore.isLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else {
+      body: FutureBuilder<List<String>>(
+        future: loadErrors,
+        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          } else if (snapshot.hasError) {
             return Center(
-              child: Stack(children: [
-                THFileWidget(thFileStore.thFile),
-                _buildFloatingActionButtons(),
-              ]),
+              child: Text('Error: ${snapshot.error}'),
             );
+          } else if (snapshot.hasData) {
+            final List<String> errorMessages = snapshot.data!;
+            if (errorMessages.isEmpty) {
+              return Center(
+                child: Stack(children: [
+                  THFileWidget(thFileStore.thFile),
+                  _zoomButtonWithOptions(),
+                ]),
+              );
+            } else {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return THErrorDialog(errorMessages: errorMessages);
+                  },
+                );
+              });
+              return Container();
+            }
+          } else {
+            throw Exception(
+                'Unexpected snapshot state: ${snapshot.connectionState}');
           }
         },
       ),
     );
   }
 
-  Widget _buildFloatingActionButtons() {
-    final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
-
+  Widget _zoomButtonWithOptions() {
     return Positioned(
-      right: 16.0,
-      bottom: 16.0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _zoomButton(Icons.zoom_in, () {
-            thFileDisplayStore.zoomIn();
-          }),
-          SizedBox(height: 8.0),
-          _zoomButton(Icons.zoom_out_map, () {
-            thFileDisplayStore.zoomShowAll();
-          }),
-          SizedBox(height: 8.0),
-          _zoomButton(Icons.zoom_out, () {
-            thFileDisplayStore.zoomOut();
-          }),
-        ],
+      bottom: 16,
+      right: 16,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (_isHovered) ...[
+              FloatingActionButton(
+                onPressed: () => thFileDisplayStore.zoomIn(),
+                tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
+                child: Icon(Icons.zoom_in),
+                mini: true,
+              ),
+              SizedBox(width: 8),
+              FloatingActionButton(
+                onPressed: () => thFileDisplayStore.zoomShowAll(),
+                tooltip:
+                    AppLocalizations.of(context).th2FileEditPageZoomShowAll,
+                child: Icon(Icons.zoom_out_map),
+                mini: true,
+              ),
+              SizedBox(width: 8),
+              FloatingActionButton(
+                onPressed: () => thFileDisplayStore.zoomOut(),
+                tooltip: AppLocalizations.of(context).th2FileEditPageZoomOut,
+                child: Icon(Icons.zoom_out),
+                mini: true,
+              ),
+              SizedBox(width: 8),
+            ],
+            FloatingActionButton(
+              onPressed: () {},
+              tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
+              child: Icon(Icons.zoom_out_map),
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _zoomButton(IconData icon, VoidCallback onPressed) {
-    return FloatingActionButton(
-      mini: true,
-      child: Icon(icon),
-      onPressed: onPressed,
     );
   }
 }

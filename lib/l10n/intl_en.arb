@@ -55,6 +55,30 @@
     "type": "text"
   } ,
 
+  "th2FileEditPageZoomIn": "Zoom In",
+  "@th2FileEditPageZoomIn": {
+    "description": "The label for the zoom in button",
+    "type": "text"
+  },
+
+  "th2FileEditPageZoomOptions": "Zoom Options",
+  "@th2FileEditPageZoomOptions": {
+    "description": "The label for the zoom options button",
+    "type": "text"
+  },
+
+  "th2FileEditPageZoomOut": "Zoom Out",
+  "@th2FileEditPageZoomOut": {
+    "description": "The label for the zoom out button",
+    "type": "text"
+  },
+
+  "th2FileEditPageZoomShowAll": "Show all",
+  "@th2FileEditPageZoomShowAll": {
+    "description": "The label for the show all zoom button",
+    "type": "text"
+  },
+
   "th2FilePickSelectTH2File": "Select a TH2 file",
   "@th2FilePickSelectTH2File": {
     "description": "The label for the TH2 file selection dialog",

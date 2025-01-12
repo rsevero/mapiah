@@ -46,5 +46,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parsingErrors => 'Parsing errors';
 
   @override
+  String get th2FileEditPageZoomIn => 'Zoom In';
+
+  @override
+  String get th2FileEditPageZoomOptions => 'Zoom Options';
+
+  @override
+  String get th2FileEditPageZoomOut => 'Zoom Out';
+
+  @override
+  String get th2FileEditPageZoomShowAll => 'Show all';
+
+  @override
   String get th2FilePickSelectTH2File => 'Select a TH2 file';
 }

@@ -143,6 +143,30 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// The label for the zoom in button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom In'**
+  String get th2FileEditPageZoomIn;
+
+  /// The label for the zoom options button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom Options'**
+  String get th2FileEditPageZoomOptions;
+
+  /// The label for the zoom out button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom Out'**
+  String get th2FileEditPageZoomOut;
+
+  /// The label for the show all zoom button
+  ///
+  /// In en, this message translates to:
+  /// **'Show all'**
+  String get th2FileEditPageZoomShowAll;
+
   /// The label for the TH2 file selection dialog
   ///
   /// In en, this message translates to:

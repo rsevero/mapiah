@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -31,7 +29,7 @@ abstract class THFileStoreBase with Store {
   late final THFileDisplayStore _thFileDisplayStore;
 
   @action
-  Future<void> loadFile(BuildContext context, String filename) async {
+  Future<List<String>> loadFile(String filename) async {
     final THFileParser parser = THFileParser();
 
     _isLoading = true;
@@ -44,15 +42,19 @@ abstract class THFileStoreBase with Store {
       _thFile = parsedFile;
       _undoRedoController = UndoRedoController(_thFile);
       _thFileDisplayStore = getIt<THFileDisplayStore>();
-    } else {
-      errorMessages.addAll(errors);
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return THErrorDialog(errorMessages: errorMessages);
-        },
-      );
     }
+
+    return errors;
+
+    // else {
+    //   errorMessages.addAll(errors);
+    //   await showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return THErrorDialog(errorMessages: errorMessages);
+    //     },
+    //   );
+    // }
   }
 
   Future<File?> saveTH2File() async {

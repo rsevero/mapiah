@@ -46,5 +46,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
+  String get th2FileEditPageZoomIn => 'Aproximar';
+
+  @override
+  String get th2FileEditPageZoomOptions => 'Opções de zoom';
+
+  @override
+  String get th2FileEditPageZoomOut => 'Afastar';
+
+  @override
+  String get th2FileEditPageZoomShowAll => 'Mostrar tudo';
+
+  @override
   String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
 }

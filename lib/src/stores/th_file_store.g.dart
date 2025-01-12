@@ -49,8 +49,8 @@ mixin _$THFileStore on THFileStoreBase, Store {
       AsyncAction('THFileStoreBase.loadFile', context: context);
 
   @override
-  Future<void> loadFile(BuildContext context, String filename) {
-    return _$loadFileAsyncAction.run(() => super.loadFile(context, filename));
+  Future<List<String>> loadFile(String filename) {
+    return _$loadFileAsyncAction.run(() => super.loadFile(filename));
   }
 
   late final _$THFileStoreBaseActionController =

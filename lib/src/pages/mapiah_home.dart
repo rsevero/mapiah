@@ -98,7 +98,7 @@ class MapiahHome extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => THFileEditPage(filename: pickedFilePath)),
+              builder: (context) => TH2FileEditPage(filename: pickedFilePath)),
         );
       } else {
         // User canceled the picker
