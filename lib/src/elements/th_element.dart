@@ -30,13 +30,6 @@ abstract class THElement with THElementMappable {
   /// Special descendants: THFile.
   THElement._();
 
-  /// Constructor that sets the parentMapiahID and the thFile.
-  /// Necessary for dart_mappable.
-  THElement.withParentMapiahIDTHFile(this.parentMapiahID, THFile thFile)
-      : _thFile = thFile {
-    parent._addElementToParent(this);
-  }
-
   /// Main constructor.
   ///
   /// Main constructor that sets all essential properties. Any change made here
@@ -83,31 +76,31 @@ mixin THParent on THElement {
   @override
   void delete() {
     final List<int> childrenList = childrenMapiahID.toList();
-    for (final int aChildMapiahID in childrenList) {
-      thFile.deleteElementByMapiahID(aChildMapiahID);
+    for (final int childMapiahID in childrenList) {
+      thFile.deleteElementByMapiahID(childMapiahID);
     }
 
     _thFile._deleteElement(this);
   }
 
-  int _addElementToParent(THElement aElement) {
-    _thFile._addElementToFile(aElement);
-    _childrenMapiahID.add(aElement.mapiahID);
+  int _addElementToParent(THElement element) {
+    _thFile._addElementToFile(element);
+    _childrenMapiahID.add(element.mapiahID);
 
-    return aElement.mapiahID;
+    return element.mapiahID;
   }
 
   List<int> get childrenMapiahID {
     return _childrenMapiahID;
   }
 
-  void _deleteElementFromParent(THElement aElement) {
-    if (!_childrenMapiahID.remove(aElement.mapiahID)) {
-      throw THCustomException("'$aElement' not found.");
+  void _deleteElementFromParent(THElement element) {
+    if (!_childrenMapiahID.remove(element.mapiahID)) {
+      throw THCustomException("'$element' not found.");
     }
 
-    if (_thFile.hasTHIDByElement(aElement)) {
-      _thFile.deleteElementTHIDByElement(aElement);
+    if (_thFile.hasTHIDByElement(element)) {
+      _thFile.deleteElementTHIDByElement(element);
     }
   }
 }
