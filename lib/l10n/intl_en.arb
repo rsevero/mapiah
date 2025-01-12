@@ -55,6 +55,15 @@
     "type": "text"
   } ,
 
+  "th2FileEditPageLoadingFile": "Loading file {filename} ...",
+  "@th2FileEditPageLoadingFile": {
+    "description": "The label for the loading file message",
+    "type": "text",
+    "placeholders": {
+      "filename": {}
+    }
+  },
+
   "th2FileEditPageZoomIn": "Zoom In",
   "@th2FileEditPageZoomIn": {
     "description": "The label for the zoom in button",

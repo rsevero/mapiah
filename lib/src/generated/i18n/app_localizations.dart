@@ -143,6 +143,12 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// The label for the loading file message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading file {filename} ...'**
+  String th2FileEditPageLoadingFile(Object filename);
+
   /// The label for the zoom in button
   ///
   /// In en, this message translates to:

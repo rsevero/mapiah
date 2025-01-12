@@ -46,6 +46,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parsingErrors => 'Parsing errors';
 
   @override
+  String th2FileEditPageLoadingFile(Object filename) {
+    return 'Loading file $filename ...';
+  }
+
+  @override
   String get th2FileEditPageZoomIn => 'Zoom In';
 
   @override

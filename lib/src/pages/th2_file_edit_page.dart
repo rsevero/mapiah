@@ -75,7 +75,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             builder: (BuildContext context,
                 AsyncSnapshot<THFileStoreCreateResult> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
+                return Center(
+                  child: Text(AppLocalizations.of(context)
+                      .th2FileEditPageLoadingFile(widget.filename)),
+                );
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('Error: ${snapshot.error}'),

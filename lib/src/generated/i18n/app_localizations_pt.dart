@@ -46,6 +46,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
+  String th2FileEditPageLoadingFile(Object filename) {
+    return 'Lendo arquivo $filename ...';
+  }
+
+  @override
   String get th2FileEditPageZoomIn => 'Aproximar';
 
   @override
