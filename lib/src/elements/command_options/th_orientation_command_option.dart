@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -18,8 +19,9 @@ class THOrientationCommandOption extends THCommandOption
   late THDoublePart _azimuth;
 
   /// Constructor necessary for dart_mappable support.
-  THOrientationCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, THDoublePart azimuth) {
+  THOrientationCommandOption.withExplicitOptionType(super.thFile,
+      super.parentMapiahID, super.optionType, THDoublePart azimuth)
+      : super.withExplicitProperties() {
     _checkOptionParent(optionParent);
     this.azimuth = azimuth;
   }

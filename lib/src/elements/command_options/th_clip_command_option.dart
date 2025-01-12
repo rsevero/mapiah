@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/command_options/th_multiple_choice_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -26,6 +27,12 @@ class THClipCommandOption extends THMultipleChoiceCommandOption
   });
 
   /// Constructor necessary for dart_mappable support.
+  THClipCommandOption.withExplicitParameters(
+      super.thFile, super.parentMapiahID, super.optionType, super.choice)
+      : super.withExplicitProperties() {
+    _checkOptionParent();
+  }
+
   THClipCommandOption(super.optionParent, super.optionType, super.choice) {
     _checkOptionParent();
   }

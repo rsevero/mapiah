@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
@@ -15,8 +16,9 @@ class THStationNamesCommandOption extends THCommandOption
   late String _suffix;
 
   /// Constructor necessary for dart_mappable support.
-  THStationNamesCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, String preffix, String suffix) {
+  THStationNamesCommandOption.withExplicitOptionType(super.thFile,
+      super.parentMapiahID, super.optionType, String preffix, String suffix)
+      : super.withExplicitProperties() {
     this.preffix = preffix;
     this.suffix = suffix;
   }

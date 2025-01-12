@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_text.dart';
 
@@ -13,7 +14,8 @@ class THTitleCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THTitleCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, String text) {
+      super.thFile, super.parentMapiahID, super.optionType, String text)
+      : super.withExplicitProperties() {
     this.text = text;
   }
 

@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -26,10 +27,14 @@ class THScrapScaleCommandOption extends THCommandOption
   THLengthUnitPart? unit;
 
   /// Constructor necessary for dart_mappable support.
-  THScrapScaleCommandOption.withExplicitOptionType(super.optionParent,
-      super.optionType, List<THDoublePart> numericSpecifications,
+  THScrapScaleCommandOption.withExplicitOptionType(
+      super.thFile,
+      super.parentMapiahID,
+      super.optionType,
+      List<THDoublePart> numericSpecifications,
       [this.unit])
-      : _numericSpecifications = numericSpecifications;
+      : _numericSpecifications = numericSpecifications,
+        super.withExplicitProperties();
 
   THScrapScaleCommandOption(
       THHasOptions optionParent, List<THDoublePart> numericSpecifications,

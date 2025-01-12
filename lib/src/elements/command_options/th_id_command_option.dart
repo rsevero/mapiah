@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 
 part 'th_id_command_option.mapper.dart';
@@ -12,8 +13,9 @@ class THIDCommandOption extends THCommandOption with THIDCommandOptionMappable {
 
   /// Constructor necessary for dart_mappable support.
   THIDCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, String thID)
-      : _thID = thID;
+      super.thFile, super.parentMapiahID, super.optionType, String thID)
+      : _thID = thID,
+        super.withExplicitProperties();
 
   THIDCommandOption(THHasOptions optionParent, String thID)
       : _thID = thID,

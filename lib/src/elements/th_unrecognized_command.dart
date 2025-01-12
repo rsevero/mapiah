@@ -10,7 +10,7 @@ class THUnrecognizedCommand extends THElement
 
   THUnrecognizedCommand(super.parent, List<dynamic> value)
       : _value = value,
-        super.withParent();
+        super.addToParent();
 
   get value {
     return _value;

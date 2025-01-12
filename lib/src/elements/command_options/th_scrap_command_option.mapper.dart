@@ -14,6 +14,7 @@ class THScrapCommandOptionMapper extends ClassMapperBase<THScrapCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THScrapCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,9 +22,12 @@ class THScrapCommandOptionMapper extends ClassMapperBase<THScrapCommandOption> {
   @override
   final String id = 'THScrapCommandOption';
 
-  static THHasOptions _$optionParent(THScrapCommandOption v) => v.optionParent;
-  static const Field<THScrapCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THScrapCommandOption v) => v.thFile;
+  static const Field<THScrapCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THScrapCommandOption v) => v.parentMapiahID;
+  static const Field<THScrapCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THScrapCommandOption v) => v.optionType;
   static const Field<THScrapCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -33,14 +37,16 @@ class THScrapCommandOptionMapper extends ClassMapperBase<THScrapCommandOption> {
 
   @override
   final MappableFields<THScrapCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #reference: _f$reference,
   };
 
   static THScrapCommandOption _instantiate(DecodingData data) {
     return THScrapCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$reference));
   }
@@ -103,7 +109,13 @@ abstract class THScrapCommandOptionCopyWith<
     $In extends THScrapCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? reference});
+  THFileCopyWith<$R, THFile, THFile> get thFile;
+  @override
+  $R call(
+      {THFile? thFile,
+      int? parentMapiahID,
+      String? optionType,
+      String? reference});
   THScrapCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -117,19 +129,25 @@ class _THScrapCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THScrapCommandOption> $mapper =
       THScrapCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           String? reference}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (reference != null) #reference: reference
       }));
   @override
   THScrapCommandOption $make(CopyWithData data) =>
       THScrapCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#reference, or: $value.reference));
 

@@ -1,6 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_altitude.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -19,9 +20,10 @@ class THAltitudeValueCommandOption extends THCommandOption
   static const String _thisOptionType = 'value';
 
   /// Constructor necessary for dart_mappable support.
-  THAltitudeValueCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, THDoublePart length, bool isFix,
-      [String? unit]) {
+  THAltitudeValueCommandOption.withExplicitOptionType(super.thFile,
+      super.parentMapiahID, super.optionType, THDoublePart length, bool isFix,
+      [String? unit])
+      : super.withExplicitProperties() {
     _checkOptionParent(optionParent);
     this.length = length;
     this.isFix = isFix;

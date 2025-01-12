@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -18,8 +19,9 @@ class THExploredCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THExploredCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, THDoublePart length,
-      [String? unit]) {
+      super.thFile, super.parentMapiahID, super.optionType, THDoublePart length,
+      [String? unit])
+      : super.withExplicitProperties() {
     _checkOptionParent();
     this.length = length;
     if (unit != null) {

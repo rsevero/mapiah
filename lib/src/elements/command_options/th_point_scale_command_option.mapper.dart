@@ -16,6 +16,7 @@ class THPointScaleCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THPointScaleCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THMultipleChoicePartMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
@@ -25,10 +26,12 @@ class THPointScaleCommandOptionMapper
   @override
   final String id = 'THPointScaleCommandOption';
 
-  static THHasOptions _$optionParent(THPointScaleCommandOption v) =>
-      v.optionParent;
-  static const Field<THPointScaleCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THPointScaleCommandOption v) => v.thFile;
+  static const Field<THPointScaleCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THPointScaleCommandOption v) => v.parentMapiahID;
+  static const Field<THPointScaleCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THPointScaleCommandOption v) => v.optionType;
   static const Field<THPointScaleCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -49,7 +52,8 @@ class THPointScaleCommandOptionMapper
 
   @override
   final MappableFields<THPointScaleCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #_multipleChoiceSize: _f$_multipleChoiceSize,
     #_numericSize: _f$_numericSize,
@@ -58,7 +62,8 @@ class THPointScaleCommandOptionMapper
 
   static THPointScaleCommandOption _instantiate(DecodingData data) {
     return THPointScaleCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$_multipleChoiceSize),
         data.dec(_f$_numericSize),
@@ -124,12 +129,15 @@ abstract class THPointScaleCommandOptionCopyWith<
     $R,
     $In extends THPointScaleCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THMultipleChoicePartCopyWith<$R, THMultipleChoicePart, THMultipleChoicePart>
       get _multipleChoiceSize;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get _numericSize;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       THMultipleChoicePart? multipleChoiceSize,
       THDoublePart? numericSize,
@@ -148,6 +156,9 @@ class _THPointScaleCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THPointScaleCommandOption> $mapper =
       THPointScaleCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THMultipleChoicePartCopyWith<$R, THMultipleChoicePart, THMultipleChoicePart>
       get _multipleChoiceSize => $value._multipleChoiceSize.copyWith
           .$chain((v) => call(multipleChoiceSize: v));
@@ -156,13 +167,15 @@ class _THPointScaleCommandOptionCopyWithImpl<$R, $Out>
       $value._numericSize.copyWith.$chain((v) => call(numericSize: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THMultipleChoicePart? multipleChoiceSize,
           THDoublePart? numericSize,
           bool? isNumeric}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (multipleChoiceSize != null) #multipleChoiceSize: multipleChoiceSize,
         if (numericSize != null) #numericSize: numericSize,
@@ -171,7 +184,8 @@ class _THPointScaleCommandOptionCopyWithImpl<$R, $Out>
   @override
   THPointScaleCommandOption $make(CopyWithData data) =>
       THPointScaleCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#multipleChoiceSize, or: $value._multipleChoiceSize),
           data.get(#numericSize, or: $value._numericSize),

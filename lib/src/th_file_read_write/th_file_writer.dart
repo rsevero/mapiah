@@ -207,20 +207,20 @@ class THFileWriter {
     return decoded;
   }
 
-  String _prepareLine(String aLine, THElement aTHElement) {
-    aLine = _encodeDoubleQuotes(aLine);
-    var newLine = '$_prefix$aLine';
+  String _prepareLine(String line, THElement aTHElement) {
+    line = _encodeDoubleQuotes(line);
+    String newLine = '$_prefix$line';
 
     // Breaking long lines
     if (newLine.length > thMaxFileLineLength) {
-      var splitLine = '';
-      var isFirst = true;
-      aLine = aLine.trim();
-      var maxLength = thMaxFileLineLength - _prefix.length;
+      String splitLine = '';
+      bool isFirst = true;
+      line = line.trim();
+      int maxLength = thMaxFileLineLength - _prefix.length;
 
-      while ((aLine.isNotEmpty) && (aLine.length > maxLength)) {
-        var breakPos = aLine.lastIndexOf(' ', maxLength) + 1;
-        var part = aLine.substring(0, breakPos);
+      while ((line.isNotEmpty) && (line.length > maxLength)) {
+        int breakPos = line.lastIndexOf(' ', maxLength) + 1;
+        String part = line.substring(0, breakPos);
 
         // Dealing with parts that consumed no actual content, i.e., are only
         // spaces. this probably means that there is a token (keyword, etc)
@@ -229,25 +229,25 @@ class THFileWriter {
         // In this situation, we put a complete token in the line, no matter how
         // big it is.
         if (part.trim() == '') {
-          breakPos = aLine.indexOf(' ', breakPos);
-          part = aLine.substring(0, breakPos);
+          breakPos = line.indexOf(' ', breakPos);
+          part = line.substring(0, breakPos);
         }
 
         // Dealing with parts that broke a quoted string.
-        final quoteCount = THFileAux.countCharOccurrences(part, thDoubleQuote);
+        int quoteCount = THFileAux.countCharOccurrences(part, thDoubleQuote);
         if (quoteCount.isOdd) {
-          breakPos = aLine.lastIndexOf(thDoubleQuote, breakPos);
-          part = aLine.substring(0, breakPos);
+          breakPos = line.lastIndexOf(thDoubleQuote, breakPos);
+          part = line.substring(0, breakPos);
 
           // Dealing with parts that consumed no actual content take 2: quoted
           // strings.
           if (part.trim() == '') {
-            breakPos = aLine.indexOf(thDoubleQuote, breakPos);
-            part = aLine.substring(0, breakPos);
+            breakPos = line.indexOf(thDoubleQuote, breakPos);
+            part = line.substring(0, breakPos);
           }
         }
 
-        aLine = aLine.substring(breakPos);
+        line = line.substring(breakPos);
         splitLine += _prefix;
 
         if (isFirst) {
@@ -258,13 +258,13 @@ class THFileWriter {
         }
 
         splitLine += part;
-        if (aLine.isNotEmpty) {
+        if (line.isNotEmpty) {
           splitLine += '\\\n';
         }
       }
 
-      if (aLine.isNotEmpty) {
-        splitLine += "$_prefix$aLine";
+      if (line.isNotEmpty) {
+        splitLine += "$_prefix$line";
       }
 
       newLine = splitLine;
@@ -282,15 +282,15 @@ class THFileWriter {
     return newLine;
   }
 
-  String _linePointOptionsAsString(THLineSegment aLineSegment) {
-    var asString = '';
+  String _linePointOptionsAsString(THLineSegment lineSegment) {
+    String asString = '';
 
     _increasePrefix();
-    final aTHHasOptions = aLineSegment as THHasOptions;
-    for (final aLinePointOptionType in aTHHasOptions.optionsList()) {
-      var newLine = "$aLinePointOptionType ";
+    final THHasOptions thHasOptions = lineSegment as THHasOptions;
+    for (String linePointOptionType in thHasOptions.optionsList) {
+      String newLine = "$linePointOptionType ";
       newLine +=
-          aTHHasOptions.optionByType(aLinePointOptionType)!.specToFile().trim();
+          thHasOptions.optionByType(linePointOptionType)!.specToFile().trim();
       asString += "$_prefix${newLine.trim()}\n";
     }
     _reducePrefix();
@@ -298,11 +298,12 @@ class THFileWriter {
     return asString;
   }
 
-  Future<List<int>> toBytes(THFile aTHFile,
+  Future<List<int>> toBytes(THFile thFile,
       {bool includeEmptyLines = false}) async {
-    final encoding = aTHFile.encoding;
+    String encoding = thFile.encoding;
     late List<int> fileContentEncoded;
-    var fileContent = serialize(aTHFile, includeEmptyLines: includeEmptyLines);
+    String fileContent =
+        serialize(thFile, includeEmptyLines: includeEmptyLines);
     switch (encoding) {
       case 'UTF-8':
         fileContentEncoded = utf8.encode(fileContent);

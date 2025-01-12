@@ -15,6 +15,7 @@ class THPointMapper extends ClassMapperBase<THPoint> {
       MapperContainer.globals.use(_instance = THPointMapper._());
       THElementMapper.ensureInitialized();
       THPointPositionPartMapper.ensureInitialized();
+      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,33 +23,50 @@ class THPointMapper extends ClassMapperBase<THPoint> {
   @override
   final String id = 'THPoint';
 
+  static int _$mapiahID(THPoint v) => v.mapiahID;
+  static const Field<THPoint, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
   static THParent _$parent(THPoint v) => v.parent;
   static const Field<THPoint, THParent> _f$parent = Field('parent', _$parent);
+  static String? _$sameLineComment(THPoint v) => v.sameLineComment;
+  static const Field<THPoint, String> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment);
   static THPointPositionPart _$position(THPoint v) => v.position;
   static const Field<THPoint, THPointPositionPart> _f$position =
       Field('position', _$position);
   static String _$pointType(THPoint v) => v.pointType;
   static const Field<THPoint, String> _f$pointType =
       Field('pointType', _$pointType);
+  static List<String> _$optionsList(THPoint v) => v.optionsList;
+  static const Field<THPoint, List<String>> _f$optionsList =
+      Field('optionsList', _$optionsList);
+  static Map<String, THCommandOption> _$optionsMap(THPoint v) => v.optionsMap;
+  static const Field<THPoint, Map<String, THCommandOption>> _f$optionsMap =
+      Field('optionsMap', _$optionsMap);
   static int _$parentMapiahID(THPoint v) => v.parentMapiahID;
   static const Field<THPoint, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
-  static String? _$sameLineComment(THPoint v) => v.sameLineComment;
-  static const Field<THPoint, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
 
   @override
   final MappableFields<THPoint> fields = const {
+    #mapiahID: _f$mapiahID,
     #parent: _f$parent,
+    #sameLineComment: _f$sameLineComment,
     #position: _f$position,
     #pointType: _f$pointType,
+    #optionsList: _f$optionsList,
+    #optionsMap: _f$optionsMap,
     #parentMapiahID: _f$parentMapiahID,
-    #sameLineComment: _f$sameLineComment,
   };
 
   static THPoint _instantiate(DecodingData data) {
-    return THPoint(
-        data.dec(_f$parent), data.dec(_f$position), data.dec(_f$pointType));
+    return THPoint.notAddedToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parent),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$position),
+        data.dec(_f$pointType),
+        data.dec(_f$optionsList),
+        data.dec(_f$optionsMap));
   }
 
   @override
@@ -102,8 +120,18 @@ abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
       get position;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get optionsList;
+  MapCopyWith<$R, String, THCommandOption,
+      ObjectCopyWith<$R, THCommandOption, THCommandOption>> get optionsMap;
   @override
-  $R call({THParent? parent, THPointPositionPart? position, String? pointType});
+  $R call(
+      {int? mapiahID,
+      THParent? parent,
+      String? sameLineComment,
+      THPointPositionPart? position,
+      String? pointType,
+      List<String>? optionsList,
+      Map<String, THCommandOption>? optionsMap});
   THPointCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -119,20 +147,45 @@ class _THPointCopyWithImpl<$R, $Out>
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
       get position => $value.position.copyWith.$chain((v) => call(position: v));
   @override
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+      get optionsList => ListCopyWith(
+          $value.optionsList,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(optionsList: v));
+  @override
+  MapCopyWith<$R, String, THCommandOption,
+          ObjectCopyWith<$R, THCommandOption, THCommandOption>>
+      get optionsMap => MapCopyWith(
+          $value.optionsMap,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(optionsMap: v));
+  @override
   $R call(
-          {THParent? parent,
+          {int? mapiahID,
+          THParent? parent,
+          Object? sameLineComment = $none,
           THPointPositionPart? position,
-          String? pointType}) =>
+          String? pointType,
+          List<String>? optionsList,
+          Map<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
         if (parent != null) #parent: parent,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (position != null) #position: position,
-        if (pointType != null) #pointType: pointType
+        if (pointType != null) #pointType: pointType,
+        if (optionsList != null) #optionsList: optionsList,
+        if (optionsMap != null) #optionsMap: optionsMap
       }));
   @override
-  THPoint $make(CopyWithData data) => THPoint(
+  THPoint $make(CopyWithData data) => THPoint.notAddedToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
       data.get(#parent, or: $value.parent),
+      data.get(#sameLineComment, or: $value.sameLineComment),
       data.get(#position, or: $value.position),
-      data.get(#pointType, or: $value.pointType));
+      data.get(#pointType, or: $value.pointType),
+      data.get(#optionsList, or: $value.optionsList),
+      data.get(#optionsMap, or: $value.optionsMap));
 
   @override
   THPointCopyWith<$R2, THPoint, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>

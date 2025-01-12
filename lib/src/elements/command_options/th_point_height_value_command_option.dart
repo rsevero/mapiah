@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -19,9 +20,14 @@ class THPointHeightValueCommandOption extends THCommandOption
   late bool isPresumed;
 
   /// Constructor necessary for dart_mappable support.
-  THPointHeightValueCommandOption.withExplicitOptionType(super.optionParent,
-      super.optionType, THDoublePart length, this.isPresumed,
-      [String? unit]) {
+  THPointHeightValueCommandOption.withExplicitOptionType(
+      super.thFile,
+      super.parentMapiahID,
+      super.optionType,
+      THDoublePart length,
+      this.isPresumed,
+      [String? unit])
+      : super.withExplicitProperties() {
     _checkOptionParent();
     this.length = length;
     if ((unit != null) && (unit.isNotEmpty)) {

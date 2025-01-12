@@ -16,6 +16,7 @@ class THLineHeightCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THLineHeightCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -24,10 +25,12 @@ class THLineHeightCommandOptionMapper
   @override
   final String id = 'THLineHeightCommandOption';
 
-  static THHasOptions _$optionParent(THLineHeightCommandOption v) =>
-      v.optionParent;
-  static const Field<THLineHeightCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THLineHeightCommandOption v) => v.thFile;
+  static const Field<THLineHeightCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THLineHeightCommandOption v) => v.parentMapiahID;
+  static const Field<THLineHeightCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THLineHeightCommandOption v) => v.optionType;
   static const Field<THLineHeightCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -37,14 +40,16 @@ class THLineHeightCommandOptionMapper
 
   @override
   final MappableFields<THLineHeightCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #height: _f$height,
   };
 
   static THLineHeightCommandOption _instantiate(DecodingData data) {
     return THLineHeightCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$height));
   }
@@ -108,10 +113,15 @@ abstract class THLineHeightCommandOptionCopyWith<
     $R,
     $In extends THLineHeightCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get height;
   @override
   $R call(
-      {THHasOptions? optionParent, String? optionType, THDoublePart? height});
+      {THFile? thFile,
+      int? parentMapiahID,
+      String? optionType,
+      THDoublePart? height});
   THLineHeightCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -126,22 +136,28 @@ class _THLineHeightCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THLineHeightCommandOption> $mapper =
       THLineHeightCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get height =>
       $value.height.copyWith.$chain((v) => call(height: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THDoublePart? height}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (height != null) #height: height
       }));
   @override
   THLineHeightCommandOption $make(CopyWithData data) =>
       THLineHeightCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#height, or: $value.height));
 

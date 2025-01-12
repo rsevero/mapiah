@@ -93,7 +93,11 @@ class _THFileWidgetState extends State<THFileWidget> {
           action.contains(localPositionOnCanvas)) {
         setState(() {
           _selectedElement = action.element;
-          _originalSelectedElement = _selectedElement!.copyWith();
+
+          _originalSelectedElement = (_selectedElement! as THPoint).clone();
+          bool ident = identical((_selectedElement! as THPoint).position,
+              (_originalSelectedElement! as THPoint).position);
+          print("ident: $ident");
         });
         break;
       }

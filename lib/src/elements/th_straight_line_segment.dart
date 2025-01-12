@@ -11,12 +11,12 @@ part 'th_straight_line_segment.mapper.dart';
 class THStraightLineSegment extends THElement
     with THStraightLineSegmentMappable, THLineSegment, THHasOptions {
   THStraightLineSegment(super.parent, THPointPositionPart endPointPosition)
-      : super.withParent() {
+      : super.addToParent() {
     this.endPointPosition = endPointPosition;
   }
 
   THStraightLineSegment.fromString(super.parent, List<dynamic> aPointDataList)
-      : super.withParent() {
+      : super.addToParent() {
     endPointPosition = THPointPositionPart.fromStringList(aPointDataList);
   }
 }

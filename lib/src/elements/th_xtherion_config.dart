@@ -8,5 +8,5 @@ class THXTherionConfig extends THElement with THXTherionConfigMappable {
   String name;
   String value;
 
-  THXTherionConfig(super.parent, this.name, this.value) : super.withParent();
+  THXTherionConfig(super.parent, this.name, this.value) : super.addToParent();
 }

@@ -9,7 +9,7 @@ part 'th_area_border_thid.mapper.dart';
 class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
   late String id;
 
-  THAreaBorderTHID(THParent parent, this.id) : super.withParent(parent) {
+  THAreaBorderTHID(THParent parent, this.id) : super.addToParent(parent) {
     if (parent is! THArea) {
       throw THCustomException(
           'THAreaBorder parent must be THArea, but it is ${parent.runtimeType}');

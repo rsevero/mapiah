@@ -16,6 +16,7 @@ class THScrapScaleCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THScrapScaleCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THLengthUnitPartMapper.ensureInitialized();
     }
@@ -25,10 +26,12 @@ class THScrapScaleCommandOptionMapper
   @override
   final String id = 'THScrapScaleCommandOption';
 
-  static THHasOptions _$optionParent(THScrapScaleCommandOption v) =>
-      v.optionParent;
-  static const Field<THScrapScaleCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THScrapScaleCommandOption v) => v.thFile;
+  static const Field<THScrapScaleCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THScrapScaleCommandOption v) => v.parentMapiahID;
+  static const Field<THScrapScaleCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THScrapScaleCommandOption v) => v.optionType;
   static const Field<THScrapScaleCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -45,7 +48,8 @@ class THScrapScaleCommandOptionMapper
 
   @override
   final MappableFields<THScrapScaleCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #_numericSpecifications: _f$_numericSpecifications,
     #unit: _f$unit,
@@ -53,7 +57,8 @@ class THScrapScaleCommandOptionMapper
 
   static THScrapScaleCommandOption _instantiate(DecodingData data) {
     return THScrapScaleCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$_numericSpecifications),
         data.dec(_f$unit));
@@ -118,13 +123,16 @@ abstract class THScrapScaleCommandOptionCopyWith<
     $R,
     $In extends THScrapScaleCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   ListCopyWith<$R, THDoublePart,
           THDoublePartCopyWith<$R, THDoublePart, THDoublePart>>
       get _numericSpecifications;
   THLengthUnitPartCopyWith<$R, THLengthUnitPart, THLengthUnitPart>? get unit;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       List<THDoublePart>? numericSpecifications,
       THLengthUnitPart? unit});
@@ -142,6 +150,9 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THScrapScaleCommandOption> $mapper =
       THScrapScaleCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   ListCopyWith<$R, THDoublePart,
           THDoublePartCopyWith<$R, THDoublePart, THDoublePart>>
       get _numericSpecifications => ListCopyWith(
@@ -153,12 +164,14 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
       $value.unit?.copyWith.$chain((v) => call(unit: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           List<THDoublePart>? numericSpecifications,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (numericSpecifications != null)
           #numericSpecifications: numericSpecifications,
@@ -167,7 +180,8 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
   @override
   THScrapScaleCommandOption $make(CopyWithData data) =>
       THScrapScaleCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#numericSpecifications, or: $value._numericSpecifications),
           data.get(#unit, or: $value.unit));

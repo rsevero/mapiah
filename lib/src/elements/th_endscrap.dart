@@ -5,5 +5,5 @@ part 'th_endscrap.mapper.dart';
 
 @MappableClass()
 class THEndscrap extends THElement with THEndscrapMappable {
-  THEndscrap(super.parent) : super.withParent();
+  THEndscrap(super.parent) : super.addToParent();
 }

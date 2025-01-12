@@ -14,6 +14,7 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THDistCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -22,9 +23,12 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
   @override
   final String id = 'THDistCommandOption';
 
-  static THHasOptions _$optionParent(THDistCommandOption v) => v.optionParent;
-  static const Field<THDistCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THDistCommandOption v) => v.thFile;
+  static const Field<THDistCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THDistCommandOption v) => v.parentMapiahID;
+  static const Field<THDistCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THDistCommandOption v) => v.optionType;
   static const Field<THDistCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -37,15 +41,20 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
 
   @override
   final MappableFields<THDistCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #length: _f$length,
     #unit: _f$unit,
   };
 
   static THDistCommandOption _instantiate(DecodingData data) {
-    return THDistCommandOption.withExplicitOptionType(data.dec(_f$optionParent),
-        data.dec(_f$optionType), data.dec(_f$length), data.dec(_f$unit));
+    return THDistCommandOption.withExplicitOptionType(
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$optionType),
+        data.dec(_f$length),
+        data.dec(_f$unit));
   }
 
   @override
@@ -103,10 +112,13 @@ extension THDistCommandOptionValueCopy<$R, $Out>
 
 abstract class THDistCommandOptionCopyWith<$R, $In extends THDistCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       THDoublePart? length,
       String? unit});
@@ -123,16 +135,21 @@ class _THDistCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THDistCommandOption> $mapper =
       THDistCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length =>
       $value.length.copyWith.$chain((v) => call(length: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THDoublePart? length,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (length != null) #length: length,
         if (unit != $none) #unit: unit
@@ -140,7 +157,8 @@ class _THDistCommandOptionCopyWithImpl<$R, $Out>
   @override
   THDistCommandOption $make(CopyWithData data) =>
       THDistCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#length, or: $value.length),
           data.get(#unit, or: $value.unit));

@@ -5,7 +5,7 @@ part 'th_encoding.mapper.dart';
 
 @MappableClass()
 class THEncoding extends THElement with THEncodingMappable {
-  THEncoding(super.parent) : super.withParent();
+  THEncoding(super.parent) : super.addToParent();
 
   set encoding(String aEncoding) {
     thFile.encoding = aEncoding;

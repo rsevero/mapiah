@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
@@ -50,8 +51,9 @@ class THProjectionCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THProjectionCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, this.type,
-      {this.index = '', this.elevationAngle, this.elevationUnit});
+      super.thFile, super.parentMapiahID, super.optionType, this.type,
+      {this.index = '', this.elevationAngle, this.elevationUnit})
+      : super.withExplicitProperties();
 
   THProjectionCommandOption.fromString(
     THHasOptions optionParent,

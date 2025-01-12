@@ -16,11 +16,11 @@ class THBezierCurveLineSegment extends THElement
 
   THBezierCurveLineSegment(super.parent, this.controlPoint1, this.controlPoint2,
       THPointPositionPart endPointPosition)
-      : super.withParent();
+      : super.addToParent();
 
   THBezierCurveLineSegment.fromString(super.parent, List<dynamic> controlPoint1,
       List<dynamic> controlPoint2, List<dynamic> endPointPosition)
-      : super.withParent() {
+      : super.addToParent() {
     this.controlPoint1 = THPointPositionPart.fromStringList(controlPoint1);
     this.controlPoint2 = THPointPositionPart.fromStringList(controlPoint2);
     this.endPointPosition =

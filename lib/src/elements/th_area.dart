@@ -38,7 +38,7 @@ class THArea extends THElement
 
   THArea(super.parent, String areaType)
       : _areaType = areaType,
-        super.withParent() {
+        super.addToParent() {
     if (!hasAreaType(areaType)) {
       throw THCustomException("Unrecognized THArea type '$areaType'.");
     }

@@ -5,5 +5,5 @@ part 'th_endarea.mapper.dart';
 
 @MappableClass()
 class THEndarea extends THElement with THEndareaMappable {
-  THEndarea(super.parent) : super.withParent();
+  THEndarea(super.parent) : super.addToParent();
 }

@@ -16,6 +16,7 @@ class THAltitudeCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THAltitudeCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,10 +24,12 @@ class THAltitudeCommandOptionMapper
   @override
   final String id = 'THAltitudeCommandOption';
 
-  static THHasOptions _$optionParent(THAltitudeCommandOption v) =>
-      v.optionParent;
-  static const Field<THAltitudeCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THAltitudeCommandOption v) => v.thFile;
+  static const Field<THAltitudeCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THAltitudeCommandOption v) => v.parentMapiahID;
+  static const Field<THAltitudeCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THAltitudeCommandOption v) => v.optionType;
   static const Field<THAltitudeCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -43,7 +46,8 @@ class THAltitudeCommandOptionMapper
 
   @override
   final MappableFields<THAltitudeCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #length: _f$length,
     #isFix: _f$isFix,
@@ -52,7 +56,8 @@ class THAltitudeCommandOptionMapper
 
   static THAltitudeCommandOption _instantiate(DecodingData data) {
     return THAltitudeCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$length),
         data.dec(_f$isFix),
@@ -117,8 +122,11 @@ abstract class THAltitudeCommandOptionCopyWith<
     $In extends THAltitudeCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
+  @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       dynamic length,
       bool? isFix,
@@ -137,14 +145,19 @@ class _THAltitudeCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THAltitudeCommandOption> $mapper =
       THAltitudeCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           Object? length = $none,
           bool? isFix,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (length != $none) #length: length,
         if (isFix != null) #isFix: isFix,
@@ -153,7 +166,8 @@ class _THAltitudeCommandOptionCopyWithImpl<$R, $Out>
   @override
   THAltitudeCommandOption $make(CopyWithData data) =>
       THAltitudeCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#length, or: $value.length),
           data.get(#isFix, or: $value.isFix),

@@ -16,6 +16,7 @@ class THStationNamesCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THStationNamesCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,10 +24,13 @@ class THStationNamesCommandOptionMapper
   @override
   final String id = 'THStationNamesCommandOption';
 
-  static THHasOptions _$optionParent(THStationNamesCommandOption v) =>
-      v.optionParent;
-  static const Field<THStationNamesCommandOption, THHasOptions>
-      _f$optionParent = Field('optionParent', _$optionParent);
+  static THFile _$thFile(THStationNamesCommandOption v) => v.thFile;
+  static const Field<THStationNamesCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THStationNamesCommandOption v) =>
+      v.parentMapiahID;
+  static const Field<THStationNamesCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THStationNamesCommandOption v) => v.optionType;
   static const Field<THStationNamesCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -39,7 +43,8 @@ class THStationNamesCommandOptionMapper
 
   @override
   final MappableFields<THStationNamesCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #preffix: _f$preffix,
     #suffix: _f$suffix,
@@ -47,7 +52,8 @@ class THStationNamesCommandOptionMapper
 
   static THStationNamesCommandOption _instantiate(DecodingData data) {
     return THStationNamesCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$preffix),
         data.dec(_f$suffix));
@@ -113,8 +119,11 @@ abstract class THStationNamesCommandOptionCopyWith<
     $In extends THStationNamesCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
+  @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       String? preffix,
       String? suffix});
@@ -134,13 +143,18 @@ class _THStationNamesCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THStationNamesCommandOption> $mapper =
       THStationNamesCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           String? preffix,
           String? suffix}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (preffix != null) #preffix: preffix,
         if (suffix != null) #suffix: suffix
@@ -148,7 +162,8 @@ class _THStationNamesCommandOptionCopyWithImpl<$R, $Out>
   @override
   THStationNamesCommandOption $make(CopyWithData data) =>
       THStationNamesCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#preffix, or: $value.preffix),
           data.get(#suffix, or: $value.suffix));

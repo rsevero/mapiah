@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_multiple_choice_part.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -24,14 +25,16 @@ class THPointScaleCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THPointScaleCommandOption.withExplicitOptionType(
-      super.optionParent,
+      super.thFile,
+      super.parentMapiahID,
       super.optionType,
       THMultipleChoicePart multipleChoiceSize,
       THDoublePart numericSize,
       bool isNumeric)
       : _multipleChoiceSize = multipleChoiceSize,
         _numericSize = numericSize,
-        _isNumeric = isNumeric {
+        _isNumeric = isNumeric,
+        super.withExplicitProperties() {
     _checkOptionParent();
   }
 

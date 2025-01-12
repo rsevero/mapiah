@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -163,13 +166,29 @@ class THPoint extends THElement
     'wheelchair',
   };
 
-  THPoint(super.parent, this.position, String pointType) : super.withParent() {
+  /// Used by dart_mappable to decode a THPoint object from a map and create a
+  /// new instance with copyWith.
+  THPoint.notAddedToParent(
+    super.mapiahID,
+    super.parent,
+    super.sameLineComment,
+    this.position,
+    String pointType,
+    List<String> optionsList,
+    Map<String, THCommandOption> optionsMap,
+  ) : super.notAddToParent() {
+    _pointType = pointType;
+    this.optionsList.addAll(optionsList);
+    addOptionsMap(optionsMap);
+  }
+
+  THPoint(super.parent, this.position, String pointType) : super.addToParent() {
     _pointType = pointType;
   }
 
   THPoint.fromString(
       super.parent, List<dynamic> aPointDataList, String pointType)
-      : super.withParent() {
+      : super.addToParent() {
     position = THPointPositionPart.fromStringList(aPointDataList);
     plaType = pointType;
   }
@@ -254,5 +273,19 @@ class THPoint extends THElement
 
   set yDecimalPositions(int decimalPositions) {
     position.yDoublePart.decimalPositions = decimalPositions;
+  }
+
+  @override
+  THPoint clone() {
+    final THPointPositionPart clonedPosition = position.copyWith();
+    final List<String> clonedOptionsList = optionsList.toList();
+    final HashMap<String, THCommandOption> clonedOptionsMap =
+        HashMap<String, THCommandOption>.from(optionsMap);
+    final THPoint clonedPoint = copyWith(
+        position: clonedPosition,
+        optionsList: clonedOptionsList,
+        optionsMap: clonedOptionsMap);
+
+    return clonedPoint;
   }
 }

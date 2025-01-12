@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -17,7 +18,8 @@ class THLineHeightCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THLineHeightCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, this.height) {
+      super.thFile, super.parentMapiahID, super.optionType, this.height)
+      : super.withExplicitProperties() {
     _checkOptionParent();
   }
 

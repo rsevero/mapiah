@@ -2,6 +2,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -16,7 +17,8 @@ class THDateValueCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THDateValueCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, this.date) {
+      super.thFile, super.parentMapiahID, super.optionType, this.date)
+      : super.withExplicitProperties() {
     _checkOptionParent();
   }
 

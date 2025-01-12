@@ -16,6 +16,7 @@ class THCopyrightCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THCopyrightCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THDatetimePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -24,10 +25,12 @@ class THCopyrightCommandOptionMapper
   @override
   final String id = 'THCopyrightCommandOption';
 
-  static THHasOptions _$optionParent(THCopyrightCommandOption v) =>
-      v.optionParent;
-  static const Field<THCopyrightCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THCopyrightCommandOption v) => v.thFile;
+  static const Field<THCopyrightCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THCopyrightCommandOption v) => v.parentMapiahID;
+  static const Field<THCopyrightCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THCopyrightCommandOption v) => v.optionType;
   static const Field<THCopyrightCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -41,7 +44,8 @@ class THCopyrightCommandOptionMapper
 
   @override
   final MappableFields<THCopyrightCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #datetime: _f$datetime,
     #copyrightMessage: _f$copyrightMessage,
@@ -49,7 +53,8 @@ class THCopyrightCommandOptionMapper
 
   static THCopyrightCommandOption _instantiate(DecodingData data) {
     return THCopyrightCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$datetime),
         data.dec(_f$copyrightMessage));
@@ -112,10 +117,13 @@ abstract class THCopyrightCommandOptionCopyWith<
     $R,
     $In extends THCopyrightCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get datetime;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       THDatetimePart? datetime,
       String? copyrightMessage});
@@ -133,16 +141,21 @@ class _THCopyrightCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THCopyrightCommandOption> $mapper =
       THCopyrightCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get datetime =>
       $value.datetime.copyWith.$chain((v) => call(datetime: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THDatetimePart? datetime,
           String? copyrightMessage}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (datetime != null) #datetime: datetime,
         if (copyrightMessage != null) #copyrightMessage: copyrightMessage
@@ -150,7 +163,8 @@ class _THCopyrightCommandOptionCopyWithImpl<$R, $Out>
   @override
   THCopyrightCommandOption $make(CopyWithData data) =>
       THCopyrightCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#datetime, or: $value.datetime),
           data.get(#copyrightMessage, or: $value.copyrightMessage));

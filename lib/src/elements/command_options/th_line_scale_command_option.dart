@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -28,13 +29,14 @@ class THLineScaleCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THLineScaleCommandOption.withExplicitOptionType(
-    super.optionParent,
+    super.thFile,
+    super.parentMapiahID,
     super.optionType,
     THMultipleChoicePart multipleChoiceSize,
     THDoublePart numericSize,
     THLineScaleCommandOptionType type,
     String textSize,
-  ) {
+  ) : super.withExplicitProperties() {
     _checkOptionParent();
     _multipleChoiceSize = multipleChoiceSize;
     _type = type;

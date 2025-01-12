@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -383,6 +384,16 @@ class THMultipleChoiceCommandOption extends THCommandOption
     },
   };
 
+  THMultipleChoiceCommandOption.withExplicitProperties(
+    super.thFile,
+    super.parentMapiahID,
+    super.optionType,
+    String choice,
+  ) : super.withExplicitProperties() {
+    _checkOptionParent();
+    this.choice = choice;
+  }
+
   THMultipleChoiceCommandOption(
     super.optionParent,
     super.optionType,
@@ -399,15 +410,15 @@ class THMultipleChoiceCommandOption extends THCommandOption
     }
   }
 
-  set choice(String aChoice) {
-    aChoice = _mainChoice(aChoice);
+  set choice(String choice) {
+    choice = _mainChoice(choice);
 
-    if (!hasOptionChoice(aChoice)) {
+    if (!hasOptionChoice(choice)) {
       throw THCustomException(
-          "Unsupported choice '$aChoice' in a '$optionType' option for a '${optionParent.elementType}' element.");
+          "Unsupported choice '$choice' in a '$optionType' option for a '${optionParent.elementType}' element.");
     }
 
-    _choice = aChoice;
+    _choice = choice;
   }
 
   String get choice => _choice;

@@ -21,20 +21,24 @@ class THElementMapper extends ClassMapperBase<THElement> {
   @override
   final String id = 'THElement';
 
+  static int _$mapiahID(THElement v) => v.mapiahID;
+  static const Field<THElement, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static THParent _$parent(THElement v) => v.parent;
   static const Field<THElement, THParent> _f$parent = Field('parent', _$parent);
+  static String? _$sameLineComment(THElement v) => v.sameLineComment;
+  static const Field<THElement, String> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment);
   static int _$parentMapiahID(THElement v) => v.parentMapiahID;
   static const Field<THElement, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
-  static String? _$sameLineComment(THElement v) => v.sameLineComment;
-  static const Field<THElement, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
 
   @override
   final MappableFields<THElement> fields = const {
+    #mapiahID: _f$mapiahID,
     #parent: _f$parent,
-    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #parentMapiahID: _f$parentMapiahID,
   };
 
   static THElement _instantiate(DecodingData data) {

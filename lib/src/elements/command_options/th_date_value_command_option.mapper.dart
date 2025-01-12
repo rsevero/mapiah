@@ -16,6 +16,7 @@ class THDateValueCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THDateValueCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THDatetimePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -24,10 +25,12 @@ class THDateValueCommandOptionMapper
   @override
   final String id = 'THDateValueCommandOption';
 
-  static THHasOptions _$optionParent(THDateValueCommandOption v) =>
-      v.optionParent;
-  static const Field<THDateValueCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THDateValueCommandOption v) => v.thFile;
+  static const Field<THDateValueCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THDateValueCommandOption v) => v.parentMapiahID;
+  static const Field<THDateValueCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THDateValueCommandOption v) => v.optionType;
   static const Field<THDateValueCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -37,14 +40,18 @@ class THDateValueCommandOptionMapper
 
   @override
   final MappableFields<THDateValueCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #date: _f$date,
   };
 
   static THDateValueCommandOption _instantiate(DecodingData data) {
     return THDateValueCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$date));
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$optionType),
+        data.dec(_f$date));
   }
 
   @override
@@ -104,10 +111,15 @@ abstract class THDateValueCommandOptionCopyWith<
     $R,
     $In extends THDateValueCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get date;
   @override
   $R call(
-      {THHasOptions? optionParent, String? optionType, THDatetimePart? date});
+      {THFile? thFile,
+      int? parentMapiahID,
+      String? optionType,
+      THDatetimePart? date});
   THDateValueCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -122,22 +134,28 @@ class _THDateValueCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THDateValueCommandOption> $mapper =
       THDateValueCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get date =>
       $value.date.copyWith.$chain((v) => call(date: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THDatetimePart? date}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (date != null) #date: date
       }));
   @override
   THDateValueCommandOption $make(CopyWithData data) =>
       THDateValueCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#date, or: $value.date));
 

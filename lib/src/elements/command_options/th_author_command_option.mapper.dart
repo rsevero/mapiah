@@ -15,6 +15,7 @@ class THAuthorCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THAuthorCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THDatetimePartMapper.ensureInitialized();
       THPersonPartMapper.ensureInitialized();
     }
@@ -24,9 +25,12 @@ class THAuthorCommandOptionMapper
   @override
   final String id = 'THAuthorCommandOption';
 
-  static THHasOptions _$optionParent(THAuthorCommandOption v) => v.optionParent;
-  static const Field<THAuthorCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THAuthorCommandOption v) => v.thFile;
+  static const Field<THAuthorCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THAuthorCommandOption v) => v.parentMapiahID;
+  static const Field<THAuthorCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THAuthorCommandOption v) => v.optionType;
   static const Field<THAuthorCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -39,7 +43,8 @@ class THAuthorCommandOptionMapper
 
   @override
   final MappableFields<THAuthorCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #datetime: _f$datetime,
     #person: _f$person,
@@ -47,7 +52,8 @@ class THAuthorCommandOptionMapper
 
   static THAuthorCommandOption _instantiate(DecodingData data) {
     return THAuthorCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$datetime),
         data.dec(_f$person));
@@ -110,11 +116,14 @@ abstract class THAuthorCommandOptionCopyWith<
     $R,
     $In extends THAuthorCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get datetime;
   THPersonPartCopyWith<$R, THPersonPart, THPersonPart> get person;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       THDatetimePart? datetime,
       THPersonPart? person});
@@ -131,6 +140,9 @@ class _THAuthorCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THAuthorCommandOption> $mapper =
       THAuthorCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get datetime =>
       $value.datetime.copyWith.$chain((v) => call(datetime: v));
   @override
@@ -138,12 +150,14 @@ class _THAuthorCommandOptionCopyWithImpl<$R, $Out>
       $value.person.copyWith.$chain((v) => call(person: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THDatetimePart? datetime,
           THPersonPart? person}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (datetime != null) #datetime: datetime,
         if (person != null) #person: person
@@ -151,7 +165,8 @@ class _THAuthorCommandOptionCopyWithImpl<$R, $Out>
   @override
   THAuthorCommandOption $make(CopyWithData data) =>
       THAuthorCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#datetime, or: $value.datetime),
           data.get(#person, or: $value.person));

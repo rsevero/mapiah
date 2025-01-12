@@ -30,12 +30,21 @@ abstract class THElement with THElementMappable {
   /// Special descendants: THFile.
   THElement._();
 
+  /// Used by dart_mappable to instantiate a THElement from a map and from
+  /// copyWith.
+  THElement.notAddToParent(
+      int mapiahID, THParent parent, this.sameLineComment) {
+    _mapiahID = mapiahID;
+    _thFile = parent.thFile;
+    parentMapiahID = parent.mapiahID;
+  }
+
   /// Main constructor.
   ///
   /// Main constructor that sets all essential properties. Any change made here
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
-  THElement.withParent(THParent parent)
+  THElement.addToParent(THParent parent)
       : parentMapiahID = parent.mapiahID,
         _thFile = parent.thFile {
     parent._addElementToParent(this);
@@ -63,6 +72,11 @@ abstract class THElement with THElementMappable {
 
   void delete() {
     _thFile._deleteElement(this);
+  }
+
+  THElement clone() {
+    final THElement newElement = copyWith();
+    return newElement;
   }
 }
 

@@ -59,7 +59,7 @@ class THLine extends THElement
     'water-flow',
   };
 
-  THLine(super.parent, String lineType) : super.withParent() {
+  THLine(super.parent, String lineType) : super.addToParent() {
     this.lineType = lineType;
   }
 

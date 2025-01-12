@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -104,7 +105,8 @@ class THSubtypeCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THSubtypeCommandOption.withExplicitOptionType(
-      super.optionParent, super.optionType, String subtype) {
+      super.thFile, super.parentMapiahID, super.optionType, String subtype)
+      : super.withExplicitProperties() {
     this.subtype = subtype;
   }
 

@@ -20,13 +20,13 @@ class THPointPositionPart with THPointPositionPartMappable {
     yDoublePart = THDoublePart.fromString(yAsString);
   }
 
-  THPointPositionPart.fromStringList(List<dynamic> aList) {
-    if (aList.length != 2) {
-      throw THConvertFromListException('THPointPart', aList);
+  THPointPositionPart.fromStringList(List<dynamic> list) {
+    if (list.length != 2) {
+      throw THConvertFromListException('THPointPart', list);
     }
 
-    xDoublePart = THDoublePart.fromString(aList[0].toString());
-    yDoublePart = THDoublePart.fromString(aList[1].toString());
+    xDoublePart = THDoublePart.fromString(list[0].toString());
+    yDoublePart = THDoublePart.fromString(list[1].toString());
   }
 
   @override

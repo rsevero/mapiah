@@ -32,7 +32,7 @@ class THScrap extends THElement
 
   THScrap(super.parent, String thID)
       : _thID = thID,
-        super.withParent();
+        super.addToParent();
 
   @override
   String get thID {

@@ -14,6 +14,7 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THTitleCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,9 +22,12 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
   @override
   final String id = 'THTitleCommandOption';
 
-  static THHasOptions _$optionParent(THTitleCommandOption v) => v.optionParent;
-  static const Field<THTitleCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THTitleCommandOption v) => v.thFile;
+  static const Field<THTitleCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THTitleCommandOption v) => v.parentMapiahID;
+  static const Field<THTitleCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THTitleCommandOption v) => v.optionType;
   static const Field<THTitleCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -33,14 +37,18 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
 
   @override
   final MappableFields<THTitleCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #text: _f$text,
   };
 
   static THTitleCommandOption _instantiate(DecodingData data) {
     return THTitleCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$text));
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$optionType),
+        data.dec(_f$text));
   }
 
   @override
@@ -101,7 +109,10 @@ abstract class THTitleCommandOptionCopyWith<
     $In extends THTitleCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? text});
+  THFileCopyWith<$R, THFile, THFile> get thFile;
+  @override
+  $R call(
+      {THFile? thFile, int? parentMapiahID, String? optionType, String? text});
   THTitleCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -115,16 +126,25 @@ class _THTitleCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THTitleCommandOption> $mapper =
       THTitleCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? text}) =>
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
+  $R call(
+          {THFile? thFile,
+          int? parentMapiahID,
+          String? optionType,
+          String? text}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (text != null) #text: text
       }));
   @override
   THTitleCommandOption $make(CopyWithData data) =>
       THTitleCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#text, or: $value.text));
 

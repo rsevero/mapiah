@@ -15,6 +15,7 @@ class THSubtypeCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THSubtypeCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,10 +23,12 @@ class THSubtypeCommandOptionMapper
   @override
   final String id = 'THSubtypeCommandOption';
 
-  static THHasOptions _$optionParent(THSubtypeCommandOption v) =>
-      v.optionParent;
-  static const Field<THSubtypeCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THSubtypeCommandOption v) => v.thFile;
+  static const Field<THSubtypeCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THSubtypeCommandOption v) => v.parentMapiahID;
+  static const Field<THSubtypeCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THSubtypeCommandOption v) => v.optionType;
   static const Field<THSubtypeCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -35,14 +38,16 @@ class THSubtypeCommandOptionMapper
 
   @override
   final MappableFields<THSubtypeCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #subtype: _f$subtype,
   };
 
   static THSubtypeCommandOption _instantiate(DecodingData data) {
     return THSubtypeCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$subtype));
   }
@@ -105,7 +110,13 @@ abstract class THSubtypeCommandOptionCopyWith<
     $In extends THSubtypeCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? subtype});
+  THFileCopyWith<$R, THFile, THFile> get thFile;
+  @override
+  $R call(
+      {THFile? thFile,
+      int? parentMapiahID,
+      String? optionType,
+      String? subtype});
   THSubtypeCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -120,16 +131,25 @@ class _THSubtypeCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THSubtypeCommandOption> $mapper =
       THSubtypeCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? subtype}) =>
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
+  $R call(
+          {THFile? thFile,
+          int? parentMapiahID,
+          String? optionType,
+          String? subtype}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (subtype != null) #subtype: subtype
       }));
   @override
   THSubtypeCommandOption $make(CopyWithData data) =>
       THSubtypeCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#subtype, or: $value.subtype));
 

@@ -8,5 +8,5 @@ class THMultilineCommentContent extends THElement
     with THMultilineCommentContentMappable {
   String content;
 
-  THMultilineCommentContent(super.parent, this.content) : super.withParent();
+  THMultilineCommentContent(super.parent, this.content) : super.addToParent();
 }

@@ -15,6 +15,7 @@ class THSketchCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THSketchCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THPointPositionPartMapper.ensureInitialized();
     }
     return _instance!;
@@ -23,9 +24,12 @@ class THSketchCommandOptionMapper
   @override
   final String id = 'THSketchCommandOption';
 
-  static THHasOptions _$optionParent(THSketchCommandOption v) => v.optionParent;
-  static const Field<THSketchCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THSketchCommandOption v) => v.thFile;
+  static const Field<THSketchCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THSketchCommandOption v) => v.parentMapiahID;
+  static const Field<THSketchCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THSketchCommandOption v) => v.optionType;
   static const Field<THSketchCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -38,7 +42,8 @@ class THSketchCommandOptionMapper
 
   @override
   final MappableFields<THSketchCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #filename: _f$filename,
     #point: _f$point,
@@ -46,7 +51,8 @@ class THSketchCommandOptionMapper
 
   static THSketchCommandOption _instantiate(DecodingData data) {
     return THSketchCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent),
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$filename),
         data.dec(_f$point));
@@ -109,11 +115,14 @@ abstract class THSketchCommandOptionCopyWith<
     $R,
     $In extends THSketchCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
       get point;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       String? filename,
       THPointPositionPart? point});
@@ -130,16 +139,21 @@ class _THSketchCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THSketchCommandOption> $mapper =
       THSketchCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
       get point => $value.point.copyWith.$chain((v) => call(point: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           String? filename,
           THPointPositionPart? point}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (filename != null) #filename: filename,
         if (point != null) #point: point
@@ -147,7 +161,8 @@ class _THSketchCommandOptionCopyWithImpl<$R, $Out>
   @override
   THSketchCommandOption $make(CopyWithData data) =>
       THSketchCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#filename, or: $value.filename),
           data.get(#point, or: $value.point));

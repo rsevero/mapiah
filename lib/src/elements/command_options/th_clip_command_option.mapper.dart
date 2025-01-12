@@ -14,6 +14,7 @@ class THClipCommandOptionMapper extends ClassMapperBase<THClipCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THClipCommandOptionMapper._());
       THMultipleChoiceCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,9 +22,12 @@ class THClipCommandOptionMapper extends ClassMapperBase<THClipCommandOption> {
   @override
   final String id = 'THClipCommandOption';
 
-  static THHasOptions _$optionParent(THClipCommandOption v) => v.optionParent;
-  static const Field<THClipCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THClipCommandOption v) => v.thFile;
+  static const Field<THClipCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THClipCommandOption v) => v.parentMapiahID;
+  static const Field<THClipCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THClipCommandOption v) => v.optionType;
   static const Field<THClipCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -33,14 +37,18 @@ class THClipCommandOptionMapper extends ClassMapperBase<THClipCommandOption> {
 
   @override
   final MappableFields<THClipCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #choice: _f$choice,
   };
 
   static THClipCommandOption _instantiate(DecodingData data) {
-    return THClipCommandOption(data.dec(_f$optionParent),
-        data.dec(_f$optionType), data.dec(_f$choice));
+    return THClipCommandOption.withExplicitParameters(
+        data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$optionType),
+        data.dec(_f$choice));
   }
 
   @override
@@ -99,7 +107,13 @@ extension THClipCommandOptionValueCopy<$R, $Out>
 abstract class THClipCommandOptionCopyWith<$R, $In extends THClipCommandOption,
     $Out> implements THMultipleChoiceCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? choice});
+  THFileCopyWith<$R, THFile, THFile> get thFile;
+  @override
+  $R call(
+      {THFile? thFile,
+      int? parentMapiahID,
+      String? optionType,
+      String? choice});
   THClipCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -113,17 +127,27 @@ class _THClipCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THClipCommandOption> $mapper =
       THClipCommandOptionMapper.ensureInitialized();
   @override
-  $R call({THHasOptions? optionParent, String? optionType, String? choice}) =>
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
+  $R call(
+          {THFile? thFile,
+          int? parentMapiahID,
+          String? optionType,
+          String? choice}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (choice != null) #choice: choice
       }));
   @override
-  THClipCommandOption $make(CopyWithData data) => THClipCommandOption(
-      data.get(#optionParent, or: $value.optionParent),
-      data.get(#optionType, or: $value.optionType),
-      data.get(#choice, or: $value.choice));
+  THClipCommandOption $make(CopyWithData data) =>
+      THClipCommandOption.withExplicitParameters(
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
+          data.get(#optionType, or: $value.optionType),
+          data.get(#choice, or: $value.choice));
 
   @override
   THClipCommandOptionCopyWith<$R2, THClipCommandOption, $Out2>

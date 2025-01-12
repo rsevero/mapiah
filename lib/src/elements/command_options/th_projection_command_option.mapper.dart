@@ -70,6 +70,7 @@ class THProjectionCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THProjectionCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
+      THFileMapper.ensureInitialized();
       THProjectionTypesMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THAngleUnitPartMapper.ensureInitialized();
@@ -80,10 +81,12 @@ class THProjectionCommandOptionMapper
   @override
   final String id = 'THProjectionCommandOption';
 
-  static THHasOptions _$optionParent(THProjectionCommandOption v) =>
-      v.optionParent;
-  static const Field<THProjectionCommandOption, THHasOptions> _f$optionParent =
-      Field('optionParent', _$optionParent);
+  static THFile _$thFile(THProjectionCommandOption v) => v.thFile;
+  static const Field<THProjectionCommandOption, THFile> _f$thFile =
+      Field('thFile', _$thFile);
+  static int _$parentMapiahID(THProjectionCommandOption v) => v.parentMapiahID;
+  static const Field<THProjectionCommandOption, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THProjectionCommandOption v) => v.optionType;
   static const Field<THProjectionCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
@@ -104,7 +107,8 @@ class THProjectionCommandOptionMapper
 
   @override
   final MappableFields<THProjectionCommandOption> fields = const {
-    #optionParent: _f$optionParent,
+    #thFile: _f$thFile,
+    #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #type: _f$type,
     #index: _f$index,
@@ -113,8 +117,8 @@ class THProjectionCommandOptionMapper
   };
 
   static THProjectionCommandOption _instantiate(DecodingData data) {
-    return THProjectionCommandOption.withExplicitOptionType(
-        data.dec(_f$optionParent), data.dec(_f$optionType), data.dec(_f$type),
+    return THProjectionCommandOption.withExplicitOptionType(data.dec(_f$thFile),
+        data.dec(_f$parentMapiahID), data.dec(_f$optionType), data.dec(_f$type),
         index: data.dec(_f$index),
         elevationAngle: data.dec(_f$elevationAngle),
         elevationUnit: data.dec(_f$elevationUnit));
@@ -179,12 +183,15 @@ abstract class THProjectionCommandOptionCopyWith<
     $R,
     $In extends THProjectionCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+  @override
+  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get elevationAngle;
   THAngleUnitPartCopyWith<$R, THAngleUnitPart, THAngleUnitPart>?
       get elevationUnit;
   @override
   $R call(
-      {THHasOptions? optionParent,
+      {THFile? thFile,
+      int? parentMapiahID,
       String? optionType,
       THProjectionTypes? type,
       String? index,
@@ -204,6 +211,9 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THProjectionCommandOption> $mapper =
       THProjectionCommandOptionMapper.ensureInitialized();
   @override
+  THFileCopyWith<$R, THFile, THFile> get thFile =>
+      $value.thFile.copyWith.$chain((v) => call(thFile: v));
+  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get elevationAngle =>
       $value.elevationAngle?.copyWith.$chain((v) => call(elevationAngle: v));
   @override
@@ -212,14 +222,16 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
           $value.elevationUnit?.copyWith.$chain((v) => call(elevationUnit: v));
   @override
   $R call(
-          {THHasOptions? optionParent,
+          {THFile? thFile,
+          int? parentMapiahID,
           String? optionType,
           THProjectionTypes? type,
           String? index,
           Object? elevationAngle = $none,
           Object? elevationUnit = $none}) =>
       $apply(FieldCopyWithData({
-        if (optionParent != null) #optionParent: optionParent,
+        if (thFile != null) #thFile: thFile,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (type != null) #type: type,
         if (index != null) #index: index,
@@ -229,7 +241,8 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
   @override
   THProjectionCommandOption $make(CopyWithData data) =>
       THProjectionCommandOption.withExplicitOptionType(
-          data.get(#optionParent, or: $value.optionParent),
+          data.get(#thFile, or: $value.thFile),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#type, or: $value.type),
           index: data.get(#index, or: $value.index),
