@@ -22,40 +22,62 @@ abstract class THFileStoreBase with Store {
   @readonly
   THFile _thFile = THFile();
 
-  List<String> errorMessages = <String>[];
+  final List<String> errorMessages = <String>[];
 
   late final UndoRedoController _undoRedoController;
 
   late final THFileDisplayStore _thFileDisplayStore;
 
-  @action
-  Future<List<String>> loadFile(String filename) async {
+  /// This is a factory constructor that creates a new instance of THFileStore.
+  /// It is a static method that returns a Future that contains a tuple of
+  /// THFileStore, a boolean, and a list of strings.
+  ///
+  /// @param filename The name of the file to be parsed.
+  /// @return A Future that contains a tuple of THFileStore, a boolean, and a
+  /// list of strings.
+  ///
+  /// The THFileStore instance is created and initialized with the parsed file.
+  /// The boolean indicates whether the file was parsed successfully.
+  /// The list of strings contains any error messages that were generated during
+  /// parsing.
+  static Future<THFileStoreCreateResult> create(
+    String filename,
+  ) async {
+    final THFileStore thFileStore = THFileStore._create();
+
+    thFileStore._preParseInitialize();
+
     final THFileParser parser = THFileParser();
 
+    final (parsedFile, isSuccessful, errors) = await parser.parse(filename);
+
+    thFileStore._postParseInitialize(parsedFile, isSuccessful, errors);
+
+    return THFileStoreCreateResult(thFileStore, isSuccessful, errors);
+  }
+
+  void _preParseInitialize() {
     _isLoading = true;
     errorMessages.clear();
+  }
 
-    final (parsedFile, isSuccessful, errors) = await parser.parse(filename);
+  void _postParseInitialize(
+    THFile parsedFile,
+    bool isSuccessful,
+    List<String> errors,
+  ) {
     _isLoading = false;
 
     if (isSuccessful) {
       _thFile = parsedFile;
       _undoRedoController = UndoRedoController(_thFile);
       _thFileDisplayStore = getIt<THFileDisplayStore>();
+    } else {
+      errorMessages.addAll(errors);
     }
-
-    return errors;
-
-    // else {
-    //   errorMessages.addAll(errors);
-    //   await showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return THErrorDialog(errorMessages: errorMessages);
-    //     },
-    //   );
-    // }
   }
+
+  THFileStoreBase._create();
 
   Future<File?> saveTH2File() async {
     final file = await _localFile();
@@ -122,4 +144,16 @@ abstract class THFileStoreBase with Store {
     _undoRedoController.execute(command);
     _thFileDisplayStore.setShouldRepaint(true);
   }
+}
+
+class THFileStoreCreateResult {
+  final THFileStore thFileStore;
+  final bool isSuccessful;
+  final List<String> errors;
+
+  THFileStoreCreateResult(
+    this.thFileStore,
+    this.isSuccessful,
+    this.errors,
+  );
 }

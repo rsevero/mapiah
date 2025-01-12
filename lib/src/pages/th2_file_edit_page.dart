@@ -4,6 +4,7 @@ import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_store_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
 class TH2FileEditPage extends StatefulWidget {
@@ -17,76 +18,96 @@ class TH2FileEditPage extends StatefulWidget {
 
 class _TH2FileEditPageState extends State<TH2FileEditPage> {
   bool _isHovered = false;
-  final THFileStore thFileStore = getIt<THFileStore>();
+  late final THFileStore thFileStore;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
-  late final Future<List<String>> loadErrors;
+  late final List<String> loadErrors;
+  late final Future<THFileStoreCreateResult> thFileStoreCreateResult;
 
   @override
   void initState() {
     super.initState();
-    loadErrors = thFileStore.loadFile(widget.filename);
+    thFileStoreCreateResult =
+        getIt<THStoreStore>().createFileStore(widget.filename);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).fileEditWindowWindowTitle),
-        elevation: 4,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save_alt_outlined),
-            onPressed: () => thFileStore.saveTH2File(),
+    return FutureBuilder<THFileStoreCreateResult>(
+      future: thFileStoreCreateResult,
+      builder: (BuildContext context,
+          AsyncSnapshot<THFileStoreCreateResult> snapshot) {
+        final bool fileReady =
+            (snapshot.connectionState == ConnectionState.done) &&
+                snapshot.hasData &&
+                snapshot.data!.isSuccessful;
+
+        if (fileReady) {
+          thFileStore = snapshot.data!.thFileStore;
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context).fileEditWindowWindowTitle),
+            elevation: 4,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
+            actions: <Widget>[
+              if (fileReady) ...[
+                IconButton(
+                  icon: Icon(Icons.save_alt_outlined),
+                  onPressed: () => thFileStore.saveTH2File(),
+                ),
+                IconButton(
+                  icon: Icon(Icons.save_as_outlined),
+                  onPressed: () => thFileStore.saveAsTH2File(),
+                ),
+              ],
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.save_as_outlined),
-            onPressed: () => thFileStore.saveAsTH2File(),
-          ),
-          IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
-      body: FutureBuilder<List<String>>(
-        future: loadErrors,
-        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container();
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else if (snapshot.hasData) {
-            final List<String> errorMessages = snapshot.data!;
-            if (errorMessages.isEmpty) {
-              return Center(
-                child: Stack(children: [
-                  THFileWidget(thFileStore.thFile),
-                  _zoomButtonWithOptions(),
-                ]),
-              );
-            } else {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return THErrorDialog(errorMessages: errorMessages);
-                  },
+          body: FutureBuilder<THFileStoreCreateResult>(
+            future: thFileStoreCreateResult,
+            builder: (BuildContext context,
+                AsyncSnapshot<THFileStoreCreateResult> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
                 );
-              });
-              return Container();
-            }
-          } else {
-            throw Exception(
-                'Unexpected snapshot state: ${snapshot.connectionState}');
-          }
-        },
-      ),
+              } else if (snapshot.hasData) {
+                final List<String> errorMessages = snapshot.data!.errors;
+                if (snapshot.data!.isSuccessful) {
+                  return Center(
+                    child: Stack(children: [
+                      THFileWidget(thFileStore),
+                      _zoomButtonWithOptions(),
+                    ]),
+                  );
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return THErrorDialog(errorMessages: errorMessages);
+                      },
+                    );
+                  });
+                  return Container();
+                }
+              } else {
+                throw Exception(
+                    'Unexpected snapshot state: ${snapshot.connectionState}');
+              }
+            },
+          ),
+        );
+      },
     );
   }
 

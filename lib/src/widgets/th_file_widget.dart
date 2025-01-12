@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_paints.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
@@ -15,13 +14,12 @@ import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:mapiah/src/widgets/th_paint_action.dart';
 
 class THFileWidget extends StatefulWidget {
-  final THFile file;
+  final THFileStore thFileStore;
 
-  THFileWidget(this.file) : super(key: ObjectKey(file));
+  THFileWidget(this.thFileStore);
 
   @override
   State<THFileWidget> createState() => _THFileWidgetState();
@@ -33,8 +31,8 @@ class _THFileWidgetState extends State<THFileWidget> {
   THElement? _selectedElement;
   THElement? _originalSelectedElement;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
-  final THFileStore thFileStore = getIt<THFileStore>();
-  late final THFile file = widget.file;
+  late final THFileStore thFileStore = widget.thFileStore;
+  late final THFile file = widget.thFileStore.thFile;
 
   @override
   void initState() {
@@ -67,23 +65,18 @@ class _THFileWidgetState extends State<THFileWidget> {
           onPanStart: _onPanStart,
           onPanUpdate: _onPanUpdate,
           onPanEnd: _onPanEnd,
-          child: Observer(
-            builder: (context) {
-              thFileDisplayStore.trigger;
-              return CustomPaint(
-                /// Creating another CustomPaint as child of this CustomPaint
-                /// because CustomPaint creates 3 layers, from bottom to top:
-                /// painter, child and foregroundPainter.
-                /// The actual drawing is paint as the middle layer (child) so
-                /// I can put grids below it (as the main CustomPaint painter)
-                /// and a scale above it.
-                child: CustomPaint(
-                  painter: THFilePainter(_paintActions.values),
-                  size: thFileDisplayStore.screenSize,
-                ),
-                size: thFileDisplayStore.screenSize,
-              );
-            },
+          child: CustomPaint(
+            /// Creating another CustomPaint as child of this CustomPaint
+            /// because CustomPaint creates 3 layers, from bottom to top:
+            /// painter, child and foregroundPainter.
+            /// The actual drawing is paint as the middle layer (child) so
+            /// I can put grids below it (as the main CustomPaint painter)
+            /// and a scale above it.
+            child: CustomPaint(
+              painter: THFilePainter(_paintActions.values),
+              size: thFileDisplayStore.screenSize,
+            ),
+            size: thFileDisplayStore.screenSize,
           ),
         );
       },
@@ -131,7 +124,6 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _addScrapPaintActions(THScrap scrap) {
-    final THFile file = widget.file;
     final List<int> scrapChildrenMapiahIDs = scrap.childrenMapiahID;
     _paintActions.clear();
 
@@ -189,13 +181,9 @@ class _THFileWidgetState extends State<THFileWidget> {
 class THFilePainter extends CustomPainter {
   final Iterable<THPaintAction> _paintActions;
   late final THFileDisplayStore thFileDisplayStore;
-  late final THFileStore thFileStore;
-  late final THSettingsStore thSettingsStore;
 
   THFilePainter(this._paintActions) {
     thFileDisplayStore = getIt<THFileDisplayStore>();
-    thFileStore = getIt<THFileStore>();
-    thSettingsStore = getIt<THSettingsStore>();
   }
 
   @override
@@ -216,10 +204,9 @@ class THFilePainter extends CustomPainter {
     canvas.scale(1, -1);
 
     Path newPath = Path();
-    final double pointRadius =
-        thFileDisplayStore.scaleScreenToCanvas(thSettingsStore.pointRadius);
-    final double lineThickness =
-        thFileDisplayStore.scaleScreenToCanvas(thSettingsStore.lineThickness);
+    final double pointRadiusOnCanvas = thFileDisplayStore.pointRadiusOnCanvas;
+    final double lineThicknessOnCanvas =
+        thFileDisplayStore.lineThicknessOnCanvas;
     for (final THPaintAction paintAction in _paintActions) {
       switch (paintAction) {
         case THPointPaintAction _:
@@ -229,8 +216,8 @@ class THFilePainter extends CustomPainter {
                   : paintAction.paint;
           // canvas.drawCircle(
           //     paintAction.position, pointRadius, paintAction.paint);
-          canvas.drawCircle(paintAction.position, pointRadius,
-              pointPaint..strokeWidth = lineThickness);
+          canvas.drawCircle(paintAction.position, pointRadiusOnCanvas,
+              pointPaint..strokeWidth = lineThicknessOnCanvas);
         case THBezierCurvePaintAction _:
           newPath.cubicTo(
               paintAction.controlPoint1X,
@@ -245,7 +232,7 @@ class THFilePainter extends CustomPainter {
           newPath = Path()..moveTo(paintAction.x, paintAction.y);
         case THEndPathPaintAction _:
           canvas.drawPath(
-              newPath, paintAction.paint..strokeWidth = lineThickness);
+              newPath, paintAction.paint..strokeWidth = lineThicknessOnCanvas);
       }
     }
   }
