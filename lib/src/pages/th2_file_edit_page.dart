@@ -1,3 +1,4 @@
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
@@ -120,42 +121,58 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   Widget _actionButtons() {
-    return Positioned(
-      bottom: 16,
-      right: 16,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'pan_tool',
-            onPressed: () {
-              thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.view);
-            },
-            tooltip: AppLocalizations.of(context).th2FileEditPagePanTool,
-            child: Image.asset(
-              'assets/icons/pan-tool.png',
-              width: thFloatingActionIconSize,
-              height: thFloatingActionIconSize,
-            ),
+    return Observer(
+      builder: (context) {
+        final bool isPanMode =
+            thFileDisplayStore.th2fileEditMode == TH2FileEditMode.pan;
+        final bool isSelectMode =
+            thFileDisplayStore.th2fileEditMode == TH2FileEditMode.select;
+        final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+        return Positioned(
+          bottom: 16,
+          right: 16,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: 'pan_tool',
+                onPressed: () {
+                  thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.pan);
+                },
+                tooltip: AppLocalizations.of(context).th2FileEditPagePanTool,
+                child: Image.asset(
+                  'assets/icons/pan-tool.png',
+                  width: thFloatingActionIconSize,
+                  height: thFloatingActionIconSize,
+                  color: isPanMode ? colorScheme.onPrimary : null,
+                ),
+                backgroundColor: isPanMode ? colorScheme.primary : null,
+                elevation: isPanMode ? 0 : null,
+              ),
+              SizedBox(height: 8),
+              FloatingActionButton(
+                heroTag: 'select_tool',
+                onPressed: () {
+                  thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.select);
+                },
+                tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
+                child: Image.asset(
+                  'assets/icons/select-tool.png',
+                  width: 24,
+                  height: 24,
+                  color: isSelectMode ? colorScheme.onPrimary : null,
+                ),
+                backgroundColor: isSelectMode ? colorScheme.primary : null,
+                elevation: isSelectMode ? 0 : null,
+              ),
+              SizedBox(height: 8),
+              _zoomButtonWithOptions(),
+            ],
           ),
-          SizedBox(height: 8),
-          FloatingActionButton(
-            heroTag: 'select_tool',
-            onPressed: () {
-              thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.edit);
-            },
-            tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
-            child: Image.asset(
-              'assets/icons/select-tool.png',
-              width: 24,
-              height: 24,
-            ),
-          ),
-          SizedBox(height: 8),
-          _zoomButtonWithOptions(),
-        ],
-      ),
+        );
+      },
     );
   }
 

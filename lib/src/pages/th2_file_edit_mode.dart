@@ -1,1 +1,1 @@
-enum TH2FileEditMode { view, edit }
+enum TH2FileEditMode { pan, select }

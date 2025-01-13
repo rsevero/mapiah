@@ -29,7 +29,7 @@ abstract class THFileDisplayStoreBase with Store {
   bool _canvasScaleTranslationUndefined = true;
 
   @readonly
-  TH2FileEditMode _th2fileEditMode = TH2FileEditMode.view;
+  TH2FileEditMode _th2fileEditMode = TH2FileEditMode.pan;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
