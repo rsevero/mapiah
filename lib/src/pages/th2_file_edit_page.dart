@@ -123,10 +123,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _actionButtons() {
     return Observer(
       builder: (context) {
-        final bool isPanMode =
-            thFileDisplayStore.th2fileEditMode == TH2FileEditMode.pan;
+        final bool isPanMode = thFileDisplayStore.mode == TH2FileEditMode.pan;
         final bool isSelectMode =
-            thFileDisplayStore.th2fileEditMode == TH2FileEditMode.select;
+            thFileDisplayStore.mode == TH2FileEditMode.select;
         final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
         return Positioned(

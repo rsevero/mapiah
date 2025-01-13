@@ -29,7 +29,7 @@ abstract class THFileDisplayStoreBase with Store {
   bool _canvasScaleTranslationUndefined = true;
 
   @readonly
-  TH2FileEditMode _th2fileEditMode = TH2FileEditMode.pan;
+  TH2FileEditMode _mode = TH2FileEditMode.pan;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -38,9 +38,6 @@ abstract class THFileDisplayStoreBase with Store {
 
   double _canvasCenterX = 0.0;
   double _canvasCenterY = 0.0;
-
-  @readonly
-  bool _trigger = false;
 
   @readonly
   bool _shouldRepaint = false;
@@ -88,7 +85,7 @@ abstract class THFileDisplayStoreBase with Store {
 
   @action
   void setTH2FileEditMode(TH2FileEditMode newMode) {
-    _th2fileEditMode = newMode;
+    _mode = newMode;
   }
 
   @action
@@ -96,7 +93,6 @@ abstract class THFileDisplayStoreBase with Store {
     _canvasTranslation += (details.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
     _shouldRepaint = true;
-    _trigger = !_trigger;
   }
 
   @action

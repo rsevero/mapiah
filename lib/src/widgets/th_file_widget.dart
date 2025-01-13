@@ -13,6 +13,7 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_paint_action.dart';
 
@@ -33,13 +34,17 @@ class _THFileWidgetState extends State<THFileWidget> {
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final THFileStore thFileStore = widget.thFileStore;
   late final THFile file = widget.thFileStore.thFile;
+  bool _repaintTrigger = false;
 
   @override
   void initState() {
     super.initState();
     thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
     thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
     for (final int childMapiahID in fileChildrenMapiahIDs) {
       final THElement child = file.elementByMapiahID(childMapiahID);
@@ -47,10 +52,7 @@ class _THFileWidgetState extends State<THFileWidget> {
         _addScrapPaintActions(child);
       }
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         thFileDisplayStore.updateScreenSize(
@@ -59,9 +61,7 @@ class _THFileWidgetState extends State<THFileWidget> {
         if (thFileDisplayStore.canvasScaleTranslationUndefined) {
           thFileDisplayStore.zoomShowAll();
         }
-
         return GestureDetector(
-          // onPanUpdate: thFileDisplayStore.onPanUpdate,
           onPanStart: _onPanStart,
           onPanUpdate: _onPanUpdate,
           onPanEnd: _onPanEnd,
@@ -84,6 +84,10 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _onPanStart(DragStartDetails details) {
+    if (thFileDisplayStore.mode != TH2FileEditMode.select) {
+      return;
+    }
+
     final Offset localPositionOnCanvas =
         thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
     final Iterable<THPaintAction> paintActions = _paintActions.values;
@@ -101,7 +105,22 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
-    if (_selectedElement == null) {
+    switch (thFileDisplayStore.mode) {
+      case TH2FileEditMode.select:
+        _onPanUpdateSelectMode(details);
+        break;
+      case TH2FileEditMode.pan:
+        thFileDisplayStore.onPanUpdate(details);
+        setState(() {
+          _repaintTrigger = !_repaintTrigger;
+        });
+        break;
+    }
+  }
+
+  void _onPanUpdateSelectMode(DragUpdateDetails details) {
+    if ((_selectedElement == null) ||
+        (thFileDisplayStore.mode != TH2FileEditMode.select)) {
       return;
     }
 

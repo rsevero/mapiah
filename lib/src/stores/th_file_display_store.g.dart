@@ -83,39 +83,21 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
     });
   }
 
-  late final _$_th2fileEditModeAtom =
-      Atom(name: 'THFileDisplayStoreBase._th2fileEditMode', context: context);
+  late final _$_modeAtom =
+      Atom(name: 'THFileDisplayStoreBase._mode', context: context);
 
-  TH2FileEditMode get th2fileEditMode {
-    _$_th2fileEditModeAtom.reportRead();
-    return super._th2fileEditMode;
+  TH2FileEditMode get mode {
+    _$_modeAtom.reportRead();
+    return super._mode;
   }
 
   @override
-  TH2FileEditMode get _th2fileEditMode => th2fileEditMode;
+  TH2FileEditMode get _mode => mode;
 
   @override
-  set _th2fileEditMode(TH2FileEditMode value) {
-    _$_th2fileEditModeAtom.reportWrite(value, super._th2fileEditMode, () {
-      super._th2fileEditMode = value;
-    });
-  }
-
-  late final _$_triggerAtom =
-      Atom(name: 'THFileDisplayStoreBase._trigger', context: context);
-
-  bool get trigger {
-    _$_triggerAtom.reportRead();
-    return super._trigger;
-  }
-
-  @override
-  bool get _trigger => trigger;
-
-  @override
-  set _trigger(bool value) {
-    _$_triggerAtom.reportWrite(value, super._trigger, () {
-      super._trigger = value;
+  set _mode(TH2FileEditMode value) {
+    _$_modeAtom.reportWrite(value, super._mode, () {
+      super._mode = value;
     });
   }
 
