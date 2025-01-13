@@ -160,8 +160,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
                 child: Image.asset(
                   'assets/icons/select-tool.png',
-                  width: 24,
-                  height: 24,
+                  width: thFloatingActionIconSize,
+                  height: thFloatingActionIconSize,
                   color: isSelectMode ? colorScheme.onPrimary : null,
                 ),
                 backgroundColor: isSelectMode ? colorScheme.primary : null,
