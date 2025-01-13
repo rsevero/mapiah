@@ -2,7 +2,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/stores/th_store_store.dart';
@@ -23,7 +25,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final List<String> loadErrors;
   late final Future<THFileStoreCreateResult> thFileStoreCreateResult;
-  TH2FileEditMode mode = TH2FileEditMode.view;
   bool _thFileStoreLoaded = false;
 
   @override
@@ -93,7 +94,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   return Center(
                     child: Stack(children: [
                       THFileWidget(thFileStore),
-                      _zoomButtonWithOptions(),
+                      _actionButtons(),
                     ]),
                   );
                 } else {
@@ -118,51 +119,89 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     );
   }
 
-  Widget _zoomButtonWithOptions() {
+  Widget _actionButtons() {
     return Positioned(
       bottom: 16,
       right: 16,
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (_isHovered) ...[
-              FloatingActionButton(
-                onPressed: () => thFileDisplayStore.zoomIn(),
-                tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
-                child: Icon(Icons.zoom_in),
-                mini: true,
-              ),
-              SizedBox(width: 8),
-              FloatingActionButton(
-                onPressed: () => thFileDisplayStore.zoomShowAll(),
-                tooltip:
-                    AppLocalizations.of(context).th2FileEditPageZoomShowAll,
-                child: Icon(Icons.zoom_out_map),
-                mini: true,
-              ),
-              SizedBox(width: 8),
-              FloatingActionButton(
-                onPressed: () => thFileDisplayStore.zoomOut(),
-                tooltip: AppLocalizations.of(context).th2FileEditPageZoomOut,
-                child: Icon(Icons.zoom_out),
-                mini: true,
-              ),
-              SizedBox(width: 8),
-            ],
-            FloatingActionButton(
-              onPressed: () {},
-              tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
-              child: SvgPicture.asset('assets/icons/zoom_plus_minus.svg'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'pan_tool',
+            onPressed: () {
+              thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.view);
+            },
+            tooltip: AppLocalizations.of(context).th2FileEditPagePanTool,
+            child: Image.asset(
+              'assets/icons/pan-tool.png',
+              width: thFloatingActionIconSize,
+              height: thFloatingActionIconSize,
             ),
+          ),
+          SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'select_tool',
+            onPressed: () {
+              thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.edit);
+            },
+            tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
+            child: Image.asset(
+              'assets/icons/select-tool.png',
+              width: 24,
+              height: 24,
+            ),
+          ),
+          SizedBox(height: 8),
+          _zoomButtonWithOptions(),
+        ],
+      ),
+    );
+  }
+
+  Widget _zoomButtonWithOptions() {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (_isHovered) ...[
+            FloatingActionButton(
+              heroTag: 'zoom_in',
+              onPressed: () => thFileDisplayStore.zoomIn(),
+              tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
+              child: Icon(Icons.zoom_in, size: thFloatingActionIconSize),
+            ),
+            SizedBox(width: 8),
+            FloatingActionButton(
+              heroTag: 'zoom_show_all',
+              onPressed: () => thFileDisplayStore.zoomShowAll(),
+              tooltip: AppLocalizations.of(context).th2FileEditPageZoomShowAll,
+              child: Icon(Icons.zoom_out_map, size: thFloatingActionIconSize),
+            ),
+            SizedBox(width: 8),
+            FloatingActionButton(
+              heroTag: 'zoom_out',
+              onPressed: () => thFileDisplayStore.zoomOut(),
+              tooltip: AppLocalizations.of(context).th2FileEditPageZoomOut,
+              child: Icon(Icons.zoom_out, size: thFloatingActionIconSize),
+            ),
+            SizedBox(width: 8),
           ],
-        ),
+          FloatingActionButton(
+            heroTag: 'zoom_options',
+            onPressed: () {},
+            tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
+            child: SvgPicture.asset(
+              'assets/icons/zoom_plus_minus.svg',
+              width: thFloatingActionIconSize,
+              height: thFloatingActionIconSize,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-enum TH2FileEditMode { view, edit }

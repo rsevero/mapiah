@@ -51,6 +51,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get th2FileEditPagePanTool => 'Pan';
+
+  @override
+  String get th2FileEditPageSelectTool => 'Select';
+
+  @override
   String get th2FileEditPageZoomIn => 'Zoom In';
 
   @override

@@ -51,6 +51,12 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get th2FileEditPagePanTool => 'Mover ponto de vista';
+
+  @override
+  String get th2FileEditPageSelectTool => 'Selecionar';
+
+  @override
   String get th2FileEditPageZoomIn => 'Aproximar';
 
   @override

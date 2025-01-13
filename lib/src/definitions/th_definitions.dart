@@ -57,6 +57,8 @@ const String thMainConfigFilename = 'mapiah.toml';
 const String thDefaultLocaleID = 'sys';
 const String thEnglishLocaleID = 'en';
 
+const double thFloatingActionIconSize = 32;
+
 const double thDefaultSelectionTolerance = 10.0;
 const double thDefaultPointRadius = 5.0;
 const double thDefaultLineThickness = 2.0;

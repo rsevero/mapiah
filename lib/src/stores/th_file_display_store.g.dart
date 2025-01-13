@@ -83,6 +83,24 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
     });
   }
 
+  late final _$_th2fileEditModeAtom =
+      Atom(name: 'THFileDisplayStoreBase._th2fileEditMode', context: context);
+
+  TH2FileEditMode get th2fileEditMode {
+    _$_th2fileEditModeAtom.reportRead();
+    return super._th2fileEditMode;
+  }
+
+  @override
+  TH2FileEditMode get _th2fileEditMode => th2fileEditMode;
+
+  @override
+  set _th2fileEditMode(TH2FileEditMode value) {
+    _$_th2fileEditModeAtom.reportWrite(value, super._th2fileEditMode, () {
+      super._th2fileEditMode = value;
+    });
+  }
+
   late final _$_triggerAtom =
       Atom(name: 'THFileDisplayStoreBase._trigger', context: context);
 
@@ -128,6 +146,17 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
         name: 'THFileDisplayStoreBase.updateScreenSize');
     try {
       return super.updateScreenSize(newSize);
+    } finally {
+      _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTH2FileEditMode(TH2FileEditMode newMode) {
+    final _$actionInfo = _$THFileDisplayStoreBaseActionController.startAction(
+        name: 'THFileDisplayStoreBase.setTH2FileEditMode');
+    try {
+      return super.setTH2FileEditMode(newMode);
     } finally {
       _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
     }

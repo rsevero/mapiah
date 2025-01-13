@@ -64,6 +64,18 @@
     }
   },
 
+  "th2FileEditPagePanTool": "Pan",
+  "@th2FileEditPagePanTool": {
+    "description": "The label for the pan tool button",
+    "type": "text"
+  },
+
+  "th2FileEditPageSelectTool": "Select",
+  "@th2FileEditPageSelectTool": {
+    "description": "The label for the select tool button",
+    "type": "text"
+  },
+
   "th2FileEditPageZoomIn": "Zoom In",
   "@th2FileEditPageZoomIn": {
     "description": "The label for the zoom in button",

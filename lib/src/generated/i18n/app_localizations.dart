@@ -149,6 +149,18 @@ abstract class AppLocalizations {
   /// **'Loading file {filename} ...'**
   String th2FileEditPageLoadingFile(Object filename);
 
+  /// The label for the pan tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Pan'**
+  String get th2FileEditPagePanTool;
+
+  /// The label for the select tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get th2FileEditPageSelectTool;
+
   /// The label for the zoom in button
   ///
   /// In en, this message translates to:

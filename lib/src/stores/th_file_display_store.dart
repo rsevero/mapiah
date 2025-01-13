@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_display_store.g.dart';
@@ -26,6 +27,9 @@ abstract class THFileDisplayStoreBase with Store {
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
+
+  @readonly
+  TH2FileEditMode _th2fileEditMode = TH2FileEditMode.view;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -80,6 +84,11 @@ abstract class THFileDisplayStoreBase with Store {
 
   double scaleCanvasToScreen(double canvasValue) {
     return canvasValue * _canvasScale;
+  }
+
+  @action
+  void setTH2FileEditMode(TH2FileEditMode newMode) {
+    _th2fileEditMode = newMode;
   }
 
   @action
