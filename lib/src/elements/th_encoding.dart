@@ -14,4 +14,9 @@ class THEncoding extends THElement with THEncodingMappable {
   String get encoding {
     return thFile.encoding;
   }
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THEncoding;
+  }
 }

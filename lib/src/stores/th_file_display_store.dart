@@ -39,9 +39,6 @@ abstract class THFileDisplayStoreBase with Store {
   double _canvasCenterX = 0.0;
   double _canvasCenterY = 0.0;
 
-  @readonly
-  bool _shouldRepaint = false;
-
   double lineThicknessOnCanvas = thDefaultLineThickness;
 
   double pointRadiusOnCanvas = thDefaultPointRadius;
@@ -92,12 +89,6 @@ abstract class THFileDisplayStoreBase with Store {
   void onPanUpdate(DragUpdateDetails details) {
     _canvasTranslation += (details.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
-    _shouldRepaint = true;
-  }
-
-  @action
-  void setShouldRepaint(bool value) {
-    _shouldRepaint = value;
   }
 
   void _setCanvasCenterFromCurrent() {

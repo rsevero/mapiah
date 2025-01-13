@@ -7,4 +7,9 @@ part 'th_multilinecomment.mapper.dart';
 class THMultiLineComment extends THElement
     with THMultiLineCommentMappable, THParent {
   THMultiLineComment(super.parent) : super.addToParent();
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THMultiLineComment;
+  }
 }

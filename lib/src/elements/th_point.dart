@@ -197,6 +197,11 @@ class THPoint extends THElement
     return _pointTypes.contains(pointType);
   }
 
+  @override
+  bool isSameClass(THElement element) {
+    return element is THPoint;
+  }
+
   set pointType(String pointType) {
     if (!hasPointType(pointType)) {
       throw THCustomException("Unrecognized THPoint type '$pointType'.");

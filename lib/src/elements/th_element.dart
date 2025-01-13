@@ -78,6 +78,8 @@ abstract class THElement with THElementMappable {
     final THElement newElement = copyWith();
     return newElement;
   }
+
+  bool isSameClass(THElement element);
 }
 
 /// Parent elements.
@@ -393,5 +395,10 @@ class THFile extends THElement with THFileMappable, THParent {
     }
 
     return _elementByMapiahID[mapiahID]!;
+  }
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THFile;
   }
 }

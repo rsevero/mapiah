@@ -6,4 +6,9 @@ part 'th_endcomment.mapper.dart';
 @MappableClass()
 class THEndcomment extends THElement with THEndcommentMappable {
   THEndcomment(super.parent) : super.addToParent();
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THEndcomment;
+  }
 }

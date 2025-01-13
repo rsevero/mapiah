@@ -101,24 +101,6 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
     });
   }
 
-  late final _$_shouldRepaintAtom =
-      Atom(name: 'THFileDisplayStoreBase._shouldRepaint', context: context);
-
-  bool get shouldRepaint {
-    _$_shouldRepaintAtom.reportRead();
-    return super._shouldRepaint;
-  }
-
-  @override
-  bool get _shouldRepaint => shouldRepaint;
-
-  @override
-  set _shouldRepaint(bool value) {
-    _$_shouldRepaintAtom.reportWrite(value, super._shouldRepaint, () {
-      super._shouldRepaint = value;
-    });
-  }
-
   late final _$THFileDisplayStoreBaseActionController =
       ActionController(name: 'THFileDisplayStoreBase', context: context);
 
@@ -150,17 +132,6 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
         name: 'THFileDisplayStoreBase.onPanUpdate');
     try {
       return super.onPanUpdate(details);
-    } finally {
-      _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setShouldRepaint(bool value) {
-    final _$actionInfo = _$THFileDisplayStoreBaseActionController.startAction(
-        name: 'THFileDisplayStoreBase.setShouldRepaint');
-    try {
-      return super.setShouldRepaint(value);
     } finally {
       _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
     }

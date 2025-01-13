@@ -67,6 +67,11 @@ class THLine extends THElement
     return _lineTypes.contains(aLineType);
   }
 
+  @override
+  bool isSameClass(THElement element) {
+    return element is THLine;
+  }
+
   set lineType(String aLineType) {
     if (!hasLineType(aLineType)) {
       throw THCustomException("Unrecognized THLine type '$aLineType'.");

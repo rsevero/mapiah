@@ -9,4 +9,9 @@ class THMultilineCommentContent extends THElement
   String content;
 
   THMultilineCommentContent(super.parent, this.content) : super.addToParent();
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THMultilineCommentContent;
+  }
 }

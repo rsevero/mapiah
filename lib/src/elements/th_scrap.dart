@@ -35,6 +35,11 @@ class THScrap extends THElement
         super.addToParent();
 
   @override
+  bool isSameClass(THElement element) {
+    return element is THScrap;
+  }
+
+  @override
   String get thID {
     return _thID;
   }

@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_controller.dart';
@@ -25,8 +23,6 @@ abstract class THFileStoreBase with Store {
   final List<String> errorMessages = <String>[];
 
   late final UndoRedoController _undoRedoController;
-
-  late final THFileDisplayStore _thFileDisplayStore;
 
   /// This is a factory constructor that creates a new instance of THFileStore.
   /// It is a static method that returns a Future that contains a tuple of
@@ -71,7 +67,6 @@ abstract class THFileStoreBase with Store {
     if (isSuccessful) {
       _thFile = parsedFile;
       _undoRedoController = UndoRedoController(_thFile);
-      _thFileDisplayStore = getIt<THFileDisplayStore>();
     } else {
       errorMessages.addAll(errors);
     }
@@ -142,7 +137,6 @@ abstract class THFileStoreBase with Store {
         originalPosition: originalPoint.position,
         newPosition: newPoint.position);
     _undoRedoController.execute(command);
-    _thFileDisplayStore.setShouldRepaint(true);
   }
 }
 

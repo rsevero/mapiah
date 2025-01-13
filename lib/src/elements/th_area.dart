@@ -61,4 +61,9 @@ class THArea extends THElement
   String get plaType {
     return _areaType;
   }
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THArea;
+  }
 }

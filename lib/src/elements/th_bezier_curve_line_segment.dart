@@ -27,6 +27,11 @@ class THBezierCurveLineSegment extends THElement
         THPointPositionPart.fromStringList(endPointPosition);
   }
 
+  @override
+  bool isSameClass(THElement element) {
+    return element is THBezierCurveLineSegment;
+  }
+
   double get controlPoint1X {
     return controlPoint1.xDoublePart.value;
   }

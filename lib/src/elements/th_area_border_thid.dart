@@ -15,4 +15,9 @@ class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
           'THAreaBorder parent must be THArea, but it is ${parent.runtimeType}');
     }
   }
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THAreaBorderTHID;
+  }
 }

@@ -12,6 +12,11 @@ class THUnrecognizedCommand extends THElement
       : _value = value,
         super.addToParent();
 
+  @override
+  bool isSameClass(THElement element) {
+    return element is THUnrecognizedCommand;
+  }
+
   get value {
     return _value;
   }

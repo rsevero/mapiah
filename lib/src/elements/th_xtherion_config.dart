@@ -9,4 +9,9 @@ class THXTherionConfig extends THElement with THXTherionConfigMappable {
   String value;
 
   THXTherionConfig(super.parent, this.name, this.value) : super.addToParent();
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THXTherionConfig;
+  }
 }

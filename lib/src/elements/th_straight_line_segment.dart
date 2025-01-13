@@ -19,4 +19,9 @@ class THStraightLineSegment extends THElement
       : super.addToParent() {
     endPointPosition = THPointPositionPart.fromStringList(aPointDataList);
   }
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THStraightLineSegment;
+  }
 }

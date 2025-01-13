@@ -8,4 +8,9 @@ class THComment extends THElement with THCommentMappable {
   String content;
 
   THComment(super.parent, this.content) : super.addToParent();
+
+  @override
+  bool isSameClass(THElement element) {
+    return element is THComment;
+  }
 }
