@@ -60,8 +60,8 @@ class _THFileWidgetState extends State<THFileWidget> {
       return;
     }
 
-    final Offset localPositionOnCanvas =
-        thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
+    // final Offset localPositionOnCanvas =
+    //     thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
     // final Iterable<THPaintAction> paintActions = _paintActions.values;
 
     // for (final THPaintAction action in paintActions) {
