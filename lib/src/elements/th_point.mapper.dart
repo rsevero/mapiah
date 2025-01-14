@@ -14,7 +14,7 @@ class THPointMapper extends ClassMapperBase<THPoint> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THPointMapper._());
       THElementMapper.ensureInitialized();
-      THPointPositionPartMapper.ensureInitialized();
+      THPositionPartMapper.ensureInitialized();
       THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
@@ -30,8 +30,8 @@ class THPointMapper extends ClassMapperBase<THPoint> {
   static String? _$sameLineComment(THPoint v) => v.sameLineComment;
   static const Field<THPoint, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment);
-  static THPointPositionPart _$position(THPoint v) => v.position;
-  static const Field<THPoint, THPointPositionPart> _f$position =
+  static THPositionPart _$position(THPoint v) => v.position;
+  static const Field<THPoint, THPositionPart> _f$position =
       Field('position', _$position);
   static String _$pointType(THPoint v) => v.pointType;
   static const Field<THPoint, String> _f$pointType =
@@ -118,8 +118,7 @@ extension THPointValueCopy<$R, $Out> on ObjectCopyWith<$R, THPoint, $Out> {
 
 abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get position;
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get position;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get optionsList;
   MapCopyWith<$R, String, THCommandOption,
       ObjectCopyWith<$R, THCommandOption, THCommandOption>> get optionsMap;
@@ -128,7 +127,7 @@ abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
       {int? mapiahID,
       THParent? parent,
       String? sameLineComment,
-      THPointPositionPart? position,
+      THPositionPart? position,
       String? pointType,
       List<String>? optionsList,
       Map<String, THCommandOption>? optionsMap});
@@ -144,8 +143,8 @@ class _THPointCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THPoint> $mapper =
       THPointMapper.ensureInitialized();
   @override
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get position => $value.position.copyWith.$chain((v) => call(position: v));
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get position =>
+      $value.position.copyWith.$chain((v) => call(position: v));
   @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
       get optionsList => ListCopyWith(
@@ -164,7 +163,7 @@ class _THPointCopyWithImpl<$R, $Out>
           {int? mapiahID,
           THParent? parent,
           Object? sameLineComment = $none,
-          THPointPositionPart? position,
+          THPositionPart? position,
           String? pointType,
           List<String>? optionsList,
           Map<String, THCommandOption>? optionsMap}) =>

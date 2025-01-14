@@ -113,7 +113,7 @@ class _THFileWidgetState extends State<THFileWidget> {
     setState(() {
       _selectedElement = (_selectedElement! as THPoint)
           .copyWith
-          .position(position: localPositionOnCanvas);
+          .position(coordinates: localPositionOnCanvas);
     });
   }
 

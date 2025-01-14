@@ -4,22 +4,22 @@ import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
-part 'th_point_position_part.mapper.dart';
+part 'th_position_part.mapper.dart';
 
 @MappableClass()
-class THPointPositionPart with THPointPositionPartMappable {
-  late final Offset _position;
+class THPositionPart with THPositionPartMappable {
+  late final Offset _coordinates;
   late final int decimalPositions;
 
-  THPointPositionPart(Offset position, this.decimalPositions) {
-    _position = position;
+  THPositionPart(Offset coordinates, this.decimalPositions) {
+    _coordinates = coordinates;
   }
 
-  THPointPositionPart.fromStrings(String xAsString, String yAsString) {
+  THPositionPart.fromStrings(String xAsString, String yAsString) {
     _fromStrings(xAsString, yAsString);
   }
 
-  THPointPositionPart.fromStringList(List<dynamic> list) {
+  THPositionPart.fromStringList(List<dynamic> list) {
     if (list.length != 2) {
       throw THConvertFromListException('THPointPart', list);
     }
@@ -31,7 +31,7 @@ class THPointPositionPart with THPointPositionPartMappable {
     final THDoublePart xDoublePart = THDoublePart.fromString(xAsString);
     final THDoublePart yDoublePart = THDoublePart.fromString(yAsString);
 
-    _position = Offset(xDoublePart.value, yDoublePart.value);
+    _coordinates = Offset(xDoublePart.value, yDoublePart.value);
     decimalPositions =
         (xDoublePart.decimalPositions > yDoublePart.decimalPositions)
             ? xDoublePart.decimalPositions
@@ -40,12 +40,12 @@ class THPointPositionPart with THPointPositionPartMappable {
 
   @override
   String toString() {
-    return "${THNumericHelper.doubleToString(_position.dx, decimalPositions)} ${THNumericHelper.doubleToString(_position.dy, decimalPositions)}";
+    return "${THNumericHelper.doubleToString(_coordinates.dx, decimalPositions)} ${THNumericHelper.doubleToString(_coordinates.dy, decimalPositions)}";
   }
 
-  Offset get position => _position;
+  Offset get coordinates => _coordinates;
 
-  double get x => _position.dx;
+  double get x => _coordinates.dx;
 
-  double get y => _position.dy;
+  double get y => _coordinates.dy;
 }

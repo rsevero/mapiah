@@ -112,7 +112,7 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = MovePointCommandMapper._());
       CommandMapper.ensureInitialized();
-      THPointPositionPartMapper.ensureInitialized();
+      THPositionPartMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
@@ -124,12 +124,12 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
   static int _$pointMapiahID(MovePointCommand v) => v.pointMapiahID;
   static const Field<MovePointCommand, int> _f$pointMapiahID =
       Field('pointMapiahID', _$pointMapiahID);
-  static THPointPositionPart _$originalPosition(MovePointCommand v) =>
+  static THPositionPart _$originalPosition(MovePointCommand v) =>
       v.originalPosition;
-  static const Field<MovePointCommand, THPointPositionPart>
-      _f$originalPosition = Field('originalPosition', _$originalPosition);
-  static THPointPositionPart _$newPosition(MovePointCommand v) => v.newPosition;
-  static const Field<MovePointCommand, THPointPositionPart> _f$newPosition =
+  static const Field<MovePointCommand, THPositionPart> _f$originalPosition =
+      Field('originalPosition', _$originalPosition);
+  static THPositionPart _$newPosition(MovePointCommand v) => v.newPosition;
+  static const Field<MovePointCommand, THPositionPart> _f$newPosition =
       Field('newPosition', _$newPosition);
   static CommandType _$type(MovePointCommand v) => v.type;
   static const Field<MovePointCommand, CommandType> _f$type =
@@ -210,15 +210,14 @@ extension MovePointCommandValueCopy<$R, $Out>
 
 abstract class MovePointCommandCopyWith<$R, $In extends MovePointCommand, $Out>
     implements CommandCopyWith<$R, $In, $Out> {
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
       get originalPosition;
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get newPosition;
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get newPosition;
   @override
   $R call(
       {int? pointMapiahID,
-      THPointPositionPart? originalPosition,
-      THPointPositionPart? newPosition,
+      THPositionPart? originalPosition,
+      THPositionPart? newPosition,
       CommandType? type,
       String? description});
   MovePointCommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -234,18 +233,17 @@ class _MovePointCommandCopyWithImpl<$R, $Out>
   late final ClassMapperBase<MovePointCommand> $mapper =
       MovePointCommandMapper.ensureInitialized();
   @override
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
       get originalPosition => $value.originalPosition.copyWith
           .$chain((v) => call(originalPosition: v));
   @override
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get newPosition =>
-          $value.newPosition.copyWith.$chain((v) => call(newPosition: v));
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get newPosition =>
+      $value.newPosition.copyWith.$chain((v) => call(newPosition: v));
   @override
   $R call(
           {int? pointMapiahID,
-          THPointPositionPart? originalPosition,
-          THPointPositionPart? newPosition,
+          THPositionPart? originalPosition,
+          THPositionPart? newPosition,
           CommandType? type,
           String? description}) =>
       $apply(FieldCopyWithData({

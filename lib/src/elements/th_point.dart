@@ -7,7 +7,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 part 'th_point.mapper.dart';
 
@@ -43,7 +43,7 @@ part 'th_point.mapper.dart';
 class THPoint extends THElement
     with THPointMappable, THHasOptions
     implements THHasPLAType, THPointInterface {
-  late final THPointPositionPart _position;
+  late final THPositionPart _position;
   late final String _pointType;
 
   static final _pointTypes = <String>{
@@ -171,7 +171,7 @@ class THPoint extends THElement
     super.mapiahID,
     super.parent,
     super.sameLineComment,
-    THPointPositionPart position,
+    THPositionPart position,
     String pointType,
     List<String> optionsList,
     Map<String, THCommandOption> optionsMap,
@@ -182,16 +182,16 @@ class THPoint extends THElement
     addOptionsMap(optionsMap);
   }
 
-  THPoint(super.parent, THPointPositionPart position, String pointType)
+  THPoint(super.parent, THPositionPart coordinates, String pointType)
       : super.addToParent() {
-    _position = position;
+    _position = coordinates;
     _pointType = pointType;
   }
 
   THPoint.fromString(
       super.parent, List<dynamic> pointDataList, String pointType)
       : super.addToParent() {
-    _position = THPointPositionPart.fromStringList(pointDataList);
+    _position = THPositionPart.fromStringList(pointDataList);
     plaType = pointType;
   }
 
@@ -226,18 +226,18 @@ class THPoint extends THElement
     return pointType;
   }
 
-  THPointPositionPart get position {
+  THPositionPart get position {
     return _position;
   }
 
   @override
   double get x {
-    return _position.position.dx;
+    return _position.coordinates.dx;
   }
 
   @override
   double get y {
-    return _position.position.dy;
+    return _position.coordinates.dy;
   }
 
   int get decimalPositions {
@@ -250,7 +250,7 @@ class THPoint extends THElement
 
   @override
   THPoint clone() {
-    final THPointPositionPart clonedPosition = _position.copyWith();
+    final THPositionPart clonedPosition = _position.copyWith();
     final List<String> clonedOptionsList = optionsList.toList();
     final HashMap<String, THCommandOption> clonedOptionsMap =
         HashMap<String, THCommandOption>.from(optionsMap);

@@ -16,7 +16,7 @@ class THSketchCommandOptionMapper
       MapperContainer.globals.use(_instance = THSketchCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
       THFileMapper.ensureInitialized();
-      THPointPositionPartMapper.ensureInitialized();
+      THPositionPartMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -36,8 +36,8 @@ class THSketchCommandOptionMapper
   static String _$filename(THSketchCommandOption v) => v.filename;
   static const Field<THSketchCommandOption, String> _f$filename =
       Field('filename', _$filename);
-  static THPointPositionPart _$point(THSketchCommandOption v) => v.point;
-  static const Field<THSketchCommandOption, THPointPositionPart> _f$point =
+  static THPositionPart _$point(THSketchCommandOption v) => v.point;
+  static const Field<THSketchCommandOption, THPositionPart> _f$point =
       Field('point', _$point);
 
   @override
@@ -117,15 +117,14 @@ abstract class THSketchCommandOptionCopyWith<
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
   THFileCopyWith<$R, THFile, THFile> get thFile;
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get point;
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get point;
   @override
   $R call(
       {THFile? thFile,
       int? parentMapiahID,
       String? optionType,
       String? filename,
-      THPointPositionPart? point});
+      THPositionPart? point});
   THSketchCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -142,15 +141,15 @@ class _THSketchCommandOptionCopyWithImpl<$R, $Out>
   THFileCopyWith<$R, THFile, THFile> get thFile =>
       $value.thFile.copyWith.$chain((v) => call(thFile: v));
   @override
-  THPointPositionPartCopyWith<$R, THPointPositionPart, THPointPositionPart>
-      get point => $value.point.copyWith.$chain((v) => call(point: v));
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get point =>
+      $value.point.copyWith.$chain((v) => call(point: v));
   @override
   $R call(
           {THFile? thFile,
           int? parentMapiahID,
           String? optionType,
           String? filename,
-          THPointPositionPart? point}) =>
+          THPositionPart? point}) =>
       $apply(FieldCopyWithData({
         if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,

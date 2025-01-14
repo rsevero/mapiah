@@ -3,13 +3,13 @@ part of 'command.dart';
 @MappableClass()
 final class MovePointCommand extends Command with MovePointCommandMappable {
   late final int _pointMapiahID;
-  late final THPointPositionPart _originalPosition;
-  late final THPointPositionPart _newPosition;
+  late final THPositionPart _originalPosition;
+  late final THPositionPart _newPosition;
 
   MovePointCommand({
     required int pointMapiahID,
-    required THPointPositionPart originalPosition,
-    required THPointPositionPart newPosition,
+    required THPositionPart originalPosition,
+    required THPositionPart newPosition,
     super.type = CommandType.movePoint,
     super.description = 'Move Point',
   }) : super() {
@@ -46,7 +46,7 @@ final class MovePointCommand extends Command with MovePointCommandMappable {
 
   int get pointMapiahID => _pointMapiahID;
 
-  THPointPositionPart get newPosition => _newPosition;
+  THPositionPart get newPosition => _newPosition;
 
-  THPointPositionPart get originalPosition => _originalPosition;
+  THPositionPart get originalPosition => _originalPosition;
 }

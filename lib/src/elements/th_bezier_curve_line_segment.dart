@@ -2,7 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/parts/th_point_position_part.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 part 'th_bezier_curve_line_segment.mapper.dart';
 
@@ -11,20 +11,19 @@ part 'th_bezier_curve_line_segment.mapper.dart';
 @MappableClass()
 class THBezierCurveLineSegment extends THElement
     with THBezierCurveLineSegmentMappable, THHasOptions, THLineSegment {
-  late final THPointPositionPart controlPoint1;
-  late final THPointPositionPart controlPoint2;
+  late final THPositionPart controlPoint1;
+  late final THPositionPart controlPoint2;
 
   THBezierCurveLineSegment(super.parent, this.controlPoint1, this.controlPoint2,
-      THPointPositionPart endPointPosition)
+      THPositionPart endPointPosition)
       : super.addToParent();
 
   THBezierCurveLineSegment.fromString(super.parent, List<dynamic> controlPoint1,
       List<dynamic> controlPoint2, List<dynamic> endPointPosition)
       : super.addToParent() {
-    this.controlPoint1 = THPointPositionPart.fromStringList(controlPoint1);
-    this.controlPoint2 = THPointPositionPart.fromStringList(controlPoint2);
-    this.endPointPosition =
-        THPointPositionPart.fromStringList(endPointPosition);
+    this.controlPoint1 = THPositionPart.fromStringList(controlPoint1);
+    this.controlPoint2 = THPositionPart.fromStringList(controlPoint2);
+    this.endPointPosition = THPositionPart.fromStringList(endPointPosition);
   }
 
   @override
@@ -33,11 +32,11 @@ class THBezierCurveLineSegment extends THElement
   }
 
   double get controlPoint1X {
-    return controlPoint1.position.dx;
+    return controlPoint1.coordinates.dx;
   }
 
   double get controlPoint1Y {
-    return controlPoint1.position.dy;
+    return controlPoint1.coordinates.dy;
   }
 
   int get controlPoint1DecimalPositions {
@@ -49,11 +48,11 @@ class THBezierCurveLineSegment extends THElement
   }
 
   double get controlPoint2X {
-    return controlPoint2.position.dx;
+    return controlPoint2.coordinates.dx;
   }
 
   double get controlPoint2Y {
-    return controlPoint2.position.dy;
+    return controlPoint2.coordinates.dy;
   }
 
   int get controlPoint2DecimalPositions {
