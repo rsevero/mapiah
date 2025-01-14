@@ -5,7 +5,7 @@ import 'package:mapiah/src/selection/th_element_selectable.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
+import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 
@@ -115,9 +115,8 @@ class _THFileWidgetState extends State<THFileWidget> {
         thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
 
     setState(() {
-      _selectedElement = (_selectedElement! as THPoint)
-          .copyWith
-          .position(coordinates: localPositionOnCanvas);
+      (_selectedElement! as THPoint).position.coordinates =
+          localPositionOnCanvas;
     });
   }
 

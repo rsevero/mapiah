@@ -9,12 +9,10 @@ part 'th_position_part.mapper.dart';
 
 @MappableClass(includeCustomMappers: [OffsetMapper()])
 class THPositionPart with THPositionPartMappable {
-  late final Offset _coordinates;
-  late final int decimalPositions;
+  late Offset coordinates;
+  late int decimalPositions;
 
-  THPositionPart(Offset coordinates, this.decimalPositions) {
-    _coordinates = coordinates;
-  }
+  THPositionPart(this.coordinates, this.decimalPositions);
 
   THPositionPart.fromStrings(String xAsString, String yAsString) {
     _fromStrings(xAsString, yAsString);
@@ -32,7 +30,7 @@ class THPositionPart with THPositionPartMappable {
     final THDoublePart xDoublePart = THDoublePart.fromString(xAsString);
     final THDoublePart yDoublePart = THDoublePart.fromString(yAsString);
 
-    _coordinates = Offset(xDoublePart.value, yDoublePart.value);
+    coordinates = Offset(xDoublePart.value, yDoublePart.value);
     decimalPositions =
         (xDoublePart.decimalPositions > yDoublePart.decimalPositions)
             ? xDoublePart.decimalPositions
@@ -41,12 +39,10 @@ class THPositionPart with THPositionPartMappable {
 
   @override
   String toString() {
-    return "${THNumericHelper.doubleToString(_coordinates.dx, decimalPositions)} ${THNumericHelper.doubleToString(_coordinates.dy, decimalPositions)}";
+    return "${THNumericHelper.doubleToString(coordinates.dx, decimalPositions)} ${THNumericHelper.doubleToString(coordinates.dy, decimalPositions)}";
   }
 
-  Offset get coordinates => _coordinates;
+  double get x => coordinates.dx;
 
-  double get x => _coordinates.dx;
-
-  double get y => _coordinates.dy;
+  double get y => coordinates.dy;
 }

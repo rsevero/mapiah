@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
-import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
+import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/selection/th_element_selectable.dart';
 import 'package:mapiah/src/selection/th_selectable.dart';
 import 'package:mobx/mobx.dart';

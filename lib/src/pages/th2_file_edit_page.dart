@@ -5,7 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
+import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/stores/th_store_store.dart';
