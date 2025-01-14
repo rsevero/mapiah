@@ -191,4 +191,20 @@ abstract class THFileDisplayStoreBase with Store {
 
     _canvasScaleTranslationUndefined = false;
   }
+
+  void transformCanvas(Canvas canvas) {
+    // Transformations are applied on the order they are defined.
+    canvas.scale(_canvasScale);
+    // // Drawing canvas border
+    // canvas.drawRect(
+    //     Rect.fromPoints(
+    //         Offset(0, 0),
+    //         Offset(
+    //           thFileController.canvasSize.width,
+    //           thFileController.canvasSize.height,
+    //         )),
+    //     THPaints.thPaint7);
+    canvas.translate(_canvasTranslation.dx, _canvasTranslation.dy);
+    canvas.scale(1, -1);
+  }
 }

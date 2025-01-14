@@ -5,20 +5,25 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_file_display_store.dart';
 
 class THLinePainter extends CustomPainter {
   final THLine line;
   final Paint linePaint;
   final THFile thFile;
+  final THFileDisplayStore thFileDisplayStore;
 
   THLinePainter({
     super.repaint,
     required this.line,
     required this.linePaint,
+    required this.thFileDisplayStore,
   }) : thFile = line.thFile;
 
   @override
   void paint(Canvas canvas, Size size) {
+    thFileDisplayStore.transformCanvas(canvas);
+
     final List<int> lineSegmentMapiahIDs = line.childrenMapiahID;
     bool isFirst = true;
     final Path path = Path();

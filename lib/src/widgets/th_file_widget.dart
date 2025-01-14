@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
-import 'package:mapiah/src/painters/th_file_painter.dart';
+import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 
 class THFileWidget extends StatefulWidget {
   final THFileStore thFileStore;
@@ -42,13 +43,24 @@ class _THFileWidgetState extends State<THFileWidget> {
         if (thFileDisplayStore.canvasScaleTranslationUndefined) {
           thFileDisplayStore.zoomShowAll();
         }
+
+        final List<THScrapWidget> scrapWidgets = [];
+        final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
+
+        for (final int childMapiahID in fileChildrenMapiahIDs) {
+          final THElement child = file.elementByMapiahID(childMapiahID);
+
+          if (child is THScrap) {
+            scrapWidgets.add(THScrapWidget(child));
+          }
+        }
+
         return GestureDetector(
           onPanStart: _onPanStart,
           onPanUpdate: _onPanUpdate,
           onPanEnd: _onPanEnd,
-          child: CustomPaint(
-            painter: THFilePainter(file),
-            size: thFileDisplayStore.screenSize,
+          child: Stack(
+            children: scrapWidgets,
           ),
         );
       },
