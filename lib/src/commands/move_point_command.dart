@@ -1,6 +1,6 @@
 part of 'command.dart';
 
-@MappableClass()
+@MappableClass(includeCustomMappers: [OffsetMapper()])
 final class MovePointCommand extends Command with MovePointCommandMappable {
   late final int _pointMapiahID;
   late final Offset _originalCoordinates;

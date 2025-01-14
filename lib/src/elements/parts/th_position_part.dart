@@ -1,12 +1,13 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/offset_mapper.dart';
 import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 part 'th_position_part.mapper.dart';
 
-@MappableClass()
+@MappableClass(includeCustomMappers: [OffsetMapper()])
 class THPositionPart with THPositionPartMappable {
   late final Offset _coordinates;
   late final int decimalPositions;

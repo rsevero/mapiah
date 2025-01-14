@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/offset_mapper.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';

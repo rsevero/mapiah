@@ -13,6 +13,7 @@ class THPositionPartMapper extends ClassMapperBase<THPositionPart> {
   static THPositionPartMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THPositionPartMapper._());
+      MapperContainer.globals.useAll([OffsetMapper()]);
     }
     return _instance!;
   }

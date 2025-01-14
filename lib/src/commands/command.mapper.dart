@@ -112,6 +112,7 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = MovePointCommandMapper._());
       CommandMapper.ensureInitialized();
+      MapperContainer.globals.useAll([OffsetMapper()]);
       CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
