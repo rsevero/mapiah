@@ -22,6 +22,7 @@ const String thIndentation = '  ';
 
 const int thMaxEncodingLength = 20;
 const int thMaxFileLineLength = 80;
+const int thMaxDecimalPositions = 6;
 
 const String thDefaultEncoding = 'UTF-8';
 

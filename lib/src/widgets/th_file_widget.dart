@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -112,8 +111,9 @@ class _THFileWidgetState extends State<THFileWidget> {
         thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
 
     setState(() {
-      (_selectedElement! as THPointInterface).x = localPositionOnCanvas.dx;
-      (_selectedElement! as THPointInterface).y = localPositionOnCanvas.dy;
+      _selectedElement = (_selectedElement! as THPoint)
+          .copyWith
+          .position(position: localPositionOnCanvas);
     });
   }
 

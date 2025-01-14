@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -44,8 +43,8 @@ part 'th_point.mapper.dart';
 class THPoint extends THElement
     with THPointMappable, THHasOptions
     implements THHasPLAType, THPointInterface {
-  late THPointPositionPart position;
-  late String _pointType;
+  late final THPointPositionPart _position;
+  late final String _pointType;
 
   static final _pointTypes = <String>{
     'air-draught',
@@ -172,24 +171,27 @@ class THPoint extends THElement
     super.mapiahID,
     super.parent,
     super.sameLineComment,
-    this.position,
+    THPointPositionPart position,
     String pointType,
     List<String> optionsList,
     Map<String, THCommandOption> optionsMap,
   ) : super.notAddToParent() {
+    _position = position;
     _pointType = pointType;
     this.optionsList.addAll(optionsList);
     addOptionsMap(optionsMap);
   }
 
-  THPoint(super.parent, this.position, String pointType) : super.addToParent() {
+  THPoint(super.parent, THPointPositionPart position, String pointType)
+      : super.addToParent() {
+    _position = position;
     _pointType = pointType;
   }
 
   THPoint.fromString(
-      super.parent, List<dynamic> aPointDataList, String pointType)
+      super.parent, List<dynamic> pointDataList, String pointType)
       : super.addToParent() {
-    position = THPointPositionPart.fromStringList(aPointDataList);
+    _position = THPointPositionPart.fromStringList(pointDataList);
     plaType = pointType;
   }
 
@@ -224,65 +226,31 @@ class THPoint extends THElement
     return pointType;
   }
 
+  THPointPositionPart get position {
+    return _position;
+  }
+
   @override
   double get x {
-    return position.xDoublePart.value;
+    return _position.position.dx;
   }
 
   @override
   double get y {
-    return position.yDoublePart.value;
+    return _position.position.dy;
   }
 
-  @override
-  set x(double x) {
-    position.xDoublePart.value = x;
+  int get decimalPositions {
+    return _position.decimalPositions;
   }
 
-  @override
-  set y(double y) {
-    position.yDoublePart.value = y;
-  }
-
-  @override
-  THDoublePart get xDoublePart {
-    return position.xDoublePart;
-  }
-
-  @override
-  THDoublePart get yDoublePart {
-    return position.yDoublePart;
-  }
-
-  @override
-  set xDoublePart(THDoublePart xDoublePart) {
-    position.xDoublePart = xDoublePart;
-  }
-
-  @override
-  set yDoublePart(THDoublePart yDoublePart) {
-    position.yDoublePart = yDoublePart;
-  }
-
-  int get xDecimalPositions {
-    return position.xDoublePart.decimalPositions;
-  }
-
-  int get yDecimalPositions {
-    return position.yDoublePart.decimalPositions;
-  }
-
-  set xDecimalPositions(int decimalPositions) {
-    position.xDoublePart.decimalPositions = decimalPositions;
-  }
-
-  set yDecimalPositions(int decimalPositions) {
-    position.yDoublePart.decimalPositions = decimalPositions;
+  set decimalPositions(int decimalPositions) {
+    _position.decimalPositions = decimalPositions;
   }
 
   @override
   THPoint clone() {
-    final THPointPositionPart clonedPosition = position.copyWith();
+    final THPointPositionPart clonedPosition = _position.copyWith();
     final List<String> clonedOptionsList = optionsList.toList();
     final HashMap<String, THCommandOption> clonedOptionsMap =
         HashMap<String, THCommandOption>.from(optionsMap);

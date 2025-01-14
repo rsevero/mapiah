@@ -1,4 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
@@ -6,18 +8,15 @@ part 'th_point_position_part.mapper.dart';
 
 @MappableClass()
 class THPointPositionPart with THPointPositionPartMappable {
-  late final THDoublePart xDoublePart;
-  late final THDoublePart yDoublePart;
+  late final Offset _position;
+  late final int decimalPositions;
 
-  THPointPositionPart(
-      double x, double y, int xDecimalPositions, int yDecimalPositions) {
-    xDoublePart = THDoublePart(x, xDecimalPositions);
-    yDoublePart = THDoublePart(y, yDecimalPositions);
+  THPointPositionPart(Offset position, this.decimalPositions) {
+    _position = position;
   }
 
   THPointPositionPart.fromStrings(String xAsString, String yAsString) {
-    xDoublePart = THDoublePart.fromString(xAsString);
-    yDoublePart = THDoublePart.fromString(yAsString);
+    _fromStrings(xAsString, yAsString);
   }
 
   THPointPositionPart.fromStringList(List<dynamic> list) {
@@ -25,28 +24,28 @@ class THPointPositionPart with THPointPositionPartMappable {
       throw THConvertFromListException('THPointPart', list);
     }
 
-    xDoublePart = THDoublePart.fromString(list[0].toString());
-    yDoublePart = THDoublePart.fromString(list[1].toString());
+    _fromStrings(list[0].toString(), list[1].toString());
+  }
+
+  void _fromStrings(String xAsString, String yAsString) {
+    final THDoublePart xDoublePart = THDoublePart.fromString(xAsString);
+    final THDoublePart yDoublePart = THDoublePart.fromString(yAsString);
+
+    _position = Offset(xDoublePart.value, yDoublePart.value);
+    decimalPositions =
+        (xDoublePart.decimalPositions > yDoublePart.decimalPositions)
+            ? xDoublePart.decimalPositions
+            : yDoublePart.decimalPositions;
   }
 
   @override
   String toString() {
-    return "${xDoublePart.toString()} ${yDoublePart.toString()}";
+    return "${THNumericHelper.doubleToString(_position.dx, decimalPositions)} ${THNumericHelper.doubleToString(_position.dy, decimalPositions)}";
   }
 
-  double get x => xDoublePart.value;
+  Offset get position => _position;
 
-  double get y => yDoublePart.value;
+  double get x => _position.dx;
 
-  int get xDecimalPositions => xDoublePart.decimalPositions;
-
-  int get yDecimalPositions => yDoublePart.decimalPositions;
-
-  set x(double x) {
-    xDoublePart.value = x;
-  }
-
-  set y(double y) {
-    yDoublePart.value = y;
-  }
+  double get y => _position.dy;
 }

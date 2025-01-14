@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/pages/th2_file_edit_mode.dart';
+import 'package:mapiah/src/selection/th_element_selectable.dart';
+import 'package:mapiah/src/selection/th_selectable.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_display_store.g.dart';
@@ -31,6 +33,9 @@ abstract class THFileDisplayStoreBase with Store {
   @readonly
   TH2FileEditMode _mode = TH2FileEditMode.pan;
 
+  @readonly
+  ObservableMap<int, THSelectable> _selectableElements = ObservableMap();
+
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
 
@@ -45,6 +50,28 @@ abstract class THFileDisplayStoreBase with Store {
 
   double selectionToleranceSquaredOnCanvas =
       thDefaultSelectionTolerance * thDefaultSelectionTolerance;
+
+  @action
+  void addSelectableElement(THElementSelectable selectableElement) {
+    _selectableElements[selectableElement.element.mapiahID] = selectableElement;
+  }
+
+  THElementSelectable? selectableElementContains(Offset canvasCoordinates) {
+    for (final THSelectable selectable in _selectableElements.values) {
+      if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
+        return selectable as THElementSelectable;
+      }
+    }
+
+    return null;
+  }
+
+  bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {
+    final double dx = offset1.dx - offset2.dx;
+    final double dy = offset1.dy - offset2.dy;
+
+    return ((dx * dx) + (dy * dy)) < selectionToleranceSquaredOnCanvas;
+  }
 
   @action
   void updateScreenSize(Size newSize) {

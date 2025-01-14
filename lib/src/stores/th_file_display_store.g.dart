@@ -101,8 +101,38 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
     });
   }
 
+  late final _$_selectableElementsAtom = Atom(
+      name: 'THFileDisplayStoreBase._selectableElements', context: context);
+
+  ObservableMap<int, THSelectable> get selectableElements {
+    _$_selectableElementsAtom.reportRead();
+    return super._selectableElements;
+  }
+
+  @override
+  ObservableMap<int, THSelectable> get _selectableElements =>
+      selectableElements;
+
+  @override
+  set _selectableElements(ObservableMap<int, THSelectable> value) {
+    _$_selectableElementsAtom.reportWrite(value, super._selectableElements, () {
+      super._selectableElements = value;
+    });
+  }
+
   late final _$THFileDisplayStoreBaseActionController =
       ActionController(name: 'THFileDisplayStoreBase', context: context);
+
+  @override
+  void addSelectableElement(THElementSelectable selectableElement) {
+    final _$actionInfo = _$THFileDisplayStoreBaseActionController.startAction(
+        name: 'THFileDisplayStoreBase.addSelectableElement');
+    try {
+      return super.addSelectableElement(selectableElement);
+    } finally {
+      _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void updateScreenSize(Size newSize) {

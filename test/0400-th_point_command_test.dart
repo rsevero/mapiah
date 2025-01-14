@@ -17,7 +17,7 @@ void main() {
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 296.0 468.0 debris
+  point 296 468 debris
 endscrap
 ''',
       },
@@ -445,7 +445,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 station:fixed -id A2
+  point 782 -1740 station:fixed -id A2
 endscrap
 ''',
       },
@@ -493,7 +493,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 station -name A2@final_de_semana
+  point 782 -1740 station -name A2@final_de_semana
 endscrap
 ''',
       },
@@ -503,7 +503,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 station:fixed -name A2@final_de_semana -id A2
+  point 782 -1740 station:fixed -name A2@final_de_semana -id A2
 endscrap
 ''',
       },
@@ -513,7 +513,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 station:fixed -name A2@final_de_semana -id A2
+  point 782 -1740 station:fixed -name A2@final_de_semana -id A2
 endscrap
 ''',
       },
@@ -573,7 +573,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 4122 9321 electric-light -orientation 297.0
+  point 4122 9321 electric-light -orientation 297
 endscrap
 ''',
       },
@@ -728,7 +728,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782.0 -1740.0 section -scrap end_tunnel
+  point 782 -1740 section -scrap end_tunnel
 endscrap
 ''',
       },
@@ -990,7 +990,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2282.0 80 date -value 2022.02.05
+  point 2282 80 date -value 2022.02.05
 endscrap
 ''',
       },
@@ -1001,7 +1001,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2282.0 80 date -value 2022.02.05 -scale xs -align bottom-left
+  point 2282 80 date -value 2022.02.05 -scale xs -align bottom-left
 endscrap
 ''',
       },
@@ -1012,7 +1012,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2282.0 80 date -value -
+  point 2282 80 date -value -
 endscrap
 ''',
       },

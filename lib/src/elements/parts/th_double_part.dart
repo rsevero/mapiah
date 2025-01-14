@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:dart_numerics/dart_numerics.dart' as numerics;
+import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
 
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
@@ -8,62 +8,57 @@ part 'th_double_part.mapper.dart';
 
 @MappableClass()
 class THDoublePart with THDoublePartMappable {
-  late double value;
+  late double _value;
   late int _decimalPositions;
 
-  THDoublePart(this.value, int decimalPositions) {
+  THDoublePart(double value, int decimalPositions) {
+    _value = value;
     this.decimalPositions = decimalPositions;
   }
 
-  THDoublePart.fromString(String aValueString) {
-    fromString(aValueString);
+  THDoublePart.fromString(String valueString) {
+    fromString(valueString);
   }
 
-  set decimalPositions(int aDecimalPositions) {
-    if (aDecimalPositions < 0) {
-      aDecimalPositions = 0;
-    } else if (aDecimalPositions > 20) {
-      aDecimalPositions = 20;
+  set decimalPositions(int decimalPositions) {
+    if (decimalPositions < 0) {
+      decimalPositions = 0;
+    } else if (decimalPositions > thMaxDecimalPositions) {
+      decimalPositions = thMaxDecimalPositions;
     }
 
-    _decimalPositions = aDecimalPositions;
+    _decimalPositions = decimalPositions;
+  }
+
+  double get value {
+    return _value;
   }
 
   int get decimalPositions {
     return _decimalPositions;
   }
 
-  void fromString(String aValueString) {
-    aValueString = aValueString.trim();
+  void fromString(String valueString) {
+    valueString = valueString.trim();
 
-    final aDouble = double.tryParse(aValueString);
-    if (aDouble == null) {
-      throw THConvertFromStringException('THDoublePart', aValueString);
+    final double? doubleValue = double.tryParse(valueString);
+    if (doubleValue == null) {
+      throw THConvertFromStringException('THDoublePart', valueString);
     }
-    value = aDouble;
+    _value = doubleValue;
 
-    final dotPosition = aValueString.indexOf(thDecimalSeparator);
-    decimalPositions =
-        (dotPosition > 0) ? aValueString.length - (dotPosition + 1) : 0;
+    final int dotPosition = valueString.indexOf(thDecimalSeparator);
+    _decimalPositions =
+        (dotPosition > 0) ? valueString.length - (dotPosition + 1) : 0;
   }
 
-  void fromValue(double aValue, int aDecimalPositions) {
-    value = aValue;
-    decimalPositions = aDecimalPositions;
+  void fromValue(double value, int decimalPositions) {
+    _value = value;
+    _decimalPositions = decimalPositions;
   }
 
   @override
   String toString() {
-    double incrementValue = numerics.positiveEpsilonOf(value);
-
-    if (value < 0) {
-      value -= incrementValue;
-    } else {
-      value += incrementValue;
-    }
-
-    var asString = value.toStringAsFixed(decimalPositions);
-
-    return asString;
+    return THNumericHelper.doubleToString(_value, _decimalPositions);
   }
 }

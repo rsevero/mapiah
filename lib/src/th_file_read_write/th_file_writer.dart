@@ -136,16 +136,16 @@ class THFileWriter {
     return asString;
   }
 
-  String _serializePoint(THElement aTHElement) {
-    final aTHPoint = aTHElement as THPoint;
-    var newLine = "point ${aTHPoint.position} ${aTHPoint.plaType}";
-    if (aTHPoint.optionIsSet('subtype')) {
-      newLine += ":${aTHPoint.optionByType('subtype')!.specToFile()}";
+  String _serializePoint(THElement thElement) {
+    final THPoint thPoint = thElement as THPoint;
+    String newLine = "point ${thPoint.position.toString()} ${thPoint.plaType}";
+    if (thPoint.optionIsSet('subtype')) {
+      newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
     }
-    newLine += " ${aTHPoint.optionsAsString()}";
+    newLine += " ${thPoint.optionsAsString()}";
     newLine = newLine.trim();
 
-    return _prepareLine(newLine, aTHPoint);
+    return _prepareLine(newLine, thPoint);
   }
 
   String _serializeLineSegment(THElement aTHElement) {

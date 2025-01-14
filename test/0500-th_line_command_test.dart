@@ -41,9 +41,9 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap scrap1
   line wall
-    355.0 1065.0
-    291.0 499.0
-    450.0 600.0
+    355 1065
+    291 499
+    450 600
   endline
 endscrap
 ''',
@@ -53,11 +53,11 @@ endscrap
         'length': 8,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 meter ]
+scrap scrap1 -scale [ 0 0 1600 0 0 0 40.64 0 meter ]
   line wall
-    355.0 1065.0
-    291.0 499.0
-    450.0 600.0 589.72 521.11 650.0 600.0
+    355 1065
+    291 499
+    450 600 589.72 521.11 650 600
   endline
 endscrap
 ''',
@@ -67,25 +67,25 @@ endscrap
         'length': 32,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap scrap1 -scale [ 0 0 1600 0 0.0 0.0 40.64 0.0 meter ]
+scrap scrap1 -scale [ 0 0 1600 0 0 0 40.64 0 meter ]
   line wall
-    355.0 1065.0
-    291.0 499.0
-    1124.0 503.0
-    1139.0 1079.0
-    355.0 1065.0
+    355 1065
+    291 499
+    1124 503
+    1139 1079
+    355 1065
   endline
-  point 1050.0 900.0 station -name a2
-  point 450.0 900.0 station -name a1
+  point 1050 900 station -name a2
+  point 450 900 station -name a1
   line chimney
-    450.0 900.0
-    450.0 600.0
-    450.0 600.0 589.72 521.11 650.0 600.0
-    731.0 706.0 649.0 898.0 649.0 898.0
-    649.0 898.0 751.0 930.0 850.0 900.0
-    774.0 854.0 850.0 600.0 850.0 600.0
-    1050.0 600.0
-    1050.0 900.0
+    450 900
+    450 600
+    450 600 589.72 521.11 650 600
+    731 706 649 898 649 898
+    649 898 751 930 850 900
+    774 854 850 600 850 600
+    1050 600
+    1050 900
   endline
 endscrap
 ''',
@@ -97,9 +97,9 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap scrap1
   line wall
-    355.0 1065.0 # Comment on data line
-    450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line
-    291.0 499.0
+    355 1065 # Comment on data line
+    450 600 589.72 521.11 650 600 # Comment on another data line
+    291 499
   endline
 endscrap
 ''',
@@ -112,9 +112,9 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap scrap1
   line slope -border on
-    355.0 1065.0 # Comment on data line
-    450.0 600.0 589.72 521.11 650.0 600.0 # Comment that Mapiah will move to the data line above
-    291.0 499.0
+    355 1065 # Comment on data line
+    450 600 589.72 521.11 650 600 # Comment that Mapiah will move to the data line above
+    291 499
   endline
 endscrap
 ''',
@@ -127,9 +127,9 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap scrap1
   line slope -border on
-    355.0 1065.0 # Comment on data line
-    450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line | Comment that Mapiah will join with the comment on the line above
-    291.0 499.0
+    355 1065 # Comment on data line
+    450 600 589.72 521.11 650 600 # Comment on another data line | Comment that Mapiah will join with the comment on the line above
+    291 499
   endline
 endscrap
 ''',
@@ -142,8 +142,8 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap test
   line floor-step
-    650.0 900.0
-    650.0 900.0 827.81 933.28 850.0 900.0
+    650 900
+    650 900 827.81 933.28 850 900
   endline
 endscrap
 ''',
@@ -156,8 +156,8 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap test
   line floor-step
-    650.0 900.0 827.81 933.28 850.0 900.0
-    650.0 900.0
+    650 900 827.81 933.28 850 900
+    650 900
   endline
 endscrap
 ''',

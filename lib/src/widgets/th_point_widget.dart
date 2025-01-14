@@ -18,7 +18,7 @@ class THPointWidget extends CustomPaint {
     required this.screenSize,
   }) : super(
           painter: THPointPainter(
-            point: point,
+            position: Offset(point.x, point.y),
             pointRadius: pointRadius,
             pointPaint: pointPaint,
             thFileDisplayStore: thFileDisplayStore,

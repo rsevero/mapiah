@@ -341,8 +341,7 @@ endscrap
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
 endscrap
 ''',
       },
@@ -351,7 +350,7 @@ endscrap
         'length': 2,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 meter ]
 endscrap
 ''',
       },

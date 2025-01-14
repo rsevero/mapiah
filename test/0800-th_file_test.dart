@@ -53,7 +53,7 @@ endscrap
         'countElements': 4,
         'asFile': r"""encoding UTF-8
 scrap poco_surubim_SCP01
-  point 2374.0 -482.0 station:fixed -name \
+  point 2374 -482 station:fixed -visibility off -name \
       E15@final_de_semana_31_de_julho_de_2016
 endscrap
 """,
@@ -131,8 +131,7 @@ comment
 The scrap below is really complex.
 Take care!!
 endcomment
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
   point 42.1 -5448.8 guano -visibility off -id P1
   comment
 
@@ -156,8 +155,7 @@ comment
 The scrap below is really complex.
 Take care!!
 endcomment
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
   comment
 
 Another comment block.
@@ -180,8 +178,7 @@ comment
 The scrap below is really complex.
 Take care!!
 endcomment
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
   point 322.4 431.7 station -name A1
 endscrap
 """,
@@ -270,8 +267,7 @@ The scrap below is really complex.
 Take care!!
 endcomment
 
-scrap poco_surubim_SCP01 -scale [ -164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 \
-    0.0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
   point 42.1 -5448.8 guano -visibility off -id P1
 
   comment
