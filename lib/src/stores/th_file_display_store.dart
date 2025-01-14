@@ -33,8 +33,7 @@ abstract class THFileDisplayStoreBase with Store {
   @readonly
   TH2FileEditMode _mode = TH2FileEditMode.pan;
 
-  @readonly
-  ObservableMap<int, THSelectable> _selectableElements = ObservableMap();
+  final Map<int, THSelectable> _selectableElements = {};
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -51,12 +50,17 @@ abstract class THFileDisplayStoreBase with Store {
   double selectionToleranceSquaredOnCanvas =
       thDefaultSelectionTolerance * thDefaultSelectionTolerance;
 
-  @action
   void addSelectableElement(THElementSelectable selectableElement) {
     _selectableElements[selectableElement.element.mapiahID] = selectableElement;
   }
 
-  THElementSelectable? selectableElementContains(Offset canvasCoordinates) {
+  void clearSelectableElements() {
+    _selectableElements.clear();
+  }
+
+  THElementSelectable? selectableElementContains(Offset screenCoordinates) {
+    final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+
     for (final THSelectable selectable in _selectableElements.values) {
       if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
         return selectable as THElementSelectable;

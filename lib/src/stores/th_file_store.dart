@@ -134,8 +134,8 @@ abstract class THFileStoreBase with Store {
   ) {
     final MovePointCommand command = MovePointCommand(
         pointMapiahID: originalPoint.mapiahID,
-        originalPosition: originalPoint.position,
-        newPosition: newPoint.position);
+        originalCoordinates: originalPoint.position.coordinates,
+        newCoordinates: newPoint.position.coordinates);
     _undoRedoController.execute(command);
   }
 }

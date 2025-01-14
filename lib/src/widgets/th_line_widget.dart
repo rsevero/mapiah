@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
+import 'package:mapiah/src/selection/th_element_selectable.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 
 class THLineWidget extends StatelessWidget {
@@ -25,6 +26,20 @@ class THLineWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
+        getLineSegmentsMap();
+
+    return CustomPaint(
+      painter: THLinePainter(
+        lineSegmentsMap: lineSegmentsMap,
+        linePaint: linePaint,
+        thFileDisplayStore: thFileDisplayStore,
+      ),
+      size: screenSize,
+    );
+  }
+
+  LinkedHashMap<int, THLinePainterLineSegment> getLineSegmentsMap() {
     final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLinePainterLineSegment>();
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
@@ -44,6 +59,10 @@ class THLineWidget extends StatelessWidget {
           y: lineChild.y,
         );
         isFirst = false;
+        thFileDisplayStore.addSelectableElement(THElementSelectable(
+          element: lineChild,
+          position: lineChild.endPointPosition.coordinates,
+        ));
         continue;
       }
 
@@ -65,16 +84,15 @@ class THLineWidget extends StatelessWidget {
             y: lineChild.y,
           );
           break;
+        default:
+          continue;
       }
+      thFileDisplayStore.addSelectableElement(THElementSelectable(
+        element: lineChild,
+        position: lineChild.endPointPosition.coordinates,
+      ));
     }
 
-    return CustomPaint(
-      painter: THLinePainter(
-        lineSegmentsMap: lineSegmentsMap,
-        linePaint: linePaint,
-        thFileDisplayStore: thFileDisplayStore,
-      ),
-      size: screenSize,
-    );
+    return lineSegmentsMap;
   }
 }

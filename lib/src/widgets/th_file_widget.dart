@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
+import 'package:mapiah/src/selection/th_element_selectable.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -43,6 +44,8 @@ class _THFileWidgetState extends State<THFileWidget> {
           thFileDisplayStore.zoomShowAll();
         }
 
+        thFileDisplayStore.clearSelectableElements();
+
         final List<THScrapWidget> scrapWidgets = [];
         final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
 
@@ -71,20 +74,21 @@ class _THFileWidgetState extends State<THFileWidget> {
       return;
     }
 
-    // final Offset localPositionOnCanvas =
-    //     thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
-    // final Iterable<THPaintAction> paintActions = _paintActions.values;
+    THElementSelectable? selectableElement =
+        thFileDisplayStore.selectableElementContains(details.localPosition);
 
-    // for (final THPaintAction action in paintActions) {
-    //   if (action is THPointPaintAction &&
-    //       action.contains(localPositionOnCanvas)) {
-    //     setState(() {
-    //       _selectedElement = action.element;
-    //       _originalSelectedElement = (_selectedElement! as THPoint).clone();
-    //     });
-    //     break;
-    //   }
-    // }
+    if (selectableElement == null) {
+      return;
+    }
+
+    if (selectableElement.element is! THPoint) {
+      return;
+    }
+
+    setState(() {
+      _selectedElement = selectableElement.element;
+      _originalSelectedElement = (_selectedElement! as THPoint).clone();
+    });
   }
 
   void _onPanUpdate(DragUpdateDetails details) {

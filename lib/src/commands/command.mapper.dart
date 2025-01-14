@@ -112,7 +112,6 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = MovePointCommandMapper._());
       CommandMapper.ensureInitialized();
-      THPositionPartMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
@@ -124,13 +123,13 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
   static int _$pointMapiahID(MovePointCommand v) => v.pointMapiahID;
   static const Field<MovePointCommand, int> _f$pointMapiahID =
       Field('pointMapiahID', _$pointMapiahID);
-  static THPositionPart _$originalPosition(MovePointCommand v) =>
-      v.originalPosition;
-  static const Field<MovePointCommand, THPositionPart> _f$originalPosition =
-      Field('originalPosition', _$originalPosition);
-  static THPositionPart _$newPosition(MovePointCommand v) => v.newPosition;
-  static const Field<MovePointCommand, THPositionPart> _f$newPosition =
-      Field('newPosition', _$newPosition);
+  static Offset _$originalCoordinates(MovePointCommand v) =>
+      v.originalCoordinates;
+  static const Field<MovePointCommand, Offset> _f$originalCoordinates =
+      Field('originalCoordinates', _$originalCoordinates);
+  static Offset _$newCoordinates(MovePointCommand v) => v.newCoordinates;
+  static const Field<MovePointCommand, Offset> _f$newCoordinates =
+      Field('newCoordinates', _$newCoordinates);
   static CommandType _$type(MovePointCommand v) => v.type;
   static const Field<MovePointCommand, CommandType> _f$type =
       Field('type', _$type, opt: true, def: CommandType.movePoint);
@@ -141,8 +140,8 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
   @override
   final MappableFields<MovePointCommand> fields = const {
     #pointMapiahID: _f$pointMapiahID,
-    #originalPosition: _f$originalPosition,
-    #newPosition: _f$newPosition,
+    #originalCoordinates: _f$originalCoordinates,
+    #newCoordinates: _f$newCoordinates,
     #type: _f$type,
     #description: _f$description,
   };
@@ -150,8 +149,8 @@ class MovePointCommandMapper extends ClassMapperBase<MovePointCommand> {
   static MovePointCommand _instantiate(DecodingData data) {
     return MovePointCommand(
         pointMapiahID: data.dec(_f$pointMapiahID),
-        originalPosition: data.dec(_f$originalPosition),
-        newPosition: data.dec(_f$newPosition),
+        originalCoordinates: data.dec(_f$originalCoordinates),
+        newCoordinates: data.dec(_f$newCoordinates),
         type: data.dec(_f$type),
         description: data.dec(_f$description));
   }
@@ -210,14 +209,11 @@ extension MovePointCommandValueCopy<$R, $Out>
 
 abstract class MovePointCommandCopyWith<$R, $In extends MovePointCommand, $Out>
     implements CommandCopyWith<$R, $In, $Out> {
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
-      get originalPosition;
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get newPosition;
   @override
   $R call(
       {int? pointMapiahID,
-      THPositionPart? originalPosition,
-      THPositionPart? newPosition,
+      Offset? originalCoordinates,
+      Offset? newCoordinates,
       CommandType? type,
       String? description});
   MovePointCommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -233,32 +229,26 @@ class _MovePointCommandCopyWithImpl<$R, $Out>
   late final ClassMapperBase<MovePointCommand> $mapper =
       MovePointCommandMapper.ensureInitialized();
   @override
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
-      get originalPosition => $value.originalPosition.copyWith
-          .$chain((v) => call(originalPosition: v));
-  @override
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get newPosition =>
-      $value.newPosition.copyWith.$chain((v) => call(newPosition: v));
-  @override
   $R call(
           {int? pointMapiahID,
-          THPositionPart? originalPosition,
-          THPositionPart? newPosition,
+          Offset? originalCoordinates,
+          Offset? newCoordinates,
           CommandType? type,
           String? description}) =>
       $apply(FieldCopyWithData({
         if (pointMapiahID != null) #pointMapiahID: pointMapiahID,
-        if (originalPosition != null) #originalPosition: originalPosition,
-        if (newPosition != null) #newPosition: newPosition,
+        if (originalCoordinates != null)
+          #originalCoordinates: originalCoordinates,
+        if (newCoordinates != null) #newCoordinates: newCoordinates,
         if (type != null) #type: type,
         if (description != null) #description: description
       }));
   @override
   MovePointCommand $make(CopyWithData data) => MovePointCommand(
       pointMapiahID: data.get(#pointMapiahID, or: $value.pointMapiahID),
-      originalPosition:
-          data.get(#originalPosition, or: $value.originalPosition),
-      newPosition: data.get(#newPosition, or: $value.newPosition),
+      originalCoordinates:
+          data.get(#originalCoordinates, or: $value.originalCoordinates),
+      newCoordinates: data.get(#newCoordinates, or: $value.newCoordinates),
       type: data.get(#type, or: $value.type),
       description: data.get(#description, or: $value.description));
 

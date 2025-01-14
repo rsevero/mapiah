@@ -3,19 +3,19 @@ part of 'command.dart';
 @MappableClass()
 final class MovePointCommand extends Command with MovePointCommandMappable {
   late final int _pointMapiahID;
-  late final THPositionPart _originalPosition;
-  late final THPositionPart _newPosition;
+  late final Offset _originalCoordinates;
+  late final Offset _newCoordinates;
 
   MovePointCommand({
     required int pointMapiahID,
-    required THPositionPart originalPosition,
-    required THPositionPart newPosition,
+    required Offset originalCoordinates,
+    required Offset newCoordinates,
     super.type = CommandType.movePoint,
     super.description = 'Move Point',
   }) : super() {
     _pointMapiahID = pointMapiahID;
-    _originalPosition = originalPosition;
-    _newPosition = newPosition;
+    _originalCoordinates = originalCoordinates;
+    _newCoordinates = newCoordinates;
   }
 
   @override
@@ -24,8 +24,8 @@ final class MovePointCommand extends Command with MovePointCommandMappable {
     /// message on undo and redo are the same.
     final MovePointCommand undoRedoCommand = MovePointCommand(
       pointMapiahID: _pointMapiahID,
-      originalPosition: _newPosition,
-      newPosition: _originalPosition,
+      originalCoordinates: _newCoordinates,
+      newCoordinates: _originalCoordinates,
       description: description,
     );
 
@@ -39,14 +39,15 @@ final class MovePointCommand extends Command with MovePointCommandMappable {
   void _actualExecute(THFile thFile) {
     final THPoint newPoint =
         (thFile.elementByMapiahID(_pointMapiahID) as THPoint)
-            .copyWith(position: _newPosition);
+            .copyWith
+            .position(coordinates: _newCoordinates);
 
     thFile.substituteElement(newPoint);
   }
 
   int get pointMapiahID => _pointMapiahID;
 
-  THPositionPart get newPosition => _newPosition;
+  Offset get newCoordinates => _newCoordinates;
 
-  THPositionPart get originalPosition => _originalPosition;
+  Offset get originalCoordinates => _originalCoordinates;
 }
