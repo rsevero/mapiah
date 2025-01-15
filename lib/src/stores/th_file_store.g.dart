@@ -93,11 +93,49 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   @override
-  void updatePointPosition(THPoint originalPoint, THPoint newPoint) {
+  void updatePointPosition(
+      {required THPoint originalPoint, required THPoint newPoint}) {
     final _$actionInfo = _$THFileStoreBaseActionController.startAction(
         name: 'THFileStoreBase.updatePointPosition');
     try {
-      return super.updatePointPosition(originalPoint, newPoint);
+      return super.updatePointPosition(
+          originalPoint: originalPoint, newPoint: newPoint);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateLinePosition(
+      {required THLine originalLine,
+      required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+      required THLine newLine,
+      required LinkedHashMap<int, THLineSegment> newLineSegmentsMap}) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.updateLinePosition');
+    try {
+      return super.updateLinePosition(
+          originalLine: originalLine,
+          originalLineSegmentsMap: originalLineSegmentsMap,
+          newLine: newLine,
+          newLineSegmentsMap: newLineSegmentsMap);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateLinePositionPerOffset(
+      {required THLine originalLine,
+      required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+      required Offset deltaOnCanvas}) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.updateLinePositionPerOffset');
+    try {
+      return super.updateLinePositionPerOffset(
+          originalLine: originalLine,
+          originalLineSegmentsMap: originalLineSegmentsMap,
+          deltaOnCanvas: deltaOnCanvas);
     } finally {
       _$THFileStoreBaseActionController.endAction(_$actionInfo);
     }

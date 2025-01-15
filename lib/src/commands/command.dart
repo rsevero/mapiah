@@ -1,17 +1,9 @@
-library;
-
-import 'dart:ui';
-
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/offset_mapper.dart';
+import 'package:mapiah/src/commands/command_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 part "command.mapper.dart";
-part "command_type.dart";
-part "move_point_command.dart";
 
 /// Abstract class that defines the structure of a command.
 ///
@@ -34,8 +26,8 @@ abstract class Command with CommandMappable {
   CommandType get type => _type;
 
   UndoRedoCommand execute(THFile thFile) {
-    _undoRedo = _createUndoRedo(thFile);
-    _actualExecute(thFile);
+    _undoRedo = createUndoRedo(thFile);
+    actualExecute(thFile);
 
     return _undoRedo;
   }
@@ -43,7 +35,7 @@ abstract class Command with CommandMappable {
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
-  UndoRedoCommand _createUndoRedo(THFile thFile);
+  UndoRedoCommand createUndoRedo(THFile thFile);
 
-  void _actualExecute(THFile thFile);
+  void actualExecute(THFile thFile);
 }

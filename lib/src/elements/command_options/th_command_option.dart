@@ -11,7 +11,7 @@ abstract class THCommandOption with THCommandOptionMappable {
   late final String _optionType;
 
   // Constructor necessary for dart_mappable support.
-  THCommandOption.withExplicitProperties(
+  THCommandOption.withExplicitParameters(
       THFile thFile, this.parentMapiahID, String optionType) {
     _optionType = optionType;
     _thFile = thFile;
@@ -32,10 +32,4 @@ abstract class THCommandOption with THCommandOptionMappable {
       _thFile.elementByMapiahID(parentMapiahID) as THHasOptions;
 
   String specToFile();
-
-  THCommandOption clone() {
-    final THCommandOption newOption = copyWith();
-
-    return newOption;
-  }
 }

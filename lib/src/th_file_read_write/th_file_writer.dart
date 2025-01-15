@@ -157,14 +157,13 @@ class THFileWriter {
         final THBezierCurveLineSegment aTHBezierCurveLineSegment =
             aTHElement as THBezierCurveLineSegment;
         final String newLine =
-            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPointPosition}";
+            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
         asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
         asString += _linePointOptionsAsString(aTHBezierCurveLineSegment);
       case 'THStraightLineSegment':
         final THStraightLineSegment aTHStraightLineSegment =
             aTHElement as THStraightLineSegment;
-        final String newLine =
-            aTHStraightLineSegment.endPointPosition.toString();
+        final String newLine = aTHStraightLineSegment.endPoint.toString();
         asString += _prepareLine(newLine, aTHStraightLineSegment);
         asString += _linePointOptionsAsString(aTHStraightLineSegment);
       default:
@@ -283,16 +282,19 @@ class THFileWriter {
   }
 
   String _linePointOptionsAsString(THLineSegment lineSegment) {
+    final THHasOptions thHasOptions = lineSegment as THHasOptions;
+    final Iterable<String> optionTypeList = thHasOptions.optionsMap.keys;
     String asString = '';
 
     _increasePrefix();
-    final THHasOptions thHasOptions = lineSegment as THHasOptions;
-    for (String linePointOptionType in thHasOptions.optionsList) {
+
+    for (String linePointOptionType in optionTypeList) {
       String newLine = "$linePointOptionType ";
       newLine +=
           thHasOptions.optionByType(linePointOptionType)!.specToFile().trim();
       asString += "$_prefix${newLine.trim()}\n";
     }
+
     _reducePrefix();
 
     return asString;

@@ -44,7 +44,7 @@ class THNameCommandOptionMapper extends ClassMapperBase<THNameCommandOption> {
   };
 
   static THNameCommandOption _instantiate(DecodingData data) {
-    return THNameCommandOption.withExplicitOptionType(
+    return THNameCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -143,7 +143,7 @@ class _THNameCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THNameCommandOption $make(CopyWithData data) =>
-      THNameCommandOption.withExplicitOptionType(
+      THNameCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

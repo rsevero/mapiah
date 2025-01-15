@@ -23,14 +23,23 @@ class THDatetimePartMapper extends ClassMapperBase<THDatetimePart> {
   static String _$datetime(THDatetimePart v) => v.datetime;
   static const Field<THDatetimePart, String> _f$datetime =
       Field('datetime', _$datetime);
+  static bool _$isRange(THDatetimePart v) => v.isRange;
+  static const Field<THDatetimePart, bool> _f$isRange =
+      Field('isRange', _$isRange);
+  static bool _$isEmpty(THDatetimePart v) => v.isEmpty;
+  static const Field<THDatetimePart, bool> _f$isEmpty =
+      Field('isEmpty', _$isEmpty);
 
   @override
   final MappableFields<THDatetimePart> fields = const {
     #datetime: _f$datetime,
+    #isRange: _f$isRange,
+    #isEmpty: _f$isEmpty,
   };
 
   static THDatetimePart _instantiate(DecodingData data) {
-    return THDatetimePart(data.dec(_f$datetime));
+    return THDatetimePart.withExplicitParameters(
+        data.dec(_f$datetime), data.dec(_f$isRange), data.dec(_f$isEmpty));
   }
 
   @override
@@ -86,7 +95,7 @@ extension THDatetimePartValueCopy<$R, $Out>
 
 abstract class THDatetimePartCopyWith<$R, $In extends THDatetimePart, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? datetime});
+  $R call({String? datetime, bool? isRange, bool? isEmpty});
   THDatetimePartCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -100,11 +109,18 @@ class _THDatetimePartCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THDatetimePart> $mapper =
       THDatetimePartMapper.ensureInitialized();
   @override
-  $R call({String? datetime}) =>
-      $apply(FieldCopyWithData({if (datetime != null) #datetime: datetime}));
+  $R call({String? datetime, bool? isRange, bool? isEmpty}) =>
+      $apply(FieldCopyWithData({
+        if (datetime != null) #datetime: datetime,
+        if (isRange != null) #isRange: isRange,
+        if (isEmpty != null) #isEmpty: isEmpty
+      }));
   @override
   THDatetimePart $make(CopyWithData data) =>
-      THDatetimePart(data.get(#datetime, or: $value.datetime));
+      THDatetimePart.withExplicitParameters(
+          data.get(#datetime, or: $value.datetime),
+          data.get(#isRange, or: $value.isRange),
+          data.get(#isEmpty, or: $value.isEmpty));
 
   @override
   THDatetimePartCopyWith<$R2, THDatetimePart, $Out2> $chain<$R2, $Out2>(

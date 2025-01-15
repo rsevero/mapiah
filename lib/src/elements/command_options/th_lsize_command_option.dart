@@ -19,9 +19,9 @@ class THLSizeCommandOption extends THCommandOption
   late THDoublePart number;
 
   /// Constructor necessary for dart_mappable support.
-  THLSizeCommandOption.withExplicitOptionType(
+  THLSizeCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.number)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

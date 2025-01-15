@@ -16,9 +16,9 @@ class THAuthorCommandOption extends THCommandOption
   late THPersonPart person;
 
   /// Constructor necessary for dart_mappable support.
-  THAuthorCommandOption.withExplicitOptionType(super.thFile,
+  THAuthorCommandOption.withExplicitParameters(super.thFile,
       super.parentMapiahID, super.optionType, this.datetime, this.person)
-      : super.withExplicitProperties();
+      : super.withExplicitParameters();
 
   THAuthorCommandOption(THHasOptions optionParent, this.datetime, this.person)
       : super(optionParent, _thisOptionType);

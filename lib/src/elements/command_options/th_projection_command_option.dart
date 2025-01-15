@@ -50,10 +50,15 @@ class THProjectionCommandOption extends THCommandOption
   };
 
   /// Constructor necessary for dart_mappable support.
-  THProjectionCommandOption.withExplicitOptionType(
-      super.thFile, super.parentMapiahID, super.optionType, this.type,
-      {this.index = '', this.elevationAngle, this.elevationUnit})
-      : super.withExplicitProperties();
+  THProjectionCommandOption.withExplicitParameters(
+    super.thFile,
+    super.parentMapiahID,
+    super.optionType,
+    this.type, {
+    this.index = '',
+    this.elevationAngle,
+    this.elevationUnit,
+  }) : super.withExplicitParameters();
 
   THProjectionCommandOption.fromString(
     THHasOptions optionParent,

@@ -49,7 +49,7 @@ class THContextCommandOptionMapper
   };
 
   static THContextCommandOption _instantiate(DecodingData data) {
-    return THContextCommandOption.withExplicitOptionType(
+    return THContextCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -155,7 +155,7 @@ class _THContextCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THContextCommandOption $make(CopyWithData data) =>
-      THContextCommandOption.withExplicitOptionType(
+      THContextCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

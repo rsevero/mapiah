@@ -36,12 +36,10 @@ class THPointMapper extends ClassMapperBase<THPoint> {
   static String _$pointType(THPoint v) => v.pointType;
   static const Field<THPoint, String> _f$pointType =
       Field('pointType', _$pointType);
-  static List<String> _$optionsList(THPoint v) => v.optionsList;
-  static const Field<THPoint, List<String>> _f$optionsList =
-      Field('optionsList', _$optionsList);
-  static Map<String, THCommandOption> _$optionsMap(THPoint v) => v.optionsMap;
-  static const Field<THPoint, Map<String, THCommandOption>> _f$optionsMap =
-      Field('optionsMap', _$optionsMap);
+  static LinkedHashMap<String, THCommandOption> _$optionsMap(THPoint v) =>
+      v.optionsMap;
+  static const Field<THPoint, LinkedHashMap<String, THCommandOption>>
+      _f$optionsMap = Field('optionsMap', _$optionsMap);
   static int _$parentMapiahID(THPoint v) => v.parentMapiahID;
   static const Field<THPoint, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
@@ -53,7 +51,6 @@ class THPointMapper extends ClassMapperBase<THPoint> {
     #sameLineComment: _f$sameLineComment,
     #position: _f$position,
     #pointType: _f$pointType,
-    #optionsList: _f$optionsList,
     #optionsMap: _f$optionsMap,
     #parentMapiahID: _f$parentMapiahID,
   };
@@ -65,7 +62,6 @@ class THPointMapper extends ClassMapperBase<THPoint> {
         data.dec(_f$sameLineComment),
         data.dec(_f$position),
         data.dec(_f$pointType),
-        data.dec(_f$optionsList),
         data.dec(_f$optionsMap));
   }
 
@@ -119,9 +115,6 @@ extension THPointValueCopy<$R, $Out> on ObjectCopyWith<$R, THPoint, $Out> {
 abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get position;
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get optionsList;
-  MapCopyWith<$R, String, THCommandOption,
-      ObjectCopyWith<$R, THCommandOption, THCommandOption>> get optionsMap;
   @override
   $R call(
       {int? mapiahID,
@@ -129,8 +122,7 @@ abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
       String? sameLineComment,
       THPositionPart? position,
       String? pointType,
-      List<String>? optionsList,
-      Map<String, THCommandOption>? optionsMap});
+      LinkedHashMap<String, THCommandOption>? optionsMap});
   THPointCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -146,34 +138,19 @@ class _THPointCopyWithImpl<$R, $Out>
   THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get position =>
       $value.position.copyWith.$chain((v) => call(position: v));
   @override
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
-      get optionsList => ListCopyWith(
-          $value.optionsList,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(optionsList: v));
-  @override
-  MapCopyWith<$R, String, THCommandOption,
-          ObjectCopyWith<$R, THCommandOption, THCommandOption>>
-      get optionsMap => MapCopyWith(
-          $value.optionsMap,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(optionsMap: v));
-  @override
   $R call(
           {int? mapiahID,
           THParent? parent,
           Object? sameLineComment = $none,
           THPositionPart? position,
           String? pointType,
-          List<String>? optionsList,
-          Map<String, THCommandOption>? optionsMap}) =>
+          LinkedHashMap<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
         if (mapiahID != null) #mapiahID: mapiahID,
         if (parent != null) #parent: parent,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (position != null) #position: position,
         if (pointType != null) #pointType: pointType,
-        if (optionsList != null) #optionsList: optionsList,
         if (optionsMap != null) #optionsMap: optionsMap
       }));
   @override
@@ -183,7 +160,6 @@ class _THPointCopyWithImpl<$R, $Out>
       data.get(#sameLineComment, or: $value.sameLineComment),
       data.get(#position, or: $value.position),
       data.get(#pointType, or: $value.pointType),
-      data.get(#optionsList, or: $value.optionsList),
       data.get(#optionsMap, or: $value.optionsMap));
 
   @override

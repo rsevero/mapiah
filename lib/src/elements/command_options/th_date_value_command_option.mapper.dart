@@ -47,7 +47,7 @@ class THDateValueCommandOptionMapper
   };
 
   static THDateValueCommandOption _instantiate(DecodingData data) {
-    return THDateValueCommandOption.withExplicitOptionType(
+    return THDateValueCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -153,7 +153,7 @@ class _THDateValueCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THDateValueCommandOption $make(CopyWithData data) =>
-      THDateValueCommandOption.withExplicitOptionType(
+      THDateValueCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

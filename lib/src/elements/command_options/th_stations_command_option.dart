@@ -15,9 +15,9 @@ class THStationsCommandOption extends THCommandOption
   List<String> stations;
 
   /// Constructor necessary for dart_mappable support.
-  THStationsCommandOption.withExplicitOptionType(
+  THStationsCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.stations)
-      : super.withExplicitProperties();
+      : super.withExplicitParameters();
 
   THStationsCommandOption(THHasOptions optionParent, this.stations)
       : super(optionParent, _thisOptionType);

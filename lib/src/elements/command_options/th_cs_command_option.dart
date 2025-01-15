@@ -15,9 +15,9 @@ class THCSCommandOption extends THCommandOption with THCSCommandOptionMappable {
   late THCSPart cs;
 
   /// Constructor necessary for dart_mappable support.
-  THCSCommandOption.withExplicitOptionType(
+  THCSCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.cs)
-      : super.withExplicitProperties();
+      : super.withExplicitParameters();
 
   THCSCommandOption.fromString(
       THHasOptions optionParent, String aCSString, bool forOutputOnly)

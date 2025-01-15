@@ -47,7 +47,7 @@ class THMultipleChoiceCommandOptionMapper
   };
 
   static THMultipleChoiceCommandOption _instantiate(DecodingData data) {
-    return THMultipleChoiceCommandOption.withExplicitProperties(
+    return THMultipleChoiceCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -153,7 +153,7 @@ class _THMultipleChoiceCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THMultipleChoiceCommandOption $make(CopyWithData data) =>
-      THMultipleChoiceCommandOption.withExplicitProperties(
+      THMultipleChoiceCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

@@ -18,10 +18,10 @@ class THExploredCommandOption extends THCommandOption
   static const String _thisOptionType = 'explored';
 
   /// Constructor necessary for dart_mappable support.
-  THExploredCommandOption.withExplicitOptionType(
+  THExploredCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, THDoublePart length,
       [String? unit])
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
     this.length = length;
     if (unit != null) {

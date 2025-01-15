@@ -13,9 +13,9 @@ class THTitleCommandOption extends THCommandOption
   static const String _thisOptionType = 'title';
 
   /// Constructor necessary for dart_mappable support.
-  THTitleCommandOption.withExplicitOptionType(
+  THTitleCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, String text)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     this.text = text;
   }
 

@@ -47,7 +47,7 @@ class THUnrecognizedCommandOptionMapper
   };
 
   static THUnrecognizedCommandOption _instantiate(DecodingData data) {
-    return THUnrecognizedCommandOption.withExplicitOptionType(
+    return THUnrecognizedCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -150,7 +150,7 @@ class _THUnrecognizedCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THUnrecognizedCommandOption $make(CopyWithData data) =>
-      THUnrecognizedCommandOption.withExplicitOptionType(
+      THUnrecognizedCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

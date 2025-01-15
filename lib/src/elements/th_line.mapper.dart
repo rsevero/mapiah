@@ -14,6 +14,7 @@ class THLineMapper extends ClassMapperBase<THLine> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THLineMapper._());
       THElementMapper.ensureInitialized();
+      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,28 +22,46 @@ class THLineMapper extends ClassMapperBase<THLine> {
   @override
   final String id = 'THLine';
 
+  static int _$mapiahID(THLine v) => v.mapiahID;
+  static const Field<THLine, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
   static THParent _$parent(THLine v) => v.parent;
   static const Field<THLine, THParent> _f$parent = Field('parent', _$parent);
+  static String? _$sameLineComment(THLine v) => v.sameLineComment;
+  static const Field<THLine, String> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment);
   static String _$lineType(THLine v) => v.lineType;
   static const Field<THLine, String> _f$lineType =
       Field('lineType', _$lineType);
+  static List<int> _$childrenMapiahID(THLine v) => v.childrenMapiahID;
+  static const Field<THLine, List<int>> _f$childrenMapiahID =
+      Field('childrenMapiahID', _$childrenMapiahID);
+  static LinkedHashMap<String, THCommandOption> _$optionsMap(THLine v) =>
+      v.optionsMap;
+  static const Field<THLine, LinkedHashMap<String, THCommandOption>>
+      _f$optionsMap = Field('optionsMap', _$optionsMap);
   static int _$parentMapiahID(THLine v) => v.parentMapiahID;
   static const Field<THLine, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
-  static String? _$sameLineComment(THLine v) => v.sameLineComment;
-  static const Field<THLine, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
 
   @override
   final MappableFields<THLine> fields = const {
+    #mapiahID: _f$mapiahID,
     #parent: _f$parent,
-    #lineType: _f$lineType,
-    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #lineType: _f$lineType,
+    #childrenMapiahID: _f$childrenMapiahID,
+    #optionsMap: _f$optionsMap,
+    #parentMapiahID: _f$parentMapiahID,
   };
 
   static THLine _instantiate(DecodingData data) {
-    return THLine(data.dec(_f$parent), data.dec(_f$lineType));
+    return THLine.notAddedToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parent),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$lineType),
+        data.dec(_f$childrenMapiahID),
+        data.dec(_f$optionsMap));
   }
 
   @override
@@ -91,8 +110,15 @@ extension THLineValueCopy<$R, $Out> on ObjectCopyWith<$R, THLine, $Out> {
 
 abstract class THLineCopyWith<$R, $In extends THLine, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
+  ListCopyWith<$R, int, ObjectCopyWith<$R, int, int>> get childrenMapiahID;
   @override
-  $R call({THParent? parent, String? lineType});
+  $R call(
+      {int? mapiahID,
+      THParent? parent,
+      String? sameLineComment,
+      String? lineType,
+      List<int>? childrenMapiahID,
+      LinkedHashMap<String, THCommandOption>? optionsMap});
   THLineCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -103,14 +129,35 @@ class _THLineCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, THLine, $Out>
   @override
   late final ClassMapperBase<THLine> $mapper = THLineMapper.ensureInitialized();
   @override
-  $R call({THParent? parent, String? lineType}) => $apply(FieldCopyWithData({
+  ListCopyWith<$R, int, ObjectCopyWith<$R, int, int>> get childrenMapiahID =>
+      ListCopyWith(
+          $value.childrenMapiahID,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(childrenMapiahID: v));
+  @override
+  $R call(
+          {int? mapiahID,
+          THParent? parent,
+          Object? sameLineComment = $none,
+          String? lineType,
+          List<int>? childrenMapiahID,
+          LinkedHashMap<String, THCommandOption>? optionsMap}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
         if (parent != null) #parent: parent,
-        if (lineType != null) #lineType: lineType
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (lineType != null) #lineType: lineType,
+        if (childrenMapiahID != null) #childrenMapiahID: childrenMapiahID,
+        if (optionsMap != null) #optionsMap: optionsMap
       }));
   @override
-  THLine $make(CopyWithData data) => THLine(
+  THLine $make(CopyWithData data) => THLine.notAddedToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
       data.get(#parent, or: $value.parent),
-      data.get(#lineType, or: $value.lineType));
+      data.get(#sameLineComment, or: $value.sameLineComment),
+      data.get(#lineType, or: $value.lineType),
+      data.get(#childrenMapiahID, or: $value.childrenMapiahID),
+      data.get(#optionsMap, or: $value.optionsMap));
 
   @override
   THLineCopyWith<$R2, THLine, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>

@@ -117,7 +117,7 @@ class THProjectionCommandOptionMapper
   };
 
   static THProjectionCommandOption _instantiate(DecodingData data) {
-    return THProjectionCommandOption.withExplicitOptionType(data.dec(_f$thFile),
+    return THProjectionCommandOption.withExplicitParameters(data.dec(_f$thFile),
         data.dec(_f$parentMapiahID), data.dec(_f$optionType), data.dec(_f$type),
         index: data.dec(_f$index),
         elevationAngle: data.dec(_f$elevationAngle),
@@ -240,7 +240,7 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THProjectionCommandOption $make(CopyWithData data) =>
-      THProjectionCommandOption.withExplicitOptionType(
+      THProjectionCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

@@ -30,7 +30,7 @@ class THPassageHeightValueCommandOption extends THCommandOption
   late bool _plusHasSign;
 
   /// Constructor necessary for dart_mappable support.
-  THPassageHeightValueCommandOption.withExplicitOptionType(
+  THPassageHeightValueCommandOption.withExplicitParameters(
       super.thFile,
       super.parentMapiahID,
       super.optionType,
@@ -38,7 +38,7 @@ class THPassageHeightValueCommandOption extends THCommandOption
       THDoublePart? minusNumber,
       THPassageHeightModes mode,
       bool plusHasSign)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
 
     _plusNumber = plusNumber;

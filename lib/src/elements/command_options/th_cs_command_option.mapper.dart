@@ -44,7 +44,7 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
   };
 
   static THCSCommandOption _instantiate(DecodingData data) {
-    return THCSCommandOption.withExplicitOptionType(data.dec(_f$thFile),
+    return THCSCommandOption.withExplicitParameters(data.dec(_f$thFile),
         data.dec(_f$parentMapiahID), data.dec(_f$optionType), data.dec(_f$cs));
   }
 
@@ -141,7 +141,7 @@ class _THCSCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THCSCommandOption $make(CopyWithData data) =>
-      THCSCommandOption.withExplicitOptionType(
+      THCSCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

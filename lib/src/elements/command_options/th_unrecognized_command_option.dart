@@ -13,9 +13,9 @@ class THUnrecognizedCommandOption extends THCommandOption
   String? value;
 
   /// Constructor necessary for dart_mappable support.
-  THUnrecognizedCommandOption.withExplicitOptionType(
+  THUnrecognizedCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.value)
-      : super.withExplicitProperties();
+      : super.withExplicitParameters();
 
   THUnrecognizedCommandOption(THHasOptions optionParent, this.value)
       : super(optionParent, _thisOptionType);

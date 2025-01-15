@@ -55,7 +55,7 @@ class THAltitudeCommandOptionMapper
   };
 
   static THAltitudeCommandOption _instantiate(DecodingData data) {
-    return THAltitudeCommandOption.withExplicitOptionType(
+    return THAltitudeCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -165,7 +165,7 @@ class _THAltitudeCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THAltitudeCommandOption $make(CopyWithData data) =>
-      THAltitudeCommandOption.withExplicitOptionType(
+      THAltitudeCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

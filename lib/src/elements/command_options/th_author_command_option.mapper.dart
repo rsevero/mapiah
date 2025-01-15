@@ -51,7 +51,7 @@ class THAuthorCommandOptionMapper
   };
 
   static THAuthorCommandOption _instantiate(DecodingData data) {
-    return THAuthorCommandOption.withExplicitOptionType(
+    return THAuthorCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -164,7 +164,7 @@ class _THAuthorCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THAuthorCommandOption $make(CopyWithData data) =>
-      THAuthorCommandOption.withExplicitOptionType(
+      THAuthorCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

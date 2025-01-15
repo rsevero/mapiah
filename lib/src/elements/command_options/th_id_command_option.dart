@@ -12,10 +12,10 @@ class THIDCommandOption extends THCommandOption with THIDCommandOptionMappable {
   late String _thID;
 
   /// Constructor necessary for dart_mappable support.
-  THIDCommandOption.withExplicitOptionType(
+  THIDCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, String thID)
       : _thID = thID,
-        super.withExplicitProperties();
+        super.withExplicitParameters();
 
   THIDCommandOption(THHasOptions optionParent, String thID)
       : _thID = thID,

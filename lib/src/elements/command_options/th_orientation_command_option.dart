@@ -19,9 +19,9 @@ class THOrientationCommandOption extends THCommandOption
   late THDoublePart _azimuth;
 
   /// Constructor necessary for dart_mappable support.
-  THOrientationCommandOption.withExplicitOptionType(super.thFile,
+  THOrientationCommandOption.withExplicitParameters(super.thFile,
       super.parentMapiahID, super.optionType, THDoublePart azimuth)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent(optionParent);
     this.azimuth = azimuth;
   }

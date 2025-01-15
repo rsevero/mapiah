@@ -16,9 +16,9 @@ class THNameCommandOption extends THCommandOption
   late String reference;
 
   /// Constructor necessary for dart_mappable support.
-  THNameCommandOption.withExplicitOptionType(
+  THNameCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.reference)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

@@ -18,10 +18,10 @@ class THDistCommandOption extends THCommandOption
   static const String _thisOptionType = 'dist';
 
   /// Constructor necessary for dart_mappable support.
-  THDistCommandOption.withExplicitOptionType(
+  THDistCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, THDoublePart length,
       [String? unit])
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
     this.length = length;
     if (unit != null) {

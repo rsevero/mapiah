@@ -14,8 +14,9 @@ class THStraightLineSegmentMapper
   static THStraightLineSegmentMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THStraightLineSegmentMapper._());
-      THElementMapper.ensureInitialized();
+      THLineSegmentMapper.ensureInitialized();
       THPositionPartMapper.ensureInitialized();
+      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,32 +24,46 @@ class THStraightLineSegmentMapper
   @override
   final String id = 'THStraightLineSegment';
 
+  static int _$mapiahID(THStraightLineSegment v) => v.mapiahID;
+  static const Field<THStraightLineSegment, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static THParent _$parent(THStraightLineSegment v) => v.parent;
   static const Field<THStraightLineSegment, THParent> _f$parent =
       Field('parent', _$parent);
-  static THPositionPart _$endPointPosition(THStraightLineSegment v) =>
-      v.endPointPosition;
-  static const Field<THStraightLineSegment, THPositionPart>
-      _f$endPointPosition = Field('endPointPosition', _$endPointPosition);
-  static int _$parentMapiahID(THStraightLineSegment v) => v.parentMapiahID;
-  static const Field<THStraightLineSegment, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
   static String? _$sameLineComment(THStraightLineSegment v) =>
       v.sameLineComment;
   static const Field<THStraightLineSegment, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
+  static THPositionPart _$endPoint(THStraightLineSegment v) => v.endPoint;
+  static const Field<THStraightLineSegment, THPositionPart> _f$endPoint =
+      Field('endPoint', _$endPoint);
+  static LinkedHashMap<String, THCommandOption> _$optionsMap(
+          THStraightLineSegment v) =>
+      v.optionsMap;
+  static const Field<THStraightLineSegment,
+          LinkedHashMap<String, THCommandOption>> _f$optionsMap =
+      Field('optionsMap', _$optionsMap);
+  static int _$parentMapiahID(THStraightLineSegment v) => v.parentMapiahID;
+  static const Field<THStraightLineSegment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
 
   @override
   final MappableFields<THStraightLineSegment> fields = const {
+    #mapiahID: _f$mapiahID,
     #parent: _f$parent,
-    #endPointPosition: _f$endPointPosition,
-    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #endPoint: _f$endPoint,
+    #optionsMap: _f$optionsMap,
+    #parentMapiahID: _f$parentMapiahID,
   };
 
   static THStraightLineSegment _instantiate(DecodingData data) {
-    return THStraightLineSegment(
-        data.dec(_f$parent), data.dec(_f$endPointPosition));
+    return THStraightLineSegment.withExplicitParameters(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parent),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$endPoint),
+        data.dec(_f$optionsMap));
   }
 
   @override
@@ -107,11 +122,16 @@ extension THStraightLineSegmentValueCopy<$R, $Out>
 abstract class THStraightLineSegmentCopyWith<
     $R,
     $In extends THStraightLineSegment,
-    $Out> implements THElementCopyWith<$R, $In, $Out> {
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
-      get endPointPosition;
+    $Out> implements THLineSegmentCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent, THPositionPart? endPointPosition});
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get endPoint;
+  @override
+  $R call(
+      {int? mapiahID,
+      THParent? parent,
+      String? sameLineComment,
+      THPositionPart? endPoint,
+      LinkedHashMap<String, THCommandOption>? optionsMap});
   THStraightLineSegmentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -125,19 +145,30 @@ class _THStraightLineSegmentCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THStraightLineSegment> $mapper =
       THStraightLineSegmentMapper.ensureInitialized();
   @override
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
-      get endPointPosition => $value.endPointPosition.copyWith
-          .$chain((v) => call(endPointPosition: v));
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get endPoint =>
+      $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
   @override
-  $R call({THParent? parent, THPositionPart? endPointPosition}) =>
+  $R call(
+          {int? mapiahID,
+          THParent? parent,
+          Object? sameLineComment = $none,
+          THPositionPart? endPoint,
+          LinkedHashMap<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
         if (parent != null) #parent: parent,
-        if (endPointPosition != null) #endPointPosition: endPointPosition
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (endPoint != null) #endPoint: endPoint,
+        if (optionsMap != null) #optionsMap: optionsMap
       }));
   @override
-  THStraightLineSegment $make(CopyWithData data) => THStraightLineSegment(
-      data.get(#parent, or: $value.parent),
-      data.get(#endPointPosition, or: $value.endPointPosition));
+  THStraightLineSegment $make(CopyWithData data) =>
+      THStraightLineSegment.withExplicitParameters(
+          data.get(#mapiahID, or: $value.mapiahID),
+          data.get(#parent, or: $value.parent),
+          data.get(#sameLineComment, or: $value.sameLineComment),
+          data.get(#endPoint, or: $value.endPoint),
+          data.get(#optionsMap, or: $value.optionsMap));
 
   @override
   THStraightLineSegmentCopyWith<$R2, THStraightLineSegment, $Out2>

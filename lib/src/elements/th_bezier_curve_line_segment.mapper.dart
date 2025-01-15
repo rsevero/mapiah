@@ -15,8 +15,9 @@ class THBezierCurveLineSegmentMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THBezierCurveLineSegmentMapper._());
-      THElementMapper.ensureInitialized();
+      THLineSegmentMapper.ensureInitialized();
       THPositionPartMapper.ensureInitialized();
+      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,9 +25,16 @@ class THBezierCurveLineSegmentMapper
   @override
   final String id = 'THBezierCurveLineSegment';
 
+  static int _$mapiahID(THBezierCurveLineSegment v) => v.mapiahID;
+  static const Field<THBezierCurveLineSegment, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static THParent _$parent(THBezierCurveLineSegment v) => v.parent;
   static const Field<THBezierCurveLineSegment, THParent> _f$parent =
       Field('parent', _$parent);
+  static String? _$sameLineComment(THBezierCurveLineSegment v) =>
+      v.sameLineComment;
+  static const Field<THBezierCurveLineSegment, String> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment);
   static THPositionPart _$controlPoint1(THBezierCurveLineSegment v) =>
       v.controlPoint1;
   static const Field<THBezierCurveLineSegment, THPositionPart>
@@ -35,34 +43,40 @@ class THBezierCurveLineSegmentMapper
       v.controlPoint2;
   static const Field<THBezierCurveLineSegment, THPositionPart>
       _f$controlPoint2 = Field('controlPoint2', _$controlPoint2);
-  static THPositionPart _$endPointPosition(THBezierCurveLineSegment v) =>
-      v.endPointPosition;
-  static const Field<THBezierCurveLineSegment, THPositionPart>
-      _f$endPointPosition = Field('endPointPosition', _$endPointPosition);
+  static THPositionPart _$endPoint(THBezierCurveLineSegment v) => v.endPoint;
+  static const Field<THBezierCurveLineSegment, THPositionPart> _f$endPoint =
+      Field('endPoint', _$endPoint);
+  static LinkedHashMap<String, THCommandOption> _$optionsMap(
+          THBezierCurveLineSegment v) =>
+      v.optionsMap;
+  static const Field<THBezierCurveLineSegment,
+          LinkedHashMap<String, THCommandOption>> _f$optionsMap =
+      Field('optionsMap', _$optionsMap);
   static int _$parentMapiahID(THBezierCurveLineSegment v) => v.parentMapiahID;
   static const Field<THBezierCurveLineSegment, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
-  static String? _$sameLineComment(THBezierCurveLineSegment v) =>
-      v.sameLineComment;
-  static const Field<THBezierCurveLineSegment, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
 
   @override
   final MappableFields<THBezierCurveLineSegment> fields = const {
+    #mapiahID: _f$mapiahID,
     #parent: _f$parent,
+    #sameLineComment: _f$sameLineComment,
     #controlPoint1: _f$controlPoint1,
     #controlPoint2: _f$controlPoint2,
-    #endPointPosition: _f$endPointPosition,
+    #endPoint: _f$endPoint,
+    #optionsMap: _f$optionsMap,
     #parentMapiahID: _f$parentMapiahID,
-    #sameLineComment: _f$sameLineComment,
   };
 
   static THBezierCurveLineSegment _instantiate(DecodingData data) {
-    return THBezierCurveLineSegment(
+    return THBezierCurveLineSegment.withExplicitParameters(
+        data.dec(_f$mapiahID),
         data.dec(_f$parent),
+        data.dec(_f$sameLineComment),
         data.dec(_f$controlPoint1),
         data.dec(_f$controlPoint2),
-        data.dec(_f$endPointPosition));
+        data.dec(_f$endPoint),
+        data.dec(_f$optionsMap));
   }
 
   @override
@@ -121,17 +135,20 @@ extension THBezierCurveLineSegmentValueCopy<$R, $Out>
 abstract class THBezierCurveLineSegmentCopyWith<
     $R,
     $In extends THBezierCurveLineSegment,
-    $Out> implements THElementCopyWith<$R, $In, $Out> {
+    $Out> implements THLineSegmentCopyWith<$R, $In, $Out> {
   THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get controlPoint1;
   THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get controlPoint2;
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
-      get endPointPosition;
+  @override
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get endPoint;
   @override
   $R call(
-      {THParent? parent,
+      {int? mapiahID,
+      THParent? parent,
+      String? sameLineComment,
       THPositionPart? controlPoint1,
       THPositionPart? controlPoint2,
-      THPositionPart? endPointPosition});
+      THPositionPart? endPoint,
+      LinkedHashMap<String, THCommandOption>? optionsMap});
   THBezierCurveLineSegmentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -154,27 +171,36 @@ class _THBezierCurveLineSegmentCopyWithImpl<$R, $Out>
       get controlPoint2 =>
           $value.controlPoint2.copyWith.$chain((v) => call(controlPoint2: v));
   @override
-  THPositionPartCopyWith<$R, THPositionPart, THPositionPart>
-      get endPointPosition => $value.endPointPosition.copyWith
-          .$chain((v) => call(endPointPosition: v));
+  THPositionPartCopyWith<$R, THPositionPart, THPositionPart> get endPoint =>
+      $value.endPoint.copyWith.$chain((v) => call(endPoint: v));
   @override
   $R call(
-          {THParent? parent,
+          {int? mapiahID,
+          THParent? parent,
+          Object? sameLineComment = $none,
           THPositionPart? controlPoint1,
           THPositionPart? controlPoint2,
-          THPositionPart? endPointPosition}) =>
+          THPositionPart? endPoint,
+          LinkedHashMap<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
         if (parent != null) #parent: parent,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (controlPoint1 != null) #controlPoint1: controlPoint1,
         if (controlPoint2 != null) #controlPoint2: controlPoint2,
-        if (endPointPosition != null) #endPointPosition: endPointPosition
+        if (endPoint != null) #endPoint: endPoint,
+        if (optionsMap != null) #optionsMap: optionsMap
       }));
   @override
-  THBezierCurveLineSegment $make(CopyWithData data) => THBezierCurveLineSegment(
-      data.get(#parent, or: $value.parent),
-      data.get(#controlPoint1, or: $value.controlPoint1),
-      data.get(#controlPoint2, or: $value.controlPoint2),
-      data.get(#endPointPosition, or: $value.endPointPosition));
+  THBezierCurveLineSegment $make(CopyWithData data) =>
+      THBezierCurveLineSegment.withExplicitParameters(
+          data.get(#mapiahID, or: $value.mapiahID),
+          data.get(#parent, or: $value.parent),
+          data.get(#sameLineComment, or: $value.sameLineComment),
+          data.get(#controlPoint1, or: $value.controlPoint1),
+          data.get(#controlPoint2, or: $value.controlPoint2),
+          data.get(#endPoint, or: $value.endPoint),
+          data.get(#optionsMap, or: $value.optionsMap));
 
   @override
   THBezierCurveLineSegmentCopyWith<$R2, THBezierCurveLineSegment, $Out2>

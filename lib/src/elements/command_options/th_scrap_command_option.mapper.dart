@@ -44,7 +44,7 @@ class THScrapCommandOptionMapper extends ClassMapperBase<THScrapCommandOption> {
   };
 
   static THScrapCommandOption _instantiate(DecodingData data) {
-    return THScrapCommandOption.withExplicitOptionType(
+    return THScrapCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -145,7 +145,7 @@ class _THScrapCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THScrapCommandOption $make(CopyWithData data) =>
-      THScrapCommandOption.withExplicitOptionType(
+      THScrapCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

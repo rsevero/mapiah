@@ -173,12 +173,10 @@ class THPoint extends THElement
     super.sameLineComment,
     THPositionPart position,
     String pointType,
-    List<String> optionsList,
-    Map<String, THCommandOption> optionsMap,
+    LinkedHashMap<String, THCommandOption> optionsMap,
   ) : super.notAddToParent() {
     _position = position;
     _pointType = pointType;
-    this.optionsList.addAll(optionsList);
     addOptionsMap(optionsMap);
   }
 
@@ -246,19 +244,5 @@ class THPoint extends THElement
 
   set decimalPositions(int decimalPositions) {
     _position.decimalPositions = decimalPositions;
-  }
-
-  @override
-  THPoint clone() {
-    final THPositionPart clonedPosition = _position.copyWith();
-    final List<String> clonedOptionsList = optionsList.toList();
-    final HashMap<String, THCommandOption> clonedOptionsMap =
-        HashMap<String, THCommandOption>.from(optionsMap);
-    final THPoint clonedPoint = copyWith(
-        position: clonedPosition,
-        optionsList: clonedOptionsList,
-        optionsMap: clonedOptionsMap);
-
-    return clonedPoint;
   }
 }

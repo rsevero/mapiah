@@ -15,9 +15,9 @@ class THMarkCommandOption extends THCommandOption
   late String _mark;
 
   /// Constructor necessary for dart_mappable support.
-  THMarkCommandOption.withExplicitOptionType(
+  THMarkCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, String mark)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     this.mark = mark;
   }
 

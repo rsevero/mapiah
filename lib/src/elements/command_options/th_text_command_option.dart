@@ -38,9 +38,9 @@ class THTextCommandOption extends THCommandOption
   };
 
   /// Constructor necessary for dart_mappable support.
-  THTextCommandOption.withExplicitOptionType(
+  THTextCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, String text)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
     this.text = text;
   }

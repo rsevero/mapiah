@@ -119,7 +119,7 @@ class THLineScaleCommandOptionMapper
   };
 
   static THLineScaleCommandOption _instantiate(DecodingData data) {
-    return THLineScaleCommandOption.withExplicitOptionType(
+    return THLineScaleCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -243,7 +243,7 @@ class _THLineScaleCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THLineScaleCommandOption $make(CopyWithData data) =>
-      THLineScaleCommandOption.withExplicitOptionType(
+      THLineScaleCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

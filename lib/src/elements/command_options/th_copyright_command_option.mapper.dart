@@ -52,7 +52,7 @@ class THCopyrightCommandOptionMapper
   };
 
   static THCopyrightCommandOption _instantiate(DecodingData data) {
-    return THCopyrightCommandOption.withExplicitOptionType(
+    return THCopyrightCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -162,7 +162,7 @@ class _THCopyrightCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THCopyrightCommandOption $make(CopyWithData data) =>
-      THCopyrightCommandOption.withExplicitOptionType(
+      THCopyrightCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

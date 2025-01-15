@@ -50,7 +50,7 @@ class THSketchCommandOptionMapper
   };
 
   static THSketchCommandOption _instantiate(DecodingData data) {
-    return THSketchCommandOption.withExplicitOptionType(
+    return THSketchCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -159,7 +159,7 @@ class _THSketchCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THSketchCommandOption $make(CopyWithData data) =>
-      THSketchCommandOption.withExplicitOptionType(
+      THSketchCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

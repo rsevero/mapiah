@@ -56,7 +56,7 @@ class THPointHeightValueCommandOptionMapper
   };
 
   static THPointHeightValueCommandOption _instantiate(DecodingData data) {
-    return THPointHeightValueCommandOption.withExplicitOptionType(
+    return THPointHeightValueCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -176,7 +176,7 @@ class _THPointHeightValueCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THPointHeightValueCommandOption $make(CopyWithData data) =>
-      THPointHeightValueCommandOption.withExplicitOptionType(
+      THPointHeightValueCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

@@ -21,14 +21,14 @@ class THDimensionsValueCommandOption extends THCommandOption
   bool unitSet = false;
 
   /// Constructor necessary for dart_mappable support.
-  THDimensionsValueCommandOption.withExplicitOptionType(
+  THDimensionsValueCommandOption.withExplicitParameters(
       super.thFile,
       super.parentMapiahID,
       super.optionType,
       THDoublePart above,
       THDoublePart below,
       [String? unit])
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
     _above = above;
     _below = below;

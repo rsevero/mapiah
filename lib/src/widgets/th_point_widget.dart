@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
-import 'package:mapiah/src/selection/th_element_selectable.dart';
+import 'package:mapiah/src/selection/th_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 
 class THPointWidget extends StatelessWidget {
@@ -21,7 +21,7 @@ class THPointWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    thFileDisplayStore.addSelectableElement(THElementSelectable(
+    thFileDisplayStore.addSelectableElement(THSelectableElement(
       element: point,
       position: point.position.coordinates,
     ));

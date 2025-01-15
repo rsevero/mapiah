@@ -1,8 +1,14 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/command.dart';
+import 'package:mapiah/src/commands/move_line_command.dart';
+import 'package:mapiah/src/commands/move_point_command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_line.dart';
+import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
@@ -128,14 +134,45 @@ abstract class THFileStoreBase with Store {
   UndoRedoController get undoRedoController => _undoRedoController;
 
   @action
-  void updatePointPosition(
-    THPoint originalPoint,
-    THPoint newPoint,
-  ) {
+  void updatePointPosition({
+    required THPoint originalPoint,
+    required THPoint newPoint,
+  }) {
     final MovePointCommand command = MovePointCommand(
-        pointMapiahID: originalPoint.mapiahID,
-        originalCoordinates: originalPoint.position.coordinates,
-        newCoordinates: newPoint.position.coordinates);
+      pointMapiahID: originalPoint.mapiahID,
+      originalCoordinates: originalPoint.position.coordinates,
+      newCoordinates: newPoint.position.coordinates,
+    );
+    _undoRedoController.execute(command);
+  }
+
+  @action
+  void updateLinePosition({
+    required THLine originalLine,
+    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+    required THLine newLine,
+    required LinkedHashMap<int, THLineSegment> newLineSegmentsMap,
+  }) {
+    final MoveLineCommand command = MoveLineCommand(
+      originalLine: originalLine,
+      originalLineSegmentsMap: originalLineSegmentsMap,
+      newLine: newLine,
+      newLineSegmentsMap: newLineSegmentsMap,
+    );
+    _undoRedoController.execute(command);
+  }
+
+  @action
+  void updateLinePositionPerOffset({
+    required THLine originalLine,
+    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+    required Offset deltaOnCanvas,
+  }) {
+    final MoveLineCommand command = MoveLineCommand.fromDelta(
+      originalLine: originalLine,
+      originalLineSegmentsMap: originalLineSegmentsMap,
+      deltaOnCanvas: deltaOnCanvas,
+    );
     _undoRedoController.execute(command);
   }
 }

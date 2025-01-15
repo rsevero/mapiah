@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
+import 'package:mapiah/src/elements/th_line.dart';
+import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/selection/th_element_selectable.dart';
+import 'package:mapiah/src/selection/th_selectable_element.dart';
+import 'package:mapiah/src/selection/th_selected_element.dart';
+import 'package:mapiah/src/selection/th_selected_line.dart';
+import 'package:mapiah/src/selection/th_selected_point.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -19,8 +25,8 @@ class THFileWidget extends StatefulWidget {
 }
 
 class _THFileWidgetState extends State<THFileWidget> {
-  THElement? _selectedElement;
-  THElement? _originalSelectedElement;
+  THSelectedElement? _selectedElement;
+  Offset _panStartCoordinates = Offset.zero;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final THFileStore thFileStore = widget.thFileStore;
   late final THFile file = widget.thFileStore.thFile;
@@ -74,20 +80,42 @@ class _THFileWidgetState extends State<THFileWidget> {
       return;
     }
 
-    THElementSelectable? selectableElement =
+    THSelectableElement? selectableElement =
         thFileDisplayStore.selectableElementContains(details.localPosition);
 
     if (selectableElement == null) {
       return;
     }
 
-    if (selectableElement.element is! THPoint) {
+    THElement element = selectableElement.element;
+
+    if ((element is! THPoint) &&
+        (element is! THLine) &&
+        (element is! THLineSegment)) {
       return;
     }
 
+    // bool isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
+    //         .contains(LogicalKeyboardKey.shiftLeft) ||
+    //     HardwareKeyboard.instance.logicalKeysPressed
+    //         .contains(LogicalKeyboardKey.shiftRight);
+
+    if (element is THLineSegment) {
+      element = element.parent;
+    }
+
     setState(() {
-      _selectedElement = selectableElement.element;
-      _originalSelectedElement = (_selectedElement! as THPoint).clone();
+      switch (element) {
+        case THLine _:
+          _selectedElement = THSelectedLine(line: element);
+          break;
+        case THPoint _:
+          _selectedElement = THSelectedPoint(point: element);
+          break;
+      }
+
+      _panStartCoordinates =
+          thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
     });
   }
 
@@ -111,24 +139,76 @@ class _THFileWidgetState extends State<THFileWidget> {
       return;
     }
 
-    final Offset localPositionOnCanvas =
-        thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
+    final Offset localDeltaPositionOnCanvas =
+        thFileDisplayStore.offsetScaleScreenToCanvas(details.delta);
 
     setState(() {
-      (_selectedElement! as THPoint).position.coordinates =
-          localPositionOnCanvas;
+      switch (_selectedElement!.element) {
+        case THPoint _:
+          (_selectedElement!.element as THPoint).position.coordinates +=
+              localDeltaPositionOnCanvas;
+          break;
+        case THLine _:
+          _updateTHLinePosition(
+              _selectedElement!.element as THLine, localDeltaPositionOnCanvas);
+          break;
+        default:
+          break;
+      }
     });
+  }
+
+  void _updateTHLinePosition(THLine line, Offset localDeltaPositionOnCanvas) {
+    final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
+    final THFile thFile = line.thFile;
+
+    for (final int lineChildMapiahID in lineChildrenMapiahIDs) {
+      final THElement lineChild = thFile.elementByMapiahID(lineChildMapiahID);
+
+      if (lineChild is! THLineSegment) {
+        continue;
+      }
+
+      lineChild.endPoint.coordinates += localDeltaPositionOnCanvas;
+
+      if (lineChild is THBezierCurveLineSegment) {
+        lineChild.controlPoint1.coordinates += localDeltaPositionOnCanvas;
+        lineChild.controlPoint2.coordinates += localDeltaPositionOnCanvas;
+      }
+    }
   }
 
   void _onPanEnd(DragEndDetails details) {
     if (_selectedElement == null) {
       return;
     }
-    thFileStore.updatePointPosition(
-        _originalSelectedElement! as THPoint, _selectedElement! as THPoint);
+
+    final Offset panEndOffset =
+        thFileDisplayStore.offsetScreenToCanvas(details.localPosition) -
+            _panStartCoordinates;
+
+    switch (_selectedElement!) {
+      case THSelectedPoint _:
+        thFileStore.updatePointPosition(
+          originalPoint: (_selectedElement! as THSelectedPoint).originalElement,
+          newPoint: (_selectedElement! as THSelectedPoint).element,
+        );
+        break;
+      case THSelectedLine _:
+        thFileStore.updateLinePositionPerOffset(
+          originalLine: (_selectedElement! as THSelectedLine).originalElement,
+          originalLineSegmentsMap:
+              (_selectedElement! as THSelectedLine).originalLineSegmentsMap,
+          deltaOnCanvas: panEndOffset,
+        );
+        break;
+      default:
+        break;
+    }
+
     setState(() {
       _selectedElement = null;
-      _originalSelectedElement = null;
+      _panStartCoordinates = Offset.zero;
     });
   }
 }

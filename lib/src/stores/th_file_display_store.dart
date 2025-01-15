@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
-import 'package:mapiah/src/selection/th_element_selectable.dart';
+import 'package:mapiah/src/selection/th_selectable_element.dart';
 import 'package:mapiah/src/selection/th_selectable.dart';
 import 'package:mobx/mobx.dart';
 
@@ -50,7 +50,7 @@ abstract class THFileDisplayStoreBase with Store {
   double selectionToleranceSquaredOnCanvas =
       thDefaultSelectionTolerance * thDefaultSelectionTolerance;
 
-  void addSelectableElement(THElementSelectable selectableElement) {
+  void addSelectableElement(THSelectableElement selectableElement) {
     _selectableElements[selectableElement.element.mapiahID] = selectableElement;
   }
 
@@ -58,12 +58,12 @@ abstract class THFileDisplayStoreBase with Store {
     _selectableElements.clear();
   }
 
-  THElementSelectable? selectableElementContains(Offset screenCoordinates) {
+  THSelectableElement? selectableElementContains(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
 
     for (final THSelectable selectable in _selectableElements.values) {
       if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
-        return selectable as THElementSelectable;
+        return selectable as THSelectableElement;
       }
     }
 
@@ -81,6 +81,16 @@ abstract class THFileDisplayStoreBase with Store {
   void updateScreenSize(Size newSize) {
     _screenSize = newSize;
     _canvasSize = newSize / _canvasScale;
+  }
+
+  Offset offsetScaleScreenToCanvas(Offset screenCoordinate) {
+    return Offset(screenCoordinate.dx / _canvasScale,
+        screenCoordinate.dy / (-_canvasScale));
+  }
+
+  Offset offsetScaleCanvasToScreen(Offset canvasCoordinate) {
+    return Offset(canvasCoordinate.dx * _canvasScale,
+        canvasCoordinate.dy * (-_canvasScale));
   }
 
   Offset offsetScreenToCanvas(Offset screenCoordinate) {
@@ -123,12 +133,12 @@ abstract class THFileDisplayStoreBase with Store {
   }
 
   void _setCanvasCenterFromCurrent() {
-    print("Current center: $_canvasCenterX, $_canvasCenterY");
+    // print("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX =
         -(_canvasTranslation.dx - (_screenSize.width / 2.0 / _canvasScale));
     _canvasCenterY =
         _canvasTranslation.dy - (_screenSize.height / 2.0 / _canvasScale);
-    print("New center: $_canvasCenterX, $_canvasCenterY");
+    // print("New center: $_canvasCenterX, $_canvasCenterY");
   }
 
   @action

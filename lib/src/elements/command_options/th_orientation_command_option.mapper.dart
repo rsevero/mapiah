@@ -47,7 +47,7 @@ class THOrientationCommandOptionMapper
   };
 
   static THOrientationCommandOption _instantiate(DecodingData data) {
-    return THOrientationCommandOption.withExplicitOptionType(
+    return THOrientationCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -156,7 +156,7 @@ class _THOrientationCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THOrientationCommandOption $make(CopyWithData data) =>
-      THOrientationCommandOption.withExplicitOptionType(
+      THOrientationCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

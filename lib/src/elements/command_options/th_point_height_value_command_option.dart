@@ -20,14 +20,14 @@ class THPointHeightValueCommandOption extends THCommandOption
   late bool isPresumed;
 
   /// Constructor necessary for dart_mappable support.
-  THPointHeightValueCommandOption.withExplicitOptionType(
+  THPointHeightValueCommandOption.withExplicitParameters(
       super.thFile,
       super.parentMapiahID,
       super.optionType,
       THDoublePart length,
       this.isPresumed,
       [String? unit])
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
     this.length = length;
     if ((unit != null) && (unit.isNotEmpty)) {

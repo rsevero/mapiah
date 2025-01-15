@@ -29,7 +29,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption
   /// Constructor necessary for dart_mappable support.
   THClipCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, super.choice)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

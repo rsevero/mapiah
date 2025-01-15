@@ -28,7 +28,7 @@ class THLineScaleCommandOption extends THCommandOption
   static const String _scaleMultipleChoiceName = 'point|scale';
 
   /// Constructor necessary for dart_mappable support.
-  THLineScaleCommandOption.withExplicitOptionType(
+  THLineScaleCommandOption.withExplicitParameters(
     super.thFile,
     super.parentMapiahID,
     super.optionType,
@@ -36,7 +36,7 @@ class THLineScaleCommandOption extends THCommandOption
     THDoublePart numericSize,
     THLineScaleCommandOptionType type,
     String textSize,
-  ) : super.withExplicitProperties() {
+  ) : super.withExplicitParameters() {
     _checkOptionParent();
     _multipleChoiceSize = multipleChoiceSize;
     _type = type;

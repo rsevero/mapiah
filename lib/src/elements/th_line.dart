@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
@@ -58,6 +61,20 @@ class THLine extends THElement
     'wall',
     'water-flow',
   };
+
+  /// Used by dart_mappable.
+  THLine.notAddedToParent(
+    super.mapiahID,
+    super.parent,
+    super.sameLineComment,
+    String lineType,
+    List<int> childrenMapiahID,
+    LinkedHashMap<String, THCommandOption> optionsMap,
+  ) : super.notAddToParent() {
+    this.lineType = lineType;
+    this.childrenMapiahID.addAll(childrenMapiahID);
+    addOptionsMap(optionsMap);
+  }
 
   THLine(super.parent, String lineType) : super.addToParent() {
     this.lineType = lineType;

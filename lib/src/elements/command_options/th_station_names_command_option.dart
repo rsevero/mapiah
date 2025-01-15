@@ -16,9 +16,9 @@ class THStationNamesCommandOption extends THCommandOption
   late String _suffix;
 
   /// Constructor necessary for dart_mappable support.
-  THStationNamesCommandOption.withExplicitOptionType(super.thFile,
+  THStationNamesCommandOption.withExplicitParameters(super.thFile,
       super.parentMapiahID, super.optionType, String preffix, String suffix)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     this.preffix = preffix;
     this.suffix = suffix;
   }

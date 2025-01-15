@@ -16,9 +16,9 @@ class THDateValueCommandOption extends THCommandOption
   late THDatetimePart date;
 
   /// Constructor necessary for dart_mappable support.
-  THDateValueCommandOption.withExplicitOptionType(
+  THDateValueCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.date)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

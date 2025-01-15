@@ -15,9 +15,9 @@ class THFromCommandOption extends THCommandOption
   String station;
 
   /// Constructor necessary for dart_mappable support.
-  THFromCommandOption.withExplicitOptionType(
+  THFromCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.station)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

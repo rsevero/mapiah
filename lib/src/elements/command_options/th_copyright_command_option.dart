@@ -15,13 +15,13 @@ class THCopyrightCommandOption extends THCommandOption
   late THDatetimePart datetime;
 
   /// Constructor necessary for dart_mappable support.
-  THCopyrightCommandOption.withExplicitOptionType(
+  THCopyrightCommandOption.withExplicitParameters(
       super.thFile,
       super.parentMapiahID,
       super.optionType,
       this.datetime,
       String copyrightMessage)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     text = copyrightMessage;
   }
 

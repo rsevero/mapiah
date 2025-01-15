@@ -17,9 +17,9 @@ class THSketchCommandOption extends THCommandOption
   late THPositionPart point;
 
   /// Constructor necessary for dart_mappable support.
-  THSketchCommandOption.withExplicitOptionType(super.thFile,
+  THSketchCommandOption.withExplicitParameters(super.thFile,
       super.parentMapiahID, super.optionType, String filename, this.point)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _filename = THStringPart(filename);
   }
 

@@ -121,7 +121,7 @@ class THPassageHeightValueCommandOptionMapper
   };
 
   static THPassageHeightValueCommandOption _instantiate(DecodingData data) {
-    return THPassageHeightValueCommandOption.withExplicitOptionType(
+    return THPassageHeightValueCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -250,7 +250,7 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THPassageHeightValueCommandOption $make(CopyWithData data) =>
-      THPassageHeightValueCommandOption.withExplicitOptionType(
+      THPassageHeightValueCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

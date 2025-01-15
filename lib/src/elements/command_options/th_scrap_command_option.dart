@@ -16,9 +16,9 @@ class THScrapCommandOption extends THCommandOption
   late String reference;
 
   /// Constructor necessary for dart_mappable support.
-  THScrapCommandOption.withExplicitOptionType(
+  THScrapCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.reference)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

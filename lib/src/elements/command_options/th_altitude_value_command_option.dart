@@ -20,10 +20,10 @@ class THAltitudeValueCommandOption extends THCommandOption
   static const String _thisOptionType = 'value';
 
   /// Constructor necessary for dart_mappable support.
-  THAltitudeValueCommandOption.withExplicitOptionType(super.thFile,
+  THAltitudeValueCommandOption.withExplicitParameters(super.thFile,
       super.parentMapiahID, super.optionType, THDoublePart length, bool isFix,
       [String? unit])
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent(optionParent);
     this.length = length;
     this.isFix = isFix;

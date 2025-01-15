@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -8,16 +11,21 @@ part 'th_straight_line_segment.mapper.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 @MappableClass()
-class THStraightLineSegment extends THElement
-    with THStraightLineSegmentMappable, THLineSegment, THHasOptions {
-  THStraightLineSegment(super.parent, THPositionPart endPointPosition)
-      : super.addToParent() {
-    this.endPointPosition = endPointPosition;
-  }
+class THStraightLineSegment extends THLineSegment
+    with THStraightLineSegmentMappable, THHasOptions {
+  THStraightLineSegment.withExplicitParameters(
+    super.mapiahID,
+    super.parent,
+    super.sameLineComment,
+    super.endPoint,
+    super.optionsMap,
+  ) : super.notAddToParent();
+
+  THStraightLineSegment(super.parent, super.endPoint) : super.addToParent();
 
   THStraightLineSegment.fromString(super.parent, List<dynamic> aPointDataList)
-      : super.addToParent() {
-    endPointPosition = THPositionPart.fromStringList(aPointDataList);
+      : super() {
+    endPoint = THPositionPart.fromStringList(aPointDataList);
   }
 
   @override

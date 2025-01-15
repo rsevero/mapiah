@@ -8,7 +8,7 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/selection/th_element_selectable.dart';
+import 'package:mapiah/src/selection/th_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 
 class THLineWidget extends StatelessWidget {
@@ -59,9 +59,9 @@ class THLineWidget extends StatelessWidget {
           y: lineChild.y,
         );
         isFirst = false;
-        thFileDisplayStore.addSelectableElement(THElementSelectable(
+        thFileDisplayStore.addSelectableElement(THSelectableElement(
           element: lineChild,
-          position: lineChild.endPointPosition.coordinates,
+          position: lineChild.endPoint.coordinates,
         ));
         continue;
       }
@@ -87,9 +87,9 @@ class THLineWidget extends StatelessWidget {
         default:
           continue;
       }
-      thFileDisplayStore.addSelectableElement(THElementSelectable(
+      thFileDisplayStore.addSelectableElement(THSelectableElement(
         element: lineChild,
-        position: lineChild.endPointPosition.coordinates,
+        position: lineChild.endPoint.coordinates,
       ));
     }
 

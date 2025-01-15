@@ -104,9 +104,9 @@ class THSubtypeCommandOption extends THCommandOption
   };
 
   /// Constructor necessary for dart_mappable support.
-  THSubtypeCommandOption.withExplicitOptionType(
+  THSubtypeCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, String subtype)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     this.subtype = subtype;
   }
 

@@ -51,7 +51,7 @@ class THExploredCommandOptionMapper
   };
 
   static THExploredCommandOption _instantiate(DecodingData data) {
-    return THExploredCommandOption.withExplicitOptionType(
+    return THExploredCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -161,7 +161,7 @@ class _THExploredCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THExploredCommandOption $make(CopyWithData data) =>
-      THExploredCommandOption.withExplicitOptionType(
+      THExploredCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

@@ -13,6 +13,7 @@ part 'th_multiple_choice_command_option.mapper.dart';
 class THMultipleChoiceCommandOption extends THCommandOption
     with THMultipleChoiceCommandOptionMappable {
   late String _choice;
+
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'area': {
@@ -384,12 +385,12 @@ class THMultipleChoiceCommandOption extends THCommandOption
     },
   };
 
-  THMultipleChoiceCommandOption.withExplicitProperties(
+  THMultipleChoiceCommandOption.withExplicitParameters(
     super.thFile,
     super.parentMapiahID,
     super.optionType,
     String choice,
-  ) : super.withExplicitProperties() {
+  ) : super.withExplicitParameters() {
     _checkOptionParent();
     this.choice = choice;
   }

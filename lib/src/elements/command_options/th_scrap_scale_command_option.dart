@@ -27,14 +27,14 @@ class THScrapScaleCommandOption extends THCommandOption
   THLengthUnitPart? unit;
 
   /// Constructor necessary for dart_mappable support.
-  THScrapScaleCommandOption.withExplicitOptionType(
+  THScrapScaleCommandOption.withExplicitParameters(
       super.thFile,
       super.parentMapiahID,
       super.optionType,
       List<THDoublePart> numericSpecifications,
       [this.unit])
       : _numericSpecifications = numericSpecifications,
-        super.withExplicitProperties();
+        super.withExplicitParameters();
 
   THScrapScaleCommandOption(
       THHasOptions optionParent, List<THDoublePart> numericSpecifications,

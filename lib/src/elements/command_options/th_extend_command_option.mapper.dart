@@ -45,7 +45,7 @@ class THExtendCommandOptionMapper
   };
 
   static THExtendCommandOption _instantiate(DecodingData data) {
-    return THExtendCommandOption.withExplicitOptionType(
+    return THExtendCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -146,7 +146,7 @@ class _THExtendCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THExtendCommandOption $make(CopyWithData data) =>
-      THExtendCommandOption.withExplicitOptionType(
+      THExtendCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

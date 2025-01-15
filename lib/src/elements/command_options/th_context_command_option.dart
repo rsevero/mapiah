@@ -22,13 +22,13 @@ class THContextCommandOption extends THCommandOption
   static const _supportedElementTypes = <String>{'point', 'line', 'area'};
 
   /// Constructor necessary for dart_mappable support.
-  THContextCommandOption.withExplicitOptionType(
+  THContextCommandOption.withExplicitParameters(
       super.thFile,
       super.parentMapiahID,
       super.optionType,
       String elementType,
       String symbolType)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     this.elementType = elementType;
     this.symbolType = symbolType;
   }

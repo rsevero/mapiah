@@ -16,9 +16,9 @@ class THExtendCommandOption extends THCommandOption
   String station;
 
   /// Constructor necessary for dart_mappable support.
-  THExtendCommandOption.withExplicitOptionType(
+  THExtendCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.station)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     if ((optionParent is! THPoint) ||
         ((optionParent as THPoint).plaType != 'station')) {
       throw THCustomException(

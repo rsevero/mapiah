@@ -17,9 +17,9 @@ class THLineHeightCommandOption extends THCommandOption
   late THDoublePart height;
 
   /// Constructor necessary for dart_mappable support.
-  THLineHeightCommandOption.withExplicitOptionType(
+  THLineHeightCommandOption.withExplicitParameters(
       super.thFile, super.parentMapiahID, super.optionType, this.height)
-      : super.withExplicitProperties() {
+      : super.withExplicitParameters() {
     _checkOptionParent();
   }
 

@@ -87,7 +87,7 @@ abstract class THElement with THElementMappable {
 /// Mixin that provides parenting capabilities.
 mixin THParent on THElement {
   // Here are registered all children mapiah IDs.
-  final List<int> _childrenMapiahID = <int>[];
+  final List<int> childrenMapiahID = <int>[];
 
   @override
   void delete() {
@@ -101,17 +101,13 @@ mixin THParent on THElement {
 
   int _addElementToParent(THElement element) {
     _thFile._addElementToFile(element);
-    _childrenMapiahID.add(element.mapiahID);
+    childrenMapiahID.add(element.mapiahID);
 
     return element.mapiahID;
   }
 
-  List<int> get childrenMapiahID {
-    return _childrenMapiahID;
-  }
-
   void _deleteElementFromParent(THElement element) {
-    if (!_childrenMapiahID.remove(element.mapiahID)) {
+    if (!childrenMapiahID.remove(element.mapiahID)) {
       throw THCustomException("'$element' not found.");
     }
 

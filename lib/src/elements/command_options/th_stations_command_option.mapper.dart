@@ -46,7 +46,7 @@ class THStationsCommandOptionMapper
   };
 
   static THStationsCommandOption _instantiate(DecodingData data) {
-    return THStationsCommandOption.withExplicitOptionType(
+    return THStationsCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -153,7 +153,7 @@ class _THStationsCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THStationsCommandOption $make(CopyWithData data) =>
-      THStationsCommandOption.withExplicitOptionType(
+      THStationsCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

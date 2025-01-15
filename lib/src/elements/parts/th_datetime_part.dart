@@ -14,6 +14,14 @@ class THDatetimePart with THDatetimePartMappable {
   late bool _isRange;
   late bool _isEmpty;
 
+  /// Constructor necessary for dart_mappable support.
+  THDatetimePart.withExplicitParameters(
+      String datetime, bool isRange, bool isEmpty) {
+    _datetime = datetime;
+    _isRange = isRange;
+    _isEmpty = isEmpty;
+  }
+
   THDatetimePart(String datetime) {
     this.datetime = datetime;
   }

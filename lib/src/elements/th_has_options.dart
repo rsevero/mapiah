@@ -1,19 +1,16 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:meta/meta.dart';
 
 mixin THHasOptions on THElement {
-  final List<String> optionsList = [];
-  final Map<String, THCommandOption> _optionsMap = {};
+  final LinkedHashMap<String, THCommandOption> _optionsMap =
+      LinkedHashMap<String, THCommandOption>();
 
   void addUpdateOption(THCommandOption option) {
-    final String type = option.optionType;
-
-    if (!optionsList.contains(type)) {
-      optionsList.add(type);
-    }
-    _optionsMap[type] = option;
+    _optionsMap[option.optionType] = option;
   }
 
   @useResult
@@ -37,19 +34,16 @@ mixin THHasOptions on THElement {
       return false;
     }
 
-    if (kDebugMode) assert(optionsList.contains(optionType));
-    if (!optionsList.remove(optionType)) {
-      return false;
-    }
-
     if (kDebugMode) assert(_optionsMap.containsKey(optionType));
     return (_optionsMap.remove(optionType) != null);
   }
 
   String optionsAsString() {
-    var asString = '';
+    String asString = '';
 
-    for (String type in optionsList) {
+    final Iterable<String> optionTypeList = _optionsMap.keys;
+
+    for (String type in optionTypeList) {
       /// subtype option is serialized in the ':subtype' format, not in the
       /// -subtype <subtype> format.
       if (type == 'subtype') {
@@ -64,7 +58,7 @@ mixin THHasOptions on THElement {
     return asString;
   }
 
-  Map<String, THCommandOption> get optionsMap => _optionsMap;
+  LinkedHashMap<String, THCommandOption> get optionsMap => _optionsMap;
 
   void addOptionsMap(Map<String, THCommandOption> optionsMap) {
     for (final String type in optionsMap.keys) {

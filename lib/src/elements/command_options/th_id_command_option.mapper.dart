@@ -44,7 +44,7 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   };
 
   static THIDCommandOption _instantiate(DecodingData data) {
-    return THIDCommandOption.withExplicitOptionType(
+    return THIDCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -140,7 +140,7 @@ class _THIDCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THIDCommandOption $make(CopyWithData data) =>
-      THIDCommandOption.withExplicitOptionType(
+      THIDCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

@@ -60,7 +60,7 @@ class THDimensionsValueCommandOptionMapper
   };
 
   static THDimensionsValueCommandOption _instantiate(DecodingData data) {
-    return THDimensionsValueCommandOption.withExplicitOptionType(
+    return THDimensionsValueCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -183,7 +183,7 @@ class _THDimensionsValueCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THDimensionsValueCommandOption $make(CopyWithData data) =>
-      THDimensionsValueCommandOption.withExplicitOptionType(
+      THDimensionsValueCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),

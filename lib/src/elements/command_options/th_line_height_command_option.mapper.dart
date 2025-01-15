@@ -47,7 +47,7 @@ class THLineHeightCommandOptionMapper
   };
 
   static THLineHeightCommandOption _instantiate(DecodingData data) {
-    return THLineHeightCommandOption.withExplicitOptionType(
+    return THLineHeightCommandOption.withExplicitParameters(
         data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
@@ -155,7 +155,7 @@ class _THLineHeightCommandOptionCopyWithImpl<$R, $Out>
       }));
   @override
   THLineHeightCommandOption $make(CopyWithData data) =>
-      THLineHeightCommandOption.withExplicitOptionType(
+      THLineHeightCommandOption.withExplicitParameters(
           data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
