@@ -21,28 +21,31 @@ class THScrapMapper extends ClassMapperBase<THScrap> {
   @override
   final String id = 'THScrap';
 
-  static THParent _$parent(THScrap v) => v.parent;
-  static const Field<THScrap, THParent> _f$parent = Field('parent', _$parent);
-  static String _$_thID(THScrap v) => v._thID;
-  static const Field<THScrap, String> _f$_thID =
-      Field('_thID', _$_thID, key: 'thID');
+  static int _$mapiahID(THScrap v) => v.mapiahID;
+  static const Field<THScrap, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THScrap v) => v.parentMapiahID;
   static const Field<THScrap, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THScrap v) => v.sameLineComment;
   static const Field<THScrap, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
+  static String _$thID(THScrap v) => v.thID;
+  static const Field<THScrap, String> _f$thID = Field('thID', _$thID);
 
   @override
   final MappableFields<THScrap> fields = const {
-    #parent: _f$parent,
-    #_thID: _f$_thID,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #thID: _f$thID,
   };
 
   static THScrap _instantiate(DecodingData data) {
-    return THScrap(data.dec(_f$parent), data.dec(_f$_thID));
+    return THScrap.notAddToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$thID));
   }
 
   @override
@@ -97,7 +100,11 @@ abstract class THScrapCopyWith<$R, $In extends THScrap, $Out>
         THElementCopyWith<$R, $In, $Out>,
         THHasTHIDCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent, String? thID});
+  $R call(
+      {int? mapiahID,
+      int? parentMapiahID,
+      String? sameLineComment,
+      String? thID});
   THScrapCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -110,11 +117,23 @@ class _THScrapCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THScrap> $mapper =
       THScrapMapper.ensureInitialized();
   @override
-  $R call({THParent? parent, String? thID}) => $apply(FieldCopyWithData(
-      {if (parent != null) #parent: parent, if (thID != null) #thID: thID}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none,
+          String? thID}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (thID != null) #thID: thID
+      }));
   @override
-  THScrap $make(CopyWithData data) => THScrap(
-      data.get(#parent, or: $value.parent), data.get(#thID, or: $value._thID));
+  THScrap $make(CopyWithData data) => THScrap.notAddToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment),
+      data.get(#thID, or: $value.thID));
 
   @override
   THScrapCopyWith<$R2, THScrap, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>

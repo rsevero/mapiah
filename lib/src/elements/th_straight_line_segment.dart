@@ -13,9 +13,10 @@ part 'th_straight_line_segment.mapper.dart';
 @MappableClass()
 class THStraightLineSegment extends THLineSegment
     with THStraightLineSegmentMappable, THHasOptions {
+  // Used by dart_mappable.
   THStraightLineSegment.withExplicitParameters(
     super.mapiahID,
-    super.parent,
+    super.parentMapiahID,
     super.sameLineComment,
     super.endPoint,
     super.optionsMap,

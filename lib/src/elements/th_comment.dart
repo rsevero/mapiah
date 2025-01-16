@@ -7,6 +7,14 @@ part 'th_comment.mapper.dart';
 class THComment extends THElement with THCommentMappable {
   String content;
 
+  // Used by dart_mappable.
+  THComment.notAddToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+    this.content,
+  ) : super.notAddToParent();
+
   THComment(super.parent, this.content) : super.addToParent();
 
   @override

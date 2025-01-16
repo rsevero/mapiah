@@ -21,28 +21,32 @@ class THAreaBorderTHIDMapper extends ClassMapperBase<THAreaBorderTHID> {
   @override
   final String id = 'THAreaBorderTHID';
 
-  static THParent _$parent(THAreaBorderTHID v) => v.parent;
-  static const Field<THAreaBorderTHID, THParent> _f$parent =
-      Field('parent', _$parent);
-  static String _$id(THAreaBorderTHID v) => v.id;
-  static const Field<THAreaBorderTHID, String> _f$id = Field('id', _$id);
+  static int _$mapiahID(THAreaBorderTHID v) => v.mapiahID;
+  static const Field<THAreaBorderTHID, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THAreaBorderTHID v) => v.parentMapiahID;
   static const Field<THAreaBorderTHID, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THAreaBorderTHID v) => v.sameLineComment;
   static const Field<THAreaBorderTHID, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
+  static String _$id(THAreaBorderTHID v) => v.id;
+  static const Field<THAreaBorderTHID, String> _f$id = Field('id', _$id);
 
   @override
   final MappableFields<THAreaBorderTHID> fields = const {
-    #parent: _f$parent,
-    #id: _f$id,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #id: _f$id,
   };
 
   static THAreaBorderTHID _instantiate(DecodingData data) {
-    return THAreaBorderTHID(data.dec(_f$parent), data.dec(_f$id));
+    return THAreaBorderTHID.notAddToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$id));
   }
 
   @override
@@ -100,7 +104,11 @@ extension THAreaBorderTHIDValueCopy<$R, $Out>
 abstract class THAreaBorderTHIDCopyWith<$R, $In extends THAreaBorderTHID, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent, String? id});
+  $R call(
+      {int? mapiahID,
+      int? parentMapiahID,
+      String? sameLineComment,
+      String? id});
   THAreaBorderTHIDCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -114,11 +122,23 @@ class _THAreaBorderTHIDCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THAreaBorderTHID> $mapper =
       THAreaBorderTHIDMapper.ensureInitialized();
   @override
-  $R call({THParent? parent, String? id}) => $apply(FieldCopyWithData(
-      {if (parent != null) #parent: parent, if (id != null) #id: id}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none,
+          String? id}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (id != null) #id: id
+      }));
   @override
-  THAreaBorderTHID $make(CopyWithData data) => THAreaBorderTHID(
-      data.get(#parent, or: $value.parent), data.get(#id, or: $value.id));
+  THAreaBorderTHID $make(CopyWithData data) => THAreaBorderTHID.notAddToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment),
+      data.get(#id, or: $value.id));
 
   @override
   THAreaBorderTHIDCopyWith<$R2, THAreaBorderTHID, $Out2> $chain<$R2, $Out2>(

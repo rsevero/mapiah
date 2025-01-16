@@ -5,6 +5,13 @@ part 'th_endline.mapper.dart';
 
 @MappableClass()
 class THEndline extends THElement with THEndlineMappable {
+  // Used by dart_mappable.
+  THEndline.notAddToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+  ) : super.notAddToParent();
+
   THEndline(super.parent) : super.addToParent();
 
   @override

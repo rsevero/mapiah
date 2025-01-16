@@ -21,24 +21,26 @@ class THEndareaMapper extends ClassMapperBase<THEndarea> {
   @override
   final String id = 'THEndarea';
 
-  static THParent _$parent(THEndarea v) => v.parent;
-  static const Field<THEndarea, THParent> _f$parent = Field('parent', _$parent);
+  static int _$mapiahID(THEndarea v) => v.mapiahID;
+  static const Field<THEndarea, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THEndarea v) => v.parentMapiahID;
   static const Field<THEndarea, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THEndarea v) => v.sameLineComment;
   static const Field<THEndarea, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
 
   @override
   final MappableFields<THEndarea> fields = const {
-    #parent: _f$parent,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 
   static THEndarea _instantiate(DecodingData data) {
-    return THEndarea(data.dec(_f$parent));
+    return THEndarea.notAddToParent(data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID), data.dec(_f$sameLineComment));
   }
 
   @override
@@ -92,7 +94,7 @@ extension THEndareaValueCopy<$R, $Out> on ObjectCopyWith<$R, THEndarea, $Out> {
 abstract class THEndareaCopyWith<$R, $In extends THEndarea, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent});
+  $R call({int? mapiahID, int? parentMapiahID, String? sameLineComment});
   THEndareaCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -105,11 +107,20 @@ class _THEndareaCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THEndarea> $mapper =
       THEndareaMapper.ensureInitialized();
   @override
-  $R call({THParent? parent}) =>
-      $apply(FieldCopyWithData({if (parent != null) #parent: parent}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment
+      }));
   @override
-  THEndarea $make(CopyWithData data) =>
-      THEndarea(data.get(#parent, or: $value.parent));
+  THEndarea $make(CopyWithData data) => THEndarea.notAddToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment));
 
   @override
   THEndareaCopyWith<$R2, THEndarea, $Out2> $chain<$R2, $Out2>(

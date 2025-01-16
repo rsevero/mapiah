@@ -24,8 +24,9 @@ class THLineMapper extends ClassMapperBase<THLine> {
 
   static int _$mapiahID(THLine v) => v.mapiahID;
   static const Field<THLine, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
-  static THParent _$parent(THLine v) => v.parent;
-  static const Field<THLine, THParent> _f$parent = Field('parent', _$parent);
+  static int _$parentMapiahID(THLine v) => v.parentMapiahID;
+  static const Field<THLine, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, key: 'parentMapiaID');
   static String? _$sameLineComment(THLine v) => v.sameLineComment;
   static const Field<THLine, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment);
@@ -39,25 +40,21 @@ class THLineMapper extends ClassMapperBase<THLine> {
       v.optionsMap;
   static const Field<THLine, LinkedHashMap<String, THCommandOption>>
       _f$optionsMap = Field('optionsMap', _$optionsMap);
-  static int _$parentMapiahID(THLine v) => v.parentMapiahID;
-  static const Field<THLine, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
 
   @override
   final MappableFields<THLine> fields = const {
     #mapiahID: _f$mapiahID,
-    #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
     #lineType: _f$lineType,
     #childrenMapiahID: _f$childrenMapiahID,
     #optionsMap: _f$optionsMap,
-    #parentMapiahID: _f$parentMapiahID,
   };
 
   static THLine _instantiate(DecodingData data) {
     return THLine.notAddedToParent(
         data.dec(_f$mapiahID),
-        data.dec(_f$parent),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$sameLineComment),
         data.dec(_f$lineType),
         data.dec(_f$childrenMapiahID),
@@ -114,7 +111,7 @@ abstract class THLineCopyWith<$R, $In extends THLine, $Out>
   @override
   $R call(
       {int? mapiahID,
-      THParent? parent,
+      int? parentMapiahID,
       String? sameLineComment,
       String? lineType,
       List<int>? childrenMapiahID,
@@ -137,14 +134,14 @@ class _THLineCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, THLine, $Out>
   @override
   $R call(
           {int? mapiahID,
-          THParent? parent,
+          int? parentMapiahID,
           Object? sameLineComment = $none,
           String? lineType,
           List<int>? childrenMapiahID,
           LinkedHashMap<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
         if (mapiahID != null) #mapiahID: mapiahID,
-        if (parent != null) #parent: parent,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (lineType != null) #lineType: lineType,
         if (childrenMapiahID != null) #childrenMapiahID: childrenMapiahID,
@@ -153,7 +150,7 @@ class _THLineCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, THLine, $Out>
   @override
   THLine $make(CopyWithData data) => THLine.notAddedToParent(
       data.get(#mapiahID, or: $value.mapiahID),
-      data.get(#parent, or: $value.parent),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
       data.get(#sameLineComment, or: $value.sameLineComment),
       data.get(#lineType, or: $value.lineType),
       data.get(#childrenMapiahID, or: $value.childrenMapiahID),

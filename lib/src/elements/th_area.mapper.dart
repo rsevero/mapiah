@@ -14,6 +14,7 @@ class THAreaMapper extends ClassMapperBase<THArea> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THAreaMapper._());
       THElementMapper.ensureInitialized();
+      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,28 +22,38 @@ class THAreaMapper extends ClassMapperBase<THArea> {
   @override
   final String id = 'THArea';
 
-  static THParent _$parent(THArea v) => v.parent;
-  static const Field<THArea, THParent> _f$parent = Field('parent', _$parent);
-  static String _$_areaType(THArea v) => v._areaType;
-  static const Field<THArea, String> _f$_areaType =
-      Field('_areaType', _$_areaType, key: 'areaType');
+  static int _$mapiahID(THArea v) => v.mapiahID;
+  static const Field<THArea, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THArea v) => v.parentMapiahID;
   static const Field<THArea, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THArea v) => v.sameLineComment;
   static const Field<THArea, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
+  static String _$areaType(THArea v) => v.areaType;
+  static const Field<THArea, String> _f$areaType =
+      Field('areaType', _$areaType);
+  static LinkedHashMap<String, THCommandOption> _$optionsMap(THArea v) =>
+      v.optionsMap;
+  static const Field<THArea, LinkedHashMap<String, THCommandOption>>
+      _f$optionsMap = Field('optionsMap', _$optionsMap);
 
   @override
   final MappableFields<THArea> fields = const {
-    #parent: _f$parent,
-    #_areaType: _f$_areaType,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #areaType: _f$areaType,
+    #optionsMap: _f$optionsMap,
   };
 
   static THArea _instantiate(DecodingData data) {
-    return THArea(data.dec(_f$parent), data.dec(_f$_areaType));
+    return THArea.notAddedToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$areaType),
+        data.dec(_f$optionsMap));
   }
 
   @override
@@ -92,7 +103,12 @@ extension THAreaValueCopy<$R, $Out> on ObjectCopyWith<$R, THArea, $Out> {
 abstract class THAreaCopyWith<$R, $In extends THArea, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent, String? areaType});
+  $R call(
+      {int? mapiahID,
+      int? parentMapiahID,
+      String? sameLineComment,
+      String? areaType,
+      LinkedHashMap<String, THCommandOption>? optionsMap});
   THAreaCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -103,14 +119,26 @@ class _THAreaCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, THArea, $Out>
   @override
   late final ClassMapperBase<THArea> $mapper = THAreaMapper.ensureInitialized();
   @override
-  $R call({THParent? parent, String? areaType}) => $apply(FieldCopyWithData({
-        if (parent != null) #parent: parent,
-        if (areaType != null) #areaType: areaType
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none,
+          String? areaType,
+          LinkedHashMap<String, THCommandOption>? optionsMap}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (areaType != null) #areaType: areaType,
+        if (optionsMap != null) #optionsMap: optionsMap
       }));
   @override
-  THArea $make(CopyWithData data) => THArea(
-      data.get(#parent, or: $value.parent),
-      data.get(#areaType, or: $value._areaType));
+  THArea $make(CopyWithData data) => THArea.notAddedToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment),
+      data.get(#areaType, or: $value.areaType),
+      data.get(#optionsMap, or: $value.optionsMap));
 
   @override
   THAreaCopyWith<$R2, THArea, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>

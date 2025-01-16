@@ -21,28 +21,33 @@ class THCommentMapper extends ClassMapperBase<THComment> {
   @override
   final String id = 'THComment';
 
-  static THParent _$parent(THComment v) => v.parent;
-  static const Field<THComment, THParent> _f$parent = Field('parent', _$parent);
+  static int _$mapiahID(THComment v) => v.mapiahID;
+  static const Field<THComment, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
+  static int _$parentMapiahID(THComment v) => v.parentMapiahID;
+  static const Field<THComment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
+  static String? _$sameLineComment(THComment v) => v.sameLineComment;
+  static const Field<THComment, String> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment);
   static String _$content(THComment v) => v.content;
   static const Field<THComment, String> _f$content =
       Field('content', _$content);
-  static int _$parentMapiahID(THComment v) => v.parentMapiahID;
-  static const Field<THComment, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
-  static String? _$sameLineComment(THComment v) => v.sameLineComment;
-  static const Field<THComment, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
 
   @override
   final MappableFields<THComment> fields = const {
-    #parent: _f$parent,
-    #content: _f$content,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #content: _f$content,
   };
 
   static THComment _instantiate(DecodingData data) {
-    return THComment(data.dec(_f$parent), data.dec(_f$content));
+    return THComment.notAddToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$content));
   }
 
   @override
@@ -96,7 +101,11 @@ extension THCommentValueCopy<$R, $Out> on ObjectCopyWith<$R, THComment, $Out> {
 abstract class THCommentCopyWith<$R, $In extends THComment, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent, String? content});
+  $R call(
+      {int? mapiahID,
+      int? parentMapiahID,
+      String? sameLineComment,
+      String? content});
   THCommentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -109,13 +118,22 @@ class _THCommentCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THComment> $mapper =
       THCommentMapper.ensureInitialized();
   @override
-  $R call({THParent? parent, String? content}) => $apply(FieldCopyWithData({
-        if (parent != null) #parent: parent,
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none,
+          String? content}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (content != null) #content: content
       }));
   @override
-  THComment $make(CopyWithData data) => THComment(
-      data.get(#parent, or: $value.parent),
+  THComment $make(CopyWithData data) => THComment.notAddToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment),
       data.get(#content, or: $value.content));
 
   @override

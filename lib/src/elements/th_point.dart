@@ -169,7 +169,7 @@ class THPoint extends THElement
   /// new instance with copyWith.
   THPoint.notAddedToParent(
     super.mapiahID,
-    super.parent,
+    super.parentMapiahID,
     super.sameLineComment,
     THPositionPart position,
     String pointType,

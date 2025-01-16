@@ -18,9 +18,10 @@ abstract class THLineSegment extends THElement
     implements THHasPLAType, THPointInterface, THHasOptions {
   late final THPositionPart endPoint;
 
+  // Used by dart_mappable.
   THLineSegment.notAddToParent(
     super.mapiahID,
-    super.parent,
+    super.parentMapiahID,
     super.sameLineComment,
     this.endPoint,
     LinkedHashMap<String, THCommandOption> optionsMap,

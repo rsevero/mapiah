@@ -9,6 +9,14 @@ part 'th_area_border_thid.mapper.dart';
 class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
   late String id;
 
+  // Used by dart_mappable.
+  THAreaBorderTHID.notAddToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+    this.id,
+  ) : super.notAddToParent();
+
   THAreaBorderTHID(THParent parent, this.id) : super.addToParent(parent) {
     if (parent is! THArea) {
       throw THCustomException(

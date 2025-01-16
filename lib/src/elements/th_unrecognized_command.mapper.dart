@@ -22,30 +22,35 @@ class THUnrecognizedCommandMapper
   @override
   final String id = 'THUnrecognizedCommand';
 
-  static THParent _$parent(THUnrecognizedCommand v) => v.parent;
-  static const Field<THUnrecognizedCommand, THParent> _f$parent =
-      Field('parent', _$parent);
-  static List<dynamic> _$_value(THUnrecognizedCommand v) => v._value;
-  static const Field<THUnrecognizedCommand, List<dynamic>> _f$_value =
-      Field('_value', _$_value, key: 'value');
+  static int _$mapiahID(THUnrecognizedCommand v) => v.mapiahID;
+  static const Field<THUnrecognizedCommand, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THUnrecognizedCommand v) => v.parentMapiahID;
   static const Field<THUnrecognizedCommand, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THUnrecognizedCommand v) =>
       v.sameLineComment;
   static const Field<THUnrecognizedCommand, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
+  static dynamic _$value(THUnrecognizedCommand v) => v.value;
+  static dynamic _arg$value(f) => f<dynamic>();
+  static const Field<THUnrecognizedCommand, List<dynamic>> _f$value =
+      Field('value', _$value, arg: _arg$value);
 
   @override
   final MappableFields<THUnrecognizedCommand> fields = const {
-    #parent: _f$parent,
-    #_value: _f$_value,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #value: _f$value,
   };
 
   static THUnrecognizedCommand _instantiate(DecodingData data) {
-    return THUnrecognizedCommand(data.dec(_f$parent), data.dec(_f$_value));
+    return THUnrecognizedCommand.notAddToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$value));
   }
 
   @override
@@ -105,9 +110,13 @@ abstract class THUnrecognizedCommandCopyWith<
     $R,
     $In extends THUnrecognizedCommand,
     $Out> implements THElementCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>> get _value;
+  ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>> get value;
   @override
-  $R call({THParent? parent, List<dynamic>? value});
+  $R call(
+      {int? mapiahID,
+      int? parentMapiahID,
+      String? sameLineComment,
+      List<dynamic>? value});
   THUnrecognizedCommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -121,16 +130,28 @@ class _THUnrecognizedCommandCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THUnrecognizedCommand> $mapper =
       THUnrecognizedCommandMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>> get _value =>
-      ListCopyWith($value._value, (v, t) => ObjectCopyWith(v, $identity, t),
+  ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>> get value =>
+      ListCopyWith($value.value, (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(value: v));
   @override
-  $R call({THParent? parent, List<dynamic>? value}) => $apply(FieldCopyWithData(
-      {if (parent != null) #parent: parent, if (value != null) #value: value}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none,
+          List<dynamic>? value}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (value != null) #value: value
+      }));
   @override
-  THUnrecognizedCommand $make(CopyWithData data) => THUnrecognizedCommand(
-      data.get(#parent, or: $value.parent),
-      data.get(#value, or: $value._value));
+  THUnrecognizedCommand $make(CopyWithData data) =>
+      THUnrecognizedCommand.notAddToParent(
+          data.get(#mapiahID, or: $value.mapiahID),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
+          data.get(#sameLineComment, or: $value.sameLineComment),
+          data.get(#value, or: $value.value));
 
   @override
   THUnrecognizedCommandCopyWith<$R2, THUnrecognizedCommand, $Out2>

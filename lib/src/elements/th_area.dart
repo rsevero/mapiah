@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
@@ -36,6 +39,18 @@ class THArea extends THElement
     'water',
   };
 
+  // Used by dart_mappable.
+  THArea.notAddedToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+    String areaType,
+    LinkedHashMap<String, THCommandOption> optionsMap,
+  ) : super.notAddToParent() {
+    _areaType = areaType;
+    addOptionsMap(optionsMap);
+  }
+
   THArea(super.parent, String areaType)
       : _areaType = areaType,
         super.addToParent() {
@@ -59,6 +74,10 @@ class THArea extends THElement
 
   @override
   String get plaType {
+    return _areaType;
+  }
+
+  String get areaType {
     return _areaType;
   }
 

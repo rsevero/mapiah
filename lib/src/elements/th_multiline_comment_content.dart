@@ -8,6 +8,14 @@ class THMultilineCommentContent extends THElement
     with THMultilineCommentContentMappable {
   String content;
 
+  // Used by dart_mappable.
+  THMultilineCommentContent.notAddToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+    this.content,
+  ) : super.notAddToParent();
+
   THMultilineCommentContent(super.parent, this.content) : super.addToParent();
 
   @override

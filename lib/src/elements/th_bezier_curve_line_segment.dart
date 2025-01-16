@@ -17,9 +17,10 @@ class THBezierCurveLineSegment extends THLineSegment
   late final THPositionPart controlPoint1;
   late final THPositionPart controlPoint2;
 
+  // Used by dart_mappable.
   THBezierCurveLineSegment.withExplicitParameters(
     super.mapiahID,
-    super.parent,
+    super.parentMapiahID,
     super.sameLineComment,
     this.controlPoint1,
     this.controlPoint2,

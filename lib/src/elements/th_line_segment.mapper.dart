@@ -26,9 +26,9 @@ class THLineSegmentMapper extends ClassMapperBase<THLineSegment> {
   static int _$mapiahID(THLineSegment v) => v.mapiahID;
   static const Field<THLineSegment, int> _f$mapiahID =
       Field('mapiahID', _$mapiahID);
-  static THParent _$parent(THLineSegment v) => v.parent;
-  static const Field<THLineSegment, THParent> _f$parent =
-      Field('parent', _$parent);
+  static int _$parentMapiahID(THLineSegment v) => v.parentMapiahID;
+  static const Field<THLineSegment, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THLineSegment v) => v.sameLineComment;
   static const Field<THLineSegment, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment);
@@ -39,18 +39,14 @@ class THLineSegmentMapper extends ClassMapperBase<THLineSegment> {
       v.optionsMap;
   static const Field<THLineSegment, LinkedHashMap<String, THCommandOption>>
       _f$optionsMap = Field('optionsMap', _$optionsMap);
-  static int _$parentMapiahID(THLineSegment v) => v.parentMapiahID;
-  static const Field<THLineSegment, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
 
   @override
   final MappableFields<THLineSegment> fields = const {
     #mapiahID: _f$mapiahID,
-    #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
     #endPoint: _f$endPoint,
     #optionsMap: _f$optionsMap,
-    #parentMapiahID: _f$parentMapiahID,
   };
 
   static THLineSegment _instantiate(DecodingData data) {
@@ -82,7 +78,7 @@ abstract class THLineSegmentCopyWith<$R, $In extends THLineSegment, $Out>
   @override
   $R call(
       {int? mapiahID,
-      THParent? parent,
+      int? parentMapiahID,
       String? sameLineComment,
       THPositionPart? endPoint,
       LinkedHashMap<String, THCommandOption>? optionsMap});

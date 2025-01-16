@@ -21,24 +21,26 @@ class THEndlineMapper extends ClassMapperBase<THEndline> {
   @override
   final String id = 'THEndline';
 
-  static THParent _$parent(THEndline v) => v.parent;
-  static const Field<THEndline, THParent> _f$parent = Field('parent', _$parent);
+  static int _$mapiahID(THEndline v) => v.mapiahID;
+  static const Field<THEndline, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THEndline v) => v.parentMapiahID;
   static const Field<THEndline, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THEndline v) => v.sameLineComment;
   static const Field<THEndline, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
 
   @override
   final MappableFields<THEndline> fields = const {
-    #parent: _f$parent,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 
   static THEndline _instantiate(DecodingData data) {
-    return THEndline(data.dec(_f$parent));
+    return THEndline.notAddToParent(data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID), data.dec(_f$sameLineComment));
   }
 
   @override
@@ -92,7 +94,7 @@ extension THEndlineValueCopy<$R, $Out> on ObjectCopyWith<$R, THEndline, $Out> {
 abstract class THEndlineCopyWith<$R, $In extends THEndline, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent});
+  $R call({int? mapiahID, int? parentMapiahID, String? sameLineComment});
   THEndlineCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -105,11 +107,20 @@ class _THEndlineCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THEndline> $mapper =
       THEndlineMapper.ensureInitialized();
   @override
-  $R call({THParent? parent}) =>
-      $apply(FieldCopyWithData({if (parent != null) #parent: parent}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment
+      }));
   @override
-  THEndline $make(CopyWithData data) =>
-      THEndline(data.get(#parent, or: $value.parent));
+  THEndline $make(CopyWithData data) => THEndline.notAddToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment));
 
   @override
   THEndlineCopyWith<$R2, THEndline, $Out2> $chain<$R2, $Out2>(

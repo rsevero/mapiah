@@ -21,25 +21,33 @@ class THEncodingMapper extends ClassMapperBase<THEncoding> {
   @override
   final String id = 'THEncoding';
 
-  static THParent _$parent(THEncoding v) => v.parent;
-  static const Field<THEncoding, THParent> _f$parent =
-      Field('parent', _$parent);
+  static int _$mapiahID(THEncoding v) => v.mapiahID;
+  static const Field<THEncoding, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THEncoding v) => v.parentMapiahID;
   static const Field<THEncoding, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THEncoding v) => v.sameLineComment;
   static const Field<THEncoding, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
+  static String _$encoding(THEncoding v) => v.encoding;
+  static const Field<THEncoding, String> _f$encoding =
+      Field('encoding', _$encoding);
 
   @override
   final MappableFields<THEncoding> fields = const {
-    #parent: _f$parent,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
+    #encoding: _f$encoding,
   };
 
   static THEncoding _instantiate(DecodingData data) {
-    return THEncoding(data.dec(_f$parent));
+    return THEncoding.notAddToParent(
+        data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID),
+        data.dec(_f$sameLineComment),
+        data.dec(_f$encoding));
   }
 
   @override
@@ -94,7 +102,11 @@ extension THEncodingValueCopy<$R, $Out>
 abstract class THEncodingCopyWith<$R, $In extends THEncoding, $Out>
     implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent});
+  $R call(
+      {int? mapiahID,
+      int? parentMapiahID,
+      String? sameLineComment,
+      String? encoding});
   THEncodingCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -107,11 +119,23 @@ class _THEncodingCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THEncoding> $mapper =
       THEncodingMapper.ensureInitialized();
   @override
-  $R call({THParent? parent}) =>
-      $apply(FieldCopyWithData({if (parent != null) #parent: parent}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none,
+          String? encoding}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment,
+        if (encoding != null) #encoding: encoding
+      }));
   @override
-  THEncoding $make(CopyWithData data) =>
-      THEncoding(data.get(#parent, or: $value.parent));
+  THEncoding $make(CopyWithData data) => THEncoding.notAddToParent(
+      data.get(#mapiahID, or: $value.mapiahID),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
+      data.get(#sameLineComment, or: $value.sameLineComment),
+      data.get(#encoding, or: $value.encoding));
 
   @override
   THEncodingCopyWith<$R2, THEncoding, $Out2> $chain<$R2, $Out2>(

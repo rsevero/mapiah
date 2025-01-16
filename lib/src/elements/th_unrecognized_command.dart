@@ -8,6 +8,16 @@ class THUnrecognizedCommand extends THElement
     with THUnrecognizedCommandMappable {
   late final List<dynamic> _value;
 
+  // Used by dart_mappable.
+  THUnrecognizedCommand.notAddToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+    List<dynamic> value,
+  ) : super.notAddToParent() {
+    _value = value;
+  }
+
   THUnrecognizedCommand(super.parent, List<dynamic> value)
       : _value = value,
         super.addToParent();

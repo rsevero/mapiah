@@ -25,8 +25,9 @@ class THPointMapper extends ClassMapperBase<THPoint> {
 
   static int _$mapiahID(THPoint v) => v.mapiahID;
   static const Field<THPoint, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
-  static THParent _$parent(THPoint v) => v.parent;
-  static const Field<THPoint, THParent> _f$parent = Field('parent', _$parent);
+  static int _$parentMapiahID(THPoint v) => v.parentMapiahID;
+  static const Field<THPoint, int> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THPoint v) => v.sameLineComment;
   static const Field<THPoint, String> _f$sameLineComment =
       Field('sameLineComment', _$sameLineComment);
@@ -40,25 +41,21 @@ class THPointMapper extends ClassMapperBase<THPoint> {
       v.optionsMap;
   static const Field<THPoint, LinkedHashMap<String, THCommandOption>>
       _f$optionsMap = Field('optionsMap', _$optionsMap);
-  static int _$parentMapiahID(THPoint v) => v.parentMapiahID;
-  static const Field<THPoint, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
 
   @override
   final MappableFields<THPoint> fields = const {
     #mapiahID: _f$mapiahID,
-    #parent: _f$parent,
+    #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
     #position: _f$position,
     #pointType: _f$pointType,
     #optionsMap: _f$optionsMap,
-    #parentMapiahID: _f$parentMapiahID,
   };
 
   static THPoint _instantiate(DecodingData data) {
     return THPoint.notAddedToParent(
         data.dec(_f$mapiahID),
-        data.dec(_f$parent),
+        data.dec(_f$parentMapiahID),
         data.dec(_f$sameLineComment),
         data.dec(_f$position),
         data.dec(_f$pointType),
@@ -118,7 +115,7 @@ abstract class THPointCopyWith<$R, $In extends THPoint, $Out>
   @override
   $R call(
       {int? mapiahID,
-      THParent? parent,
+      int? parentMapiahID,
       String? sameLineComment,
       THPositionPart? position,
       String? pointType,
@@ -140,14 +137,14 @@ class _THPointCopyWithImpl<$R, $Out>
   @override
   $R call(
           {int? mapiahID,
-          THParent? parent,
+          int? parentMapiahID,
           Object? sameLineComment = $none,
           THPositionPart? position,
           String? pointType,
           LinkedHashMap<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
         if (mapiahID != null) #mapiahID: mapiahID,
-        if (parent != null) #parent: parent,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (position != null) #position: position,
         if (pointType != null) #pointType: pointType,
@@ -156,7 +153,7 @@ class _THPointCopyWithImpl<$R, $Out>
   @override
   THPoint $make(CopyWithData data) => THPoint.notAddedToParent(
       data.get(#mapiahID, or: $value.mapiahID),
-      data.get(#parent, or: $value.parent),
+      data.get(#parentMapiahID, or: $value.parentMapiahID),
       data.get(#sameLineComment, or: $value.sameLineComment),
       data.get(#position, or: $value.position),
       data.get(#pointType, or: $value.pointType),

@@ -21,25 +21,26 @@ class THMultiLineCommentMapper extends ClassMapperBase<THMultiLineComment> {
   @override
   final String id = 'THMultiLineComment';
 
-  static THParent _$parent(THMultiLineComment v) => v.parent;
-  static const Field<THMultiLineComment, THParent> _f$parent =
-      Field('parent', _$parent);
+  static int _$mapiahID(THMultiLineComment v) => v.mapiahID;
+  static const Field<THMultiLineComment, int> _f$mapiahID =
+      Field('mapiahID', _$mapiahID);
   static int _$parentMapiahID(THMultiLineComment v) => v.parentMapiahID;
   static const Field<THMultiLineComment, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID, mode: FieldMode.member);
+      Field('parentMapiahID', _$parentMapiahID);
   static String? _$sameLineComment(THMultiLineComment v) => v.sameLineComment;
   static const Field<THMultiLineComment, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment, mode: FieldMode.member);
+      Field('sameLineComment', _$sameLineComment);
 
   @override
   final MappableFields<THMultiLineComment> fields = const {
-    #parent: _f$parent,
+    #mapiahID: _f$mapiahID,
     #parentMapiahID: _f$parentMapiahID,
     #sameLineComment: _f$sameLineComment,
   };
 
   static THMultiLineComment _instantiate(DecodingData data) {
-    return THMultiLineComment(data.dec(_f$parent));
+    return THMultiLineComment.notAddToParent(data.dec(_f$mapiahID),
+        data.dec(_f$parentMapiahID), data.dec(_f$sameLineComment));
   }
 
   @override
@@ -98,7 +99,7 @@ extension THMultiLineCommentValueCopy<$R, $Out>
 abstract class THMultiLineCommentCopyWith<$R, $In extends THMultiLineComment,
     $Out> implements THElementCopyWith<$R, $In, $Out> {
   @override
-  $R call({THParent? parent});
+  $R call({int? mapiahID, int? parentMapiahID, String? sameLineComment});
   THMultiLineCommentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -112,11 +113,21 @@ class _THMultiLineCommentCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THMultiLineComment> $mapper =
       THMultiLineCommentMapper.ensureInitialized();
   @override
-  $R call({THParent? parent}) =>
-      $apply(FieldCopyWithData({if (parent != null) #parent: parent}));
+  $R call(
+          {int? mapiahID,
+          int? parentMapiahID,
+          Object? sameLineComment = $none}) =>
+      $apply(FieldCopyWithData({
+        if (mapiahID != null) #mapiahID: mapiahID,
+        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (sameLineComment != $none) #sameLineComment: sameLineComment
+      }));
   @override
   THMultiLineComment $make(CopyWithData data) =>
-      THMultiLineComment(data.get(#parent, or: $value.parent));
+      THMultiLineComment.notAddToParent(
+          data.get(#mapiahID, or: $value.mapiahID),
+          data.get(#parentMapiahID, or: $value.parentMapiahID),
+          data.get(#sameLineComment, or: $value.sameLineComment));
 
   @override
   THMultiLineCommentCopyWith<$R2, THMultiLineComment, $Out2> $chain<$R2, $Out2>(

@@ -65,7 +65,7 @@ class THLine extends THElement
   /// Used by dart_mappable.
   THLine.notAddedToParent(
     super.mapiahID,
-    super.parent,
+    super.parentMapiaID,
     super.sameLineComment,
     String lineType,
     List<int> childrenMapiahID,

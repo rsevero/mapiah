@@ -5,6 +5,13 @@ part 'th_endarea.mapper.dart';
 
 @MappableClass()
 class THEndarea extends THElement with THEndareaMappable {
+  // Used by dart_mappable.
+  THEndarea.notAddToParent(
+    super.mapiahID,
+    super.parentMapiahID,
+    super.sameLineComment,
+  ) : super.notAddToParent();
+
   THEndarea(super.parent) : super.addToParent();
 
   @override

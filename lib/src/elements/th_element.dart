@@ -33,10 +33,8 @@ abstract class THElement with THElementMappable {
   /// Used by dart_mappable to instantiate a THElement from a map and from
   /// copyWith.
   THElement.notAddToParent(
-      int mapiahID, THParent parent, this.sameLineComment) {
+      int mapiahID, this.parentMapiahID, this.sameLineComment) {
     _mapiahID = mapiahID;
-    _thFile = parent.thFile;
-    parentMapiahID = parent.mapiahID;
   }
 
   /// Main constructor.
