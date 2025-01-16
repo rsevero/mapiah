@@ -21,8 +21,8 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
   late final THLine newLine;
   late final LinkedHashMap<int, THLineSegment> newLineSegmentsMap;
-  late final Offset deltaOnCanvas;
-  bool isFromDelta = false;
+  final Offset deltaOnCanvas;
+  final bool isFromDelta;
 
   MoveLineCommand({
     required this.originalLine,
@@ -31,7 +31,9 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
     required this.newLineSegmentsMap,
     super.type = CommandType.moveLine,
     super.description = 'Move Line',
-  }) : super();
+  })  : deltaOnCanvas = Offset.zero,
+        isFromDelta = false,
+        super();
 
   MoveLineCommand.fromDelta({
     required this.originalLine,
@@ -41,7 +43,39 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
     super.description = 'Move Line',
   })  : newLine = originalLine.copyWith(),
         isFromDelta = true,
-        super();
+        super() {
+    newLineSegmentsMap = LinkedHashMap<int, THLineSegment>();
+    for (var entry in originalLineSegmentsMap.entries) {
+      final int originalLineSegmentMapiahID = entry.key;
+      final THLineSegment originalLineSegment = entry.value;
+      late THLineSegment newLineSegment;
+
+      switch (originalLineSegment) {
+        case THStraightLineSegment _:
+          newLineSegment = originalLineSegment.copyWith.endPoint(
+            coordinates:
+                originalLineSegment.endPoint.coordinates + deltaOnCanvas,
+          );
+          break;
+        case THBezierCurveLineSegment _:
+          newLineSegment = originalLineSegment.copyWith
+              .endPoint(
+                  coordinates:
+                      originalLineSegment.endPoint.coordinates + deltaOnCanvas)
+              .copyWith
+              .controlPoint1(
+                  coordinates: originalLineSegment.controlPoint1.coordinates +
+                      deltaOnCanvas)
+              .copyWith
+              .controlPoint2(
+                  coordinates: originalLineSegment.controlPoint2.coordinates +
+                      deltaOnCanvas);
+          break;
+      }
+
+      newLineSegmentsMap[originalLineSegmentMapiahID] = newLineSegment;
+    }
+  }
 
   @override
   void actualExecute(THFile thFile) {
