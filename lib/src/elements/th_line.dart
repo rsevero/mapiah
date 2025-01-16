@@ -76,7 +76,7 @@ class THLine extends THElement
     addOptionsMap(optionsMap);
   }
 
-  THLine(super.parent, String lineType) : super.addToParent() {
+  THLine(super.parentMapiahID, String lineType) : super() {
     this.lineType = lineType;
   }
 
@@ -85,16 +85,16 @@ class THLine extends THElement
   }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THLine;
+  bool isSameClass(Object object) {
+    return object is THLine;
   }
 
-  set lineType(String aLineType) {
-    if (!hasLineType(aLineType)) {
-      throw THCustomException("Unrecognized THLine type '$aLineType'.");
+  set lineType(String lineType) {
+    if (!hasLineType(lineType)) {
+      throw THCustomException("Unrecognized THLine type '$lineType'.");
     }
 
-    _lineType = aLineType;
+    _lineType = lineType;
   }
 
   String get lineType {

@@ -14,7 +14,6 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THMarkCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,9 +21,6 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
   @override
   final String id = 'THMarkCommandOption';
 
-  static THFile _$thFile(THMarkCommandOption v) => v.thFile;
-  static const Field<THMarkCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THMarkCommandOption v) => v.parentMapiahID;
   static const Field<THMarkCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -37,7 +33,6 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
 
   @override
   final MappableFields<THMarkCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #mark: _f$mark,
@@ -45,7 +40,6 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
 
   static THMarkCommandOption _instantiate(DecodingData data) {
     return THMarkCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$mark));
@@ -107,10 +101,7 @@ extension THMarkCommandOptionValueCopy<$R, $Out>
 abstract class THMarkCommandOptionCopyWith<$R, $In extends THMarkCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
-  @override
-  $R call(
-      {THFile? thFile, int? parentMapiahID, String? optionType, String? mark});
+  $R call({int? parentMapiahID, String? optionType, String? mark});
   THMarkCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -124,16 +115,8 @@ class _THMarkCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THMarkCommandOption> $mapper =
       THMarkCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          String? mark}) =>
+  $R call({int? parentMapiahID, String? optionType, String? mark}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (mark != null) #mark: mark
@@ -141,7 +124,6 @@ class _THMarkCommandOptionCopyWithImpl<$R, $Out>
   @override
   THMarkCommandOption $make(CopyWithData data) =>
       THMarkCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#mark, or: $value.mark));

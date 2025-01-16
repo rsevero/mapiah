@@ -6,8 +6,6 @@ import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
-import 'package:mapiah/src/elements/th_line.dart';
 
 part 'th_line_segment.mapper.dart';
 
@@ -15,7 +13,7 @@ part 'th_line_segment.mapper.dart';
 @MappableClass()
 abstract class THLineSegment extends THElement
     with THLineSegmentMappable
-    implements THHasPLAType, THPointInterface, THHasOptions {
+    implements THPointInterface, THHasOptions {
   late final THPositionPart endPoint;
 
   // Used by dart_mappable.
@@ -29,19 +27,9 @@ abstract class THLineSegment extends THElement
     addOptionsMap(optionsMap);
   }
 
-  THLineSegment.addToParent(super.parent, this.endPoint) : super.addToParent();
+  THLineSegment.withEndPoint(super.parentMapiahID, this.endPoint) : super();
 
-  THLineSegment(super.parent) : super.addToParent();
-
-  @override
-  set plaType(String lineType) {
-    (parent as THLine).plaType = lineType;
-  }
-
-  @override
-  String get plaType {
-    return (parent as THLine).plaType;
-  }
+  THLineSegment(super.parentMapiahID) : super();
 
   @override
   String get elementType {

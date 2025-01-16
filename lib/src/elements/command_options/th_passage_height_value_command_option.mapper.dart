@@ -71,7 +71,6 @@ class THPassageHeightValueCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THPassageHeightValueCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THPassageHeightModesMapper.ensureInitialized();
     }
@@ -81,9 +80,6 @@ class THPassageHeightValueCommandOptionMapper
   @override
   final String id = 'THPassageHeightValueCommandOption';
 
-  static THFile _$thFile(THPassageHeightValueCommandOption v) => v.thFile;
-  static const Field<THPassageHeightValueCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THPassageHeightValueCommandOption v) =>
       v.parentMapiahID;
   static const Field<THPassageHeightValueCommandOption, int> _f$parentMapiahID =
@@ -111,7 +107,6 @@ class THPassageHeightValueCommandOptionMapper
 
   @override
   final MappableFields<THPassageHeightValueCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #plusNumber: _f$plusNumber,
@@ -122,7 +117,6 @@ class THPassageHeightValueCommandOptionMapper
 
   static THPassageHeightValueCommandOption _instantiate(DecodingData data) {
     return THPassageHeightValueCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$plusNumber),
@@ -193,14 +187,11 @@ abstract class THPassageHeightValueCommandOptionCopyWith<
     $R,
     $In extends THPassageHeightValueCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get plusNumber;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get minusNumber;
   @override
   $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
+      {int? parentMapiahID,
       String? optionType,
       THDoublePart? plusNumber,
       THDoublePart? minusNumber,
@@ -222,9 +213,6 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THPassageHeightValueCommandOption> $mapper =
       THPassageHeightValueCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get plusNumber =>
       $value.plusNumber?.copyWith.$chain((v) => call(plusNumber: v));
   @override
@@ -232,15 +220,13 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
       $value.minusNumber?.copyWith.$chain((v) => call(minusNumber: v));
   @override
   $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
+          {int? parentMapiahID,
           String? optionType,
           Object? plusNumber = $none,
           Object? minusNumber = $none,
           THPassageHeightModes? mode,
           bool? plusHasSign}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (plusNumber != $none) #plusNumber: plusNumber,
@@ -251,7 +237,6 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
   @override
   THPassageHeightValueCommandOption $make(CopyWithData data) =>
       THPassageHeightValueCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#plusNumber, or: $value.plusNumber),

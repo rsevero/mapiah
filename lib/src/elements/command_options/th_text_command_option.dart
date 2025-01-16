@@ -1,10 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/elements/th_has_text.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_text_command_option.mapper.dart';
 
@@ -26,43 +23,29 @@ part 'th_text_command_option.mapper.dart';
 class THTextCommandOption extends THCommandOption
     with THTextCommandOptionMappable, THHasText {
   static const String _thisOptionType = 'text';
-  static final Map<String, Set<String>> _supportedTypes = {
-    'point': {
-      'label',
-      'remark',
-      'continuation',
-    },
-    'line': {
-      'label',
-    },
-  };
+  // static final Map<String, Set<String>> _supportedTypes = {
+  //   'point': {
+  //     'label',
+  //     'remark',
+  //     'continuation',
+  //   },
+  //   'line': {
+  //     'label',
+  //   },
+  // };
 
   /// Constructor necessary for dart_mappable support.
   THTextCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, String text)
-      : super.withExplicitParameters() {
-    _checkOptionParent();
+    super.parentMapiahID,
+    super.optionType,
+    String text,
+  ) : super.withExplicitParameters() {
     this.text = text;
   }
 
   THTextCommandOption(THHasOptions optionParent, String text)
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent();
     this.text = text;
-  }
-
-  void _checkOptionParent() {
-    final String parentType = optionParent.elementType;
-    if (_supportedTypes.containsKey(parentType)) {
-      final String plaType = (optionParent as THHasPLAType).plaType;
-      if (!_supportedTypes[parentType]!.contains(plaType)) {
-        throw THCustomException(
-            "'text' command option not supported on elements of type '$parentType' and plaType '$plaType'.");
-      }
-    } else {
-      throw THCustomException(
-          "'text' command option not supported on elements of type '$parentType'.");
-    }
   }
 
   @override

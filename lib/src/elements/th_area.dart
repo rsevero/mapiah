@@ -51,9 +51,9 @@ class THArea extends THElement
     addOptionsMap(optionsMap);
   }
 
-  THArea(super.parent, String areaType)
+  THArea(super.parentMapiahID, String areaType)
       : _areaType = areaType,
-        super.addToParent() {
+        super() {
     if (!hasAreaType(areaType)) {
       throw THCustomException("Unrecognized THArea type '$areaType'.");
     }
@@ -82,7 +82,7 @@ class THArea extends THElement
   }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THArea;
+  bool isSameClass(Object object) {
+    return object is THArea;
   }
 }

@@ -1,9 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_passage_height_value_command_option.mapper.dart';
@@ -31,16 +29,13 @@ class THPassageHeightValueCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THPassageHeightValueCommandOption.withExplicitParameters(
-      super.thFile,
-      super.parentMapiahID,
-      super.optionType,
-      THDoublePart? plusNumber,
-      THDoublePart? minusNumber,
-      THPassageHeightModes mode,
-      bool plusHasSign)
-      : super.withExplicitParameters() {
-    _checkOptionParent();
-
+    super.parentMapiahID,
+    super.optionType,
+    THDoublePart? plusNumber,
+    THDoublePart? minusNumber,
+    THPassageHeightModes mode,
+    bool plusHasSign,
+  ) : super.withExplicitParameters() {
     _plusNumber = plusNumber;
     _minusNumber = minusNumber;
     _mode = mode;
@@ -50,16 +45,7 @@ class THPassageHeightValueCommandOption extends THCommandOption
   THPassageHeightValueCommandOption.fromString(
       THHasOptions optionParent, String plusNumber, String minusNumber)
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent();
     plusAndMinusNumbersFromString(plusNumber, minusNumber);
-  }
-
-  void _checkOptionParent() {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'passage-height')) {
-      throw THCustomException(
-          "'$optionType' command option only supported on points of type 'passage-height'.");
-    }
   }
 
   void _setMode() {

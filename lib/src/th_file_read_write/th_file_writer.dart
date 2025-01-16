@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_comment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_encoding.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -21,86 +22,93 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 
 class THFileWriter {
-  var _prefix = '';
+  String _prefix = '';
 
-  final _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
-  final _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
+  final RegExp _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
+  final RegExp _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
 
   bool _includeEmptyLines = false;
   bool _insideMultiLineComment = false;
 
-  String serialize(THElement aTHElement, {bool? includeEmptyLines}) {
+  late THFile _thFile;
+
+  String serialize(THFile thFile, {bool? includeEmptyLines}) {
+    _thFile = thFile;
     String asString = '';
-    final String type = aTHElement.elementType;
 
     if (includeEmptyLines != null) {
       _includeEmptyLines = includeEmptyLines;
     }
 
+    _prefix = '';
+    if (thFile.elementByMapiahID(thFile.childrenMapiahID[0]) is! THEncoding) {
+      final String newLine = 'encoding ${thFile.encoding}\n';
+      asString += newLine;
+    }
+    asString += _childrenAsString(thFile);
+
+    return asString;
+  }
+
+  String serializeElement(THElement thElement) {
+    String asString = '';
+    final String type = thElement.elementType;
+
     switch (type) {
       case 'area':
-        asString += _serializeArea(aTHElement);
+        asString += _serializeArea(thElement);
       case 'areaborderthid':
-        final newLine = (aTHElement as THAreaBorderTHID).id;
-        asString += _prepareLine(newLine, aTHElement);
+        final newLine = (thElement as THAreaBorderTHID).id;
+        asString += _prepareLine(newLine, thElement);
       case 'comment':
-        asString += '# ${(aTHElement as THComment).content}\n';
+        asString += '# ${(thElement as THComment).content}\n';
       case 'emptyline':
         if (_includeEmptyLines || _insideMultiLineComment) {
           asString += '\n';
         }
       case 'encoding':
-        final newLine = 'encoding ${(aTHElement as THEncoding).encoding}';
-        asString += _prepareLine(newLine, aTHElement);
+        final newLine = 'encoding ${(thElement as THEncoding).encoding}';
+        asString += _prepareLine(newLine, thElement);
       case 'endarea':
         _reducePrefix();
-        asString += _prepareLine('endarea', aTHElement);
+        asString += _prepareLine('endarea', thElement);
       case 'endcomment':
         _reducePrefix();
         _insideMultiLineComment = false;
-        asString += _prepareLine('endcomment', aTHElement);
+        asString += _prepareLine('endcomment', thElement);
       case 'endline':
         _reducePrefix();
-        asString += _prepareLine('endline', aTHElement);
+        asString += _prepareLine('endline', thElement);
       case 'endscrap':
         _reducePrefix();
-        asString += _prepareLine('endscrap', aTHElement);
-      case 'file':
-        _prefix = '';
-        final THFile aTHFile = aTHElement as THFile;
-        if (aTHFile.elementByMapiahID(aTHFile.childrenMapiahID[0])
-            is! THEncoding) {
-          final String newLine = 'encoding ${aTHFile.encoding}\n';
-          asString += newLine;
-        }
-        asString += _childrenAsString(aTHFile);
+        asString += _prepareLine('endscrap', thElement);
       case 'line':
-        asString += _serializeLine(aTHElement);
+        asString += _serializeLine(thElement);
       case 'linesegment':
-        asString += _serializeLineSegment(aTHElement);
+        asString += _serializeLineSegment(thElement);
       case 'multilinecomment':
-        asString += _prepareLine('comment', aTHElement);
+        asString += _prepareLine('comment', thElement);
         _increasePrefix();
         _insideMultiLineComment = true;
-        asString += _childrenAsString(aTHElement as THMultiLineComment);
+        asString += _childrenAsString(thElement as THMultiLineComment);
       case 'multilinecommentcontent':
-        asString += '${(aTHElement as THMultilineCommentContent).content}\n';
+        asString += '${(thElement as THMultilineCommentContent).content}\n';
       case 'point':
-        asString += _serializePoint(aTHElement);
+        asString += _serializePoint(thElement);
       case 'scrap':
-        final THScrap aTHScrap = aTHElement as THScrap;
+        final THScrap aTHScrap = thElement as THScrap;
         final String newLine =
             "scrap ${aTHScrap.thID} ${aTHScrap.optionsAsString()}".trim();
         asString += _prepareLine(newLine, aTHScrap);
         _increasePrefix();
         asString += _childrenAsString(aTHScrap);
       case 'xtherionconfig':
-        final THXTherionConfig xtherionconfig = aTHElement as THXTherionConfig;
+        final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
         asString +=
             "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
       default:
-        final String newLine = "Unrecognized element: '$aTHElement'";
-        asString += _prepareLine(newLine, aTHElement);
+        final String newLine = "Unrecognized element: '$thElement'";
+        asString += _prepareLine(newLine, thElement);
     }
 
     return asString;
@@ -173,12 +181,11 @@ class THFileWriter {
     return asString;
   }
 
-  String _childrenAsString(THParent aTHParent) {
+  String _childrenAsString(THParent thParent) {
     String asString = '';
-    final THFile thFile = aTHParent.thFile;
 
-    for (final int aChildMapiahID in (aTHParent).childrenMapiahID) {
-      asString += serialize(thFile.elementByMapiahID(aChildMapiahID));
+    for (final int aChildMapiahID in (thParent).childrenMapiahID) {
+      asString += serializeElement(_thFile.elementByMapiahID(aChildMapiahID));
     }
 
     return asString;
@@ -302,6 +309,7 @@ class THFileWriter {
 
   Future<List<int>> toBytes(THFile thFile,
       {bool includeEmptyLines = false}) async {
+    _thFile = thFile;
     String encoding = thFile.encoding;
     late List<int> fileContentEncoded;
     String fileContent =

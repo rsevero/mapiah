@@ -12,10 +12,10 @@ class THEmptyLine extends THElement with THEmptyLineMappable {
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THEmptyLine(super.parent) : super.addToParent();
+  THEmptyLine(super.parentMapiahID) : super();
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THEmptyLine;
+  bool isSameClass(Object object) {
+    return object is THEmptyLine;
   }
 }

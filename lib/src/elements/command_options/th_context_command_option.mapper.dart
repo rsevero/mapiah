@@ -15,7 +15,6 @@ class THContextCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THContextCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,9 +22,6 @@ class THContextCommandOptionMapper
   @override
   final String id = 'THContextCommandOption';
 
-  static THFile _$thFile(THContextCommandOption v) => v.thFile;
-  static const Field<THContextCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THContextCommandOption v) => v.parentMapiahID;
   static const Field<THContextCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -41,7 +37,6 @@ class THContextCommandOptionMapper
 
   @override
   final MappableFields<THContextCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #elementType: _f$elementType,
@@ -50,7 +45,6 @@ class THContextCommandOptionMapper
 
   static THContextCommandOption _instantiate(DecodingData data) {
     return THContextCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$elementType),
@@ -115,11 +109,8 @@ abstract class THContextCommandOptionCopyWith<
     $In extends THContextCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
-  @override
   $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
+      {int? parentMapiahID,
       String? optionType,
       String? elementType,
       String? symbolType});
@@ -137,17 +128,12 @@ class _THContextCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THContextCommandOption> $mapper =
       THContextCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
+          {int? parentMapiahID,
           String? optionType,
           String? elementType,
           String? symbolType}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (elementType != null) #elementType: elementType,
@@ -156,7 +142,6 @@ class _THContextCommandOptionCopyWithImpl<$R, $Out>
   @override
   THContextCommandOption $make(CopyWithData data) =>
       THContextCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#elementType, or: $value.elementType),

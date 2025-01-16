@@ -1,6 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 
 part 'th_stations_command_option.mapper.dart';
@@ -16,8 +15,10 @@ class THStationsCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THStationsCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, this.stations)
-      : super.withExplicitParameters();
+    super.parentMapiahID,
+    super.optionType,
+    this.stations,
+  ) : super.withExplicitParameters();
 
   THStationsCommandOption(THHasOptions optionParent, this.stations)
       : super(optionParent, _thisOptionType);

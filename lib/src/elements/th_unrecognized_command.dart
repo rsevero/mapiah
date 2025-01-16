@@ -18,13 +18,13 @@ class THUnrecognizedCommand extends THElement
     _value = value;
   }
 
-  THUnrecognizedCommand(super.parent, List<dynamic> value)
+  THUnrecognizedCommand(super.parentMapiahID, List<dynamic> value)
       : _value = value,
-        super.addToParent();
+        super();
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THUnrecognizedCommand;
+  bool isSameClass(Object object) {
+    return object is THUnrecognizedCommand;
   }
 
   get value {

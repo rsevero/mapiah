@@ -7,7 +7,7 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 import 'package:mapiah/src/stores/multiple_store_reactions.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
-import 'package:mapiah/src/stores/th_store_store.dart';
+import 'package:mapiah/src/stores/general_store.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -18,7 +18,7 @@ void main() {
 
 void _setup() {
   getIt.registerSingleton<THSettingsStore>(THSettingsStore());
-  getIt.registerSingleton<THStoreStore>(THStoreStore());
+  getIt.registerSingleton<GeneralStore>(GeneralStore());
   getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());
   getIt.registerSingleton<MultipleStoreReactions>(MultipleStoreReactions());
 }

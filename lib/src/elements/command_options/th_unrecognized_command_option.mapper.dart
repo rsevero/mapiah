@@ -16,7 +16,6 @@ class THUnrecognizedCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THUnrecognizedCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,9 +23,6 @@ class THUnrecognizedCommandOptionMapper
   @override
   final String id = 'THUnrecognizedCommandOption';
 
-  static THFile _$thFile(THUnrecognizedCommandOption v) => v.thFile;
-  static const Field<THUnrecognizedCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THUnrecognizedCommandOption v) =>
       v.parentMapiahID;
   static const Field<THUnrecognizedCommandOption, int> _f$parentMapiahID =
@@ -40,7 +36,6 @@ class THUnrecognizedCommandOptionMapper
 
   @override
   final MappableFields<THUnrecognizedCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #value: _f$value,
@@ -48,7 +43,6 @@ class THUnrecognizedCommandOptionMapper
 
   static THUnrecognizedCommandOption _instantiate(DecodingData data) {
     return THUnrecognizedCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$value));
@@ -114,10 +108,7 @@ abstract class THUnrecognizedCommandOptionCopyWith<
     $In extends THUnrecognizedCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
-  @override
-  $R call(
-      {THFile? thFile, int? parentMapiahID, String? optionType, String? value});
+  $R call({int? parentMapiahID, String? optionType, String? value});
   THUnrecognizedCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -134,16 +125,8 @@ class _THUnrecognizedCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THUnrecognizedCommandOption> $mapper =
       THUnrecognizedCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          Object? value = $none}) =>
+  $R call({int? parentMapiahID, String? optionType, Object? value = $none}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (value != $none) #value: value
@@ -151,7 +134,6 @@ class _THUnrecognizedCommandOptionCopyWithImpl<$R, $Out>
   @override
   THUnrecognizedCommandOption $make(CopyWithData data) =>
       THUnrecognizedCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#value, or: $value.value));

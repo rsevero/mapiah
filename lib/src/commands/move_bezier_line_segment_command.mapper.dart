@@ -16,6 +16,7 @@ class MoveBezierLineSegmentCommandMapper
       MapperContainer.globals
           .use(_instance = MoveBezierLineSegmentCommandMapper._());
       CommandMapper.ensureInitialized();
+      MapperContainer.globals.useAll([OffsetMapper()]);
       THBezierCurveLineSegmentMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }

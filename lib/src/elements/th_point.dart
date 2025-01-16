@@ -180,15 +180,20 @@ class THPoint extends THElement
     addOptionsMap(optionsMap);
   }
 
-  THPoint(super.parent, THPositionPart coordinates, String pointType)
-      : super.addToParent() {
+  THPoint(
+    super.parentMapiahID,
+    THPositionPart coordinates,
+    String pointType,
+  ) : super() {
     _position = coordinates;
     _pointType = pointType;
   }
 
   THPoint.fromString(
-      super.parent, List<dynamic> pointDataList, String pointType)
-      : super.addToParent() {
+    super.parentMapiahID,
+    List<dynamic> pointDataList,
+    String pointType,
+  ) : super() {
     _position = THPositionPart.fromStringList(pointDataList);
     plaType = pointType;
   }
@@ -198,8 +203,8 @@ class THPoint extends THElement
   }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THPoint;
+  bool isSameClass(Object object) {
+    return object is THPoint;
   }
 
   set pointType(String pointType) {

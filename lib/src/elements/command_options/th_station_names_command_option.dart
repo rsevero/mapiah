@@ -1,6 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
@@ -16,9 +15,12 @@ class THStationNamesCommandOption extends THCommandOption
   late String _suffix;
 
   /// Constructor necessary for dart_mappable support.
-  THStationNamesCommandOption.withExplicitParameters(super.thFile,
-      super.parentMapiahID, super.optionType, String preffix, String suffix)
-      : super.withExplicitParameters() {
+  THStationNamesCommandOption.withExplicitParameters(
+    super.parentMapiahID,
+    super.optionType,
+    String preffix,
+    String suffix,
+  ) : super.withExplicitParameters() {
     this.preffix = preffix;
     this.suffix = suffix;
   }
@@ -29,22 +31,22 @@ class THStationNamesCommandOption extends THCommandOption
         _suffix = suffix,
         super(optionParent, _thisOptionType);
 
-  set preffix(String aPreffix) {
-    if (aPreffix.contains(' ')) {
+  set preffix(String preffix) {
+    if (preffix.contains(' ')) {
       throw THCustomException(
-          "Preffix can't contain spaces in THStationNamesCommandOption: '$aPreffix'");
+          "Preffix can't contain spaces in THStationNamesCommandOption: '$preffix'");
     }
 
-    _prefix = aPreffix;
+    _prefix = preffix;
   }
 
-  set suffix(String aSuffix) {
-    if (aSuffix.contains(' ')) {
+  set suffix(String suffix) {
+    if (suffix.contains(' ')) {
       throw THCustomException(
-          "Suffix can't contain spaces in THStationNamesCommandOption: '$aSuffix'");
+          "Suffix can't contain spaces in THStationNamesCommandOption: '$suffix'");
     }
 
-    _suffix = aSuffix;
+    _suffix = suffix;
   }
 
   String get preffix {

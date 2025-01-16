@@ -14,7 +14,6 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THCSCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
       THCSPartMapper.ensureInitialized();
     }
     return _instance!;
@@ -23,9 +22,6 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
   @override
   final String id = 'THCSCommandOption';
 
-  static THFile _$thFile(THCSCommandOption v) => v.thFile;
-  static const Field<THCSCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THCSCommandOption v) => v.parentMapiahID;
   static const Field<THCSCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -37,14 +33,13 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
 
   @override
   final MappableFields<THCSCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #cs: _f$cs,
   };
 
   static THCSCommandOption _instantiate(DecodingData data) {
-    return THCSCommandOption.withExplicitParameters(data.dec(_f$thFile),
+    return THCSCommandOption.withExplicitParameters(
         data.dec(_f$parentMapiahID), data.dec(_f$optionType), data.dec(_f$cs));
   }
 
@@ -103,12 +98,9 @@ extension THCSCommandOptionValueCopy<$R, $Out>
 
 abstract class THCSCommandOptionCopyWith<$R, $In extends THCSCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   THCSPartCopyWith<$R, THCSPart, THCSPart> get cs;
   @override
-  $R call(
-      {THFile? thFile, int? parentMapiahID, String? optionType, THCSPart? cs});
+  $R call({int? parentMapiahID, String? optionType, THCSPart? cs});
   THCSCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -122,19 +114,11 @@ class _THCSCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THCSCommandOption> $mapper =
       THCSCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   THCSPartCopyWith<$R, THCSPart, THCSPart> get cs =>
       $value.cs.copyWith.$chain((v) => call(cs: v));
   @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          THCSPart? cs}) =>
+  $R call({int? parentMapiahID, String? optionType, THCSPart? cs}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (cs != null) #cs: cs
@@ -142,7 +126,6 @@ class _THCSCommandOptionCopyWithImpl<$R, $Out>
   @override
   THCSCommandOption $make(CopyWithData data) =>
       THCSCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#cs, or: $value.cs));

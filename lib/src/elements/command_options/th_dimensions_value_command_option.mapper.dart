@@ -16,7 +16,6 @@ class THDimensionsValueCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THDimensionsValueCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -25,9 +24,6 @@ class THDimensionsValueCommandOptionMapper
   @override
   final String id = 'THDimensionsValueCommandOption';
 
-  static THFile _$thFile(THDimensionsValueCommandOption v) => v.thFile;
-  static const Field<THDimensionsValueCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THDimensionsValueCommandOption v) =>
       v.parentMapiahID;
   static const Field<THDimensionsValueCommandOption, int> _f$parentMapiahID =
@@ -50,7 +46,6 @@ class THDimensionsValueCommandOptionMapper
 
   @override
   final MappableFields<THDimensionsValueCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #above: _f$above,
@@ -61,7 +56,6 @@ class THDimensionsValueCommandOptionMapper
 
   static THDimensionsValueCommandOption _instantiate(DecodingData data) {
     return THDimensionsValueCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$above),
@@ -129,14 +123,11 @@ abstract class THDimensionsValueCommandOptionCopyWith<
     $R,
     $In extends THDimensionsValueCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get above;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get below;
   @override
   $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
+      {int? parentMapiahID,
       String? optionType,
       THDoublePart? above,
       THDoublePart? below,
@@ -157,9 +148,6 @@ class _THDimensionsValueCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THDimensionsValueCommandOption> $mapper =
       THDimensionsValueCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get above =>
       $value.above.copyWith.$chain((v) => call(above: v));
   @override
@@ -167,14 +155,12 @@ class _THDimensionsValueCommandOptionCopyWithImpl<$R, $Out>
       $value.below.copyWith.$chain((v) => call(below: v));
   @override
   $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
+          {int? parentMapiahID,
           String? optionType,
           THDoublePart? above,
           THDoublePart? below,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (above != null) #above: above,
@@ -184,7 +170,6 @@ class _THDimensionsValueCommandOptionCopyWithImpl<$R, $Out>
   @override
   THDimensionsValueCommandOption $make(CopyWithData data) =>
       THDimensionsValueCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#above, or: $value.above),

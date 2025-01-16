@@ -1,7 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
@@ -16,8 +15,10 @@ class THMarkCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THMarkCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, String mark)
-      : super.withExplicitParameters() {
+    super.parentMapiahID,
+    super.optionType,
+    String mark,
+  ) : super.withExplicitParameters() {
     this.mark = mark;
   }
 

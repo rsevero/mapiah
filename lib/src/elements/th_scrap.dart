@@ -1,5 +1,6 @@
 import "package:dart_mappable/dart_mappable.dart";
 import "package:mapiah/src/elements/th_element.dart";
+import "package:mapiah/src/elements/th_file.dart";
 import "package:mapiah/src/elements/th_has_id.dart";
 import "package:mapiah/src/elements/th_has_options.dart";
 
@@ -40,13 +41,13 @@ class THScrap extends THElement
     _thID = thID;
   }
 
-  THScrap(super.parent, String thID)
-      : _thID = thID,
-        super.addToParent();
+  THScrap(super.parentMapiahID, String thID) : super() {
+    _thID = thID;
+  }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THScrap;
+  bool isSameClass(Object object) {
+    return object is THScrap;
   }
 
   @override
@@ -54,8 +55,7 @@ class THScrap extends THElement
     return _thID;
   }
 
-  @override
-  set thID(String aTHID) {
+  void setTHID(THFile thFile, String aTHID) {
     thFile.updateTHID(this, aTHID);
     _thID = aTHID;
   }

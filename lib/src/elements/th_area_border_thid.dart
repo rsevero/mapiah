@@ -17,7 +17,7 @@ class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
     this.id,
   ) : super.notAddToParent();
 
-  THAreaBorderTHID(THParent parent, this.id) : super.addToParent(parent) {
+  THAreaBorderTHID(super.parentMapiahID, this.id) : super() {
     if (parent is! THArea) {
       throw THCustomException(
           'THAreaBorder parent must be THArea, but it is ${parent.runtimeType}');
@@ -25,7 +25,7 @@ class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
   }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THAreaBorderTHID;
+  bool isSameClass(Object object) {
+    return object is THAreaBorderTHID;
   }
 }

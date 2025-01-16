@@ -1,10 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_line_height_command_option.mapper.dart';
 
@@ -18,27 +15,14 @@ class THLineHeightCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THLineHeightCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, this.height)
-      : super.withExplicitParameters() {
-    _checkOptionParent();
-  }
+    super.parentMapiahID,
+    super.optionType,
+    this.height,
+  ) : super.withExplicitParameters();
 
   THLineHeightCommandOption.fromString(THHasOptions optionParent, String height)
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent();
     this.height = THDoublePart.fromString(height);
-  }
-
-  void _checkOptionParent() {
-    if (optionParent is THLine) {
-      final String platype = (optionParent as THLine).plaType;
-      if ((platype != 'pit') && (platype != 'wall')) {
-        throw THCustomException(
-            "Only available for 'pit' and 'wall:pit' lines.");
-      }
-    } else {
-      throw THCustomException("Only available for lines.");
-    }
   }
 
   @override

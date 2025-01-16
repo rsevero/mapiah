@@ -12,10 +12,10 @@ class THEndarea extends THElement with THEndareaMappable {
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THEndarea(super.parent) : super.addToParent();
+  THEndarea(super.parentMapiahID) : super();
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THEndarea;
+  bool isSameClass(Object object) {
+    return object is THEndarea;
   }
 }

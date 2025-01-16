@@ -1,6 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -17,14 +16,10 @@ class THExtendCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THExtendCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, this.station)
-      : super.withExplicitParameters() {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'station')) {
-      throw THCustomException(
-          "Option 'extend' only valid for points of type 'station'.");
-    }
-  }
+    super.parentMapiahID,
+    super.optionType,
+    this.station,
+  ) : super.withExplicitParameters();
 
   THExtendCommandOption(THHasOptions optionParent, this.station)
       : super(optionParent, _thisOptionType) {

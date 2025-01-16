@@ -1,7 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -23,12 +22,11 @@ class THContextCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THContextCommandOption.withExplicitParameters(
-      super.thFile,
-      super.parentMapiahID,
-      super.optionType,
-      String elementType,
-      String symbolType)
-      : super.withExplicitParameters() {
+    super.parentMapiahID,
+    super.optionType,
+    String elementType,
+    String symbolType,
+  ) : super.withExplicitParameters() {
     this.elementType = elementType;
     this.symbolType = symbolType;
   }

@@ -16,7 +16,6 @@ class THMultipleChoiceCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THMultipleChoiceCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,9 +23,6 @@ class THMultipleChoiceCommandOptionMapper
   @override
   final String id = 'THMultipleChoiceCommandOption';
 
-  static THFile _$thFile(THMultipleChoiceCommandOption v) => v.thFile;
-  static const Field<THMultipleChoiceCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THMultipleChoiceCommandOption v) =>
       v.parentMapiahID;
   static const Field<THMultipleChoiceCommandOption, int> _f$parentMapiahID =
@@ -34,23 +30,27 @@ class THMultipleChoiceCommandOptionMapper
   static String _$optionType(THMultipleChoiceCommandOption v) => v.optionType;
   static const Field<THMultipleChoiceCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
+  static String _$parentElementType(THMultipleChoiceCommandOption v) =>
+      v.parentElementType;
+  static const Field<THMultipleChoiceCommandOption, String>
+      _f$parentElementType = Field('parentElementType', _$parentElementType);
   static String _$choice(THMultipleChoiceCommandOption v) => v.choice;
   static const Field<THMultipleChoiceCommandOption, String> _f$choice =
       Field('choice', _$choice);
 
   @override
   final MappableFields<THMultipleChoiceCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
+    #parentElementType: _f$parentElementType,
     #choice: _f$choice,
   };
 
   static THMultipleChoiceCommandOption _instantiate(DecodingData data) {
     return THMultipleChoiceCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
+        data.dec(_f$parentElementType),
         data.dec(_f$choice));
   }
 
@@ -114,12 +114,10 @@ abstract class THMultipleChoiceCommandOptionCopyWith<
     $In extends THMultipleChoiceCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
-  @override
   $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
+      {int? parentMapiahID,
       String? optionType,
+      String? parentElementType,
       String? choice});
   THMultipleChoiceCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -137,26 +135,23 @@ class _THMultipleChoiceCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THMultipleChoiceCommandOption> $mapper =
       THMultipleChoiceCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
+          {int? parentMapiahID,
           String? optionType,
+          String? parentElementType,
           String? choice}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
+        if (parentElementType != null) #parentElementType: parentElementType,
         if (choice != null) #choice: choice
       }));
   @override
   THMultipleChoiceCommandOption $make(CopyWithData data) =>
       THMultipleChoiceCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
+          data.get(#parentElementType, or: $value.parentElementType),
           data.get(#choice, or: $value.choice));
 
   @override

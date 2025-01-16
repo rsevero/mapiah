@@ -1,10 +1,13 @@
 import "package:dart_mappable/dart_mappable.dart";
 import "package:mapiah/src/elements/th_element.dart";
+import "package:mapiah/src/elements/th_file.dart";
 
 part 'th_encoding.mapper.dart';
 
 @MappableClass()
 class THEncoding extends THElement with THEncodingMappable {
+  late String _encoding;
+
   // Used by dart_mappable.
   THEncoding.notAddToParent(
     super.mapiahID,
@@ -12,21 +15,22 @@ class THEncoding extends THElement with THEncodingMappable {
     super.sameLineComment,
     String encoding,
   ) : super.notAddToParent() {
-    this.encoding = encoding;
+    _encoding = encoding;
   }
 
-  THEncoding(super.parent) : super.addToParent();
-
-  set encoding(String newEncoding) {
-    thFile.encoding = newEncoding;
+  THEncoding(super.parentMapiahID, String encoding) : super() {
+    _encoding = encoding;
   }
 
-  String get encoding {
-    return thFile.encoding;
+  void setEncoding(THFile thFile, String encoding) {
+    _encoding = encoding;
+    thFile.encoding = encoding;
   }
+
+  String get encoding => _encoding;
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THEncoding;
+  bool isSameClass(Object object) {
+    return object is THEncoding;
   }
 }

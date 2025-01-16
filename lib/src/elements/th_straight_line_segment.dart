@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -22,15 +21,18 @@ class THStraightLineSegment extends THLineSegment
     super.optionsMap,
   ) : super.notAddToParent();
 
-  THStraightLineSegment(super.parent, super.endPoint) : super.addToParent();
+  THStraightLineSegment(super.parentMapiahID, super.endPoint)
+      : super.withEndPoint();
 
-  THStraightLineSegment.fromString(super.parent, List<dynamic> aPointDataList)
-      : super() {
-    endPoint = THPositionPart.fromStringList(aPointDataList);
+  THStraightLineSegment.fromString(
+    super.parentMapiahID,
+    List<dynamic> pointDataList,
+  ) : super() {
+    endPoint = THPositionPart.fromStringList(pointDataList);
   }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THStraightLineSegment;
+  bool isSameClass(Object object) {
+    return object is THStraightLineSegment;
   }
 }

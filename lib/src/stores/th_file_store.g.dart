@@ -38,10 +38,14 @@ mixin _$THFileStore on THFileStoreBase, Store {
   @override
   THFile get _thFile => thFile;
 
+  bool __thFileIsInitialized = false;
+
   @override
   set _thFile(THFile value) {
-    _$_thFileAtom.reportWrite(value, super._thFile, () {
+    _$_thFileAtom
+        .reportWrite(value, __thFileIsInitialized ? super._thFile : null, () {
       super._thFile = value;
+      __thFileIsInitialized = true;
     });
   }
 
@@ -136,6 +140,61 @@ mixin _$THFileStore on THFileStoreBase, Store {
           originalLine: originalLine,
           originalLineSegmentsMap: originalLineSegmentsMap,
           deltaOnCanvas: deltaOnCanvas);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addElement(THElement element) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.addElement');
+    try {
+      return super.addElement(element);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addElementWithParent(THElement element, THParent parent) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.addElementWithParent');
+    try {
+      return super.addElementWithParent(element, parent);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteElement(THElement element) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.deleteElement');
+    try {
+      return super.deleteElement(element);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteElementByMapiahID(int mapiahID) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.deleteElementByMapiahID');
+    try {
+      return super.deleteElementByMapiahID(mapiahID);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteElementByTHID(String thID) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.deleteElementByTHID');
+    try {
+      return super.deleteElementByTHID(thID);
     } finally {
       _$THFileStoreBaseActionController.endAction(_$actionInfo);
     }

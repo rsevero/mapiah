@@ -1,12 +1,9 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_altitude.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_altitude_value_command_option.mapper.dart';
 
@@ -20,11 +17,13 @@ class THAltitudeValueCommandOption extends THCommandOption
   static const String _thisOptionType = 'value';
 
   /// Constructor necessary for dart_mappable support.
-  THAltitudeValueCommandOption.withExplicitParameters(super.thFile,
-      super.parentMapiahID, super.optionType, THDoublePart length, bool isFix,
-      [String? unit])
-      : super.withExplicitParameters() {
-    _checkOptionParent(optionParent);
+  THAltitudeValueCommandOption.withExplicitParameters(
+    super.parentMapiahID,
+    super.optionType,
+    THDoublePart length,
+    bool isFix, [
+    String? unit,
+  ]) : super.withExplicitParameters() {
     this.length = length;
     this.isFix = isFix;
     if ((unit != null) && (unit.isNotEmpty)) {
@@ -36,7 +35,6 @@ class THAltitudeValueCommandOption extends THCommandOption
       THHasOptions optionParent, THDoublePart length, bool isFix,
       [String? unit])
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     this.length = length;
     this.isFix = isFix;
     if ((unit != null) && (unit.isNotEmpty)) {
@@ -48,7 +46,6 @@ class THAltitudeValueCommandOption extends THCommandOption
       THHasOptions optionParent, String aHeight, bool aIsFix,
       [String? aUnit])
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     length = THDoublePart.fromString(aHeight);
     isFix = aIsFix;
     if ((aUnit != null) && (aUnit.isNotEmpty)) {
@@ -58,16 +55,7 @@ class THAltitudeValueCommandOption extends THCommandOption
 
   THAltitudeValueCommandOption.fromNan(THHasOptions optionParent)
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     length = THDoublePart.fromString('0');
     isNan = true;
-  }
-
-  void _checkOptionParent(THHasOptions aOptionParent) {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'altitude')) {
-      throw THCustomException(
-          "'$optionType' command option only supported on points and they should be of type 'altitude'.");
-    }
   }
 }

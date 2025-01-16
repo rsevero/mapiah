@@ -1,10 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
@@ -19,29 +15,18 @@ class THOrientationCommandOption extends THCommandOption
   late THDoublePart _azimuth;
 
   /// Constructor necessary for dart_mappable support.
-  THOrientationCommandOption.withExplicitParameters(super.thFile,
-      super.parentMapiahID, super.optionType, THDoublePart azimuth)
-      : super.withExplicitParameters() {
-    _checkOptionParent(optionParent);
+  THOrientationCommandOption.withExplicitParameters(
+    super.parentMapiahID,
+    super.optionType,
+    THDoublePart azimuth,
+  ) : super.withExplicitParameters() {
     this.azimuth = azimuth;
   }
 
   THOrientationCommandOption.fromString(
       THHasOptions optionParent, String azimuth)
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     azimuthFromString = azimuth;
-  }
-
-  void _checkOptionParent(THHasOptions aOptionParent) {
-    if (optionParent is THLineSegment) {
-      if ((optionParent.parent is! THLine) ||
-          ((optionParent.parent as THLine).plaType != 'slope')) {
-        throw THCustomException("Only available for 'slope' lines.");
-      }
-    } else if (optionParent is! THPoint) {
-      throw THCustomException("Only available for 'point' and 'slope' lines.");
-    }
   }
 
   set azimuth(THDoublePart aAzimuth) {

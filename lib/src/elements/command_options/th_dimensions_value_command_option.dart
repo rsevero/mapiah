@@ -2,10 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_dimensions_value_command_option.mapper.dart';
 
@@ -22,14 +19,12 @@ class THDimensionsValueCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THDimensionsValueCommandOption.withExplicitParameters(
-      super.thFile,
-      super.parentMapiahID,
-      super.optionType,
-      THDoublePart above,
-      THDoublePart below,
-      [String? unit])
-      : super.withExplicitParameters() {
-    _checkOptionParent();
+    super.parentMapiahID,
+    super.optionType,
+    THDoublePart above,
+    THDoublePart below, [
+    String? unit,
+  ]) : super.withExplicitParameters() {
     _above = above;
     _below = below;
     if ((unit != null) && (unit.isNotEmpty)) {
@@ -41,19 +36,10 @@ class THDimensionsValueCommandOption extends THCommandOption
       THHasOptions optionParent, String aAbove, String aBelow,
       [String? aUnit])
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent();
     aboveFromString = aAbove;
     belowFromString = aBelow;
     if ((aUnit != null) && (aUnit.isNotEmpty)) {
       unitFromString(aUnit);
-    }
-  }
-
-  void _checkOptionParent() {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'dimensions')) {
-      throw THCustomException(
-          "'$optionType' command option only supported on points of type 'dimensions'.");
     }
   }
 

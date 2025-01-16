@@ -16,7 +16,6 @@ class THStationsCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THStationsCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,9 +23,6 @@ class THStationsCommandOptionMapper
   @override
   final String id = 'THStationsCommandOption';
 
-  static THFile _$thFile(THStationsCommandOption v) => v.thFile;
-  static const Field<THStationsCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THStationsCommandOption v) => v.parentMapiahID;
   static const Field<THStationsCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -39,7 +35,6 @@ class THStationsCommandOptionMapper
 
   @override
   final MappableFields<THStationsCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #stations: _f$stations,
@@ -47,7 +42,6 @@ class THStationsCommandOptionMapper
 
   static THStationsCommandOption _instantiate(DecodingData data) {
     return THStationsCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$stations));
@@ -110,15 +104,9 @@ abstract class THStationsCommandOptionCopyWith<
     $R,
     $In extends THStationsCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get stations;
   @override
-  $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
-      String? optionType,
-      List<String>? stations});
+  $R call({int? parentMapiahID, String? optionType, List<String>? stations});
   THStationsCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -133,20 +121,12 @@ class _THStationsCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THStationsCommandOption> $mapper =
       THStationsCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get stations =>
       ListCopyWith($value.stations, (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(stations: v));
   @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          List<String>? stations}) =>
+  $R call({int? parentMapiahID, String? optionType, List<String>? stations}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (stations != null) #stations: stations
@@ -154,7 +134,6 @@ class _THStationsCommandOptionCopyWithImpl<$R, $Out>
   @override
   THStationsCommandOption $make(CopyWithData data) =>
       THStationsCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#stations, or: $value.stations));

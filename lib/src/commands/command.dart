@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/commands/command_type.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 part "command.mapper.dart";
@@ -12,16 +12,12 @@ part "command.mapper.dart";
 @MappableClass()
 abstract class Command with CommandMappable {
   late final CommandType _type;
-  late final String _description;
+  String description;
   late final UndoRedoCommand _undoRedo;
 
-  Command({required CommandType type, required String description}) {
+  Command({required CommandType type, required this.description}) {
     _type = type;
-    _description = description;
   }
-
-  /// User presentable description of the command.
-  String get description => _description;
 
   CommandType get type => _type;
 

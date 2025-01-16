@@ -14,6 +14,7 @@ class MoveLineCommandMapper extends ClassMapperBase<MoveLineCommand> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = MoveLineCommandMapper._());
       CommandMapper.ensureInitialized();
+      MapperContainer.globals.useAll([OffsetMapper()]);
       THLineMapper.ensureInitialized();
       THLineSegmentMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
@@ -49,10 +50,10 @@ class MoveLineCommandMapper extends ClassMapperBase<MoveLineCommand> {
       Field('description', _$description, opt: true, def: 'Move Line');
   static Offset _$deltaOnCanvas(MoveLineCommand v) => v.deltaOnCanvas;
   static const Field<MoveLineCommand, Offset> _f$deltaOnCanvas =
-      Field('deltaOnCanvas', _$deltaOnCanvas, mode: FieldMode.member);
+      Field('deltaOnCanvas', _$deltaOnCanvas, opt: true, def: Offset.zero);
   static bool _$isFromDelta(MoveLineCommand v) => v.isFromDelta;
   static const Field<MoveLineCommand, bool> _f$isFromDelta =
-      Field('isFromDelta', _$isFromDelta, mode: FieldMode.member);
+      Field('isFromDelta', _$isFromDelta, opt: true, def: false);
 
   @override
   final MappableFields<MoveLineCommand> fields = const {
@@ -73,7 +74,9 @@ class MoveLineCommandMapper extends ClassMapperBase<MoveLineCommand> {
         newLine: data.dec(_f$newLine),
         newLineSegmentsMap: data.dec(_f$newLineSegmentsMap),
         type: data.dec(_f$type),
-        description: data.dec(_f$description));
+        description: data.dec(_f$description),
+        deltaOnCanvas: data.dec(_f$deltaOnCanvas),
+        isFromDelta: data.dec(_f$isFromDelta));
   }
 
   @override
@@ -138,7 +141,9 @@ abstract class MoveLineCommandCopyWith<$R, $In extends MoveLineCommand, $Out>
       THLine? newLine,
       LinkedHashMap<int, THLineSegment>? newLineSegmentsMap,
       CommandType? type,
-      String? description});
+      String? description,
+      Offset? deltaOnCanvas,
+      bool? isFromDelta});
   MoveLineCommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -164,7 +169,9 @@ class _MoveLineCommandCopyWithImpl<$R, $Out>
           THLine? newLine,
           LinkedHashMap<int, THLineSegment>? newLineSegmentsMap,
           CommandType? type,
-          String? description}) =>
+          String? description,
+          Offset? deltaOnCanvas,
+          bool? isFromDelta}) =>
       $apply(FieldCopyWithData({
         if (originalLine != null) #originalLine: originalLine,
         if (originalLineSegmentsMap != null)
@@ -172,7 +179,9 @@ class _MoveLineCommandCopyWithImpl<$R, $Out>
         if (newLine != null) #newLine: newLine,
         if (newLineSegmentsMap != null) #newLineSegmentsMap: newLineSegmentsMap,
         if (type != null) #type: type,
-        if (description != null) #description: description
+        if (description != null) #description: description,
+        if (deltaOnCanvas != null) #deltaOnCanvas: deltaOnCanvas,
+        if (isFromDelta != null) #isFromDelta: isFromDelta
       }));
   @override
   MoveLineCommand $make(CopyWithData data) => MoveLineCommand(
@@ -183,7 +192,9 @@ class _MoveLineCommandCopyWithImpl<$R, $Out>
       newLineSegmentsMap:
           data.get(#newLineSegmentsMap, or: $value.newLineSegmentsMap),
       type: data.get(#type, or: $value.type),
-      description: data.get(#description, or: $value.description));
+      description: data.get(#description, or: $value.description),
+      deltaOnCanvas: data.get(#deltaOnCanvas, or: $value.deltaOnCanvas),
+      isFromDelta: data.get(#isFromDelta, or: $value.isFromDelta));
 
   @override
   MoveLineCommandCopyWith<$R2, MoveLineCommand, $Out2> $chain<$R2, $Out2>(

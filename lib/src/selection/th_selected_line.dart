@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/selection/th_selected_element.dart';
@@ -12,9 +13,8 @@ class THSelectedLine extends THSelectedElement {
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
       LinkedHashMap<int, THLineSegment>();
 
-  THSelectedLine({required this.line}) {
+  THSelectedLine({required THFile thFile, required this.line}) {
     final Iterable<int> lineSegmentMapiahIDs = line.childrenMapiahID;
-    final THFile thFile = line.thFile;
     for (final int mapiahID in lineSegmentMapiahIDs) {
       final THElement element = thFile.elementByMapiahID(mapiahID);
 

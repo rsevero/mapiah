@@ -1,5 +1,5 @@
 import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 class UndoRedoController {

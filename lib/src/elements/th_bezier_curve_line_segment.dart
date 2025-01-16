@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -29,20 +28,26 @@ class THBezierCurveLineSegment extends THLineSegment
   ) : super.notAddToParent();
 
   THBezierCurveLineSegment(
-      super.parent, this.controlPoint1, this.controlPoint2, super.endPoint)
-      : super.addToParent();
+    super.parentMapiahID,
+    this.controlPoint1,
+    this.controlPoint2,
+    super.endPoint,
+  ) : super.withEndPoint();
 
-  THBezierCurveLineSegment.fromString(super.parent, List<dynamic> controlPoint1,
-      List<dynamic> controlPoint2, List<dynamic> endPoint)
-      : super() {
+  THBezierCurveLineSegment.fromString(
+    super.parentMapiahID,
+    List<dynamic> controlPoint1,
+    List<dynamic> controlPoint2,
+    List<dynamic> endPoint,
+  ) : super() {
     this.controlPoint1 = THPositionPart.fromStringList(controlPoint1);
     this.controlPoint2 = THPositionPart.fromStringList(controlPoint2);
     this.endPoint = THPositionPart.fromStringList(endPoint);
   }
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THBezierCurveLineSegment;
+  bool isSameClass(Object object) {
+    return object is THBezierCurveLineSegment;
   }
 
   double get controlPoint1X {

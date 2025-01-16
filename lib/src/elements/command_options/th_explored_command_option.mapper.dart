@@ -16,7 +16,6 @@ class THExploredCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THExploredCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -25,9 +24,6 @@ class THExploredCommandOptionMapper
   @override
   final String id = 'THExploredCommandOption';
 
-  static THFile _$thFile(THExploredCommandOption v) => v.thFile;
-  static const Field<THExploredCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THExploredCommandOption v) => v.parentMapiahID;
   static const Field<THExploredCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -43,7 +39,6 @@ class THExploredCommandOptionMapper
 
   @override
   final MappableFields<THExploredCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #length: _f$length,
@@ -52,7 +47,6 @@ class THExploredCommandOptionMapper
 
   static THExploredCommandOption _instantiate(DecodingData data) {
     return THExploredCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$length),
@@ -116,13 +110,10 @@ abstract class THExploredCommandOptionCopyWith<
     $R,
     $In extends THExploredCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length;
   @override
   $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
+      {int? parentMapiahID,
       String? optionType,
       THDoublePart? length,
       String? unit});
@@ -140,20 +131,15 @@ class _THExploredCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THExploredCommandOption> $mapper =
       THExploredCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length =>
       $value.length.copyWith.$chain((v) => call(length: v));
   @override
   $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
+          {int? parentMapiahID,
           String? optionType,
           THDoublePart? length,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (length != null) #length: length,
@@ -162,7 +148,6 @@ class _THExploredCommandOptionCopyWithImpl<$R, $Out>
   @override
   THExploredCommandOption $make(CopyWithData data) =>
       THExploredCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#length, or: $value.length),

@@ -12,10 +12,10 @@ class THEndcomment extends THElement with THEndcommentMappable {
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THEndcomment(super.parent) : super.addToParent();
+  THEndcomment(super.parentMapiahID) : super();
 
   @override
-  bool isSameClass(THElement element) {
-    return element is THEndcomment;
+  bool isSameClass(Object object) {
+    return object is THEndcomment;
   }
 }

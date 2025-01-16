@@ -1,9 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_from_command_option.mapper.dart';
 
@@ -16,23 +13,13 @@ class THFromCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THFromCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, this.station)
-      : super.withExplicitParameters() {
-    _checkOptionParent();
-  }
+    super.parentMapiahID,
+    super.optionType,
+    this.station,
+  ) : super.withExplicitParameters();
 
   THFromCommandOption(THHasOptions optionParent, this.station)
-      : super(optionParent, _thisOptionType) {
-    _checkOptionParent();
-  }
-
-  void _checkOptionParent() {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'extra')) {
-      throw THCustomException(
-          "Option 'dist' only valid for points of type 'extra'.");
-    }
-  }
+      : super(optionParent, _thisOptionType);
 
   @override
   String specToFile() {

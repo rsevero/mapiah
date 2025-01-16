@@ -16,7 +16,6 @@ class THScrapScaleCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THScrapScaleCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THLengthUnitPartMapper.ensureInitialized();
     }
@@ -26,9 +25,6 @@ class THScrapScaleCommandOptionMapper
   @override
   final String id = 'THScrapScaleCommandOption';
 
-  static THFile _$thFile(THScrapScaleCommandOption v) => v.thFile;
-  static const Field<THScrapScaleCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THScrapScaleCommandOption v) => v.parentMapiahID;
   static const Field<THScrapScaleCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -48,7 +44,6 @@ class THScrapScaleCommandOptionMapper
 
   @override
   final MappableFields<THScrapScaleCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #_numericSpecifications: _f$_numericSpecifications,
@@ -57,7 +52,6 @@ class THScrapScaleCommandOptionMapper
 
   static THScrapScaleCommandOption _instantiate(DecodingData data) {
     return THScrapScaleCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$_numericSpecifications),
@@ -123,16 +117,13 @@ abstract class THScrapScaleCommandOptionCopyWith<
     $R,
     $In extends THScrapScaleCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   ListCopyWith<$R, THDoublePart,
           THDoublePartCopyWith<$R, THDoublePart, THDoublePart>>
       get _numericSpecifications;
   THLengthUnitPartCopyWith<$R, THLengthUnitPart, THLengthUnitPart>? get unit;
   @override
   $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
+      {int? parentMapiahID,
       String? optionType,
       List<THDoublePart>? numericSpecifications,
       THLengthUnitPart? unit});
@@ -150,9 +141,6 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THScrapScaleCommandOption> $mapper =
       THScrapScaleCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   ListCopyWith<$R, THDoublePart,
           THDoublePartCopyWith<$R, THDoublePart, THDoublePart>>
       get _numericSpecifications => ListCopyWith(
@@ -164,13 +152,11 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
       $value.unit?.copyWith.$chain((v) => call(unit: v));
   @override
   $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
+          {int? parentMapiahID,
           String? optionType,
           List<THDoublePart>? numericSpecifications,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (numericSpecifications != null)
@@ -180,7 +166,6 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
   @override
   THScrapScaleCommandOption $make(CopyWithData data) =>
       THScrapScaleCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#numericSpecifications, or: $value._numericSpecifications),

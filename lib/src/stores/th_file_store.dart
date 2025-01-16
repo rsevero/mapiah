@@ -7,6 +7,7 @@ import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/commands/move_line_command.dart';
 import 'package:mapiah/src/commands/move_point_command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -24,38 +25,40 @@ abstract class THFileStoreBase with Store {
   bool _isLoading = false;
 
   @readonly
-  THFile _thFile = THFile();
+  late THFile _thFile;
 
   final List<String> errorMessages = <String>[];
 
   late final UndoRedoController _undoRedoController;
 
-  /// This is a factory constructor that creates a new instance of THFileStore.
-  /// It is a static method that returns a Future that contains a tuple of
-  /// THFileStore, a boolean, and a list of strings.
-  ///
-  /// @param filename The name of the file to be parsed.
-  /// @return A Future that contains a tuple of THFileStore, a boolean, and a
-  /// list of strings.
-  ///
-  /// The THFileStore instance is created and initialized with the parsed file.
-  /// The boolean indicates whether the file was parsed successfully.
-  /// The list of strings contains any error messages that were generated during
-  /// parsing.
-  static Future<THFileStoreCreateResult> create(
-    String filename,
-  ) async {
-    final THFileStore thFileStore = THFileStore._create();
-
-    thFileStore._preParseInitialize();
+  Future<THFileStoreCreateResult> load() async {
+    _preParseInitialize();
 
     final THFileParser parser = THFileParser();
 
-    final (parsedFile, isSuccessful, errors) = await parser.parse(filename);
+    final (parsedFile, isSuccessful, errors) =
+        await parser.parse(_thFile.filename);
 
-    thFileStore._postParseInitialize(parsedFile, isSuccessful, errors);
+    _postParseInitialize(parsedFile, isSuccessful, errors);
 
-    return THFileStoreCreateResult(thFileStore, isSuccessful, errors);
+    return THFileStoreCreateResult(isSuccessful, errors);
+  }
+
+  /// This is a factory constructor that creates a new instance of THFileStore
+  /// with an empty THFile.
+  static THFileStore create(String filename) {
+    final THFileStore thFileStore = THFileStore._create();
+    final THFile thFile = THFile();
+    thFile.filename = filename;
+    thFileStore._basicInitialization(thFile);
+    return thFileStore;
+  }
+
+  THFileStoreBase._create();
+
+  void _basicInitialization(THFile file) {
+    _thFile = file;
+    _undoRedoController = UndoRedoController(_thFile);
   }
 
   void _preParseInitialize() {
@@ -70,24 +73,19 @@ abstract class THFileStoreBase with Store {
   ) {
     _isLoading = false;
 
-    if (isSuccessful) {
-      _thFile = parsedFile;
-      _undoRedoController = UndoRedoController(_thFile);
-    } else {
+    if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
   }
 
-  THFileStoreBase._create();
-
   Future<File?> saveTH2File() async {
-    final file = await _localFile();
-    final encodedContent = await _encodedFileContents();
+    final File file = await _localFile();
+    final List<int> encodedContent = await _encodedFileContents();
     return await file.writeAsBytes(encodedContent, flush: true);
   }
 
   Future<List<int>> _encodedFileContents() async {
-    final thFileWriter = THFileWriter();
+    final THFileWriter thFileWriter = THFileWriter();
     return await thFileWriter.toBytes(_thFile);
   }
 
@@ -98,8 +96,8 @@ abstract class THFileStoreBase with Store {
     );
 
     if (filePath != null) {
-      final file = File(filePath);
-      final encodedContent = await _encodedFileContents();
+      final File file = File(filePath);
+      final List<int> encodedContent = await _encodedFileContents();
       return await file.writeAsBytes(encodedContent, flush: true);
     }
 
@@ -107,7 +105,8 @@ abstract class THFileStoreBase with Store {
   }
 
   Future<File> _localFile() async {
-    final filename = _thFile.filename;
+    final String filename = _thFile.filename;
+
     return File(filename);
   }
 
@@ -158,6 +157,7 @@ abstract class THFileStoreBase with Store {
       originalLineSegmentsMap: originalLineSegmentsMap,
       newLine: newLine,
       newLineSegmentsMap: newLineSegmentsMap,
+      description: 'Move Line',
     );
     _undoRedoController.execute(command);
   }
@@ -175,15 +175,42 @@ abstract class THFileStoreBase with Store {
     );
     _undoRedoController.execute(command);
   }
+
+  @action
+  void addElement(THElement element) {
+    _thFile.addElement(element);
+    _thFile.addElementToParent(element);
+  }
+
+  @action
+  void addElementWithParent(THElement element, THParent parent) {
+    _thFile.addElement(element);
+    parent.addElementToParent(element);
+  }
+
+  @action
+  void deleteElement(THElement element) {
+    _thFile.deleteElement(element);
+  }
+
+  @action
+  void deleteElementByMapiahID(int mapiahID) {
+    final THElement element = _thFile.elementByMapiahID(mapiahID);
+    _thFile.deleteElement(element);
+  }
+
+  @action
+  void deleteElementByTHID(String thID) {
+    final THElement element = _thFile.elementByTHID(thID);
+    _thFile.deleteElement(element);
+  }
 }
 
 class THFileStoreCreateResult {
-  final THFileStore thFileStore;
   final bool isSuccessful;
   final List<String> errors;
 
   THFileStoreCreateResult(
-    this.thFileStore,
     this.isSuccessful,
     this.errors,
   );

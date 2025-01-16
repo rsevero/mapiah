@@ -16,7 +16,6 @@ class THOrientationCommandOptionMapper
       MapperContainer.globals
           .use(_instance = THOrientationCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -25,9 +24,6 @@ class THOrientationCommandOptionMapper
   @override
   final String id = 'THOrientationCommandOption';
 
-  static THFile _$thFile(THOrientationCommandOption v) => v.thFile;
-  static const Field<THOrientationCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THOrientationCommandOption v) => v.parentMapiahID;
   static const Field<THOrientationCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -40,7 +36,6 @@ class THOrientationCommandOptionMapper
 
   @override
   final MappableFields<THOrientationCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #azimuth: _f$azimuth,
@@ -48,7 +43,6 @@ class THOrientationCommandOptionMapper
 
   static THOrientationCommandOption _instantiate(DecodingData data) {
     return THOrientationCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$azimuth));
@@ -113,15 +107,9 @@ abstract class THOrientationCommandOptionCopyWith<
     $R,
     $In extends THOrientationCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get azimuth;
   @override
-  $R call(
-      {THFile? thFile,
-      int? parentMapiahID,
-      String? optionType,
-      THDoublePart? azimuth});
+  $R call({int? parentMapiahID, String? optionType, THDoublePart? azimuth});
   THOrientationCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -137,19 +125,11 @@ class _THOrientationCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THOrientationCommandOption> $mapper =
       THOrientationCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get azimuth =>
       $value.azimuth.copyWith.$chain((v) => call(azimuth: v));
   @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          THDoublePart? azimuth}) =>
+  $R call({int? parentMapiahID, String? optionType, THDoublePart? azimuth}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (azimuth != null) #azimuth: azimuth
@@ -157,7 +137,6 @@ class _THOrientationCommandOptionCopyWithImpl<$R, $Out>
   @override
   THOrientationCommandOption $make(CopyWithData data) =>
       THOrientationCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#azimuth, or: $value.azimuth));

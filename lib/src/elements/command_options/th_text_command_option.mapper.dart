@@ -14,7 +14,6 @@ class THTextCommandOptionMapper extends ClassMapperBase<THTextCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THTextCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,9 +21,6 @@ class THTextCommandOptionMapper extends ClassMapperBase<THTextCommandOption> {
   @override
   final String id = 'THTextCommandOption';
 
-  static THFile _$thFile(THTextCommandOption v) => v.thFile;
-  static const Field<THTextCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THTextCommandOption v) => v.parentMapiahID;
   static const Field<THTextCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
@@ -37,7 +33,6 @@ class THTextCommandOptionMapper extends ClassMapperBase<THTextCommandOption> {
 
   @override
   final MappableFields<THTextCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
     #text: _f$text,
@@ -45,7 +40,6 @@ class THTextCommandOptionMapper extends ClassMapperBase<THTextCommandOption> {
 
   static THTextCommandOption _instantiate(DecodingData data) {
     return THTextCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
         data.dec(_f$parentMapiahID),
         data.dec(_f$optionType),
         data.dec(_f$text));
@@ -107,10 +101,7 @@ extension THTextCommandOptionValueCopy<$R, $Out>
 abstract class THTextCommandOptionCopyWith<$R, $In extends THTextCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
-  @override
-  $R call(
-      {THFile? thFile, int? parentMapiahID, String? optionType, String? text});
+  $R call({int? parentMapiahID, String? optionType, String? text});
   THTextCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -124,16 +115,8 @@ class _THTextCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THTextCommandOption> $mapper =
       THTextCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          String? text}) =>
+  $R call({int? parentMapiahID, String? optionType, String? text}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (text != null) #text: text
@@ -141,7 +124,6 @@ class _THTextCommandOptionCopyWithImpl<$R, $Out>
   @override
   THTextCommandOption $make(CopyWithData data) =>
       THTextCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
           data.get(#text, or: $value.text));

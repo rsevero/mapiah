@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/offset_mapper.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/commands/command_type.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 

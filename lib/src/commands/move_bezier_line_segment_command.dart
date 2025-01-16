@@ -1,14 +1,15 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/offset_mapper.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/commands/command_type.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 part 'move_bezier_line_segment_command.mapper.dart';
 
-@MappableClass()
+@MappableClass(includeCustomMappers: [OffsetMapper()])
 class MoveBezierLineSegmentCommand extends Command
     with MoveBezierLineSegmentCommandMappable {
   late final THBezierCurveLineSegment lineSegment;

@@ -1,9 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_scrap_command_option.mapper.dart';
 
@@ -17,23 +14,13 @@ class THScrapCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THScrapCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, this.reference)
-      : super.withExplicitParameters() {
-    _checkOptionParent();
-  }
+    super.parentMapiahID,
+    super.optionType,
+    this.reference,
+  ) : super.withExplicitParameters();
 
   THScrapCommandOption(THHasOptions optionParent, this.reference)
-      : super(optionParent, _thisOptionType) {
-    _checkOptionParent();
-  }
-
-  void _checkOptionParent() {
-    if ((optionParent is! THPoint) ||
-        ((optionParent as THPoint).plaType != 'section')) {
-      throw THCustomException(
-          "Option 'scrap' only valid for points of type 'section'.");
-    }
-  }
+      : super(optionParent, _thisOptionType);
 
   @override
   String specToFile() {

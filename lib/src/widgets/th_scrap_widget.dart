@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_paints.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 
 class THScrapWidget extends StatelessWidget {
   final THScrap thScrap;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+  final THFileStore thFileStore;
 
-  THScrapWidget(this.thScrap);
+  THScrapWidget(this.thScrap, this.thFileStore);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class THScrapWidget extends StatelessWidget {
       builder: (context, constraints) {
         final List<Widget> drawableElements = [];
         final List<int> scrapChildrenMapiahIDs = thScrap.childrenMapiahID;
-        final THFile thFile = thScrap.thFile;
+        final THFile thFile = thFileStore.thFile;
         final double pointRadius = thFileDisplayStore.pointRadiusOnCanvas;
         final double lineThickness = thFileDisplayStore.lineThicknessOnCanvas;
         final Paint pointPaint = THPaints.thPaint1..strokeWidth = lineThickness;
@@ -46,6 +49,7 @@ class THScrapWidget extends StatelessWidget {
                 line: child,
                 linePaint: linePaint,
                 thFileDisplayStore: thFileDisplayStore,
+                thFileStore: thFileStore,
                 screenSize: screenSize,
               ));
               break;

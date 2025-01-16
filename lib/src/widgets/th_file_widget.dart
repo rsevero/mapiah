@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
@@ -29,13 +30,13 @@ class _THFileWidgetState extends State<THFileWidget> {
   Offset _panStartCoordinates = Offset.zero;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final THFileStore thFileStore = widget.thFileStore;
-  late final THFile file = widget.thFileStore.thFile;
+  late final THFile thFile = widget.thFileStore.thFile;
   bool _repaintTrigger = false;
 
   @override
   void initState() {
     super.initState();
-    thFileDisplayStore.updateDataBoundingBox(file.boundingBox());
+    thFileDisplayStore.updateDataBoundingBox(thFile.boundingBox());
     thFileDisplayStore.setCanvasScaleTranslationUndefined(true);
   }
 
@@ -53,13 +54,13 @@ class _THFileWidgetState extends State<THFileWidget> {
         thFileDisplayStore.clearSelectableElements();
 
         final List<THScrapWidget> scrapWidgets = [];
-        final List<int> fileChildrenMapiahIDs = file.childrenMapiahID;
+        final List<int> fileChildrenMapiahIDs = thFile.childrenMapiahID;
 
         for (final int childMapiahID in fileChildrenMapiahIDs) {
-          final THElement child = file.elementByMapiahID(childMapiahID);
+          final THElement child = thFile.elementByMapiahID(childMapiahID);
 
           if (child is THScrap) {
-            scrapWidgets.add(THScrapWidget(child));
+            scrapWidgets.add(THScrapWidget(child, thFileStore));
           }
         }
 
@@ -101,13 +102,13 @@ class _THFileWidgetState extends State<THFileWidget> {
     //         .contains(LogicalKeyboardKey.shiftRight);
 
     if (element is THLineSegment) {
-      element = element.parent;
+      element = element.parent(thFile) as THLine;
     }
 
     setState(() {
       switch (element) {
         case THLine _:
-          _selectedElement = THSelectedLine(line: element);
+          _selectedElement = THSelectedLine(thFile: thFile, line: element);
           break;
         case THPoint _:
           _selectedElement = THSelectedPoint(point: element);
@@ -160,7 +161,6 @@ class _THFileWidgetState extends State<THFileWidget> {
 
   void _updateTHLinePosition(THLine line, Offset localDeltaPositionOnCanvas) {
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
-    final THFile thFile = line.thFile;
 
     for (final int lineChildMapiahID in lineChildrenMapiahIDs) {
       final THElement lineChild = thFile.elementByMapiahID(lineChildMapiahID);

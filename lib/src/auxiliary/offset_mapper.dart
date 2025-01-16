@@ -7,7 +7,8 @@ class OffsetMapper extends SimpleMapper<Offset> {
 
   @override
   Offset decode(dynamic value) {
-    final RegExp regExp = RegExp(r'Offset\s*\(\s*([\d.]+)\s*,\s*([\d.]+)\s*\)');
+    final RegExp regExp =
+        RegExp(r'Offset\s*\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)');
     final Match? match = regExp.firstMatch(value);
 
     if (match != null) {
@@ -21,6 +22,6 @@ class OffsetMapper extends SimpleMapper<Offset> {
 
   @override
   dynamic encode(Offset self) {
-    return self.toString();
+    return 'Offset(${self.dx.toStringAsFixed(4)}, ${self.dy.toStringAsFixed(4)})';
   }
 }

@@ -2,12 +2,13 @@ import 'dart:collection';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/offset_mapper.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/commands/command_type.dart';
 import 'package:mapiah/src/commands/move_bezier_line_segment_command.dart';
 import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
@@ -15,14 +16,14 @@ import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 part 'move_line_command.mapper.dart';
 
-@MappableClass()
+@MappableClass(includeCustomMappers: [OffsetMapper()])
 class MoveLineCommand extends Command with MoveLineCommandMappable {
-  final THLine originalLine;
-  final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
-  late final THLine newLine;
-  late final LinkedHashMap<int, THLineSegment> newLineSegmentsMap;
-  final Offset deltaOnCanvas;
-  final bool isFromDelta;
+  THLine originalLine;
+  LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
+  late THLine newLine;
+  late LinkedHashMap<int, THLineSegment> newLineSegmentsMap;
+  Offset deltaOnCanvas;
+  bool isFromDelta;
 
   MoveLineCommand({
     required this.originalLine,
@@ -31,9 +32,9 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
     required this.newLineSegmentsMap,
     super.type = CommandType.moveLine,
     super.description = 'Move Line',
-  })  : deltaOnCanvas = Offset.zero,
-        isFromDelta = false,
-        super();
+    this.deltaOnCanvas = Offset.zero,
+    this.isFromDelta = false,
+  }) : super();
 
   MoveLineCommand.fromDelta({
     required this.originalLine,
@@ -92,6 +93,7 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
               endPointOriginalCoordinates:
                   originalLineSegment.endPoint.coordinates,
               deltaOnCanvas: deltaOnCanvas,
+              description: description,
             );
           } else {
             command = MoveStraightLineSegmentCommand(
@@ -102,6 +104,7 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
                   newLineSegmentsMap[originalLineSegmentMapiahID]!
                       .endPoint
                       .coordinates,
+              description: description,
             );
           }
           break;
@@ -120,6 +123,7 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
               controlPoint2OriginalCoordinates:
                   originalLineSegment.controlPoint2.coordinates,
               deltaOnCanvas: deltaOnCanvas,
+              description: description,
             );
           } else {
             command = MoveBezierLineSegmentCommand(
@@ -135,6 +139,7 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
                   originalLineSegment.controlPoint2.coordinates,
               controlPoint2NewCoordinates:
                   newLineSegment.controlPoint2.coordinates,
+              description: description,
             );
           }
           break;

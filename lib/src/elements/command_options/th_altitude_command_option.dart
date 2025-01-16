@@ -1,14 +1,9 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_altitude.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_altitude_command_option.mapper.dart';
 
@@ -26,10 +21,9 @@ class THAltitudeCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THAltitudeCommandOption.withExplicitParameters(
-      super.thFile, super.parentMapiahID, super.optionType, length, bool isFix,
+      super.parentMapiahID, super.optionType, length, bool isFix,
       [String? unit])
       : super.withExplicitParameters() {
-    _checkOptionParent(optionParent);
     this.length = length;
     this.isFix = isFix;
     if ((unit != null) && (unit.isNotEmpty)) {
@@ -41,7 +35,6 @@ class THAltitudeCommandOption extends THCommandOption
       THHasOptions optionParent, THDoublePart length, bool isFix,
       [String? unit])
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     this.length = length;
     this.isFix = isFix;
     if ((unit != null) && (unit.isNotEmpty)) {
@@ -53,7 +46,6 @@ class THAltitudeCommandOption extends THCommandOption
       THHasOptions optionParent, String aHeight, bool aIsFix,
       [String? aUnit])
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     length = THDoublePart.fromString(aHeight);
     isFix = aIsFix;
     if ((aUnit != null) && (aUnit.isNotEmpty)) {
@@ -63,24 +55,7 @@ class THAltitudeCommandOption extends THCommandOption
 
   THAltitudeCommandOption.fromNan(THHasOptions optionParent)
       : super(optionParent, _thisOptionType) {
-    _checkOptionParent(optionParent);
     length = THDoublePart.fromString('0');
     isNan = true;
-  }
-
-  void _checkOptionParent(THHasOptions aOptionParent) {
-    if (optionParent is THPoint) {
-      if ((optionParent as THPoint).plaType != _thisOptionType) {
-        throw THCustomException(
-            "'$optionType' command option only supported on points of type 'altitude'.");
-      }
-    } else if (optionParent is THLineSegment) {
-      if ((optionParent.parent as THLine).plaType != 'wall') {
-        throw THCustomException(
-            "'$optionType' command option only supported on lines of type 'wall'.");
-      }
-    } else {
-      throw THCustomException("'$optionType' command option not supported.");
-    }
   }
 }

@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -13,6 +12,7 @@ part 'th_multiple_choice_command_option.mapper.dart';
 class THMultipleChoiceCommandOption extends THCommandOption
     with THMultipleChoiceCommandOptionMappable {
   late String _choice;
+  String parentElementType;
 
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
@@ -386,37 +386,28 @@ class THMultipleChoiceCommandOption extends THCommandOption
   };
 
   THMultipleChoiceCommandOption.withExplicitParameters(
-    super.thFile,
     super.parentMapiahID,
     super.optionType,
+    this.parentElementType,
     String choice,
   ) : super.withExplicitParameters() {
-    _checkOptionParent();
-    this.choice = choice;
+    setChoice(choice);
   }
 
   THMultipleChoiceCommandOption(
     super.optionParent,
     super.optionType,
     String choice,
-  ) {
-    _checkOptionParent();
-    this.choice = choice;
+  ) : parentElementType = optionParent.elementType {
+    setChoice(choice);
   }
 
-  void _checkOptionParent() {
-    if (!hasOptionType(optionParent, optionType)) {
-      throw THCustomException(
-          "Unsupported option type '$optionType' for a '${optionParent.elementType}'");
-    }
-  }
-
-  set choice(String choice) {
+  void setChoice(String choice) {
     choice = _mainChoice(choice);
 
     if (!hasOptionChoice(choice)) {
       throw THCustomException(
-          "Unsupported choice '$choice' in a '$optionType' option for a '${optionParent.elementType}' element.");
+          "Unsupported choice '$choice' in a '$optionType' option for a '$parentElementType' element.");
     }
 
     _choice = choice;
@@ -425,8 +416,8 @@ class THMultipleChoiceCommandOption extends THCommandOption
   String get choice => _choice;
 
   bool hasDefaultChoice() {
-    return (_supportedOptions[optionParent.elementType]![optionType]![
-        'hasDefault'] as bool);
+    return (_supportedOptions[parentElementType]![optionType]!['hasDefault']
+        as bool);
   }
 
   String defaultChoice() {
@@ -435,27 +426,27 @@ class THMultipleChoiceCommandOption extends THCommandOption
           "Unsupported option type '$optionType' in 'defaultChoice'");
     }
 
-    return (_supportedOptions[optionParent.elementType]![optionType]![
-        'defaultChoice'] as String);
+    return (_supportedOptions[parentElementType]![optionType]!['defaultChoice']
+        as String);
   }
 
-  bool hasOptionChoice(String aChoice) {
-    aChoice = _mainChoice(aChoice);
+  bool hasOptionChoice(String choice) {
+    choice = _mainChoice(choice);
 
-    return (_supportedOptions[optionParent.elementType]![optionType]!['choices']
+    return (_supportedOptions[parentElementType]![optionType]!['choices']
             as LinkedHashSet)
-        .contains(aChoice);
+        .contains(choice);
   }
 
-  String _mainChoice(String aChoice) {
-    final Map<String, String> alternateChoiceMap = _supportedOptions[
-            optionParent.elementType]![optionType]!['alternateChoices']
-        as Map<String, String>;
-    if (alternateChoiceMap.containsKey(aChoice)) {
-      aChoice = alternateChoiceMap[aChoice]!;
+  String _mainChoice(String choice) {
+    final Map<String, String> alternateChoiceMap =
+        _supportedOptions[parentElementType]![optionType]!['alternateChoices']
+            as Map<String, String>;
+    if (alternateChoiceMap.containsKey(choice)) {
+      choice = alternateChoiceMap[choice]!;
     }
 
-    return aChoice;
+    return choice;
   }
 
   static bool hasOptionType(THHasOptions aOptionParent, String aOptionType) {

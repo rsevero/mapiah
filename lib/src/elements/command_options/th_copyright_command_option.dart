@@ -1,6 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_text.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
@@ -16,12 +15,11 @@ class THCopyrightCommandOption extends THCommandOption
 
   /// Constructor necessary for dart_mappable support.
   THCopyrightCommandOption.withExplicitParameters(
-      super.thFile,
-      super.parentMapiahID,
-      super.optionType,
-      this.datetime,
-      String copyrightMessage)
-      : super.withExplicitParameters() {
+    super.parentMapiahID,
+    super.optionType,
+    this.datetime,
+    String copyrightMessage,
+  ) : super.withExplicitParameters() {
     text = copyrightMessage;
   }
 

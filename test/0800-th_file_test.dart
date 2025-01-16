@@ -1,3 +1,4 @@
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_multilinecomment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
@@ -5,7 +6,6 @@ import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 
 import 'th_test_aux.dart';
 
@@ -212,7 +212,7 @@ endcomment
       expect((pointGuano as THPoint).plaType, 'guano');
 
       var countDeletedElements = 1;
-      pointGuano.delete();
+      file.deleteElement(pointGuano);
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
       asFile = writer.serialize(file);
@@ -223,7 +223,7 @@ endcomment
 
       countDeletedElements +=
           (multilineComment as THMultiLineComment).childrenMapiahID.length + 1;
-      multilineComment.delete();
+      file.deleteElement(multilineComment);
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
       asFile = writer.serialize(file);
@@ -235,7 +235,7 @@ endcomment
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
 
-      file.delete();
+      file.clear();
       expect(file.countElements(), 0);
     });
 
@@ -249,7 +249,7 @@ endcomment
       var asFile = writer.serialize(file);
       expect(asFile, success['asFile']);
 
-      file.delete();
+      file.clear();
       expect(file.countElements(), 0);
     });
   });

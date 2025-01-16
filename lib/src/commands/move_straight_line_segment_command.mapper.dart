@@ -16,6 +16,7 @@ class MoveStraightLineSegmentCommandMapper
       MapperContainer.globals
           .use(_instance = MoveStraightLineSegmentCommandMapper._());
       CommandMapper.ensureInitialized();
+      MapperContainer.globals.useAll([OffsetMapper()]);
       THStraightLineSegmentMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }

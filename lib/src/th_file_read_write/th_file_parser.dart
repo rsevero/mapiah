@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_area_border_thid.dart';
@@ -46,6 +47,7 @@ import 'package:mapiah/src/elements/th_endarea.dart';
 import 'package:mapiah/src/elements/th_endcomment.dart';
 import 'package:mapiah/src/elements/th_endline.dart';
 import 'package:mapiah/src/elements/th_endscrap.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -61,6 +63,8 @@ import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.dart';
+import 'package:mapiah/src/stores/general_store.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -88,8 +92,8 @@ class THFileParser {
   late List<String> _splittedContents;
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
-  late THFile _parsedTHFile;
   late THParent _currentParent;
+  late int _currentParentMapiahID;
   late THElement _currentElement;
   late THHasOptions _currentHasOptions;
   THLineSegment? _lastLineSegment;
@@ -97,6 +101,9 @@ class THFileParser {
   late List<dynamic> _currentSpec;
   // final _parsedOptions = HashSet<String>();
   bool _runTraceParser = false;
+
+  late THFile _parsedTHFile;
+  late THFileStore _thFileStore;
 
   final List<String> _parseErrors = [];
 
@@ -137,6 +144,7 @@ class THFileParser {
 
   void _injectContents() {
     bool isFirst = true;
+
     for (String line in _splittedContents) {
       if (line.trim().isEmpty) {
         _injectEmptyLine();
@@ -189,7 +197,7 @@ class THFileParser {
           /// Line data injects same line comment by themselves.
           continue;
         case 'encoding':
-          _injectEncoding();
+          _injectEncoding(element);
         case 'endarea':
           _injectEndarea();
         case 'endmultilinecomment':
@@ -240,78 +248,97 @@ class THFileParser {
   }
 
   void _injectEmptyLine() {
-    _currentElement = THEmptyLine(_currentParent);
+    _currentElement = THEmptyLine(_currentParentMapiahID);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
   }
 
-  void _injectMultiLineCommentContent(List<dynamic> aElement) {
-    final content = (aElement.isEmpty) ? '' : aElement[1].toString();
-    _currentElement = THMultilineCommentContent(_currentParent, content);
+  void _injectMultiLineCommentContent(List<dynamic> element) {
+    final content = (element.isEmpty) ? '' : element[1].toString();
+    _currentElement =
+        THMultilineCommentContent(_currentParentMapiahID, content);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
   }
 
   void _injectEndMultiLineComment() {
-    _currentElement = THEndcomment(_currentParent);
-    _currentParent = _currentParent.parent;
+    _currentElement = THEndcomment(_currentParentMapiahID);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
+    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
   void _injectStartMultiLineComment() {
-    _currentParent = THMultiLineComment(_currentParent);
-    _currentElement = _currentParent;
+    _currentElement = THMultiLineComment(_currentParentMapiahID);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
+    setCurrentParent(_currentElement as THParent);
     _addChildParser(_multiLineCommentContentParser);
   }
 
-  void _injectEncoding() {
-    _currentElement = THEncoding(_currentParent);
-  }
-
-  void _injectXTherionSetting(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectEncoding(List<dynamic> element) {
+    final int elementSize = element.length;
 
     if (kDebugMode) {
       assert(elementSize == 2);
-      assert(aElement[1] is List);
-      assert(aElement[1].length == 2);
+      assert(element[1] is String);
     }
 
-    THXTherionConfig(_currentParent, aElement[1][0], aElement[1][1]);
+    _currentElement = THEncoding(_currentParentMapiahID, element[1]);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
   }
 
-  void _injectPoint(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
-    if (kDebugMode) assert(elementSize >= 3);
-
-    _checkParsedListAsPoint(aElement[1]);
+  void _injectXTherionSetting(List<dynamic> element) {
+    final int elementSize = element.length;
 
     if (kDebugMode) {
-      assert(aElement[2] is List);
-      assert(aElement[2].length == 2);
+      assert(elementSize == 2);
+      assert(element[1] is List);
+      assert(element[1].length == 2);
+    }
+
+    final THXTherionConfig newElement = THXTherionConfig(
+      _currentParentMapiahID,
+      element[1][0],
+      element[1][1],
+    );
+    _thFileStore.addElementWithParent(newElement, _currentParent);
+  }
+
+  void _injectPoint(List<dynamic> element) {
+    final int elementSize = element.length;
+    if (kDebugMode) assert(elementSize >= 3);
+
+    _checkParsedListAsPoint(element[1]);
+
+    if (kDebugMode) {
+      assert(element[2] is List);
+      assert(element[2].length == 2);
     }
 
     final newPoint =
-        THPoint.fromString(_currentParent, aElement[1], aElement[2][0]);
+        THPoint.fromString(_currentParentMapiahID, element[1], element[2][0]);
+    _thFileStore.addElementWithParent(newPoint, _currentParent);
 
     _currentElement = newPoint;
     // _parsedOptions.clear();
 
     try {
       // Including subtype defined with type (type:subtype).
-      if (aElement[2][1] != null) {
-        THSubtypeCommandOption(newPoint, aElement[2][1]);
+      if (element[2][1] != null) {
+        THSubtypeCommandOption(newPoint, element[2][1]);
         // _parsedOptions.add('subtype');
       }
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_pointOptionFromElement',
-          aElement[2][1].toString());
+          element[2][1].toString());
     }
 
-    _optionFromElement(aElement[3], _pointRegularOptions);
+    _optionFromElement(element[3], _pointRegularOptions);
   }
 
-  void _injectBezierCurveLineSegment(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectBezierCurveLineSegment(List<dynamic> element) {
+    final int elementSize = element.length;
     if (kDebugMode) assert(elementSize == 2);
 
-    final pointList = aElement[1];
+    final pointList = element[1];
     if (kDebugMode) {
       assert(pointList is List);
       assert(pointList.length == 3);
@@ -338,7 +365,13 @@ class THFileParser {
     _checkParsedListAsPoint(endPoint);
 
     final newBezierCurveLineSegment = THBezierCurveLineSegment.fromString(
-        _currentParent, controlPoint1, controlPoint2, endPoint);
+      _currentParentMapiahID,
+      controlPoint1,
+      controlPoint2,
+      endPoint,
+    );
+    _thFileStore.addElementWithParent(
+        newBezierCurveLineSegment, _currentParent);
 
     // _currentElement = newBezierCurveLineSegment;
     _lastLineSegment = newBezierCurveLineSegment;
@@ -347,24 +380,29 @@ class THFileParser {
     /// in the line command that includes this line segment.
     _currentElement = newBezierCurveLineSegment;
     _injectComment();
-    _currentElement = newBezierCurveLineSegment.parent;
+    _currentElement =
+        newBezierCurveLineSegment.parent(_parsedTHFile) as THElement;
   }
 
-  void _injectAreaBorderTHID(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectAreaBorderTHID(List<dynamic> element) {
+    final int elementSize = element.length;
     if (kDebugMode) assert(elementSize == 2);
 
-    final areaBorderID = aElement[1];
+    final areaBorderID = element[1];
     if (kDebugMode) assert(areaBorderID is String);
 
-    THAreaBorderTHID(_currentParent, areaBorderID);
+    final THAreaBorderTHID newElement = THAreaBorderTHID(
+      _currentParentMapiahID,
+      areaBorderID,
+    );
+    _thFileStore.addElementWithParent(newElement, _currentParent);
   }
 
-  void _injectStraightLineSegment(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectStraightLineSegment(List<dynamic> element) {
+    final int elementSize = element.length;
     assert(elementSize == 2);
 
-    final pointList = aElement[1];
+    final pointList = element[1];
     if (kDebugMode) {
       assert(pointList is List);
       assert(pointList.length == 2);
@@ -379,7 +417,8 @@ class THFileParser {
     _checkParsedListAsPoint(endPoint);
 
     final THStraightLineSegment newStraightLineSegment =
-        THStraightLineSegment.fromString(_currentParent, endPoint);
+        THStraightLineSegment.fromString(_currentParentMapiahID, endPoint);
+    _thFileStore.addElementWithParent(newStraightLineSegment, _currentParent);
 
     // _currentElement = newStraightLineSegment;
     _lastLineSegment = newStraightLineSegment;
@@ -388,39 +427,46 @@ class THFileParser {
     /// in the line command that includes this line segment.
     _currentElement = newStraightLineSegment;
     _injectComment();
-    _currentElement = newStraightLineSegment.parent;
+    _currentElement = newStraightLineSegment.parent(_parsedTHFile) as THElement;
   }
 
-  void _injectScrap(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectScrap(List<dynamic> element) {
+    final int elementSize = element.length;
+
     if (kDebugMode) assert(elementSize >= 2);
-    final THScrap newScrap = THScrap(_currentParent, aElement[1]);
+
+    final THScrap newScrap = THScrap(
+      _currentParentMapiahID,
+      element[1],
+    );
+    _thFileStore.addElementWithParent(newScrap, _currentParent);
 
     _currentElement = newScrap;
-    _currentParent = newScrap;
+    setCurrentParent(newScrap);
 
     // _parsedOptions.clear();
-    _optionFromElement(aElement[2], _scrapRegularOptions);
+    _optionFromElement(element[2], _scrapRegularOptions);
     _addChildParser(_scrapContentParser);
   }
 
   void _injectEndscrap() {
-    _currentElement = THEndscrap(_currentParent);
-    _currentParent = _currentParent.parent;
+    _currentElement = THEndscrap(_currentParentMapiahID);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
+    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
-  void _injectAreaCommandLikeOption(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectAreaCommandLikeOption(List<dynamic> element) {
+    final int elementSize = element.length;
 
     if (kDebugMode) {
       assert(elementSize == 2);
-      assert(aElement[1] is List);
-      assert(aElement[1].length == 1);
-      assert(aElement[1][0] is List);
+      assert(element[1] is List);
+      assert(element[1].length == 1);
+      assert(element[1][0] is List);
     }
 
-    _optionFromElement(aElement[1], _areaRegularOptions);
+    _optionFromElement(element[1], _areaRegularOptions);
   }
 
   /// All line options (the ones that should be on the "line" line in the .th2
@@ -429,17 +475,17 @@ class THFileParser {
   /// Here we deall with them all, registering the line options that appeared as
   /// linepoint options in the line options list and keeping the linepoint
   /// options registered with the appropriate line segment.
-  void _injectLineCommandLikeOption(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectLineCommandLikeOption(List<dynamic> element) {
+    final int elementSize = element.length;
 
     if (kDebugMode) {
       assert(elementSize == 2);
-      assert(aElement[1] is List);
-      assert(aElement[1].length == 1);
-      assert(aElement[1][0] is List);
+      assert(element[1] is List);
+      assert(element[1].length == 1);
+      assert(element[1][0] is List);
     }
 
-    _optionFromElement(aElement[1], _lineSegmentRegularOptions);
+    _optionFromElement(element[1], _lineSegmentRegularOptions);
 
     /// Same line comments should be inserted in the line segment to which this
     /// line segment option is related if there is a linepoint before it and not
@@ -450,129 +496,139 @@ class THFileParser {
     }
     _injectComment();
     if (_lastLineSegment != null) {
-      _currentElement = _lastLineSegment!.parent;
+      _currentElement = _lastLineSegment!.parent(_parsedTHFile) as THElement;
     }
 
     /// Reverting the change made by _lineSegmentRegularOptions().
     _currentHasOptions = _currentElement as THHasOptions;
   }
 
-  void _injectArea(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectArea(List<dynamic> element) {
+    final int elementSize = element.length;
 
     if (kDebugMode) {
       assert(elementSize >= 2);
-      assert(aElement[1] is List);
-      assert(aElement[1].length == 2);
-      assert(aElement[1][0] is String);
+      assert(element[1] is List);
+      assert(element[1].length == 2);
+      assert(element[1][0] is String);
     }
 
-    final THArea newArea = THArea(_currentParent, aElement[1][0]);
+    final THArea newArea = THArea(_currentParentMapiahID, element[1][0]);
+    _thFileStore.addElementWithParent(newArea, _currentParent);
 
     _currentElement = newArea;
-    _currentParent = newArea;
+    setCurrentParent(newArea);
 
     try {
       // Including subtype defined with type (type:subtype).
-      if ((aElement[1][1] != null) && (aElement[1][0] == 'u')) {
-        THSubtypeCommandOption(newArea, aElement[1][1]);
+      if ((element[1][1] != null) && (element[1][0] == 'u')) {
+        THSubtypeCommandOption(newArea, element[1][1]);
       }
     } catch (e, s) {
-      _addError("$e\n\nTrace:\n\n$s", '_injectArea', aElement[1][1].toString());
+      _addError("$e\n\nTrace:\n\n$s", '_injectArea', element[1][1].toString());
     }
 
-    _optionFromElement(aElement[2], _areaRegularOptions);
+    _optionFromElement(element[2], _areaRegularOptions);
     _addChildParser(_areaContentParser);
   }
 
-  void _injectLine(List<dynamic> aElement) {
-    final int elementSize = aElement.length;
+  void _injectLine(List<dynamic> element) {
+    final int elementSize = element.length;
 
     if (kDebugMode) {
       assert(elementSize >= 2);
-      assert(aElement[1] is List);
-      assert(aElement[1].length == 2);
-      assert(aElement[1][0] is String);
+      assert(element[1] is List);
+      assert(element[1].length == 2);
+      assert(element[1][0] is String);
     }
 
-    final THLine newLine = THLine(_currentParent, aElement[1][0]);
+    final THLine newLine = THLine(_currentParentMapiahID, element[1][0]);
+    _thFileStore.addElementWithParent(newLine, _currentParent);
 
     _currentElement = newLine;
-    _currentParent = newLine;
+    setCurrentParent(newLine);
 
     try {
       // Including subtype defined with type (type:subtype).
-      if (aElement[1][1] != null) {
-        THSubtypeCommandOption(newLine, aElement[1][1]);
+      if (element[1][1] != null) {
+        THSubtypeCommandOption(newLine, element[1][1]);
       }
     } catch (e, s) {
-      _addError("$e\n\nTrace:\n\n$s", '_injectLine', aElement[1][1].toString());
+      _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[1][1].toString());
     }
 
-    _optionFromElement(aElement[2], _lineRegularOptions);
+    _optionFromElement(element[2], _lineRegularOptions);
     _addChildParser(_lineContentParser);
     _lastLineSegment = null;
   }
 
   void _injectEndarea() {
-    _currentElement = THEndarea(_currentParent);
-    _currentParent = _currentParent.parent;
+    _currentElement = THEndarea(_currentParentMapiahID);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
+    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
   void _injectEndline() {
-    _currentElement = THEndline(_currentParent);
-    _currentParent = _currentParent.parent;
+    _currentElement = THEndline(_currentParentMapiahID);
+    _thFileStore.addElementWithParent(_currentElement, _currentParent);
+    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
   void _injectComment() {
-    final List<dynamic>? aElement = _commentContentToParse;
-    if (aElement == null) {
+    final List<dynamic>? element = _commentContentToParse;
+    if (element == null) {
       return;
     }
 
-    if (aElement.length != 2) {
-      throw THCreateObjectFromListWithWrongLengthException('== 2', aElement);
+    if (element.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException('== 2', element);
     }
 
-    if (aElement[0] is! String) {
+    if (element[0] is! String) {
       throw THCustomException(
-          "Need string as comment type. Received '${aElement[0]}'.");
+          "Need string as comment type. Received '${element[0]}'.");
     }
 
-    if (aElement[1] is! String) {
+    if (element[1] is! String) {
       throw THCustomException(
-          "Need string as comment content. Received '${aElement[1]}'.");
+          "Need string as comment content. Received '${element[1]}'.");
     }
 
-    if (aElement[1].indexOf('# ') == 0) {
-      aElement[1] = aElement[1].substring(2);
-    } else if (aElement[1].indexOf('#') == 0) {
-      aElement[1] = aElement[1].substring(1);
+    if (element[1].indexOf('# ') == 0) {
+      element[1] = element[1].substring(2);
+    } else if (element[1].indexOf('#') == 0) {
+      element[1] = element[1].substring(1);
     }
 
-    switch (aElement[0]) {
+    switch (element[0]) {
       case 'fulllinecomment':
-        THComment(_currentParent, aElement[1]);
+        final THElement newElement =
+            THComment(_currentParentMapiahID, element[1]);
+        _thFileStore.addElementWithParent(newElement, _currentParent);
+        break;
       case 'samelinecomment':
         if ((_currentElement.sameLineComment == null) ||
             _currentElement.sameLineComment!.isEmpty) {
-          _currentElement.sameLineComment = aElement[1];
+          _currentElement.sameLineComment = element[1];
         } else {
           _currentElement.sameLineComment =
-              '${_currentElement.sameLineComment!} | ${aElement[1]}';
+              '${_currentElement.sameLineComment!} | ${element[1]}';
         }
+        break;
       default:
-        THUnrecognizedCommand(_currentParent, aElement);
+        final THElement newElement =
+            THUnrecognizedCommand(_currentParentMapiahID, element);
+        _thFileStore.addElementWithParent(newElement, _currentParent);
     }
   }
 
   void _optionFromElement(
-    List<dynamic> aElement,
+    List<dynamic> element,
     Function(String) createRegularOption,
   ) {
-    for (_currentOptions in aElement) {
+    for (_currentOptions in element) {
       if (_currentOptions.length != 2) {
         throw THOptionsListWrongLengthError();
       }
@@ -582,7 +638,7 @@ class THFileParser {
       // if (_parsedOptions.contains(optionType)) {
       //   final elementType = _currentElement.type;
       //   _addError("Duplicated option '$optionType' in $elementType.",
-      //       '_optionFromElement', aElement.toString());
+      //       '_optionFromElement', element.toString());
       //   continue;
       // }
 
@@ -763,6 +819,11 @@ class THFileParser {
     }
 
     return optionIdentified;
+  }
+
+  void setCurrentParent(THParent parent) {
+    _currentParent = parent;
+    _currentParentMapiahID = parent.mapiahID;
   }
 
   bool _scrapRegularOptions(String aOptionType) {
@@ -1407,15 +1468,17 @@ class THFileParser {
     }
   }
 
-  void _injectUnknown(List<dynamic> aElement) {
-    THUnrecognizedCommand(_currentParent, aElement);
+  void _injectUnknown(List<dynamic> element) {
+    final THElement newElement =
+        THUnrecognizedCommand(_currentParentMapiahID, element);
+    _thFileStore.addElementWithParent(newElement, _currentParent);
   }
 
   @useResult
-  Future<String> _decodeFile(RandomAccessFile aRaf, String encoding) async {
-    await aRaf.setPosition(0);
-    final fileSize = await aRaf.length();
-    final fileContentRaw = await aRaf.read(fileSize);
+  Future<String> _decodeFile(RandomAccessFile raf, String encoding) async {
+    await raf.setPosition(0);
+    final fileSize = await raf.length();
+    final fileContentRaw = await raf.read(fileSize);
     String fileContentDecoded = '';
 
     switch (encoding) {
@@ -1486,7 +1549,7 @@ class THFileParser {
   }
 
   @useResult
-  Future<(THFile, bool, List<String>)> parse(String aFilePath,
+  Future<(THFile, bool, List<String>)> parse(String filePath,
       {Parser? alternateStartParser, bool trace = false}) async {
     if (alternateStartParser == null) {
       _newRootParser(_th2FileFirstLineParser);
@@ -1498,13 +1561,14 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _parsedTHFile = THFile();
-    _parsedTHFile.filename = aFilePath;
-    _currentParent = _parsedTHFile;
+    _thFileStore = getIt<GeneralStore>().getTHFileStore(filePath);
+    _parsedTHFile = _thFileStore.thFile;
+    _parsedTHFile.filename = filePath;
+    setCurrentParent(_parsedTHFile);
     _parseErrors.clear();
 
     try {
-      final File file = File(aFilePath);
+      final File file = File(filePath);
       final RandomAccessFile raf = await file.open();
 
       _parsedTHFile.encoding = await _encodingNameFromFile(raf);

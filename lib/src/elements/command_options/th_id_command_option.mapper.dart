@@ -14,7 +14,6 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THIDCommandOptionMapper._());
       THCommandOptionMapper.ensureInitialized();
-      THFileMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,33 +21,25 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   @override
   final String id = 'THIDCommandOption';
 
-  static THFile _$thFile(THIDCommandOption v) => v.thFile;
-  static const Field<THIDCommandOption, THFile> _f$thFile =
-      Field('thFile', _$thFile);
   static int _$parentMapiahID(THIDCommandOption v) => v.parentMapiahID;
   static const Field<THIDCommandOption, int> _f$parentMapiahID =
       Field('parentMapiahID', _$parentMapiahID);
   static String _$optionType(THIDCommandOption v) => v.optionType;
   static const Field<THIDCommandOption, String> _f$optionType =
       Field('optionType', _$optionType);
-  static String _$_thID(THIDCommandOption v) => v._thID;
-  static const Field<THIDCommandOption, String> _f$_thID =
-      Field('_thID', _$_thID, key: 'thID');
+  static String _$thID(THIDCommandOption v) => v.thID;
+  static const Field<THIDCommandOption, String> _f$thID = Field('thID', _$thID);
 
   @override
   final MappableFields<THIDCommandOption> fields = const {
-    #thFile: _f$thFile,
     #parentMapiahID: _f$parentMapiahID,
     #optionType: _f$optionType,
-    #_thID: _f$_thID,
+    #thID: _f$thID,
   };
 
   static THIDCommandOption _instantiate(DecodingData data) {
-    return THIDCommandOption.withExplicitParameters(
-        data.dec(_f$thFile),
-        data.dec(_f$parentMapiahID),
-        data.dec(_f$optionType),
-        data.dec(_f$_thID));
+    return THIDCommandOption.withExplicitParameters(data.dec(_f$parentMapiahID),
+        data.dec(_f$optionType), data.dec(_f$thID));
   }
 
   @override
@@ -107,10 +98,7 @@ extension THIDCommandOptionValueCopy<$R, $Out>
 abstract class THIDCommandOptionCopyWith<$R, $In extends THIDCommandOption,
     $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile;
-  @override
-  $R call(
-      {THFile? thFile, int? parentMapiahID, String? optionType, String? thID});
+  $R call({int? parentMapiahID, String? optionType, String? thID});
   THIDCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -124,16 +112,8 @@ class _THIDCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THIDCommandOption> $mapper =
       THIDCommandOptionMapper.ensureInitialized();
   @override
-  THFileCopyWith<$R, THFile, THFile> get thFile =>
-      $value.thFile.copyWith.$chain((v) => call(thFile: v));
-  @override
-  $R call(
-          {THFile? thFile,
-          int? parentMapiahID,
-          String? optionType,
-          String? thID}) =>
+  $R call({int? parentMapiahID, String? optionType, String? thID}) =>
       $apply(FieldCopyWithData({
-        if (thFile != null) #thFile: thFile,
         if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
         if (optionType != null) #optionType: optionType,
         if (thID != null) #thID: thID
@@ -141,10 +121,9 @@ class _THIDCommandOptionCopyWithImpl<$R, $Out>
   @override
   THIDCommandOption $make(CopyWithData data) =>
       THIDCommandOption.withExplicitParameters(
-          data.get(#thFile, or: $value.thFile),
           data.get(#parentMapiahID, or: $value.parentMapiahID),
           data.get(#optionType, or: $value.optionType),
-          data.get(#thID, or: $value._thID));
+          data.get(#thID, or: $value.thID));
 
   @override
   THIDCommandOptionCopyWith<$R2, THIDCommandOption, $Out2> $chain<$R2, $Out2>(

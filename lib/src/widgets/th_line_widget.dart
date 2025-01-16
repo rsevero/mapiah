@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
@@ -10,17 +11,20 @@ import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/selection/th_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 
 class THLineWidget extends StatelessWidget {
   final THLine line;
   final Paint linePaint;
   final THFileDisplayStore thFileDisplayStore;
+  final THFileStore thFileStore;
   final Size screenSize;
 
   THLineWidget({
     required this.line,
     required this.linePaint,
     required this.thFileDisplayStore,
+    required this.thFileStore,
     required this.screenSize,
   });
 
@@ -43,8 +47,8 @@ class THLineWidget extends StatelessWidget {
     final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLinePainterLineSegment>();
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
-    final THFile thFile = line.thFile;
     bool isFirst = true;
+    final THFile thFile = thFileStore.thFile;
 
     for (int lineChildMapiahID in lineChildrenMapiahIDs) {
       final THElement lineChild = thFile.elementByMapiahID(lineChildMapiahID);
