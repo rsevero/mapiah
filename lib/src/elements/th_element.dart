@@ -384,13 +384,13 @@ class THFile extends THElement with THFileMappable, THParent {
   }
 
   THElement elementByMapiahID(int mapiahID) {
-    if (mapiahID == 0) {
+    if (_elementByMapiahID.containsKey(mapiahID)) {
+      return _elementByMapiahID[mapiahID]!;
+    } else if (mapiahID == 0) {
       return _thFile;
-    } else if (!_elementByMapiahID.containsKey(mapiahID)) {
+    } else {
       throw THNoElementByMapiahIDException(filename, mapiahID);
     }
-
-    return _elementByMapiahID[mapiahID]!;
   }
 
   @override
