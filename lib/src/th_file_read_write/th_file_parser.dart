@@ -1550,8 +1550,12 @@ class THFileParser {
   }
 
   @useResult
-  Future<(THFile, bool, List<String>)> parse(String filePath,
-      {Parser? alternateStartParser, bool trace = false}) async {
+  Future<(THFile, bool, List<String>)> parse(
+    String filePath, {
+    Parser? alternateStartParser,
+    bool trace = false,
+    bool forceNewStore = false,
+  }) async {
     if (alternateStartParser == null) {
       _newRootParser(_th2FileFirstLineParser);
       _resetParsersLineage();
@@ -1563,7 +1567,7 @@ class THFileParser {
     _runTraceParser = trace;
 
     _thFileStore = getIt<GeneralStore>()
-        .getTHFileStore(filename: filePath, forceNewStore: true);
+        .getTHFileStore(filename: filePath, forceNewStore: forceNewStore);
     _parsedTHFile = _thFileStore.thFile;
     _parsedTHFile.filename = filePath;
     setCurrentParent(_parsedTHFile);

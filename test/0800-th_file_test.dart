@@ -250,8 +250,10 @@ endcomment
 
     test("${success['file']} as once", () async {
       // getIt<GeneralStore>().resetMapiahIDGenerator();
-      final (file, isSuccessful, errors) =
-          await parser.parse(THTestAux.testPath(success['file'] as String));
+      final (file, isSuccessful, errors) = await parser.parse(
+        THTestAux.testPath(success['file'] as String),
+        forceNewStore: true,
+      );
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
@@ -301,8 +303,10 @@ endscrap
     };
 
     test("${success['file']} as once", () async {
-      final (file, isSuccessful, errors) =
-          await parser.parse(THTestAux.testPath(success['file'] as String));
+      final (file, isSuccessful, errors) = await parser.parse(
+        THTestAux.testPath(success['file'] as String),
+        forceNewStore: true,
+      );
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
