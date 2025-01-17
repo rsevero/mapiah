@@ -201,6 +201,17 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   @override
+  void registerElementWithTHID(THElement element, String thID) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.registerElementWithTHID');
+    try {
+      return super.registerElementWithTHID(element, thID);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

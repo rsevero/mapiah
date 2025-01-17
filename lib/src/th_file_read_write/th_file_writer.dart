@@ -58,7 +58,7 @@ class THFileWriter {
       case 'area':
         asString += _serializeArea(thElement);
       case 'areaborderthid':
-        final newLine = (thElement as THAreaBorderTHID).id;
+        final String newLine = (thElement as THAreaBorderTHID).id;
         asString += _prepareLine(newLine, thElement);
       case 'comment':
         asString += '# ${(thElement as THComment).content}\n';
@@ -67,7 +67,7 @@ class THFileWriter {
           asString += '\n';
         }
       case 'encoding':
-        final newLine = 'encoding ${(thElement as THEncoding).encoding}';
+        final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
         asString += _prepareLine(newLine, thElement);
       case 'endarea':
         _reducePrefix();
@@ -96,12 +96,12 @@ class THFileWriter {
       case 'point':
         asString += _serializePoint(thElement);
       case 'scrap':
-        final THScrap aTHScrap = thElement as THScrap;
+        final THScrap thScrap = thElement as THScrap;
         final String newLine =
-            "scrap ${aTHScrap.thID} ${aTHScrap.optionsAsString()}".trim();
-        asString += _prepareLine(newLine, aTHScrap);
+            "scrap ${thScrap.thID} ${thScrap.optionsAsString()}".trim();
+        asString += _prepareLine(newLine, thScrap);
         _increasePrefix();
-        asString += _childrenAsString(aTHScrap);
+        asString += _childrenAsString(thScrap);
       case 'xtherionconfig':
         final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
         asString +=
@@ -184,8 +184,8 @@ class THFileWriter {
   String _childrenAsString(THParent thParent) {
     String asString = '';
 
-    for (final int aChildMapiahID in (thParent).childrenMapiahID) {
-      asString += serializeElement(_thFile.elementByMapiahID(aChildMapiahID));
+    for (final int childMapiahID in thParent.childrenMapiahID) {
+      asString += serializeElement(_thFile.elementByMapiahID(childMapiahID));
     }
 
     return asString;
@@ -200,20 +200,20 @@ class THFileWriter {
   }
 
   String _encodeDoubleQuotes(String aString) {
-    final encoded =
+    final String encoded =
         aString.replaceAll(_doubleQuotePairRegex, thDoubleQuotePairEncoded);
 
     return encoded;
   }
 
   String _decodeDoubleQuotes(String aString) {
-    final decoded =
+    final String decoded =
         aString.replaceAll(_doubleQuotePairEncodedRegex, thDoubleQuotePair);
 
     return decoded;
   }
 
-  String _prepareLine(String line, THElement aTHElement) {
+  String _prepareLine(String line, THElement thElement) {
     line = _encodeDoubleQuotes(line);
     String newLine = '$_prefix$line';
 
@@ -278,8 +278,8 @@ class THFileWriter {
       _reducePrefix();
     }
 
-    if (aTHElement.sameLineComment != null) {
-      newLine += " # ${aTHElement.sameLineComment}";
+    if (thElement.sameLineComment != null) {
+      newLine += " # ${thElement.sameLineComment}";
     }
 
     newLine += '\n';

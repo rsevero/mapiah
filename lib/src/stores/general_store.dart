@@ -15,12 +15,25 @@ class GeneralStore {
     return _nextMapiahIDForTHFiles--;
   }
 
+  /// Reset the Mapiah ID for elements to the first value.
+  /// Should only be used for tests.
+  void resetStore() {
+    _nextMapiahIDForElements = thFirstMapiahIDForElements;
+    _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
+    _thFileStores.clear();
+  }
+
   final HashMap<String, THFileStore> _thFileStores =
       HashMap<String, THFileStore>();
 
-  THFileStore getTHFileStore(String filename) {
+  THFileStore getTHFileStore(
+      {required String filename, bool forceNewStore = false}) {
     if (_thFileStores.containsKey(filename)) {
-      return _thFileStores[filename]!;
+      if (forceNewStore) {
+        _thFileStores.remove(filename);
+      } else {
+        return _thFileStores[filename]!;
+      }
     }
 
     final THFileStore createdStore = THFileStoreBase.create(filename);

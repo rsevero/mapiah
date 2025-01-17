@@ -204,6 +204,11 @@ abstract class THFileStoreBase with Store {
     final THElement element = _thFile.elementByTHID(thID);
     _thFile.deleteElement(element);
   }
+
+  @action
+  void registerElementWithTHID(THElement element, String thID) {
+    _thFile.registerElementWithTHID(element, thID);
+  }
 }
 
 class THFileStoreCreateResult {

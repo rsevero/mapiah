@@ -31,7 +31,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   @override
   void initState() {
     super.initState();
-    thFileStore = getIt<GeneralStore>().getTHFileStore(widget.filename);
+    thFileStore =
+        getIt<GeneralStore>().getTHFileStore(filename: widget.filename);
     thFileStoreCreateResult = thFileStore.load();
   }
 

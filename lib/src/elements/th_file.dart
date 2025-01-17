@@ -269,13 +269,11 @@ class THFile with THFileMappable, THParent {
 
   void deleteElement(THElement element) {
     if (element is THParent) {
-      final List<int> childrenMapiahIDs =
-          (element as THParent).childrenMapiahID;
-
-      for (final int childMapiahID in childrenMapiahIDs) {
+      final List<int> childrenMapiahIDsCopy =
+          (element as THParent).childrenMapiahID.toList();
+      for (final int childMapiahID in childrenMapiahIDsCopy) {
         deleteElement(elementByMapiahID(childMapiahID));
       }
-      return;
     }
 
     if ((element is THHasTHID) || hasOption(element, 'id')) {
@@ -303,6 +301,10 @@ class THFile with THFileMappable, THParent {
     }
 
     return _elementByMapiahID[mapiahID]!;
+  }
+
+  THElement elementByPosition(int position) {
+    return _elementByMapiahID.values.elementAt(position);
   }
 
   void clear() {

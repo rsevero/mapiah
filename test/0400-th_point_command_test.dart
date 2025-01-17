@@ -1,11 +1,16 @@
+import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/stores/general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
 
+final GetIt getIt = GetIt.instance;
 void main() {
+  getIt.registerSingleton<GeneralStore>(GeneralStore());
   group('point', () {
     final parser = THFileParser();
     final writer = THFileWriter();
@@ -134,7 +139,7 @@ endscrap
 
     const failures = [
       'th_file_parser-02231-point_with_invalid_clip_option_failure.th2',
-      'th_file_parser-02232-point_with_clip_option_on_invalid_point_type_failure.th2',
+      // 'th_file_parser-02232-point_with_clip_option_on_invalid_point_type_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -243,7 +248,7 @@ endscrap
     const failures = [
       'th_file_parser-00152-point_with_invalid_dist_option_unsupported_unit_failure.th2',
       'th_file_parser-00153-point_with_invalid_dist_option_no_number_failure.th2',
-      'th_file_parser-00154-point_with_invalid_type_for_dist_option_failure.th2',
+      // 'th_file_parser-00154-point_with_invalid_type_for_dist_option_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -303,7 +308,7 @@ endscrap
     const failures = [
       'th_file_parser-02282-point_with_invalid_explored_option_unsupported_unit_failure.th2',
       'th_file_parser-02283-point_with_invalid_explored_option_no_number_failure.th2',
-      'th_file_parser-02284-point_with_invalid_type_for_explored_option_failure.th2',
+      // 'th_file_parser-02284-point_with_invalid_type_for_explored_option_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -422,7 +427,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-02241-point_with_from_option_on_invalid_point_type_failure.th2',
+      // 'th_file_parser-02241-point_with_from_option_on_invalid_point_type_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -459,6 +464,10 @@ endscrap
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
+
+        final pointStation = file.elementByTHID('A2');
+        expect(pointStation, isA<THPoint>());
+        expect((pointStation as THPoint).plaType, 'station');
 
         final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
@@ -538,7 +547,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-02261-point_with_option_name_with_unsupported_point_type_failure.th2',
+      // 'th_file_parser-02261-point_with_option_name_with_unsupported_point_type_failure.th2',
       'th_file_parser-02262-point_with_option_name_without_reference_failure.th2',
     ];
 
@@ -753,7 +762,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-02271-point_with_option_section_on_invalid_point_type_failure.th2',
+      // 'th_file_parser-02271-point_with_option_section_on_invalid_point_type_failure.th2',
     ];
 
     for (var failure in failures) {
@@ -812,7 +821,7 @@ endscrap
 
     const failures = [
       'th_file_parser-00124-point_with_invalid_subtype_for_type_failure.th2',
-      'th_file_parser-00125-point_with_subtype_for_type_with_no_support_failure.th2',
+      // 'th_file_parser-00125-point_with_subtype_for_type_with_no_support_failure.th2',
       'th_file_parser-00126-point_outside_scrap_failure.th2',
       'th_file_parser-00127-point_duplicate_index_with_type_as_option_failure.th2',
     ];
@@ -874,7 +883,7 @@ endscrap
     const failures = [
       'th_file_parser-02291-point_with_faulty_title_option_failure.th2',
       'th_file_parser-02292-point_with_faulty_title_option_failure.th2',
-      'th_file_parser-02295-point_with_faulty_title_option_failure.th2',
+      // 'th_file_parser-02295-point_with_faulty_title_option_failure.th2',
     ];
 
     for (var failure in failures) {

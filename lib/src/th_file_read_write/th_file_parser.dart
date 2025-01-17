@@ -729,21 +729,21 @@ class THFileParser {
     _currentHasOptions = _currentElement as THHasOptions;
   }
 
-  bool _lineSegmentRegularOptions(String aOptionType) {
-    bool optionIdentified = _lineRegularOptions(aOptionType);
+  bool _lineSegmentRegularOptions(String optionType) {
+    bool optionIdentified = _lineRegularOptions(optionType);
 
     if (optionIdentified) {
       return true;
     }
 
     optionIdentified = true;
-    switch (aOptionType) {
+    switch (optionType) {
       case 'altitude':
         _injectAltitudeCommandOption();
       case 'direction':
-        _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
+        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
       case 'gradient':
-        _injectMultipleChoiceWithPointChoiceCommandOption(aOptionType);
+        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
       case 'l-size':
         _injectLSizeCommandOption();
       case 'mark':
@@ -763,9 +763,9 @@ class THFileParser {
     /// line options, not line segment options.
     /// The actual line segment options are created in _optionFromElement().
     if (THMultipleChoiceCommandOption.hasOptionType(
-        _currentHasOptions, aOptionType)) {
+        _currentHasOptions, optionType)) {
       _optionParentAsCurrentElement();
-      _injectMultipleChoiceCommandOption(aOptionType);
+      _injectMultipleChoiceCommandOption(optionType);
       return true;
     }
 
@@ -777,10 +777,10 @@ class THFileParser {
     return false;
   }
 
-  bool _areaRegularOptions(String aOptionType) {
+  bool _areaRegularOptions(String optionType) {
     bool optionIdentified = true;
 
-    switch (aOptionType) {
+    switch (optionType) {
       case 'clip':
         _injectClipCommandOption();
       case 'context':
@@ -855,45 +855,45 @@ class THFileParser {
     return optionIdentified;
   }
 
-  void _injectMultipleChoiceWithPointChoiceCommandOption(String aOptionType) {
+  void _injectMultipleChoiceWithPointChoiceCommandOption(String optionType) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+          "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+          "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] == 'point') {
       _optionParentAsTHLineSegment();
       THMultipleChoiceCommandOption(
-          _currentHasOptions, aOptionType, _currentSpec[0]);
+          _currentHasOptions, optionType, _currentSpec[0]);
     } else {
       _optionParentAsCurrentElement();
       THMultipleChoiceCommandOption(
-          _currentHasOptions, aOptionType, _currentSpec[0]);
+          _currentHasOptions, optionType, _currentSpec[0]);
     }
   }
 
-  void _injectMultipleChoiceCommandOption(String aOptionType) {
+  void _injectMultipleChoiceCommandOption(String optionType) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+          "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a '$aOptionType' option for a '${_currentHasOptions.elementType}'");
+          "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
     }
 
     THMultipleChoiceCommandOption(
-        _currentHasOptions, aOptionType, _currentSpec[0]);
+        _currentHasOptions, optionType, _currentSpec[0]);
   }
 
-  void _checkParsedListAsPoint(List<dynamic> aList) {
-    if (aList.length != 2) {
+  void _checkParsedListAsPoint(List<dynamic> list) {
+    if (list.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
           '== 2', _currentSpec[1]);
     }
@@ -997,6 +997,7 @@ class THFileParser {
     }
 
     THIDCommandOption(_currentHasOptions, _currentSpec[0]);
+    _thFileStore.registerElementWithTHID(_currentHasOptions, _currentSpec[0]);
   }
 
   void _injectNameCommandOption() {
@@ -1561,7 +1562,8 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _thFileStore = getIt<GeneralStore>().getTHFileStore(filePath);
+    _thFileStore = getIt<GeneralStore>()
+        .getTHFileStore(filename: filePath, forceNewStore: true);
     _parsedTHFile = _thFileStore.thFile;
     _parsedTHFile.filename = filePath;
     setCurrentParent(_parsedTHFile);

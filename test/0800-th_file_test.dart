@@ -1,7 +1,9 @@
+import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_multilinecomment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
+import 'package:mapiah/src/stores/general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 
@@ -9,12 +11,14 @@ import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 
 import 'th_test_aux.dart';
 
+final GetIt getIt = GetIt.instance;
 void main() {
+  getIt.registerSingleton<GeneralStore>(GeneralStore());
   group('initial', () {
     final file = THFile();
 
     test("THFile", () {
-      expect(file.mapiahID, 0);
+      expect(file.mapiahID, -1);
       expect(file.elements.length, 0);
     });
   });
@@ -191,6 +195,7 @@ endcomment
     };
 
     test("${success['file']} in parts", () async {
+      getIt<GeneralStore>().resetStore();
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
       expect(isSuccessful, true);
@@ -203,7 +208,11 @@ endcomment
       expect(file.hasElementByTHID('poco_surubim_SCP01'), true);
       expect(file.hasElementByTHID('test'), false);
 
-      final pointStation = file.elementByMapiahID(25);
+      var pointStation = file.elementByPosition(24);
+      expect(pointStation, isA<THPoint>());
+      expect((pointStation as THPoint).plaType, 'station');
+
+      pointStation = file.elementByMapiahID(25);
       expect(pointStation, isA<THPoint>());
       expect((pointStation as THPoint).plaType, 'station');
 
@@ -240,6 +249,7 @@ endcomment
     });
 
     test("${success['file']} as once", () async {
+      // getIt<GeneralStore>().resetMapiahIDGenerator();
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
       expect(isSuccessful, true);
