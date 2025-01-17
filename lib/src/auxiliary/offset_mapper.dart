@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 
 class OffsetMapper extends SimpleMapper<Offset> {
   const OffsetMapper();
@@ -22,6 +23,6 @@ class OffsetMapper extends SimpleMapper<Offset> {
 
   @override
   dynamic encode(Offset self) {
-    return 'Offset(${self.dx.toStringAsFixed(4)}, ${self.dy.toStringAsFixed(4)})';
+    return 'Offset(${self.dx.toStringAsFixed(thDecimalPositionsForOffsetMapper)}, ${self.dy.toStringAsFixed(thDecimalPositionsForOffsetMapper)})';
   }
 }

@@ -17,7 +17,7 @@ class GeneralStore {
 
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
-  void resetStore() {
+  void reset() {
     _nextMapiahIDForElements = thFirstMapiahIDForElements;
     _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
     _thFileStores.clear();

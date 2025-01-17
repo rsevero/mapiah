@@ -195,7 +195,7 @@ endcomment
     };
 
     test("${success['file']} in parts", () async {
-      getIt<GeneralStore>().resetStore();
+      getIt<GeneralStore>().reset();
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
       expect(isSuccessful, true);
