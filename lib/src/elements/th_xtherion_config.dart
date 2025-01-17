@@ -17,7 +17,8 @@ class THXTherionConfig extends THElement with THXTherionConfigMappable {
     this.value,
   ) : super.notAddToParent();
 
-  THXTherionConfig(super.parentMapiahID, this.name, this.value) : super();
+  THXTherionConfig(super.parentMapiahID, this.name, this.value)
+      : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

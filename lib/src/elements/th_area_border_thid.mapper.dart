@@ -13,7 +13,6 @@ class THAreaBorderTHIDMapper extends ClassMapperBase<THAreaBorderTHID> {
   static THAreaBorderTHIDMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THAreaBorderTHIDMapper._());
-      THElementMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,14 +21,17 @@ class THAreaBorderTHIDMapper extends ClassMapperBase<THAreaBorderTHID> {
   final String id = 'THAreaBorderTHID';
 
   static int _$mapiahID(THAreaBorderTHID v) => v.mapiahID;
-  static const Field<THAreaBorderTHID, int> _f$mapiahID =
-      Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THAreaBorderTHID, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THAreaBorderTHID v) => v.parentMapiahID;
-  static const Field<THAreaBorderTHID, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THAreaBorderTHID, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THAreaBorderTHID v) => v.sameLineComment;
-  static const Field<THAreaBorderTHID, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THAreaBorderTHID, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
   static String _$id(THAreaBorderTHID v) => v.id;
   static const Field<THAreaBorderTHID, String> _f$id = Field('id', _$id);
 
@@ -102,12 +104,11 @@ extension THAreaBorderTHIDValueCopy<$R, $Out>
 }
 
 abstract class THAreaBorderTHIDCopyWith<$R, $In extends THAreaBorderTHID, $Out>
-    implements THElementCopyWith<$R, $In, $Out> {
-  @override
+    implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {int? mapiahID,
-      int? parentMapiahID,
-      String? sameLineComment,
+      {dynamic mapiahID,
+      dynamic parentMapiahID,
+      dynamic sameLineComment,
       String? id});
   THAreaBorderTHIDCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -123,13 +124,13 @@ class _THAreaBorderTHIDCopyWithImpl<$R, $Out>
       THAreaBorderTHIDMapper.ensureInitialized();
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none,
           String? id}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (id != null) #id: id
       }));

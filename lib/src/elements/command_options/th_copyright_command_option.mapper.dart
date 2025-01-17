@@ -15,7 +15,6 @@ class THCopyrightCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THCopyrightCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDatetimePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -25,11 +24,13 @@ class THCopyrightCommandOptionMapper
   final String id = 'THCopyrightCommandOption';
 
   static int _$parentMapiahID(THCopyrightCommandOption v) => v.parentMapiahID;
-  static const Field<THCopyrightCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THCopyrightCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THCopyrightCommandOption v) => v.optionType;
-  static const Field<THCopyrightCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THCopyrightCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDatetimePart _$datetime(THCopyrightCommandOption v) => v.datetime;
   static const Field<THCopyrightCommandOption, THDatetimePart> _f$datetime =
       Field('datetime', _$datetime);
@@ -110,12 +111,11 @@ extension THCopyrightCommandOptionValueCopy<$R, $Out>
 abstract class THCopyrightCommandOptionCopyWith<
     $R,
     $In extends THCopyrightCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get datetime;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THDatetimePart? datetime,
       String? copyrightMessage});
   THCopyrightCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -136,13 +136,13 @@ class _THCopyrightCommandOptionCopyWithImpl<$R, $Out>
       $value.datetime.copyWith.$chain((v) => call(datetime: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           THDatetimePart? datetime,
           String? copyrightMessage}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (datetime != null) #datetime: datetime,
         if (copyrightMessage != null) #copyrightMessage: copyrightMessage
       }));

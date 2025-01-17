@@ -13,7 +13,6 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
   static THDistCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THDistCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -23,11 +22,13 @@ class THDistCommandOptionMapper extends ClassMapperBase<THDistCommandOption> {
   final String id = 'THDistCommandOption';
 
   static int _$parentMapiahID(THDistCommandOption v) => v.parentMapiahID;
-  static const Field<THDistCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THDistCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THDistCommandOption v) => v.optionType;
-  static const Field<THDistCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THDistCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDoublePart _$length(THDistCommandOption v) => v.length;
   static const Field<THDistCommandOption, THDoublePart> _f$length =
       Field('length', _$length);
@@ -105,12 +106,11 @@ extension THDistCommandOptionValueCopy<$R, $Out>
 }
 
 abstract class THDistCommandOptionCopyWith<$R, $In extends THDistCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THDoublePart? length,
       String? unit});
   THDistCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -130,13 +130,13 @@ class _THDistCommandOptionCopyWithImpl<$R, $Out>
       $value.length.copyWith.$chain((v) => call(length: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           THDoublePart? length,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (length != null) #length: length,
         if (unit != $none) #unit: unit
       }));

@@ -18,7 +18,7 @@ class THEncoding extends THElement with THEncodingMappable {
     _encoding = encoding;
   }
 
-  THEncoding(super.parentMapiahID, String encoding) : super() {
+  THEncoding(super.parentMapiahID, String encoding) : super.addToParent() {
     _encoding = encoding;
   }
 

@@ -17,7 +17,6 @@ class MoveBezierLineSegmentCommandMapper
           .use(_instance = MoveBezierLineSegmentCommandMapper._());
       CommandMapper.ensureInitialized();
       MapperContainer.globals.useAll([OffsetMapper()]);
-      THBezierCurveLineSegmentMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
@@ -160,8 +159,6 @@ abstract class MoveBezierLineSegmentCommandCopyWith<
     $R,
     $In extends MoveBezierLineSegmentCommand,
     $Out> implements CommandCopyWith<$R, $In, $Out> {
-  THBezierCurveLineSegmentCopyWith<$R, THBezierCurveLineSegment,
-      THBezierCurveLineSegment> get lineSegment;
   @override
   $R call(
       {THBezierCurveLineSegment? lineSegment,
@@ -188,11 +185,6 @@ class _MoveBezierLineSegmentCommandCopyWithImpl<$R, $Out>
   @override
   late final ClassMapperBase<MoveBezierLineSegmentCommand> $mapper =
       MoveBezierLineSegmentCommandMapper.ensureInitialized();
-  @override
-  THBezierCurveLineSegmentCopyWith<$R, THBezierCurveLineSegment,
-          THBezierCurveLineSegment>
-      get lineSegment =>
-          $value.lineSegment.copyWith.$chain((v) => call(lineSegment: v));
   @override
   $R call(
           {THBezierCurveLineSegment? lineSegment,

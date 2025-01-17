@@ -13,7 +13,6 @@ class THEndscrapMapper extends ClassMapperBase<THEndscrap> {
   static THEndscrapMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THEndscrapMapper._());
-      THElementMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,14 +21,17 @@ class THEndscrapMapper extends ClassMapperBase<THEndscrap> {
   final String id = 'THEndscrap';
 
   static int _$mapiahID(THEndscrap v) => v.mapiahID;
-  static const Field<THEndscrap, int> _f$mapiahID =
-      Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THEndscrap, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THEndscrap v) => v.parentMapiahID;
-  static const Field<THEndscrap, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THEndscrap, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THEndscrap v) => v.sameLineComment;
-  static const Field<THEndscrap, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THEndscrap, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
 
   @override
   final MappableFields<THEndscrap> fields = const {
@@ -93,9 +95,8 @@ extension THEndscrapValueCopy<$R, $Out>
 }
 
 abstract class THEndscrapCopyWith<$R, $In extends THEndscrap, $Out>
-    implements THElementCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? mapiahID, int? parentMapiahID, String? sameLineComment});
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic mapiahID, dynamic parentMapiahID, dynamic sameLineComment});
   THEndscrapCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -109,12 +110,12 @@ class _THEndscrapCopyWithImpl<$R, $Out>
       THEndscrapMapper.ensureInitialized();
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment
       }));
   @override

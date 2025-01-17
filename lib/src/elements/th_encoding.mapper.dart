@@ -13,7 +13,6 @@ class THEncodingMapper extends ClassMapperBase<THEncoding> {
   static THEncodingMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THEncodingMapper._());
-      THElementMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,14 +21,17 @@ class THEncodingMapper extends ClassMapperBase<THEncoding> {
   final String id = 'THEncoding';
 
   static int _$mapiahID(THEncoding v) => v.mapiahID;
-  static const Field<THEncoding, int> _f$mapiahID =
-      Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THEncoding, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THEncoding v) => v.parentMapiahID;
-  static const Field<THEncoding, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THEncoding, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THEncoding v) => v.sameLineComment;
-  static const Field<THEncoding, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THEncoding, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
   static String _$encoding(THEncoding v) => v.encoding;
   static const Field<THEncoding, String> _f$encoding =
       Field('encoding', _$encoding);
@@ -100,12 +102,11 @@ extension THEncodingValueCopy<$R, $Out>
 }
 
 abstract class THEncodingCopyWith<$R, $In extends THEncoding, $Out>
-    implements THElementCopyWith<$R, $In, $Out> {
-  @override
+    implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {int? mapiahID,
-      int? parentMapiahID,
-      String? sameLineComment,
+      {dynamic mapiahID,
+      dynamic parentMapiahID,
+      dynamic sameLineComment,
       String? encoding});
   THEncodingCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -120,13 +121,13 @@ class _THEncodingCopyWithImpl<$R, $Out>
       THEncodingMapper.ensureInitialized();
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none,
           String? encoding}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (encoding != null) #encoding: encoding
       }));

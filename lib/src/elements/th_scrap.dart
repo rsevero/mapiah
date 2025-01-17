@@ -41,7 +41,7 @@ class THScrap extends THElement
     _thID = thID;
   }
 
-  THScrap(super.parentMapiahID, String thID) : super() {
+  THScrap(super.parentMapiahID, String thID) : super.addToParent() {
     _thID = thID;
   }
 

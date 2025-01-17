@@ -15,7 +15,6 @@ class THMultilineCommentContentMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THMultilineCommentContentMapper._());
-      THElementMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,15 +23,18 @@ class THMultilineCommentContentMapper
   final String id = 'THMultilineCommentContent';
 
   static int _$mapiahID(THMultilineCommentContent v) => v.mapiahID;
-  static const Field<THMultilineCommentContent, int> _f$mapiahID =
-      Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THMultilineCommentContent, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THMultilineCommentContent v) => v.parentMapiahID;
-  static const Field<THMultilineCommentContent, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THMultilineCommentContent, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THMultilineCommentContent v) =>
       v.sameLineComment;
-  static const Field<THMultilineCommentContent, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THMultilineCommentContent, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
   static String _$content(THMultilineCommentContent v) => v.content;
   static const Field<THMultilineCommentContent, String> _f$content =
       Field('content', _$content);
@@ -111,12 +113,11 @@ extension THMultilineCommentContentValueCopy<$R, $Out>
 abstract class THMultilineCommentContentCopyWith<
     $R,
     $In extends THMultilineCommentContent,
-    $Out> implements THElementCopyWith<$R, $In, $Out> {
-  @override
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {int? mapiahID,
-      int? parentMapiahID,
-      String? sameLineComment,
+      {dynamic mapiahID,
+      dynamic parentMapiahID,
+      dynamic sameLineComment,
       String? content});
   THMultilineCommentContentCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -133,13 +134,13 @@ class _THMultilineCommentContentCopyWithImpl<$R, $Out>
       THMultilineCommentContentMapper.ensureInitialized();
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none,
           String? content}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (content != null) #content: content
       }));

@@ -13,8 +13,6 @@ class THAreaMapper extends ClassMapperBase<THArea> {
   static THAreaMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THAreaMapper._());
-      THElementMapper.ensureInitialized();
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,13 +21,17 @@ class THAreaMapper extends ClassMapperBase<THArea> {
   final String id = 'THArea';
 
   static int _$mapiahID(THArea v) => v.mapiahID;
-  static const Field<THArea, int> _f$mapiahID = Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THArea, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THArea v) => v.parentMapiahID;
-  static const Field<THArea, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THArea, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THArea v) => v.sameLineComment;
-  static const Field<THArea, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THArea, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
   static String _$areaType(THArea v) => v.areaType;
   static const Field<THArea, String> _f$areaType =
       Field('areaType', _$areaType);
@@ -101,12 +103,11 @@ extension THAreaValueCopy<$R, $Out> on ObjectCopyWith<$R, THArea, $Out> {
 }
 
 abstract class THAreaCopyWith<$R, $In extends THArea, $Out>
-    implements THElementCopyWith<$R, $In, $Out> {
-  @override
+    implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {int? mapiahID,
-      int? parentMapiahID,
-      String? sameLineComment,
+      {dynamic mapiahID,
+      dynamic parentMapiahID,
+      dynamic sameLineComment,
       String? areaType,
       LinkedHashMap<String, THCommandOption>? optionsMap});
   THAreaCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -120,14 +121,14 @@ class _THAreaCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, THArea, $Out>
   late final ClassMapperBase<THArea> $mapper = THAreaMapper.ensureInitialized();
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none,
           String? areaType,
           LinkedHashMap<String, THCommandOption>? optionsMap}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (areaType != null) #areaType: areaType,
         if (optionsMap != null) #optionsMap: optionsMap

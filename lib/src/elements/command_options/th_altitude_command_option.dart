@@ -1,11 +1,7 @@
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/th_has_altitude.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-
-part 'th_altitude_command_option.mapper.dart';
 
 // altitude <value> . can be specified only with the wall type. This option creates an
 // altitude label on the wall. All altitudes are exported as a difference against grid Z
@@ -14,48 +10,94 @@ part 'th_altitude_command_option.mapper.dart';
 // defined as ”-”, ”.”, ”nan”, ”NAN” or ”NaN”. The value can be prefixed by a keyword
 // “fix”, then no nearest station is taken into consideration; the absolute given value is
 // used instead. Units can follow the value. Examples: +4, [+4 m], [fix 1510 m].
-@MappableClass()
 class THAltitudeCommandOption extends THCommandOption
-    with THAltitudeCommandOptionMappable, THHasLength, THHasAltitude {
+    with THHasLength, THHasAltitude {
   static const String _thisOptionType = 'altitude';
 
-  /// Constructor necessary for dart_mappable support.
-  THAltitudeCommandOption.withExplicitParameters(
-      super.parentMapiahID, super.optionType, length, bool isFix,
-      [String? unit])
-      : super.withExplicitParameters() {
+  THAltitudeCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required length,
+    required bool isFix,
+    String? unit,
+  }) : super() {
     this.length = length;
     this.isFix = isFix;
-    if ((unit != null) && (unit.isNotEmpty)) {
-      unitFromString(unit);
-    }
+    unitFromString(unit);
   }
 
-  THAltitudeCommandOption(
-      THHasOptions optionParent, THDoublePart length, bool isFix,
-      [String? unit])
-      : super(optionParent, _thisOptionType) {
+  THAltitudeCommandOption.addToOptionParent({
+    required super.optionParent,
+    required THDoublePart length,
+    required bool isFix,
+    required String? unit,
+  }) : super.addToOptionParent(optionType: _thisOptionType) {
     this.length = length;
     this.isFix = isFix;
-    if ((unit != null) && (unit.isNotEmpty)) {
-      unitFromString(unit);
-    }
+    unitFromString(unit);
   }
 
-  THAltitudeCommandOption.fromString(
-      THHasOptions optionParent, String aHeight, bool aIsFix,
-      [String? aUnit])
-      : super(optionParent, _thisOptionType) {
-    length = THDoublePart.fromString(aHeight);
-    isFix = aIsFix;
-    if ((aUnit != null) && (aUnit.isNotEmpty)) {
-      unitFromString(aUnit);
-    }
+  THAltitudeCommandOption.fromString({
+    required super.optionParent,
+    required String height,
+    required bool isFix,
+    required String? unit,
+  }) : super.addToOptionParent(optionType: _thisOptionType) {
+    length = THDoublePart.fromString(height);
+    this.isFix = isFix;
+    unitFromString(unit);
   }
 
-  THAltitudeCommandOption.fromNan(THHasOptions optionParent)
-      : super(optionParent, _thisOptionType) {
+  THAltitudeCommandOption.fromNan({required super.optionParent})
+      : super.addToOptionParent(optionType: _thisOptionType) {
     length = THDoublePart.fromString('0');
     isNan = true;
+    unitFromString('');
   }
+
+  @override
+  THAltitudeCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    THDoublePart? length,
+    bool? isFix,
+    String? unit,
+  }) {
+    return THAltitudeCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      length: length ?? this.length,
+      isFix: isFix ?? this.isFix,
+      unit: unit ?? this.unit,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    final map = super.toMap();
+    map.addAll({
+      'length': length.toMap(),
+      'isFix': isFix,
+      'unit': unit,
+    });
+    return map;
+  }
+
+  @override
+  bool operator ==(covariant THAltitudeCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return super == other &&
+        other.length == length &&
+        other.isFix == isFix &&
+        other.unit == unit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        super.hashCode,
+        length,
+        isFix,
+        unit,
+      );
 }

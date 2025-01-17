@@ -69,7 +69,6 @@ class THProjectionCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THProjectionCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THProjectionTypesMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THAngleUnitPartMapper.ensureInitialized();
@@ -81,11 +80,13 @@ class THProjectionCommandOptionMapper
   final String id = 'THProjectionCommandOption';
 
   static int _$parentMapiahID(THProjectionCommandOption v) => v.parentMapiahID;
-  static const Field<THProjectionCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THProjectionCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THProjectionCommandOption v) => v.optionType;
-  static const Field<THProjectionCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THProjectionCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THProjectionTypes _$type(THProjectionCommandOption v) => v.type;
   static const Field<THProjectionCommandOption, THProjectionTypes> _f$type =
       Field('type', _$type);
@@ -177,14 +178,13 @@ extension THProjectionCommandOptionValueCopy<$R, $Out>
 abstract class THProjectionCommandOptionCopyWith<
     $R,
     $In extends THProjectionCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get elevationAngle;
   THAngleUnitPartCopyWith<$R, THAngleUnitPart, THAngleUnitPart>?
       get elevationUnit;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THProjectionTypes? type,
       String? index,
       THDoublePart? elevationAngle,
@@ -211,15 +211,15 @@ class _THProjectionCommandOptionCopyWithImpl<$R, $Out>
           $value.elevationUnit?.copyWith.$chain((v) => call(elevationUnit: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           THProjectionTypes? type,
           String? index,
           Object? elevationAngle = $none,
           Object? elevationUnit = $none}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (type != null) #type: type,
         if (index != null) #index: index,
         if (elevationAngle != $none) #elevationAngle: elevationAngle,

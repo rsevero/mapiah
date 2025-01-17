@@ -22,11 +22,14 @@ class THClipCommandOptionMapper extends ClassMapperBase<THClipCommandOption> {
   final String id = 'THClipCommandOption';
 
   static int _$parentMapiahID(THClipCommandOption v) => v.parentMapiahID;
-  static const Field<THClipCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THClipCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THClipCommandOption v) => v.optionType;
-  static const Field<THClipCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType, key: 'parentElementType');
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THClipCommandOption, dynamic> _f$optionType = Field(
+      'optionType', _$optionType,
+      key: 'parentElementType', arg: _arg$optionType);
   static String _$parentElementType(THClipCommandOption v) =>
       v.parentElementType;
   static const Field<THClipCommandOption, String> _f$parentElementType =
@@ -108,8 +111,8 @@ abstract class THClipCommandOptionCopyWith<$R, $In extends THClipCommandOption,
     $Out> implements THMultipleChoiceCommandOptionCopyWith<$R, $In, $Out> {
   @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       String? parentElementType,
       String? choice});
   THClipCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -126,13 +129,13 @@ class _THClipCommandOptionCopyWithImpl<$R, $Out>
       THClipCommandOptionMapper.ensureInitialized();
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           String? parentElementType,
           String? choice}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (parentElementType != null) #parentElementType: parentElementType,
         if (choice != null) #choice: choice
       }));

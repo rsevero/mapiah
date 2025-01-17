@@ -1,27 +1,54 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 
-part 'th_command_option.mapper.dart';
-
-@MappableClass()
-abstract class THCommandOption with THCommandOptionMappable {
-  late int parentMapiahID;
+abstract class THCommandOption {
+  late final int parentMapiahID;
   late final String _optionType;
 
-  // Constructor necessary for dart_mappable support.
-  THCommandOption.withExplicitParameters(
-    this.parentMapiahID,
-    String optionType,
-  ) {
-    _optionType = optionType;
-  }
+  THCommandOption({
+    required this.parentMapiahID,
+    required String optionType,
+  }) : _optionType = optionType;
 
-  THCommandOption(THHasOptions optionParent, String optionType) {
-    _optionType = optionType;
-    parentMapiahID = optionParent.mapiahID;
+  THCommandOption.addToOptionParent({
+    required THHasOptions optionParent,
+    required String optionType,
+  })  : _optionType = optionType,
+        parentMapiahID = optionParent.mapiahID {
     optionParent.addUpdateOption(this);
   }
+
+  THCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+    };
+  }
+
+  String toJson() {
+    return jsonEncode(toMap());
+  }
+
+  @override
+  bool operator ==(covariant THCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+      );
 
   String get optionType => _optionType;
 

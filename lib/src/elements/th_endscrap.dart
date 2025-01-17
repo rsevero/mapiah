@@ -12,7 +12,7 @@ class THEndscrap extends THElement with THEndscrapMappable {
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THEndscrap(super.parentMapiahID) : super();
+  THEndscrap(super.parentMapiahID) : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

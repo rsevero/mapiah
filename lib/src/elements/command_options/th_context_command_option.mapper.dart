@@ -14,7 +14,6 @@ class THContextCommandOptionMapper
   static THContextCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THContextCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,11 +22,13 @@ class THContextCommandOptionMapper
   final String id = 'THContextCommandOption';
 
   static int _$parentMapiahID(THContextCommandOption v) => v.parentMapiahID;
-  static const Field<THContextCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THContextCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THContextCommandOption v) => v.optionType;
-  static const Field<THContextCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THContextCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$elementType(THContextCommandOption v) => v.elementType;
   static const Field<THContextCommandOption, String> _f$elementType =
       Field('elementType', _$elementType);
@@ -107,11 +108,10 @@ extension THContextCommandOptionValueCopy<$R, $Out>
 abstract class THContextCommandOptionCopyWith<
     $R,
     $In extends THContextCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       String? elementType,
       String? symbolType});
   THContextCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -129,13 +129,13 @@ class _THContextCommandOptionCopyWithImpl<$R, $Out>
       THContextCommandOptionMapper.ensureInitialized();
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           String? elementType,
           String? symbolType}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (elementType != null) #elementType: elementType,
         if (symbolType != null) #symbolType: symbolType
       }));

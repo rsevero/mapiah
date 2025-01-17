@@ -4,12 +4,16 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
 mixin THHasLength on THCommandOption {
   late THDoublePart length;
-  final _unit = THLengthUnitPart.fromString('m');
-  bool unitSet = false;
+  final THLengthUnitPart _unit = THLengthUnitPart.fromString('m');
+  late final bool unitSet;
 
-  void unitFromString(String aUnit) {
-    _unit.fromString(aUnit);
-    unitSet = true;
+  void unitFromString(String? unit) {
+    if ((unit != null) && (unit.isNotEmpty)) {
+      _unit.fromString(unit);
+      unitSet = true;
+    } else {
+      unitSet = false;
+    }
   }
 
   String get unit {

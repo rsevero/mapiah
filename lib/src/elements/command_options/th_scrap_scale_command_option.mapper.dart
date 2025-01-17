@@ -15,7 +15,6 @@ class THScrapScaleCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THScrapScaleCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THLengthUnitPartMapper.ensureInitialized();
     }
@@ -26,11 +25,13 @@ class THScrapScaleCommandOptionMapper
   final String id = 'THScrapScaleCommandOption';
 
   static int _$parentMapiahID(THScrapScaleCommandOption v) => v.parentMapiahID;
-  static const Field<THScrapScaleCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THScrapScaleCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THScrapScaleCommandOption v) => v.optionType;
-  static const Field<THScrapScaleCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THScrapScaleCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static List<THDoublePart> _$_numericSpecifications(
           THScrapScaleCommandOption v) =>
       v._numericSpecifications;
@@ -116,15 +117,14 @@ extension THScrapScaleCommandOptionValueCopy<$R, $Out>
 abstract class THScrapScaleCommandOptionCopyWith<
     $R,
     $In extends THScrapScaleCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, THDoublePart,
           THDoublePartCopyWith<$R, THDoublePart, THDoublePart>>
       get _numericSpecifications;
   THLengthUnitPartCopyWith<$R, THLengthUnitPart, THLengthUnitPart>? get unit;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       List<THDoublePart>? numericSpecifications,
       THLengthUnitPart? unit});
   THScrapScaleCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -152,13 +152,13 @@ class _THScrapScaleCommandOptionCopyWithImpl<$R, $Out>
       $value.unit?.copyWith.$chain((v) => call(unit: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           List<THDoublePart>? numericSpecifications,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (numericSpecifications != null)
           #numericSpecifications: numericSpecifications,
         if (unit != $none) #unit: unit

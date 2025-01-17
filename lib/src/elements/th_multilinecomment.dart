@@ -13,7 +13,7 @@ class THMultiLineComment extends THElement
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THMultiLineComment(super.parentMapiahID) : super();
+  THMultiLineComment(super.parentMapiahID) : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

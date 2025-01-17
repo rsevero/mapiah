@@ -15,7 +15,7 @@ class THAreaBorderTHID extends THElement with THAreaBorderTHIDMappable {
     this.id,
   ) : super.notAddToParent();
 
-  THAreaBorderTHID(super.parentMapiahID, this.id) : super() {
+  THAreaBorderTHID(super.parentMapiahID, this.id) : super.addToParent() {
     // if (parent is! THArea) {
     //   throw THCustomException(
     //       'THAreaBorder parent must be THArea, but it is ${parent.runtimeType}');

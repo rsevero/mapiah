@@ -17,7 +17,6 @@ class MoveStraightLineSegmentCommandMapper
           .use(_instance = MoveStraightLineSegmentCommandMapper._());
       CommandMapper.ensureInitialized();
       MapperContainer.globals.useAll([OffsetMapper()]);
-      THStraightLineSegmentMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
@@ -130,8 +129,6 @@ abstract class MoveStraightLineSegmentCommandCopyWith<
     $R,
     $In extends MoveStraightLineSegmentCommand,
     $Out> implements CommandCopyWith<$R, $In, $Out> {
-  THStraightLineSegmentCopyWith<$R, THStraightLineSegment,
-      THStraightLineSegment> get lineSegment;
   @override
   $R call(
       {THStraightLineSegment? lineSegment,
@@ -154,11 +151,6 @@ class _MoveStraightLineSegmentCommandCopyWithImpl<$R, $Out>
   @override
   late final ClassMapperBase<MoveStraightLineSegmentCommand> $mapper =
       MoveStraightLineSegmentCommandMapper.ensureInitialized();
-  @override
-  THStraightLineSegmentCopyWith<$R, THStraightLineSegment,
-          THStraightLineSegment>
-      get lineSegment =>
-          $value.lineSegment.copyWith.$chain((v) => call(lineSegment: v));
   @override
   $R call(
           {THStraightLineSegment? lineSegment,

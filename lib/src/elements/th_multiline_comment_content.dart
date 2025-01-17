@@ -16,7 +16,8 @@ class THMultilineCommentContent extends THElement
     this.content,
   ) : super.notAddToParent();
 
-  THMultilineCommentContent(super.parentMapiahID, this.content) : super();
+  THMultilineCommentContent(super.parentMapiahID, this.content)
+      : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

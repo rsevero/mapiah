@@ -13,7 +13,6 @@ class THEmptyLineMapper extends ClassMapperBase<THEmptyLine> {
   static THEmptyLineMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THEmptyLineMapper._());
-      THElementMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,14 +21,17 @@ class THEmptyLineMapper extends ClassMapperBase<THEmptyLine> {
   final String id = 'THEmptyLine';
 
   static int _$mapiahID(THEmptyLine v) => v.mapiahID;
-  static const Field<THEmptyLine, int> _f$mapiahID =
-      Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THEmptyLine, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THEmptyLine v) => v.parentMapiahID;
-  static const Field<THEmptyLine, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THEmptyLine, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THEmptyLine v) => v.sameLineComment;
-  static const Field<THEmptyLine, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THEmptyLine, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
 
   @override
   final MappableFields<THEmptyLine> fields = const {
@@ -93,9 +95,8 @@ extension THEmptyLineValueCopy<$R, $Out>
 }
 
 abstract class THEmptyLineCopyWith<$R, $In extends THEmptyLine, $Out>
-    implements THElementCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? mapiahID, int? parentMapiahID, String? sameLineComment});
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic mapiahID, dynamic parentMapiahID, dynamic sameLineComment});
   THEmptyLineCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -109,12 +110,12 @@ class _THEmptyLineCopyWithImpl<$R, $Out>
       THEmptyLineMapper.ensureInitialized();
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment
       }));
   @override

@@ -13,7 +13,6 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
   static THCSCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THCSCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THCSPartMapper.ensureInitialized();
     }
     return _instance!;
@@ -23,11 +22,13 @@ class THCSCommandOptionMapper extends ClassMapperBase<THCSCommandOption> {
   final String id = 'THCSCommandOption';
 
   static int _$parentMapiahID(THCSCommandOption v) => v.parentMapiahID;
-  static const Field<THCSCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THCSCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THCSCommandOption v) => v.optionType;
-  static const Field<THCSCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THCSCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THCSPart _$cs(THCSCommandOption v) => v.cs;
   static const Field<THCSCommandOption, THCSPart> _f$cs = Field('cs', _$cs);
 
@@ -97,10 +98,9 @@ extension THCSCommandOptionValueCopy<$R, $Out>
 }
 
 abstract class THCSCommandOptionCopyWith<$R, $In extends THCSCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THCSPartCopyWith<$R, THCSPart, THCSPart> get cs;
-  @override
-  $R call({int? parentMapiahID, String? optionType, THCSPart? cs});
+  $R call({dynamic parentMapiahID, dynamic optionType, THCSPart? cs});
   THCSCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -117,10 +117,13 @@ class _THCSCommandOptionCopyWithImpl<$R, $Out>
   THCSPartCopyWith<$R, THCSPart, THCSPart> get cs =>
       $value.cs.copyWith.$chain((v) => call(cs: v));
   @override
-  $R call({int? parentMapiahID, String? optionType, THCSPart? cs}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          THCSPart? cs}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (cs != null) #cs: cs
       }));
   @override

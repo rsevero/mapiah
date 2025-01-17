@@ -12,7 +12,7 @@ class THEndline extends THElement with THEndlineMappable {
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THEndline(super.parentMapiahID) : super();
+  THEndline(super.parentMapiahID) : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

@@ -14,7 +14,6 @@ class THSubtypeCommandOptionMapper
   static THSubtypeCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THSubtypeCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,11 +22,13 @@ class THSubtypeCommandOptionMapper
   final String id = 'THSubtypeCommandOption';
 
   static int _$parentMapiahID(THSubtypeCommandOption v) => v.parentMapiahID;
-  static const Field<THSubtypeCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THSubtypeCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THSubtypeCommandOption v) => v.optionType;
-  static const Field<THSubtypeCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THSubtypeCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$subtype(THSubtypeCommandOption v) => v.subtype;
   static const Field<THSubtypeCommandOption, String> _f$subtype =
       Field('subtype', _$subtype);
@@ -102,9 +103,8 @@ extension THSubtypeCommandOptionValueCopy<$R, $Out>
 abstract class THSubtypeCommandOptionCopyWith<
     $R,
     $In extends THSubtypeCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? parentMapiahID, String? optionType, String? subtype});
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic parentMapiahID, dynamic optionType, String? subtype});
   THSubtypeCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -119,10 +119,13 @@ class _THSubtypeCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THSubtypeCommandOption> $mapper =
       THSubtypeCommandOptionMapper.ensureInitialized();
   @override
-  $R call({int? parentMapiahID, String? optionType, String? subtype}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          String? subtype}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (subtype != null) #subtype: subtype
       }));
   @override

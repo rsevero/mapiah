@@ -15,8 +15,6 @@ class MoveLineCommandMapper extends ClassMapperBase<MoveLineCommand> {
       MapperContainer.globals.use(_instance = MoveLineCommandMapper._());
       CommandMapper.ensureInitialized();
       MapperContainer.globals.useAll([OffsetMapper()]);
-      THLineMapper.ensureInitialized();
-      THLineSegmentMapper.ensureInitialized();
       CommandTypeMapper.ensureInitialized();
     }
     return _instance!;
@@ -132,8 +130,6 @@ extension MoveLineCommandValueCopy<$R, $Out>
 
 abstract class MoveLineCommandCopyWith<$R, $In extends MoveLineCommand, $Out>
     implements CommandCopyWith<$R, $In, $Out> {
-  THLineCopyWith<$R, THLine, THLine> get originalLine;
-  THLineCopyWith<$R, THLine, THLine> get newLine;
   @override
   $R call(
       {THLine? originalLine,
@@ -156,12 +152,6 @@ class _MoveLineCommandCopyWithImpl<$R, $Out>
   @override
   late final ClassMapperBase<MoveLineCommand> $mapper =
       MoveLineCommandMapper.ensureInitialized();
-  @override
-  THLineCopyWith<$R, THLine, THLine> get originalLine =>
-      $value.originalLine.copyWith.$chain((v) => call(originalLine: v));
-  @override
-  THLineCopyWith<$R, THLine, THLine> get newLine =>
-      $value.newLine.copyWith.$chain((v) => call(newLine: v));
   @override
   $R call(
           {THLine? originalLine,

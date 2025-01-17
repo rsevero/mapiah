@@ -14,7 +14,6 @@ class THUnrecognizedCommandMapper
   static THUnrecognizedCommandMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THUnrecognizedCommandMapper._());
-      THElementMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,15 +22,18 @@ class THUnrecognizedCommandMapper
   final String id = 'THUnrecognizedCommand';
 
   static int _$mapiahID(THUnrecognizedCommand v) => v.mapiahID;
-  static const Field<THUnrecognizedCommand, int> _f$mapiahID =
-      Field('mapiahID', _$mapiahID);
+  static dynamic _arg$mapiahID(f) => f<int>();
+  static const Field<THUnrecognizedCommand, dynamic> _f$mapiahID =
+      Field('mapiahID', _$mapiahID, arg: _arg$mapiahID);
   static int _$parentMapiahID(THUnrecognizedCommand v) => v.parentMapiahID;
-  static const Field<THUnrecognizedCommand, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THUnrecognizedCommand, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String? _$sameLineComment(THUnrecognizedCommand v) =>
       v.sameLineComment;
-  static const Field<THUnrecognizedCommand, String> _f$sameLineComment =
-      Field('sameLineComment', _$sameLineComment);
+  static dynamic _arg$sameLineComment(f) => f<String>();
+  static const Field<THUnrecognizedCommand, dynamic> _f$sameLineComment =
+      Field('sameLineComment', _$sameLineComment, arg: _arg$sameLineComment);
   static dynamic _$value(THUnrecognizedCommand v) => v.value;
   static dynamic _arg$value(f) => f<dynamic>();
   static const Field<THUnrecognizedCommand, List<dynamic>> _f$value =
@@ -109,13 +111,12 @@ extension THUnrecognizedCommandValueCopy<$R, $Out>
 abstract class THUnrecognizedCommandCopyWith<
     $R,
     $In extends THUnrecognizedCommand,
-    $Out> implements THElementCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>> get value;
-  @override
   $R call(
-      {int? mapiahID,
-      int? parentMapiahID,
-      String? sameLineComment,
+      {dynamic mapiahID,
+      dynamic parentMapiahID,
+      dynamic sameLineComment,
       List<dynamic>? value});
   THUnrecognizedCommandCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -135,13 +136,13 @@ class _THUnrecognizedCommandCopyWithImpl<$R, $Out>
           (v) => call(value: v));
   @override
   $R call(
-          {int? mapiahID,
-          int? parentMapiahID,
+          {Object? mapiahID = $none,
+          Object? parentMapiahID = $none,
           Object? sameLineComment = $none,
           List<dynamic>? value}) =>
       $apply(FieldCopyWithData({
-        if (mapiahID != null) #mapiahID: mapiahID,
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
+        if (mapiahID != $none) #mapiahID: mapiahID,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
         if (sameLineComment != $none) #sameLineComment: sameLineComment,
         if (value != null) #value: value
       }));

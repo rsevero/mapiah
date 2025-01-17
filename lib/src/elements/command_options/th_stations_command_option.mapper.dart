@@ -15,7 +15,6 @@ class THStationsCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THStationsCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,11 +23,13 @@ class THStationsCommandOptionMapper
   final String id = 'THStationsCommandOption';
 
   static int _$parentMapiahID(THStationsCommandOption v) => v.parentMapiahID;
-  static const Field<THStationsCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THStationsCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THStationsCommandOption v) => v.optionType;
-  static const Field<THStationsCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THStationsCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static List<String> _$stations(THStationsCommandOption v) => v.stations;
   static const Field<THStationsCommandOption, List<String>> _f$stations =
       Field('stations', _$stations);
@@ -103,10 +104,9 @@ extension THStationsCommandOptionValueCopy<$R, $Out>
 abstract class THStationsCommandOptionCopyWith<
     $R,
     $In extends THStationsCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get stations;
-  @override
-  $R call({int? parentMapiahID, String? optionType, List<String>? stations});
+  $R call({dynamic parentMapiahID, dynamic optionType, List<String>? stations});
   THStationsCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -125,10 +125,13 @@ class _THStationsCommandOptionCopyWithImpl<$R, $Out>
       ListCopyWith($value.stations, (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(stations: v));
   @override
-  $R call({int? parentMapiahID, String? optionType, List<String>? stations}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          List<String>? stations}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (stations != null) #stations: stations
       }));
   @override

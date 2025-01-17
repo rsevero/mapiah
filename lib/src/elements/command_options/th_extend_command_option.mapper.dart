@@ -14,7 +14,6 @@ class THExtendCommandOptionMapper
   static THExtendCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THExtendCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,11 +22,13 @@ class THExtendCommandOptionMapper
   final String id = 'THExtendCommandOption';
 
   static int _$parentMapiahID(THExtendCommandOption v) => v.parentMapiahID;
-  static const Field<THExtendCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THExtendCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THExtendCommandOption v) => v.optionType;
-  static const Field<THExtendCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THExtendCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$station(THExtendCommandOption v) => v.station;
   static const Field<THExtendCommandOption, String> _f$station =
       Field('station', _$station);
@@ -102,9 +103,8 @@ extension THExtendCommandOptionValueCopy<$R, $Out>
 abstract class THExtendCommandOptionCopyWith<
     $R,
     $In extends THExtendCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? parentMapiahID, String? optionType, String? station});
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic parentMapiahID, dynamic optionType, String? station});
   THExtendCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -118,10 +118,13 @@ class _THExtendCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THExtendCommandOption> $mapper =
       THExtendCommandOptionMapper.ensureInitialized();
   @override
-  $R call({int? parentMapiahID, String? optionType, String? station}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          String? station}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (station != null) #station: station
       }));
   @override

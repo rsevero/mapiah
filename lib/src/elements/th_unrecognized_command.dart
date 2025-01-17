@@ -20,7 +20,7 @@ class THUnrecognizedCommand extends THElement
 
   THUnrecognizedCommand(super.parentMapiahID, List<dynamic> value)
       : _value = value,
-        super();
+        super.addToParent();
 
   @override
   bool isSameClass(Object object) {

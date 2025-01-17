@@ -15,7 +15,6 @@ class THPointHeightValueCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THPointHeightValueCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -26,11 +25,14 @@ class THPointHeightValueCommandOptionMapper
 
   static int _$parentMapiahID(THPointHeightValueCommandOption v) =>
       v.parentMapiahID;
-  static const Field<THPointHeightValueCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THPointHeightValueCommandOption, dynamic>
+      _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THPointHeightValueCommandOption v) => v.optionType;
-  static const Field<THPointHeightValueCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THPointHeightValueCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDoublePart _$length(THPointHeightValueCommandOption v) => v.length;
   static const Field<THPointHeightValueCommandOption, THDoublePart> _f$length =
       Field('length', _$length);
@@ -119,12 +121,11 @@ extension THPointHeightValueCommandOptionValueCopy<$R, $Out>
 abstract class THPointHeightValueCommandOptionCopyWith<
     $R,
     $In extends THPointHeightValueCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get length;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THDoublePart? length,
       bool? isPresumed,
       String? unit});
@@ -148,14 +149,14 @@ class _THPointHeightValueCommandOptionCopyWithImpl<$R, $Out>
       $value.length.copyWith.$chain((v) => call(length: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           THDoublePart? length,
           bool? isPresumed,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (length != null) #length: length,
         if (isPresumed != null) #isPresumed: isPresumed,
         if (unit != $none) #unit: unit

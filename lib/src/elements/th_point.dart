@@ -1,15 +1,12 @@
 import 'dart:collection';
 
-import 'package:dart_mappable/dart_mappable.dart';
+import 'package:collection/collection.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
-
-part 'th_point.mapper.dart';
 
 // Description: Point is a command for drawing a point map symbol.
 // Syntax: point <x> <y> <type> [OPTIONS]
@@ -39,12 +36,11 @@ part 'th_point.mapper.dart';
 // ice-pillar, ice-stalactite, ice-stalagmite, map-connection18 , paleo-material,
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
-@MappableClass()
 class THPoint extends THElement
-    with THPointMappable, THHasOptions
+    with THHasOptions
     implements THHasPLAType, THPointInterface {
-  late final THPositionPart _position;
-  late final String _pointType;
+  final THPositionPart _position;
+  final String _pointType;
 
   static final _pointTypes = <String>{
     'air-draught',
@@ -165,38 +161,87 @@ class THPoint extends THElement
     'wheelchair',
   };
 
-  /// Used by dart_mappable to decode a THPoint object from a map and create a
-  /// new instance with copyWith.
-  THPoint.notAddedToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+  THPoint({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-    THPositionPart position,
-    String pointType,
-    LinkedHashMap<String, THCommandOption> optionsMap,
-  ) : super.notAddToParent() {
-    _position = position;
-    _pointType = pointType;
+    required THPositionPart position,
+    required String pointType,
+    required LinkedHashMap<String, THCommandOption> optionsMap,
+  })  : _position = position,
+        _pointType = pointType,
+        super() {
     addOptionsMap(optionsMap);
   }
 
-  THPoint(
-    super.parentMapiahID,
-    THPositionPart coordinates,
-    String pointType,
-  ) : super() {
-    _position = coordinates;
-    _pointType = pointType;
+  THPoint.addToParent({
+    required super.parentMapiahID,
+    super.sameLineComment,
+    required THPositionPart coordinates,
+    required String pointType,
+  })  : _position = coordinates,
+        _pointType = pointType,
+        super.addToParent();
+
+  THPoint.fromString({
+    required super.parentMapiahID,
+    super.sameLineComment,
+    required List<dynamic> pointDataList,
+    required String pointType,
+  })  : _position = THPositionPart.fromStringList(list: pointDataList),
+        _pointType = pointType,
+        super.addToParent();
+
+  @override
+  THPoint copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    THPositionPart? position,
+    String? pointType,
+    LinkedHashMap<String, THCommandOption>? optionsMap,
+  }) {
+    return THPoint(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: sameLineComment ?? this.sameLineComment,
+      position: position ?? _position,
+      pointType: pointType ?? _pointType,
+      optionsMap: optionsMap ??
+          LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
+    );
   }
 
-  THPoint.fromString(
-    super.parentMapiahID,
-    List<dynamic> pointDataList,
-    String pointType,
-  ) : super() {
-    _position = THPositionPart.fromStringList(pointDataList);
-    plaType = pointType;
+  @override
+  Map<String, dynamic> toMap() {
+    final map = super.toMap();
+    map.addAll({
+      'position': _position.toMap(),
+      'pointType': _pointType,
+      'optionsMap':
+          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+    });
+    return map;
   }
+
+  @override
+  bool operator ==(covariant THPoint other) {
+    if (identical(this, other)) return true;
+
+    return super == other &&
+        _position == other._position &&
+        _pointType == other._pointType &&
+        const MapEquality<String, THCommandOption>()
+            .equals(optionsMap, other.optionsMap);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        super.hashCode,
+        _position,
+        _pointType,
+        Object.hashAll(optionsMap.entries),
+      );
 
   static bool hasPointType(String pointType) {
     return _pointTypes.contains(pointType);
@@ -207,21 +252,8 @@ class THPoint extends THElement
     return object is THPoint;
   }
 
-  set pointType(String pointType) {
-    if (!hasPointType(pointType)) {
-      throw THCustomException("Unrecognized THPoint type '$pointType'.");
-    }
-
-    _pointType = pointType;
-  }
-
   String get pointType {
     return _pointType;
-  }
-
-  @override
-  set plaType(String pointType) {
-    _pointType = pointType;
   }
 
   @override

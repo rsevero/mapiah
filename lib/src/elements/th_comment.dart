@@ -15,7 +15,7 @@ class THComment extends THElement with THCommentMappable {
     this.content,
   ) : super.notAddToParent();
 
-  THComment(super.parentMapiahID, this.content) : super();
+  THComment(super.parentMapiahID, this.content) : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

@@ -13,7 +13,6 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
   static THTitleCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THTitleCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,11 +21,13 @@ class THTitleCommandOptionMapper extends ClassMapperBase<THTitleCommandOption> {
   final String id = 'THTitleCommandOption';
 
   static int _$parentMapiahID(THTitleCommandOption v) => v.parentMapiahID;
-  static const Field<THTitleCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THTitleCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THTitleCommandOption v) => v.optionType;
-  static const Field<THTitleCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THTitleCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$text(THTitleCommandOption v) => v.text;
   static const Field<THTitleCommandOption, String> _f$text =
       Field('text', _$text);
@@ -101,9 +102,8 @@ extension THTitleCommandOptionValueCopy<$R, $Out>
 abstract class THTitleCommandOptionCopyWith<
     $R,
     $In extends THTitleCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? parentMapiahID, String? optionType, String? text});
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic parentMapiahID, dynamic optionType, String? text});
   THTitleCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -117,10 +117,13 @@ class _THTitleCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THTitleCommandOption> $mapper =
       THTitleCommandOptionMapper.ensureInitialized();
   @override
-  $R call({int? parentMapiahID, String? optionType, String? text}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          String? text}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (text != null) #text: text
       }));
   @override

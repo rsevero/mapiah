@@ -1,36 +1,31 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 
-part 'th_element.mapper.dart';
-
 /// Base class for all elements that form a THFile, including THFile itself.
-@MappableClass()
-abstract class THElement with THElementMappable {
+abstract class THElement {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
-  late final int _mapiahID;
-  int parentMapiahID;
+  final int _mapiahID;
+  final int parentMapiahID;
+  final String? sameLineComment;
 
-  String? sameLineComment;
-
-  /// Used by dart_mappable to instantiate a THElement from a map and from
-  /// copyWith.
-  THElement.notAddToParent(
-      int mapiahID, this.parentMapiahID, this.sameLineComment) {
-    _mapiahID = mapiahID;
-  }
+  THElement({
+    required int mapiahID,
+    required this.parentMapiahID,
+    this.sameLineComment,
+  }) : _mapiahID = mapiahID;
 
   /// Main constructor.
   ///
   /// Main constructor that sets all essential properties. Any change made here
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
-  THElement(this.parentMapiahID) {
-    _mapiahID = getIt<GeneralStore>().nextMapiahIDForElements();
-  }
+  THElement.addToParent({required this.parentMapiahID, this.sameLineComment})
+      : _mapiahID = getIt<GeneralStore>().nextMapiahIDForElements();
 
   THParent parent(THFile thFile) {
     if (parentMapiahID < 0) {
@@ -44,14 +39,41 @@ abstract class THElement with THElementMappable {
     return runtimeType.toString().substring(2).toLowerCase();
   }
 
-  void removeSameLineComment() {
-    sameLineComment = null;
+  THElement copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+    };
   }
 
-  THElement clone() {
-    final THElement newElement = copyWith();
-    return newElement;
+  String toJson() {
+    return jsonEncode(toMap());
   }
+
+  @override
+  bool operator ==(covariant THElement other) {
+    if (identical(this, other)) return true;
+
+    return other.runtimeType == runtimeType &&
+        other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        runtimeType,
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+      );
 
   int get mapiahID => _mapiahID;
 

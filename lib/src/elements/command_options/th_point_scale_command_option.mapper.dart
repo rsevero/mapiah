@@ -15,7 +15,6 @@ class THPointScaleCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THPointScaleCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THMultipleChoicePartMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
@@ -26,11 +25,13 @@ class THPointScaleCommandOptionMapper
   final String id = 'THPointScaleCommandOption';
 
   static int _$parentMapiahID(THPointScaleCommandOption v) => v.parentMapiahID;
-  static const Field<THPointScaleCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THPointScaleCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THPointScaleCommandOption v) => v.optionType;
-  static const Field<THPointScaleCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THPointScaleCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THMultipleChoicePart _$_multipleChoiceSize(
           THPointScaleCommandOption v) =>
       v._multipleChoiceSize;
@@ -122,14 +123,13 @@ extension THPointScaleCommandOptionValueCopy<$R, $Out>
 abstract class THPointScaleCommandOptionCopyWith<
     $R,
     $In extends THPointScaleCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THMultipleChoicePartCopyWith<$R, THMultipleChoicePart, THMultipleChoicePart>
       get _multipleChoiceSize;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get _numericSize;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THMultipleChoicePart? multipleChoiceSize,
       THDoublePart? numericSize,
       bool? isNumeric});
@@ -155,14 +155,14 @@ class _THPointScaleCommandOptionCopyWithImpl<$R, $Out>
       $value._numericSize.copyWith.$chain((v) => call(numericSize: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           THMultipleChoicePart? multipleChoiceSize,
           THDoublePart? numericSize,
           bool? isNumeric}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (multipleChoiceSize != null) #multipleChoiceSize: multipleChoiceSize,
         if (numericSize != null) #numericSize: numericSize,
         if (isNumeric != null) #isNumeric: isNumeric

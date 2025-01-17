@@ -542,7 +542,8 @@ class THFileParser {
       assert(element[1][0] is String);
     }
 
-    final THLine newLine = THLine(_currentParentMapiahID, element[1][0]);
+    final THLine newLine =
+        THLine.addToParent(_currentParentMapiahID, element[1][0]);
     _thFileStore.addElementWithParent(newLine, _currentParent);
 
     _currentElement = newLine;

@@ -15,7 +15,6 @@ class THDateValueCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THDateValueCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDatetimePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -25,11 +24,13 @@ class THDateValueCommandOptionMapper
   final String id = 'THDateValueCommandOption';
 
   static int _$parentMapiahID(THDateValueCommandOption v) => v.parentMapiahID;
-  static const Field<THDateValueCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THDateValueCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THDateValueCommandOption v) => v.optionType;
-  static const Field<THDateValueCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THDateValueCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDatetimePart _$date(THDateValueCommandOption v) => v.date;
   static const Field<THDateValueCommandOption, THDatetimePart> _f$date =
       Field('date', _$date);
@@ -104,10 +105,9 @@ extension THDateValueCommandOptionValueCopy<$R, $Out>
 abstract class THDateValueCommandOptionCopyWith<
     $R,
     $In extends THDateValueCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get date;
-  @override
-  $R call({int? parentMapiahID, String? optionType, THDatetimePart? date});
+  $R call({dynamic parentMapiahID, dynamic optionType, THDatetimePart? date});
   THDateValueCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -125,10 +125,13 @@ class _THDateValueCommandOptionCopyWithImpl<$R, $Out>
   THDatetimePartCopyWith<$R, THDatetimePart, THDatetimePart> get date =>
       $value.date.copyWith.$chain((v) => call(date: v));
   @override
-  $R call({int? parentMapiahID, String? optionType, THDatetimePart? date}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          THDatetimePart? date}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (date != null) #date: date
       }));
   @override

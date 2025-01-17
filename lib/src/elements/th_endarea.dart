@@ -12,7 +12,7 @@ class THEndarea extends THElement with THEndareaMappable {
     super.sameLineComment,
   ) : super.notAddToParent();
 
-  THEndarea(super.parentMapiahID) : super();
+  THEndarea(super.parentMapiahID) : super.addToParent();
 
   @override
   bool isSameClass(Object object) {

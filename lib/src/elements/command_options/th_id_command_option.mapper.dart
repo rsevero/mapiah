@@ -13,7 +13,6 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   static THIDCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THIDCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,11 +21,13 @@ class THIDCommandOptionMapper extends ClassMapperBase<THIDCommandOption> {
   final String id = 'THIDCommandOption';
 
   static int _$parentMapiahID(THIDCommandOption v) => v.parentMapiahID;
-  static const Field<THIDCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THIDCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THIDCommandOption v) => v.optionType;
-  static const Field<THIDCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THIDCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$thID(THIDCommandOption v) => v.thID;
   static const Field<THIDCommandOption, String> _f$thID = Field('thID', _$thID);
 
@@ -96,9 +97,8 @@ extension THIDCommandOptionValueCopy<$R, $Out>
 }
 
 abstract class THIDCommandOptionCopyWith<$R, $In extends THIDCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? parentMapiahID, String? optionType, String? thID});
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic parentMapiahID, dynamic optionType, String? thID});
   THIDCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -112,10 +112,13 @@ class _THIDCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THIDCommandOption> $mapper =
       THIDCommandOptionMapper.ensureInitialized();
   @override
-  $R call({int? parentMapiahID, String? optionType, String? thID}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          String? thID}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (thID != null) #thID: thID
       }));
   @override

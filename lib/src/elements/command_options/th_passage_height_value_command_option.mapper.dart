@@ -70,7 +70,6 @@ class THPassageHeightValueCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THPassageHeightValueCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
       THPassageHeightModesMapper.ensureInitialized();
     }
@@ -82,12 +81,15 @@ class THPassageHeightValueCommandOptionMapper
 
   static int _$parentMapiahID(THPassageHeightValueCommandOption v) =>
       v.parentMapiahID;
-  static const Field<THPassageHeightValueCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THPassageHeightValueCommandOption, dynamic>
+      _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THPassageHeightValueCommandOption v) =>
       v.optionType;
-  static const Field<THPassageHeightValueCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THPassageHeightValueCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDoublePart? _$plusNumber(THPassageHeightValueCommandOption v) =>
       v.plusNumber;
   static const Field<THPassageHeightValueCommandOption, THDoublePart>
@@ -186,13 +188,12 @@ extension THPassageHeightValueCommandOptionValueCopy<$R, $Out>
 abstract class THPassageHeightValueCommandOptionCopyWith<
     $R,
     $In extends THPassageHeightValueCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get plusNumber;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart>? get minusNumber;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THDoublePart? plusNumber,
       THDoublePart? minusNumber,
       THPassageHeightModes? mode,
@@ -220,15 +221,15 @@ class _THPassageHeightValueCommandOptionCopyWithImpl<$R, $Out>
       $value.minusNumber?.copyWith.$chain((v) => call(minusNumber: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           Object? plusNumber = $none,
           Object? minusNumber = $none,
           THPassageHeightModes? mode,
           bool? plusHasSign}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (plusNumber != $none) #plusNumber: plusNumber,
         if (minusNumber != $none) #minusNumber: minusNumber,
         if (mode != null) #mode: mode,

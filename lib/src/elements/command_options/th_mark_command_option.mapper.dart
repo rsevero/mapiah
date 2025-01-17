@@ -13,7 +13,6 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
   static THMarkCommandOptionMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = THMarkCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -22,11 +21,13 @@ class THMarkCommandOptionMapper extends ClassMapperBase<THMarkCommandOption> {
   final String id = 'THMarkCommandOption';
 
   static int _$parentMapiahID(THMarkCommandOption v) => v.parentMapiahID;
-  static const Field<THMarkCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THMarkCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THMarkCommandOption v) => v.optionType;
-  static const Field<THMarkCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THMarkCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$mark(THMarkCommandOption v) => v.mark;
   static const Field<THMarkCommandOption, String> _f$mark =
       Field('mark', _$mark);
@@ -99,9 +100,8 @@ extension THMarkCommandOptionValueCopy<$R, $Out>
 }
 
 abstract class THMarkCommandOptionCopyWith<$R, $In extends THMarkCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
-  $R call({int? parentMapiahID, String? optionType, String? mark});
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({dynamic parentMapiahID, dynamic optionType, String? mark});
   THMarkCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -115,10 +115,13 @@ class _THMarkCommandOptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<THMarkCommandOption> $mapper =
       THMarkCommandOptionMapper.ensureInitialized();
   @override
-  $R call({int? parentMapiahID, String? optionType, String? mark}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          String? mark}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (mark != null) #mark: mark
       }));
   @override

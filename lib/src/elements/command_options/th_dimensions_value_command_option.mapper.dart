@@ -15,7 +15,6 @@ class THDimensionsValueCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THDimensionsValueCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -26,11 +25,14 @@ class THDimensionsValueCommandOptionMapper
 
   static int _$parentMapiahID(THDimensionsValueCommandOption v) =>
       v.parentMapiahID;
-  static const Field<THDimensionsValueCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THDimensionsValueCommandOption, dynamic>
+      _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THDimensionsValueCommandOption v) => v.optionType;
-  static const Field<THDimensionsValueCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THDimensionsValueCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDoublePart _$above(THDimensionsValueCommandOption v) => v.above;
   static const Field<THDimensionsValueCommandOption, THDoublePart> _f$above =
       Field('above', _$above);
@@ -122,13 +124,12 @@ extension THDimensionsValueCommandOptionValueCopy<$R, $Out>
 abstract class THDimensionsValueCommandOptionCopyWith<
     $R,
     $In extends THDimensionsValueCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get above;
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get below;
-  @override
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       THDoublePart? above,
       THDoublePart? below,
       String? unit});
@@ -155,14 +156,14 @@ class _THDimensionsValueCommandOptionCopyWithImpl<$R, $Out>
       $value.below.copyWith.$chain((v) => call(below: v));
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           THDoublePart? above,
           THDoublePart? below,
           Object? unit = $none}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (above != null) #above: above,
         if (below != null) #below: below,
         if (unit != $none) #unit: unit

@@ -15,7 +15,6 @@ class THLineHeightCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THLineHeightCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
       THDoublePartMapper.ensureInitialized();
     }
     return _instance!;
@@ -25,11 +24,13 @@ class THLineHeightCommandOptionMapper
   final String id = 'THLineHeightCommandOption';
 
   static int _$parentMapiahID(THLineHeightCommandOption v) => v.parentMapiahID;
-  static const Field<THLineHeightCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THLineHeightCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THLineHeightCommandOption v) => v.optionType;
-  static const Field<THLineHeightCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THLineHeightCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static THDoublePart _$height(THLineHeightCommandOption v) => v.height;
   static const Field<THLineHeightCommandOption, THDoublePart> _f$height =
       Field('height', _$height);
@@ -106,10 +107,9 @@ extension THLineHeightCommandOptionValueCopy<$R, $Out>
 abstract class THLineHeightCommandOptionCopyWith<
     $R,
     $In extends THLineHeightCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get height;
-  @override
-  $R call({int? parentMapiahID, String? optionType, THDoublePart? height});
+  $R call({dynamic parentMapiahID, dynamic optionType, THDoublePart? height});
   THLineHeightCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -127,10 +127,13 @@ class _THLineHeightCommandOptionCopyWithImpl<$R, $Out>
   THDoublePartCopyWith<$R, THDoublePart, THDoublePart> get height =>
       $value.height.copyWith.$chain((v) => call(height: v));
   @override
-  $R call({int? parentMapiahID, String? optionType, THDoublePart? height}) =>
+  $R call(
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
+          THDoublePart? height}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (height != null) #height: height
       }));
   @override

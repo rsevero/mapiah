@@ -15,7 +15,6 @@ class THStationNamesCommandOptionMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = THStationNamesCommandOptionMapper._());
-      THCommandOptionMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -25,11 +24,13 @@ class THStationNamesCommandOptionMapper
 
   static int _$parentMapiahID(THStationNamesCommandOption v) =>
       v.parentMapiahID;
-  static const Field<THStationNamesCommandOption, int> _f$parentMapiahID =
-      Field('parentMapiahID', _$parentMapiahID);
+  static dynamic _arg$parentMapiahID(f) => f<int>();
+  static const Field<THStationNamesCommandOption, dynamic> _f$parentMapiahID =
+      Field('parentMapiahID', _$parentMapiahID, arg: _arg$parentMapiahID);
   static String _$optionType(THStationNamesCommandOption v) => v.optionType;
-  static const Field<THStationNamesCommandOption, String> _f$optionType =
-      Field('optionType', _$optionType);
+  static dynamic _arg$optionType(f) => f<String>();
+  static const Field<THStationNamesCommandOption, dynamic> _f$optionType =
+      Field('optionType', _$optionType, arg: _arg$optionType);
   static String _$preffix(THStationNamesCommandOption v) => v.preffix;
   static const Field<THStationNamesCommandOption, String> _f$preffix =
       Field('preffix', _$preffix);
@@ -111,11 +112,10 @@ extension THStationNamesCommandOptionValueCopy<$R, $Out>
 abstract class THStationNamesCommandOptionCopyWith<
     $R,
     $In extends THStationNamesCommandOption,
-    $Out> implements THCommandOptionCopyWith<$R, $In, $Out> {
-  @override
+    $Out> implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {int? parentMapiahID,
-      String? optionType,
+      {dynamic parentMapiahID,
+      dynamic optionType,
       String? preffix,
       String? suffix});
   THStationNamesCommandOptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -135,13 +135,13 @@ class _THStationNamesCommandOptionCopyWithImpl<$R, $Out>
       THStationNamesCommandOptionMapper.ensureInitialized();
   @override
   $R call(
-          {int? parentMapiahID,
-          String? optionType,
+          {Object? parentMapiahID = $none,
+          Object? optionType = $none,
           String? preffix,
           String? suffix}) =>
       $apply(FieldCopyWithData({
-        if (parentMapiahID != null) #parentMapiahID: parentMapiahID,
-        if (optionType != null) #optionType: optionType,
+        if (parentMapiahID != $none) #parentMapiahID: parentMapiahID,
+        if (optionType != $none) #optionType: optionType,
         if (preffix != null) #preffix: preffix,
         if (suffix != null) #suffix: suffix
       }));
