@@ -12,7 +12,6 @@ class THCSCommandOption extends THCommandOption {
   /// Constructor necessary for dart_mappable support.
   THCSCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.cs,
   }) : super();
 
@@ -20,15 +19,17 @@ class THCSCommandOption extends THCommandOption {
     required super.optionParent,
     required String csString,
     required bool forOutputOnly,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.cs) {
+  }) : super.addToOptionParent() {
     cs = THCSPart(name: csString, forOutputOnly: forOutputOnly);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.cs;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'cs': cs.toMap(),
     };
   }
@@ -36,7 +37,6 @@ class THCSCommandOption extends THCommandOption {
   factory THCSCommandOption.fromMap(Map<String, dynamic> map) {
     return THCSCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       cs: THCSPart.fromMap(map['cs']),
     );
   }
@@ -48,12 +48,10 @@ class THCSCommandOption extends THCommandOption {
   @override
   THCSCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THCSPart? cs,
   }) {
     return THCSCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       cs: cs ?? this.cs,
     );
   }
@@ -62,15 +60,12 @@ class THCSCommandOption extends THCommandOption {
   bool operator ==(covariant THCSCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.cs == cs;
+    return other.parentMapiahID == parentMapiahID && other.cs == cs;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         cs,
       );
 

@@ -32,20 +32,21 @@ class THTextCommandOption extends THCommandOption {
 
   THTextCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.text,
   }) : super();
 
   THTextCommandOption.addToOptionParent({
     required super.optionParent,
     required this.text,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.text);
+  }) : super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.text;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'text': text,
     };
   }
@@ -53,7 +54,6 @@ class THTextCommandOption extends THCommandOption {
   factory THTextCommandOption.fromMap(Map<String, dynamic> map) {
     return THTextCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       text: map['text'],
     );
   }
@@ -65,12 +65,10 @@ class THTextCommandOption extends THCommandOption {
   @override
   THTextCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? text,
   }) {
     return THTextCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       text: text ?? this.text,
     );
   }
@@ -79,15 +77,12 @@ class THTextCommandOption extends THCommandOption {
   bool operator ==(covariant THTextCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.text == text;
+    return other.parentMapiahID == parentMapiahID && other.text == text;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         text,
       );
 

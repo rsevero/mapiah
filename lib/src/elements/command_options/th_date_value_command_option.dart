@@ -9,22 +9,23 @@ class THDateValueCommandOption extends THCommandOption {
 
   THDateValueCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.date,
   }) : super();
 
   THDateValueCommandOption.fromString({
     required super.optionParent,
     required String date,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.dateValue) {
+  }) : super.addToOptionParent() {
     this.date = THDatetimePart.fromString(datetime: date);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.dateValue;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'date': date.toMap(),
     };
   }
@@ -32,7 +33,6 @@ class THDateValueCommandOption extends THCommandOption {
   factory THDateValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDateValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       date: THDatetimePart.fromMap(map['date']),
     );
   }
@@ -44,12 +44,10 @@ class THDateValueCommandOption extends THCommandOption {
   @override
   THDateValueCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDatetimePart? date,
   }) {
     return THDateValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       date: date ?? this.date,
     );
   }
@@ -58,15 +56,12 @@ class THDateValueCommandOption extends THCommandOption {
   bool operator ==(covariant THDateValueCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.date == date;
+    return other.parentMapiahID == parentMapiahID && other.date == date;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         date,
       );
 

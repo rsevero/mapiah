@@ -11,7 +11,6 @@ class THAuthorCommandOption extends THCommandOption {
 
   THAuthorCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.datetime,
     required this.person,
   }) : super();
@@ -20,22 +19,24 @@ class THAuthorCommandOption extends THCommandOption {
     required super.optionParent,
     required this.datetime,
     required this.person,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.author);
+  }) : super.addToOptionParent();
 
   THAuthorCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required String person,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.author) {
+  }) : super.addToOptionParent() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
     this.person = THPersonPart.fromString(name: person);
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.author;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'datetime': datetime.toMap(),
       'person': person.toMap(),
     };
@@ -44,7 +45,6 @@ class THAuthorCommandOption extends THCommandOption {
   factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
     return THAuthorCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       datetime: THDatetimePart.fromMap(map['datetime']),
       person: THPersonPart.fromMap(map['person']),
     );
@@ -57,13 +57,11 @@ class THAuthorCommandOption extends THCommandOption {
   @override
   THAuthorCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDatetimePart? datetime,
     THPersonPart? person,
   }) {
     return THAuthorCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       datetime: datetime ?? this.datetime,
       person: person ?? this.person,
     );
@@ -74,7 +72,6 @@ class THAuthorCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.datetime == datetime &&
         other.person == person;
   }
@@ -82,7 +79,6 @@ class THAuthorCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         datetime,
         person,
       );

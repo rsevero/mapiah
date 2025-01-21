@@ -44,7 +44,6 @@ class THProjectionCommandOption extends THCommandOption {
 
   THProjectionCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.type,
     this.index = '',
     this.elevationAngle,
@@ -57,17 +56,19 @@ class THProjectionCommandOption extends THCommandOption {
     this.index = '',
     required String elevationAngle,
     required String elevationUnit,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.projection) {
+  }) : super.addToOptionParent() {
     typeFromString(type);
     this.elevationAngle = THDoublePart.fromString(valueString: elevationAngle);
     this.elevationUnit = THAngleUnitPart.fromString(unitString: elevationUnit);
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.projection;
+
+  @override
   Map<String, dynamic> toMap() {
     var asMap = {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'type': typeToString[type],
       'index': index,
     };
@@ -84,7 +85,6 @@ class THProjectionCommandOption extends THCommandOption {
   factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {
     return THProjectionCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       type: stringToType[map['type']]!,
       index: map['index'],
       elevationAngle: THDoublePart.fromMap(map['elevationAngle']),
@@ -99,7 +99,6 @@ class THProjectionCommandOption extends THCommandOption {
   @override
   THProjectionCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THProjectionTypes? type,
     String? index,
     THDoublePart? elevationAngle,
@@ -107,7 +106,6 @@ class THProjectionCommandOption extends THCommandOption {
   }) {
     return THProjectionCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       type: type ?? this.type,
       index: index ?? this.index,
       elevationAngle: elevationAngle ?? this.elevationAngle,
@@ -120,7 +118,6 @@ class THProjectionCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.type == type &&
         other.index == index &&
         other.elevationAngle == elevationAngle &&
@@ -130,7 +127,6 @@ class THProjectionCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         type,
         index,
         elevationAngle,

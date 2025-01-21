@@ -14,7 +14,6 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
 
   THPointHeightValueCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required THDoublePart length,
     required this.isPresumed,
     required THLengthUnitPart unit,
@@ -28,8 +27,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
     required String height,
     required this.isPresumed,
     String? unit,
-  }) : super.addToOptionParent(
-            optionType: THCommandOptionType.pointHeightValue) {
+  }) : super.addToOptionParent() {
     length = THDoublePart.fromString(valueString: height);
     if ((unit != null) && (unit.isNotEmpty)) {
       unitFromString(unit);
@@ -37,10 +35,12 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.pointHeightValue;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'length': length.toMap(),
       'isPresumed': isPresumed,
       'unit': unit.toMap(),
@@ -50,7 +50,6 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   factory THPointHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPointHeightValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -64,14 +63,12 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   @override
   THPointHeightValueCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? length,
     bool? isPresumed,
     THLengthUnitPart? unit,
   }) {
     return THPointHeightValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       length: length ?? this.length,
       isPresumed: isPresumed ?? this.isPresumed,
       unit: unit ?? this.unit,
@@ -83,7 +80,6 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.length == length &&
         other.isPresumed == isPresumed &&
         other.unit == unit;
@@ -92,7 +88,6 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         length,
         isPresumed,
         unit,

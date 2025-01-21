@@ -12,7 +12,6 @@ class THSketchCommandOption extends THCommandOption {
 
   THSketchCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required String filename,
     required this.point,
   }) : super() {
@@ -23,10 +22,13 @@ class THSketchCommandOption extends THCommandOption {
     required super.optionParent,
     required String filename,
     required List<dynamic> pointList,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.sketch) {
+  }) : super.addToOptionParent() {
     _filename = THStringPart(content: filename);
     pointFromStringList(pointList);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.sketch;
 
   void pointFromStringList(List<dynamic> list) {
     point = THPositionPart.fromStringList(list: list);
@@ -36,7 +38,6 @@ class THSketchCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'filename': _filename.toMap(),
       'point': point.toMap(),
     };
@@ -45,7 +46,6 @@ class THSketchCommandOption extends THCommandOption {
   factory THSketchCommandOption.fromMap(Map<String, dynamic> map) {
     return THSketchCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       filename: map['filename']['content'],
       point: THPositionPart.fromMap(map['point']),
     );
@@ -58,13 +58,11 @@ class THSketchCommandOption extends THCommandOption {
   @override
   THSketchCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? filename,
     THPositionPart? point,
   }) {
     return THSketchCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       filename: filename ?? _filename.content,
       point: point ?? this.point,
     );
@@ -75,7 +73,6 @@ class THSketchCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other._filename == _filename &&
         other.point == point;
   }
@@ -83,7 +80,6 @@ class THSketchCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         _filename,
         point,
       );

@@ -23,7 +23,6 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   THPassageHeightValueCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
     required THPassageHeightModes mode,
@@ -38,16 +37,17 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     required super.optionParent,
     required String plusNumber,
     required String minusNumber,
-  }) : super.addToOptionParent(
-            optionType: THCommandOptionType.passageHeightValue) {
+  }) : super.addToOptionParent() {
     plusAndMinusNumbersFromString(plusNumber, minusNumber);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.passageHeightValue;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'plusNumber': _plusNumber?.toMap(),
       'minusNumber': _minusNumber?.toMap(),
       'mode': _mode.toString(),
@@ -58,7 +58,6 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   factory THPassageHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPassageHeightValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       plusNumber: map['plusNumber'] != null
           ? THDoublePart.fromMap(map['plusNumber'])
           : null,
@@ -78,7 +77,6 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   @override
   THPassageHeightValueCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
     THPassageHeightModes? mode,
@@ -88,7 +86,6 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }) {
     return THPassageHeightValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       plusNumber: makePlusNumberNull ? null : (plusNumber ?? _plusNumber),
       minusNumber: makeMinusNumberNull ? null : (minusNumber ?? _minusNumber),
       mode: mode ?? _mode,
@@ -101,7 +98,6 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other._plusNumber == _plusNumber &&
         other._minusNumber == _minusNumber &&
         other._mode == _mode &&
@@ -111,7 +107,6 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         _plusNumber,
         _minusNumber,
         _mode,

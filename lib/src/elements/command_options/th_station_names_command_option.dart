@@ -10,7 +10,6 @@ class THStationNamesCommandOption extends THCommandOption {
 
   THStationNamesCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.prefix,
     required this.suffix,
   }) : super();
@@ -19,13 +18,15 @@ class THStationNamesCommandOption extends THCommandOption {
     required super.optionParent,
     required this.prefix,
     required this.suffix,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.stationNames);
+  }) : super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.stationNames;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'prefix': prefix,
       'suffix': suffix,
     };
@@ -34,7 +35,6 @@ class THStationNamesCommandOption extends THCommandOption {
   factory THStationNamesCommandOption.fromMap(Map<String, dynamic> map) {
     return THStationNamesCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       prefix: map['prefix'],
       suffix: map['suffix'],
     );
@@ -47,13 +47,11 @@ class THStationNamesCommandOption extends THCommandOption {
   @override
   THStationNamesCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? prefix,
     String? suffix,
   }) {
     return THStationNamesCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       prefix: prefix ?? this.prefix,
       suffix: suffix ?? this.suffix,
     );
@@ -64,7 +62,6 @@ class THStationNamesCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.prefix == prefix &&
         other.suffix == suffix;
   }
@@ -72,7 +69,6 @@ class THStationNamesCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         prefix,
         suffix,
       );

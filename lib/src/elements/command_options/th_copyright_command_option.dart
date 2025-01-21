@@ -11,7 +11,6 @@ class THCopyrightCommandOption extends THCommandOption {
   /// Constructor necessary for dart_mappable support.
   THCopyrightCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.datetime,
     required this.copyrightMessage,
   }) : super();
@@ -20,21 +19,23 @@ class THCopyrightCommandOption extends THCommandOption {
     required super.optionParent,
     required this.datetime,
     required this.copyrightMessage,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.copyright);
+  }) : super.addToOptionParent();
 
   THCopyrightCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required this.copyrightMessage,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.copyright) {
+  }) : super.addToOptionParent() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.copyright;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'datetime': datetime.toMap(),
       'copyrightMessage': copyrightMessage,
     };
@@ -43,7 +44,6 @@ class THCopyrightCommandOption extends THCommandOption {
   factory THCopyrightCommandOption.fromMap(Map<String, dynamic> map) {
     return THCopyrightCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       datetime: THDatetimePart.fromMap(map['datetime']),
       copyrightMessage: map['copyrightMessage'],
     );
@@ -56,13 +56,11 @@ class THCopyrightCommandOption extends THCommandOption {
   @override
   THCopyrightCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDatetimePart? datetime,
     String? copyrightMessage,
   }) {
     return THCopyrightCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       datetime: datetime ?? this.datetime,
       copyrightMessage: copyrightMessage ?? this.copyrightMessage,
     );
@@ -73,7 +71,6 @@ class THCopyrightCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.datetime == datetime &&
         other.copyrightMessage == copyrightMessage;
   }
@@ -81,7 +78,6 @@ class THCopyrightCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         datetime,
         copyrightMessage,
       );

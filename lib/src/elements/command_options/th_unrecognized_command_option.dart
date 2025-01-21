@@ -8,21 +8,22 @@ class THUnrecognizedCommandOption extends THCommandOption {
 
   THUnrecognizedCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.value,
   }) : super();
 
   THUnrecognizedCommandOption.addToOptionParent({
     required super.optionParent,
     required this.value,
-  }) : super.addToOptionParent(
-            optionType: THCommandOptionType.unrecognizedCommandOption);
+  }) : super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType =>
+      THCommandOptionType.unrecognizedCommandOption;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'value': value,
     };
   }
@@ -30,7 +31,6 @@ class THUnrecognizedCommandOption extends THCommandOption {
   factory THUnrecognizedCommandOption.fromMap(Map<String, dynamic> map) {
     return THUnrecognizedCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       value: map['value'],
     );
   }
@@ -42,12 +42,10 @@ class THUnrecognizedCommandOption extends THCommandOption {
   @override
   THUnrecognizedCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? value,
   }) {
     return THUnrecognizedCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       value: value ?? this.value,
     );
   }
@@ -56,15 +54,12 @@ class THUnrecognizedCommandOption extends THCommandOption {
   bool operator ==(covariant THUnrecognizedCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.value == value;
+    return other.parentMapiahID == parentMapiahID && other.value == value;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         value,
       );
 

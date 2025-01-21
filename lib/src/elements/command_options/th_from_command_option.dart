@@ -8,20 +8,21 @@ class THFromCommandOption extends THCommandOption {
 
   THFromCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.station,
   }) : super();
 
   THFromCommandOption.addToOptionParent({
     required super.optionParent,
     required this.station,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.from);
+  }) : super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.from;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'station': station,
     };
   }
@@ -29,7 +30,6 @@ class THFromCommandOption extends THCommandOption {
   factory THFromCommandOption.fromMap(Map<String, dynamic> map) {
     return THFromCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       station: map['station'],
     );
   }
@@ -41,12 +41,10 @@ class THFromCommandOption extends THCommandOption {
   @override
   THFromCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? station,
   }) {
     return THFromCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       station: station ?? this.station,
     );
   }
@@ -55,15 +53,12 @@ class THFromCommandOption extends THCommandOption {
   bool operator ==(covariant THFromCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.station == station;
+    return other.parentMapiahID == parentMapiahID && other.station == station;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         station,
       );
 

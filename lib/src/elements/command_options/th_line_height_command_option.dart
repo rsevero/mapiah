@@ -10,22 +10,23 @@ class THLineHeightCommandOption extends THCommandOption {
 
   THLineHeightCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.height,
   }) : super();
 
   THLineHeightCommandOption.fromString({
     required super.optionParent,
     required String height,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.lineHeight) {
+  }) : super.addToOptionParent() {
     this.height = THDoublePart.fromString(valueString: height);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.lineHeight;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'height': height.toMap(),
     };
   }
@@ -33,7 +34,6 @@ class THLineHeightCommandOption extends THCommandOption {
   factory THLineHeightCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineHeightCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       height: THDoublePart.fromMap(map['height']),
     );
   }
@@ -45,12 +45,10 @@ class THLineHeightCommandOption extends THCommandOption {
   @override
   THLineHeightCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? height,
   }) {
     return THLineHeightCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       height: height ?? this.height,
     );
   }
@@ -59,15 +57,12 @@ class THLineHeightCommandOption extends THCommandOption {
   bool operator ==(covariant THLineHeightCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.height == height;
+    return other.parentMapiahID == parentMapiahID && other.height == height;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         height,
       );
 

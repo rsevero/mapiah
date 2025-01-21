@@ -20,7 +20,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   THClipCommandOption({
     required super.parentMapiahID,
     required super.parentElementType,
-    required super.optionType,
     required super.multipleChoiceType,
     required super.choice,
   }) : super();
@@ -28,25 +27,21 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   THClipCommandOption.addToOptionParent({
     required super.optionParent,
     required super.choice,
-  }) : super.addToOptionParent(
-          multipleChoiceType: thClipMultipleChoiceType,
-          optionType: THCommandOptionType.clip,
-        );
+  }) : super.addToOptionParent(multipleChoiceType: thClipMultipleChoiceType);
 
   THClipCommandOption.fromChoice({
     required super.optionParent,
     required super.choice,
-  }) : super.addToOptionParent(
-          multipleChoiceType: thClipMultipleChoiceType,
-          optionType: THCommandOptionType.clip,
-        );
+  }) : super.addToOptionParent(multipleChoiceType: thClipMultipleChoiceType);
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.clip;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
       'parentElementType': parentElementType.name,
-      'optionType': optionType.name,
       'multipleChoiceType': multipleChoiceType,
       'choice': choice,
     };
@@ -56,7 +51,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
     return THClipCommandOption(
       parentMapiahID: map['parentMapiahID'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       multipleChoiceType: map['multipleChoiceType'],
       choice: map['choice'],
     );
@@ -70,7 +64,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   THClipCommandOption copyWith({
     int? parentMapiahID,
     THElementType? parentElementType,
-    THCommandOptionType? optionType,
     String? multipleChoiceType,
     String? choice,
     bool makeChoiceNull = false,
@@ -78,7 +71,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
     return THClipCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       parentElementType: parentElementType ?? this.parentElementType,
-      optionType: optionType ?? this.optionType,
       multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,
       choice: makeChoiceNull ? '' : (choice ?? this.choice),
     );
@@ -90,7 +82,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
 
     return other.parentMapiahID == parentMapiahID &&
         other.parentElementType == parentElementType &&
-        other.optionType == optionType &&
         other.multipleChoiceType == multipleChoiceType &&
         other.choice == choice;
   }
@@ -99,7 +90,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   int get hashCode => Object.hash(
         parentMapiahID,
         parentElementType,
-        optionType,
         multipleChoiceType,
         choice,
       );

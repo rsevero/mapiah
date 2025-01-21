@@ -17,7 +17,6 @@ class THPointScaleCommandOption extends THCommandOption {
 
   THPointScaleCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required THMultipleChoicePart multipleChoiceSize,
     required THDoublePart numericSize,
     required bool isNumeric,
@@ -29,7 +28,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.pointScale) {
+  }) : super.addToOptionParent() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
     _isNumeric = false;
@@ -38,7 +37,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.pointScale) {
+  }) : super.addToOptionParent() {
     _numericSize = numericScaleSize;
     _isNumeric = true;
   }
@@ -46,16 +45,18 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.pointScale) {
+  }) : super.addToOptionParent() {
     _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     _isNumeric = true;
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.pointScale;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'multipleChoiceSize': _multipleChoiceSize.toMap(),
       'numericSize': _numericSize.toMap(),
       'isNumeric': _isNumeric,
@@ -65,7 +66,6 @@ class THPointScaleCommandOption extends THCommandOption {
   factory THPointScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THPointScaleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
       numericSize: THDoublePart.fromMap(map['numericSize']),
@@ -80,14 +80,12 @@ class THPointScaleCommandOption extends THCommandOption {
   @override
   THPointScaleCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THMultipleChoicePart? multipleChoiceSize,
     THDoublePart? numericSize,
     bool? isNumeric,
   }) {
     return THPointScaleCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       multipleChoiceSize: multipleChoiceSize ?? _multipleChoiceSize,
       numericSize: numericSize ?? _numericSize,
       isNumeric: isNumeric ?? _isNumeric,
@@ -99,7 +97,6 @@ class THPointScaleCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other._multipleChoiceSize == _multipleChoiceSize &&
         other._numericSize == _numericSize &&
         other._isNumeric == _isNumeric;
@@ -108,7 +105,6 @@ class THPointScaleCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         _multipleChoiceSize,
         _numericSize,
         _isNumeric,

@@ -15,7 +15,6 @@ class THDimensionsValueCommandOption extends THCommandOption {
 
   THDimensionsValueCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.above,
     required this.below,
     required THLengthUnitPart unit,
@@ -28,18 +27,19 @@ class THDimensionsValueCommandOption extends THCommandOption {
     required String above,
     required String below,
     String? unit,
-  }) : super.addToOptionParent(
-            optionType: THCommandOptionType.dimensionsValue) {
+  }) : super.addToOptionParent() {
     this.above = THDoublePart.fromString(valueString: above);
     this.below = THDoublePart.fromString(valueString: below);
     unitFromString(unit);
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.dimensionsValue;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'above': above.toMap(),
       'below': below.toMap(),
       'unit': _unit.toMap(),
@@ -50,7 +50,6 @@ class THDimensionsValueCommandOption extends THCommandOption {
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDimensionsValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       above: THDoublePart.fromMap(map['above']),
       below: THDoublePart.fromMap(map['below']),
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -65,7 +64,6 @@ class THDimensionsValueCommandOption extends THCommandOption {
   @override
   THDimensionsValueCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? above,
     THDoublePart? below,
     THLengthUnitPart? unit,
@@ -73,7 +71,6 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }) {
     return THDimensionsValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       above: above ?? this.above,
       below: below ?? this.below,
       unit: unit ?? _unit,
@@ -86,7 +83,6 @@ class THDimensionsValueCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.above == above &&
         other.below == below &&
         other.unit == unit &&
@@ -96,7 +92,6 @@ class THDimensionsValueCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         above,
         below,
         unit,

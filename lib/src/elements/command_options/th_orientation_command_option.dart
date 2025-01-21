@@ -10,22 +10,23 @@ class THOrientationCommandOption extends THCommandOption {
 
   THOrientationCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.azimuth,
   }) : super();
 
   THOrientationCommandOption.fromString({
     required super.optionParent,
     required String azimuth,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.orientation) {
+  }) : super.addToOptionParent() {
     this.azimuth = THDoublePart.fromString(valueString: azimuth);
   }
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.orientation;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'azimuth': azimuth.toMap(),
     };
   }
@@ -33,7 +34,6 @@ class THOrientationCommandOption extends THCommandOption {
   factory THOrientationCommandOption.fromMap(Map<String, dynamic> map) {
     return THOrientationCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       azimuth: THDoublePart.fromMap(map['azimuth']),
     );
   }
@@ -45,12 +45,10 @@ class THOrientationCommandOption extends THCommandOption {
   @override
   THOrientationCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? azimuth,
   }) {
     return THOrientationCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       azimuth: azimuth ?? this.azimuth,
     );
   }
@@ -59,15 +57,12 @@ class THOrientationCommandOption extends THCommandOption {
   bool operator ==(covariant THOrientationCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.azimuth == azimuth;
+    return other.parentMapiahID == parentMapiahID && other.azimuth == azimuth;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         azimuth,
       );
 

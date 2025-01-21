@@ -20,7 +20,6 @@ class THLineScaleCommandOption extends THCommandOption {
 
   THLineScaleCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required THMultipleChoicePart multipleChoiceSize,
     required THDoublePart numericSize,
     required THLineScaleCommandOptionType type,
@@ -35,7 +34,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
+  }) : super.addToOptionParent() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
     _type = THLineScaleCommandOptionType.multiplechoice;
@@ -44,7 +43,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsText({
     required super.optionParent,
     required String textScale,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
+  }) : super.addToOptionParent() {
     _textSize = textScale;
     _type = THLineScaleCommandOptionType.text;
   }
@@ -52,7 +51,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
+  }) : super.addToOptionParent() {
     _numericSize = numericScaleSize;
     _type = THLineScaleCommandOptionType.numeric;
   }
@@ -60,16 +59,18 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
+  }) : super.addToOptionParent() {
     _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     _type = THLineScaleCommandOptionType.numeric;
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.lineScale;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'multipleChoiceSize': multipleChoiceSize.toMap(),
       'numericSize': numericSize.toMap(),
       'type': type.toString(),
@@ -80,7 +81,6 @@ class THLineScaleCommandOption extends THCommandOption {
   factory THLineScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineScaleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
       numericSize: THDoublePart.fromMap(map['numericSize']),
@@ -97,7 +97,6 @@ class THLineScaleCommandOption extends THCommandOption {
   @override
   THLineScaleCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THMultipleChoicePart? multipleChoiceSize,
     THDoublePart? numericSize,
     THLineScaleCommandOptionType? type,
@@ -105,7 +104,6 @@ class THLineScaleCommandOption extends THCommandOption {
   }) {
     return THLineScaleCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       multipleChoiceSize: multipleChoiceSize ?? this.multipleChoiceSize,
       numericSize: numericSize ?? this.numericSize,
       type: type ?? this.type,
@@ -118,7 +116,6 @@ class THLineScaleCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.multipleChoiceSize == multipleChoiceSize &&
         other.numericSize == numericSize &&
         other.type == type &&
@@ -128,7 +125,6 @@ class THLineScaleCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         multipleChoiceSize,
         numericSize,
         type,

@@ -9,14 +9,13 @@ class THExtendCommandOption extends THCommandOption {
 
   THExtendCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.station,
   }) : super();
 
   THExtendCommandOption.addToOptionParent({
     required super.optionParent,
     required this.station,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.extend);
+  }) : super.addToOptionParent();
   //      {
   //   if ((optionParent is! THPoint) || (optionParent.plaType != 'station')) {
   //     throw THCustomException(
@@ -25,10 +24,12 @@ class THExtendCommandOption extends THCommandOption {
   // }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.extend;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'station': station,
     };
   }
@@ -36,7 +37,6 @@ class THExtendCommandOption extends THCommandOption {
   factory THExtendCommandOption.fromMap(Map<String, dynamic> map) {
     return THExtendCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       station: map['station'],
     );
   }
@@ -48,12 +48,10 @@ class THExtendCommandOption extends THCommandOption {
   @override
   THExtendCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? station,
   }) {
     return THExtendCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       station: station ?? this.station,
     );
   }
@@ -62,15 +60,12 @@ class THExtendCommandOption extends THCommandOption {
   bool operator ==(covariant THExtendCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.station == station;
+    return other.parentMapiahID == parentMapiahID && other.station == station;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         station,
       );
 

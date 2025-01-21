@@ -21,7 +21,6 @@ class THScrapScaleCommandOption extends THCommandOption {
 
   THScrapScaleCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required List<THDoublePart> numericSpecifications,
     this.unit,
   })  : _numericSpecifications = numericSpecifications,
@@ -32,13 +31,15 @@ class THScrapScaleCommandOption extends THCommandOption {
     required List<THDoublePart> numericSpecifications,
     this.unit,
   })  : _numericSpecifications = numericSpecifications,
-        super.addToOptionParent(optionType: THCommandOptionType.scrapScale);
+        super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.scrapScale;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'numericSpecifications':
           _numericSpecifications.map((e) => e.toMap()).toList(),
       'unit': unit?.toMap(),
@@ -48,7 +49,6 @@ class THScrapScaleCommandOption extends THCommandOption {
   factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THScrapScaleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       numericSpecifications: List<THDoublePart>.from(
           map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
       unit: map['unit'] != null ? THLengthUnitPart.fromMap(map['unit']) : null,
@@ -62,14 +62,12 @@ class THScrapScaleCommandOption extends THCommandOption {
   @override
   THScrapScaleCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     List<THDoublePart>? numericSpecifications,
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
   }) {
     return THScrapScaleCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       numericSpecifications: numericSpecifications ?? _numericSpecifications,
       unit: makeUnitNull ? null : (unit ?? this.unit),
     );
@@ -80,7 +78,6 @@ class THScrapScaleCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other._numericSpecifications == _numericSpecifications &&
         other.unit == unit;
   }
@@ -88,7 +85,6 @@ class THScrapScaleCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         _numericSpecifications,
         unit,
       );

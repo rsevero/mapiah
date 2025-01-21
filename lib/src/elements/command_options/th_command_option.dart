@@ -75,19 +75,18 @@ enum THCommandOptionType {
 
 abstract class THCommandOption implements THSerializable {
   late final int parentMapiahID;
-  late final THCommandOptionType optionType;
 
   THCommandOption({
     required this.parentMapiahID,
-    required this.optionType,
   });
 
   THCommandOption.addToOptionParent({
     required THHasOptions optionParent,
-    required this.optionType,
   }) : parentMapiahID = optionParent.mapiahID {
     optionParent.addUpdateOption(this);
   }
+
+  THCommandOptionType get optionType;
 
   @override
   String toJson() {

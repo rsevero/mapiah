@@ -8,20 +8,21 @@ class THTitleCommandOption extends THCommandOption {
 
   THTitleCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.title,
   }) : super();
 
   THTitleCommandOption.addToOptionParent({
     required super.optionParent,
     required this.title,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.title);
+  }) : super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.title;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'title': title,
     };
   }
@@ -29,7 +30,6 @@ class THTitleCommandOption extends THCommandOption {
   factory THTitleCommandOption.fromMap(Map<String, dynamic> map) {
     return THTitleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       title: map['title'],
     );
   }
@@ -41,12 +41,10 @@ class THTitleCommandOption extends THCommandOption {
   @override
   THTitleCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? title,
   }) {
     return THTitleCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       title: title ?? this.title,
     );
   }
@@ -55,15 +53,12 @@ class THTitleCommandOption extends THCommandOption {
   bool operator ==(covariant THTitleCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.title == title;
+    return other.parentMapiahID == parentMapiahID && other.title == title;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         title,
       );
 

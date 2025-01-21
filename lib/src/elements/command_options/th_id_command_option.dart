@@ -8,22 +8,21 @@ class THIDCommandOption extends THCommandOption {
 
   THIDCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.thID,
   }) : super();
 
   THIDCommandOption.addToOptionParent({
     required super.optionParent,
     required this.thID,
-  }) : super.addToOptionParent(
-          optionType: THCommandOptionType.id,
-        ); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
+  }) : super.addToOptionParent(); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.id;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'thID': thID,
     };
   }
@@ -31,7 +30,6 @@ class THIDCommandOption extends THCommandOption {
   factory THIDCommandOption.fromMap(Map<String, dynamic> map) {
     return THIDCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       thID: map['thID'],
     );
   }
@@ -43,12 +41,10 @@ class THIDCommandOption extends THCommandOption {
   @override
   THIDCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? thID,
   }) {
     return THIDCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       thID: thID ?? this.thID,
     );
   }
@@ -57,15 +53,12 @@ class THIDCommandOption extends THCommandOption {
   bool operator ==(covariant THIDCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
-        other.thID == thID;
+    return other.parentMapiahID == parentMapiahID && other.thID == thID;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         thID,
       );
 

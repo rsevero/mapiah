@@ -14,7 +14,6 @@ class THContextCommandOption extends THCommandOption {
   /// Constructor necessary for dart_mappable support.
   THContextCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.elementType,
     required this.symbolType,
   }) : super();
@@ -23,13 +22,15 @@ class THContextCommandOption extends THCommandOption {
     required super.optionParent,
     required this.elementType,
     required this.symbolType,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.context);
+  }) : super.addToOptionParent();
+
+  @override
+  THCommandOptionType get optionType => THCommandOptionType.context;
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'elementType': elementType,
       'symbolType': symbolType,
     };
@@ -38,7 +39,6 @@ class THContextCommandOption extends THCommandOption {
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {
     return THContextCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       elementType: map['elementType'],
       symbolType: map['symbolType'],
     );
@@ -51,13 +51,11 @@ class THContextCommandOption extends THCommandOption {
   @override
   THContextCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? elementType,
     String? symbolType,
   }) {
     return THContextCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       elementType: elementType ?? this.elementType,
       symbolType: symbolType ?? this.symbolType,
     );
@@ -68,7 +66,6 @@ class THContextCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.elementType == elementType &&
         other.symbolType == symbolType;
   }
@@ -76,7 +73,6 @@ class THContextCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         elementType,
         symbolType,
       );

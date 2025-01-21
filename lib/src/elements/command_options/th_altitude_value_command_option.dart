@@ -14,7 +14,6 @@ class THAltitudeValueCommandOption extends THCommandOption
     with THHasLength, THHasAltitude {
   THAltitudeValueCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required THDoublePart length,
     required bool isFix,
     required THLengthUnitPart unit,
@@ -29,7 +28,7 @@ class THAltitudeValueCommandOption extends THCommandOption
     required THDoublePart length,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.altitudeValue) {
+  }) : super.addToOptionParent() {
     this.length = length;
     this.isFix = isFix;
     unitFromString(unit);
@@ -40,24 +39,26 @@ class THAltitudeValueCommandOption extends THCommandOption
     required String height,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.altitudeValue) {
+  }) : super.addToOptionParent() {
     length = THDoublePart.fromString(valueString: height);
     isFix = isFix;
     unitFromString(unit);
   }
 
   THAltitudeValueCommandOption.fromNan({required super.optionParent})
-      : super.addToOptionParent(optionType: THCommandOptionType.altitudeValue) {
+      : super.addToOptionParent() {
     length = THDoublePart.fromString(valueString: '0');
     isNan = true;
     unitFromString('');
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.altitudeValue;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'length': length.toMap(),
       'isFix': isFix,
       'unit': unit,
@@ -67,7 +68,6 @@ class THAltitudeValueCommandOption extends THCommandOption
   factory THAltitudeValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THAltitudeValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
       unit: map['unit'],
@@ -81,14 +81,12 @@ class THAltitudeValueCommandOption extends THCommandOption
   @override
   THAltitudeValueCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? length,
     bool? isFix,
     THLengthUnitPart? unit,
   }) {
     return THAltitudeValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,
       unit: unit ?? this.unit,
@@ -100,7 +98,6 @@ class THAltitudeValueCommandOption extends THCommandOption
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.length == length &&
         other.isFix == isFix &&
         other.unit == unit;
@@ -109,7 +106,6 @@ class THAltitudeValueCommandOption extends THCommandOption
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         length,
         isFix,
         unit,

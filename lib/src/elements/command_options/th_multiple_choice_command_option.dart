@@ -385,7 +385,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
 
   THMultipleChoiceCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required this.multipleChoiceType,
     required this.parentElementType,
     required String choice,
@@ -396,7 +395,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   THMultipleChoiceCommandOption.addToOptionParent({
     required super.optionParent,
     required this.multipleChoiceType,
-    super.optionType = THCommandOptionType.multipleChoice,
     required String choice,
   })  : parentElementType = optionParent.elementType,
         super.addToOptionParent() {
@@ -404,10 +402,12 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.multipleChoice;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'multipleChoiceType': multipleChoiceType,
       'parentElementType': parentElementType.name,
       'choice': _choice,
@@ -417,7 +417,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   factory THMultipleChoiceCommandOption.fromMap(Map<String, dynamic> map) {
     return THMultipleChoiceCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       multipleChoiceType: map['multipleChoiceType'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: map['choice'],
@@ -431,7 +430,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   THMultipleChoiceCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     String? multipleChoiceType,
     THElementType? parentElementType,
     String? choice,
@@ -439,7 +437,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }) {
     return THMultipleChoiceCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,
       parentElementType: parentElementType ?? this.parentElementType,
       choice: makeChoiceNull ? '' : (choice ?? _choice),
@@ -451,7 +448,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.multipleChoiceType == multipleChoiceType &&
         other.parentElementType == parentElementType &&
         other._choice == _choice;
@@ -460,7 +456,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         multipleChoiceType,
         parentElementType,
         _choice,

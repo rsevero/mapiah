@@ -11,7 +11,6 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 class THDistCommandOption extends THCommandOption with THHasLength {
   THDistCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
     required THDoublePart length,
     required THLengthUnitPart unit,
   }) : super() {
@@ -23,7 +22,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     required super.optionParent,
     required String distance,
     required String? unit,
-  }) : super.addToOptionParent(optionType: THCommandOptionType.dist) {
+  }) : super.addToOptionParent() {
     length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
@@ -31,10 +30,12 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   }
 
   @override
+  THCommandOptionType get optionType => THCommandOptionType.dist;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType.name,
       'length': length.toMap(),
       'unit': unit,
     };
@@ -43,7 +44,6 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   factory THDistCommandOption.fromMap(Map<String, dynamic> map) {
     return THDistCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       unit: map['unit'],
     );
@@ -56,13 +56,11 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   @override
   THDistCommandOption copyWith({
     int? parentMapiahID,
-    THCommandOptionType? optionType,
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {
     return THDistCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      optionType: optionType ?? this.optionType,
       length: length ?? this.length,
       unit: unit ?? this.unit,
     );
@@ -73,7 +71,6 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other.optionType == optionType &&
         other.length == length &&
         other.unit == unit;
   }
@@ -81,7 +78,6 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        optionType,
         length,
         unit,
       );
