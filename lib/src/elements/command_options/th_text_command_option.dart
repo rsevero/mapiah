@@ -30,15 +30,15 @@ class THTextCommandOption extends THCommandOption {
   //   },
   // };
 
-  THTextCommandOption({
+  THTextCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.text,
-  }) : super();
+  }) : super.forCWJM();
 
-  THTextCommandOption.addToOptionParent({
+  THTextCommandOption({
     required super.optionParent,
     required this.text,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.text;
@@ -52,7 +52,7 @@ class THTextCommandOption extends THCommandOption {
   }
 
   factory THTextCommandOption.fromMap(Map<String, dynamic> map) {
-    return THTextCommandOption(
+    return THTextCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       text: map['text'],
     );
@@ -67,7 +67,7 @@ class THTextCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? text,
   }) {
-    return THTextCommandOption(
+    return THTextCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       text: text ?? this.text,
     );

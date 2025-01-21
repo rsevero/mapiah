@@ -17,22 +17,22 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   //   'station',
   // });
 
-  THClipCommandOption({
+  THClipCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.parentElementType,
     required super.multipleChoiceType,
     required super.choice,
-  }) : super();
+  }) : super.forCWJM();
 
-  THClipCommandOption.addToOptionParent({
+  THClipCommandOption({
     required super.optionParent,
     required super.choice,
-  }) : super.addToOptionParent(multipleChoiceType: thClipMultipleChoiceType);
+  }) : super(multipleChoiceType: thClipMultipleChoiceType);
 
   THClipCommandOption.fromChoice({
     required super.optionParent,
     required super.choice,
-  }) : super.addToOptionParent(multipleChoiceType: thClipMultipleChoiceType);
+  }) : super(multipleChoiceType: thClipMultipleChoiceType);
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.clip;
@@ -48,7 +48,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   }
 
   factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
-    return THClipCommandOption(
+    return THClipCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       multipleChoiceType: map['multipleChoiceType'],
@@ -68,7 +68,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
     String? choice,
     bool makeChoiceNull = false,
   }) {
-    return THClipCommandOption(
+    return THClipCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       parentElementType: parentElementType ?? this.parentElementType,
       multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,

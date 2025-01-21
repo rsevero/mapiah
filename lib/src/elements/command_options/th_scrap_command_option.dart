@@ -7,15 +7,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THScrapCommandOption extends THCommandOption {
   late final String reference;
 
-  THScrapCommandOption({
+  THScrapCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.reference,
-  }) : super();
+  }) : super.forCWJM();
 
-  THScrapCommandOption.addToOptionParent({
+  THScrapCommandOption({
     required super.optionParent,
     required this.reference,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.scrap;
@@ -29,7 +29,7 @@ class THScrapCommandOption extends THCommandOption {
   }
 
   factory THScrapCommandOption.fromMap(Map<String, dynamic> map) {
-    return THScrapCommandOption(
+    return THScrapCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       reference: map['reference'],
     );
@@ -44,7 +44,7 @@ class THScrapCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? reference,
   }) {
-    return THScrapCommandOption(
+    return THScrapCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       reference: reference ?? this.reference,
     );

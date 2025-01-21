@@ -91,15 +91,15 @@ class THSubtypeCommandOption extends THCommandOption {
   //   },
   // };
 
-  THSubtypeCommandOption({
+  THSubtypeCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.subtype,
-  }) : super();
+  }) : super.forCWJM();
 
-  THSubtypeCommandOption.addToOptionParent({
+  THSubtypeCommandOption({
     required super.optionParent,
     required this.subtype,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.subtype;
@@ -113,7 +113,7 @@ class THSubtypeCommandOption extends THCommandOption {
   }
 
   factory THSubtypeCommandOption.fromMap(Map<String, dynamic> map) {
-    return THSubtypeCommandOption(
+    return THSubtypeCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       subtype: map['subtype'],
     );
@@ -128,7 +128,7 @@ class THSubtypeCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? subtype,
   }) {
-    return THSubtypeCommandOption(
+    return THSubtypeCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       subtype: subtype ?? this.subtype,
     );

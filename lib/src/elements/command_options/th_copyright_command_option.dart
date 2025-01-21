@@ -9,23 +9,23 @@ class THCopyrightCommandOption extends THCommandOption {
   final String copyrightMessage;
 
   /// Constructor necessary for dart_mappable support.
-  THCopyrightCommandOption({
+  THCopyrightCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.datetime,
     required this.copyrightMessage,
-  }) : super();
+  }) : super.forCWJM();
 
-  THCopyrightCommandOption.addToOptionParent({
+  THCopyrightCommandOption({
     required super.optionParent,
     required this.datetime,
     required this.copyrightMessage,
-  }) : super.addToOptionParent();
+  }) : super();
 
   THCopyrightCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required this.copyrightMessage,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
 
@@ -42,7 +42,7 @@ class THCopyrightCommandOption extends THCommandOption {
   }
 
   factory THCopyrightCommandOption.fromMap(Map<String, dynamic> map) {
-    return THCopyrightCommandOption(
+    return THCopyrightCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       datetime: THDatetimePart.fromMap(map['datetime']),
       copyrightMessage: map['copyrightMessage'],
@@ -59,7 +59,7 @@ class THCopyrightCommandOption extends THCommandOption {
     THDatetimePart? datetime,
     String? copyrightMessage,
   }) {
-    return THCopyrightCommandOption(
+    return THCopyrightCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       datetime: datetime ?? this.datetime,
       copyrightMessage: copyrightMessage ?? this.copyrightMessage,

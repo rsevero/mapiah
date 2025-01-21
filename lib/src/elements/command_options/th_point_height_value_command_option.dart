@@ -12,12 +12,12 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   late bool isPresumed;
 
-  THPointHeightValueCommandOption({
+  THPointHeightValueCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,
     required this.isPresumed,
     required THLengthUnitPart unit,
-  }) : super() {
+  }) : super.forCWJM() {
     this.length = length;
     this.unit = unit;
   }
@@ -27,7 +27,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
     required String height,
     required this.isPresumed,
     String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     length = THDoublePart.fromString(valueString: height);
     if ((unit != null) && (unit.isNotEmpty)) {
       unitFromString(unit);
@@ -48,7 +48,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   }
 
   factory THPointHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return THPointHeightValueCommandOption(
+    return THPointHeightValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
@@ -67,7 +67,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
     bool? isPresumed,
     THLengthUnitPart? unit,
   }) {
-    return THPointHeightValueCommandOption(
+    return THPointHeightValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       length: length ?? this.length,
       isPresumed: isPresumed ?? this.isPresumed,

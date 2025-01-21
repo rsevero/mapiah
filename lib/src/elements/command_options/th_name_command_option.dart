@@ -7,15 +7,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THNameCommandOption extends THCommandOption {
   late final String reference;
 
-  THNameCommandOption({
+  THNameCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.reference,
-  }) : super();
+  }) : super.forCWJM();
 
-  THNameCommandOption.addToOptionParent({
+  THNameCommandOption({
     required super.optionParent,
     required this.reference,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.name;
@@ -29,7 +29,7 @@ class THNameCommandOption extends THCommandOption {
   }
 
   factory THNameCommandOption.fromMap(Map<String, dynamic> map) {
-    return THNameCommandOption(
+    return THNameCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       reference: map['reference'],
     );
@@ -44,7 +44,7 @@ class THNameCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? reference,
   }) {
-    return THNameCommandOption(
+    return THNameCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       reference: reference ?? this.reference,
     );

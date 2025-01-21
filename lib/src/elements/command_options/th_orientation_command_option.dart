@@ -8,15 +8,15 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 class THOrientationCommandOption extends THCommandOption {
   late THDoublePart azimuth;
 
-  THOrientationCommandOption({
+  THOrientationCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.azimuth,
-  }) : super();
+  }) : super.forCWJM();
 
   THOrientationCommandOption.fromString({
     required super.optionParent,
     required String azimuth,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.azimuth = THDoublePart.fromString(valueString: azimuth);
   }
 
@@ -32,7 +32,7 @@ class THOrientationCommandOption extends THCommandOption {
   }
 
   factory THOrientationCommandOption.fromMap(Map<String, dynamic> map) {
-    return THOrientationCommandOption(
+    return THOrientationCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       azimuth: THDoublePart.fromMap(map['azimuth']),
     );
@@ -47,7 +47,7 @@ class THOrientationCommandOption extends THCommandOption {
     int? parentMapiahID,
     THDoublePart? azimuth,
   }) {
-    return THOrientationCommandOption(
+    return THOrientationCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       azimuth: azimuth ?? this.azimuth,
     );

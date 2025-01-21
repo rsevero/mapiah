@@ -76,11 +76,11 @@ enum THCommandOptionType {
 abstract class THCommandOption implements THSerializable {
   late final int parentMapiahID;
 
-  THCommandOption({
+  THCommandOption.forCWJM({
     required this.parentMapiahID,
   });
 
-  THCommandOption.addToOptionParent({
+  THCommandOption({
     required THHasOptions optionParent,
   }) : parentMapiahID = optionParent.mapiahID {
     optionParent.addUpdateOption(this);

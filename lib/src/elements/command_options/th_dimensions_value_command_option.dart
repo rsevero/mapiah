@@ -13,21 +13,21 @@ class THDimensionsValueCommandOption extends THCommandOption {
   late final THLengthUnitPart _unit;
   late final bool unitSet;
 
-  THDimensionsValueCommandOption({
+  THDimensionsValueCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.above,
     required this.below,
     required THLengthUnitPart unit,
     required this.unitSet,
   })  : _unit = unit,
-        super();
+        super.forCWJM();
 
   THDimensionsValueCommandOption.fromString({
     required super.optionParent,
     required String above,
     required String below,
     String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.above = THDoublePart.fromString(valueString: above);
     this.below = THDoublePart.fromString(valueString: below);
     unitFromString(unit);
@@ -48,7 +48,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }
 
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return THDimensionsValueCommandOption(
+    return THDimensionsValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       above: THDoublePart.fromMap(map['above']),
       below: THDoublePart.fromMap(map['below']),
@@ -69,7 +69,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
     THLengthUnitPart? unit,
     bool? unitSet,
   }) {
-    return THDimensionsValueCommandOption(
+    return THDimensionsValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       above: above ?? this.above,
       below: below ?? this.below,

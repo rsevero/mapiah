@@ -6,15 +6,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THFromCommandOption extends THCommandOption {
   final String station;
 
-  THFromCommandOption({
+  THFromCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.station,
-  }) : super();
+  }) : super.forCWJM();
 
-  THFromCommandOption.addToOptionParent({
+  THFromCommandOption({
     required super.optionParent,
     required this.station,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.from;
@@ -28,7 +28,7 @@ class THFromCommandOption extends THCommandOption {
   }
 
   factory THFromCommandOption.fromMap(Map<String, dynamic> map) {
-    return THFromCommandOption(
+    return THFromCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       station: map['station'],
     );
@@ -43,7 +43,7 @@ class THFromCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? station,
   }) {
-    return THFromCommandOption(
+    return THFromCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       station: station ?? this.station,
     );

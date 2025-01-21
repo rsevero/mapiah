@@ -9,11 +9,11 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // (or station specified using -from option. If not specified, appropriate value from LRUD
 // data is used.
 class THDistCommandOption extends THCommandOption with THHasLength {
-  THDistCommandOption({
+  THDistCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,
     required THLengthUnitPart unit,
-  }) : super() {
+  }) : super.forCWJM() {
     this.length = length;
     this.unit = unit;
   }
@@ -22,7 +22,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     required super.optionParent,
     required String distance,
     required String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
@@ -42,7 +42,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   }
 
   factory THDistCommandOption.fromMap(Map<String, dynamic> map) {
-    return THDistCommandOption(
+    return THDistCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       length: THDoublePart.fromMap(map['length']),
       unit: map['unit'],
@@ -59,7 +59,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {
-    return THDistCommandOption(
+    return THDistCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       length: length ?? this.length,
       unit: unit ?? this.unit,

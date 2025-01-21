@@ -42,13 +42,13 @@ class THProjectionCommandOption extends THCommandOption {
     THProjectionTypes.plan: 'plan',
   };
 
-  THProjectionCommandOption({
+  THProjectionCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.type,
     this.index = '',
     this.elevationAngle,
     this.elevationUnit,
-  }) : super();
+  }) : super.forCWJM();
 
   THProjectionCommandOption.fromString({
     required super.optionParent,
@@ -56,7 +56,7 @@ class THProjectionCommandOption extends THCommandOption {
     this.index = '',
     required String elevationAngle,
     required String elevationUnit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     typeFromString(type);
     this.elevationAngle = THDoublePart.fromString(valueString: elevationAngle);
     this.elevationUnit = THAngleUnitPart.fromString(unitString: elevationUnit);
@@ -83,7 +83,7 @@ class THProjectionCommandOption extends THCommandOption {
   }
 
   factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {
-    return THProjectionCommandOption(
+    return THProjectionCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       type: stringToType[map['type']]!,
       index: map['index'],
@@ -104,7 +104,7 @@ class THProjectionCommandOption extends THCommandOption {
     THDoublePart? elevationAngle,
     THAngleUnitPart? elevationUnit,
   }) {
-    return THProjectionCommandOption(
+    return THProjectionCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       type: type ?? this.type,
       index: index ?? this.index,

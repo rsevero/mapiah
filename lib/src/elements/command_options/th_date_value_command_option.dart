@@ -7,15 +7,15 @@ import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 class THDateValueCommandOption extends THCommandOption {
   late final THDatetimePart date;
 
-  THDateValueCommandOption({
+  THDateValueCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.date,
-  }) : super();
+  }) : super.forCWJM();
 
   THDateValueCommandOption.fromString({
     required super.optionParent,
     required String date,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.date = THDatetimePart.fromString(datetime: date);
   }
 
@@ -31,7 +31,7 @@ class THDateValueCommandOption extends THCommandOption {
   }
 
   factory THDateValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return THDateValueCommandOption(
+    return THDateValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       date: THDatetimePart.fromMap(map['date']),
     );
@@ -46,7 +46,7 @@ class THDateValueCommandOption extends THCommandOption {
     int? parentMapiahID,
     THDatetimePart? date,
   }) {
-    return THDateValueCommandOption(
+    return THDateValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       date: date ?? this.date,
     );

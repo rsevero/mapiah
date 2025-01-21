@@ -12,23 +12,23 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // The value can optionally be followed by length units.
 class THAltitudeValueCommandOption extends THCommandOption
     with THHasLength, THHasAltitude {
-  THAltitudeValueCommandOption({
+  THAltitudeValueCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,
     required bool isFix,
     required THLengthUnitPart unit,
-  }) : super() {
+  }) : super.forCWJM() {
     this.length = length;
     this.isFix = isFix;
     this.unit = unit;
   }
 
-  THAltitudeValueCommandOption.addToOptionParent({
+  THAltitudeValueCommandOption({
     required super.optionParent,
     required THDoublePart length,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.length = length;
     this.isFix = isFix;
     unitFromString(unit);
@@ -39,14 +39,14 @@ class THAltitudeValueCommandOption extends THCommandOption
     required String height,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     length = THDoublePart.fromString(valueString: height);
     isFix = isFix;
     unitFromString(unit);
   }
 
   THAltitudeValueCommandOption.fromNan({required super.optionParent})
-      : super.addToOptionParent() {
+      : super() {
     length = THDoublePart.fromString(valueString: '0');
     isNan = true;
     unitFromString('');
@@ -66,7 +66,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   }
 
   factory THAltitudeValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return THAltitudeValueCommandOption(
+    return THAltitudeValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
@@ -85,7 +85,7 @@ class THAltitudeValueCommandOption extends THCommandOption
     bool? isFix,
     THLengthUnitPart? unit,
   }) {
-    return THAltitudeValueCommandOption(
+    return THAltitudeValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,

@@ -383,21 +383,21 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     },
   };
 
-  THMultipleChoiceCommandOption({
+  THMultipleChoiceCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.multipleChoiceType,
     required this.parentElementType,
     required String choice,
-  }) : super() {
+  }) : super.forCWJM() {
     setChoice(choice);
   }
 
-  THMultipleChoiceCommandOption.addToOptionParent({
+  THMultipleChoiceCommandOption({
     required super.optionParent,
     required this.multipleChoiceType,
     required String choice,
   })  : parentElementType = optionParent.elementType,
-        super.addToOptionParent() {
+        super() {
     setChoice(choice);
   }
 
@@ -415,7 +415,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   factory THMultipleChoiceCommandOption.fromMap(Map<String, dynamic> map) {
-    return THMultipleChoiceCommandOption(
+    return THMultipleChoiceCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       multipleChoiceType: map['multipleChoiceType'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
@@ -435,7 +435,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     String? choice,
     bool makeChoiceNull = false,
   }) {
-    return THMultipleChoiceCommandOption(
+    return THMultipleChoiceCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,
       parentElementType: parentElementType ?? this.parentElementType,

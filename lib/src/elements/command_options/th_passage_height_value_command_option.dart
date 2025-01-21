@@ -21,7 +21,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   late final THPassageHeightModes _mode;
   late final bool _plusHasSign;
 
-  THPassageHeightValueCommandOption({
+  THPassageHeightValueCommandOption.forCWJM({
     required super.parentMapiahID,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
@@ -31,13 +31,13 @@ class THPassageHeightValueCommandOption extends THCommandOption {
         _minusNumber = minusNumber,
         _mode = mode,
         _plusHasSign = plusHasSign,
-        super();
+        super.forCWJM();
 
   THPassageHeightValueCommandOption.fromString({
     required super.optionParent,
     required String plusNumber,
     required String minusNumber,
-  }) : super.addToOptionParent() {
+  }) : super() {
     plusAndMinusNumbersFromString(plusNumber, minusNumber);
   }
 
@@ -56,7 +56,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }
 
   factory THPassageHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return THPassageHeightValueCommandOption(
+    return THPassageHeightValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       plusNumber: map['plusNumber'] != null
           ? THDoublePart.fromMap(map['plusNumber'])
@@ -84,7 +84,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     bool makePlusNumberNull = false,
     bool makeMinusNumberNull = false,
   }) {
-    return THPassageHeightValueCommandOption(
+    return THPassageHeightValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       plusNumber: makePlusNumberNull ? null : (plusNumber ?? _plusNumber),
       minusNumber: makeMinusNumberNull ? null : (minusNumber ?? _minusNumber),

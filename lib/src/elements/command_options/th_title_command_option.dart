@@ -6,15 +6,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THTitleCommandOption extends THCommandOption {
   final String title;
 
-  THTitleCommandOption({
+  THTitleCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.title,
-  }) : super();
+  }) : super.forCWJM();
 
-  THTitleCommandOption.addToOptionParent({
+  THTitleCommandOption({
     required super.optionParent,
     required this.title,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.title;
@@ -28,7 +28,7 @@ class THTitleCommandOption extends THCommandOption {
   }
 
   factory THTitleCommandOption.fromMap(Map<String, dynamic> map) {
-    return THTitleCommandOption(
+    return THTitleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       title: map['title'],
     );
@@ -43,7 +43,7 @@ class THTitleCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? title,
   }) {
-    return THTitleCommandOption(
+    return THTitleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       title: title ?? this.title,
     );

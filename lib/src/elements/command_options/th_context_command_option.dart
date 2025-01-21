@@ -11,18 +11,17 @@ class THContextCommandOption extends THCommandOption {
 
   // static const _supportedElementTypes = <String>{'point', 'line', 'area'};
 
-  /// Constructor necessary for dart_mappable support.
-  THContextCommandOption({
+  THContextCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.elementType,
     required this.symbolType,
-  }) : super();
+  }) : super.forCWJM();
 
-  THContextCommandOption.addToOptionParent({
+  THContextCommandOption({
     required super.optionParent,
     required this.elementType,
     required this.symbolType,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.context;
@@ -37,7 +36,7 @@ class THContextCommandOption extends THCommandOption {
   }
 
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {
-    return THContextCommandOption(
+    return THContextCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       elementType: map['elementType'],
       symbolType: map['symbolType'],
@@ -54,7 +53,7 @@ class THContextCommandOption extends THCommandOption {
     String? elementType,
     String? symbolType,
   }) {
-    return THContextCommandOption(
+    return THContextCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       elementType: elementType ?? this.elementType,
       symbolType: symbolType ?? this.symbolType,

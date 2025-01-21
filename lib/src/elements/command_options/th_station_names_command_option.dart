@@ -8,17 +8,17 @@ class THStationNamesCommandOption extends THCommandOption {
   late final String prefix;
   late final String suffix;
 
-  THStationNamesCommandOption({
+  THStationNamesCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.prefix,
     required this.suffix,
-  }) : super();
+  }) : super.forCWJM();
 
-  THStationNamesCommandOption.addToptionType({
+  THStationNamesCommandOption({
     required super.optionParent,
     required this.prefix,
     required this.suffix,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.stationNames;
@@ -33,7 +33,7 @@ class THStationNamesCommandOption extends THCommandOption {
   }
 
   factory THStationNamesCommandOption.fromMap(Map<String, dynamic> map) {
-    return THStationNamesCommandOption(
+    return THStationNamesCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       prefix: map['prefix'],
       suffix: map['suffix'],
@@ -50,7 +50,7 @@ class THStationNamesCommandOption extends THCommandOption {
     String? prefix,
     String? suffix,
   }) {
-    return THStationNamesCommandOption(
+    return THStationNamesCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       prefix: prefix ?? this.prefix,
       suffix: suffix ?? this.suffix,

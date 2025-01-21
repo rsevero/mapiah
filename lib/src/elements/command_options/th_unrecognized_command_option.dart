@@ -6,15 +6,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THUnrecognizedCommandOption extends THCommandOption {
   String? value;
 
-  THUnrecognizedCommandOption({
+  THUnrecognizedCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.value,
-  }) : super();
+  }) : super.forCWJM();
 
-  THUnrecognizedCommandOption.addToOptionParent({
+  THUnrecognizedCommandOption({
     required super.optionParent,
     required this.value,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType =>
@@ -29,7 +29,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   }
 
   factory THUnrecognizedCommandOption.fromMap(Map<String, dynamic> map) {
-    return THUnrecognizedCommandOption(
+    return THUnrecognizedCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       value: map['value'],
     );
@@ -44,7 +44,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? value,
   }) {
-    return THUnrecognizedCommandOption(
+    return THUnrecognizedCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       value: value ?? this.value,
     );

@@ -6,15 +6,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THMarkCommandOption extends THCommandOption {
   late final String mark;
 
-  THMarkCommandOption({
+  THMarkCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.mark,
-  }) : super();
+  }) : super.forCWJM();
 
-  THMarkCommandOption.addToOptionParent({
+  THMarkCommandOption({
     required super.optionParent,
     required this.mark,
-  }) : super.addToOptionParent();
+  }) : super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.mark;
@@ -28,7 +28,7 @@ class THMarkCommandOption extends THCommandOption {
   }
 
   factory THMarkCommandOption.fromMap(Map<String, dynamic> map) {
-    return THMarkCommandOption(
+    return THMarkCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       mark: map['mark'],
     );
@@ -43,7 +43,7 @@ class THMarkCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? mark,
   }) {
-    return THMarkCommandOption(
+    return THMarkCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       mark: mark ?? this.mark,
     );

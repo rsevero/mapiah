@@ -10,11 +10,11 @@ class THSketchCommandOption extends THCommandOption {
   late final THStringPart _filename;
   late final THPositionPart point;
 
-  THSketchCommandOption({
+  THSketchCommandOption.forCWJM({
     required super.parentMapiahID,
     required String filename,
     required this.point,
-  }) : super() {
+  }) : super.forCWJM() {
     _filename = THStringPart(content: filename);
   }
 
@@ -22,7 +22,7 @@ class THSketchCommandOption extends THCommandOption {
     required super.optionParent,
     required String filename,
     required List<dynamic> pointList,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _filename = THStringPart(content: filename);
     pointFromStringList(pointList);
   }
@@ -44,7 +44,7 @@ class THSketchCommandOption extends THCommandOption {
   }
 
   factory THSketchCommandOption.fromMap(Map<String, dynamic> map) {
-    return THSketchCommandOption(
+    return THSketchCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       filename: map['filename']['content'],
       point: THPositionPart.fromMap(map['point']),
@@ -61,7 +61,7 @@ class THSketchCommandOption extends THCommandOption {
     String? filename,
     THPositionPart? point,
   }) {
-    return THSketchCommandOption(
+    return THSketchCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       filename: filename ?? _filename.content,
       point: point ?? this.point,

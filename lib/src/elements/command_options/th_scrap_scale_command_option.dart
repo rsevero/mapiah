@@ -19,19 +19,19 @@ class THScrapScaleCommandOption extends THCommandOption {
   final List<THDoublePart> _numericSpecifications;
   final THLengthUnitPart? unit;
 
-  THScrapScaleCommandOption({
+  THScrapScaleCommandOption.forCWJM({
     required super.parentMapiahID,
     required List<THDoublePart> numericSpecifications,
     this.unit,
   })  : _numericSpecifications = numericSpecifications,
-        super();
+        super.forCWJM();
 
-  THScrapScaleCommandOption.addToOptionParent({
+  THScrapScaleCommandOption({
     required super.optionParent,
     required List<THDoublePart> numericSpecifications,
     this.unit,
   })  : _numericSpecifications = numericSpecifications,
-        super.addToOptionParent();
+        super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.scrapScale;
@@ -47,7 +47,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   }
 
   factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {
-    return THScrapScaleCommandOption(
+    return THScrapScaleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       numericSpecifications: List<THDoublePart>.from(
           map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
@@ -66,7 +66,7 @@ class THScrapScaleCommandOption extends THCommandOption {
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
   }) {
-    return THScrapScaleCommandOption(
+    return THScrapScaleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       numericSpecifications: numericSpecifications ?? _numericSpecifications,
       unit: makeUnitNull ? null : (unit ?? this.unit),

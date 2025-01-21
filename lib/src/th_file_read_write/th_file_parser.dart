@@ -248,26 +248,29 @@ class THFileParser {
   }
 
   void _injectEmptyLine() {
-    _currentElement = THEmptyLine(_currentParentMapiahID);
+    _currentElement = THEmptyLine(parentMapiahID: _currentParentMapiahID);
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
   }
 
   void _injectMultiLineCommentContent(List<dynamic> element) {
     final content = (element.isEmpty) ? '' : element[1].toString();
-    _currentElement =
-        THMultilineCommentContent(_currentParentMapiahID, content);
+    _currentElement = THMultilineCommentContent(
+      parentMapiahID: _currentParentMapiahID,
+      content: content,
+    );
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
   }
 
   void _injectEndMultiLineComment() {
-    _currentElement = THEndcomment(_currentParentMapiahID);
+    _currentElement = THEndcomment(parentMapiahID: _currentParentMapiahID);
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
   void _injectStartMultiLineComment() {
-    _currentElement = THMultiLineComment(_currentParentMapiahID);
+    _currentElement =
+        THMultiLineComment(parentMapiahID: _currentParentMapiahID);
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent(_currentElement as THParent);
     _addChildParser(_multiLineCommentContentParser);
@@ -281,7 +284,10 @@ class THFileParser {
       assert(element[1] is String);
     }
 
-    _currentElement = THEncoding(_currentParentMapiahID, element[1]);
+    _currentElement = THEncoding(
+      parentMapiahID: _currentParentMapiahID,
+      encoding: element[1],
+    );
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
   }
 
@@ -295,9 +301,9 @@ class THFileParser {
     }
 
     final THXTherionConfig newElement = THXTherionConfig(
-      _currentParentMapiahID,
-      element[1][0],
-      element[1][1],
+      parentMapiahID: _currentParentMapiahID,
+      name: element[1][0],
+      value: element[1][1],
     );
     _thFileStore.addElementWithParent(newElement, _currentParent);
   }
@@ -313,8 +319,11 @@ class THFileParser {
       assert(element[2].length == 2);
     }
 
-    final newPoint =
-        THPoint.fromString(_currentParentMapiahID, element[1], element[2][0]);
+    final THPoint newPoint = THPoint.fromString(
+      parentMapiahID: _currentParentMapiahID,
+      pointType: element[1],
+      pointDataList: element[2][0],
+    );
     _thFileStore.addElementWithParent(newPoint, _currentParent);
 
     _currentElement = newPoint;

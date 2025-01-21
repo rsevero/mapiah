@@ -6,15 +6,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THIDCommandOption extends THCommandOption {
   late final String thID;
 
-  THIDCommandOption({
+  THIDCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.thID,
-  }) : super();
+  }) : super.forCWJM();
 
-  THIDCommandOption.addToOptionParent({
+  THIDCommandOption({
     required super.optionParent,
     required this.thID,
-  }) : super.addToOptionParent(); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
+  }) : super(); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.id;
@@ -28,7 +28,7 @@ class THIDCommandOption extends THCommandOption {
   }
 
   factory THIDCommandOption.fromMap(Map<String, dynamic> map) {
-    return THIDCommandOption(
+    return THIDCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       thID: map['thID'],
     );
@@ -43,7 +43,7 @@ class THIDCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? thID,
   }) {
-    return THIDCommandOption(
+    return THIDCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       thID: thID ?? this.thID,
     );

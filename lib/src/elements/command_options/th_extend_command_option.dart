@@ -7,15 +7,15 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class THExtendCommandOption extends THCommandOption {
   final String station;
 
-  THExtendCommandOption({
+  THExtendCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.station,
-  }) : super();
+  }) : super.forCWJM();
 
-  THExtendCommandOption.addToOptionParent({
+  THExtendCommandOption({
     required super.optionParent,
     required this.station,
-  }) : super.addToOptionParent();
+  }) : super();
   //      {
   //   if ((optionParent is! THPoint) || (optionParent.plaType != 'station')) {
   //     throw THCustomException(
@@ -35,7 +35,7 @@ class THExtendCommandOption extends THCommandOption {
   }
 
   factory THExtendCommandOption.fromMap(Map<String, dynamic> map) {
-    return THExtendCommandOption(
+    return THExtendCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       station: map['station'],
     );
@@ -50,7 +50,7 @@ class THExtendCommandOption extends THCommandOption {
     int? parentMapiahID,
     String? station,
   }) {
-    return THExtendCommandOption(
+    return THExtendCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       station: station ?? this.station,
     );

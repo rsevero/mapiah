@@ -18,13 +18,13 @@ class THLineScaleCommandOption extends THCommandOption {
 
   static const String _scaleMultipleChoiceName = 'point|scale';
 
-  THLineScaleCommandOption({
+  THLineScaleCommandOption.forCWJM({
     required super.parentMapiahID,
     required THMultipleChoicePart multipleChoiceSize,
     required THDoublePart numericSize,
     required THLineScaleCommandOptionType type,
     required String textSize,
-  }) : super() {
+  }) : super.forCWJM() {
     _multipleChoiceSize = multipleChoiceSize;
     _type = type;
     _numericSize = numericSize;
@@ -34,7 +34,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
     _type = THLineScaleCommandOptionType.multiplechoice;
@@ -43,7 +43,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsText({
     required super.optionParent,
     required String textScale,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _textSize = textScale;
     _type = THLineScaleCommandOptionType.text;
   }
@@ -51,7 +51,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _numericSize = numericScaleSize;
     _type = THLineScaleCommandOptionType.numeric;
   }
@@ -59,7 +59,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     _type = THLineScaleCommandOptionType.numeric;
   }
@@ -79,7 +79,7 @@ class THLineScaleCommandOption extends THCommandOption {
   }
 
   factory THLineScaleCommandOption.fromMap(Map<String, dynamic> map) {
-    return THLineScaleCommandOption(
+    return THLineScaleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
@@ -102,7 +102,7 @@ class THLineScaleCommandOption extends THCommandOption {
     THLineScaleCommandOptionType? type,
     String? textSize,
   }) {
-    return THLineScaleCommandOption(
+    return THLineScaleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       multipleChoiceSize: multipleChoiceSize ?? this.multipleChoiceSize,
       numericSize: numericSize ?? this.numericSize,

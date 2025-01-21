@@ -15,23 +15,23 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // used instead. Units can follow the value. Examples: +4, [+4 m], [fix 1510 m].
 class THAltitudeCommandOption extends THCommandOption
     with THHasLength, THHasAltitude {
-  THAltitudeCommandOption({
+  THAltitudeCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,
     required bool isFix,
     required THLengthUnitPart unit,
-  }) : super() {
+  }) : super.forCWJM() {
     this.length = length;
     this.isFix = isFix;
     this.unit = unit;
   }
 
-  THAltitudeCommandOption.addToOptionParent({
+  THAltitudeCommandOption({
     required super.optionParent,
     required THDoublePart length,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.length = length;
     this.isFix = isFix;
     unitFromString(unit);
@@ -42,14 +42,13 @@ class THAltitudeCommandOption extends THCommandOption
     required String height,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     length = THDoublePart.fromString(valueString: height);
     this.isFix = isFix;
     unitFromString(unit);
   }
 
-  THAltitudeCommandOption.fromNan({required super.optionParent})
-      : super.addToOptionParent() {
+  THAltitudeCommandOption.fromNan({required super.optionParent}) : super() {
     length = THDoublePart.fromString(valueString: '0');
     isNan = true;
     unitFromString('');
@@ -69,7 +68,7 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   factory THAltitudeCommandOption.fromMap(Map<String, dynamic> map) {
-    return THAltitudeCommandOption(
+    return THAltitudeCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
@@ -89,7 +88,7 @@ class THAltitudeCommandOption extends THCommandOption
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
   }) {
-    return THAltitudeCommandOption(
+    return THAltitudeCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,

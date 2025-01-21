@@ -9,23 +9,23 @@ class THAuthorCommandOption extends THCommandOption {
   late final THDatetimePart datetime;
   late final THPersonPart person;
 
-  THAuthorCommandOption({
+  THAuthorCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.datetime,
     required this.person,
-  }) : super();
+  }) : super.forCWJM();
 
-  THAuthorCommandOption.addToOptionParent({
+  THAuthorCommandOption({
     required super.optionParent,
     required this.datetime,
     required this.person,
-  }) : super.addToOptionParent();
+  }) : super();
 
   THAuthorCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required String person,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
     this.person = THPersonPart.fromString(name: person);
   }
@@ -43,7 +43,7 @@ class THAuthorCommandOption extends THCommandOption {
   }
 
   factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
-    return THAuthorCommandOption(
+    return THAuthorCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       datetime: THDatetimePart.fromMap(map['datetime']),
       person: THPersonPart.fromMap(map['person']),
@@ -60,7 +60,7 @@ class THAuthorCommandOption extends THCommandOption {
     THDatetimePart? datetime,
     THPersonPart? person,
   }) {
-    return THAuthorCommandOption(
+    return THAuthorCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       datetime: datetime ?? this.datetime,
       person: person ?? this.person,

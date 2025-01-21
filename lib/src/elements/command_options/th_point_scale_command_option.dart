@@ -15,7 +15,7 @@ class THPointScaleCommandOption extends THCommandOption {
 
   static const _scaleMultipleChoiceName = 'point|scale';
 
-  THPointScaleCommandOption({
+  THPointScaleCommandOption.forCWJM({
     required super.parentMapiahID,
     required THMultipleChoicePart multipleChoiceSize,
     required THDoublePart numericSize,
@@ -23,12 +23,12 @@ class THPointScaleCommandOption extends THCommandOption {
   })  : _multipleChoiceSize = multipleChoiceSize,
         _numericSize = numericSize,
         _isNumeric = isNumeric,
-        super();
+        super.forCWJM();
 
   THPointScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
     _isNumeric = false;
@@ -37,7 +37,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _numericSize = numericScaleSize;
     _isNumeric = true;
   }
@@ -45,7 +45,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
-  }) : super.addToOptionParent() {
+  }) : super() {
     _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     _isNumeric = true;
   }
@@ -64,7 +64,7 @@ class THPointScaleCommandOption extends THCommandOption {
   }
 
   factory THPointScaleCommandOption.fromMap(Map<String, dynamic> map) {
-    return THPointScaleCommandOption(
+    return THPointScaleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
@@ -84,7 +84,7 @@ class THPointScaleCommandOption extends THCommandOption {
     THDoublePart? numericSize,
     bool? isNumeric,
   }) {
-    return THPointScaleCommandOption(
+    return THPointScaleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       multipleChoiceSize: multipleChoiceSize ?? _multipleChoiceSize,
       numericSize: numericSize ?? _numericSize,

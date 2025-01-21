@@ -10,15 +10,15 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 class THLSizeCommandOption extends THCommandOption {
   late final THDoublePart number;
 
-  THLSizeCommandOption({
+  THLSizeCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.number,
-  }) : super();
+  }) : super.forCWJM();
 
   THLSizeCommandOption.fromString({
     required super.optionParent,
     required String number,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.number = THDoublePart.fromString(valueString: number);
   }
 
@@ -34,7 +34,7 @@ class THLSizeCommandOption extends THCommandOption {
   }
 
   factory THLSizeCommandOption.fromMap(Map<String, dynamic> map) {
-    return THLSizeCommandOption(
+    return THLSizeCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       number: THDoublePart.fromMap(map['number']),
     );
@@ -49,7 +49,7 @@ class THLSizeCommandOption extends THCommandOption {
     int? parentMapiahID,
     THDoublePart? number,
   }) {
-    return THLSizeCommandOption(
+    return THLSizeCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       number: number ?? this.number,
     );

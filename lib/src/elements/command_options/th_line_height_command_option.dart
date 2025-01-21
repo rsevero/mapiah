@@ -8,15 +8,15 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 class THLineHeightCommandOption extends THCommandOption {
   late final THDoublePart height;
 
-  THLineHeightCommandOption({
+  THLineHeightCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.height,
-  }) : super();
+  }) : super.forCWJM();
 
   THLineHeightCommandOption.fromString({
     required super.optionParent,
     required String height,
-  }) : super.addToOptionParent() {
+  }) : super() {
     this.height = THDoublePart.fromString(valueString: height);
   }
 
@@ -32,7 +32,7 @@ class THLineHeightCommandOption extends THCommandOption {
   }
 
   factory THLineHeightCommandOption.fromMap(Map<String, dynamic> map) {
-    return THLineHeightCommandOption(
+    return THLineHeightCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       height: THDoublePart.fromMap(map['height']),
     );
@@ -47,7 +47,7 @@ class THLineHeightCommandOption extends THCommandOption {
     int? parentMapiahID,
     THDoublePart? height,
   }) {
-    return THLineHeightCommandOption(
+    return THLineHeightCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       height: height ?? this.height,
     );

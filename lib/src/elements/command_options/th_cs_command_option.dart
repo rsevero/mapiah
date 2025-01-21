@@ -10,16 +10,16 @@ class THCSCommandOption extends THCommandOption {
   late final THCSPart cs;
 
   /// Constructor necessary for dart_mappable support.
-  THCSCommandOption({
+  THCSCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.cs,
-  }) : super();
+  }) : super.forCWJM();
 
   THCSCommandOption.fromString({
     required super.optionParent,
     required String csString,
     required bool forOutputOnly,
-  }) : super.addToOptionParent() {
+  }) : super() {
     cs = THCSPart(name: csString, forOutputOnly: forOutputOnly);
   }
 
@@ -35,7 +35,7 @@ class THCSCommandOption extends THCommandOption {
   }
 
   factory THCSCommandOption.fromMap(Map<String, dynamic> map) {
-    return THCSCommandOption(
+    return THCSCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       cs: THCSPart.fromMap(map['cs']),
     );
@@ -50,7 +50,7 @@ class THCSCommandOption extends THCommandOption {
     int? parentMapiahID,
     THCSPart? cs,
   }) {
-    return THCSCommandOption(
+    return THCSCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       cs: cs ?? this.cs,
     );

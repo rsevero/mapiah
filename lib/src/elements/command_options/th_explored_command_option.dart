@@ -9,11 +9,11 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
 // statistics.
 class THExploredCommandOption extends THCommandOption with THHasLength {
-  THExploredCommandOption({
+  THExploredCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,
     required THLengthUnitPart unit,
-  }) : super() {
+  }) : super.forCWJM() {
     this.length = length;
     this.unit = unit;
   }
@@ -22,7 +22,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
     required super.optionParent,
     required String distance,
     required String? unit,
-  }) : super.addToOptionParent() {
+  }) : super() {
     length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
@@ -42,7 +42,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
   }
 
   factory THExploredCommandOption.fromMap(Map<String, dynamic> map) {
-    return THExploredCommandOption(
+    return THExploredCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       length: THDoublePart.fromMap(map['length']),
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -59,7 +59,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {
-    return THExploredCommandOption(
+    return THExploredCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       length: length ?? this.length,
       unit: unit ?? this.unit,
