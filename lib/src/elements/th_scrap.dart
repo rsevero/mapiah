@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 import "package:mapiah/src/elements/th_file.dart";
 import "package:mapiah/src/elements/th_has_id.dart";
@@ -47,7 +46,7 @@ class THScrap extends THElement
   }
 
   @override
-  String get elementType => thScrapID;
+  THElementType get elementType => THElementType.scrap;
 
   @override
   Map<String, dynamic> toMap() {

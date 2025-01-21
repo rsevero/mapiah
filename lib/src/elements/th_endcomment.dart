@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THEndcomment extends THElement {
@@ -13,7 +12,7 @@ class THEndcomment extends THElement {
   THEndcomment({required super.parentMapiahID}) : super.addToParent();
 
   @override
-  String get elementType => thEndcommentID;
+  THElementType get elementType => THElementType.endcomment;
 
   @override
   Map<String, dynamic> toMap() {

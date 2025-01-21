@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THXTherionConfig extends THElement {
@@ -22,7 +21,7 @@ class THXTherionConfig extends THElement {
   }) : super.addToParent();
 
   @override
-  String get elementType => thXTherionConfigID;
+  THElementType get elementType => THElementType.xTherionConfig;
 
   @override
   Map<String, dynamic> toMap() {

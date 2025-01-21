@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THEndarea extends THElement {
@@ -13,7 +12,7 @@ class THEndarea extends THElement {
   THEndarea({required super.parentMapiahID}) : super.addToParent();
 
   @override
-  String get elementType => thEndareaID;
+  THElementType get elementType => THElementType.endarea;
 
   @override
   Map<String, dynamic> toMap() {

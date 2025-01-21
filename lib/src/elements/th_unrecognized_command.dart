@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THUnrecognizedCommand extends THElement {
@@ -22,7 +21,7 @@ class THUnrecognizedCommand extends THElement {
         super.addToParent();
 
   @override
-  String get elementType => thUnrecognizedCommandID;
+  THElementType get elementType => THElementType.unrecognizedCommand;
 
   @override
   Map<String, dynamic> toMap() {

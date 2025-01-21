@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THEmptyLine extends THElement {
@@ -13,7 +12,7 @@ class THEmptyLine extends THElement {
   THEmptyLine({required super.parentMapiahID}) : super.addToParent();
 
   @override
-  String get elementType => thEmptyLineID;
+  THElementType get elementType => THElementType.emptyLine;
 
   @override
   Map<String, dynamic> toMap() {

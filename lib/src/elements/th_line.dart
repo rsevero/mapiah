@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -84,7 +83,7 @@ class THLine extends THElement
   }
 
   @override
-  String get elementType => thLineID;
+  THElementType get elementType => THElementType.line;
 
   @override
   Map<String, dynamic> toMap() {

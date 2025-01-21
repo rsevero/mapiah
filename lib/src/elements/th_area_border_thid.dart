@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THAreaBorderTHID extends THElement {
@@ -25,7 +24,7 @@ class THAreaBorderTHID extends THElement {
   // }
 
   @override
-  String get elementType => thAreaBorderTHIDID;
+  THElementType get elementType => THElementType.areaBorderTHID;
 
   @override
   Map<String, dynamic> toMap() {

@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THEndscrap extends THElement {
@@ -13,7 +12,7 @@ class THEndscrap extends THElement {
   THEndscrap({required super.parentMapiahID}) : super.addToParent();
 
   @override
-  String get elementType => thEndscrapID;
+  THElementType get elementType => THElementType.endscrap;
 
   @override
   Map<String, dynamic> toMap() {

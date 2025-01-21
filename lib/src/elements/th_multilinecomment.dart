@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THMultiLineComment extends THElement with THParent {
@@ -13,7 +12,7 @@ class THMultiLineComment extends THElement with THParent {
   THMultiLineComment({required super.parentMapiahID}) : super.addToParent();
 
   @override
-  String get elementType => thMultilineCommentID;
+  THElementType get elementType => THElementType.multilineComment;
 
   @override
   Map<String, dynamic> toMap() {

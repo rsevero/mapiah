@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -24,7 +24,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
   }) : super.withEndPoint();
 
   @override
-  String get elementType => thStraightLineSegmentID;
+  THElementType get elementType => THElementType.straightLineSegment;
 
   THStraightLineSegment.fromString({
     required super.parentMapiahID,

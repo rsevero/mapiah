@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -59,7 +58,7 @@ class THArea extends THElement
   }
 
   @override
-  String get elementType => thAreaID;
+  THElementType get elementType => THElementType.area;
 
   @override
   Map<String, dynamic> toMap() {

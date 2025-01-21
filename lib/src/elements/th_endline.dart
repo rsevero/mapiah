@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THEndline extends THElement {
@@ -13,7 +12,7 @@ class THEndline extends THElement {
   THEndline({required super.parentMapiahID}) : super.addToParent();
 
   @override
-  String get elementType => thEndlineID;
+  THElementType get elementType => THElementType.endline;
 
   @override
   Map<String, dynamic> toMap() {

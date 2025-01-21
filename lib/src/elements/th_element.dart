@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_serializeable.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_area_border_thid.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -23,6 +22,28 @@ import 'package:mapiah/src/elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/elements/th_xtherion_config.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/stores/general_store.dart';
+
+enum THElementType {
+  areaBorderTHID,
+  area,
+  bezierCurveLineSegment,
+  comment,
+  emptyLine,
+  encoding,
+  endarea,
+  endcomment,
+  endline,
+  endscrap,
+  line,
+  lineSegment,
+  multilineCommentContent,
+  multilineComment,
+  point,
+  scrap,
+  straightLineSegment,
+  unrecognizedCommand,
+  xTherionConfig,
+}
 
 /// Base class for all elements that form a THFile, including THFile itself.
 abstract class THElement implements THSerializable {
@@ -54,7 +75,7 @@ abstract class THElement implements THSerializable {
     return thFile.elementByMapiahID(parentMapiahID) as THParent;
   }
 
-  String get elementType;
+  THElementType get elementType;
 
   @override
   String toJson() {
@@ -63,41 +84,41 @@ abstract class THElement implements THSerializable {
 
   static THElement fromMap(Map<String, dynamic> map) {
     switch (map['elementType']) {
-      case thAreaBorderTHIDID:
+      case THElementType.areaBorderTHID:
         return THAreaBorderTHID.fromMap(map);
-      case thAreaID:
+      case THElementType.area:
         return THArea.fromMap(map);
-      case thBezierCurveLieSegmentID:
+      case THElementType.bezierCurveLineSegment:
         return THBezierCurveLineSegment.fromMap(map);
-      case thCommentID:
+      case THElementType.comment:
         return THComment.fromMap(map);
-      case thEmptyLineID:
+      case THElementType.emptyLine:
         return THEmptyLine.fromMap(map);
-      case thEncodingID:
+      case THElementType.encoding:
         return THEncoding.fromMap(map);
-      case thEndareaID:
+      case THElementType.endarea:
         return THEndarea.fromMap(map);
-      case thEndcommentID:
+      case THElementType.endcomment:
         return THEndcomment.fromMap(map);
-      case thEndlineID:
+      case THElementType.endline:
         return THEndline.fromMap(map);
-      case thEndscrapID:
+      case THElementType.endscrap:
         return THEndscrap.fromMap(map);
-      case thLineID:
+      case THElementType.line:
         return THLine.fromMap(map);
-      case thMultilineCommentContentID:
+      case THElementType.lineSegment:
         return THMultilineCommentContent.fromMap(map);
-      case thMultilineCommentID:
+      case THElementType.multilineCommentContent:
         return THMultilineCommentContent.fromMap(map);
-      case thPointID:
+      case THElementType.point:
         return THPoint.fromMap(map);
-      case thScrapID:
+      case THElementType.scrap:
         return THScrap.fromMap(map);
-      case thStraightLineSegmentID:
+      case THElementType.straightLineSegment:
         return THStraightLineSegment.fromMap(map);
-      case thUnrecognizedCommandID:
+      case THElementType.unrecognizedCommand:
         return THUnrecognizedCommand.fromMap(map);
-      case thXTherionConfigID:
+      case THElementType.xTherionConfig:
         return THXTherionConfig.fromMap(map);
       default:
         throw THCustomException(

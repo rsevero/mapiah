@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_multiple_choice_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 
 class THClipCommandOption extends THMultipleChoiceCommandOption {
   // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
@@ -44,7 +45,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'parentElementType': parentElementType,
+      'parentElementType': parentElementType.name,
       'optionType': optionType.name,
       'multipleChoiceType': multipleChoiceType,
       'choice': choice,
@@ -54,7 +55,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
     return THClipCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      parentElementType: map['parentElementType'],
+      parentElementType: THElementType.values.byName(map['parentElementType']),
       optionType: THCommandOptionType.values.byName(map['optionType']),
       multipleChoiceType: map['multipleChoiceType'],
       choice: map['choice'],
@@ -68,7 +69,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   @override
   THClipCommandOption copyWith({
     int? parentMapiahID,
-    String? parentElementType,
+    THElementType? parentElementType,
     THCommandOptionType? optionType,
     String? multipleChoiceType,
     String? choice,
