@@ -6,7 +6,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // height <value> . height of pit or wall:pit; available in METAPOST as a numeric
 // variable ATTR__height.
 class THLineHeightCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'height';
+  static const String _thisOptionType = 'lineheight';
   late final THDoublePart height;
 
   THLineHeightCommandOption({

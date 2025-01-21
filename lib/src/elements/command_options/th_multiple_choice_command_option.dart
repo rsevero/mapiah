@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
@@ -383,19 +384,21 @@ class THMultipleChoiceCommandOption extends THCommandOption {
 
   THMultipleChoiceCommandOption({
     required super.parentMapiahID,
-    required super.optionType,
+    required String optionType,
     required this.parentElementType,
     required String choice,
-  }) : super() {
+  }) : super(optionType: "$thMultipleChoiceCommandOptionID$optionType") {
     setChoice(choice);
   }
 
   THMultipleChoiceCommandOption.addToOptionParent({
     required super.optionParent,
-    required super.optionType,
+    required String optionType,
     required String choice,
   })  : parentElementType = optionParent.elementType,
-        super.addToOptionParent() {
+        super.addToOptionParent(
+          optionType: "$thMultipleChoiceCommandOptionID$optionType",
+        ) {
     setChoice(choice);
   }
 

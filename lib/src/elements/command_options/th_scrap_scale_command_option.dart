@@ -16,7 +16,7 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // in reality. Optionally, you can also specify units for the coordinates of the ‘points in
 // reality’. This form allows you to apply both scaling and rotation to the scrap.
 class THScrapScaleCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'scale';
+  static const String _thisOptionType = 'scrapscale';
   final List<THDoublePart> _numericSpecifications;
   final THLengthUnitPart? unit;
 

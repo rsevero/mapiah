@@ -16,7 +16,7 @@ enum THPassageHeightModes {
 // tance between floor and ceiling) and [+<number> -<number>] (the distance to ceiling
 // and distance to floor).
 class THPassageHeightValueCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'value';
+  static const String _thisOptionType = 'passageheightvalue';
   late final THDoublePart? _plusNumber;
   late final THDoublePart? _minusNumber;
   late final THPassageHeightModes _mode;

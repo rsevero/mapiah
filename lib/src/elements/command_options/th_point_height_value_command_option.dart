@@ -10,7 +10,7 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // value can be optionally followed by ‘?’, if the value is presumed and units can be added
 // (e.g. -value [40? ft]).
 class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
-  static const String _thisOptionType = 'value';
+  static const String _thisOptionType = 'pointheightvalue';
   late bool isPresumed;
 
   THPointHeightValueCommandOption({

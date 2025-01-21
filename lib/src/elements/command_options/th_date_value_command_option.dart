@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 
 class THDateValueCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'value';
+  static const String _thisOptionType = 'datevalue';
   late final THDatetimePart date;
 
   THDateValueCommandOption({

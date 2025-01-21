@@ -8,7 +8,7 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // dimensions: -value [<above> <below> [<units>]] specifies passage dimensions a-
 // bove/below centerline plane used in 3D model.
 class THDimensionsValueCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'value';
+  static const String _thisOptionType = 'dimensionsvalue';
   late final THDoublePart above;
   late final THDoublePart below;
   late final THLengthUnitPart _unit;

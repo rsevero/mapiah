@@ -11,7 +11,7 @@ enum THLineScaleCommandOptionType { multiplechoice, text, numeric }
 /// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0. Absolute font sizes (in points) can be
 /// assigned to named sizes using fonts-setup in the layout configuration section.
 class THLineScaleCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'scale';
+  static const String _thisOptionType = 'linescale';
   late final THMultipleChoicePart _multipleChoiceSize;
   late final THDoublePart _numericSize;
   late final THLineScaleCommandOptionType _type;

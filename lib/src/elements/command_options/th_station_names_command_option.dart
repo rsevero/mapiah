@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // station-names <prefix> <suffix> . adds given prefix/suffix to all survey stations
 // in the current scrap. Saves some typing.
 class THStationNamesCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'station-names';
+  static const String _thisOptionType = 'stationnames';
   late final String prefix;
   late final String suffix;
 

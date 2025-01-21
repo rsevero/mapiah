@@ -12,7 +12,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // The value can optionally be followed by length units.
 class THAltitudeValueCommandOption extends THCommandOption
     with THHasLength, THHasAltitude {
-  static const String _thisOptionType = 'value';
+  static const String _thisOptionType = 'altitudevalue';
 
   THAltitudeValueCommandOption({
     required super.parentMapiahID,
