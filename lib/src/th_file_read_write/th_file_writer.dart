@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:charset/charset.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_area_border_thid.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -52,57 +53,57 @@ class THFileWriter {
 
   String serializeElement(THElement thElement) {
     String asString = '';
-    final String type = thElement.elementType;
+    final THElementType type = thElement.elementType;
 
     switch (type) {
-      case 'area':
+      case THElementType.area:
         asString += _serializeArea(thElement);
-      case 'areaborderthid':
+      case THElementType.areaBorderTHID:
         final String newLine = (thElement as THAreaBorderTHID).id;
         asString += _prepareLine(newLine, thElement);
-      case 'comment':
+      case THElementType.comment:
         asString += '# ${(thElement as THComment).content}\n';
-      case 'emptyline':
+      case THElementType.emptyLine:
         if (_includeEmptyLines || _insideMultiLineComment) {
           asString += '\n';
         }
-      case 'encoding':
+      case THElementType.encoding:
         final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
         asString += _prepareLine(newLine, thElement);
-      case 'endarea':
+      case THElementType.endarea:
         _reducePrefix();
         asString += _prepareLine('endarea', thElement);
-      case 'endcomment':
+      case THElementType.endcomment:
         _reducePrefix();
         _insideMultiLineComment = false;
         asString += _prepareLine('endcomment', thElement);
-      case 'endline':
+      case THElementType.endline:
         _reducePrefix();
         asString += _prepareLine('endline', thElement);
-      case 'endscrap':
+      case THElementType.endscrap:
         _reducePrefix();
         asString += _prepareLine('endscrap', thElement);
-      case 'line':
+      case THElementType.line:
         asString += _serializeLine(thElement);
-      case 'linesegment':
+      case THElementType.lineSegment:
         asString += _serializeLineSegment(thElement);
-      case 'multilinecomment':
+      case THElementType.multilineComment:
         asString += _prepareLine('comment', thElement);
         _increasePrefix();
         _insideMultiLineComment = true;
         asString += _childrenAsString(thElement as THMultiLineComment);
-      case 'multilinecommentcontent':
+      case THElementType.multilineCommentContent:
         asString += '${(thElement as THMultilineCommentContent).content}\n';
-      case 'point':
+      case THElementType.point:
         asString += _serializePoint(thElement);
-      case 'scrap':
+      case THElementType.scrap:
         final THScrap thScrap = thElement as THScrap;
         final String newLine =
             "scrap ${thScrap.thID} ${thScrap.optionsAsString()}".trim();
         asString += _prepareLine(newLine, thScrap);
         _increasePrefix();
         asString += _childrenAsString(thScrap);
-      case 'xtherionconfig':
+      case THElementType.xTherionConfig:
         final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
         asString +=
             "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
@@ -114,32 +115,34 @@ class THFileWriter {
     return asString;
   }
 
-  String _serializeArea(THElement aTHElement) {
-    final aTHArea = aTHElement as THArea;
-    var newLine = "area ${aTHArea.plaType}";
-    if (aTHArea.optionIsSet('subtype')) {
-      newLine += ":${aTHArea.optionByType('subtype')!.specToFile()}";
+  String _serializeArea(THElement thElement) {
+    final THArea thArea = thElement as THArea;
+    String newLine = "area ${thArea.plaType}";
+    if (thArea.optionIsSet(THCommandOptionType.subtype)) {
+      newLine +=
+          ":${thArea.optionByType(THCommandOptionType.subtype)!.specToFile()}";
     }
-    newLine += " ${aTHArea.optionsAsString()}";
+    newLine += " ${thArea.optionsAsString()}";
     newLine = newLine.trim();
-    var asString = _prepareLine(newLine, aTHArea);
+    var asString = _prepareLine(newLine, thArea);
     _increasePrefix();
-    asString += _childrenAsString(aTHArea);
+    asString += _childrenAsString(thArea);
 
     return asString;
   }
 
-  String _serializeLine(THElement aTHElement) {
-    final aTHLine = aTHElement as THLine;
-    var newLine = "line ${aTHLine.plaType}";
-    if (aTHLine.optionIsSet('subtype')) {
-      newLine += ":${aTHLine.optionByType('subtype')!.specToFile()}";
+  String _serializeLine(THElement thElement) {
+    final THLine thLine = thElement as THLine;
+    String newLine = "line ${thLine.plaType}";
+    if (thLine.optionIsSet(THCommandOptionType.subtype)) {
+      newLine +=
+          ":${thLine.optionByType(THCommandOptionType.subtype)!.specToFile()}";
     }
-    newLine += " ${aTHLine.optionsAsString()}";
+    newLine += " ${thLine.optionsAsString()}";
     newLine = newLine.trim();
-    var asString = _prepareLine(newLine, aTHLine);
+    var asString = _prepareLine(newLine, thLine);
     _increasePrefix();
-    asString += _childrenAsString(aTHLine);
+    asString += _childrenAsString(thLine);
 
     return asString;
   }
@@ -147,8 +150,9 @@ class THFileWriter {
   String _serializePoint(THElement thElement) {
     final THPoint thPoint = thElement as THPoint;
     String newLine = "point ${thPoint.position.toString()} ${thPoint.plaType}";
-    if (thPoint.optionIsSet('subtype')) {
-      newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
+    if (thPoint.optionIsSet(THCommandOptionType.subtype)) {
+      newLine +=
+          ":${thPoint.optionByType(THCommandOptionType.subtype)!.specToFile()}";
     }
     newLine += " ${thPoint.optionsAsString()}";
     newLine = newLine.trim();
@@ -290,13 +294,14 @@ class THFileWriter {
 
   String _linePointOptionsAsString(THLineSegment lineSegment) {
     final THHasOptions thHasOptions = lineSegment as THHasOptions;
-    final Iterable<String> optionTypeList = thHasOptions.optionsMap.keys;
+    final Iterable<THCommandOptionType> optionTypeList =
+        thHasOptions.optionsMap.keys;
     String asString = '';
 
     _increasePrefix();
 
-    for (String linePointOptionType in optionTypeList) {
-      String newLine = "$linePointOptionType ";
+    for (THCommandOptionType linePointOptionType in optionTypeList) {
+      String newLine = "${linePointOptionType.name} ";
       newLine +=
           thHasOptions.optionByType(linePointOptionType)!.specToFile().trim();
       asString += "$_prefix${newLine.trim()}\n";

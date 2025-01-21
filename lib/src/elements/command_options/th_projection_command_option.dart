@@ -45,7 +45,7 @@ class THProjectionCommandOption extends THCommandOption {
   THProjectionCommandOption.forCWJM({
     required super.parentMapiahID,
     required this.type,
-    this.index = '',
+    required this.index,
     this.elevationAngle,
     this.elevationUnit,
   }) : super.forCWJM();

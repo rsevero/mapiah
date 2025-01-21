@@ -332,7 +332,7 @@ class THFileParser {
     try {
       // Including subtype defined with type (type:subtype).
       if (element[2][1] != null) {
-        THSubtypeCommandOption(newPoint, element[2][1]);
+        THSubtypeCommandOption(optionParent: newPoint, subtype: element[2][1]);
         // _parsedOptions.add('subtype');
       }
     } catch (e, s) {
@@ -374,10 +374,10 @@ class THFileParser {
     _checkParsedListAsPoint(endPoint);
 
     final newBezierCurveLineSegment = THBezierCurveLineSegment.fromString(
-      _currentParentMapiahID,
-      controlPoint1,
-      controlPoint2,
-      endPoint,
+      parentMapiahID: _currentParentMapiahID,
+      controlPoint1: controlPoint1,
+      controlPoint2: controlPoint2,
+      endPoint: endPoint,
     );
     _thFileStore.addElementWithParent(
         newBezierCurveLineSegment, _currentParent);
@@ -401,8 +401,8 @@ class THFileParser {
     if (kDebugMode) assert(areaBorderID is String);
 
     final THAreaBorderTHID newElement = THAreaBorderTHID(
-      _currentParentMapiahID,
-      areaBorderID,
+      parentMapiahID: _currentParentMapiahID,
+      id: areaBorderID,
     );
     _thFileStore.addElementWithParent(newElement, _currentParent);
   }
@@ -426,7 +426,10 @@ class THFileParser {
     _checkParsedListAsPoint(endPoint);
 
     final THStraightLineSegment newStraightLineSegment =
-        THStraightLineSegment.fromString(_currentParentMapiahID, endPoint);
+        THStraightLineSegment.fromString(
+      parentMapiahID: _currentParentMapiahID,
+      pointDataList: endPoint,
+    );
     _thFileStore.addElementWithParent(newStraightLineSegment, _currentParent);
 
     // _currentElement = newStraightLineSegment;
@@ -445,8 +448,8 @@ class THFileParser {
     if (kDebugMode) assert(elementSize >= 2);
 
     final THScrap newScrap = THScrap(
-      _currentParentMapiahID,
-      element[1],
+      parentMapiahID: _currentParentMapiahID,
+      thID: element[1],
     );
     _thFileStore.addElementWithParent(newScrap, _currentParent);
 
@@ -459,7 +462,7 @@ class THFileParser {
   }
 
   void _injectEndscrap() {
-    _currentElement = THEndscrap(_currentParentMapiahID);
+    _currentElement = THEndscrap(parentMapiahID: _currentParentMapiahID);
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
@@ -522,7 +525,10 @@ class THFileParser {
       assert(element[1][0] is String);
     }
 
-    final THArea newArea = THArea(_currentParentMapiahID, element[1][0]);
+    final THArea newArea = THArea(
+      parentMapiahID: _currentParentMapiahID,
+      areaType: element[1][0],
+    );
     _thFileStore.addElementWithParent(newArea, _currentParent);
 
     _currentElement = newArea;
@@ -531,7 +537,7 @@ class THFileParser {
     try {
       // Including subtype defined with type (type:subtype).
       if ((element[1][1] != null) && (element[1][0] == 'u')) {
-        THSubtypeCommandOption(newArea, element[1][1]);
+        THSubtypeCommandOption(optionParent: newArea, subtype: element[1][1]);
       }
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_injectArea', element[1][1].toString());
@@ -552,7 +558,7 @@ class THFileParser {
     }
 
     final THLine newLine =
-        THLine.addToParent(_currentParentMapiahID, element[1][0]);
+        THLine(parentMapiahID: _currentParentMapiahID, lineType: element[1][0]);
     _thFileStore.addElementWithParent(newLine, _currentParent);
 
     _currentElement = newLine;
@@ -561,7 +567,7 @@ class THFileParser {
     try {
       // Including subtype defined with type (type:subtype).
       if (element[1][1] != null) {
-        THSubtypeCommandOption(newLine, element[1][1]);
+        THSubtypeCommandOption(optionParent: newLine, subtype: element[1][1]);
       }
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[1][1].toString());
@@ -573,14 +579,14 @@ class THFileParser {
   }
 
   void _injectEndarea() {
-    _currentElement = THEndarea(_currentParentMapiahID);
+    _currentElement = THEndarea(parentMapiahID: _currentParentMapiahID);
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
   void _injectEndline() {
-    _currentElement = THEndline(_currentParentMapiahID);
+    _currentElement = THEndline(parentMapiahID: _currentParentMapiahID);
     _thFileStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
@@ -614,8 +620,10 @@ class THFileParser {
 
     switch (element[0]) {
       case 'fulllinecomment':
-        final THElement newElement =
-            THComment(_currentParentMapiahID, element[1]);
+        final THElement newElement = THComment(
+          parentMapiahID: _currentParentMapiahID,
+          content: element[1],
+        );
         _thFileStore.addElementWithParent(newElement, _currentParent);
         break;
       case 'samelinecomment':
@@ -628,8 +636,10 @@ class THFileParser {
         }
         break;
       default:
-        final THElement newElement =
-            THUnrecognizedCommand(_currentParentMapiahID, element);
+        final THElement newElement = THUnrecognizedCommand(
+          parentMapiahID: _currentParentMapiahID,
+          value: element,
+        );
         _thFileStore.addElementWithParent(newElement, _currentParent);
     }
   }
@@ -878,13 +888,14 @@ class THFileParser {
 
     if (_currentSpec[0] == 'point') {
       _optionParentAsTHLineSegment();
-      THMultipleChoiceCommandOption(
-          _currentHasOptions, optionType, _currentSpec[0]);
     } else {
       _optionParentAsCurrentElement();
-      THMultipleChoiceCommandOption(
-          _currentHasOptions, optionType, _currentSpec[0]);
     }
+    THMultipleChoiceCommandOption(
+      optionParent: _currentHasOptions,
+      multipleChoiceType: optionType,
+      choice: _currentSpec[0],
+    );
   }
 
   void _injectMultipleChoiceCommandOption(String optionType) {
@@ -899,7 +910,10 @@ class THFileParser {
     }
 
     THMultipleChoiceCommandOption(
-        _currentHasOptions, optionType, _currentSpec[0]);
+      optionParent: _currentHasOptions,
+      multipleChoiceType: optionType,
+      choice: _currentSpec[0],
+    );
   }
 
   void _checkParsedListAsPoint(List<dynamic> list) {
@@ -920,7 +934,10 @@ class THFileParser {
           "One string parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THClipCommandOption.fromChoice(_currentHasOptions, _currentSpec[0]);
+    THClipCommandOption.fromChoice(
+      optionParent: _currentHasOptions,
+      choice: _currentSpec[0],
+    );
   }
 
   void _injectDistCommandOption() {
@@ -931,10 +948,16 @@ class THFileParser {
 
     switch (_currentSpec.length) {
       case 1:
-        THDistCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+        THDistCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          distance: _currentSpec[0],
+        );
       case 2:
         THDistCommandOption.fromString(
-            _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          distance: _currentSpec[0],
+          unit: _currentSpec[1],
+        );
       default:
         throw THCustomException(
             "Unsupported parameters for a 'point' 'dist' option: '${_currentSpec[0]}'.");
@@ -949,10 +972,16 @@ class THFileParser {
 
     switch (_currentSpec.length) {
       case 1:
-        THExploredCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+        THExploredCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          distance: _currentSpec[0],
+        );
       case 2:
         THExploredCommandOption.fromString(
-            _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          distance: _currentSpec[0],
+          unit: _currentSpec[1],
+        );
       default:
         throw THCustomException(
             "Unsupported parameters for a 'point' 'explored' option: '${_currentSpec[0]}'.");
@@ -965,7 +994,10 @@ class THFileParser {
           "One parameter required to create a 'height' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THLineHeightCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+    THLineHeightCommandOption.fromString(
+      optionParent: _currentHasOptions,
+      height: _currentSpec[0],
+    );
   }
 
   void _injectContextCommandOption() {
@@ -975,7 +1007,10 @@ class THFileParser {
     }
 
     THContextCommandOption(
-        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+      optionParent: _currentHasOptions,
+      elementType: _currentSpec[0],
+      symbolType: _currentSpec[1],
+    );
   }
 
   void _injectFromCommandOption() {
@@ -984,7 +1019,10 @@ class THFileParser {
           "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THFromCommandOption(_currentHasOptions, _currentSpec[0]);
+    THFromCommandOption(
+      optionParent: _currentHasOptions,
+      station: _currentSpec[0],
+    );
   }
 
   void _injectExtendCommandOption() {
@@ -994,9 +1032,12 @@ class THFileParser {
     }
 
     if (_currentSpec[0] == null) {
-      THExtendCommandOption(_currentHasOptions, '');
+      THExtendCommandOption(optionParent: _currentHasOptions, station: '');
     } else {
-      THExtendCommandOption(_currentHasOptions, _currentSpec[0]);
+      THExtendCommandOption(
+        optionParent: _currentHasOptions,
+        station: _currentSpec[0],
+      );
     }
   }
 
@@ -1006,7 +1047,7 @@ class THFileParser {
           "One parameter required to create a 'id' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THIDCommandOption(_currentHasOptions, _currentSpec[0]);
+    THIDCommandOption(optionParent: _currentHasOptions, thID: _currentSpec[0]);
     _thFileStore.registerElementWithTHID(_currentHasOptions, _currentSpec[0]);
   }
 
@@ -1016,7 +1057,10 @@ class THFileParser {
           "One parameter required to create a 'name' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THNameCommandOption(_currentHasOptions, _currentSpec[0]);
+    THNameCommandOption(
+      optionParent: _currentHasOptions,
+      reference: _currentSpec[0],
+    );
   }
 
   void _injectSketchCommandOption() {
@@ -1034,7 +1078,10 @@ class THFileParser {
     final filename = _parseTHString(_currentSpec[0]);
 
     THSketchCommandOption.fromString(
-        _currentHasOptions, filename, _currentSpec[1]);
+      optionParent: _currentHasOptions,
+      filename: filename,
+      pointList: _currentSpec[1],
+    );
   }
 
   void _injectStationNamesCommandOption() {
@@ -1044,7 +1091,10 @@ class THFileParser {
     }
 
     THStationNamesCommandOption(
-        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+      optionParent: _currentHasOptions,
+      prefix: _currentSpec[0],
+      suffix: _currentSpec[1],
+    );
   }
 
   void _injectStationsCommandOption() {
@@ -1059,7 +1109,10 @@ class THFileParser {
       throw THCreateObjectFromListWithWrongLengthException('> 0', stations);
     }
 
-    THStationsCommandOption(_currentHasOptions, stations);
+    THStationsCommandOption(
+      optionParent: _currentHasOptions,
+      stations: stations,
+    );
   }
 
   void _injectLSizeCommandOption() {
@@ -1069,7 +1122,10 @@ class THFileParser {
     }
 
     _optionParentAsTHLineSegment();
-    THLSizeCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+    THLSizeCommandOption.fromString(
+      optionParent: _currentHasOptions,
+      number: _currentSpec[0],
+    );
   }
 
   void _injectMarkCommandOption() {
@@ -1079,7 +1135,10 @@ class THFileParser {
     }
 
     _optionParentAsTHLineSegment();
-    THMarkCommandOption(_currentHasOptions, _currentSpec[0]);
+    THMarkCommandOption(
+      optionParent: _currentHasOptions,
+      mark: _currentSpec[0],
+    );
   }
 
   void _injectAuthorCommandOption() {
@@ -1089,7 +1148,10 @@ class THFileParser {
     }
 
     THAuthorCommandOption.fromString(
-        _currentHasOptions, _currentSpec[0], _currentSpec[1]);
+      optionParent: _currentHasOptions,
+      datetime: _currentSpec[0],
+      person: _currentSpec[1],
+    );
   }
 
   void _injectSubtypeCommandOption() {
@@ -1098,7 +1160,10 @@ class THFileParser {
           '== 1', _currentSpec);
     }
 
-    THSubtypeCommandOption(_currentHasOptions, _currentSpec[0]);
+    THSubtypeCommandOption(
+      optionParent: _currentHasOptions,
+      subtype: _currentSpec[0],
+    );
   }
 
   void _injectPointScaleCommandOption() {
@@ -1110,10 +1175,14 @@ class THFileParser {
     switch (_currentSpec[0]) {
       case 'numeric':
         THPointScaleCommandOption.sizeAsNumberFromString(
-            _currentHasOptions, _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          numericScaleSize: _currentSpec[1],
+        );
       case 'multiplechoice':
         THPointScaleCommandOption.sizeAsMultipleChoice(
-            _currentHasOptions, _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          textScaleSize: _currentSpec[1],
+        );
       default:
         throw THCustomException(
             "Unknown point scale mode '${_currentSpec[0]}'");
@@ -1129,13 +1198,19 @@ class THFileParser {
     switch (_currentSpec[0]) {
       case 'numeric':
         THLineScaleCommandOption.sizeAsNumberFromString(
-            _currentHasOptions, _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          numericScaleSize: _currentSpec[1],
+        );
       case 'multiplechoice':
         THLineScaleCommandOption.sizeAsMultipleChoice(
-            _currentHasOptions, _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          textScaleSize: _currentSpec[1],
+        );
       case 'text':
         THLineScaleCommandOption.sizeAsText(
-            _currentHasOptions, _currentSpec[1]);
+          optionParent: _currentHasOptions,
+          textScale: _currentSpec[1],
+        );
       default:
         throw THCustomException(
             "Unknown point scale mode '${_currentSpec[0]}'");
@@ -1148,7 +1223,10 @@ class THFileParser {
           "One parameter required to create a 'scrap' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THScrapCommandOption(_currentHasOptions, _currentSpec[0]);
+    THScrapCommandOption(
+      optionParent: _currentHasOptions,
+      reference: _currentSpec[0],
+    );
   }
 
   void _injectOrientationCommandOption() {
@@ -1157,7 +1235,10 @@ class THFileParser {
           '== 1', _currentSpec);
     }
 
-    THOrientationCommandOption.fromString(_currentHasOptions, _currentSpec[0]);
+    THOrientationCommandOption.fromString(
+      optionParent: _currentHasOptions,
+      azimuth: _currentSpec[0],
+    );
   }
 
   void _injectCopyrightCommandOption() {
@@ -1166,10 +1247,13 @@ class THFileParser {
           '== 2', _currentSpec);
     }
 
-    final message = _parseTHString(_currentSpec[1]);
+    final String message = _parseTHString(_currentSpec[1]);
 
     THCopyrightCommandOption.fromString(
-        _currentHasOptions, _currentSpec[0], message);
+      optionParent: _currentHasOptions,
+      datetime: _currentSpec[0],
+      copyrightMessage: message,
+    );
   }
 
   void _injectCSCommandOption() {
@@ -1177,7 +1261,11 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THCSCommandOption');
     }
 
-    THCSCommandOption.fromString(_currentHasOptions, _currentSpec[0], false);
+    THCSCommandOption.fromString(
+      optionParent: _currentHasOptions,
+      csString: _currentSpec[0],
+      forOutputOnly: false,
+    );
   }
 
   void _injectTitleCommandOption() {
@@ -1186,9 +1274,12 @@ class THFileParser {
           '== 1', _currentSpec);
     }
 
-    final stringContent = _parseTHString(_currentSpec[0]);
+    final String stringContent = _parseTHString(_currentSpec[0]);
 
-    THTitleCommandOption(_currentHasOptions, stringContent);
+    THTitleCommandOption(
+      optionParent: _currentHasOptions,
+      title: stringContent,
+    );
   }
 
   void _injectTextCommandOption() {
@@ -1197,9 +1288,9 @@ class THFileParser {
           '== 1', _currentSpec);
     }
 
-    final stringContent = _parseTHString(_currentSpec[0]);
+    final String stringContent = _parseTHString(_currentSpec[0]);
 
-    THTextCommandOption(_currentHasOptions, stringContent);
+    THTextCommandOption(optionParent: _currentHasOptions, text: stringContent);
   }
 
   void _injectValueCommandOption() {
@@ -1242,10 +1333,14 @@ class THFileParser {
             ? specs[2].toString()
             : '';
         THAltitudeCommandOption.fromString(
-            _currentHasOptions, specs[1], true, unit);
+          optionParent: _currentHasOptions,
+          height: specs[1],
+          isFix: true,
+          unit: unit,
+        );
       case 'hyphen':
       case 'nan':
-        THAltitudeCommandOption.fromNan(_currentHasOptions);
+        THAltitudeCommandOption.fromNan(optionParent: _currentHasOptions);
       case 'number_with_something_else':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
@@ -1256,9 +1351,17 @@ class THFileParser {
             ? specs[1].toString()
             : '';
         THAltitudeCommandOption.fromString(
-            _currentHasOptions, specs[0], false, unit);
+          optionParent: _currentHasOptions,
+          height: specs[0],
+          isFix: false,
+          unit: unit,
+        );
       case 'single_number':
-        THAltitudeCommandOption.fromString(_currentHasOptions, specs, false);
+        THAltitudeCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          height: specs,
+          isFix: false,
+        );
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectAltitudeCommandOption'.");
@@ -1281,10 +1384,14 @@ class THFileParser {
             ? specs[2].toString()
             : '';
         THAltitudeValueCommandOption.fromString(
-            _currentHasOptions, specs[1], true, unit);
+          optionParent: _currentHasOptions,
+          height: specs[1],
+          isFix: true,
+          unit: unit,
+        );
       case 'hyphen':
       case 'nan':
-        THAltitudeValueCommandOption.fromNan(_currentHasOptions);
+        THAltitudeValueCommandOption.fromNan(optionParent: _currentHasOptions);
       case 'number_with_something_else':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
@@ -1296,10 +1403,16 @@ class THFileParser {
             ? specs[1].toString()
             : '';
         THAltitudeValueCommandOption.fromString(
-            _currentHasOptions, specs[0], false, unit);
+            optionParent: _currentHasOptions,
+            height: specs[0],
+            isFix: false,
+            unit: unit);
       case 'single_number':
         THAltitudeValueCommandOption.fromString(
-            _currentHasOptions, specs, false);
+          optionParent: _currentHasOptions,
+          height: specs,
+          isFix: false,
+        );
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectAltitudeValueCommandOption'.");
@@ -1316,7 +1429,10 @@ class THFileParser {
         if (specs is! String) {
           throw THCustomException("Need a string value.");
         }
-        THDateValueCommandOption.fromString(_currentHasOptions, specs);
+        THDateValueCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          date: specs,
+        );
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectDateValueCommandOption'.");
@@ -1342,7 +1458,11 @@ class THFileParser {
             ? specs[2].toString()
             : '';
         THDimensionsValueCommandOption.fromString(
-            _currentHasOptions, specs[0], specs[1], unit);
+          optionParent: _currentHasOptions,
+          above: specs[0],
+          below: specs[1],
+          unit: unit,
+        );
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectDimensionsValueCommandOption'.");
@@ -1371,10 +1491,17 @@ class THFileParser {
             ? specs[1].toString()
             : '';
         THPointHeightValueCommandOption.fromString(
-            _currentHasOptions, value, isPresumed, unit);
+          optionParent: _currentHasOptions,
+          height: value,
+          isPresumed: isPresumed,
+          unit: unit,
+        );
       case 'single_number':
         THPointHeightValueCommandOption.fromString(
-            _currentHasOptions, specs, false);
+          optionParent: _currentHasOptions,
+          height: specs,
+          isPresumed: false,
+        );
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectHeightValueCommandOption'.");
@@ -1388,10 +1515,16 @@ class THFileParser {
     switch (parseType) {
       case 'single_number':
         THPassageHeightValueCommandOption.fromString(
-            _currentHasOptions, specs, '');
+          optionParent: _currentHasOptions,
+          plusNumber: specs,
+          minusNumber: '',
+        );
       case 'plus_number_minus_number':
         THPassageHeightValueCommandOption.fromString(
-            _currentHasOptions, specs[0], specs[1]);
+          optionParent: _currentHasOptions,
+          plusNumber: specs[0],
+          minusNumber: specs[1],
+        );
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectPassageHeightValueCommandOption'.");
@@ -1426,27 +1559,31 @@ class THFileParser {
     THLengthUnitPart? unit;
     bool unitFound = false;
 
-    for (final aValue in _currentSpec) {
+    for (final value in _currentSpec) {
       if (unitFound) {
         throw THCustomWithListParameterException(
             "Unknown element after unit found when creating a THScaleCommandOption object.",
             _currentSpec);
       }
-      final newDouble = double.tryParse(aValue);
+      final newDouble = double.tryParse(value);
 
       if (newDouble == null) {
         if (values.isEmpty) {
           throw THCustomException(
               "Can´t create THScaleCommandOption object without any value.");
         }
-        unit = THLengthUnitPart.fromString(aValue);
+        unit = THLengthUnitPart.fromString(unitString: value);
         unitFound = true;
       } else {
-        values.add(THDoublePart.fromString(aValue));
+        values.add(THDoublePart.fromString(valueString: value));
       }
     }
 
-    THScrapScaleCommandOption(_currentHasOptions, values, unit);
+    THScrapScaleCommandOption(
+      optionParent: _currentHasOptions,
+      numericSpecifications: values,
+      unit: unit,
+    );
   }
 
   void _injectProjectionCommandOption() {
@@ -1458,30 +1595,33 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THProjectionCommandOption');
     }
 
-    final newProjectionOption = THProjectionCommandOption.fromString(
-        _currentHasOptions, _currentSpec[0]);
+    final bool currentLengthOnePlus = _currentSpec.length > 1;
+    final bool projectionTypeElevation = _currentSpec[0] == 'elevation';
 
-    if (_currentSpec.length == 1) {
-      return;
-    }
-
-    if (_currentSpec[1] != null) {
-      newProjectionOption.index = _currentSpec[1];
-    }
-    if (newProjectionOption.type == THProjectionTypes.elevation) {
-      if (_currentSpec[2] != null) {
-        newProjectionOption.elevationAngleFromString(_currentSpec[2]);
-      }
-
-      if (_currentSpec[3] != null) {
-        newProjectionOption.elevationUnitFromString(_currentSpec[3]);
-      }
-    }
+    THProjectionCommandOption.fromString(
+      optionParent: _currentHasOptions,
+      type: _currentSpec[0],
+      index: (currentLengthOnePlus && (_currentSpec[1] != null))
+          ? _currentSpec[1]
+          : '',
+      elevationAngle: (currentLengthOnePlus &&
+              projectionTypeElevation &&
+              (_currentSpec[2] != null))
+          ? _currentSpec[2]
+          : null,
+      elevationUnit: (currentLengthOnePlus &&
+              projectionTypeElevation &&
+              (_currentSpec[3] != null))
+          ? _currentSpec[3]
+          : null,
+    );
   }
 
   void _injectUnknown(List<dynamic> element) {
-    final THElement newElement =
-        THUnrecognizedCommand(_currentParentMapiahID, element);
+    final THElement newElement = THUnrecognizedCommand(
+      parentMapiahID: _currentParentMapiahID,
+      value: element,
+    );
     _thFileStore.addElementWithParent(newElement, _currentParent);
   }
 

@@ -41,7 +41,7 @@ class THAltitudeCommandOption extends THCommandOption
     required super.optionParent,
     required String height,
     required bool isFix,
-    required String? unit,
+    String? unit,
   }) : super() {
     length = THDoublePart.fromString(valueString: height);
     this.isFix = isFix;

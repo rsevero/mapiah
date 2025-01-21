@@ -21,7 +21,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   THDistCommandOption.fromString({
     required super.optionParent,
     required String distance,
-    required String? unit,
+    String? unit,
   }) : super() {
     length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {

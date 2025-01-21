@@ -51,7 +51,7 @@ abstract class THElement implements THSerializable {
   // value is never saved anywhere.
   final int _mapiahID;
   final int parentMapiahID;
-  final String? sameLineComment;
+  String? sameLineComment;
 
   THElement.forCWJM({
     required int mapiahID,
