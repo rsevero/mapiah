@@ -1,24 +1,64 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
 
 import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
-part 'th_double_part.mapper.dart';
+class THDoublePart extends THPart {
+  late final double _value;
+  late final int _decimalPositions;
 
-@MappableClass()
-class THDoublePart with THDoublePartMappable {
-  late double _value;
-  late int _decimalPositions;
-
-  THDoublePart(double value, int decimalPositions) {
+  THDoublePart({required double value, required int decimalPositions}) {
     _value = value;
     this.decimalPositions = decimalPositions;
   }
 
-  THDoublePart.fromString(String valueString) {
+  THDoublePart.fromString({required String valueString}) {
     fromString(valueString);
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'value': _value,
+      'decimalPositions': _decimalPositions,
+    };
+  }
+
+  factory THDoublePart.fromMap(Map<String, dynamic> map) {
+    return THDoublePart(
+      value: map['value'],
+      decimalPositions: map['decimalPositions'],
+    );
+  }
+
+  factory THDoublePart.fromJson(String jsonString) {
+    return THDoublePart.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THDoublePart copyWith({
+    double? value,
+    int? decimalPositions,
+  }) {
+    return THDoublePart(
+      value: value ?? _value,
+      decimalPositions: decimalPositions ?? _decimalPositions,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THDoublePart other) {
+    if (identical(this, other)) return true;
+
+    return other._value == _value &&
+        other._decimalPositions == _decimalPositions;
+  }
+
+  @override
+  int get hashCode => Object.hash(_value, _decimalPositions);
 
   set decimalPositions(int decimalPositions) {
     if (decimalPositions < 0) {

@@ -1,14 +1,11 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/elements/parts/th_part.dart';
 
-part 'th_multiple_choice_part.mapper.dart';
-
-@MappableClass()
-class THMultipleChoicePart with THMultipleChoicePartMappable {
-  late String _choice;
-  late String _multipleChoiceName;
+class THMultipleChoicePart extends THPart {
+  late final String choice;
+  late final String multipleChoiceName;
 
   static final _choices = {
     'point|scale': {
@@ -25,53 +22,85 @@ class THMultipleChoicePart with THMultipleChoicePartMappable {
     },
   };
 
-  THMultipleChoicePart(String multipleChoiceName, String choice) {
-    if (!_choices.containsKey(multipleChoiceName)) {
-      throw THCustomException(
-          "Unknown multiple choice part '$multipleChoiceName'.");
-    }
+  THMultipleChoicePart({
+    required this.multipleChoiceName,
+    required this.choice,
+  });
 
-    _multipleChoiceName = multipleChoiceName;
-    this.choice = choice;
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'multipleChoiceName': multipleChoiceName,
+      'choice': choice,
+    };
   }
 
-  String _mainChoice(String aChoice) {
-    final alternateChoicesMap =
-        _choices[_multipleChoiceName]!['alternateChoices']
-            as Map<String, String>;
-
-    if (alternateChoicesMap.containsKey(aChoice)) {
-      aChoice = alternateChoicesMap[aChoice]!;
-    }
-
-    return aChoice;
+  factory THMultipleChoicePart.fromMap(Map<String, dynamic> map) {
+    return THMultipleChoicePart(
+      multipleChoiceName: map['multipleChoiceName'],
+      choice: map['choice'],
+    );
   }
 
-  bool hasChoice(String aChoice) {
-    aChoice = _mainChoice(aChoice);
-    return (_choices[_multipleChoiceName]!['choices'] as LinkedHashSet)
-        .contains(aChoice);
-  }
-
-  String get choice {
-    return _choice;
-  }
-
-  set choice(String aChoice) {
-    if (!hasChoice(aChoice)) {
-      throw THCustomException(
-          "Unknwon choice '$aChoice' for '$_multipleChoiceName'.");
-    }
-
-    _choice = _mainChoice(aChoice);
+  factory THMultipleChoicePart.fromJson(String jsonString) {
+    return THMultipleChoicePart.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  String toString() {
-    return _choice;
+  THMultipleChoicePart copyWith({
+    String? multipleChoiceName,
+    String? choice,
+  }) {
+    return THMultipleChoicePart(
+      multipleChoiceName: multipleChoiceName ?? this.multipleChoiceName,
+      choice: choice ?? this.choice,
+    );
   }
 
-  String get multipleChoiceName {
-    return _multipleChoiceName;
+  @override
+  bool operator ==(covariant THMultipleChoicePart other) {
+    if (identical(this, other)) return true;
+
+    return other.multipleChoiceName == multipleChoiceName &&
+        other.choice == choice;
+  }
+
+  @override
+  int get hashCode => Object.hash(multipleChoiceName, choice);
+
+  String _mainChoice(String choice) {
+    final alternateChoicesMap =
+        _choices[multipleChoiceName]!['alternateChoices']
+            as Map<String, String>;
+
+    if (alternateChoicesMap.containsKey(choice)) {
+      choice = alternateChoicesMap[choice]!;
+    }
+
+    return choice;
+  }
+
+  bool hasChoice(String choice) {
+    choice = _mainChoice(choice);
+    return (_choices[multipleChoiceName]!['choices'] as LinkedHashSet)
+        .contains(choice);
+  }
+
+  // String get choice {
+  //   return _choice;
+  // }
+
+  // set choice(String aChoice) {
+  //   if (!hasChoice(aChoice)) {
+  //     throw THCustomException(
+  //         "Unknwon choice '$aChoice' for '$_multipleChoiceName'.");
+  //   }
+
+  //   _choice = _mainChoice(aChoice);
+  // }
+
+  @override
+  String toString() {
+    return choice;
   }
 }

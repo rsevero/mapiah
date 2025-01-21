@@ -1,9 +1,8 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
+import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
-part 'th_length_unit_part.mapper.dart';
-
-@MappableEnum()
 enum THLengthUnit {
   centimeter,
   feet,
@@ -12,9 +11,8 @@ enum THLengthUnit {
   yard,
 }
 
-@MappableClass()
-class THLengthUnitPart with THLengthUnitPartMappable {
-  late THLengthUnit unit;
+class THLengthUnitPart extends THPart {
+  late final THLengthUnit unit;
 
   static const stringToUnit = {
     'centimeter': THLengthUnit.centimeter,
@@ -42,18 +40,54 @@ class THLengthUnitPart with THLengthUnitPartMappable {
     THLengthUnit.yard: 'yard',
   };
 
-  THLengthUnitPart(this.unit);
+  THLengthUnitPart({required this.unit});
 
-  THLengthUnitPart.fromString(String aUnitString) {
-    fromString(aUnitString);
+  THLengthUnitPart.fromString({required String unitString}) {
+    fromString(unitString);
   }
 
-  void fromString(String aUnitString) {
-    if (!isUnit(aUnitString)) {
-      throw THConvertFromStringException('THLengthUnitPart', aUnitString);
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'unit': unitToString[unit],
+    };
+  }
+
+  factory THLengthUnitPart.fromMap(Map<String, dynamic> map) {
+    return THLengthUnitPart(
+      unit: stringToUnit[map['unit']]!,
+    );
+  }
+
+  factory THLengthUnitPart.fromJson(String jsonString) {
+    return THLengthUnitPart.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THLengthUnitPart copyWith({
+    THLengthUnit? unit,
+  }) {
+    return THLengthUnitPart(
+      unit: unit ?? this.unit,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THLengthUnitPart other) {
+    if (identical(this, other)) return true;
+
+    return other.unit == unit;
+  }
+
+  @override
+  int get hashCode => unit.hashCode;
+
+  void fromString(String unitString) {
+    if (!isUnit(unitString)) {
+      throw THConvertFromStringException('THLengthUnitPart', unitString);
     }
 
-    unit = stringToUnit[aUnitString]!;
+    unit = stringToUnit[unitString]!;
   }
 
   @override
@@ -61,7 +95,7 @@ class THLengthUnitPart with THLengthUnitPartMappable {
     return unitToString[unit]!;
   }
 
-  static bool isUnit(String aUnitString) {
-    return stringToUnit.containsKey(aUnitString);
+  static bool isUnit(String unitString) {
+    return stringToUnit.containsKey(unitString);
   }
 }

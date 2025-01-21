@@ -1,42 +1,81 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
+import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-part 'th_person_part.mapper.dart';
+class THPersonPart extends THPart {
+  late final String firstname;
+  late final String surname;
 
-@MappableClass()
-class THPersonPart with THPersonPartMappable {
-  late String firstname;
-  late String surname;
+  THPersonPart({required this.firstname, required this.surname});
 
-  THPersonPart(this.firstname, this.surname);
-
-  THPersonPart.fromString(String aName) {
-    if (aName.contains('/')) {
-      final List<String> names = aName.split('/');
+  THPersonPart.fromString({required String name}) {
+    if (name.contains('/')) {
+      final List<String> names = name.split('/');
       if (names.length != 2) {
         throw THCustomException(
-            "Only one slash ('/') allowed in person name at THPersonPart: '$aName'");
+            "Only one slash ('/') allowed in person name at THPersonPart: '$name'");
       }
       firstname = names[0].trim();
       surname = names[1].trim();
-    } else if (aName.contains(' ')) {
-      final last = aName.lastIndexOf(' ');
-      firstname = aName.substring(0, last).trim();
-      surname = aName.substring(last + 1).trim();
+    } else if (name.contains(' ')) {
+      final last = name.lastIndexOf(' ');
+      firstname = name.substring(0, last).trim();
+      surname = name.substring(last + 1).trim();
     } else {
       throw THCustomException(
-          "Only one space (' ') required in person name at THPersonPart: '$aName'");
+          "Only one space (' ') required in person name at THPersonPart: '$name'");
     }
 
     if (firstname.isEmpty) {
       throw THCustomException(
-          "firstname can´t be empty at THPersonPart: '$aName'");
+          "firstname can´t be empty at THPersonPart: '$name'");
     }
     if (surname.isEmpty) {
       throw THCustomException(
-          "surname can´t be empty at THPersonPart: '$aName'");
+          "surname can´t be empty at THPersonPart: '$name'");
     }
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'firstname': firstname,
+      'surname': surname,
+    };
+  }
+
+  factory THPersonPart.fromMap(Map<String, dynamic> map) {
+    return THPersonPart(
+      firstname: map['firstname'],
+      surname: map['surname'],
+    );
+  }
+
+  factory THPersonPart.fromJson(String jsonString) {
+    return THPersonPart.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THPersonPart copyWith({
+    String? firstname,
+    String? surname,
+  }) {
+    return THPersonPart(
+      firstname: firstname ?? this.firstname,
+      surname: surname ?? this.surname,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THPersonPart other) {
+    if (identical(this, other)) return true;
+
+    return other.firstname == firstname && other.surname == surname;
+  }
+
+  @override
+  int get hashCode => Object.hash(firstname, surname);
 
   @override
   String toString() {

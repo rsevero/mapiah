@@ -1,10 +1,9 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dogs_core/dogs_core.dart';
-import 'package:mapiah/src/auxiliary/th_serializeable.dart';
+import 'package:mapiah/src/elements/parts/th_part.dart';
 
-@serializable
-class THCSPart with Dataclass<THCSPart> implements THSerializable {
+class THCSPart extends THPart {
   late final String name;
   late final bool forOutputOnly;
 
@@ -47,33 +46,43 @@ class THCSPart with Dataclass<THCSPart> implements THSerializable {
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THCSPart>(this);
+    return {
+      'name': name,
+      'forOutputOnly': forOutputOnly,
+    };
   }
 
   factory THCSPart.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THCSPart>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THCSPart>(this);
+    return THCSPart(
+      name: map['name'],
+      forOutputOnly: map['forOutputOnly'],
+    );
   }
 
   factory THCSPart.fromJson(String jsonString) {
-    return dogs.fromJson<THCSPart>(jsonString);
+    return THCSPart.fromMap(jsonDecode(jsonString));
   }
 
   @override
   THCSPart copyWith({
     String? name,
     bool? forOutputOnly,
-    bool makeNameNull = false,
   }) {
     return THCSPart(
       name: name ?? this.name,
       forOutputOnly: forOutputOnly ?? this.forOutputOnly,
     );
   }
+
+  @override
+  bool operator ==(covariant THCSPart other) {
+    if (identical(this, other)) return true;
+
+    return other.name == name && other.forOutputOnly == forOutputOnly;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, forOutputOnly);
 
   @override
   String toString() {

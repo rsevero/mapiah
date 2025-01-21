@@ -1,12 +1,13 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
-import 'package:mapiah/src/auxiliary/th_serializeable.dart';
+import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
-@serializable
-class THPositionPart with Dataclass<THPositionPart> implements THSerializable {
+class THPositionPart extends THPart {
   late final Offset coordinates;
   late final int decimalPositions;
 
@@ -32,20 +33,24 @@ class THPositionPart with Dataclass<THPositionPart> implements THSerializable {
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THPositionPart>(this);
+    return {
+      'coordinates': {
+        'dx': coordinates.dx,
+        'dy': coordinates.dy,
+      },
+      'decimalPositions': decimalPositions,
+    };
   }
 
   factory THPositionPart.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THPositionPart>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THPositionPart>(this);
+    return THPositionPart(
+      coordinates: Offset(map['coordinates']['dx'], map['coordinates']['dy']),
+      decimalPositions: map['decimalPositions'],
+    );
   }
 
   factory THPositionPart.fromJson(String jsonString) {
-    return dogs.fromJson<THPositionPart>(jsonString);
+    return THPositionPart.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -59,9 +64,22 @@ class THPositionPart with Dataclass<THPositionPart> implements THSerializable {
     );
   }
 
+  @override
+  bool operator ==(covariant THPositionPart other) {
+    if (identical(this, other)) return true;
+
+    return other.coordinates == coordinates &&
+        other.decimalPositions == decimalPositions;
+  }
+
+  @override
+  int get hashCode => Object.hash(coordinates, decimalPositions);
+
   void _fromStrings(String xAsString, String yAsString) {
-    final THDoublePart xDoublePart = THDoublePart.fromString(xAsString);
-    final THDoublePart yDoublePart = THDoublePart.fromString(yAsString);
+    final THDoublePart xDoublePart =
+        THDoublePart.fromString(valueString: xAsString);
+    final THDoublePart yDoublePart =
+        THDoublePart.fromString(valueString: yAsString);
 
     coordinates = Offset(xDoublePart.value, yDoublePart.value);
     decimalPositions =

@@ -9,17 +9,14 @@ import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_settings_store.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 
-import 'package:mapiah/dogs.g.dart';
-
 final GetIt getIt = GetIt.instance;
 
-Future main() async {
-  await _setup();
+void main() {
+  _setup();
   runApp(MapiahApp());
 }
 
-Future<void> _setup() async {
-  await initialiseDogs();
+void _setup() {
   getIt.registerSingleton<THSettingsStore>(THSettingsStore());
   getIt.registerSingleton<GeneralStore>(GeneralStore());
   getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());

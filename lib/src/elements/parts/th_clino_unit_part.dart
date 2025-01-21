@@ -1,8 +1,7 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
 
-part 'th_clino_unit_part.mapper.dart';
+import 'package:mapiah/src/elements/parts/th_part.dart';
 
-@MappableEnum()
 enum THClinoUnit {
   degree,
   grad,
@@ -11,9 +10,8 @@ enum THClinoUnit {
   percent,
 }
 
-@MappableClass()
-class THClinoUnitPart with THClinoUnitPartMappable {
-  late THClinoUnit unit;
+class THClinoUnitPart extends THPart {
+  late final THClinoUnit unit;
 
   static const stringToUnit = {
     'deg': THClinoUnit.degree,
@@ -38,22 +36,58 @@ class THClinoUnitPart with THClinoUnitPartMappable {
     THClinoUnit.percent: 'percent',
   };
 
-  THClinoUnitPart(this.unit);
+  THClinoUnitPart({required this.unit}) : super();
 
-  THClinoUnitPart.fromString(String aUnitString) {
-    if (!isUnit(aUnitString)) {
+  THClinoUnitPart.fromString(String unitString) : super() {
+    if (!isUnit(unitString)) {
       throw 'Unknown clino unit.';
     }
 
-    fromString(aUnitString);
+    fromString(unitString);
   }
 
-  bool fromString(String aUnitString) {
-    if (!isUnit(aUnitString)) {
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'unit': unitToString[unit],
+    };
+  }
+
+  factory THClinoUnitPart.fromMap(Map<String, dynamic> map) {
+    return THClinoUnitPart(
+      unit: stringToUnit[map['unit']]!,
+    );
+  }
+
+  factory THClinoUnitPart.fromJson(String jsonString) {
+    return THClinoUnitPart.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THClinoUnitPart copyWith({
+    THClinoUnit? unit,
+  }) {
+    return THClinoUnitPart(
+      unit: unit ?? this.unit,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THClinoUnitPart other) {
+    if (identical(this, other)) return true;
+
+    return other.unit == unit;
+  }
+
+  @override
+  int get hashCode => unit.hashCode;
+
+  bool fromString(String unitString) {
+    if (!isUnit(unitString)) {
       return false;
     }
 
-    unit = stringToUnit[aUnitString]!;
+    unit = stringToUnit[unitString]!;
 
     return true;
   }
@@ -63,7 +97,7 @@ class THClinoUnitPart with THClinoUnitPartMappable {
     return unitToString[unit]!;
   }
 
-  static bool isUnit(String aUnitString) {
-    return stringToUnit.containsKey(aUnitString);
+  static bool isUnit(String unitString) {
+    return stringToUnit.containsKey(unitString);
   }
 }
