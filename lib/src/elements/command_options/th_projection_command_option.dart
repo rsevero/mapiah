@@ -1,13 +1,9 @@
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
-part 'th_projection_command_option.mapper.dart';
-
-@MappableEnum()
 enum THProjectionTypes {
   elevation,
   extended,
@@ -25,9 +21,7 @@ enum THProjectionTypes {
 // 3. elevation . orthogonal projection (a.k.a. projected profile) which optionally takes
 // a view direction as an argument (e.g. [elevation 10] or [elevation 10 deg]).
 // 4. extended . extended elevation (a.k.a. extended profile).
-@MappableClass()
-class THProjectionCommandOption extends THCommandOption
-    with THProjectionCommandOptionMappable {
+class THProjectionCommandOption extends THCommandOption {
   static const String _thisOptionType = 'projection';
   late THProjectionTypes type;
   String index;
