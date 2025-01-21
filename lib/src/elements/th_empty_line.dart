@@ -1,16 +1,19 @@
 import "dart:convert";
 
+import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THEmptyLine extends THElement {
-  THEmptyLine({
+  THEmptyLine.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
-  }) : super();
+  }) : super.forCWJM();
 
-  THEmptyLine.addToParent({required super.parentMapiahID})
-      : super.addToParent();
+  THEmptyLine({required super.parentMapiahID}) : super.addToParent();
+
+  @override
+  String get elementType => thEmptyLineID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -22,7 +25,7 @@ class THEmptyLine extends THElement {
   }
 
   factory THEmptyLine.fromMap(Map<String, dynamic> map) {
-    return THEmptyLine(
+    return THEmptyLine.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -40,7 +43,7 @@ class THEmptyLine extends THElement {
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
   }) {
-    return THEmptyLine(
+    return THEmptyLine.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

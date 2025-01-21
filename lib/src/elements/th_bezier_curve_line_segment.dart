@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -13,7 +14,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
   late final THPositionPart controlPoint2;
 
   // Used by dart_mappable.
-  THBezierCurveLineSegment({
+  THBezierCurveLineSegment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
@@ -21,9 +22,9 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
     required this.controlPoint2,
     required super.endPoint,
     required super.optionsMap,
-  }) : super();
+  }) : super.forCWJM();
 
-  THBezierCurveLineSegment.addToParent({
+  THBezierCurveLineSegment({
     required super.parentMapiahID,
     super.sameLineComment,
     required this.controlPoint1,
@@ -44,6 +45,9 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
   }
 
   @override
+  String get elementType => thBezierCurveLieSegmentID;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'mapiahID': mapiahID,
@@ -58,7 +62,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
   }
 
   factory THBezierCurveLineSegment.fromMap(Map<String, dynamic> map) {
-    return THBezierCurveLineSegment(
+    return THBezierCurveLineSegment.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -87,7 +91,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
     LinkedHashMap<String, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
-    return THBezierCurveLineSegment(
+    return THBezierCurveLineSegment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

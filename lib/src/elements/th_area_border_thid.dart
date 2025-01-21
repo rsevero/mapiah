@@ -1,18 +1,19 @@
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THAreaBorderTHID extends THElement {
   late final String id;
 
-  THAreaBorderTHID({
+  THAreaBorderTHID.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     required super.sameLineComment,
     required this.id,
-  }) : super();
+  }) : super.forCWJM();
 
-  THAreaBorderTHID.addToParent({
+  THAreaBorderTHID({
     required super.parentMapiahID,
     required this.id,
   }) : super.addToParent();
@@ -22,6 +23,9 @@ class THAreaBorderTHID extends THElement {
   //         'THAreaBorder parent must be THArea, but it is ${parent.runtimeType}');
   //   }
   // }
+
+  @override
+  String get elementType => thAreaBorderTHIDID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -34,7 +38,7 @@ class THAreaBorderTHID extends THElement {
   }
 
   factory THAreaBorderTHID.fromMap(Map<String, dynamic> map) {
-    return THAreaBorderTHID(
+    return THAreaBorderTHID.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -53,7 +57,7 @@ class THAreaBorderTHID extends THElement {
     String? sameLineComment,
     String? id,
   }) {
-    return THAreaBorderTHID(
+    return THAreaBorderTHID.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: sameLineComment ?? this.sameLineComment,

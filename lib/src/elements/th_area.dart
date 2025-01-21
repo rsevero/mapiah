@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -36,18 +37,18 @@ class THArea extends THElement
     'water',
   };
 
-  THArea({
+  THArea.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     required super.sameLineComment,
     required String areaType,
     required LinkedHashMap<String, THCommandOption> optionsMap,
-  }) : super() {
+  }) : super.forCWJM() {
     _areaType = areaType;
     addOptionsMap(optionsMap);
   }
 
-  THArea.addToParent({
+  THArea({
     required super.parentMapiahID,
     required String areaType,
   })  : _areaType = areaType,
@@ -56,6 +57,9 @@ class THArea extends THElement
       throw THCustomException("Unrecognized THArea type '$areaType'.");
     }
   }
+
+  @override
+  String get elementType => thAreaID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -70,7 +74,7 @@ class THArea extends THElement
   }
 
   factory THArea.fromMap(Map<String, dynamic> map) {
-    return THArea(
+    return THArea.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -94,7 +98,7 @@ class THArea extends THElement
     String? areaType,
     LinkedHashMap<String, THCommandOption>? optionsMap,
   }) {
-    return THArea(
+    return THArea.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: sameLineComment ?? this.sameLineComment,

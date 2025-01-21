@@ -1,21 +1,25 @@
 import "dart:convert";
 
+import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THEncoding extends THElement {
   late final String encoding;
 
-  THEncoding({
+  THEncoding.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required this.encoding,
-  }) : super();
+  }) : super.forCWJM();
 
-  THEncoding.addToParent({
+  THEncoding({
     required super.parentMapiahID,
     required this.encoding,
   }) : super.addToParent();
+
+  @override
+  String get elementType => thEncodingID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -28,7 +32,7 @@ class THEncoding extends THElement {
   }
 
   factory THEncoding.fromMap(Map<String, dynamic> map) {
-    return THEncoding(
+    return THEncoding.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -48,7 +52,7 @@ class THEncoding extends THElement {
     String? encoding,
     bool makeSameLineCommentNull = false,
   }) {
-    return THEncoding(
+    return THEncoding.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

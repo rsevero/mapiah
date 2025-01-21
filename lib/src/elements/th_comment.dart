@@ -1,21 +1,25 @@
 import "dart:convert";
 
+import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THComment extends THElement {
   final String content;
 
-  THComment({
+  THComment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required this.content,
-  }) : super();
+  }) : super.forCWJM();
 
-  THComment.addToParent({
+  THComment({
     required super.parentMapiahID,
     required this.content,
   }) : super.addToParent();
+
+  @override
+  String get elementType => thCommentID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -28,7 +32,7 @@ class THComment extends THElement {
   }
 
   factory THComment.fromMap(Map<String, dynamic> map) {
-    return THComment(
+    return THComment.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -48,7 +52,7 @@ class THComment extends THElement {
     String? content,
     bool makeSameLineCommentNull = false,
   }) {
-    return THComment(
+    return THComment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

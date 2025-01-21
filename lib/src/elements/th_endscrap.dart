@@ -1,15 +1,19 @@
 import "dart:convert";
 
+import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THEndscrap extends THElement {
-  THEndscrap({
+  THEndscrap.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
-  }) : super();
+  }) : super.forCWJM();
 
-  THEndscrap.addToParent({required super.parentMapiahID}) : super.addToParent();
+  THEndscrap({required super.parentMapiahID}) : super.addToParent();
+
+  @override
+  String get elementType => thEndscrapID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -21,7 +25,7 @@ class THEndscrap extends THElement {
   }
 
   factory THEndscrap.fromMap(Map<String, dynamic> map) {
-    return THEndscrap(
+    return THEndscrap.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -39,7 +43,7 @@ class THEndscrap extends THElement {
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
   }) {
-    return THEndscrap(
+    return THEndscrap.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

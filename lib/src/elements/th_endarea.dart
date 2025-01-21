@@ -1,15 +1,19 @@
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THEndarea extends THElement {
-  THEndarea({
+  THEndarea.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
-  }) : super();
+  }) : super.forCWJM();
 
-  THEndarea.addToParent({required super.parentMapiahID}) : super.addToParent();
+  THEndarea({required super.parentMapiahID}) : super.addToParent();
+
+  @override
+  String get elementType => thEndareaID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -21,7 +25,7 @@ class THEndarea extends THElement {
   }
 
   factory THEndarea.fromMap(Map<String, dynamic> map) {
-    return THEndarea(
+    return THEndarea.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -39,7 +43,7 @@ class THEndarea extends THElement {
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
   }) {
-    return THEndarea(
+    return THEndarea.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

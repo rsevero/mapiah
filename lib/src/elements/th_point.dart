@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -161,7 +162,7 @@ class THPoint extends THElement
     'wheelchair',
   };
 
-  THPoint({
+  THPoint.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
@@ -170,11 +171,11 @@ class THPoint extends THElement
     required LinkedHashMap<String, THCommandOption> optionsMap,
   })  : _position = position,
         _pointType = pointType,
-        super() {
+        super.forCWJM() {
     addOptionsMap(optionsMap);
   }
 
-  THPoint.addToParent({
+  THPoint({
     required super.parentMapiahID,
     super.sameLineComment,
     required THPositionPart coordinates,
@@ -182,6 +183,9 @@ class THPoint extends THElement
   })  : _position = coordinates,
         _pointType = pointType,
         super.addToParent();
+
+  @override
+  String get elementType => thPointID;
 
   THPoint.fromString({
     required super.parentMapiahID,
@@ -206,7 +210,7 @@ class THPoint extends THElement
   }
 
   factory THPoint.fromMap(Map<String, dynamic> map) {
-    return THPoint(
+    return THPoint.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -233,7 +237,7 @@ class THPoint extends THElement
     LinkedHashMap<String, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
-    return THPoint(
+    return THPoint.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

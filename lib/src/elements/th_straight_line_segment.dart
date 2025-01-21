@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -8,19 +9,22 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 class THStraightLineSegment extends THLineSegment with THHasOptions {
-  THStraightLineSegment({
+  THStraightLineSegment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required super.endPoint,
     required super.optionsMap,
-  }) : super();
+  }) : super.forCWJM();
 
-  THStraightLineSegment.addToParent({
+  THStraightLineSegment({
     required super.parentMapiahID,
     super.sameLineComment,
     required super.endPoint,
   }) : super.withEndPoint();
+
+  @override
+  String get elementType => thStraightLineSegmentID;
 
   THStraightLineSegment.fromString({
     required super.parentMapiahID,
@@ -43,7 +47,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
   }
 
   factory THStraightLineSegment.fromMap(Map<String, dynamic> map) {
-    return THStraightLineSegment(
+    return THStraightLineSegment.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -68,7 +72,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
     LinkedHashMap<String, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
-    return THStraightLineSegment(
+    return THStraightLineSegment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

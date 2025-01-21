@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -58,7 +59,7 @@ class THLine extends THElement
     'water-flow',
   };
 
-  THLine({
+  THLine.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     required super.sameLineComment,
@@ -66,12 +67,12 @@ class THLine extends THElement
     required List<int> childrenMapiahID,
     required LinkedHashMap<String, THCommandOption> optionsMap,
   })  : _lineType = lineType,
-        super() {
+        super.forCWJM() {
     this.childrenMapiahID.addAll(childrenMapiahID);
     addOptionsMap(optionsMap);
   }
 
-  THLine.addToParent({
+  THLine({
     required super.parentMapiahID,
     required String lineType,
     super.sameLineComment,
@@ -81,6 +82,9 @@ class THLine extends THElement
   static bool hasLineType(String aLineType) {
     return _lineTypes.contains(aLineType);
   }
+
+  @override
+  String get elementType => thLineID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -96,7 +100,7 @@ class THLine extends THElement
   }
 
   factory THLine.fromMap(Map<String, dynamic> map) {
-    return THLine(
+    return THLine.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -123,7 +127,7 @@ class THLine extends THElement
     LinkedHashMap<String, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
-    return THLine(
+    return THLine.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

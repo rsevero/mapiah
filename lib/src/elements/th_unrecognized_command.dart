@@ -1,24 +1,28 @@
 import "dart:convert";
 
+import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 
 class THUnrecognizedCommand extends THElement {
   late final List<dynamic> _value;
 
-  THUnrecognizedCommand({
+  THUnrecognizedCommand.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required List<dynamic> value,
-  }) : super() {
+  }) : super.forCWJM() {
     _value = value;
   }
 
-  THUnrecognizedCommand.addToParent({
+  THUnrecognizedCommand({
     required super.parentMapiahID,
     required List<dynamic> value,
   })  : _value = value,
         super.addToParent();
+
+  @override
+  String get elementType => thUnrecognizedCommandID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -31,7 +35,7 @@ class THUnrecognizedCommand extends THElement {
   }
 
   factory THUnrecognizedCommand.fromMap(Map<String, dynamic> map) {
-    return THUnrecognizedCommand(
+    return THUnrecognizedCommand.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -51,7 +55,7 @@ class THUnrecognizedCommand extends THElement {
     List<dynamic>? value,
     bool makeSameLineCommentNull = false,
   }) {
-    return THUnrecognizedCommand(
+    return THUnrecognizedCommand.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

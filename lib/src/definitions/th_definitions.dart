@@ -42,6 +42,26 @@ const int thDecimalPositionsForOffsetMapper = 7;
 const String thDefaultLengthUnit = 'm';
 const String thMultipleChoiceCommandOptionID = 'multiplechoice|';
 
+const String thAreaBorderTHIDID = 'thareaborderthid';
+const String thAreaID = 'tharea';
+const String thBezierCurveLieSegmentID = 'thbeziercurvelinesegment';
+const String thCommentID = 'thcomment';
+const String thEmptyLineID = 'themptyline';
+const String thEncodingID = 'thencoding';
+const String thEndareaID = 'thendarea';
+const String thEndcommentID = 'thendcomment';
+const String thEndlineID = 'thendline';
+const String thEndscrapID = 'thendscrap';
+const String thLineID = 'thline';
+const String thLineSegmentID = 'thlinesegment';
+const String thMultilineCommentContentID = 'thmultilinecommentcontent';
+const String thMultilineCommentID = 'thmultilinecomment';
+const String thPointID = 'thpoint';
+const String thScrapID = 'thscrap';
+const String thStraightLineSegmentID = 'thstraightlinesegment';
+const String thUnrecognizedCommandID = 'thunrecognizedcommand';
+const String thXTherionConfigID = 'thxtherionconfig';
+
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 

@@ -1,5 +1,6 @@
 import "dart:convert";
 
+import "package:mapiah/src/definitions/th_definitions.dart";
 import "package:mapiah/src/elements/th_element.dart";
 import "package:mapiah/src/elements/th_file.dart";
 import "package:mapiah/src/elements/th_has_id.dart";
@@ -29,21 +30,24 @@ class THScrap extends THElement
     implements THHasTHID {
   late String _thID;
 
-  THScrap({
+  THScrap.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required String thID,
-  }) : super() {
+  }) : super.forCWJM() {
     _thID = thID;
   }
 
-  THScrap.addToParent({
+  THScrap({
     required super.parentMapiahID,
     required String thID,
   }) : super.addToParent() {
     _thID = thID;
   }
+
+  @override
+  String get elementType => thScrapID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -56,7 +60,7 @@ class THScrap extends THElement
   }
 
   factory THScrap.fromMap(Map<String, dynamic> map) {
-    return THScrap(
+    return THScrap.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -76,7 +80,7 @@ class THScrap extends THElement
     String? thID,
     bool makeSameLineCommentNull = false,
   }) {
-    return THScrap(
+    return THScrap.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

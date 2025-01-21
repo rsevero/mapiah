@@ -1,24 +1,28 @@
 import 'dart:convert';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class THXTherionConfig extends THElement {
   String name;
   String value;
 
-  THXTherionConfig({
+  THXTherionConfig.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required this.name,
     required this.value,
-  }) : super();
+  }) : super.forCWJM();
 
-  THXTherionConfig.addToParent({
+  THXTherionConfig({
     required super.parentMapiahID,
     required this.name,
     required this.value,
   }) : super.addToParent();
+
+  @override
+  String get elementType => thXTherionConfigID;
 
   @override
   Map<String, dynamic> toMap() {
@@ -32,7 +36,7 @@ class THXTherionConfig extends THElement {
   }
 
   factory THXTherionConfig.fromMap(Map<String, dynamic> map) {
-    return THXTherionConfig(
+    return THXTherionConfig.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
@@ -54,7 +58,7 @@ class THXTherionConfig extends THElement {
     String? value,
     bool makeSameLineCommentNull = false,
   }) {
-    return THXTherionConfig(
+    return THXTherionConfig.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: makeSameLineCommentNull

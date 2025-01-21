@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -11,13 +12,13 @@ abstract class THLineSegment extends THElement
     implements THPointInterface, THHasOptions {
   late final THPositionPart endPoint;
 
-  THLineSegment({
+  THLineSegment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
     required this.endPoint,
     required LinkedHashMap<String, THCommandOption> optionsMap,
-  }) : super() {
+  }) : super.forCWJM() {
     addOptionsMap(optionsMap);
   }
 
@@ -33,9 +34,7 @@ abstract class THLineSegment extends THElement
   }) : super.addToParent();
 
   @override
-  String get elementType {
-    return 'linesegment';
-  }
+  String get elementType => thLineSegmentID;
 
   @override
   double get x {

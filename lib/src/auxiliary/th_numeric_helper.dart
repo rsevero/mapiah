@@ -21,7 +21,7 @@ class THNumericHelper {
     final int decimalPositions =
         (dotPosition > 0) ? valueString.length - (dotPosition + 1) : 0;
 
-    return THDoublePart(value, decimalPositions);
+    return THDoublePart(value: value, decimalPositions: decimalPositions);
   }
 
   static String doubleToString(double value, int decimalPositions) {
