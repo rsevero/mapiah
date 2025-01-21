@@ -1,9 +1,7 @@
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_text.dart';
+import 'dart:convert';
 
-part 'th_text_command_option.mapper.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_has_text.dart';
 
 // text . text of the label, remark or continuation. It may contain following formatting
 // keywords:24
@@ -19,9 +17,7 @@ part 'th_text_command_option.mapper.dart';
 // label; N should be between 1 and 999.25
 // <size:S> . specify the font size using predefined scales; S can be one of xs, s, m, l, 6.1.1
 // xl.
-@MappableClass()
-class THTextCommandOption extends THCommandOption
-    with THTextCommandOptionMappable, THHasText {
+class THTextCommandOption extends THCommandOption with THHasText {
   static const String _thisOptionType = 'text';
   // static final Map<String, Set<String>> _supportedTypes = {
   //   'point': {
@@ -34,19 +30,70 @@ class THTextCommandOption extends THCommandOption
   //   },
   // };
 
-  /// Constructor necessary for dart_mappable support.
-  THTextCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    String text,
-  ) : super.withExplicitParameters() {
+  THTextCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required String text,
+  }) : super() {
     this.text = text;
   }
 
-  THTextCommandOption(THHasOptions optionParent, String text)
-      : super(optionParent, _thisOptionType) {
+  THTextCommandOption.addToOptionParent({
+    required super.optionParent,
+    required String text,
+  }) : super.addToOptionParent(optionType: _thisOptionType) {
     this.text = text;
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'text': text,
+    };
+  }
+
+  factory THTextCommandOption.fromMap(Map<String, dynamic> map) {
+    return THTextCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      text: map['text'],
+    );
+  }
+
+  factory THTextCommandOption.fromJson(String jsonString) {
+    return THTextCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THTextCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    String? text,
+  }) {
+    return THTextCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      text: text ?? this.text,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THTextCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.text == text;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        text,
+      );
 
   @override
   String specToFile() {

@@ -1,11 +1,8 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-
-part 'th_scrap_scale_command_option.mapper.dart';
 
 // scale <specification> . is used to pre-scale (convert coordinates from pixels to
 // meters) the scrap data. If scrap projection is none, this is the only transformation that
@@ -18,37 +15,84 @@ part 'th_scrap_scale_command_option.mapper.dart';
 // you specify, in order, the x and y coordinates of two points in the scrap and two points
 // in reality. Optionally, you can also specify units for the coordinates of the ‘points in
 // reality’. This form allows you to apply both scaling and rotation to the scrap.
-@MappableClass()
-class THScrapScaleCommandOption extends THCommandOption
-    with THScrapScaleCommandOptionMappable {
+class THScrapScaleCommandOption extends THCommandOption {
   static const String _thisOptionType = 'scale';
-  List<THDoublePart> _numericSpecifications;
-  THLengthUnitPart? unit;
+  final List<THDoublePart> _numericSpecifications;
+  final THLengthUnitPart? unit;
 
-  /// Constructor necessary for dart_mappable support.
-  THScrapScaleCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    List<THDoublePart> numericSpecifications, [
+  THScrapScaleCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required List<THDoublePart> numericSpecifications,
     this.unit,
-  ])  : _numericSpecifications = numericSpecifications,
-        super.withExplicitParameters();
+  })  : _numericSpecifications = numericSpecifications,
+        super();
 
-  THScrapScaleCommandOption(
-      THHasOptions optionParent, List<THDoublePart> numericSpecifications,
-      [this.unit])
-      : _numericSpecifications = numericSpecifications,
-        super(optionParent, _thisOptionType);
+  THScrapScaleCommandOption.addToOptionParent({
+    required super.optionParent,
+    required List<THDoublePart> numericSpecifications,
+    this.unit,
+  })  : _numericSpecifications = numericSpecifications,
+        super.addToOptionParent(optionType: _thisOptionType);
 
-  set numericSpecifications(List<THDoublePart> aList) {
-    final int length = aList.length;
-
-    if ((length != 1) && (length != 2) && (length != 8)) {
-      throw THConvertFromListException('THScaleCommandOption', aList);
-    }
-
-    _numericSpecifications = aList;
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'numericSpecifications':
+          _numericSpecifications.map((e) => e.toMap()).toList(),
+      'unit': unit?.toMap(),
+    };
   }
+
+  factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {
+    return THScrapScaleCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      numericSpecifications: List<THDoublePart>.from(
+          map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
+      unit: map['unit'] != null ? THLengthUnitPart.fromMap(map['unit']) : null,
+    );
+  }
+
+  factory THScrapScaleCommandOption.fromJson(String jsonString) {
+    return THScrapScaleCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THScrapScaleCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    List<THDoublePart>? numericSpecifications,
+    THLengthUnitPart? unit,
+    bool makeUnitNull = false,
+  }) {
+    return THScrapScaleCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      numericSpecifications: numericSpecifications ?? _numericSpecifications,
+      unit: makeUnitNull ? null : (unit ?? this.unit),
+    );
+  }
+
+  @override
+  bool operator ==(covariant THScrapScaleCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other._numericSpecifications == _numericSpecifications &&
+        other.unit == unit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        _numericSpecifications,
+        unit,
+      );
 
   @override
   String specToFile() {

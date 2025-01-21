@@ -1,5 +1,6 @@
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -23,10 +24,10 @@ enum THProjectionTypes {
 // 4. extended . extended elevation (a.k.a. extended profile).
 class THProjectionCommandOption extends THCommandOption {
   static const String _thisOptionType = 'projection';
-  late THProjectionTypes type;
-  String index;
-  THDoublePart? elevationAngle;
-  THAngleUnitPart? elevationUnit;
+  late final THProjectionTypes type;
+  final String index;
+  late final THDoublePart? elevationAngle;
+  late final THAngleUnitPart? elevationUnit;
 
   static const stringToType = {
     'elevation': THProjectionTypes.elevation,
@@ -42,44 +43,111 @@ class THProjectionCommandOption extends THCommandOption {
     THProjectionTypes.plan: 'plan',
   };
 
-  /// Constructor necessary for dart_mappable support.
-  THProjectionCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    this.type, {
+  THProjectionCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required this.type,
     this.index = '',
     this.elevationAngle,
     this.elevationUnit,
-  }) : super.withExplicitParameters();
+  }) : super();
 
-  THProjectionCommandOption.fromString(
-    THHasOptions optionParent,
-    String aType, {
+  THProjectionCommandOption.fromString({
+    required super.optionParent,
+    required String type,
     this.index = '',
-    this.elevationAngle,
-    this.elevationUnit,
-  }) : super(optionParent, _thisOptionType) {
-    typeFromString(aType);
+    required String elevationAngle,
+    required String elevationUnit,
+  }) : super.addToOptionParent(optionType: _thisOptionType) {
+    typeFromString(type);
+    this.elevationAngle = THDoublePart.fromString(valueString: elevationAngle);
+    this.elevationUnit = THAngleUnitPart.fromString(unitString: elevationUnit);
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    var asMap = {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'type': typeToString[type],
+      'index': index,
+    };
+    if (elevationAngle != null) {
+      asMap['elevationAngle'] = elevationAngle!.toMap();
+    }
+    if (elevationUnit != null) {
+      asMap['elevationUnit'] = elevationUnit!.toMap();
+    }
+
+    return asMap;
+  }
+
+  factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {
+    return THProjectionCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      type: stringToType[map['type']]!,
+      index: map['index'],
+      elevationAngle: THDoublePart.fromMap(map['elevationAngle']),
+      elevationUnit: THAngleUnitPart.fromMap(map['elevationUnit']),
+    );
+  }
+
+  factory THProjectionCommandOption.fromJson(String jsonString) {
+    return THProjectionCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THProjectionCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    THProjectionTypes? type,
+    String? index,
+    THDoublePart? elevationAngle,
+    THAngleUnitPart? elevationUnit,
+  }) {
+    return THProjectionCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      type: type ?? this.type,
+      index: index ?? this.index,
+      elevationAngle: elevationAngle ?? this.elevationAngle,
+      elevationUnit: elevationUnit ?? this.elevationUnit,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THProjectionCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.type == type &&
+        other.index == index &&
+        other.elevationAngle == elevationAngle &&
+        other.elevationUnit == elevationUnit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        type,
+        index,
+        elevationAngle,
+        elevationUnit,
+      );
 
   static bool isType(String aType) {
     return stringToType.containsKey(aType);
   }
 
-  void typeFromString(String aType) {
-    if (!THProjectionCommandOption.isType(aType)) {
-      throw THConvertFromStringException(runtimeType.toString(), aType);
+  void typeFromString(String type) {
+    if (!THProjectionCommandOption.isType(type)) {
+      throw THConvertFromStringException(runtimeType.toString(), type);
     }
 
-    type = stringToType[aType]!;
-  }
-
-  void elevationAngleFromString(String aAngle) {
-    elevationAngle = THDoublePart.fromString(aAngle);
-  }
-
-  void elevationUnitFromString(String aUnit) {
-    elevationUnit = THAngleUnitPart.fromString(aUnit);
+    this.type = stringToType[type]!;
   }
 
   @override

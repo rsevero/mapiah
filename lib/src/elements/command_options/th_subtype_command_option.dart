@@ -1,8 +1,6 @@
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
+import 'dart:convert';
 
-part 'th_subtype_command_option.mapper.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 // subtype <keyword> . determines the object’s subtype. The following subtypes for
 // given types are supported:
@@ -13,11 +11,9 @@ part 'th_subtype_command_option.mapper.dart';
 // separator.22
 // Any subtype specification can be used with user defined type (u). In this case you need
 // also to define corresponding metapost symbol (see the chapter New map symbols).
-@MappableClass()
-class THSubtypeCommandOption extends THCommandOption
-    with THSubtypeCommandOptionMappable {
+class THSubtypeCommandOption extends THCommandOption {
   static const String _thisOptionType = 'subtype';
-  String subtype;
+  final String subtype;
 
   // static final Map<String, Map<String, Map<String, Object>>> _allowedSubtypes =
   //     {
@@ -96,15 +92,66 @@ class THSubtypeCommandOption extends THCommandOption
   //   },
   // };
 
-  /// Constructor necessary for dart_mappable support.
-  THSubtypeCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    this.subtype,
-  ) : super.withExplicitParameters();
+  THSubtypeCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required this.subtype,
+  }) : super();
 
-  THSubtypeCommandOption(THHasOptions optionParent, this.subtype)
-      : super(optionParent, _thisOptionType);
+  THSubtypeCommandOption.addToOptionParent({
+    required super.optionParent,
+    required this.subtype,
+  }) : super.addToOptionParent(optionType: _thisOptionType);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'subtype': subtype,
+    };
+  }
+
+  factory THSubtypeCommandOption.fromMap(Map<String, dynamic> map) {
+    return THSubtypeCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      subtype: map['subtype'],
+    );
+  }
+
+  factory THSubtypeCommandOption.fromJson(String jsonString) {
+    return THSubtypeCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THSubtypeCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    String? subtype,
+  }) {
+    return THSubtypeCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      subtype: subtype ?? this.subtype,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THSubtypeCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.subtype == subtype;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        subtype,
+      );
 
   @override
   String specToFile() {

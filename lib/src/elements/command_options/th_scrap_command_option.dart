@@ -1,26 +1,73 @@
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
+import 'dart:convert';
 
-part 'th_scrap_command_option.mapper.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 // scrap <reference> . if the point type is section, this is a reference to a cross-section
 // scrap.
-@MappableClass()
-class THScrapCommandOption extends THCommandOption
-    with THScrapCommandOptionMappable {
+class THScrapCommandOption extends THCommandOption {
   static const String _thisOptionType = 'scrap';
-  late String reference;
+  late final String reference;
 
-  /// Constructor necessary for dart_mappable support.
-  THScrapCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    this.reference,
-  ) : super.withExplicitParameters();
+  THScrapCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required this.reference,
+  }) : super();
 
-  THScrapCommandOption(THHasOptions optionParent, this.reference)
-      : super(optionParent, _thisOptionType);
+  THScrapCommandOption.addToOptionParent({
+    required super.optionParent,
+    required this.reference,
+  }) : super.addToOptionParent(optionType: _thisOptionType);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'reference': reference,
+    };
+  }
+
+  factory THScrapCommandOption.fromMap(Map<String, dynamic> map) {
+    return THScrapCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      reference: map['reference'],
+    );
+  }
+
+  factory THScrapCommandOption.fromJson(String jsonString) {
+    return THScrapCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THScrapCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    String? reference,
+  }) {
+    return THScrapCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      reference: reference ?? this.reference,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THScrapCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        reference,
+      );
 
   @override
   String specToFile() {
