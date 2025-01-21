@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
@@ -9,6 +8,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THMultipleChoiceCommandOption extends THCommandOption {
   late final String _choice;
+  late final String multipleChoiceType;
   final String parentElementType;
 
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
@@ -384,21 +384,21 @@ class THMultipleChoiceCommandOption extends THCommandOption {
 
   THMultipleChoiceCommandOption({
     required super.parentMapiahID,
-    required String optionType,
+    required super.optionType,
+    required this.multipleChoiceType,
     required this.parentElementType,
     required String choice,
-  }) : super(optionType: "$thMultipleChoiceCommandOptionID$optionType") {
+  }) : super() {
     setChoice(choice);
   }
 
   THMultipleChoiceCommandOption.addToOptionParent({
     required super.optionParent,
-    required String optionType,
+    required this.multipleChoiceType,
+    super.optionType = THCommandOptionType.multipleChoice,
     required String choice,
   })  : parentElementType = optionParent.elementType,
-        super.addToOptionParent(
-          optionType: "$thMultipleChoiceCommandOptionID$optionType",
-        ) {
+        super.addToOptionParent() {
     setChoice(choice);
   }
 
@@ -406,7 +406,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
+      'multipleChoiceType': multipleChoiceType,
       'parentElementType': parentElementType,
       'choice': _choice,
     };
@@ -415,7 +416,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   factory THMultipleChoiceCommandOption.fromMap(Map<String, dynamic> map) {
     return THMultipleChoiceCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
+      multipleChoiceType: map['multipleChoiceType'],
       parentElementType: map['parentElementType'],
       choice: map['choice'],
     );
@@ -428,15 +430,18 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   THMultipleChoiceCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
+    String? multipleChoiceType,
     String? parentElementType,
     String? choice,
+    bool makeChoiceNull = false,
   }) {
     return THMultipleChoiceCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
+      multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,
       parentElementType: parentElementType ?? this.parentElementType,
-      choice: choice ?? _choice,
+      choice: makeChoiceNull ? '' : (choice ?? _choice),
     );
   }
 
@@ -446,6 +451,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
 
     return other.parentMapiahID == parentMapiahID &&
         other.optionType == optionType &&
+        other.multipleChoiceType == multipleChoiceType &&
         other.parentElementType == parentElementType &&
         other._choice == _choice;
   }
@@ -454,6 +460,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   int get hashCode => Object.hash(
         parentMapiahID,
         optionType,
+        multipleChoiceType,
         parentElementType,
         _choice,
       );
@@ -472,8 +479,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   String get choice => _choice;
 
   bool hasDefaultChoice() {
-    return (_supportedOptions[parentElementType]![optionType]!['hasDefault']
-        as bool);
+    return (_supportedOptions[parentElementType]![multipleChoiceType]![
+        'hasDefault'] as bool);
   }
 
   String defaultChoice() {
@@ -482,22 +489,22 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           "Unsupported option type '$optionType' in 'defaultChoice'");
     }
 
-    return (_supportedOptions[parentElementType]![optionType]!['defaultChoice']
-        as String);
+    return (_supportedOptions[parentElementType]![multipleChoiceType]![
+        'defaultChoice'] as String);
   }
 
   bool hasOptionChoice(String choice) {
     choice = _mainChoice(choice);
 
-    return (_supportedOptions[parentElementType]![optionType]!['choices']
-            as LinkedHashSet)
+    return (_supportedOptions[parentElementType]![multipleChoiceType]![
+            'choices'] as LinkedHashSet)
         .contains(choice);
   }
 
   String _mainChoice(String choice) {
-    final Map<String, String> alternateChoiceMap =
-        _supportedOptions[parentElementType]![optionType]!['alternateChoices']
-            as Map<String, String>;
+    final Map<String, String> alternateChoiceMap = _supportedOptions[
+            parentElementType]![multipleChoiceType]!['alternateChoices']
+        as Map<String, String>;
     if (alternateChoiceMap.containsKey(choice)) {
       choice = alternateChoiceMap[choice]!;
     }
@@ -506,12 +513,12 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   static bool hasOptionType(THHasOptions optionParent, String optionType) {
-    final String aOptionParentElementType = optionParent.elementType;
-    if (!_supportedOptions.containsKey(aOptionParentElementType)) {
+    final String optionParentElementType = optionParent.elementType;
+    if (!_supportedOptions.containsKey(optionParentElementType)) {
       return false;
     }
 
-    if (!_supportedOptions[aOptionParentElementType]!.containsKey(optionType)) {
+    if (!_supportedOptions[optionParentElementType]!.containsKey(optionType)) {
       return false;
     }
 
@@ -519,7 +526,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
       final String aPLAType = (optionParent as THHasPLAType).plaType;
 
       final Set<String> plaTypesSupported = _supportedOptions[
-              aOptionParentElementType]![optionType]!['plaTypesSupported']
+              optionParentElementType]![optionType]!['plaTypesSupported']
           as Set<String>;
 
       if (plaTypesSupported.isEmpty) {

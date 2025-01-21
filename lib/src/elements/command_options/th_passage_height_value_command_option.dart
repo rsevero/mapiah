@@ -16,7 +16,6 @@ enum THPassageHeightModes {
 // tance between floor and ceiling) and [+<number> -<number>] (the distance to ceiling
 // and distance to floor).
 class THPassageHeightValueCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'passageheightvalue';
   late final THDoublePart? _plusNumber;
   late final THDoublePart? _minusNumber;
   late final THPassageHeightModes _mode;
@@ -39,7 +38,8 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     required super.optionParent,
     required String plusNumber,
     required String minusNumber,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(
+            optionType: THCommandOptionType.passageHeightValue) {
     plusAndMinusNumbersFromString(plusNumber, minusNumber);
   }
 
@@ -47,7 +47,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'plusNumber': _plusNumber?.toMap(),
       'minusNumber': _minusNumber?.toMap(),
       'mode': _mode.toString(),
@@ -58,7 +58,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   factory THPassageHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPassageHeightValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       plusNumber: map['plusNumber'] != null
           ? THDoublePart.fromMap(map['plusNumber'])
           : null,
@@ -78,7 +78,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   @override
   THPassageHeightValueCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
     THPassageHeightModes? mode,
@@ -89,11 +89,10 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     return THPassageHeightValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
-      plusNumber: makePlusNumberNull ? null : (plusNumber ?? this._plusNumber),
-      minusNumber:
-          makeMinusNumberNull ? null : (minusNumber ?? this._minusNumber),
-      mode: mode ?? this._mode,
-      plusHasSign: plusHasSign ?? this._plusHasSign,
+      plusNumber: makePlusNumberNull ? null : (plusNumber ?? _plusNumber),
+      minusNumber: makeMinusNumberNull ? null : (minusNumber ?? _minusNumber),
+      mode: mode ?? _mode,
+      plusHasSign: plusHasSign ?? _plusHasSign,
     );
   }
 

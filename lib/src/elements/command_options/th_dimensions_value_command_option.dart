@@ -8,7 +8,6 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // dimensions: -value [<above> <below> [<units>]] specifies passage dimensions a-
 // bove/below centerline plane used in 3D model.
 class THDimensionsValueCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'dimensionsvalue';
   late final THDoublePart above;
   late final THDoublePart below;
   late final THLengthUnitPart _unit;
@@ -29,7 +28,8 @@ class THDimensionsValueCommandOption extends THCommandOption {
     required String above,
     required String below,
     String? unit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(
+            optionType: THCommandOptionType.dimensionsValue) {
     this.above = THDoublePart.fromString(valueString: above);
     this.below = THDoublePart.fromString(valueString: below);
     unitFromString(unit);
@@ -39,7 +39,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'above': above.toMap(),
       'below': below.toMap(),
       'unit': _unit.toMap(),
@@ -50,7 +50,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDimensionsValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       above: THDoublePart.fromMap(map['above']),
       below: THDoublePart.fromMap(map['below']),
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -65,7 +65,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   @override
   THDimensionsValueCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? above,
     THDoublePart? below,
     THLengthUnitPart? unit,

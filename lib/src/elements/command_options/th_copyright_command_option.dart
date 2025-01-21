@@ -5,7 +5,6 @@ import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 
 // copyright <date> <string> . copyright date and name
 class THCopyrightCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'copyright';
   late final THDatetimePart datetime;
   final String copyrightMessage;
 
@@ -21,13 +20,13 @@ class THCopyrightCommandOption extends THCommandOption {
     required super.optionParent,
     required this.datetime,
     required this.copyrightMessage,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.copyright);
 
   THCopyrightCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required this.copyrightMessage,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.copyright) {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
 
@@ -35,7 +34,7 @@ class THCopyrightCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'datetime': datetime.toMap(),
       'copyrightMessage': copyrightMessage,
     };
@@ -44,7 +43,7 @@ class THCopyrightCommandOption extends THCommandOption {
   factory THCopyrightCommandOption.fromMap(Map<String, dynamic> map) {
     return THCopyrightCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       datetime: THDatetimePart.fromMap(map['datetime']),
       copyrightMessage: map['copyrightMessage'],
     );
@@ -57,7 +56,7 @@ class THCopyrightCommandOption extends THCommandOption {
   @override
   THCopyrightCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDatetimePart? datetime,
     String? copyrightMessage,
   }) {

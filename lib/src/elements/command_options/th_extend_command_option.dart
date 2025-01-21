@@ -5,7 +5,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // extend [prev[ious] <station>] . if the point type is station and scrap projection
 // is extended elevation, you can adjust the extension of the centreline using this option.
 class THExtendCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'extend';
   final String station;
 
   THExtendCommandOption({
@@ -17,7 +16,7 @@ class THExtendCommandOption extends THCommandOption {
   THExtendCommandOption.addToOptionParent({
     required super.optionParent,
     required this.station,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.extend);
   //      {
   //   if ((optionParent is! THPoint) || (optionParent.plaType != 'station')) {
   //     throw THCustomException(
@@ -29,7 +28,7 @@ class THExtendCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'station': station,
     };
   }
@@ -37,7 +36,7 @@ class THExtendCommandOption extends THCommandOption {
   factory THExtendCommandOption.fromMap(Map<String, dynamic> map) {
     return THExtendCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       station: map['station'],
     );
   }
@@ -49,7 +48,7 @@ class THExtendCommandOption extends THCommandOption {
   @override
   THExtendCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? station,
   }) {
     return THExtendCommandOption(

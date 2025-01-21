@@ -23,7 +23,6 @@ enum THProjectionTypes {
 // a view direction as an argument (e.g. [elevation 10] or [elevation 10 deg]).
 // 4. extended . extended elevation (a.k.a. extended profile).
 class THProjectionCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'projection';
   late final THProjectionTypes type;
   final String index;
   late final THDoublePart? elevationAngle;
@@ -58,7 +57,7 @@ class THProjectionCommandOption extends THCommandOption {
     this.index = '',
     required String elevationAngle,
     required String elevationUnit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.projection) {
     typeFromString(type);
     this.elevationAngle = THDoublePart.fromString(valueString: elevationAngle);
     this.elevationUnit = THAngleUnitPart.fromString(unitString: elevationUnit);
@@ -68,7 +67,7 @@ class THProjectionCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     var asMap = {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'type': typeToString[type],
       'index': index,
     };
@@ -85,7 +84,7 @@ class THProjectionCommandOption extends THCommandOption {
   factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {
     return THProjectionCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       type: stringToType[map['type']]!,
       index: map['index'],
       elevationAngle: THDoublePart.fromMap(map['elevationAngle']),
@@ -100,7 +99,7 @@ class THProjectionCommandOption extends THCommandOption {
   @override
   THProjectionCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THProjectionTypes? type,
     String? index,
     THDoublePart? elevationAngle,

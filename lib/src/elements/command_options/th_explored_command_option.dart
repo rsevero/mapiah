@@ -9,9 +9,6 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
 // statistics.
 class THExploredCommandOption extends THCommandOption with THHasLength {
-  static const String _thisOptionType = 'explored';
-
-  /// Constructor necessary for dart_mappable support.
   THExploredCommandOption({
     required super.parentMapiahID,
     required super.optionType,
@@ -26,7 +23,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
     required super.optionParent,
     required String distance,
     required String? unit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.explored) {
     length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
@@ -37,7 +34,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'length': length.toMap(),
       'unit': unit.toMap(),
     };
@@ -46,7 +43,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
   factory THExploredCommandOption.fromMap(Map<String, dynamic> map) {
     return THExploredCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       unit: THLengthUnitPart.fromMap(map['unit']),
     );
@@ -59,7 +56,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
   @override
   THExploredCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {

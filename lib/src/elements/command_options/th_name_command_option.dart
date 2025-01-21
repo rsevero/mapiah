@@ -5,7 +5,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // name <reference> . if the point type is station, this option gives the reference to the
 // real survey station.
 class THNameCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'name';
   late final String reference;
 
   THNameCommandOption({
@@ -17,13 +16,13 @@ class THNameCommandOption extends THCommandOption {
   THNameCommandOption.addToOptionParent({
     required super.optionParent,
     required this.reference,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.name);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'reference': reference,
     };
   }
@@ -31,7 +30,7 @@ class THNameCommandOption extends THCommandOption {
   factory THNameCommandOption.fromMap(Map<String, dynamic> map) {
     return THNameCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       reference: map['reference'],
     );
   }
@@ -43,7 +42,7 @@ class THNameCommandOption extends THCommandOption {
   @override
   THNameCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? reference,
   }) {
     return THNameCommandOption(

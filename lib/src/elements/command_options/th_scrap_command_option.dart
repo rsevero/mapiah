@@ -5,7 +5,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // scrap <reference> . if the point type is section, this is a reference to a cross-section
 // scrap.
 class THScrapCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'scrap';
   late final String reference;
 
   THScrapCommandOption({
@@ -17,13 +16,13 @@ class THScrapCommandOption extends THCommandOption {
   THScrapCommandOption.addToOptionParent({
     required super.optionParent,
     required this.reference,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.scrap);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'reference': reference,
     };
   }
@@ -31,7 +30,7 @@ class THScrapCommandOption extends THCommandOption {
   factory THScrapCommandOption.fromMap(Map<String, dynamic> map) {
     return THScrapCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       reference: map['reference'],
     );
   }
@@ -43,7 +42,7 @@ class THScrapCommandOption extends THCommandOption {
   @override
   THScrapCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? reference,
   }) {
     return THScrapCommandOption(

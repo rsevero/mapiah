@@ -5,7 +5,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 
 class THDateValueCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'datevalue';
   late final THDatetimePart date;
 
   THDateValueCommandOption({
@@ -17,7 +16,7 @@ class THDateValueCommandOption extends THCommandOption {
   THDateValueCommandOption.fromString({
     required super.optionParent,
     required String date,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.dateValue) {
     this.date = THDatetimePart.fromString(datetime: date);
   }
 
@@ -25,7 +24,7 @@ class THDateValueCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'date': date.toMap(),
     };
   }
@@ -33,7 +32,7 @@ class THDateValueCommandOption extends THCommandOption {
   factory THDateValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDateValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       date: THDatetimePart.fromMap(map['date']),
     );
   }
@@ -45,7 +44,7 @@ class THDateValueCommandOption extends THCommandOption {
   @override
   THDateValueCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDatetimePart? date,
   }) {
     return THDateValueCommandOption(

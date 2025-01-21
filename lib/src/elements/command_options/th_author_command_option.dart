@@ -6,7 +6,6 @@ import 'package:mapiah/src/elements/parts/th_person_part.dart';
 
 // author <date> <person> . author of the data and its creation date
 class THAuthorCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'author';
   late final THDatetimePart datetime;
   late final THPersonPart person;
 
@@ -21,13 +20,13 @@ class THAuthorCommandOption extends THCommandOption {
     required super.optionParent,
     required this.datetime,
     required this.person,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.author);
 
   THAuthorCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required String person,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.author) {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
     this.person = THPersonPart.fromString(name: person);
   }
@@ -36,7 +35,7 @@ class THAuthorCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'datetime': datetime.toMap(),
       'person': person.toMap(),
     };
@@ -45,7 +44,7 @@ class THAuthorCommandOption extends THCommandOption {
   factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
     return THAuthorCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       datetime: THDatetimePart.fromMap(map['datetime']),
       person: THPersonPart.fromMap(map['person']),
     );
@@ -58,7 +57,7 @@ class THAuthorCommandOption extends THCommandOption {
   @override
   THAuthorCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDatetimePart? datetime,
     THPersonPart? person,
   }) {

@@ -6,7 +6,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // symbol-show layout options) symbol will be hidden/shown according to rules for spec-
 // ified <symbol-type>.
 class THContextCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'context';
   late final String elementType;
   late final String symbolType;
 
@@ -24,13 +23,13 @@ class THContextCommandOption extends THCommandOption {
     required super.optionParent,
     required this.elementType,
     required this.symbolType,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.context);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'elementType': elementType,
       'symbolType': symbolType,
     };
@@ -39,7 +38,7 @@ class THContextCommandOption extends THCommandOption {
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {
     return THContextCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       elementType: map['elementType'],
       symbolType: map['symbolType'],
     );
@@ -52,7 +51,7 @@ class THContextCommandOption extends THCommandOption {
   @override
   THContextCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? elementType,
     String? symbolType,
   }) {

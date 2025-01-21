@@ -6,7 +6,6 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // orientation/orient <number> . defines the orientation of the symbol. If not speci-
 // fied, it’s oriented to north. 0 ≤ number < 360.
 class THOrientationCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'orientation';
   late THDoublePart azimuth;
 
   THOrientationCommandOption({
@@ -18,7 +17,7 @@ class THOrientationCommandOption extends THCommandOption {
   THOrientationCommandOption.fromString({
     required super.optionParent,
     required String azimuth,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.orientation) {
     this.azimuth = THDoublePart.fromString(valueString: azimuth);
   }
 
@@ -26,7 +25,7 @@ class THOrientationCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'azimuth': azimuth.toMap(),
     };
   }
@@ -34,7 +33,7 @@ class THOrientationCommandOption extends THCommandOption {
   factory THOrientationCommandOption.fromMap(Map<String, dynamic> map) {
     return THOrientationCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       azimuth: THDoublePart.fromMap(map['azimuth']),
     );
   }
@@ -46,7 +45,7 @@ class THOrientationCommandOption extends THCommandOption {
   @override
   THOrientationCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? azimuth,
   }) {
     return THOrientationCommandOption(

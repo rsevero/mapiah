@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/auxiliary/th_serializeable.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_altitude_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_altitude_value_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_author_command_option.dart';
@@ -37,9 +36,46 @@ import 'package:mapiah/src/elements/command_options/th_unrecognized_command_opti
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 
+enum THCommandOptionType {
+  altitude,
+  altitudeValue,
+  author,
+  clip,
+  context,
+  copyright,
+  cs,
+  dateValue,
+  dimensionsValue,
+  dist,
+  explored,
+  extend,
+  from,
+  id,
+  lineHeight,
+  lineScale,
+  lSize,
+  mark,
+  multipleChoice,
+  name,
+  orientation,
+  passageHeightValue,
+  pointHeightValue,
+  pointScale,
+  projection,
+  scrap,
+  scrapScale,
+  sketch,
+  stationNames,
+  stations,
+  subtype,
+  text,
+  title,
+  unrecognizedCommandOption,
+}
+
 abstract class THCommandOption implements THSerializable {
   late final int parentMapiahID;
-  late final String optionType;
+  late final THCommandOptionType optionType;
 
   THCommandOption({
     required this.parentMapiahID,
@@ -59,73 +95,72 @@ abstract class THCommandOption implements THSerializable {
   }
 
   static THCommandOption fromMap(Map<String, dynamic> map) {
-    if ((map['optionType'] as String)
-        .startsWith(thMultipleChoiceCommandOptionID)) {
+    if (map['optionType'] == THCommandOptionType.multipleChoice) {
       return THMultipleChoiceCommandOption.fromMap(map);
     }
 
-    switch (map['optionType']) {
-      case 'altitude':
+    switch (map['optionType'] as THCommandOptionType) {
+      case THCommandOptionType.altitude:
         return THAltitudeCommandOption.fromMap(map);
-      case 'altitudevalue':
+      case THCommandOptionType.altitudeValue:
         return THAltitudeValueCommandOption.fromMap(map);
-      case 'author':
+      case THCommandOptionType.author:
         return THAuthorCommandOption.fromMap(map);
-      case 'clip':
+      case THCommandOptionType.clip:
         return THClipCommandOption.fromMap(map);
-      case 'context':
+      case THCommandOptionType.context:
         return THContextCommandOption.fromMap(map);
-      case 'copyright':
+      case THCommandOptionType.copyright:
         return THCopyrightCommandOption.fromMap(map);
-      case 'cs':
+      case THCommandOptionType.cs:
         return THCSCommandOption.fromMap(map);
-      case 'datevalue':
+      case THCommandOptionType.dateValue:
         return THDateValueCommandOption.fromMap(map);
-      case 'dimensionsvalue':
+      case THCommandOptionType.dimensionsValue:
         return THDimensionsValueCommandOption.fromMap(map);
-      case 'dist':
+      case THCommandOptionType.dist:
         return THDistCommandOption.fromMap(map);
-      case 'explored':
+      case THCommandOptionType.explored:
         return THExploredCommandOption.fromMap(map);
-      case 'from':
+      case THCommandOptionType.from:
         return THFromCommandOption.fromMap(map);
-      case 'id':
+      case THCommandOptionType.id:
         return THIDCommandOption.fromMap(map);
-      case 'lineheight':
+      case THCommandOptionType.lineHeight:
         return THLineHeightCommandOption.fromMap(map);
-      case 'linescale':
+      case THCommandOptionType.lineScale:
         return THLineScaleCommandOption.fromMap(map);
-      case 'lsize':
+      case THCommandOptionType.lSize:
         return THLSizeCommandOption.fromMap(map);
-      case 'mark':
+      case THCommandOptionType.mark:
         return THMarkCommandOption.fromMap(map);
-      case 'name':
+      case THCommandOptionType.name:
         return THNameCommandOption.fromMap(map);
-      case 'orientation':
+      case THCommandOptionType.orientation:
         return THOrientationCommandOption.fromMap(map);
-      case 'passageheightvalue':
+      case THCommandOptionType.passageHeightValue:
         return THPassageHeightValueCommandOption.fromMap(map);
-      case 'pointheightvalue':
+      case THCommandOptionType.pointHeightValue:
         return THPointHeightValueCommandOption.fromMap(map);
-      case 'projection':
+      case THCommandOptionType.projection:
         return THProjectionCommandOption.fromMap(map);
-      case 'scrap':
+      case THCommandOptionType.scrap:
         return THScrapCommandOption.fromMap(map);
-      case 'scrapscale':
+      case THCommandOptionType.scrapScale:
         return THScrapScaleCommandOption.fromMap(map);
-      case 'sketch':
+      case THCommandOptionType.sketch:
         return THSketchCommandOption.fromMap(map);
-      case 'stationnames':
+      case THCommandOptionType.stationNames:
         return THStationNamesCommandOption.fromMap(map);
-      case 'stations':
+      case THCommandOptionType.stations:
         return THStationsCommandOption.fromMap(map);
-      case 'subtype':
+      case THCommandOptionType.subtype:
         return THSubtypeCommandOption.fromMap(map);
-      case 'text':
+      case THCommandOptionType.text:
         return THTextCommandOption.fromMap(map);
-      case 'title':
+      case THCommandOptionType.title:
         return THTitleCommandOption.fromMap(map);
-      case 'unrecognized':
+      case THCommandOptionType.unrecognizedCommandOption:
         return THUnrecognizedCommandOption.fromMap(map);
       default:
         throw Exception('Unknown optionType: ${map['optionType']}');

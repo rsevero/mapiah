@@ -11,7 +11,6 @@ enum THLineScaleCommandOptionType { multiplechoice, text, numeric }
 /// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0. Absolute font sizes (in points) can be
 /// assigned to named sizes using fonts-setup in the layout configuration section.
 class THLineScaleCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'linescale';
   late final THMultipleChoicePart _multipleChoiceSize;
   late final THDoublePart _numericSize;
   late final THLineScaleCommandOptionType _type;
@@ -36,7 +35,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
     _type = THLineScaleCommandOptionType.multiplechoice;
@@ -45,7 +44,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsText({
     required super.optionParent,
     required String textScale,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
     _textSize = textScale;
     _type = THLineScaleCommandOptionType.text;
   }
@@ -53,7 +52,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
     _numericSize = numericScaleSize;
     _type = THLineScaleCommandOptionType.numeric;
   }
@@ -61,7 +60,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.lineScale) {
     _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     _type = THLineScaleCommandOptionType.numeric;
   }
@@ -70,7 +69,7 @@ class THLineScaleCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'multipleChoiceSize': multipleChoiceSize.toMap(),
       'numericSize': numericSize.toMap(),
       'type': type.toString(),
@@ -81,7 +80,7 @@ class THLineScaleCommandOption extends THCommandOption {
   factory THLineScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineScaleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
       numericSize: THDoublePart.fromMap(map['numericSize']),
@@ -98,7 +97,7 @@ class THLineScaleCommandOption extends THCommandOption {
   @override
   THLineScaleCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THMultipleChoicePart? multipleChoiceSize,
     THDoublePart? numericSize,
     THLineScaleCommandOptionType? type,

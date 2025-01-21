@@ -17,7 +17,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // <size:S> . specify the font size using predefined scales; S can be one of xs, s, m, l, 6.1.1
 // xl.
 class THTextCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'text';
   final String text;
 
   // static final Map<String, Set<String>> _supportedTypes = {
@@ -40,13 +39,13 @@ class THTextCommandOption extends THCommandOption {
   THTextCommandOption.addToOptionParent({
     required super.optionParent,
     required this.text,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.text);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'text': text,
     };
   }
@@ -54,7 +53,7 @@ class THTextCommandOption extends THCommandOption {
   factory THTextCommandOption.fromMap(Map<String, dynamic> map) {
     return THTextCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       text: map['text'],
     );
   }
@@ -66,7 +65,7 @@ class THTextCommandOption extends THCommandOption {
   @override
   THTextCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? text,
   }) {
     return THTextCommandOption(

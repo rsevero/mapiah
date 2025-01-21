@@ -5,7 +5,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // station-names <prefix> <suffix> . adds given prefix/suffix to all survey stations
 // in the current scrap. Saves some typing.
 class THStationNamesCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'stationnames';
   late final String prefix;
   late final String suffix;
 
@@ -20,13 +19,13 @@ class THStationNamesCommandOption extends THCommandOption {
     required super.optionParent,
     required this.prefix,
     required this.suffix,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.stationNames);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'prefix': prefix,
       'suffix': suffix,
     };
@@ -35,7 +34,7 @@ class THStationNamesCommandOption extends THCommandOption {
   factory THStationNamesCommandOption.fromMap(Map<String, dynamic> map) {
     return THStationNamesCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       prefix: map['prefix'],
       suffix: map['suffix'],
     );
@@ -48,7 +47,7 @@ class THStationNamesCommandOption extends THCommandOption {
   @override
   THStationNamesCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? prefix,
     String? suffix,
   }) {

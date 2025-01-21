@@ -10,7 +10,6 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // value can be optionally followed by ‘?’, if the value is presumed and units can be added
 // (e.g. -value [40? ft]).
 class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
-  static const String _thisOptionType = 'pointheightvalue';
   late bool isPresumed;
 
   THPointHeightValueCommandOption({
@@ -29,7 +28,8 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
     required String height,
     required this.isPresumed,
     String? unit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(
+            optionType: THCommandOptionType.pointHeightValue) {
     length = THDoublePart.fromString(valueString: height);
     if ((unit != null) && (unit.isNotEmpty)) {
       unitFromString(unit);
@@ -40,7 +40,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'length': length.toMap(),
       'isPresumed': isPresumed,
       'unit': unit.toMap(),
@@ -50,7 +50,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   factory THPointHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPointHeightValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -64,7 +64,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   @override
   THPointHeightValueCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? length,
     bool? isPresumed,
     THLengthUnitPart? unit,

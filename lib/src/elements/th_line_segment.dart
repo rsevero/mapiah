@@ -17,7 +17,7 @@ abstract class THLineSegment extends THElement
     required super.parentMapiahID,
     super.sameLineComment,
     required this.endPoint,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
   }

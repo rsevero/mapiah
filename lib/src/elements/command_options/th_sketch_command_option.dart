@@ -7,7 +7,6 @@ import 'package:mapiah/src/elements/parts/th_string_part.dart';
 // sketch <filename> <x> <y> . underlying sketch bitmap specification (lower left cor-
 // ner coordinates).
 class THSketchCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'sketch';
   late final THStringPart _filename;
   late final THPositionPart point;
 
@@ -24,7 +23,7 @@ class THSketchCommandOption extends THCommandOption {
     required super.optionParent,
     required String filename,
     required List<dynamic> pointList,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.sketch) {
     _filename = THStringPart(content: filename);
     pointFromStringList(pointList);
   }
@@ -37,7 +36,7 @@ class THSketchCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'filename': _filename.toMap(),
       'point': point.toMap(),
     };
@@ -46,7 +45,7 @@ class THSketchCommandOption extends THCommandOption {
   factory THSketchCommandOption.fromMap(Map<String, dynamic> map) {
     return THSketchCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       filename: map['filename']['content'],
       point: THPositionPart.fromMap(map['point']),
     );
@@ -59,7 +58,7 @@ class THSketchCommandOption extends THCommandOption {
   @override
   THSketchCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? filename,
     THPositionPart? point,
   }) {

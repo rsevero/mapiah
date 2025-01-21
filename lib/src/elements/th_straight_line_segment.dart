@@ -52,7 +52,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
       endPoint: THPositionPart.fromMap(map['endPoint']),
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
         map['optionsMap']
             .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
       ),
@@ -69,7 +69,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
     int? parentMapiahID,
     String? sameLineComment,
     THPositionPart? endPoint,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
     return THStraightLineSegment.forCWJM(

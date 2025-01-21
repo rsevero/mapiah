@@ -42,7 +42,7 @@ class THArea extends THElement
     required super.parentMapiahID,
     required super.sameLineComment,
     required String areaType,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
   }) : super.forCWJM() {
     _areaType = areaType;
     addOptionsMap(optionsMap);
@@ -79,7 +79,7 @@ class THArea extends THElement
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
       areaType: map['areaType'],
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
         map['optionsMap']
             .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
       ),
@@ -96,7 +96,7 @@ class THArea extends THElement
     int? parentMapiahID,
     String? sameLineComment,
     String? areaType,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THArea.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,

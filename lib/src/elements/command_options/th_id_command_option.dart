@@ -4,7 +4,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 // id <ext_keyword> . ID of the symbol.
 class THIDCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'id';
   late final String thID;
 
   THIDCommandOption({
@@ -17,14 +16,14 @@ class THIDCommandOption extends THCommandOption {
     required super.optionParent,
     required this.thID,
   }) : super.addToOptionParent(
-          optionType: _thisOptionType,
+          optionType: THCommandOptionType.id,
         ); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'thID': thID,
     };
   }
@@ -32,7 +31,7 @@ class THIDCommandOption extends THCommandOption {
   factory THIDCommandOption.fromMap(Map<String, dynamic> map) {
     return THIDCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       thID: map['thID'],
     );
   }
@@ -44,7 +43,7 @@ class THIDCommandOption extends THCommandOption {
   @override
   THIDCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? thID,
   }) {
     return THIDCommandOption(

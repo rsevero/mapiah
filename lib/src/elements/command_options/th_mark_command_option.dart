@@ -4,7 +4,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 // mark <keyword> . is used to mark the point on the line (see join command).
 class THMarkCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'mark';
   late final String mark;
 
   THMarkCommandOption({
@@ -16,13 +15,13 @@ class THMarkCommandOption extends THCommandOption {
   THMarkCommandOption.addToOptionParent({
     required super.optionParent,
     required this.mark,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.mark);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'mark': mark,
     };
   }
@@ -30,7 +29,7 @@ class THMarkCommandOption extends THCommandOption {
   factory THMarkCommandOption.fromMap(Map<String, dynamic> map) {
     return THMarkCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       mark: map['mark'],
     );
   }
@@ -42,7 +41,7 @@ class THMarkCommandOption extends THCommandOption {
   @override
   THMarkCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? mark,
   }) {
     return THMarkCommandOption(

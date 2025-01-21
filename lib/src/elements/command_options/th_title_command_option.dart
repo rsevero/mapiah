@@ -4,7 +4,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 // title <string> . description of the object
 class THTitleCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'title';
   final String title;
 
   THTitleCommandOption({
@@ -16,13 +15,13 @@ class THTitleCommandOption extends THCommandOption {
   THTitleCommandOption.addToOptionParent({
     required super.optionParent,
     required this.title,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.title);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'title': title,
     };
   }
@@ -30,7 +29,7 @@ class THTitleCommandOption extends THCommandOption {
   factory THTitleCommandOption.fromMap(Map<String, dynamic> map) {
     return THTitleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       title: map['title'],
     );
   }
@@ -42,7 +41,7 @@ class THTitleCommandOption extends THCommandOption {
   @override
   THTitleCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? title,
   }) {
     return THTitleCommandOption(

@@ -12,7 +12,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // Any subtype specification can be used with user defined type (u). In this case you need
 // also to define corresponding metapost symbol (see the chapter New map symbols).
 class THSubtypeCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'subtype';
   final String subtype;
 
   // static final Map<String, Map<String, Map<String, Object>>> _allowedSubtypes =
@@ -101,13 +100,13 @@ class THSubtypeCommandOption extends THCommandOption {
   THSubtypeCommandOption.addToOptionParent({
     required super.optionParent,
     required this.subtype,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.subtype);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'subtype': subtype,
     };
   }
@@ -115,7 +114,7 @@ class THSubtypeCommandOption extends THCommandOption {
   factory THSubtypeCommandOption.fromMap(Map<String, dynamic> map) {
     return THSubtypeCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       subtype: map['subtype'],
     );
   }
@@ -127,7 +126,7 @@ class THSubtypeCommandOption extends THCommandOption {
   @override
   THSubtypeCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? subtype,
   }) {
     return THSubtypeCommandOption(

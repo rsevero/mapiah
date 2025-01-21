@@ -6,7 +6,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // which are not used for scrap transformation. You don’t have to specify (draw) them
 // with the point station command.
 class THStationsCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'stations';
   final List<String> stations;
 
   THStationsCommandOption({
@@ -18,13 +17,13 @@ class THStationsCommandOption extends THCommandOption {
   THStationsCommandOption.addToOptionParent({
     required super.optionParent,
     required this.stations,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(optionType: THCommandOptionType.stations);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'stations': stations,
     };
   }
@@ -32,7 +31,7 @@ class THStationsCommandOption extends THCommandOption {
   factory THStationsCommandOption.fromMap(Map<String, dynamic> map) {
     return THStationsCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       stations: List<String>.from(map['stations']),
     );
   }
@@ -44,7 +43,7 @@ class THStationsCommandOption extends THCommandOption {
   @override
   THStationsCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     List<String>? stations,
   }) {
     return THStationsCommandOption(

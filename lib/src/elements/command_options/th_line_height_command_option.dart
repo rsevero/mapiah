@@ -6,7 +6,6 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // height <value> . height of pit or wall:pit; available in METAPOST as a numeric
 // variable ATTR__height.
 class THLineHeightCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'lineheight';
   late final THDoublePart height;
 
   THLineHeightCommandOption({
@@ -18,7 +17,7 @@ class THLineHeightCommandOption extends THCommandOption {
   THLineHeightCommandOption.fromString({
     required super.optionParent,
     required String height,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.lineHeight) {
     this.height = THDoublePart.fromString(valueString: height);
   }
 
@@ -26,7 +25,7 @@ class THLineHeightCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'height': height.toMap(),
     };
   }
@@ -34,7 +33,7 @@ class THLineHeightCommandOption extends THCommandOption {
   factory THLineHeightCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineHeightCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       height: THDoublePart.fromMap(map['height']),
     );
   }
@@ -46,7 +45,7 @@ class THLineHeightCommandOption extends THCommandOption {
   @override
   THLineHeightCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? height,
   }) {
     return THLineHeightCommandOption(

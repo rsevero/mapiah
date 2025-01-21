@@ -168,7 +168,7 @@ class THPoint extends THElement
     super.sameLineComment,
     required THPositionPart position,
     required String pointType,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
   })  : _position = position,
         _pointType = pointType,
         super.forCWJM() {
@@ -216,7 +216,7 @@ class THPoint extends THElement
       sameLineComment: map['sameLineComment'],
       position: THPositionPart.fromMap(map['position']),
       pointType: map['pointType'],
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
         map['optionsMap']
             .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
       ),
@@ -234,7 +234,7 @@ class THPoint extends THElement
     String? sameLineComment,
     THPositionPart? position,
     String? pointType,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
     return THPoint.forCWJM(

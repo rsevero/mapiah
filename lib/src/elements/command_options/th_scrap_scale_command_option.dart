@@ -16,7 +16,6 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // in reality. Optionally, you can also specify units for the coordinates of the ‘points in
 // reality’. This form allows you to apply both scaling and rotation to the scrap.
 class THScrapScaleCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'scrapscale';
   final List<THDoublePart> _numericSpecifications;
   final THLengthUnitPart? unit;
 
@@ -33,13 +32,13 @@ class THScrapScaleCommandOption extends THCommandOption {
     required List<THDoublePart> numericSpecifications,
     this.unit,
   })  : _numericSpecifications = numericSpecifications,
-        super.addToOptionParent(optionType: _thisOptionType);
+        super.addToOptionParent(optionType: THCommandOptionType.scrapScale);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'numericSpecifications':
           _numericSpecifications.map((e) => e.toMap()).toList(),
       'unit': unit?.toMap(),
@@ -49,7 +48,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THScrapScaleCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       numericSpecifications: List<THDoublePart>.from(
           map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
       unit: map['unit'] != null ? THLengthUnitPart.fromMap(map['unit']) : null,
@@ -63,7 +62,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   @override
   THScrapScaleCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     List<THDoublePart>? numericSpecifications,
     THLengthUnitPart? unit,
     bool makeUnitNull = false,

@@ -12,8 +12,6 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // The value can optionally be followed by length units.
 class THAltitudeValueCommandOption extends THCommandOption
     with THHasLength, THHasAltitude {
-  static const String _thisOptionType = 'altitudevalue';
-
   THAltitudeValueCommandOption({
     required super.parentMapiahID,
     required super.optionType,
@@ -31,7 +29,7 @@ class THAltitudeValueCommandOption extends THCommandOption
     required THDoublePart length,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.altitudeValue) {
     this.length = length;
     this.isFix = isFix;
     unitFromString(unit);
@@ -42,14 +40,14 @@ class THAltitudeValueCommandOption extends THCommandOption
     required String height,
     required bool isFix,
     required String? unit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.altitudeValue) {
     length = THDoublePart.fromString(valueString: height);
     isFix = isFix;
     unitFromString(unit);
   }
 
   THAltitudeValueCommandOption.fromNan({required super.optionParent})
-      : super.addToOptionParent(optionType: _thisOptionType) {
+      : super.addToOptionParent(optionType: THCommandOptionType.altitudeValue) {
     length = THDoublePart.fromString(valueString: '0');
     isNan = true;
     unitFromString('');
@@ -59,7 +57,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'length': length.toMap(),
       'isFix': isFix,
       'unit': unit,
@@ -69,7 +67,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   factory THAltitudeValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THAltitudeValueCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
       unit: map['unit'],
@@ -83,7 +81,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   @override
   THAltitudeValueCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? length,
     bool? isFix,
     THLengthUnitPart? unit,

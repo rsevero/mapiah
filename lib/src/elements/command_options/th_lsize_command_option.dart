@@ -8,7 +8,6 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 //
 // size <number> . synonym of l-size
 class THLSizeCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'l-size';
   late final THDoublePart number;
 
   THLSizeCommandOption({
@@ -20,7 +19,7 @@ class THLSizeCommandOption extends THCommandOption {
   THLSizeCommandOption.fromString({
     required super.optionParent,
     required String number,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.lSize) {
     this.number = THDoublePart.fromString(valueString: number);
   }
 
@@ -28,7 +27,7 @@ class THLSizeCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'number': number.toMap(),
     };
   }
@@ -36,7 +35,7 @@ class THLSizeCommandOption extends THCommandOption {
   factory THLSizeCommandOption.fromMap(Map<String, dynamic> map) {
     return THLSizeCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       number: THDoublePart.fromMap(map['number']),
     );
   }
@@ -48,7 +47,7 @@ class THLSizeCommandOption extends THCommandOption {
   @override
   THLSizeCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? number,
   }) {
     return THLSizeCommandOption(

@@ -4,7 +4,6 @@ import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 class THUnrecognizedCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'unrecognized';
   String? value;
 
   THUnrecognizedCommandOption({
@@ -16,13 +15,14 @@ class THUnrecognizedCommandOption extends THCommandOption {
   THUnrecognizedCommandOption.addToOptionParent({
     required super.optionParent,
     required this.value,
-  }) : super.addToOptionParent(optionType: _thisOptionType);
+  }) : super.addToOptionParent(
+            optionType: THCommandOptionType.unrecognizedCommandOption);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'value': value,
     };
   }
@@ -30,7 +30,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   factory THUnrecognizedCommandOption.fromMap(Map<String, dynamic> map) {
     return THUnrecognizedCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       value: map['value'],
     );
   }
@@ -42,7 +42,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   @override
   THUnrecognizedCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     String? value,
   }) {
     return THUnrecognizedCommandOption(

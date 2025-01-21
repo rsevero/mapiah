@@ -6,30 +6,30 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:meta/meta.dart';
 
 mixin THHasOptions on THElement {
-  final LinkedHashMap<String, THCommandOption> _optionsMap =
-      LinkedHashMap<String, THCommandOption>();
+  final LinkedHashMap<THCommandOptionType, THCommandOption> _optionsMap =
+      LinkedHashMap<THCommandOptionType, THCommandOption>();
 
   void addUpdateOption(THCommandOption option) {
     _optionsMap[option.optionType] = option;
   }
 
   @useResult
-  bool hasOption(String optionType) {
+  bool hasOption(THCommandOptionType optionType) {
     return _optionsMap.containsKey(optionType);
   }
 
   @useResult
-  bool optionIsSet(String optionType) {
+  bool optionIsSet(THCommandOptionType optionType) {
     return _optionsMap.containsKey(optionType);
   }
 
   @useResult
-  THCommandOption? optionByType(String optionType) {
+  THCommandOption? optionByType(THCommandOptionType optionType) {
     return _optionsMap[optionType];
   }
 
   @useResult
-  bool deleteOption(String optionType) {
+  bool deleteOption(THCommandOptionType optionType) {
     if (!hasOption(optionType)) {
       return false;
     }
@@ -41,12 +41,12 @@ mixin THHasOptions on THElement {
   String optionsAsString() {
     String asString = '';
 
-    final Iterable<String> optionTypeList = _optionsMap.keys;
+    final Iterable<THCommandOptionType> optionTypeList = _optionsMap.keys;
 
-    for (String type in optionTypeList) {
+    for (THCommandOptionType type in optionTypeList) {
       /// subtype option is serialized in the ':subtype' format, not in the
       /// -subtype <subtype> format.
-      if (type == 'subtype') {
+      if (type == THCommandOptionType.subtype) {
         continue;
       }
       final String spec = optionByType(type)!.specToFile();
@@ -58,10 +58,11 @@ mixin THHasOptions on THElement {
     return asString;
   }
 
-  LinkedHashMap<String, THCommandOption> get optionsMap => _optionsMap;
+  LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
+      _optionsMap;
 
-  void addOptionsMap(Map<String, THCommandOption> optionsMap) {
-    for (final String type in optionsMap.keys) {
+  void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
+    for (final THCommandOptionType type in optionsMap.keys) {
       addUpdateOption(optionsMap[type]!);
     }
   }

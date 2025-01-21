@@ -9,9 +9,6 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // (or station specified using -from option. If not specified, appropriate value from LRUD
 // data is used.
 class THDistCommandOption extends THCommandOption with THHasLength {
-  static const String _thisOptionType = 'dist';
-
-  /// Constructor necessary for dart_mappable support.
   THDistCommandOption({
     required super.parentMapiahID,
     required super.optionType,
@@ -26,7 +23,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
     required super.optionParent,
     required String distance,
     required String? unit,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.dist) {
     length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
@@ -37,7 +34,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'length': length.toMap(),
       'unit': unit,
     };
@@ -46,7 +43,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   factory THDistCommandOption.fromMap(Map<String, dynamic> map) {
     return THDistCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       length: THDoublePart.fromMap(map['length']),
       unit: map['unit'],
     );
@@ -59,7 +56,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   @override
   THDistCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {

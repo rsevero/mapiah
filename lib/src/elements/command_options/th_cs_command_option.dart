@@ -7,7 +7,6 @@ import 'package:mapiah/src/elements/parts/th_cs_part.dart';
 // in specified coordinate system. It is useful for absolute placing of imported sketches
 // where no survey stations are specified.
 class THCSCommandOption extends THCommandOption {
-  static const String _thisOptionType = 'cs';
   late final THCSPart cs;
 
   /// Constructor necessary for dart_mappable support.
@@ -21,7 +20,7 @@ class THCSCommandOption extends THCommandOption {
     required super.optionParent,
     required String csString,
     required bool forOutputOnly,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
+  }) : super.addToOptionParent(optionType: THCommandOptionType.cs) {
     cs = THCSPart(name: csString, forOutputOnly: forOutputOnly);
   }
 
@@ -29,7 +28,7 @@ class THCSCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'optionType': optionType,
+      'optionType': optionType.name,
       'cs': cs.toMap(),
     };
   }
@@ -37,7 +36,7 @@ class THCSCommandOption extends THCommandOption {
   factory THCSCommandOption.fromMap(Map<String, dynamic> map) {
     return THCSCommandOption(
       parentMapiahID: map['parentMapiahID'],
-      optionType: map['optionType'],
+      optionType: THCommandOptionType.values.byName(map['optionType']),
       cs: THCSPart.fromMap(map['cs']),
     );
   }
@@ -49,7 +48,7 @@ class THCSCommandOption extends THCommandOption {
   @override
   THCSCommandOption copyWith({
     int? parentMapiahID,
-    String? optionType,
+    THCommandOptionType? optionType,
     THCSPart? cs,
   }) {
     return THCSCommandOption(
