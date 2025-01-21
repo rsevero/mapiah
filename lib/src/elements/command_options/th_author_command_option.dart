@@ -1,12 +1,11 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/parts/th_person_part.dart';
 
 // author <date> <person> . author of the data and its creation date
-@serializable
-class THAuthorCommandOption extends THCommandOption
-    with Dataclass<THAuthorCommandOption> {
+class THAuthorCommandOption extends THCommandOption {
   static const String _thisOptionType = 'author';
   late final THDatetimePart datetime;
   late final THPersonPart person;
@@ -29,26 +28,31 @@ class THAuthorCommandOption extends THCommandOption
     required String datetime,
     required String person,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
-    this.datetime = THDatetimePart(datetime);
-    this.person = THPersonPart.fromString(person);
+    this.datetime = THDatetimePart.fromString(datetime: datetime);
+    this.person = THPersonPart.fromString(name: person);
   }
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THAuthorCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'datetime': datetime.toMap(),
+      'person': person.toMap(),
+    };
   }
 
   factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THAuthorCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THAuthorCommandOption>(this);
+    return THAuthorCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      datetime: THDatetimePart.fromMap(map['datetime']),
+      person: THPersonPart.fromMap(map['person']),
+    );
   }
 
   factory THAuthorCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THAuthorCommandOption>(jsonString);
+    return THAuthorCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -65,6 +69,24 @@ class THAuthorCommandOption extends THCommandOption
       person: person ?? this.person,
     );
   }
+
+  @override
+  bool operator ==(covariant THAuthorCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.datetime == datetime &&
+        other.person == person;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        datetime,
+        person,
+      );
 
   @override
   String specToFile() {

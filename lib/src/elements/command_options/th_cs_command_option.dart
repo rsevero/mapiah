@@ -1,13 +1,12 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_cs_part.dart';
 
 // cs <coordinate system> assumes that (calibrated) local scrap coordinates are given
 // in specified coordinate system. It is useful for absolute placing of imported sketches
 // where no survey stations are specified.
-@serializable
-class THCSCommandOption extends THCommandOption
-    with Dataclass<THCSCommandOption> {
+class THCSCommandOption extends THCommandOption {
   static const String _thisOptionType = 'cs';
   late final THCSPart cs;
 
@@ -28,20 +27,23 @@ class THCSCommandOption extends THCommandOption
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THCSCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'cs': cs.toMap(),
+    };
   }
 
   factory THCSCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THCSCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THCSCommandOption>(this);
+    return THCSCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      cs: THCSPart.fromMap(map['cs']),
+    );
   }
 
   factory THCSCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THCSCommandOption>(jsonString);
+    return THCSCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -56,6 +58,22 @@ class THCSCommandOption extends THCommandOption
       cs: cs ?? this.cs,
     );
   }
+
+  @override
+  bool operator ==(covariant THCSCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.cs == cs;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        cs,
+      );
 
   @override
   String specToFile() {

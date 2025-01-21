@@ -1,38 +1,91 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-
-part 'th_explored_command_option.mapper.dart';
+import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
 // explored <length> . if the point type is continuation, you can specify length of pas-
 // sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
 // statistics.
-@MappableClass()
-class THExploredCommandOption extends THCommandOption
-    with THExploredCommandOptionMappable, THHasLength {
+class THExploredCommandOption extends THCommandOption with THHasLength {
   static const String _thisOptionType = 'explored';
 
   /// Constructor necessary for dart_mappable support.
-  THExploredCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    THDoublePart length, [
-    String? unit,
-  ]) : super.withExplicitParameters() {
+  THExploredCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required THDoublePart length,
+    required THLengthUnitPart unit,
+  }) : super() {
     this.length = length;
+    this.unit = unit;
+  }
+
+  THExploredCommandOption.fromString({
+    required super.optionParent,
+    required String distance,
+    required String? unit,
+  }) : super.addToOptionParent(optionType: _thisOptionType) {
+    length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
     }
   }
 
-  THExploredCommandOption.fromString(THHasOptions optionParent, String distance,
-      [String? aUnit])
-      : super(optionParent, _thisOptionType) {
-    length = THDoublePart.fromString(distance);
-    if (aUnit != null) {
-      unitFromString(aUnit);
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'length': length.toMap(),
+      'unit': unit.toMap(),
+    };
   }
+
+  factory THExploredCommandOption.fromMap(Map<String, dynamic> map) {
+    return THExploredCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      length: THDoublePart.fromMap(map['length']),
+      unit: THLengthUnitPart.fromMap(map['unit']),
+    );
+  }
+
+  factory THExploredCommandOption.fromJson(String jsonString) {
+    return THExploredCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THExploredCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    THDoublePart? length,
+    THLengthUnitPart? unit,
+  }) {
+    return THExploredCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      length: length ?? this.length,
+      unit: unit ?? this.unit,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THExploredCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.length == length &&
+        other.unit == unit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        length,
+        unit,
+      );
 }

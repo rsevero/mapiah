@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -17,6 +19,11 @@ abstract class THCommandOption implements THSerializable {
   })  : _optionType = optionType,
         parentMapiahID = optionParent.mapiahID {
     optionParent.addUpdateOption(this);
+  }
+
+  @override
+  String toJson() {
+    return jsonEncode(toMap());
   }
 
   String get optionType => _optionType;

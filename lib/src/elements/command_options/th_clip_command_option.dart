@@ -1,12 +1,8 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_multiple_choice_command_option.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
 
-part 'th_clip_command_option.mapper.dart';
-
-@MappableClass()
-class THClipCommandOption extends THMultipleChoiceCommandOption
-    with THClipCommandOptionMappable {
+class THClipCommandOption extends THMultipleChoiceCommandOption {
   static const _thisOptionType = 'clip';
   // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
   //   'altitude',
@@ -20,15 +16,77 @@ class THClipCommandOption extends THMultipleChoiceCommandOption
   // });
 
   /// Constructor necessary for dart_mappable support.
-  THClipCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.parentElementType,
-    super.optionType,
-    super.choice,
-  ) : super.withExplicitParameters();
+  THClipCommandOption({
+    required super.parentMapiahID,
+    required super.parentElementType,
+    required super.optionType,
+    required super.choice,
+  }) : super();
 
-  THClipCommandOption(super.optionParent, super.optionType, super.choice);
+  THClipCommandOption.addToOptionParent({
+    required super.optionParent,
+    required super.optionType,
+    required super.choice,
+  }) : super.addToOptionParent();
 
-  THClipCommandOption.fromChoice(THHasOptions optionParent, String choice)
-      : super(optionParent, _thisOptionType, choice);
+  THClipCommandOption.fromChoice({
+    required super.optionParent,
+    required super.choice,
+  }) : super.addToOptionParent(optionType: _thisOptionType);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'parentElementType': parentElementType,
+      'optionType': optionType,
+      'choice': choice,
+    };
+  }
+
+  factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
+    return THClipCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      parentElementType: map['parentElementType'],
+      optionType: map['optionType'],
+      choice: map['choice'],
+    );
+  }
+
+  factory THClipCommandOption.fromJson(String jsonString) {
+    return THClipCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THClipCommandOption copyWith({
+    int? parentMapiahID,
+    String? parentElementType,
+    String? optionType,
+    String? choice,
+  }) {
+    return THClipCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentElementType: parentElementType ?? this.parentElementType,
+      optionType: optionType ?? this.optionType,
+      choice: choice ?? this.choice,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THClipCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.parentElementType == parentElementType &&
+        other.optionType == optionType &&
+        other.choice == choice;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        parentElementType,
+        optionType,
+        choice,
+      );
 }

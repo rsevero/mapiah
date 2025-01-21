@@ -1,14 +1,13 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_text.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 
 // copyright <date> <string> . copyright date and name
-@serializable
-class THCopyrightCommandOption extends THCommandOption
-    with Dataclass<THCopyrightCommandOption>, THHasText {
+class THCopyrightCommandOption extends THCommandOption with THHasText {
   static const String _thisOptionType = 'copyright';
-  late THDatetimePart datetime;
+  late final THDatetimePart datetime;
 
   /// Constructor necessary for dart_mappable support.
   THCopyrightCommandOption({
@@ -33,26 +32,31 @@ class THCopyrightCommandOption extends THCommandOption
     required String datetime,
     required String text,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
-    this.datetime = THDatetimePart(datetime);
+    this.datetime = THDatetimePart.fromString(datetime: datetime);
     this.text = text;
   }
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THCopyrightCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'datetime': datetime.toMap(),
+      'text': text,
+    };
   }
 
   factory THCopyrightCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THCopyrightCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THCopyrightCommandOption>(this);
+    return THCopyrightCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      datetime: THDatetimePart.fromMap(map['datetime']),
+      copyrightMessage: map['text'],
+    );
   }
 
   factory THCopyrightCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THCopyrightCommandOption>(jsonString);
+    return THCopyrightCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -60,15 +64,33 @@ class THCopyrightCommandOption extends THCommandOption
     int? parentMapiahID,
     String? optionType,
     THDatetimePart? datetime,
-    String? copyrightMessage,
+    String? text,
   }) {
     return THCopyrightCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
       datetime: datetime ?? this.datetime,
-      copyrightMessage: copyrightMessage ?? this.copyrightMessage,
+      copyrightMessage: text ?? this.text,
     );
   }
+
+  @override
+  bool operator ==(covariant THCopyrightCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.datetime == datetime &&
+        other.text == text;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        datetime,
+        text,
+      );
 
   @override
   String specToFile() {

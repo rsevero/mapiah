@@ -1,11 +1,10 @@
 // date: -value <date> sets the date for the date point.
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 
-@serializable
-class THDateValueCommandOption extends THCommandOption
-    with Dataclass<THDateValueCommandOption> {
+class THDateValueCommandOption extends THCommandOption {
   static const String _thisOptionType = 'value';
   late final THDatetimePart date;
 
@@ -19,25 +18,28 @@ class THDateValueCommandOption extends THCommandOption
     required super.optionParent,
     required String date,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
-    this.date = THDatetimePart(date);
+    this.date = THDatetimePart.fromString(datetime: date);
   }
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THDateValueCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'date': date.toMap(),
+    };
   }
 
   factory THDateValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THDateValueCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THDateValueCommandOption>(this);
+    return THDateValueCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      date: THDatetimePart.fromMap(map['date']),
+    );
   }
 
   factory THDateValueCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THDateValueCommandOption>(jsonString);
+    return THDateValueCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -52,6 +54,22 @@ class THDateValueCommandOption extends THCommandOption
       date: date ?? this.date,
     );
   }
+
+  @override
+  bool operator ==(covariant THDateValueCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.date == date;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        date,
+      );
 
   @override
   String specToFile() {

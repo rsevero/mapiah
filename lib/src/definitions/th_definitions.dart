@@ -39,6 +39,8 @@ const int thFirstMapiahIDForElements = 1;
 
 const int thDecimalPositionsForOffsetMapper = 7;
 
+const String thDefaultLengthUnit = 'm';
+
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 

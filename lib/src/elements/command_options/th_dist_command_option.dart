@@ -1,14 +1,14 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
 // dist <distance> . valid for extra points, specifies the distance to the nearest station
 // (or station specified using -from option. If not specified, appropriate value from LRUD
 // data is used.
-@serializable
-class THDistCommandOption extends THCommandOption
-    with Dataclass<THDistCommandOption>, THHasLength {
+class THDistCommandOption extends THCommandOption with THHasLength {
   static const String _thisOptionType = 'dist';
 
   /// Constructor necessary for dart_mappable support.
@@ -16,12 +16,10 @@ class THDistCommandOption extends THCommandOption
     required super.parentMapiahID,
     required super.optionType,
     required THDoublePart length,
-    required String? unit,
+    required THLengthUnitPart unit,
   }) : super() {
     this.length = length;
-    if (unit != null) {
-      unitFromString(unit);
-    }
+    this.unit = unit;
   }
 
   THDistCommandOption.fromString({
@@ -29,7 +27,7 @@ class THDistCommandOption extends THCommandOption
     required String distance,
     required String? unit,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
-    length = THDoublePart.fromString(distance);
+    length = THDoublePart.fromString(valueString: distance);
     if (unit != null) {
       unitFromString(unit);
     }
@@ -37,20 +35,25 @@ class THDistCommandOption extends THCommandOption
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THDistCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'length': length.toMap(),
+      'unit': unit,
+    };
   }
 
   factory THDistCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THDistCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THDistCommandOption>(this);
+    return THDistCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      length: THDoublePart.fromMap(map['length']),
+      unit: map['unit'],
+    );
   }
 
   factory THDistCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THDistCommandOption>(jsonString);
+    return THDistCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -58,14 +61,31 @@ class THDistCommandOption extends THCommandOption
     int? parentMapiahID,
     String? optionType,
     THDoublePart? length,
-    String? unit,
-    bool makeUnitNull = false,
+    THLengthUnitPart? unit,
   }) {
     return THDistCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
       length: length ?? this.length,
-      unit: makeUnitNull ? null : (unit ?? this.unit),
+      unit: unit ?? this.unit,
     );
   }
+
+  @override
+  bool operator ==(covariant THDistCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.length == length &&
+        other.unit == unit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        length,
+        unit,
+      );
 }

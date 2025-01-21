@@ -1,18 +1,14 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_has_platype.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
-part 'th_multiple_choice_command_option.mapper.dart';
-
-@MappableClass()
-class THMultipleChoiceCommandOption extends THCommandOption
-    with THMultipleChoiceCommandOptionMappable {
-  late String _choice;
-  String parentElementType;
+class THMultipleChoiceCommandOption extends THCommandOption {
+  late final String _choice;
+  final String parentElementType;
 
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
@@ -385,22 +381,79 @@ class THMultipleChoiceCommandOption extends THCommandOption
     },
   };
 
-  THMultipleChoiceCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    this.parentElementType,
-    String choice,
-  ) : super.withExplicitParameters() {
+  THMultipleChoiceCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required this.parentElementType,
+    required String choice,
+  }) : super() {
     setChoice(choice);
   }
 
-  THMultipleChoiceCommandOption(
-    super.optionParent,
-    super.optionType,
-    String choice,
-  ) : parentElementType = optionParent.elementType {
+  THMultipleChoiceCommandOption.addToOptionParent({
+    required super.optionParent,
+    required super.optionType,
+    required String choice,
+  })  : parentElementType = optionParent.elementType,
+        super.addToOptionParent() {
     setChoice(choice);
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'parentElementType': parentElementType,
+      'choice': _choice,
+    };
+  }
+
+  factory THMultipleChoiceCommandOption.fromMap(Map<String, dynamic> map) {
+    return THMultipleChoiceCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      parentElementType: map['parentElementType'],
+      choice: map['choice'],
+    );
+  }
+
+  factory THMultipleChoiceCommandOption.fromJson(String jsonString) {
+    return THMultipleChoiceCommandOption.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THMultipleChoiceCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    String? parentElementType,
+    String? choice,
+  }) {
+    return THMultipleChoiceCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      parentElementType: parentElementType ?? this.parentElementType,
+      choice: choice ?? _choice,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THMultipleChoiceCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.parentElementType == parentElementType &&
+        other._choice == _choice;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        parentElementType,
+        _choice,
+      );
 
   void setChoice(String choice) {
     choice = _mainChoice(choice);
@@ -449,22 +502,21 @@ class THMultipleChoiceCommandOption extends THCommandOption
     return choice;
   }
 
-  static bool hasOptionType(THHasOptions aOptionParent, String aOptionType) {
-    final String aOptionParentElementType = aOptionParent.elementType;
+  static bool hasOptionType(THHasOptions optionParent, String optionType) {
+    final String aOptionParentElementType = optionParent.elementType;
     if (!_supportedOptions.containsKey(aOptionParentElementType)) {
       return false;
     }
 
-    if (!_supportedOptions[aOptionParentElementType]!
-        .containsKey(aOptionType)) {
+    if (!_supportedOptions[aOptionParentElementType]!.containsKey(optionType)) {
       return false;
     }
 
-    if (aOptionParent is THHasPLAType) {
-      final String aPLAType = (aOptionParent as THHasPLAType).plaType;
+    if (optionParent is THHasPLAType) {
+      final String aPLAType = (optionParent as THHasPLAType).plaType;
 
       final Set<String> plaTypesSupported = _supportedOptions[
-              aOptionParentElementType]![aOptionType]!['plaTypesSupported']
+              aOptionParentElementType]![optionType]!['plaTypesSupported']
           as Set<String>;
 
       if (plaTypesSupported.isEmpty) {

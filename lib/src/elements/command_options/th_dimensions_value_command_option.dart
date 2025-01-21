@@ -1,32 +1,28 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
 // dimensions: -value [<above> <below> [<units>]] specifies passage dimensions a-
 // bove/below centerline plane used in 3D model.
-@serializable
-class THDimensionsValueCommandOption extends THCommandOption
-    with Dataclass<THDimensionsValueCommandOption> {
+class THDimensionsValueCommandOption extends THCommandOption {
   static const String _thisOptionType = 'value';
-  late final THDoublePart _above;
-  late final THDoublePart _below;
-  final THLengthUnitPart _unit = THLengthUnitPart.fromString('m');
-  bool unitSet = false;
+  late final THDoublePart above;
+  late final THDoublePart below;
+  late final THLengthUnitPart _unit;
+  late final bool unitSet;
 
   THDimensionsValueCommandOption({
     required super.parentMapiahID,
     required super.optionType,
-    required THDoublePart above,
-    required THDoublePart below,
-    String? unit,
-  }) : super() {
-    _above = above;
-    _below = below;
-    if ((unit != null) && (unit.isNotEmpty)) {
-      unitFromString(unit);
-    }
-  }
+    required this.above,
+    required this.below,
+    required THLengthUnitPart unit,
+    required this.unitSet,
+  })  : _unit = unit,
+        super();
 
   THDimensionsValueCommandOption.fromString({
     required super.optionParent,
@@ -34,29 +30,36 @@ class THDimensionsValueCommandOption extends THCommandOption
     required String below,
     String? unit,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
-    _above = THDoublePart.fromString(above);
-    _below = THDoublePart.fromString(below);
-    if ((unit != null) && (unit.isNotEmpty)) {
-      unitFromString(unit);
-    }
+    this.above = THDoublePart.fromString(valueString: above);
+    this.below = THDoublePart.fromString(valueString: below);
+    unitFromString(unit);
   }
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THDimensionsValueCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'above': above.toMap(),
+      'below': below.toMap(),
+      'unit': _unit.toMap(),
+      'unitSet': unitSet,
+    };
   }
 
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THDimensionsValueCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THDimensionsValueCommandOption>(this);
+    return THDimensionsValueCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      above: THDoublePart.fromMap(map['above']),
+      below: THDoublePart.fromMap(map['below']),
+      unit: THLengthUnitPart.fromMap(map['unit']),
+      unitSet: map['unitSet'],
+    );
   }
 
   factory THDimensionsValueCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THDimensionsValueCommandOption>(jsonString);
+    return THDimensionsValueCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -65,26 +68,54 @@ class THDimensionsValueCommandOption extends THCommandOption
     String? optionType,
     THDoublePart? above,
     THDoublePart? below,
-    String? unit,
-    bool makeUnitNull = false,
+    THLengthUnitPart? unit,
+    bool? unitSet,
   }) {
     return THDimensionsValueCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
       above: above ?? this.above,
       below: below ?? this.below,
-      unit: makeUnitNull ? null : (unit ?? this.unit),
+      unit: unit ?? _unit,
+      unitSet: unitSet ?? this.unitSet,
     );
   }
 
-  void unitFromString(String aUnit) {
-    _unit.fromString(aUnit);
-    unitSet = true;
+  @override
+  bool operator ==(covariant THDimensionsValueCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.above == above &&
+        other.below == below &&
+        other.unit == unit &&
+        other.unitSet == unitSet;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        above,
+        below,
+        unit,
+        unitSet,
+      );
+
+  void unitFromString(String? unit) {
+    if ((unit != null) && (unit.isNotEmpty)) {
+      _unit = THLengthUnitPart.fromString(unitString: unit);
+      unitSet = true;
+    } else {
+      _unit = THLengthUnitPart.fromString(unitString: thDefaultLengthUnit);
+      unitSet = false;
+    }
   }
 
   @override
   String specToFile() {
-    var asString = "${_above.toString()} ${_below.toString()}";
+    var asString = "${above.toString()} ${below.toString()}";
 
     if (unitSet) {
       asString += " ${_unit.toString()}";
@@ -94,10 +125,6 @@ class THDimensionsValueCommandOption extends THCommandOption
 
     return asString;
   }
-
-  THDoublePart get above => _above;
-
-  THDoublePart get below => _below;
 
   String get unit => _unit.toString();
 }

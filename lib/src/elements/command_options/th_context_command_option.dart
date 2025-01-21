@@ -1,12 +1,11 @@
-import 'package:dogs_core/dogs_core.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 // context <point/line/area> <symbol-type> . (to be used with symbol-hide and
 // symbol-show layout options) symbol will be hidden/shown according to rules for spec-
 // ified <symbol-type>.
-@serializable
-class THContextCommandOption extends THCommandOption
-    with Dataclass<THContextCommandOption> {
+class THContextCommandOption extends THCommandOption {
   static const String _thisOptionType = 'context';
   late final String elementType;
   late final String symbolType;
@@ -29,20 +28,25 @@ class THContextCommandOption extends THCommandOption
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THContextCommandOption>(this);
+    return {
+      'parentMapiahID': parentMapiahID,
+      'optionType': optionType,
+      'elementType': elementType,
+      'symbolType': symbolType,
+    };
   }
 
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THContextCommandOption>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THContextCommandOption>(this);
+    return THContextCommandOption(
+      parentMapiahID: map['parentMapiahID'],
+      optionType: map['optionType'],
+      elementType: map['elementType'],
+      symbolType: map['symbolType'],
+    );
   }
 
   factory THContextCommandOption.fromJson(String jsonString) {
-    return dogs.fromJson<THContextCommandOption>(jsonString);
+    return THContextCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -59,6 +63,24 @@ class THContextCommandOption extends THCommandOption
       symbolType: symbolType ?? this.symbolType,
     );
   }
+
+  @override
+  bool operator ==(covariant THContextCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.optionType == optionType &&
+        other.elementType == elementType &&
+        other.symbolType == symbolType;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        parentMapiahID,
+        optionType,
+        elementType,
+        symbolType,
+      );
 
   // set elementType(String aElementType) {
   //   if (!_supportedElementTypes.contains(aElementType)) {

@@ -6,8 +6,8 @@ import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 // prefixed by ‘fix’ (e.g. -value [fix 1300]), this value is used as an absolute altitude.
 // The value can optionally be followed by length units.
 mixin THHasAltitude on THCommandOption, THHasLength {
-  bool isNan = false;
-  late bool isFix;
+  late final bool isNan;
+  late final bool isFix;
 
   @override
   String specToFile() {

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
+import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/th_has_altitude.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
@@ -19,13 +20,13 @@ class THAltitudeCommandOption extends THCommandOption
   THAltitudeCommandOption({
     required super.parentMapiahID,
     required super.optionType,
-    required length,
+    required THDoublePart length,
     required bool isFix,
-    String? unit,
+    required THLengthUnitPart unit,
   }) : super() {
     this.length = length;
     this.isFix = isFix;
-    unitFromString(unit);
+    this.unit = unit;
   }
 
   THAltitudeCommandOption.addToOptionParent({
@@ -45,14 +46,14 @@ class THAltitudeCommandOption extends THCommandOption
     required bool isFix,
     required String? unit,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
-    length = THDoublePart.fromString(height);
+    length = THDoublePart.fromString(valueString: height);
     this.isFix = isFix;
     unitFromString(unit);
   }
 
   THAltitudeCommandOption.fromNan({required super.optionParent})
       : super.addToOptionParent(optionType: _thisOptionType) {
-    length = THDoublePart.fromString('0');
+    length = THDoublePart.fromString(valueString: '0');
     isNan = true;
     unitFromString('');
   }
@@ -64,7 +65,7 @@ class THAltitudeCommandOption extends THCommandOption
       'optionType': optionType,
       'length': length.toMap(),
       'isFix': isFix,
-      'unit': unit,
+      'unit': unit.toMap(),
     };
   }
 
@@ -78,11 +79,6 @@ class THAltitudeCommandOption extends THCommandOption
     );
   }
 
-  @override
-  String toJson() {
-    return jsonEncode(toMap());
-  }
-
   factory THAltitudeCommandOption.fromJson(String jsonString) {
     return THAltitudeCommandOption.fromMap(jsonDecode(jsonString));
   }
@@ -93,7 +89,7 @@ class THAltitudeCommandOption extends THCommandOption
     String? optionType,
     THDoublePart? length,
     bool? isFix,
-    String? unit,
+    THLengthUnitPart? unit,
     bool makeUnitNull = false,
   }) {
     return THAltitudeCommandOption(
@@ -101,7 +97,7 @@ class THAltitudeCommandOption extends THCommandOption
       optionType: optionType ?? this.optionType,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,
-      unit: makeUnitNull ? null : (unit ?? this.unit),
+      unit: unit ?? this.unit,
     );
   }
 
