@@ -1,6 +1,6 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -8,9 +8,7 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 // [[LINE DATA] specify the coordinates of a Bézier curve arc:
 // <c1x> <c1y> <c2x> <c2y> <x> <y>, where c indicates the control point.
-@serializable
-class THBezierCurveLineSegment extends THLineSegment
-    with Dataclass<THBezierCurveLineSegment>, THHasOptions {
+class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
   late final THPositionPart controlPoint1;
   late final THPositionPart controlPoint2;
 
@@ -47,20 +45,35 @@ class THBezierCurveLineSegment extends THLineSegment
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THBezierCurveLineSegment>(this);
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'controlPoint1': controlPoint1.toMap(),
+      'controlPoint2': controlPoint2.toMap(),
+      'endPoint': endPoint.toMap(),
+      'optionsMap':
+          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+    };
   }
 
   factory THBezierCurveLineSegment.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THBezierCurveLineSegment>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THBezierCurveLineSegment>(this);
+    return THBezierCurveLineSegment(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      controlPoint1: THPositionPart.fromMap(map['controlPoint1']),
+      controlPoint2: THPositionPart.fromMap(map['controlPoint2']),
+      endPoint: THPositionPart.fromMap(map['endPoint']),
+      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+        map['optionsMap']
+            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      ),
+    );
   }
 
   factory THBezierCurveLineSegment.fromJson(String jsonString) {
-    return dogs.fromJson<THBezierCurveLineSegment>(jsonString);
+    return THBezierCurveLineSegment.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -68,22 +81,48 @@ class THBezierCurveLineSegment extends THLineSegment
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
-    THPositionPart? endPoint,
     THPositionPart? controlPoint1,
     THPositionPart? controlPoint2,
+    THPositionPart? endPoint,
     LinkedHashMap<String, THCommandOption>? optionsMap,
+    bool makeSameLineCommentNull = false,
   }) {
     return THBezierCurveLineSegment(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      sameLineComment: sameLineComment ?? this.sameLineComment,
-      endPoint: endPoint ?? this.endPoint,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
       controlPoint1: controlPoint1 ?? this.controlPoint1,
       controlPoint2: controlPoint2 ?? this.controlPoint2,
-      optionsMap: optionsMap ??
-          LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
+      endPoint: endPoint ?? this.endPoint,
+      optionsMap: optionsMap ?? this.optionsMap,
     );
   }
+
+  @override
+  bool operator ==(covariant THBezierCurveLineSegment other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.controlPoint1 == controlPoint1 &&
+        other.controlPoint2 == controlPoint2 &&
+        other.endPoint == endPoint &&
+        other.optionsMap == optionsMap;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        controlPoint1,
+        controlPoint2,
+        endPoint,
+        optionsMap,
+      );
 
   @override
   bool isSameClass(Object object) {

@@ -1,33 +1,29 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_text.dart';
 
 // title <string> . description of the object
-class THTitleCommandOption extends THCommandOption with THHasText {
+class THTitleCommandOption extends THCommandOption {
   static const String _thisOptionType = 'title';
+  final String title;
 
   THTitleCommandOption({
     required super.parentMapiahID,
     required super.optionType,
-    required String text,
-  }) : super() {
-    this.text = text;
-  }
+    required this.title,
+  }) : super();
 
   THTitleCommandOption.addToOptionParent({
     required super.optionParent,
-    required String text,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
-    this.text = text;
-  }
+    required this.title,
+  }) : super.addToOptionParent(optionType: _thisOptionType);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
       'optionType': optionType,
-      'text': text,
+      'title': title,
     };
   }
 
@@ -35,7 +31,7 @@ class THTitleCommandOption extends THCommandOption with THHasText {
     return THTitleCommandOption(
       parentMapiahID: map['parentMapiahID'],
       optionType: map['optionType'],
-      text: map['text'],
+      title: map['title'],
     );
   }
 
@@ -47,12 +43,12 @@ class THTitleCommandOption extends THCommandOption with THHasText {
   THTitleCommandOption copyWith({
     int? parentMapiahID,
     String? optionType,
-    String? text,
+    String? title,
   }) {
     return THTitleCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
-      text: text ?? this.text,
+      title: title ?? this.title,
     );
   }
 
@@ -62,18 +58,18 @@ class THTitleCommandOption extends THCommandOption with THHasText {
 
     return other.parentMapiahID == parentMapiahID &&
         other.optionType == optionType &&
-        other.text == text;
+        other.title == title;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
         optionType,
-        text,
+        title,
       );
 
   @override
   String specToFile() {
-    return textToFile();
+    return title;
   }
 }

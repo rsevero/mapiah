@@ -1,6 +1,6 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -36,9 +36,8 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 // ice-pillar, ice-stalactite, ice-stalagmite, map-connection18 , paleo-material,
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
-@serializable
 class THPoint extends THElement
-    with Dataclass<THPoint>, THHasOptions
+    with THHasOptions
     implements THHasPLAType, THPointInterface {
   final THPositionPart _position;
   final String _pointType;
@@ -195,20 +194,33 @@ class THPoint extends THElement
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THPoint>(this);
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'position': position.toMap(),
+      'pointType': pointType,
+      'optionsMap':
+          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+    };
   }
 
   factory THPoint.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THPoint>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THPoint>(this);
+    return THPoint(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      position: THPositionPart.fromMap(map['position']),
+      pointType: map['pointType'],
+      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+        map['optionsMap']
+            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      ),
+    );
   }
 
   factory THPoint.fromJson(String jsonString) {
-    return dogs.fromJson<THPoint>(jsonString);
+    return THPoint.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -219,17 +231,41 @@ class THPoint extends THElement
     THPositionPart? position,
     String? pointType,
     LinkedHashMap<String, THCommandOption>? optionsMap,
+    bool makeSameLineCommentNull = false,
   }) {
     return THPoint(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      sameLineComment: sameLineComment ?? this.sameLineComment,
-      position: position ?? _position,
-      pointType: pointType ?? _pointType,
-      optionsMap: optionsMap ??
-          LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      position: position ?? this.position,
+      pointType: pointType ?? this.pointType,
+      optionsMap: optionsMap ?? this.optionsMap,
     );
   }
+
+  @override
+  bool operator ==(covariant THPoint other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.position == position &&
+        other.pointType == pointType &&
+        other.optionsMap == optionsMap;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        position,
+        pointType,
+        optionsMap,
+      );
 
   static bool hasPointType(String pointType) {
     return _pointTypes.contains(pointType);

@@ -1,33 +1,80 @@
-import "package:dart_mappable/dart_mappable.dart";
+import "dart:convert";
+
 import "package:mapiah/src/elements/th_element.dart";
-import "package:mapiah/src/elements/th_file.dart";
 
-part 'th_encoding.mapper.dart';
+class THEncoding extends THElement {
+  late final String encoding;
 
-@MappableClass()
-class THEncoding extends THElement with THEncodingMappable {
-  late String _encoding;
-
-  // Used by dart_mappable.
-  THEncoding.notAddToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+  THEncoding({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-    String encoding,
-  ) : super.notAddToParent() {
-    _encoding = encoding;
+    required this.encoding,
+  }) : super();
+
+  THEncoding.addToParent({
+    required super.parentMapiahID,
+    required this.encoding,
+  }) : super.addToParent();
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'encoding': encoding,
+    };
   }
 
-  THEncoding(super.parentMapiahID, String encoding) : super.addToParent() {
-    _encoding = encoding;
+  factory THEncoding.fromMap(Map<String, dynamic> map) {
+    return THEncoding(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      encoding: map['encoding'],
+    );
   }
 
-  void setEncoding(THFile thFile, String encoding) {
-    _encoding = encoding;
-    thFile.encoding = encoding;
+  factory THEncoding.fromJson(String jsonString) {
+    return THEncoding.fromMap(jsonDecode(jsonString));
   }
 
-  String get encoding => _encoding;
+  @override
+  THEncoding copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    String? encoding,
+    bool makeSameLineCommentNull = false,
+  }) {
+    return THEncoding(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      encoding: encoding ?? this.encoding,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THEncoding other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.encoding == encoding;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        encoding,
+      );
 
   @override
   bool isSameClass(Object object) {

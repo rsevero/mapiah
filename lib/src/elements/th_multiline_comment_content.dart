@@ -1,23 +1,80 @@
-import "package:dart_mappable/dart_mappable.dart";
+import "dart:convert";
+
 import "package:mapiah/src/elements/th_element.dart";
 
-part 'th_multiline_comment_content.mapper.dart';
-
-@MappableClass()
-class THMultilineCommentContent extends THElement
-    with THMultilineCommentContentMappable {
+class THMultilineCommentContent extends THElement {
   String content;
 
-  // Used by dart_mappable.
-  THMultilineCommentContent.notAddToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+  THMultilineCommentContent({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-    this.content,
-  ) : super.notAddToParent();
+    required this.content,
+  }) : super();
 
-  THMultilineCommentContent(super.parentMapiahID, this.content)
-      : super.addToParent();
+  THMultilineCommentContent.addToParent({
+    required super.parentMapiahID,
+    required this.content,
+  }) : super.addToParent();
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'content': content,
+    };
+  }
+
+  factory THMultilineCommentContent.fromMap(Map<String, dynamic> map) {
+    return THMultilineCommentContent(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      content: map['content'],
+    );
+  }
+
+  factory THMultilineCommentContent.fromJson(String jsonString) {
+    return THMultilineCommentContent.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THMultilineCommentContent copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    String? content,
+    bool makeSameLineCommentNull = false,
+  }) {
+    return THMultilineCommentContent(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      content: content ?? this.content,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THMultilineCommentContent other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.content == content;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        content,
+      );
 
   @override
   bool isSameClass(Object object) {

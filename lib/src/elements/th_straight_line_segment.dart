@@ -1,15 +1,13 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
-@serializable
-class THStraightLineSegment extends THLineSegment
-    with Dataclass<THStraightLineSegment>, THHasOptions {
+class THStraightLineSegment extends THLineSegment with THHasOptions {
   THStraightLineSegment({
     required super.mapiahID,
     required super.parentMapiahID,
@@ -34,20 +32,31 @@ class THStraightLineSegment extends THLineSegment
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THStraightLineSegment>(this);
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'endPoint': endPoint.toMap(),
+      'optionsMap':
+          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+    };
   }
 
   factory THStraightLineSegment.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THStraightLineSegment>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THStraightLineSegment>(this);
+    return THStraightLineSegment(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      endPoint: THPositionPart.fromMap(map['endPoint']),
+      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+        map['optionsMap']
+            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      ),
+    );
   }
 
   factory THStraightLineSegment.fromJson(String jsonString) {
-    return dogs.fromJson<THStraightLineSegment>(jsonString);
+    return THStraightLineSegment.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -57,16 +66,38 @@ class THStraightLineSegment extends THLineSegment
     String? sameLineComment,
     THPositionPart? endPoint,
     LinkedHashMap<String, THCommandOption>? optionsMap,
+    bool makeSameLineCommentNull = false,
   }) {
     return THStraightLineSegment(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      sameLineComment: sameLineComment ?? this.sameLineComment,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
       endPoint: endPoint ?? this.endPoint,
-      optionsMap: optionsMap ??
-          LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
+      optionsMap: optionsMap ?? this.optionsMap,
     );
   }
+
+  @override
+  bool operator ==(covariant THStraightLineSegment other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.endPoint == endPoint &&
+        other.optionsMap == optionsMap;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        endPoint,
+        optionsMap,
+      );
 
   @override
   bool isSameClass(Object object) {

@@ -1,10 +1,9 @@
-import "package:dart_mappable/dart_mappable.dart";
+import "dart:convert";
+
 import "package:mapiah/src/elements/th_element.dart";
 import "package:mapiah/src/elements/th_file.dart";
 import "package:mapiah/src/elements/th_has_id.dart";
 import "package:mapiah/src/elements/th_has_options.dart";
-
-part 'th_scrap.mapper.dart';
 
 // Description: Scrap is a piece of 2D map, which doesn’t contain overlapping passages
 // (i.e. all the passages may be drawn on the paper without overlapping). For small and
@@ -25,25 +24,85 @@ part 'th_scrap.mapper.dart';
 // which are specified both in the scrap as point map symbols and in centreline data. If the
 // scrap doesn’t contain at least two survey stations with the -name reference, you have to
 // use the -scale option for calibrating the scrap. (This is usual for cross sections.)
-@MappableClass()
 class THScrap extends THElement
-    with THScrapMappable, THHasOptions, THParent
+    with THHasOptions, THParent
     implements THHasTHID {
   late String _thID;
 
-  // Used by dart_mappable.
-  THScrap.notAddToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+  THScrap({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-    String thID,
-  ) : super.notAddToParent() {
+    required String thID,
+  }) : super() {
     _thID = thID;
   }
 
-  THScrap(super.parentMapiahID, String thID) : super.addToParent() {
+  THScrap.addToParent({
+    required super.parentMapiahID,
+    required String thID,
+  }) : super.addToParent() {
     _thID = thID;
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'thID': _thID,
+    };
+  }
+
+  factory THScrap.fromMap(Map<String, dynamic> map) {
+    return THScrap(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      thID: map['thID'],
+    );
+  }
+
+  factory THScrap.fromJson(String jsonString) {
+    return THScrap.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THScrap copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    String? thID,
+    bool makeSameLineCommentNull = false,
+  }) {
+    return THScrap(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      thID: thID ?? _thID,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THScrap other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other._thID == _thID;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        _thID,
+      );
 
   @override
   bool isSameClass(Object object) {

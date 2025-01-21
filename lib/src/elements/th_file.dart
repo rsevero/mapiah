@@ -1,8 +1,9 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_id_command_option.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -16,14 +17,11 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 
-part 'th_file.mapper.dart';
-
 /// THFile represents the complete contents of a .th or .th2 file.
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-@MappableClass()
-class THFile with THFileMappable, THParent {
+class THFile with THParent implements THSerializable {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -58,9 +56,117 @@ class THFile with THFileMappable, THParent {
   final LinkedHashMap<int, String> _thIDByMapiahID =
       LinkedHashMap<int, String>();
 
+  THFile.forCWJM({
+    required this.filename,
+    required this.encoding,
+    required int mapiahID,
+    required LinkedHashMap<int, THElement> elementByMapiahID,
+    required LinkedHashMap<int, THScrap> scrapByMapiahID,
+    required LinkedHashMap<String, THElement> elementByTHID,
+    required LinkedHashMap<int, String> thIDByMapiahID,
+  }) : _mapiahID = mapiahID {
+    _elementByMapiahID.addAll(elementByMapiahID);
+    _scrapByMapiahID.addAll(scrapByMapiahID);
+    _elementByTHID.addAll(elementByTHID);
+    _thIDByMapiahID.addAll(thIDByMapiahID);
+  }
+
   THFile() {
     _mapiahID = getIt<GeneralStore>().nextMapiahIDForTHFiles();
   }
+
+  @override
+  String toJson() {
+    return jsonEncode(toMap());
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'filename': filename,
+      'encoding': encoding,
+      'mapiahID': _mapiahID,
+      'elementByMapiahID':
+          _elementByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
+      'scrapByMapiahID':
+          _scrapByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
+      'elementByTHID':
+          _elementByTHID.map((key, value) => MapEntry(key, value.toMap())),
+      'thIDByMapiahID': _thIDByMapiahID,
+    };
+  }
+
+  factory THFile.fromMap(Map<String, dynamic> map) {
+    return THFile.forCWJM(
+      filename: map['filename'],
+      encoding: map['encoding'],
+      mapiahID: map['mapiahID'],
+      elementByMapiahID: LinkedHashMap<int, THElement>.from(
+        map['elementByMapiahID']
+            .map((key, value) => MapEntry(key, THElement.fromMap(value))),
+      ),
+      scrapByMapiahID: LinkedHashMap<int, THScrap>.from(
+        map['scrapByMapiahID']
+            .map((key, value) => MapEntry(key, THScrap.fromMap(value))),
+      ),
+      elementByTHID: LinkedHashMap<String, THElement>.from(
+        map['elementByTHID']
+            .map((key, value) => MapEntry(key, THElement.fromMap(value))),
+      ),
+      thIDByMapiahID: LinkedHashMap<int, String>.from(map['thIDByMapiahID']),
+    );
+  }
+
+  factory THFile.fromJson(String jsonString) {
+    return THFile.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THFile copyWith({
+    String? filename,
+    String? encoding,
+    int? mapiahID,
+    LinkedHashMap<int, THElement>? elementByMapiahID,
+    LinkedHashMap<int, THScrap>? scrapByMapiahID,
+    LinkedHashMap<String, THElement>? elementByTHID,
+    LinkedHashMap<int, String>? thIDByMapiahID,
+    bool makeFilenameNull = false,
+    bool makeEncodingNull = false,
+  }) {
+    return THFile.forCWJM(
+      filename: makeFilenameNull ? '' : (filename ?? this.filename),
+      encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
+      mapiahID: mapiahID ?? _mapiahID,
+      elementByMapiahID: elementByMapiahID ?? _elementByMapiahID,
+      scrapByMapiahID: scrapByMapiahID ?? _scrapByMapiahID,
+      elementByTHID: elementByTHID ?? _elementByTHID,
+      thIDByMapiahID: thIDByMapiahID ?? _thIDByMapiahID,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THFile other) {
+    if (identical(this, other)) return true;
+
+    return other.filename == filename &&
+        other.encoding == encoding &&
+        other._mapiahID == _mapiahID &&
+        other._elementByMapiahID == _elementByMapiahID &&
+        other._scrapByMapiahID == _scrapByMapiahID &&
+        other._elementByTHID == _elementByTHID &&
+        other._thIDByMapiahID == _thIDByMapiahID;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        filename,
+        encoding,
+        _mapiahID,
+        _elementByMapiahID,
+        _scrapByMapiahID,
+        _elementByTHID,
+        _thIDByMapiahID,
+      );
 
   Map<int, THElement> get elements {
     return _elementByMapiahID;

@@ -1,39 +1,34 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_text.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 
 // copyright <date> <string> . copyright date and name
-class THCopyrightCommandOption extends THCommandOption with THHasText {
+class THCopyrightCommandOption extends THCommandOption {
   static const String _thisOptionType = 'copyright';
   late final THDatetimePart datetime;
+  final String copyrightMessage;
 
   /// Constructor necessary for dart_mappable support.
   THCopyrightCommandOption({
     required super.parentMapiahID,
     required super.optionType,
     required this.datetime,
-    required String copyrightMessage,
-  }) : super() {
-    text = copyrightMessage;
-  }
+    required this.copyrightMessage,
+  }) : super();
 
   THCopyrightCommandOption.addToOptionParent({
     required super.optionParent,
     required this.datetime,
-    required String copyrightMessage,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
-    text = copyrightMessage;
-  }
+    required this.copyrightMessage,
+  }) : super.addToOptionParent(optionType: _thisOptionType);
 
   THCopyrightCommandOption.fromString({
     required super.optionParent,
     required String datetime,
-    required String text,
+    required this.copyrightMessage,
   }) : super.addToOptionParent(optionType: _thisOptionType) {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
-    this.text = text;
   }
 
   @override
@@ -42,7 +37,7 @@ class THCopyrightCommandOption extends THCommandOption with THHasText {
       'parentMapiahID': parentMapiahID,
       'optionType': optionType,
       'datetime': datetime.toMap(),
-      'text': text,
+      'copyrightMessage': copyrightMessage,
     };
   }
 
@@ -51,7 +46,7 @@ class THCopyrightCommandOption extends THCommandOption with THHasText {
       parentMapiahID: map['parentMapiahID'],
       optionType: map['optionType'],
       datetime: THDatetimePart.fromMap(map['datetime']),
-      copyrightMessage: map['text'],
+      copyrightMessage: map['copyrightMessage'],
     );
   }
 
@@ -64,13 +59,13 @@ class THCopyrightCommandOption extends THCommandOption with THHasText {
     int? parentMapiahID,
     String? optionType,
     THDatetimePart? datetime,
-    String? text,
+    String? copyrightMessage,
   }) {
     return THCopyrightCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
       datetime: datetime ?? this.datetime,
-      copyrightMessage: text ?? this.text,
+      copyrightMessage: copyrightMessage ?? this.copyrightMessage,
     );
   }
 
@@ -81,7 +76,7 @@ class THCopyrightCommandOption extends THCommandOption with THHasText {
     return other.parentMapiahID == parentMapiahID &&
         other.optionType == optionType &&
         other.datetime == datetime &&
-        other.text == text;
+        other.copyrightMessage == copyrightMessage;
   }
 
   @override
@@ -89,13 +84,11 @@ class THCopyrightCommandOption extends THCommandOption with THHasText {
         parentMapiahID,
         optionType,
         datetime,
-        text,
+        copyrightMessage,
       );
 
   @override
   String specToFile() {
-    return '$datetime ${textToFile()}';
+    return '$datetime $copyrightMessage';
   }
-
-  String get copyrightMessage => text;
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_has_text.dart';
 
 // text . text of the label, remark or continuation. It may contain following formatting
 // keywords:24
@@ -17,8 +16,10 @@ import 'package:mapiah/src/elements/th_has_text.dart';
 // label; N should be between 1 and 999.25
 // <size:S> . specify the font size using predefined scales; S can be one of xs, s, m, l, 6.1.1
 // xl.
-class THTextCommandOption extends THCommandOption with THHasText {
+class THTextCommandOption extends THCommandOption {
   static const String _thisOptionType = 'text';
+  final String text;
+
   // static final Map<String, Set<String>> _supportedTypes = {
   //   'point': {
   //     'label',
@@ -33,17 +34,13 @@ class THTextCommandOption extends THCommandOption with THHasText {
   THTextCommandOption({
     required super.parentMapiahID,
     required super.optionType,
-    required String text,
-  }) : super() {
-    this.text = text;
-  }
+    required this.text,
+  }) : super();
 
   THTextCommandOption.addToOptionParent({
     required super.optionParent,
-    required String text,
-  }) : super.addToOptionParent(optionType: _thisOptionType) {
-    this.text = text;
-  }
+    required this.text,
+  }) : super.addToOptionParent(optionType: _thisOptionType);
 
   @override
   Map<String, dynamic> toMap() {
@@ -97,6 +94,6 @@ class THTextCommandOption extends THCommandOption with THHasText {
 
   @override
   String specToFile() {
-    return textToFile();
+    return text;
   }
 }

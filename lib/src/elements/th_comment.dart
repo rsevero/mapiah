@@ -1,21 +1,80 @@
-import "package:dart_mappable/dart_mappable.dart";
+import "dart:convert";
+
 import "package:mapiah/src/elements/th_element.dart";
 
-part 'th_comment.mapper.dart';
+class THComment extends THElement {
+  final String content;
 
-@MappableClass()
-class THComment extends THElement with THCommentMappable {
-  String content;
-
-  // Used by dart_mappable.
-  THComment.notAddToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+  THComment({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-    this.content,
-  ) : super.notAddToParent();
+    required this.content,
+  }) : super();
 
-  THComment(super.parentMapiahID, this.content) : super.addToParent();
+  THComment.addToParent({
+    required super.parentMapiahID,
+    required this.content,
+  }) : super.addToParent();
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'content': content,
+    };
+  }
+
+  factory THComment.fromMap(Map<String, dynamic> map) {
+    return THComment(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      content: map['content'],
+    );
+  }
+
+  factory THComment.fromJson(String jsonString) {
+    return THComment.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THComment copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    String? content,
+    bool makeSameLineCommentNull = false,
+  }) {
+    return THComment(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      content: content ?? this.content,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THComment other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.content == content;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        content,
+      );
 
   @override
   bool isSameClass(Object object) {

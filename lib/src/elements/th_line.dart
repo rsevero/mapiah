@@ -1,6 +1,6 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -11,9 +11,8 @@ import 'package:mapiah/src/elements/th_has_platype.dart';
 // general rule is that the free space is on the left, rock on the right. Examples: the lower
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
-@serializable
 class THLine extends THElement
-    with Dataclass<THLine>, THHasOptions, THParent
+    with THHasOptions, THParent
     implements THHasPLAType {
   late final String _lineType;
 
@@ -85,20 +84,33 @@ class THLine extends THElement
 
   @override
   Map<String, dynamic> toMap() {
-    return dogs.toNative<THLine>(this);
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'lineType': _lineType,
+      'childrenMapiahID': childrenMapiahID,
+      'optionsMap':
+          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+    };
   }
 
   factory THLine.fromMap(Map<String, dynamic> map) {
-    return dogs.fromNative<THLine>(map);
-  }
-
-  @override
-  String toJson() {
-    return dogs.toJson<THLine>(this);
+    return THLine(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      lineType: map['lineType'],
+      childrenMapiahID: List<int>.from(map['childrenMapiahID']),
+      optionsMap: LinkedHashMap<String, THCommandOption>.from(
+        map['optionsMap']
+            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      ),
+    );
   }
 
   factory THLine.fromJson(String jsonString) {
-    return dogs.fromJson<THLine>(jsonString);
+    return THLine.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -109,18 +121,41 @@ class THLine extends THElement
     String? lineType,
     List<int>? childrenMapiahID,
     LinkedHashMap<String, THCommandOption>? optionsMap,
+    bool makeSameLineCommentNull = false,
   }) {
     return THLine(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      sameLineComment: sameLineComment ?? this.sameLineComment,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
       lineType: lineType ?? _lineType,
-      childrenMapiahID:
-          childrenMapiahID ?? List<int>.from(this.childrenMapiahID),
-      optionsMap: optionsMap ??
-          LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
+      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
+      optionsMap: optionsMap ?? this.optionsMap,
     );
   }
+
+  @override
+  bool operator ==(covariant THLine other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other._lineType == _lineType &&
+        other.childrenMapiahID == childrenMapiahID &&
+        other.optionsMap == optionsMap;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        _lineType,
+        childrenMapiahID,
+        optionsMap,
+      );
 
   @override
   bool isSameClass(Object object) {

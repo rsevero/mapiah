@@ -1,24 +1,89 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/th_element.dart';
 
-part 'th_xtherion_config.mapper.dart';
-
-@MappableClass()
-class THXTherionConfig extends THElement with THXTherionConfigMappable {
+class THXTherionConfig extends THElement {
   String name;
   String value;
 
-  // Used by dart_mappable.
-  THXTherionConfig.notAddToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+  THXTherionConfig({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-    this.name,
-    this.value,
-  ) : super.notAddToParent();
+    required this.name,
+    required this.value,
+  }) : super();
 
-  THXTherionConfig(super.parentMapiahID, this.name, this.value)
-      : super.addToParent();
+  THXTherionConfig.addToParent({
+    required super.parentMapiahID,
+    required this.name,
+    required this.value,
+  }) : super.addToParent();
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'name': name,
+      'value': value,
+    };
+  }
+
+  factory THXTherionConfig.fromMap(Map<String, dynamic> map) {
+    return THXTherionConfig(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+      name: map['name'],
+      value: map['value'],
+    );
+  }
+
+  factory THXTherionConfig.fromJson(String jsonString) {
+    return THXTherionConfig.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THXTherionConfig copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    String? name,
+    String? value,
+    bool makeSameLineCommentNull = false,
+  }) {
+    return THXTherionConfig(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      name: name ?? this.name,
+      value: value ?? this.value,
+    );
+  }
+
+  @override
+  bool operator ==(covariant THXTherionConfig other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.name == name &&
+        other.value == value;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        name,
+        value,
+      );
 
   @override
   bool isSameClass(Object object) {

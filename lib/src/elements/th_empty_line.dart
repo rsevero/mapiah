@@ -1,18 +1,69 @@
-import "package:dart_mappable/dart_mappable.dart";
+import "dart:convert";
+
 import "package:mapiah/src/elements/th_element.dart";
 
-part 'th_empty_line.mapper.dart';
-
-@MappableClass()
-class THEmptyLine extends THElement with THEmptyLineMappable {
-  // Used by dart_mappable.
-  THEmptyLine.notAddToParent(
-    super.mapiahID,
-    super.parentMapiahID,
+class THEmptyLine extends THElement {
+  THEmptyLine({
+    required super.mapiahID,
+    required super.parentMapiahID,
     super.sameLineComment,
-  ) : super.notAddToParent();
+  }) : super();
 
-  THEmptyLine(super.parentMapiahID) : super.addToParent();
+  THEmptyLine.addToParent({required super.parentMapiahID})
+      : super.addToParent();
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+    };
+  }
+
+  factory THEmptyLine.fromMap(Map<String, dynamic> map) {
+    return THEmptyLine(
+      mapiahID: map['mapiahID'],
+      parentMapiahID: map['parentMapiahID'],
+      sameLineComment: map['sameLineComment'],
+    );
+  }
+
+  factory THEmptyLine.fromJson(String jsonString) {
+    return THEmptyLine.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  THEmptyLine copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+  }) {
+    return THEmptyLine(
+      mapiahID: mapiahID ?? this.mapiahID,
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+    );
+  }
+
+  @override
+  bool operator ==(covariant THEmptyLine other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+      );
 
   @override
   bool isSameClass(Object object) {
