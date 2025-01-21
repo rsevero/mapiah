@@ -1,9 +1,12 @@
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/parts/th_person_part.dart';
 
 // author <date> <person> . author of the data and its creation date
-class THAuthorCommandOption extends THCommandOption {
+@serializable
+class THAuthorCommandOption extends THCommandOption
+    with Dataclass<THAuthorCommandOption> {
   static const String _thisOptionType = 'author';
   late final THDatetimePart datetime;
   late final THPersonPart person;
@@ -31,45 +34,37 @@ class THAuthorCommandOption extends THCommandOption {
   }
 
   @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THAuthorCommandOption>(this);
+  }
+
+  factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THAuthorCommandOption>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THAuthorCommandOption>(this);
+  }
+
+  factory THAuthorCommandOption.fromJson(String jsonString) {
+    return dogs.fromJson<THAuthorCommandOption>(jsonString);
+  }
+
+  @override
   THAuthorCommandOption copyWith({
     int? parentMapiahID,
     String? optionType,
-    THPersonPart? person,
     THDatetimePart? datetime,
+    THPersonPart? person,
   }) {
     return THAuthorCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
-      person: person ?? this.person,
       datetime: datetime ?? this.datetime,
+      person: person ?? this.person,
     );
   }
-
-  @override
-  Map<String, dynamic> toMap() {
-    final map = super.toMap();
-    map.addAll({
-      'person': person.toMap(),
-      'datetime': datetime.toMap(),
-    });
-    return map;
-  }
-
-  @override
-  bool operator ==(covariant THAuthorCommandOption other) {
-    if (identical(this, other)) return true;
-
-    return super == other &&
-        other.person == person &&
-        other.datetime == datetime;
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        person,
-        datetime,
-      );
 
   @override
   String specToFile() {

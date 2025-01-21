@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
@@ -8,7 +8,9 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 // [[LINE DATA] specify the coordinates of a Bézier curve arc:
 // <c1x> <c1y> <c2x> <c2y> <x> <y>, where c indicates the control point.
-class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
+@serializable
+class THBezierCurveLineSegment extends THLineSegment
+    with Dataclass<THBezierCurveLineSegment>, THHasOptions {
   late final THPositionPart controlPoint1;
   late final THPositionPart controlPoint2;
 
@@ -44,6 +46,24 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
   }
 
   @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THBezierCurveLineSegment>(this);
+  }
+
+  factory THBezierCurveLineSegment.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THBezierCurveLineSegment>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THBezierCurveLineSegment>(this);
+  }
+
+  factory THBezierCurveLineSegment.fromJson(String jsonString) {
+    return dogs.fromJson<THBezierCurveLineSegment>(jsonString);
+  }
+
+  @override
   THBezierCurveLineSegment copyWith({
     int? mapiahID,
     int? parentMapiahID,
@@ -64,41 +84,6 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
           LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
     );
   }
-
-  @override
-  Map<String, dynamic> toMap() {
-    final map = super.toMap();
-    map.addAll({
-      'controlPoint1': controlPoint1.toMap(),
-      'controlPoint2': controlPoint2.toMap(),
-    });
-    return map;
-  }
-
-  @override
-  bool operator ==(covariant THBezierCurveLineSegment other) {
-    if (identical(this, other)) return true;
-
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
-        other.sameLineComment == sameLineComment &&
-        other.endPoint == endPoint &&
-        other.controlPoint1 == controlPoint1 &&
-        other.controlPoint2 == controlPoint2 &&
-        const MapEquality<String, THCommandOption>()
-            .equals(optionsMap, other.optionsMap);
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
-        endPoint,
-        controlPoint1,
-        controlPoint2,
-        Object.hashAll(optionsMap.entries),
-      );
 
   @override
   bool isSameClass(Object object) {

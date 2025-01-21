@@ -1,19 +1,17 @@
 import 'dart:collection';
 
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+import 'package:dogs_core/dogs_core.dart';
+import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 
-part 'th_cs_part.mapper.dart';
+@serializable
+class THCSPart with Dataclass<THCSPart> implements THSerializable {
+  late final String name;
+  late final bool forOutputOnly;
 
-@MappableClass()
-class THCSPart with THCSPartMappable {
-  late String _name;
-  late final bool _forOutputOnly;
-
-  THCSPart(String name, bool forOutputOnly) {
-    _forOutputOnly = forOutputOnly;
-    this.name = name;
-  }
+  THCSPart({
+    required this.name,
+    required this.forOutputOnly,
+  });
 
   static final HashSet<String> _csList =
       HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
@@ -48,25 +46,47 @@ class THCSPart with THCSPartMappable {
   }
 
   @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THCSPart>(this);
+  }
+
+  factory THCSPart.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THCSPart>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THCSPart>(this);
+  }
+
+  factory THCSPart.fromJson(String jsonString) {
+    return dogs.fromJson<THCSPart>(jsonString);
+  }
+
+  @override
+  THCSPart copyWith({
+    String? name,
+    bool? forOutputOnly,
+    bool makeNameNull = false,
+  }) {
+    return THCSPart(
+      name: name ?? this.name,
+      forOutputOnly: forOutputOnly ?? this.forOutputOnly,
+    );
+  }
+
+  @override
   String toString() {
-    return _name;
+    return name;
   }
 
-  set name(String aCS) {
-    if (!THCSPart.isCS(aCS, _forOutputOnly)) {
-      String message = _forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
-      message = "Unsupported THCSPart '$aCS' in '$message' mode.";
-      throw THCustomException(message);
-    }
+  // set name(String aCS) {
+  //   if (!THCSPart.isCS(aCS, _forOutputOnly)) {
+  //     String message = _forOutputOnly ? 'OUTPUT ONLY' : 'non-output';
+  //     message = "Unsupported THCSPart '$aCS' in '$message' mode.";
+  //     throw THCustomException(message);
+  //   }
 
-    _name = aCS;
-  }
-
-  String get name {
-    return _name;
-  }
-
-  bool get forOutputOnly {
-    return _forOutputOnly;
-  }
+  //   _name = aCS;
+  // }
 }

@@ -15,6 +15,7 @@ dependencies:
   collection: ^1.19.0
   dart_mappable: ^4.3.0
   dart_numerics: ^0.0.6
+  dogs_core: ^9.4.1
   file_picker: ^8.0.0
   flutter:
     sdk: flutter
@@ -32,12 +33,13 @@ dependencies:
   package_info_plus: ^8.0.0
   path_provider: ^2.0.0
   petitparser: ^6.0.0
-  toml: ^0.16.0
+  toml: ^0.15.0
   window_size: ^0.1.0
 
 dev_dependencies:
   build_runner: ^2.0.0
   dart_mappable_builder: ^4.0.0
+  dogs_generator: any
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter

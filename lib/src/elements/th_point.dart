@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -36,8 +36,9 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 // ice-pillar, ice-stalactite, ice-stalagmite, map-connection18 , paleo-material,
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
+@serializable
 class THPoint extends THElement
-    with THHasOptions
+    with Dataclass<THPoint>, THHasOptions
     implements THHasPLAType, THPointInterface {
   final THPositionPart _position;
   final String _pointType;
@@ -193,6 +194,24 @@ class THPoint extends THElement
         super.addToParent();
 
   @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THPoint>(this);
+  }
+
+  factory THPoint.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THPoint>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THPoint>(this);
+  }
+
+  factory THPoint.fromJson(String jsonString) {
+    return dogs.fromJson<THPoint>(jsonString);
+  }
+
+  @override
   THPoint copyWith({
     int? mapiahID,
     int? parentMapiahID,
@@ -211,37 +230,6 @@ class THPoint extends THElement
           LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
     );
   }
-
-  @override
-  Map<String, dynamic> toMap() {
-    final map = super.toMap();
-    map.addAll({
-      'position': _position.toMap(),
-      'pointType': _pointType,
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-    });
-    return map;
-  }
-
-  @override
-  bool operator ==(covariant THPoint other) {
-    if (identical(this, other)) return true;
-
-    return super == other &&
-        _position == other._position &&
-        _pointType == other._pointType &&
-        const MapEquality<String, THCommandOption>()
-            .equals(optionsMap, other.optionsMap);
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        _position,
-        _pointType,
-        Object.hashAll(optionsMap.entries),
-      );
 
   static bool hasPointType(String pointType) {
     return _pointTypes.contains(pointType);

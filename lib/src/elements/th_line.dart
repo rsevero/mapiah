@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -11,8 +11,9 @@ import 'package:mapiah/src/elements/th_has_platype.dart';
 // general rule is that the free space is on the left, rock on the right. Examples: the lower
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
+@serializable
 class THLine extends THElement
-    with THHasOptions, THParent
+    with Dataclass<THLine>, THHasOptions, THParent
     implements THHasPLAType {
   late final String _lineType;
 
@@ -78,6 +79,28 @@ class THLine extends THElement
   })  : _lineType = lineType,
         super.addToParent();
 
+  static bool hasLineType(String aLineType) {
+    return _lineTypes.contains(aLineType);
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THLine>(this);
+  }
+
+  factory THLine.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THLine>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THLine>(this);
+  }
+
+  factory THLine.fromJson(String jsonString) {
+    return dogs.fromJson<THLine>(jsonString);
+  }
+
   @override
   THLine copyWith({
     int? mapiahID,
@@ -91,48 +114,12 @@ class THLine extends THElement
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: sameLineComment ?? this.sameLineComment,
-      lineType: lineType ?? this.lineType,
+      lineType: lineType ?? _lineType,
       childrenMapiahID:
           childrenMapiahID ?? List<int>.from(this.childrenMapiahID),
       optionsMap: optionsMap ??
           LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
     );
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    final map = super.toMap();
-    map.addAll({
-      'lineType': lineType,
-      'childrenMapiahID': childrenMapiahID.toList(),
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-    });
-    return map;
-  }
-
-  @override
-  bool operator ==(covariant THLine other) {
-    if (identical(this, other)) return true;
-
-    return super == other &&
-        _lineType == other._lineType &&
-        const ListEquality<int>()
-            .equals(childrenMapiahID, other.childrenMapiahID) &&
-        const MapEquality<String, THCommandOption>()
-            .equals(optionsMap, other.optionsMap);
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        _lineType,
-        Object.hashAll(childrenMapiahID),
-        Object.hashAll(optionsMap.entries),
-      );
-
-  static bool hasLineType(String aLineType) {
-    return _lineTypes.contains(aLineType);
   }
 
   @override

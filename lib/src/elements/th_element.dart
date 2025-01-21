@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 
 /// Base class for all elements that form a THFile, including THFile itself.
-abstract class THElement {
+abstract class THElement implements THSerializable {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
   final int _mapiahID;
@@ -39,41 +40,10 @@ abstract class THElement {
     return runtimeType.toString().substring(2).toLowerCase();
   }
 
-  THElement copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
-    String? sameLineComment,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-    };
-  }
-
+  @override
   String toJson() {
     return jsonEncode(toMap());
   }
-
-  @override
-  bool operator ==(covariant THElement other) {
-    if (identical(this, other)) return true;
-
-    return other.runtimeType == runtimeType &&
-        other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
-        other.sameLineComment == sameLineComment;
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        runtimeType,
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
-      );
 
   int get mapiahID => _mapiahID;
 

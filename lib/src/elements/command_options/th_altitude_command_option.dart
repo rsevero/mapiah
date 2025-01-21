@@ -1,3 +1,4 @@
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/th_has_altitude.dart';
@@ -10,8 +11,9 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // defined as ”-”, ”.”, ”nan”, ”NAN” or ”NaN”. The value can be prefixed by a keyword
 // “fix”, then no nearest station is taken into consideration; the absolute given value is
 // used instead. Units can follow the value. Examples: +4, [+4 m], [fix 1510 m].
+@serializable
 class THAltitudeCommandOption extends THCommandOption
-    with THHasLength, THHasAltitude {
+    with Dataclass<THAltitudeCommandOption>, THHasLength, THHasAltitude {
   static const String _thisOptionType = 'altitude';
 
   THAltitudeCommandOption({
@@ -56,48 +58,38 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THAltitudeCommandOption>(this);
+  }
+
+  factory THAltitudeCommandOption.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THAltitudeCommandOption>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THAltitudeCommandOption>(this);
+  }
+
+  factory THAltitudeCommandOption.fromJson(String jsonString) {
+    return dogs.fromJson<THAltitudeCommandOption>(jsonString);
+  }
+
+  @override
   THAltitudeCommandOption copyWith({
     int? parentMapiahID,
     String? optionType,
     THDoublePart? length,
     bool? isFix,
     String? unit,
+    bool makeUnitNull = false,
   }) {
     return THAltitudeCommandOption(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       optionType: optionType ?? this.optionType,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,
-      unit: unit ?? this.unit,
+      unit: makeUnitNull ? null : (unit ?? this.unit),
     );
   }
-
-  @override
-  Map<String, dynamic> toMap() {
-    final map = super.toMap();
-    map.addAll({
-      'length': length.toMap(),
-      'isFix': isFix,
-      'unit': unit,
-    });
-    return map;
-  }
-
-  @override
-  bool operator ==(covariant THAltitudeCommandOption other) {
-    if (identical(this, other)) return true;
-
-    return super == other &&
-        other.length == length &&
-        other.isFix == isFix &&
-        other.unit == unit;
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        length,
-        isFix,
-        unit,
-      );
 }

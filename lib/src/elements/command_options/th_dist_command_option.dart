@@ -1,38 +1,71 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-
-part 'th_dist_command_option.mapper.dart';
 
 // dist <distance> . valid for extra points, specifies the distance to the nearest station
 // (or station specified using -from option. If not specified, appropriate value from LRUD
 // data is used.
-@MappableClass()
+@serializable
 class THDistCommandOption extends THCommandOption
-    with THDistCommandOptionMappable, THHasLength {
+    with Dataclass<THDistCommandOption>, THHasLength {
   static const String _thisOptionType = 'dist';
 
   /// Constructor necessary for dart_mappable support.
-  THDistCommandOption.withExplicitParameters(
-    super.parentMapiahID,
-    super.optionType,
-    THDoublePart length, [
-    String? unit,
-  ]) : super.withExplicitParameters() {
+  THDistCommandOption({
+    required super.parentMapiahID,
+    required super.optionType,
+    required THDoublePart length,
+    required String? unit,
+  }) : super() {
     this.length = length;
     if (unit != null) {
       unitFromString(unit);
     }
   }
 
-  THDistCommandOption.fromString(THHasOptions optionParent, String distance,
-      [String? aUnit])
-      : super(optionParent, _thisOptionType) {
+  THDistCommandOption.fromString({
+    required super.optionParent,
+    required String distance,
+    required String? unit,
+  }) : super.addToOptionParent(optionType: _thisOptionType) {
     length = THDoublePart.fromString(distance);
-    if (aUnit != null) {
-      unitFromString(aUnit);
+    if (unit != null) {
+      unitFromString(unit);
     }
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THDistCommandOption>(this);
+  }
+
+  factory THDistCommandOption.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THDistCommandOption>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THDistCommandOption>(this);
+  }
+
+  factory THDistCommandOption.fromJson(String jsonString) {
+    return dogs.fromJson<THDistCommandOption>(jsonString);
+  }
+
+  @override
+  THDistCommandOption copyWith({
+    int? parentMapiahID,
+    String? optionType,
+    THDoublePart? length,
+    String? unit,
+    bool makeUnitNull = false,
+  }) {
+    return THDistCommandOption(
+      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      optionType: optionType ?? this.optionType,
+      length: length ?? this.length,
+      unit: makeUnitNull ? null : (unit ?? this.unit),
+    );
   }
 }

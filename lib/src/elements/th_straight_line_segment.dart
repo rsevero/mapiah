@@ -1,13 +1,15 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
+import 'package:dogs_core/dogs_core.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
-class THStraightLineSegment extends THLineSegment with THHasOptions {
+@serializable
+class THStraightLineSegment extends THLineSegment
+    with Dataclass<THStraightLineSegment>, THHasOptions {
   THStraightLineSegment({
     required super.mapiahID,
     required super.parentMapiahID,
@@ -31,6 +33,24 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
   }
 
   @override
+  Map<String, dynamic> toMap() {
+    return dogs.toNative<THStraightLineSegment>(this);
+  }
+
+  factory THStraightLineSegment.fromMap(Map<String, dynamic> map) {
+    return dogs.fromNative<THStraightLineSegment>(map);
+  }
+
+  @override
+  String toJson() {
+    return dogs.toJson<THStraightLineSegment>(this);
+  }
+
+  factory THStraightLineSegment.fromJson(String jsonString) {
+    return dogs.fromJson<THStraightLineSegment>(jsonString);
+  }
+
+  @override
   THStraightLineSegment copyWith({
     int? mapiahID,
     int? parentMapiahID,
@@ -47,26 +67,6 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
           LinkedHashMap<String, THCommandOption>.from(this.optionsMap),
     );
   }
-
-  /// THStraightLineSegment does not need a toMap() method as all it's
-  /// properties are already mapeed by THLineSegment.toMap();
-
-  @override
-  bool operator ==(covariant THStraightLineSegment other) {
-    if (identical(this, other)) return true;
-
-    return super == other &&
-        endPoint == other.endPoint &&
-        const MapEquality<String, THCommandOption>()
-            .equals(optionsMap, other.optionsMap);
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        endPoint,
-        Object.hashAll(optionsMap.entries),
-      );
 
   @override
   bool isSameClass(Object object) {

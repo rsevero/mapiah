@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -32,34 +31,6 @@ abstract class THLineSegment extends THElement
     required super.parentMapiahID,
     super.sameLineComment,
   }) : super.addToParent();
-
-  @override
-  Map<String, dynamic> toMap() {
-    final map = super.toMap();
-    map.addAll({
-      'endPoint': endPoint.toMap(),
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-    });
-    return map;
-  }
-
-  @override
-  bool operator ==(covariant THLineSegment other) {
-    if (identical(this, other)) return true;
-
-    return super == other &&
-        endPoint == other.endPoint &&
-        const MapEquality<String, THCommandOption>()
-            .equals(optionsMap, other.optionsMap);
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        endPoint,
-        Object.hashAll(optionsMap.entries),
-      );
 
   @override
   String get elementType {
