@@ -52,8 +52,8 @@ class THFile with THParent implements THSerializable {
   ///
   /// Not to be confused with Mapiah IDs, which are internal and unique only
   /// during a run.
-  final LinkedHashMap<String, THElement> _elementByTHID =
-      LinkedHashMap<String, THElement>();
+  final LinkedHashMap<String, int> _mapiahIDByTHID =
+      LinkedHashMap<String, int>();
   final LinkedHashMap<int, String> _thIDByMapiahID =
       LinkedHashMap<int, String>();
 
@@ -63,12 +63,12 @@ class THFile with THParent implements THSerializable {
     required int mapiahID,
     required LinkedHashMap<int, THElement> elementByMapiahID,
     required LinkedHashMap<int, THScrap> scrapByMapiahID,
-    required LinkedHashMap<String, THElement> elementByTHID,
+    required LinkedHashMap<String, int> mapiahIDByTHID,
     required LinkedHashMap<int, String> thIDByMapiahID,
   }) : _mapiahID = mapiahID {
     _elementByMapiahID.addAll(elementByMapiahID);
     _scrapByMapiahID.addAll(scrapByMapiahID);
-    _elementByTHID.addAll(elementByTHID);
+    _mapiahIDByTHID.addAll(mapiahIDByTHID);
     _thIDByMapiahID.addAll(thIDByMapiahID);
   }
 
@@ -92,7 +92,7 @@ class THFile with THParent implements THSerializable {
       'scrapByMapiahID':
           _scrapByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
       'elementByTHID':
-          _elementByTHID.map((key, value) => MapEntry(key, value.toMap())),
+          _mapiahIDByTHID.map((key, value) => MapEntry(key, value)),
       'thIDByMapiahID': _thIDByMapiahID,
     };
   }
@@ -110,10 +110,7 @@ class THFile with THParent implements THSerializable {
         map['scrapByMapiahID']
             .map((key, value) => MapEntry(key, THScrap.fromMap(value))),
       ),
-      elementByTHID: LinkedHashMap<String, THElement>.from(
-        map['elementByTHID']
-            .map((key, value) => MapEntry(key, THElement.fromMap(value))),
-      ),
+      mapiahIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
       thIDByMapiahID: LinkedHashMap<int, String>.from(map['thIDByMapiahID']),
     );
   }
@@ -129,7 +126,7 @@ class THFile with THParent implements THSerializable {
     int? mapiahID,
     LinkedHashMap<int, THElement>? elementByMapiahID,
     LinkedHashMap<int, THScrap>? scrapByMapiahID,
-    LinkedHashMap<String, THElement>? elementByTHID,
+    LinkedHashMap<String, int>? mapiahIDByTHID,
     LinkedHashMap<int, String>? thIDByMapiahID,
     bool makeFilenameNull = false,
     bool makeEncodingNull = false,
@@ -140,7 +137,7 @@ class THFile with THParent implements THSerializable {
       mapiahID: mapiahID ?? _mapiahID,
       elementByMapiahID: elementByMapiahID ?? _elementByMapiahID,
       scrapByMapiahID: scrapByMapiahID ?? _scrapByMapiahID,
-      elementByTHID: elementByTHID ?? _elementByTHID,
+      mapiahIDByTHID: mapiahIDByTHID ?? _mapiahIDByTHID,
       thIDByMapiahID: thIDByMapiahID ?? _thIDByMapiahID,
     );
   }
@@ -154,7 +151,7 @@ class THFile with THParent implements THSerializable {
         other._mapiahID == _mapiahID &&
         other._elementByMapiahID == _elementByMapiahID &&
         other._scrapByMapiahID == _scrapByMapiahID &&
-        other._elementByTHID == _elementByTHID &&
+        other._mapiahIDByTHID == _mapiahIDByTHID &&
         other._thIDByMapiahID == _thIDByMapiahID;
   }
 
@@ -165,7 +162,7 @@ class THFile with THParent implements THSerializable {
         _mapiahID,
         _elementByMapiahID,
         _scrapByMapiahID,
-        _elementByTHID,
+        _mapiahIDByTHID,
         _thIDByMapiahID,
       );
 
@@ -197,27 +194,32 @@ class THFile with THParent implements THSerializable {
   void unregisterElementTHIDByElement(THElement element) {
     final int mapiahID = element.mapiahID;
 
+    unregisterElementTHIDByMapiahID(mapiahID);
+  }
+
+  void unregisterElementTHIDByMapiahID(int mapiahID) {
     if (!_thIDByMapiahID.containsKey(mapiahID)) {
-      throw THCustomException("Element '$element' has no registered thID.");
+      throw THCustomException(
+          "Element with MapiahID '$mapiahID' has no registered thID.");
     }
 
     final String thID = _thIDByMapiahID[mapiahID]!;
 
-    if (!_elementByTHID.containsKey(thID)) {
+    if (!_mapiahIDByTHID.containsKey(thID)) {
       throw THCustomException(
-          "thID '$thID' gotten from element '$element' is not registered.");
+          "thID '$thID' gotten from element with Mapiah ID '$mapiahID' is not registered.");
     }
 
     _thIDByMapiahID.remove(mapiahID);
-    _elementByTHID.remove(thID);
+    _mapiahIDByTHID.remove(thID);
   }
 
   void unregisterElementTHIDByTHID(String thID) {
-    if (!_elementByTHID.containsKey(thID)) {
+    if (!_mapiahIDByTHID.containsKey(thID)) {
       throw THCustomException("thID '$thID' is not registered.");
     }
 
-    unregisterElementTHIDByElement(_elementByTHID[thID]!);
+    unregisterElementTHIDByMapiahID(_mapiahIDByTHID[thID]!);
   }
 
   void _comparePoint(double x, double y) {
@@ -274,23 +276,23 @@ class THFile with THParent implements THSerializable {
     }
     final String oldTHID = _thIDByMapiahID[mapiahID]!;
 
-    if (_elementByTHID.containsKey(newTHID)) {
+    if (_mapiahIDByTHID.containsKey(newTHID)) {
       throw THCustomException("Duplicate element with thID '$newTHID'.");
     }
 
-    _elementByTHID.remove(oldTHID);
-    _elementByTHID[newTHID] = element;
+    _mapiahIDByTHID.remove(oldTHID);
+    _mapiahIDByTHID[newTHID] = mapiahID;
 
     _thIDByMapiahID[mapiahID] = newTHID;
   }
 
   void registerElementWithTHID(THElement element, String thID) {
-    if (_elementByTHID.containsKey(thID)) {
+    if (_mapiahIDByTHID.containsKey(thID)) {
       throw THCustomException("Duplicate thID: '$thID'.");
     }
-    _elementByTHID[thID] = element;
-
     final int mapiahID = element.mapiahID;
+    _mapiahIDByTHID[thID] = mapiahID;
+
     if (_thIDByMapiahID.containsKey(mapiahID)) {
       throw THCustomException("'${element.elementType}' already included.");
     }
@@ -298,7 +300,7 @@ class THFile with THParent implements THSerializable {
   }
 
   bool hasElementByTHID(String thID) {
-    return _elementByTHID.containsKey(thID);
+    return _mapiahIDByTHID.containsKey(thID);
   }
 
   bool hasTHIDByElement(THElement element) {
@@ -310,7 +312,15 @@ class THFile with THParent implements THSerializable {
       throw THCustomException("No element with thID '$thID' found.");
     }
 
-    return _elementByTHID[thID]!;
+    return elementByMapiahID(_mapiahIDByTHID[thID]!);
+  }
+
+  int mapiahIDByTHID(String thID) {
+    if (!hasElementByTHID(thID)) {
+      throw THCustomException("No element with thID '$thID' found.");
+    }
+
+    return _mapiahIDByTHID[thID]!;
   }
 
   void substituteElement(THElement newElement) {
@@ -328,15 +338,15 @@ class THFile with THParent implements THSerializable {
       final String oldTHID = (oldElement as THHasTHID).thID;
       final String newTHID = (newElement as THHasTHID).thID;
 
-      if (_elementByTHID.containsKey(oldTHID)) {
-        _elementByTHID.remove(oldTHID);
+      if (_mapiahIDByTHID.containsKey(oldTHID)) {
+        _mapiahIDByTHID.remove(oldTHID);
       }
-      if (_elementByTHID.containsKey(newTHID)) {
+      if (_mapiahIDByTHID.containsKey(newTHID)) {
         throw THCustomException(
             "Duplicate thID in _elementByTHID: '$newTHID'.");
       }
 
-      _elementByTHID[newTHID] = newElement;
+      _mapiahIDByTHID[newTHID] = mapiahID;
       _thIDByMapiahID[mapiahID] = newTHID;
     }
   }
@@ -418,7 +428,7 @@ class THFile with THParent implements THSerializable {
   void clear() {
     _elementByMapiahID.clear();
     _scrapByMapiahID.clear();
-    _elementByTHID.clear();
+    _mapiahIDByTHID.clear();
     _thIDByMapiahID.clear();
     filename = '';
     encoding = thDefaultEncoding;
