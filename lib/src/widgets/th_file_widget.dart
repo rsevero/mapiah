@@ -108,10 +108,11 @@ class _THFileWidgetState extends State<THFileWidget> {
     setState(() {
       switch (element) {
         case THLine _:
-          _selectedElement = THSelectedLine(thFile: thFile, line: element);
+          _selectedElement =
+              THSelectedLine(thFile: thFile, modifiedLine: element);
           break;
         case THPoint _:
-          _selectedElement = THSelectedPoint(point: element);
+          _selectedElement = THSelectedPoint(modifiedPoint: element);
           break;
       }
 
@@ -144,14 +145,18 @@ class _THFileWidgetState extends State<THFileWidget> {
         thFileDisplayStore.offsetScaleScreenToCanvas(details.delta);
 
     setState(() {
-      switch (_selectedElement!.element) {
+      switch (_selectedElement!.modifiedElement) {
         case THPoint _:
-          (_selectedElement!.element as THPoint).position.coordinates +=
-              localDeltaPositionOnCanvas;
+          final THPoint currentPoint =
+              _selectedElement!.modifiedElement as THPoint;
+          _selectedElement!.modifiedElement = currentPoint.copyWith(
+              position: currentPoint.position.copyWith(
+                  coordinates: currentPoint.position.coordinates +
+                      localDeltaPositionOnCanvas));
           break;
         case THLine _:
-          _updateTHLinePosition(
-              _selectedElement!.element as THLine, localDeltaPositionOnCanvas);
+          _updateTHLinePosition(_selectedElement!.modifiedElement as THLine,
+              localDeltaPositionOnCanvas);
           break;
         default:
           break;
@@ -187,16 +192,25 @@ class _THFileWidgetState extends State<THFileWidget> {
         thFileDisplayStore.offsetScreenToCanvas(details.localPosition) -
             _panStartCoordinates;
 
+    if (panEndOffset == Offset.zero) {
+      // TODO - compare doubles with some epsilon
+      setState(() {
+        _selectedElement = null;
+        _panStartCoordinates = Offset.zero;
+      });
+      return;
+    }
+
     switch (_selectedElement!) {
       case THSelectedPoint _:
         thFileStore.updatePointPosition(
-          originalPoint: (_selectedElement! as THSelectedPoint).originalElement,
-          newPoint: (_selectedElement! as THSelectedPoint).element,
+          originalPoint: (_selectedElement! as THSelectedPoint).originalPoint,
+          modifiedPoint: (_selectedElement! as THSelectedPoint).modifiedPoint,
         );
         break;
       case THSelectedLine _:
         thFileStore.updateLinePositionPerOffset(
-          originalLine: (_selectedElement! as THSelectedLine).originalElement,
+          originalLine: (_selectedElement! as THSelectedLine).originalLine,
           originalLineSegmentsMap:
               (_selectedElement! as THSelectedLine).originalLineSegmentsMap,
           deltaOnCanvas: panEndOffset,

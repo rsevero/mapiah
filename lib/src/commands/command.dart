@@ -34,6 +34,10 @@ abstract class Command {
 
   Map<String, dynamic> toMap();
 
+  static Command fromJson(String jsonString) {
+    return fromMap(jsonDecode(jsonString));
+  }
+
   static Command fromMap(Map<String, dynamic> map) {
     switch (CommandType.values.byName(map['commandType'])) {
       case CommandType.moveBezierLineSegment:

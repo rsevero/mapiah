@@ -135,12 +135,12 @@ abstract class THFileStoreBase with Store {
   @action
   void updatePointPosition({
     required THPoint originalPoint,
-    required THPoint newPoint,
+    required THPoint modifiedPoint,
   }) {
     final MovePointCommand command = MovePointCommand(
       pointMapiahID: originalPoint.mapiahID,
       originalCoordinates: originalPoint.position.coordinates,
-      newCoordinates: newPoint.position.coordinates,
+      modifiedCoordinates: modifiedPoint.position.coordinates,
     );
     _undoRedoController.execute(command);
   }

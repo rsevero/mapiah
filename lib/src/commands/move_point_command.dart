@@ -10,12 +10,12 @@ import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 class MovePointCommand extends Command {
   late final int pointMapiahID;
   late final Offset originalCoordinates;
-  late final Offset newCoordinates;
+  late final Offset modifiedCoordinates;
 
   MovePointCommand.forCWJM({
     required this.pointMapiahID,
     required this.originalCoordinates,
-    required this.newCoordinates,
+    required this.modifiedCoordinates,
     required super.undoRedo,
     super.description = mpMovePointCommandDescription,
   }) : super.forCWJM();
@@ -23,7 +23,7 @@ class MovePointCommand extends Command {
   MovePointCommand({
     required this.pointMapiahID,
     required this.originalCoordinates,
-    required this.newCoordinates,
+    required this.modifiedCoordinates,
     super.description = mpMovePointCommandDescription,
   }) : super();
 
@@ -33,7 +33,7 @@ class MovePointCommand extends Command {
     required Offset deltaOnCanvas,
     super.description = mpMovePointCommandDescription,
   }) : super() {
-    newCoordinates = originalCoordinates + deltaOnCanvas;
+    modifiedCoordinates = originalCoordinates + deltaOnCanvas;
   }
 
   @override
@@ -48,7 +48,10 @@ class MovePointCommand extends Command {
         'dx': originalCoordinates.dx,
         'dy': originalCoordinates.dy
       },
-      'newCoordinates': {'dx': newCoordinates.dx, 'dy': newCoordinates.dy},
+      'modifiedCoordinates': {
+        'dx': modifiedCoordinates.dx,
+        'dy': modifiedCoordinates.dy
+      },
       'undoRedo': undoRedo.toMap(),
       'description': description,
     };
@@ -59,8 +62,8 @@ class MovePointCommand extends Command {
       pointMapiahID: map['pointMapiahID'],
       originalCoordinates: Offset(
           map['originalCoordinates']['dx'], map['originalCoordinates']['dy']),
-      newCoordinates:
-          Offset(map['newCoordinates']['dx'], map['newCoordinates']['dy']),
+      modifiedCoordinates: Offset(
+          map['modifiedCoordinates']['dx'], map['modifiedCoordinates']['dy']),
       undoRedo: UndoRedoCommand.fromMap(map['undoRedo']),
       description: map['description'],
     );
@@ -74,14 +77,14 @@ class MovePointCommand extends Command {
   MovePointCommand copyWith({
     int? pointMapiahID,
     Offset? originalCoordinates,
-    Offset? newCoordinates,
+    Offset? modifiedCoordinates,
     UndoRedoCommand? undoRedo,
     String? description,
   }) {
     return MovePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
-      newCoordinates: newCoordinates ?? this.newCoordinates,
+      modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
       undoRedo: undoRedo ?? this.undoRedo,
       description: description ?? this.description,
     );
@@ -93,7 +96,7 @@ class MovePointCommand extends Command {
 
     return other.pointMapiahID == pointMapiahID &&
         other.originalCoordinates == originalCoordinates &&
-        other.newCoordinates == newCoordinates &&
+        other.modifiedCoordinates == modifiedCoordinates &&
         other.description == description;
   }
 
@@ -101,7 +104,7 @@ class MovePointCommand extends Command {
   int get hashCode => Object.hash(
         pointMapiahID,
         originalCoordinates,
-        newCoordinates,
+        modifiedCoordinates,
         description,
       );
 
@@ -111,8 +114,8 @@ class MovePointCommand extends Command {
     /// message on undo and redo are the same.
     final MovePointCommand undoRedoCommand = MovePointCommand(
       pointMapiahID: pointMapiahID,
-      originalCoordinates: newCoordinates,
-      newCoordinates: originalCoordinates,
+      originalCoordinates: modifiedCoordinates,
+      modifiedCoordinates: originalCoordinates,
       description: description,
     );
 
@@ -127,7 +130,8 @@ class MovePointCommand extends Command {
     final THPoint originalPoint =
         thFile.elementByMapiahID(pointMapiahID) as THPoint;
     final THPoint newPoint = originalPoint.copyWith(
-        position: originalPoint.position.copyWith(coordinates: newCoordinates));
+        position:
+            originalPoint.position.copyWith(coordinates: modifiedCoordinates));
 
     thFile.substituteElement(newPoint);
   }

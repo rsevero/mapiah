@@ -8,13 +8,13 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/selection/th_selected_element.dart';
 
 class THSelectedLine extends THSelectedElement {
-  final THLine line;
-  late final THLine originalLine;
+  THLine modifiedLine;
+  late THLine originalLine;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
       LinkedHashMap<int, THLineSegment>();
 
-  THSelectedLine({required THFile thFile, required this.line}) {
-    final Iterable<int> lineSegmentMapiahIDs = line.childrenMapiahID;
+  THSelectedLine({required THFile thFile, required this.modifiedLine}) {
+    final Iterable<int> lineSegmentMapiahIDs = modifiedLine.childrenMapiahID;
 
     for (final int mapiahID in lineSegmentMapiahIDs) {
       final THElement element = thFile.elementByMapiahID(mapiahID);
@@ -35,19 +35,44 @@ class THSelectedLine extends THSelectedElement {
       );
     }
 
-    final LinkedHashMap<String, THCommandOption> optionsMap =
+    final List<int> clonedChildrenMapiahIDs =
+        modifiedLine.childrenMapiahID.toList();
+
+    final LinkedHashMap<String, THCommandOption> clonedOptionsMap =
         LinkedHashMap<String, THCommandOption>();
-    line.optionsMap.forEach((key, value) {
-      optionsMap[key] = value.copyWith();
+    modifiedLine.optionsMap.forEach((key, value) {
+      clonedOptionsMap[key] = value.copyWith();
     });
 
-    originalLine = line.copyWith(optionsMap: optionsMap);
-    assert(!identical(line, originalLine));
+    originalLine = modifiedLine.copyWith(
+      childrenMapiahID: clonedChildrenMapiahIDs,
+      optionsMap: clonedOptionsMap,
+    );
   }
 
   @override
-  THLine get element => line;
+  THLine get modifiedElement => modifiedLine;
 
   @override
   THLine get originalElement => originalLine;
+
+  @override
+  set modifiedElement(THElement element) {
+    if (element is! THLine) {
+      throw ArgumentError(
+          'The element is should be a THLine in modifiedElement of THSelectedLine.');
+    }
+
+    modifiedLine = element;
+  }
+
+  @override
+  set originalElement(THElement element) {
+    if (element is! THLine) {
+      throw ArgumentError(
+          'The element is should be a THLine in modifiedElement of THSelectedLine.');
+    }
+
+    originalLine = element;
+  }
 }
