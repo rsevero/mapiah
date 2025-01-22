@@ -37,6 +37,9 @@ class THDimensionsValueCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.dimensionsValue;
 
   @override
+  String typeToFile() => 'value';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
