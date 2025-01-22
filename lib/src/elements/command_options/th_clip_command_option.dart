@@ -44,6 +44,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
       'parentElementType': parentElementType.name,
       'multipleChoiceType': multipleChoiceType,
       'choice': choice,
+      'optionType': optionType.name,
     };
   }
 

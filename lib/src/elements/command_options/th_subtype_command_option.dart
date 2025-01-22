@@ -109,6 +109,7 @@ class THSubtypeCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'subtype': subtype,
+      'optionType': optionType.name,
     };
   }
 

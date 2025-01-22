@@ -24,6 +24,7 @@ class THMarkCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'mark': mark,
+      'optionType': optionType.name,
     };
   }
 

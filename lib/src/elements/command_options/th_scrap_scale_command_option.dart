@@ -43,6 +43,7 @@ class THScrapScaleCommandOption extends THCommandOption {
       'numericSpecifications':
           _numericSpecifications.map((e) => e.toMap()).toList(),
       'unit': unit?.toMap(),
+      'optionType': optionType.name,
     };
   }
 

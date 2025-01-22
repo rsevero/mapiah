@@ -62,6 +62,7 @@ class THAltitudeValueCommandOption extends THCommandOption
       'length': length.toMap(),
       'isFix': isFix,
       'unit': unit,
+      'optionType': optionType.name,
     };
   }
 

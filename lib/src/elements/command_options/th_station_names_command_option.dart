@@ -29,6 +29,7 @@ class THStationNamesCommandOption extends THCommandOption {
       'parentMapiahID': parentMapiahID,
       'prefix': prefix,
       'suffix': suffix,
+      'optionType': optionType.name,
     };
   }
 

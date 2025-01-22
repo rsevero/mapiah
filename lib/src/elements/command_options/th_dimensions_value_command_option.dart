@@ -44,6 +44,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
       'below': below.toMap(),
       'unit': _unit.toMap(),
       'unitSet': unitSet,
+      'optionType': optionType.name,
     };
   }
 

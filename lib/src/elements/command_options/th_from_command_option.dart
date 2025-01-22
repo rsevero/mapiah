@@ -24,6 +24,7 @@ class THFromCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'station': station,
+      'optionType': optionType.name,
     };
   }
 

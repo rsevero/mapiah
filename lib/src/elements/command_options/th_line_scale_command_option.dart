@@ -75,6 +75,7 @@ class THLineScaleCommandOption extends THCommandOption {
       'numericSize': numericSize.toMap(),
       'type': type.toString(),
       'textSize': textSize,
+      'optionType': optionType.name,
     };
   }
 

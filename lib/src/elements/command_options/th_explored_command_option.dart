@@ -38,6 +38,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'unit': unit.toMap(),
+      'optionType': optionType.name,
     };
   }
 

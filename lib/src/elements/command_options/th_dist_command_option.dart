@@ -38,6 +38,7 @@ class THDistCommandOption extends THCommandOption with THHasLength {
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'unit': unit,
+      'optionType': optionType.name,
     };
   }
 

@@ -28,6 +28,7 @@ class THOrientationCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'azimuth': azimuth.toMap(),
+      'optionType': optionType.name,
     };
   }
 

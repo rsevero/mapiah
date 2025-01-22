@@ -28,6 +28,7 @@ class THLineHeightCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'height': height.toMap(),
+      'optionType': optionType.name,
     };
   }
 

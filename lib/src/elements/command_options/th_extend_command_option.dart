@@ -31,6 +31,7 @@ class THExtendCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'station': station,
+      'optionType': optionType.name,
     };
   }
 

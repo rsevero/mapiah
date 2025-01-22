@@ -38,6 +38,7 @@ class THCopyrightCommandOption extends THCommandOption {
       'parentMapiahID': parentMapiahID,
       'datetime': datetime.toMap(),
       'copyrightMessage': copyrightMessage,
+      'optionType': optionType.name,
     };
   }
 

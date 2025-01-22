@@ -30,6 +30,7 @@ class THLSizeCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'number': number.toMap(),
+      'optionType': optionType.name,
     };
   }
 

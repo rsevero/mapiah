@@ -71,6 +71,7 @@ class THProjectionCommandOption extends THCommandOption {
       'parentMapiahID': parentMapiahID,
       'type': typeToString[type],
       'index': index,
+      'optionType': optionType.name,
     };
     if (elevationAngle != null) {
       asMap['elevationAngle'] = elevationAngle!.toMap();

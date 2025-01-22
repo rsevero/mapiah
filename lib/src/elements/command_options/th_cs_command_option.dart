@@ -31,6 +31,7 @@ class THCSCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'cs': cs.toMap(),
+      'optionType': optionType.name,
     };
   }
 

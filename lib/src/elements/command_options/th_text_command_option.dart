@@ -48,6 +48,7 @@ class THTextCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'text': text,
+      'optionType': optionType.name,
     };
   }
 

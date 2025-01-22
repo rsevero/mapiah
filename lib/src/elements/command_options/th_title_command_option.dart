@@ -24,6 +24,7 @@ class THTitleCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'title': title,
+      'optionType': optionType.name,
     };
   }
 

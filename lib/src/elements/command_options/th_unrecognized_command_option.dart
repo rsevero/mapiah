@@ -25,6 +25,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'value': value,
+      'optionType': optionType.name,
     };
   }
 

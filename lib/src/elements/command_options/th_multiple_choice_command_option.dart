@@ -411,6 +411,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
       'multipleChoiceType': multipleChoiceType,
       'parentElementType': parentElementType.name,
       'choice': _choice,
+      'optionType': optionType.name,
     };
   }
 

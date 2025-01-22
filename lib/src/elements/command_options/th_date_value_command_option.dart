@@ -27,6 +27,7 @@ class THDateValueCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'date': date.toMap(),
+      'optionType': optionType.name,
     };
   }
 

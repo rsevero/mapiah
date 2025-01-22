@@ -44,6 +44,7 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
       'length': length.toMap(),
       'isPresumed': isPresumed,
       'unit': unit.toMap(),
+      'optionType': optionType.name,
     };
   }
 

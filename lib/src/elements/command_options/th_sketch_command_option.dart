@@ -40,6 +40,7 @@ class THSketchCommandOption extends THCommandOption {
       'parentMapiahID': parentMapiahID,
       'filename': _filename.toMap(),
       'point': point.toMap(),
+      'optionType': optionType.name,
     };
   }
 

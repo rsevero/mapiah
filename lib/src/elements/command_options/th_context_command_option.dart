@@ -32,6 +32,7 @@ class THContextCommandOption extends THCommandOption {
       'parentMapiahID': parentMapiahID,
       'elementType': elementType,
       'symbolType': symbolType,
+      'optionType': optionType.name,
     };
   }
 

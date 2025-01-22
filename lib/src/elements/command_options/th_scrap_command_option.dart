@@ -25,6 +25,7 @@ class THScrapCommandOption extends THCommandOption {
     return {
       'parentMapiahID': parentMapiahID,
       'reference': reference,
+      'optionType': optionType.name,
     };
   }
 

@@ -52,6 +52,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
       'minusNumber': _minusNumber?.toMap(),
       'mode': _mode.toString(),
       'plusHasSign': _plusHasSign,
+      'optionType': optionType.name,
     };
   }
 

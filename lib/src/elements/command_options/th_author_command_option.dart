@@ -39,6 +39,7 @@ class THAuthorCommandOption extends THCommandOption {
       'parentMapiahID': parentMapiahID,
       'datetime': datetime.toMap(),
       'person': person.toMap(),
+      'optionType': optionType.name,
     };
   }
 
