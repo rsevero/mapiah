@@ -10,7 +10,7 @@ mixin THHasLength on THCommandOption {
 
   void unitFromString(String? unit) {
     if ((unit != null) && (unit.isNotEmpty)) {
-      this.unit.fromString(unit);
+      this.unit = THLengthUnitPart.fromString(unitString: unit);
       unitSet = true;
     } else {
       this.unit = THLengthUnitPart.fromString(unitString: thDefaultLengthUnit);
