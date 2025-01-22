@@ -88,6 +88,7 @@ class MoveLineCommand extends Command {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'commandType': type.name,
       'originalLine': originalLine.toMap(),
       'originalLineSegmentsMap': originalLineSegmentsMap
           .map((key, value) => MapEntry(key, value.toMap())),

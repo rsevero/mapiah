@@ -59,6 +59,7 @@ class MoveBezierLineSegmentCommand extends Command {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'commandType': type.name,
       'lineSegment': lineSegment.toMap(),
       'endPointOriginalCoordinates': {
         'dx': endPointOriginalCoordinates.dx,

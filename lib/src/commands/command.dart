@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:mapiah/src/commands/move_bezier_line_segment_command.dart';
+import 'package:mapiah/src/commands/move_line_command.dart';
+import 'package:mapiah/src/commands/move_point_command.dart';
+import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
@@ -29,6 +33,19 @@ abstract class Command {
   }
 
   Map<String, dynamic> toMap();
+
+  static Command fromMap(Map<String, dynamic> map) {
+    switch (CommandType.values.byName(map['commandType'])) {
+      case CommandType.moveBezierLineSegment:
+        return MoveBezierLineSegmentCommand.fromMap(map);
+      case CommandType.moveLine:
+        return MoveLineCommand.fromMap(map);
+      case CommandType.movePoint:
+        return MovePointCommand.fromMap(map);
+      case CommandType.moveStraightLineSegment:
+        return MoveStraightLineSegmentCommand.fromMap(map);
+    }
+  }
 
   Command copyWith({
     required String description,

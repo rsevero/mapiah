@@ -42,6 +42,7 @@ class MovePointCommand extends Command {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'commandType': type.name,
       'pointMapiahID': pointMapiahID,
       'originalCoordinates': {
         'dx': originalCoordinates.dx,
