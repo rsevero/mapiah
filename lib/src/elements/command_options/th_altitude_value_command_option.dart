@@ -16,10 +16,12 @@ class THAltitudeValueCommandOption extends THCommandOption
     required super.parentMapiahID,
     required THDoublePart length,
     required bool isFix,
+    required bool isNan,
     required THLengthUnitPart unit,
   }) : super.forCWJM() {
     this.length = length;
     this.isFix = isFix;
+    this.isNan = isNan;
     this.unit = unit;
   }
 
@@ -27,10 +29,12 @@ class THAltitudeValueCommandOption extends THCommandOption
     required super.optionParent,
     required THDoublePart length,
     required bool isFix,
+    bool isNan = false,
     required String? unit,
   }) : super() {
     this.length = length;
     this.isFix = isFix;
+    this.isNan = isNan;
     unitFromString(unit);
   }
 
@@ -38,10 +42,12 @@ class THAltitudeValueCommandOption extends THCommandOption
     required super.optionParent,
     required String height,
     required bool isFix,
+    bool isNan = false,
     String? unit,
   }) : super() {
     length = THDoublePart.fromString(valueString: height);
-    isFix = isFix;
+    this.isFix = isFix;
+    this.isNan = isNan;
     unitFromString(unit);
   }
 
@@ -56,11 +62,15 @@ class THAltitudeValueCommandOption extends THCommandOption
   THCommandOptionType get optionType => THCommandOptionType.altitudeValue;
 
   @override
+  String typeToFile() => 'value';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'isFix': isFix,
+      'isNan': isNan,
       'unit': unit,
       'optionType': optionType.name,
     };
@@ -71,6 +81,7 @@ class THAltitudeValueCommandOption extends THCommandOption
       parentMapiahID: map['parentMapiahID'],
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
+      isNan: map['isNan'],
       unit: map['unit'],
     );
   }
@@ -84,12 +95,14 @@ class THAltitudeValueCommandOption extends THCommandOption
     int? parentMapiahID,
     THDoublePart? length,
     bool? isFix,
+    bool? isNan,
     THLengthUnitPart? unit,
   }) {
     return THAltitudeValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,
+      isNan: isNan ?? this.isNan,
       unit: unit ?? this.unit,
     );
   }
@@ -101,6 +114,7 @@ class THAltitudeValueCommandOption extends THCommandOption
     return other.parentMapiahID == parentMapiahID &&
         other.length == length &&
         other.isFix == isFix &&
+        other.isNan == isNan &&
         other.unit == unit;
   }
 
@@ -109,6 +123,7 @@ class THAltitudeValueCommandOption extends THCommandOption
         parentMapiahID,
         length,
         isFix,
+        isNan,
         unit,
       );
 }
