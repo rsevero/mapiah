@@ -6,47 +6,47 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:meta/meta.dart';
 
 mixin THHasOptions on THElement {
-  final LinkedHashMap<THCommandOptionType, THCommandOption> _optionsMap =
-      LinkedHashMap<THCommandOptionType, THCommandOption>();
+  final LinkedHashMap<String, THCommandOption> _optionsMap =
+      LinkedHashMap<String, THCommandOption>();
 
   void addUpdateOption(THCommandOption option) {
-    _optionsMap[option.optionType] = option;
+    _optionsMap[option.typeToFile()] = option;
   }
 
   @useResult
-  bool hasOption(THCommandOptionType optionType) {
-    return _optionsMap.containsKey(optionType);
+  bool hasOption(String optionStringType) {
+    return _optionsMap.containsKey(optionStringType);
   }
 
   @useResult
-  bool optionIsSet(THCommandOptionType optionType) {
-    return _optionsMap.containsKey(optionType);
+  bool optionIsSet(String optionStringType) {
+    return _optionsMap.containsKey(optionStringType);
   }
 
   @useResult
-  THCommandOption? optionByType(THCommandOptionType optionType) {
-    return _optionsMap[optionType];
+  THCommandOption? optionByType(String optionStringType) {
+    return _optionsMap[optionStringType];
   }
 
   @useResult
-  bool deleteOption(THCommandOptionType optionType) {
-    if (!hasOption(optionType)) {
+  bool deleteOption(String optionStringType) {
+    if (!hasOption(optionStringType)) {
       return false;
     }
 
-    if (kDebugMode) assert(_optionsMap.containsKey(optionType));
-    return (_optionsMap.remove(optionType) != null);
+    if (kDebugMode) assert(_optionsMap.containsKey(optionStringType));
+    return (_optionsMap.remove(optionStringType) != null);
   }
 
   String optionsAsString() {
     String asString = '';
 
-    final Iterable<THCommandOptionType> optionTypeList = _optionsMap.keys;
+    final Iterable<String> optionTypeList = _optionsMap.keys;
 
-    for (THCommandOptionType type in optionTypeList) {
+    for (String type in optionTypeList) {
       /// subtype option is serialized in the ':subtype' format, not in the
       /// -subtype <subtype> format.
-      if (type == THCommandOptionType.subtype) {
+      if (type == 'subtype') {
         continue;
       }
       final THCommandOption option = optionByType(type)!;
@@ -60,11 +60,10 @@ mixin THHasOptions on THElement {
     return asString;
   }
 
-  LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
-      _optionsMap;
+  LinkedHashMap<String, THCommandOption> get optionsMap => _optionsMap;
 
-  void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
-    for (final THCommandOptionType type in optionsMap.keys) {
+  void addOptionsMap(Map<String, THCommandOption> optionsMap) {
+    for (final String type in optionsMap.keys) {
       addUpdateOption(optionsMap[type]!);
     }
   }

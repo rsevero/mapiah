@@ -120,9 +120,8 @@ class THFileWriter {
   String _serializeArea(THElement thElement) {
     final THArea thArea = thElement as THArea;
     String newLine = "area ${thArea.plaType}";
-    if (thArea.optionIsSet(THCommandOptionType.subtype)) {
-      newLine +=
-          ":${thArea.optionByType(THCommandOptionType.subtype)!.specToFile()}";
+    if (thArea.optionIsSet('subtype')) {
+      newLine += ":${thArea.optionByType('subtype')!.specToFile()}";
     }
     newLine += " ${thArea.optionsAsString()}";
     newLine = newLine.trim();
@@ -136,9 +135,8 @@ class THFileWriter {
   String _serializeLine(THElement thElement) {
     final THLine thLine = thElement as THLine;
     String newLine = "line ${thLine.plaType}";
-    if (thLine.optionIsSet(THCommandOptionType.subtype)) {
-      newLine +=
-          ":${thLine.optionByType(THCommandOptionType.subtype)!.specToFile()}";
+    if (thLine.optionIsSet('subtype')) {
+      newLine += ":${thLine.optionByType('subtype')!.specToFile()}";
     }
     newLine += " ${thLine.optionsAsString()}";
     newLine = newLine.trim();
@@ -152,9 +150,8 @@ class THFileWriter {
   String _serializePoint(THElement thElement) {
     final THPoint thPoint = thElement as THPoint;
     String newLine = "point ${thPoint.position.toString()} ${thPoint.plaType}";
-    if (thPoint.optionIsSet(THCommandOptionType.subtype)) {
-      newLine +=
-          ":${thPoint.optionByType(THCommandOptionType.subtype)!.specToFile()}";
+    if (thPoint.optionIsSet('subtype')) {
+      newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
     }
     newLine += " ${thPoint.optionsAsString()}";
     newLine = newLine.trim();
@@ -296,13 +293,12 @@ class THFileWriter {
 
   String _linePointOptionsAsString(THLineSegment lineSegment) {
     final THHasOptions thHasOptions = lineSegment as THHasOptions;
-    final Iterable<THCommandOptionType> optionTypeList =
-        thHasOptions.optionsMap.keys;
+    final Iterable<String> optionTypeList = thHasOptions.optionsMap.keys;
     String asString = '';
 
     _increasePrefix();
 
-    for (THCommandOptionType linePointOptionType in optionTypeList) {
+    for (String linePointOptionType in optionTypeList) {
       final THCommandOption option =
           thHasOptions.optionByType(linePointOptionType)!;
       String newLine = "${option.typeToFile()} ";

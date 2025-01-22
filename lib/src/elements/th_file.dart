@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_id_command_option.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -358,7 +357,7 @@ class THFile with THParent {
     }
   }
 
-  bool hasOption(THElement element, THCommandOptionType optionType) {
+  bool hasOption(THElement element, String optionType) {
     if (THElement is! THHasOptions) {
       return false;
     }
@@ -371,11 +370,10 @@ class THFile with THParent {
 
     if (element is THHasTHID) {
       registerElementWithTHID(element, (element as THHasTHID).thID);
-    } else if (hasOption(element, THCommandOptionType.id)) {
+    } else if (hasOption(element, 'id')) {
       registerElementWithTHID(
         element,
-        ((element as THHasOptions).optionByType(THCommandOptionType.id)!
-                as THIDCommandOption)
+        ((element as THHasOptions).optionByType('id')! as THIDCommandOption)
             .thID,
       );
     }
@@ -399,7 +397,7 @@ class THFile with THParent {
       }
     }
 
-    if ((element is THHasTHID) || hasOption(element, THCommandOptionType.id)) {
+    if ((element is THHasTHID) || hasOption(element, 'id')) {
       unregisterElementTHIDByElement(element);
     }
 

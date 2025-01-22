@@ -23,8 +23,8 @@ class THSelectedLine extends THSelectedElement {
         continue;
       }
 
-      final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap =
-          LinkedHashMap<THCommandOptionType, THCommandOption>();
+      final LinkedHashMap<String, THCommandOption> optionsMap =
+          LinkedHashMap<String, THCommandOption>();
 
       element.optionsMap.forEach((key, value) {
         optionsMap[key] = value.copyWith();
@@ -35,8 +35,8 @@ class THSelectedLine extends THSelectedElement {
       );
     }
 
-    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap =
-        LinkedHashMap<THCommandOptionType, THCommandOption>();
+    final LinkedHashMap<String, THCommandOption> optionsMap =
+        LinkedHashMap<String, THCommandOption>();
     line.optionsMap.forEach((key, value) {
       optionsMap[key] = value.copyWith();
     });
