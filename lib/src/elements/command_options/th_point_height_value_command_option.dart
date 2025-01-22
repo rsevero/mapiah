@@ -29,13 +29,14 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
     String? unit,
   }) : super() {
     length = THDoublePart.fromString(valueString: height);
-    if ((unit != null) && (unit.isNotEmpty)) {
-      unitFromString(unit);
-    }
+    unitFromString(unit);
   }
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.pointHeightValue;
+
+  @override
+  String typeToFile() => 'value';
 
   @override
   Map<String, dynamic> toMap() {
