@@ -49,8 +49,10 @@ mixin THHasOptions on THElement {
       if (type == THCommandOptionType.subtype) {
         continue;
       }
-      final String spec = optionByType(type)!.specToFile();
-      asString += " -${type.name} $spec";
+      final THCommandOption option = optionByType(type)!;
+      final String typeToFile = option.typeToFile();
+      final String spec = option.specToFile();
+      asString += " -$typeToFile $spec";
     }
 
     asString = asString.trim();

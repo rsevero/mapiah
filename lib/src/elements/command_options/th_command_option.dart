@@ -89,6 +89,10 @@ abstract class THCommandOption {
 
   THCommandOptionType get optionType;
 
+  String typeToFile() {
+    return optionType.name;
+  }
+
   String toJson() {
     return jsonEncode(toMap());
   }

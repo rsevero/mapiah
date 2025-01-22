@@ -462,6 +462,11 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         _choice,
       );
 
+  @override
+  String typeToFile() {
+    return multipleChoiceType;
+  }
+
   void setChoice(String choice) {
     choice = _mainChoice(choice);
 
