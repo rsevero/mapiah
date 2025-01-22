@@ -45,6 +45,9 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.passageHeightValue;
 
   @override
+  String typeToFile() => 'value';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
