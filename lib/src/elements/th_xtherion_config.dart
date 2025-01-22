@@ -31,6 +31,7 @@ class THXTherionConfig extends THElement {
       'sameLineComment': sameLineComment,
       'name': name,
       'value': value,
+      'elementType': elementType.name,
     };
   }
 

@@ -205,6 +205,7 @@ class THPoint extends THElement
       'pointType': pointType,
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+      'elementType': elementType.name,
     };
   }
 

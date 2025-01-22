@@ -27,6 +27,7 @@ class THEncoding extends THElement {
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'encoding': encoding,
+      'elementType': elementType.name,
     };
   }
 

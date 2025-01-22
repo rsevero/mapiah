@@ -85,7 +85,9 @@ abstract class THElement {
   THElement copyWith();
 
   static THElement fromMap(Map<String, dynamic> map) {
-    switch (map['elementType']) {
+    final THElementType type = THElementType.values.byName(map['elementType']);
+
+    switch (type) {
       case THElementType.areaBorderTHID:
         return THAreaBorderTHID.fromMap(map);
       case THElementType.area:
@@ -109,8 +111,11 @@ abstract class THElement {
       case THElementType.line:
         return THLine.fromMap(map);
       case THElementType.lineSegment:
-        return THMultilineCommentContent.fromMap(map);
+        throw THCustomException(
+            'THElementType.lineSegment should not by instantiatet by THElementfromMap().');
       case THElementType.multilineCommentContent:
+        return THMultilineCommentContent.fromMap(map);
+      case THElementType.multilineComment:
         return THMultilineCommentContent.fromMap(map);
       case THElementType.point:
         return THPoint.fromMap(map);
@@ -122,9 +127,6 @@ abstract class THElement {
         return THUnrecognizedCommand.fromMap(map);
       case THElementType.xTherionConfig:
         return THXTherionConfig.fromMap(map);
-      default:
-        throw THCustomException(
-            "Unknown element type: '${map['elementType']}'.");
     }
   }
 

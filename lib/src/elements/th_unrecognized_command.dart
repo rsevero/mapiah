@@ -30,6 +30,7 @@ class THUnrecognizedCommand extends THElement {
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'value': _value,
+      'elementType': elementType.name,
     };
   }
 

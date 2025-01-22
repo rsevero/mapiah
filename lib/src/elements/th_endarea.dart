@@ -20,6 +20,7 @@ class THEndarea extends THElement {
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
+      'elementType': elementType.name,
     };
   }
 

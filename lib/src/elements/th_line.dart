@@ -95,6 +95,7 @@ class THLine extends THElement
       'childrenMapiahID': childrenMapiahID,
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+      'elementType': elementType.name,
     };
   }
 

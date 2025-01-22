@@ -69,6 +69,7 @@ class THArea extends THElement
       'areaType': _areaType,
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+      'elementType': elementType.name,
     };
   }
 

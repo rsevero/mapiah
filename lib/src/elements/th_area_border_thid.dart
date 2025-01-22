@@ -33,6 +33,7 @@ class THAreaBorderTHID extends THElement {
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'id': id,
+      'elementType': elementType.name,
     };
   }
 

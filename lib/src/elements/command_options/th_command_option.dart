@@ -11,6 +11,7 @@ import 'package:mapiah/src/elements/command_options/th_date_value_command_option
 import 'package:mapiah/src/elements/command_options/th_dimensions_value_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_dist_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_explored_command_option.dart';
+import 'package:mapiah/src/elements/command_options/th_extend_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_from_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_id_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_line_height_command_option.dart';
@@ -22,6 +23,7 @@ import 'package:mapiah/src/elements/command_options/th_name_command_option.dart'
 import 'package:mapiah/src/elements/command_options/th_orientation_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_passage_height_value_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_point_height_value_command_option.dart';
+import 'package:mapiah/src/elements/command_options/th_point_scale_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_projection_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_scrap_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_scrap_scale_command_option.dart';
@@ -96,11 +98,10 @@ abstract class THCommandOption {
   THCommandOption copyWith();
 
   static THCommandOption fromMap(Map<String, dynamic> map) {
-    if (map['optionType'] == THCommandOptionType.multipleChoice) {
-      return THMultipleChoiceCommandOption.fromMap(map);
-    }
+    final THCommandOptionType type =
+        THCommandOptionType.values.byName(map['optionType']);
 
-    switch (map['optionType'] as THCommandOptionType) {
+    switch (type) {
       case THCommandOptionType.altitude:
         return THAltitudeCommandOption.fromMap(map);
       case THCommandOptionType.altitudeValue:
@@ -123,6 +124,8 @@ abstract class THCommandOption {
         return THDistCommandOption.fromMap(map);
       case THCommandOptionType.explored:
         return THExploredCommandOption.fromMap(map);
+      case THCommandOptionType.extend:
+        return THExtendCommandOption.fromMap(map);
       case THCommandOptionType.from:
         return THFromCommandOption.fromMap(map);
       case THCommandOptionType.id:
@@ -135,6 +138,8 @@ abstract class THCommandOption {
         return THLSizeCommandOption.fromMap(map);
       case THCommandOptionType.mark:
         return THMarkCommandOption.fromMap(map);
+      case THCommandOptionType.multipleChoice:
+        return THMultipleChoiceCommandOption.fromMap(map);
       case THCommandOptionType.name:
         return THNameCommandOption.fromMap(map);
       case THCommandOptionType.orientation:
@@ -143,6 +148,8 @@ abstract class THCommandOption {
         return THPassageHeightValueCommandOption.fromMap(map);
       case THCommandOptionType.pointHeightValue:
         return THPointHeightValueCommandOption.fromMap(map);
+      case THCommandOptionType.pointScale:
+        return THPointScaleCommandOption.fromMap(map);
       case THCommandOptionType.projection:
         return THProjectionCommandOption.fromMap(map);
       case THCommandOptionType.scrap:
@@ -163,8 +170,6 @@ abstract class THCommandOption {
         return THTitleCommandOption.fromMap(map);
       case THCommandOptionType.unrecognizedCommandOption:
         return THUnrecognizedCommandOption.fromMap(map);
-      default:
-        throw Exception('Unknown optionType: ${map['optionType']}');
     }
   }
 

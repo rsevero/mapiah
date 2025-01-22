@@ -55,6 +55,7 @@ class THScrap extends THElement
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'thID': _thID,
+      'elementType': elementType.name,
     };
   }
 

@@ -27,6 +27,7 @@ class THMultilineCommentContent extends THElement {
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'content': content,
+      'elementType': elementType.name,
     };
   }
 
