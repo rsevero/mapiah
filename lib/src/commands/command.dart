@@ -1,31 +1,45 @@
-import 'package:dart_mappable/dart_mappable.dart';
-import 'package:mapiah/src/commands/command_type.dart';
+import 'dart:convert';
+
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
-part "command.mapper.dart";
+enum CommandType {
+  moveBezierLineSegment,
+  moveLine,
+  movePoint,
+  moveStraightLineSegment,
+}
 
 /// Abstract class that defines the structure of a command.
 ///
 /// It is responsible both for executing and undoing the command, therefore, all
 /// actions that should support undo must be impmentend as a command.
-@MappableClass()
-abstract class Command with CommandMappable {
-  late final CommandType _type;
-  String description;
-  late final UndoRedoCommand _undoRedo;
+abstract class Command {
+  late final String description;
+  late final UndoRedoCommand undoRedo;
 
-  Command({required CommandType type, required this.description}) {
-    _type = type;
+  Command.forCWJM({required this.description, required this.undoRedo});
+
+  Command({required this.description});
+
+  CommandType get type;
+
+  String toJson() {
+    return jsonEncode(toMap());
   }
 
-  CommandType get type => _type;
+  Map<String, dynamic> toMap();
+
+  Command copyWith({
+    required String description,
+    required UndoRedoCommand undoRedo,
+  });
 
   UndoRedoCommand execute(THFile thFile) {
-    _undoRedo = createUndoRedo(thFile);
+    undoRedo = createUndoRedo(thFile);
     actualExecute(thFile);
 
-    return _undoRedo;
+    return undoRedo;
   }
 
   /// The description for the undo/redo command should be the description of

@@ -1,12 +1,11 @@
 import 'dart:collection';
+import 'dart:convert';
 
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/offset_mapper.dart';
 import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/commands/command_type.dart';
 import 'package:mapiah/src/commands/move_bezier_line_segment_command.dart';
 import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
@@ -14,24 +13,31 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
-part 'move_line_command.mapper.dart';
+class MoveLineCommand extends Command {
+  final THLine originalLine;
+  final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
+  late final THLine newLine;
+  late final LinkedHashMap<int, THLineSegment> newLineSegmentsMap;
+  final Offset deltaOnCanvas;
+  final bool isFromDelta;
 
-@MappableClass(includeCustomMappers: [OffsetMapper()])
-class MoveLineCommand extends Command with MoveLineCommandMappable {
-  THLine originalLine;
-  LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
-  late THLine newLine;
-  late LinkedHashMap<int, THLineSegment> newLineSegmentsMap;
-  Offset deltaOnCanvas;
-  bool isFromDelta;
+  MoveLineCommand.forCWJM({
+    required this.originalLine,
+    required this.originalLineSegmentsMap,
+    required this.newLine,
+    required this.newLineSegmentsMap,
+    required super.undoRedo,
+    super.description = mpMoveLineCommandDescription,
+    this.deltaOnCanvas = Offset.zero,
+    this.isFromDelta = false,
+  }) : super.forCWJM();
 
   MoveLineCommand({
     required this.originalLine,
     required this.originalLineSegmentsMap,
     required this.newLine,
     required this.newLineSegmentsMap,
-    super.type = CommandType.moveLine,
-    super.description = 'Move Line',
+    super.description = mpMoveLineCommandDescription,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
   }) : super();
@@ -40,8 +46,7 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
     required this.originalLine,
     required this.originalLineSegmentsMap,
     required this.deltaOnCanvas,
-    super.type = CommandType.moveLine,
-    super.description = 'Move Line',
+    super.description = mpMoveLineCommandDescription,
   })  : newLine = originalLine.copyWith(),
         isFromDelta = true,
         super() {
@@ -53,30 +58,122 @@ class MoveLineCommand extends Command with MoveLineCommandMappable {
 
       switch (originalLineSegment) {
         case THStraightLineSegment _:
-          newLineSegment = originalLineSegment.copyWith.endPoint(
+          newLineSegment = originalLineSegment.copyWith(
+              endPoint: originalLineSegment.endPoint.copyWith(
             coordinates:
                 originalLineSegment.endPoint.coordinates + deltaOnCanvas,
-          );
+          ));
           break;
         case THBezierCurveLineSegment _:
-          newLineSegment = originalLineSegment.copyWith
-              .endPoint(
+          newLineSegment = originalLineSegment.copyWith(
+              endPoint: originalLineSegment.endPoint.copyWith(
                   coordinates:
-                      originalLineSegment.endPoint.coordinates + deltaOnCanvas)
-              .copyWith
-              .controlPoint1(
+                      originalLineSegment.endPoint.coordinates + deltaOnCanvas),
+              controlPoint1: originalLineSegment.controlPoint1.copyWith(
                   coordinates: originalLineSegment.controlPoint1.coordinates +
-                      deltaOnCanvas)
-              .copyWith
-              .controlPoint2(
+                      deltaOnCanvas),
+              controlPoint2: originalLineSegment.controlPoint2.copyWith(
                   coordinates: originalLineSegment.controlPoint2.coordinates +
-                      deltaOnCanvas);
+                      deltaOnCanvas));
           break;
       }
 
       newLineSegmentsMap[originalLineSegmentMapiahID] = newLineSegment;
     }
   }
+
+  @override
+  CommandType get type => CommandType.moveLine;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'originalLine': originalLine.toMap(),
+      'originalLineSegmentsMap': originalLineSegmentsMap
+          .map((key, value) => MapEntry(key, value.toMap())),
+      'newLine': newLine.toMap(),
+      'newLineSegmentsMap':
+          newLineSegmentsMap.map((key, value) => MapEntry(key, value.toMap())),
+      'undoRedo': undoRedo.toMap(),
+      'deltaOnCanvas': {'dx': deltaOnCanvas.dx, 'dy': deltaOnCanvas.dy},
+      'isFromDelta': isFromDelta,
+      'description': description,
+    };
+  }
+
+  factory MoveLineCommand.fromMap(Map<String, dynamic> map) {
+    return MoveLineCommand.forCWJM(
+      originalLine: THLine.fromMap(map['originalLine']),
+      originalLineSegmentsMap: LinkedHashMap<int, THLineSegment>.from(
+        map['originalLineSegmentsMap']
+            .map((key, value) => MapEntry(key, THLineSegment.fromMap(value))),
+      ),
+      newLine: THLine.fromMap(map['newLine']),
+      newLineSegmentsMap: LinkedHashMap<int, THLineSegment>.from(
+        map['newLineSegmentsMap']
+            .map((key, value) => MapEntry(key, THLineSegment.fromMap(value))),
+      ),
+      undoRedo: UndoRedoCommand.fromMap(map['undoRedo']),
+      deltaOnCanvas:
+          Offset(map['deltaOnCanvas']['dx'], map['deltaOnCanvas']['dy']),
+      isFromDelta: map['isFromDelta'],
+      description: map['description'],
+    );
+  }
+
+  factory MoveLineCommand.fromJson(String jsonString) {
+    return MoveLineCommand.fromMap(jsonDecode(jsonString));
+  }
+
+  @override
+  MoveLineCommand copyWith({
+    THLine? originalLine,
+    LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
+    THLine? newLine,
+    LinkedHashMap<int, THLineSegment>? newLineSegmentsMap,
+    UndoRedoCommand? undoRedo,
+    Offset? deltaOnCanvas,
+    bool? isFromDelta,
+    String? description,
+  }) {
+    return MoveLineCommand.forCWJM(
+      originalLine: originalLine ?? this.originalLine,
+      originalLineSegmentsMap:
+          originalLineSegmentsMap ?? this.originalLineSegmentsMap,
+      newLine: newLine ?? this.newLine,
+      newLineSegmentsMap: newLineSegmentsMap ?? this.newLineSegmentsMap,
+      undoRedo: undoRedo ?? this.undoRedo,
+      deltaOnCanvas: deltaOnCanvas ?? this.deltaOnCanvas,
+      isFromDelta: isFromDelta ?? this.isFromDelta,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  bool operator ==(covariant MoveLineCommand other) {
+    if (identical(this, other)) return true;
+
+    return other.originalLine == originalLine &&
+        other.originalLineSegmentsMap == originalLineSegmentsMap &&
+        other.newLine == newLine &&
+        other.newLineSegmentsMap == newLineSegmentsMap &&
+        other.undoRedo == undoRedo &&
+        other.deltaOnCanvas == deltaOnCanvas &&
+        other.isFromDelta == isFromDelta &&
+        other.description == description;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        originalLine,
+        originalLineSegmentsMap,
+        newLine,
+        newLineSegmentsMap,
+        undoRedo,
+        deltaOnCanvas,
+        isFromDelta,
+        description,
+      );
 
   @override
   void actualExecute(THFile thFile) {

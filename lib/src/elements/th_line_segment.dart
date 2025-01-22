@@ -2,9 +2,11 @@ import 'dart:collection';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_point_interface.dart';
+import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
+import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 abstract class THLineSegment extends THElement
@@ -47,6 +49,20 @@ abstract class THLineSegment extends THElement
 
   int get endPointDecimalPositions {
     return endPoint.decimalPositions;
+  }
+
+  static THLineSegment fromMap(Map<String, dynamic> map) {
+    final THElementType elementType =
+        THElementType.values.byName(map['element']['elementType']);
+
+    switch (elementType) {
+      case THElementType.straightLineSegment:
+        return THStraightLineSegment.fromMap(map['element']);
+      case THElementType.bezierCurveLineSegment:
+        return THBezierCurveLineSegment.fromMap(map['element']);
+      default:
+        throw Exception('Invalid THElementType: $elementType');
+    }
   }
 
   @override
