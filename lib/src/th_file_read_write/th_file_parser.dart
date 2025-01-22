@@ -1744,7 +1744,8 @@ class THFileParser {
 
     _injectContents();
 
-    if (_currentParent != _parsedTHFile) {
+    if (!(_parsedTHFile).isSameClass(_currentParent) ||
+        (_currentParent != _parsedTHFile)) {
       _addError('Multiline commmands left open at end of file', 'parse',
           'Unclosed multiline command: "${_currentParent.toString()}"');
     }
