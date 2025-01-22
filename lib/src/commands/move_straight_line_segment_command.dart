@@ -132,6 +132,6 @@ class MoveStraightLineSegmentCommand extends Command {
     return UndoRedoCommand(
         type: undoRedoCommand.type,
         description: description,
-        json: undoRedoCommand.toJson());
+        map: undoRedoCommand.toMap());
   }
 }

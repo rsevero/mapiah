@@ -1,10 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
-import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
@@ -15,7 +13,7 @@ void main() {
   group('line json', () {
     getIt<GeneralStore>().reset();
     final parser = THFileParser();
-    final writer = THFileWriter();
+    // final writer = THFileWriter();
 
     const successes = [
       {

@@ -208,8 +208,9 @@ class MoveBezierLineSegmentCommand extends Command {
     );
 
     return UndoRedoCommand(
-        type: undoRedoCommand.type,
-        description: description,
-        json: undoRedoCommand.toJson());
+      type: undoRedoCommand.type,
+      description: description,
+      map: undoRedoCommand.toMap(),
+    );
   }
 }

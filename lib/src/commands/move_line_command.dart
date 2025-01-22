@@ -259,6 +259,6 @@ class MoveLineCommand extends Command {
     return UndoRedoCommand(
         type: undoRedoCommand.type,
         description: description,
-        json: undoRedoCommand.toJson());
+        map: undoRedoCommand.toMap());
   }
 }

@@ -9,16 +9,16 @@ import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
 class UndoRedoCommand {
   final CommandType type;
   final String description;
-  final String json;
+  final Map<String, dynamic> map;
 
   UndoRedoCommand(
-      {required this.type, required this.description, required this.json});
+      {required this.type, required this.description, required this.map});
 
   Map<String, dynamic> toMap() {
     return {
       'type': type.name,
       'description': description,
-      'json': json,
+      'map': map,
     };
   }
 
@@ -26,7 +26,7 @@ class UndoRedoCommand {
     return UndoRedoCommand(
       type: CommandType.values.byName(map['type']),
       description: map['description'],
-      json: map['json'],
+      map: map['map'],
     );
   }
 
@@ -37,12 +37,12 @@ class UndoRedoCommand {
   UndoRedoCommand copyWith({
     CommandType? type,
     String? description,
-    String? json,
+    Map<String, dynamic>? map,
   }) {
     return UndoRedoCommand(
       type: type ?? this.type,
       description: description ?? this.description,
-      json: json ?? this.json,
+      map: map ?? this.map,
     );
   }
 
@@ -52,26 +52,26 @@ class UndoRedoCommand {
 
     return other.type == type &&
         other.description == description &&
-        other.json == json;
+        other.map == map;
   }
 
   @override
   int get hashCode => Object.hash(
         type,
         description,
-        json,
+        map,
       );
 
   Command get command {
     switch (type) {
       case CommandType.moveBezierLineSegment:
-        return MoveBezierLineSegmentCommand.fromJson(json);
+        return MoveBezierLineSegmentCommand.fromMap(map);
       case CommandType.moveLine:
-        return MoveLineCommand.fromJson(json);
+        return MoveLineCommand.fromMap(map);
       case CommandType.movePoint:
-        return MovePointCommand.fromJson(json);
+        return MovePointCommand.fromMap(map);
       case CommandType.moveStraightLineSegment:
-        return MoveStraightLineSegmentCommand.fromJson(json);
+        return MoveStraightLineSegmentCommand.fromMap(map);
     }
   }
 }
