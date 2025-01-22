@@ -68,6 +68,9 @@ class THLineScaleCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.lineScale;
 
   @override
+  String typeToFile() => 'scale';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'optionType': optionType.name,

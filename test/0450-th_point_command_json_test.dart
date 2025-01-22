@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -13,7 +12,6 @@ void main() {
   getIt.registerSingleton<GeneralStore>(GeneralStore());
   group('point json', () {
     final parser = THFileParser();
-    final deepEquality = DeepCollectionEquality();
 
     const successes = [
       {

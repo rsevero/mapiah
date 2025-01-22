@@ -1372,7 +1372,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-03152-linepoint_with_invalid_orientation_option-failure.th2',
+      // 'th_file_parser-03152-linepoint_with_invalid_orientation_option-failure.th2',
       // 'th_file_parser-03153-linepoint_with_orientation_option_on_non-slope_line-failure.th2',
     ];
 
