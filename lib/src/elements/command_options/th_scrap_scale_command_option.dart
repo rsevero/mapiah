@@ -37,6 +37,9 @@ class THScrapScaleCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.scrapScale;
 
   @override
+  String typeToFile() => 'scale';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
