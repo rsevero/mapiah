@@ -94,7 +94,7 @@ class THLine extends THElement
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'lineType': _lineType,
-      'childrenMapiahID': childrenMapiahID,
+      'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
     };
@@ -144,12 +144,14 @@ class THLine extends THElement
   bool operator ==(covariant THLine other) {
     if (identical(this, other)) return true;
 
+    final Function deepEq = const DeepCollectionEquality().equals;
+
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
         other._lineType == _lineType &&
-        other.childrenMapiahID == childrenMapiahID &&
-        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
+        deepEq(other.childrenMapiahID, childrenMapiahID) &&
+        deepEq(other.optionsMap, optionsMap);
   }
 
   @override

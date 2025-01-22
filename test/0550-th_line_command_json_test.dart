@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
@@ -27,7 +29,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"mapiahID":3,"parentMapiaID":2,"sameLineComment":null,"lineType":"wall","childrenMapiahID":[4],"optionsMap":{}}''',
+            r'''{"elementType":"line","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"lineType":"wall","childrenMapiahID":[4],"optionsMap":{}}''',
       },
 //       {
 //         'file': 'th_file_parser-00081-line_with_last_line_with_spaces_only.th2',
@@ -177,8 +179,18 @@ endscrap
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
 
-        final asJson = file.elementByMapiahID(3).toJson();
+        THElement expected = file.elementByMapiahID(3);
+
+        Map<String, dynamic> asMap = expected.toMap();
+        THLine fromMap = THLine.fromMap(asMap);
+        expect(expected, fromMap);
+        expect(identical(expected, fromMap), false);
+
+        String asJson = expected.toJson();
         expect(asJson, success['asJson']);
+        THElement fromJson = THLine.fromJson(asJson);
+        expect(expected == fromJson, true);
+        expect(identical(expected, fromJson), false);
       });
     }
   });

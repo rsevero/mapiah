@@ -42,6 +42,7 @@ class THArea extends THElement
     required super.parentMapiahID,
     required super.sameLineComment,
     required String areaType,
+    required List<int> childrenMapiahID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
   }) : super.forCWJM() {
     _areaType = areaType;
@@ -69,6 +70,7 @@ class THArea extends THElement
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'areaType': _areaType,
+      'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
     };
@@ -80,6 +82,7 @@ class THArea extends THElement
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
       areaType: map['areaType'],
+      childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
         map['optionsMap']
             .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
@@ -97,6 +100,7 @@ class THArea extends THElement
     int? parentMapiahID,
     String? sameLineComment,
     String? areaType,
+    List<int>? childrenMapiahID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THArea.forCWJM(
@@ -104,6 +108,7 @@ class THArea extends THElement
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       sameLineComment: sameLineComment ?? this.sameLineComment,
       areaType: areaType ?? _areaType,
+      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       optionsMap: optionsMap ?? this.optionsMap,
     );
   }
@@ -112,11 +117,14 @@ class THArea extends THElement
   bool operator ==(covariant THArea other) {
     if (identical(this, other)) return true;
 
+    final Function deepEq = const DeepCollectionEquality().equals;
+
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
         other._areaType == _areaType &&
-        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
+        deepEq(other.childrenMapiahID, childrenMapiahID) &&
+        deepEq(other.optionsMap, optionsMap);
   }
 
   @override
@@ -125,11 +133,12 @@ class THArea extends THElement
         parentMapiahID,
         sameLineComment,
         _areaType,
+        childrenMapiahID,
         optionsMap,
       );
 
-  static bool hasAreaType(String aAreaType) {
-    return _areaTypes.contains(aAreaType);
+  static bool hasAreaType(String areaType) {
+    return _areaTypes.contains(areaType);
   }
 
   // @override

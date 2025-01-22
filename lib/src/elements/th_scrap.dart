@@ -37,9 +37,11 @@ class THScrap extends THElement
     required super.parentMapiahID,
     super.sameLineComment,
     required String thID,
+    required List<int> childrenMapiahID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
   }) : super.forCWJM() {
     _thID = thID;
+    this.childrenMapiahID.addAll(childrenMapiahID);
     addOptionsMap(optionsMap);
   }
 
@@ -61,6 +63,7 @@ class THScrap extends THElement
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'thID': _thID,
+      'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
     };
@@ -72,6 +75,7 @@ class THScrap extends THElement
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
       thID: map['thID'],
+      childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
         map['optionsMap']
             .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
@@ -89,6 +93,7 @@ class THScrap extends THElement
     int? parentMapiahID,
     String? sameLineComment,
     String? thID,
+    List<int>? childrenMapiahID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   }) {
@@ -99,6 +104,7 @@ class THScrap extends THElement
           ? null
           : (sameLineComment ?? this.sameLineComment),
       thID: thID ?? _thID,
+      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       optionsMap: optionsMap ?? this.optionsMap,
     );
   }
@@ -107,11 +113,14 @@ class THScrap extends THElement
   bool operator ==(covariant THScrap other) {
     if (identical(this, other)) return true;
 
+    final Function deepEq = const DeepCollectionEquality().equals;
+
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
         other._thID == _thID &&
-        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
+        deepEq(other.childrenMapiahID, childrenMapiahID) &&
+        deepEq(other.optionsMap, optionsMap);
   }
 
   @override
@@ -120,6 +129,7 @@ class THScrap extends THElement
         parentMapiahID,
         sameLineComment,
         _thID,
+        childrenMapiahID,
         optionsMap,
       );
 

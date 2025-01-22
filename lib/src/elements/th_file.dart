@@ -61,15 +61,17 @@ class THFile with THParent {
     required this.filename,
     required this.encoding,
     required int mapiahID,
-    required LinkedHashMap<int, THElement> elementByMapiahID,
+    required List<int> childrenMapiahID,
     required LinkedHashMap<int, THScrap> scrapByMapiahID,
     required LinkedHashMap<String, int> mapiahIDByTHID,
     required LinkedHashMap<int, String> thIDByMapiahID,
+    required LinkedHashMap<int, THElement> elementByMapiahID,
   }) : _mapiahID = mapiahID {
-    _elementByMapiahID.addAll(elementByMapiahID);
+    this.childrenMapiahID.addAll(childrenMapiahID);
     _scrapByMapiahID.addAll(scrapByMapiahID);
     _mapiahIDByTHID.addAll(mapiahIDByTHID);
     _thIDByMapiahID.addAll(thIDByMapiahID);
+    _elementByMapiahID.addAll(elementByMapiahID);
   }
 
   THFile() {
@@ -85,13 +87,14 @@ class THFile with THParent {
       'filename': filename,
       'encoding': encoding,
       'mapiahID': _mapiahID,
-      'elementByMapiahID':
-          _elementByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
+      'childrenMapiahID': childrenMapiahID.toList(),
       'scrapByMapiahID':
           _scrapByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
       'elementByTHID':
           _mapiahIDByTHID.map((key, value) => MapEntry(key, value)),
       'thIDByMapiahID': _thIDByMapiahID,
+      'elementByMapiahID':
+          _elementByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
     };
   }
 
@@ -100,16 +103,17 @@ class THFile with THParent {
       filename: map['filename'],
       encoding: map['encoding'],
       mapiahID: map['mapiahID'],
-      elementByMapiahID: LinkedHashMap<int, THElement>.from(
-        map['elementByMapiahID']
-            .map((key, value) => MapEntry(key, THElement.fromMap(value))),
-      ),
+      childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       scrapByMapiahID: LinkedHashMap<int, THScrap>.from(
         map['scrapByMapiahID']
             .map((key, value) => MapEntry(key, THScrap.fromMap(value))),
       ),
       mapiahIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
       thIDByMapiahID: LinkedHashMap<int, String>.from(map['thIDByMapiahID']),
+      elementByMapiahID: LinkedHashMap<int, THElement>.from(
+        map['elementByMapiahID']
+            .map((key, value) => MapEntry(key, THElement.fromMap(value))),
+      ),
     );
   }
 
@@ -121,10 +125,11 @@ class THFile with THParent {
     String? filename,
     String? encoding,
     int? mapiahID,
-    LinkedHashMap<int, THElement>? elementByMapiahID,
+    List<int>? childrenMapiahID,
     LinkedHashMap<int, THScrap>? scrapByMapiahID,
     LinkedHashMap<String, int>? mapiahIDByTHID,
     LinkedHashMap<int, String>? thIDByMapiahID,
+    LinkedHashMap<int, THElement>? elementByMapiahID,
     bool makeFilenameNull = false,
     bool makeEncodingNull = false,
   }) {
@@ -132,10 +137,11 @@ class THFile with THParent {
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mapiahID: mapiahID ?? _mapiahID,
-      elementByMapiahID: elementByMapiahID ?? _elementByMapiahID,
+      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       scrapByMapiahID: scrapByMapiahID ?? _scrapByMapiahID,
       mapiahIDByTHID: mapiahIDByTHID ?? _mapiahIDByTHID,
       thIDByMapiahID: thIDByMapiahID ?? _thIDByMapiahID,
+      elementByMapiahID: elementByMapiahID ?? _elementByMapiahID,
     );
   }
 
@@ -148,10 +154,11 @@ class THFile with THParent {
     return other.filename == filename &&
         other.encoding == encoding &&
         other._mapiahID == _mapiahID &&
-        deepEq(other._elementByMapiahID, _elementByMapiahID) &&
+        deepEq(other.childrenMapiahID, childrenMapiahID) &&
         deepEq(other._scrapByMapiahID, _scrapByMapiahID) &&
         deepEq(other._mapiahIDByTHID, _mapiahIDByTHID) &&
-        deepEq(other._thIDByMapiahID, _thIDByMapiahID);
+        deepEq(other._thIDByMapiahID, _thIDByMapiahID) &&
+        deepEq(other._elementByMapiahID, _elementByMapiahID);
   }
 
   @override
@@ -159,10 +166,11 @@ class THFile with THParent {
         filename,
         encoding,
         _mapiahID,
-        _elementByMapiahID,
+        childrenMapiahID,
         _scrapByMapiahID,
         _mapiahIDByTHID,
         _thIDByMapiahID,
+        _elementByMapiahID,
       );
 
   Map<int, THElement> get elements {

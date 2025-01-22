@@ -1,13 +1,17 @@
 import "dart:convert";
 
+import 'package:collection/collection.dart';
 import "package:mapiah/src/elements/th_element.dart";
 
 class THMultiLineComment extends THElement with THParent {
   THMultiLineComment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
+    required List<int> childrenMapiahID,
     super.sameLineComment,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.childrenMapiahID.addAll(childrenMapiahID);
+  }
 
   THMultiLineComment({required super.parentMapiahID}) : super.addToParent();
 
@@ -20,6 +24,7 @@ class THMultiLineComment extends THElement with THParent {
       'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
+      'childrenMapiahID': childrenMapiahID.toList(),
       'sameLineComment': sameLineComment,
     };
   }
@@ -28,6 +33,7 @@ class THMultiLineComment extends THElement with THParent {
     return THMultiLineComment.forCWJM(
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
+      childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       sameLineComment: map['sameLineComment'],
     );
   }
@@ -40,12 +46,14 @@ class THMultiLineComment extends THElement with THParent {
   THMultiLineComment copyWith({
     int? mapiahID,
     int? parentMapiahID,
+    List<int>? childrenMapiahID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
   }) {
     return THMultiLineComment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -58,6 +66,8 @@ class THMultiLineComment extends THElement with THParent {
 
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
+        const DeepCollectionEquality()
+            .equals(other.childrenMapiahID, childrenMapiahID) &&
         other.sameLineComment == sameLineComment;
   }
 
@@ -65,6 +75,7 @@ class THMultiLineComment extends THElement with THParent {
   int get hashCode => Object.hash(
         mapiahID,
         parentMapiahID,
+        childrenMapiahID,
         sameLineComment,
       );
 
