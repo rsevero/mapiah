@@ -24,6 +24,9 @@ class THStationNamesCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.stationNames;
 
   @override
+  String typeToFile() => 'station-names';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
