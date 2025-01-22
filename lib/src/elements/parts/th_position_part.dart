@@ -40,23 +40,16 @@ class THPositionPart extends THPart {
     return {
       'partType': type.name,
       'coordinates': {
-        'dx': coordinates.dx.toStringAsFixed(thDecimalPositionsForOffsetMapper),
-        'dy': coordinates.dy.toStringAsFixed(thDecimalPositionsForOffsetMapper),
+        'dx': coordinates.dx,
+        'dy': coordinates.dy,
       },
       'decimalPositions': decimalPositions,
     };
   }
 
   factory THPositionPart.fromMap(Map<String, dynamic> map) {
-    final double? dx = double.tryParse(map['coordinates']['dx']);
-    final double? dy = double.tryParse(map['coordinates']['dy']);
-
-    if (dx == null || dy == null) {
-      throw FormatException('Invalid coordinate values in map');
-    }
-
     return THPositionPart(
-      coordinates: Offset(dx, dy),
+      coordinates: Offset(map['coordinates']['dx'], map['coordinates']['dy']),
       decimalPositions: map['decimalPositions'],
     );
   }

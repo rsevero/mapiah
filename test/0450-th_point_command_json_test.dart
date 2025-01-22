@@ -26,7 +26,19 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"partType":"position","coordinates":{"dx":"296.0000000","dy":"468.0000000"},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
+            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"partType":"position","coordinates":{"dx":296.0,"dy":468.0},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
+      },
+      {
+        'file': 'th_file_parser-00075-point_only_with_extra_precision.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 296.48195403809 468.93754612064 debris
+endscrap
+''',
+        'asJson':
+            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":11},"pointType":"debris","optionsMap":{}}''',
       },
     ];
 
