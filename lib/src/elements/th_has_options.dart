@@ -50,7 +50,7 @@ mixin THHasOptions on THElement {
         continue;
       }
       final String spec = optionByType(type)!.specToFile();
-      asString += " -$type $spec";
+      asString += " -${type.name} $spec";
     }
 
     asString = asString.trim();
