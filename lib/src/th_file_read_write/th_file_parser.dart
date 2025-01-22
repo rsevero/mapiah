@@ -816,10 +816,10 @@ class THFileParser {
     return optionIdentified;
   }
 
-  bool _lineRegularOptions(String aOptionType) {
+  bool _lineRegularOptions(String optionType) {
     bool optionIdentified = true;
 
-    switch (aOptionType) {
+    switch (optionType) {
       case 'clip':
         _injectClipCommandOption();
       case 'context':

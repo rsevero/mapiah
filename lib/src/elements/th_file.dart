@@ -143,17 +143,15 @@ class THFile with THParent {
   bool operator ==(covariant THFile other) {
     if (identical(this, other)) return true;
 
+    final Function deepEq = const DeepCollectionEquality().equals;
+
     return other.filename == filename &&
         other.encoding == encoding &&
         other._mapiahID == _mapiahID &&
-        const DeepCollectionEquality()
-            .equals(other._elementByMapiahID, _elementByMapiahID) &&
-        const DeepCollectionEquality()
-            .equals(other._scrapByMapiahID, _scrapByMapiahID) &&
-        const DeepCollectionEquality()
-            .equals(other._mapiahIDByTHID, _mapiahIDByTHID) &&
-        const DeepCollectionEquality()
-            .equals(other._thIDByMapiahID, _thIDByMapiahID);
+        deepEq(other._elementByMapiahID, _elementByMapiahID) &&
+        deepEq(other._scrapByMapiahID, _scrapByMapiahID) &&
+        deepEq(other._mapiahIDByTHID, _mapiahIDByTHID) &&
+        deepEq(other._thIDByMapiahID, _thIDByMapiahID);
   }
 
   @override

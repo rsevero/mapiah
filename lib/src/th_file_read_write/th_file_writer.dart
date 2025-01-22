@@ -303,9 +303,10 @@ class THFileWriter {
     _increasePrefix();
 
     for (THCommandOptionType linePointOptionType in optionTypeList) {
-      String newLine = "${linePointOptionType.name} ";
-      newLine +=
-          thHasOptions.optionByType(linePointOptionType)!.specToFile().trim();
+      final THCommandOption option =
+          thHasOptions.optionByType(linePointOptionType)!;
+      String newLine = "${option.typeToFile()} ";
+      newLine += option.specToFile().trim();
       asString += "$_prefix${newLine.trim()}\n";
     }
 

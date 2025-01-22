@@ -405,6 +405,26 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.multipleChoice;
 
   @override
+  String typeToFile() => multipleChoiceType;
+
+  static String getParentTypeNameForChecking(String parentTypeName) {
+    String parentTypeNameForChecking = parentTypeName;
+
+    if ((parentTypeNameForChecking == THElementType.straightLineSegment.name) ||
+        (parentTypeNameForChecking ==
+            THElementType.bezierCurveLineSegment.name)) {
+      parentTypeNameForChecking = 'linesegment';
+    } else {
+      parentTypeNameForChecking = parentTypeNameForChecking.toLowerCase();
+    }
+
+    return parentTypeNameForChecking;
+  }
+
+  String get parentTypeNameForChecking =>
+      getParentTypeNameForChecking(parentElementType.name);
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'optionType': optionType.name,
@@ -462,11 +482,6 @@ class THMultipleChoiceCommandOption extends THCommandOption {
         _choice,
       );
 
-  @override
-  String typeToFile() {
-    return multipleChoiceType;
-  }
-
   void setChoice(String choice) {
     choice = _mainChoice(choice);
 
@@ -481,7 +496,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   String get choice => _choice;
 
   bool hasDefaultChoice() {
-    return (_supportedOptions[parentElementType.name]![multipleChoiceType]![
+    return (_supportedOptions[parentTypeNameForChecking]![multipleChoiceType]![
         'hasDefault'] as bool);
   }
 
@@ -491,21 +506,21 @@ class THMultipleChoiceCommandOption extends THCommandOption {
           "Unsupported option type '$optionType' in 'defaultChoice'");
     }
 
-    return (_supportedOptions[parentElementType.name]![multipleChoiceType]![
+    return (_supportedOptions[parentTypeNameForChecking]![multipleChoiceType]![
         'defaultChoice'] as String);
   }
 
   bool hasOptionChoice(String choice) {
     choice = _mainChoice(choice);
 
-    return (_supportedOptions[parentElementType.name]![multipleChoiceType]![
+    return (_supportedOptions[parentTypeNameForChecking]![multipleChoiceType]![
             'choices'] as LinkedHashSet)
         .contains(choice);
   }
 
   String _mainChoice(String choice) {
     final Map<String, String> alternateChoiceMap = _supportedOptions[
-            parentElementType.name]![multipleChoiceType]!['alternateChoices']
+            parentTypeNameForChecking]![multipleChoiceType]!['alternateChoices']
         as Map<String, String>;
     if (alternateChoiceMap.containsKey(choice)) {
       choice = alternateChoiceMap[choice]!;
@@ -515,7 +530,9 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   static bool hasOptionType(THHasOptions optionParent, String optionType) {
-    final String optionParentElementType = optionParent.elementType.name;
+    final String optionParentElementType =
+        getParentTypeNameForChecking(optionParent.elementType.name);
+
     if (!_supportedOptions.containsKey(optionParentElementType)) {
       return false;
     }
@@ -525,7 +542,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     }
 
     if (optionParent is THHasPLAType) {
-      final String aPLAType = (optionParent as THHasPLAType).plaType;
+      final String plaType = (optionParent as THHasPLAType).plaType;
 
       final Set<String> plaTypesSupported = _supportedOptions[
               optionParentElementType]![optionType]!['plaTypesSupported']
@@ -534,7 +551,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
       if (plaTypesSupported.isEmpty) {
         return true;
       } else {
-        return plaTypesSupported.contains(aPLAType);
+        return plaTypesSupported.contains(plaType);
       }
     }
 
