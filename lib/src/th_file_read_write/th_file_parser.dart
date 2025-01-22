@@ -321,8 +321,8 @@ class THFileParser {
 
     final THPoint newPoint = THPoint.fromString(
       parentMapiahID: _currentParentMapiahID,
-      pointType: element[1],
-      pointDataList: element[2][0],
+      pointDataList: element[1],
+      pointType: element[2][0],
     );
     _thFileStore.addElementWithParent(newPoint, _currentParent);
 
