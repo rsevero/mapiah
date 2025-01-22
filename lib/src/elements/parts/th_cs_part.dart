@@ -12,6 +12,9 @@ class THCSPart extends THPart {
     required this.forOutputOnly,
   });
 
+  @override
+  THPartType get type => THPartType.cs;
+
   static final HashSet<String> _csList =
       HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
 
@@ -49,6 +52,7 @@ class THCSPart extends THPart {
     return {
       'name': name,
       'forOutputOnly': forOutputOnly,
+      'partType': type.name,
     };
   }
 

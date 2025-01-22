@@ -8,12 +8,16 @@ class THStringPart extends THPart {
 
   THStringPart({this.content = ''});
 
+  @override
+  THPartType get type => THPartType.string;
+
   static final _quoteRegex = RegExp(thDoubleQuote);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'content': content,
+      'partType': type.name,
     };
   }
 

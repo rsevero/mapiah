@@ -20,10 +20,14 @@ class THDoublePart extends THPart {
   }
 
   @override
+  THPartType get type => THPartType.double;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'value': _value,
       'decimalPositions': _decimalPositions,
+      'partType': type.name,
     };
   }
 

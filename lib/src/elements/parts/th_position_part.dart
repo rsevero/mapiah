@@ -32,6 +32,9 @@ class THPositionPart extends THPart {
   }
 
   @override
+  THPartType get type => THPartType.position;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'coordinates': {
@@ -39,6 +42,7 @@ class THPositionPart extends THPart {
         'dy': coordinates.dy,
       },
       'decimalPositions': decimalPositions,
+      'partType': type.name,
     };
   }
 

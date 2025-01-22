@@ -28,10 +28,14 @@ class THMultipleChoicePart extends THPart {
   });
 
   @override
+  THPartType get type => THPartType.multipleChoice;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'multipleChoiceName': multipleChoiceName,
       'choice': choice,
+      'partType': type.name,
     };
   }
 

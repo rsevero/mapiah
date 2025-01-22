@@ -47,9 +47,13 @@ class THClinoUnitPart extends THPart {
   }
 
   @override
+  THPartType get type => THPartType.clinoUnit;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'unit': unitToString[unit],
+      'partType': type.name,
     };
   }
 

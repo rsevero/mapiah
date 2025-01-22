@@ -28,11 +28,15 @@ class THDatetimePart extends THPart {
   }
 
   @override
+  THPartType get type => THPartType.datetime;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'datetime': _datetime,
       'isRange': _isRange,
       'isEmpty': _isEmpty,
+      'partType': type.name,
     };
   }
 

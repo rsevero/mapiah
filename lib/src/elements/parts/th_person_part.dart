@@ -38,10 +38,14 @@ class THPersonPart extends THPart {
   }
 
   @override
+  THPartType get type => THPartType.person;
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'firstname': firstname,
       'surname': surname,
+      'partType': type.name,
     };
   }
 
