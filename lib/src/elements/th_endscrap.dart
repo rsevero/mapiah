@@ -17,10 +17,10 @@ class THEndscrap extends THElement {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
-      'elementType': elementType.name,
     };
   }
 

@@ -70,12 +70,12 @@ class THLineScaleCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'multipleChoiceSize': multipleChoiceSize.toMap(),
       'numericSize': numericSize.toMap(),
       'type': type.toString(),
       'textSize': textSize,
-      'optionType': optionType.name,
     };
   }
 

@@ -88,6 +88,7 @@ class THLine extends THElement
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
@@ -95,7 +96,6 @@ class THLine extends THElement
       'childrenMapiahID': childrenMapiahID,
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-      'elementType': elementType.name,
     };
   }
 

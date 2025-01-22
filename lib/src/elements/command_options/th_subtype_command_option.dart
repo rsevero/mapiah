@@ -107,9 +107,9 @@ class THSubtypeCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'subtype': subtype,
-      'optionType': optionType.name,
     };
   }
 

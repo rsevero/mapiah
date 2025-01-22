@@ -36,10 +36,10 @@ class THAuthorCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'datetime': datetime.toMap(),
       'person': person.toMap(),
-      'optionType': optionType.name,
     };
   }
 

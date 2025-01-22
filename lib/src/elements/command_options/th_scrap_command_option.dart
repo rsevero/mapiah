@@ -23,9 +23,9 @@ class THScrapCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'reference': reference,
-      'optionType': optionType.name,
     };
   }
 

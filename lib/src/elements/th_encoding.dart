@@ -23,11 +23,11 @@ class THEncoding extends THElement {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'encoding': encoding,
-      'elementType': elementType.name,
     };
   }
 

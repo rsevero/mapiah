@@ -33,10 +33,10 @@ class THDistCommandOption extends THCommandOption with THHasLength {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'unit': unit,
-      'optionType': optionType.name,
     };
   }
 

@@ -41,11 +41,11 @@ class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'isPresumed': isPresumed,
       'unit': unit.toMap(),
-      'optionType': optionType.name,
     };
   }
 

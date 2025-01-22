@@ -29,10 +29,10 @@ class THContextCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'elementType': elementType,
       'symbolType': symbolType,
-      'optionType': optionType.name,
     };
   }
 

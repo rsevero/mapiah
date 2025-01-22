@@ -28,9 +28,9 @@ class THDateValueCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'date': date.toMap(),
-      'optionType': optionType.name,
     };
   }
 

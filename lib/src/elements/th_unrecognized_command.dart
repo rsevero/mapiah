@@ -26,11 +26,11 @@ class THUnrecognizedCommand extends THElement {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'value': _value,
-      'elementType': elementType.name,
     };
   }
 

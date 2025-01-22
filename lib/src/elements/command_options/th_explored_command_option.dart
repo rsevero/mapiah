@@ -33,10 +33,10 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'unit': unit.toMap(),
-      'optionType': optionType.name,
     };
   }
 

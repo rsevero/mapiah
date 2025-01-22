@@ -24,9 +24,9 @@ class THStationsCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'stations': stations,
-      'optionType': optionType.name,
     };
   }
 

@@ -407,11 +407,11 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'multipleChoiceType': multipleChoiceType,
       'parentElementType': parentElementType.name,
       'choice': _choice,
-      'optionType': optionType.name,
     };
   }
 

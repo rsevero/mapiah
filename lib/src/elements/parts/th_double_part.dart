@@ -25,9 +25,9 @@ class THDoublePart extends THPart {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'partType': type.name,
       'value': _value,
       'decimalPositions': _decimalPositions,
-      'partType': type.name,
     };
   }
 

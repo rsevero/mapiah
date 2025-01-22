@@ -51,11 +51,11 @@ class THScrap extends THElement
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'thID': _thID,
-      'elementType': elementType.name,
     };
   }
 

@@ -29,10 +29,10 @@ class THStationNamesCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'prefix': prefix,
       'suffix': suffix,
-      'optionType': optionType.name,
     };
   }
 

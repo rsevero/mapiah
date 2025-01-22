@@ -16,8 +16,8 @@ class THStringPart extends THPart {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'content': content,
       'partType': type.name,
+      'content': content,
     };
   }
 

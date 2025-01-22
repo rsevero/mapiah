@@ -33,9 +33,9 @@ class THMultipleChoicePart extends THPart {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'partType': type.name,
       'multipleChoiceName': multipleChoiceName,
       'choice': choice,
-      'partType': type.name,
     };
   }
 

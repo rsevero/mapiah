@@ -40,11 +40,11 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'parentElementType': parentElementType.name,
       'multipleChoiceType': multipleChoiceType,
       'choice': choice,
-      'optionType': optionType.name,
     };
   }
 

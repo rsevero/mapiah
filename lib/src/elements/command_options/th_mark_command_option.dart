@@ -22,9 +22,9 @@ class THMarkCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'mark': mark,
-      'optionType': optionType.name,
     };
   }
 

@@ -37,13 +37,13 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'endPoint': endPoint.toMap(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-      'elementType': elementType.name,
     };
   }
 

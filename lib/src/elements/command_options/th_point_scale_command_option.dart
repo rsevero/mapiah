@@ -59,11 +59,11 @@ class THPointScaleCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'multipleChoiceSize': _multipleChoiceSize.toMap(),
       'numericSize': _numericSize.toMap(),
       'isNumeric': _isNumeric,
-      'optionType': optionType.name,
     };
   }
 

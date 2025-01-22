@@ -23,11 +23,11 @@ class THComment extends THElement {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'elementType': elementType.name,
       'mapiahID': mapiahID,
       'parentMapiahID': parentMapiahID,
       'sameLineComment': sameLineComment,
       'content': content,
-      'elementType': elementType.name,
     };
   }
 

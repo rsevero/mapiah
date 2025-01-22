@@ -50,9 +50,9 @@ class THCSPart extends THPart {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'partType': type.name,
       'name': name,
       'forOutputOnly': forOutputOnly,
-      'partType': type.name,
     };
   }
 

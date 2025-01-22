@@ -52,8 +52,8 @@ class THLengthUnitPart extends THPart {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'unit': unitToString[unit],
       'partType': type.name,
+      'unit': unitToString[unit],
     };
   }
 

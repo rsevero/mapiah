@@ -31,10 +31,10 @@ class THDatetimePart extends THPart {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'partType': type.name,
       'datetime': _datetime,
       'isRange': isRange,
       'isEmpty': isEmpty,
-      'partType': type.name,
     };
   }
 

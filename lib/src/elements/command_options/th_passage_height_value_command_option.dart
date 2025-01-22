@@ -50,12 +50,12 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'plusNumber': _plusNumber?.toMap(),
       'minusNumber': _minusNumber?.toMap(),
       'mode': _mode.toString(),
       'plusHasSign': _plusHasSign,
-      'optionType': optionType.name,
     };
   }
 

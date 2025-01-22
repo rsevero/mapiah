@@ -23,9 +23,9 @@ class THUnrecognizedCommandOption extends THCommandOption {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'value': value,
-      'optionType': optionType.name,
     };
   }
 

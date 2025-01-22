@@ -67,12 +67,12 @@ class THAltitudeValueCommandOption extends THCommandOption
   @override
   Map<String, dynamic> toMap() {
     return {
+      'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
       'length': length.toMap(),
       'isFix': isFix,
       'isNan': isNan,
       'unit': unit,
-      'optionType': optionType.name,
     };
   }
 
