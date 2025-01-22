@@ -48,4 +48,14 @@ abstract class THLineSegment extends THElement
   int get endPointDecimalPositions {
     return endPoint.decimalPositions;
   }
+
+  @override
+  THLineSegment copyWith({
+    int? mapiahID,
+    int? parentMapiahID,
+    String? sameLineComment,
+    THPositionPart? endPoint,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    bool makeSameLineCommentNull = false,
+  });
 }

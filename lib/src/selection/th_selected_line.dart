@@ -15,6 +15,7 @@ class THSelectedLine extends THSelectedElement {
 
   THSelectedLine({required THFile thFile, required this.line}) {
     final Iterable<int> lineSegmentMapiahIDs = line.childrenMapiahID;
+
     for (final int mapiahID in lineSegmentMapiahIDs) {
       final THElement element = thFile.elementByMapiahID(mapiahID);
 
@@ -22,8 +23,8 @@ class THSelectedLine extends THSelectedElement {
         continue;
       }
 
-      final LinkedHashMap<String, THCommandOption> optionsMap =
-          LinkedHashMap<String, THCommandOption>();
+      final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap =
+          LinkedHashMap<THCommandOptionType, THCommandOption>();
 
       element.optionsMap.forEach((key, value) {
         optionsMap[key] = value.copyWith();
@@ -34,8 +35,8 @@ class THSelectedLine extends THSelectedElement {
       );
     }
 
-    final LinkedHashMap<String, THCommandOption> optionsMap =
-        LinkedHashMap<String, THCommandOption>();
+    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap =
+        LinkedHashMap<THCommandOptionType, THCommandOption>();
     line.optionsMap.forEach((key, value) {
       optionsMap[key] = value.copyWith();
     });

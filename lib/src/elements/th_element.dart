@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_area_border_thid.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
@@ -46,7 +45,7 @@ enum THElementType {
 }
 
 /// Base class for all elements that form a THFile, including THFile itself.
-abstract class THElement implements THSerializable {
+abstract class THElement {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
   final int _mapiahID;
@@ -77,10 +76,13 @@ abstract class THElement implements THSerializable {
 
   THElementType get elementType;
 
-  @override
   String toJson() {
     return jsonEncode(toMap());
   }
+
+  Map<String, dynamic> toMap();
+
+  THElement copyWith();
 
   static THElement fromMap(Map<String, dynamic> map) {
     switch (map['elementType']) {

@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_id_command_option.dart';
@@ -22,7 +21,7 @@ import 'package:mapiah/src/stores/general_store.dart';
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile with THParent implements THSerializable {
+class THFile with THParent {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -76,12 +75,10 @@ class THFile with THParent implements THSerializable {
     _mapiahID = getIt<GeneralStore>().nextMapiahIDForTHFiles();
   }
 
-  @override
   String toJson() {
     return jsonEncode(toMap());
   }
 
-  @override
   Map<String, dynamic> toMap() {
     return {
       'filename': filename,
@@ -119,7 +116,6 @@ class THFile with THParent implements THSerializable {
     return THFile.fromMap(jsonDecode(jsonString));
   }
 
-  @override
   THFile copyWith({
     String? filename,
     String? encoding,

@@ -9,8 +9,8 @@ class THSelectedPoint extends THSelectedElement {
   late final THPoint originalPoint;
 
   THSelectedPoint({required this.point}) {
-    final LinkedHashMap<String, THCommandOption> optionsMap =
-        LinkedHashMap<String, THCommandOption>();
+    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap =
+        LinkedHashMap<THCommandOptionType, THCommandOption>();
     point.optionsMap.forEach((key, value) {
       optionsMap[key] = value.copyWith();
     });

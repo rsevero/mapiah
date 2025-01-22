@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/auxiliary/th_serializeable.dart';
 import 'package:mapiah/src/elements/command_options/th_altitude_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_altitude_value_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_author_command_option.dart';
@@ -73,7 +72,7 @@ enum THCommandOptionType {
   unrecognizedCommandOption,
 }
 
-abstract class THCommandOption implements THSerializable {
+abstract class THCommandOption {
   late final int parentMapiahID;
 
   THCommandOption.forCWJM({
@@ -88,10 +87,13 @@ abstract class THCommandOption implements THSerializable {
 
   THCommandOptionType get optionType;
 
-  @override
   String toJson() {
     return jsonEncode(toMap());
   }
+
+  Map<String, dynamic> toMap();
+
+  THCommandOption copyWith();
 
   static THCommandOption fromMap(Map<String, dynamic> map) {
     if (map['optionType'] == THCommandOptionType.multipleChoice) {
