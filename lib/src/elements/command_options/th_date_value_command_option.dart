@@ -23,6 +23,9 @@ class THDateValueCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.dateValue;
 
   @override
+  String typeToFile() => 'value';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
