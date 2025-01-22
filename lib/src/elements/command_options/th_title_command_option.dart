@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_string_part.dart';
 
 // title <string> . description of the object
 class THTitleCommandOption extends THCommandOption {
-  final String title;
+  final THStringPart title;
 
   THTitleCommandOption.forCWJM({
     required super.parentMapiahID,
@@ -13,8 +14,9 @@ class THTitleCommandOption extends THCommandOption {
 
   THTitleCommandOption({
     required super.optionParent,
-    required this.title,
-  }) : super();
+    required String titleText,
+  })  : title = THStringPart(content: titleText),
+        super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.title;
@@ -23,7 +25,7 @@ class THTitleCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'title': title,
+      'title': title.toMap(),
       'optionType': optionType.name,
     };
   }
@@ -31,7 +33,7 @@ class THTitleCommandOption extends THCommandOption {
   factory THTitleCommandOption.fromMap(Map<String, dynamic> map) {
     return THTitleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
-      title: map['title'],
+      title: THStringPart.fromMap(map['title']),
     );
   }
 
@@ -42,7 +44,7 @@ class THTitleCommandOption extends THCommandOption {
   @override
   THTitleCommandOption copyWith({
     int? parentMapiahID,
-    String? title,
+    THStringPart? title,
   }) {
     return THTitleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
@@ -65,6 +67,6 @@ class THTitleCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    return title;
+    return title.toString();
   }
 }

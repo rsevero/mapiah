@@ -24,11 +24,13 @@ void main() {
       test(
           "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
           () {
-        var aTHDoublePart = THDoublePart(
-            success['value'] as double, success['decimalPositions'] as int);
-        expect(aTHDoublePart.value, success['value']);
-        expect(aTHDoublePart.decimalPositions, success['decimalPositions']);
-        expect(aTHDoublePart.toString(), success['asString']);
+        THDoublePart thDoublePart = THDoublePart(
+          value: success['value'] as double,
+          decimalPositions: success['decimalPositions'] as int,
+        );
+        expect(thDoublePart.value, success['value']);
+        expect(thDoublePart.decimalPositions, success['decimalPositions']);
+        expect(thDoublePart.toString(), success['asString']);
       });
       id++;
     }
@@ -51,7 +53,7 @@ void main() {
           "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
           () {
         var aTHDoublePart =
-            THDoublePart.fromString(success['asString'] as String);
+            THDoublePart.fromString(valueString: success['asString'] as String);
         expect(aTHDoublePart.value, success['value']);
         expect(aTHDoublePart.decimalPositions, success['decimalPositions']);
         expect(aTHDoublePart.toString(), success['asString']);

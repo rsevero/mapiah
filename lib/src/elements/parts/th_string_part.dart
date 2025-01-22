@@ -50,7 +50,8 @@ class THStringPart extends THPart {
   @override
   int get hashCode => content.hashCode;
 
-  String toFile() {
+  @override
+  String toString() {
     String asString = content;
 
     if (content.isEmpty) {

@@ -10,17 +10,15 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 /// or ‘-’ to leave a date unspecified.
 class THDatetimePart extends THPart {
   late final String _datetime;
-  late final bool _isRange;
-  late final bool _isEmpty;
+  late final bool isRange;
+  late final bool isEmpty;
 
   THDatetimePart({
     required String datetime,
-    required bool isRange,
-    required bool isEmpty,
-  }) {
-    _datetime = datetime;
-    _isRange = isRange;
-    _isEmpty = isEmpty;
+    required this.isRange,
+    required this.isEmpty,
+  }) : super() {
+    this.datetime = datetime;
   }
 
   THDatetimePart.fromString({required String datetime}) {
@@ -34,8 +32,8 @@ class THDatetimePart extends THPart {
   Map<String, dynamic> toMap() {
     return {
       'datetime': _datetime,
-      'isRange': _isRange,
-      'isEmpty': _isEmpty,
+      'isRange': isRange,
+      'isEmpty': isEmpty,
       'partType': type.name,
     };
   }
@@ -60,8 +58,8 @@ class THDatetimePart extends THPart {
   }) {
     return THDatetimePart(
       datetime: datetime ?? _datetime,
-      isRange: isRange ?? _isRange,
-      isEmpty: isEmpty ?? _isEmpty,
+      isRange: isRange ?? this.isRange,
+      isEmpty: isEmpty ?? this.isEmpty,
     );
   }
 
@@ -70,27 +68,23 @@ class THDatetimePart extends THPart {
     if (identical(this, other)) return true;
 
     return other._datetime == _datetime &&
-        other._isRange == _isRange &&
-        other._isEmpty == _isEmpty;
+        other.isRange == isRange &&
+        other.isEmpty == isEmpty;
   }
 
   @override
-  int get hashCode => Object.hash(_datetime, _isRange, _isEmpty);
-
-  String get datetime {
-    return _datetime;
-  }
+  int get hashCode => Object.hash(_datetime, isRange, isEmpty);
 
   set datetime(String date) {
     date = date.trim();
 
-    bool isRange = false;
+    bool tempIsRange = false;
     if (date == '-') {
-      _isEmpty = true;
+      isEmpty = true;
       _datetime = '-';
       return;
     } else {
-      _isEmpty = false;
+      isEmpty = false;
     }
 
     final List<String> parts = date.split('-');
@@ -111,23 +105,15 @@ class THDatetimePart extends THPart {
               "Can´t parse end of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'");
         }
         newDatetime += ' - ${parts[1]}';
-        isRange = true;
+        tempIsRange = true;
       }
     } else {
       throw THCustomException(
           "Can´t parse datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]) from '$date'");
     }
 
-    _isRange = isRange;
+    isRange = tempIsRange;
     _datetime = newDatetime;
-  }
-
-  bool get isRange {
-    return _isRange;
-  }
-
-  bool get isEmpty {
-    return _isEmpty;
   }
 
   @override

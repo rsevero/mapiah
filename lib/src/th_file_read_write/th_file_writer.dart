@@ -85,7 +85,9 @@ class THFileWriter {
         asString += _prepareLine('endscrap', thElement);
       case THElementType.line:
         asString += _serializeLine(thElement);
+      case THElementType.bezierCurveLineSegment:
       case THElementType.lineSegment:
+      case THElementType.straightLineSegment:
         asString += _serializeLineSegment(thElement);
       case THElementType.multilineComment:
         asString += _prepareLine('comment', thElement);
@@ -98,8 +100,8 @@ class THFileWriter {
         asString += _serializePoint(thElement);
       case THElementType.scrap:
         final THScrap thScrap = thElement as THScrap;
-        final String newLine =
-            "scrap ${thScrap.thID} ${thScrap.optionsAsString()}".trim();
+        final String scrapOptions = thScrap.optionsAsString();
+        final String newLine = "scrap ${thScrap.thID} $scrapOptions".trim();
         asString += _prepareLine(newLine, thScrap);
         _increasePrefix();
         asString += _childrenAsString(thScrap);
@@ -107,7 +109,7 @@ class THFileWriter {
         final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
         asString +=
             "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
-      default:
+      case THElementType.unrecognizedCommand:
         final String newLine = "Unrecognized element: '$thElement'";
         asString += _prepareLine(newLine, thElement);
     }
@@ -124,7 +126,7 @@ class THFileWriter {
     }
     newLine += " ${thArea.optionsAsString()}";
     newLine = newLine.trim();
-    var asString = _prepareLine(newLine, thArea);
+    String asString = _prepareLine(newLine, thArea);
     _increasePrefix();
     asString += _childrenAsString(thArea);
 
@@ -140,7 +142,7 @@ class THFileWriter {
     }
     newLine += " ${thLine.optionsAsString()}";
     newLine = newLine.trim();
-    var asString = _prepareLine(newLine, thLine);
+    String asString = _prepareLine(newLine, thLine);
     _increasePrefix();
     asString += _childrenAsString(thLine);
 
@@ -160,24 +162,24 @@ class THFileWriter {
     return _prepareLine(newLine, thPoint);
   }
 
-  String _serializeLineSegment(THElement aTHElement) {
-    final thType = aTHElement.runtimeType.toString();
-    var asString = '';
+  String _serializeLineSegment(THElement thElement) {
+    final String thType = thElement.runtimeType.toString();
+    String asString = '';
 
     switch (thType) {
       case 'THBezierCurveLineSegment':
-        final THBezierCurveLineSegment aTHBezierCurveLineSegment =
-            aTHElement as THBezierCurveLineSegment;
+        final THBezierCurveLineSegment thBezierCurveLineSegment =
+            thElement as THBezierCurveLineSegment;
         final String newLine =
-            "${aTHBezierCurveLineSegment.controlPoint1} ${aTHBezierCurveLineSegment.controlPoint2} ${aTHBezierCurveLineSegment.endPoint}";
-        asString += _prepareLine(newLine, aTHBezierCurveLineSegment);
-        asString += _linePointOptionsAsString(aTHBezierCurveLineSegment);
+            "${thBezierCurveLineSegment.controlPoint1} ${thBezierCurveLineSegment.controlPoint2} ${thBezierCurveLineSegment.endPoint}";
+        asString += _prepareLine(newLine, thBezierCurveLineSegment);
+        asString += _linePointOptionsAsString(thBezierCurveLineSegment);
       case 'THStraightLineSegment':
-        final THStraightLineSegment aTHStraightLineSegment =
-            aTHElement as THStraightLineSegment;
-        final String newLine = aTHStraightLineSegment.endPoint.toString();
-        asString += _prepareLine(newLine, aTHStraightLineSegment);
-        asString += _linePointOptionsAsString(aTHStraightLineSegment);
+        final THStraightLineSegment thStraightLineSegment =
+            thElement as THStraightLineSegment;
+        final String newLine = thStraightLineSegment.endPoint.toString();
+        asString += _prepareLine(newLine, thStraightLineSegment);
+        asString += _linePointOptionsAsString(thStraightLineSegment);
       default:
         throw THCustomException("Unrecognized line segment type: '$thType'.");
     }

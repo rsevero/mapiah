@@ -1278,7 +1278,7 @@ class THFileParser {
 
     THTitleCommandOption(
       optionParent: _currentHasOptions,
-      title: stringContent,
+      titleText: stringContent,
     );
   }
 
@@ -1290,7 +1290,10 @@ class THFileParser {
 
     final String stringContent = _parseTHString(_currentSpec[0]);
 
-    THTextCommandOption(optionParent: _currentHasOptions, text: stringContent);
+    THTextCommandOption(
+      optionParent: _currentHasOptions,
+      textContent: stringContent,
+    );
   }
 
   void _injectValueCommandOption() {
@@ -1531,8 +1534,9 @@ class THFileParser {
     }
   }
 
-  String _parseTHString(String aString) {
-    final parsed = aString.replaceAll(_doubleQuoteRegex, thDoubleQuote);
+  String _parseTHString(String stringToParse) {
+    final String parsed =
+        stringToParse.replaceAll(_doubleQuoteRegex, thDoubleQuote);
 
     return parsed;
   }

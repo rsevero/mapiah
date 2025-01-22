@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_string_part.dart';
 
 // text . text of the label, remark or continuation. It may contain following formatting
 // keywords:24
@@ -17,7 +18,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 // <size:S> . specify the font size using predefined scales; S can be one of xs, s, m, l, 6.1.1
 // xl.
 class THTextCommandOption extends THCommandOption {
-  final String text;
+  final THStringPart text;
 
   // static final Map<String, Set<String>> _supportedTypes = {
   //   'point': {
@@ -37,8 +38,9 @@ class THTextCommandOption extends THCommandOption {
 
   THTextCommandOption({
     required super.optionParent,
-    required this.text,
-  }) : super();
+    required String textContent,
+  })  : text = THStringPart(content: textContent),
+        super();
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.text;
@@ -47,7 +49,7 @@ class THTextCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,
-      'text': text,
+      'text': text.toMap(),
       'optionType': optionType.name,
     };
   }
@@ -55,7 +57,7 @@ class THTextCommandOption extends THCommandOption {
   factory THTextCommandOption.fromMap(Map<String, dynamic> map) {
     return THTextCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
-      text: map['text'],
+      text: THStringPart.fromMap(map['text']),
     );
   }
 
@@ -66,7 +68,7 @@ class THTextCommandOption extends THCommandOption {
   @override
   THTextCommandOption copyWith({
     int? parentMapiahID,
-    String? text,
+    THStringPart? text,
   }) {
     return THTextCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
@@ -89,6 +91,6 @@ class THTextCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    return text;
+    return text.toString();
   }
 }

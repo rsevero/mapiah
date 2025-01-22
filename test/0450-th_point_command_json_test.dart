@@ -40,7 +40,7 @@ endscrap
         THElement expected = file.elementByMapiahID(3);
         String asJson = expected.toJson();
         expect(asJson, success['asJson']);
-        THElement fromJson = THPointMapper.fromJson(asJson);
+        THElement fromJson = THPoint.fromJson(asJson);
         expect(deepEquality.equals(expected, fromJson), true);
       });
     }
