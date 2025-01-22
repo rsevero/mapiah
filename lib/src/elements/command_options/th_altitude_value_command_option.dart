@@ -54,6 +54,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   THAltitudeValueCommandOption.fromNan({required super.optionParent})
       : super() {
     length = THDoublePart.fromString(valueString: '0');
+    isFix = false;
     isNan = true;
     unitFromString('');
   }
