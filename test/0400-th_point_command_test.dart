@@ -607,7 +607,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-00128-point_with_invalid_orientation_option_value_failure.th2',
+      // 'th_file_parser-00128-point_with_invalid_orientation_option_value_failure.th2',
       'th_file_parser-00129-point_with_orientation_option_with_unit_failure.th2',
     ];
 
@@ -799,6 +799,17 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file':
+            'th_file_parser-00127-point_duplicate_index_with_type_as_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 432 911 air-draught:winter
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -820,10 +831,9 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-00124-point_with_invalid_subtype_for_type_failure.th2',
+      // 'th_file_parser-00124-point_with_invalid_subtype_for_type_failure.th2',
       // 'th_file_parser-00125-point_with_subtype_for_type_with_no_support_failure.th2',
       'th_file_parser-00126-point_outside_scrap_failure.th2',
-      'th_file_parser-00127-point_duplicate_index_with_type_as_option_failure.th2',
     ];
 
     for (var failure in failures) {

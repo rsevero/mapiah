@@ -54,6 +54,9 @@ class THPointScaleCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.pointScale;
 
   @override
+  String typeToFile() => 'scale';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'parentMapiahID': parentMapiahID,

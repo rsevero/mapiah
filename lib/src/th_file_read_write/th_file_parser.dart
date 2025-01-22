@@ -1321,7 +1321,7 @@ class THFileParser {
   }
 
   void _injectAltitudeCommandOption() {
-    final parseType = _currentSpec[0].toString();
+    final String parseType = _currentSpec[0].toString();
     final specs = _currentSpec[1];
 
     _optionParentAsTHLineSegment();
@@ -1372,7 +1372,7 @@ class THFileParser {
   }
 
   void _injectAltitudeValueCommandOption() {
-    final parseType = _currentSpec[0].toString();
+    final String parseType = _currentSpec[0].toString();
     final specs = _currentSpec[1];
 
     switch (parseType) {
@@ -1423,7 +1423,7 @@ class THFileParser {
   }
 
   void _injectDateValueCommandOption() {
-    final parseType = _currentSpec[0].toString();
+    final String parseType = _currentSpec[0].toString();
     final specs = _currentSpec[1];
 
     switch (parseType) {
@@ -1443,7 +1443,7 @@ class THFileParser {
   }
 
   void _injectDimensionsValueCommandOption() {
-    final parseType = _currentSpec[0].toString();
+    final String parseType = _currentSpec[0].toString();
     final specs = _currentSpec[1];
 
     switch (parseType) {
@@ -1473,7 +1473,7 @@ class THFileParser {
   }
 
   void _injectHeightValueCommandOption() {
-    final parseType = _currentSpec[0].toString();
+    final String parseType = _currentSpec[0].toString();
     final specs = _currentSpec[1];
 
     switch (parseType) {
@@ -1512,7 +1512,7 @@ class THFileParser {
   }
 
   void _injectPassageHeightValueCommandOption() {
-    final parseType = _currentSpec[0].toString();
+    final String parseType = _currentSpec[0].toString();
     final specs = _currentSpec[1];
 
     switch (parseType) {
@@ -1549,7 +1549,7 @@ class THFileParser {
   }
 
   void _addError(String aErrorMessage, String aLocation, String aLocalInfo) {
-    var errorMessage =
+    final String errorMessage =
         "'$aErrorMessage' at '$aLocation' with '$aLocalInfo' local info.";
     _parseErrors.add(errorMessage);
   }
@@ -1632,8 +1632,8 @@ class THFileParser {
   @useResult
   Future<String> _decodeFile(RandomAccessFile raf, String encoding) async {
     await raf.setPosition(0);
-    final fileSize = await raf.length();
-    final fileContentRaw = await raf.read(fileSize);
+    final int fileSize = await raf.length();
+    final Uint8List fileContentRaw = await raf.read(fileSize);
     String fileContentDecoded = '';
 
     switch (encoding) {
@@ -1662,15 +1662,15 @@ class THFileParser {
   }
 
   @useResult
-  Future<String> _encodingNameFromFile(RandomAccessFile aRaf) async {
-    var line = '';
+  Future<String> _encodingNameFromFile(RandomAccessFile raf) async {
+    String line = '';
     int byte;
-    var priorChar = '';
-    var charsRead = 0;
+    String priorChar = '';
+    int charsRead = 0;
 
-    await aRaf.setPosition(0);
+    await raf.setPosition(0);
     while ((charsRead < thMaxEncodingLength) &
-        ((byte = await aRaf.readByte()) != -1)) {
+        ((byte = await raf.readByte()) != -1)) {
       charsRead++;
       // print("Byte: '$byte'");
       final char = utf8.decode([byte]);
@@ -1752,27 +1752,27 @@ class THFileParser {
     return (_parsedTHFile, _parseErrors.isEmpty, _parseErrors);
   }
 
-  (int index, int length) _findLineBreak(String aContent) {
-    final int windowsResult = aContent.indexOf(thWindowsLineBreak);
+  (int index, int length) _findLineBreak(String content) {
+    final int windowsResult = content.indexOf(thWindowsLineBreak);
     if (windowsResult != -1) return (windowsResult, 2);
 
-    final int unixResult = aContent.indexOf(thUnixLineBreak);
+    final int unixResult = content.indexOf(thUnixLineBreak);
     if (unixResult != -1) return (unixResult, 1);
 
     return (-1, 0);
   }
 
-  void _splitContents(String aContents) {
+  void _splitContents(String contents) {
     _splittedContents = [];
     String lastLine = '';
-    while (aContents.isNotEmpty) {
-      var (lineBreakIndex, lineBreakLength) = _findLineBreak(aContents);
+    while (contents.isNotEmpty) {
+      var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
       if (lineBreakIndex == -1) {
-        lastLine += aContents;
+        lastLine += contents;
         break;
       }
-      String newLine = aContents.substring(0, lineBreakIndex);
-      aContents = aContents.substring(lineBreakIndex + lineBreakLength);
+      String newLine = contents.substring(0, lineBreakIndex);
+      contents = contents.substring(lineBreakIndex + lineBreakLength);
       if (newLine.isEmpty) {
         _splittedContents.add("$lastLine$newLine");
         lastLine = '';
@@ -1782,14 +1782,14 @@ class THFileParser {
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
       // the line break belongs to the string content.
-      while (quoteCount.isOdd && aContents.isNotEmpty) {
-        (lineBreakIndex, lineBreakLength) = _findLineBreak(aContents);
+      while (quoteCount.isOdd && contents.isNotEmpty) {
+        (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
         if (lineBreakIndex == -1) {
-          newLine += aContents;
+          newLine += contents;
           break;
         }
-        newLine += aContents.substring(0, lineBreakIndex);
-        aContents = aContents.substring(lineBreakIndex + lineBreakLength);
+        newLine += contents.substring(0, lineBreakIndex);
+        contents = contents.substring(lineBreakIndex + lineBreakLength);
         quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
       }
 
