@@ -187,7 +187,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-00141-point_with_invalid_context_type_failure.th2',
+      // 'th_file_parser-00141-point_with_invalid_context_type_failure.th2',
       'th_file_parser-00142-point_with_incomplete_context_option_failure.th2',
     ];
 

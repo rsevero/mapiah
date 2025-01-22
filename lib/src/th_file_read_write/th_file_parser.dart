@@ -693,10 +693,10 @@ class THFileParser {
     }
   }
 
-  bool _pointRegularOptions(String aOptionType) {
+  bool _pointRegularOptions(String optionType) {
     bool optionIdentified = true;
 
-    switch (aOptionType) {
+    switch (optionType) {
       case 'clip':
         _injectClipCommandOption();
       case 'context':
