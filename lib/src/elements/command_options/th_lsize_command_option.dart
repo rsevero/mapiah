@@ -26,6 +26,9 @@ class THLSizeCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.lSize;
 
   @override
+  String typeToFile() => 'l-size';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'optionType': optionType.name,
