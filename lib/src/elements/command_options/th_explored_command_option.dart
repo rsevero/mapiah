@@ -24,9 +24,7 @@ class THExploredCommandOption extends THCommandOption with THHasLength {
     String? unit,
   }) : super() {
     length = THDoublePart.fromString(valueString: distance);
-    if (unit != null) {
-      unitFromString(unit);
-    }
+    unitFromString(unit);
   }
 
   @override
