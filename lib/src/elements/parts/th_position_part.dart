@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
+import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -39,16 +40,23 @@ class THPositionPart extends THPart {
     return {
       'partType': type.name,
       'coordinates': {
-        'dx': coordinates.dx,
-        'dy': coordinates.dy,
+        'dx': coordinates.dx.toStringAsFixed(thDecimalPositionsForOffsetMapper),
+        'dy': coordinates.dy.toStringAsFixed(thDecimalPositionsForOffsetMapper),
       },
       'decimalPositions': decimalPositions,
     };
   }
 
   factory THPositionPart.fromMap(Map<String, dynamic> map) {
+    final double? dx = double.tryParse(map['coordinates']['dx']);
+    final double? dy = double.tryParse(map['coordinates']['dy']);
+
+    if (dx == null || dy == null) {
+      throw FormatException('Invalid coordinate values in map');
+    }
+
     return THPositionPart(
-      coordinates: Offset(map['coordinates']['dx'], map['coordinates']['dy']),
+      coordinates: Offset(dx, dy),
       decimalPositions: map['decimalPositions'],
     );
   }

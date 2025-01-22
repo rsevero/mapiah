@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -115,7 +116,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
         other.controlPoint1 == controlPoint1 &&
         other.controlPoint2 == controlPoint2 &&
         other.endPoint == endPoint &&
-        other.optionsMap == optionsMap;
+        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
   }
 
   @override

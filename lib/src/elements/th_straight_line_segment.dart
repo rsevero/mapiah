@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_options.dart';
@@ -92,7 +93,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
         other.endPoint == endPoint &&
-        other.optionsMap == optionsMap;
+        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
   }
 
   @override

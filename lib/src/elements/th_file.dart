@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
@@ -145,10 +146,14 @@ class THFile with THParent {
     return other.filename == filename &&
         other.encoding == encoding &&
         other._mapiahID == _mapiahID &&
-        other._elementByMapiahID == _elementByMapiahID &&
-        other._scrapByMapiahID == _scrapByMapiahID &&
-        other._mapiahIDByTHID == _mapiahIDByTHID &&
-        other._thIDByMapiahID == _thIDByMapiahID;
+        const DeepCollectionEquality()
+            .equals(other._elementByMapiahID, _elementByMapiahID) &&
+        const DeepCollectionEquality()
+            .equals(other._scrapByMapiahID, _scrapByMapiahID) &&
+        const DeepCollectionEquality()
+            .equals(other._mapiahIDByTHID, _mapiahIDByTHID) &&
+        const DeepCollectionEquality()
+            .equals(other._thIDByMapiahID, _thIDByMapiahID);
   }
 
   @override

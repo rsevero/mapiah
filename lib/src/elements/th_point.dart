@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/auxiliary/th_point_interface.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -258,7 +259,7 @@ class THPoint extends THElement
         other.sameLineComment == sameLineComment &&
         other.position == position &&
         other.pointType == pointType &&
-        other.optionsMap == optionsMap;
+        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
   }
 
   @override

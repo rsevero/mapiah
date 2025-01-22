@@ -26,7 +26,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"coordinates":"Offset(296.0000000, 468.0000000)","decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
+            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"partType":"position","coordinates":{"dx":"296.0000000","dy":"468.0000000"},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
       },
     ];
 
@@ -38,10 +38,17 @@ endscrap
         expect(isSuccessful, true);
 
         THElement expected = file.elementByMapiahID(3);
+
+        Map<String, dynamic> asMap = expected.toMap();
+        THPoint fromMap = THPoint.fromMap(asMap);
+        expect(expected, fromMap);
+        expect(identical(expected, fromMap), false);
+
         String asJson = expected.toJson();
         expect(asJson, success['asJson']);
         THElement fromJson = THPoint.fromJson(asJson);
-        expect(deepEquality.equals(expected, fromJson), true);
+        expect(expected == fromJson, true);
+        expect(identical(expected, fromJson), false);
       });
     }
   });
