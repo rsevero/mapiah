@@ -3,7 +3,6 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/th_numeric_helper.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';

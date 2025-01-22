@@ -24,6 +24,9 @@ class THLineHeightCommandOption extends THCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.lineHeight;
 
   @override
+  String typeToFile() => 'height';
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'optionType': optionType.name,
