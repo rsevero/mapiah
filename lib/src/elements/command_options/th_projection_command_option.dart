@@ -54,12 +54,22 @@ class THProjectionCommandOption extends THCommandOption {
     required super.optionParent,
     required String type,
     this.index = '',
-    required String elevationAngle,
-    required String elevationUnit,
+    String? elevationAngle,
+    String? elevationUnit,
   }) : super() {
     typeFromString(type);
-    this.elevationAngle = THDoublePart.fromString(valueString: elevationAngle);
-    this.elevationUnit = THAngleUnitPart.fromString(unitString: elevationUnit);
+    if (elevationAngle == null) {
+      this.elevationAngle = null;
+    } else {
+      this.elevationAngle =
+          THDoublePart.fromString(valueString: elevationAngle);
+    }
+    if (elevationUnit == null) {
+      this.elevationUnit = null;
+    } else {
+      this.elevationUnit =
+          THAngleUnitPart.fromString(unitString: elevationUnit);
+    }
   }
 
   @override
@@ -88,8 +98,12 @@ class THProjectionCommandOption extends THCommandOption {
       parentMapiahID: map['parentMapiahID'],
       type: stringToType[map['type']]!,
       index: map['index'],
-      elevationAngle: THDoublePart.fromMap(map['elevationAngle']),
-      elevationUnit: THAngleUnitPart.fromMap(map['elevationUnit']),
+      elevationAngle: map.containsKey('elevationAngle')
+          ? THDoublePart.fromMap(map['elevationAngle'])
+          : null,
+      elevationUnit: map.containsKey('elevationUnit')
+          ? THAngleUnitPart.fromMap(map['elevationUnit'])
+          : null,
     );
   }
 
@@ -103,14 +117,19 @@ class THProjectionCommandOption extends THCommandOption {
     THProjectionTypes? type,
     String? index,
     THDoublePart? elevationAngle,
+    makeElevationAngleNull = false,
     THAngleUnitPart? elevationUnit,
+    makeElevationUnitNull = false,
   }) {
     return THProjectionCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       type: type ?? this.type,
       index: index ?? this.index,
-      elevationAngle: elevationAngle ?? this.elevationAngle,
-      elevationUnit: elevationUnit ?? this.elevationUnit,
+      elevationAngle: makeElevationAngleNull
+          ? null
+          : (elevationAngle ?? this.elevationAngle),
+      elevationUnit:
+          makeElevationUnitNull ? null : (elevationUnit ?? this.elevationUnit),
     );
   }
 
@@ -134,8 +153,8 @@ class THProjectionCommandOption extends THCommandOption {
         elevationUnit,
       );
 
-  static bool isType(String aType) {
-    return stringToType.containsKey(aType);
+  static bool isType(String type) {
+    return stringToType.containsKey(type);
   }
 
   void typeFromString(String type) {
