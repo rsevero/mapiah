@@ -846,10 +846,10 @@ class THFileParser {
     _currentParentMapiahID = parent.mapiahID;
   }
 
-  bool _scrapRegularOptions(String aOptionType) {
+  bool _scrapRegularOptions(String optionType) {
     bool optionIdentified = true;
 
-    switch (aOptionType) {
+    switch (optionType) {
       case 'author':
         _injectAuthorCommandOption();
       case 'copyright':

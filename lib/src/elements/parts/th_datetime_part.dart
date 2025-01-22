@@ -84,7 +84,7 @@ class THDatetimePart extends THPart {
   set datetime(String date) {
     date = date.trim();
 
-    _isRange = false;
+    bool isRange = false;
     if (date == '-') {
       _isEmpty = true;
       _datetime = '-';
@@ -111,13 +111,14 @@ class THDatetimePart extends THPart {
               "Can´t parse end of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'");
         }
         newDatetime += ' - ${parts[1]}';
-        _isRange = true;
+        isRange = true;
       }
     } else {
       throw THCustomException(
           "Can´t parse datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]) from '$date'");
     }
 
+    _isRange = isRange;
     _datetime = newDatetime;
   }
 

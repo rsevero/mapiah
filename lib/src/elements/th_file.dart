@@ -360,9 +360,7 @@ class THFile with THParent {
 
     if (element is THHasTHID) {
       registerElementWithTHID(element, (element as THHasTHID).thID);
-    }
-
-    if (hasOption(element, THCommandOptionType.id)) {
+    } else if (hasOption(element, THCommandOptionType.id)) {
       registerElementWithTHID(
         element,
         ((element as THHasOptions).optionByType(THCommandOptionType.id)!
