@@ -122,7 +122,7 @@ class MovePointCommand extends Command {
     );
 
     return UndoRedoCommand(
-        type: undoRedoCommand.type,
+        commandType: undoRedoCommand.type,
         description: description,
         map: undoRedoCommand.toMap());
   }

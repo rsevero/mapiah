@@ -7,16 +7,18 @@ import 'package:mapiah/src/commands/move_point_command.dart';
 import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
 
 class UndoRedoCommand {
-  final CommandType type;
+  final CommandType commandType;
   final String description;
   final Map<String, dynamic> map;
 
   UndoRedoCommand(
-      {required this.type, required this.description, required this.map});
+      {required this.commandType,
+      required this.description,
+      required this.map});
 
   Map<String, dynamic> toMap() {
     return {
-      'type': type.name,
+      'commandType': commandType.name,
       'description': description,
       'map': map,
     };
@@ -24,7 +26,7 @@ class UndoRedoCommand {
 
   factory UndoRedoCommand.fromMap(Map<String, dynamic> map) {
     return UndoRedoCommand(
-      type: CommandType.values.byName(map['type']),
+      commandType: CommandType.values.byName(map['commandType']),
       description: map['description'],
       map: map['map'],
     );
@@ -35,12 +37,12 @@ class UndoRedoCommand {
   }
 
   UndoRedoCommand copyWith({
-    CommandType? type,
+    CommandType? commandType,
     String? description,
     Map<String, dynamic>? map,
   }) {
     return UndoRedoCommand(
-      type: type ?? this.type,
+      commandType: commandType ?? this.commandType,
       description: description ?? this.description,
       map: map ?? this.map,
     );
@@ -50,20 +52,20 @@ class UndoRedoCommand {
   bool operator ==(covariant UndoRedoCommand other) {
     if (identical(this, other)) return true;
 
-    return other.type == type &&
+    return other.commandType == commandType &&
         other.description == description &&
         other.map == map;
   }
 
   @override
   int get hashCode => Object.hash(
-        type,
+        commandType,
         description,
         map,
       );
 
   Command get command {
-    switch (type) {
+    switch (commandType) {
       case CommandType.moveBezierLineSegment:
         return MoveBezierLineSegmentCommand.fromMap(map);
       case CommandType.moveLine:
