@@ -20,7 +20,7 @@ import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/elements/th_unrecognized_command.dart';
 import 'package:mapiah/src/elements/th_xtherion_config.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/stores/general_store.dart';
+import 'package:mapiah/src/stores/mp_general_store.dart';
 
 enum THElementType {
   areaBorderTHID,
@@ -64,7 +64,7 @@ abstract class THElement {
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
   THElement.addToParent({required this.parentMapiahID, this.sameLineComment})
-      : _mapiahID = getIt<GeneralStore>().nextMapiahIDForElements();
+      : _mapiahID = getIt<MPGeneralStore>().nextMapiahIDForElements();
 
   THParent parent(THFile thFile) {
     if (parentMapiahID < 0) {

@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 
-class GeneralStore {
+class MPGeneralStore {
   int _nextMapiahIDForElements = thFirstMapiahIDForElements;
   int _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
 

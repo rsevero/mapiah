@@ -3,7 +3,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_multilinecomment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/stores/general_store.dart';
+import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 
@@ -13,7 +13,7 @@ import 'th_test_aux.dart';
 
 final GetIt getIt = GetIt.instance;
 void main() {
-  getIt.registerSingleton<GeneralStore>(GeneralStore());
+  getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
   group('initial', () {
     final file = THFile();
 
@@ -195,7 +195,7 @@ endcomment
     };
 
     test("${success['file']} in parts", () async {
-      getIt<GeneralStore>().reset();
+      getIt<MPGeneralStore>().reset();
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
       expect(isSuccessful, true);

@@ -63,7 +63,7 @@ import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.dart';
-import 'package:mapiah/src/stores/general_store.dart';
+import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
@@ -1720,7 +1720,7 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _thFileStore = getIt<GeneralStore>()
+    _thFileStore = getIt<MPGeneralStore>()
         .getTHFileStore(filename: filePath, forceNewStore: forceNewStore);
     _parsedTHFile = _thFileStore.thFile;
     _parsedTHFile.filename = filePath;

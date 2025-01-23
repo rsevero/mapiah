@@ -15,7 +15,7 @@ import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
-import 'package:mapiah/src/stores/general_store.dart';
+import 'package:mapiah/src/stores/mp_general_store.dart';
 
 /// THFile represents the complete contents of a .th or .th2 file.
 ///
@@ -74,7 +74,7 @@ class THFile with THParent {
   }
 
   THFile() {
-    _mapiahID = getIt<GeneralStore>().nextMapiahIDForTHFiles();
+    _mapiahID = getIt<MPGeneralStore>().nextMapiahIDForTHFiles();
   }
 
   String toJson() {

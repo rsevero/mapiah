@@ -8,7 +8,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/stores/general_store.dart';
+import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
 class TH2FileEditPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   void initState() {
     super.initState();
     thFileStore =
-        getIt<GeneralStore>().getTHFileStore(filename: widget.filename);
+        getIt<MPGeneralStore>().getTHFileStore(filename: widget.filename);
     thFileStoreCreateResult = thFileStore.load();
   }
 
