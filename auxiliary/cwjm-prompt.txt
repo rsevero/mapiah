@@ -1,0 +1,18 @@
+Create the following methods for the current class:
+
+* toMap,
+* fromMap,
+* fromJson,
+* copyWith,
+* hashCode and
+* overriden == operator.
+
+Don´t use super as base for any methods.
+
+Include all parameters of the original class forCWJM constructor and use this same constructor in the fromMap and copyWith methods.
+
+In case there are any optional parameters, include an extra makePARAMETER_NAMENull boolean parameter in copyWith.
+
+toMap, toJson, copyWith, hashCode should include @override annotations.
+
+Present only the created methods, don´t return the complete class.
