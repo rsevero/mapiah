@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_area_border_thid.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';

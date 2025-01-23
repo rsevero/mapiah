@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
+import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-class MoveBezierLineSegmentCommand extends Command {
+class MPMoveBezierLineSegmentCommand extends MPCommand {
   late final THBezierCurveLineSegment lineSegment;
   late final Offset endPointOriginalCoordinates;
   late final Offset endPointNewCoordinates;
@@ -16,7 +16,7 @@ class MoveBezierLineSegmentCommand extends Command {
   late final Offset controlPoint2OriginalCoordinates;
   late final Offset controlPoint2NewCoordinates;
 
-  MoveBezierLineSegmentCommand.forCWJM({
+  MPMoveBezierLineSegmentCommand.forCWJM({
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required this.endPointNewCoordinates,
@@ -28,7 +28,7 @@ class MoveBezierLineSegmentCommand extends Command {
     super.description = mpMoveBezierLineSegmentCommandDescription,
   }) : super.forCWJM();
 
-  MoveBezierLineSegmentCommand({
+  MPMoveBezierLineSegmentCommand({
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required this.endPointNewCoordinates,
@@ -39,7 +39,7 @@ class MoveBezierLineSegmentCommand extends Command {
     super.description = mpMoveBezierLineSegmentCommandDescription,
   }) : super();
 
-  MoveBezierLineSegmentCommand.fromDelta({
+  MPMoveBezierLineSegmentCommand.fromDelta({
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required this.controlPoint1OriginalCoordinates,
@@ -54,7 +54,7 @@ class MoveBezierLineSegmentCommand extends Command {
         super();
 
   @override
-  CommandType get type => CommandType.moveBezierLineSegment;
+  MPCommandType get type => MPCommandType.moveBezierLineSegment;
 
   @override
   Map<String, dynamic> toMap() {
@@ -90,8 +90,8 @@ class MoveBezierLineSegmentCommand extends Command {
     };
   }
 
-  factory MoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
-    return MoveBezierLineSegmentCommand.forCWJM(
+  factory MPMoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
+    return MPMoveBezierLineSegmentCommand.forCWJM(
       lineSegment: THBezierCurveLineSegment.fromMap(map['lineSegment']),
       endPointOriginalCoordinates: Offset(
           map['endPointOriginalCoordinates']['dx'],
@@ -112,17 +112,17 @@ class MoveBezierLineSegmentCommand extends Command {
           map['controlPoint2NewCoordinates']['dy']),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['oppositeCommand']),
+          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       description: map['description'],
     );
   }
 
-  factory MoveBezierLineSegmentCommand.fromJson(String jsonString) {
-    return MoveBezierLineSegmentCommand.fromMap(jsonDecode(jsonString));
+  factory MPMoveBezierLineSegmentCommand.fromJson(String jsonString) {
+    return MPMoveBezierLineSegmentCommand.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  MoveBezierLineSegmentCommand copyWith({
+  MPMoveBezierLineSegmentCommand copyWith({
     THBezierCurveLineSegment? lineSegment,
     Offset? endPointOriginalCoordinates,
     Offset? endPointNewCoordinates,
@@ -130,10 +130,10 @@ class MoveBezierLineSegmentCommand extends Command {
     Offset? controlPoint1NewCoordinates,
     Offset? controlPoint2OriginalCoordinates,
     Offset? controlPoint2NewCoordinates,
-    UndoRedoCommand? oppositeCommand,
+    MPUndoRedoCommand? oppositeCommand,
     String? description,
   }) {
-    return MoveBezierLineSegmentCommand.forCWJM(
+    return MPMoveBezierLineSegmentCommand.forCWJM(
       lineSegment: lineSegment ?? this.lineSegment,
       endPointOriginalCoordinates:
           endPointOriginalCoordinates ?? this.endPointOriginalCoordinates,
@@ -153,7 +153,7 @@ class MoveBezierLineSegmentCommand extends Command {
   }
 
   @override
-  bool operator ==(covariant MoveBezierLineSegmentCommand other) {
+  bool operator ==(covariant MPMoveBezierLineSegmentCommand other) {
     if (identical(this, other)) return true;
 
     return other.lineSegment == lineSegment &&
@@ -197,9 +197,9 @@ class MoveBezierLineSegmentCommand extends Command {
   }
 
   @override
-  UndoRedoCommand createOppositeCommand() {
-    final MoveBezierLineSegmentCommand oppositeCommand =
-        MoveBezierLineSegmentCommand(
+  MPUndoRedoCommand createOppositeCommand() {
+    final MPMoveBezierLineSegmentCommand oppositeCommand =
+        MPMoveBezierLineSegmentCommand(
       lineSegment: lineSegment,
       endPointOriginalCoordinates: endPointNewCoordinates,
       endPointNewCoordinates: endPointOriginalCoordinates,
@@ -210,7 +210,7 @@ class MoveBezierLineSegmentCommand extends Command {
       description: description,
     );
 
-    return UndoRedoCommand(
+    return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
       description: description,
       map: oppositeCommand.toMap(),

@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
+import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-class MoveStraightLineSegmentCommand extends Command {
+class MPMoveStraightLineSegmentCommand extends MPCommand {
   late final THStraightLineSegment lineSegment;
   late final Offset endPointOriginalCoordinates;
   late final Offset endPointNewCoordinates;
 
-  MoveStraightLineSegmentCommand.forCWJM({
+  MPMoveStraightLineSegmentCommand.forCWJM({
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required this.endPointNewCoordinates,
@@ -20,14 +20,14 @@ class MoveStraightLineSegmentCommand extends Command {
     required super.description,
   }) : super.forCWJM();
 
-  MoveStraightLineSegmentCommand({
+  MPMoveStraightLineSegmentCommand({
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required this.endPointNewCoordinates,
     super.description = mpMoveStraightLineSegmentCommandDescription,
   }) : super();
 
-  MoveStraightLineSegmentCommand.fromDelta({
+  MPMoveStraightLineSegmentCommand.fromDelta({
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required Offset deltaOnCanvas,
@@ -36,7 +36,7 @@ class MoveStraightLineSegmentCommand extends Command {
         super();
 
   @override
-  CommandType get type => CommandType.moveStraightLineSegment;
+  MPCommandType get type => MPCommandType.moveStraightLineSegment;
 
   @override
   Map<String, dynamic> toMap() {
@@ -56,8 +56,8 @@ class MoveStraightLineSegmentCommand extends Command {
     };
   }
 
-  factory MoveStraightLineSegmentCommand.fromMap(Map<String, dynamic> map) {
-    return MoveStraightLineSegmentCommand.forCWJM(
+  factory MPMoveStraightLineSegmentCommand.fromMap(Map<String, dynamic> map) {
+    return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegment: THStraightLineSegment.fromMap(map['lineSegment']),
       endPointOriginalCoordinates: Offset(
           map['endPointOriginalCoordinates']['dx'],
@@ -66,24 +66,24 @@ class MoveStraightLineSegmentCommand extends Command {
           map['endPointNewCoordinates']['dy']),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['oppositeCommand']),
+          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       description: map['description'],
     );
   }
 
-  factory MoveStraightLineSegmentCommand.fromJson(String jsonString) {
-    return MoveStraightLineSegmentCommand.fromMap(jsonDecode(jsonString));
+  factory MPMoveStraightLineSegmentCommand.fromJson(String jsonString) {
+    return MPMoveStraightLineSegmentCommand.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  MoveStraightLineSegmentCommand copyWith({
+  MPMoveStraightLineSegmentCommand copyWith({
     THStraightLineSegment? lineSegment,
     Offset? endPointOriginalCoordinates,
     Offset? endPointNewCoordinates,
-    UndoRedoCommand? oppositeCommand,
+    MPUndoRedoCommand? oppositeCommand,
     String? description,
   }) {
-    return MoveStraightLineSegmentCommand.forCWJM(
+    return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegment: lineSegment ?? this.lineSegment,
       endPointOriginalCoordinates:
           endPointOriginalCoordinates ?? this.endPointOriginalCoordinates,
@@ -95,7 +95,7 @@ class MoveStraightLineSegmentCommand extends Command {
   }
 
   @override
-  bool operator ==(covariant MoveStraightLineSegmentCommand other) {
+  bool operator ==(covariant MPMoveStraightLineSegmentCommand other) {
     if (identical(this, other)) return true;
 
     return other.lineSegment == lineSegment &&
@@ -125,16 +125,16 @@ class MoveStraightLineSegmentCommand extends Command {
   }
 
   @override
-  UndoRedoCommand createOppositeCommand() {
-    final MoveStraightLineSegmentCommand oppositeCommand =
-        MoveStraightLineSegmentCommand(
+  MPUndoRedoCommand createOppositeCommand() {
+    final MPMoveStraightLineSegmentCommand oppositeCommand =
+        MPMoveStraightLineSegmentCommand(
       lineSegment: lineSegment,
       endPointOriginalCoordinates: endPointNewCoordinates,
       endPointNewCoordinates: endPointOriginalCoordinates,
       description: description,
     );
 
-    return UndoRedoCommand(
+    return MPUndoRedoCommand(
         commandType: oppositeCommand.type,
         description: description,
         map: oppositeCommand.toMap());

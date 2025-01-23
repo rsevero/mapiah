@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';

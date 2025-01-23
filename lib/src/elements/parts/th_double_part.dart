@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:mapiah/src/auxiliary/mp_numeric_helper.dart';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 

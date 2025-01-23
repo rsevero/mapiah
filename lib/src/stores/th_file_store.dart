@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_redraw_trigger.dart';
-import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/commands/move_line_command.dart';
-import 'package:mapiah/src/commands/move_point_command.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/mp_move_line_command.dart';
+import 'package:mapiah/src/commands/mp_move_point_command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
@@ -15,7 +15,7 @@ import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-import 'package:mapiah/src/undo_redo/undo_redo_controller.dart';
+import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_store.g.dart';
@@ -38,7 +38,7 @@ abstract class THFileStoreBase with Store {
 
   final List<String> errorMessages = <String>[];
 
-  late final UndoRedoController _undoRedoController;
+  late final MPUndoRedoController _undoRedoController;
 
   Future<THFileStoreCreateResult> load() async {
     _preParseInitialize();
@@ -67,7 +67,7 @@ abstract class THFileStoreBase with Store {
 
   void _basicInitialization(THFile file) {
     _thFile = file;
-    _undoRedoController = UndoRedoController(this as THFileStore);
+    _undoRedoController = MPUndoRedoController(this as THFileStore);
   }
 
   void _preParseInitialize() {
@@ -152,7 +152,7 @@ abstract class THFileStoreBase with Store {
     _thFile.substituteElement(newElement);
   }
 
-  void execute(Command command) {
+  void execute(MPCommand command) {
     _undoRedoController.execute(command);
   }
 
@@ -164,13 +164,13 @@ abstract class THFileStoreBase with Store {
     _undoRedoController.redo();
   }
 
-  UndoRedoController get undoRedoController => _undoRedoController;
+  MPUndoRedoController get undoRedoController => _undoRedoController;
 
   void updatePointPosition({
     required THPoint originalPoint,
     required THPoint modifiedPoint,
   }) {
-    final MovePointCommand command = MovePointCommand(
+    final MPMovePointCommand command = MPMovePointCommand(
       pointMapiahID: originalPoint.mapiahID,
       originalCoordinates: originalPoint.position.coordinates,
       modifiedCoordinates: modifiedPoint.position.coordinates,
@@ -184,7 +184,7 @@ abstract class THFileStoreBase with Store {
     required THLine newLine,
     required LinkedHashMap<int, THLineSegment> newLineSegmentsMap,
   }) {
-    final MoveLineCommand command = MoveLineCommand(
+    final MPMoveLineCommand command = MPMoveLineCommand(
       originalLine: originalLine,
       originalLineSegmentsMap: originalLineSegmentsMap,
       newLine: newLine,
@@ -199,7 +199,7 @@ abstract class THFileStoreBase with Store {
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required Offset deltaOnCanvas,
   }) {
-    final MoveLineCommand command = MoveLineCommand.fromDelta(
+    final MPMoveLineCommand command = MPMoveLineCommand.fromDelta(
       originalLine: originalLine,
       originalLineSegmentsMap: originalLineSegmentsMap,
       deltaOnCanvas: deltaOnCanvas,

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_id_command_option.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';

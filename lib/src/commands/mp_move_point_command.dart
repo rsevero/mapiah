@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
+import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-class MovePointCommand extends Command {
+class MPMovePointCommand extends MPCommand {
   late final int pointMapiahID;
   late final Offset originalCoordinates;
   late final Offset modifiedCoordinates;
 
-  MovePointCommand.forCWJM({
+  MPMovePointCommand.forCWJM({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
@@ -20,14 +20,14 @@ class MovePointCommand extends Command {
     super.description = mpMovePointCommandDescription,
   }) : super.forCWJM();
 
-  MovePointCommand({
+  MPMovePointCommand({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
     super.description = mpMovePointCommandDescription,
   }) : super();
 
-  MovePointCommand.fromDelta({
+  MPMovePointCommand.fromDelta({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required Offset deltaOnCanvas,
@@ -37,7 +37,7 @@ class MovePointCommand extends Command {
   }
 
   @override
-  CommandType get type => CommandType.movePoint;
+  MPCommandType get type => MPCommandType.movePoint;
 
   @override
   Map<String, dynamic> toMap() {
@@ -57,8 +57,8 @@ class MovePointCommand extends Command {
     };
   }
 
-  factory MovePointCommand.fromMap(Map<String, dynamic> map) {
-    return MovePointCommand.forCWJM(
+  factory MPMovePointCommand.fromMap(Map<String, dynamic> map) {
+    return MPMovePointCommand.forCWJM(
       pointMapiahID: map['pointMapiahID'],
       originalCoordinates: Offset(
           map['originalCoordinates']['dx'], map['originalCoordinates']['dy']),
@@ -66,24 +66,24 @@ class MovePointCommand extends Command {
           map['modifiedCoordinates']['dx'], map['modifiedCoordinates']['dy']),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['oppositeCommand']),
+          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       description: map['description'],
     );
   }
 
-  factory MovePointCommand.fromJson(String jsonString) {
-    return MovePointCommand.fromMap(jsonDecode(jsonString));
+  factory MPMovePointCommand.fromJson(String jsonString) {
+    return MPMovePointCommand.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  MovePointCommand copyWith({
+  MPMovePointCommand copyWith({
     int? pointMapiahID,
     Offset? originalCoordinates,
     Offset? modifiedCoordinates,
-    UndoRedoCommand? oppositeCommand,
+    MPUndoRedoCommand? oppositeCommand,
     String? description,
   }) {
-    return MovePointCommand.forCWJM(
+    return MPMovePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
       modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
@@ -93,7 +93,7 @@ class MovePointCommand extends Command {
   }
 
   @override
-  bool operator ==(covariant MovePointCommand other) {
+  bool operator ==(covariant MPMovePointCommand other) {
     if (identical(this, other)) return true;
 
     return other.pointMapiahID == pointMapiahID &&
@@ -113,17 +113,17 @@ class MovePointCommand extends Command {
       );
 
   @override
-  UndoRedoCommand createOppositeCommand() {
+  MPUndoRedoCommand createOppositeCommand() {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
-    final MovePointCommand oppositeCommand = MovePointCommand(
+    final MPMovePointCommand oppositeCommand = MPMovePointCommand(
       pointMapiahID: pointMapiahID,
       originalCoordinates: modifiedCoordinates,
       modifiedCoordinates: originalCoordinates,
       description: description,
     );
 
-    return UndoRedoCommand(
+    return MPUndoRedoCommand(
         commandType: oppositeCommand.type,
         description: description,
         map: oppositeCommand.toMap());

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/definitions/th_paints.dart';
+import 'package:mapiah/src/definitions/mp_paints.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';

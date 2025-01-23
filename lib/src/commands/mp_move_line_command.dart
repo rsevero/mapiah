@@ -2,18 +2,18 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/commands/command.dart';
-import 'package:mapiah/src/commands/move_bezier_line_segment_command.dart';
-import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/mp_move_bezier_line_segment_command.dart';
+import 'package:mapiah/src/commands/mp_move_straight_line_segment_command.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
+import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-class MoveLineCommand extends Command {
+class MPMoveLineCommand extends MPCommand {
   final THLine originalLine;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
   late final THLine newLine;
@@ -21,7 +21,7 @@ class MoveLineCommand extends Command {
   final Offset deltaOnCanvas;
   final bool isFromDelta;
 
-  MoveLineCommand.forCWJM({
+  MPMoveLineCommand.forCWJM({
     required this.originalLine,
     required this.originalLineSegmentsMap,
     required this.newLine,
@@ -32,7 +32,7 @@ class MoveLineCommand extends Command {
     this.isFromDelta = false,
   }) : super.forCWJM();
 
-  MoveLineCommand({
+  MPMoveLineCommand({
     required this.originalLine,
     required this.originalLineSegmentsMap,
     required this.newLine,
@@ -42,7 +42,7 @@ class MoveLineCommand extends Command {
     this.isFromDelta = false,
   }) : super();
 
-  MoveLineCommand.fromDelta({
+  MPMoveLineCommand.fromDelta({
     required this.originalLine,
     required this.originalLineSegmentsMap,
     required this.deltaOnCanvas,
@@ -83,7 +83,7 @@ class MoveLineCommand extends Command {
   }
 
   @override
-  CommandType get type => CommandType.moveLine;
+  MPCommandType get type => MPCommandType.moveLine;
 
   @override
   Map<String, dynamic> toMap() {
@@ -102,8 +102,8 @@ class MoveLineCommand extends Command {
     };
   }
 
-  factory MoveLineCommand.fromMap(Map<String, dynamic> map) {
-    return MoveLineCommand.forCWJM(
+  factory MPMoveLineCommand.fromMap(Map<String, dynamic> map) {
+    return MPMoveLineCommand.forCWJM(
       originalLine: THLine.fromMap(map['originalLine']),
       originalLineSegmentsMap: LinkedHashMap<int, THLineSegment>.from(
         map['originalLineSegmentsMap']
@@ -116,7 +116,7 @@ class MoveLineCommand extends Command {
       ),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['oppositeCommand']),
+          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       deltaOnCanvas:
           Offset(map['deltaOnCanvas']['dx'], map['deltaOnCanvas']['dy']),
       isFromDelta: map['isFromDelta'],
@@ -124,22 +124,22 @@ class MoveLineCommand extends Command {
     );
   }
 
-  factory MoveLineCommand.fromJson(String jsonString) {
-    return MoveLineCommand.fromMap(jsonDecode(jsonString));
+  factory MPMoveLineCommand.fromJson(String jsonString) {
+    return MPMoveLineCommand.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  MoveLineCommand copyWith({
+  MPMoveLineCommand copyWith({
     THLine? originalLine,
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
     THLine? newLine,
     LinkedHashMap<int, THLineSegment>? newLineSegmentsMap,
-    UndoRedoCommand? oppositeCommand,
+    MPUndoRedoCommand? oppositeCommand,
     Offset? deltaOnCanvas,
     bool? isFromDelta,
     String? description,
   }) {
-    return MoveLineCommand.forCWJM(
+    return MPMoveLineCommand.forCWJM(
       originalLine: originalLine ?? this.originalLine,
       originalLineSegmentsMap:
           originalLineSegmentsMap ?? this.originalLineSegmentsMap,
@@ -153,7 +153,7 @@ class MoveLineCommand extends Command {
   }
 
   @override
-  bool operator ==(covariant MoveLineCommand other) {
+  bool operator ==(covariant MPMoveLineCommand other) {
     if (identical(this, other)) return true;
 
     return other.originalLine == originalLine &&
@@ -183,12 +183,12 @@ class MoveLineCommand extends Command {
     for (final entry in originalLineSegmentsMap.entries) {
       final int originalLineSegmentMapiahID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
-      late Command command;
+      late MPCommand command;
 
       switch (originalLineSegment) {
         case THStraightLineSegment _:
           if (isFromDelta) {
-            command = MoveStraightLineSegmentCommand.fromDelta(
+            command = MPMoveStraightLineSegmentCommand.fromDelta(
               lineSegment: originalLineSegment,
               endPointOriginalCoordinates:
                   originalLineSegment.endPoint.coordinates,
@@ -196,7 +196,7 @@ class MoveLineCommand extends Command {
               description: description,
             );
           } else {
-            command = MoveStraightLineSegmentCommand(
+            command = MPMoveStraightLineSegmentCommand(
               lineSegment: originalLineSegment,
               endPointOriginalCoordinates:
                   originalLineSegment.endPoint.coordinates,
@@ -214,7 +214,7 @@ class MoveLineCommand extends Command {
                   as THBezierCurveLineSegment;
 
           if (isFromDelta) {
-            command = MoveBezierLineSegmentCommand.fromDelta(
+            command = MPMoveBezierLineSegmentCommand.fromDelta(
               lineSegment: originalLineSegment,
               endPointOriginalCoordinates:
                   originalLineSegment.endPoint.coordinates,
@@ -226,7 +226,7 @@ class MoveLineCommand extends Command {
               description: description,
             );
           } else {
-            command = MoveBezierLineSegmentCommand(
+            command = MPMoveBezierLineSegmentCommand(
               lineSegment: originalLineSegment,
               endPointOriginalCoordinates:
                   originalLineSegment.endPoint.coordinates,
@@ -250,8 +250,8 @@ class MoveLineCommand extends Command {
   }
 
   @override
-  UndoRedoCommand createOppositeCommand() {
-    final MoveLineCommand oppositeCommand = MoveLineCommand(
+  MPUndoRedoCommand createOppositeCommand() {
+    final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
       originalLine: newLine,
       originalLineSegmentsMap: newLineSegmentsMap,
       newLine: originalLine,
@@ -259,7 +259,7 @@ class MoveLineCommand extends Command {
       description: description,
     );
 
-    return UndoRedoCommand(
+    return MPUndoRedoCommand(
         commandType: oppositeCommand.type,
         description: description,
         map: oppositeCommand.toMap());

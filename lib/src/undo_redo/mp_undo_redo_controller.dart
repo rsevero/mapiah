@@ -1,16 +1,16 @@
-import 'package:mapiah/src/commands/command.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
+import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-class UndoRedoController {
-  final List<UndoRedoCommand> _undo = [];
-  final List<UndoRedoCommand> _redo = [];
+class MPUndoRedoController {
+  final List<MPUndoRedoCommand> _undo = [];
+  final List<MPUndoRedoCommand> _redo = [];
   final THFileStore thFileStore;
 
-  UndoRedoController(this.thFileStore);
+  MPUndoRedoController(this.thFileStore);
 
-  void execute(Command command) {
-    final UndoRedoCommand undo = command.execute(thFileStore);
+  void execute(MPCommand command) {
+    final MPUndoRedoCommand undo = command.execute(thFileStore);
 
     if (_redo.isNotEmpty) {
       _undo.addAll(_redo);
@@ -24,8 +24,8 @@ class UndoRedoController {
     if (_undo.isEmpty) {
       return;
     }
-    final Command command = _undo.removeLast().command;
-    final UndoRedoCommand redo = command.execute(thFileStore);
+    final MPCommand command = _undo.removeLast().command;
+    final MPUndoRedoCommand redo = command.execute(thFileStore);
     _redo.add(redo);
   }
 
@@ -33,8 +33,8 @@ class UndoRedoController {
     if (_redo.isEmpty) {
       return;
     }
-    final Command command = _redo.removeLast().command;
-    final UndoRedoCommand undo = command.execute(thFileStore);
+    final MPCommand command = _redo.removeLast().command;
+    final MPUndoRedoCommand undo = command.execute(thFileStore);
     _undo.add(undo);
   }
 

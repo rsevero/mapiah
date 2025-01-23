@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/selection/mp_selectable.dart';

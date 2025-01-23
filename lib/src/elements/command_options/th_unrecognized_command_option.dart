@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 class THUnrecognizedCommandOption extends THCommandOption {

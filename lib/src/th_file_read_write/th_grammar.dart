@@ -1,6 +1,6 @@
 import 'package:petitparser/petitparser.dart';
 
-import 'package:mapiah/src/definitions/th_definitions.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
