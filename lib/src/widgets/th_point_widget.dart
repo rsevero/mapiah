@@ -33,18 +33,20 @@ class THPointWidget extends StatelessWidget {
 
         thFileStore.redrawTrigger[thFileMapiahID];
         thFileStore.redrawTrigger[thScrapMapiahID];
-        thFileStore.redrawTrigger[point.mapiahID];
+        thFileStore.elements[point.mapiahID];
 
         final THPointPaint pointPaint = thFileDisplayStore.getPointPaint(point);
 
-        return CustomPaint(
-          painter: THPointPainter(
-            position: point.position.coordinates,
-            pointRadius: pointPaint.radius,
-            pointPaint: pointPaint.paint,
-            thFileDisplayStore: thFileDisplayStore,
+        return RepaintBoundary(
+          child: CustomPaint(
+            painter: THPointPainter(
+              position: point.position.coordinates,
+              pointRadius: pointPaint.radius,
+              pointPaint: pointPaint.paint,
+              thFileDisplayStore: thFileDisplayStore,
+            ),
+            size: thFileDisplayStore.screenSize,
           ),
-          size: thFileDisplayStore.screenSize,
         );
       },
     );

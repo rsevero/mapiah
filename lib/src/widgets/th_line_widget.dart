@@ -36,20 +36,22 @@ class THLineWidget extends StatelessWidget {
       builder: (_) {
         thFileStore.redrawTrigger[thFileMapiahID];
         thFileStore.redrawTrigger[thScrapMapiahID];
-        thFileStore.redrawTrigger[line.mapiahID];
+        thFileStore.elements[line.mapiahID];
 
         final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
             getLineSegmentsMap();
 
         final THLinePaint linePaint = thFileDisplayStore.getLinePaint(line);
 
-        return CustomPaint(
-          painter: THLinePainter(
-            lineSegmentsMap: lineSegmentsMap,
-            linePaint: linePaint.paint,
-            thFileDisplayStore: thFileDisplayStore,
+        return RepaintBoundary(
+          child: CustomPaint(
+            painter: THLinePainter(
+              lineSegmentsMap: lineSegmentsMap,
+              linePaint: linePaint.paint,
+              thFileDisplayStore: thFileDisplayStore,
+            ),
+            size: thFileDisplayStore.screenSize,
           ),
-          size: thFileDisplayStore.screenSize,
         );
       },
     );

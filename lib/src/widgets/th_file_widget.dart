@@ -140,20 +140,18 @@ class _THFileWidgetState extends State<THFileWidget> {
       element = element.parent(thFile) as THLine;
     }
 
-    setState(() {
-      switch (element) {
-        case THLine _:
-          _selectedElement =
-              MPSelectedLine(thFile: thFile, modifiedLine: element);
-          break;
-        case THPoint _:
-          _selectedElement = MPSelectedPoint(modifiedPoint: element);
-          break;
-      }
+    switch (element) {
+      case THLine _:
+        _selectedElement =
+            MPSelectedLine(thFile: thFile, modifiedLine: element);
+        break;
+      case THPoint _:
+        _selectedElement = MPSelectedPoint(modifiedPoint: element);
+        break;
+    }
 
-      _panStartCoordinates =
-          thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
-    });
+    _panStartCoordinates =
+        thFileDisplayStore.offsetScreenToCanvas(details.localPosition);
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -175,26 +173,26 @@ class _THFileWidgetState extends State<THFileWidget> {
     }
 
     final Offset localDeltaPositionOnCanvas =
-        thFileDisplayStore.offsetScaleScreenToCanvas(details.delta);
+        thFileDisplayStore.offsetScreenToCanvas(details.localPosition) -
+            _panStartCoordinates;
 
-    setState(() {
-      switch (_selectedElement!.modifiedElement) {
-        case THPoint _:
-          final THPoint currentPoint =
-              _selectedElement!.modifiedElement as THPoint;
-          _selectedElement!.modifiedElement = currentPoint.copyWith(
-              position: currentPoint.position.copyWith(
-                  coordinates: currentPoint.position.coordinates +
-                      localDeltaPositionOnCanvas));
-          break;
-        case THLine _:
-          _updateTHLinePosition(
-              _selectedElement! as MPSelectedLine, localDeltaPositionOnCanvas);
-          break;
-        default:
-          break;
-      }
-    });
+    switch (_selectedElement!.originalElement) {
+      case THPoint _:
+        final THPoint currentPoint =
+            _selectedElement!.originalElement as THPoint;
+        final THPoint modifiedPoint = currentPoint.copyWith(
+            position: currentPoint.position.copyWith(
+                coordinates: currentPoint.position.coordinates +
+                    localDeltaPositionOnCanvas));
+        thFileStore.substituteElement(modifiedPoint);
+        break;
+      case THLine _:
+        _updateTHLinePosition(
+            _selectedElement! as MPSelectedLine, localDeltaPositionOnCanvas);
+        break;
+      default:
+        break;
+    }
   }
 
   void _updateTHLinePosition(

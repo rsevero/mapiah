@@ -54,17 +54,18 @@ class THLinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant THLinePainter oldDelegate) {
-    if (linePaint != oldDelegate.linePaint) {
-      return true;
-    }
+    return true;
+    // if (linePaint != oldDelegate.linePaint) {
+    //   return true;
+    // }
 
-    final MapEquality<int, THLinePainterLineSegment> mapEquality =
-        MapEquality<int, THLinePainterLineSegment>();
+    // final MapEquality<int, THLinePainterLineSegment> mapEquality =
+    //     MapEquality<int, THLinePainterLineSegment>();
 
-    if (!mapEquality.equals(lineSegmentsMap, oldDelegate.lineSegmentsMap)) {
-      return true;
-    }
+    // if (!mapEquality.equals(lineSegmentsMap, oldDelegate.lineSegmentsMap)) {
+    //   return true;
+    // }
 
-    return false;
+    // return false;
   }
 }
