@@ -16,7 +16,7 @@ class MoveStraightLineSegmentCommand extends Command {
     required this.lineSegment,
     required this.endPointOriginalCoordinates,
     required this.endPointNewCoordinates,
-    required super.undoRedo,
+    required super.oppositeCommand,
     required super.description,
   }) : super.forCWJM();
 
@@ -51,7 +51,7 @@ class MoveStraightLineSegmentCommand extends Command {
         'dx': endPointNewCoordinates.dx,
         'dy': endPointNewCoordinates.dy
       },
-      'undoRedo': undoRedo?.toMap(),
+      'oppositeCommand': oppositeCommand?.toMap(),
       'description': description,
     };
   }
@@ -64,9 +64,9 @@ class MoveStraightLineSegmentCommand extends Command {
           map['endPointOriginalCoordinates']['dy']),
       endPointNewCoordinates: Offset(map['endPointNewCoordinates']['dx'],
           map['endPointNewCoordinates']['dy']),
-      undoRedo: map['undoRedo'] == null
+      oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['undoRedo']),
+          : UndoRedoCommand.fromMap(map['oppositeCommand']),
       description: map['description'],
     );
   }
@@ -80,7 +80,7 @@ class MoveStraightLineSegmentCommand extends Command {
     THStraightLineSegment? lineSegment,
     Offset? endPointOriginalCoordinates,
     Offset? endPointNewCoordinates,
-    UndoRedoCommand? undoRedo,
+    UndoRedoCommand? oppositeCommand,
     String? description,
   }) {
     return MoveStraightLineSegmentCommand.forCWJM(
@@ -89,7 +89,7 @@ class MoveStraightLineSegmentCommand extends Command {
           endPointOriginalCoordinates ?? this.endPointOriginalCoordinates,
       endPointNewCoordinates:
           endPointNewCoordinates ?? this.endPointNewCoordinates,
-      undoRedo: undoRedo ?? this.undoRedo,
+      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       description: description ?? this.description,
     );
   }
@@ -101,6 +101,7 @@ class MoveStraightLineSegmentCommand extends Command {
     return other.lineSegment == lineSegment &&
         other.endPointOriginalCoordinates == endPointOriginalCoordinates &&
         other.endPointNewCoordinates == endPointNewCoordinates &&
+        other.oppositeCommand == oppositeCommand &&
         other.description == description;
   }
 
@@ -109,6 +110,7 @@ class MoveStraightLineSegmentCommand extends Command {
         lineSegment,
         endPointOriginalCoordinates,
         endPointNewCoordinates,
+        oppositeCommand,
         description,
       );
 
@@ -123,8 +125,8 @@ class MoveStraightLineSegmentCommand extends Command {
   }
 
   @override
-  UndoRedoCommand createUndoRedo(THFile thFile) {
-    final MoveStraightLineSegmentCommand undoRedoCommand =
+  UndoRedoCommand createOppositeCommand(THFile thFile) {
+    final MoveStraightLineSegmentCommand oppositeCommand =
         MoveStraightLineSegmentCommand(
       lineSegment: lineSegment,
       endPointOriginalCoordinates: endPointNewCoordinates,
@@ -133,8 +135,8 @@ class MoveStraightLineSegmentCommand extends Command {
     );
 
     return UndoRedoCommand(
-        commandType: undoRedoCommand.type,
+        commandType: oppositeCommand.type,
         description: description,
-        map: undoRedoCommand.toMap());
+        map: oppositeCommand.toMap());
   }
 }

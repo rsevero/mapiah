@@ -16,7 +16,7 @@ class MovePointCommand extends Command {
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
-    required super.undoRedo,
+    required super.oppositeCommand,
     super.description = mpMovePointCommandDescription,
   }) : super.forCWJM();
 
@@ -52,7 +52,7 @@ class MovePointCommand extends Command {
         'dx': modifiedCoordinates.dx,
         'dy': modifiedCoordinates.dy
       },
-      'undoRedo': undoRedo?.toMap(),
+      'oppositeCommand': oppositeCommand?.toMap(),
       'description': description,
     };
   }
@@ -64,9 +64,9 @@ class MovePointCommand extends Command {
           map['originalCoordinates']['dx'], map['originalCoordinates']['dy']),
       modifiedCoordinates: Offset(
           map['modifiedCoordinates']['dx'], map['modifiedCoordinates']['dy']),
-      undoRedo: map['undoRedo'] == null
+      oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['undoRedo']),
+          : UndoRedoCommand.fromMap(map['oppositeCommand']),
       description: map['description'],
     );
   }
@@ -80,14 +80,14 @@ class MovePointCommand extends Command {
     int? pointMapiahID,
     Offset? originalCoordinates,
     Offset? modifiedCoordinates,
-    UndoRedoCommand? undoRedo,
+    UndoRedoCommand? oppositeCommand,
     String? description,
   }) {
     return MovePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
       modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
-      undoRedo: undoRedo ?? this.undoRedo,
+      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       description: description ?? this.description,
     );
   }
@@ -99,6 +99,7 @@ class MovePointCommand extends Command {
     return other.pointMapiahID == pointMapiahID &&
         other.originalCoordinates == originalCoordinates &&
         other.modifiedCoordinates == modifiedCoordinates &&
+        other.oppositeCommand == oppositeCommand &&
         other.description == description;
   }
 
@@ -107,14 +108,15 @@ class MovePointCommand extends Command {
         pointMapiahID,
         originalCoordinates,
         modifiedCoordinates,
+        oppositeCommand,
         description,
       );
 
   @override
-  UndoRedoCommand createUndoRedo(THFile thFile) {
+  UndoRedoCommand createOppositeCommand(THFile thFile) {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
-    final MovePointCommand undoRedoCommand = MovePointCommand(
+    final MovePointCommand oppositeCommand = MovePointCommand(
       pointMapiahID: pointMapiahID,
       originalCoordinates: modifiedCoordinates,
       modifiedCoordinates: originalCoordinates,
@@ -122,9 +124,9 @@ class MovePointCommand extends Command {
     );
 
     return UndoRedoCommand(
-        commandType: undoRedoCommand.type,
+        commandType: oppositeCommand.type,
         description: description,
-        map: undoRedoCommand.toMap());
+        map: oppositeCommand.toMap());
   }
 
   @override

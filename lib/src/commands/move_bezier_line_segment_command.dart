@@ -24,7 +24,7 @@ class MoveBezierLineSegmentCommand extends Command {
     required this.controlPoint1NewCoordinates,
     required this.controlPoint2OriginalCoordinates,
     required this.controlPoint2NewCoordinates,
-    required super.undoRedo,
+    required super.oppositeCommand,
     super.description = mpMoveBezierLineSegmentCommandDescription,
   }) : super.forCWJM();
 
@@ -85,7 +85,7 @@ class MoveBezierLineSegmentCommand extends Command {
         'dx': controlPoint2NewCoordinates.dx,
         'dy': controlPoint2NewCoordinates.dy
       },
-      'undoRedo': undoRedo?.toMap(),
+      'oppositeCommand': oppositeCommand?.toMap(),
       'description': description,
     };
   }
@@ -110,9 +110,9 @@ class MoveBezierLineSegmentCommand extends Command {
       controlPoint2NewCoordinates: Offset(
           map['controlPoint2NewCoordinates']['dx'],
           map['controlPoint2NewCoordinates']['dy']),
-      undoRedo: map['undoRedo'] == null
+      oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['undoRedo']),
+          : UndoRedoCommand.fromMap(map['oppositeCommand']),
       description: map['description'],
     );
   }
@@ -130,7 +130,7 @@ class MoveBezierLineSegmentCommand extends Command {
     Offset? controlPoint1NewCoordinates,
     Offset? controlPoint2OriginalCoordinates,
     Offset? controlPoint2NewCoordinates,
-    UndoRedoCommand? undoRedo,
+    UndoRedoCommand? oppositeCommand,
     String? description,
   }) {
     return MoveBezierLineSegmentCommand.forCWJM(
@@ -147,7 +147,7 @@ class MoveBezierLineSegmentCommand extends Command {
           this.controlPoint2OriginalCoordinates,
       controlPoint2NewCoordinates:
           controlPoint2NewCoordinates ?? this.controlPoint2NewCoordinates,
-      undoRedo: undoRedo ?? this.undoRedo,
+      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       description: description ?? this.description,
     );
   }
@@ -165,7 +165,7 @@ class MoveBezierLineSegmentCommand extends Command {
         other.controlPoint2OriginalCoordinates ==
             controlPoint2OriginalCoordinates &&
         other.controlPoint2NewCoordinates == controlPoint2NewCoordinates &&
-        other.undoRedo == undoRedo &&
+        other.oppositeCommand == oppositeCommand &&
         other.description == description;
   }
 
@@ -178,7 +178,7 @@ class MoveBezierLineSegmentCommand extends Command {
         controlPoint1NewCoordinates,
         controlPoint2OriginalCoordinates,
         controlPoint2NewCoordinates,
-        undoRedo,
+        oppositeCommand,
         description,
       );
 
@@ -197,8 +197,8 @@ class MoveBezierLineSegmentCommand extends Command {
   }
 
   @override
-  UndoRedoCommand createUndoRedo(THFile thFile) {
-    final MoveBezierLineSegmentCommand undoRedoCommand =
+  UndoRedoCommand createOppositeCommand(THFile thFile) {
+    final MoveBezierLineSegmentCommand oppositeCommand =
         MoveBezierLineSegmentCommand(
       lineSegment: lineSegment,
       endPointOriginalCoordinates: endPointNewCoordinates,
@@ -211,9 +211,9 @@ class MoveBezierLineSegmentCommand extends Command {
     );
 
     return UndoRedoCommand(
-      commandType: undoRedoCommand.type,
+      commandType: oppositeCommand.type,
       description: description,
-      map: undoRedoCommand.toMap(),
+      map: oppositeCommand.toMap(),
     );
   }
 }

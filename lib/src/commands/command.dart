@@ -20,9 +20,9 @@ enum CommandType {
 /// actions that should support undo must be impmentend as a command.
 abstract class Command {
   late final String description;
-  UndoRedoCommand? undoRedo;
+  UndoRedoCommand? oppositeCommand;
 
-  Command.forCWJM({required this.description, required this.undoRedo});
+  Command.forCWJM({required this.description, required this.oppositeCommand});
 
   Command({required this.description});
 
@@ -53,20 +53,20 @@ abstract class Command {
 
   Command copyWith({
     required String description,
-    required UndoRedoCommand undoRedo,
+    required UndoRedoCommand oppositeCommand,
   });
 
   UndoRedoCommand execute(THFile thFile) {
-    undoRedo = createUndoRedo(thFile);
+    oppositeCommand = createOppositeCommand(thFile);
     actualExecute(thFile);
 
-    return undoRedo!;
+    return oppositeCommand!;
   }
 
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
-  UndoRedoCommand createUndoRedo(THFile thFile);
+  UndoRedoCommand createOppositeCommand(THFile thFile);
 
   void actualExecute(THFile thFile);
 }

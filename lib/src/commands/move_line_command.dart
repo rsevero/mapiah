@@ -26,7 +26,7 @@ class MoveLineCommand extends Command {
     required this.originalLineSegmentsMap,
     required this.newLine,
     required this.newLineSegmentsMap,
-    required super.undoRedo,
+    required super.oppositeCommand,
     super.description = mpMoveLineCommandDescription,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
@@ -95,7 +95,7 @@ class MoveLineCommand extends Command {
       'newLine': newLine.toMap(),
       'newLineSegmentsMap':
           newLineSegmentsMap.map((key, value) => MapEntry(key, value.toMap())),
-      'undoRedo': undoRedo?.toMap(),
+      'oppositeCommand': oppositeCommand?.toMap(),
       'deltaOnCanvas': {'dx': deltaOnCanvas.dx, 'dy': deltaOnCanvas.dy},
       'isFromDelta': isFromDelta,
       'description': description,
@@ -114,9 +114,9 @@ class MoveLineCommand extends Command {
         map['newLineSegmentsMap']
             .map((key, value) => MapEntry(key, THLineSegment.fromMap(value))),
       ),
-      undoRedo: map['undoRedo'] == null
+      oppositeCommand: map['oppositeCommand'] == null
           ? null
-          : UndoRedoCommand.fromMap(map['undoRedo']),
+          : UndoRedoCommand.fromMap(map['oppositeCommand']),
       deltaOnCanvas:
           Offset(map['deltaOnCanvas']['dx'], map['deltaOnCanvas']['dy']),
       isFromDelta: map['isFromDelta'],
@@ -134,7 +134,7 @@ class MoveLineCommand extends Command {
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
     THLine? newLine,
     LinkedHashMap<int, THLineSegment>? newLineSegmentsMap,
-    UndoRedoCommand? undoRedo,
+    UndoRedoCommand? oppositeCommand,
     Offset? deltaOnCanvas,
     bool? isFromDelta,
     String? description,
@@ -145,7 +145,7 @@ class MoveLineCommand extends Command {
           originalLineSegmentsMap ?? this.originalLineSegmentsMap,
       newLine: newLine ?? this.newLine,
       newLineSegmentsMap: newLineSegmentsMap ?? this.newLineSegmentsMap,
-      undoRedo: undoRedo ?? this.undoRedo,
+      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       deltaOnCanvas: deltaOnCanvas ?? this.deltaOnCanvas,
       isFromDelta: isFromDelta ?? this.isFromDelta,
       description: description ?? this.description,
@@ -160,7 +160,7 @@ class MoveLineCommand extends Command {
         other.originalLineSegmentsMap == originalLineSegmentsMap &&
         other.newLine == newLine &&
         other.newLineSegmentsMap == newLineSegmentsMap &&
-        other.undoRedo == undoRedo &&
+        other.oppositeCommand == oppositeCommand &&
         other.deltaOnCanvas == deltaOnCanvas &&
         other.isFromDelta == isFromDelta &&
         other.description == description;
@@ -172,7 +172,7 @@ class MoveLineCommand extends Command {
         originalLineSegmentsMap,
         newLine,
         newLineSegmentsMap,
-        undoRedo,
+        oppositeCommand,
         deltaOnCanvas,
         isFromDelta,
         description,
@@ -250,8 +250,8 @@ class MoveLineCommand extends Command {
   }
 
   @override
-  UndoRedoCommand createUndoRedo(THFile thFile) {
-    final MoveLineCommand undoRedoCommand = MoveLineCommand(
+  UndoRedoCommand createOppositeCommand(THFile thFile) {
+    final MoveLineCommand oppositeCommand = MoveLineCommand(
       originalLine: newLine,
       originalLineSegmentsMap: newLineSegmentsMap,
       newLine: originalLine,
@@ -260,8 +260,8 @@ class MoveLineCommand extends Command {
     );
 
     return UndoRedoCommand(
-        commandType: undoRedoCommand.type,
+        commandType: oppositeCommand.type,
         description: description,
-        map: undoRedoCommand.toMap());
+        map: oppositeCommand.toMap());
   }
 }
