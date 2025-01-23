@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -6,10 +7,10 @@ import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/selection/th_selectable_element.dart';
-import 'package:mapiah/src/selection/th_selected_element.dart';
-import 'package:mapiah/src/selection/th_selected_line.dart';
-import 'package:mapiah/src/selection/th_selected_point.dart';
+import 'package:mapiah/src/selection/mp_selectable_element.dart';
+import 'package:mapiah/src/selection/mp_selected_element.dart';
+import 'package:mapiah/src/selection/mp_selected_line.dart';
+import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -27,12 +28,12 @@ class THFileWidget extends StatefulWidget {
 }
 
 class _THFileWidgetState extends State<THFileWidget> {
-  THSelectedElement? _selectedElement;
+  MPSelectedElement? _selectedElement;
   Offset _panStartCoordinates = Offset.zero;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final THFileStore thFileStore = widget.thFileStore;
   late final THFile thFile = widget.thFileStore.thFile;
-  bool _repaintTrigger = false;
+  late final int thFileMapiahID = thFile.mapiahID;
 
   @override
   void initState() {
@@ -45,33 +46,38 @@ class _THFileWidgetState extends State<THFileWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        thFileDisplayStore.updateScreenSize(
-            Size(constraints.maxWidth, constraints.maxHeight));
+        return Observer(
+          builder: (context) {
+            thFileStore.redrawTrigger[thFileMapiahID];
+            thFileDisplayStore.updateScreenSize(
+                Size(constraints.maxWidth, constraints.maxHeight));
 
-        if (thFileDisplayStore.canvasScaleTranslationUndefined) {
-          thFileDisplayStore.zoomShowAll();
-        }
+            if (thFileDisplayStore.canvasScaleTranslationUndefined) {
+              thFileDisplayStore.zoomShowAll();
+            }
 
-        thFileDisplayStore.clearSelectableElements();
+            thFileDisplayStore.clearSelectableElements();
 
-        final List<THScrapWidget> scrapWidgets = [];
-        final List<int> fileChildrenMapiahIDs = thFile.childrenMapiahID;
+            final List<THScrapWidget> scrapWidgets = [];
+            final List<int> fileChildrenMapiahIDs = thFile.childrenMapiahID;
 
-        for (final int childMapiahID in fileChildrenMapiahIDs) {
-          final THElement child = thFile.elementByMapiahID(childMapiahID);
+            for (final int childMapiahID in fileChildrenMapiahIDs) {
+              final THElement child = thFile.elementByMapiahID(childMapiahID);
 
-          if (child is THScrap) {
-            scrapWidgets.add(THScrapWidget(child, thFileStore));
-          }
-        }
+              if (child is THScrap) {
+                scrapWidgets.add(THScrapWidget(child, thFileStore));
+              }
+            }
 
-        return GestureDetector(
-          onPanStart: _onPanStart,
-          onPanUpdate: _onPanUpdate,
-          onPanEnd: _onPanEnd,
-          child: Stack(
-            children: scrapWidgets,
-          ),
+            return GestureDetector(
+              onPanStart: _onPanStart,
+              onPanUpdate: _onPanUpdate,
+              onPanEnd: _onPanEnd,
+              child: Stack(
+                children: scrapWidgets,
+              ),
+            );
+          },
         );
       },
     );
@@ -82,7 +88,7 @@ class _THFileWidgetState extends State<THFileWidget> {
       return;
     }
 
-    THSelectableElement? selectableElement =
+    MPSelectableElement? selectableElement =
         thFileDisplayStore.selectableElementContains(details.localPosition);
 
     if (selectableElement == null) {
@@ -110,10 +116,10 @@ class _THFileWidgetState extends State<THFileWidget> {
       switch (element) {
         case THLine _:
           _selectedElement =
-              THSelectedLine(thFile: thFile, modifiedLine: element);
+              MPSelectedLine(thFile: thFile, modifiedLine: element);
           break;
         case THPoint _:
-          _selectedElement = THSelectedPoint(modifiedPoint: element);
+          _selectedElement = MPSelectedPoint(modifiedPoint: element);
           break;
       }
 
@@ -129,9 +135,7 @@ class _THFileWidgetState extends State<THFileWidget> {
         break;
       case TH2FileEditMode.pan:
         thFileDisplayStore.onPanUpdate(details);
-        setState(() {
-          _repaintTrigger = !_repaintTrigger;
-        });
+        thFileStore.triggerFileRedraw();
         break;
     }
   }
@@ -157,7 +161,7 @@ class _THFileWidgetState extends State<THFileWidget> {
           break;
         case THLine _:
           _updateTHLinePosition(
-              _selectedElement! as THSelectedLine, localDeltaPositionOnCanvas);
+              _selectedElement! as MPSelectedLine, localDeltaPositionOnCanvas);
           break;
         default:
           break;
@@ -166,7 +170,7 @@ class _THFileWidgetState extends State<THFileWidget> {
   }
 
   void _updateTHLinePosition(
-      THSelectedLine selectedLine, Offset localDeltaPositionOnCanvas) {
+      MPSelectedLine selectedLine, Offset localDeltaPositionOnCanvas) {
     final THLine line = selectedLine.modifiedLine;
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
 
@@ -223,17 +227,17 @@ class _THFileWidgetState extends State<THFileWidget> {
     }
 
     switch (_selectedElement!) {
-      case THSelectedPoint _:
+      case MPSelectedPoint _:
         thFileStore.updatePointPosition(
-          originalPoint: (_selectedElement! as THSelectedPoint).originalPoint,
-          modifiedPoint: (_selectedElement! as THSelectedPoint).modifiedPoint,
+          originalPoint: (_selectedElement! as MPSelectedPoint).originalPoint,
+          modifiedPoint: (_selectedElement! as MPSelectedPoint).modifiedPoint,
         );
         break;
-      case THSelectedLine _:
+      case MPSelectedLine _:
         thFileStore.updateLinePositionPerOffset(
-          originalLine: (_selectedElement! as THSelectedLine).originalLine,
+          originalLine: (_selectedElement! as MPSelectedLine).originalLine,
           originalLineSegmentsMap:
-              (_selectedElement! as THSelectedLine).originalLineSegmentsMap,
+              (_selectedElement! as MPSelectedLine).originalLineSegmentsMap,
           deltaOnCanvas: panEndOffset,
         );
         break;

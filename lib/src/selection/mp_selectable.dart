@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-abstract class THSelectable {
+abstract class MPSelectable {
   final Offset position;
 
-  THSelectable({
+  MPSelectable({
     required this.position,
   });
 

@@ -6,7 +6,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 import 'package:mapiah/src/stores/multiple_store_reactions.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
-import 'package:mapiah/src/stores/th_settings_store.dart';
+import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/general_store.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -17,7 +17,7 @@ void main() {
 }
 
 void _setup() {
-  getIt.registerSingleton<THSettingsStore>(THSettingsStore());
+  getIt.registerSingleton<MPSettingsStore>(MPSettingsStore());
   getIt.registerSingleton<GeneralStore>(GeneralStore());
   getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());
   getIt.registerSingleton<MultipleStoreReactions>(MultipleStoreReactions());
@@ -28,7 +28,7 @@ class MapiahApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final THSettingsStore settingsStore = getIt<THSettingsStore>();
+    final MPSettingsStore settingsStore = getIt<MPSettingsStore>();
 
     return Observer(
       builder: (context) => MaterialApp(

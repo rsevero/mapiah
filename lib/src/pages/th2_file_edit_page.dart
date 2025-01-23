@@ -2,7 +2,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/th_error_dialog.dart';
+import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
@@ -103,7 +103,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return THErrorDialog(errorMessages: errorMessages);
+                        return MPErrorDialog(errorMessages: errorMessages);
                       },
                     );
                   });

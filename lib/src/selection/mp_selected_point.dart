@@ -3,13 +3,13 @@ import 'dart:collection';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/selection/th_selected_element.dart';
+import 'package:mapiah/src/selection/mp_selected_element.dart';
 
-class THSelectedPoint extends THSelectedElement {
+class MPSelectedPoint extends MPSelectedElement {
   THPoint modifiedPoint;
   late THPoint originalPoint;
 
-  THSelectedPoint({required this.modifiedPoint}) {
+  MPSelectedPoint({required this.modifiedPoint}) {
     final LinkedHashMap<String, THCommandOption> clonedOptionsMap =
         LinkedHashMap<String, THCommandOption>();
     modifiedPoint.optionsMap.forEach((key, value) {

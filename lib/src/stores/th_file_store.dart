@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_redraw_trigger.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/commands/move_line_command.dart';
 import 'package:mapiah/src/commands/move_point_command.dart';
@@ -11,6 +12,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_controller.dart';
@@ -29,6 +31,10 @@ abstract class THFileStoreBase with Store {
 
   @readonly
   ObservableMap<int, THElement> _elements = ObservableMap<int, THElement>();
+
+  @readonly
+  ObservableMap<int, MPRedrawTrigger> _redrawTrigger =
+      ObservableMap<int, MPRedrawTrigger>();
 
   final List<String> errorMessages = <String>[];
 
@@ -74,13 +80,34 @@ abstract class THFileStoreBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
+    _elements.clear();
     _elements.addAll(parsedFile.elements);
+
+    _redrawTrigger.clear();
+    _redrawTrigger[_thFile.mapiahID] = MPRedrawTrigger();
+    for (final entry in parsedFile.elements.entries) {
+      final THElement element = entry.value;
+      if (element is THScrap) {
+        _redrawTrigger[entry.key] = MPRedrawTrigger();
+      }
+    }
 
     _isLoading = false;
 
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+  }
+
+  @action
+  void triggerFileRedraw() {
+    final int mapiahID = _thFile.mapiahID;
+    _redrawTrigger[mapiahID] = MPRedrawTrigger();
+  }
+
+  @action
+  void triggerScrapRedraw(int mapiahID) {
+    _redrawTrigger[mapiahID] = MPRedrawTrigger();
   }
 
   Future<File?> saveTH2File() async {

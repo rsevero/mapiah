@@ -1,10 +1,10 @@
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/selection/th_selectable.dart';
+import 'package:mapiah/src/selection/mp_selectable.dart';
 
-class THSelectableElement extends THSelectable {
+class MPSelectableElement extends MPSelectable {
   THElement element;
 
-  THSelectableElement({
+  MPSelectableElement({
     required this.element,
     required super.position,
   }) : super();

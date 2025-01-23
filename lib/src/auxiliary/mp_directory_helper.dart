@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ThDirectoryHelper {
+class MPDirectoryHelper {
   static Directory _rootDirectory = Directory('');
   static bool _rootDirectorySet = false;
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
-import 'package:mapiah/src/selection/th_selectable_element.dart';
-import 'package:mapiah/src/selection/th_selectable.dart';
+import 'package:mapiah/src/selection/mp_selectable_element.dart';
+import 'package:mapiah/src/selection/mp_selectable.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th_file_display_store.g.dart';
@@ -33,7 +33,7 @@ abstract class THFileDisplayStoreBase with Store {
   @readonly
   TH2FileEditMode _mode = TH2FileEditMode.pan;
 
-  final Map<int, THSelectable> _selectableElements = {};
+  final Map<int, MPSelectable> _selectableElements = {};
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -50,7 +50,7 @@ abstract class THFileDisplayStoreBase with Store {
   double selectionToleranceSquaredOnCanvas =
       thDefaultSelectionTolerance * thDefaultSelectionTolerance;
 
-  void addSelectableElement(THSelectableElement selectableElement) {
+  void addSelectableElement(MPSelectableElement selectableElement) {
     _selectableElements[selectableElement.element.mapiahID] = selectableElement;
   }
 
@@ -58,12 +58,12 @@ abstract class THFileDisplayStoreBase with Store {
     _selectableElements.clear();
   }
 
-  THSelectableElement? selectableElementContains(Offset screenCoordinates) {
+  MPSelectableElement? selectableElementContains(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
 
-    for (final THSelectable selectable in _selectableElements.values) {
+    for (final MPSelectable selectable in _selectableElements.values) {
       if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
-        return selectable as THSelectableElement;
+        return selectable as MPSelectableElement;
       }
     }
 

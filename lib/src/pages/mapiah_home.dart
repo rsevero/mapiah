@@ -5,14 +5,14 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
-import 'package:mapiah/src/stores/th_settings_store.dart';
+import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final THSettingsStore settingsStore = getIt<THSettingsStore>();
+    final MPSettingsStore settingsStore = getIt<MPSettingsStore>();
     setWindowTitle(AppLocalizations.of(context).appTitle);
 
     return Scaffold(
@@ -37,7 +37,7 @@ class MapiahHome extends StatelessWidget {
   }
 
   Widget _buildLanguageDropdown(
-      THSettingsStore settingsStore, BuildContext context) {
+      MPSettingsStore settingsStore, BuildContext context) {
     final List<String> localeIDs = [
       'sys',
       ...AppLocalizations.supportedLocales.map((locale) => locale.languageCode),

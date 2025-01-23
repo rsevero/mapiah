@@ -5,15 +5,15 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/selection/th_selected_element.dart';
+import 'package:mapiah/src/selection/mp_selected_element.dart';
 
-class THSelectedLine extends THSelectedElement {
+class MPSelectedLine extends MPSelectedElement {
   THLine modifiedLine;
   late THLine originalLine;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
       LinkedHashMap<int, THLineSegment>();
 
-  THSelectedLine({required THFile thFile, required this.modifiedLine}) {
+  MPSelectedLine({required THFile thFile, required this.modifiedLine}) {
     final Iterable<int> lineSegmentMapiahIDs = modifiedLine.childrenMapiahID;
 
     for (final int mapiahID in lineSegmentMapiahIDs) {

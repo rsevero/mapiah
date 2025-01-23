@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
-class THErrorDialog extends StatelessWidget {
+class MPErrorDialog extends StatelessWidget {
   final List<String> errorMessages;
 
-  THErrorDialog({required this.errorMessages});
+  MPErrorDialog({required this.errorMessages});
 
   @override
   Widget build(BuildContext context) {

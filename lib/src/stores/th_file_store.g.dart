@@ -67,8 +67,48 @@ mixin _$THFileStore on THFileStoreBase, Store {
     });
   }
 
+  late final _$_redrawTriggerAtom =
+      Atom(name: 'THFileStoreBase._redrawTrigger', context: context);
+
+  ObservableMap<int, MPRedrawTrigger> get redrawTrigger {
+    _$_redrawTriggerAtom.reportRead();
+    return super._redrawTrigger;
+  }
+
+  @override
+  ObservableMap<int, MPRedrawTrigger> get _redrawTrigger => redrawTrigger;
+
+  @override
+  set _redrawTrigger(ObservableMap<int, MPRedrawTrigger> value) {
+    _$_redrawTriggerAtom.reportWrite(value, super._redrawTrigger, () {
+      super._redrawTrigger = value;
+    });
+  }
+
   late final _$THFileStoreBaseActionController =
       ActionController(name: 'THFileStoreBase', context: context);
+
+  @override
+  void triggerFileRedraw() {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.triggerFileRedraw');
+    try {
+      return super.triggerFileRedraw();
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerScrapRedraw(int mapiahID) {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.triggerScrapRedraw');
+    try {
+      return super.triggerScrapRedraw(mapiahID);
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void _substituteStoreElement(THElement newElement) {

@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/th_directory_helper.dart';
+import 'package:mapiah/src/auxiliary/mp_directory_helper.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mobx/mobx.dart';
 import 'package:toml/toml.dart';
 
-part 'th_settings_store.g.dart';
+part 'mp_settings_store.g.dart';
 
-class THSettingsStore = THSettingsStoreBase with _$THSettingsStore;
+class MPSettingsStore = MPSettingsStoreBase with _$MPSettingsStore;
 
-abstract class THSettingsStoreBase with Store {
+abstract class MPSettingsStoreBase with Store {
   bool _readingConfigFile = false;
 
   @readonly
@@ -40,7 +40,7 @@ abstract class THSettingsStoreBase with Store {
     try {
       _readingConfigFile = true;
 
-      final Directory configDirectory = await ThDirectoryHelper.config();
+      final Directory configDirectory = await MPDirectoryHelper.config();
       final File file = File(configDirectory.path + thMainConfigFilename);
       final String contents = await file.readAsString();
       final Map<String, dynamic> config = TomlDocument.parse(contents).toMap();
@@ -159,7 +159,7 @@ abstract class THSettingsStoreBase with Store {
       };
       final String contents = TomlDocument.fromMap(config).toString();
 
-      final Directory configDirectory = await ThDirectoryHelper.config();
+      final Directory configDirectory = await MPDirectoryHelper.config();
       final File file = File(configDirectory.path + thMainConfigFilename);
 
       await file.writeAsString(contents);
