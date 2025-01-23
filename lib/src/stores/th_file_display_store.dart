@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
+import 'package:mapiah/src/definitions/mp_paints.dart';
+import 'package:mapiah/src/elements/th_line.dart';
+import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/selection/mp_selectable.dart';
 import 'package:mobx/mobx.dart';
@@ -68,6 +73,19 @@ abstract class THFileDisplayStoreBase with Store {
     }
 
     return null;
+  }
+
+  THPointPaint getPointPaint(THPoint point) {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaint1..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getLinePaint(THLine line) {
+    return THLinePaint(
+      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
+    );
   }
 
   bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {

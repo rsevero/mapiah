@@ -94,7 +94,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 if (snapshot.data!.isSuccessful) {
                   return Center(
                     child: Stack(children: [
-                      THFileWidget(thFileStore),
+                      THFileWidget(thFileStore: thFileStore),
                       _actionButtons(),
                     ]),
                   );

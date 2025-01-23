@@ -36,6 +36,9 @@ abstract class THFileStoreBase with Store {
   ObservableMap<int, MPRedrawTrigger> _redrawTrigger =
       ObservableMap<int, MPRedrawTrigger>();
 
+  @readonly
+  bool _thFileLengthChildrenListTrigger = false;
+
   final List<String> errorMessages = <String>[];
 
   late final MPUndoRedoController _undoRedoController;
@@ -99,12 +102,30 @@ abstract class THFileStoreBase with Store {
     }
   }
 
+  /// Should be used only when a drawable element (scrap, line or point) is
+  /// added or removed directly as child of the THFile. Usually there should
+  /// only be one drawable element as child of the THFile: a scrap.
+  ///
+  /// The THFileWidget itself will redraw.
+  @action
+  void triggerTHFileLengthChildrenList() {
+    _thFileLengthChildrenListTrigger = !_thFileLengthChildrenListTrigger;
+  }
+
+  /// Should be used when some change that potentially affects the whole file
+  /// happens. For example a pan or zoom operation.
+  ///
+  /// All drawable items in the THFile will be triggered.
   @action
   void triggerFileRedraw() {
     final int mapiahID = _thFile.mapiahID;
     _redrawTrigger[mapiahID] = MPRedrawTrigger();
   }
 
+  /// Should be used when some change that potentially affects the whole scrap
+  /// happens. For example changing the 'selectedScrap'.
+  ///
+  /// All drawable items in the scrap will be triggered.
   @action
   void triggerScrapRedraw(int mapiahID) {
     _redrawTrigger[mapiahID] = MPRedrawTrigger();

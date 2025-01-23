@@ -16,12 +16,14 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/widgets/th_line_widget.dart';
+import 'package:mapiah/src/widgets/th_point_widget.dart';
 import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 
 class THFileWidget extends StatefulWidget {
   final THFileStore thFileStore;
 
-  THFileWidget(this.thFileStore);
+  THFileWidget({required this.thFileStore});
 
   @override
   State<THFileWidget> createState() => _THFileWidgetState();
@@ -58,14 +60,40 @@ class _THFileWidgetState extends State<THFileWidget> {
 
             thFileDisplayStore.clearSelectableElements();
 
-            final List<THScrapWidget> scrapWidgets = [];
+            final List<Widget> childWidgets = [];
             final List<int> fileChildrenMapiahIDs = thFile.childrenMapiahID;
 
             for (final int childMapiahID in fileChildrenMapiahIDs) {
               final THElement child = thFile.elementByMapiahID(childMapiahID);
 
-              if (child is THScrap) {
-                scrapWidgets.add(THScrapWidget(child, thFileStore));
+              switch (child) {
+                case THScrap _:
+                  childWidgets.add(THScrapWidget(
+                    thScrap: child,
+                    thFileStore: thFileStore,
+                    thFileMapiahID: thFileMapiahID,
+                  ));
+                  break;
+                case THPoint _:
+                  childWidgets.add(THPointWidget(
+                    point: child,
+                    thFileDisplayStore: thFileDisplayStore,
+                    thFileStore: thFileStore,
+                    thFileMapiahID: thFileMapiahID,
+                    thScrapMapiahID: thFileMapiahID,
+                  ));
+                  break;
+                case THLine _:
+                  childWidgets.add(THLineWidget(
+                    line: child,
+                    thFileDisplayStore: thFileDisplayStore,
+                    thFileStore: thFileStore,
+                    thFileMapiahID: thFileMapiahID,
+                    thScrapMapiahID: thFileMapiahID,
+                  ));
+                  break;
+                default:
+                  break;
               }
             }
 
@@ -74,7 +102,7 @@ class _THFileWidgetState extends State<THFileWidget> {
               onPanUpdate: _onPanUpdate,
               onPanEnd: _onPanEnd,
               child: Stack(
-                children: scrapWidgets,
+                children: childWidgets,
               ),
             );
           },

@@ -85,8 +85,39 @@ mixin _$THFileStore on THFileStoreBase, Store {
     });
   }
 
+  late final _$_thFileLengthChildrenListTriggerAtom = Atom(
+      name: 'THFileStoreBase._thFileLengthChildrenListTrigger',
+      context: context);
+
+  bool get thFileLengthChildrenListTrigger {
+    _$_thFileLengthChildrenListTriggerAtom.reportRead();
+    return super._thFileLengthChildrenListTrigger;
+  }
+
+  @override
+  bool get _thFileLengthChildrenListTrigger => thFileLengthChildrenListTrigger;
+
+  @override
+  set _thFileLengthChildrenListTrigger(bool value) {
+    _$_thFileLengthChildrenListTriggerAtom
+        .reportWrite(value, super._thFileLengthChildrenListTrigger, () {
+      super._thFileLengthChildrenListTrigger = value;
+    });
+  }
+
   late final _$THFileStoreBaseActionController =
       ActionController(name: 'THFileStoreBase', context: context);
+
+  @override
+  void triggerTHFileLengthChildrenList() {
+    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
+        name: 'THFileStoreBase.triggerTHFileLengthChildrenList');
+    try {
+      return super.triggerTHFileLengthChildrenList();
+    } finally {
+      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void triggerFileRedraw() {
