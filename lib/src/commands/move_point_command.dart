@@ -52,7 +52,7 @@ class MovePointCommand extends Command {
         'dx': modifiedCoordinates.dx,
         'dy': modifiedCoordinates.dy
       },
-      'undoRedo': undoRedo.toMap(),
+      'undoRedo': undoRedo?.toMap(),
       'description': description,
     };
   }
@@ -64,7 +64,9 @@ class MovePointCommand extends Command {
           map['originalCoordinates']['dx'], map['originalCoordinates']['dy']),
       modifiedCoordinates: Offset(
           map['modifiedCoordinates']['dx'], map['modifiedCoordinates']['dy']),
-      undoRedo: UndoRedoCommand.fromMap(map['undoRedo']),
+      undoRedo: map['undoRedo'] == null
+          ? null
+          : UndoRedoCommand.fromMap(map['undoRedo']),
       description: map['description'],
     );
   }
@@ -129,10 +131,10 @@ class MovePointCommand extends Command {
   void actualExecute(THFile thFile) {
     final THPoint originalPoint =
         thFile.elementByMapiahID(pointMapiahID) as THPoint;
-    final THPoint newPoint = originalPoint.copyWith(
+    final THPoint modifiedPoint = originalPoint.copyWith(
         position:
             originalPoint.position.copyWith(coordinates: modifiedCoordinates));
 
-    thFile.substituteElement(newPoint);
+    thFile.substituteElement(modifiedPoint);
   }
 }

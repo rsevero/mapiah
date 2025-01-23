@@ -85,7 +85,7 @@ class MoveBezierLineSegmentCommand extends Command {
         'dx': controlPoint2NewCoordinates.dx,
         'dy': controlPoint2NewCoordinates.dy
       },
-      'undoRedo': undoRedo.toMap(),
+      'undoRedo': undoRedo?.toMap(),
       'description': description,
     };
   }
@@ -110,7 +110,9 @@ class MoveBezierLineSegmentCommand extends Command {
       controlPoint2NewCoordinates: Offset(
           map['controlPoint2NewCoordinates']['dx'],
           map['controlPoint2NewCoordinates']['dy']),
-      undoRedo: UndoRedoCommand.fromMap(map['undoRedo']),
+      undoRedo: map['undoRedo'] == null
+          ? null
+          : UndoRedoCommand.fromMap(map['undoRedo']),
       description: map['description'],
     );
   }

@@ -20,7 +20,7 @@ enum CommandType {
 /// actions that should support undo must be impmentend as a command.
 abstract class Command {
   late final String description;
-  late final UndoRedoCommand undoRedo;
+  UndoRedoCommand? undoRedo;
 
   Command.forCWJM({required this.description, required this.undoRedo});
 
@@ -60,7 +60,7 @@ abstract class Command {
     undoRedo = createUndoRedo(thFile);
     actualExecute(thFile);
 
-    return undoRedo;
+    return undoRedo!;
   }
 
   /// The description for the undo/redo command should be the description of

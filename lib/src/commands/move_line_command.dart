@@ -95,7 +95,7 @@ class MoveLineCommand extends Command {
       'newLine': newLine.toMap(),
       'newLineSegmentsMap':
           newLineSegmentsMap.map((key, value) => MapEntry(key, value.toMap())),
-      'undoRedo': undoRedo.toMap(),
+      'undoRedo': undoRedo?.toMap(),
       'deltaOnCanvas': {'dx': deltaOnCanvas.dx, 'dy': deltaOnCanvas.dy},
       'isFromDelta': isFromDelta,
       'description': description,
@@ -114,7 +114,9 @@ class MoveLineCommand extends Command {
         map['newLineSegmentsMap']
             .map((key, value) => MapEntry(key, THLineSegment.fromMap(value))),
       ),
-      undoRedo: UndoRedoCommand.fromMap(map['undoRedo']),
+      undoRedo: map['undoRedo'] == null
+          ? null
+          : UndoRedoCommand.fromMap(map['undoRedo']),
       deltaOnCanvas:
           Offset(map['deltaOnCanvas']['dx'], map['deltaOnCanvas']['dy']),
       isFromDelta: map['isFromDelta'],

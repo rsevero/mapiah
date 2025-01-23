@@ -51,7 +51,7 @@ class MoveStraightLineSegmentCommand extends Command {
         'dx': endPointNewCoordinates.dx,
         'dy': endPointNewCoordinates.dy
       },
-      'undoRedo': undoRedo.toMap(),
+      'undoRedo': undoRedo?.toMap(),
       'description': description,
     };
   }
@@ -64,7 +64,9 @@ class MoveStraightLineSegmentCommand extends Command {
           map['endPointOriginalCoordinates']['dy']),
       endPointNewCoordinates: Offset(map['endPointNewCoordinates']['dx'],
           map['endPointNewCoordinates']['dy']),
-      undoRedo: UndoRedoCommand.fromMap(map['undoRedo']),
+      undoRedo: map['undoRedo'] == null
+          ? null
+          : UndoRedoCommand.fromMap(map['undoRedo']),
       description: map['description'],
     );
   }
