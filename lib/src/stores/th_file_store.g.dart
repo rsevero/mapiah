@@ -49,97 +49,33 @@ mixin _$THFileStore on THFileStoreBase, Store {
     });
   }
 
+  late final _$_elementsAtom =
+      Atom(name: 'THFileStoreBase._elements', context: context);
+
+  ObservableMap<int, THElement> get elements {
+    _$_elementsAtom.reportRead();
+    return super._elements;
+  }
+
+  @override
+  ObservableMap<int, THElement> get _elements => elements;
+
+  @override
+  set _elements(ObservableMap<int, THElement> value) {
+    _$_elementsAtom.reportWrite(value, super._elements, () {
+      super._elements = value;
+    });
+  }
+
   late final _$THFileStoreBaseActionController =
       ActionController(name: 'THFileStoreBase', context: context);
 
   @override
-  void substituteElement(THElement newElement) {
+  void _substituteStoreElement(THElement newElement) {
     final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.substituteElement');
+        name: 'THFileStoreBase._substituteStoreElement');
     try {
-      return super.substituteElement(newElement);
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void execute(Command command) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.execute');
-    try {
-      return super.execute(command);
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void undo() {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.undo');
-    try {
-      return super.undo();
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void redo() {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.redo');
-    try {
-      return super.redo();
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updatePointPosition(
-      {required THPoint originalPoint, required THPoint modifiedPoint}) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.updatePointPosition');
-    try {
-      return super.updatePointPosition(
-          originalPoint: originalPoint, modifiedPoint: modifiedPoint);
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updateLinePosition(
-      {required THLine originalLine,
-      required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-      required THLine newLine,
-      required LinkedHashMap<int, THLineSegment> newLineSegmentsMap}) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.updateLinePosition');
-    try {
-      return super.updateLinePosition(
-          originalLine: originalLine,
-          originalLineSegmentsMap: originalLineSegmentsMap,
-          newLine: newLine,
-          newLineSegmentsMap: newLineSegmentsMap);
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updateLinePositionPerOffset(
-      {required THLine originalLine,
-      required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-      required Offset deltaOnCanvas}) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.updateLinePositionPerOffset');
-    try {
-      return super.updateLinePositionPerOffset(
-          originalLine: originalLine,
-          originalLineSegmentsMap: originalLineSegmentsMap,
-          deltaOnCanvas: deltaOnCanvas);
+      return super._substituteStoreElement(newElement);
     } finally {
       _$THFileStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -5,6 +5,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
+import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/selection/th_selectable_element.dart';
 import 'package:mapiah/src/selection/th_selected_element.dart';
 import 'package:mapiah/src/selection/th_selected_line.dart';
@@ -155,8 +156,8 @@ class _THFileWidgetState extends State<THFileWidget> {
                       localDeltaPositionOnCanvas));
           break;
         case THLine _:
-          _updateTHLinePosition(_selectedElement!.modifiedElement as THLine,
-              localDeltaPositionOnCanvas);
+          _updateTHLinePosition(
+              _selectedElement! as THSelectedLine, localDeltaPositionOnCanvas);
           break;
         default:
           break;
@@ -164,7 +165,9 @@ class _THFileWidgetState extends State<THFileWidget> {
     });
   }
 
-  void _updateTHLinePosition(THLine line, Offset localDeltaPositionOnCanvas) {
+  void _updateTHLinePosition(
+      THSelectedLine selectedLine, Offset localDeltaPositionOnCanvas) {
+    final THLine line = selectedLine.modifiedLine;
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
 
     for (final int lineChildMapiahID in lineChildrenMapiahIDs) {
@@ -174,11 +177,29 @@ class _THFileWidgetState extends State<THFileWidget> {
         continue;
       }
 
-      lineChild.endPoint.coordinates += localDeltaPositionOnCanvas;
+      late THLineSegment newLineSegment;
 
-      if (lineChild is THBezierCurveLineSegment) {
-        lineChild.controlPoint1.coordinates += localDeltaPositionOnCanvas;
-        lineChild.controlPoint2.coordinates += localDeltaPositionOnCanvas;
+      switch (lineChild) {
+        case THStraightLineSegment _:
+          newLineSegment = lineChild.copyWith(
+              endPoint: lineChild.endPoint.copyWith(
+                  coordinates: lineChild.endPoint.coordinates +
+                      localDeltaPositionOnCanvas));
+          break;
+        case THBezierCurveLineSegment _:
+          newLineSegment = lineChild.copyWith(
+              endPoint: lineChild.endPoint.copyWith(
+                  coordinates: lineChild.endPoint.coordinates +
+                      localDeltaPositionOnCanvas),
+              controlPoint1: lineChild.controlPoint1.copyWith(
+                  coordinates: lineChild.controlPoint1.coordinates +
+                      localDeltaPositionOnCanvas),
+              controlPoint2: lineChild.controlPoint2.copyWith(
+                  coordinates: lineChild.controlPoint2.coordinates +
+                      localDeltaPositionOnCanvas));
+          break;
+        default:
+          throw Exception('Unknown line segment type');
       }
     }
   }

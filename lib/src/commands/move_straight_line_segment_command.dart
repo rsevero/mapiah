@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
-import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 class MoveStraightLineSegmentCommand extends Command {
@@ -115,17 +115,17 @@ class MoveStraightLineSegmentCommand extends Command {
       );
 
   @override
-  void actualExecute(THFile thFile) {
+  void actualExecute(THFileStore thFileStore) {
     final THStraightLineSegment originalLineSegment = lineSegment;
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
         endPoint: originalLineSegment.endPoint
             .copyWith(coordinates: endPointNewCoordinates));
 
-    thFile.substituteElement(newLineSegment);
+    thFileStore.substituteElement(newLineSegment);
   }
 
   @override
-  UndoRedoCommand createOppositeCommand(THFile thFile) {
+  UndoRedoCommand createOppositeCommand() {
     final MoveStraightLineSegmentCommand oppositeCommand =
         MoveStraightLineSegmentCommand(
       lineSegment: lineSegment,

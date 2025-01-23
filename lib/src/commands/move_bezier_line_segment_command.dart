@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 class MoveBezierLineSegmentCommand extends Command {
@@ -183,7 +183,7 @@ class MoveBezierLineSegmentCommand extends Command {
       );
 
   @override
-  void actualExecute(THFile thFile) {
+  void actualExecute(THFileStore thFileStore) {
     final THBezierCurveLineSegment originalLineSegment = lineSegment;
     final THBezierCurveLineSegment newLineSegment = lineSegment.copyWith(
         endPoint: originalLineSegment.endPoint
@@ -193,11 +193,11 @@ class MoveBezierLineSegmentCommand extends Command {
         controlPoint2: originalLineSegment.controlPoint2
             .copyWith(coordinates: controlPoint2NewCoordinates));
 
-    thFile.substituteElement(newLineSegment);
+    thFileStore.substituteElement(newLineSegment);
   }
 
   @override
-  UndoRedoCommand createOppositeCommand(THFile thFile) {
+  UndoRedoCommand createOppositeCommand() {
     final MoveBezierLineSegmentCommand oppositeCommand =
         MoveBezierLineSegmentCommand(
       lineSegment: lineSegment,

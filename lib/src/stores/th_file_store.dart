@@ -27,6 +27,9 @@ abstract class THFileStoreBase with Store {
   @readonly
   late THFile _thFile;
 
+  @readonly
+  ObservableMap<int, THElement> _elements = ObservableMap<int, THElement>();
+
   final List<String> errorMessages = <String>[];
 
   late final UndoRedoController _undoRedoController;
@@ -58,7 +61,7 @@ abstract class THFileStoreBase with Store {
 
   void _basicInitialization(THFile file) {
     _thFile = file;
-    _undoRedoController = UndoRedoController(_thFile);
+    _undoRedoController = UndoRedoController(this as THFileStore);
   }
 
   void _preParseInitialize() {
@@ -71,6 +74,8 @@ abstract class THFileStoreBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
+    _elements.addAll(parsedFile.elements);
+
     _isLoading = false;
 
     if (!isSuccessful) {
@@ -111,28 +116,29 @@ abstract class THFileStoreBase with Store {
   }
 
   @action
+  void _substituteStoreElement(THElement newElement) {
+    _elements[newElement.mapiahID] = newElement;
+  }
+
   void substituteElement(THElement newElement) {
+    _substituteStoreElement(newElement);
     _thFile.substituteElement(newElement);
   }
 
-  @action
   void execute(Command command) {
     _undoRedoController.execute(command);
   }
 
-  @action
   void undo() {
     _undoRedoController.undo();
   }
 
-  @action
   void redo() {
     _undoRedoController.redo();
   }
 
   UndoRedoController get undoRedoController => _undoRedoController;
 
-  @action
   void updatePointPosition({
     required THPoint originalPoint,
     required THPoint modifiedPoint,
@@ -145,7 +151,6 @@ abstract class THFileStoreBase with Store {
     _undoRedoController.execute(command);
   }
 
-  @action
   void updateLinePosition({
     required THLine originalLine,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
@@ -162,7 +167,6 @@ abstract class THFileStoreBase with Store {
     _undoRedoController.execute(command);
   }
 
-  @action
   void updateLinePositionPerOffset({
     required THLine originalLine,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,

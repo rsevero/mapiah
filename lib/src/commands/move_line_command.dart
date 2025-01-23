@@ -7,10 +7,10 @@ import 'package:mapiah/src/commands/move_bezier_line_segment_command.dart';
 import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
 import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 class MoveLineCommand extends Command {
@@ -179,7 +179,7 @@ class MoveLineCommand extends Command {
       );
 
   @override
-  void actualExecute(THFile thFile) {
+  void actualExecute(THFileStore thFileStore) {
     for (final entry in originalLineSegmentsMap.entries) {
       final int originalLineSegmentMapiahID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
@@ -245,12 +245,12 @@ class MoveLineCommand extends Command {
           break;
       }
 
-      command.execute(thFile);
+      command.execute(thFileStore);
     }
   }
 
   @override
-  UndoRedoCommand createOppositeCommand(THFile thFile) {
+  UndoRedoCommand createOppositeCommand() {
     final MoveLineCommand oppositeCommand = MoveLineCommand(
       originalLine: newLine,
       originalLineSegmentsMap: newLineSegmentsMap,

@@ -4,7 +4,7 @@ import 'package:mapiah/src/commands/move_bezier_line_segment_command.dart';
 import 'package:mapiah/src/commands/move_line_command.dart';
 import 'package:mapiah/src/commands/move_point_command.dart';
 import 'package:mapiah/src/commands/move_straight_line_segment_command.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 enum CommandType {
@@ -28,6 +28,25 @@ abstract class Command {
 
   CommandType get type;
 
+  Command copyWith({
+    required String description,
+    required UndoRedoCommand oppositeCommand,
+  });
+
+  UndoRedoCommand execute(THFileStore thFileStore) {
+    oppositeCommand = createOppositeCommand();
+    actualExecute(thFileStore);
+
+    return oppositeCommand!;
+  }
+
+  /// The description for the undo/redo command should be the description of
+  /// the original command so the message on undo and redo are the same even
+  /// if the actual original and opposite commands are different.
+  UndoRedoCommand createOppositeCommand();
+
+  void actualExecute(THFileStore thFileStore);
+
   String toJson() {
     return jsonEncode(toMap());
   }
@@ -50,23 +69,4 @@ abstract class Command {
         return MoveStraightLineSegmentCommand.fromMap(map);
     }
   }
-
-  Command copyWith({
-    required String description,
-    required UndoRedoCommand oppositeCommand,
-  });
-
-  UndoRedoCommand execute(THFile thFile) {
-    oppositeCommand = createOppositeCommand(thFile);
-    actualExecute(thFile);
-
-    return oppositeCommand!;
-  }
-
-  /// The description for the undo/redo command should be the description of
-  /// the original command so the message on undo and redo are the same even
-  /// if the actual original and opposite commands are different.
-  UndoRedoCommand createOppositeCommand(THFile thFile);
-
-  void actualExecute(THFile thFile);
 }

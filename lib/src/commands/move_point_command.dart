@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/command.dart';
 import 'package:mapiah/src/definitions/th_definitions.dart';
-import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/undo_redo/undo_redo_command.dart';
 
 class MovePointCommand extends Command {
@@ -113,7 +113,7 @@ class MovePointCommand extends Command {
       );
 
   @override
-  UndoRedoCommand createOppositeCommand(THFile thFile) {
+  UndoRedoCommand createOppositeCommand() {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
     final MovePointCommand oppositeCommand = MovePointCommand(
@@ -130,13 +130,13 @@ class MovePointCommand extends Command {
   }
 
   @override
-  void actualExecute(THFile thFile) {
+  void actualExecute(THFileStore thFileStore) {
     final THPoint originalPoint =
-        thFile.elementByMapiahID(pointMapiahID) as THPoint;
+        thFileStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
     final THPoint modifiedPoint = originalPoint.copyWith(
         position:
             originalPoint.position.copyWith(coordinates: modifiedCoordinates));
 
-    thFile.substituteElement(modifiedPoint);
+    thFileStore.substituteElement(modifiedPoint);
   }
 }
