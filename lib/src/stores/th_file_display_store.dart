@@ -225,10 +225,10 @@ abstract class THFileDisplayStoreBase with Store {
   }
 
   void _setCanvasCenterToDrawingCenter() {
-    getIt<MPLog>().t("Current center: $_canvasCenterX, $_canvasCenterY");
+    getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (_dataBoundingBox.left + _dataBoundingBox.right) / 2.0;
     _canvasCenterY = (_dataBoundingBox.top + _dataBoundingBox.bottom) / 2.0;
-    getIt<MPLog>().t(
+    getIt<MPLog>().finer(
         "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
 

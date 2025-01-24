@@ -108,7 +108,7 @@ class MPLog extends Logger {
     StackTrace? stackTrace,
     DateTime? time,
   }) {
-    if (_shouldLog(MPLogLevel.finer)) {
+    if (_shouldLog(MPLogLevel.fine)) {
       super.t(message, error: error, stackTrace: stackTrace, time: time);
     }
   }
@@ -121,7 +121,7 @@ class MPLog extends Logger {
     StackTrace? stackTrace,
     DateTime? time,
   }) {
-    if (_shouldLog(MPLogLevel.finer)) {
+    if (_shouldLog(MPLogLevel.debug)) {
       super.d(message, error: error, stackTrace: stackTrace, time: time);
     }
   }
