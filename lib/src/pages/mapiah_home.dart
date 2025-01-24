@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -104,10 +105,10 @@ class MapiahHome extends StatelessWidget {
         );
       } else {
         // User canceled the picker
-        print('No file selected.');
+        getIt<MPLog>().i('No file selected.');
       }
     } catch (e) {
-      print('Error picking file: $e');
+      getIt<MPLog>().e('Error picking file', error: e);
       // Optionally, handle the error for the user
     }
   }

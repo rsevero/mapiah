@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
@@ -151,12 +153,12 @@ abstract class THFileDisplayStoreBase with Store {
   }
 
   void _setCanvasCenterFromCurrent() {
-    // print("Current center: $_canvasCenterX, $_canvasCenterY");
+    getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX =
         -(_canvasTranslation.dx - (_screenSize.width / 2.0 / _canvasScale));
     _canvasCenterY =
         _canvasTranslation.dy - (_screenSize.height / 2.0 / _canvasScale);
-    // print("New center: $_canvasCenterX, $_canvasCenterY");
+    getIt<MPLog>().finer("New center: $_canvasCenterX, $_canvasCenterY");
   }
 
   @action
@@ -223,11 +225,11 @@ abstract class THFileDisplayStoreBase with Store {
   }
 
   void _setCanvasCenterToDrawingCenter() {
-    // print("Current center: $_canvasCenterX, $_canvasCenterY");
+    getIt<MPLog>().t("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (_dataBoundingBox.left + _dataBoundingBox.right) / 2.0;
     _canvasCenterY = (_dataBoundingBox.top + _dataBoundingBox.bottom) / 2.0;
-    // print(
-    //     "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
+    getIt<MPLog>().t(
+        "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
 
   @action

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_area.dart';
 import 'package:mapiah/src/elements/th_area_border_thid.dart';
@@ -1672,7 +1673,7 @@ class THFileParser {
     while ((charsRead < thMaxEncodingLength) &
         ((byte = await raf.readByte()) != -1)) {
       charsRead++;
-      // print("Byte: '$byte'");
+      getIt<MPLog>().finest("Byte: '$byte'");
       final char = utf8.decode([byte]);
 
       if (_isEncodingDelimiter(priorChar, char)) {
@@ -1682,10 +1683,10 @@ class THFileParser {
       line += char;
       priorChar = char;
     }
-    // print("Line: '$line'");
+    getIt<MPLog>().finer("Line: '$line'");
 
     final encoding = _encodingRegex.firstMatch(line);
-    // print("Encoding object: '$encoding");
+    getIt<MPLog>().finer("Encoding object: '$encoding");
     if (encoding == null) {
       return thDefaultEncoding;
     } else {

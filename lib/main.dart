@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
@@ -17,6 +18,7 @@ void main() {
 }
 
 void _setup() {
+  getIt.registerSingleton<MPLog>(MPLog.instance);
   getIt.registerSingleton<MPSettingsStore>(MPSettingsStore());
   getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
   getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());
