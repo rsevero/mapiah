@@ -45,8 +45,8 @@ abstract class MPCommand {
   });
 
   MPUndoRedoCommand execute(THFileStore thFileStore) {
-    oppositeCommand = createOppositeCommand();
-    actualExecute(thFileStore);
+    oppositeCommand = _createOppositeCommand();
+    _actualExecute(thFileStore);
 
     return oppositeCommand!;
   }
@@ -54,9 +54,9 @@ abstract class MPCommand {
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
-  MPUndoRedoCommand createOppositeCommand();
+  MPUndoRedoCommand _createOppositeCommand();
 
-  void actualExecute(THFileStore thFileStore);
+  void _actualExecute(THFileStore thFileStore);
 
   String toJson() {
     return jsonEncode(toMap());

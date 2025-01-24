@@ -106,7 +106,7 @@ class MPMovePointCommand extends MPCommand {
       );
 
   @override
-  MPUndoRedoCommand createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand() {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
     final MPMovePointCommand oppositeCommand = MPMovePointCommand(
@@ -123,7 +123,7 @@ class MPMovePointCommand extends MPCommand {
   }
 
   @override
-  void actualExecute(THFileStore thFileStore) {
+  void _actualExecute(THFileStore thFileStore) {
     final THPoint originalPoint =
         thFileStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
     final THPoint modifiedPoint = originalPoint.copyWith(

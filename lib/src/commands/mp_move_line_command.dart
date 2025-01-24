@@ -166,7 +166,7 @@ class MPMoveLineCommand extends MPCommand {
       );
 
   @override
-  void actualExecute(THFileStore thFileStore) {
+  void _actualExecute(THFileStore thFileStore) {
     for (final entry in originalLineSegmentsMap.entries) {
       final int originalLineSegmentMapiahID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
@@ -237,7 +237,7 @@ class MPMoveLineCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand() {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
       originalLine: newLine,
       originalLineSegmentsMap: newLineSegmentsMap,
