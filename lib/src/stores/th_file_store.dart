@@ -5,8 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_redraw_trigger.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/commands/mp_move_line_command.dart';
-import 'package:mapiah/src/commands/mp_move_point_command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';

@@ -1,11 +1,22 @@
+library;
+
+import 'dart:collection';
 import 'dart:convert';
 
-import 'package:mapiah/src/commands/mp_move_bezier_line_segment_command.dart';
-import 'package:mapiah/src/commands/mp_move_line_command.dart';
-import 'package:mapiah/src/commands/mp_move_point_command.dart';
-import 'package:mapiah/src/commands/mp_move_straight_line_segment_command.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
+import 'package:mapiah/src/elements/th_line.dart';
+import 'package:mapiah/src/elements/th_line_segment.dart';
+import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/stores/th_file_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
+
+part 'mp_move_bezier_line_segment_command.dart';
+part 'mp_move_line_command.dart';
+part 'mp_move_point_command.dart';
+part 'mp_move_straight_line_segment_command.dart';
 
 enum MPCommandType {
   moveBezierLineSegment,

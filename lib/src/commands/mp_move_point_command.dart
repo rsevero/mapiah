@@ -1,11 +1,4 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
-import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
+part of 'mp_command.dart';
 
 class MPMovePointCommand extends MPCommand {
   late final int pointMapiahID;
