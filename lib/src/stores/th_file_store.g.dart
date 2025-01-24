@@ -49,39 +49,45 @@ mixin _$THFileStore on THFileStoreBase, Store {
     });
   }
 
-  late final _$_elementsAtom =
-      Atom(name: 'THFileStoreBase._elements', context: context);
+  late final _$_thFileMapiahIDAtom =
+      Atom(name: 'THFileStoreBase._thFileMapiahID', context: context);
 
-  ObservableMap<int, THElement> get elements {
-    _$_elementsAtom.reportRead();
-    return super._elements;
+  int get thFileMapiahID {
+    _$_thFileMapiahIDAtom.reportRead();
+    return super._thFileMapiahID;
   }
 
   @override
-  ObservableMap<int, THElement> get _elements => elements;
+  int get _thFileMapiahID => thFileMapiahID;
+
+  bool __thFileMapiahIDIsInitialized = false;
 
   @override
-  set _elements(ObservableMap<int, THElement> value) {
-    _$_elementsAtom.reportWrite(value, super._elements, () {
-      super._elements = value;
+  set _thFileMapiahID(int value) {
+    _$_thFileMapiahIDAtom.reportWrite(
+        value, __thFileMapiahIDIsInitialized ? super._thFileMapiahID : null,
+        () {
+      super._thFileMapiahID = value;
+      __thFileMapiahIDIsInitialized = true;
     });
   }
 
-  late final _$_redrawTriggerAtom =
-      Atom(name: 'THFileStoreBase._redrawTrigger', context: context);
+  late final _$_elementRedrawTriggerAtom =
+      Atom(name: 'THFileStoreBase._elementRedrawTrigger', context: context);
 
-  ObservableMap<int, MPRedrawTrigger> get redrawTrigger {
-    _$_redrawTriggerAtom.reportRead();
-    return super._redrawTrigger;
+  Map<int, Observable<bool>> get elementRedrawTrigger {
+    _$_elementRedrawTriggerAtom.reportRead();
+    return super._elementRedrawTrigger;
   }
 
   @override
-  ObservableMap<int, MPRedrawTrigger> get _redrawTrigger => redrawTrigger;
+  Map<int, Observable<bool>> get _elementRedrawTrigger => elementRedrawTrigger;
 
   @override
-  set _redrawTrigger(ObservableMap<int, MPRedrawTrigger> value) {
-    _$_redrawTriggerAtom.reportWrite(value, super._redrawTrigger, () {
-      super._redrawTrigger = value;
+  set _elementRedrawTrigger(Map<int, Observable<bool>> value) {
+    _$_elementRedrawTriggerAtom.reportWrite(value, super._elementRedrawTrigger,
+        () {
+      super._elementRedrawTrigger = value;
     });
   }
 
@@ -120,33 +126,11 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   @override
-  void triggerFileRedraw() {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.triggerFileRedraw');
-    try {
-      return super.triggerFileRedraw();
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void triggerScrapRedraw(int mapiahID) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.triggerScrapRedraw');
-    try {
-      return super.triggerScrapRedraw(mapiahID);
-    } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void _substituteStoreElement(THElement newElement) {
+  void _substituteStoreElement(int mapiahID) {
     final _$actionInfo = _$THFileStoreBaseActionController.startAction(
         name: 'THFileStoreBase._substituteStoreElement');
     try {
-      return super._substituteStoreElement(newElement);
+      return super._substituteStoreElement(mapiahID);
     } finally {
       _$THFileStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -50,7 +50,7 @@ class _THFileWidgetState extends State<THFileWidget> {
       builder: (context, constraints) {
         return Observer(
           builder: (context) {
-            thFileStore.redrawTrigger[thFileMapiahID];
+            thFileStore.elementRedrawTrigger[thFileMapiahID];
             thFileDisplayStore.updateScreenSize(
                 Size(constraints.maxWidth, constraints.maxHeight));
 

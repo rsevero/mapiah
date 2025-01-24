@@ -97,8 +97,15 @@ abstract class THFileDisplayStoreBase with Store {
     return ((dx * dx) + (dy * dy)) < selectionToleranceSquaredOnCanvas;
   }
 
-  @action
   void updateScreenSize(Size newSize) {
+    if (_screenSize == newSize) {
+      return;
+    }
+    _updateScreenSize(newSize);
+  }
+
+  @action
+  void _updateScreenSize(Size newSize) {
     _screenSize = newSize;
     _canvasSize = newSize / _canvasScale;
   }
@@ -146,8 +153,15 @@ abstract class THFileDisplayStoreBase with Store {
     _mode = newMode;
   }
 
-  @action
   void onPanUpdate(DragUpdateDetails details) {
+    if (details.delta == Offset.zero) {
+      return;
+    }
+    _onPanUpdate(details);
+  }
+
+  @action
+  void _onPanUpdate(DragUpdateDetails details) {
     _canvasTranslation += (details.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
   }
@@ -161,8 +175,15 @@ abstract class THFileDisplayStoreBase with Store {
     getIt<MPLog>().finer("New center: $_canvasCenterX, $_canvasCenterY");
   }
 
-  @action
   void updateCanvasScale(double newScale) {
+    if (_canvasScale == newScale) {
+      return;
+    }
+    _updateCanvasScale(newScale);
+  }
+
+  @action
+  void _updateCanvasScale(double newScale) {
     _canvasScale = newScale;
     _canvasSize = _screenSize / _canvasScale;
   }

@@ -56,7 +56,7 @@ class MPLog extends Logger {
 
   bool _shouldLog(MPLogLevel logLevel) {
     if (kDebugMode) {
-      return (Enum.compareByIndex(logLevel, MPLogLevel.finer) > 0);
+      return (Enum.compareByIndex(logLevel, MPLogLevel.fine) > 0);
     } else {
       return (Enum.compareByIndex(logLevel, MPLogLevel.info) > 0);
     }

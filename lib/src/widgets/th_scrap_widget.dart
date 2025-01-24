@@ -34,7 +34,7 @@ class THScrapWidget extends StatelessWidget {
             final THFile thFile = thFileStore.thFile;
             final int thScrapMapiahID = thScrap.mapiahID;
 
-            thFileStore.redrawTrigger[thFileMapiahID];
+            thFileStore.elementRedrawTrigger[thFileMapiahID];
 
             for (final int childMapiahID in scrapChildrenMapiahIDs) {
               final THElement child = thFile.elementByMapiahID(childMapiahID);

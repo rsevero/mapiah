@@ -10,9 +10,18 @@ import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 
+// /// For mobx debugging with spy().
+// import 'package:mobx/mobx.dart';
+
 final GetIt getIt = GetIt.instance;
 
 void main() {
+  // /// For mobx debugging with spy().
+  // mainContext.config = mainContext.config.clone(
+  //   isSpyEnabled: true,
+  // );
+
+  // mainContext.spy(print);
   _setup();
   runApp(MapiahApp());
 }

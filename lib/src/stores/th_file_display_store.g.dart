@@ -105,11 +105,11 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
       ActionController(name: 'THFileDisplayStoreBase', context: context);
 
   @override
-  void updateScreenSize(Size newSize) {
+  void _updateScreenSize(Size newSize) {
     final _$actionInfo = _$THFileDisplayStoreBaseActionController.startAction(
-        name: 'THFileDisplayStoreBase.updateScreenSize');
+        name: 'THFileDisplayStoreBase._updateScreenSize');
     try {
-      return super.updateScreenSize(newSize);
+      return super._updateScreenSize(newSize);
     } finally {
       _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -127,22 +127,22 @@ mixin _$THFileDisplayStore on THFileDisplayStoreBase, Store {
   }
 
   @override
-  void onPanUpdate(DragUpdateDetails details) {
+  void _onPanUpdate(DragUpdateDetails details) {
     final _$actionInfo = _$THFileDisplayStoreBaseActionController.startAction(
-        name: 'THFileDisplayStoreBase.onPanUpdate');
+        name: 'THFileDisplayStoreBase._onPanUpdate');
     try {
-      return super.onPanUpdate(details);
+      return super._onPanUpdate(details);
     } finally {
       _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void updateCanvasScale(double newScale) {
+  void _updateCanvasScale(double newScale) {
     final _$actionInfo = _$THFileDisplayStoreBaseActionController.startAction(
-        name: 'THFileDisplayStoreBase.updateCanvasScale');
+        name: 'THFileDisplayStoreBase._updateCanvasScale');
     try {
-      return super.updateCanvasScale(newScale);
+      return super._updateCanvasScale(newScale);
     } finally {
       _$THFileDisplayStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_redraw_trigger.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -28,11 +29,10 @@ abstract class THFileStoreBase with Store {
   late THFile _thFile;
 
   @readonly
-  ObservableMap<int, THElement> _elements = ObservableMap<int, THElement>();
+  late int _thFileMapiahID;
 
   @readonly
-  ObservableMap<int, MPRedrawTrigger> _redrawTrigger =
-      ObservableMap<int, MPRedrawTrigger>();
+  Map<int, Observable<bool>> _elementRedrawTrigger = <int, Observable<bool>>{};
 
   @readonly
   bool _thFileLengthChildrenListTrigger = false;
@@ -68,6 +68,7 @@ abstract class THFileStoreBase with Store {
 
   void _basicInitialization(THFile file) {
     _thFile = file;
+    _thFileMapiahID = _thFile.mapiahID;
     _undoRedoController = MPUndoRedoController(this as THFileStore);
   }
 
@@ -81,17 +82,13 @@ abstract class THFileStoreBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
-    _elements.clear();
-    _elements.addAll(parsedFile.elements);
-
-    _redrawTrigger.clear();
-    _redrawTrigger[_thFile.mapiahID] = MPRedrawTrigger();
-    for (final entry in parsedFile.elements.entries) {
-      final THElement element = entry.value;
-      if (element is THScrap) {
-        _redrawTrigger[entry.key] = MPRedrawTrigger();
+    _elementRedrawTrigger.clear();
+    _elementRedrawTrigger[_thFile.mapiahID] = false.obs();
+    parsedFile.elements.forEach((key, value) {
+      if (value is THPoint || value is THLine || value is THScrap) {
+        _elementRedrawTrigger[key] = false.obs();
       }
-    }
+    });
 
     _isLoading = false;
 
@@ -114,19 +111,8 @@ abstract class THFileStoreBase with Store {
   /// happens. For example a pan or zoom operation.
   ///
   /// All drawable items in the THFile will be triggered.
-  @action
   void triggerFileRedraw() {
-    final int mapiahID = _thFile.mapiahID;
-    _redrawTrigger[mapiahID] = MPRedrawTrigger();
-  }
-
-  /// Should be used when some change that potentially affects the whole scrap
-  /// happens. For example changing the 'selectedScrap'.
-  ///
-  /// All drawable items in the scrap will be triggered.
-  @action
-  void triggerScrapRedraw(int mapiahID) {
-    _redrawTrigger[mapiahID] = MPRedrawTrigger();
+    _substituteStoreElement(_thFileMapiahID);
   }
 
   Future<File?> saveTH2File() async {
@@ -162,13 +148,15 @@ abstract class THFileStoreBase with Store {
   }
 
   @action
-  void _substituteStoreElement(THElement newElement) {
-    _elements[newElement.mapiahID] = newElement;
+  void _substituteStoreElement(int mapiahID) {
+    _elementRedrawTrigger[mapiahID]!.value =
+        !_elementRedrawTrigger[mapiahID]!.value;
   }
 
   void substituteElement(THElement newElement) {
-    _substituteStoreElement(newElement);
     _thFile.substituteElement(newElement);
+    _substituteStoreElement(newElement.mapiahID);
+    getIt<MPLog>().finer('Substituted element ${newElement.mapiahID}');
   }
 
   void execute(MPCommand command) {

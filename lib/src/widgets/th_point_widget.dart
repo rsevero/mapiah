@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
@@ -9,6 +11,7 @@ import 'package:mapiah/src/stores/th_file_store.dart';
 
 class THPointWidget extends StatelessWidget {
   final THPoint point;
+  final int pointMapiahID;
   final THFileDisplayStore thFileDisplayStore;
   final THFileStore thFileStore;
   final int thFileMapiahID;
@@ -20,25 +23,28 @@ class THPointWidget extends StatelessWidget {
     required this.thFileStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
-  });
+  }) : pointMapiahID = point.mapiahID;
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        thFileDisplayStore.addSelectableElement(MPSelectableElement(
-          element: point,
-          position: point.position.coordinates,
-        ));
+    thFileDisplayStore.addSelectableElement(MPSelectableElement(
+      element: point,
+      position: point.position.coordinates,
+    ));
 
-        thFileStore.redrawTrigger[thFileMapiahID];
-        thFileStore.redrawTrigger[thScrapMapiahID];
-        thFileStore.elements[point.mapiahID];
+    return RepaintBoundary(
+      child: Observer(
+        builder: (_) {
+          thFileStore.elementRedrawTrigger[thFileMapiahID];
+          thFileStore.elementRedrawTrigger[thScrapMapiahID];
+          thFileStore.elementRedrawTrigger[pointMapiahID];
 
-        final THPointPaint pointPaint = thFileDisplayStore.getPointPaint(point);
+          getIt<MPLog>().fine('THPointWidget for point $pointMapiahID build');
 
-        return RepaintBoundary(
-          child: CustomPaint(
+          final THPointPaint pointPaint =
+              thFileDisplayStore.getPointPaint(point);
+
+          return CustomPaint(
             painter: THPointPainter(
               position: point.position.coordinates,
               pointRadius: pointPaint.radius,
@@ -46,9 +52,9 @@ class THPointWidget extends StatelessWidget {
               thFileDisplayStore: thFileDisplayStore,
             ),
             size: thFileDisplayStore.screenSize,
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
