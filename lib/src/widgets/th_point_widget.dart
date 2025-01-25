@@ -18,6 +18,7 @@ class THPointWidget extends StatelessWidget {
   final int thScrapMapiahID;
 
   THPointWidget({
+    required super.key,
     required this.point,
     required this.thFileDisplayStore,
     required this.thFileStore,
@@ -35,9 +36,9 @@ class THPointWidget extends StatelessWidget {
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
-          thFileStore.elementRedrawTrigger[thFileMapiahID];
-          thFileStore.elementRedrawTrigger[thScrapMapiahID];
-          thFileStore.elementRedrawTrigger[pointMapiahID];
+          thFileStore.elementRedrawTrigger[thFileMapiahID]!.value;
+          thFileStore.elementRedrawTrigger[thScrapMapiahID]!.value;
+          thFileStore.elementRedrawTrigger[pointMapiahID]!.value;
 
           getIt<MPLog>().fine('THPointWidget for point $pointMapiahID build');
 

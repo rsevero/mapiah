@@ -91,23 +91,24 @@ mixin _$THFileStore on THFileStoreBase, Store {
     });
   }
 
-  late final _$_thFileLengthChildrenListTriggerAtom = Atom(
-      name: 'THFileStoreBase._thFileLengthChildrenListTrigger',
+  late final _$_childrenListLengthChangeTriggerAtom = Atom(
+      name: 'THFileStoreBase._childrenListLengthChangeTrigger',
       context: context);
 
-  bool get thFileLengthChildrenListTrigger {
-    _$_thFileLengthChildrenListTriggerAtom.reportRead();
-    return super._thFileLengthChildrenListTrigger;
+  Map<int, Observable<bool>> get childrenListLengthChangeTrigger {
+    _$_childrenListLengthChangeTriggerAtom.reportRead();
+    return super._childrenListLengthChangeTrigger;
   }
 
   @override
-  bool get _thFileLengthChildrenListTrigger => thFileLengthChildrenListTrigger;
+  Map<int, Observable<bool>> get _childrenListLengthChangeTrigger =>
+      childrenListLengthChangeTrigger;
 
   @override
-  set _thFileLengthChildrenListTrigger(bool value) {
-    _$_thFileLengthChildrenListTriggerAtom
-        .reportWrite(value, super._thFileLengthChildrenListTrigger, () {
-      super._thFileLengthChildrenListTrigger = value;
+  set _childrenListLengthChangeTrigger(Map<int, Observable<bool>> value) {
+    _$_childrenListLengthChangeTriggerAtom
+        .reportWrite(value, super._childrenListLengthChangeTrigger, () {
+      super._childrenListLengthChangeTrigger = value;
     });
   }
 

@@ -23,6 +23,7 @@ class THLineWidget extends StatelessWidget {
   final int thScrapMapiahID;
 
   THLineWidget({
+    required super.key,
     required this.line,
     required this.thFileDisplayStore,
     required this.thFileStore,
@@ -34,9 +35,9 @@ class THLineWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        thFileStore.elementRedrawTrigger[thFileMapiahID];
-        thFileStore.elementRedrawTrigger[thScrapMapiahID];
-        thFileStore.elementRedrawTrigger[line.mapiahID];
+        thFileStore.elementRedrawTrigger[thFileMapiahID]!.value;
+        thFileStore.elementRedrawTrigger[thScrapMapiahID]!.value;
+        thFileStore.elementRedrawTrigger[line.mapiahID]!.value;
 
         final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
             getLineSegmentsMap();

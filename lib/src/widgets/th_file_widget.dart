@@ -23,7 +23,7 @@ import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 class THFileWidget extends StatefulWidget {
   final THFileStore thFileStore;
 
-  THFileWidget({required this.thFileStore});
+  THFileWidget({required super.key, required this.thFileStore});
 
   @override
   State<THFileWidget> createState() => _THFileWidgetState();
@@ -35,7 +35,7 @@ class _THFileWidgetState extends State<THFileWidget> {
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final THFileStore thFileStore = widget.thFileStore;
   late final THFile thFile = widget.thFileStore.thFile;
-  late final int thFileMapiahID = thFile.mapiahID;
+  late final int thFileMapiahID = thFileStore.thFileMapiahID;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _THFileWidgetState extends State<THFileWidget> {
       builder: (context, constraints) {
         return Observer(
           builder: (context) {
-            thFileStore.elementRedrawTrigger[thFileMapiahID];
+            thFileStore.childrenListLengthChangeTrigger[thFileMapiahID]!.value;
             thFileDisplayStore.updateScreenSize(
                 Size(constraints.maxWidth, constraints.maxHeight));
 
@@ -69,6 +69,7 @@ class _THFileWidgetState extends State<THFileWidget> {
               switch (child) {
                 case THScrap _:
                   childWidgets.add(THScrapWidget(
+                    key: ValueKey(childMapiahID),
                     thScrap: child,
                     thFileStore: thFileStore,
                     thFileMapiahID: thFileMapiahID,
@@ -76,6 +77,7 @@ class _THFileWidgetState extends State<THFileWidget> {
                   break;
                 case THPoint _:
                   childWidgets.add(THPointWidget(
+                    key: ValueKey(childMapiahID),
                     point: child,
                     thFileDisplayStore: thFileDisplayStore,
                     thFileStore: thFileStore,
@@ -85,6 +87,7 @@ class _THFileWidgetState extends State<THFileWidget> {
                   break;
                 case THLine _:
                   childWidgets.add(THLineWidget(
+                    key: ValueKey(childMapiahID),
                     line: child,
                     thFileDisplayStore: thFileDisplayStore,
                     thFileStore: thFileStore,

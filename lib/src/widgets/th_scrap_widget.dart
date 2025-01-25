@@ -18,6 +18,7 @@ class THScrapWidget extends StatelessWidget {
   final int thFileMapiahID;
 
   THScrapWidget({
+    required super.key,
     required this.thScrap,
     required this.thFileStore,
     required this.thFileMapiahID,
@@ -34,7 +35,7 @@ class THScrapWidget extends StatelessWidget {
             final THFile thFile = thFileStore.thFile;
             final int thScrapMapiahID = thScrap.mapiahID;
 
-            thFileStore.elementRedrawTrigger[thFileMapiahID];
+            thFileStore.childrenListLengthChangeTrigger[thScrapMapiahID]!.value;
 
             for (final int childMapiahID in scrapChildrenMapiahIDs) {
               final THElement child = thFile.elementByMapiahID(childMapiahID);
@@ -42,6 +43,7 @@ class THScrapWidget extends StatelessWidget {
               switch (child) {
                 case THPoint _:
                   drawableElements.add(THPointWidget(
+                    key: ValueKey(childMapiahID),
                     point: child,
                     thFileDisplayStore: thFileDisplayStore,
                     thFileStore: thFileStore,
@@ -51,6 +53,7 @@ class THScrapWidget extends StatelessWidget {
                   break;
                 case THLine _:
                   drawableElements.add(THLineWidget(
+                    key: ValueKey(childMapiahID),
                     line: child,
                     thFileDisplayStore: thFileDisplayStore,
                     thFileStore: thFileStore,

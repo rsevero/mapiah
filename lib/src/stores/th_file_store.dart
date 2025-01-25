@@ -31,11 +31,25 @@ abstract class THFileStoreBase with Store {
   @readonly
   late int _thFileMapiahID;
 
+  /// These triggers are used to notify the drawable widgets that they should
+  /// redraw. There area triggers specific to each point and line (the actual
+  /// drawable elements), to each scrap and the THFile itself:
+  ///
+  /// 1. THFile: triggers the whole file to redraw when some setting that
+  ///  affects the whole file changes like zoom or pan.
+  /// 2. THScrap: triggers the scrap to redraw when some setting that affects
+  /// the scrap changes like changing the isSelected property of the scrap.
+  /// 3. THPoint and THLine: triggers the point or line to redraw when this
+  /// particular element has been edit: moved, changed type etc.
   @readonly
   Map<int, Observable<bool>> _elementRedrawTrigger = <int, Observable<bool>>{};
 
+  /// These triggers are used to notify the widgets that have drawable children,
+  /// i.e., THFile and THScraps, that they should redraw themselves because a
+  /// child widget has been added or removed.
   @readonly
-  bool _thFileLengthChildrenListTrigger = false;
+  Map<int, Observable<bool>> _childrenListLengthChangeTrigger =
+      <int, Observable<bool>>{};
 
   final List<String> errorMessages = <String>[];
 
@@ -83,10 +97,14 @@ abstract class THFileStoreBase with Store {
     List<String> errors,
   ) {
     _elementRedrawTrigger.clear();
-    _elementRedrawTrigger[_thFile.mapiahID] = false.obs();
+    _childrenListLengthChangeTrigger.clear();
+
+    _elementRedrawTrigger[_thFileMapiahID] = Observable(false);
+    _childrenListLengthChangeTrigger[_thFileMapiahID] = Observable(false);
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine || value is THScrap) {
-        _elementRedrawTrigger[key] = false.obs();
+        _elementRedrawTrigger[key] = Observable(false);
+        _childrenListLengthChangeTrigger[key] = Observable(false);
       }
     });
 
@@ -104,7 +122,8 @@ abstract class THFileStoreBase with Store {
   /// The THFileWidget itself will redraw.
   @action
   void triggerTHFileLengthChildrenList() {
-    _thFileLengthChildrenListTrigger = !_thFileLengthChildrenListTrigger;
+    _childrenListLengthChangeTrigger[_thFileMapiahID]!.value =
+        !_childrenListLengthChangeTrigger[_thFileMapiahID]!.value;
   }
 
   /// Should be used when some change that potentially affects the whole file
