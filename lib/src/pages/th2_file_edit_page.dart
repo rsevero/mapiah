@@ -135,43 +135,49 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           child: Row(
             children: [
               Observer(
-                builder: (_) => FloatingActionButton(
-                  heroTag: 'undo',
-                  mini: true,
-                  tooltip: thFileEditStore.hasUndo
-                      ? thFileEditStore.undoDescription
-                      : AppLocalizations.of(context)
-                          .th2FileEditPageNoUndoAvailable,
-                  backgroundColor: thFileEditStore.hasUndo
-                      ? null
-                      : Theme.of(context).colorScheme.surfaceContainerLowest,
-                  foregroundColor: thFileEditStore.hasUndo
-                      ? null
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                  onPressed:
-                      thFileEditStore.hasUndo ? thFileEditStore.undo : null,
-                  child: const Icon(Icons.undo),
-                ),
+                builder: (_) {
+                  final bool hasUndo = thFileEditStore.hasUndo;
+
+                  return FloatingActionButton(
+                    heroTag: 'undo',
+                    mini: true,
+                    tooltip: hasUndo
+                        ? thFileEditStore.undoDescription
+                        : AppLocalizations.of(context)
+                            .th2FileEditPageNoUndoAvailable,
+                    backgroundColor: hasUndo
+                        ? null
+                        : Theme.of(context).colorScheme.surfaceContainerLowest,
+                    foregroundColor: hasUndo
+                        ? null
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    onPressed: hasUndo ? thFileEditStore.undo : null,
+                    child: const Icon(Icons.undo),
+                  );
+                },
               ),
               const SizedBox(width: 8),
               Observer(
-                builder: (_) => FloatingActionButton(
-                  heroTag: 'redo',
-                  mini: true,
-                  tooltip: thFileEditStore.hasRedo
-                      ? thFileEditStore.redoDescription
-                      : AppLocalizations.of(context)
-                          .th2FileEditPageNoRedoAvailable,
-                  backgroundColor: thFileEditStore.hasRedo
-                      ? null
-                      : Theme.of(context).colorScheme.surfaceContainerLowest,
-                  foregroundColor: thFileEditStore.hasRedo
-                      ? null
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                  onPressed:
-                      thFileEditStore.hasRedo ? thFileEditStore.redo : null,
-                  child: const Icon(Icons.redo),
-                ),
+                builder: (_) {
+                  final bool hasRedo = thFileEditStore.hasRedo;
+
+                  return FloatingActionButton(
+                    heroTag: 'redo',
+                    mini: true,
+                    tooltip: hasRedo
+                        ? thFileEditStore.redoDescription
+                        : AppLocalizations.of(context)
+                            .th2FileEditPageNoRedoAvailable,
+                    backgroundColor: hasRedo
+                        ? null
+                        : Theme.of(context).colorScheme.surfaceContainerLowest,
+                    foregroundColor: hasRedo
+                        ? null
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    onPressed: hasRedo ? thFileEditStore.redo : null,
+                    child: const Icon(Icons.redo),
+                  );
+                },
               ),
             ],
           ),
@@ -183,9 +189,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _actionButtons() {
     return Observer(
       builder: (context) {
-        final bool isPanMode = thFileEditStore.mode == TH2FileEditMode.pan;
-        final bool isSelectMode =
-            thFileEditStore.mode == TH2FileEditMode.select;
+        final bool isPanMode = thFileEditStore.isPanMode;
+        final bool isSelectMode = thFileEditStore.isSelectMode;
         final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
         return Positioned(
