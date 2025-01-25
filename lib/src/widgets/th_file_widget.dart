@@ -48,8 +48,6 @@ class _THFileWidgetState extends State<THFileWidget> {
       builder: (context, constraints) {
         return Observer(
           builder: (context) {
-            thFileEditStore
-                .childrenListLengthChangeTrigger[thFileMapiahID]!.value;
             thFileEditStore.updateScreenSize(
                 Size(constraints.maxWidth, constraints.maxHeight));
 
@@ -58,6 +56,9 @@ class _THFileWidgetState extends State<THFileWidget> {
             }
 
             thFileEditStore.clearSelectableElements();
+
+            thFileEditStore
+                .childrenListLengthChangeTrigger[thFileMapiahID]!.value;
 
             final List<Widget> childWidgets = [];
             final List<int> fileChildrenMapiahIDs = thFile.childrenMapiahID;

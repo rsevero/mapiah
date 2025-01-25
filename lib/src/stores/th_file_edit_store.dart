@@ -151,7 +151,9 @@ abstract class THFileEditStoreBase with Store {
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine || value is THScrap) {
         _elementRedrawTrigger[key] = Observable(false);
-        _childrenListLengthChangeTrigger[key] = Observable(false);
+        if (value is THScrap) {
+          _childrenListLengthChangeTrigger[key] = Observable(false);
+        }
       }
     });
 
@@ -411,7 +413,16 @@ abstract class THFileEditStoreBase with Store {
   ///
   /// All drawable items in the THFile will be triggered.
   void triggerFileRedraw() {
-    _substituteStoreElement(_thFileMapiahID);
+    _triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+  }
+
+  /// Should be used when a element with children (file or scrap) has a child
+  /// added or deleted. The actual element (file or scrap) will redraw itself to
+  /// recreate it's children list.
+  @action
+  void triggerElementWithChildrenRedraw(int mapiahID) {
+    _childrenListLengthChangeTrigger[mapiahID]!.value =
+        !_childrenListLengthChangeTrigger[mapiahID]!.value;
   }
 
   Future<File?> saveTH2File() async {
@@ -447,14 +458,14 @@ abstract class THFileEditStoreBase with Store {
   }
 
   @action
-  void _substituteStoreElement(int mapiahID) {
+  void _triggerElementActuallyDrawableRedraw(int mapiahID) {
     _elementRedrawTrigger[mapiahID]!.value =
         !_elementRedrawTrigger[mapiahID]!.value;
   }
 
   void substituteElement(THElement newElement) {
     _thFile.substituteElement(newElement);
-    _substituteStoreElement(newElement.mapiahID);
+    _triggerElementActuallyDrawableRedraw(newElement.mapiahID);
     getIt<MPLog>().finer('Substituted element ${newElement.mapiahID}');
   }
 

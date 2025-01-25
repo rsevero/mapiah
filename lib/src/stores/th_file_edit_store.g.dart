@@ -362,11 +362,22 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
   }
 
   @override
-  void _substituteStoreElement(int mapiahID) {
+  void triggerElementWithChildrenRedraw(int mapiahID) {
     final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase._substituteStoreElement');
+        name: 'THFileEditStoreBase.triggerElementWithChildrenRedraw');
     try {
-      return super._substituteStoreElement(mapiahID);
+      return super.triggerElementWithChildrenRedraw(mapiahID);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _triggerElementActuallyDrawableRedraw(int mapiahID) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._triggerElementActuallyDrawableRedraw');
+    try {
+      return super._triggerElementActuallyDrawableRedraw(mapiahID);
     } finally {
       _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
