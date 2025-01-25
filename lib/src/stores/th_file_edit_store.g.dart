@@ -9,6 +9,98 @@ part of 'th_file_edit_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$THFileEditStore on THFileEditStoreBase, Store {
+  late final _$_screenSizeAtom =
+      Atom(name: 'THFileEditStoreBase._screenSize', context: context);
+
+  Size get screenSize {
+    _$_screenSizeAtom.reportRead();
+    return super._screenSize;
+  }
+
+  @override
+  Size get _screenSize => screenSize;
+
+  @override
+  set _screenSize(Size value) {
+    _$_screenSizeAtom.reportWrite(value, super._screenSize, () {
+      super._screenSize = value;
+    });
+  }
+
+  late final _$_canvasScaleAtom =
+      Atom(name: 'THFileEditStoreBase._canvasScale', context: context);
+
+  double get canvasScale {
+    _$_canvasScaleAtom.reportRead();
+    return super._canvasScale;
+  }
+
+  @override
+  double get _canvasScale => canvasScale;
+
+  @override
+  set _canvasScale(double value) {
+    _$_canvasScaleAtom.reportWrite(value, super._canvasScale, () {
+      super._canvasScale = value;
+    });
+  }
+
+  late final _$_canvasTranslationAtom =
+      Atom(name: 'THFileEditStoreBase._canvasTranslation', context: context);
+
+  Offset get canvasTranslation {
+    _$_canvasTranslationAtom.reportRead();
+    return super._canvasTranslation;
+  }
+
+  @override
+  Offset get _canvasTranslation => canvasTranslation;
+
+  @override
+  set _canvasTranslation(Offset value) {
+    _$_canvasTranslationAtom.reportWrite(value, super._canvasTranslation, () {
+      super._canvasTranslation = value;
+    });
+  }
+
+  late final _$_canvasScaleTranslationUndefinedAtom = Atom(
+      name: 'THFileEditStoreBase._canvasScaleTranslationUndefined',
+      context: context);
+
+  bool get canvasScaleTranslationUndefined {
+    _$_canvasScaleTranslationUndefinedAtom.reportRead();
+    return super._canvasScaleTranslationUndefined;
+  }
+
+  @override
+  bool get _canvasScaleTranslationUndefined => canvasScaleTranslationUndefined;
+
+  @override
+  set _canvasScaleTranslationUndefined(bool value) {
+    _$_canvasScaleTranslationUndefinedAtom
+        .reportWrite(value, super._canvasScaleTranslationUndefined, () {
+      super._canvasScaleTranslationUndefined = value;
+    });
+  }
+
+  late final _$_modeAtom =
+      Atom(name: 'THFileEditStoreBase._mode', context: context);
+
+  TH2FileEditMode get mode {
+    _$_modeAtom.reportRead();
+    return super._mode;
+  }
+
+  @override
+  TH2FileEditMode get _mode => mode;
+
+  @override
+  set _mode(TH2FileEditMode value) {
+    _$_modeAtom.reportWrite(value, super._mode, () {
+      super._mode = value;
+    });
+  }
+
   late final _$_isLoadingAtom =
       Atom(name: 'THFileEditStoreBase._isLoading', context: context);
 
@@ -114,6 +206,149 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
 
   late final _$THFileEditStoreBaseActionController =
       ActionController(name: 'THFileEditStoreBase', context: context);
+
+  @override
+  void _updateScreenSize(Size newSize) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._updateScreenSize');
+    try {
+      return super._updateScreenSize(newSize);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTH2FileEditMode(TH2FileEditMode newMode) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.setTH2FileEditMode');
+    try {
+      return super.setTH2FileEditMode(newMode);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _onPanUpdate(DragUpdateDetails details) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._onPanUpdate');
+    try {
+      return super._onPanUpdate(details);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _updateCanvasScale(double newScale) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._updateCanvasScale');
+    try {
+      return super._updateCanvasScale(newScale);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateCanvasOffsetDrawing(Offset newOffset) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.updateCanvasOffsetDrawing');
+    try {
+      return super.updateCanvasOffsetDrawing(newOffset);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setCanvasScaleTranslationUndefined(bool isUndefined) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.setCanvasScaleTranslationUndefined');
+    try {
+      return super.setCanvasScaleTranslationUndefined(isUndefined);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomIn() {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.zoomIn');
+    try {
+      return super.zoomIn();
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomOut() {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.zoomOut');
+    try {
+      return super.zoomOut();
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _calculateCanvasOffset() {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._calculateCanvasOffset');
+    try {
+      return super._calculateCanvasOffset();
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateDataWidth(double newWidth) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.updateDataWidth');
+    try {
+      return super.updateDataWidth(newWidth);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateDataHeight(double newHeight) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.updateDataHeight');
+    try {
+      return super.updateDataHeight(newHeight);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateDataBoundingBox(Rect newBoundingBox) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.updateDataBoundingBox');
+    try {
+      return super.updateDataBoundingBox(newBoundingBox);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomShowAll() {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.zoomShowAll');
+    try {
+      return super.zoomShowAll();
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void triggerTHFileLengthChildrenList() {

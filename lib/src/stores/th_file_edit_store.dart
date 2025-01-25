@@ -5,13 +5,20 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
+import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
+import 'package:mapiah/src/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/definitions/mp_paints.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
+import 'package:mapiah/src/selection/mp_selectable.dart';
+import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
@@ -22,6 +29,29 @@ part 'th_file_edit_store.g.dart';
 class THFileEditStore = THFileEditStoreBase with _$THFileEditStore;
 
 abstract class THFileEditStoreBase with Store {
+  // 'screen' is related to actual pixels on the screen.
+  // 'canvas' is the virtual canvas used to draw.
+  // 'data' is the actual data to be drawn.
+  // 'canvas' and 'data' are on the same scale. They are both scaled and
+  // translated to be shown on the screen.
+
+  @readonly
+  Size _screenSize = Size.zero;
+
+  Size _canvasSize = Size.zero;
+
+  @readonly
+  double _canvasScale = 1.0;
+
+  @readonly
+  Offset _canvasTranslation = Offset.zero;
+
+  @readonly
+  bool _canvasScaleTranslationUndefined = true;
+
+  @readonly
+  TH2FileEditMode _mode = TH2FileEditMode.pan;
+
   @readonly
   bool _isLoading = false;
 
@@ -51,11 +81,28 @@ abstract class THFileEditStoreBase with Store {
   Map<int, Observable<bool>> _childrenListLengthChangeTrigger =
       <int, Observable<bool>>{};
 
+  final Map<int, MPSelectable> _selectableElements = {};
+
+  double _dataWidth = 0.0;
+  double _dataHeight = 0.0;
+
+  Rect _dataBoundingBox = Rect.zero;
+
+  double _canvasCenterX = 0.0;
+  double _canvasCenterY = 0.0;
+
+  double lineThicknessOnCanvas = thDefaultLineThickness;
+
+  double pointRadiusOnCanvas = thDefaultPointRadius;
+
+  double selectionToleranceSquaredOnCanvas =
+      thDefaultSelectionTolerance * thDefaultSelectionTolerance;
+
   final List<String> errorMessages = <String>[];
 
   late final MPUndoRedoController _undoRedoController;
 
-  Future<THFileStoreCreateResult> load() async {
+  Future<THFileEditStoreCreateResult> load() async {
     _preParseInitialize();
 
     final THFileParser parser = THFileParser();
@@ -65,17 +112,17 @@ abstract class THFileEditStoreBase with Store {
 
     _postParseInitialize(parsedFile, isSuccessful, errors);
 
-    return THFileStoreCreateResult(isSuccessful, errors);
+    return THFileEditStoreCreateResult(isSuccessful, errors);
   }
 
-  /// This is a factory constructor that creates a new instance of THFileStore
+  /// This is a factory constructor that creates a new instance of THFileEditStore
   /// with an empty THFile.
   static THFileEditStore create(String filename) {
-    final THFileEditStore thFileStore = THFileEditStore._create();
+    final THFileEditStore thFileEditStore = THFileEditStore._create();
     final THFile thFile = THFile();
     thFile.filename = filename;
-    thFileStore._basicInitialization(thFile);
-    return thFileStore;
+    thFileEditStore._basicInitialization(thFile);
+    return thFileEditStore;
   }
 
   THFileEditStoreBase._create();
@@ -113,6 +160,239 @@ abstract class THFileEditStoreBase with Store {
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+  }
+
+  void addSelectableElement(MPSelectableElement selectableElement) {
+    _selectableElements[selectableElement.element.mapiahID] = selectableElement;
+  }
+
+  void clearSelectableElements() {
+    _selectableElements.clear();
+  }
+
+  MPSelectableElement? selectableElementContains(Offset screenCoordinates) {
+    final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+
+    for (final MPSelectable selectable in _selectableElements.values) {
+      if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
+        return selectable as MPSelectableElement;
+      }
+    }
+
+    return null;
+  }
+
+  THPointPaint getPointPaint(THPoint point) {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaint1..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getLinePaint(THLine line) {
+    return THLinePaint(
+      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {
+    final double dx = offset1.dx - offset2.dx;
+    final double dy = offset1.dy - offset2.dy;
+
+    return ((dx * dx) + (dy * dy)) < selectionToleranceSquaredOnCanvas;
+  }
+
+  void updateScreenSize(Size newSize) {
+    if (_screenSize == newSize) {
+      return;
+    }
+    _updateScreenSize(newSize);
+  }
+
+  @action
+  void _updateScreenSize(Size newSize) {
+    _screenSize = newSize;
+    _canvasSize = newSize / _canvasScale;
+  }
+
+  Offset offsetScaleScreenToCanvas(Offset screenCoordinate) {
+    return Offset(screenCoordinate.dx / _canvasScale,
+        screenCoordinate.dy / (-_canvasScale));
+  }
+
+  Offset offsetScaleCanvasToScreen(Offset canvasCoordinate) {
+    return Offset(canvasCoordinate.dx * _canvasScale,
+        canvasCoordinate.dy * (-_canvasScale));
+  }
+
+  Offset offsetScreenToCanvas(Offset screenCoordinate) {
+    // Apply the inverse of the translation
+    final double canvasX =
+        (screenCoordinate.dx / _canvasScale) - _canvasTranslation.dx;
+    final double canvasY =
+        _canvasTranslation.dy - (screenCoordinate.dy / _canvasScale);
+
+    return Offset(canvasX, canvasY);
+  }
+
+  Offset offsetCanvasToScreen(Offset canvasCoordinate) {
+    // Apply the translation and scaling
+    final double screenX =
+        (_canvasTranslation.dx + canvasCoordinate.dx) * _canvasScale;
+    final double screenY =
+        (_canvasTranslation.dy - canvasCoordinate.dy) * _canvasScale;
+
+    return Offset(screenX, screenY);
+  }
+
+  double scaleScreenToCanvas(double screenValue) {
+    return screenValue / _canvasScale;
+  }
+
+  double scaleCanvasToScreen(double canvasValue) {
+    return canvasValue * _canvasScale;
+  }
+
+  @action
+  void setTH2FileEditMode(TH2FileEditMode newMode) {
+    _mode = newMode;
+  }
+
+  void onPanUpdate(DragUpdateDetails details) {
+    if (details.delta == Offset.zero) {
+      return;
+    }
+    _onPanUpdate(details);
+  }
+
+  @action
+  void _onPanUpdate(DragUpdateDetails details) {
+    _canvasTranslation += (details.delta / _canvasScale);
+    _setCanvasCenterFromCurrent();
+  }
+
+  void _setCanvasCenterFromCurrent() {
+    getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
+    _canvasCenterX =
+        -(_canvasTranslation.dx - (_screenSize.width / 2.0 / _canvasScale));
+    _canvasCenterY =
+        _canvasTranslation.dy - (_screenSize.height / 2.0 / _canvasScale);
+    getIt<MPLog>().finer("New center: $_canvasCenterX, $_canvasCenterY");
+  }
+
+  void updateCanvasScale(double newScale) {
+    if (_canvasScale == newScale) {
+      return;
+    }
+    _updateCanvasScale(newScale);
+  }
+
+  @action
+  void _updateCanvasScale(double newScale) {
+    _canvasScale = newScale;
+    _canvasSize = _screenSize / _canvasScale;
+  }
+
+  @action
+  void updateCanvasOffsetDrawing(Offset newOffset) {
+    _canvasTranslation = newOffset;
+  }
+
+  @action
+  void setCanvasScaleTranslationUndefined(bool isUndefined) {
+    _canvasScaleTranslationUndefined = isUndefined;
+  }
+
+  @action
+  void zoomIn() {
+    _canvasScale *= thZoomFactor;
+    _canvasSize = _screenSize / _canvasScale;
+    _calculateCanvasOffset();
+  }
+
+  @action
+  void zoomOut() {
+    _canvasScale /= thZoomFactor;
+    _canvasSize = _screenSize / _canvasScale;
+    _calculateCanvasOffset();
+  }
+
+  @action
+  void _calculateCanvasOffset() {
+    final double xOffset = (_canvasSize.width / 2.0) - _canvasCenterX;
+    final double yOffset = (_canvasSize.height / 2.0) + _canvasCenterY;
+
+    _canvasTranslation = Offset(xOffset, yOffset);
+  }
+
+  @action
+  void updateDataWidth(double newWidth) {
+    _dataWidth = newWidth;
+  }
+
+  @action
+  void updateDataHeight(double newHeight) {
+    _dataHeight = newHeight;
+  }
+
+  @action
+  void updateDataBoundingBox(Rect newBoundingBox) {
+    _dataBoundingBox = newBoundingBox;
+  }
+
+  void _getFileDrawingSize() {
+    _dataWidth = (_dataBoundingBox.width < thMinimumSizeForDrawing)
+        ? thMinimumSizeForDrawing
+        : _dataBoundingBox.width;
+
+    _dataHeight = (_dataBoundingBox.height < thMinimumSizeForDrawing)
+        ? thMinimumSizeForDrawing
+        : _dataBoundingBox.height;
+  }
+
+  void _setCanvasCenterToDrawingCenter() {
+    getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
+    _canvasCenterX = (_dataBoundingBox.left + _dataBoundingBox.right) / 2.0;
+    _canvasCenterY = (_dataBoundingBox.top + _dataBoundingBox.bottom) / 2.0;
+    getIt<MPLog>().finer(
+        "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
+  }
+
+  @action
+  void zoomShowAll() {
+    final double screenWidth = _screenSize.width;
+    final double screenHeight = _screenSize.height;
+
+    _getFileDrawingSize();
+
+    final double widthScale =
+        (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
+    final double heightScale =
+        (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
+
+    _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
+    _canvasSize = _screenSize / _canvasScale;
+
+    _setCanvasCenterToDrawingCenter();
+    _calculateCanvasOffset();
+
+    _canvasScaleTranslationUndefined = false;
+  }
+
+  void transformCanvas(Canvas canvas) {
+    // Transformations are applied on the order they are defined.
+    canvas.scale(_canvasScale);
+    // // Drawing canvas border
+    // canvas.drawRect(
+    //     Rect.fromPoints(
+    //         Offset(0, 0),
+    //         Offset(
+    //           thFileController.canvasSize.width,
+    //           thFileController.canvasSize.height,
+    //         )),
+    //     THPaints.thPaint7);
+    canvas.translate(_canvasTranslation.dx, _canvasTranslation.dy);
+    canvas.scale(1, -1);
   }
 
   /// Should be used only when a drawable element (scrap, line or point) is
@@ -268,11 +548,11 @@ abstract class THFileEditStoreBase with Store {
   }
 }
 
-class THFileStoreCreateResult {
+class THFileEditStoreCreateResult {
   final bool isSuccessful;
   final List<String> errors;
 
-  THFileStoreCreateResult(
+  THFileEditStoreCreateResult(
     this.isSuccessful,
     this.errors,
   );

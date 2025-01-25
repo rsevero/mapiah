@@ -166,7 +166,7 @@ class MPMoveLineCommand extends MPCommand {
       );
 
   @override
-  void _actualExecute(THFileEditStore thFileStore) {
+  void _actualExecute(THFileEditStore thFileEditStore) {
     for (final entry in originalLineSegmentsMap.entries) {
       final int originalLineSegmentMapiahID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
@@ -232,7 +232,7 @@ class MPMoveLineCommand extends MPCommand {
           break;
       }
 
-      command.execute(thFileStore);
+      command.execute(thFileEditStore);
     }
   }
 

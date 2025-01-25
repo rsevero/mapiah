@@ -6,29 +6,26 @@ import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THPointWidget extends StatelessWidget {
   final THPoint point;
   final int pointMapiahID;
-  final THFileDisplayStore thFileDisplayStore;
-  final THFileEditStore thFileStore;
+  final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
   final int thScrapMapiahID;
 
   THPointWidget({
     required super.key,
     required this.point,
-    required this.thFileDisplayStore,
-    required this.thFileStore,
+    required this.thFileEditStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
   }) : pointMapiahID = point.mapiahID;
 
   @override
   Widget build(BuildContext context) {
-    thFileDisplayStore.addSelectableElement(MPSelectableElement(
+    thFileEditStore.addSelectableElement(MPSelectableElement(
       element: point,
       position: point.position.coordinates,
     ));
@@ -36,23 +33,22 @@ class THPointWidget extends StatelessWidget {
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
-          thFileStore.elementRedrawTrigger[thFileMapiahID]!.value;
-          thFileStore.elementRedrawTrigger[thScrapMapiahID]!.value;
-          thFileStore.elementRedrawTrigger[pointMapiahID]!.value;
+          thFileEditStore.elementRedrawTrigger[thFileMapiahID]!.value;
+          thFileEditStore.elementRedrawTrigger[thScrapMapiahID]!.value;
+          thFileEditStore.elementRedrawTrigger[pointMapiahID]!.value;
 
           getIt<MPLog>().fine('THPointWidget for point $pointMapiahID build');
 
-          final THPointPaint pointPaint =
-              thFileDisplayStore.getPointPaint(point);
+          final THPointPaint pointPaint = thFileEditStore.getPointPaint(point);
 
           return CustomPaint(
             painter: THPointPainter(
               position: point.position.coordinates,
               pointRadius: pointPaint.radius,
               pointPaint: pointPaint.paint,
-              thFileDisplayStore: thFileDisplayStore,
+              thFileEditStore: thFileEditStore,
             ),
-            size: thFileDisplayStore.screenSize,
+            size: thFileEditStore.screenSize,
           );
         },
       ),

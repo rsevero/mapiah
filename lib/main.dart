@@ -6,7 +6,6 @@ import 'package:mapiah/src/definitions/color_schemes.orange_brown.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 import 'package:mapiah/src/stores/multiple_store_reactions.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 
@@ -30,7 +29,6 @@ void _setup() {
   getIt.registerSingleton<MPLog>(MPLog.instance);
   getIt.registerSingleton<MPSettingsStore>(MPSettingsStore());
   getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
-  getIt.registerSingleton<THFileDisplayStore>(THFileDisplayStore());
   getIt.registerSingleton<MultipleStoreReactions>(MultipleStoreReactions());
 }
 

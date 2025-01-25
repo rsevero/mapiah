@@ -1,30 +1,29 @@
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mobx/mobx.dart';
 
 class MultipleStoreReactions {
   final updateLineThicknessOnCanvas = autorun((_) {
-    final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+    final THFileEditStore thFileEditStore = getIt<THFileEditStore>();
 
-    thFileDisplayStore.lineThicknessOnCanvas =
-        getIt<MPSettingsStore>().lineThickness / thFileDisplayStore.canvasScale;
+    thFileEditStore.lineThicknessOnCanvas =
+        getIt<MPSettingsStore>().lineThickness / thFileEditStore.canvasScale;
   });
 
   final updatePointRadiusOnCanvas = autorun((_) {
-    final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+    final THFileEditStore thFileEditStore = getIt<THFileEditStore>();
 
-    thFileDisplayStore.pointRadiusOnCanvas =
-        getIt<MPSettingsStore>().pointRadius / thFileDisplayStore.canvasScale;
+    thFileEditStore.pointRadiusOnCanvas =
+        getIt<MPSettingsStore>().pointRadius / thFileEditStore.canvasScale;
   });
 
   final updateSelectionToleranceSquaredOnCanvas = autorun((_) {
-    final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+    final THFileEditStore thFileEditStore = getIt<THFileEditStore>();
     final double selectionTolerance =
         getIt<MPSettingsStore>().selectionTolerance;
 
-    thFileDisplayStore.selectionToleranceSquaredOnCanvas =
-        (selectionTolerance * selectionTolerance) /
-            thFileDisplayStore.canvasScale;
+    thFileEditStore.selectionToleranceSquaredOnCanvas =
+        (selectionTolerance * selectionTolerance) / thFileEditStore.canvasScale;
   });
 }

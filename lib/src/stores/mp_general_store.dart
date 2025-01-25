@@ -20,44 +20,32 @@ class MPGeneralStore {
   void reset() {
     _nextMapiahIDForElements = thFirstMapiahIDForElements;
     _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
-    _thFileStores.clear();
+    _thFileEditStores.clear();
   }
 
-  final HashMap<String, THFileEditStore> _thFileStores =
+  final HashMap<String, THFileEditStore> _thFileEditStores =
       HashMap<String, THFileEditStore>();
 
-  THFileEditStore getTHFileStore(
+  THFileEditStore getTHFileEditStore(
       {required String filename, bool forceNewStore = false}) {
-    if (_thFileStores.containsKey(filename)) {
+    if (_thFileEditStores.containsKey(filename)) {
       if (forceNewStore) {
-        _thFileStores.remove(filename);
+        _thFileEditStores.remove(filename);
       } else {
-        return _thFileStores[filename]!;
+        return _thFileEditStores[filename]!;
       }
     }
 
     final THFileEditStore createdStore = THFileEditStoreBase.create(filename);
 
-    _thFileStores[filename] = createdStore;
+    _thFileEditStores[filename] = createdStore;
 
     return createdStore;
   }
-  // Future<THFileStoreCreateResult> createFileStore(String filename) async {
-  //   if (_fileStores.containsKey(filename)) {
-  //     return _fileStores[filename]!;
-  //   }
-
-  //   final THFileStoreCreateResult createResult =
-  //       await THFileStoreBase.createAndLoad(filename);
-
-  //   _fileStores[filename] = createResult;
-
-  //   return createResult;
-  // }
 
   void removeFileStore(String filename) {
-    if (_thFileStores.containsKey(filename)) {
-      _thFileStores.remove(filename);
+    if (_thFileEditStores.containsKey(filename)) {
+      _thFileEditStores.remove(filename);
     }
   }
 }

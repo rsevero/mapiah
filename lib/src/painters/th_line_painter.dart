@@ -1,20 +1,19 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final Paint linePaint;
-  final THFileDisplayStore thFileDisplayStore;
+  final THFileEditStore thFileEditStore;
 
   THLinePainter({
     super.repaint,
     required this.lineSegmentsMap,
     required this.linePaint,
-    required this.thFileDisplayStore,
+    required this.thFileEditStore,
   });
 
   @override
@@ -24,7 +23,7 @@ class THLinePainter extends CustomPainter {
     bool isFirst = true;
     final Path path = Path();
 
-    thFileDisplayStore.transformCanvas(canvas);
+    thFileEditStore.transformCanvas(canvas);
 
     for (THLinePainterLineSegment lineSegment in lineSegments) {
       if (isFirst) {

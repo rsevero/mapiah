@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 
 class THScrapWidget extends StatelessWidget {
   final THScrap thScrap;
-  final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
-  final THFileEditStore thFileStore;
+  final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
 
   THScrapWidget({
     required super.key,
     required this.thScrap,
-    required this.thFileStore,
+    required this.thFileEditStore,
     required this.thFileMapiahID,
   });
 
@@ -32,10 +29,11 @@ class THScrapWidget extends StatelessWidget {
           builder: (_) {
             final List<Widget> drawableElements = [];
             final List<int> scrapChildrenMapiahIDs = thScrap.childrenMapiahID;
-            final THFile thFile = thFileStore.thFile;
+            final THFile thFile = thFileEditStore.thFile;
             final int thScrapMapiahID = thScrap.mapiahID;
 
-            thFileStore.childrenListLengthChangeTrigger[thScrapMapiahID]!.value;
+            thFileEditStore
+                .childrenListLengthChangeTrigger[thScrapMapiahID]!.value;
 
             for (final int childMapiahID in scrapChildrenMapiahIDs) {
               final THElement child = thFile.elementByMapiahID(childMapiahID);
@@ -45,8 +43,7 @@ class THScrapWidget extends StatelessWidget {
                   drawableElements.add(THPointWidget(
                     key: ValueKey(childMapiahID),
                     point: child,
-                    thFileDisplayStore: thFileDisplayStore,
-                    thFileStore: thFileStore,
+                    thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thScrapMapiahID,
                   ));
@@ -55,8 +52,7 @@ class THScrapWidget extends StatelessWidget {
                   drawableElements.add(THLineWidget(
                     key: ValueKey(childMapiahID),
                     line: child,
-                    thFileDisplayStore: thFileDisplayStore,
-                    thFileStore: thFileStore,
+                    thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thScrapMapiahID,
                   ));

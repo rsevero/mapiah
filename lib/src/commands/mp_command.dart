@@ -44,9 +44,9 @@ abstract class MPCommand {
     required MPUndoRedoCommand oppositeCommand,
   });
 
-  MPUndoRedoCommand execute(THFileEditStore thFileStore) {
+  MPUndoRedoCommand execute(THFileEditStore thFileEditStore) {
     oppositeCommand = _createOppositeCommand();
-    _actualExecute(thFileStore);
+    _actualExecute(thFileEditStore);
 
     return oppositeCommand!;
   }
@@ -56,7 +56,7 @@ abstract class MPCommand {
   /// if the actual original and opposite commands are different.
   MPUndoRedoCommand _createOppositeCommand();
 
-  void _actualExecute(THFileEditStore thFileStore);
+  void _actualExecute(THFileEditStore thFileEditStore);
 
   String toJson() {
     return jsonEncode(toMap());

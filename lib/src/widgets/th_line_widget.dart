@@ -12,21 +12,18 @@ import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THLineWidget extends StatelessWidget {
   final THLine line;
-  final THFileDisplayStore thFileDisplayStore;
-  final THFileEditStore thFileStore;
+  final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
   final int thScrapMapiahID;
 
   THLineWidget({
     required super.key,
     required this.line,
-    required this.thFileDisplayStore,
-    required this.thFileStore,
+    required this.thFileEditStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
   });
@@ -35,23 +32,23 @@ class THLineWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        thFileStore.elementRedrawTrigger[thFileMapiahID]!.value;
-        thFileStore.elementRedrawTrigger[thScrapMapiahID]!.value;
-        thFileStore.elementRedrawTrigger[line.mapiahID]!.value;
+        thFileEditStore.elementRedrawTrigger[thFileMapiahID]!.value;
+        thFileEditStore.elementRedrawTrigger[thScrapMapiahID]!.value;
+        thFileEditStore.elementRedrawTrigger[line.mapiahID]!.value;
 
         final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
             getLineSegmentsMap();
 
-        final THLinePaint linePaint = thFileDisplayStore.getLinePaint(line);
+        final THLinePaint linePaint = thFileEditStore.getLinePaint(line);
 
         return RepaintBoundary(
           child: CustomPaint(
             painter: THLinePainter(
               lineSegmentsMap: lineSegmentsMap,
               linePaint: linePaint.paint,
-              thFileDisplayStore: thFileDisplayStore,
+              thFileEditStore: thFileEditStore,
             ),
-            size: thFileDisplayStore.screenSize,
+            size: thFileEditStore.screenSize,
           ),
         );
       },
@@ -63,7 +60,7 @@ class THLineWidget extends StatelessWidget {
         LinkedHashMap<int, THLinePainterLineSegment>();
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
     bool isFirst = true;
-    final THFile thFile = thFileStore.thFile;
+    final THFile thFile = thFileEditStore.thFile;
 
     for (int lineChildMapiahID in lineChildrenMapiahIDs) {
       final THElement lineChild = thFile.elementByMapiahID(lineChildMapiahID);
@@ -78,7 +75,7 @@ class THLineWidget extends StatelessWidget {
           y: lineChild.y,
         );
         isFirst = false;
-        thFileDisplayStore.addSelectableElement(MPSelectableElement(
+        thFileEditStore.addSelectableElement(MPSelectableElement(
           element: lineChild,
           position: lineChild.endPoint.coordinates,
         ));
@@ -106,7 +103,7 @@ class THLineWidget extends StatelessWidget {
         default:
           continue;
       }
-      thFileDisplayStore.addSelectableElement(MPSelectableElement(
+      thFileEditStore.addSelectableElement(MPSelectableElement(
         element: lineChild,
         position: lineChild.endPoint.coordinates,
       ));

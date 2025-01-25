@@ -6,7 +6,6 @@ import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
-import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
@@ -22,33 +21,32 @@ class TH2FileEditPage extends StatefulWidget {
 
 class _TH2FileEditPageState extends State<TH2FileEditPage> {
   bool _isHovered = false;
-  late final THFileEditStore thFileStore;
-  final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
+  late final THFileEditStore thFileEditStore;
   late final List<String> loadErrors;
-  late final Future<THFileStoreCreateResult> thFileStoreCreateResult;
-  bool _thFileStoreLoaded = false;
+  late final Future<THFileEditStoreCreateResult> thFileEditStoreCreateResult;
+  bool _thFileEditStoreLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    thFileStore =
-        getIt<MPGeneralStore>().getTHFileStore(filename: widget.filename);
-    thFileStoreCreateResult = thFileStore.load();
+    thFileEditStore =
+        getIt<MPGeneralStore>().getTHFileEditStore(filename: widget.filename);
+    thFileEditStoreCreateResult = thFileEditStore.load();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<THFileStoreCreateResult>(
-      future: thFileStoreCreateResult,
+    return FutureBuilder<THFileEditStoreCreateResult>(
+      future: thFileEditStoreCreateResult,
       builder: (BuildContext context,
-          AsyncSnapshot<THFileStoreCreateResult> snapshot) {
+          AsyncSnapshot<THFileEditStoreCreateResult> snapshot) {
         final bool fileReady =
             (snapshot.connectionState == ConnectionState.done) &&
                 snapshot.hasData &&
                 snapshot.data!.isSuccessful;
 
-        if (fileReady && !_thFileStoreLoaded) {
-          _thFileStoreLoaded = true;
+        if (fileReady && !_thFileEditStoreLoaded) {
+          _thFileEditStoreLoaded = true;
         }
 
         return Scaffold(
@@ -63,11 +61,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               if (fileReady) ...[
                 IconButton(
                   icon: Icon(Icons.save_outlined),
-                  onPressed: () => thFileStore.saveTH2File(),
+                  onPressed: () => thFileEditStore.saveTH2File(),
                 ),
                 IconButton(
                   icon: Icon(Icons.save_as_outlined),
-                  onPressed: () => thFileStore.saveAsTH2File(),
+                  onPressed: () => thFileEditStore.saveAsTH2File(),
                 ),
               ],
               IconButton(
@@ -76,10 +74,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               ),
             ],
           ),
-          body: FutureBuilder<THFileStoreCreateResult>(
-            future: thFileStoreCreateResult,
+          body: FutureBuilder<THFileEditStoreCreateResult>(
+            future: thFileEditStoreCreateResult,
             builder: (BuildContext context,
-                AsyncSnapshot<THFileStoreCreateResult> snapshot) {
+                AsyncSnapshot<THFileEditStoreCreateResult> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: Text(AppLocalizations.of(context)
@@ -95,8 +93,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   return Center(
                     child: Stack(children: [
                       THFileWidget(
-                        key: ValueKey(thFileStore.thFileMapiahID),
-                        thFileStore: thFileStore,
+                        key: ValueKey(thFileEditStore.thFileMapiahID),
+                        thFileEditStore: thFileEditStore,
                       ),
                       _actionButtons(),
                     ]),
@@ -126,9 +124,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _actionButtons() {
     return Observer(
       builder: (context) {
-        final bool isPanMode = thFileDisplayStore.mode == TH2FileEditMode.pan;
+        final bool isPanMode = thFileEditStore.mode == TH2FileEditMode.pan;
         final bool isSelectMode =
-            thFileDisplayStore.mode == TH2FileEditMode.select;
+            thFileEditStore.mode == TH2FileEditMode.select;
         final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
         return Positioned(
@@ -141,7 +139,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               FloatingActionButton(
                 heroTag: 'pan_tool',
                 onPressed: () {
-                  thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.pan);
+                  thFileEditStore.setTH2FileEditMode(TH2FileEditMode.pan);
                 },
                 tooltip: AppLocalizations.of(context).th2FileEditPagePanTool,
                 child: Image.asset(
@@ -157,7 +155,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               FloatingActionButton(
                 heroTag: 'select_tool',
                 onPressed: () {
-                  thFileDisplayStore.setTH2FileEditMode(TH2FileEditMode.select);
+                  thFileEditStore.setTH2FileEditMode(TH2FileEditMode.select);
                 },
                 tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
                 child: Image.asset(
@@ -189,21 +187,21 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           if (_isHovered) ...[
             FloatingActionButton(
               heroTag: 'zoom_in',
-              onPressed: () => thFileDisplayStore.zoomIn(),
+              onPressed: () => thFileEditStore.zoomIn(),
               tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
               child: Icon(Icons.zoom_in, size: thFloatingActionIconSize),
             ),
             SizedBox(width: 8),
             FloatingActionButton(
               heroTag: 'zoom_show_all',
-              onPressed: () => thFileDisplayStore.zoomShowAll(),
+              onPressed: () => thFileEditStore.zoomShowAll(),
               tooltip: AppLocalizations.of(context).th2FileEditPageZoomShowAll,
               child: Icon(Icons.zoom_out_map, size: thFloatingActionIconSize),
             ),
             SizedBox(width: 8),
             FloatingActionButton(
               heroTag: 'zoom_out',
-              onPressed: () => thFileDisplayStore.zoomOut(),
+              onPressed: () => thFileEditStore.zoomOut(),
               tooltip: AppLocalizations.of(context).th2FileEditPageZoomOut,
               child: Icon(Icons.zoom_out, size: thFloatingActionIconSize),
             ),
