@@ -15,7 +15,6 @@ import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THLineWidget extends StatelessWidget {
-  final THLine line;
   final int lineMapiahID;
   final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
@@ -27,18 +26,21 @@ class THLineWidget extends StatelessWidget {
     required this.thFileEditStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
-  }) : line = thFileEditStore.thFile.elementByMapiahID(lineMapiahID) as THLine;
+  });
 
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
+        final THLine line =
+            thFileEditStore.thFile.elementByMapiahID(lineMapiahID) as THLine;
+
         thFileEditStore.elementRedrawTrigger[thFileMapiahID]!.value;
         thFileEditStore.elementRedrawTrigger[thScrapMapiahID]!.value;
         thFileEditStore.elementRedrawTrigger[line.mapiahID]!.value;
 
         final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
-            getLineSegmentsMap();
+            getLineSegmentsMap(line);
 
         final THLinePaint linePaint = thFileEditStore.getLinePaint(line);
 
@@ -56,7 +58,7 @@ class THLineWidget extends StatelessWidget {
     );
   }
 
-  LinkedHashMap<int, THLinePainterLineSegment> getLineSegmentsMap() {
+  LinkedHashMap<int, THLinePainterLineSegment> getLineSegmentsMap(THLine line) {
     final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLinePainterLineSegment>();
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;

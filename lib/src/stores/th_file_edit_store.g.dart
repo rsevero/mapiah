@@ -413,11 +413,11 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
   }
 
   @override
-  void _triggerElementActuallyDrawableRedraw(int mapiahID) {
+  void triggerElementActuallyDrawableRedraw(int mapiahID) {
     final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase._triggerElementActuallyDrawableRedraw');
+        name: 'THFileEditStoreBase.triggerElementActuallyDrawableRedraw');
     try {
-      return super._triggerElementActuallyDrawableRedraw(mapiahID);
+      return super.triggerElementActuallyDrawableRedraw(mapiahID);
     } finally {
       _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -268,46 +268,61 @@ abstract class THFileEditStoreBase with Store {
 
     switch (_selectedElement!.originalElementClone) {
       case THPoint _:
-        final THPoint originalPoint =
-            _selectedElement!.originalElementClone as THPoint;
-        final THPoint modifiedPoint = originalPoint.copyWith(
-            position: originalPoint.position.copyWith(
-                coordinates: originalPoint.position.coordinates +
-                    localDeltaPositionOnCanvas));
-        substituteElement(modifiedPoint);
+        _updateTHPointPosition(
+          _selectedElement! as MPSelectedPoint,
+          localDeltaPositionOnCanvas,
+        );
         break;
       case THLine _:
         _updateTHLinePosition(
-            _selectedElement! as MPSelectedLine, localDeltaPositionOnCanvas);
+          _selectedElement! as MPSelectedLine,
+          localDeltaPositionOnCanvas,
+        );
         break;
       default:
         break;
     }
   }
 
-  void _updateTHLinePosition(
-      MPSelectedLine selectedLine, Offset localDeltaPositionOnCanvas) {
-    final THLine line = selectedLine.originalLineClone;
-    final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
+  void _updateTHPointPosition(
+    MPSelectedPoint selectedPoint,
+    Offset localDeltaPositionOnCanvas,
+  ) {
+    final THPoint originalPoint = selectedPoint.originalPointClone;
+    final THPoint modifiedPoint = originalPoint.copyWith(
+        position: originalPoint.position.copyWith(
+            coordinates: originalPoint.position.coordinates +
+                localDeltaPositionOnCanvas));
+    substituteElement(modifiedPoint);
+  }
 
-    for (final int lineChildMapiahID in lineChildrenMapiahIDs) {
-      final THElement lineChild = _thFile.elementByMapiahID(lineChildMapiahID);
+  void _updateTHLinePosition(
+    MPSelectedLine selectedLine,
+    Offset localDeltaPositionOnCanvas,
+  ) {
+    final THLine line = selectedLine.originalLineClone;
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final lineSegmentEntry
+        in selectedLine.originalLineSegmentsMapClone.entries) {
+      final THElement lineChild = lineSegmentEntry.value;
 
       if (lineChild is! THLineSegment) {
         continue;
       }
 
-      late THLineSegment newLineSegment;
+      late THLineSegment modifiedLineSegment;
 
       switch (lineChild) {
         case THStraightLineSegment _:
-          newLineSegment = lineChild.copyWith(
+          modifiedLineSegment = lineChild.copyWith(
               endPoint: lineChild.endPoint.copyWith(
                   coordinates: lineChild.endPoint.coordinates +
                       localDeltaPositionOnCanvas));
           break;
         case THBezierCurveLineSegment _:
-          newLineSegment = lineChild.copyWith(
+          modifiedLineSegment = lineChild.copyWith(
               endPoint: lineChild.endPoint.copyWith(
                   coordinates: lineChild.endPoint.coordinates +
                       localDeltaPositionOnCanvas),
@@ -321,11 +336,15 @@ abstract class THFileEditStoreBase with Store {
         default:
           throw Exception('Unknown line segment type');
       }
+
+      modifiedLineSegmentsMap[lineChild.mapiahID] = modifiedLineSegment;
     }
+
+    substituteLineSegmentsOfLine(line.mapiahID, modifiedLineSegmentsMap);
   }
 
   void onPanEnd(DragEndDetails details) {
-    if (_selectedElement == null) {
+    if ((_selectedElement == null) || (_mode != TH2FileEditMode.select)) {
       return;
     }
 
@@ -341,7 +360,7 @@ abstract class THFileEditStoreBase with Store {
 
     switch (_selectedElement!) {
       case MPSelectedPoint _:
-        updatePointPosition(
+        updatePointPositionPerOffset(
           originalPoint:
               (_selectedElement! as MPSelectedPoint).originalPointClone,
           panOffset: panEndOffset,
@@ -592,7 +611,7 @@ abstract class THFileEditStoreBase with Store {
   ///
   /// All drawable items in the THFile will be triggered.
   void triggerFileRedraw() {
-    _triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
   /// Should be used when a element with children (file or scrap) has a child
@@ -637,15 +656,31 @@ abstract class THFileEditStoreBase with Store {
   }
 
   @action
-  void _triggerElementActuallyDrawableRedraw(int mapiahID) {
+  void triggerElementActuallyDrawableRedraw(int mapiahID) {
     _elementRedrawTrigger[mapiahID]!.value =
         !_elementRedrawTrigger[mapiahID]!.value;
   }
 
   void substituteElement(THElement newElement) {
     _thFile.substituteElement(newElement);
-    _triggerElementActuallyDrawableRedraw(newElement.mapiahID);
+    triggerElementActuallyDrawableRedraw(newElement.mapiahID);
     getIt<MPLog>().finer('Substituted element ${newElement.mapiahID}');
+  }
+
+  void substituteElementWithoutRedrawTrigger(THElement newElement) {
+    _thFile.substituteElement(newElement);
+    getIt<MPLog>().finer(
+        'Substituted element without redraw trigger ${newElement.mapiahID}');
+  }
+
+  void substituteLineSegmentsOfLine(
+    int lineMapiahID,
+    LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap,
+  ) {
+    for (final lineSegment in modifiedLineSegmentsMap.values) {
+      _thFile.substituteElement(lineSegment);
+    }
+    triggerElementActuallyDrawableRedraw(lineMapiahID);
   }
 
   void execute(MPCommand command) {
@@ -662,7 +697,7 @@ abstract class THFileEditStoreBase with Store {
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
 
-  void updatePointPosition({
+  void updatePointPositionPerOffset({
     required THPoint originalPoint,
     required Offset panOffset,
   }) {

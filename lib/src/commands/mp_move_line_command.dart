@@ -234,6 +234,8 @@ class MPMoveLineCommand extends MPCommand {
 
       command.execute(thFileEditStore);
     }
+
+    thFileEditStore.triggerElementActuallyDrawableRedraw(originalLine.mapiahID);
   }
 
   @override
