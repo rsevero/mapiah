@@ -1,16 +1,16 @@
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/stores/th_file_edit_store.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 class MPUndoRedoController {
   final List<MPUndoRedoCommand> _undo = [];
   final List<MPUndoRedoCommand> _redo = [];
-  final THFileEditStore thFileEditStore;
+  final TH2FileEditStore th2FileEditStore;
 
-  MPUndoRedoController(this.thFileEditStore);
+  MPUndoRedoController(this.th2FileEditStore);
 
   void execute(MPCommand command) {
-    final MPUndoRedoCommand undo = command.execute(thFileEditStore);
+    final MPUndoRedoCommand undo = command.execute(th2FileEditStore);
 
     if (_redo.isNotEmpty) {
       _undo.addAll(_redo);
@@ -25,7 +25,7 @@ class MPUndoRedoController {
       return;
     }
     final MPCommand command = _undo.removeLast().command;
-    final MPUndoRedoCommand redo = command.execute(thFileEditStore);
+    final MPUndoRedoCommand redo = command.execute(th2FileEditStore);
     _redo.add(redo);
   }
 
@@ -34,7 +34,7 @@ class MPUndoRedoController {
       return;
     }
     final MPCommand command = _redo.removeLast().command;
-    final MPUndoRedoCommand undo = command.execute(thFileEditStore);
+    final MPUndoRedoCommand undo = command.execute(th2FileEditStore);
     _undo.add(undo);
   }
 

@@ -5,38 +5,38 @@ import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/stores/th_file_edit_store.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 
 class THFileWidget extends StatelessWidget {
-  final THFileEditStore thFileEditStore;
+  final TH2FileEditStore th2FileEditStore;
 
-  late final THFile thFile = thFileEditStore.thFile;
-  late final int thFileMapiahID = thFileEditStore.thFileMapiahID;
+  late final THFile thFile = th2FileEditStore.thFile;
+  late final int thFileMapiahID = th2FileEditStore.thFileMapiahID;
 
-  THFileWidget({required super.key, required this.thFileEditStore});
+  THFileWidget({required super.key, required this.th2FileEditStore});
 
   @override
   Widget build(BuildContext context) {
-    thFileEditStore.updateDataBoundingBox(thFile.boundingBox());
-    thFileEditStore.setCanvasScaleTranslationUndefined(true);
+    th2FileEditStore.updateDataBoundingBox(thFile.boundingBox());
+    th2FileEditStore.setCanvasScaleTranslationUndefined(true);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return Observer(
           builder: (context) {
-            thFileEditStore.updateScreenSize(
+            th2FileEditStore.updateScreenSize(
                 Size(constraints.maxWidth, constraints.maxHeight));
 
-            if (thFileEditStore.canvasScaleTranslationUndefined) {
-              thFileEditStore.zoomShowAll();
+            if (th2FileEditStore.canvasScaleTranslationUndefined) {
+              th2FileEditStore.zoomShowAll();
             }
 
-            thFileEditStore.clearSelectableElements();
+            th2FileEditStore.clearSelectableElements();
 
-            thFileEditStore
+            th2FileEditStore
                 .childrenListLengthChangeTrigger[thFileMapiahID]!.value;
 
             final List<Widget> childWidgets = [];
@@ -50,7 +50,7 @@ class THFileWidget extends StatelessWidget {
                   childWidgets.add(THScrapWidget(
                     key: ValueKey(childMapiahID),
                     scrapMapiahID: childMapiahID,
-                    thFileEditStore: thFileEditStore,
+                    th2FileEditStore: th2FileEditStore,
                     thFileMapiahID: thFileMapiahID,
                   ));
                   break;
@@ -58,7 +58,7 @@ class THFileWidget extends StatelessWidget {
                   childWidgets.add(THPointWidget(
                     key: ValueKey(childMapiahID),
                     pointMapiahID: childMapiahID,
-                    thFileEditStore: thFileEditStore,
+                    th2FileEditStore: th2FileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thFileMapiahID,
                   ));
@@ -67,7 +67,7 @@ class THFileWidget extends StatelessWidget {
                   childWidgets.add(THLineWidget(
                     key: ValueKey(childMapiahID),
                     lineMapiahID: childMapiahID,
-                    thFileEditStore: thFileEditStore,
+                    th2FileEditStore: th2FileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thFileMapiahID,
                   ));
@@ -78,6 +78,7 @@ class THFileWidget extends StatelessWidget {
             }
 
             return GestureDetector(
+              onTapUp: _onTapUp,
               onPanStart: _onPanStart,
               onPanUpdate: _onPanUpdate,
               onPanEnd: _onPanEnd,
@@ -91,15 +92,19 @@ class THFileWidget extends StatelessWidget {
     );
   }
 
+  void _onTapUp(TapUpDetails details) {
+    th2FileEditStore.onTapUp(details);
+  }
+
   void _onPanStart(DragStartDetails details) {
-    thFileEditStore.onPanStart(details);
+    th2FileEditStore.onPanStart(details);
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
-    thFileEditStore.onPanUpdate(details);
+    th2FileEditStore.onPanUpdate(details);
   }
 
   void _onPanEnd(DragEndDetails details) {
-    thFileEditStore.onPanEnd(details);
+    th2FileEditStore.onPanEnd(details);
   }
 }

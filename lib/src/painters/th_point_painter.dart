@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/stores/th_file_edit_store.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
 class THPointPainter extends CustomPainter {
   final Offset position;
   final double pointRadius;
   final Paint pointPaint;
-  final THFileEditStore thFileEditStore;
+  final TH2FileEditStore th2FileEditStore;
 
   THPointPainter({
     super.repaint,
     required this.position,
     required this.pointRadius,
     required this.pointPaint,
-    required this.thFileEditStore,
+    required this.th2FileEditStore,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    thFileEditStore.transformCanvas(canvas);
+    th2FileEditStore.transformCanvas(canvas);
 
     canvas.drawCircle(
       position,

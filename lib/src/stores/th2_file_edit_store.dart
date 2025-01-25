@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
@@ -29,11 +30,11 @@ import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
 
-part 'th_file_edit_store.g.dart';
+part 'th2_file_edit_store.g.dart';
 
-class THFileEditStore = THFileEditStoreBase with _$THFileEditStore;
+class TH2FileEditStore = TH2FileEditStoreBase with _$TH2FileEditStore;
 
-abstract class THFileEditStoreBase with Store {
+abstract class TH2FileEditStoreBase with Store {
   // 'screen' is related to actual pixels on the screen.
   // 'canvas' is the virtual canvas used to draw.
   // 'data' is the actual data to be drawn.
@@ -87,13 +88,16 @@ abstract class THFileEditStoreBase with Store {
       <int, Observable<bool>>{};
 
   @readonly
-  MPSelectedElement? _selectedElement;
+  Map<int, MPSelectedElement> _selectedElements = <int, MPSelectedElement>{};
 
-  @computed
-  bool get isSelectMode => _mode == TH2FileEditMode.select;
+  @readonly
+  bool _isEditMode = false;
 
-  @computed
-  bool get isPanMode => _mode == TH2FileEditMode.pan;
+  @readonly
+  bool _isPanMode = false;
+
+  @readonly
+  bool _isSelectMode = false;
 
   @readonly
   bool _hasUndo = false;
@@ -133,7 +137,7 @@ abstract class THFileEditStoreBase with Store {
 
   late final MPUndoRedoController _undoRedoController;
 
-  Future<THFileEditStoreCreateResult> load() async {
+  Future<TH2FileEditStoreCreateResult> load() async {
     _preParseInitialize();
 
     final THFileParser parser = THFileParser();
@@ -143,25 +147,25 @@ abstract class THFileEditStoreBase with Store {
 
     _postParseInitialize(parsedFile, isSuccessful, errors);
 
-    return THFileEditStoreCreateResult(isSuccessful, errors);
+    return TH2FileEditStoreCreateResult(isSuccessful, errors);
   }
 
-  /// This is a factory constructor that creates a new instance of THFileEditStore
+  /// This is a factory constructor that creates a new instance of TH2FileEditStore
   /// with an empty THFile.
-  static THFileEditStore create(String filename) {
-    final THFileEditStore thFileEditStore = THFileEditStore._create();
+  static TH2FileEditStore create(String filename) {
+    final TH2FileEditStore th2FileEditStore = TH2FileEditStore._create();
     final THFile thFile = THFile();
     thFile.filename = filename;
-    thFileEditStore._basicInitialization(thFile);
-    return thFileEditStore;
+    th2FileEditStore._basicInitialization(thFile);
+    return th2FileEditStore;
   }
 
-  THFileEditStoreBase._create();
+  TH2FileEditStoreBase._create();
 
   void _basicInitialization(THFile file) {
     _thFile = file;
     _thFileMapiahID = _thFile.mapiahID;
-    _undoRedoController = MPUndoRedoController(this as THFileEditStore);
+    _undoRedoController = MPUndoRedoController(this as TH2FileEditStore);
   }
 
   void _preParseInitialize() {
@@ -208,105 +212,145 @@ abstract class THFileEditStoreBase with Store {
     _selectableElements.clear();
   }
 
-  MPSelectableElement? selectableElementContains(Offset screenCoordinates) {
+  List<THElement> selectableElementContains(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+    final List<THElement> clickedElements = <THElement>[];
 
     for (final MPSelectable selectable in _selectableElements.values) {
       if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
-        return selectable as MPSelectableElement;
+        switch (selectable.selected) {
+          case THPoint _:
+          case THLine _:
+            clickedElements.add(selectable.selected as THElement);
+            break;
+        }
       }
     }
 
-    return null;
+    return clickedElements;
+  }
+
+  void onTapUp(TapUpDetails details) {
+    switch (_mode) {
+      case TH2FileEditMode.edit:
+        // _onTapUpEditMode(details);
+        break;
+      case TH2FileEditMode.pan:
+        break;
+      case TH2FileEditMode.select:
+        // _onTapUpSelectMode(details);
+        break;
+    }
   }
 
   void onPanStart(DragStartDetails details) {
-    if (!isSelectMode) {
-      return;
+    switch (_mode) {
+      case TH2FileEditMode.edit:
+        // _onPanStartEditMode(details);
+        break;
+      case TH2FileEditMode.pan:
+        break;
+      case TH2FileEditMode.select:
+        _onPanStartSelectMode(details);
+        break;
     }
+  }
 
-    MPSelectableElement? selectableElement =
+  void _onPanStartSelectMode(DragStartDetails details) {
+    final List<THElement> clickedElements =
         selectableElementContains(details.localPosition);
 
-    if (selectableElement == null) {
+    if (clickedElements.isEmpty) {
       return;
     }
 
-    THElement element = selectableElement.element;
+    bool isFirst = true;
+    for (THElement element in clickedElements) {
+      if ((element is! THPoint) &&
+          (element is! THLine) &&
+          (element is! THLineSegment)) {
+        return;
+      }
 
-    if ((element is! THPoint) &&
-        (element is! THLine) &&
-        (element is! THLineSegment)) {
-      return;
-    }
+      if (isFirst) {
+        panStartCoordinates = offsetScreenToCanvas(details.localPosition);
+        isFirst = false;
+      }
 
-    // bool isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
-    //         .contains(LogicalKeyboardKey.shiftLeft) ||
-    //     HardwareKeyboard.instance.logicalKeysPressed
-    //         .contains(LogicalKeyboardKey.shiftRight);
+      bool isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
+              .contains(LogicalKeyboardKey.shiftLeft) ||
+          HardwareKeyboard.instance.logicalKeysPressed
+              .contains(LogicalKeyboardKey.shiftRight);
 
-    if (element is THLineSegment) {
-      element = element.parent(_thFile) as THLine;
-    }
+      if (!isShiftPressed) {
+        _selectedElements.clear();
+      }
 
-    panStartCoordinates = offsetScreenToCanvas(details.localPosition);
+      if (element is THLineSegment) {
+        element = element.parent(_thFile) as THLine;
+      }
 
-    switch (element) {
-      case THLine _:
-        _setSelectedElement(
-            MPSelectedLine(thFile: _thFile, originalLine: element));
-        break;
-      case THPoint _:
-        _setSelectedElement(MPSelectedPoint(originalPoint: element));
-        break;
+      switch (element) {
+        case THLine _:
+          _addSelectedElement(
+              MPSelectedLine(thFile: _thFile, originalLine: element));
+          break;
+        case THPoint _:
+          _addSelectedElement(MPSelectedPoint(originalPoint: element));
+          break;
+      }
     }
   }
 
   @action
-  void _setSelectedElement(MPSelectedElement selectedElement) {
-    _selectedElement = selectedElement;
+  void _addSelectedElement(MPSelectedElement selectedElement) {
+    _selectedElements[selectedElement.mapiahID] = selectedElement;
   }
 
   @action
-  void clearSelectedElement() {
-    _selectedElement = null;
+  void clearSelectedElements() {
+    _selectedElements.clear();
   }
 
   void onPanUpdate(DragUpdateDetails details) {
     switch (_mode) {
-      case TH2FileEditMode.select:
+      case TH2FileEditMode.edit:
         _onPanUpdateSelectMode(details);
         break;
       case TH2FileEditMode.pan:
         onPanUpdatePanMode(details);
         triggerFileRedraw();
         break;
+      case TH2FileEditMode.select:
+        break;
     }
   }
 
   void _onPanUpdateSelectMode(DragUpdateDetails details) {
-    if ((_selectedElement == null) || !isSelectMode) {
+    if ((_selectedElements.isEmpty) || !_isSelectMode) {
       return;
     }
 
     final Offset localDeltaPositionOnCanvas =
         offsetScreenToCanvas(details.localPosition) - panStartCoordinates;
 
-    switch (_selectedElement!.originalElementClone) {
-      case THPoint _:
-        _updateTHPointPosition(
-          _selectedElement! as MPSelectedPoint,
-          localDeltaPositionOnCanvas,
-        );
-        break;
-      case THLine _:
-        _updateTHLinePosition(
-          _selectedElement! as MPSelectedLine,
-          localDeltaPositionOnCanvas,
-        );
-        break;
-      default:
-        break;
+    for (final MPSelectedElement selectedElement in _selectedElements.values) {
+      switch (selectedElement.originalElementClone) {
+        case THPoint _:
+          _updateTHPointPosition(
+            selectedElement as MPSelectedPoint,
+            localDeltaPositionOnCanvas,
+          );
+          break;
+        case THLine _:
+          _updateTHLinePosition(
+            selectedElement as MPSelectedLine,
+            localDeltaPositionOnCanvas,
+          );
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -370,7 +414,7 @@ abstract class THFileEditStoreBase with Store {
   }
 
   void onPanEnd(DragEndDetails details) {
-    if ((_selectedElement == null) || !isSelectMode) {
+    if ((_selectedElements.isEmpty) || !_isSelectMode) {
       return;
     }
 
@@ -379,32 +423,29 @@ abstract class THFileEditStoreBase with Store {
 
     if (panEndOffset == Offset.zero) {
       // TODO - compare doubles with some epsilon
-      _selectedElement = null;
       panStartCoordinates = Offset.zero;
       return;
     }
 
-    switch (_selectedElement!) {
-      case MPSelectedPoint _:
-        updatePointPositionPerOffset(
-          originalPoint:
-              (_selectedElement! as MPSelectedPoint).originalPointClone,
-          panOffset: panEndOffset,
-        );
-        break;
-      case MPSelectedLine _:
-        updateLinePositionPerOffset(
-          originalLine: (_selectedElement! as MPSelectedLine).originalLineClone,
-          originalLineSegmentsMap: (_selectedElement! as MPSelectedLine)
-              .originalLineSegmentsMapClone,
-          deltaOnCanvas: panEndOffset,
-        );
-        break;
-      default:
-        break;
+    for (final selectedElement in _selectedElements.values) {
+      switch (selectedElement) {
+        case MPSelectedPoint _:
+          updatePointPositionPerOffset(
+            originalPoint: selectedElement.originalPointClone,
+            panOffset: panEndOffset,
+          );
+          break;
+        case MPSelectedLine _:
+          updateLinePositionPerOffset(
+            originalLine: selectedElement.originalLineClone,
+            originalLineSegmentsMap:
+                selectedElement.originalLineSegmentsMapClone,
+            deltaOnCanvas: panEndOffset,
+          );
+          break;
+      }
     }
 
-    _selectedElement = null;
     panStartCoordinates = Offset.zero;
   }
 
@@ -482,6 +523,9 @@ abstract class THFileEditStoreBase with Store {
   @action
   void setTH2FileEditMode(TH2FileEditMode newMode) {
     _mode = newMode;
+    _isEditMode = _mode == TH2FileEditMode.edit;
+    _isPanMode = _mode == TH2FileEditMode.pan;
+    _isSelectMode = _mode == TH2FileEditMode.select;
   }
 
   void onPanUpdatePanMode(DragUpdateDetails details) {
@@ -807,11 +851,11 @@ abstract class THFileEditStoreBase with Store {
   }
 }
 
-class THFileEditStoreCreateResult {
+class TH2FileEditStoreCreateResult {
   final bool isSuccessful;
   final List<String> errors;
 
-  THFileEditStoreCreateResult(
+  TH2FileEditStoreCreateResult(
     this.isSuccessful,
     this.errors,
   );

@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/stores/th_file_edit_store.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
 class MPGeneralStore {
   int _nextMapiahIDForElements = thFirstMapiahIDForElements;
@@ -20,32 +20,32 @@ class MPGeneralStore {
   void reset() {
     _nextMapiahIDForElements = thFirstMapiahIDForElements;
     _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
-    _thFileEditStores.clear();
+    _t2hFileEditStores.clear();
   }
 
-  final HashMap<String, THFileEditStore> _thFileEditStores =
-      HashMap<String, THFileEditStore>();
+  final HashMap<String, TH2FileEditStore> _t2hFileEditStores =
+      HashMap<String, TH2FileEditStore>();
 
-  THFileEditStore getTHFileEditStore(
+  TH2FileEditStore getTH2FileEditStore(
       {required String filename, bool forceNewStore = false}) {
-    if (_thFileEditStores.containsKey(filename)) {
+    if (_t2hFileEditStores.containsKey(filename)) {
       if (forceNewStore) {
-        _thFileEditStores.remove(filename);
+        _t2hFileEditStores.remove(filename);
       } else {
-        return _thFileEditStores[filename]!;
+        return _t2hFileEditStores[filename]!;
       }
     }
 
-    final THFileEditStore createdStore = THFileEditStoreBase.create(filename);
+    final TH2FileEditStore createdStore = TH2FileEditStoreBase.create(filename);
 
-    _thFileEditStores[filename] = createdStore;
+    _t2hFileEditStores[filename] = createdStore;
 
     return createdStore;
   }
 
   void removeFileStore(String filename) {
-    if (_thFileEditStores.containsKey(filename)) {
-      _thFileEditStores.remove(filename);
+    if (_t2hFileEditStores.containsKey(filename)) {
+      _t2hFileEditStores.remove(filename);
     }
   }
 }

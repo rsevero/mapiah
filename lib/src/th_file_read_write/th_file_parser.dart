@@ -65,7 +65,7 @@ import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
-import 'package:mapiah/src/stores/th_file_edit_store.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -104,7 +104,7 @@ class THFileParser {
   bool _runTraceParser = false;
 
   late THFile _parsedTHFile;
-  late THFileEditStore _thFileEditStore;
+  late TH2FileEditStore _th2FileEditStore;
 
   final List<String> _parseErrors = [];
 
@@ -250,7 +250,7 @@ class THFileParser {
 
   void _injectEmptyLine() {
     _currentElement = THEmptyLine(parentMapiahID: _currentParentMapiahID);
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
   }
 
   void _injectMultiLineCommentContent(List<dynamic> element) {
@@ -259,12 +259,12 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       content: content,
     );
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
   }
 
   void _injectEndMultiLineComment() {
     _currentElement = THEndcomment(parentMapiahID: _currentParentMapiahID);
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -272,7 +272,7 @@ class THFileParser {
   void _injectStartMultiLineComment() {
     _currentElement =
         THMultiLineComment(parentMapiahID: _currentParentMapiahID);
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent(_currentElement as THParent);
     _addChildParser(_multiLineCommentContentParser);
   }
@@ -289,7 +289,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       encoding: element[1],
     );
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
   }
 
   void _injectXTherionSetting(List<dynamic> element) {
@@ -306,7 +306,7 @@ class THFileParser {
       name: element[1][0],
       value: element[1][1],
     );
-    _thFileEditStore.addElementWithParent(newElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(newElement, _currentParent);
   }
 
   void _injectPoint(List<dynamic> element) {
@@ -325,7 +325,7 @@ class THFileParser {
       pointDataList: element[1],
       pointType: element[2][0],
     );
-    _thFileEditStore.addElementWithParent(newPoint, _currentParent);
+    _th2FileEditStore.addElementWithParent(newPoint, _currentParent);
 
     _currentElement = newPoint;
     // _parsedOptions.clear();
@@ -380,7 +380,7 @@ class THFileParser {
       controlPoint2: controlPoint2,
       endPoint: endPoint,
     );
-    _thFileEditStore.addElementWithParent(
+    _th2FileEditStore.addElementWithParent(
         newBezierCurveLineSegment, _currentParent);
 
     // _currentElement = newBezierCurveLineSegment;
@@ -405,7 +405,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       id: areaBorderID,
     );
-    _thFileEditStore.addElementWithParent(newElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(newElement, _currentParent);
   }
 
   void _injectStraightLineSegment(List<dynamic> element) {
@@ -431,7 +431,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       pointDataList: endPoint,
     );
-    _thFileEditStore.addElementWithParent(
+    _th2FileEditStore.addElementWithParent(
         newStraightLineSegment, _currentParent);
 
     // _currentElement = newStraightLineSegment;
@@ -453,7 +453,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       thID: element[1],
     );
-    _thFileEditStore.addElementWithParent(newScrap, _currentParent);
+    _th2FileEditStore.addElementWithParent(newScrap, _currentParent);
 
     _currentElement = newScrap;
     setCurrentParent(newScrap);
@@ -465,7 +465,7 @@ class THFileParser {
 
   void _injectEndscrap() {
     _currentElement = THEndscrap(parentMapiahID: _currentParentMapiahID);
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -531,7 +531,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       areaType: element[1][0],
     );
-    _thFileEditStore.addElementWithParent(newArea, _currentParent);
+    _th2FileEditStore.addElementWithParent(newArea, _currentParent);
 
     _currentElement = newArea;
     setCurrentParent(newArea);
@@ -561,7 +561,7 @@ class THFileParser {
 
     final THLine newLine =
         THLine(parentMapiahID: _currentParentMapiahID, lineType: element[1][0]);
-    _thFileEditStore.addElementWithParent(newLine, _currentParent);
+    _th2FileEditStore.addElementWithParent(newLine, _currentParent);
 
     _currentElement = newLine;
     setCurrentParent(newLine);
@@ -582,14 +582,14 @@ class THFileParser {
 
   void _injectEndarea() {
     _currentElement = THEndarea(parentMapiahID: _currentParentMapiahID);
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
 
   void _injectEndline() {
     _currentElement = THEndline(parentMapiahID: _currentParentMapiahID);
-    _thFileEditStore.addElementWithParent(_currentElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -626,7 +626,7 @@ class THFileParser {
           parentMapiahID: _currentParentMapiahID,
           content: element[1],
         );
-        _thFileEditStore.addElementWithParent(newElement, _currentParent);
+        _th2FileEditStore.addElementWithParent(newElement, _currentParent);
         break;
       case 'samelinecomment':
         if ((_currentElement.sameLineComment == null) ||
@@ -642,7 +642,7 @@ class THFileParser {
           parentMapiahID: _currentParentMapiahID,
           value: element,
         );
-        _thFileEditStore.addElementWithParent(newElement, _currentParent);
+        _th2FileEditStore.addElementWithParent(newElement, _currentParent);
     }
   }
 
@@ -1050,7 +1050,7 @@ class THFileParser {
     }
 
     THIDCommandOption(optionParent: _currentHasOptions, thID: _currentSpec[0]);
-    _thFileEditStore.registerElementWithTHID(
+    _th2FileEditStore.registerElementWithTHID(
         _currentHasOptions, _currentSpec[0]);
   }
 
@@ -1629,7 +1629,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       value: element,
     );
-    _thFileEditStore.addElementWithParent(newElement, _currentParent);
+    _th2FileEditStore.addElementWithParent(newElement, _currentParent);
   }
 
   @useResult
@@ -1723,9 +1723,9 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _thFileEditStore = getIt<MPGeneralStore>()
-        .getTHFileEditStore(filename: filePath, forceNewStore: forceNewStore);
-    _parsedTHFile = _thFileEditStore.thFile;
+    _th2FileEditStore = getIt<MPGeneralStore>()
+        .getTH2FileEditStore(filename: filePath, forceNewStore: forceNewStore);
+    _parsedTHFile = _th2FileEditStore.thFile;
     setCurrentParent(_parsedTHFile);
     _parseErrors.clear();
 
