@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 // value will be set to 0 if defined as ‘-’, ‘.’, ‘nan’, ‘NAN’ or ‘NaN’. If the altitude value is
 // prefixed by ‘fix’ (e.g. -value [fix 1300]), this value is used as an absolute altitude.
 // The value can optionally be followed by length units.
-mixin THHasAltitude on THCommandOption, THHasLength {
+mixin THHasAltitudeMixin on THCommandOption, THHasLength {
   late final bool isNan;
   late final bool isFix;
 

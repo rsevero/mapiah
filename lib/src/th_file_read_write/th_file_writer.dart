@@ -3,22 +3,10 @@ import 'dart:convert';
 import 'package:charset/charset.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_area.dart';
-import 'package:mapiah/src/elements/th_area_border_thid.dart';
-import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_comment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_encoding.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/th_multiline_comment_content.dart';
-import 'package:mapiah/src/elements/th_multilinecomment.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/elements/th_xtherion_config.dart';
+import 'package:mapiah/src/elements/th_has_options_mixin.dart';
+import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 
@@ -184,7 +172,7 @@ class THFileWriter {
     return asString;
   }
 
-  String _childrenAsString(THParent thParent) {
+  String _childrenAsString(THParentMixin thParent) {
     String asString = '';
 
     for (final int childMapiahID in thParent.childrenMapiahID) {
@@ -292,7 +280,7 @@ class THFileWriter {
   }
 
   String _linePointOptionsAsString(THLineSegment lineSegment) {
-    final THHasOptions thHasOptions = lineSegment as THHasOptions;
+    final THHasOptionsMixin thHasOptions = lineSegment as THHasOptionsMixin;
     final Iterable<String> optionTypeList = thHasOptions.optionsMap.keys;
     String asString = '';
 

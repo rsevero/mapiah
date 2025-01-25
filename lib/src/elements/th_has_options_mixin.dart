@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:meta/meta.dart';
 
-mixin THHasOptions on THElement {
+mixin THHasOptionsMixin on THElement {
   final LinkedHashMap<String, THCommandOption> _optionsMap =
       LinkedHashMap<String, THCommandOption>();
 

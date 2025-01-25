@@ -1,11 +1,4 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:collection/collection.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
+part of 'th_element.dart';
 
 // Description: Line is a command for drawing a line symbol on the map. Each line symbol
 // is oriented and its visualization may depend on its orientation (e.g. pitch edge ticks). The
@@ -13,9 +6,10 @@ import 'package:mapiah/src/elements/th_has_platype.dart';
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
 class THLine extends THElement
-    with THHasOptions, THParent
-    implements THHasPLAType {
+    with THHasOptionsMixin, THParentMixin
+    implements THHasPLATypeMixin {
   late final String _lineType;
+  Rect? _boundingBox;
 
   static final _lineTypes = <String>{
     'abyss-entrance',
@@ -167,6 +161,63 @@ class THLine extends THElement
   @override
   bool isSameClass(Object object) {
     return object is THLine;
+  }
+
+  Rect getBoundingBox(THFile thFile) {
+    _boundingBox ??= _calculateBoundingBox(thFile);
+
+    return _boundingBox!;
+  }
+
+  Rect _calculateBoundingBox(THFile thFile) {
+    if (childrenMapiahID.isEmpty) {
+      return Rect.zero;
+    }
+
+    double minX = 0.0;
+    double minY = 0.0;
+    double maxX = 0.0;
+    double maxY = 0.0;
+
+    bool isFirst = true;
+    Offset startPoint = Offset.zero;
+
+    for (final int childMapiahID in childrenMapiahID) {
+      final THElement child = thFile.elementByMapiahID(childMapiahID);
+
+      if (child is! THLineSegment) {
+        continue;
+      }
+
+      if (isFirst) {
+        startPoint = child.endPoint.coordinates;
+      }
+
+      final Rect childBoundingBox = child.getBoundingBox(startPoint);
+
+      if (isFirst) {
+        minX = childBoundingBox.left;
+        minY = childBoundingBox.top;
+        maxX = childBoundingBox.right;
+        maxY = childBoundingBox.bottom;
+        isFirst = false;
+        continue;
+      }
+
+      if (childBoundingBox.left < minX) {
+        minX = childBoundingBox.left;
+      } else if (childBoundingBox.right > maxX) {
+        maxX = childBoundingBox.right;
+      }
+
+      if (childBoundingBox.top < minY) {
+        minY = childBoundingBox.top;
+      } else if (childBoundingBox.bottom > maxY) {
+        maxY = childBoundingBox.bottom;
+      }
+    }
+
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
   String get lineType {

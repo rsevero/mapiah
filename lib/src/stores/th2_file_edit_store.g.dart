@@ -9,6 +9,28 @@ part of 'th2_file_edit_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
+  Computed<bool>? _$isEditModeComputed;
+
+  @override
+  bool get isEditMode =>
+      (_$isEditModeComputed ??= Computed<bool>(() => super.isEditMode,
+              name: 'TH2FileEditStoreBase.isEditMode'))
+          .value;
+  Computed<bool>? _$isPanModeComputed;
+
+  @override
+  bool get isPanMode =>
+      (_$isPanModeComputed ??= Computed<bool>(() => super.isPanMode,
+              name: 'TH2FileEditStoreBase.isPanMode'))
+          .value;
+  Computed<bool>? _$isSelectModeComputed;
+
+  @override
+  bool get isSelectMode =>
+      (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
+              name: 'TH2FileEditStoreBase.isSelectMode'))
+          .value;
+
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
 
@@ -222,60 +244,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
-  late final _$_isEditModeAtom =
-      Atom(name: 'TH2FileEditStoreBase._isEditMode', context: context);
-
-  bool get isEditMode {
-    _$_isEditModeAtom.reportRead();
-    return super._isEditMode;
-  }
-
-  @override
-  bool get _isEditMode => isEditMode;
-
-  @override
-  set _isEditMode(bool value) {
-    _$_isEditModeAtom.reportWrite(value, super._isEditMode, () {
-      super._isEditMode = value;
-    });
-  }
-
-  late final _$_isPanModeAtom =
-      Atom(name: 'TH2FileEditStoreBase._isPanMode', context: context);
-
-  bool get isPanMode {
-    _$_isPanModeAtom.reportRead();
-    return super._isPanMode;
-  }
-
-  @override
-  bool get _isPanMode => isPanMode;
-
-  @override
-  set _isPanMode(bool value) {
-    _$_isPanModeAtom.reportWrite(value, super._isPanMode, () {
-      super._isPanMode = value;
-    });
-  }
-
-  late final _$_isSelectModeAtom =
-      Atom(name: 'TH2FileEditStoreBase._isSelectMode', context: context);
-
-  bool get isSelectMode {
-    _$_isSelectModeAtom.reportRead();
-    return super._isSelectMode;
-  }
-
-  @override
-  bool get _isSelectMode => isSelectMode;
-
-  @override
-  set _isSelectMode(bool value) {
-    _$_isSelectModeAtom.reportWrite(value, super._isSelectMode, () {
-      super._isSelectMode = value;
-    });
-  }
-
   late final _$_hasUndoAtom =
       Atom(name: 'TH2FileEditStoreBase._hasUndo', context: context);
 
@@ -367,6 +335,28 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_stateAtom =
+      Atom(name: 'TH2FileEditStoreBase._state', context: context);
+
+  MPTH2FileEditState get state {
+    _$_stateAtom.reportRead();
+    return super._state;
+  }
+
+  @override
+  MPTH2FileEditState get _state => state;
+
+  bool __stateIsInitialized = false;
+
+  @override
+  set _state(MPTH2FileEditState value) {
+    _$_stateAtom.reportWrite(value, __stateIsInitialized ? super._state : null,
+        () {
+      super._state = value;
+      __stateIsInitialized = true;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -376,6 +366,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.setZoomButtonsHovered');
     try {
       return super.setZoomButtonsHovered(isHovered);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectedElements(List<THElement> clickedElements) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.setSelectedElements');
+    try {
+      return super.setSelectedElements(clickedElements);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -404,6 +405,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
+  void setNewState(MPTH2FileEditStateType type) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.setNewState');
+    try {
+      return super.setNewState(type);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _updateScreenSize(Size newSize) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase._updateScreenSize');
@@ -426,11 +438,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void _onPanUpdatePanMode(DragUpdateDetails details) {
+  void onPanUpdatePanMode(DragUpdateDetails details) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase._onPanUpdatePanMode');
+        name: 'TH2FileEditStoreBase.onPanUpdatePanMode');
     try {
-      return super._onPanUpdatePanMode(details);
+      return super.onPanUpdatePanMode(details);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -536,7 +548,7 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void addElementWithParent(THElement element, THParent parent) {
+  void addElementWithParent(THElement element, THParentMixin parent) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.addElementWithParent');
     try {
@@ -593,7 +605,9 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   @override
   String toString() {
     return '''
-
+isEditMode: ${isEditMode},
+isPanMode: ${isPanMode},
+isSelectMode: ${isSelectMode}
     ''';
   }
 }

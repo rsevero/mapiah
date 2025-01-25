@@ -1,16 +1,8 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:collection/collection.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+part of 'th_element.dart';
 
 class THArea extends THElement
-    with THHasOptions, THParent
-    implements THHasPLAType {
+    with THHasOptionsMixin, THParentMixin
+    implements THHasPLATypeMixin {
   late final String _areaType;
 
   static final _areaTypes = <String>{

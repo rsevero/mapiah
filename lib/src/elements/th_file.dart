@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_id_command_option.dart';
-import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+import 'package:mapiah/src/elements/th_has_options_mixin.dart';
+import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
@@ -21,7 +18,7 @@ import 'package:mapiah/src/stores/mp_general_store.dart';
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile with THParent {
+class THFile with THParentMixin {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -33,11 +30,7 @@ class THFile with THParent {
 
   String encoding = thDefaultEncoding;
 
-  double _minX = 0.0;
-  double _minY = 0.0;
-  double _maxX = 0.0;
-  double _maxY = 0.0;
-  bool _isFirst = true;
+  Rect? _boundingBox;
 
   late final int _mapiahID;
 
@@ -228,46 +221,54 @@ class THFile with THParent {
     unregisterElementTHIDByMapiahID(_mapiahIDByTHID[thID]!);
   }
 
-  void _comparePoint(double x, double y) {
-    if (_isFirst) {
-      _minX = x;
-      _minY = y;
-      _maxX = x;
-      _maxY = y;
-      _isFirst = false;
-    } else {
-      if (x < _minX) {
-        _minX = x;
-      } else if (x > _maxX) {
-        _maxX = x;
-      }
-      if (y < _minY) {
-        _minY = y;
-      } else if (y > _maxY) {
-        _maxY = y;
-      }
-    }
+  Rect getBoundingBox() {
+    _boundingBox ??= _calculateBoundingBox();
+    return _boundingBox!;
   }
 
-  Rect boundingBox() {
-    _isFirst = true;
+  Rect _calculateBoundingBox() {
+    double minX = 0.0;
+    double minY = 0.0;
+    double maxX = 0.0;
+    double maxY = 0.0;
+    bool isFirst = true;
+
     for (final THElement element in _elementByMapiahID.values) {
+      late final Rect childBoundingBox;
       switch (element) {
         case THPoint _:
-          _comparePoint(element.x, element.y);
+          childBoundingBox = element.getBoundingBox();
           break;
-        case THStraightLineSegment _:
-          _comparePoint(element.x, element.y);
+        case THLine _:
+          childBoundingBox = element.getBoundingBox(this);
           break;
-        case THBezierCurveLineSegment _:
-          _comparePoint(element.x, element.y);
-          _comparePoint(element.controlPoint1X, element.controlPoint1Y);
-          _comparePoint(element.controlPoint2X, element.controlPoint2Y);
-          break;
+        default:
+          continue;
+      }
+
+      if (isFirst) {
+        minX = childBoundingBox.left;
+        minY = childBoundingBox.top;
+        maxX = childBoundingBox.right;
+        maxY = childBoundingBox.bottom;
+        isFirst = false;
+        continue;
+      }
+
+      if (childBoundingBox.left < minX) {
+        minX = childBoundingBox.left;
+      } else if (childBoundingBox.right > maxX) {
+        maxX = childBoundingBox.right;
+      }
+
+      if (childBoundingBox.top < minY) {
+        minY = childBoundingBox.top;
+      } else if (childBoundingBox.bottom > maxY) {
+        maxY = childBoundingBox.bottom;
       }
     }
 
-    return Rect.fromLTRB(_minX, _minY, _maxX, _maxY);
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
   /// Updates the thID of a given element of the THFile.
@@ -339,6 +340,7 @@ class THFile with THParent {
     }
 
     _elementByMapiahID[mapiahID] = newElement;
+    _boundingBox = null;
 
     if (newElement is THHasTHID) {
       final String oldTHID = (oldElement as THHasTHID).thID;
@@ -358,11 +360,11 @@ class THFile with THParent {
   }
 
   bool hasOption(THElement element, String optionType) {
-    if (THElement is! THHasOptions) {
+    if (THElement is! THHasOptionsMixin) {
       return false;
     }
 
-    return (element as THHasOptions).hasOption(optionType);
+    return (element as THHasOptionsMixin).hasOption(optionType);
   }
 
   void addElement(THElement element) {
@@ -373,7 +375,8 @@ class THFile with THParent {
     } else if (hasOption(element, 'id')) {
       registerElementWithTHID(
         element,
-        ((element as THHasOptions).optionByType('id')! as THIDCommandOption)
+        ((element as THHasOptionsMixin).optionByType('id')!
+                as THIDCommandOption)
             .thID,
       );
     }
@@ -389,9 +392,9 @@ class THFile with THParent {
   }
 
   void deleteElement(THElement element) {
-    if (element is THParent) {
+    if (element is THParentMixin) {
       final List<int> childrenMapiahIDsCopy =
-          (element as THParent).childrenMapiahID.toList();
+          (element as THParentMixin).childrenMapiahID.toList();
       for (final int childMapiahID in childrenMapiahIDsCopy) {
         deleteElement(elementByMapiahID(childMapiahID));
       }
@@ -435,7 +438,7 @@ class THFile with THParent {
     _thIDByMapiahID.clear();
     filename = '';
     encoding = thDefaultEncoding;
-    _isFirst = true;
+    _boundingBox = null;
   }
 
   bool isSameClass(Object object) {

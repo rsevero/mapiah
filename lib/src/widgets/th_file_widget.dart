@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
@@ -20,7 +17,7 @@ class THFileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    th2FileEditStore.updateDataBoundingBox(thFile.boundingBox());
+    th2FileEditStore.updateDataBoundingBox(thFile.getBoundingBox());
     th2FileEditStore.setCanvasScaleTranslationUndefined(true);
 
     return LayoutBuilder(

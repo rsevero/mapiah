@@ -1,9 +1,6 @@
-import "dart:convert";
+part of 'th_element.dart';
 
-import 'package:collection/collection.dart';
-import "package:mapiah/src/elements/th_element.dart";
-
-class THMultiLineComment extends THElement with THParent {
+class THMultiLineComment extends THElement with THParentMixin {
   THMultiLineComment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,

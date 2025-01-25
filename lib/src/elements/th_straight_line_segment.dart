@@ -1,15 +1,7 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:collection/collection.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
+part of 'th_element.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
-class THStraightLineSegment extends THLineSegment with THHasOptions {
+class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
   THStraightLineSegment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,
@@ -108,5 +100,13 @@ class THStraightLineSegment extends THLineSegment with THHasOptions {
   @override
   bool isSameClass(Object object) {
     return object is THStraightLineSegment;
+  }
+
+  @override
+  Rect _calculateBoundingBox(Offset startPoint) {
+    return Rect.fromPoints(
+      startPoint,
+      endPoint.coordinates,
+    );
   }
 }

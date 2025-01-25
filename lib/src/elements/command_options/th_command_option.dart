@@ -35,7 +35,7 @@ import 'package:mapiah/src/elements/command_options/th_text_command_option.dart'
 import 'package:mapiah/src/elements/command_options/th_title_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_unrecognized_command_option.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
+import 'package:mapiah/src/elements/th_has_options_mixin.dart';
 
 enum THCommandOptionType {
   altitude,
@@ -82,7 +82,7 @@ abstract class THCommandOption {
   });
 
   THCommandOption({
-    required THHasOptions optionParent,
+    required THHasOptionsMixin optionParent,
   }) : parentMapiahID = optionParent.mapiahID {
     optionParent.addUpdateOption(this);
   }
@@ -177,8 +177,8 @@ abstract class THCommandOption {
     }
   }
 
-  THHasOptions optionParent(THFile thFile) =>
-      thFile.elementByMapiahID(parentMapiahID) as THHasOptions;
+  THHasOptionsMixin optionParent(THFile thFile) =>
+      thFile.elementByMapiahID(parentMapiahID) as THHasOptionsMixin;
 
   String specToFile();
 }

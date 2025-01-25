@@ -4,9 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/elements/th_area.dart';
-import 'package:mapiah/src/elements/th_area_border_thid.dart';
-import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/command_options/th_altitude_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_altitude_value_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_author_command_option.dart';
@@ -40,25 +37,10 @@ import 'package:mapiah/src/elements/command_options/th_stations_command_option.d
 import 'package:mapiah/src/elements/command_options/th_subtype_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_text_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_title_command_option.dart';
-import 'package:mapiah/src/elements/th_comment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_empty_line.dart';
-import 'package:mapiah/src/elements/th_encoding.dart';
-import 'package:mapiah/src/elements/th_endarea.dart';
-import 'package:mapiah/src/elements/th_endcomment.dart';
-import 'package:mapiah/src/elements/th_endline.dart';
-import 'package:mapiah/src/elements/th_endscrap.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/th_multiline_comment_content.dart';
-import 'package:mapiah/src/elements/th_multilinecomment.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/elements/th_unrecognized_command.dart';
-import 'package:mapiah/src/elements/th_xtherion_config.dart';
+import 'package:mapiah/src/elements/th_has_options_mixin.dart';
+import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
@@ -93,10 +75,10 @@ class THFileParser {
   late List<String> _splittedContents;
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
-  late THParent _currentParent;
+  late THParentMixin _currentParent;
   late int _currentParentMapiahID;
   late THElement _currentElement;
-  late THHasOptions _currentHasOptions;
+  late THHasOptionsMixin _currentHasOptions;
   THLineSegment? _lastLineSegment;
   late List<dynamic> _currentOptions;
   late List<dynamic> _currentSpec;
@@ -273,7 +255,7 @@ class THFileParser {
     _currentElement =
         THMultiLineComment(parentMapiahID: _currentParentMapiahID);
     _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
-    setCurrentParent(_currentElement as THParent);
+    setCurrentParent(_currentElement as THParentMixin);
     _addChildParser(_multiLineCommentContentParser);
   }
 
@@ -514,7 +496,7 @@ class THFileParser {
     }
 
     /// Reverting the change made by _lineSegmentRegularOptions().
-    _currentHasOptions = _currentElement as THHasOptions;
+    _currentHasOptions = _currentElement as THHasOptionsMixin;
   }
 
   void _injectArea(List<dynamic> element) {
@@ -670,7 +652,7 @@ class THFileParser {
       // _currentSpec we create a list with a null inside to represent the
       // null value we received from the parser.
       _currentSpec = _currentOptions[1] ?? [null];
-      _currentHasOptions = _currentElement as THHasOptions;
+      _currentHasOptions = _currentElement as THHasOptionsMixin;
       // _parsedOptions.add(optionType);
 
       try {
@@ -744,11 +726,11 @@ class THFileParser {
     /// Changing _currentHasOptions to the line segment that is the parent of
     /// of the linepoint option. This change will be reverted by
     /// _injectLineSegmentOption().
-    _currentHasOptions = _lastLineSegment as THHasOptions;
+    _currentHasOptions = _lastLineSegment as THHasOptionsMixin;
   }
 
   void _optionParentAsCurrentElement() {
-    _currentHasOptions = _currentElement as THHasOptions;
+    _currentHasOptions = _currentElement as THHasOptionsMixin;
   }
 
   bool _lineSegmentRegularOptions(String optionType) {
@@ -843,7 +825,7 @@ class THFileParser {
     return optionIdentified;
   }
 
-  void setCurrentParent(THParent parent) {
+  void setCurrentParent(THParentMixin parent) {
     _currentParent = parent;
     _currentParentMapiahID = parent.mapiahID;
   }

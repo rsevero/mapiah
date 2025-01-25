@@ -1,26 +1,42 @@
+library;
+
+import 'dart:collection';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/elements/th_area.dart';
-import 'package:mapiah/src/elements/th_area_border_thid.dart';
-import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_comment.dart';
-import 'package:mapiah/src/elements/th_empty_line.dart';
-import 'package:mapiah/src/elements/th_encoding.dart';
-import 'package:mapiah/src/elements/th_endarea.dart';
-import 'package:mapiah/src/elements/th_endcomment.dart';
-import 'package:mapiah/src/elements/th_endline.dart';
-import 'package:mapiah/src/elements/th_endscrap.dart';
+import 'package:mapiah/src/auxiliary/th_point_interface.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_multiline_comment_content.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/elements/th_scrap.dart';
-import 'package:mapiah/src/elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/elements/th_unrecognized_command.dart';
-import 'package:mapiah/src/elements/th_xtherion_config.dart';
+import 'package:mapiah/src/elements/th_has_id.dart';
+import 'package:mapiah/src/elements/th_has_options_mixin.dart';
+import 'package:mapiah/src/elements/th_has_platype_mixin.dart';
+import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
+
+part 'th_area_border_thid.dart';
+part 'th_area.dart';
+part 'th_bezier_curve_line_segment.dart';
+part 'th_comment.dart';
+part 'th_empty_line.dart';
+part 'th_encoding.dart';
+part 'th_endarea.dart';
+part 'th_endcomment.dart';
+part 'th_endline.dart';
+part 'th_endscrap.dart';
+part 'th_line_segment.dart';
+part 'th_line.dart';
+part 'th_multiline_comment_content.dart';
+part 'th_multilinecomment.dart';
+part 'th_point.dart';
+part 'th_scrap.dart';
+part 'th_straight_line_segment.dart';
+part 'th_unrecognized_command.dart';
+part 'th_xtherion_config.dart';
 
 enum THElementType {
   areaBorderTHID,
@@ -66,12 +82,12 @@ abstract class THElement {
   THElement.addToParent({required this.parentMapiahID, this.sameLineComment})
       : _mapiahID = getIt<MPGeneralStore>().nextMapiahIDForElements();
 
-  THParent parent(THFile thFile) {
+  THParentMixin parent(THFile thFile) {
     if (parentMapiahID < 0) {
       return thFile;
     }
 
-    return thFile.elementByMapiahID(parentMapiahID) as THParent;
+    return thFile.elementByMapiahID(parentMapiahID) as THParentMixin;
   }
 
   THElementType get elementType;
@@ -133,28 +149,4 @@ abstract class THElement {
   int get mapiahID => _mapiahID;
 
   bool isSameClass(Object object);
-}
-
-/// Parent elements.
-///
-/// Mixin that provides parenting capabilities.
-mixin THParent {
-  // Here are registered all children mapiah IDs.
-  final List<int> childrenMapiahID = <int>[];
-
-  void addElementToParent(THElement element) {
-    childrenMapiahID.add(element.mapiahID);
-  }
-
-  void deleteElementFromParent(THFile thFile, THElement element) {
-    if (!childrenMapiahID.remove(element.mapiahID)) {
-      throw THCustomException("'$element' not found.");
-    }
-
-    if (thFile.hasTHIDByElement(element)) {
-      thFile.unregisterElementTHIDByElement(element);
-    }
-  }
-
-  int get mapiahID;
 }

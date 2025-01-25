@@ -1,6 +1,4 @@
-import "dart:convert";
-
-import "package:mapiah/src/elements/th_element.dart";
+part of 'th_element.dart';
 
 class THEndcomment extends THElement {
   THEndcomment.forCWJM({

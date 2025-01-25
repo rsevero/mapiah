@@ -5,11 +5,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_line.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/th_point.dart';
-import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 

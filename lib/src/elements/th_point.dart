@@ -1,13 +1,4 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:collection/collection.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/auxiliary/th_point_interface.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
+part of 'th_element.dart';
 
 // Description: Point is a command for drawing a point map symbol.
 // Syntax: point <x> <y> <type> [OPTIONS]
@@ -38,10 +29,11 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
 class THPoint extends THElement
-    with THHasOptions
-    implements THHasPLAType, THPointInterface {
+    with THHasOptionsMixin
+    implements THHasPLATypeMixin, THPointInterface {
   final THPositionPart _position;
   final String _pointType;
+  Rect? _boundingBox;
 
   static final _pointTypes = <String>{
     'air-draught',
@@ -279,6 +271,20 @@ class THPoint extends THElement
   @override
   bool isSameClass(Object object) {
     return object is THPoint;
+  }
+
+  Rect getBoundingBox() {
+    _boundingBox ??= _calculateBoundingBox();
+
+    return _boundingBox!;
+  }
+
+  Rect _calculateBoundingBox() {
+    return Rect.fromCenter(
+      center: position.coordinates,
+      width: thSizePointBoundingBox,
+      height: thSizePointBoundingBox,
+    );
   }
 
   String get pointType {

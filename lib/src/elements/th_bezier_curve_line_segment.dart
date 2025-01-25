@@ -1,16 +1,8 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:collection/collection.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_line_segment.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
+part of 'th_element.dart';
 
 // [[LINE DATA] specify the coordinates of a Bézier curve arc:
 // <c1x> <c1y> <c2x> <c2y> <x> <y>, where c indicates the control point.
-class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
+class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   late final THPositionPart controlPoint1;
   late final THPositionPart controlPoint2;
 
@@ -165,5 +157,37 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptions {
 
   set controlPoint2DecimalPositions(int decimalPositions) {
     controlPoint2.decimalPositions = decimalPositions;
+  }
+
+  @override
+  Rect _calculateBoundingBox(Offset startPoint) {
+    final List<Offset> points = [
+      startPoint,
+      controlPoint1.coordinates,
+      controlPoint2.coordinates,
+      endPoint.coordinates,
+    ];
+
+    double minX = double.infinity;
+    double maxX = double.negativeInfinity;
+    double minY = double.infinity;
+    double maxY = double.negativeInfinity;
+
+    for (final Offset point in points) {
+      if (point.dx < minX) {
+        minX = point.dx;
+      }
+      if (point.dx > maxX) {
+        maxX = point.dx;
+      }
+      if (point.dy < minY) {
+        minY = point.dy;
+      }
+      if (point.dy > maxY) {
+        maxY = point.dy;
+      }
+    }
+
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 }

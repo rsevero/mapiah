@@ -1,17 +1,10 @@
-import 'dart:collection';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/auxiliary/th_point_interface.dart';
-import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_straight_line_segment.dart';
+part of 'th_element.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 abstract class THLineSegment extends THElement
-    implements THPointInterface, THHasOptions {
+    implements THPointInterface, THHasOptionsMixin {
   late final THPositionPart endPoint;
+  Rect? _boundingBox;
 
   THLineSegment.forCWJM({
     required super.mapiahID,
@@ -74,4 +67,12 @@ abstract class THLineSegment extends THElement
     LinkedHashMap<String, THCommandOption>? optionsMap,
     bool makeSameLineCommentNull = false,
   });
+
+  Rect getBoundingBox(Offset startPoint) {
+    _boundingBox ??= _calculateBoundingBox(startPoint);
+
+    return _boundingBox!;
+  }
+
+  Rect _calculateBoundingBox(Offset startPoint);
 }

@@ -37,7 +37,7 @@ const double thMinimumSizeForDrawing = 10.0;
 const int thFirstMapiahIDForTHFiles = -1;
 const int thFirstMapiahIDForElements = 1;
 
-const int thDecimalPositionsForOffsetMapper = 7;
+const double thSizePointBoundingBox = 2.0;
 
 const String thDefaultLengthUnit = 'm';
 

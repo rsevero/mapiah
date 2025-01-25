@@ -5,7 +5,6 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
@@ -74,8 +73,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           ),
           body: FutureBuilder<TH2FileEditStoreCreateResult>(
             future: th2FileEditStoreCreateResult,
-            builder: (BuildContext context,
-                AsyncSnapshot<TH2FileEditStoreCreateResult> snapshot) {
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<TH2FileEditStoreCreateResult> snapshot,
+            ) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: Text(AppLocalizations.of(context)
@@ -87,6 +88,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 );
               } else if (snapshot.hasData) {
                 final List<String> errorMessages = snapshot.data!.errors;
+
                 if (snapshot.data!.isSuccessful) {
                   return Center(
                     child: Stack(
@@ -204,9 +206,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             children: [
               FloatingActionButton(
                 heroTag: 'pan_tool',
-                onPressed: () {
-                  th2FileEditStore.setTH2FileEditMode(TH2FileEditMode.pan);
-                },
+                onPressed: _onPanToolPressed,
                 tooltip: AppLocalizations.of(context).th2FileEditPagePanTool,
                 child: Image.asset(
                   'assets/icons/pan-tool.png',
@@ -220,9 +220,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               SizedBox(height: 8),
               FloatingActionButton(
                 heroTag: 'select_tool',
-                onPressed: () {
-                  th2FileEditStore.setTH2FileEditMode(TH2FileEditMode.select);
-                },
+                onPressed: _onSelectToolPressed,
                 tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
                 child: Image.asset(
                   'assets/icons/select-tool.png',
@@ -240,6 +238,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         );
       },
     );
+  }
+
+  void _onPanToolPressed() {
+    th2FileEditStore.onPanToolPressed();
+  }
+
+  void _onSelectToolPressed() {
+    th2FileEditStore.onSelectToolPressed();
   }
 
   Widget _zoomButtonWithOptions() {

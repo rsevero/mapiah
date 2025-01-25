@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/th_point_paint.dart';
-import 'package:mapiah/src/elements/th_point.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';

@@ -1,7 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:test/test.dart';

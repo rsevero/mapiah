@@ -1,12 +1,4 @@
-import "dart:collection";
-import "dart:convert";
-
-import 'package:collection/collection.dart';
-import "package:mapiah/src/elements/command_options/th_command_option.dart";
-import "package:mapiah/src/elements/th_element.dart";
-import "package:mapiah/src/elements/th_file.dart";
-import "package:mapiah/src/elements/th_has_id.dart";
-import "package:mapiah/src/elements/th_has_options.dart";
+part of 'th_element.dart';
 
 // Description: Scrap is a piece of 2D map, which doesn’t contain overlapping passages
 // (i.e. all the passages may be drawn on the paper without overlapping). For small and
@@ -28,7 +20,7 @@ import "package:mapiah/src/elements/th_has_options.dart";
 // scrap doesn’t contain at least two survey stations with the -name reference, you have to
 // use the -scale option for calibrating the scrap. (This is usual for cross sections.)
 class THScrap extends THElement
-    with THHasOptions, THParent
+    with THHasOptionsMixin, THParentMixin
     implements THHasTHID {
   late String _thID;
 

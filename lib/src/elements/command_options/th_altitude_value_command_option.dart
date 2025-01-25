@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_has_length.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/th_has_altitude.dart';
+import 'package:mapiah/src/elements/th_has_altitude_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 // altitude: the value specified is the altitude difference from the nearest station. The
@@ -11,7 +11,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // prefixed by ‘fix’ (e.g. -value [fix 1300]), this value is used as an absolute altitude.
 // The value can optionally be followed by length units.
 class THAltitudeValueCommandOption extends THCommandOption
-    with THHasLength, THHasAltitude {
+    with THHasLength, THHasAltitudeMixin {
   THAltitudeValueCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,

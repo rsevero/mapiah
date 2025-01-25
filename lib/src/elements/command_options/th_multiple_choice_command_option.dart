@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options.dart';
-import 'package:mapiah/src/elements/th_has_platype.dart';
+import 'package:mapiah/src/elements/th_has_options_mixin.dart';
+import 'package:mapiah/src/elements/th_has_platype_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THMultipleChoiceCommandOption extends THCommandOption {
@@ -529,7 +529,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     return choice;
   }
 
-  static bool hasOptionType(THHasOptions optionParent, String optionType) {
+  static bool hasOptionType(THHasOptionsMixin optionParent, String optionType) {
     final String optionParentElementType =
         getParentTypeNameForChecking(optionParent.elementType.name);
 
@@ -541,8 +541,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
       return false;
     }
 
-    if (optionParent is THHasPLAType) {
-      final String plaType = (optionParent as THHasPLAType).plaType;
+    if (optionParent is THHasPLATypeMixin) {
+      final String plaType = (optionParent as THHasPLATypeMixin).plaType;
 
       final Set<String> plaTypesSupported = _supportedOptions[
               optionParentElementType]![optionType]!['plaTypesSupported']
