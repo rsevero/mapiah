@@ -228,10 +228,10 @@ abstract class THFileEditStoreBase with Store {
     switch (element) {
       case THLine _:
         _setSelectedElement(
-            MPSelectedLine(thFile: _thFile, modifiedLine: element));
+            MPSelectedLine(thFile: _thFile, originalLine: element));
         break;
       case THPoint _:
-        _setSelectedElement(MPSelectedPoint(modifiedPoint: element));
+        _setSelectedElement(MPSelectedPoint(originalPoint: element));
         break;
     }
   }
@@ -266,13 +266,13 @@ abstract class THFileEditStoreBase with Store {
     final Offset localDeltaPositionOnCanvas =
         offsetScreenToCanvas(details.localPosition) - panStartCoordinates;
 
-    switch (_selectedElement!.originalElement) {
+    switch (_selectedElement!.originalElementClone) {
       case THPoint _:
-        final THPoint currentPoint =
-            _selectedElement!.originalElement as THPoint;
-        final THPoint modifiedPoint = currentPoint.copyWith(
-            position: currentPoint.position.copyWith(
-                coordinates: currentPoint.position.coordinates +
+        final THPoint originalPoint =
+            _selectedElement!.originalElementClone as THPoint;
+        final THPoint modifiedPoint = originalPoint.copyWith(
+            position: originalPoint.position.copyWith(
+                coordinates: originalPoint.position.coordinates +
                     localDeltaPositionOnCanvas));
         substituteElement(modifiedPoint);
         break;
@@ -287,7 +287,7 @@ abstract class THFileEditStoreBase with Store {
 
   void _updateTHLinePosition(
       MPSelectedLine selectedLine, Offset localDeltaPositionOnCanvas) {
-    final THLine line = selectedLine.modifiedLine;
+    final THLine line = selectedLine.originalLineClone;
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
 
     for (final int lineChildMapiahID in lineChildrenMapiahIDs) {
@@ -342,15 +342,16 @@ abstract class THFileEditStoreBase with Store {
     switch (_selectedElement!) {
       case MPSelectedPoint _:
         updatePointPosition(
-          originalPoint: (_selectedElement! as MPSelectedPoint).originalPoint,
-          modifiedPoint: (_selectedElement! as MPSelectedPoint).modifiedPoint,
+          originalPoint:
+              (_selectedElement! as MPSelectedPoint).originalPointClone,
+          panOffset: panEndOffset,
         );
         break;
       case MPSelectedLine _:
         updateLinePositionPerOffset(
-          originalLine: (_selectedElement! as MPSelectedLine).originalLine,
-          originalLineSegmentsMap:
-              (_selectedElement! as MPSelectedLine).originalLineSegmentsMap,
+          originalLine: (_selectedElement! as MPSelectedLine).originalLineClone,
+          originalLineSegmentsMap: (_selectedElement! as MPSelectedLine)
+              .originalLineSegmentsMapClone,
           deltaOnCanvas: panEndOffset,
         );
         break;
@@ -663,12 +664,12 @@ abstract class THFileEditStoreBase with Store {
 
   void updatePointPosition({
     required THPoint originalPoint,
-    required THPoint modifiedPoint,
+    required Offset panOffset,
   }) {
     final MPMovePointCommand command = MPMovePointCommand(
       pointMapiahID: originalPoint.mapiahID,
       originalCoordinates: originalPoint.position.coordinates,
-      modifiedCoordinates: modifiedPoint.position.coordinates,
+      modifiedCoordinates: originalPoint.position.coordinates + panOffset,
     );
     _undoRedoController.execute(command);
   }

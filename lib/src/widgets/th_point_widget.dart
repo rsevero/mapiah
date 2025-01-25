@@ -9,7 +9,6 @@ import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THPointWidget extends StatelessWidget {
-  final THPoint point;
   final int pointMapiahID;
   final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
@@ -21,19 +20,20 @@ class THPointWidget extends StatelessWidget {
     required this.thFileEditStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
-  }) : point =
-            thFileEditStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
+  });
 
   @override
   Widget build(BuildContext context) {
-    thFileEditStore.addSelectableElement(MPSelectableElement(
-      element: point,
-      position: point.position.coordinates,
-    ));
-
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
+          final THPoint point = thFileEditStore.thFile
+              .elementByMapiahID(pointMapiahID) as THPoint;
+          thFileEditStore.addSelectableElement(MPSelectableElement(
+            element: point,
+            position: point.position.coordinates,
+          ));
+
           thFileEditStore.elementRedrawTrigger[thFileMapiahID]!.value;
           thFileEditStore.elementRedrawTrigger[thScrapMapiahID]!.value;
           thFileEditStore.elementRedrawTrigger[pointMapiahID]!.value;

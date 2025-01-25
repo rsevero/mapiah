@@ -8,13 +8,12 @@ import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 
 class MPSelectedLine extends MPSelectedElement {
-  THLine modifiedLine;
-  late THLine originalLine;
-  final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
+  late THLine originalLineClone;
+  final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
       LinkedHashMap<int, THLineSegment>();
 
-  MPSelectedLine({required THFile thFile, required this.modifiedLine}) {
-    final Iterable<int> lineSegmentMapiahIDs = modifiedLine.childrenMapiahID;
+  MPSelectedLine({required THFile thFile, required THLine originalLine}) {
+    final Iterable<int> lineSegmentMapiahIDs = originalLine.childrenMapiahID;
 
     for (final int mapiahID in lineSegmentMapiahIDs) {
       final THElement element = thFile.elementByMapiahID(mapiahID);
@@ -30,49 +29,26 @@ class MPSelectedLine extends MPSelectedElement {
         optionsMap[key] = value.copyWith();
       });
 
-      originalLineSegmentsMap[element.mapiahID] = element.copyWith(
+      originalLineSegmentsMapClone[element.mapiahID] = element.copyWith(
         optionsMap: optionsMap,
       );
     }
 
-    final List<int> clonedChildrenMapiahIDs =
-        modifiedLine.childrenMapiahID.toList();
+    final List<int> childrenMapiahIDsClone =
+        originalLine.childrenMapiahID.toList();
 
-    final LinkedHashMap<String, THCommandOption> clonedOptionsMap =
+    final LinkedHashMap<String, THCommandOption> optionsMapClone =
         LinkedHashMap<String, THCommandOption>();
-    modifiedLine.optionsMap.forEach((key, value) {
-      clonedOptionsMap[key] = value.copyWith();
+    originalLine.optionsMap.forEach((key, value) {
+      optionsMapClone[key] = value.copyWith();
     });
 
-    originalLine = modifiedLine.copyWith(
-      childrenMapiahID: clonedChildrenMapiahIDs,
-      optionsMap: clonedOptionsMap,
+    originalLineClone = originalLine.copyWith(
+      childrenMapiahID: childrenMapiahIDsClone,
+      optionsMap: optionsMapClone,
     );
   }
 
   @override
-  THLine get modifiedElement => modifiedLine;
-
-  @override
-  THLine get originalElement => originalLine;
-
-  @override
-  set modifiedElement(THElement element) {
-    if (element is! THLine) {
-      throw ArgumentError(
-          'The element is should be a THLine in modifiedElement of THSelectedLine.');
-    }
-
-    modifiedLine = element;
-  }
-
-  @override
-  set originalElement(THElement element) {
-    if (element is! THLine) {
-      throw ArgumentError(
-          'The element is should be a THLine in modifiedElement of THSelectedLine.');
-    }
-
-    originalLine = element;
-  }
+  THElement get originalElementClone => originalLineClone;
 }
