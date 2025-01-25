@@ -49,7 +49,7 @@ class THFileWidget extends StatelessWidget {
                 case THScrap _:
                   childWidgets.add(THScrapWidget(
                     key: ValueKey(childMapiahID),
-                    thScrap: child,
+                    scrapMapiahID: childMapiahID,
                     thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                   ));
@@ -57,7 +57,7 @@ class THFileWidget extends StatelessWidget {
                 case THPoint _:
                   childWidgets.add(THPointWidget(
                     key: ValueKey(childMapiahID),
-                    point: child,
+                    pointMapiahID: childMapiahID,
                     thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thFileMapiahID,
@@ -66,7 +66,7 @@ class THFileWidget extends StatelessWidget {
                 case THLine _:
                   childWidgets.add(THLineWidget(
                     key: ValueKey(childMapiahID),
-                    line: child,
+                    lineMapiahID: childMapiahID,
                     thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thFileMapiahID,

@@ -10,16 +10,18 @@ import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 
 class THScrapWidget extends StatelessWidget {
-  final THScrap thScrap;
+  final THScrap scrap;
+  final int scrapMapiahID;
   final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
 
   THScrapWidget({
     required super.key,
-    required this.thScrap,
+    required this.scrapMapiahID,
     required this.thFileEditStore,
     required this.thFileMapiahID,
-  });
+  }) : scrap =
+            thFileEditStore.thFile.elementByMapiahID(scrapMapiahID) as THScrap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +30,9 @@ class THScrapWidget extends StatelessWidget {
         return Observer(
           builder: (_) {
             final List<Widget> drawableElements = [];
-            final List<int> scrapChildrenMapiahIDs = thScrap.childrenMapiahID;
+            final List<int> scrapChildrenMapiahIDs = scrap.childrenMapiahID;
             final THFile thFile = thFileEditStore.thFile;
-            final int thScrapMapiahID = thScrap.mapiahID;
+            final int thScrapMapiahID = scrap.mapiahID;
 
             thFileEditStore
                 .childrenListLengthChangeTrigger[thScrapMapiahID]!.value;
@@ -42,7 +44,7 @@ class THScrapWidget extends StatelessWidget {
                 case THPoint _:
                   drawableElements.add(THPointWidget(
                     key: ValueKey(childMapiahID),
-                    point: child,
+                    pointMapiahID: childMapiahID,
                     thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thScrapMapiahID,
@@ -51,7 +53,7 @@ class THScrapWidget extends StatelessWidget {
                 case THLine _:
                   drawableElements.add(THLineWidget(
                     key: ValueKey(childMapiahID),
-                    line: child,
+                    lineMapiahID: childMapiahID,
                     thFileEditStore: thFileEditStore,
                     thFileMapiahID: thFileMapiahID,
                     thScrapMapiahID: thScrapMapiahID,

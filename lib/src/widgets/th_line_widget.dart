@@ -16,17 +16,18 @@ import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THLineWidget extends StatelessWidget {
   final THLine line;
+  final int lineMapiahID;
   final THFileEditStore thFileEditStore;
   final int thFileMapiahID;
   final int thScrapMapiahID;
 
   THLineWidget({
     required super.key,
-    required this.line,
+    required this.lineMapiahID,
     required this.thFileEditStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
-  });
+  }) : line = thFileEditStore.thFile.elementByMapiahID(lineMapiahID) as THLine;
 
   @override
   Widget build(BuildContext context) {

@@ -17,11 +17,12 @@ class THPointWidget extends StatelessWidget {
 
   THPointWidget({
     required super.key,
-    required this.point,
+    required this.pointMapiahID,
     required this.thFileEditStore,
     required this.thFileMapiahID,
     required this.thScrapMapiahID,
-  }) : pointMapiahID = point.mapiahID;
+  }) : point =
+            thFileEditStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
 
   @override
   Widget build(BuildContext context) {
