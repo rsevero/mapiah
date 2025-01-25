@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class MPGeneralStore {
   int _nextMapiahIDForElements = thFirstMapiahIDForElements;
@@ -23,10 +23,10 @@ class MPGeneralStore {
     _thFileStores.clear();
   }
 
-  final HashMap<String, THFileStore> _thFileStores =
-      HashMap<String, THFileStore>();
+  final HashMap<String, THFileEditStore> _thFileStores =
+      HashMap<String, THFileEditStore>();
 
-  THFileStore getTHFileStore(
+  THFileEditStore getTHFileStore(
       {required String filename, bool forceNewStore = false}) {
     if (_thFileStores.containsKey(filename)) {
       if (forceNewStore) {
@@ -36,7 +36,7 @@ class MPGeneralStore {
       }
     }
 
-    final THFileStore createdStore = THFileStoreBase.create(filename);
+    final THFileEditStore createdStore = THFileEditStoreBase.create(filename);
 
     _thFileStores[filename] = createdStore;
 

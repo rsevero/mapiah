@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_multilinecomment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
@@ -13,6 +14,7 @@ import 'th_test_aux.dart';
 
 final GetIt getIt = GetIt.instance;
 void main() {
+  getIt.registerSingleton<MPLog>(MPLog.instance);
   getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
   group('initial', () {
     final file = THFile();

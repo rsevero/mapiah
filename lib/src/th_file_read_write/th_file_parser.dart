@@ -65,7 +65,7 @@ import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -104,7 +104,7 @@ class THFileParser {
   bool _runTraceParser = false;
 
   late THFile _parsedTHFile;
-  late THFileStore _thFileStore;
+  late THFileEditStore _thFileStore;
 
   final List<String> _parseErrors = [];
 
@@ -1674,7 +1674,7 @@ class THFileParser {
         ((byte = await raf.readByte()) != -1)) {
       charsRead++;
       getIt<MPLog>().finest("Byte: '$byte'");
-      final char = utf8.decode([byte]);
+      final String char = utf8.decode([byte]);
 
       if (_isEncodingDelimiter(priorChar, char)) {
         break;
@@ -1683,9 +1683,9 @@ class THFileParser {
       line += char;
       priorChar = char;
     }
-    getIt<MPLog>().finer("Line: '$line'");
+    getIt<MPLog>().finer("Line read: '$line'");
 
-    final encoding = _encodingRegex.firstMatch(line);
+    final RegExpMatch? encoding = _encodingRegex.firstMatch(line);
     getIt<MPLog>().finer("Encoding object: '$encoding");
     if (encoding == null) {
       return thDefaultEncoding;
@@ -1724,7 +1724,6 @@ class THFileParser {
     _thFileStore = getIt<MPGeneralStore>()
         .getTHFileStore(filename: filePath, forceNewStore: forceNewStore);
     _parsedTHFile = _thFileStore.thFile;
-    _parsedTHFile.filename = filePath;
     setCurrentParent(_parsedTHFile);
     _parseErrors.clear();
 
@@ -1740,7 +1739,7 @@ class THFileParser {
 
       await raf.close();
     } catch (e) {
-      stderr.writeln('failed to read file: \n$e');
+      getIt<MPLog>().e('Failed to read file', error: e);
     }
 
     _injectContents();

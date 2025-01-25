@@ -10,7 +10,7 @@ import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_straight_line_segment.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 part 'mp_move_bezier_line_segment_command.dart';
@@ -44,7 +44,7 @@ abstract class MPCommand {
     required MPUndoRedoCommand oppositeCommand,
   });
 
-  MPUndoRedoCommand execute(THFileStore thFileStore) {
+  MPUndoRedoCommand execute(THFileEditStore thFileStore) {
     oppositeCommand = _createOppositeCommand();
     _actualExecute(thFileStore);
 
@@ -56,7 +56,7 @@ abstract class MPCommand {
   /// if the actual original and opposite commands are different.
   MPUndoRedoCommand _createOppositeCommand();
 
-  void _actualExecute(THFileStore thFileStore);
+  void _actualExecute(THFileEditStore thFileStore);
 
   String toJson() {
     return jsonEncode(toMap());

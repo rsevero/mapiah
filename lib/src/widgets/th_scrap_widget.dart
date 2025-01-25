@@ -7,14 +7,14 @@ import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 
 class THScrapWidget extends StatelessWidget {
   final THScrap thScrap;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
-  final THFileStore thFileStore;
+  final THFileEditStore thFileStore;
   final int thFileMapiahID;
 
   THScrapWidget({

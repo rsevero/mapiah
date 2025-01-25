@@ -176,7 +176,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
       );
 
   @override
-  void _actualExecute(THFileStore thFileStore) {
+  void _actualExecute(THFileEditStore thFileStore) {
     final THBezierCurveLineSegment originalLineSegment = lineSegment;
     final THBezierCurveLineSegment newLineSegment = lineSegment.copyWith(
         endPoint: originalLineSegment.endPoint

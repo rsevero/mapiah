@@ -7,7 +7,7 @@ import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
@@ -22,7 +22,7 @@ class TH2FileEditPage extends StatefulWidget {
 
 class _TH2FileEditPageState extends State<TH2FileEditPage> {
   bool _isHovered = false;
-  late final THFileStore thFileStore;
+  late final THFileEditStore thFileStore;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
   late final List<String> loadErrors;
   late final Future<THFileStoreCreateResult> thFileStoreCreateResult;

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'th_file_store.dart';
+part of 'th_file_edit_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,9 @@ part of 'th_file_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$THFileStore on THFileStoreBase, Store {
+mixin _$THFileEditStore on THFileEditStoreBase, Store {
   late final _$_isLoadingAtom =
-      Atom(name: 'THFileStoreBase._isLoading', context: context);
+      Atom(name: 'THFileEditStoreBase._isLoading', context: context);
 
   bool get isLoading {
     _$_isLoadingAtom.reportRead();
@@ -28,7 +28,7 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   late final _$_thFileAtom =
-      Atom(name: 'THFileStoreBase._thFile', context: context);
+      Atom(name: 'THFileEditStoreBase._thFile', context: context);
 
   THFile get thFile {
     _$_thFileAtom.reportRead();
@@ -50,7 +50,7 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   late final _$_thFileMapiahIDAtom =
-      Atom(name: 'THFileStoreBase._thFileMapiahID', context: context);
+      Atom(name: 'THFileEditStoreBase._thFileMapiahID', context: context);
 
   int get thFileMapiahID {
     _$_thFileMapiahIDAtom.reportRead();
@@ -73,7 +73,7 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   late final _$_elementRedrawTriggerAtom =
-      Atom(name: 'THFileStoreBase._elementRedrawTrigger', context: context);
+      Atom(name: 'THFileEditStoreBase._elementRedrawTrigger', context: context);
 
   Map<int, Observable<bool>> get elementRedrawTrigger {
     _$_elementRedrawTriggerAtom.reportRead();
@@ -92,7 +92,7 @@ mixin _$THFileStore on THFileStoreBase, Store {
   }
 
   late final _$_childrenListLengthChangeTriggerAtom = Atom(
-      name: 'THFileStoreBase._childrenListLengthChangeTrigger',
+      name: 'THFileEditStoreBase._childrenListLengthChangeTrigger',
       context: context);
 
   Map<int, Observable<bool>> get childrenListLengthChangeTrigger {
@@ -112,94 +112,94 @@ mixin _$THFileStore on THFileStoreBase, Store {
     });
   }
 
-  late final _$THFileStoreBaseActionController =
-      ActionController(name: 'THFileStoreBase', context: context);
+  late final _$THFileEditStoreBaseActionController =
+      ActionController(name: 'THFileEditStoreBase', context: context);
 
   @override
   void triggerTHFileLengthChildrenList() {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.triggerTHFileLengthChildrenList');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.triggerTHFileLengthChildrenList');
     try {
       return super.triggerTHFileLengthChildrenList();
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void _substituteStoreElement(int mapiahID) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase._substituteStoreElement');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._substituteStoreElement');
     try {
       return super._substituteStoreElement(mapiahID);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void addElement(THElement element) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.addElement');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.addElement');
     try {
       return super.addElement(element);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void addElementWithParent(THElement element, THParent parent) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.addElementWithParent');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.addElementWithParent');
     try {
       return super.addElementWithParent(element, parent);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void deleteElement(THElement element) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.deleteElement');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.deleteElement');
     try {
       return super.deleteElement(element);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void deleteElementByMapiahID(int mapiahID) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.deleteElementByMapiahID');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.deleteElementByMapiahID');
     try {
       return super.deleteElementByMapiahID(mapiahID);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void deleteElementByTHID(String thID) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.deleteElementByTHID');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.deleteElementByTHID');
     try {
       return super.deleteElementByTHID(thID);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void registerElementWithTHID(THElement element, String thID) {
-    final _$actionInfo = _$THFileStoreBaseActionController.startAction(
-        name: 'THFileStoreBase.registerElementWithTHID');
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.registerElementWithTHID');
     try {
       return super.registerElementWithTHID(element, thID);
     } finally {
-      _$THFileStoreBaseActionController.endAction(_$actionInfo);
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

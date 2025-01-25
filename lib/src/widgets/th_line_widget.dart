@@ -13,12 +13,12 @@ import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THLineWidget extends StatelessWidget {
   final THLine line;
   final THFileDisplayStore thFileDisplayStore;
-  final THFileStore thFileStore;
+  final THFileEditStore thFileStore;
   final int thFileMapiahID;
   final int thScrapMapiahID;
 

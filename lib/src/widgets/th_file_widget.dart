@@ -15,13 +15,13 @@ import 'package:mapiah/src/stores/th_file_display_store.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 
 class THFileWidget extends StatefulWidget {
-  final THFileStore thFileStore;
+  final THFileEditStore thFileStore;
 
   THFileWidget({required super.key, required this.thFileStore});
 
@@ -33,7 +33,7 @@ class _THFileWidgetState extends State<THFileWidget> {
   MPSelectedElement? _selectedElement;
   Offset _panStartCoordinates = Offset.zero;
   final THFileDisplayStore thFileDisplayStore = getIt<THFileDisplayStore>();
-  late final THFileStore thFileStore = widget.thFileStore;
+  late final THFileEditStore thFileStore = widget.thFileStore;
   late final THFile thFile = widget.thFileStore.thFile;
   late final int thFileMapiahID = thFileStore.thFileMapiahID;
 

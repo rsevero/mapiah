@@ -123,7 +123,7 @@ class MPMovePointCommand extends MPCommand {
   }
 
   @override
-  void _actualExecute(THFileStore thFileStore) {
+  void _actualExecute(THFileEditStore thFileStore) {
     final THPoint originalPoint =
         thFileStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
     final THPoint modifiedPoint = originalPoint.copyWith(

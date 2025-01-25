@@ -108,7 +108,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
       );
 
   @override
-  void _actualExecute(THFileStore thFileStore) {
+  void _actualExecute(THFileEditStore thFileStore) {
     final THStraightLineSegment originalLineSegment = lineSegment;
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
         endPoint: originalLineSegment.endPoint

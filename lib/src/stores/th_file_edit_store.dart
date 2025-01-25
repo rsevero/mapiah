@@ -17,11 +17,11 @@ import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
 
-part 'th_file_store.g.dart';
+part 'th_file_edit_store.g.dart';
 
-class THFileStore = THFileStoreBase with _$THFileStore;
+class THFileEditStore = THFileEditStoreBase with _$THFileEditStore;
 
-abstract class THFileStoreBase with Store {
+abstract class THFileEditStoreBase with Store {
   @readonly
   bool _isLoading = false;
 
@@ -70,20 +70,20 @@ abstract class THFileStoreBase with Store {
 
   /// This is a factory constructor that creates a new instance of THFileStore
   /// with an empty THFile.
-  static THFileStore create(String filename) {
-    final THFileStore thFileStore = THFileStore._create();
+  static THFileEditStore create(String filename) {
+    final THFileEditStore thFileStore = THFileEditStore._create();
     final THFile thFile = THFile();
     thFile.filename = filename;
     thFileStore._basicInitialization(thFile);
     return thFileStore;
   }
 
-  THFileStoreBase._create();
+  THFileEditStoreBase._create();
 
   void _basicInitialization(THFile file) {
     _thFile = file;
     _thFileMapiahID = _thFile.mapiahID;
-    _undoRedoController = MPUndoRedoController(this as THFileStore);
+    _undoRedoController = MPUndoRedoController(this as THFileEditStore);
   }
 
   void _preParseInitialize() {

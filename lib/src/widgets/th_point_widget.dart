@@ -7,13 +7,13 @@ import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
 import 'package:mapiah/src/stores/th_file_display_store.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 
 class THPointWidget extends StatelessWidget {
   final THPoint point;
   final int pointMapiahID;
   final THFileDisplayStore thFileDisplayStore;
-  final THFileStore thFileStore;
+  final THFileEditStore thFileStore;
   final int thFileMapiahID;
   final int thScrapMapiahID;
 

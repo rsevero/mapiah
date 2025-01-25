@@ -1,11 +1,11 @@
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/stores/th_file_store.dart';
+import 'package:mapiah/src/stores/th_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 class MPUndoRedoController {
   final List<MPUndoRedoCommand> _undo = [];
   final List<MPUndoRedoCommand> _redo = [];
-  final THFileStore thFileStore;
+  final THFileEditStore thFileStore;
 
   MPUndoRedoController(this.thFileStore);
 
