@@ -150,9 +150,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         : Theme.of(context).colorScheme.surfaceContainerLowest,
                     foregroundColor: hasUndo
                         ? null
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                        : Theme.of(context).colorScheme.surfaceContainerHighest,
                     onPressed: hasUndo ? thFileEditStore.undo : null,
-                    elevation: hasUndo ? 6.0 : 0.0,
+                    elevation: hasUndo ? 6.0 : 3.0,
                     child: const Icon(Icons.undo),
                   );
                 },
@@ -174,9 +174,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         : Theme.of(context).colorScheme.surfaceContainerLowest,
                     foregroundColor: hasRedo
                         ? null
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                        : Theme.of(context).colorScheme.surfaceContainerHighest,
                     onPressed: hasRedo ? thFileEditStore.redo : null,
-                    elevation: hasRedo ? 6.0 : 0.0,
+                    elevation: hasRedo ? 6.0 : 3.0,
                     child: const Icon(Icons.redo),
                   );
                 },
