@@ -152,6 +152,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         ? null
                         : Theme.of(context).colorScheme.onSurfaceVariant,
                     onPressed: hasUndo ? thFileEditStore.undo : null,
+                    elevation: hasUndo ? 6.0 : 0.0,
                     child: const Icon(Icons.undo),
                   );
                 },
@@ -175,6 +176,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         ? null
                         : Theme.of(context).colorScheme.onSurfaceVariant,
                     onPressed: hasRedo ? thFileEditStore.redo : null,
+                    elevation: hasRedo ? 6.0 : 0.0,
                     child: const Icon(Icons.redo),
                   );
                 },
