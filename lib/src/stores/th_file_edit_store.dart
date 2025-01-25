@@ -11,14 +11,19 @@ import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/definitions/mp_paints.dart';
+import 'package:mapiah/src/elements/th_bezier_curve_line_segment.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_line.dart';
 import 'package:mapiah/src/elements/th_line_segment.dart';
 import 'package:mapiah/src/elements/th_point.dart';
 import 'package:mapiah/src/elements/th_scrap.dart';
+import 'package:mapiah/src/elements/th_straight_line_segment.dart';
 import 'package:mapiah/src/selection/mp_selectable.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
+import 'package:mapiah/src/selection/mp_selected_element.dart';
+import 'package:mapiah/src/selection/mp_selected_line.dart';
+import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
@@ -81,7 +86,12 @@ abstract class THFileEditStoreBase with Store {
   Map<int, Observable<bool>> _childrenListLengthChangeTrigger =
       <int, Observable<bool>>{};
 
+  @readonly
+  MPSelectedElement? _selectedElement;
+
   final Map<int, MPSelectable> _selectableElements = {};
+
+  Offset panStartCoordinates = Offset.zero;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -184,6 +194,174 @@ abstract class THFileEditStoreBase with Store {
     return null;
   }
 
+  void onPanStart(DragStartDetails details) {
+    if (_mode != TH2FileEditMode.select) {
+      return;
+    }
+
+    MPSelectableElement? selectableElement =
+        selectableElementContains(details.localPosition);
+
+    if (selectableElement == null) {
+      return;
+    }
+
+    THElement element = selectableElement.element;
+
+    if ((element is! THPoint) &&
+        (element is! THLine) &&
+        (element is! THLineSegment)) {
+      return;
+    }
+
+    // bool isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
+    //         .contains(LogicalKeyboardKey.shiftLeft) ||
+    //     HardwareKeyboard.instance.logicalKeysPressed
+    //         .contains(LogicalKeyboardKey.shiftRight);
+
+    if (element is THLineSegment) {
+      element = element.parent(_thFile) as THLine;
+    }
+
+    panStartCoordinates = offsetScreenToCanvas(details.localPosition);
+
+    switch (element) {
+      case THLine _:
+        _setSelectedElement(
+            MPSelectedLine(thFile: _thFile, modifiedLine: element));
+        break;
+      case THPoint _:
+        _setSelectedElement(MPSelectedPoint(modifiedPoint: element));
+        break;
+    }
+  }
+
+  @action
+  void _setSelectedElement(MPSelectedElement selectedElement) {
+    _selectedElement = selectedElement;
+  }
+
+  @action
+  void clearSelectedElement() {
+    _selectedElement = null;
+  }
+
+  void onPanUpdate(DragUpdateDetails details) {
+    switch (_mode) {
+      case TH2FileEditMode.select:
+        _onPanUpdateSelectMode(details);
+        break;
+      case TH2FileEditMode.pan:
+        onPanUpdatePanMode(details);
+        triggerFileRedraw();
+        break;
+    }
+  }
+
+  void _onPanUpdateSelectMode(DragUpdateDetails details) {
+    if ((_selectedElement == null) || (_mode != TH2FileEditMode.select)) {
+      return;
+    }
+
+    final Offset localDeltaPositionOnCanvas =
+        offsetScreenToCanvas(details.localPosition) - panStartCoordinates;
+
+    switch (_selectedElement!.originalElement) {
+      case THPoint _:
+        final THPoint currentPoint =
+            _selectedElement!.originalElement as THPoint;
+        final THPoint modifiedPoint = currentPoint.copyWith(
+            position: currentPoint.position.copyWith(
+                coordinates: currentPoint.position.coordinates +
+                    localDeltaPositionOnCanvas));
+        substituteElement(modifiedPoint);
+        break;
+      case THLine _:
+        _updateTHLinePosition(
+            _selectedElement! as MPSelectedLine, localDeltaPositionOnCanvas);
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _updateTHLinePosition(
+      MPSelectedLine selectedLine, Offset localDeltaPositionOnCanvas) {
+    final THLine line = selectedLine.modifiedLine;
+    final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
+
+    for (final int lineChildMapiahID in lineChildrenMapiahIDs) {
+      final THElement lineChild = _thFile.elementByMapiahID(lineChildMapiahID);
+
+      if (lineChild is! THLineSegment) {
+        continue;
+      }
+
+      late THLineSegment newLineSegment;
+
+      switch (lineChild) {
+        case THStraightLineSegment _:
+          newLineSegment = lineChild.copyWith(
+              endPoint: lineChild.endPoint.copyWith(
+                  coordinates: lineChild.endPoint.coordinates +
+                      localDeltaPositionOnCanvas));
+          break;
+        case THBezierCurveLineSegment _:
+          newLineSegment = lineChild.copyWith(
+              endPoint: lineChild.endPoint.copyWith(
+                  coordinates: lineChild.endPoint.coordinates +
+                      localDeltaPositionOnCanvas),
+              controlPoint1: lineChild.controlPoint1.copyWith(
+                  coordinates: lineChild.controlPoint1.coordinates +
+                      localDeltaPositionOnCanvas),
+              controlPoint2: lineChild.controlPoint2.copyWith(
+                  coordinates: lineChild.controlPoint2.coordinates +
+                      localDeltaPositionOnCanvas));
+          break;
+        default:
+          throw Exception('Unknown line segment type');
+      }
+    }
+  }
+
+  void onPanEnd(DragEndDetails details) {
+    if (_selectedElement == null) {
+      return;
+    }
+
+    final Offset panEndOffset =
+        offsetScreenToCanvas(details.localPosition) - panStartCoordinates;
+
+    if (panEndOffset == Offset.zero) {
+      // TODO - compare doubles with some epsilon
+      _selectedElement = null;
+      panStartCoordinates = Offset.zero;
+      return;
+    }
+
+    switch (_selectedElement!) {
+      case MPSelectedPoint _:
+        updatePointPosition(
+          originalPoint: (_selectedElement! as MPSelectedPoint).originalPoint,
+          modifiedPoint: (_selectedElement! as MPSelectedPoint).modifiedPoint,
+        );
+        break;
+      case MPSelectedLine _:
+        updateLinePositionPerOffset(
+          originalLine: (_selectedElement! as MPSelectedLine).originalLine,
+          originalLineSegmentsMap:
+              (_selectedElement! as MPSelectedLine).originalLineSegmentsMap,
+          deltaOnCanvas: panEndOffset,
+        );
+        break;
+      default:
+        break;
+    }
+
+    _selectedElement = null;
+    panStartCoordinates = Offset.zero;
+  }
+
   THPointPaint getPointPaint(THPoint point) {
     return THPointPaint(
       radius: pointRadiusOnCanvas,
@@ -260,15 +438,15 @@ abstract class THFileEditStoreBase with Store {
     _mode = newMode;
   }
 
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPanUpdatePanMode(DragUpdateDetails details) {
     if (details.delta == Offset.zero) {
       return;
     }
-    _onPanUpdate(details);
+    _onPanUpdatePanMode(details);
   }
 
   @action
-  void _onPanUpdate(DragUpdateDetails details) {
+  void _onPanUpdatePanMode(DragUpdateDetails details) {
     _canvasTranslation += (details.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
   }

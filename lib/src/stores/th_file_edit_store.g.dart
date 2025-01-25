@@ -204,8 +204,48 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
     });
   }
 
+  late final _$_selectedElementAtom =
+      Atom(name: 'THFileEditStoreBase._selectedElement', context: context);
+
+  MPSelectedElement? get selectedElement {
+    _$_selectedElementAtom.reportRead();
+    return super._selectedElement;
+  }
+
+  @override
+  MPSelectedElement? get _selectedElement => selectedElement;
+
+  @override
+  set _selectedElement(MPSelectedElement? value) {
+    _$_selectedElementAtom.reportWrite(value, super._selectedElement, () {
+      super._selectedElement = value;
+    });
+  }
+
   late final _$THFileEditStoreBaseActionController =
       ActionController(name: 'THFileEditStoreBase', context: context);
+
+  @override
+  void _setSelectedElement(MPSelectedElement selectedElement) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._setSelectedElement');
+    try {
+      return super._setSelectedElement(selectedElement);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearSelectedElement() {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.clearSelectedElement');
+    try {
+      return super.clearSelectedElement();
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void _updateScreenSize(Size newSize) {
@@ -230,11 +270,11 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
   }
 
   @override
-  void _onPanUpdate(DragUpdateDetails details) {
+  void _onPanUpdatePanMode(DragUpdateDetails details) {
     final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase._onPanUpdate');
+        name: 'THFileEditStoreBase._onPanUpdatePanMode');
     try {
-      return super._onPanUpdate(details);
+      return super._onPanUpdatePanMode(details);
     } finally {
       _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
