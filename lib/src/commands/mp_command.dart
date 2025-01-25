@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 

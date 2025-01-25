@@ -128,7 +128,7 @@ abstract class THElement {
         return THLine.fromMap(map);
       case THElementType.lineSegment:
         throw THCustomException(
-            'THElementType.lineSegment should not by instantiatet by THElementfromMap().');
+            'THElementType.lineSegment should not by instantiated by THElementfromMap().');
       case THElementType.multilineCommentContent:
         return THMultilineCommentContent.fromMap(map);
       case THElementType.multilineComment:
