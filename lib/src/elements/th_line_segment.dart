@@ -53,13 +53,13 @@ abstract class THLineSegment extends THElement
 
   static THLineSegment fromMap(Map<String, dynamic> map) {
     final THElementType elementType =
-        THElementType.values.byName(map['element']['elementType']);
+        THElementType.values.byName(map['elementType']);
 
     switch (elementType) {
       case THElementType.straightLineSegment:
-        return THStraightLineSegment.fromMap(map['element']);
+        return THStraightLineSegment.fromMap(map);
       case THElementType.bezierCurveLineSegment:
-        return THBezierCurveLineSegment.fromMap(map['element']);
+        return THBezierCurveLineSegment.fromMap(map);
       default:
         throw Exception('Invalid THElementType: $elementType');
     }
