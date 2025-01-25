@@ -309,8 +309,38 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
     });
   }
 
+  late final _$_isZoomButtonsHoveredAtom =
+      Atom(name: 'THFileEditStoreBase._isZoomButtonsHovered', context: context);
+
+  bool get isZoomButtonsHovered {
+    _$_isZoomButtonsHoveredAtom.reportRead();
+    return super._isZoomButtonsHovered;
+  }
+
+  @override
+  bool get _isZoomButtonsHovered => isZoomButtonsHovered;
+
+  @override
+  set _isZoomButtonsHovered(bool value) {
+    _$_isZoomButtonsHoveredAtom.reportWrite(value, super._isZoomButtonsHovered,
+        () {
+      super._isZoomButtonsHovered = value;
+    });
+  }
+
   late final _$THFileEditStoreBaseActionController =
       ActionController(name: 'THFileEditStoreBase', context: context);
+
+  @override
+  void setZoomButtonsHovered(bool isHovered) {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase.setZoomButtonsHovered');
+    try {
+      return super.setZoomButtonsHovered(isHovered);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void _setSelectedElement(MPSelectedElement selectedElement) {

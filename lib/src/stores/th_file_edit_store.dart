@@ -107,6 +107,9 @@ abstract class THFileEditStoreBase with Store {
   @readonly
   String _redoDescription = '';
 
+  @readonly
+  bool _isZoomButtonsHovered = false;
+
   final Map<int, MPSelectable> _selectableElements = {};
 
   Offset panStartCoordinates = Offset.zero;
@@ -190,6 +193,11 @@ abstract class THFileEditStoreBase with Store {
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+  }
+
+  @action
+  void setZoomButtonsHovered(bool isHovered) {
+    _isZoomButtonsHovered = isHovered;
   }
 
   void addSelectableElement(MPSelectableElement selectableElement) {

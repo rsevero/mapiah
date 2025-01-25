@@ -20,9 +20,7 @@ class TH2FileEditPage extends StatefulWidget {
 }
 
 class _TH2FileEditPageState extends State<TH2FileEditPage> {
-  bool _isHovered = false;
   late final THFileEditStore thFileEditStore;
-  late final List<String> loadErrors;
   late final Future<THFileEditStoreCreateResult> thFileEditStoreCreateResult;
   bool _thFileEditStoreLoaded = false;
 
@@ -239,35 +237,48 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   Widget _zoomButtonWithOptions() {
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      onEnter: (_) => thFileEditStore.setZoomButtonsHovered(true),
+      onExit: (_) => thFileEditStore.setZoomButtonsHovered(false),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (_isHovered) ...[
-            FloatingActionButton(
-              heroTag: 'zoom_in',
-              onPressed: () => thFileEditStore.zoomIn(),
-              tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
-              child: Icon(Icons.zoom_in, size: thFloatingActionIconSize),
-            ),
-            SizedBox(width: 8),
-            FloatingActionButton(
-              heroTag: 'zoom_show_all',
-              onPressed: () => thFileEditStore.zoomShowAll(),
-              tooltip: AppLocalizations.of(context).th2FileEditPageZoomShowAll,
-              child: Icon(Icons.zoom_out_map, size: thFloatingActionIconSize),
-            ),
-            SizedBox(width: 8),
-            FloatingActionButton(
-              heroTag: 'zoom_out',
-              onPressed: () => thFileEditStore.zoomOut(),
-              tooltip: AppLocalizations.of(context).th2FileEditPageZoomOut,
-              child: Icon(Icons.zoom_out, size: thFloatingActionIconSize),
-            ),
-            SizedBox(width: 8),
-          ],
+          Observer(
+            builder: (_) {
+              if (!thFileEditStore.isZoomButtonsHovered) {
+                return const SizedBox();
+              }
+
+              return Row(
+                children: [
+                  FloatingActionButton(
+                    heroTag: 'zoom_in',
+                    onPressed: () => thFileEditStore.zoomIn(),
+                    tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
+                    child: Icon(Icons.zoom_in, size: thFloatingActionIconSize),
+                  ),
+                  SizedBox(width: 8),
+                  FloatingActionButton(
+                    heroTag: 'zoom_show_all',
+                    onPressed: () => thFileEditStore.zoomShowAll(),
+                    tooltip:
+                        AppLocalizations.of(context).th2FileEditPageZoomShowAll,
+                    child: Icon(Icons.zoom_out_map,
+                        size: thFloatingActionIconSize),
+                  ),
+                  SizedBox(width: 8),
+                  FloatingActionButton(
+                    heroTag: 'zoom_out',
+                    onPressed: () => thFileEditStore.zoomOut(),
+                    tooltip:
+                        AppLocalizations.of(context).th2FileEditPageZoomOut,
+                    child: Icon(Icons.zoom_out, size: thFloatingActionIconSize),
+                  ),
+                  SizedBox(width: 8),
+                ],
+              );
+            },
+          ),
           FloatingActionButton(
             heroTag: 'zoom_options',
             onPressed: () {},
