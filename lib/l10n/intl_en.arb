@@ -64,6 +64,18 @@
     }
   },
 
+  "th2FileEditPageNoUndoAvailable": "No undo available",
+  "@th2FileEditPageNoUndoAvailable": {
+    "description": "The label for the no undo available message",
+    "type": "text"
+  },
+
+  "th2FileEditPageNoRedoAvailable": "No redo available",
+  "@th2FileEditPageNoRedoAvailable": {
+    "description": "The label for the no redo available message",
+    "type": "text"
+  },
+
   "th2FileEditPagePanTool": "Pan",
   "@th2FileEditPagePanTool": {
     "description": "The label for the pan tool button",

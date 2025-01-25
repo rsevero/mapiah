@@ -51,6 +51,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get th2FileEditPageNoUndoAvailable => 'No undo available';
+
+  @override
+  String get th2FileEditPageNoRedoAvailable => 'No redo available';
+
+  @override
   String get th2FileEditPagePanTool => 'Pan';
 
   @override

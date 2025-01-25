@@ -149,6 +149,18 @@ abstract class AppLocalizations {
   /// **'Loading file {filename} ...'**
   String th2FileEditPageLoadingFile(Object filename);
 
+  /// The label for the no undo available message
+  ///
+  /// In en, this message translates to:
+  /// **'No undo available'**
+  String get th2FileEditPageNoUndoAvailable;
+
+  /// The label for the no redo available message
+  ///
+  /// In en, this message translates to:
+  /// **'No redo available'**
+  String get th2FileEditPageNoRedoAvailable;
+
   /// The label for the pan tool button
   ///
   /// In en, this message translates to:

@@ -51,6 +51,12 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get th2FileEditPageNoUndoAvailable => 'Nenhuma ação para desfazer';
+
+  @override
+  String get th2FileEditPageNoRedoAvailable => 'Nenhuma ação para refazer';
+
+  @override
   String get th2FileEditPagePanTool => 'Mover ponto de vista';
 
   @override

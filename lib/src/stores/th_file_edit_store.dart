@@ -89,6 +89,24 @@ abstract class THFileEditStoreBase with Store {
   @readonly
   MPSelectedElement? _selectedElement;
 
+  @computed
+  bool get isSelectMode => _mode == TH2FileEditMode.select;
+
+  @computed
+  bool get isPanMode => _mode == TH2FileEditMode.pan;
+
+  @readonly
+  bool _hasUndo = false;
+
+  @readonly
+  bool _hasRedo = false;
+
+  @readonly
+  String _undoDescription = '';
+
+  @readonly
+  String _redoDescription = '';
+
   final Map<int, MPSelectable> _selectableElements = {};
 
   Offset panStartCoordinates = Offset.zero;
@@ -195,7 +213,7 @@ abstract class THFileEditStoreBase with Store {
   }
 
   void onPanStart(DragStartDetails details) {
-    if (_mode != TH2FileEditMode.select) {
+    if (!isSelectMode) {
       return;
     }
 
@@ -259,7 +277,7 @@ abstract class THFileEditStoreBase with Store {
   }
 
   void _onPanUpdateSelectMode(DragUpdateDetails details) {
-    if ((_selectedElement == null) || (_mode != TH2FileEditMode.select)) {
+    if ((_selectedElement == null) || !isSelectMode) {
       return;
     }
 
@@ -344,7 +362,7 @@ abstract class THFileEditStoreBase with Store {
   }
 
   void onPanEnd(DragEndDetails details) {
-    if ((_selectedElement == null) || (_mode != TH2FileEditMode.select)) {
+    if ((_selectedElement == null) || !isSelectMode) {
       return;
     }
 
@@ -503,21 +521,20 @@ abstract class THFileEditStoreBase with Store {
     _canvasScaleTranslationUndefined = isUndefined;
   }
 
-  @action
   void zoomIn() {
     _canvasScale *= thZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
+    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
-  @action
   void zoomOut() {
     _canvasScale /= thZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
+    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
-  @action
   void _calculateCanvasOffset() {
     final double xOffset = (_canvasSize.width / 2.0) - _canvasCenterX;
     final double yOffset = (_canvasSize.height / 2.0) + _canvasCenterY;
@@ -525,12 +542,10 @@ abstract class THFileEditStoreBase with Store {
     _canvasTranslation = Offset(xOffset, yOffset);
   }
 
-  @action
   void updateDataWidth(double newWidth) {
     _dataWidth = newWidth;
   }
 
-  @action
   void updateDataHeight(double newHeight) {
     _dataHeight = newHeight;
   }
@@ -558,7 +573,6 @@ abstract class THFileEditStoreBase with Store {
         "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
 
-  @action
   void zoomShowAll() {
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
@@ -577,6 +591,7 @@ abstract class THFileEditStoreBase with Store {
     _calculateCanvasOffset();
 
     _canvasScaleTranslationUndefined = false;
+    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
   void transformCanvas(Canvas canvas) {
@@ -685,14 +700,25 @@ abstract class THFileEditStoreBase with Store {
 
   void execute(MPCommand command) {
     _undoRedoController.execute(command);
+    _updateUndoRedoStatus();
+  }
+
+  @action
+  void _updateUndoRedoStatus() {
+    _hasUndo = _undoRedoController.hasUndo;
+    _hasRedo = _undoRedoController.hasRedo;
+    _undoDescription = _undoRedoController.undoDescription;
+    _redoDescription = _undoRedoController.redoDescription;
   }
 
   void undo() {
     _undoRedoController.undo();
+    _updateUndoRedoStatus();
   }
 
   void redo() {
     _undoRedoController.redo();
+    _updateUndoRedoStatus();
   }
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
@@ -706,7 +732,7 @@ abstract class THFileEditStoreBase with Store {
       originalCoordinates: originalPoint.position.coordinates,
       modifiedCoordinates: originalPoint.position.coordinates + panOffset,
     );
-    _undoRedoController.execute(command);
+    execute(command);
   }
 
   void updateLinePosition({
@@ -722,7 +748,7 @@ abstract class THFileEditStoreBase with Store {
       newLineSegmentsMap: newLineSegmentsMap,
       description: 'Move Line',
     );
-    _undoRedoController.execute(command);
+    execute(command);
   }
 
   void updateLinePositionPerOffset({
@@ -735,7 +761,7 @@ abstract class THFileEditStoreBase with Store {
       originalLineSegmentsMap: originalLineSegmentsMap,
       deltaOnCanvas: deltaOnCanvas,
     );
-    _undoRedoController.execute(command);
+    execute(command);
   }
 
   @action

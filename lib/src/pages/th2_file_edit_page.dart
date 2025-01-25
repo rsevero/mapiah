@@ -91,13 +91,16 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 final List<String> errorMessages = snapshot.data!.errors;
                 if (snapshot.data!.isSuccessful) {
                   return Center(
-                    child: Stack(children: [
-                      THFileWidget(
-                        key: ValueKey(thFileEditStore.thFileMapiahID),
-                        thFileEditStore: thFileEditStore,
-                      ),
-                      _actionButtons(),
-                    ]),
+                    child: Stack(
+                      children: [
+                        THFileWidget(
+                          key: ValueKey(thFileEditStore.thFileMapiahID),
+                          thFileEditStore: thFileEditStore,
+                        ),
+                        _undoRedoButtons(),
+                        _actionButtons(),
+                      ],
+                    ),
                   );
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -115,6 +118,64 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     'Unexpected snapshot state: ${snapshot.connectionState}');
               }
             },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _undoRedoButtons() {
+    return Observer(
+      builder: (_) {
+        if (!thFileEditStore.isSelectMode) {
+          return const SizedBox();
+        }
+
+        return Positioned(
+          top: 16,
+          right: 16,
+          child: Row(
+            children: [
+              Observer(
+                builder: (_) => FloatingActionButton(
+                  heroTag: 'undo',
+                  mini: true,
+                  tooltip: thFileEditStore.hasUndo
+                      ? thFileEditStore.undoDescription
+                      : AppLocalizations.of(context)
+                          .th2FileEditPageNoUndoAvailable,
+                  backgroundColor: thFileEditStore.hasUndo
+                      ? null
+                      : Theme.of(context).colorScheme.surfaceContainerLowest,
+                  foregroundColor: thFileEditStore.hasUndo
+                      ? null
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  onPressed:
+                      thFileEditStore.hasUndo ? thFileEditStore.undo : null,
+                  child: const Icon(Icons.undo),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Observer(
+                builder: (_) => FloatingActionButton(
+                  heroTag: 'redo',
+                  mini: true,
+                  tooltip: thFileEditStore.hasRedo
+                      ? thFileEditStore.redoDescription
+                      : AppLocalizations.of(context)
+                          .th2FileEditPageNoRedoAvailable,
+                  backgroundColor: thFileEditStore.hasRedo
+                      ? null
+                      : Theme.of(context).colorScheme.surfaceContainerLowest,
+                  foregroundColor: thFileEditStore.hasRedo
+                      ? null
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  onPressed:
+                      thFileEditStore.hasRedo ? thFileEditStore.redo : null,
+                  child: const Icon(Icons.redo),
+                ),
+              ),
+            ],
           ),
         );
       },

@@ -10,6 +10,8 @@
     "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
     "parsingErrors": "Erros na interpretação do arquivo",
     "th2FileEditPageLoadingFile": "Lendo arquivo {filename} ...",
+    "th2FileEditPageNoUndoAvailable": "Nenhuma ação para desfazer",
+    "th2FileEditPageNoRedoAvailable": "Nenhuma ação para refazer",
     "th2FileEditPagePanTool": "Mover ponto de vista",
     "th2FileEditPageSelectTool": "Selecionar",
     "th2FileEditPageZoomIn": "Aproximar",

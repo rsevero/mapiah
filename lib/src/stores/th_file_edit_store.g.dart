@@ -9,6 +9,21 @@ part of 'th_file_edit_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$THFileEditStore on THFileEditStoreBase, Store {
+  Computed<bool>? _$isSelectModeComputed;
+
+  @override
+  bool get isSelectMode =>
+      (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
+              name: 'THFileEditStoreBase.isSelectMode'))
+          .value;
+  Computed<bool>? _$isPanModeComputed;
+
+  @override
+  bool get isPanMode =>
+      (_$isPanModeComputed ??= Computed<bool>(() => super.isPanMode,
+              name: 'THFileEditStoreBase.isPanMode'))
+          .value;
+
   late final _$_screenSizeAtom =
       Atom(name: 'THFileEditStoreBase._screenSize', context: context);
 
@@ -222,6 +237,78 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
     });
   }
 
+  late final _$_hasUndoAtom =
+      Atom(name: 'THFileEditStoreBase._hasUndo', context: context);
+
+  bool get hasUndo {
+    _$_hasUndoAtom.reportRead();
+    return super._hasUndo;
+  }
+
+  @override
+  bool get _hasUndo => hasUndo;
+
+  @override
+  set _hasUndo(bool value) {
+    _$_hasUndoAtom.reportWrite(value, super._hasUndo, () {
+      super._hasUndo = value;
+    });
+  }
+
+  late final _$_hasRedoAtom =
+      Atom(name: 'THFileEditStoreBase._hasRedo', context: context);
+
+  bool get hasRedo {
+    _$_hasRedoAtom.reportRead();
+    return super._hasRedo;
+  }
+
+  @override
+  bool get _hasRedo => hasRedo;
+
+  @override
+  set _hasRedo(bool value) {
+    _$_hasRedoAtom.reportWrite(value, super._hasRedo, () {
+      super._hasRedo = value;
+    });
+  }
+
+  late final _$_undoDescriptionAtom =
+      Atom(name: 'THFileEditStoreBase._undoDescription', context: context);
+
+  String get undoDescription {
+    _$_undoDescriptionAtom.reportRead();
+    return super._undoDescription;
+  }
+
+  @override
+  String get _undoDescription => undoDescription;
+
+  @override
+  set _undoDescription(String value) {
+    _$_undoDescriptionAtom.reportWrite(value, super._undoDescription, () {
+      super._undoDescription = value;
+    });
+  }
+
+  late final _$_redoDescriptionAtom =
+      Atom(name: 'THFileEditStoreBase._redoDescription', context: context);
+
+  String get redoDescription {
+    _$_redoDescriptionAtom.reportRead();
+    return super._redoDescription;
+  }
+
+  @override
+  String get _redoDescription => redoDescription;
+
+  @override
+  set _redoDescription(String value) {
+    _$_redoDescriptionAtom.reportWrite(value, super._redoDescription, () {
+      super._redoDescription = value;
+    });
+  }
+
   late final _$THFileEditStoreBaseActionController =
       ActionController(name: 'THFileEditStoreBase', context: context);
 
@@ -314,77 +401,11 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
   }
 
   @override
-  void zoomIn() {
-    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase.zoomIn');
-    try {
-      return super.zoomIn();
-    } finally {
-      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void zoomOut() {
-    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase.zoomOut');
-    try {
-      return super.zoomOut();
-    } finally {
-      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void _calculateCanvasOffset() {
-    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase._calculateCanvasOffset');
-    try {
-      return super._calculateCanvasOffset();
-    } finally {
-      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updateDataWidth(double newWidth) {
-    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase.updateDataWidth');
-    try {
-      return super.updateDataWidth(newWidth);
-    } finally {
-      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updateDataHeight(double newHeight) {
-    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase.updateDataHeight');
-    try {
-      return super.updateDataHeight(newHeight);
-    } finally {
-      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void updateDataBoundingBox(Rect newBoundingBox) {
     final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
         name: 'THFileEditStoreBase.updateDataBoundingBox');
     try {
       return super.updateDataBoundingBox(newBoundingBox);
-    } finally {
-      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void zoomShowAll() {
-    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
-        name: 'THFileEditStoreBase.zoomShowAll');
-    try {
-      return super.zoomShowAll();
     } finally {
       _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -418,6 +439,17 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
         name: 'THFileEditStoreBase.triggerElementActuallyDrawableRedraw');
     try {
       return super.triggerElementActuallyDrawableRedraw(mapiahID);
+    } finally {
+      _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _updateUndoRedoStatus() {
+    final _$actionInfo = _$THFileEditStoreBaseActionController.startAction(
+        name: 'THFileEditStoreBase._updateUndoRedoStatus');
+    try {
+      return super._updateUndoRedoStatus();
     } finally {
       _$THFileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -492,7 +524,8 @@ mixin _$THFileEditStore on THFileEditStoreBase, Store {
   @override
   String toString() {
     return '''
-
+isSelectMode: ${isSelectMode},
+isPanMode: ${isPanMode}
     ''';
   }
 }

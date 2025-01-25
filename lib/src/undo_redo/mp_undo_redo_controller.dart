@@ -38,9 +38,9 @@ class MPUndoRedoController {
     _undo.add(undo);
   }
 
-  bool get canUndo => _undo.isNotEmpty;
+  bool get hasUndo => _undo.isNotEmpty;
 
-  bool get canRedo => _redo.isNotEmpty;
+  bool get hasRedo => _redo.isNotEmpty;
 
   String get undoDescription {
     if (_undo.isEmpty) {
