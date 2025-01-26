@@ -30,6 +30,28 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
       (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
               name: 'TH2FileEditStoreBase.isSelectMode'))
           .value;
+  Computed<double>? _$lineThicknessOnCanvasComputed;
+
+  @override
+  double get lineThicknessOnCanvas => (_$lineThicknessOnCanvasComputed ??=
+          Computed<double>(() => super.lineThicknessOnCanvas,
+              name: 'TH2FileEditStoreBase.lineThicknessOnCanvas'))
+      .value;
+  Computed<double>? _$pointRadiusOnCanvasComputed;
+
+  @override
+  double get pointRadiusOnCanvas => (_$pointRadiusOnCanvasComputed ??=
+          Computed<double>(() => super.pointRadiusOnCanvas,
+              name: 'TH2FileEditStoreBase.pointRadiusOnCanvas'))
+      .value;
+  Computed<double>? _$selectionToleranceSquaredOnCanvasComputed;
+
+  @override
+  double get selectionToleranceSquaredOnCanvas =>
+      (_$selectionToleranceSquaredOnCanvasComputed ??= Computed<double>(
+              () => super.selectionToleranceSquaredOnCanvas,
+              name: 'TH2FileEditStoreBase.selectionToleranceSquaredOnCanvas'))
+          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -82,26 +104,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   set _canvasTranslation(Offset value) {
     _$_canvasTranslationAtom.reportWrite(value, super._canvasTranslation, () {
       super._canvasTranslation = value;
-    });
-  }
-
-  late final _$_canvasScaleTranslationUndefinedAtom = Atom(
-      name: 'TH2FileEditStoreBase._canvasScaleTranslationUndefined',
-      context: context);
-
-  bool get canvasScaleTranslationUndefined {
-    _$_canvasScaleTranslationUndefinedAtom.reportRead();
-    return super._canvasScaleTranslationUndefined;
-  }
-
-  @override
-  bool get _canvasScaleTranslationUndefined => canvasScaleTranslationUndefined;
-
-  @override
-  set _canvasScaleTranslationUndefined(bool value) {
-    _$_canvasScaleTranslationUndefinedAtom
-        .reportWrite(value, super._canvasScaleTranslationUndefined, () {
-      super._canvasScaleTranslationUndefined = value;
     });
   }
 
@@ -357,6 +359,26 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_canvasScaleTranslationUndefinedAtom = Atom(
+      name: 'TH2FileEditStoreBase._canvasScaleTranslationUndefined',
+      context: context);
+
+  bool get canvasScaleTranslationUndefined {
+    _$_canvasScaleTranslationUndefinedAtom.reportRead();
+    return super._canvasScaleTranslationUndefined;
+  }
+
+  @override
+  bool get _canvasScaleTranslationUndefined => canvasScaleTranslationUndefined;
+
+  @override
+  set _canvasScaleTranslationUndefined(bool value) {
+    _$_canvasScaleTranslationUndefinedAtom
+        .reportWrite(value, super._canvasScaleTranslationUndefined, () {
+      super._canvasScaleTranslationUndefined = value;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -465,17 +487,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.updateCanvasOffsetDrawing');
     try {
       return super.updateCanvasOffsetDrawing(newOffset);
-    } finally {
-      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setCanvasScaleTranslationUndefined(bool isUndefined) {
-    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.setCanvasScaleTranslationUndefined');
-    try {
-      return super.setCanvasScaleTranslationUndefined(isUndefined);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -596,7 +607,10 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     return '''
 isEditMode: ${isEditMode},
 isPanMode: ${isPanMode},
-isSelectMode: ${isSelectMode}
+isSelectMode: ${isSelectMode},
+lineThicknessOnCanvas: ${lineThicknessOnCanvas},
+pointRadiusOnCanvas: ${pointRadiusOnCanvas},
+selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas}
     ''';
   }
 }

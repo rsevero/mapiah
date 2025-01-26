@@ -275,7 +275,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   SizedBox(width: 8),
                   FloatingActionButton(
                     heroTag: 'zoom_show_all',
-                    onPressed: () => th2FileEditStore.zoomShowAll(),
+                    onPressed: () => th2FileEditStore.zoomAll(),
                     tooltip:
                         AppLocalizations.of(context).th2FileEditPageZoomShowAll,
                     child: Icon(Icons.zoom_out_map,

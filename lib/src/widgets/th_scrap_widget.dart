@@ -39,22 +39,26 @@ class THScrapWidget extends StatelessWidget {
 
               switch (child) {
                 case THPoint _:
-                  drawableElements.add(THPointWidget(
-                    key: ValueKey(childMapiahID),
-                    pointMapiahID: childMapiahID,
-                    th2FileEditStore: th2FileEditStore,
-                    thFileMapiahID: thFileMapiahID,
-                    thScrapMapiahID: thScrapMapiahID,
-                  ));
+                  drawableElements.add(
+                    THPointWidget(
+                      key: ValueKey(childMapiahID),
+                      pointMapiahID: childMapiahID,
+                      th2FileEditStore: th2FileEditStore,
+                      thFileMapiahID: thFileMapiahID,
+                      thScrapMapiahID: thScrapMapiahID,
+                    ),
+                  );
                   break;
                 case THLine _:
-                  drawableElements.add(THLineWidget(
-                    key: ValueKey(childMapiahID),
-                    lineMapiahID: childMapiahID,
-                    th2FileEditStore: th2FileEditStore,
-                    thFileMapiahID: thFileMapiahID,
-                    thScrapMapiahID: thScrapMapiahID,
-                  ));
+                  drawableElements.add(
+                    THLineWidget(
+                      key: ValueKey(childMapiahID),
+                      lineMapiahID: childMapiahID,
+                      th2FileEditStore: th2FileEditStore,
+                      thFileMapiahID: thFileMapiahID,
+                      thScrapMapiahID: thScrapMapiahID,
+                    ),
+                  );
                   break;
               }
             }

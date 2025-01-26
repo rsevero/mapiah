@@ -5,7 +5,6 @@ import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/material_theme.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
-import 'package:mapiah/src/stores/multiple_store_reactions.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 
@@ -29,7 +28,6 @@ void _setup() {
   getIt.registerSingleton<MPLog>(MPLog.instance);
   getIt.registerSingleton<MPSettingsStore>(MPSettingsStore());
   getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
-  getIt.registerSingleton<MultipleStoreReactions>(MultipleStoreReactions());
 }
 
 class MapiahApp extends StatelessWidget {

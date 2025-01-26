@@ -20,6 +20,7 @@ import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/selection/mp_selected_line.dart';
 import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
@@ -47,9 +48,6 @@ abstract class TH2FileEditStoreBase with Store {
 
   @readonly
   Offset _canvasTranslation = Offset.zero;
-
-  @readonly
-  bool _canvasScaleTranslationUndefined = true;
 
   @readonly
   TH2FileEditMode _mode = TH2FileEditMode.pan;
@@ -113,6 +111,25 @@ abstract class TH2FileEditStoreBase with Store {
   @readonly
   late MPTH2FileEditState _state;
 
+  @computed
+  double get lineThicknessOnCanvas =>
+      getIt<MPSettingsStore>().lineThickness / _canvasScale;
+
+  @computed
+  double get pointRadiusOnCanvas =>
+      getIt<MPSettingsStore>().pointRadius / _canvasScale;
+
+  @computed
+  double get selectionToleranceSquaredOnCanvas {
+    final double selectionTolerance =
+        getIt<MPSettingsStore>().selectionTolerance;
+
+    return (selectionTolerance * selectionTolerance) / _canvasScale;
+  }
+
+  @readonly
+  bool _canvasScaleTranslationUndefined = true;
+
   final Map<int, MPSelectable> _selectableElements = {};
 
   Offset panStartCanvasCoordinates = Offset.zero;
@@ -122,13 +139,6 @@ abstract class TH2FileEditStoreBase with Store {
 
   double _canvasCenterX = 0.0;
   double _canvasCenterY = 0.0;
-
-  double lineThicknessOnCanvas = thDefaultLineThickness;
-
-  double pointRadiusOnCanvas = thDefaultPointRadius;
-
-  double selectionToleranceSquaredOnCanvas =
-      thDefaultSelectionTolerance * thDefaultSelectionTolerance;
 
   final List<String> errorMessages = <String>[];
 
@@ -632,15 +642,11 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasTranslation = newOffset;
   }
 
-  @action
-  void setCanvasScaleTranslationUndefined(bool isUndefined) {
-    _canvasScaleTranslationUndefined = isUndefined;
-  }
-
   void zoomIn() {
     _canvasScale *= thZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
+    _canvasScaleTranslationUndefined = false;
     triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
@@ -648,6 +654,7 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasScale /= thZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
+    _canvasScaleTranslationUndefined = false;
     triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
@@ -688,7 +695,7 @@ abstract class TH2FileEditStoreBase with Store {
         "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
 
-  void zoomShowAll() {
+  void zoomAll() {
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
 
@@ -704,7 +711,6 @@ abstract class TH2FileEditStoreBase with Store {
 
     _setCanvasCenterToDrawingCenter();
     _calculateCanvasOffset();
-
     _canvasScaleTranslationUndefined = false;
     triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
