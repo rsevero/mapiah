@@ -171,6 +171,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     return bezierBoundingBoxExtrema(points);
   }
 
+  /// Source: https://pomax.github.io/bezierinfo/#extremities
   Rect bezierBoundingBoxExtrema(List<Offset> points) {
     if (points.isEmpty) {
       return Rect.zero;

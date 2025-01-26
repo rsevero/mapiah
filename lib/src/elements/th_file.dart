@@ -1,6 +1,5 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -246,10 +245,18 @@ class THFile with THParentMixin {
           continue;
       }
 
-      minX = min(minX, childBoundingBox.left);
-      maxX = max(maxX, childBoundingBox.right);
-      minY = min(minY, childBoundingBox.top);
-      maxY = max(maxY, childBoundingBox.bottom);
+      if (childBoundingBox.left < minX) {
+        minX = childBoundingBox.left;
+      }
+      if (childBoundingBox.right > maxX) {
+        maxX = childBoundingBox.right;
+      }
+      if (childBoundingBox.top < minY) {
+        minY = childBoundingBox.top;
+      }
+      if (childBoundingBox.bottom > maxY) {
+        maxY = childBoundingBox.bottom;
+      }
     }
 
     return Rect.fromLTRB(minX, minY, maxX, maxY);
