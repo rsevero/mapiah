@@ -42,7 +42,7 @@ class THFileParser {
   late List<String> _splittedContents;
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
-  late THParentMixin _currentParent;
+  late THIsParentMixin _currentParent;
   late int _currentParentMapiahID;
   late THElement _currentElement;
   late THHasOptionsMixin _currentHasOptions;
@@ -222,7 +222,7 @@ class THFileParser {
     _currentElement =
         THMultiLineComment(parentMapiahID: _currentParentMapiahID);
     _th2FileEditStore.addElementWithParent(_currentElement, _currentParent);
-    setCurrentParent(_currentElement as THParentMixin);
+    setCurrentParent(_currentElement as THIsParentMixin);
     _addChildParser(_multiLineCommentContentParser);
   }
 
@@ -792,7 +792,7 @@ class THFileParser {
     return optionIdentified;
   }
 
-  void setCurrentParent(THParentMixin parent) {
+  void setCurrentParent(THIsParentMixin parent) {
     _currentParent = parent;
     _currentParentMapiahID = parent.mapiahID;
   }

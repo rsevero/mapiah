@@ -84,12 +84,12 @@ abstract class THElement {
   THElement.addToParent({required this.parentMapiahID, this.sameLineComment})
       : _mapiahID = getIt<MPGeneralStore>().nextMapiahIDForElements();
 
-  THParentMixin parent(THFile thFile) {
+  THIsParentMixin parent(THFile thFile) {
     if (parentMapiahID < 0) {
       return thFile;
     }
 
-    return thFile.elementByMapiahID(parentMapiahID) as THParentMixin;
+    return thFile.elementByMapiahID(parentMapiahID) as THIsParentMixin;
   }
 
   THElementType get elementType;

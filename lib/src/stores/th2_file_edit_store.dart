@@ -933,7 +933,7 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   @action
-  void addElementWithParent(THElement element, THParentMixin parent) {
+  void addElementWithParent(THElement element, THIsParentMixin parent) {
     _thFile.addElement(element);
     parent.addElementToParent(element);
   }

@@ -537,7 +537,7 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void addElementWithParent(THElement element, THParentMixin parent) {
+  void addElementWithParent(THElement element, THIsParentMixin parent) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.addElementWithParent');
     try {

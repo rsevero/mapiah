@@ -1,6 +1,6 @@
 part of 'th_element.dart';
 
-class THMultiLineComment extends THElement with THParentMixin {
+class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment.forCWJM({
     required super.mapiahID,
     required super.parentMapiahID,

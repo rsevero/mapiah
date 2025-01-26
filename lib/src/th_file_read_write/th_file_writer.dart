@@ -171,7 +171,7 @@ class THFileWriter {
     return asString;
   }
 
-  String _childrenAsString(THParentMixin thParent) {
+  String _childrenAsString(THIsParentMixin thParent) {
     String asString = '';
 
     for (final int childMapiahID in thParent.childrenMapiahID) {

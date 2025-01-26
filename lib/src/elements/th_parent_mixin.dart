@@ -5,7 +5,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 /// Parent elements.
 ///
 /// Mixin that provides parenting capabilities.
-mixin THParentMixin {
+mixin THIsParentMixin {
   // Here are registered all children mapiah IDs.
   final List<int> childrenMapiahID = <int>[];
 

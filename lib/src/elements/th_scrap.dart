@@ -20,7 +20,7 @@ part of 'th_element.dart';
 // scrap doesn’t contain at least two survey stations with the -name reference, you have to
 // use the -scale option for calibrating the scrap. (This is usual for cross sections.)
 class THScrap extends THElement
-    with THHasOptionsMixin, THParentMixin
+    with THHasOptionsMixin, THIsParentMixin
     implements THHasTHID {
   late String _thID;
 

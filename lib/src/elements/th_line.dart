@@ -6,7 +6,7 @@ part of 'th_element.dart';
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
 class THLine extends THElement
-    with THHasOptionsMixin, THParentMixin
+    with THHasOptionsMixin, THIsParentMixin
     implements THHasPLATypeMixin {
   late final String _lineType;
   Rect? _boundingBox;

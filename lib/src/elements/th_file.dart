@@ -17,7 +17,7 @@ import 'package:mapiah/src/stores/mp_general_store.dart';
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile with THParentMixin {
+class THFile with THIsParentMixin {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -382,9 +382,9 @@ class THFile with THParentMixin {
   }
 
   void deleteElement(THElement element) {
-    if (element is THParentMixin) {
+    if (element is THIsParentMixin) {
       final List<int> childrenMapiahIDsCopy =
-          (element as THParentMixin).childrenMapiahID.toList();
+          (element as THIsParentMixin).childrenMapiahID.toList();
       for (final int childMapiahID in childrenMapiahIDsCopy) {
         deleteElement(elementByMapiahID(childMapiahID));
       }

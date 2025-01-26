@@ -1,7 +1,7 @@
 part of 'th_element.dart';
 
 class THArea extends THElement
-    with THHasOptionsMixin, THParentMixin
+    with THHasOptionsMixin, THIsParentMixin
     implements THHasPLATypeMixin {
   late final String _areaType;
 
