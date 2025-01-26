@@ -412,22 +412,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void setSelectedElements(List<THElement> clickedElements) {
+  void clearSelectedElements() {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.setSelectedElements');
+        name: 'TH2FileEditStoreBase.clearSelectedElements');
     try {
-      return super.setSelectedElements(clickedElements);
-    } finally {
-      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void removeSelectedElement(THElement element) {
-    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.removeSelectedElement');
-    try {
-      return super.removeSelectedElement(element);
+      return super.clearSelectedElements();
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -456,11 +445,22 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void clearSelectedElements() {
+  void setSelectedElements(List<THElement> clickedElements) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.clearSelectedElements');
+        name: 'TH2FileEditStoreBase.setSelectedElements');
     try {
-      return super.clearSelectedElements();
+      return super.setSelectedElements(clickedElements);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeSelectedElement(THElement element) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.removeSelectedElement');
+    try {
+      return super.removeSelectedElement(element);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

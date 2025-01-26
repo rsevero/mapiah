@@ -247,9 +247,10 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
-    final List<THElement> insideWindowElements = <THElement>[];
+    final Map<int, THElement> insideWindowElements = <int, THElement>{};
+    final selectableElements = _selectableElements.values;
 
-    for (final MPSelectable selectable in _selectableElements.values) {
+    for (final MPSelectable selectable in selectableElements) {
       final THElement selected = selectable.selected as THElement;
       switch (selected) {
         case THPoint _:
@@ -257,7 +258,7 @@ abstract class TH2FileEditStoreBase with Store {
             rect1: selected.getBoundingBox(),
             rect2: canvasSelectionWindow,
           )) {
-            insideWindowElements.add(selected);
+            insideWindowElements[selected.mapiahID] = selected;
           }
           break;
         case THLine _:
@@ -265,13 +266,13 @@ abstract class TH2FileEditStoreBase with Store {
             rect1: selected.getBoundingBox(_thFile),
             rect2: canvasSelectionWindow,
           )) {
-            insideWindowElements.add(selected);
+            insideWindowElements[selected.mapiahID] = selected;
           }
           break;
       }
     }
 
-    return insideWindowElements;
+    return insideWindowElements.values.toList();
   }
 
   void onTapUp(TapUpDetails details) {
@@ -298,33 +299,14 @@ abstract class TH2FileEditStoreBase with Store {
     _state.onSelectToolPressed();
   }
 
-  @action
-  void setSelectedElements(List<THElement> clickedElements) {
-    clearSelectedElements();
-
-    for (THElement element in clickedElements) {
-      if ((element is! THPoint) &&
-          (element is! THLine) &&
-          (element is! THLineSegment)) {
-        return;
-      }
-
-      if (element is THLineSegment) {
-        element = element.parent(_thFile) as THLine;
-      }
-
-      addSelectedElement(element);
-    }
-  }
-
   bool getIsSelected(THElement element) {
     return _selectedElements.containsKey(element.mapiahID);
   }
 
   @action
-  void removeSelectedElement(THElement element) {
-    _selectedElements.remove(element.mapiahID);
-    _isSelected[element.mapiahID]!.value = false;
+  void clearSelectedElements() {
+    _selectedElements.clear();
+    _isSelected.forEach((key, value) => value.value = false);
   }
 
   @action
@@ -349,14 +331,33 @@ abstract class TH2FileEditStoreBase with Store {
     }
   }
 
-  void setPanStartCoordinates(Offset screenCoordinates) {
-    panStartCanvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+  @action
+  void setSelectedElements(List<THElement> clickedElements) {
+    clearSelectedElements();
+
+    for (THElement element in clickedElements) {
+      if ((element is! THPoint) &&
+          (element is! THLine) &&
+          (element is! THLineSegment)) {
+        return;
+      }
+
+      if (element is THLineSegment) {
+        element = element.parent(_thFile) as THLine;
+      }
+
+      addSelectedElement(element);
+    }
   }
 
   @action
-  void clearSelectedElements() {
-    _selectedElements.clear();
-    _isSelected.forEach((key, value) => value.value = false);
+  void removeSelectedElement(THElement element) {
+    _selectedElements.remove(element.mapiahID);
+    _isSelected[element.mapiahID]!.value = false;
+  }
+
+  void setPanStartCoordinates(Offset screenCoordinates) {
+    panStartCanvasCoordinates = offsetScreenToCanvas(screenCoordinates);
   }
 
   @action
@@ -479,7 +480,7 @@ abstract class TH2FileEditStoreBase with Store {
 
   THLinePaint getLinePaint(THLine line) {
     final Paint linePaint =
-        getIsSelected(line) ? THPaints.thPaint6 : THPaints.thPaint5;
+        getIsSelected(line) ? THPaints.thPaint5 : THPaints.thPaint4;
     return THLinePaint(
       paint: linePaint..strokeWidth = lineThicknessOnCanvas,
     );

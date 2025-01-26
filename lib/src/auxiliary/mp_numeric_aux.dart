@@ -98,9 +98,40 @@ class MPNumericAux {
 
   /// In Flutter, the Rect.fromLTWH() method does not check if the width is
   /// negative or if the height is negative so I am providing this method to
-  /// ensure that the Rect is ordered.
+  /// ensure that the Rect is ordered according to Flutter expectations.
   static Rect orderedRectFromLTWH(
       double left, double top, double width, double height) {
     return orderedRectFromLTRB(left, top, left + width, top + height);
+  }
+
+  /// In Flutter, the Rect.fromCenter() method does not check if the width or
+  /// the height is negative so I am providing this method to ensure that the
+  /// Rect is ordered according to Flutter expectations.
+  static Rect orderedRectFromCenter({
+    required Offset center,
+    required double width,
+    required double height,
+  }) {
+    final double left = center.dx - width / 2;
+    final double top = center.dy - height / 2;
+    final double right = center.dx + width / 2;
+    final double bottom = center.dy + height / 2;
+
+    return orderedRectFromLTRB(left, top, right, bottom);
+  }
+
+  /// In Flutter, the Rect.fromCircle() method does not check if the radius is
+  /// negative so I am providing this method to ensure that the Rect is ordered
+  /// according to Flutter expectations.
+  static Rect orderedRectFromCircle({
+    required Offset center,
+    required double radius,
+  }) {
+    final double left = center.dx - radius;
+    final double top = center.dy - radius;
+    final double right = center.dx + radius;
+    final double bottom = center.dy + radius;
+
+    return orderedRectFromLTRB(left, top, right, bottom);
   }
 }

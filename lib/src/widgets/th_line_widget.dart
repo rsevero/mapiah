@@ -76,7 +76,7 @@ class THLineWidget extends StatelessWidget {
         );
         isFirst = false;
         th2FileEditStore.addSelectableElement(MPSelectableElement(
-          element: lineChild,
+          element: line,
           position: lineChild.endPoint.coordinates,
         ));
         continue;
@@ -104,7 +104,7 @@ class THLineWidget extends StatelessWidget {
           continue;
       }
       th2FileEditStore.addSelectableElement(MPSelectableElement(
-        element: lineChild,
+        element: line,
         position: lineChild.endPoint.coordinates,
       ));
     }
