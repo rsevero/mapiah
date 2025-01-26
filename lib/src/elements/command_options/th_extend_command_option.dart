@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // extend [prev[ious] <station>] . if the point type is station and scrap projection
 // is extended elevation, you can adjust the extension of the centreline using this option.

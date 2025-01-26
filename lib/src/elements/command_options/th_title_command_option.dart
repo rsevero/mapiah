@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_string_part.dart';
+part of 'th_command_option.dart';
 
 // title <string> . description of the object
 class THTitleCommandOption extends THCommandOption {

@@ -1,9 +1,6 @@
+part of 'th_command_option.dart';
+
 // date: -value <date> sets the date for the date point.
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
-
 class THDateValueCommandOption extends THCommandOption {
   late final THDatetimePart date;
 

@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // context <point/line/area> <symbol-type> . (to be used with symbol-hide and
 // symbol-show layout options) symbol will be hidden/shown according to rules for spec-

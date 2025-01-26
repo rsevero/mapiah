@@ -1,9 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_has_length_mixin.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+part of 'th_command_option.dart';
 
 // height: according to the sign of the value (positive, negative or unsigned), this type of
 // symbol represents chimney height, pit depth or step height in general. The numeric

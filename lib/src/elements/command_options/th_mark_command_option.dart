@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // mark <keyword> . is used to mark the point on the line (see join command).
 class THMarkCommandOption extends THCommandOption {

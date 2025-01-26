@@ -1,9 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_multiple_choice_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+part of 'th_command_option.dart';
 
 class THClipCommandOption extends THMultipleChoiceCommandOption {
   // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({

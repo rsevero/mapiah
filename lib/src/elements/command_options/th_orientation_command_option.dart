@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
+part of 'th_command_option.dart';
 
 // orientation/orient <number> . defines the orientation of the symbol. If not speci-
 // fied, it’s oriented to north. 0 ≤ number < 360.

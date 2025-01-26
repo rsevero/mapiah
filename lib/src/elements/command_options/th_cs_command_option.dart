@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_cs_part.dart';
+part of 'th_command_option.dart';
 
 // cs <coordinate system> assumes that (calibrated) local scrap coordinates are given
 // in specified coordinate system. It is useful for absolute placing of imported sketches

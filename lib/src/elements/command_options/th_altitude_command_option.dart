@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_has_length_mixin.dart';
-import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/command_options/th_has_altitude_mixin.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
+part of 'th_command_option.dart';
 
 // altitude <value> . can be specified only with the wall type. This option creates an
 // altitude label on the wall. All altitudes are exported as a difference against grid Z

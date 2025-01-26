@@ -1,7 +1,4 @@
-import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+part of 'th_command_option.dart';
 
 mixin THHasLengthMixin on THCommandOption {
   late final THDoublePart length;

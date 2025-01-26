@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_string_part.dart';
+part of 'th_command_option.dart';
 
 // text . text of the label, remark or continuation. It may contain following formatting
 // keywords:24

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
+part of 'th_command_option.dart';
 
 // l-size <number> . Size of the line (to the left). Only valid on and required for slope
 // type.

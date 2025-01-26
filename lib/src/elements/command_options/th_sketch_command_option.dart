@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
-import 'package:mapiah/src/elements/parts/th_string_part.dart';
+part of 'th_command_option.dart';
 
 // sketch <filename> <x> <y> . underlying sketch bitmap specification (lower left cor-
 // ner coordinates).

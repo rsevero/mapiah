@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // id <ext_keyword> . ID of the symbol.
 class THIDCommandOption extends THCommandOption {

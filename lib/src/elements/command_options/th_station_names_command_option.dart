@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // station-names <prefix> <suffix> . adds given prefix/suffix to all survey stations
 // in the current scrap. Saves some typing.

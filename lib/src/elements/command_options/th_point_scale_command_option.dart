@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/parts/th_multiple_choice_part.dart';
+part of 'th_command_option.dart';
 
 /// Therion Book says for points:
 /// scale . symbol scale, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)

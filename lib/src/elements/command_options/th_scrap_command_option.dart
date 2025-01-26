@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // scrap <reference> . if the point type is section, this is a reference to a cross-section
 // scrap.

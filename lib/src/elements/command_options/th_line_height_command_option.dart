@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
+part of 'th_command_option.dart';
 
 // height <value> . height of pit or wall:pit; available in METAPOST as a numeric
 // variable ATTR__height.

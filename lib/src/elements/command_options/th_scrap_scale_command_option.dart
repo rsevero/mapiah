@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+part of 'th_command_option.dart';
 
 // scale <specification> . is used to pre-scale (convert coordinates from pixels to
 // meters) the scrap data. If scrap projection is none, this is the only transformation that

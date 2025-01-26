@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+part of 'th_command_option.dart';
 
 enum THPassageHeightModes {
   height,

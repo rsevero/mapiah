@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // from <station> . valid for extra points, specifies reference station.
 class THFromCommandOption extends THCommandOption {

@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+part of 'th_command_option.dart';
 
 // subtype <keyword> . determines the object’s subtype. The following subtypes for
 // given types are supported:
