@@ -20,6 +20,7 @@ import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/selection/mp_selected_line.dart';
 import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
@@ -620,6 +621,10 @@ abstract class TH2FileEditStoreBase with Store {
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
     triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+  }
+
+  void close() {
+    getIt<MPGeneralStore>().removeFileStore(filename: _thFile.filename);
   }
 
   void _calculateCanvasOffset() {

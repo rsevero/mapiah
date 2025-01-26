@@ -43,7 +43,7 @@ class MPGeneralStore {
     return createdStore;
   }
 
-  void removeFileStore(String filename) {
+  void removeFileStore({required String filename}) {
     if (_t2hFileEditStores.containsKey(filename)) {
       _t2hFileEditStores.remove(filename);
     }

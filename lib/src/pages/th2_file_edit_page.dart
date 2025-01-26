@@ -54,7 +54,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             elevation: 4,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
+              onPressed: _onLeavePage,
             ),
             actions: <Widget>[
               if (fileReady) ...[
@@ -69,7 +69,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               ],
               IconButton(
                 icon: Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
+                onPressed: _onLeavePage,
               ),
             ],
           ),
@@ -124,6 +124,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         );
       },
     );
+  }
+
+  void _onLeavePage() {
+    th2FileEditStore.close();
+    Navigator.pop(context);
   }
 
   Widget _undoRedoButtons() {
