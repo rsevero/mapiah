@@ -542,6 +542,7 @@ abstract class TH2FileEditStoreBase with Store {
   void onPanUpdatePanMode(DragUpdateDetails details) {
     _canvasTranslation += (details.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
+    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
   void _setCanvasCenterFromCurrent() {
@@ -571,6 +572,7 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasTranslation = newOffset;
   }
 
+  @action
   void zoomIn() {
     _canvasScale *= thZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
@@ -579,9 +581,31 @@ abstract class TH2FileEditStoreBase with Store {
     triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
+  @action
   void zoomOut() {
     _canvasScale /= thZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
+    _calculateCanvasOffset();
+    _canvasScaleTranslationUndefined = false;
+    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+  }
+
+  @action
+  void zoomAll() {
+    final double screenWidth = _screenSize.width;
+    final double screenHeight = _screenSize.height;
+
+    _getFileDrawingSize();
+
+    final double widthScale =
+        (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
+    final double heightScale =
+        (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
+
+    _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
+    _canvasSize = _screenSize / _canvasScale;
+
+    _setCanvasCenterToDrawingCenter();
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
     triggerElementActuallyDrawableRedraw(_thFileMapiahID);
@@ -622,26 +646,6 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasCenterY = (dataBoundingBox.top + dataBoundingBox.bottom) / 2.0;
     getIt<MPLog>().finer(
         "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
-  }
-
-  void zoomAll() {
-    final double screenWidth = _screenSize.width;
-    final double screenHeight = _screenSize.height;
-
-    _getFileDrawingSize();
-
-    final double widthScale =
-        (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
-    final double heightScale =
-        (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
-
-    _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
-    _canvasSize = _screenSize / _canvasScale;
-
-    _setCanvasCenterToDrawingCenter();
-    _calculateCanvasOffset();
-    _canvasScaleTranslationUndefined = false;
-    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
   }
 
   void transformCanvas(Canvas canvas) {

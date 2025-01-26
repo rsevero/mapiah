@@ -8,15 +8,15 @@ class MPTH2FileEditStatePan extends MPTH2FileEditState {
     th2FileEditStore.setVisualMode(TH2FileEditMode.pan);
   }
 
+  /// Moves the canvas
   @override
   void onPanUpdate(DragUpdateDetails details) {
-    /// Moves the canvas
     th2FileEditStore.onPanUpdatePanMode(details);
   }
 
+  /// Changes to [MPTH2FileEditStateType.selectEmptySelection]
   @override
   void onSelectToolPressed() {
-    /// Changes to [MPTH2FileEditStateType.selectEmptySelection]
     th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
   }
 
