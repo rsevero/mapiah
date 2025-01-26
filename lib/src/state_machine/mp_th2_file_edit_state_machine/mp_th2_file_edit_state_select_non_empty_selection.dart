@@ -4,6 +4,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     with MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin {
   MPTH2FileEditStateSelectNonEmptySelection({required super.th2FileEditStore});
 
+  @override
+  void setVisualMode() {
+    th2FileEditStore.setVisualMode(TH2FileEditMode.select);
+  }
+
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
   /// 1.1.1. Yes. Is Shift pressed?
@@ -33,7 +38,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           th2FileEditStore.removeSelectedElement(clickedElements.first);
           if (th2FileEditStore.selectedElements.isEmpty) {
             th2FileEditStore
-                .setNewState(MPTH2FileEditStateType.selectEmptySelection);
+                .setState(MPTH2FileEditStateType.selectEmptySelection);
           }
         }
         return;
@@ -49,8 +54,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         th2FileEditStore.clearSelectedElements();
-        th2FileEditStore
-            .setNewState(MPTH2FileEditStateType.selectEmptySelection);
+        th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
   }
@@ -76,7 +80,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         final bool clickedElementAlreadySelected =
             th2FileEditStore.isSelected(clickedElements.first);
         if (clickedElementAlreadySelected) {
-          th2FileEditStore.setNewState(MPTH2FileEditStateType.moving);
+          th2FileEditStore.setState(MPTH2FileEditStateType.moving);
         } else {
           th2FileEditStore.setSelectedElements([clickedElements.first]);
         }
@@ -113,8 +117,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     } else {
       th2FileEditStore.clearSelectedElements();
       if (elementsInsideSelectionWindow.isEmpty) {
-        th2FileEditStore
-            .setNewState(MPTH2FileEditStateType.selectEmptySelection);
+        th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
       } else {
         th2FileEditStore.setSelectedElements(elementsInsideSelectionWindow);
       }
@@ -126,7 +129,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   @override
   void onPanToolPressed() {
     th2FileEditStore.clearSelectedElements();
-    th2FileEditStore.setNewState(MPTH2FileEditStateType.pan);
+    th2FileEditStore.setState(MPTH2FileEditStateType.pan);
   }
 
   @override

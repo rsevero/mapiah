@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/selection/mp_selected_line.dart';
 import 'package:mapiah/src/selection/mp_selected_point.dart';
+import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
 part 'mp_th2_file_edit_state_get_objects_inside_selection_window_mixin.dart';
@@ -40,6 +41,8 @@ abstract class MPTH2FileEditState {
         return MPTH2FileEditStateMoving(th2FileEditStore: thFileEditStore);
     }
   }
+
+  void setVisualMode() {}
 
   void setCursor() {}
 

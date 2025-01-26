@@ -81,8 +81,7 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
 
     th2FileEditStore.setPanStartCoordinates(Offset.zero);
 
-    th2FileEditStore
-        .setNewState(MPTH2FileEditStateType.selectNonEmptySelection);
+    th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
   }
 
   @override

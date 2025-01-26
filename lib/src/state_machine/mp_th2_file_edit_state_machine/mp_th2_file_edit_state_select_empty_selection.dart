@@ -4,6 +4,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     with MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin {
   MPTH2FileEditStateSelectEmptySelection({required super.th2FileEditStore});
 
+  @override
+  void setVisualMode() {
+    th2FileEditStore.setVisualMode(TH2FileEditMode.select);
+  }
+
   /// 1. Clicked on an object?
   /// 1.1. If yes, select object. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
   /// 1.2. If no, do nothing.
@@ -16,8 +21,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
       th2FileEditStore.setSelectedElements(clickedElements);
     }
 
-    th2FileEditStore
-        .setNewState(MPTH2FileEditStateType.selectNonEmptySelection);
+    th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
   }
 
   /// Marks the start point of the pan.
@@ -48,15 +52,14 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
 
     if (elementsInsideSelectionWindow.isNotEmpty) {
       th2FileEditStore.setSelectedElements(elementsInsideSelectionWindow);
-      th2FileEditStore
-          .setNewState(MPTH2FileEditStateType.selectNonEmptySelection);
+      th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
     }
   }
 
   /// Change to [MPTH2FileEditStateType.pan].
   @override
   void onPanToolPressed() {
-    th2FileEditStore.setNewState(MPTH2FileEditStateType.pan);
+    th2FileEditStore.setState(MPTH2FileEditStateType.pan);
   }
 
   @override

@@ -107,21 +107,21 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
-  late final _$_modeAtom =
-      Atom(name: 'TH2FileEditStoreBase._mode', context: context);
+  late final _$_visualModeAtom =
+      Atom(name: 'TH2FileEditStoreBase._visualMode', context: context);
 
-  TH2FileEditMode get mode {
-    _$_modeAtom.reportRead();
-    return super._mode;
+  TH2FileEditMode get visualMode {
+    _$_visualModeAtom.reportRead();
+    return super._visualMode;
   }
 
   @override
-  TH2FileEditMode get _mode => mode;
+  TH2FileEditMode get _visualMode => visualMode;
 
   @override
-  set _mode(TH2FileEditMode value) {
-    _$_modeAtom.reportWrite(value, super._mode, () {
-      super._mode = value;
+  set _visualMode(TH2FileEditMode value) {
+    _$_visualModeAtom.reportWrite(value, super._visualMode, () {
+      super._visualMode = value;
     });
   }
 
@@ -427,11 +427,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void setNewState(MPTH2FileEditStateType type) {
+  void setState(MPTH2FileEditStateType type) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.setNewState');
+        name: 'TH2FileEditStoreBase.setState');
     try {
-      return super.setNewState(type);
+      return super.setState(type);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -449,11 +449,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void setTH2FileEditMode(TH2FileEditMode newMode) {
+  void setVisualMode(TH2FileEditMode visualMode) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.setTH2FileEditMode');
+        name: 'TH2FileEditStoreBase.setVisualMode');
     try {
-      return super.setTH2FileEditMode(newMode);
+      return super.setVisualMode(visualMode);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
