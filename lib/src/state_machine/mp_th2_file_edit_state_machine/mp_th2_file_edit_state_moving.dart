@@ -1,7 +1,7 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMoving extends MPTH2FileEditState {
-  MPTH2FileEditStateMoving({required super.thFileEditStore});
+  MPTH2FileEditStateMoving({required super.th2FileEditStore});
 
   @override
   void setCursor() {}

@@ -312,16 +312,34 @@ abstract class TH2FileEditStoreBase with Store {
         element = element.parent(_thFile) as THLine;
       }
 
-      switch (element) {
-        case THLine _:
-          _selectedElements[element.mapiahID] =
-              MPSelectedLine(thFile: _thFile, originalLine: element);
-          break;
-        case THPoint _:
-          _selectedElements[element.mapiahID] =
-              MPSelectedPoint(originalPoint: element);
-          break;
-      }
+      addSelectedElement(element);
+    }
+  }
+
+  bool isSelected(THElement element) {
+    return _selectedElements.containsKey(element.mapiahID);
+  }
+
+  void removeSelectedElement(THElement element) {
+    _selectedElements.remove(element.mapiahID);
+  }
+
+  void addSelectedElement(THElement element) {
+    switch (element) {
+      case THLine _:
+        _selectedElements[element.mapiahID] =
+            MPSelectedLine(thFile: _thFile, originalLine: element);
+        break;
+      case THPoint _:
+        _selectedElements[element.mapiahID] =
+            MPSelectedPoint(originalPoint: element);
+        break;
+    }
+  }
+
+  void addSelectedElements(List<THElement> elements) {
+    for (THElement element in elements) {
+      addSelectedElement(element);
     }
   }
 
