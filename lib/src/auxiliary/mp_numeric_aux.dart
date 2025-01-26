@@ -4,7 +4,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
-class MPNumericHelper {
+class MPNumericAux {
   static RegExp endingZeroes = RegExp(r'0*$');
   static RegExp endingDot = RegExp(r'\.$');
 

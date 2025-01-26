@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/auxiliary/mp_numeric_helper.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
@@ -103,6 +103,6 @@ class THDoublePart extends THPart {
 
   @override
   String toString() {
-    return MPNumericHelper.doubleToString(_value, _decimalPositions);
+    return MPNumericAux.doubleToString(_value, _decimalPositions);
   }
 }

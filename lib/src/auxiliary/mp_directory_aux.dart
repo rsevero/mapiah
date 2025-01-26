@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:path_provider/path_provider.dart';
 
-class MPDirectoryHelper {
+class MPDirectoryAux {
   static Directory _rootDirectory = Directory('');
   static bool _rootDirectorySet = false;
 

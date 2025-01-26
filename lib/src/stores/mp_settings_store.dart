@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_directory_helper.dart';
+import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mobx/mobx.dart';
@@ -42,7 +42,7 @@ abstract class MPSettingsStoreBase with Store {
     try {
       _readingConfigFile = true;
 
-      final Directory configDirectory = await MPDirectoryHelper.config();
+      final Directory configDirectory = await MPDirectoryAux.config();
       final File file = File(configDirectory.path + thMainConfigFilename);
       final String contents = await file.readAsString();
       final Map<String, dynamic> config = TomlDocument.parse(contents).toMap();
@@ -161,7 +161,7 @@ abstract class MPSettingsStoreBase with Store {
       };
       final String contents = TomlDocument.fromMap(config).toString();
 
-      final Directory configDirectory = await MPDirectoryHelper.config();
+      final Directory configDirectory = await MPDirectoryAux.config();
       final File file = File(configDirectory.path + thMainConfigFilename);
 
       await file.writeAsString(contents);

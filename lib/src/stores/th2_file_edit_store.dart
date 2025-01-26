@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
-import 'package:mapiah/src/auxiliary/mp_numeric_helper.dart';
-import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -16,12 +15,13 @@ import 'package:mapiah/src/definitions/mp_paints.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
-import 'package:mapiah/src/selection/mp_selectable.dart';
 import 'package:mapiah/src/selection/mp_selectable_element.dart';
+import 'package:mapiah/src/selection/mp_selectable.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/selection/mp_selected_line.dart';
 import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
@@ -239,7 +239,7 @@ abstract class TH2FileEditStoreBase with Store {
       final THElement selected = selectable.selected as THElement;
       switch (selected) {
         case THPoint _:
-          if (MPNumericHelper.isRect1InsideRect2(
+          if (MPNumericAux.isRect1InsideRect2(
             rect1: selected.getBoundingBox(),
             rect2: canvasSelectionWindow,
           )) {
@@ -247,7 +247,7 @@ abstract class TH2FileEditStoreBase with Store {
           }
           break;
         case THLine _:
-          if (MPNumericHelper.isRect1InsideRect2(
+          if (MPNumericAux.isRect1InsideRect2(
             rect1: selected.getBoundingBox(_thFile),
             rect2: canvasSelectionWindow,
           )) {
