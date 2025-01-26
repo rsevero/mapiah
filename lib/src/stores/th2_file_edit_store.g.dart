@@ -482,17 +482,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void updateDataBoundingBox(Rect newBoundingBox) {
-    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.updateDataBoundingBox');
-    try {
-      return super.updateDataBoundingBox(newBoundingBox);
-    } finally {
-      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void triggerTHFileLengthChildrenList() {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.triggerTHFileLengthChildrenList');

@@ -35,8 +35,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget build(BuildContext context) {
     return FutureBuilder<TH2FileEditStoreCreateResult>(
       future: th2FileEditStoreCreateResult,
-      builder: (BuildContext context,
-          AsyncSnapshot<TH2FileEditStoreCreateResult> snapshot) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<TH2FileEditStoreCreateResult> snapshot,
+      ) {
         final bool fileReady =
             (snapshot.connectionState == ConnectionState.done) &&
                 snapshot.hasData &&

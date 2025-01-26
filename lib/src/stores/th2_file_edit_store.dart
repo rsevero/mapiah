@@ -120,7 +120,7 @@ abstract class TH2FileEditStoreBase with Store {
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
 
-  Rect _dataBoundingBox = Rect.zero;
+  Rect? _dataBoundingBox;
 
   double _canvasCenterX = 0.0;
   double _canvasCenterY = 0.0;
@@ -249,6 +249,12 @@ abstract class TH2FileEditStoreBase with Store {
     }
 
     return clickedElements;
+  }
+
+  Rect _getDataBoundingBox() {
+    _dataBoundingBox ??= _thFile.getBoundingBox();
+
+    return _dataBoundingBox!;
   }
 
   void onTapUp(TapUpDetails details) {
@@ -675,25 +681,22 @@ abstract class TH2FileEditStoreBase with Store {
     _dataHeight = newHeight;
   }
 
-  @action
-  void updateDataBoundingBox(Rect newBoundingBox) {
-    _dataBoundingBox = newBoundingBox;
-  }
-
   void _getFileDrawingSize() {
-    _dataWidth = (_dataBoundingBox.width < thMinimumSizeForDrawing)
+    _dataWidth = (_getDataBoundingBox().width < thMinimumSizeForDrawing)
         ? thMinimumSizeForDrawing
-        : _dataBoundingBox.width;
+        : _getDataBoundingBox().width;
 
-    _dataHeight = (_dataBoundingBox.height < thMinimumSizeForDrawing)
+    _dataHeight = (_getDataBoundingBox().height < thMinimumSizeForDrawing)
         ? thMinimumSizeForDrawing
-        : _dataBoundingBox.height;
+        : _getDataBoundingBox().height;
   }
 
   void _setCanvasCenterToDrawingCenter() {
     getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
-    _canvasCenterX = (_dataBoundingBox.left + _dataBoundingBox.right) / 2.0;
-    _canvasCenterY = (_dataBoundingBox.top + _dataBoundingBox.bottom) / 2.0;
+    _canvasCenterX =
+        (_getDataBoundingBox().left + _getDataBoundingBox().right) / 2.0;
+    _canvasCenterY =
+        (_getDataBoundingBox().top + _getDataBoundingBox().bottom) / 2.0;
     getIt<MPLog>().finer(
         "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
@@ -803,6 +806,7 @@ abstract class TH2FileEditStoreBase with Store {
 
   void substituteElement(THElement newElement) {
     _thFile.substituteElement(newElement);
+    _dataBoundingBox = null;
     triggerElementActuallyDrawableRedraw(newElement.mapiahID);
     getIt<MPLog>().finer('Substituted element ${newElement.mapiahID}');
   }

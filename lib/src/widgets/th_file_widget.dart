@@ -17,9 +17,6 @@ class THFileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    th2FileEditStore.updateDataBoundingBox(thFile.getBoundingBox());
-    th2FileEditStore.setCanvasScaleTranslationUndefined(true);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         return Observer(
