@@ -809,7 +809,6 @@ abstract class TH2FileEditStoreBase with Store {
       lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: originalLineSegmentsMap,
       modifiedLineSegmentsMap: newLineSegmentsMap,
-      description: 'Move Line',
     );
     execute(command);
   }

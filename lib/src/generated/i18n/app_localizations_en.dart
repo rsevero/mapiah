@@ -43,6 +43,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mpMoveBezierLineSegmentCommandDescription => 'Move Bézier line segment';
+
+  @override
+  String get mpMoveElementsCommandDescription => 'Move elements';
+
+  @override
+  String get mpMoveLineCommandDescription => 'Move line';
+
+  @override
+  String get mpMovePointCommandDescription => 'Move point';
+
+  @override
+  String get mpMoveStraightLineSegmentCommandDescription => 'Move straight line segment';
+
+  @override
   String get parsingErrors => 'Parsing errors';
 
   @override

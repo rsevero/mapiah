@@ -10,21 +10,21 @@ class MPMovePointCommand extends MPCommand {
     required this.originalCoordinates,
     required this.modifiedCoordinates,
     required super.oppositeCommand,
-    super.description = mpMovePointCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.movePoint,
   }) : super.forCWJM();
 
   MPMovePointCommand({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
-    super.description = mpMovePointCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.movePoint,
   }) : super();
 
   MPMovePointCommand.fromDelta({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required Offset deltaOnCanvas,
-    super.description = mpMovePointCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.movePoint,
   }) : super() {
     modifiedCoordinates = originalCoordinates + deltaOnCanvas;
   }
@@ -51,12 +51,12 @@ class MPMovePointCommand extends MPCommand {
       pointMapiahID: pointMapiahID,
       originalCoordinates: modifiedCoordinates,
       modifiedCoordinates: originalCoordinates,
-      description: description,
+      descriptionType: descriptionType,
     );
 
     return MPUndoRedoCommand(
         commandType: oppositeCommand.type,
-        description: description,
+        descriptionType: descriptionType,
         map: oppositeCommand.toMap());
   }
 
@@ -67,14 +67,14 @@ class MPMovePointCommand extends MPCommand {
       'pointMapiahID': pointMapiahID,
       'originalCoordinates': {
         'dx': originalCoordinates.dx,
-        'dy': originalCoordinates.dy
+        'dy': originalCoordinates.dy,
       },
       'modifiedCoordinates': {
         'dx': modifiedCoordinates.dx,
-        'dy': modifiedCoordinates.dy
+        'dy': modifiedCoordinates.dy,
       },
       'oppositeCommand': oppositeCommand?.toMap(),
-      'description': description,
+      'descriptionType': descriptionType.name,
     };
   }
 
@@ -82,18 +82,23 @@ class MPMovePointCommand extends MPCommand {
     return MPMovePointCommand.forCWJM(
       pointMapiahID: map['pointMapiahID'],
       originalCoordinates: Offset(
-          map['originalCoordinates']['dx'], map['originalCoordinates']['dy']),
+        map['originalCoordinates']['dx'],
+        map['originalCoordinates']['dy'],
+      ),
       modifiedCoordinates: Offset(
-          map['modifiedCoordinates']['dx'], map['modifiedCoordinates']['dy']),
+        map['modifiedCoordinates']['dx'],
+        map['modifiedCoordinates']['dy'],
+      ),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
-      description: map['description'],
+      descriptionType:
+          MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
-  factory MPMovePointCommand.fromJson(String jsonString) {
-    return MPMovePointCommand.fromMap(jsonDecode(jsonString));
+  factory MPMovePointCommand.fromJson(String source) {
+    return MPMovePointCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -102,26 +107,27 @@ class MPMovePointCommand extends MPCommand {
     Offset? originalCoordinates,
     Offset? modifiedCoordinates,
     MPUndoRedoCommand? oppositeCommand,
-    String? description,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
       modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
-      description: description ?? this.description,
+      descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   @override
-  bool operator ==(covariant MPMovePointCommand other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.pointMapiahID == pointMapiahID &&
+    return other is MPMovePointCommand &&
+        other.pointMapiahID == pointMapiahID &&
         other.originalCoordinates == originalCoordinates &&
         other.modifiedCoordinates == modifiedCoordinates &&
         other.oppositeCommand == oppositeCommand &&
-        other.description == description;
+        other.descriptionType == descriptionType;
   }
 
   @override
@@ -130,6 +136,6 @@ class MPMovePointCommand extends MPCommand {
         originalCoordinates,
         modifiedCoordinates,
         oppositeCommand,
-        description,
+        descriptionType,
       );
 }

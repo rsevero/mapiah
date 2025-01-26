@@ -1,4 +1,5 @@
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/mp_command_descriptor.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
@@ -46,13 +47,17 @@ class MPUndoRedoController {
     if (_undo.isEmpty) {
       return '';
     }
-    return _undo.last.description;
+    return MPCommandDescriptor.getCommandDescription(
+      _undo.last.descriptionType,
+    );
   }
 
   String get redoDescription {
     if (_redo.isEmpty) {
       return '';
     }
-    return _redo.last.description;
+    return MPCommandDescriptor.getCommandDescription(
+      _redo.last.descriptionType,
+    );
   }
 }

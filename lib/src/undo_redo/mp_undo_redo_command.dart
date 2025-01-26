@@ -1,21 +1,22 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/mp_command_description_type.dart';
 
 class MPUndoRedoCommand {
   final MPCommandType commandType;
-  final String description;
+  final MPCommandDescriptionType descriptionType;
   final Map<String, dynamic> map;
 
   MPUndoRedoCommand(
       {required this.commandType,
-      required this.description,
+      required this.descriptionType,
       required this.map});
 
   Map<String, dynamic> toMap() {
     return {
       'commandType': commandType.name,
-      'description': description,
+      'descriptionType': descriptionType,
       'map': map,
     };
   }
@@ -23,7 +24,8 @@ class MPUndoRedoCommand {
   factory MPUndoRedoCommand.fromMap(Map<String, dynamic> map) {
     return MPUndoRedoCommand(
       commandType: MPCommandType.values.byName(map['commandType']),
-      description: map['description'],
+      descriptionType:
+          MPCommandDescriptionType.values.byName(map['descriptionType']),
       map: map['map'],
     );
   }
@@ -34,12 +36,12 @@ class MPUndoRedoCommand {
 
   MPUndoRedoCommand copyWith({
     MPCommandType? commandType,
-    String? description,
+    MPCommandDescriptionType? descriptionType,
     Map<String, dynamic>? map,
   }) {
     return MPUndoRedoCommand(
       commandType: commandType ?? this.commandType,
-      description: description ?? this.description,
+      descriptionType: descriptionType ?? this.descriptionType,
       map: map ?? this.map,
     );
   }
@@ -49,14 +51,14 @@ class MPUndoRedoCommand {
     if (identical(this, other)) return true;
 
     return other.commandType == commandType &&
-        other.description == description &&
+        other.descriptionType == descriptionType &&
         other.map == map;
   }
 
   @override
   int get hashCode => Object.hash(
         commandType,
-        description,
+        descriptionType,
         map,
       );
 

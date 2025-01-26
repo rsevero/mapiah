@@ -137,6 +137,36 @@ abstract class AppLocalizations {
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
+  /// The description for the move Bézier line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Move Bézier line segment'**
+  String get mpMoveBezierLineSegmentCommandDescription;
+
+  /// The description for the move elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Move elements'**
+  String get mpMoveElementsCommandDescription;
+
+  /// The description for the move line command
+  ///
+  /// In en, this message translates to:
+  /// **'Move line'**
+  String get mpMoveLineCommandDescription;
+
+  /// The description for the move point command
+  ///
+  /// In en, this message translates to:
+  /// **'Move point'**
+  String get mpMovePointCommandDescription;
+
+  /// The description for the move straight line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Move straight line segment'**
+  String get mpMoveStraightLineSegmentCommandDescription;
+
   /// The label for the parsing errors dialog
   ///
   /// In en, this message translates to:

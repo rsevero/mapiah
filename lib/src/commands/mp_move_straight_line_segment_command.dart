@@ -10,21 +10,21 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
     required super.oppositeCommand,
-    required super.description,
+    super.descriptionType = MPCommandDescriptionType.moveStraightLineSegment,
   }) : super.forCWJM();
 
   MPMoveStraightLineSegmentCommand({
     required this.lineSegmentMapiahID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
-    super.description = mpMoveStraightLineSegmentCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveStraightLineSegment,
   }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDelta({
     required this.lineSegmentMapiahID,
     required this.originalEndPointCoordinates,
     required Offset deltaOnCanvas,
-    super.description = mpMoveStraightLineSegmentCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveStraightLineSegment,
   })  : modifiedEndPointCoordinates =
             originalEndPointCoordinates + deltaOnCanvas,
         super();
@@ -50,12 +50,12 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
       lineSegmentMapiahID: lineSegmentMapiahID,
       originalEndPointCoordinates: modifiedEndPointCoordinates,
       modifiedEndPointCoordinates: originalEndPointCoordinates,
-      description: description,
+      descriptionType: descriptionType,
     );
 
     return MPUndoRedoCommand(
         commandType: oppositeCommand.type,
-        description: description,
+        descriptionType: descriptionType,
         map: oppositeCommand.toMap());
   }
 
@@ -73,7 +73,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         'dy': modifiedEndPointCoordinates.dy,
       },
       'oppositeCommand': oppositeCommand?.toMap(),
-      'description': description,
+      'descriptionType': descriptionType.name,
     };
   }
 
@@ -91,7 +91,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
-      description: map['description'],
+      descriptionType:
+          MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
@@ -105,7 +106,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     Offset? originalEndPointCoordinates,
     Offset? modifiedEndPointCoordinates,
     MPUndoRedoCommand? oppositeCommand,
-    String? description,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
@@ -114,7 +115,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
       modifiedEndPointCoordinates:
           modifiedEndPointCoordinates ?? this.modifiedEndPointCoordinates,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
-      description: description ?? this.description,
+      descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
@@ -127,7 +128,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         other.originalEndPointCoordinates == originalEndPointCoordinates &&
         other.modifiedEndPointCoordinates == modifiedEndPointCoordinates &&
         other.oppositeCommand == oppositeCommand &&
-        other.description == description;
+        other.descriptionType == descriptionType;
   }
 
   @override
@@ -136,6 +137,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         originalEndPointCoordinates,
         modifiedEndPointCoordinates,
         oppositeCommand,
-        description,
+        descriptionType,
       );
 }

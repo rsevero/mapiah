@@ -17,7 +17,9 @@ toMap, toJson, copyWith, hashCode should include @override annotations.
 
 Use jsonDecode(), not json.decode().
 
-In the toMap() method start the map with a "'type': type.name".
+In the toMap() method start the map with a "'TYPE_STRING_ID': type.name". Check on the fromMap() method of the parent class for the exact TYPE_STRING_ID that should be used.
+
+In the fromMap() method use 'Type.values.byName(map[TYPE_STRING_ID])' to get the type back from the map.
 
 If there is a 'oppositeCommand' parameter, it should be treated as nullable.
 

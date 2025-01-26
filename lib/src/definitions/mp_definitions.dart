@@ -43,14 +43,6 @@ const String thDefaultLengthUnit = 'm';
 
 const String thClipMultipleChoiceType = 'clip';
 
-const String mpMoveBezierLineSegmentCommandDescription =
-    'Move Bezier Line Segment';
-const String mpMoveElementsCommandDescription = 'Move Elements';
-const String mpMoveLineCommandDescription = 'Move Line';
-const String mpMovePointCommandDescription = 'Move Point';
-const String mpMoveStraightLineSegmentCommandDescription =
-    'Move Straight Line Segment';
-
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 

@@ -49,6 +49,36 @@
     }
   },
 
+  "mpMoveBezierLineSegmentCommandDescription": "Move Bézier line segment",
+  "@mpMoveBezierLineSegmentCommandDescription": {
+    "description": "The description for the move Bézier line segment command",
+    "type": "text"
+  },
+
+  "mpMoveElementsCommandDescription": "Move elements",
+  "@mpMoveElementsCommandDescription": {
+    "description": "The description for the move elements command",
+    "type": "text"
+  },
+
+  "mpMoveLineCommandDescription": "Move line",
+  "@mpMoveLineCommandDescription": {
+    "description": "The description for the move line command",
+    "type": "text"
+  },
+
+  "mpMovePointCommandDescription": "Move point",
+  "@mpMovePointCommandDescription": {
+    "description": "The description for the move point command",
+    "type": "text"
+  },
+
+  "mpMoveStraightLineSegmentCommandDescription": "Move straight line segment",
+  "@mpMoveStraightLineSegmentCommandDescription": {
+    "description": "The description for the move straight line segment command",
+    "type": "text"
+  },
+
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",

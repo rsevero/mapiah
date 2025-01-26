@@ -5,9 +5,9 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/commands/mp_command_description_type.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_parameters.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
@@ -24,12 +24,13 @@ part 'mp_move_straight_line_segment_command.dart';
 /// It is responsible both for executing and undoing the command, therefore, all
 /// actions that should support undo must be impmentend as a command.
 abstract class MPCommand {
-  late final String description;
+  late final MPCommandDescriptionType descriptionType;
   MPUndoRedoCommand? oppositeCommand;
 
-  MPCommand.forCWJM({required this.description, required this.oppositeCommand});
+  MPCommand.forCWJM(
+      {required this.descriptionType, required this.oppositeCommand});
 
-  MPCommand({required this.description});
+  MPCommand({required this.descriptionType});
 
   MPCommandType get type;
 
@@ -48,7 +49,7 @@ abstract class MPCommand {
   void _actualExecute(TH2FileEditStore th2FileEditStore);
 
   MPCommand copyWith({
-    String? description,
+    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   });
 

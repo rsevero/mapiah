@@ -7,19 +7,19 @@ class MPMoveElementsCommand extends MPCommand {
   MPMoveElementsCommand.forCWJM({
     required this.moveCommandParametersList,
     required super.oppositeCommand,
-    super.description = mpMoveElementsCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveElements,
   }) : super.forCWJM();
 
   MPMoveElementsCommand({
     required this.moveCommandParametersList,
-    super.description = mpMoveElementsCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveElements,
   }) : super();
 
   MPMoveElementsCommand.fromDelta({
     required List<MPMoveCommandOriginalParameters>
         moveCommandOriginalParametersList,
     required Offset deltaOnCanvas,
-    super.description = mpMoveElementsCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveElements,
   }) : super() {
     moveCommandParametersList = [];
     for (final moveCommandOriginalParameters
@@ -123,7 +123,7 @@ class MPMoveElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      description: description,
+      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -138,7 +138,7 @@ class MPMoveElementsCommand extends MPCommand {
       'moveCommandParametersList':
           moveCommandParametersList.map((x) => x.toMap()).toList(),
       'oppositeCommand': oppositeCommand?.toMap(),
-      'description': description,
+      'descriptionType': descriptionType.name,
     };
   }
 
@@ -152,7 +152,8 @@ class MPMoveElementsCommand extends MPCommand {
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
-      description: map['description'],
+      descriptionType:
+          MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
@@ -164,13 +165,13 @@ class MPMoveElementsCommand extends MPCommand {
   MPMoveElementsCommand copyWith({
     List<MPMoveCommandCompleteParameters>? moveCommandParametersList,
     MPUndoRedoCommand? oppositeCommand,
-    String? description,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveElementsCommand.forCWJM(
       moveCommandParametersList:
           moveCommandParametersList ?? this.moveCommandParametersList,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
-      description: description ?? this.description,
+      descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
@@ -182,13 +183,13 @@ class MPMoveElementsCommand extends MPCommand {
         const DeepCollectionEquality().equals(
             other.moveCommandParametersList, moveCommandParametersList) &&
         other.oppositeCommand == oppositeCommand &&
-        other.description == description;
+        other.descriptionType == descriptionType;
   }
 
   @override
   int get hashCode => Object.hash(
         Object.hashAll(moveCommandParametersList),
         oppositeCommand,
-        description,
+        descriptionType,
       );
 }

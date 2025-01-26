@@ -43,6 +43,21 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get mpMoveBezierLineSegmentCommandDescription => 'Mover segmento de linha Bézier';
+
+  @override
+  String get mpMoveElementsCommandDescription => 'Mover elementos';
+
+  @override
+  String get mpMoveLineCommandDescription => 'Mover linha';
+
+  @override
+  String get mpMovePointCommandDescription => 'Mover ponto';
+
+  @override
+  String get mpMoveStraightLineSegmentCommandDescription => 'Mover segmento de linha reta';
+
+  @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override

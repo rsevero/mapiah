@@ -12,7 +12,7 @@ class MPMoveLineCommand extends MPCommand {
     required this.originalLineSegmentsMap,
     required this.modifiedLineSegmentsMap,
     required super.oppositeCommand,
-    super.description = mpMoveLineCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveLine,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
   }) : super.forCWJM();
@@ -21,7 +21,7 @@ class MPMoveLineCommand extends MPCommand {
     required this.lineMapiahID,
     required this.originalLineSegmentsMap,
     required this.modifiedLineSegmentsMap,
-    super.description = mpMoveLineCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveLine,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
   }) : super();
@@ -30,7 +30,7 @@ class MPMoveLineCommand extends MPCommand {
     required this.lineMapiahID,
     required this.originalLineSegmentsMap,
     required this.deltaOnCanvas,
-    super.description = mpMoveLineCommandDescription,
+    super.descriptionType = MPCommandDescriptionType.moveLine,
   })  : isFromDelta = true,
         super() {
     modifiedLineSegmentsMap = LinkedHashMap<int, THLineSegment>();
@@ -84,7 +84,7 @@ class MPMoveLineCommand extends MPCommand {
               originalEndPointCoordinates:
                   originalLineSegment.endPoint.coordinates,
               deltaOnCanvas: deltaOnCanvas,
-              description: description,
+              descriptionType: descriptionType,
             );
           } else {
             command = MPMoveStraightLineSegmentCommand(
@@ -95,7 +95,7 @@ class MPMoveLineCommand extends MPCommand {
                   modifiedLineSegmentsMap[originalLineSegmentMapiahID]!
                       .endPoint
                       .coordinates,
-              description: description,
+              descriptionType: descriptionType,
             );
           }
           break;
@@ -114,7 +114,7 @@ class MPMoveLineCommand extends MPCommand {
               originalControlPoint2Coordinates:
                   originalLineSegment.controlPoint2.coordinates,
               deltaOnCanvas: deltaOnCanvas,
-              description: description,
+              descriptionType: descriptionType,
             );
           } else {
             command = MPMoveBezierLineSegmentCommand(
@@ -130,7 +130,7 @@ class MPMoveLineCommand extends MPCommand {
                   originalLineSegment.controlPoint2.coordinates,
               modifiedControlPoint2Coordinates:
                   newLineSegment.controlPoint2.coordinates,
-              description: description,
+              descriptionType: descriptionType,
             );
           }
           break;
@@ -148,12 +148,12 @@ class MPMoveLineCommand extends MPCommand {
       lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: modifiedLineSegmentsMap,
       modifiedLineSegmentsMap: originalLineSegmentsMap,
-      description: description,
+      descriptionType: descriptionType,
     );
 
     return MPUndoRedoCommand(
         commandType: oppositeCommand.type,
-        description: description,
+        descriptionType: descriptionType,
         map: oppositeCommand.toMap());
   }
 
@@ -169,7 +169,7 @@ class MPMoveLineCommand extends MPCommand {
         (key, value) => MapEntry(key.toString(), value.toMap()),
       ),
       'oppositeCommand': oppositeCommand?.toMap(),
-      'description': description,
+      'descriptionType': descriptionType.name,
     };
   }
 
@@ -195,7 +195,8 @@ class MPMoveLineCommand extends MPCommand {
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
-      description: map['description'],
+      descriptionType:
+          MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
@@ -209,7 +210,7 @@ class MPMoveLineCommand extends MPCommand {
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
     LinkedHashMap<int, THLineSegment>? modifiedLineSegmentsMap,
     MPUndoRedoCommand? oppositeCommand,
-    String? description,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveLineCommand.forCWJM(
       lineMapiahID: lineMapiahID ?? this.lineMapiahID,
@@ -218,7 +219,7 @@ class MPMoveLineCommand extends MPCommand {
       modifiedLineSegmentsMap:
           modifiedLineSegmentsMap ?? this.modifiedLineSegmentsMap,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
-      description: description ?? this.description,
+      descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
@@ -233,7 +234,7 @@ class MPMoveLineCommand extends MPCommand {
         const DeepCollectionEquality()
             .equals(other.modifiedLineSegmentsMap, modifiedLineSegmentsMap) &&
         other.oppositeCommand == oppositeCommand &&
-        other.description == description;
+        other.descriptionType == descriptionType;
   }
 
   @override
@@ -242,6 +243,6 @@ class MPMoveLineCommand extends MPCommand {
         Object.hashAll(originalLineSegmentsMap.entries),
         Object.hashAll(modifiedLineSegmentsMap.entries),
         oppositeCommand,
-        description,
+        descriptionType,
       );
 }

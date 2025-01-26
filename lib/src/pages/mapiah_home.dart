@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
+import 'package:mapiah/src/commands/mp_command_descriptor.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
+import 'package:mobx/mobx.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
@@ -15,6 +17,17 @@ class MapiahHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final MPSettingsStore settingsStore = getIt<MPSettingsStore>();
     setWindowTitle(AppLocalizations.of(context).appTitle);
+
+    if (getIt.isRegistered<AppLocalizations>()) {
+      getIt.unregister<AppLocalizations>();
+    }
+    getIt.registerSingleton<AppLocalizations>(AppLocalizations.of(context));
+
+    autorun((_) {
+      if (getIt<MPSettingsStore>().localeID.isNotEmpty) {
+        MPCommandDescriptor.resetCommandDescriptions();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
