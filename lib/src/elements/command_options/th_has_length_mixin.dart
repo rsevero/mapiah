@@ -3,7 +3,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
-mixin THHasLength on THCommandOption {
+mixin THHasLengthMixin on THCommandOption {
   late final THDoublePart length;
   late final THLengthUnitPart unit;
   late final bool unitSet;

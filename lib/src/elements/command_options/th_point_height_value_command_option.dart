@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_has_length.dart';
+import 'package:mapiah/src/elements/command_options/th_has_length_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
@@ -9,7 +9,8 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 // symbol represents chimney height, pit depth or step height in general. The numeric
 // value can be optionally followed by ‘?’, if the value is presumed and units can be added
 // (e.g. -value [40? ft]).
-class THPointHeightValueCommandOption extends THCommandOption with THHasLength {
+class THPointHeightValueCommandOption extends THCommandOption
+    with THHasLengthMixin {
   late bool isPresumed;
 
   THPointHeightValueCommandOption.forCWJM({

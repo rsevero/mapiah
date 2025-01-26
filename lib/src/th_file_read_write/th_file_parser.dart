@@ -39,7 +39,6 @@ import 'package:mapiah/src/elements/command_options/th_text_command_option.dart'
 import 'package:mapiah/src/elements/command_options/th_title_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_has_options_mixin.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';

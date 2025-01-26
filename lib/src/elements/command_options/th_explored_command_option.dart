@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_has_length.dart';
+import 'package:mapiah/src/elements/command_options/th_has_length_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
 // explored <length> . if the point type is continuation, you can specify length of pas-
 // sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
 // statistics.
-class THExploredCommandOption extends THCommandOption with THHasLength {
+class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   THExploredCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,

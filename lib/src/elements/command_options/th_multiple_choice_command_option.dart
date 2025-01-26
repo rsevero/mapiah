@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_has_options_mixin.dart';
-import 'package:mapiah/src/elements/th_has_platype_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 class THMultipleChoiceCommandOption extends THCommandOption {

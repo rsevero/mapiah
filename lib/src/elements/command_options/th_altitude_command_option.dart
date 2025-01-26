@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_has_length.dart';
+import 'package:mapiah/src/elements/command_options/th_has_length_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/th_has_altitude_mixin.dart';
+import 'package:mapiah/src/elements/command_options/th_has_altitude_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 // altitude <value> . can be specified only with the wall type. This option creates an
@@ -14,7 +14,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 // “fix”, then no nearest station is taken into consideration; the absolute given value is
 // used instead. Units can follow the value. Examples: +4, [+4 m], [fix 1510 m].
 class THAltitudeCommandOption extends THCommandOption
-    with THHasLength, THHasAltitudeMixin {
+    with THHasLengthMixin, THHasAltitudeMixin {
   THAltitudeCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,

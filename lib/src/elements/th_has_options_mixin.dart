@@ -1,9 +1,4 @@
-import 'dart:collection';
-
-import 'package:flutter/foundation.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:meta/meta.dart';
+part of 'th_element.dart';
 
 mixin THHasOptionsMixin on THElement {
   final LinkedHashMap<String, THCommandOption> _optionsMap =
@@ -13,22 +8,18 @@ mixin THHasOptionsMixin on THElement {
     _optionsMap[option.typeToFile()] = option;
   }
 
-  @useResult
   bool hasOption(String optionStringType) {
     return _optionsMap.containsKey(optionStringType);
   }
 
-  @useResult
   bool optionIsSet(String optionStringType) {
     return _optionsMap.containsKey(optionStringType);
   }
 
-  @useResult
   THCommandOption? optionByType(String optionStringType) {
     return _optionsMap[optionStringType];
   }
 
-  @useResult
   bool deleteOption(String optionStringType) {
     if (!hasOption(optionStringType)) {
       return false;

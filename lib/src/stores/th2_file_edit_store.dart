@@ -436,13 +436,24 @@ abstract class TH2FileEditStoreBase with Store {
     _state.setStatusBarMessage();
   }
 
-  void _onPanUpdateSelectMode(DragUpdateDetails details) {
+  void moveSelectedElementsToScreenCoordinates(
+    Offset screenCoordinatesFinalPosition,
+  ) {
+    final Offset canvasCoordinatesFinalPosition =
+        offsetScreenToCanvas(screenCoordinatesFinalPosition);
+
+    moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
+  }
+
+  void moveSelectedElementsToCanvasCoordinates(
+    Offset canvasCoordinatesFinalPosition,
+  ) {
     if ((_selectedElements.isEmpty) || !isSelectMode) {
       return;
     }
 
     final Offset localDeltaPositionOnCanvas =
-        offsetScreenToCanvas(details.localPosition) - panStartCoordinates;
+        canvasCoordinatesFinalPosition - panStartCoordinates;
 
     for (final MPSelectedElement selectedElement in _selectedElements.values) {
       switch (selectedElement.originalElementClone) {
@@ -895,8 +906,8 @@ abstract class TH2FileEditStoreBase with Store {
     final MPMoveLineCommand command = MPMoveLineCommand(
       originalLine: originalLine,
       originalLineSegmentsMap: originalLineSegmentsMap,
-      newLine: newLine,
-      newLineSegmentsMap: newLineSegmentsMap,
+      modifiedLine: newLine,
+      modifiedLineSegmentsMap: newLineSegmentsMap,
       description: 'Move Line',
     );
     execute(command);

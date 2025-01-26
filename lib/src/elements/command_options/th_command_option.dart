@@ -34,8 +34,8 @@ import 'package:mapiah/src/elements/command_options/th_subtype_command_option.da
 import 'package:mapiah/src/elements/command_options/th_text_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_title_command_option.dart';
 import 'package:mapiah/src/elements/command_options/th_unrecognized_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_has_options_mixin.dart';
 
 enum THCommandOptionType {
   altitude,

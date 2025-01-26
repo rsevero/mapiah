@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/command_options/th_has_length.dart';
+import 'package:mapiah/src/elements/command_options/th_has_length_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 
 // dist <distance> . valid for extra points, specifies the distance to the nearest station
 // (or station specified using -from option. If not specified, appropriate value from LRUD
 // data is used.
-class THDistCommandOption extends THCommandOption with THHasLength {
+class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   THDistCommandOption.forCWJM({
     required super.parentMapiahID,
     required THDoublePart length,
