@@ -31,7 +31,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
     if (clickedElements.isNotEmpty) {
       final bool clickedElementAlreadySelected =
-          th2FileEditStore.isSelected(clickedElements.first);
+          th2FileEditStore.getIsSelected(clickedElements.first);
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
@@ -78,7 +78,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     if (clickedElements.isNotEmpty) {
       if (!shiftPressed) {
         final bool clickedElementAlreadySelected =
-            th2FileEditStore.isSelected(clickedElements.first);
+            th2FileEditStore.getIsSelected(clickedElements.first);
         if (clickedElementAlreadySelected) {
           th2FileEditStore.setState(MPTH2FileEditStateType.moving);
         } else {

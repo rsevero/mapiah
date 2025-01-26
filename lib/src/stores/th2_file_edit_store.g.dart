@@ -228,6 +228,24 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_isSelectedAtom =
+      Atom(name: 'TH2FileEditStoreBase._isSelected', context: context);
+
+  Map<int, Observable<bool>> get isSelected {
+    _$_isSelectedAtom.reportRead();
+    return super._isSelected;
+  }
+
+  @override
+  Map<int, Observable<bool>> get _isSelected => isSelected;
+
+  @override
+  set _isSelected(Map<int, Observable<bool>> value) {
+    _$_isSelectedAtom.reportWrite(value, super._isSelected, () {
+      super._isSelected = value;
+    });
+  }
+
   late final _$_selectedElementsAtom =
       Atom(name: 'TH2FileEditStoreBase._selectedElements', context: context);
 
@@ -405,11 +423,33 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void _addSelectedElement(MPSelectedElement selectedElement) {
+  void removeSelectedElement(THElement element) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase._addSelectedElement');
+        name: 'TH2FileEditStoreBase.removeSelectedElement');
     try {
-      return super._addSelectedElement(selectedElement);
+      return super.removeSelectedElement(element);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addSelectedElement(THElement element) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.addSelectedElement');
+    try {
+      return super.addSelectedElement(element);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addSelectedElements(List<THElement> elements) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.addSelectedElements');
+    try {
+      return super.addSelectedElements(elements);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -33,7 +33,8 @@ class THLineWidget extends StatelessWidget {
 
         th2FileEditStore.elementRedrawTrigger[thFileMapiahID]!.value;
         th2FileEditStore.elementRedrawTrigger[thScrapMapiahID]!.value;
-        th2FileEditStore.elementRedrawTrigger[line.mapiahID]!.value;
+        th2FileEditStore.elementRedrawTrigger[lineMapiahID]!.value;
+        th2FileEditStore.isSelected[lineMapiahID]!.value;
 
         final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
             getLineSegmentsMap(line);

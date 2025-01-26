@@ -82,6 +82,9 @@ abstract class TH2FileEditStoreBase with Store {
       <int, Observable<bool>>{};
 
   @readonly
+  Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
+
+  @readonly
   Map<int, MPSelectedElement> _selectedElements = <int, MPSelectedElement>{};
 
   @computed
@@ -191,12 +194,14 @@ abstract class TH2FileEditStoreBase with Store {
   ) {
     _elementRedrawTrigger.clear();
     _childrenListLengthChangeTrigger.clear();
+    _isSelected.clear();
 
     _elementRedrawTrigger[_thFileMapiahID] = Observable(false);
     _childrenListLengthChangeTrigger[_thFileMapiahID] = Observable(false);
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine || value is THScrap) {
         _elementRedrawTrigger[key] = Observable(false);
+        _isSelected[key] = Observable(false);
         if (value is THScrap) {
           _childrenListLengthChangeTrigger[key] = Observable(false);
         }
@@ -295,7 +300,7 @@ abstract class TH2FileEditStoreBase with Store {
 
   @action
   void setSelectedElements(List<THElement> clickedElements) {
-    _selectedElements.clear();
+    clearSelectedElements();
 
     for (THElement element in clickedElements) {
       if ((element is! THPoint) &&
@@ -312,14 +317,17 @@ abstract class TH2FileEditStoreBase with Store {
     }
   }
 
-  bool isSelected(THElement element) {
+  bool getIsSelected(THElement element) {
     return _selectedElements.containsKey(element.mapiahID);
   }
 
+  @action
   void removeSelectedElement(THElement element) {
     _selectedElements.remove(element.mapiahID);
+    _isSelected[element.mapiahID]!.value = false;
   }
 
+  @action
   void addSelectedElement(THElement element) {
     switch (element) {
       case THLine _:
@@ -331,8 +339,10 @@ abstract class TH2FileEditStoreBase with Store {
             MPSelectedPoint(originalPoint: element);
         break;
     }
+    _isSelected[element.mapiahID]!.value = true;
   }
 
+  @action
   void addSelectedElements(List<THElement> elements) {
     for (THElement element in elements) {
       addSelectedElement(element);
@@ -344,13 +354,9 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   @action
-  void _addSelectedElement(MPSelectedElement selectedElement) {
-    _selectedElements[selectedElement.mapiahID] = selectedElement;
-  }
-
-  @action
   void clearSelectedElements() {
     _selectedElements.clear();
+    _isSelected.forEach((key, value) => value.value = false);
   }
 
   @action
@@ -463,15 +469,19 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   THPointPaint getPointPaint(THPoint point) {
+    final Paint pointPaint =
+        getIsSelected(point) ? THPaints.thPaint2 : THPaints.thPaint1;
     return THPointPaint(
       radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaint1..strokeWidth = lineThicknessOnCanvas,
+      paint: pointPaint..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
   THLinePaint getLinePaint(THLine line) {
+    final Paint linePaint =
+        getIsSelected(line) ? THPaints.thPaint6 : THPaints.thPaint5;
     return THLinePaint(
-      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
+      paint: linePaint..strokeWidth = lineThicknessOnCanvas,
     );
   }
 

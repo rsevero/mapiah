@@ -37,6 +37,7 @@ class THPointWidget extends StatelessWidget {
           th2FileEditStore.elementRedrawTrigger[thFileMapiahID]!.value;
           th2FileEditStore.elementRedrawTrigger[thScrapMapiahID]!.value;
           th2FileEditStore.elementRedrawTrigger[pointMapiahID]!.value;
+          th2FileEditStore.isSelected[pointMapiahID]!.value;
 
           getIt<MPLog>().fine('THPointWidget for point $pointMapiahID build');
 
