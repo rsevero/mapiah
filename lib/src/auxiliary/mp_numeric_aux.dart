@@ -56,4 +56,51 @@ class MPNumericAux {
   }) {
     return rect2.contains(rect1.topLeft) && rect2.contains(rect1.bottomRight);
   }
+
+  /// In Flutter, the Rect.fromLTRB() method does not check if the left is
+  /// greater than the right or if the top is greater than the bottom so I am
+  /// providing this method to ensure that the Rect is ordered.
+  ///
+  /// The problem is that for Flutter:
+  ///  bool get isEmpty => left >= right || top >= bottom;
+  /// for a Rect.
+  ///
+  /// If you are not paying attention, let me repeat it: for Flutter if the TOP
+  /// of a Rect is GREATER than the BOTTOM, the Rect is EMPTY!!
+  ///
+  /// All created Rects in Mapiah should be ordered according to Flutter
+  /// expectations.
+  ///
+  /// /// For more details, see the Flutter documentation:
+  /// [Flutter Rect Documentation](https://main-api.flutter.dev/flutter/dart-ui/Rect/isEmpty.html)
+  static Rect orderedRectFromLTRB(
+    double left,
+    double top,
+    double right,
+    double bottom,
+  ) {
+    double rectLeft = left;
+    double rectTop = top;
+    double rectRight = right;
+    double rectBottom = bottom;
+
+    if (rectLeft > rectRight) {
+      rectLeft = right;
+      rectRight = left;
+    }
+    if (rectTop > rectBottom) {
+      rectTop = bottom;
+      rectBottom = top;
+    }
+
+    return Rect.fromLTRB(rectLeft, rectTop, rectRight, rectBottom);
+  }
+
+  /// In Flutter, the Rect.fromLTWH() method does not check if the width is
+  /// negative or if the height is negative so I am providing this method to
+  /// ensure that the Rect is ordered.
+  static Rect orderedRectFromLTWH(
+      double left, double top, double width, double height) {
+    return orderedRectFromLTRB(left, top, left + width, top + height);
+  }
 }

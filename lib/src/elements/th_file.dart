@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -258,7 +259,7 @@ class THFile with THIsParentMixin {
       }
     }
 
-    return Rect.fromLTRB(minX, minY, maxX, maxY);
+    return MPNumericAux.orderedRectFromLTRB(minX, minY, maxX, maxY);
   }
 
   /// Updates the thID of a given element of the THFile.

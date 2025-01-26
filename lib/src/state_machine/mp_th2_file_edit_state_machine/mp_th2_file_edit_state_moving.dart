@@ -6,13 +6,13 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
   /// 1. Moves all selected objects by the distance indicated by [details].
   @override
   void onPanUpdate(DragUpdateDetails details) {
-    th2FileEditStore.moveSelectedElementsToScreenCoordinates(details.delta);
+    th2FileEditStore
+        .moveSelectedElementsToScreenCoordinates(details.localPosition);
   }
 
   /// 1. Records an MPCommand that moves the entire selection by the distance
   /// indicated by [details].
-  /// 2. Resets the pan start point.
-  /// 3. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
+  /// 2. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPanEnd(DragEndDetails details) {
     final int selectedCount = th2FileEditStore.selectedElements.length;
@@ -78,8 +78,6 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
 
       th2FileEditStore.execute(moveElementsCommand);
     }
-
-    th2FileEditStore.setPanStartCoordinates(Offset.zero);
 
     th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
   }

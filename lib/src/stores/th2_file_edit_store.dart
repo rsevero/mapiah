@@ -281,6 +281,10 @@ abstract class TH2FileEditStoreBase with Store {
     _state.onPanUpdate(details);
   }
 
+  void onPanEnd(DragEndDetails details) {
+    _state.onPanEnd(details);
+  }
+
   void onPanToolPressed() {
     _state.onPanToolPressed();
   }
@@ -456,10 +460,6 @@ abstract class TH2FileEditStoreBase with Store {
     }
 
     substituteLineSegmentsOfLine(line.mapiahID, modifiedLineSegmentsMap);
-  }
-
-  void onPanEnd(DragEndDetails details) {
-    _state.onPanEnd(details);
   }
 
   THPointPaint getPointPaint(THPoint point) {

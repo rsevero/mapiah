@@ -258,6 +258,6 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       }
     }
 
-    return Rect.fromLTRB(minX, minY, maxX, maxY);
+    return MPNumericAux.orderedRectFromLTRB(minX, minY, maxX, maxY);
   }
 }

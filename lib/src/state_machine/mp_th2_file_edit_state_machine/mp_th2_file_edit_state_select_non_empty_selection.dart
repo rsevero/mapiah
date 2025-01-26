@@ -95,13 +95,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   }
 
   /// 1. Create a list of objects inside the selection window.
-  /// 2. Reset the start point of the pan/selection window.
-  /// 3. Is Shift pressed?
-  /// 3.1. Yes. Include objects not yet selected in the selection;
-  /// 3.2. No. Clear current selection. Is the list of objects inside the
+  /// 2. Is Shift pressed?
+  /// 2.1. Yes. Include objects not yet selected in the selection;
+  /// 2.2. No. Clear current selection. Is the list of objects inside the
   /// selection window empty?
-  /// 3.2.1. Yes. Change to [MPTH2FileEditStateType.selectEmptySelection];
-  /// 3.2.2. No. Include objects from the list inside the selection window in
+  /// 2.2.1. Yes. Change to [MPTH2FileEditStateType.selectEmptySelection];
+  /// 2.2.2. No. Include objects from the list inside the selection window in
   /// the current selection.
 
   @override
@@ -109,8 +108,6 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     final List<THElement> elementsInsideSelectionWindow =
         _getObjectsInsideSelectionWindow(details.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
-
-    th2FileEditStore.setPanStartCoordinates(Offset.zero);
 
     if (shiftPressed) {
       th2FileEditStore.addSelectedElements(elementsInsideSelectionWindow);
