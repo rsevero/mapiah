@@ -5,7 +5,8 @@ mixin MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin
   List<THElement> _getObjectsInsideSelectionWindow(
     Offset screenCoordinatesEndSelectionWindow,
   ) {
-    final Offset startSelectionWindow = th2FileEditStore.panStartCoordinates;
+    final Offset startSelectionWindow =
+        th2FileEditStore.panStartCanvasCoordinates;
     final Offset endSelectionWindow = th2FileEditStore
         .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
     final Rect selectionWindow = Rect.fromLTRB(

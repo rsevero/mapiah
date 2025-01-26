@@ -45,6 +45,7 @@ const String thClipMultipleChoiceType = 'clip';
 
 const String mpMoveBezierLineSegmentCommandDescription =
     'Move Bezier Line Segment';
+const String mpMoveElementsCommandDescription = 'Move Elements';
 const String mpMoveLineCommandDescription = 'Move Line';
 const String mpMovePointCommandDescription = 'Move Point';
 const String mpMoveStraightLineSegmentCommandDescription =

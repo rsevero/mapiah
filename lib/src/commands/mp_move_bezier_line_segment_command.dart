@@ -1,190 +1,67 @@
 part of 'mp_command.dart';
 
 class MPMoveBezierLineSegmentCommand extends MPCommand {
-  late final THBezierCurveLineSegment lineSegment;
-  late final Offset endPointOriginalCoordinates;
-  late final Offset endPointNewCoordinates;
-  late final Offset controlPoint1OriginalCoordinates;
-  late final Offset controlPoint1NewCoordinates;
-  late final Offset controlPoint2OriginalCoordinates;
-  late final Offset controlPoint2NewCoordinates;
+  final int lineSegmentMapiahID;
+  final Offset originalEndPointCoordinates;
+  final Offset originalControlPoint1Coordinates;
+  final Offset originalControlPoint2Coordinates;
+  late final Offset modifiedEndPointCoordinates;
+  late final Offset modifiedControlPoint1Coordinates;
+  late final Offset modifiedControlPoint2Coordinates;
 
   MPMoveBezierLineSegmentCommand.forCWJM({
-    required this.lineSegment,
-    required this.endPointOriginalCoordinates,
-    required this.endPointNewCoordinates,
-    required this.controlPoint1OriginalCoordinates,
-    required this.controlPoint1NewCoordinates,
-    required this.controlPoint2OriginalCoordinates,
-    required this.controlPoint2NewCoordinates,
+    required this.lineSegmentMapiahID,
+    required this.originalEndPointCoordinates,
+    required this.modifiedEndPointCoordinates,
+    required this.originalControlPoint1Coordinates,
+    required this.modifiedControlPoint1Coordinates,
+    required this.originalControlPoint2Coordinates,
+    required this.modifiedControlPoint2Coordinates,
     required super.oppositeCommand,
     super.description = mpMoveBezierLineSegmentCommandDescription,
   }) : super.forCWJM();
 
   MPMoveBezierLineSegmentCommand({
-    required this.lineSegment,
-    required this.endPointOriginalCoordinates,
-    required this.endPointNewCoordinates,
-    required this.controlPoint1OriginalCoordinates,
-    required this.controlPoint1NewCoordinates,
-    required this.controlPoint2OriginalCoordinates,
-    required this.controlPoint2NewCoordinates,
+    required this.lineSegmentMapiahID,
+    required this.originalEndPointCoordinates,
+    required this.modifiedEndPointCoordinates,
+    required this.originalControlPoint1Coordinates,
+    required this.modifiedControlPoint1Coordinates,
+    required this.originalControlPoint2Coordinates,
+    required this.modifiedControlPoint2Coordinates,
     super.description = mpMoveBezierLineSegmentCommandDescription,
   }) : super();
 
   MPMoveBezierLineSegmentCommand.fromDelta({
-    required this.lineSegment,
-    required this.endPointOriginalCoordinates,
-    required this.controlPoint1OriginalCoordinates,
-    required this.controlPoint2OriginalCoordinates,
+    required this.lineSegmentMapiahID,
+    required this.originalEndPointCoordinates,
+    required this.originalControlPoint1Coordinates,
+    required this.originalControlPoint2Coordinates,
     required Offset deltaOnCanvas,
     super.description = mpMoveBezierLineSegmentCommandDescription,
-  })  : endPointNewCoordinates = endPointOriginalCoordinates + deltaOnCanvas,
-        controlPoint1NewCoordinates =
-            controlPoint1OriginalCoordinates + deltaOnCanvas,
-        controlPoint2NewCoordinates =
-            controlPoint2OriginalCoordinates + deltaOnCanvas,
+  })  : modifiedEndPointCoordinates =
+            originalEndPointCoordinates + deltaOnCanvas,
+        modifiedControlPoint1Coordinates =
+            originalControlPoint1Coordinates + deltaOnCanvas,
+        modifiedControlPoint2Coordinates =
+            originalControlPoint2Coordinates + deltaOnCanvas,
         super();
 
   @override
   MPCommandType get type => MPCommandType.moveBezierLineSegment;
 
   @override
-  Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
-      'lineSegment': lineSegment.toMap(),
-      'endPointOriginalCoordinates': {
-        'dx': endPointOriginalCoordinates.dx,
-        'dy': endPointOriginalCoordinates.dy
-      },
-      'endPointNewCoordinates': {
-        'dx': endPointNewCoordinates.dx,
-        'dy': endPointNewCoordinates.dy
-      },
-      'controlPoint1OriginalCoordinates': {
-        'dx': controlPoint1OriginalCoordinates.dx,
-        'dy': controlPoint1OriginalCoordinates.dy
-      },
-      'controlPoint1NewCoordinates': {
-        'dx': controlPoint1NewCoordinates.dx,
-        'dy': controlPoint1NewCoordinates.dy
-      },
-      'controlPoint2OriginalCoordinates': {
-        'dx': controlPoint2OriginalCoordinates.dx,
-        'dy': controlPoint2OriginalCoordinates.dy
-      },
-      'controlPoint2NewCoordinates': {
-        'dx': controlPoint2NewCoordinates.dx,
-        'dy': controlPoint2NewCoordinates.dy
-      },
-      'oppositeCommand': oppositeCommand?.toMap(),
-      'description': description,
-    };
-  }
-
-  factory MPMoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
-    return MPMoveBezierLineSegmentCommand.forCWJM(
-      lineSegment: THBezierCurveLineSegment.fromMap(map['lineSegment']),
-      endPointOriginalCoordinates: Offset(
-          map['endPointOriginalCoordinates']['dx'],
-          map['endPointOriginalCoordinates']['dy']),
-      endPointNewCoordinates: Offset(map['endPointNewCoordinates']['dx'],
-          map['endPointNewCoordinates']['dy']),
-      controlPoint1OriginalCoordinates: Offset(
-          map['controlPoint1OriginalCoordinates']['dx'],
-          map['controlPoint1OriginalCoordinates']['dy']),
-      controlPoint1NewCoordinates: Offset(
-          map['controlPoint1NewCoordinates']['dx'],
-          map['controlPoint1NewCoordinates']['dy']),
-      controlPoint2OriginalCoordinates: Offset(
-          map['controlPoint2OriginalCoordinates']['dx'],
-          map['controlPoint2OriginalCoordinates']['dy']),
-      controlPoint2NewCoordinates: Offset(
-          map['controlPoint2NewCoordinates']['dx'],
-          map['controlPoint2NewCoordinates']['dy']),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
-      description: map['description'],
-    );
-  }
-
-  factory MPMoveBezierLineSegmentCommand.fromJson(String jsonString) {
-    return MPMoveBezierLineSegmentCommand.fromMap(jsonDecode(jsonString));
-  }
-
-  @override
-  MPMoveBezierLineSegmentCommand copyWith({
-    THBezierCurveLineSegment? lineSegment,
-    Offset? endPointOriginalCoordinates,
-    Offset? endPointNewCoordinates,
-    Offset? controlPoint1OriginalCoordinates,
-    Offset? controlPoint1NewCoordinates,
-    Offset? controlPoint2OriginalCoordinates,
-    Offset? controlPoint2NewCoordinates,
-    MPUndoRedoCommand? oppositeCommand,
-    String? description,
-  }) {
-    return MPMoveBezierLineSegmentCommand.forCWJM(
-      lineSegment: lineSegment ?? this.lineSegment,
-      endPointOriginalCoordinates:
-          endPointOriginalCoordinates ?? this.endPointOriginalCoordinates,
-      endPointNewCoordinates:
-          endPointNewCoordinates ?? this.endPointNewCoordinates,
-      controlPoint1OriginalCoordinates: controlPoint1OriginalCoordinates ??
-          this.controlPoint1OriginalCoordinates,
-      controlPoint1NewCoordinates:
-          controlPoint1NewCoordinates ?? this.controlPoint1NewCoordinates,
-      controlPoint2OriginalCoordinates: controlPoint2OriginalCoordinates ??
-          this.controlPoint2OriginalCoordinates,
-      controlPoint2NewCoordinates:
-          controlPoint2NewCoordinates ?? this.controlPoint2NewCoordinates,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
-      description: description ?? this.description,
-    );
-  }
-
-  @override
-  bool operator ==(covariant MPMoveBezierLineSegmentCommand other) {
-    if (identical(this, other)) return true;
-
-    return other.lineSegment == lineSegment &&
-        other.endPointOriginalCoordinates == endPointOriginalCoordinates &&
-        other.endPointNewCoordinates == endPointNewCoordinates &&
-        other.controlPoint1OriginalCoordinates ==
-            controlPoint1OriginalCoordinates &&
-        other.controlPoint1NewCoordinates == controlPoint1NewCoordinates &&
-        other.controlPoint2OriginalCoordinates ==
-            controlPoint2OriginalCoordinates &&
-        other.controlPoint2NewCoordinates == controlPoint2NewCoordinates &&
-        other.oppositeCommand == oppositeCommand &&
-        other.description == description;
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        lineSegment,
-        endPointOriginalCoordinates,
-        endPointNewCoordinates,
-        controlPoint1OriginalCoordinates,
-        controlPoint1NewCoordinates,
-        controlPoint2OriginalCoordinates,
-        controlPoint2NewCoordinates,
-        oppositeCommand,
-        description,
-      );
-
-  @override
   void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    final THBezierCurveLineSegment originalLineSegment = lineSegment;
-    final THBezierCurveLineSegment newLineSegment = lineSegment.copyWith(
-        endPoint: originalLineSegment.endPoint
-            .copyWith(coordinates: endPointNewCoordinates),
-        controlPoint1: originalLineSegment.controlPoint1
-            .copyWith(coordinates: controlPoint1NewCoordinates),
-        controlPoint2: originalLineSegment.controlPoint2
-            .copyWith(coordinates: controlPoint2NewCoordinates));
+    final THBezierCurveLineSegment originalLineSegment = th2FileEditStore.thFile
+        .elementByMapiahID(lineSegmentMapiahID) as THBezierCurveLineSegment;
+    final THBezierCurveLineSegment newLineSegment =
+        originalLineSegment.copyWith(
+            endPoint: originalLineSegment.endPoint
+                .copyWith(coordinates: modifiedEndPointCoordinates),
+            controlPoint1: originalLineSegment.controlPoint1
+                .copyWith(coordinates: modifiedControlPoint1Coordinates),
+            controlPoint2: originalLineSegment.controlPoint2
+                .copyWith(coordinates: modifiedControlPoint2Coordinates));
 
     th2FileEditStore.substituteElementWithoutRedrawTrigger(newLineSegment);
   }
@@ -193,13 +70,13 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createOppositeCommand() {
     final MPMoveBezierLineSegmentCommand oppositeCommand =
         MPMoveBezierLineSegmentCommand(
-      lineSegment: lineSegment,
-      endPointOriginalCoordinates: endPointNewCoordinates,
-      endPointNewCoordinates: endPointOriginalCoordinates,
-      controlPoint1OriginalCoordinates: controlPoint1NewCoordinates,
-      controlPoint1NewCoordinates: controlPoint1OriginalCoordinates,
-      controlPoint2OriginalCoordinates: controlPoint2NewCoordinates,
-      controlPoint2NewCoordinates: controlPoint2OriginalCoordinates,
+      lineSegmentMapiahID: lineSegmentMapiahID,
+      originalEndPointCoordinates: modifiedEndPointCoordinates,
+      modifiedEndPointCoordinates: originalEndPointCoordinates,
+      originalControlPoint1Coordinates: modifiedControlPoint1Coordinates,
+      modifiedControlPoint1Coordinates: originalControlPoint1Coordinates,
+      originalControlPoint2Coordinates: modifiedControlPoint2Coordinates,
+      modifiedControlPoint2Coordinates: originalControlPoint2Coordinates,
       description: description,
     );
 
@@ -209,4 +86,140 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
       map: oppositeCommand.toMap(),
     );
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'commandType': type.name,
+      'lineSegmentMapiahID': lineSegmentMapiahID,
+      'originalControlPoint1Coordinates': {
+        'dx': originalControlPoint1Coordinates.dx,
+        'dy': originalControlPoint1Coordinates.dy,
+      },
+      'originalControlPoint2Coordinates': {
+        'dx': originalControlPoint2Coordinates.dx,
+        'dy': originalControlPoint2Coordinates.dy,
+      },
+      'originalEndPointCoordinates': {
+        'dx': originalEndPointCoordinates.dx,
+        'dy': originalEndPointCoordinates.dy,
+      },
+      'modifiedControlPoint1Coordinates': {
+        'dx': modifiedControlPoint1Coordinates.dx,
+        'dy': modifiedControlPoint1Coordinates.dy,
+      },
+      'modifiedControlPoint2Coordinates': {
+        'dx': modifiedControlPoint2Coordinates.dx,
+        'dy': modifiedControlPoint2Coordinates.dy,
+      },
+      'modifiedEndPointCoordinates': {
+        'dx': modifiedEndPointCoordinates.dx,
+        'dy': modifiedEndPointCoordinates.dy,
+      },
+      'oppositeCommand': oppositeCommand?.toMap(),
+      'description': description,
+    };
+  }
+
+  factory MPMoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
+    return MPMoveBezierLineSegmentCommand.forCWJM(
+      lineSegmentMapiahID: map['lineSegmentMapiahID'],
+      originalControlPoint1Coordinates: Offset(
+        map['originalControlPoint1Coordinates']['dx'],
+        map['originalControlPoint1Coordinates']['dy'],
+      ),
+      originalControlPoint2Coordinates: Offset(
+        map['originalControlPoint2Coordinates']['dx'],
+        map['originalControlPoint2Coordinates']['dy'],
+      ),
+      originalEndPointCoordinates: Offset(
+        map['originalEndPointCoordinates']['dx'],
+        map['originalEndPointCoordinates']['dy'],
+      ),
+      modifiedControlPoint1Coordinates: Offset(
+        map['modifiedControlPoint1Coordinates']['dx'],
+        map['modifiedControlPoint1Coordinates']['dy'],
+      ),
+      modifiedControlPoint2Coordinates: Offset(
+        map['modifiedControlPoint2Coordinates']['dx'],
+        map['modifiedControlPoint2Coordinates']['dy'],
+      ),
+      modifiedEndPointCoordinates: Offset(
+        map['modifiedEndPointCoordinates']['dx'],
+        map['modifiedEndPointCoordinates']['dy'],
+      ),
+      oppositeCommand: map['oppositeCommand'] == null
+          ? null
+          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
+      description: map['description'],
+    );
+  }
+
+  factory MPMoveBezierLineSegmentCommand.fromJson(String source) {
+    return MPMoveBezierLineSegmentCommand.fromMap(jsonDecode(source));
+  }
+
+  @override
+  MPMoveBezierLineSegmentCommand copyWith({
+    int? lineSegmentMapiahID,
+    Offset? originalControlPoint1Coordinates,
+    Offset? originalControlPoint2Coordinates,
+    Offset? originalEndPointCoordinates,
+    Offset? modifiedControlPoint1Coordinates,
+    Offset? modifiedControlPoint2Coordinates,
+    Offset? modifiedEndPointCoordinates,
+    MPUndoRedoCommand? oppositeCommand,
+    String? description,
+  }) {
+    return MPMoveBezierLineSegmentCommand.forCWJM(
+      lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
+      originalControlPoint1Coordinates: originalControlPoint1Coordinates ??
+          this.originalControlPoint1Coordinates,
+      originalControlPoint2Coordinates: originalControlPoint2Coordinates ??
+          this.originalControlPoint2Coordinates,
+      originalEndPointCoordinates:
+          originalEndPointCoordinates ?? this.originalEndPointCoordinates,
+      modifiedControlPoint1Coordinates: modifiedControlPoint1Coordinates ??
+          this.modifiedControlPoint1Coordinates,
+      modifiedControlPoint2Coordinates: modifiedControlPoint2Coordinates ??
+          this.modifiedControlPoint2Coordinates,
+      modifiedEndPointCoordinates:
+          modifiedEndPointCoordinates ?? this.modifiedEndPointCoordinates,
+      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MPMoveBezierLineSegmentCommand &&
+        other.lineSegmentMapiahID == lineSegmentMapiahID &&
+        other.originalControlPoint1Coordinates ==
+            originalControlPoint1Coordinates &&
+        other.originalControlPoint2Coordinates ==
+            originalControlPoint2Coordinates &&
+        other.originalEndPointCoordinates == originalEndPointCoordinates &&
+        other.modifiedControlPoint1Coordinates ==
+            modifiedControlPoint1Coordinates &&
+        other.modifiedControlPoint2Coordinates ==
+            modifiedControlPoint2Coordinates &&
+        other.modifiedEndPointCoordinates == modifiedEndPointCoordinates &&
+        other.oppositeCommand == oppositeCommand &&
+        other.description == description;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        lineSegmentMapiahID,
+        originalControlPoint1Coordinates,
+        originalControlPoint2Coordinates,
+        originalEndPointCoordinates,
+        modifiedControlPoint1Coordinates,
+        modifiedControlPoint2Coordinates,
+        modifiedEndPointCoordinates,
+        oppositeCommand,
+        description,
+      );
 }

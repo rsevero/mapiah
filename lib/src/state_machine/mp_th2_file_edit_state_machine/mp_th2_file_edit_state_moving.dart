@@ -3,39 +3,86 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateMoving extends MPTH2FileEditState {
   MPTH2FileEditStateMoving({required super.th2FileEditStore});
 
-  @override
-  void setCursor() {}
-
-  @override
-  void onTapUp(TapUpDetails details) {
-    /// Nada
-  }
-
-  @override
-  void onPanStart(DragStartDetails details) {
-    /// Nada.
-  }
-
+  /// 1. Moves all selected objects by the distance indicated by [details].
   @override
   void onPanUpdate(DragUpdateDetails details) {
-    /// Desloca todos os objetos selecionados pela distância indicada por [details].
+    th2FileEditStore.moveSelectedElementsToScreenCoordinates(details.delta);
   }
 
+  /// 1. Records an MPCommand that moves the entire selection by the distance
+  /// indicated by [details].
+  /// 2. Resets the pan start point.
+  /// 3. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPanEnd(DragEndDetails details) {
-    /// 1. Grava um MPCommand que move toda a seleção pela distância indicada por [details].
-    /// 2. Zera ponto de início do pan.
-    /// 3. Muda para [MPTH2FileEditStateType.selectNonEmptySelection].
-  }
+    final int selectedCount = th2FileEditStore.selectedElements.length;
+    final Offset panDeltaOnCanvas =
+        th2FileEditStore.offsetScreenToCanvas(details.localPosition) -
+            th2FileEditStore.panStartCanvasCoordinates;
 
-  @override
-  void onPanToolPressed() {
-    /// Nada.
-  }
+    if (selectedCount == 1) {
+      final MPSelectedElement selected =
+          th2FileEditStore.selectedElements.values.first;
+      final THElement selectedElement = selected.originalElementClone;
 
-  @override
-  void onSelectToolPressed() {
-    /// Nada.
+      switch (selected) {
+        case MPSelectedPoint _:
+          final MPMovePointCommand movePointCommand =
+              MPMovePointCommand.fromDelta(
+            pointMapiahID: selectedElement.mapiahID,
+            originalCoordinates:
+                (selectedElement as THPoint).position.coordinates,
+            deltaOnCanvas: panDeltaOnCanvas,
+          );
+
+          th2FileEditStore.execute(movePointCommand);
+          break;
+        case MPSelectedLine _:
+          final MPMoveLineCommand moveLineCommand = MPMoveLineCommand.fromDelta(
+            lineMapiahID: selectedElement.mapiahID,
+            originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
+            deltaOnCanvas: panDeltaOnCanvas,
+          );
+
+          th2FileEditStore.execute(moveLineCommand);
+          break;
+      }
+    } else if (selectedCount > 1) {
+      final List<MPMoveCommandOriginalParameters>
+          moveCommandOriginalParametersList = th2FileEditStore
+              .selectedElements.values
+              .map<MPMoveCommandOriginalParameters>(
+                  (MPSelectedElement selected) {
+        final THElement selectedElement = selected.originalElementClone;
+        switch (selected) {
+          case MPSelectedPoint _:
+            return MPMoveCommandPointOriginalParameters(
+              mapiahID: selectedElement.mapiahID,
+              coordinates: (selectedElement as THPoint).position.coordinates,
+            );
+          case MPSelectedLine _:
+            return MPMoveCommandLineOriginalParameters(
+              mapiahID: selectedElement.mapiahID,
+              lineSegmentsMap: selected.originalLineSegmentsMapClone,
+            );
+          default:
+            throw UnimplementedError();
+        }
+      }).toList();
+
+      final MPMoveElementsCommand moveElementsCommand =
+          MPMoveElementsCommand.fromDelta(
+        moveCommandOriginalParametersList: moveCommandOriginalParametersList,
+        deltaOnCanvas: panDeltaOnCanvas,
+      );
+
+      th2FileEditStore.execute(moveElementsCommand);
+    }
+
+    th2FileEditStore.setPanStartCoordinates(Offset.zero);
+
+    th2FileEditStore
+        .setNewState(MPTH2FileEditStateType.selectNonEmptySelection);
   }
 
   @override

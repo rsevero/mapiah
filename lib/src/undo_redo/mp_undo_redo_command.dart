@@ -64,6 +64,8 @@ class MPUndoRedoCommand {
     switch (commandType) {
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
+      case MPCommandType.moveElements:
+        return MPMoveElementsCommand.fromMap(map);
       case MPCommandType.moveLine:
         return MPMoveLineCommand.fromMap(map);
       case MPCommandType.movePoint:

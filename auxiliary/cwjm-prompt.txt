@@ -15,4 +15,10 @@ In case there are any optional parameters, include an extra makePARAMETER_NAMENu
 
 toMap, toJson, copyWith, hashCode should include @override annotations.
 
+Use jsonDecode(), not json.decode().
+
+In the toMap() method start the map with a "'type': type.name".
+
+If there is a 'oppositeCommand' parameter, it should be treated as nullable.
+
 Present only the created methods, don´t return the complete class.

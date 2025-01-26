@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -116,7 +115,7 @@ abstract class TH2FileEditStoreBase with Store {
 
   final Map<int, MPSelectable> _selectableElements = {};
 
-  Offset panStartCoordinates = Offset.zero;
+  Offset panStartCanvasCoordinates = Offset.zero;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -344,53 +343,7 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   void setPanStartCoordinates(Offset screenCoordinates) {
-    panStartCoordinates = offsetScreenToCanvas(screenCoordinates);
-  }
-
-  void _onPanStartSelectMode(DragStartDetails details) {
-    final List<THElement> clickedElements =
-        selectableElementsClicked(details.localPosition);
-
-    if (clickedElements.isEmpty) {
-      return;
-    }
-
-    bool isFirst = true;
-    for (THElement element in clickedElements) {
-      if ((element is! THPoint) &&
-          (element is! THLine) &&
-          (element is! THLineSegment)) {
-        return;
-      }
-
-      if (isFirst) {
-        panStartCoordinates = offsetScreenToCanvas(details.localPosition);
-        isFirst = false;
-      }
-
-      bool isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
-              .contains(LogicalKeyboardKey.shiftLeft) ||
-          HardwareKeyboard.instance.logicalKeysPressed
-              .contains(LogicalKeyboardKey.shiftRight);
-
-      if (!isShiftPressed) {
-        _selectedElements.clear();
-      }
-
-      if (element is THLineSegment) {
-        element = element.parent(_thFile) as THLine;
-      }
-
-      switch (element) {
-        case THLine _:
-          _addSelectedElement(
-              MPSelectedLine(thFile: _thFile, originalLine: element));
-          break;
-        case THPoint _:
-          _addSelectedElement(MPSelectedPoint(originalPoint: element));
-          break;
-      }
-    }
+    panStartCanvasCoordinates = offsetScreenToCanvas(screenCoordinates);
   }
 
   @action
@@ -453,7 +406,7 @@ abstract class TH2FileEditStoreBase with Store {
     }
 
     final Offset localDeltaPositionOnCanvas =
-        canvasCoordinatesFinalPosition - panStartCoordinates;
+        canvasCoordinatesFinalPosition - panStartCanvasCoordinates;
 
     for (final MPSelectedElement selectedElement in _selectedElements.values) {
       switch (selectedElement.originalElementClone) {
@@ -540,11 +493,11 @@ abstract class TH2FileEditStoreBase with Store {
     }
 
     final Offset panEndOffset =
-        offsetScreenToCanvas(details.localPosition) - panStartCoordinates;
+        offsetScreenToCanvas(details.localPosition) - panStartCanvasCoordinates;
 
     if (panEndOffset == Offset.zero) {
       // TODO - compare doubles with some epsilon
-      panStartCoordinates = Offset.zero;
+      panStartCanvasCoordinates = Offset.zero;
       return;
     }
 
@@ -558,7 +511,7 @@ abstract class TH2FileEditStoreBase with Store {
           break;
         case MPSelectedLine _:
           updateLinePositionPerOffset(
-            originalLine: selectedElement.originalLineClone,
+            lineMapiahID: selectedElement.originalLineClone.mapiahID,
             originalLineSegmentsMap:
                 selectedElement.originalLineSegmentsMapClone,
             deltaOnCanvas: panEndOffset,
@@ -567,7 +520,7 @@ abstract class TH2FileEditStoreBase with Store {
       }
     }
 
-    panStartCoordinates = Offset.zero;
+    panStartCanvasCoordinates = Offset.zero;
   }
 
   THPointPaint getPointPaint(THPoint point) {
@@ -898,15 +851,13 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   void updateLinePosition({
-    required THLine originalLine,
+    required int lineMapiahID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-    required THLine newLine,
     required LinkedHashMap<int, THLineSegment> newLineSegmentsMap,
   }) {
     final MPMoveLineCommand command = MPMoveLineCommand(
-      originalLine: originalLine,
+      lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: originalLineSegmentsMap,
-      modifiedLine: newLine,
       modifiedLineSegmentsMap: newLineSegmentsMap,
       description: 'Move Line',
     );
@@ -914,12 +865,12 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   void updateLinePositionPerOffset({
-    required THLine originalLine,
+    required int lineMapiahID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required Offset deltaOnCanvas,
   }) {
     final MPMoveLineCommand command = MPMoveLineCommand.fromDelta(
-      originalLine: originalLine,
+      lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: originalLineSegmentsMap,
       deltaOnCanvas: deltaOnCanvas,
     );

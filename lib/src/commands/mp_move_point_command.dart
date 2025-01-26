@@ -33,6 +33,34 @@ class MPMovePointCommand extends MPCommand {
   MPCommandType get type => MPCommandType.movePoint;
 
   @override
+  void _actualExecute(TH2FileEditStore th2FileEditStore) {
+    final THPoint originalPoint =
+        th2FileEditStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
+    final THPoint modifiedPoint = originalPoint.copyWith(
+        position:
+            originalPoint.position.copyWith(coordinates: modifiedCoordinates));
+
+    th2FileEditStore.substituteElement(modifiedPoint);
+  }
+
+  @override
+  MPUndoRedoCommand _createOppositeCommand() {
+    /// The original description is kept for the undo/redo command so the
+    /// message on undo and redo are the same.
+    final MPMovePointCommand oppositeCommand = MPMovePointCommand(
+      pointMapiahID: pointMapiahID,
+      originalCoordinates: modifiedCoordinates,
+      modifiedCoordinates: originalCoordinates,
+      description: description,
+    );
+
+    return MPUndoRedoCommand(
+        commandType: oppositeCommand.type,
+        description: description,
+        map: oppositeCommand.toMap());
+  }
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       'commandType': type.name,
@@ -104,32 +132,4 @@ class MPMovePointCommand extends MPCommand {
         oppositeCommand,
         description,
       );
-
-  @override
-  MPUndoRedoCommand _createOppositeCommand() {
-    /// The original description is kept for the undo/redo command so the
-    /// message on undo and redo are the same.
-    final MPMovePointCommand oppositeCommand = MPMovePointCommand(
-      pointMapiahID: pointMapiahID,
-      originalCoordinates: modifiedCoordinates,
-      modifiedCoordinates: originalCoordinates,
-      description: description,
-    );
-
-    return MPUndoRedoCommand(
-        commandType: oppositeCommand.type,
-        description: description,
-        map: oppositeCommand.toMap());
-  }
-
-  @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    final THPoint originalPoint =
-        th2FileEditStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
-    final THPoint modifiedPoint = originalPoint.copyWith(
-        position:
-            originalPoint.position.copyWith(coordinates: modifiedCoordinates));
-
-    th2FileEditStore.substituteElement(modifiedPoint);
-  }
 }
