@@ -8,7 +8,6 @@ import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
-import 'package:mobx/mobx.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
@@ -18,16 +17,7 @@ class MapiahHome extends StatelessWidget {
     final MPSettingsStore settingsStore = getIt<MPSettingsStore>();
     setWindowTitle(AppLocalizations.of(context).appTitle);
 
-    if (getIt.isRegistered<AppLocalizations>()) {
-      getIt.unregister<AppLocalizations>();
-    }
-    getIt.registerSingleton<AppLocalizations>(AppLocalizations.of(context));
-
-    autorun((_) {
-      if (getIt<MPSettingsStore>().localeID.isNotEmpty) {
-        MPCommandDescriptor.resetCommandDescriptions();
-      }
-    });
+    initializeMPCommandLoclizations(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -94,6 +84,15 @@ class MapiahHome extends StatelessWidget {
         );
       },
     );
+  }
+
+  void initializeMPCommandLoclizations(BuildContext context) {
+    if (getIt.isRegistered<AppLocalizations>()) {
+      getIt.unregister<AppLocalizations>();
+    }
+    getIt.registerSingleton<AppLocalizations>(AppLocalizations.of(context));
+
+    MPCommandDescriptor.resetCommandDescriptions();
   }
 
   void _pickTh2File(BuildContext context) async {
