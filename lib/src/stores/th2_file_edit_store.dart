@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_helper.dart';
 import 'package:mapiah/src/auxiliary/th2_file_edit_mode.dart';
 import 'package:mapiah/src/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/auxiliary/th_point_paint.dart';
@@ -231,22 +232,32 @@ abstract class TH2FileEditStoreBase with Store {
     return clickedElements;
   }
 
-  List<THElement> selectableElementsInsideWindow(Offset screenCoordinates) {
-    final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
-    final List<THElement> clickedElements = <THElement>[];
+  List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
+    final List<THElement> insideWindowElements = <THElement>[];
 
     for (final MPSelectable selectable in _selectableElements.values) {
-      if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
-        switch (selectable.selected) {
-          case THPoint _:
-          case THLine _:
-            clickedElements.add(selectable.selected as THElement);
-            break;
-        }
+      final THElement selected = selectable.selected as THElement;
+      switch (selected) {
+        case THPoint _:
+          if (MPNumericHelper.isRect1InsideRect2(
+            rect1: selected.getBoundingBox(),
+            rect2: canvasSelectionWindow,
+          )) {
+            insideWindowElements.add(selected);
+          }
+          break;
+        case THLine _:
+          if (MPNumericHelper.isRect1InsideRect2(
+            rect1: selected.getBoundingBox(_thFile),
+            rect2: canvasSelectionWindow,
+          )) {
+            insideWindowElements.add(selected);
+          }
+          break;
       }
     }
 
-    return clickedElements;
+    return insideWindowElements;
   }
 
   void onTapUp(TapUpDetails details) {

@@ -30,17 +30,37 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState {
     /// TODO: Draw the selection window.
   }
 
-  /// 1. Create a list of objects inside the selection window. Is the list empty?
-  /// 1.1. Yes. Do nothing;
-  /// 1.2. No. Add objects from the list inside the selection window to the current selection. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
-  /// 2. Reset the start point of the pan.
+  /// 1. Create a list of objects inside the selection window.
+  /// 2. Reset the start point of the pan/selection window.
+  /// 3. Is the list empty?
+  /// 3.1. Yes. Do nothing;
+  /// 3.2. No. Add objects from the list inside the selection window to the
+  /// current selection. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
   @override
-  void onPanEnd(DragEndDetails details) {}
+  void onPanEnd(DragEndDetails details) {
+    final Offset startSelectionWindow = thFileEditStore.panStartCoordinates;
+    final Offset endSelectionWindow =
+        thFileEditStore.offsetScreenToCanvas(details.localPosition);
+    final Rect selectionWindow = Rect.fromLTRB(
+      startSelectionWindow.dx,
+      startSelectionWindow.dy,
+      endSelectionWindow.dx,
+      endSelectionWindow.dy,
+    );
+    final List<THElement> elementsInsideSelectionWindow =
+        thFileEditStore.selectableElementsInsideWindow(selectionWindow);
+
+    if (elementsInsideSelectionWindow.isNotEmpty) {
+      thFileEditStore.setSelectedElements(elementsInsideSelectionWindow);
+      thFileEditStore
+          .setNewState(MPTH2FileEditStateType.selectNonEmptySelection);
+    }
+  }
 
   /// Change to [MPTH2FileEditStateType.pan].
   @override
   void onPanToolPressed() {
-    /// Muda para [MPTH2FileEditStateType.pan];
+    thFileEditStore.setNewState(MPTH2FileEditStateType.pan);
   }
 
   @override

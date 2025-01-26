@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
@@ -47,5 +48,12 @@ class MPNumericHelper {
       valueString = valueString.replaceAll(endingDot, '');
     }
     return valueString;
+  }
+
+  static bool isRect1InsideRect2({
+    required Rect rect1,
+    required Rect rect2,
+  }) {
+    return rect2.contains(rect1.topLeft) && rect2.contains(rect1.bottomRight);
   }
 }
