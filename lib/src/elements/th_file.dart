@@ -227,11 +227,10 @@ class THFile with THParentMixin {
   }
 
   Rect _calculateBoundingBox() {
-    double minX = 0.0;
-    double minY = 0.0;
-    double maxX = 0.0;
-    double maxY = 0.0;
-    bool isFirst = true;
+    double minX = double.infinity;
+    double minY = double.infinity;
+    double maxX = double.negativeInfinity;
+    double maxY = double.negativeInfinity;
 
     for (final THElement element in _elementByMapiahID.values) {
       late final Rect childBoundingBox;
@@ -246,24 +245,17 @@ class THFile with THParentMixin {
           continue;
       }
 
-      if (isFirst) {
-        minX = childBoundingBox.left;
-        minY = childBoundingBox.top;
-        maxX = childBoundingBox.right;
-        maxY = childBoundingBox.bottom;
-        isFirst = false;
-        continue;
-      }
-
       if (childBoundingBox.left < minX) {
         minX = childBoundingBox.left;
-      } else if (childBoundingBox.right > maxX) {
+      }
+      if (childBoundingBox.right > maxX) {
         maxX = childBoundingBox.right;
       }
 
       if (childBoundingBox.top < minY) {
         minY = childBoundingBox.top;
-      } else if (childBoundingBox.bottom > maxY) {
+      }
+      if (childBoundingBox.bottom > maxY) {
         maxY = childBoundingBox.bottom;
       }
     }

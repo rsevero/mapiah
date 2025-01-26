@@ -174,10 +174,10 @@ class THLine extends THElement
       return Rect.zero;
     }
 
-    double minX = 0.0;
-    double minY = 0.0;
-    double maxX = 0.0;
-    double maxY = 0.0;
+    double minX = double.infinity;
+    double minY = double.infinity;
+    double maxX = double.negativeInfinity;
+    double maxY = double.negativeInfinity;
 
     bool isFirst = true;
     Offset startPoint = Offset.zero;
@@ -191,28 +191,24 @@ class THLine extends THElement
 
       if (isFirst) {
         startPoint = child.endPoint.coordinates;
+        isFirst = false;
       }
 
       final Rect childBoundingBox = child.getBoundingBox(startPoint);
 
-      if (isFirst) {
-        minX = childBoundingBox.left;
-        minY = childBoundingBox.top;
-        maxX = childBoundingBox.right;
-        maxY = childBoundingBox.bottom;
-        isFirst = false;
-        continue;
-      }
+      startPoint = child.endPoint.coordinates;
 
       if (childBoundingBox.left < minX) {
         minX = childBoundingBox.left;
-      } else if (childBoundingBox.right > maxX) {
+      }
+      if (childBoundingBox.right > maxX) {
         maxX = childBoundingBox.right;
       }
 
       if (childBoundingBox.top < minY) {
         minY = childBoundingBox.top;
-      } else if (childBoundingBox.bottom > maxY) {
+      }
+      if (childBoundingBox.bottom > maxY) {
         maxY = childBoundingBox.bottom;
       }
     }
