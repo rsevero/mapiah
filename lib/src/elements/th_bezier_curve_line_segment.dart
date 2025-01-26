@@ -168,23 +168,92 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       endPoint.coordinates,
     ];
 
+    return bezierBoundingBoxExtrema(points);
+  }
+
+  Rect bezierBoundingBoxExtrema(List<Offset> points) {
+    if (points.isEmpty) {
+      return Rect.zero;
+    }
+
     double minX = double.infinity;
     double maxX = double.negativeInfinity;
     double minY = double.infinity;
     double maxY = double.negativeInfinity;
 
-    for (final Offset point in points) {
-      if (point.dx < minX) {
-        minX = point.dx;
+    // Function to calculate a point on the Bezier curve at t
+    Offset bezierPoint(double t) {
+      // Cubic Bezier
+      double u = 1 - t;
+      double tt = t * t;
+      double ttt = tt * t;
+      double uu = u * u;
+      double uuu = uu * u;
+      return Offset(
+        uuu * points[0].dx +
+            3 * uu * t * points[1].dx +
+            3 * u * tt * points[2].dx +
+            ttt * points[3].dx,
+        uuu * points[0].dy +
+            3 * uu * t * points[1].dy +
+            3 * u * tt * points[2].dy +
+            ttt * points[3].dy,
+      );
+    }
+
+    // Function to solve quadratic equation for t values
+    List<double> solveQuadratic(double a, double b, double c) {
+      double discriminant = b * b - 4 * a * c;
+      if (discriminant < 0) return [];
+      if (discriminant == 0) return [-b / (2 * a)];
+      double sqrtDiscriminant = sqrt(discriminant);
+      return [
+        (-b + sqrtDiscriminant) / (2 * a),
+        (-b - sqrtDiscriminant) / (2 * a)
+      ];
+    }
+
+    final List<Offset> endPoints = [points.first, points.last];
+
+    // Add start and end control points to the bounding box
+    for (final p in endPoints) {
+      minX = min(minX, p.dx);
+      maxX = max(maxX, p.dx);
+      minY = min(minY, p.dy);
+      maxY = max(maxY, p.dy);
+    }
+
+    // Cubic Bezier: Calculate extrema
+    double a = -3 * points[0].dx +
+        9 * points[1].dx -
+        9 * points[2].dx +
+        3 * points[3].dx;
+    double b = 6 * points[0].dx - 12 * points[1].dx + 6 * points[2].dx;
+    double c = -3 * points[0].dx + 3 * points[1].dx;
+
+    List<double> xt = solveQuadratic(a, b, c);
+
+    a = -3 * points[0].dy +
+        9 * points[1].dy -
+        9 * points[2].dy +
+        3 * points[3].dy;
+    b = 6 * points[0].dy - 12 * points[1].dy + 6 * points[2].dy;
+    c = -3 * points[0].dy + 3 * points[1].dy;
+
+    List<double> yt = solveQuadratic(a, b, c);
+
+    for (double t in xt) {
+      if (t > 0 && t < 1) {
+        Offset p = bezierPoint(t);
+        minX = min(minX, p.dx);
+        maxX = max(maxX, p.dx);
       }
-      if (point.dx > maxX) {
-        maxX = point.dx;
-      }
-      if (point.dy < minY) {
-        minY = point.dy;
-      }
-      if (point.dy > maxY) {
-        maxY = point.dy;
+    }
+    for (double t in yt) {
+      if (t > 0 && t < 1) {
+        Offset p = bezierPoint(t);
+        minY = min(minY, p.dy);
+        maxY = max(maxY, p.dy);
       }
     }
 
