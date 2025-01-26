@@ -3,16 +3,16 @@ part of 'mp_command.dart';
 class MPMoveLineCommand extends MPCommand {
   final THLine originalLine;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
-  late final THLine newLine;
-  late final LinkedHashMap<int, THLineSegment> newLineSegmentsMap;
+  late final THLine modifiedLine;
+  late final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap;
   final Offset deltaOnCanvas;
   final bool isFromDelta;
 
   MPMoveLineCommand.forCWJM({
     required this.originalLine,
     required this.originalLineSegmentsMap,
-    required this.newLine,
-    required this.newLineSegmentsMap,
+    required this.modifiedLine,
+    required this.modifiedLineSegmentsMap,
     required super.oppositeCommand,
     super.description = mpMoveLineCommandDescription,
     this.deltaOnCanvas = Offset.zero,
@@ -22,8 +22,8 @@ class MPMoveLineCommand extends MPCommand {
   MPMoveLineCommand({
     required this.originalLine,
     required this.originalLineSegmentsMap,
-    required this.newLine,
-    required this.newLineSegmentsMap,
+    required this.modifiedLine,
+    required this.modifiedLineSegmentsMap,
     super.description = mpMoveLineCommandDescription,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
@@ -34,10 +34,10 @@ class MPMoveLineCommand extends MPCommand {
     required this.originalLineSegmentsMap,
     required this.deltaOnCanvas,
     super.description = mpMoveLineCommandDescription,
-  })  : newLine = originalLine.copyWith(),
+  })  : modifiedLine = originalLine.copyWith(),
         isFromDelta = true,
         super() {
-    newLineSegmentsMap = LinkedHashMap<int, THLineSegment>();
+    modifiedLineSegmentsMap = LinkedHashMap<int, THLineSegment>();
     for (var entry in originalLineSegmentsMap.entries) {
       final int originalLineSegmentMapiahID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
@@ -65,7 +65,7 @@ class MPMoveLineCommand extends MPCommand {
           break;
       }
 
-      newLineSegmentsMap[originalLineSegmentMapiahID] = newLineSegment;
+      modifiedLineSegmentsMap[originalLineSegmentMapiahID] = newLineSegment;
     }
   }
 
@@ -79,9 +79,9 @@ class MPMoveLineCommand extends MPCommand {
       'originalLine': originalLine.toMap(),
       'originalLineSegmentsMap': originalLineSegmentsMap
           .map((key, value) => MapEntry(key, value.toMap())),
-      'newLine': newLine.toMap(),
-      'newLineSegmentsMap':
-          newLineSegmentsMap.map((key, value) => MapEntry(key, value.toMap())),
+      'modifiedLine': modifiedLine.toMap(),
+      'modifiedLineSegmentsMap': modifiedLineSegmentsMap
+          .map((key, value) => MapEntry(key, value.toMap())),
       'oppositeCommand': oppositeCommand?.toMap(),
       'deltaOnCanvas': {'dx': deltaOnCanvas.dx, 'dy': deltaOnCanvas.dy},
       'isFromDelta': isFromDelta,
@@ -96,9 +96,9 @@ class MPMoveLineCommand extends MPCommand {
         map['originalLineSegmentsMap']
             .map((key, value) => MapEntry(key, THLineSegment.fromMap(value))),
       ),
-      newLine: THLine.fromMap(map['newLine']),
-      newLineSegmentsMap: LinkedHashMap<int, THLineSegment>.from(
-        map['newLineSegmentsMap']
+      modifiedLine: THLine.fromMap(map['modifiedLine']),
+      modifiedLineSegmentsMap: LinkedHashMap<int, THLineSegment>.from(
+        map['modifiedLineSegmentsMap']
             .map((key, value) => MapEntry(key, THLineSegment.fromMap(value))),
       ),
       oppositeCommand: map['oppositeCommand'] == null
@@ -119,8 +119,8 @@ class MPMoveLineCommand extends MPCommand {
   MPMoveLineCommand copyWith({
     THLine? originalLine,
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
-    THLine? newLine,
-    LinkedHashMap<int, THLineSegment>? newLineSegmentsMap,
+    THLine? modifiedLine,
+    LinkedHashMap<int, THLineSegment>? modifiedLineSegmentsMap,
     MPUndoRedoCommand? oppositeCommand,
     Offset? deltaOnCanvas,
     bool? isFromDelta,
@@ -130,8 +130,9 @@ class MPMoveLineCommand extends MPCommand {
       originalLine: originalLine ?? this.originalLine,
       originalLineSegmentsMap:
           originalLineSegmentsMap ?? this.originalLineSegmentsMap,
-      newLine: newLine ?? this.newLine,
-      newLineSegmentsMap: newLineSegmentsMap ?? this.newLineSegmentsMap,
+      modifiedLine: modifiedLine ?? this.modifiedLine,
+      modifiedLineSegmentsMap:
+          modifiedLineSegmentsMap ?? this.modifiedLineSegmentsMap,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       deltaOnCanvas: deltaOnCanvas ?? this.deltaOnCanvas,
       isFromDelta: isFromDelta ?? this.isFromDelta,
@@ -145,8 +146,8 @@ class MPMoveLineCommand extends MPCommand {
 
     return other.originalLine == originalLine &&
         other.originalLineSegmentsMap == originalLineSegmentsMap &&
-        other.newLine == newLine &&
-        other.newLineSegmentsMap == newLineSegmentsMap &&
+        other.modifiedLine == modifiedLine &&
+        other.modifiedLineSegmentsMap == modifiedLineSegmentsMap &&
         other.oppositeCommand == oppositeCommand &&
         other.deltaOnCanvas == deltaOnCanvas &&
         other.isFromDelta == isFromDelta &&
@@ -157,8 +158,8 @@ class MPMoveLineCommand extends MPCommand {
   int get hashCode => Object.hash(
         originalLine,
         originalLineSegmentsMap,
-        newLine,
-        newLineSegmentsMap,
+        modifiedLine,
+        modifiedLineSegmentsMap,
         oppositeCommand,
         deltaOnCanvas,
         isFromDelta,
@@ -188,7 +189,7 @@ class MPMoveLineCommand extends MPCommand {
               endPointOriginalCoordinates:
                   originalLineSegment.endPoint.coordinates,
               endPointNewCoordinates:
-                  newLineSegmentsMap[originalLineSegmentMapiahID]!
+                  modifiedLineSegmentsMap[originalLineSegmentMapiahID]!
                       .endPoint
                       .coordinates,
               description: description,
@@ -197,7 +198,7 @@ class MPMoveLineCommand extends MPCommand {
           break;
         case THBezierCurveLineSegment _:
           THBezierCurveLineSegment newLineSegment =
-              newLineSegmentsMap[originalLineSegmentMapiahID]
+              modifiedLineSegmentsMap[originalLineSegmentMapiahID]
                   as THBezierCurveLineSegment;
 
           if (isFromDelta) {
@@ -242,10 +243,10 @@ class MPMoveLineCommand extends MPCommand {
   @override
   MPUndoRedoCommand _createOppositeCommand() {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
-      originalLine: newLine,
-      originalLineSegmentsMap: newLineSegmentsMap,
-      newLine: originalLine,
-      newLineSegmentsMap: originalLineSegmentsMap,
+      originalLine: modifiedLine,
+      originalLineSegmentsMap: modifiedLineSegmentsMap,
+      modifiedLine: originalLine,
+      modifiedLineSegmentsMap: originalLineSegmentsMap,
       description: description,
     );
 
