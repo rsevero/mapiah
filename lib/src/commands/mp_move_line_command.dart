@@ -135,11 +135,10 @@ class MPMoveLineCommand extends MPCommand {
           }
           break;
       }
-
       command.execute(th2FileEditStore);
     }
-
-    th2FileEditStore.triggerSelectedElementsRedraw();
+    th2FileEditStore.substituteElement(
+        th2FileEditStore.thFile.elementByMapiahID(lineMapiahID).copyWith());
   }
 
   @override
