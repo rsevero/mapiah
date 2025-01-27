@@ -96,7 +96,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     child: Stack(
                       children: [
                         THFileWidget(
-                          key: ValueKey(th2FileEditStore.thFileMapiahID),
+                          key: ValueKey(
+                            "THFileWidget|${th2FileEditStore.thFileMapiahID}",
+                          ),
                           th2FileEditStore: th2FileEditStore,
                         ),
                         _undoRedoButtons(),

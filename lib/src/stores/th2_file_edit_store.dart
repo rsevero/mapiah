@@ -286,8 +286,9 @@ abstract class TH2FileEditStoreBase with Store {
   List<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
     final List<THElement> clickedElements = <THElement>[];
+    final selectableElements = _selectableCoordinates.entries;
 
-    for (final selectableElement in _selectableCoordinates.entries) {
+    for (final selectableElement in selectableElements) {
       final int mapiahID = selectableElement.key;
       final List<Offset> selectableCanvasCoordinatesList =
           selectableElement.value;
@@ -936,10 +937,12 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   @action
-  void addElementWithParent(THElement element, THIsParentMixin parent) {
+  void addElementWithParentWithoutSelectableElement(
+    THElement element,
+    THIsParentMixin parent,
+  ) {
     _thFile.addElement(element);
     parent.addElementToParent(element);
-    _addSelectableElement(element);
   }
 
   @action

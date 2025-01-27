@@ -231,9 +231,11 @@ class THFile with THIsParentMixin {
     double minY = double.infinity;
     double maxX = double.negativeInfinity;
     double maxY = double.negativeInfinity;
+    final elements = _elementByMapiahID.values;
 
-    for (final THElement element in _elementByMapiahID.values) {
+    for (final THElement element in elements) {
       late final Rect childBoundingBox;
+
       switch (element) {
         case THPoint _:
           childBoundingBox = element.getBoundingBox();

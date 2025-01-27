@@ -768,11 +768,13 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void addElementWithParent(THElement element, THIsParentMixin parent) {
+  void addElementWithParentWithoutSelectableElement(
+      THElement element, THIsParentMixin parent) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.addElementWithParent');
     try {
-      return super.addElementWithParent(element, parent);
+      return super
+          .addElementWithParentWithoutSelectableElement(element, parent);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
