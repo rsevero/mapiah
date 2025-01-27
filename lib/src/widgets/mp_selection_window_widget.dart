@@ -14,13 +14,16 @@ class MPSelectionWindowWidget extends StatelessWidget {
 
   @override
   Widget build(Object context) {
-    return Observer(
-      builder: (_) => RepaintBoundary(
-        child: CustomPaint(
+    return RepaintBoundary(
+      child: Observer(
+        builder: (_) => CustomPaint(
           painter: MPSelectionWindowPainter(
             th2FileEditStore: th2FileEditStore,
             selectionWindowPosition:
                 th2FileEditStore.selectionWindowCanvasCoordinates.value,
+            fillPaint: th2FileEditStore.selectionWindowFillPaint.value,
+            borderPaint:
+                th2FileEditStore.selectionWindowBorderPaintComplete.value,
           ),
         ),
       ),

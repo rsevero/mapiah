@@ -137,6 +137,23 @@ abstract class TH2FileEditStoreBase with Store {
   @readonly
   Observable<Rect> _selectionWindowCanvasCoordinates = Observable(Rect.zero);
 
+  @readonly
+  Observable<Paint> _selectionWindowFillPaint =
+      Observable(thSelectionWindowFillPaint);
+
+  @readonly
+  Observable<Paint> _selectionWindowBorderPaint =
+      Observable(thSelectionWindowBorderPaint);
+
+  @readonly
+  Observable<double> _selectionWindowBorderPaintStrokeWidth =
+      Observable(thSelectionWindowBorderPaintStrokeWidth);
+
+  @computed
+  Observable<Paint> get selectionWindowBorderPaintComplete =>
+      Observable(_selectionWindowBorderPaint.value
+        ..strokeWidth = _selectionWindowBorderPaintStrokeWidth.value);
+
   final Map<int, MPSelectable> _selectableElements = {};
 
   Offset panStartCanvasCoordinates = Offset.zero;
@@ -511,7 +528,7 @@ abstract class TH2FileEditStoreBase with Store {
 
   THLinePaint getLinePaint(THLine line) {
     final Paint linePaint =
-        getIsSelected(line) ? THPaints.thPaint5 : THPaints.thPaint4;
+        getIsSelected(line) ? THPaints.thPaint2 : THPaints.thPaint3;
     return THLinePaint(
       paint: linePaint..strokeWidth = lineThicknessOnCanvas,
     );

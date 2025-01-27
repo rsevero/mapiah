@@ -1,4 +1,5 @@
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
+import 'package:flutter/material.dart';
 
 /// Constants and others definitioons that should be generally available.
 
@@ -77,3 +78,11 @@ const String thFileEditConfigSection = 'FileEdit';
 const String thFileEditConfigSelectionTolerance = 'SelectionTolerance';
 const String thFileEditConfigPointRadius = 'PointRadius';
 const String thFileEditConfigLineThickness = 'LineThickness';
+
+final Paint thSelectionWindowFillPaint = Paint()
+  ..color = Colors.redAccent.withValues(alpha: 0.3)
+  ..style = PaintingStyle.fill;
+final Paint thSelectionWindowBorderPaint = Paint()
+  ..color = Colors.blue
+  ..style = PaintingStyle.stroke;
+const double thSelectionWindowBorderPaintStrokeWidth = 2;

@@ -52,6 +52,15 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               () => super.selectionToleranceSquaredOnCanvas,
               name: 'TH2FileEditStoreBase.selectionToleranceSquaredOnCanvas'))
           .value;
+  Computed<Observable<Paint>>? _$selectionWindowBorderPaintCompleteComputed;
+
+  @override
+  Observable<Paint> get selectionWindowBorderPaintComplete =>
+      (_$selectionWindowBorderPaintCompleteComputed ??= Computed<
+                  Observable<Paint>>(
+              () => super.selectionWindowBorderPaintComplete,
+              name: 'TH2FileEditStoreBase.selectionWindowBorderPaintComplete'))
+          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -418,6 +427,67 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_selectionWindowFillPaintAtom = Atom(
+      name: 'TH2FileEditStoreBase._selectionWindowFillPaint', context: context);
+
+  Observable<Paint> get selectionWindowFillPaint {
+    _$_selectionWindowFillPaintAtom.reportRead();
+    return super._selectionWindowFillPaint;
+  }
+
+  @override
+  Observable<Paint> get _selectionWindowFillPaint => selectionWindowFillPaint;
+
+  @override
+  set _selectionWindowFillPaint(Observable<Paint> value) {
+    _$_selectionWindowFillPaintAtom
+        .reportWrite(value, super._selectionWindowFillPaint, () {
+      super._selectionWindowFillPaint = value;
+    });
+  }
+
+  late final _$_selectionWindowBorderPaintAtom = Atom(
+      name: 'TH2FileEditStoreBase._selectionWindowBorderPaint',
+      context: context);
+
+  Observable<Paint> get selectionWindowBorderPaint {
+    _$_selectionWindowBorderPaintAtom.reportRead();
+    return super._selectionWindowBorderPaint;
+  }
+
+  @override
+  Observable<Paint> get _selectionWindowBorderPaint =>
+      selectionWindowBorderPaint;
+
+  @override
+  set _selectionWindowBorderPaint(Observable<Paint> value) {
+    _$_selectionWindowBorderPaintAtom
+        .reportWrite(value, super._selectionWindowBorderPaint, () {
+      super._selectionWindowBorderPaint = value;
+    });
+  }
+
+  late final _$_selectionWindowBorderPaintStrokeWidthAtom = Atom(
+      name: 'TH2FileEditStoreBase._selectionWindowBorderPaintStrokeWidth',
+      context: context);
+
+  Observable<double> get selectionWindowBorderPaintStrokeWidth {
+    _$_selectionWindowBorderPaintStrokeWidthAtom.reportRead();
+    return super._selectionWindowBorderPaintStrokeWidth;
+  }
+
+  @override
+  Observable<double> get _selectionWindowBorderPaintStrokeWidth =>
+      selectionWindowBorderPaintStrokeWidth;
+
+  @override
+  set _selectionWindowBorderPaintStrokeWidth(Observable<double> value) {
+    _$_selectionWindowBorderPaintStrokeWidthAtom
+        .reportWrite(value, super._selectionWindowBorderPaintStrokeWidth, () {
+      super._selectionWindowBorderPaintStrokeWidth = value;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -728,7 +798,8 @@ isPanMode: ${isPanMode},
 isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
-selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas}
+selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
+selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete}
     ''';
   }
 }
