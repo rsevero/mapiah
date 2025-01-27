@@ -14,8 +14,6 @@ import 'package:mapiah/src/definitions/mp_paints.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
-import 'package:mapiah/src/selection/mp_selectable_element.dart';
-import 'package:mapiah/src/selection/mp_selectable.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/selection/mp_selected_line.dart';
 import 'package:mapiah/src/selection/mp_selected_point.dart';
@@ -61,26 +59,6 @@ abstract class TH2FileEditStoreBase with Store {
 
   @readonly
   late int _thFileMapiahID;
-
-  /// These triggers are used to notify the drawable widgets that they should
-  /// redraw. There area triggers specific to each point and line (the actual
-  /// drawable elements), to each scrap and the THFile itself:
-  ///
-  /// 1. THFile: triggers the whole file to redraw when some setting that
-  ///  affects the whole file changes like zoom or pan.
-  /// 2. THScrap: triggers the scrap to redraw when some setting that affects
-  /// the scrap changes like changing the isSelected property of the scrap.
-  /// 3. THPoint and THLine: triggers the point or line to redraw when this
-  /// particular element has been edit: moved, changed type etc.
-  @readonly
-  Map<int, Observable<bool>> _elementRedrawTrigger = <int, Observable<bool>>{};
-
-  /// These triggers are used to notify the widgets that have drawable children,
-  /// i.e., THFile and THScraps, that they should redraw themselves because a
-  /// child widget has been added or removed.
-  @readonly
-  Map<int, Observable<bool>> _childrenListLengthChangeTrigger =
-      <int, Observable<bool>>{};
 
   @readonly
   Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
@@ -154,7 +132,21 @@ abstract class TH2FileEditStoreBase with Store {
       Observable(_selectionWindowBorderPaint.value
         ..strokeWidth = _selectionWindowBorderPaintStrokeWidth.value);
 
-  final Map<int, MPSelectable> _selectableElements = {};
+  @readonly
+  int _redrawTriggerSelectedElementsListChanged = 0;
+
+  @readonly
+  int _redrawTriggerSelectedElements = 0;
+
+  @readonly
+  int _redrawTriggerNonSelectedElements = 0;
+
+  /// Used to serach for selected elements by list of selectable coordinates.
+  final Map<int, List<Offset>> _selectableCoordinates = {};
+
+  /// Used to search for selected elements by others characteristcs of the
+  /// element: boundingBox() for example.
+  final Map<int, Rect> _selectableBoundingBoxes = {};
 
   Offset panStartCanvasCoordinates = Offset.zero;
 
@@ -181,8 +173,8 @@ abstract class TH2FileEditStoreBase with Store {
     return TH2FileEditStoreCreateResult(isSuccessful, errors);
   }
 
-  /// This is a factory constructor that creates a new instance of TH2FileEditStore
-  /// with an empty THFile.
+  /// This is a factory constructor that creates a new instance of
+  /// TH2FileEditStore with an empty THFile.
   static TH2FileEditStore create(String filename) {
     final TH2FileEditStore th2FileEditStore = TH2FileEditStore._create();
     final THFile thFile = THFile();
@@ -213,19 +205,14 @@ abstract class TH2FileEditStoreBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
-    _elementRedrawTrigger.clear();
-    _childrenListLengthChangeTrigger.clear();
     _isSelected.clear();
+    _selectableCoordinates.clear();
+    _selectableBoundingBoxes.clear();
 
-    _elementRedrawTrigger[_thFileMapiahID] = Observable(false);
-    _childrenListLengthChangeTrigger[_thFileMapiahID] = Observable(false);
     parsedFile.elements.forEach((key, value) {
-      if (value is THPoint || value is THLine || value is THScrap) {
-        _elementRedrawTrigger[key] = Observable(false);
+      if (value is THPoint || value is THLine) {
         _isSelected[key] = Observable(false);
-        if (value is THScrap) {
-          _childrenListLengthChangeTrigger[key] = Observable(false);
-        }
+        _addSelectableElement(value);
       }
     });
 
@@ -236,30 +223,85 @@ abstract class TH2FileEditStoreBase with Store {
     }
   }
 
+  /// We are sure that _selectableCoordinates[mapiahID] is already set to a list
+  /// because _addSelectableElement adds/resets it.
+  void _addSelectableElementCoordinates(
+    int mapiahID,
+    Offset selectableCanvasCoordinate,
+  ) {
+    _selectableCoordinates[mapiahID]!.add(selectableCanvasCoordinate);
+  }
+
+  void _addSelectableElement(THElement element) {
+    if ((element is! THPoint) && (element is! THLine)) {
+      return;
+    }
+
+    _selectableCoordinates[element.mapiahID] = <Offset>[];
+    switch (element) {
+      case THPoint _:
+        _addPointSelectableElement(element);
+        break;
+      case THLine _:
+        _addLineSelectableElement(element);
+        break;
+    }
+  }
+
+  void _addPointSelectableElement(THPoint point) {
+    _selectableBoundingBoxes[point.mapiahID] = point.getBoundingBox();
+    _addSelectableElementCoordinates(
+        point.mapiahID, point.position.coordinates);
+  }
+
+  void _addLineSelectableElement(THLine line) {
+    final int lineMapiahID = line.mapiahID;
+    final lineSegmentMapiahIDs = line.childrenMapiahID;
+
+    _selectableBoundingBoxes[lineMapiahID] = line.getBoundingBox(_thFile);
+
+    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
+      final THElement lineSegment =
+          _thFile.elementByMapiahID(lineSegmentMapiahID);
+
+      if (lineSegment is! THLineSegment) {
+        continue;
+      }
+
+      _addSelectableElementCoordinates(
+          lineMapiahID, lineSegment.endPoint.coordinates);
+    }
+  }
+
+  void _removeSelectableElement(int mapiahID) {
+    _selectableCoordinates.remove(mapiahID);
+    _selectableBoundingBoxes.remove(mapiahID);
+  }
+
   @action
   void setZoomButtonsHovered(bool isHovered) {
     _isZoomButtonsHovered = isHovered;
-  }
-
-  void addSelectableElement(MPSelectableElement selectableElement) {
-    _selectableElements[selectableElement.element.mapiahID] = selectableElement;
-  }
-
-  void clearSelectableElements() {
-    _selectableElements.clear();
   }
 
   List<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
     final List<THElement> clickedElements = <THElement>[];
 
-    for (final MPSelectable selectable in _selectableElements.values) {
-      if (offsetsInSelectionTolerance(selectable.position, canvasCoordinates)) {
-        switch (selectable.selected) {
-          case THPoint _:
-          case THLine _:
-            clickedElements.add(selectable.selected as THElement);
-            break;
+    for (final selectableElement in _selectableCoordinates.entries) {
+      final int mapiahID = selectableElement.key;
+      final List<Offset> selectableCanvasCoordinatesList =
+          selectableElement.value;
+
+      for (final selectableCoordinates in selectableCanvasCoordinatesList) {
+        if (offsetsInSelectionTolerance(
+            selectableCoordinates, canvasCoordinates)) {
+          final THElement selectedElement = _thFile.elementByMapiahID(mapiahID);
+          switch (selectedElement) {
+            case THPoint _:
+            case THLine _:
+              clickedElements.add(selectedElement);
+              break;
+          }
         }
       }
     }
@@ -269,27 +311,17 @@ abstract class TH2FileEditStoreBase with Store {
 
   List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
-    final selectableElements = _selectableElements.values;
+    final selectableElements = _selectableBoundingBoxes.entries;
 
-    for (final MPSelectable selectable in selectableElements) {
-      final THElement selected = selectable.selected as THElement;
-      switch (selected) {
-        case THPoint _:
-          if (MPNumericAux.isRect1InsideRect2(
-            rect1: selected.getBoundingBox(),
-            rect2: canvasSelectionWindow,
-          )) {
-            insideWindowElements[selected.mapiahID] = selected;
-          }
-          break;
-        case THLine _:
-          if (MPNumericAux.isRect1InsideRect2(
-            rect1: selected.getBoundingBox(_thFile),
-            rect2: canvasSelectionWindow,
-          )) {
-            insideWindowElements[selected.mapiahID] = selected;
-          }
-          break;
+    for (final selectableElement in selectableElements) {
+      if (MPNumericAux.isRect1InsideRect2(
+        rect1: selectableElement.value,
+        rect2: canvasSelectionWindow,
+      )) {
+        final int mapiahID = selectableElement.key;
+        final THElement selectedElement = _thFile.elementByMapiahID(mapiahID);
+
+        insideWindowElements[mapiahID] = selectedElement;
       }
     }
 
@@ -353,6 +385,13 @@ abstract class TH2FileEditStoreBase with Store {
 
   @action
   void clearSelectedElements() {
+    _clearSelectedElementsWithoutResettingRedrawTriggers();
+    _redrawTriggerNonSelectedElements = 0;
+    _redrawTriggerSelectedElements = 0;
+    _redrawTriggerSelectedElementsListChanged = 0;
+  }
+
+  void _clearSelectedElementsWithoutResettingRedrawTriggers() {
     _selectedElements.clear();
     _isSelected.forEach((key, value) => value.value = false);
   }
@@ -370,6 +409,7 @@ abstract class TH2FileEditStoreBase with Store {
         break;
     }
     _isSelected[element.mapiahID]!.value = true;
+    triggerSelectedListChanged();
   }
 
   @action
@@ -381,7 +421,7 @@ abstract class TH2FileEditStoreBase with Store {
 
   @action
   void setSelectedElements(List<THElement> clickedElements) {
-    clearSelectedElements();
+    _clearSelectedElementsWithoutResettingRedrawTriggers();
 
     for (THElement element in clickedElements) {
       if ((element is! THPoint) &&
@@ -402,6 +442,7 @@ abstract class TH2FileEditStoreBase with Store {
   void removeSelectedElement(THElement element) {
     _selectedElements.remove(element.mapiahID);
     _isSelected[element.mapiahID]!.value = false;
+    triggerSelectedListChanged();
   }
 
   void setPanStartCoordinates(Offset screenCoordinates) {
@@ -456,6 +497,7 @@ abstract class TH2FileEditStoreBase with Store {
           break;
       }
     }
+    triggerSelectedElementsRedraw();
   }
 
   void _updateTHPointPosition(
@@ -467,7 +509,8 @@ abstract class TH2FileEditStoreBase with Store {
         position: originalPoint.position.copyWith(
             coordinates: originalPoint.position.coordinates +
                 localDeltaPositionOnCanvas));
-    substituteElement(modifiedPoint);
+    substituteElementWithoutRedrawTriggerAndSeleactableElementUpdate(
+        modifiedPoint);
   }
 
   void _updateTHLinePosition(
@@ -517,20 +560,29 @@ abstract class TH2FileEditStoreBase with Store {
     substituteLineSegmentsOfLine(line.mapiahID, modifiedLineSegmentsMap);
   }
 
-  THPointPaint getPointPaint(THPoint point) {
-    final Paint pointPaint =
-        getIsSelected(point) ? THPaints.thPaint2 : THPaints.thPaint1;
+  THPointPaint getUnselectedPointPaint(THPoint point) {
     return THPointPaint(
       radius: pointRadiusOnCanvas,
-      paint: pointPaint..strokeWidth = lineThicknessOnCanvas,
+      paint: THPaints.thPaint1..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
-  THLinePaint getLinePaint(THLine line) {
-    final Paint linePaint =
-        getIsSelected(line) ? THPaints.thPaint2 : THPaints.thPaint3;
+  THPointPaint getSelectedPointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getUnselectedLinePaint(THLine line) {
     return THLinePaint(
-      paint: linePaint..strokeWidth = lineThicknessOnCanvas,
+      paint: THPaints.thPaint3..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getSelectedLinePaint() {
+    return THLinePaint(
+      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
@@ -601,7 +653,28 @@ abstract class TH2FileEditStoreBase with Store {
   void onPanUpdatePanMode(DragUpdateDetails details) {
     _canvasTranslation += (details.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
-    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+    triggerAllElementsRedraw();
+  }
+
+  @action
+  triggerAllElementsRedraw() {
+    _redrawTriggerSelectedElements++;
+    _redrawTriggerNonSelectedElements++;
+  }
+
+  @action
+  triggerSelectedElementsRedraw() {
+    _redrawTriggerSelectedElements++;
+  }
+
+  @action
+  triggerNonSelectedElementsRedraw() {
+    _redrawTriggerNonSelectedElements++;
+  }
+
+  @action
+  triggerSelectedListChanged() {
+    _redrawTriggerSelectedElementsListChanged++;
   }
 
   void _setCanvasCenterFromCurrent() {
@@ -637,7 +710,7 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
-    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+    triggerAllElementsRedraw();
   }
 
   @action
@@ -646,7 +719,7 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
-    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+    triggerAllElementsRedraw();
   }
 
   @action
@@ -667,7 +740,7 @@ abstract class TH2FileEditStoreBase with Store {
     _setCanvasCenterToDrawingCenter();
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
-    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
+    triggerAllElementsRedraw();
   }
 
   void close() {
@@ -727,34 +800,6 @@ abstract class TH2FileEditStoreBase with Store {
     canvas.scale(1, -1);
   }
 
-  /// Should be used only when a drawable element (scrap, line or point) is
-  /// added or removed directly as child of the THFile. Usually there should
-  /// only be one drawable element as child of the THFile: a scrap.
-  ///
-  /// The THFileWidget itself will redraw.
-  @action
-  void triggerTHFileLengthChildrenList() {
-    _childrenListLengthChangeTrigger[_thFileMapiahID]!.value =
-        !_childrenListLengthChangeTrigger[_thFileMapiahID]!.value;
-  }
-
-  /// Should be used when some change that potentially affects the whole file
-  /// happens. For example a pan or zoom operation.
-  ///
-  /// All drawable items in the THFile will be triggered.
-  void triggerFileRedraw() {
-    triggerElementActuallyDrawableRedraw(_thFileMapiahID);
-  }
-
-  /// Should be used when a element with children (file or scrap) has a child
-  /// added or deleted. The actual element (file or scrap) will redraw itself to
-  /// recreate it's children list.
-  @action
-  void triggerElementWithChildrenRedraw(int mapiahID) {
-    _childrenListLengthChangeTrigger[mapiahID]!.value =
-        !_childrenListLengthChangeTrigger[mapiahID]!.value;
-  }
-
   Future<File?> saveTH2File() async {
     final File file = await _localFile();
     final List<int> encodedContent = await _encodedFileContents();
@@ -787,22 +832,28 @@ abstract class TH2FileEditStoreBase with Store {
     return File(filename);
   }
 
-  @action
-  void triggerElementActuallyDrawableRedraw(int mapiahID) {
-    _elementRedrawTrigger[mapiahID]!.value =
-        !_elementRedrawTrigger[mapiahID]!.value;
+  void substituteElement(THElement modifiedElement) {
+    _thFile.substituteElement(modifiedElement);
+    _addSelectableElement(modifiedElement);
+    triggerSelectedElementsRedraw();
+    getIt<MPLog>().finer('Substituted element ${modifiedElement.mapiahID}');
   }
 
-  void substituteElement(THElement newElement) {
-    _thFile.substituteElement(newElement);
-    triggerElementActuallyDrawableRedraw(newElement.mapiahID);
-    getIt<MPLog>().finer('Substituted element ${newElement.mapiahID}');
+  void substituteElements(List<THElement> modifiedElements) {
+    for (final modifiedElement in modifiedElements) {
+      _thFile.substituteElement(modifiedElement);
+      _addSelectableElement(modifiedElement);
+      getIt<MPLog>()
+          .finer('Substituted element ${modifiedElement.mapiahID} from list');
+    }
+    triggerSelectedElementsRedraw();
   }
 
-  void substituteElementWithoutRedrawTrigger(THElement newElement) {
-    _thFile.substituteElement(newElement);
+  void substituteElementWithoutRedrawTriggerAndSeleactableElementUpdate(
+      THElement modifiedElement) {
+    _thFile.substituteElement(modifiedElement);
     getIt<MPLog>().finer(
-        'Substituted element without redraw trigger ${newElement.mapiahID}');
+        'Substituted element without redraw trigger ${modifiedElement.mapiahID}');
   }
 
   void substituteLineSegmentsOfLine(
@@ -812,7 +863,6 @@ abstract class TH2FileEditStoreBase with Store {
     for (final lineSegment in modifiedLineSegmentsMap.values) {
       _thFile.substituteElement(lineSegment);
     }
-    triggerElementActuallyDrawableRedraw(lineMapiahID);
   }
 
   void execute(MPCommand command) {
@@ -882,29 +932,34 @@ abstract class TH2FileEditStoreBase with Store {
   void addElement(THElement element) {
     _thFile.addElement(element);
     _thFile.addElementToParent(element);
+    _addSelectableElement(element);
   }
 
   @action
   void addElementWithParent(THElement element, THIsParentMixin parent) {
     _thFile.addElement(element);
     parent.addElementToParent(element);
+    _addSelectableElement(element);
   }
 
   @action
   void deleteElement(THElement element) {
     _thFile.deleteElement(element);
+    _removeSelectableElement(element.mapiahID);
   }
 
   @action
   void deleteElementByMapiahID(int mapiahID) {
     final THElement element = _thFile.elementByMapiahID(mapiahID);
     _thFile.deleteElement(element);
+    _removeSelectableElement(mapiahID);
   }
 
   @action
   void deleteElementByTHID(String thID) {
     final THElement element = _thFile.elementByTHID(thID);
     _thFile.deleteElement(element);
+    _removeSelectableElement(element.mapiahID);
   }
 
   @action

@@ -139,7 +139,7 @@ class MPMoveLineCommand extends MPCommand {
       command.execute(th2FileEditStore);
     }
 
-    th2FileEditStore.triggerElementActuallyDrawableRedraw(lineMapiahID);
+    th2FileEditStore.triggerSelectedElementsRedraw();
   }
 
   @override

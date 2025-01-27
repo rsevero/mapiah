@@ -23,8 +23,6 @@ class THLinePainter extends CustomPainter {
     bool isFirst = true;
     final Path path = Path();
 
-    th2FileEditStore.transformCanvas(canvas);
-
     for (THLinePainterLineSegment lineSegment in lineSegments) {
       if (isFirst) {
         path.moveTo(lineSegment.x, lineSegment.y);
@@ -54,17 +52,5 @@ class THLinePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant THLinePainter oldDelegate) {
     return true;
-    // if (linePaint != oldDelegate.linePaint) {
-    //   return true;
-    // }
-
-    // final MapEquality<int, THLinePainterLineSegment> mapEquality =
-    //     MapEquality<int, THLinePainterLineSegment>();
-
-    // if (!mapEquality.equals(lineSegmentsMap, oldDelegate.lineSegmentsMap)) {
-    //   return true;
-    // }
-
-    // return false;
   }
 }

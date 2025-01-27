@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
+import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
-import 'package:mapiah/src/widgets/th_line_widget.dart';
-import 'package:mapiah/src/widgets/th_point_widget.dart';
-import 'package:mapiah/src/widgets/th_scrap_widget.dart';
 
 class THFileWidget extends StatelessWidget {
   final TH2FileEditStore th2FileEditStore;
@@ -18,64 +18,19 @@ class THFileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getIt<MPLog>().finer("THFileWidget.build()");
     return LayoutBuilder(
       builder: (context, constraints) {
+        th2FileEditStore.updateScreenSize(
+            Size(constraints.maxWidth, constraints.maxHeight));
+
+        if (th2FileEditStore.canvasScaleTranslationUndefined) {
+          th2FileEditStore.zoomAll();
+        }
+
         return Observer(
           builder: (context) {
-            th2FileEditStore.updateScreenSize(
-                Size(constraints.maxWidth, constraints.maxHeight));
-
-            if (th2FileEditStore.canvasScaleTranslationUndefined) {
-              th2FileEditStore.zoomAll();
-            }
-
-            th2FileEditStore.clearSelectableElements();
-
-            th2FileEditStore
-                .childrenListLengthChangeTrigger[thFileMapiahID]!.value;
-
-            final List<Widget> childWidgets = [];
-            final List<int> fileChildrenMapiahIDs = thFile.childrenMapiahID;
-
-            for (final int childMapiahID in fileChildrenMapiahIDs) {
-              final THElement child = thFile.elementByMapiahID(childMapiahID);
-
-              switch (child) {
-                case THScrap _:
-                  childWidgets.add(THScrapWidget(
-                    key: ValueKey(childMapiahID),
-                    scrapMapiahID: childMapiahID,
-                    th2FileEditStore: th2FileEditStore,
-                    thFileMapiahID: thFileMapiahID,
-                  ));
-                  break;
-                case THPoint _:
-                  childWidgets.add(THPointWidget(
-                    key: ValueKey(childMapiahID),
-                    pointMapiahID: childMapiahID,
-                    th2FileEditStore: th2FileEditStore,
-                    thFileMapiahID: thFileMapiahID,
-                    thScrapMapiahID: thFileMapiahID,
-                  ));
-                  break;
-                case THLine _:
-                  childWidgets.add(THLineWidget(
-                    key: ValueKey(childMapiahID),
-                    lineMapiahID: childMapiahID,
-                    th2FileEditStore: th2FileEditStore,
-                    thFileMapiahID: thFileMapiahID,
-                    thScrapMapiahID: thFileMapiahID,
-                  ));
-                  break;
-                default:
-                  break;
-              }
-            }
-
-            childWidgets.add(MPSelectionWindowWidget(
-              key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
-              th2FileEditStore: th2FileEditStore,
-            ));
+            getIt<MPLog>().finer("THFileWidget Observer()");
 
             return GestureDetector(
               onTapUp: _onTapUp,
@@ -83,7 +38,21 @@ class THFileWidget extends StatelessWidget {
               onPanUpdate: _onPanUpdate,
               onPanEnd: _onPanEnd,
               child: Stack(
-                children: childWidgets,
+                children: [
+                  MPNonSelectedElementsWidget(
+                    key:
+                        ValueKey("MPNonSelectedElementsWidget|$thFileMapiahID"),
+                    th2FileEditStore: th2FileEditStore,
+                  ),
+                  MPSelectedElementsWidget(
+                    key: ValueKey("MPSelectedElementsWidget|$thFileMapiahID"),
+                    th2FileEditStore: th2FileEditStore,
+                  ),
+                  MPSelectionWindowWidget(
+                    key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
+                    th2FileEditStore: th2FileEditStore,
+                  )
+                ],
               ),
             );
           },

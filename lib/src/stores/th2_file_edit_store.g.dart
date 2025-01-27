@@ -197,46 +197,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
-  late final _$_elementRedrawTriggerAtom = Atom(
-      name: 'TH2FileEditStoreBase._elementRedrawTrigger', context: context);
-
-  Map<int, Observable<bool>> get elementRedrawTrigger {
-    _$_elementRedrawTriggerAtom.reportRead();
-    return super._elementRedrawTrigger;
-  }
-
-  @override
-  Map<int, Observable<bool>> get _elementRedrawTrigger => elementRedrawTrigger;
-
-  @override
-  set _elementRedrawTrigger(Map<int, Observable<bool>> value) {
-    _$_elementRedrawTriggerAtom.reportWrite(value, super._elementRedrawTrigger,
-        () {
-      super._elementRedrawTrigger = value;
-    });
-  }
-
-  late final _$_childrenListLengthChangeTriggerAtom = Atom(
-      name: 'TH2FileEditStoreBase._childrenListLengthChangeTrigger',
-      context: context);
-
-  Map<int, Observable<bool>> get childrenListLengthChangeTrigger {
-    _$_childrenListLengthChangeTriggerAtom.reportRead();
-    return super._childrenListLengthChangeTrigger;
-  }
-
-  @override
-  Map<int, Observable<bool>> get _childrenListLengthChangeTrigger =>
-      childrenListLengthChangeTrigger;
-
-  @override
-  set _childrenListLengthChangeTrigger(Map<int, Observable<bool>> value) {
-    _$_childrenListLengthChangeTriggerAtom
-        .reportWrite(value, super._childrenListLengthChangeTrigger, () {
-      super._childrenListLengthChangeTrigger = value;
-    });
-  }
-
   late final _$_isSelectedAtom =
       Atom(name: 'TH2FileEditStoreBase._isSelected', context: context);
 
@@ -488,6 +448,67 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_redrawTriggerSelectedElementsListChangedAtom = Atom(
+      name: 'TH2FileEditStoreBase._redrawTriggerSelectedElementsListChanged',
+      context: context);
+
+  int get redrawTriggerSelectedElementsListChanged {
+    _$_redrawTriggerSelectedElementsListChangedAtom.reportRead();
+    return super._redrawTriggerSelectedElementsListChanged;
+  }
+
+  @override
+  int get _redrawTriggerSelectedElementsListChanged =>
+      redrawTriggerSelectedElementsListChanged;
+
+  @override
+  set _redrawTriggerSelectedElementsListChanged(int value) {
+    _$_redrawTriggerSelectedElementsListChangedAtom.reportWrite(
+        value, super._redrawTriggerSelectedElementsListChanged, () {
+      super._redrawTriggerSelectedElementsListChanged = value;
+    });
+  }
+
+  late final _$_redrawTriggerSelectedElementsAtom = Atom(
+      name: 'TH2FileEditStoreBase._redrawTriggerSelectedElements',
+      context: context);
+
+  int get redrawTriggerSelectedElements {
+    _$_redrawTriggerSelectedElementsAtom.reportRead();
+    return super._redrawTriggerSelectedElements;
+  }
+
+  @override
+  int get _redrawTriggerSelectedElements => redrawTriggerSelectedElements;
+
+  @override
+  set _redrawTriggerSelectedElements(int value) {
+    _$_redrawTriggerSelectedElementsAtom
+        .reportWrite(value, super._redrawTriggerSelectedElements, () {
+      super._redrawTriggerSelectedElements = value;
+    });
+  }
+
+  late final _$_redrawTriggerNonSelectedElementsAtom = Atom(
+      name: 'TH2FileEditStoreBase._redrawTriggerNonSelectedElements',
+      context: context);
+
+  int get redrawTriggerNonSelectedElements {
+    _$_redrawTriggerNonSelectedElementsAtom.reportRead();
+    return super._redrawTriggerNonSelectedElements;
+  }
+
+  @override
+  int get _redrawTriggerNonSelectedElements => redrawTriggerNonSelectedElements;
+
+  @override
+  set _redrawTriggerNonSelectedElements(int value) {
+    _$_redrawTriggerNonSelectedElementsAtom
+        .reportWrite(value, super._redrawTriggerNonSelectedElements, () {
+      super._redrawTriggerNonSelectedElements = value;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -626,6 +647,50 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
+  dynamic triggerAllElementsRedraw() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.triggerAllElementsRedraw');
+    try {
+      return super.triggerAllElementsRedraw();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic triggerSelectedElementsRedraw() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.triggerSelectedElementsRedraw');
+    try {
+      return super.triggerSelectedElementsRedraw();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic triggerNonSelectedElementsRedraw() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.triggerNonSelectedElementsRedraw');
+    try {
+      return super.triggerNonSelectedElementsRedraw();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic triggerSelectedListChanged() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.triggerSelectedListChanged');
+    try {
+      return super.triggerSelectedListChanged();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _updateCanvasScale(double newScale) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase._updateCanvasScale');
@@ -675,39 +740,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.zoomAll');
     try {
       return super.zoomAll();
-    } finally {
-      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void triggerTHFileLengthChildrenList() {
-    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.triggerTHFileLengthChildrenList');
-    try {
-      return super.triggerTHFileLengthChildrenList();
-    } finally {
-      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void triggerElementWithChildrenRedraw(int mapiahID) {
-    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.triggerElementWithChildrenRedraw');
-    try {
-      return super.triggerElementWithChildrenRedraw(mapiahID);
-    } finally {
-      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void triggerElementActuallyDrawableRedraw(int mapiahID) {
-    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.triggerElementActuallyDrawableRedraw');
-    try {
-      return super.triggerElementActuallyDrawableRedraw(mapiahID);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

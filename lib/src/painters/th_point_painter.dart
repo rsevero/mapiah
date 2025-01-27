@@ -17,8 +17,6 @@ class THPointPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    th2FileEditStore.transformCanvas(canvas);
-
     canvas.drawCircle(
       position,
       pointRadius,
@@ -28,10 +26,6 @@ class THPointPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant THPointPainter oldDelegate) {
-    // return (pointRadius != oldDelegate.pointRadius) ||
-    //     (pointPaint != oldDelegate.pointPaint) ||
-    //     (position.dx != oldDelegate.position.dx) ||
-    //     (position.dy != oldDelegate.position.dy);
     return true;
   }
 }
