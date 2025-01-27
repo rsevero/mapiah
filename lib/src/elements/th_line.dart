@@ -212,7 +212,12 @@ class THLine extends THElement
       }
     }
 
-    return MPNumericAux.orderedRectFromLTRB(minX, minY, maxX, maxY);
+    return MPNumericAux.orderedRectFromLTRB(
+      left: minX,
+      top: minY,
+      right: maxX,
+      bottom: maxY,
+    );
   }
 
   String get lineType {

@@ -10,10 +10,10 @@ mixin MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin
     final Offset endSelectionWindow = th2FileEditStore
         .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
     final Rect selectionWindow = MPNumericAux.orderedRectFromLTRB(
-      startSelectionWindow.dx,
-      startSelectionWindow.dy,
-      endSelectionWindow.dx,
-      endSelectionWindow.dy,
+      left: startSelectionWindow.dx,
+      top: startSelectionWindow.dy,
+      right: endSelectionWindow.dx,
+      bottom: endSelectionWindow.dy,
     );
     final List<THElement> elementsInsideSelectionWindow =
         th2FileEditStore.selectableElementsInsideWindow(selectionWindow);

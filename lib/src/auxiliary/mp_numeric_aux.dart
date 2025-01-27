@@ -73,12 +73,12 @@ class MPNumericAux {
   ///
   /// /// For more details, see the Flutter documentation:
   /// [Flutter Rect Documentation](https://main-api.flutter.dev/flutter/dart-ui/Rect/isEmpty.html)
-  static Rect orderedRectFromLTRB(
-    double left,
-    double top,
-    double right,
-    double bottom,
-  ) {
+  static Rect orderedRectFromLTRB({
+    required double left,
+    required double top,
+    required double right,
+    required double bottom,
+  }) {
     double rectLeft = left;
     double rectTop = top;
     double rectRight = right;
@@ -99,9 +99,18 @@ class MPNumericAux {
   /// In Flutter, the Rect.fromLTWH() method does not check if the width is
   /// negative or if the height is negative so I am providing this method to
   /// ensure that the Rect is ordered according to Flutter expectations.
-  static Rect orderedRectFromLTWH(
-      double left, double top, double width, double height) {
-    return orderedRectFromLTRB(left, top, left + width, top + height);
+  static Rect orderedRectFromLTWH({
+    required double left,
+    required double top,
+    required double width,
+    required double height,
+  }) {
+    return orderedRectFromLTRB(
+      left: left,
+      top: top,
+      right: left + width,
+      bottom: top + height,
+    );
   }
 
   /// In Flutter, the Rect.fromCenter() method does not check if the width or
@@ -117,7 +126,12 @@ class MPNumericAux {
     final double right = center.dx + width / 2;
     final double bottom = center.dy + height / 2;
 
-    return orderedRectFromLTRB(left, top, right, bottom);
+    return orderedRectFromLTRB(
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom,
+    );
   }
 
   /// In Flutter, the Rect.fromCircle() method does not check if the radius is
@@ -132,6 +146,22 @@ class MPNumericAux {
     final double right = center.dx + radius;
     final double bottom = center.dy + radius;
 
-    return orderedRectFromLTRB(left, top, right, bottom);
+    return orderedRectFromLTRB(
+        left: left, top: top, right: right, bottom: bottom);
+  }
+
+  /// In Flutter, the Rect.fromPoints() method is the only method that actually
+  /// checks if the points are ordered correctly but I am providing this method
+  /// anyway for consistency: always create Rect through MPNUmeric methods.
+  static Rect orderedRectFromPoints({
+    required Offset point1,
+    required Offset point2,
+  }) {
+    return orderedRectFromLTRB(
+      left: point1.dx,
+      top: point1.dy,
+      right: point2.dx,
+      bottom: point2.dy,
+    );
   }
 }

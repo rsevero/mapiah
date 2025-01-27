@@ -259,7 +259,12 @@ class THFile with THIsParentMixin {
       }
     }
 
-    return MPNumericAux.orderedRectFromLTRB(minX, minY, maxX, maxY);
+    return MPNumericAux.orderedRectFromLTRB(
+      left: minX,
+      top: minY,
+      right: maxX,
+      bottom: maxY,
+    );
   }
 
   /// Updates the thID of a given element of the THFile.

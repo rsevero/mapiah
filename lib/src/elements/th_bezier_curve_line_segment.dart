@@ -218,10 +218,18 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
     // Add start and end control points to the bounding box
     for (final p in endPoints) {
-      minX = min(minX, p.dx);
-      maxX = max(maxX, p.dx);
-      minY = min(minY, p.dy);
-      maxY = max(maxY, p.dy);
+      if (p.dx < minX) {
+        minX = p.dx;
+      }
+      if (p.dx > maxX) {
+        maxX = p.dx;
+      }
+      if (p.dy < minY) {
+        minY = p.dy;
+      }
+      if (p.dy > maxY) {
+        maxY = p.dy;
+      }
     }
 
     // Cubic Bezier: Calculate extrema
@@ -246,18 +254,31 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     for (double t in xt) {
       if (t > 0 && t < 1) {
         Offset p = bezierPoint(t);
-        minX = min(minX, p.dx);
-        maxX = max(maxX, p.dx);
+        if (p.dx < minX) {
+          minX = p.dx;
+        }
+        if (p.dx > maxX) {
+          maxX = p.dx;
+        }
       }
     }
     for (double t in yt) {
       if (t > 0 && t < 1) {
         Offset p = bezierPoint(t);
-        minY = min(minY, p.dy);
-        maxY = max(maxY, p.dy);
+        if (p.dy < minY) {
+          minY = p.dy;
+        }
+        if (p.dy > maxY) {
+          maxY = p.dy;
+        }
       }
     }
 
-    return MPNumericAux.orderedRectFromLTRB(minX, minY, maxX, maxY);
+    return MPNumericAux.orderedRectFromLTRB(
+      left: minX,
+      top: minY,
+      right: maxX,
+      bottom: maxY,
+    );
   }
 }

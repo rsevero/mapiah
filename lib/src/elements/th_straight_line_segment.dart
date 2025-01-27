@@ -104,9 +104,9 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
 
   @override
   Rect _calculateBoundingBox(Offset startPoint) {
-    return Rect.fromPoints(
-      startPoint,
-      endPoint.coordinates,
+    return MPNumericAux.orderedRectFromPoints(
+      point1: startPoint,
+      point2: endPoint.coordinates,
     );
   }
 }
