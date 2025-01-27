@@ -24,6 +24,8 @@ class MPSelectionWindowWidget extends StatelessWidget {
             fillPaint: th2FileEditStore.selectionWindowFillPaint.value,
             borderPaint:
                 th2FileEditStore.selectionWindowBorderPaintComplete.value,
+            dashInterval: th2FileEditStore
+                .selectionWindowBorderPaintDashIntervalOnCanvas.value,
           ),
         ),
       ),

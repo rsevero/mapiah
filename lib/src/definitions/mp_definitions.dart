@@ -71,6 +71,7 @@ const double thFloatingActionIconSize = 32;
 const double thDefaultSelectionTolerance = 10.0;
 const double thDefaultPointRadius = 5.0;
 const double thDefaultLineThickness = 2.0;
+const double thSelectionWindowBorderPaintDashInterval = 5.0;
 
 const String thMainConfigSection = 'Main';
 const String thMainConfigLocale = 'Locale';

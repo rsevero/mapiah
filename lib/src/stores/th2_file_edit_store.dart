@@ -130,7 +130,16 @@ abstract class TH2FileEditStoreBase with Store {
   @computed
   Observable<Paint> get selectionWindowBorderPaintComplete =>
       Observable(_selectionWindowBorderPaint.value
-        ..strokeWidth = _selectionWindowBorderPaintStrokeWidth.value);
+        ..strokeWidth =
+            _selectionWindowBorderPaintStrokeWidth.value / _canvasScale);
+
+  @readonly
+  Observable<double> _selectionWindowBorderPaintDashInterval =
+      Observable(thSelectionWindowBorderPaintDashInterval);
+
+  @computed
+  Observable<double> get selectionWindowBorderPaintDashIntervalOnCanvas =>
+      Observable(_selectionWindowBorderPaintDashInterval.value / _canvasScale);
 
   @readonly
   int _redrawTriggerSelectedElementsListChanged = 0;

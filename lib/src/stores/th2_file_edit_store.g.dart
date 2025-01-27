@@ -61,6 +61,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               () => super.selectionWindowBorderPaintComplete,
               name: 'TH2FileEditStoreBase.selectionWindowBorderPaintComplete'))
           .value;
+  Computed<Observable<double>>?
+      _$selectionWindowBorderPaintDashIntervalOnCanvasComputed;
+
+  @override
+  Observable<double> get selectionWindowBorderPaintDashIntervalOnCanvas =>
+      (_$selectionWindowBorderPaintDashIntervalOnCanvasComputed ??= Computed<
+                  Observable<double>>(
+              () => super.selectionWindowBorderPaintDashIntervalOnCanvas,
+              name:
+                  'TH2FileEditStoreBase.selectionWindowBorderPaintDashIntervalOnCanvas'))
+          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -448,6 +459,27 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_selectionWindowBorderPaintDashIntervalAtom = Atom(
+      name: 'TH2FileEditStoreBase._selectionWindowBorderPaintDashInterval',
+      context: context);
+
+  Observable<double> get selectionWindowBorderPaintDashInterval {
+    _$_selectionWindowBorderPaintDashIntervalAtom.reportRead();
+    return super._selectionWindowBorderPaintDashInterval;
+  }
+
+  @override
+  Observable<double> get _selectionWindowBorderPaintDashInterval =>
+      selectionWindowBorderPaintDashInterval;
+
+  @override
+  set _selectionWindowBorderPaintDashInterval(Observable<double> value) {
+    _$_selectionWindowBorderPaintDashIntervalAtom
+        .reportWrite(value, super._selectionWindowBorderPaintDashInterval, () {
+      super._selectionWindowBorderPaintDashInterval = value;
+    });
+  }
+
   late final _$_redrawTriggerSelectedElementsListChangedAtom = Atom(
       name: 'TH2FileEditStoreBase._redrawTriggerSelectedElementsListChanged',
       context: context);
@@ -771,7 +803,8 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   void addElementWithParentWithoutSelectableElement(
       THElement element, THIsParentMixin parent) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.addElementWithParent');
+        name:
+            'TH2FileEditStoreBase.addElementWithParentWithoutSelectableElement');
     try {
       return super
           .addElementWithParentWithoutSelectableElement(element, parent);
@@ -833,7 +866,8 @@ isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
 selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
-selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete}
+selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
+selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas}
     ''';
   }
 }

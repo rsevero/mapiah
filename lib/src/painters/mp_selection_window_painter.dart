@@ -7,12 +7,14 @@ class MPSelectionWindowPainter extends CustomPainter {
   final TH2FileEditStore th2FileEditStore;
   final Paint fillPaint;
   final Paint borderPaint;
+  final double dashInterval;
 
   MPSelectionWindowPainter({
     required this.selectionWindowPosition,
     required this.th2FileEditStore,
     required this.fillPaint,
     required this.borderPaint,
+    required this.dashInterval,
   });
 
   @override
@@ -30,7 +32,8 @@ class MPSelectionWindowPainter extends CustomPainter {
     canvas.drawPath(
       dashPath(
         dashedPath,
-        dashArray: CircularIntervalList<double>(<double>[5, 5]),
+        dashArray:
+            CircularIntervalList<double>(<double>[dashInterval, dashInterval]),
       ),
       borderPaint,
     );
