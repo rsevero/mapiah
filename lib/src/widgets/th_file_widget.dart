@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
 import 'package:mapiah/src/widgets/th_line_widget.dart';
 import 'package:mapiah/src/widgets/th_point_widget.dart';
 import 'package:mapiah/src/widgets/th_scrap_widget.dart';
@@ -70,6 +71,11 @@ class THFileWidget extends StatelessWidget {
                   break;
               }
             }
+
+            childWidgets.add(MPSelectionWindowWidget(
+              key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
+              th2FileEditStore: th2FileEditStore,
+            ));
 
             return GestureDetector(
               onTapUp: _onTapUp,

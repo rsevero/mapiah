@@ -134,6 +134,9 @@ abstract class TH2FileEditStoreBase with Store {
   @readonly
   bool _canvasScaleTranslationUndefined = true;
 
+  @readonly
+  Observable<Rect> _selectionWindowCanvasCoordinates = Observable(Rect.zero);
+
   final Map<int, MPSelectable> _selectableElements = {};
 
   Offset panStartCanvasCoordinates = Offset.zero;
@@ -298,6 +301,33 @@ abstract class TH2FileEditStoreBase with Store {
 
   void onSelectToolPressed() {
     _state.onSelectToolPressed();
+  }
+
+  @action
+  void setSelectionWindowCanvasCoordinates({
+    required Offset point1,
+    required Offset point2,
+  }) {
+    _selectionWindowCanvasCoordinates.value =
+        MPNumericAux.orderedRectFromPoints(
+      point1: point1,
+      point2: point2,
+    );
+  }
+
+  void setSelectionWindowScreenEndCoordinates(Offset screenEndCoordinates) {
+    final Offset canvasEndCoordinates =
+        offsetScreenToCanvas(screenEndCoordinates);
+
+    setSelectionWindowCanvasCoordinates(
+      point1: panStartCanvasCoordinates,
+      point2: canvasEndCoordinates,
+    );
+  }
+
+  @action
+  void clearSelectionWindow() {
+    _selectionWindowCanvasCoordinates.value = Rect.zero;
   }
 
   bool getIsSelected(THElement element) {

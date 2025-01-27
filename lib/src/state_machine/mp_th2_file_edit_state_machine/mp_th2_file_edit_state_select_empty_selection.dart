@@ -33,19 +33,23 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// Draws the selection window.
   @override
   void onPanUpdate(DragUpdateDetails details) {
-    /// TODO: Draw the selection window.
+    th2FileEditStore
+        .setSelectionWindowScreenEndCoordinates(details.localPosition);
   }
 
   /// 1. Create a list of objects inside the selection window.
-  /// 2. Is the list empty?
-  /// 2.1. Yes. Do nothing;
-  /// 2.2. No. Add objects from the list inside the selection window to the
+  /// 2. Clear the selection window.
+  /// 3. Is the list empty?
+  /// 3.1. Yes. Do nothing;
+  /// 3.2. No. Add objects from the list inside the selection window to the
   /// current selection. Change to
   /// [MPTH2FileEditStateType.selectNonEmptySelection];
   @override
   void onPanEnd(DragEndDetails details) {
     final List<THElement> elementsInsideSelectionWindow =
         _getObjectsInsideSelectionWindow(details.localPosition);
+
+    th2FileEditStore.clearSelectionWindow();
 
     if (elementsInsideSelectionWindow.isNotEmpty) {
       th2FileEditStore.setSelectedElements(elementsInsideSelectionWindow);

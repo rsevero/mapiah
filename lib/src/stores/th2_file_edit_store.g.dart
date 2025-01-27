@@ -397,6 +397,27 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_selectionWindowCanvasCoordinatesAtom = Atom(
+      name: 'TH2FileEditStoreBase._selectionWindowCanvasCoordinates',
+      context: context);
+
+  Observable<Rect> get selectionWindowCanvasCoordinates {
+    _$_selectionWindowCanvasCoordinatesAtom.reportRead();
+    return super._selectionWindowCanvasCoordinates;
+  }
+
+  @override
+  Observable<Rect> get _selectionWindowCanvasCoordinates =>
+      selectionWindowCanvasCoordinates;
+
+  @override
+  set _selectionWindowCanvasCoordinates(Observable<Rect> value) {
+    _$_selectionWindowCanvasCoordinatesAtom
+        .reportWrite(value, super._selectionWindowCanvasCoordinates, () {
+      super._selectionWindowCanvasCoordinates = value;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -406,6 +427,30 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.setZoomButtonsHovered');
     try {
       return super.setZoomButtonsHovered(isHovered);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectionWindowCanvasCoordinates(
+      {required Offset point1, required Offset point2}) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.setSelectionWindowCanvasCoordinates');
+    try {
+      return super
+          .setSelectionWindowCanvasCoordinates(point1: point1, point2: point2);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearSelectionWindow() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.clearSelectionWindow');
+    try {
+      return super.clearSelectionWindow();
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

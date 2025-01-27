@@ -91,16 +91,18 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// Draw the selection window.
   @override
   void onPanUpdate(DragUpdateDetails details) {
-    /// TODO: Draw the selection window.
+    th2FileEditStore
+        .setSelectionWindowScreenEndCoordinates(details.localPosition);
   }
 
   /// 1. Create a list of objects inside the selection window.
-  /// 2. Is Shift pressed?
-  /// 2.1. Yes. Include objects not yet selected in the selection;
-  /// 2.2. No. Clear current selection. Is the list of objects inside the
+  /// 2. Clear the selection window.
+  /// 3. Is Shift pressed?
+  /// 3.1. Yes. Include objects not yet selected in the selection;
+  /// 3.2. No. Clear current selection. Is the list of objects inside the
   /// selection window empty?
-  /// 2.2.1. Yes. Change to [MPTH2FileEditStateType.selectEmptySelection];
-  /// 2.2.2. No. Include objects from the list inside the selection window in
+  /// 3.2.1. Yes. Change to [MPTH2FileEditStateType.selectEmptySelection];
+  /// 3.2.2. No. Include objects from the list inside the selection window in
   /// the current selection.
 
   @override
@@ -108,6 +110,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     final List<THElement> elementsInsideSelectionWindow =
         _getObjectsInsideSelectionWindow(details.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
+
+    th2FileEditStore.clearSelectionWindow();
 
     if (shiftPressed) {
       th2FileEditStore.addSelectedElements(elementsInsideSelectionWindow);
