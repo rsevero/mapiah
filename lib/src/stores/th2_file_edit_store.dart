@@ -614,6 +614,7 @@ abstract class TH2FileEditStoreBase with Store {
   void _updateScreenSize(Size newSize) {
     _screenSize = newSize;
     _canvasSize = newSize / _canvasScale;
+    _calculateCanvasOffset();
   }
 
   Offset offsetScaleScreenToCanvas(Offset screenCoordinate) {
