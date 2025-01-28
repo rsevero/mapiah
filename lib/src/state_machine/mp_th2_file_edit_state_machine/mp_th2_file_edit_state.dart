@@ -58,4 +58,8 @@ abstract class MPTH2FileEditState {
   void onPanToolPressed() {}
 
   void onSelectToolPressed() {}
+
+  void onUndoPressed() {}
+
+  void onRedoPressed() {}
 }

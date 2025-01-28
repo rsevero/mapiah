@@ -128,6 +128,13 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               () => super.selectionHandlePaint,
               name: 'TH2FileEditStoreBase.selectionHandlePaint'))
           .value;
+  Computed<bool>? _$showUndoRedoButtonsComputed;
+
+  @override
+  bool get showUndoRedoButtons => (_$showUndoRedoButtonsComputed ??=
+          Computed<bool>(() => super.showUndoRedoButtons,
+              name: 'TH2FileEditStoreBase.showUndoRedoButtons'))
+      .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -921,7 +928,8 @@ selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDash
 selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
 selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
 selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
-selectionHandlePaint: ${selectionHandlePaint}
+selectionHandlePaint: ${selectionHandlePaint},
+showUndoRedoButtons: ${showUndoRedoButtons}
     ''';
   }
 }

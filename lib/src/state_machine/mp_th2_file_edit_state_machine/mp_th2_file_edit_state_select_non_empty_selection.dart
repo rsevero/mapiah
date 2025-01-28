@@ -134,6 +134,20 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   }
 
   @override
+  void onUndoPressed() {
+    th2FileEditStore.clearSelectedElements();
+    th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
+    th2FileEditStore.undo();
+  }
+
+  @override
+  void onRedoPressed() {
+    th2FileEditStore.clearSelectedElements();
+    th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
+    th2FileEditStore.redo();
+  }
+
+  @override
   MPTH2FileEditStateType get type =>
       MPTH2FileEditStateType.selectNonEmptySelection;
 }

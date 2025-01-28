@@ -174,6 +174,9 @@ abstract class TH2FileEditStoreBase with Store {
       Observable(thSelectionHandleFillPaint
         ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
 
+  @computed
+  bool get showUndoRedoButtons => isSelectMode;
+
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
   Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
@@ -445,6 +448,14 @@ abstract class TH2FileEditStoreBase with Store {
 
   void onSelectToolPressed() {
     _state.onSelectToolPressed();
+  }
+
+  void onUndoPressed() {
+    _state.onUndoPressed();
+  }
+
+  void onRedoPressed() {
+    _state.onRedoPressed();
   }
 
   @action

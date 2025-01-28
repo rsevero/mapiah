@@ -136,7 +136,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _undoRedoButtons() {
     return Observer(
       builder: (_) {
-        if (!th2FileEditStore.isSelectMode) {
+        if (!th2FileEditStore.showUndoRedoButtons) {
           return const SizedBox();
         }
 
@@ -162,7 +162,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     foregroundColor: hasUndo
                         ? null
                         : Theme.of(context).colorScheme.surfaceContainerHighest,
-                    onPressed: hasUndo ? th2FileEditStore.undo : null,
+                    onPressed: hasUndo ? th2FileEditStore.onUndoPressed : null,
                     elevation: hasUndo ? 6.0 : 3.0,
                     child: const Icon(Icons.undo),
                   );
@@ -186,7 +186,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     foregroundColor: hasRedo
                         ? null
                         : Theme.of(context).colorScheme.surfaceContainerHighest,
-                    onPressed: hasRedo ? th2FileEditStore.redo : null,
+                    onPressed: hasRedo ? th2FileEditStore.onRedoPressed : null,
                     elevation: hasRedo ? 6.0 : 3.0,
                     child: const Icon(Icons.redo),
                   );
