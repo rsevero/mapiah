@@ -72,6 +72,11 @@ const double thDefaultSelectionTolerance = 10.0;
 const double thDefaultPointRadius = 5.0;
 const double thDefaultLineThickness = 2.0;
 const double thSelectionWindowBorderPaintDashInterval = 5.0;
+const double thSelectionHandleSize = 10.0;
+const double thSelectionHandleDistance = 10.0;
+final Paint thSelectionHandleFillPaint = Paint()
+  ..color = Colors.black
+  ..style = PaintingStyle.fill;
 
 const String thMainConfigSection = 'Main';
 const String thMainConfigLocale = 'Locale';

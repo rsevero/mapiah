@@ -72,6 +72,30 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               name:
                   'TH2FileEditStoreBase.selectionWindowBorderPaintDashIntervalOnCanvas'))
           .value;
+  Computed<Observable<double>>? _$selectionHandleSizeOnCanvasComputed;
+
+  @override
+  Observable<double> get selectionHandleSizeOnCanvas =>
+      (_$selectionHandleSizeOnCanvasComputed ??= Computed<Observable<double>>(
+              () => super.selectionHandleSizeOnCanvas,
+              name: 'TH2FileEditStoreBase.selectionHandleSizeOnCanvas'))
+          .value;
+  Computed<Observable<double>>? _$selectionHandleDistanceOnCanvasComputed;
+
+  @override
+  Observable<double> get selectionHandleDistanceOnCanvas =>
+      (_$selectionHandleDistanceOnCanvasComputed ??=
+              Computed<Observable<double>>(
+                  () => super.selectionHandleDistanceOnCanvas,
+                  name: 'TH2FileEditStoreBase.selectionHandleDistanceOnCanvas'))
+          .value;
+  Computed<ObservableList<Rect>>? _$selectionHandlesComputed;
+
+  @override
+  ObservableList<Rect> get selectionHandles => (_$selectionHandlesComputed ??=
+          Computed<ObservableList<Rect>>(() => super.selectionHandles,
+              name: 'TH2FileEditStoreBase.selectionHandles'))
+      .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -229,16 +253,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   late final _$_selectedElementsAtom =
       Atom(name: 'TH2FileEditStoreBase._selectedElements', context: context);
 
-  Map<int, MPSelectedElement> get selectedElements {
+  ObservableMap<int, MPSelectedElement> get selectedElements {
     _$_selectedElementsAtom.reportRead();
     return super._selectedElements;
   }
 
   @override
-  Map<int, MPSelectedElement> get _selectedElements => selectedElements;
+  ObservableMap<int, MPSelectedElement> get _selectedElements =>
+      selectedElements;
 
   @override
-  set _selectedElements(Map<int, MPSelectedElement> value) {
+  set _selectedElements(ObservableMap<int, MPSelectedElement> value) {
     _$_selectedElementsAtom.reportWrite(value, super._selectedElements, () {
       super._selectedElements = value;
     });
@@ -438,27 +463,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
-  late final _$_selectionWindowBorderPaintStrokeWidthAtom = Atom(
-      name: 'TH2FileEditStoreBase._selectionWindowBorderPaintStrokeWidth',
-      context: context);
-
-  Observable<double> get selectionWindowBorderPaintStrokeWidth {
-    _$_selectionWindowBorderPaintStrokeWidthAtom.reportRead();
-    return super._selectionWindowBorderPaintStrokeWidth;
-  }
-
-  @override
-  Observable<double> get _selectionWindowBorderPaintStrokeWidth =>
-      selectionWindowBorderPaintStrokeWidth;
-
-  @override
-  set _selectionWindowBorderPaintStrokeWidth(Observable<double> value) {
-    _$_selectionWindowBorderPaintStrokeWidthAtom
-        .reportWrite(value, super._selectionWindowBorderPaintStrokeWidth, () {
-      super._selectionWindowBorderPaintStrokeWidth = value;
-    });
-  }
-
   late final _$_selectionWindowBorderPaintDashIntervalAtom = Atom(
       name: 'TH2FileEditStoreBase._selectionWindowBorderPaintDashInterval',
       context: context);
@@ -477,6 +481,26 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     _$_selectionWindowBorderPaintDashIntervalAtom
         .reportWrite(value, super._selectionWindowBorderPaintDashInterval, () {
       super._selectionWindowBorderPaintDashInterval = value;
+    });
+  }
+
+  late final _$_selectionHandlesFillPaintAtom = Atom(
+      name: 'TH2FileEditStoreBase._selectionHandlesFillPaint',
+      context: context);
+
+  Observable<Paint> get selectionHandlesFillPaint {
+    _$_selectionHandlesFillPaintAtom.reportRead();
+    return super._selectionHandlesFillPaint;
+  }
+
+  @override
+  Observable<Paint> get _selectionHandlesFillPaint => selectionHandlesFillPaint;
+
+  @override
+  set _selectionHandlesFillPaint(Observable<Paint> value) {
+    _$_selectionHandlesFillPaintAtom
+        .reportWrite(value, super._selectionHandlesFillPaint, () {
+      super._selectionHandlesFillPaint = value;
     });
   }
 
@@ -596,6 +620,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.addSelectedElement');
     try {
       return super.addSelectedElement(element);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Rect _getSelectedElementsBoundingBox() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase._getSelectedElementsBoundingBox');
+    try {
+      return super._getSelectedElementsBoundingBox();
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -867,7 +902,10 @@ lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
 selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
-selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas}
+selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
+selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
+selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
+selectionHandles: ${selectionHandles}
     ''';
   }
 }

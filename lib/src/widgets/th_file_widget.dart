@@ -6,6 +6,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
+import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
 
 class THFileWidget extends StatelessWidget {
@@ -46,6 +47,10 @@ class THFileWidget extends StatelessWidget {
                   ),
                   MPSelectedElementsWidget(
                     key: ValueKey("MPSelectedElementsWidget|$thFileMapiahID"),
+                    th2FileEditStore: th2FileEditStore,
+                  ),
+                  MPSelectionHandlesWidget(
+                    key: ValueKey("MPSelectionHandlesWidget|$thFileMapiahID"),
                     th2FileEditStore: th2FileEditStore,
                   ),
                   MPSelectionWindowWidget(

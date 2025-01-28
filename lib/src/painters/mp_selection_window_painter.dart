@@ -19,10 +19,6 @@ class MPSelectionWindowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (selectionWindowPosition.isEmpty) {
-      return;
-    }
-
     th2FileEditStore.transformCanvas(canvas);
 
     Path dashedPath = Path()..addRect(selectionWindowPosition);

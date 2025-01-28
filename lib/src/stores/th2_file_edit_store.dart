@@ -64,7 +64,16 @@ abstract class TH2FileEditStoreBase with Store {
   Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
 
   @readonly
-  Map<int, MPSelectedElement> _selectedElements = <int, MPSelectedElement>{};
+  ObservableMap<int, MPSelectedElement> _selectedElements =
+      ObservableMap<int, MPSelectedElement>();
+
+  Rect get selectedElementsBoundingBox {
+    _selectedElementsBoundingBox ??= _getSelectedElementsBoundingBox();
+
+    return _selectedElementsBoundingBox!;
+  }
+
+  Rect? _selectedElementsBoundingBox;
 
   @computed
   bool get isEditMode => _visualMode == TH2FileEditMode.edit;
@@ -123,15 +132,10 @@ abstract class TH2FileEditStoreBase with Store {
   Observable<Paint> _selectionWindowBorderPaint =
       Observable(thSelectionWindowBorderPaint);
 
-  @readonly
-  Observable<double> _selectionWindowBorderPaintStrokeWidth =
-      Observable(thSelectionWindowBorderPaintStrokeWidth);
-
   @computed
   Observable<Paint> get selectionWindowBorderPaintComplete =>
       Observable(_selectionWindowBorderPaint.value
-        ..strokeWidth =
-            _selectionWindowBorderPaintStrokeWidth.value / _canvasScale);
+        ..strokeWidth = thSelectionWindowBorderPaintStrokeWidth / _canvasScale);
 
   @readonly
   Observable<double> _selectionWindowBorderPaintDashInterval =
@@ -140,6 +144,103 @@ abstract class TH2FileEditStoreBase with Store {
   @computed
   Observable<double> get selectionWindowBorderPaintDashIntervalOnCanvas =>
       Observable(_selectionWindowBorderPaintDashInterval.value / _canvasScale);
+
+  @computed
+  Observable<double> get selectionHandleSizeOnCanvas =>
+      Observable(thSelectionHandleSize / _canvasScale);
+
+  @computed
+  Observable<double> get selectionHandleDistanceOnCanvas =>
+      Observable(thSelectionHandleDistance / _canvasScale);
+
+  @readonly
+  Observable<Paint> _selectionHandlesFillPaint =
+      Observable(thSelectionHandleFillPaint);
+
+  @computed
+  ObservableList<Rect> get selectionHandles {
+    final List<Rect> handles = <Rect>[];
+
+    if (_selectedElements.isEmpty) {
+      return ObservableList.of(handles);
+    }
+
+    final double handleSize = selectionHandleSizeOnCanvas.value;
+    final double handleDistance = selectionHandleDistanceOnCanvas.value;
+    final Rect boundingBox = selectedElementsBoundingBox;
+
+    final double left = boundingBox.left - handleSize - handleDistance;
+    final double right = boundingBox.right + handleDistance;
+    final double top = boundingBox.top - handleSize - handleDistance;
+    final double bottom = boundingBox.bottom + handleDistance;
+    final double halfSize = handleSize / 2.0;
+    final double centerX =
+        (boundingBox.left + boundingBox.right) / 2.0 - halfSize;
+    final double centerY =
+        (boundingBox.top + boundingBox.bottom) / 2.0 - halfSize;
+
+    final Rect topLeft = MPNumericAux.orderedRectFromLTWH(
+      left: left,
+      top: top,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect topRight = MPNumericAux.orderedRectFromLTWH(
+      left: right,
+      top: top,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect bottomLeft = MPNumericAux.orderedRectFromLTWH(
+      left: left,
+      top: bottom,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect bottomRight = MPNumericAux.orderedRectFromLTWH(
+      left: right,
+      top: bottom,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect topCenter = MPNumericAux.orderedRectFromLTWH(
+      left: centerX,
+      top: top,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect bottomCenter = MPNumericAux.orderedRectFromLTWH(
+      left: centerX,
+      top: bottom,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect leftCenter = MPNumericAux.orderedRectFromLTWH(
+      left: left,
+      top: centerY,
+      width: handleSize,
+      height: handleSize,
+    );
+    final Rect rightCenter = MPNumericAux.orderedRectFromLTWH(
+      left: right,
+      top: centerY,
+      width: handleSize,
+      height: handleSize,
+    );
+
+    handles.addAll(<Rect>[
+      topLeft,
+      topRight,
+      bottomLeft,
+      bottomRight,
+      topCenter,
+      bottomCenter,
+      leftCenter,
+      rightCenter,
+    ]);
+
+    return ObservableList.of(handles);
+  }
 
   @readonly
   int _redrawTriggerSelectedElementsListChanged = 0;
@@ -419,7 +520,52 @@ abstract class TH2FileEditStoreBase with Store {
         break;
     }
     _isSelected[element.mapiahID]!.value = true;
+    _selectedElementsBoundingBox = null;
     triggerSelectedListChanged();
+  }
+
+  @action
+  Rect _getSelectedElementsBoundingBox() {
+    late Rect boundingBox;
+    double minX = double.infinity;
+    double minY = double.infinity;
+    double maxX = double.negativeInfinity;
+    double maxY = double.negativeInfinity;
+    final selectedElements = _selectedElements.values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      final THElement element =
+          _thFile.elementByMapiahID(selectedElement.mapiahID);
+      switch (element) {
+        case THPoint _:
+          boundingBox = element.getBoundingBox();
+          break;
+        case THLine _:
+          boundingBox = element.getBoundingBox(_thFile);
+          break;
+        default:
+          continue;
+      }
+      if (boundingBox.left < minX) {
+        minX = boundingBox.left;
+      }
+      if (boundingBox.top < minY) {
+        minY = boundingBox.top;
+      }
+      if (boundingBox.right > maxX) {
+        maxX = boundingBox.right;
+      }
+      if (boundingBox.bottom > maxY) {
+        maxY = boundingBox.bottom;
+      }
+    }
+
+    return MPNumericAux.orderedRectFromLTRB(
+      left: minX,
+      top: minY,
+      right: maxX,
+      bottom: maxY,
+    );
   }
 
   @action
@@ -452,6 +598,7 @@ abstract class TH2FileEditStoreBase with Store {
   void removeSelectedElement(THElement element) {
     _selectedElements.remove(element.mapiahID);
     _isSelected[element.mapiahID]!.value = false;
+    _selectedElementsBoundingBox = null;
     triggerSelectedListChanged();
   }
 
