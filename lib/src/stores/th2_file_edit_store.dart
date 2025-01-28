@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_selection_handle_type.dart';
 import 'package:mapiah/src/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -153,93 +154,58 @@ abstract class TH2FileEditStoreBase with Store {
   Observable<double> get selectionHandleDistanceOnCanvas =>
       Observable(thSelectionHandleDistance / _canvasScale);
 
-  @readonly
-  Observable<Paint> _selectionHandlesFillPaint =
-      Observable(thSelectionHandleFillPaint);
+  @computed
+  Observable<double> get selectionHandleLineThicknessOnCanvas =>
+      Observable(thSelectionHandleLineThickness / _canvasScale);
 
   @computed
-  ObservableList<Rect> get selectionHandles {
-    final List<Rect> handles = <Rect>[];
+  Observable<Paint> get selectionHandlePaint =>
+      Observable(thSelectionHandleFillPaint
+        ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
+
+  @computed
+  ObservableMap<MPSelectionHandleType, Offset> get selectionHandleCenters {
+    final Map<MPSelectionHandleType, Offset> handles =
+        <MPSelectionHandleType, Offset>{};
 
     if (_selectedElements.isEmpty) {
-      return ObservableList.of(handles);
+      return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
     }
 
     final double handleSize = selectionHandleSizeOnCanvas.value;
     final double handleDistance = selectionHandleDistanceOnCanvas.value;
     final Rect boundingBox = selectedElementsBoundingBox;
-
-    final double left = boundingBox.left - handleSize - handleDistance;
-    final double right = boundingBox.right + handleDistance;
-    final double top = boundingBox.top - handleSize - handleDistance;
-    final double bottom = boundingBox.bottom + handleDistance;
     final double halfSize = handleSize / 2.0;
-    final double centerX =
-        (boundingBox.left + boundingBox.right) / 2.0 - halfSize;
-    final double centerY =
-        (boundingBox.top + boundingBox.bottom) / 2.0 - halfSize;
 
-    final Rect topLeft = MPNumericAux.orderedRectFromLTWH(
-      left: left,
-      top: top,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect topRight = MPNumericAux.orderedRectFromLTWH(
-      left: right,
-      top: top,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect bottomLeft = MPNumericAux.orderedRectFromLTWH(
-      left: left,
-      top: bottom,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect bottomRight = MPNumericAux.orderedRectFromLTWH(
-      left: right,
-      top: bottom,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect topCenter = MPNumericAux.orderedRectFromLTWH(
-      left: centerX,
-      top: top,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect bottomCenter = MPNumericAux.orderedRectFromLTWH(
-      left: centerX,
-      top: bottom,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect leftCenter = MPNumericAux.orderedRectFromLTWH(
-      left: left,
-      top: centerY,
-      width: handleSize,
-      height: handleSize,
-    );
-    final Rect rightCenter = MPNumericAux.orderedRectFromLTWH(
-      left: right,
-      top: centerY,
-      width: handleSize,
-      height: handleSize,
-    );
+    final double left = boundingBox.left - halfSize - handleDistance;
+    final double right = boundingBox.right + halfSize + handleDistance;
+    final double top = boundingBox.top - halfSize - handleDistance;
+    final double bottom = boundingBox.bottom + halfSize + handleDistance;
 
-    handles.addAll(<Rect>[
-      topLeft,
-      topRight,
-      bottomLeft,
-      bottomRight,
-      topCenter,
-      bottomCenter,
-      leftCenter,
-      rightCenter,
-    ]);
+    final double centerX = (boundingBox.left + boundingBox.right) / 2.0;
+    final double centerY = (boundingBox.top + boundingBox.bottom) / 2.0;
 
-    return ObservableList.of(handles);
+    final Offset topLeft = Offset(left, top);
+    final Offset topRight = Offset(right, top);
+    final Offset bottomLeft = Offset(left, bottom);
+    final Offset bottomRight = Offset(right, bottom);
+    final Offset topCenter = Offset(centerX, top);
+    final Offset bottomCenter = Offset(centerX, bottom);
+    final Offset leftCenter = Offset(left, centerY);
+    final Offset rightCenter = Offset(right, centerY);
+
+    handles.addAll(<MPSelectionHandleType, Offset>{
+      MPSelectionHandleType.topLeft: topLeft,
+      MPSelectionHandleType.topRight: topRight,
+      MPSelectionHandleType.bottomLeft: bottomLeft,
+      MPSelectionHandleType.bottomRight: bottomRight,
+      MPSelectionHandleType.topCenter: topCenter,
+      MPSelectionHandleType.bottomCenter: bottomCenter,
+      MPSelectionHandleType.leftCenter: leftCenter,
+      MPSelectionHandleType.rightCenter: rightCenter,
+    });
+
+    return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
   }
 
   @readonly

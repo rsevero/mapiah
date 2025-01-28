@@ -89,13 +89,34 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
                   () => super.selectionHandleDistanceOnCanvas,
                   name: 'TH2FileEditStoreBase.selectionHandleDistanceOnCanvas'))
           .value;
-  Computed<ObservableList<Rect>>? _$selectionHandlesComputed;
+  Computed<Observable<double>>? _$selectionHandleLineThicknessOnCanvasComputed;
 
   @override
-  ObservableList<Rect> get selectionHandles => (_$selectionHandlesComputed ??=
-          Computed<ObservableList<Rect>>(() => super.selectionHandles,
-              name: 'TH2FileEditStoreBase.selectionHandles'))
-      .value;
+  Observable<double> get selectionHandleLineThicknessOnCanvas =>
+      (_$selectionHandleLineThicknessOnCanvasComputed ??= Computed<
+                  Observable<double>>(
+              () => super.selectionHandleLineThicknessOnCanvas,
+              name:
+                  'TH2FileEditStoreBase.selectionHandleLineThicknessOnCanvas'))
+          .value;
+  Computed<Observable<Paint>>? _$selectionHandlePaintComputed;
+
+  @override
+  Observable<Paint> get selectionHandlePaint =>
+      (_$selectionHandlePaintComputed ??= Computed<Observable<Paint>>(
+              () => super.selectionHandlePaint,
+              name: 'TH2FileEditStoreBase.selectionHandlePaint'))
+          .value;
+  Computed<ObservableMap<MPSelectionHandleType, Offset>>?
+      _$selectionHandleCentersComputed;
+
+  @override
+  ObservableMap<MPSelectionHandleType, Offset> get selectionHandleCenters =>
+      (_$selectionHandleCentersComputed ??=
+              Computed<ObservableMap<MPSelectionHandleType, Offset>>(
+                  () => super.selectionHandleCenters,
+                  name: 'TH2FileEditStoreBase.selectionHandleCenters'))
+          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -481,26 +502,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     _$_selectionWindowBorderPaintDashIntervalAtom
         .reportWrite(value, super._selectionWindowBorderPaintDashInterval, () {
       super._selectionWindowBorderPaintDashInterval = value;
-    });
-  }
-
-  late final _$_selectionHandlesFillPaintAtom = Atom(
-      name: 'TH2FileEditStoreBase._selectionHandlesFillPaint',
-      context: context);
-
-  Observable<Paint> get selectionHandlesFillPaint {
-    _$_selectionHandlesFillPaintAtom.reportRead();
-    return super._selectionHandlesFillPaint;
-  }
-
-  @override
-  Observable<Paint> get _selectionHandlesFillPaint => selectionHandlesFillPaint;
-
-  @override
-  set _selectionHandlesFillPaint(Observable<Paint> value) {
-    _$_selectionHandlesFillPaintAtom
-        .reportWrite(value, super._selectionHandlesFillPaint, () {
-      super._selectionHandlesFillPaint = value;
     });
   }
 
@@ -905,7 +906,9 @@ selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
 selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
-selectionHandles: ${selectionHandles}
+selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
+selectionHandlePaint: ${selectionHandlePaint},
+selectionHandleCenters: ${selectionHandleCenters}
     ''';
   }
 }

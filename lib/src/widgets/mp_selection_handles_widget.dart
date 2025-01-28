@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/auxiliary/mp_selection_handle_type.dart';
+import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/painters/mp_selection_handles_painter.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
@@ -20,14 +22,26 @@ class MPSelectionHandlesWidget extends StatelessWidget {
           if (th2FileEditStore.selectedElements.isEmpty) {
             return const SizedBox.shrink();
           }
-          final List<Rect> handles = th2FileEditStore.selectionHandles;
-          final Paint handlesFillPaint =
-              th2FileEditStore.selectionHandlesFillPaint.value;
+          final Map<MPSelectionHandleType, Offset> handleCenters =
+              th2FileEditStore.selectionHandleCenters;
+          final Paint handlePaint = th2FileEditStore.selectionHandlePaint.value;
+
+          final Rect boundingBox = th2FileEditStore.selectedElementsBoundingBox;
+          double handleSize =
+              th2FileEditStore.selectionHandleSizeOnCanvas.value;
+          final double handleSizeThreshold =
+              handleSize * thSelectionHandleThresholdMultiplier;
+          if ((boundingBox.width > handleSizeThreshold) &&
+              (boundingBox.height > handleSizeThreshold)) {
+            handleSize = handleSize * thSelectionHandleSizeAmplifier;
+          }
+
           return CustomPaint(
             painter: MPSelectionHandlesPainter(
               th2FileEditStore: th2FileEditStore,
-              handles: handles,
-              fillPaint: handlesFillPaint,
+              handleCenters: handleCenters,
+              handleSize: handleSize,
+              handlePaint: handlePaint,
             ),
           );
         },
