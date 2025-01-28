@@ -664,7 +664,7 @@ abstract class TH2FileEditStoreBase with Store {
         position: originalPoint.position.copyWith(
             coordinates: originalPoint.position.coordinates +
                 localDeltaPositionOnCanvas));
-    substituteElementWithoutRedrawTriggerAddSelectableElement(modifiedPoint);
+    substituteElementWithoutAddSelectableElement(modifiedPoint);
   }
 
   void _updateTHLinePosition(
@@ -1006,11 +1006,10 @@ abstract class TH2FileEditStoreBase with Store {
     }
   }
 
-  void substituteElementWithoutRedrawTriggerAddSelectableElement(
-      THElement modifiedElement) {
+  void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     getIt<MPLog>().finer(
-        'Substituted element without redraw trigger ${modifiedElement.mapiahID}');
+        'Substituted element without add selectable element ${modifiedElement.mapiahID}');
   }
 
   void substituteLineSegmentsOfLine(

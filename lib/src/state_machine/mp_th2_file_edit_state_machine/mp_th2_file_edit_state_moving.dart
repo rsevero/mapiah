@@ -21,6 +21,7 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
     final Offset panDeltaOnCanvas =
         th2FileEditStore.offsetScreenToCanvas(details.localPosition) -
             th2FileEditStore.panStartCanvasCoordinates;
+    late MPCommand moveCommand;
 
     if (selectedCount == 1) {
       final MPSelectedElement selected =
@@ -29,24 +30,19 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
 
       switch (selected) {
         case MPSelectedPoint _:
-          final MPMovePointCommand movePointCommand =
-              MPMovePointCommand.fromDelta(
+          moveCommand = MPMovePointCommand.fromDelta(
             pointMapiahID: selectedElement.mapiahID,
             originalCoordinates:
                 (selectedElement as THPoint).position.coordinates,
             deltaOnCanvas: panDeltaOnCanvas,
           );
-
-          th2FileEditStore.execute(movePointCommand);
           break;
         case MPSelectedLine _:
-          final MPMoveLineCommand moveLineCommand = MPMoveLineCommand.fromDelta(
+          moveCommand = MPMoveLineCommand.fromDelta(
             lineMapiahID: selectedElement.mapiahID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
             deltaOnCanvas: panDeltaOnCanvas,
           );
-
-          th2FileEditStore.execute(moveLineCommand);
           break;
       }
     } else if (selectedCount > 1) {
@@ -72,14 +68,12 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
         }
       }).toList();
 
-      final MPMoveElementsCommand moveElementsCommand =
-          MPMoveElementsCommand.fromDelta(
+      moveCommand = MPMoveElementsCommand.fromDelta(
         moveCommandOriginalParametersList: moveCommandOriginalParametersList,
         deltaOnCanvas: panDeltaOnCanvas,
       );
-
-      th2FileEditStore.execute(moveElementsCommand);
     }
+    th2FileEditStore.execute(moveCommand);
 
     th2FileEditStore.updateSelectedElementsClones();
 
