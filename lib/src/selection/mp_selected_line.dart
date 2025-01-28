@@ -1,17 +1,18 @@
-import 'dart:collection';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/selection/mp_selected_element.dart';
+part of 'mp_selected_element.dart';
 
 class MPSelectedLine extends MPSelectedElement {
   late THLine originalLineClone;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
       LinkedHashMap<int, THLineSegment>();
 
-  MPSelectedLine({required THFile thFile, required THLine originalLine}) {
+  MPSelectedLine({required THLine originalLine, required THFile thFile}) {
+    _createClone(originalLine, thFile);
+  }
+
+  void _createClone(THLine originalLine, THFile thFile) {
     final Iterable<int> lineSegmentMapiahIDs = originalLine.childrenMapiahID;
+
+    originalLineSegmentsMapClone.clear();
 
     for (final int mapiahID in lineSegmentMapiahIDs) {
       final THElement element = thFile.elementByMapiahID(mapiahID);
@@ -45,6 +46,13 @@ class MPSelectedLine extends MPSelectedElement {
       childrenMapiahID: childrenMapiahIDsClone,
       optionsMap: optionsMapClone,
     );
+  }
+
+  @override
+  void updateClone(THFile thFile) {
+    final THLine updatedOriginalLine =
+        thFile.elementByMapiahID(mapiahID) as THLine;
+    _createClone(updatedOriginalLine, thFile);
   }
 
   @override

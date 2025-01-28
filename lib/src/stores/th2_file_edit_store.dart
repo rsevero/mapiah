@@ -16,8 +16,6 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
-import 'package:mapiah/src/selection/mp_selected_line.dart';
-import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
@@ -491,6 +489,12 @@ abstract class TH2FileEditStoreBase with Store {
   void _clearSelectedElementsWithoutResettingRedrawTriggers() {
     _selectedElements.clear();
     _isSelected.forEach((key, value) => value.value = false);
+  }
+
+  void updateSelectedElementsClones() {
+    for (final MPSelectedElement selectedElement in _selectedElements.values) {
+      selectedElement.updateClone(_thFile);
+    }
   }
 
   @action

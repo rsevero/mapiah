@@ -7,8 +7,6 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
-import 'package:mapiah/src/selection/mp_selected_line.dart';
-import 'package:mapiah/src/selection/mp_selected_point.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 

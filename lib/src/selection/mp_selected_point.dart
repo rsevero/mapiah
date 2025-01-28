@@ -1,13 +1,13 @@
-import 'dart:collection';
-
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/selection/mp_selected_element.dart';
+part of 'mp_selected_element.dart';
 
 class MPSelectedPoint extends MPSelectedElement {
   late THPoint originalPointClone;
 
   MPSelectedPoint({required THPoint originalPoint}) {
+    _createClone(originalPoint);
+  }
+
+  void _createClone(THPoint originalPoint) {
     final LinkedHashMap<String, THCommandOption> optionsMapClone =
         LinkedHashMap<String, THCommandOption>();
     originalPoint.optionsMap.forEach((key, value) {
@@ -15,6 +15,13 @@ class MPSelectedPoint extends MPSelectedElement {
     });
 
     originalPointClone = originalPoint.copyWith(optionsMap: optionsMapClone);
+  }
+
+  @override
+  void updateClone(THFile thFile) {
+    final THPoint updatedOriginalPoint =
+        thFile.elementByMapiahID(mapiahID) as THPoint;
+    _createClone(updatedOriginalPoint);
   }
 
   @override

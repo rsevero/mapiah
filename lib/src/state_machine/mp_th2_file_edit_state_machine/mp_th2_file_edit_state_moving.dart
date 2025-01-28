@@ -12,7 +12,8 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
 
   /// 1. Records an MPCommand that moves the entire selection by the distance
   /// indicated by [details].
-  /// 2. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
+  /// 2. Update cloned copies inside TH2FileEditStore.selectedElements.
+  /// 3. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPanEnd(DragEndDetails details) {
     final int selectedCount = th2FileEditStore.selectedElements.length;
@@ -78,6 +79,8 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
 
       th2FileEditStore.execute(moveElementsCommand);
     }
+
+    th2FileEditStore.updateSelectedElementsClones();
 
     th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
   }
