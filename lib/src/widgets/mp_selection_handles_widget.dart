@@ -20,7 +20,7 @@ class MPSelectionHandlesWidget extends StatelessWidget {
       child: Observer(
         builder: (_) {
           final Map<MPSelectionHandleType, Offset> handleCenters =
-              th2FileEditStore.selectionHandleCenters;
+              th2FileEditStore.getSelectionHandleCenters();
           final Paint handlePaint = th2FileEditStore.selectionHandlePaint.value;
 
           final Rect boundingBox = th2FileEditStore.selectedElementsBoundingBox;

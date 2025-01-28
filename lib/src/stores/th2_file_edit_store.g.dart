@@ -128,16 +128,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               () => super.selectionHandlePaint,
               name: 'TH2FileEditStoreBase.selectionHandlePaint'))
           .value;
-  Computed<ObservableMap<MPSelectionHandleType, Offset>>?
-      _$selectionHandleCentersComputed;
-
-  @override
-  ObservableMap<MPSelectionHandleType, Offset> get selectionHandleCenters =>
-      (_$selectionHandleCentersComputed ??=
-              Computed<ObservableMap<MPSelectionHandleType, Offset>>(
-                  () => super.selectionHandleCenters,
-                  name: 'TH2FileEditStoreBase.selectionHandleCenters'))
-          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -931,8 +921,7 @@ selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDash
 selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
 selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
 selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
-selectionHandlePaint: ${selectionHandlePaint},
-selectionHandleCenters: ${selectionHandleCenters}
+selectionHandlePaint: ${selectionHandlePaint}
     ''';
   }
 }

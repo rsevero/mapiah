@@ -176,8 +176,15 @@ abstract class TH2FileEditStoreBase with Store {
       Observable(thSelectionHandleFillPaint
         ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
 
-  @computed
-  ObservableMap<MPSelectionHandleType, Offset> get selectionHandleCenters {
+  Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
+
+  Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
+    _selectionHandleCenters ??= _calculateSelectionHandleCenters();
+
+    return _selectionHandleCenters!;
+  }
+
+  Map<MPSelectionHandleType, Offset> _calculateSelectionHandleCenters() {
     final Map<MPSelectionHandleType, Offset> handles =
         <MPSelectionHandleType, Offset>{};
 
@@ -499,7 +506,6 @@ abstract class TH2FileEditStoreBase with Store {
         break;
     }
     _isSelected[element.mapiahID]!.value = true;
-    _selectedElementsBoundingBox = null;
     triggerSelectedListChanged();
   }
 
@@ -577,7 +583,6 @@ abstract class TH2FileEditStoreBase with Store {
   void removeSelectedElement(THElement element) {
     _selectedElements.remove(element.mapiahID);
     _isSelected[element.mapiahID]!.value = false;
-    _selectedElementsBoundingBox = null;
     triggerSelectedListChanged();
   }
 
@@ -800,6 +805,8 @@ abstract class TH2FileEditStoreBase with Store {
 
   @action
   triggerSelectedElementsRedraw() {
+    _selectedElementsBoundingBox = null;
+    _selectionHandleCenters = null;
     _redrawTriggerSelectedElements++;
   }
 
@@ -810,6 +817,8 @@ abstract class TH2FileEditStoreBase with Store {
 
   @action
   triggerSelectedListChanged() {
+    _selectedElementsBoundingBox = null;
+    _selectionHandleCenters = null;
     _redrawTriggerSelectedElementsListChanged++;
   }
 
