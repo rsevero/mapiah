@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
@@ -21,6 +22,10 @@ class THElementsPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant THElementsPainter oldDelegate) {
-    return true;
+    if (identical(this, oldDelegate)) return false;
+
+    return painters.length != oldDelegate.painters.length ||
+        !const ListEquality<CustomPainter>()
+            .equals(painters, oldDelegate.painters);
   }
 }

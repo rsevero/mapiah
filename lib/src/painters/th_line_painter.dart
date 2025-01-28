@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
@@ -51,6 +52,10 @@ class THLinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant THLinePainter oldDelegate) {
-    return true;
+    if (identical(this, oldDelegate)) return false;
+
+    return linePaint != oldDelegate.linePaint ||
+        !const MapEquality<int, THLinePainterLineSegment>()
+            .equals(lineSegmentsMap, oldDelegate.lineSegmentsMap);
   }
 }

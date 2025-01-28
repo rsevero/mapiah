@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_selection_handle_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
@@ -75,7 +76,12 @@ class MPSelectionHandlesPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(covariant MPSelectionHandlesPainter oldDelegate) {
+    if (identical(this, oldDelegate)) return false;
+
+    return handleSize != oldDelegate.handleSize ||
+        handlePaint != oldDelegate.handlePaint ||
+        !const DeepCollectionEquality()
+            .equals(handleCenters, oldDelegate.handleCenters);
   }
 }

@@ -26,6 +26,10 @@ class THPointPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant THPointPainter oldDelegate) {
-    return true;
+    if (identical(this, oldDelegate)) return false;
+
+    return position != oldDelegate.position ||
+        pointRadius != oldDelegate.pointRadius ||
+        pointPaint != oldDelegate.pointPaint;
   }
 }

@@ -36,7 +36,12 @@ class MPSelectionWindowPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(covariant MPSelectionWindowPainter oldDelegate) {
+    if (identical(this, oldDelegate)) return false;
+
+    return selectionWindowPosition != oldDelegate.selectionWindowPosition ||
+        fillPaint != oldDelegate.fillPaint ||
+        borderPaint != oldDelegate.borderPaint ||
+        dashInterval != oldDelegate.dashInterval;
   }
 }
