@@ -95,3 +95,33 @@ final Paint thSelectionWindowBorderPaint = Paint()
   ..color = Colors.blue
   ..style = PaintingStyle.stroke;
 const double thSelectionWindowBorderPaintStrokeWidth = 2;
+
+const double thMeterToCentimeter = 100.0;
+const double thInchToCentimeter = 2.54;
+const double thFeetToInch = 12.0;
+const double thYardToFeet = 3.0;
+
+const double thMeterToInch = thMeterToCentimeter / thInchToCentimeter;
+const double thMeterToFeet =
+    thMeterToCentimeter / (thInchToCentimeter * thFeetToInch);
+const double thMeterToYard =
+    thMeterToCentimeter / (thInchToCentimeter * thFeetToInch * thYardToFeet);
+
+const double thInchToMeter = 1 / thMeterToInch;
+const double thFeetToMeter = 1 / thMeterToFeet;
+const double thYardToMeter = 1 / thMeterToYard;
+const double thCentimeterToMeter = 1 / thMeterToCentimeter;
+
+const double thCentimeterToInch = 1 / thInchToCentimeter;
+const double thCentimeterToFeet = 1 / (thInchToCentimeter * thFeetToInch);
+const double thCentimeterToYard =
+    1 / (thInchToCentimeter * thFeetToInch * thYardToFeet);
+
+const double thInchToFeet = 1 / thFeetToInch;
+const double thInchToYard = 1 / (thFeetToInch * thYardToFeet);
+
+const double thFeetToCentimeter = 1 / thCentimeterToFeet;
+const double thFeetToYard = 1 / thYardToFeet;
+
+const double thYardToCentimeter = 1 / thCentimeterToYard;
+const double thYardToInch = 1 / thInchToYard;
