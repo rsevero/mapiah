@@ -14,10 +14,6 @@ class MPSelectionWindowWidget extends StatelessWidget {
 
   @override
   Widget build(Object context) {
-    if (th2FileEditStore.selectionWindowCanvasCoordinates.value.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return RepaintBoundary(
       child: Observer(
         builder: (_) => CustomPaint(

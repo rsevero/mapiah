@@ -119,6 +119,19 @@ abstract class TH2FileEditStoreBase with Store {
     return (selectionTolerance * selectionTolerance) / _canvasScale;
   }
 
+  @computed
+  bool get showSelectedElements => _selectedElements.isNotEmpty;
+
+  @computed
+  bool get showSelectionHandles =>
+      showSelectedElements &&
+      isSelectMode &&
+      _state is! MPTH2FileEditStateMoving;
+
+  @computed
+  bool get showSelectionWindow =>
+      _selectionWindowCanvasCoordinates.value != Rect.zero;
+
   @readonly
   bool _canvasScaleTranslationUndefined = true;
 

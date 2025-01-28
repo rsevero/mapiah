@@ -52,6 +52,27 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               () => super.selectionToleranceSquaredOnCanvas,
               name: 'TH2FileEditStoreBase.selectionToleranceSquaredOnCanvas'))
           .value;
+  Computed<bool>? _$showSelectedElementsComputed;
+
+  @override
+  bool get showSelectedElements => (_$showSelectedElementsComputed ??=
+          Computed<bool>(() => super.showSelectedElements,
+              name: 'TH2FileEditStoreBase.showSelectedElements'))
+      .value;
+  Computed<bool>? _$showSelectionHandlesComputed;
+
+  @override
+  bool get showSelectionHandles => (_$showSelectionHandlesComputed ??=
+          Computed<bool>(() => super.showSelectionHandles,
+              name: 'TH2FileEditStoreBase.showSelectionHandles'))
+      .value;
+  Computed<bool>? _$showSelectionWindowComputed;
+
+  @override
+  bool get showSelectionWindow => (_$showSelectionWindowComputed ??=
+          Computed<bool>(() => super.showSelectionWindow,
+              name: 'TH2FileEditStoreBase.showSelectionWindow'))
+      .value;
   Computed<Observable<Paint>>? _$selectionWindowBorderPaintCompleteComputed;
 
   @override
@@ -902,6 +923,9 @@ isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
 selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
+showSelectedElements: ${showSelectedElements},
+showSelectionHandles: ${showSelectionHandles},
+showSelectionWindow: ${showSelectionWindow},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},

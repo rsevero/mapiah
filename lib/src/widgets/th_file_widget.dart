@@ -45,18 +45,21 @@ class THFileWidget extends StatelessWidget {
                         ValueKey("MPNonSelectedElementsWidget|$thFileMapiahID"),
                     th2FileEditStore: th2FileEditStore,
                   ),
-                  MPSelectedElementsWidget(
-                    key: ValueKey("MPSelectedElementsWidget|$thFileMapiahID"),
-                    th2FileEditStore: th2FileEditStore,
-                  ),
-                  MPSelectionHandlesWidget(
-                    key: ValueKey("MPSelectionHandlesWidget|$thFileMapiahID"),
-                    th2FileEditStore: th2FileEditStore,
-                  ),
-                  MPSelectionWindowWidget(
-                    key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
-                    th2FileEditStore: th2FileEditStore,
-                  )
+                  if (th2FileEditStore.showSelectedElements)
+                    MPSelectedElementsWidget(
+                      key: ValueKey("MPSelectedElementsWidget|$thFileMapiahID"),
+                      th2FileEditStore: th2FileEditStore,
+                    ),
+                  if (th2FileEditStore.showSelectionHandles)
+                    MPSelectionHandlesWidget(
+                      key: ValueKey("MPSelectionHandlesWidget|$thFileMapiahID"),
+                      th2FileEditStore: th2FileEditStore,
+                    ),
+                  if (th2FileEditStore.showSelectionWindow)
+                    MPSelectionWindowWidget(
+                      key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
+                      th2FileEditStore: th2FileEditStore,
+                    )
                 ],
               ),
             );

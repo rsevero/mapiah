@@ -19,9 +19,6 @@ class MPSelectionHandlesWidget extends StatelessWidget {
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
-          if (th2FileEditStore.selectedElements.isEmpty) {
-            return const SizedBox.shrink();
-          }
           final Map<MPSelectionHandleType, Offset> handleCenters =
               th2FileEditStore.selectionHandleCenters;
           final Paint handlePaint = th2FileEditStore.selectionHandlePaint.value;
