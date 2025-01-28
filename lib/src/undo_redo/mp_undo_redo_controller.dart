@@ -27,6 +27,7 @@ class MPUndoRedoController {
     }
     final MPCommand command = _undo.removeLast().command;
     final MPUndoRedoCommand redo = command.execute(th2FileEditStore);
+    th2FileEditStore.triggerAllElementsRedraw();
     _redo.add(redo);
   }
 
@@ -36,6 +37,7 @@ class MPUndoRedoController {
     }
     final MPCommand command = _redo.removeLast().command;
     final MPUndoRedoCommand undo = command.execute(th2FileEditStore);
+    th2FileEditStore.triggerAllElementsRedraw();
     _undo.add(undo);
   }
 

@@ -492,14 +492,13 @@ abstract class TH2FileEditStoreBase with Store {
   @action
   void clearSelectedElements() {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
-    _redrawTriggerNonSelectedElements = 0;
-    _redrawTriggerSelectedElements = 0;
-    _redrawTriggerSelectedElementsListChanged = 0;
   }
 
   void _clearSelectedElementsWithoutResettingRedrawTriggers() {
     _selectedElements.clear();
     _isSelected.forEach((key, value) => value.value = false);
+    _selectedElementsBoundingBox = null;
+    _selectionHandleCenters = null;
   }
 
   void updateSelectedElementsClones() {
@@ -995,7 +994,6 @@ abstract class TH2FileEditStoreBase with Store {
   void substituteElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     _addSelectableElement(modifiedElement);
-    triggerSelectedElementsRedraw();
     getIt<MPLog>().finer('Substituted element ${modifiedElement.mapiahID}');
   }
 
@@ -1006,7 +1004,6 @@ abstract class TH2FileEditStoreBase with Store {
       getIt<MPLog>()
           .finer('Substituted element ${modifiedElement.mapiahID} from list');
     }
-    triggerSelectedElementsRedraw();
   }
 
   void substituteElementWithoutRedrawTriggerAddSelectableElement(
@@ -1049,44 +1046,6 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
-
-  void updatePointPositionPerOffset({
-    required THPoint originalPoint,
-    required Offset panOffset,
-  }) {
-    final MPMovePointCommand command = MPMovePointCommand(
-      pointMapiahID: originalPoint.mapiahID,
-      originalCoordinates: originalPoint.position.coordinates,
-      modifiedCoordinates: originalPoint.position.coordinates + panOffset,
-    );
-    execute(command);
-  }
-
-  void updateLinePosition({
-    required int lineMapiahID,
-    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-    required LinkedHashMap<int, THLineSegment> newLineSegmentsMap,
-  }) {
-    final MPMoveLineCommand command = MPMoveLineCommand(
-      lineMapiahID: lineMapiahID,
-      originalLineSegmentsMap: originalLineSegmentsMap,
-      modifiedLineSegmentsMap: newLineSegmentsMap,
-    );
-    execute(command);
-  }
-
-  void updateLinePositionPerOffset({
-    required int lineMapiahID,
-    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-    required Offset deltaOnCanvas,
-  }) {
-    final MPMoveLineCommand command = MPMoveLineCommand.fromDelta(
-      lineMapiahID: lineMapiahID,
-      originalLineSegmentsMap: originalLineSegmentsMap,
-      deltaOnCanvas: deltaOnCanvas,
-    );
-    execute(command);
-  }
 
   @action
   void addElement(THElement element) {
