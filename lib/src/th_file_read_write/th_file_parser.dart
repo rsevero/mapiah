@@ -274,6 +274,12 @@ class THFileParser {
       assert(element[2].length == 2);
     }
 
+    if (kDebugMode) {
+      assert(element[2] is List);
+      assert(element[2].length == 2);
+      assert(element[2][0] is String);
+    }
+
     final THPoint newPoint = THPoint.fromString(
       parentMapiahID: _currentParentMapiahID,
       pointDataList: element[1],
@@ -281,6 +287,15 @@ class THFileParser {
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
         newPoint, _currentParent);
+
+    try {
+      // Including subtype defined with type (type:subtype).
+      if (element[2][1] != null) {
+        THSubtypeCommandOption(optionParent: newPoint, subtype: element[1][1]);
+      }
+    } catch (e, s) {
+      _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[1][1].toString());
+    }
 
     _currentElement = newPoint;
     // _parsedOptions.clear();
@@ -1515,10 +1530,10 @@ class THFileParser {
     // THUnrecognizedCommandOption(_currentHasOptions, aSpec.toString());
   }
 
-  void _addError(String aErrorMessage, String aLocation, String aLocalInfo) {
-    final String errorMessage =
-        "'$aErrorMessage' at '$aLocation' with '$aLocalInfo' local info.";
-    _parseErrors.add(errorMessage);
+  void _addError(String errorMessage, String location, String localInfo) {
+    final String completeErrorMessage =
+        "'$errorMessage' at '$location' with '$localInfo' local info.";
+    _parseErrors.add(completeErrorMessage);
   }
 
   void _injectScrapScaleCommandOption() {

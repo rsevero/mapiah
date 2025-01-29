@@ -900,6 +900,39 @@ endscrap
     }
   });
 
+  group('point u', () {
+    final parser = THFileParser();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser_00190-point_user_with_subtype.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap U23-U28 -projection plan -scale [ -128 -2644 3414 -2644 0 0 \
+    89.96680000000002 0 meter ]
+  point 2311 -1386 u:brokenstal -scale xs
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse(THTestAux.testPath(success['file'] as String));
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
   group('point -value (altitude)', () {
     final parser = THFileParser();
     final writer = THFileWriter();
