@@ -6,7 +6,6 @@ import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/material_theme.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
-import 'package:mapiah/src/stores/mp_settings_store.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
@@ -27,7 +26,6 @@ void main() {
 
 void _setup() {
   getIt.registerSingleton<MPLog>(MPLog.instance);
-  getIt.registerSingleton<MPSettingsStore>(MPSettingsStore());
 }
 
 class MapiahApp extends StatelessWidget {
@@ -35,8 +33,6 @@ class MapiahApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MPSettingsStore settingsStore = getIt<MPSettingsStore>();
-
     return Observer(
       builder: (context) => MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -50,7 +46,7 @@ class MapiahApp extends StatelessWidget {
         ),
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        locale: settingsStore.locale,
+        locale: mpLocator.mpSettingsStore.locale,
         supportedLocales: AppLocalizations.supportedLocales,
         home: MapiahHome(),
       ),

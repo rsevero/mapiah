@@ -17,7 +17,6 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
-import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
@@ -102,16 +101,16 @@ abstract class TH2FileEditStoreBase with Store {
 
   @computed
   double get lineThicknessOnCanvas =>
-      getIt<MPSettingsStore>().lineThickness / _canvasScale;
+      mpLocator.mpSettingsStore.lineThickness / _canvasScale;
 
   @computed
   double get pointRadiusOnCanvas =>
-      getIt<MPSettingsStore>().pointRadius / _canvasScale;
+      mpLocator.mpSettingsStore.pointRadius / _canvasScale;
 
   @computed
   double get selectionToleranceSquaredOnCanvas {
     final double selectionTolerance =
-        getIt<MPSettingsStore>().selectionTolerance;
+        mpLocator.mpSettingsStore.selectionTolerance;
 
     return (selectionTolerance * selectionTolerance) / _canvasScale;
   }

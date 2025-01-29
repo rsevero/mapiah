@@ -13,7 +13,6 @@ import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';

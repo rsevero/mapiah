@@ -7,14 +7,12 @@ import 'package:mapiah/src/commands/mp_command_descriptor.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
-import 'package:mapiah/src/stores/mp_settings_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MPSettingsStore settingsStore = getIt<MPSettingsStore>();
     setWindowTitle(AppLocalizations.of(context).appTitle);
 
     initializeMPCommandLoclizations(context);
@@ -32,7 +30,7 @@ class MapiahHome extends StatelessWidget {
             icon: Icon(Icons.info_outline),
             onPressed: () => _showAboutDialog(context),
           ),
-          _buildLanguageDropdown(settingsStore, context),
+          _buildLanguageDropdown(context),
         ],
       ),
       body: Center(
@@ -40,8 +38,7 @@ class MapiahHome extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageDropdown(
-      MPSettingsStore settingsStore, BuildContext context) {
+  Widget _buildLanguageDropdown(BuildContext context) {
     final List<String> localeIDs = [
       'sys',
       ...AppLocalizations.supportedLocales.map((locale) => locale.languageCode),
@@ -51,7 +48,7 @@ class MapiahHome extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         return PopupMenuButton<String>(
           onSelected: (String newValue) {
-            settingsStore.setLocaleID(newValue);
+            mpLocator.mpSettingsStore.setLocaleID(newValue);
           },
           itemBuilder: (BuildContext context) {
             return localeIDs.map<PopupMenuEntry<String>>((String localeID) {
@@ -61,7 +58,7 @@ class MapiahHome extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: 300),
                   child: Row(
                     children: [
-                      if (localeID == settingsStore.localeID) ...[
+                      if (localeID == mpLocator.mpSettingsStore.localeID) ...[
                         Icon(Icons.check,
                             color: Theme.of(context).colorScheme.primary),
                         const SizedBox(width: 8),
