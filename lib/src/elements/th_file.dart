@@ -12,7 +12,6 @@ import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
 
 /// THFile represents the complete contents of a .th or .th2 file.
 ///
@@ -67,7 +66,7 @@ class THFile with THIsParentMixin {
   }
 
   THFile() {
-    _mapiahID = getIt<MPGeneralStore>().nextMapiahIDForTHFiles();
+    _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForTHFiles();
   }
 
   String toJson() {

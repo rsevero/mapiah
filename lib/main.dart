@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/material_theme.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 import 'package:mapiah/src/stores/mp_settings_store.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
 
 final GetIt getIt = GetIt.instance;
+final MPLocator mpLocator = MPLocator();
 
 void main() {
   // /// For mobx debugging with spy().
@@ -27,7 +28,6 @@ void main() {
 void _setup() {
   getIt.registerSingleton<MPLog>(MPLog.instance);
   getIt.registerSingleton<MPSettingsStore>(MPSettingsStore());
-  getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
 }
 
 class MapiahApp extends StatelessWidget {

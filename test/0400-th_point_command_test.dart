@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
@@ -12,7 +11,6 @@ import 'th_test_aux.dart';
 final GetIt getIt = GetIt.instance;
 void main() {
   getIt.registerSingleton<MPLog>(MPLog.instance);
-  getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
   group('point', () {
     final parser = THFileParser();
     final writer = THFileWriter();

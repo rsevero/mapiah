@@ -1689,7 +1689,7 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _th2FileEditStore = getIt<MPGeneralStore>()
+    _th2FileEditStore = mpLocator.mpGeneralStore
         .getTH2FileEditStore(filename: filePath, forceNewStore: forceNewStore);
     _parsedTHFile = _th2FileEditStore.thFile;
     setCurrentParent(_parsedTHFile);

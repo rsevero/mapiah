@@ -1,16 +1,16 @@
 import 'package:get_it/get_it.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
 
 final GetIt getIt = GetIt.instance;
+final MPLocator mpLocator = MPLocator();
 void main() {
   getIt.registerSingleton<MPLog>(MPLog.instance);
-  getIt.registerSingleton<MPGeneralStore>(MPGeneralStore());
   group('point json', () {
     final parser = THFileParser();
 
@@ -43,7 +43,7 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        getIt<MPGeneralStore>().reset();
+        mpLocator.mpGeneralStore.reset();
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);

@@ -17,7 +17,6 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
 
 part 'th_area_border_thid.dart';
 part 'th_area.dart';
@@ -83,7 +82,7 @@ abstract class THElement {
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
   THElement.addToParent({required this.parentMapiahID, this.sameLineComment})
-      : _mapiahID = getIt<MPGeneralStore>().nextMapiahIDForElements();
+      : _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForElements();
 
   THIsParentMixin parent(THFile thFile) {
     if (parentMapiahID < 0) {
