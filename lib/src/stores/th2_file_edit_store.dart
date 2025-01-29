@@ -305,6 +305,11 @@ abstract class TH2FileEditStoreBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
+    if (_thFile.scraps.isNotEmpty) {
+      _activeScrap = _thFile.scraps.keys.first;
+      _hasMultipleScraps = _thFile.scraps.length > 1;
+    }
+
     _isSelected.clear();
     _selectableCoordinates.clear();
     _selectableBoundingBoxes.clear();
@@ -312,14 +317,11 @@ abstract class TH2FileEditStoreBase with Store {
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine) {
         _isSelected[key] = Observable(false);
-        _addSelectableElement(value);
+        if (isFromActiveScrap(value)) {
+          _addSelectableElement(value);
+        }
       }
     });
-
-    if (_thFile.scraps.isNotEmpty) {
-      _activeScrap = _thFile.scraps.keys.first;
-      _hasMultipleScraps = _thFile.scraps.length > 1;
-    }
 
     _isLoading = false;
 
@@ -727,9 +729,8 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   THPointPaint getUnselectedPointPaint(THPoint point) {
-    final Paint paint = (point.parentMapiahID == _activeScrap)
-        ? THPaints.thPaint1
-        : THPaints.thPaint4;
+    final Paint paint =
+        isFromActiveScrap(point) ? THPaints.thPaint1 : THPaints.thPaint4;
     return THPointPaint(
       radius: pointRadiusOnCanvas,
       paint: paint..strokeWidth = lineThicknessOnCanvas,
@@ -737,9 +738,8 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   THLinePaint getUnselectedLinePaint(THLine line) {
-    final Paint paint = (line.parentMapiahID == _activeScrap)
-        ? THPaints.thPaint3
-        : THPaints.thPaint4;
+    final Paint paint =
+        isFromActiveScrap(line) ? THPaints.thPaint3 : THPaints.thPaint4;
     return THLinePaint(
       paint: paint..strokeWidth = lineThicknessOnCanvas,
     );
@@ -756,6 +756,10 @@ abstract class TH2FileEditStoreBase with Store {
     return THLinePaint(
       paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
     );
+  }
+
+  bool isFromActiveScrap(THElement element) {
+    return element.parentMapiahID == _activeScrap;
   }
 
   @action
