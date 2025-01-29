@@ -1,0 +1,4 @@
+encoding  utf-8
+scrap U20-U23 -projection plan -scale [-128 -2644 3414 -2644 0.0 0.0 89.96 0.0 m]
+point 777.0 -1224.0 passage-height -value [7 ft]
+endscrap

@@ -685,7 +685,7 @@ class THGrammar extends GrammarDefinition {
       bracketStringTemplate(
               numberWithSuffix(char('?').optional()) & lengthUnit().optional())
           .trim()
-          .map((value) => ['number_with_something_else', value]) |
+          .map((value) => ['one_number_with_optional_unit', value]) |
       bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
           .trim()
           .map((value) => ['plus_number_minus_number', value]) |

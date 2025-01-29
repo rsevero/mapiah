@@ -1312,7 +1312,7 @@ class THFileParser {
         if ((specs[1] == null) || (specs[1] is! String)) {
           throw THCustomException("Need a string value.");
         }
-        final unit = ((specs[2] != null) &&
+        final String unit = ((specs[2] != null) &&
                 (specs[2] is String) &&
                 ((specs[2] as String).isNotEmpty))
             ? specs[2].toString()
@@ -1326,7 +1326,7 @@ class THFileParser {
       case 'hyphen':
       case 'nan':
         THAltitudeCommandOption.fromNan(optionParent: _currentHasOptions);
-      case 'number_with_something_else':
+      case 'one_number_with_optional_unit':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
         }
@@ -1377,7 +1377,7 @@ class THFileParser {
       case 'hyphen':
       case 'nan':
         THAltitudeValueCommandOption.fromNan(optionParent: _currentHasOptions);
-      case 'number_with_something_else':
+      case 'one_number_with_optional_unit':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
         }
@@ -1459,7 +1459,7 @@ class THFileParser {
     final specs = _currentSpec[1];
 
     switch (parseType) {
-      case 'number_with_something_else':
+      case 'one_number_with_optional_unit':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
         }
@@ -1510,6 +1510,32 @@ class THFileParser {
           plusNumber: specs[0],
           minusNumber: specs[1],
         );
+      case 'one_number_with_optional_unit':
+        final String unit = ((specs[1] != null) &&
+                (specs[1] is String) &&
+                ((specs[1] as String).isNotEmpty))
+            ? specs[1].toString()
+            : '';
+        THPassageHeightValueCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          plusNumber: specs[0],
+          minusNumber: '',
+          unit: unit,
+        );
+        break;
+      case 'two_numbers_with_optional_unit':
+        final String unit = ((specs[2] != null) &&
+                (specs[2] is String) &&
+                ((specs[2] as String).isNotEmpty))
+            ? specs[2].toString()
+            : '';
+        THPassageHeightValueCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          plusNumber: specs[0],
+          minusNumber: specs[1],
+          unit: unit,
+        );
+        break;
       default:
         throw THCustomException(
             "Unsuported parse type '$parseType' in '_injectPassageHeightValueCommandOption'.");

@@ -906,7 +906,7 @@ endscrap
 
     const successes = [
       {
-        'file': 'th_file_parser_00190-point_user_with_subtype.th2',
+        'file': 'th_file_parser-00190-point_user_with_subtype.th2',
         'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
@@ -1227,7 +1227,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -3081 799 passage-height -value [ +6 -71 ]
+  point -3081 799 passage-height -value [ +6 -71 meter ]
 endscrap
 ''',
       },
@@ -1238,7 +1238,30 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -3081 799 passage-height -value +6
+  point -3081 799 passage-height -value [ +6 meter ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-00195-passage_height_point_with_value_option_with_unit.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.96 0 meter \
+    ]
+  point 777 -1224 passage-height -value [ 7 feet ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02311-passage_height_point_with_value_option_with_invalid_unit-failure.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -3081 799 passage-height -value [ +6 -71 inch ]
 endscrap
 ''',
       },
@@ -1266,7 +1289,6 @@ endscrap
 
     const failures = [
       'th_file_parser-00185-passage_height_point_with_value_option_without_brackets-failure.th2',
-      'th_file_parser-02311-passage_height_point_with_value_option_with_invalid_unit-failure.th2',
     ];
 
     for (var failure in failures) {

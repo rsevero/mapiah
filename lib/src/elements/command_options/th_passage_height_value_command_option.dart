@@ -12,28 +12,30 @@ enum THPassageHeightModes {
 // tance between floor and ceiling) and [+<number> -<number>] (the distance to ceiling
 // and distance to floor).
 class THPassageHeightValueCommandOption extends THCommandOption {
-  late final THDoublePart? _plusNumber;
-  late final THDoublePart? _minusNumber;
-  late final THPassageHeightModes _mode;
-  late final bool _plusHasSign;
+  late final THDoublePart? plusNumber;
+  late final THDoublePart? minusNumber;
+  late final THPassageHeightModes mode;
+  late final THLengthUnitPart unit;
+  late final bool plusHasSign;
 
   THPassageHeightValueCommandOption.forCWJM({
     required super.parentMapiahID,
-    THDoublePart? plusNumber,
-    THDoublePart? minusNumber,
-    required THPassageHeightModes mode,
-    required bool plusHasSign,
-  })  : _plusNumber = plusNumber,
-        _minusNumber = minusNumber,
-        _mode = mode,
-        _plusHasSign = plusHasSign,
-        super.forCWJM();
+    this.plusNumber,
+    this.minusNumber,
+    String? unit,
+    required this.mode,
+    required this.plusHasSign,
+  }) : super.forCWJM() {
+    unitFromString(unit);
+  }
 
   THPassageHeightValueCommandOption.fromString({
     required super.optionParent,
     required String plusNumber,
     required String minusNumber,
+    String? unit,
   }) : super() {
+    unitFromString(unit);
     plusAndMinusNumbersFromString(plusNumber, minusNumber);
   }
 
@@ -43,15 +45,24 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   @override
   String typeToFile() => 'value';
 
+  void unitFromString(String? unit) {
+    if ((unit != null) && (unit.isNotEmpty)) {
+      this.unit = THLengthUnitPart.fromString(unitString: unit);
+    } else {
+      this.unit = THLengthUnitPart.fromString(unitString: thDefaultLengthUnit);
+    }
+  }
+
   @override
   Map<String, dynamic> toMap() {
     return {
       'optionType': optionType.name,
       'parentMapiahID': parentMapiahID,
-      'plusNumber': _plusNumber?.toMap(),
-      'minusNumber': _minusNumber?.toMap(),
-      'mode': _mode.toString(),
-      'plusHasSign': _plusHasSign,
+      'plusNumber': plusNumber?.toMap(),
+      'minusNumber': minusNumber?.toMap(),
+      'unit': unit.toMap(),
+      'mode': mode.toString(),
+      'plusHasSign': plusHasSign,
     };
   }
 
@@ -64,6 +75,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
       minusNumber: map['minusNumber'] != null
           ? THDoublePart.fromMap(map['minusNumber'])
           : null,
+      unit: map['unit'],
       mode: THPassageHeightModes.values
           .firstWhere((e) => e.toString() == map['mode']),
       plusHasSign: map['plusHasSign'],
@@ -86,10 +98,11 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }) {
     return THPassageHeightValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      plusNumber: makePlusNumberNull ? null : (plusNumber ?? _plusNumber),
-      minusNumber: makeMinusNumberNull ? null : (minusNumber ?? _minusNumber),
-      mode: mode ?? _mode,
-      plusHasSign: plusHasSign ?? _plusHasSign,
+      plusNumber: makePlusNumberNull ? null : (plusNumber ?? this.plusNumber),
+      minusNumber:
+          makeMinusNumberNull ? null : (minusNumber ?? this.minusNumber),
+      mode: mode ?? this.mode,
+      plusHasSign: plusHasSign ?? this.plusHasSign,
     );
   }
 
@@ -98,68 +111,71 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
-        other._plusNumber == _plusNumber &&
-        other._minusNumber == _minusNumber &&
-        other._mode == _mode &&
-        other._plusHasSign == _plusHasSign;
+        other.plusNumber == plusNumber &&
+        other.minusNumber == minusNumber &&
+        other.mode == mode &&
+        other.plusHasSign == plusHasSign;
   }
 
   @override
   int get hashCode => Object.hash(
         parentMapiahID,
-        _plusNumber,
-        _minusNumber,
-        _mode,
-        _plusHasSign,
+        plusNumber,
+        minusNumber,
+        mode,
+        plusHasSign,
       );
 
   void _setMode() {
-    if (_plusNumber == null) {
-      if (_minusNumber == null) {
+    if (plusNumber == null) {
+      if (minusNumber == null) {
         throw THCustomException(
             "Passage-height command option must have at least one number.");
       } else {
-        _mode = THPassageHeightModes.depth;
+        mode = THPassageHeightModes.depth;
       }
     } else {
-      if (_minusNumber == null) {
-        if (_plusHasSign) {
-          _mode = THPassageHeightModes.height;
+      if (minusNumber == null) {
+        if (plusHasSign) {
+          mode = THPassageHeightModes.height;
         } else {
-          _mode = THPassageHeightModes.distanceBetweenFloorAndCeiling;
+          mode = THPassageHeightModes.distanceBetweenFloorAndCeiling;
         }
       } else {
-        _mode = THPassageHeightModes.distanceToCeilingAndDistanceToFloor;
+        mode = THPassageHeightModes.distanceToCeilingAndDistanceToFloor;
       }
     }
   }
 
-  void plusAndMinusNumbersFromString(String plusNumber, String minusNumber) {
-    if (plusNumber.isEmpty) {
-      _plusNumber = null;
-      _plusHasSign = false;
+  void plusAndMinusNumbersFromString(
+    String newPlusNumber,
+    String newMinusNumber,
+  ) {
+    if (newPlusNumber.isEmpty) {
+      plusNumber = null;
+      plusHasSign = false;
     } else {
-      if (plusNumber.startsWith('+')) {
-        _plusHasSign = true;
-        plusNumber = plusNumber.substring(1);
+      if (newPlusNumber.startsWith('+')) {
+        plusHasSign = true;
+        newPlusNumber = newPlusNumber.substring(1);
       } else {
-        _plusHasSign = false;
+        plusHasSign = false;
       }
 
-      _plusNumber = THDoublePart.fromString(valueString: plusNumber);
+      plusNumber = THDoublePart.fromString(valueString: newPlusNumber);
 
-      if (_plusNumber!.value < 0) {
+      if (plusNumber!.value < 0) {
         throw THCustomException(
             "Plus number in passage-height command option must be positive.");
       }
     }
 
-    if (minusNumber.isEmpty) {
-      _minusNumber = null;
+    if (newMinusNumber.isEmpty) {
+      minusNumber = null;
     } else {
-      _minusNumber = THDoublePart.fromString(valueString: minusNumber);
+      minusNumber = THDoublePart.fromString(valueString: newMinusNumber);
 
-      if (_minusNumber!.value > 0) {
+      if (minusNumber!.value > 0) {
         throw THCustomException(
             "Minus number in passage-height command option must be negative.");
       }
@@ -170,23 +186,15 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    switch (_mode) {
+    switch (mode) {
       case THPassageHeightModes.height:
-        return "+${_plusNumber!.toString()}";
+        return "[ +${plusNumber!.toString()} $unit ]";
       case THPassageHeightModes.depth:
-        return _minusNumber!.toString();
+        return "[ ${minusNumber!.toString()} $unit ]";
       case THPassageHeightModes.distanceBetweenFloorAndCeiling:
-        return _plusNumber!.toString();
+        return "[ ${plusNumber!.toString()} $unit ]";
       case THPassageHeightModes.distanceToCeilingAndDistanceToFloor:
-        return "[ +${_plusNumber!.toString()} ${_minusNumber!.toString()} ]";
+        return "[ +${plusNumber!.toString()} ${minusNumber!.toString()} $unit ]";
     }
   }
-
-  THDoublePart? get plusNumber => _plusNumber;
-
-  THDoublePart? get minusNumber => _minusNumber;
-
-  THPassageHeightModes get mode => _mode;
-
-  bool get plusHasSign => _plusHasSign;
 }

@@ -14,7 +14,7 @@ mixin THHasAltitudeMixin on THCommandOption, THHasLengthMixin {
       return 'NaN';
     }
 
-    var asString = length.toString();
+    String asString = length.toString();
 
     if (unitSet || isFix) {
       if (isFix) {
