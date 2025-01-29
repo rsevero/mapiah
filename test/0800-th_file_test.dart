@@ -243,7 +243,6 @@ endcomment
     });
 
     test("${success['file']} as once", () async {
-      // getIt<GeneralStore>().resetMapiahIDGenerator();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
         forceNewStore: true,

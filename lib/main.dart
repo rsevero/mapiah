@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/definitions/material_theme.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -8,8 +7,6 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
-
-final GetIt getIt = GetIt.instance;
 final MPLocator mpLocator = MPLocator();
 
 void main() {

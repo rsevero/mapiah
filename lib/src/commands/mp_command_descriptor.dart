@@ -7,7 +7,7 @@ class MPCommandDescriptor {
       {};
 
   static void resetCommandDescriptions() {
-    final localizations = getIt<AppLocalizations>();
+    final AppLocalizations localizations = mpLocator.appLocalizations;
     _commandDescriptionMap[MPCommandDescriptionType.moveBezierLineSegment] =
         localizations.mpMoveBezierLineSegmentCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.moveElements] =

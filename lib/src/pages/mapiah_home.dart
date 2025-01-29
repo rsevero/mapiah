@@ -83,10 +83,7 @@ class MapiahHome extends StatelessWidget {
   }
 
   void initializeMPCommandLoclizations(BuildContext context) {
-    if (getIt.isRegistered<AppLocalizations>()) {
-      getIt.unregister<AppLocalizations>();
-    }
-    getIt.registerSingleton<AppLocalizations>(AppLocalizations.of(context));
+    mpLocator.resetAppLocalizations(context);
 
     MPCommandDescriptor.resetCommandDescriptions();
   }

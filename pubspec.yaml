@@ -22,7 +22,6 @@ dependencies:
     sdk: flutter
   flutter_mobx: ^2.0.0
   flutter_svg: ^2.0.17
-  get_it: ^8.0.3
   intl: any
   intl_utils: ^2.8.7
   logger: ^2.5.0
