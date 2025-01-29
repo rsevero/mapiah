@@ -1,4 +1,4 @@
-part of 'th_element.dart';
+part of '../th_element.dart';
 
 mixin THHasOptionsMixin on THElement {
   final LinkedHashMap<String, THCommandOption> _optionsMap =

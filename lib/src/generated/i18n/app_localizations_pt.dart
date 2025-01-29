@@ -61,6 +61,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
+  String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo';
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Lendo arquivo $filename ...';
   }

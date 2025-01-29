@@ -55,6 +55,8 @@ abstract class MPTH2FileEditState {
 
   void onPanEnd(DragEndDetails details) {}
 
+  void onChangeActiveScrapToolPressed() {}
+
   void onPanToolPressed() {}
 
   void onSelectToolPressed() {}

@@ -20,9 +20,11 @@ part of 'th_element.dart';
 // scrap doesn’t contain at least two survey stations with the -name reference, you have to
 // use the -scale option for calibrating the scrap. (This is usual for cross sections.)
 class THScrap extends THElement
-    with THHasOptionsMixin, THIsParentMixin
+    with THHasOptionsMixin, THIsParentMixin, THCalculateChildrenBoundingBoxMixin
     implements THHasTHID {
   late String _thID;
+
+  Rect? _boundingBox;
 
   THScrap.forCWJM({
     required super.mapiahID,
@@ -138,5 +140,19 @@ class THScrap extends THElement
   void setTHID(THFile thFile, String aTHID) {
     thFile.updateTHID(this, aTHID);
     _thID = aTHID;
+  }
+
+  Rect getBoundingBox(THFile thFile) {
+    _boundingBox ??= _calculateBoundingBox(thFile);
+
+    return _boundingBox!;
+  }
+
+  Rect _calculateBoundingBox(THFile thFile) {
+    return calculateChildrenBoundingBox(childrenMapiahID, thFile);
+  }
+
+  void clearBoundingBox() {
+    _boundingBox = null;
   }
 }

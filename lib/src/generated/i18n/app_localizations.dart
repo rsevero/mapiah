@@ -173,6 +173,12 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// The label for the change active scrap tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Change active scrap'**
+  String get th2FileEditPageChangeActiveScrapTool;
+
   /// The label for the loading file message
   ///
   /// In en, this message translates to:

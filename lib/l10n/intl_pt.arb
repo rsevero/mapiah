@@ -14,6 +14,7 @@
     "mpMovePointCommandDescription": "Mover ponto",
     "mpMoveStraightLineSegmentCommandDescription": "Mover segmento de linha reta",
     "parsingErrors": "Erros na interpretação do arquivo",
+    "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo",
     "th2FileEditPageLoadingFile": "Lendo arquivo {filename} ...",
     "th2FileEditPageNoUndoAvailable": "Nenhuma ação para desfazer",
     "th2FileEditPageNoRedoAvailable": "Nenhuma ação para refazer",

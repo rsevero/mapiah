@@ -421,6 +421,42 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_activeScrapAtom =
+      Atom(name: 'TH2FileEditStoreBase._activeScrap', context: context);
+
+  int get activeScrap {
+    _$_activeScrapAtom.reportRead();
+    return super._activeScrap;
+  }
+
+  @override
+  int get _activeScrap => activeScrap;
+
+  @override
+  set _activeScrap(int value) {
+    _$_activeScrapAtom.reportWrite(value, super._activeScrap, () {
+      super._activeScrap = value;
+    });
+  }
+
+  late final _$_hasMultipleScrapsAtom =
+      Atom(name: 'TH2FileEditStoreBase._hasMultipleScraps', context: context);
+
+  bool get hasMultipleScraps {
+    _$_hasMultipleScrapsAtom.reportRead();
+    return super._hasMultipleScraps;
+  }
+
+  @override
+  bool get _hasMultipleScraps => hasMultipleScraps;
+
+  @override
+  set _hasMultipleScraps(bool value) {
+    _$_hasMultipleScrapsAtom.reportWrite(value, super._hasMultipleScraps, () {
+      super._hasMultipleScraps = value;
+    });
+  }
+
   late final _$_canvasScaleTranslationUndefinedAtom = Atom(
       name: 'TH2FileEditStoreBase._canvasScaleTranslationUndefined',
       context: context);
@@ -694,6 +730,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.setState');
     try {
       return super.setState(type);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setActiveScrap(int scrapMapiahID) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.setActiveScrap');
+    try {
+      return super.setActiveScrap(scrapMapiahID);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

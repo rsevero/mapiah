@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
+import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
-import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 
@@ -17,7 +17,7 @@ import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart'
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile with THIsParentMixin {
+class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -226,46 +226,7 @@ class THFile with THIsParentMixin {
   }
 
   Rect _calculateBoundingBox() {
-    double minX = double.infinity;
-    double minY = double.infinity;
-    double maxX = double.negativeInfinity;
-    double maxY = double.negativeInfinity;
-    final elements = _elementByMapiahID.values;
-
-    for (final THElement element in elements) {
-      late final Rect childBoundingBox;
-
-      switch (element) {
-        case THPoint _:
-          childBoundingBox = element.getBoundingBox();
-          break;
-        case THLine _:
-          childBoundingBox = element.getBoundingBox(this);
-          break;
-        default:
-          continue;
-      }
-
-      if (childBoundingBox.left < minX) {
-        minX = childBoundingBox.left;
-      }
-      if (childBoundingBox.right > maxX) {
-        maxX = childBoundingBox.right;
-      }
-      if (childBoundingBox.top < minY) {
-        minY = childBoundingBox.top;
-      }
-      if (childBoundingBox.bottom > maxY) {
-        maxY = childBoundingBox.bottom;
-      }
-    }
-
-    return MPNumericAux.orderedRectFromLTRB(
-      left: minX,
-      top: minY,
-      right: maxX,
-      bottom: maxY,
-    );
+    return calculateChildrenBoundingBox(childrenMapiahID, this);
   }
 
   /// Updates the thID of a given element of the THFile.
@@ -327,6 +288,17 @@ class THFile with THIsParentMixin {
     return _mapiahIDByTHID[thID]!;
   }
 
+  void _clearTHFileAndParentBoundingBoxes(THElement element) {
+    _boundingBox = null;
+    final int parentMapiahID = element.parentMapiahID;
+    if (parentMapiahID > 0) {
+      final THElement parentElement = elementByMapiahID(parentMapiahID);
+      if (parentElement is THScrap) {
+        parentElement.clearBoundingBox();
+      }
+    }
+  }
+
   void substituteElement(THElement newElement) {
     final int mapiahID = newElement.mapiahID;
     final THElement oldElement = elementByMapiahID(mapiahID);
@@ -337,7 +309,7 @@ class THFile with THIsParentMixin {
     }
 
     _elementByMapiahID[mapiahID] = newElement;
-    _boundingBox = null;
+    _clearTHFileAndParentBoundingBoxes(newElement);
 
     if (newElement is THHasTHID) {
       final String oldTHID = (oldElement as THHasTHID).thID;

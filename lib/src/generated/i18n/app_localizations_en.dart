@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parsingErrors => 'Parsing errors';
 
   @override
+  String get th2FileEditPageChangeActiveScrapTool => 'Change active scrap';
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Loading file $filename ...';
   }

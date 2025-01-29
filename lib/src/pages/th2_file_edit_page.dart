@@ -212,6 +212,20 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if (th2FileEditStore.hasMultipleScraps) ...[
+                FloatingActionButton(
+                  heroTag: 'change_active_scrap_tool',
+                  onPressed: _onChangeActiveScrapToolPressed,
+                  tooltip: AppLocalizations.of(context)
+                      .th2FileEditPageChangeActiveScrapTool,
+                  child: Image.asset(
+                    'assets/icons/pan-tool.png',
+                    width: thFloatingActionIconSize,
+                    height: thFloatingActionIconSize,
+                  ),
+                ),
+                SizedBox(height: 8),
+              ],
               FloatingActionButton(
                 heroTag: 'pan_tool',
                 onPressed: _onPanToolPressed,
@@ -246,6 +260,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         );
       },
     );
+  }
+
+  void _onChangeActiveScrapToolPressed() {
+    th2FileEditStore.onChangeActiveScrapToolPressed();
   }
 
   void _onPanToolPressed() {

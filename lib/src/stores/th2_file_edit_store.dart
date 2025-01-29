@@ -5,18 +5,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
-import 'package:mapiah/src/stores/types/th_line_paint.dart';
-import 'package:mapiah/src/stores/types/th_point_paint.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/definitions/mp_paints.dart';
+import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_parent_mixin.dart';
+import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
+import 'package:mapiah/src/stores/types/th_line_paint.dart';
+import 'package:mapiah/src/stores/types/th_point_paint.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
@@ -97,6 +97,12 @@ abstract class TH2FileEditStoreBase with Store {
 
   @readonly
   late MPTH2FileEditState _state;
+
+  @readonly
+  int _activeScrap = 0;
+
+  @readonly
+  bool _hasMultipleScraps = false;
 
   @computed
   double get lineThicknessOnCanvas =>
@@ -310,6 +316,11 @@ abstract class TH2FileEditStoreBase with Store {
       }
     });
 
+    if (_thFile.scraps.isNotEmpty) {
+      _activeScrap = _thFile.scraps.keys.first;
+      _hasMultipleScraps = _thFile.scraps.length > 1;
+    }
+
     _isLoading = false;
 
     if (!isSuccessful) {
@@ -437,6 +448,10 @@ abstract class TH2FileEditStoreBase with Store {
 
   void onPanEnd(DragEndDetails details) {
     _state.onPanEnd(details);
+  }
+
+  void onChangeActiveScrapToolPressed() {
+    _state.onChangeActiveScrapToolPressed();
   }
 
   void onPanToolPressed() {
@@ -712,9 +727,12 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   THPointPaint getUnselectedPointPaint(THPoint point) {
+    final Paint paint = (point.parentMapiahID == _activeScrap)
+        ? THPaints.thPaint1
+        : THPaints.thPaint4;
     return THPointPaint(
       radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaint1..strokeWidth = lineThicknessOnCanvas,
+      paint: paint..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
@@ -726,8 +744,11 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   THLinePaint getUnselectedLinePaint(THLine line) {
+    final Paint paint = (line.parentMapiahID == _activeScrap)
+        ? THPaints.thPaint3
+        : THPaints.thPaint4;
     return THLinePaint(
-      paint: THPaints.thPaint3..strokeWidth = lineThicknessOnCanvas,
+      paint: paint..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
@@ -735,6 +756,11 @@ abstract class TH2FileEditStoreBase with Store {
     return THLinePaint(
       paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
     );
+  }
+
+  @action
+  void setActiveScrap(int scrapMapiahID) {
+    _activeScrap = scrapMapiahID;
   }
 
   bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {

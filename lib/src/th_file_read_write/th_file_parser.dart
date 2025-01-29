@@ -1,12 +1,16 @@
 import 'dart:io';
 import 'dart:convert';
+
+import 'package:charset/charset.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/th_parent_mixin.dart';
 import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
@@ -15,12 +19,9 @@ import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.da
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
-import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:meta/meta.dart';
-import 'package:charset/charset.dart';
-import 'package:petitparser/petitparser.dart';
 import 'package:petitparser/debug.dart';
+import 'package:petitparser/petitparser.dart';
 
 class THFileParser {
   final _grammar = THGrammar();

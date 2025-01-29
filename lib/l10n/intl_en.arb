@@ -83,7 +83,13 @@
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",
     "type": "text"
-  } ,
+  },
+
+  "th2FileEditPageChangeActiveScrapTool": "Change active scrap",
+  "@th2FileEditPageChangeActiveScrapTool": {
+    "description": "The label for the change active scrap tool button",
+    "type": "text"
+  },
 
   "th2FileEditPageLoadingFile": "Loading file {filename} ...",
   "@th2FileEditPageLoadingFile": {
