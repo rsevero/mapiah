@@ -7,6 +7,7 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
+
 final MPLocator mpLocator = MPLocator();
 
 void main() {

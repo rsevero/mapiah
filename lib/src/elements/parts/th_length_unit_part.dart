@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
-enum THLengthUnit {
+enum THLengthUnitType {
   centimeter,
   feet,
   inch,
@@ -12,32 +12,32 @@ enum THLengthUnit {
 }
 
 class THLengthUnitPart extends THPart {
-  late final THLengthUnit unit;
+  late final THLengthUnitType unit;
 
-  static const stringToUnit = {
-    'centimeter': THLengthUnit.centimeter,
-    'centimeters': THLengthUnit.centimeter,
-    'cm': THLengthUnit.centimeter,
-    'feet': THLengthUnit.feet,
-    'feets': THLengthUnit.feet,
-    'ft': THLengthUnit.feet,
-    'in': THLengthUnit.inch,
-    'inch': THLengthUnit.inch,
-    'inches': THLengthUnit.inch,
-    'm': THLengthUnit.meter,
-    'meter': THLengthUnit.meter,
-    'meters': THLengthUnit.meter,
-    'yard': THLengthUnit.yard,
-    'yards': THLengthUnit.yard,
-    'yd': THLengthUnit.yard,
+  static const stringToLengthUnit = {
+    'centimeter': THLengthUnitType.centimeter,
+    'centimeters': THLengthUnitType.centimeter,
+    'cm': THLengthUnitType.centimeter,
+    'feet': THLengthUnitType.feet,
+    'feets': THLengthUnitType.feet,
+    'ft': THLengthUnitType.feet,
+    'in': THLengthUnitType.inch,
+    'inch': THLengthUnitType.inch,
+    'inches': THLengthUnitType.inch,
+    'm': THLengthUnitType.meter,
+    'meter': THLengthUnitType.meter,
+    'meters': THLengthUnitType.meter,
+    'yard': THLengthUnitType.yard,
+    'yards': THLengthUnitType.yard,
+    'yd': THLengthUnitType.yard,
   };
 
-  static const unitToString = {
-    THLengthUnit.centimeter: 'centimeter',
-    THLengthUnit.feet: 'feet',
-    THLengthUnit.inch: 'inch',
-    THLengthUnit.meter: 'meter',
-    THLengthUnit.yard: 'yard',
+  static const lengthUnitToString = {
+    THLengthUnitType.centimeter: 'centimeter',
+    THLengthUnitType.feet: 'feet',
+    THLengthUnitType.inch: 'inch',
+    THLengthUnitType.meter: 'meter',
+    THLengthUnitType.yard: 'yard',
   };
 
   THLengthUnitPart({required this.unit});
@@ -53,13 +53,13 @@ class THLengthUnitPart extends THPart {
   Map<String, dynamic> toMap() {
     return {
       'partType': type.name,
-      'unit': unitToString[unit],
+      'unit': lengthUnitToString[unit],
     };
   }
 
   factory THLengthUnitPart.fromMap(Map<String, dynamic> map) {
     return THLengthUnitPart(
-      unit: stringToUnit[map['unit']]!,
+      unit: stringToLengthUnit[map['unit']]!,
     );
   }
 
@@ -69,7 +69,7 @@ class THLengthUnitPart extends THPart {
 
   @override
   THLengthUnitPart copyWith({
-    THLengthUnit? unit,
+    THLengthUnitType? unit,
   }) {
     return THLengthUnitPart(
       unit: unit ?? this.unit,
@@ -91,15 +91,15 @@ class THLengthUnitPart extends THPart {
       throw THConvertFromStringException('THLengthUnitPart', unitString);
     }
 
-    unit = stringToUnit[unitString]!;
+    unit = stringToLengthUnit[unitString]!;
   }
 
   @override
   String toString() {
-    return unitToString[unit]!;
+    return lengthUnitToString[unit]!;
   }
 
   static bool isUnit(String unitString) {
-    return stringToUnit.containsKey(unitString);
+    return stringToLengthUnit.containsKey(unitString);
   }
 }
