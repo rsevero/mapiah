@@ -1,15 +1,8 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/elements/parts/th_part.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
-
-enum THLengthUnitType {
-  centimeter,
-  feet,
-  inch,
-  meter,
-  yard,
-}
 
 class THLengthUnitPart extends THPart {
   late final THLengthUnitType unit;

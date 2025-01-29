@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_selection_handle_type.dart';
+import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
 class MPSelectionHandlesPainter extends CustomPainter {

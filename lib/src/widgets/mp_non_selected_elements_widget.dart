@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/auxiliary/th_line_paint.dart';
-import 'package:mapiah/src/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/stores/types/th_line_paint.dart';
+import 'package:mapiah/src/stores/types/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';

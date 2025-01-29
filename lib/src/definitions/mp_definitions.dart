@@ -1,5 +1,6 @@
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 
 /// Constants and others definitioons that should be generally available.
 
@@ -125,3 +126,6 @@ const double thFeetToYard = 1 / thYardToFeet;
 
 const double thYardToCentimeter = 1 / thCentimeterToYard;
 const double thYardToInch = 1 / thInchToYard;
+
+const double thDefaultTHFileScale = 1.0;
+const THLengthUnitType thDefaultTHFileLengthUnit = THLengthUnitType.meter;
