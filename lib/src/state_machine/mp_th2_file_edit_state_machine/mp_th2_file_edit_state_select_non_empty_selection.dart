@@ -125,6 +125,16 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     }
   }
 
+  @override
+  void onChangeActiveScrapToolPressed() {
+    final int nextAvailableScrapID = th2FileEditStore.getNextAvailableScrapID();
+    th2FileEditStore.setActiveScrap(nextAvailableScrapID);
+    th2FileEditStore.clearSelectedElements();
+    th2FileEditStore.updateSelectableElements();
+    th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
+    th2FileEditStore.triggerAllElementsRedraw();
+  }
+
   /// 1. Clear selection.
   /// 2. Change to [MPTH2FileEditStateType.pan].
   @override

@@ -57,6 +57,15 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     }
   }
 
+  @override
+  void onChangeActiveScrapToolPressed() {
+    final int nextAvailableScrapID = th2FileEditStore.getNextAvailableScrapID();
+    th2FileEditStore.setActiveScrap(nextAvailableScrapID);
+    th2FileEditStore.clearSelectedElements();
+    th2FileEditStore.updateSelectableElements();
+    th2FileEditStore.triggerAllElementsRedraw();
+  }
+
   /// Change to [MPTH2FileEditStateType.pan].
   @override
   void onPanToolPressed() {

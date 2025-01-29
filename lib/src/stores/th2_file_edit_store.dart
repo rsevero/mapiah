@@ -317,16 +317,29 @@ abstract class TH2FileEditStoreBase with Store {
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine) {
         _isSelected[key] = Observable(false);
-        if (isFromActiveScrap(value)) {
-          _addSelectableElement(value);
-        }
       }
     });
+
+    updateSelectableElements();
 
     _isLoading = false;
 
     if (!isSuccessful) {
       errorMessages.addAll(errors);
+    }
+  }
+
+  void updateSelectableElements() {
+    _selectableCoordinates.clear();
+    _selectableBoundingBoxes.clear();
+
+    final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+
+    for (final int elementMapiahID in scrap.childrenMapiahID) {
+      final THElement element = _thFile.elementByMapiahID(elementMapiahID);
+      if (element is THPoint || element is THLine) {
+        _addSelectableElement(element);
+      }
     }
   }
 
@@ -470,6 +483,17 @@ abstract class TH2FileEditStoreBase with Store {
 
   void onRedoPressed() {
     _state.onRedoPressed();
+  }
+
+  int getNextAvailableScrapID() {
+    final List<int> scrapIDs = _thFile.scraps.keys.toList();
+    final int currentIndex = scrapIDs.indexOf(_activeScrap);
+
+    if (currentIndex == -1 || scrapIDs.isEmpty) {
+      throw Exception('Current active scrap ID not found in scrapIDs');
+    }
+    final int nextIndex = (currentIndex + 1) % scrapIDs.length;
+    return scrapIDs[nextIndex];
   }
 
   @action
@@ -949,7 +973,10 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   void _getFileDrawingSize() {
-    final Rect dataBoundingBox = _thFile.getBoundingBox();
+    final Rect dataBoundingBox = _canvasScaleTranslationUndefined
+        ? _thFile.getBoundingBox()
+        : (_thFile.elementByMapiahID(_activeScrap) as THScrap)
+            .getBoundingBox(_thFile);
 
     _dataWidth = (dataBoundingBox.width < thMinimumSizeForDrawing)
         ? thMinimumSizeForDrawing
