@@ -15,6 +15,7 @@ class THUnrecognizedCommand extends THElement {
   THUnrecognizedCommand({
     required super.parentMapiahID,
     required List<dynamic> value,
+    super.originalRepresentationInFile = '',
   })  : _value = value,
         super.addToParent();
 

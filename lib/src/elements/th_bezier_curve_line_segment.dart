@@ -23,6 +23,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     required this.controlPoint1,
     required this.controlPoint2,
     required super.endPoint,
+    super.originalRepresentationInFile = '',
   }) : super.withEndPoint();
 
   THBezierCurveLineSegment.fromString({
@@ -31,6 +32,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     required List<dynamic> controlPoint1,
     required List<dynamic> controlPoint2,
     required List<dynamic> endPoint,
+    super.originalRepresentationInFile = '',
   }) : super.withoutEndPoint() {
     this.controlPoint1 = THPositionPart.fromStringList(list: controlPoint1);
     this.controlPoint2 = THPositionPart.fromStringList(list: controlPoint2);

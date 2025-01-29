@@ -20,11 +20,13 @@ abstract class THLineSegment extends THElement
     required super.parentMapiahID,
     super.sameLineComment,
     required this.endPoint,
+    super.originalRepresentationInFile = '',
   }) : super.addToParent();
 
   THLineSegment.withoutEndPoint({
     required super.parentMapiahID,
     super.sameLineComment,
+    super.originalRepresentationInFile = '',
   }) : super.addToParent();
 
   @override

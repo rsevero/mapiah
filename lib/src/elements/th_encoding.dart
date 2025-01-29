@@ -13,6 +13,7 @@ class THEncoding extends THElement {
   THEncoding({
     required super.parentMapiahID,
     required this.encoding,
+    super.originalRepresentationInFile = '',
   }) : super.addToParent();
 
   @override

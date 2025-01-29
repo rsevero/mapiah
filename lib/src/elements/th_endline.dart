@@ -7,7 +7,10 @@ class THEndline extends THElement {
     super.sameLineComment,
   }) : super.forCWJM();
 
-  THEndline({required super.parentMapiahID}) : super.addToParent();
+  THEndline({
+    required super.parentMapiahID,
+    super.originalRepresentationInFile = '',
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.endline;

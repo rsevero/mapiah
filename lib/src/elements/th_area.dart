@@ -44,6 +44,7 @@ class THArea extends THElement
   THArea({
     required super.parentMapiahID,
     required String areaType,
+    super.originalRepresentationInFile = '',
   })  : _areaType = areaType,
         super.addToParent() {
     if (!hasAreaType(areaType)) {

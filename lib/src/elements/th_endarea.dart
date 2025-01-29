@@ -7,7 +7,10 @@ class THEndarea extends THElement {
     super.sameLineComment,
   }) : super.forCWJM();
 
-  THEndarea({required super.parentMapiahID}) : super.addToParent();
+  THEndarea({
+    required super.parentMapiahID,
+    super.originalRepresentationInFile = '',
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.endarea;

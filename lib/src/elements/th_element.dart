@@ -70,20 +70,25 @@ abstract class THElement {
   final int _mapiahID;
   final int parentMapiahID;
   String? sameLineComment;
+  final String originalRepresentationInFile;
 
   THElement.forCWJM({
     required int mapiahID,
     required this.parentMapiahID,
     this.sameLineComment,
-  }) : _mapiahID = mapiahID;
+  })  : _mapiahID = mapiahID,
+        originalRepresentationInFile = '';
 
   /// Main constructor.
   ///
   /// Main constructor that sets all essential properties. Any change made here
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
-  THElement.addToParent({required this.parentMapiahID, this.sameLineComment})
-      : _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForElements();
+  THElement.addToParent({
+    required this.parentMapiahID,
+    this.sameLineComment,
+    this.originalRepresentationInFile = '',
+  }) : _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForElements();
 
   THIsParentMixin parent(THFile thFile) {
     if (parentMapiahID < 0) {

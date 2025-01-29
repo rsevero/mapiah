@@ -42,6 +42,7 @@ class THScrap extends THElement
   THScrap({
     required super.parentMapiahID,
     required String thID,
+    super.originalRepresentationInFile = '',
   }) : super.addToParent() {
     _thID = thID;
   }

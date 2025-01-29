@@ -13,6 +13,7 @@ class THMultilineCommentContent extends THElement {
   THMultilineCommentContent({
     required super.parentMapiahID,
     required this.content,
+    super.originalRepresentationInFile = '',
   }) : super.addToParent();
 
   @override

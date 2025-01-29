@@ -7,7 +7,10 @@ class THEmptyLine extends THElement {
     super.sameLineComment,
   }) : super.forCWJM();
 
-  THEmptyLine({required super.parentMapiahID}) : super.addToParent();
+  THEmptyLine({
+    required super.parentMapiahID,
+    super.originalRepresentationInFile = '',
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.emptyLine;

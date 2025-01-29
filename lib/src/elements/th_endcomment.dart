@@ -7,7 +7,10 @@ class THEndcomment extends THElement {
     super.sameLineComment,
   }) : super.forCWJM();
 
-  THEndcomment({required super.parentMapiahID}) : super.addToParent();
+  THEndcomment({
+    required super.parentMapiahID,
+    super.originalRepresentationInFile = '',
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.endcomment;

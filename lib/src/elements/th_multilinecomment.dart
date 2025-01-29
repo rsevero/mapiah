@@ -10,7 +10,10 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     this.childrenMapiahID.addAll(childrenMapiahID);
   }
 
-  THMultiLineComment({required super.parentMapiahID}) : super.addToParent();
+  THMultiLineComment({
+    required super.parentMapiahID,
+    super.originalRepresentationInFile = '',
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.multilineComment;

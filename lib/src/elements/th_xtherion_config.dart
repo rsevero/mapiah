@@ -16,6 +16,7 @@ class THXTherionConfig extends THElement {
     required super.parentMapiahID,
     required this.name,
     required this.value,
+    super.originalRepresentationInFile = '',
   }) : super.addToParent();
 
   @override
