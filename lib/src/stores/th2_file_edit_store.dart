@@ -736,19 +736,19 @@ abstract class TH2FileEditStoreBase with Store {
     );
   }
 
-  THPointPaint getSelectedPointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
   THLinePaint getUnselectedLinePaint(THLine line) {
     final Paint paint = (line.parentMapiahID == _activeScrap)
         ? THPaints.thPaint3
         : THPaints.thPaint4;
     return THLinePaint(
       paint: paint..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THPointPaint getSelectedPointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
     );
   }
 

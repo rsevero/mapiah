@@ -27,6 +27,7 @@ class THPointScaleCommandOption extends THCommandOption {
   }) : super() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
+    _numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
     _isNumeric = false;
   }
 
@@ -34,6 +35,8 @@ class THPointScaleCommandOption extends THCommandOption {
     required super.optionParent,
     required THDoublePart numericScaleSize,
   }) : super() {
+    _multipleChoiceSize = THMultipleChoicePart(
+        multipleChoiceName: _scaleMultipleChoiceName, choice: '');
     _numericSize = numericScaleSize;
     _isNumeric = true;
   }

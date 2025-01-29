@@ -219,7 +219,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   tooltip: AppLocalizations.of(context)
                       .th2FileEditPageChangeActiveScrapTool,
                   child: Image.asset(
-                    'assets/icons/pan-tool.png',
+                    'assets/icons/change-scrap-tool.png',
                     width: thFloatingActionIconSize,
                     height: thFloatingActionIconSize,
                   ),

@@ -38,7 +38,7 @@ class THPaints {
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
   static final thPaint4 = Paint()
-    ..color = Color(0xff00CC66)
+    ..color = Colors.grey
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;

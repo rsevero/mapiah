@@ -1,63 +1,73 @@
 part of 'th_command_option.dart';
 
-enum THLineScaleCommandOptionType { multiplechoice, text, numeric }
+enum THLineScaleCommandOptionType {
+  multiplechoice,
+  text,
+  numeric,
+}
 
 /// scale . scale for labels, can be: tiny (xs), small (s), normal (m), large (l), huge (xl)
 /// or a numeric value. Normal is default. Named sizes scale by √2, so that xs ≡ 0.5,
 /// s ≡ 0.707, m ≡ 1.0, l ≡ 1.414 and xl ≡ 2.0. Absolute font sizes (in points) can be
 /// assigned to named sizes using fonts-setup in the layout configuration section.
 class THLineScaleCommandOption extends THCommandOption {
-  late final THMultipleChoicePart _multipleChoiceSize;
-  late final THDoublePart _numericSize;
-  late final THLineScaleCommandOptionType _type;
-  late final String _textSize;
+  late final THMultipleChoicePart multipleChoiceSize;
+  late final THDoublePart numericSize;
+  late final THLineScaleCommandOptionType type;
+  late final String textSize;
 
   static const String _scaleMultipleChoiceName = 'point|scale';
 
   THLineScaleCommandOption.forCWJM({
     required super.parentMapiahID,
-    required THMultipleChoicePart multipleChoiceSize,
-    required THDoublePart numericSize,
-    required THLineScaleCommandOptionType type,
-    required String textSize,
-  }) : super.forCWJM() {
-    _multipleChoiceSize = multipleChoiceSize;
-    _type = type;
-    _numericSize = numericSize;
-    _textSize = textSize;
-  }
+    required this.multipleChoiceSize,
+    required this.numericSize,
+    required this.type,
+    required this.textSize,
+  }) : super.forCWJM();
 
   THLineScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
   }) : super() {
-    _multipleChoiceSize = THMultipleChoicePart(
+    multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
-    _type = THLineScaleCommandOptionType.multiplechoice;
+    type = THLineScaleCommandOptionType.multiplechoice;
+    numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
+    textSize = '';
   }
 
   THLineScaleCommandOption.sizeAsText({
     required super.optionParent,
     required String textScale,
-  }) : super() {
-    _textSize = textScale;
-    _type = THLineScaleCommandOptionType.text;
+  })  : textSize = textScale,
+        super() {
+    type = THLineScaleCommandOptionType.text;
+    multipleChoiceSize = THMultipleChoicePart(
+        multipleChoiceName: _scaleMultipleChoiceName, choice: '');
+    numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
   }
 
   THLineScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
-  }) : super() {
-    _numericSize = numericScaleSize;
-    _type = THLineScaleCommandOptionType.numeric;
+  })  : numericSize = numericScaleSize,
+        super() {
+    type = THLineScaleCommandOptionType.numeric;
+    multipleChoiceSize = THMultipleChoicePart(
+        multipleChoiceName: _scaleMultipleChoiceName, choice: '');
+    textSize = '';
   }
 
   THLineScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
   }) : super() {
-    _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
-    _type = THLineScaleCommandOptionType.numeric;
+    numericSize = THDoublePart.fromString(valueString: numericScaleSize);
+    type = THLineScaleCommandOptionType.numeric;
+    multipleChoiceSize = THMultipleChoicePart(
+        multipleChoiceName: _scaleMultipleChoiceName, choice: '');
+    textSize = '';
   }
 
   @override
@@ -132,37 +142,29 @@ class THLineScaleCommandOption extends THCommandOption {
       );
 
   THLineScaleCommandOptionType get scaleType {
-    return _type;
+    return type;
   }
 
   dynamic get size {
-    switch (_type) {
+    switch (type) {
       case THLineScaleCommandOptionType.numeric:
-        return _numericSize;
+        return numericSize;
       case THLineScaleCommandOptionType.multiplechoice:
-        return _multipleChoiceSize;
+        return multipleChoiceSize;
       case THLineScaleCommandOptionType.text:
-        return _textSize;
+        return textSize;
     }
   }
 
   @override
   String specToFile() {
-    switch (_type) {
+    switch (type) {
       case THLineScaleCommandOptionType.numeric:
-        return _numericSize.toString();
+        return numericSize.toString();
       case THLineScaleCommandOptionType.multiplechoice:
-        return _multipleChoiceSize.toString();
+        return multipleChoiceSize.toString();
       case THLineScaleCommandOptionType.text:
-        return _textSize;
+        return textSize;
     }
   }
-
-  THMultipleChoicePart get multipleChoiceSize => _multipleChoiceSize;
-
-  THDoublePart get numericSize => _numericSize;
-
-  THLineScaleCommandOptionType get type => _type;
-
-  String get textSize => _textSize;
 }
