@@ -12,7 +12,8 @@ class MPErrorDialog extends StatelessWidget {
       title: Text(AppLocalizations.of(context).parsingErrors),
       content: SingleChildScrollView(
         child: ListBody(
-          children: errorMessages.map((message) => Text(message)).toList(),
+          children:
+              errorMessages.map((message) => SelectableText(message)).toList(),
         ),
       ),
       actions: <Widget>[
