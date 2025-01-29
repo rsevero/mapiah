@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
@@ -19,7 +18,7 @@ class THFileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getIt<MPLog>().finer("THFileWidget.build()");
+    mpLocator.mpLog.finer("THFileWidget.build()");
     return LayoutBuilder(
       builder: (context, constraints) {
         th2FileEditStore.updateScreenSize(
@@ -31,7 +30,7 @@ class THFileWidget extends StatelessWidget {
 
         return Observer(
           builder: (context) {
-            getIt<MPLog>().finer("THFileWidget Observer()");
+            mpLocator.mpLog.finer("THFileWidget Observer()");
 
             return GestureDetector(
               onTapUp: _onTapUp,

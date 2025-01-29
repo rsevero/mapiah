@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mobx/mobx.dart';
 import 'package:toml/toml.dart';
@@ -87,7 +86,7 @@ abstract class MPSettingsStoreBase with Store {
 
       _readingConfigFile = false;
     } catch (e) {
-      getIt<MPLog>().e('Error reading config file.', error: e);
+      mpLocator.mpLog.e('Error reading config file.', error: e);
     }
   }
 
@@ -166,7 +165,7 @@ abstract class MPSettingsStoreBase with Store {
 
       await file.writeAsString(contents);
     } catch (e) {
-      getIt<MPLog>().e('Error saving config file.', error: e);
+      mpLocator.mpLog.e('Error saving config file.', error: e);
     }
   }
 }

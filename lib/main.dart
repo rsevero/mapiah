@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
-import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/material_theme.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
@@ -20,12 +19,7 @@ void main() {
   // );
 
   // mainContext.spy(print);
-  _setup();
   runApp(MapiahApp());
-}
-
-void _setup() {
-  getIt.registerSingleton<MPLog>(MPLog.instance);
 }
 
 class MapiahApp extends StatelessWidget {

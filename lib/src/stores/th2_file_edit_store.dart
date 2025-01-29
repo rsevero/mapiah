@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_selection_handle_type.dart';
 import 'package:mapiah/src/auxiliary/th_line_paint.dart';
@@ -835,12 +834,12 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   void _setCanvasCenterFromCurrent() {
-    getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
+    mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX =
         -(_canvasTranslation.dx - (_screenSize.width / 2.0 / _canvasScale));
     _canvasCenterY =
         _canvasTranslation.dy - (_screenSize.height / 2.0 / _canvasScale);
-    getIt<MPLog>().finer("New center: $_canvasCenterX, $_canvasCenterY");
+    mpLocator.mpLog.finer("New center: $_canvasCenterX, $_canvasCenterY");
   }
 
   void updateCanvasScale(double newScale) {
@@ -934,10 +933,10 @@ abstract class TH2FileEditStoreBase with Store {
   void _setCanvasCenterToDrawingCenter() {
     final Rect dataBoundingBox = _thFile.getBoundingBox();
 
-    getIt<MPLog>().finer("Current center: $_canvasCenterX, $_canvasCenterY");
+    mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (dataBoundingBox.left + dataBoundingBox.right) / 2.0;
     _canvasCenterY = (dataBoundingBox.top + dataBoundingBox.bottom) / 2.0;
-    getIt<MPLog>().finer(
+    mpLocator.mpLog.finer(
         "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
   }
 
@@ -992,21 +991,21 @@ abstract class TH2FileEditStoreBase with Store {
   void substituteElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     _addSelectableElement(modifiedElement);
-    getIt<MPLog>().finer('Substituted element ${modifiedElement.mapiahID}');
+    mpLocator.mpLog.finer('Substituted element ${modifiedElement.mapiahID}');
   }
 
   void substituteElements(List<THElement> modifiedElements) {
     for (final modifiedElement in modifiedElements) {
       _thFile.substituteElement(modifiedElement);
       _addSelectableElement(modifiedElement);
-      getIt<MPLog>()
+      mpLocator.mpLog
           .finer('Substituted element ${modifiedElement.mapiahID} from list');
     }
   }
 
   void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
-    getIt<MPLog>().finer(
+    mpLocator.mpLog.finer(
         'Substituted element without add selectable element ${modifiedElement.mapiahID}');
   }
 

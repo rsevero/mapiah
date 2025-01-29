@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -1640,7 +1639,7 @@ class THFileParser {
     while ((charsRead < thMaxEncodingLength) &
         ((byte = await raf.readByte()) != -1)) {
       charsRead++;
-      getIt<MPLog>().finest("Byte: '$byte'");
+      mpLocator.mpLog.finest("Byte: '$byte'");
       final String char = utf8.decode([byte]);
 
       if (_isEncodingDelimiter(priorChar, char)) {
@@ -1650,10 +1649,10 @@ class THFileParser {
       line += char;
       priorChar = char;
     }
-    getIt<MPLog>().finer("Line read: '$line'");
+    mpLocator.mpLog.finer("Line read: '$line'");
 
     final RegExpMatch? encoding = _encodingRegex.firstMatch(line);
-    getIt<MPLog>().finer("Encoding object: '$encoding");
+    mpLocator.mpLog.finer("Encoding object: '$encoding");
     if (encoding == null) {
       return thDefaultEncoding;
     } else {
@@ -1706,7 +1705,7 @@ class THFileParser {
 
       await raf.close();
     } catch (e) {
-      getIt<MPLog>().e('Failed to read file', error: e);
+      mpLocator.mpLog.e('Failed to read file', error: e);
     }
 
     _injectContents();
