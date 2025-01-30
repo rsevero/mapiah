@@ -106,11 +106,13 @@ class THSubtypeCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'subtype': subtype,
-    };
+    });
+
+    return map;
   }
 
   factory THSubtypeCommandOption.fromMap(Map<String, dynamic> map) {

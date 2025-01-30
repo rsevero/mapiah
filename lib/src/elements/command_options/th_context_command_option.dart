@@ -28,12 +28,14 @@ class THContextCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'elementType': elementType,
       'symbolType': symbolType,
-    };
+    });
+
+    return map;
   }
 
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {

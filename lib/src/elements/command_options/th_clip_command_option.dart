@@ -35,17 +35,6 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   @override
   THCommandOptionType get optionType => THCommandOptionType.clip;
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
-      'parentElementType': parentElementType.name,
-      'multipleChoiceType': multipleChoiceType,
-      'choice': choice,
-    };
-  }
-
   factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
     return THClipCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],

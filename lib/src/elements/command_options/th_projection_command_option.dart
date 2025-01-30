@@ -74,20 +74,21 @@ class THProjectionCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> asMap = {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'type': typeToString[type],
       'index': index,
-    };
+    });
+
     if (elevationAngle != null) {
-      asMap['elevationAngle'] = elevationAngle!.toMap();
+      map['elevationAngle'] = elevationAngle!.toMap();
     }
     if (elevationUnit != null) {
-      asMap['elevationUnit'] = elevationUnit!.toMap();
+      map['elevationUnit'] = elevationUnit!.toMap();
     }
 
-    return asMap;
+    return map;
   }
 
   factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {

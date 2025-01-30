@@ -29,12 +29,14 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'length': length.toMap(),
       'unit': unit.toMap(),
-    };
+    });
+
+    return map;
   }
 
   factory THExploredCommandOption.fromMap(Map<String, dynamic> map) {

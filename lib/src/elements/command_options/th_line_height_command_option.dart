@@ -27,11 +27,13 @@ class THLineHeightCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'height': height.toMap(),
-    };
+    });
+
+    return map;
   }
 
   factory THLineHeightCommandOption.fromMap(Map<String, dynamic> map) {

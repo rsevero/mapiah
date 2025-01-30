@@ -29,11 +29,13 @@ class THLSizeCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'number': number.toMap(),
-    };
+    });
+
+    return map;
   }
 
   factory THLSizeCommandOption.fromMap(Map<String, dynamic> map) {

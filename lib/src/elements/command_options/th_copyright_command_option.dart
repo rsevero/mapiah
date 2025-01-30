@@ -36,12 +36,14 @@ class THCopyrightCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'datetime': datetime.toMap(),
       'copyright': copyright.toMap(),
-    };
+    });
+
+    return map;
   }
 
   factory THCopyrightCommandOption.fromMap(Map<String, dynamic> map) {

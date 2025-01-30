@@ -21,11 +21,13 @@ class THMarkCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'mark': mark,
-    };
+    });
+
+    return map;
   }
 
   factory THMarkCommandOption.fromMap(Map<String, dynamic> map) {

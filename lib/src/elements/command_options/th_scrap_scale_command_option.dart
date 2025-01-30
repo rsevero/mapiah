@@ -41,13 +41,15 @@ class THScrapScaleCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'numericSpecifications':
           _numericSpecifications.map((e) => e.toMap()).toList(),
       'unit': unit?.toMap(),
-    };
+    });
+
+    return map;
   }
 
   factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {

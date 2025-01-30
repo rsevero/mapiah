@@ -22,11 +22,13 @@ class THNameCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'reference': reference,
-    };
+    });
+
+    return map;
   }
 
   factory THNameCommandOption.fromMap(Map<String, dynamic> map) {

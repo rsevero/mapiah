@@ -38,14 +38,16 @@ class THDimensionsValueCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'above': above.toMap(),
       'below': below.toMap(),
       'unit': _unit.toMap(),
       'unitSet': unitSet,
-    };
+    });
+
+    return map;
   }
 
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {

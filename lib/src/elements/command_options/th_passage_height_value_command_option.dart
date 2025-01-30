@@ -57,15 +57,17 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'plusNumber': plusNumber?.toMap(),
       'minusNumber': minusNumber?.toMap(),
       'unit': unit.toMap(),
       'mode': mode.toString(),
       'plusHasSign': plusHasSign,
-    };
+    });
+
+    return map;
   }
 
   factory THPassageHeightValueCommandOption.fromMap(Map<String, dynamic> map) {

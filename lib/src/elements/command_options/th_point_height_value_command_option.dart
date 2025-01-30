@@ -38,13 +38,15 @@ class THPointHeightValueCommandOption extends THCommandOption
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'optionType': optionType.name,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'length': length.toMap(),
       'isPresumed': isPresumed,
       'unit': unit.toMap(),
-    };
+    });
+
+    return map;
   }
 
   factory THPointHeightValueCommandOption.fromMap(Map<String, dynamic> map) {

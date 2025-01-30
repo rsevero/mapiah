@@ -118,7 +118,13 @@ abstract class THCommandOption {
     return jsonEncode(toMap());
   }
 
-  Map<String, dynamic> toMap();
+  Map<String, dynamic> toMap() {
+    return {
+      'optionType': optionType.name,
+      'parentMapiahID': parentMapiahID,
+      'originalLineInTH2File': originalLineInTH2File,
+    };
+  }
 
   THCommandOption copyWith();
 
