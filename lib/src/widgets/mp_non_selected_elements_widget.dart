@@ -25,12 +25,14 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     return Observer(
       builder: (_) {
         final List<CustomPainter> painters = [];
-        final elements = thFile.elements.values;
+        final drawableElementMapiahIDs = thFile.drawableElementMapiahIDs;
 
         th2FileEditStore.redrawTriggerNonSelectedElements;
         th2FileEditStore.redrawTriggerSelectedElementsListChanged;
 
-        for (final element in elements) {
+        for (final drawableElementMapiahID in drawableElementMapiahIDs) {
+          final element = thFile.elementByMapiahID(drawableElementMapiahID);
+
           if (th2FileEditStore.getIsSelected(element)) {
             continue;
           }

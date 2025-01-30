@@ -620,6 +620,61 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$isChangeScrapsPopupVisibleAtom = Atom(
+      name: 'TH2FileEditStoreBase.isChangeScrapsPopupVisible',
+      context: context);
+
+  @override
+  bool get isChangeScrapsPopupVisible {
+    _$isChangeScrapsPopupVisibleAtom.reportRead();
+    return super.isChangeScrapsPopupVisible;
+  }
+
+  @override
+  set isChangeScrapsPopupVisible(bool value) {
+    _$isChangeScrapsPopupVisibleAtom
+        .reportWrite(value, super.isChangeScrapsPopupVisible, () {
+      super.isChangeScrapsPopupVisible = value;
+    });
+  }
+
+  late final _$changeScrapsPopupOverlayPortalControllerControllerAtom = Atom(
+      name:
+          'TH2FileEditStoreBase.changeScrapsPopupOverlayPortalControllerController',
+      context: context);
+
+  @override
+  OverlayPortalController
+      get changeScrapsPopupOverlayPortalControllerController {
+    _$changeScrapsPopupOverlayPortalControllerControllerAtom.reportRead();
+    return super.changeScrapsPopupOverlayPortalControllerController;
+  }
+
+  @override
+  set changeScrapsPopupOverlayPortalControllerController(
+      OverlayPortalController value) {
+    _$changeScrapsPopupOverlayPortalControllerControllerAtom.reportWrite(
+        value, super.changeScrapsPopupOverlayPortalControllerController, () {
+      super.changeScrapsPopupOverlayPortalControllerController = value;
+    });
+  }
+
+  late final _$changeScrapsFABKeyAtom =
+      Atom(name: 'TH2FileEditStoreBase.changeScrapsFABKey', context: context);
+
+  @override
+  GlobalKey<State<StatefulWidget>> get changeScrapsFABKey {
+    _$changeScrapsFABKeyAtom.reportRead();
+    return super.changeScrapsFABKey;
+  }
+
+  @override
+  set changeScrapsFABKey(GlobalKey<State<StatefulWidget>> value) {
+    _$changeScrapsFABKeyAtom.reportWrite(value, super.changeScrapsFABKey, () {
+      super.changeScrapsFABKey = value;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -961,6 +1016,9 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   @override
   String toString() {
     return '''
+isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
+changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPortalControllerController},
+changeScrapsFABKey: ${changeScrapsFABKey},
 isEditMode: ${isEditMode},
 isPanMode: ${isPanMode},
 isSelectMode: ${isSelectMode},

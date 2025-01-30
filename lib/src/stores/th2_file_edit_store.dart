@@ -241,6 +241,16 @@ abstract class TH2FileEditStoreBase with Store {
   @readonly
   int _redrawTriggerNonSelectedElements = 0;
 
+  @observable
+  bool isChangeScrapsPopupVisible = false;
+
+  @observable
+  OverlayPortalController changeScrapsPopupOverlayPortalControllerController =
+      OverlayPortalController();
+
+  @observable
+  GlobalKey changeScrapsFABKey = GlobalKey();
+
   /// Used to serach for selected elements by list of selectable coordinates.
   final Map<int, List<Offset>> _selectableCoordinates = {};
 
@@ -305,9 +315,9 @@ abstract class TH2FileEditStoreBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
-    if (_thFile.scraps.isNotEmpty) {
-      _activeScrap = _thFile.scraps.keys.first;
-      _hasMultipleScraps = _thFile.scraps.length > 1;
+    if (_thFile.scrapMapiahIDs.isNotEmpty) {
+      _activeScrap = _thFile.scrapMapiahIDs.first;
+      _hasMultipleScraps = _thFile.scrapMapiahIDs.length > 1;
     }
 
     _isSelected.clear();
@@ -486,7 +496,7 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   int getNextAvailableScrapID() {
-    final List<int> scrapIDs = _thFile.scraps.keys.toList();
+    final List<int> scrapIDs = _thFile.scrapMapiahIDs;
     final int currentIndex = scrapIDs.indexOf(_activeScrap);
 
     if (currentIndex == -1 || scrapIDs.isEmpty) {
@@ -789,6 +799,18 @@ abstract class TH2FileEditStoreBase with Store {
   @action
   void setActiveScrap(int scrapMapiahID) {
     _activeScrap = scrapMapiahID;
+  }
+
+  List<(int, String, bool)> availableScraps() {
+    final List<(int, String, bool)> scraps = <(int, String, bool)>[];
+
+    for (final int scrapMapiahID in _thFile.scrapMapiahIDs) {
+      final THScrap scrap = _thFile.elementByMapiahID(scrapMapiahID) as THScrap;
+      final bool isActive = scrapMapiahID == _activeScrap;
+      scraps.add((scrapMapiahID, scrap.thID, isActive));
+    }
+
+    return scraps;
   }
 
   bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {

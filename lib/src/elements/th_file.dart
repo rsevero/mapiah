@@ -33,8 +33,9 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
 
   late final int _mapiahID;
 
-  final LinkedHashMap<int, THScrap> _scrapByMapiahID =
-      LinkedHashMap<int, THScrap>();
+  final List<int> _scrapMapiahIDs = [];
+
+  final List<int> _drawableElementMapiahIDs = [];
 
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
@@ -53,13 +54,15 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     required this.encoding,
     required int mapiahID,
     required List<int> childrenMapiahID,
-    required LinkedHashMap<int, THScrap> scrapByMapiahID,
+    required List<int> scrapMapiahIDs,
+    required List<int> drawableElementsMapiahID,
     required LinkedHashMap<String, int> mapiahIDByTHID,
     required LinkedHashMap<int, String> thIDByMapiahID,
     required LinkedHashMap<int, THElement> elementByMapiahID,
   }) : _mapiahID = mapiahID {
     this.childrenMapiahID.addAll(childrenMapiahID);
-    _scrapByMapiahID.addAll(scrapByMapiahID);
+    _scrapMapiahIDs.addAll(scrapMapiahIDs);
+    _drawableElementMapiahIDs.addAll(drawableElementsMapiahID);
     _mapiahIDByTHID.addAll(mapiahIDByTHID);
     _thIDByMapiahID.addAll(thIDByMapiahID);
     _elementByMapiahID.addAll(elementByMapiahID);
@@ -79,8 +82,8 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
       'encoding': encoding,
       'mapiahID': _mapiahID,
       'childrenMapiahID': childrenMapiahID.toList(),
-      'scrapByMapiahID':
-          _scrapByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
+      'scrapMapiahIDs': _scrapMapiahIDs.toList(),
+      'drawableElementMapiahIDs': _drawableElementMapiahIDs.toList(),
       'elementByTHID':
           _mapiahIDByTHID.map((key, value) => MapEntry(key, value)),
       'thIDByMapiahID': _thIDByMapiahID,
@@ -95,10 +98,8 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
       encoding: map['encoding'],
       mapiahID: map['mapiahID'],
       childrenMapiahID: List<int>.from(map['childrenMapiahID']),
-      scrapByMapiahID: LinkedHashMap<int, THScrap>.from(
-        map['scrapByMapiahID']
-            .map((key, value) => MapEntry(key, THScrap.fromMap(value))),
-      ),
+      scrapMapiahIDs: List<int>.from(map['scrapMapiahIDs']),
+      drawableElementsMapiahID: List<int>.from(map['drawableElementMapiahIDs']),
       mapiahIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
       thIDByMapiahID: LinkedHashMap<int, String>.from(map['thIDByMapiahID']),
       elementByMapiahID: LinkedHashMap<int, THElement>.from(
@@ -117,7 +118,8 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     String? encoding,
     int? mapiahID,
     List<int>? childrenMapiahID,
-    LinkedHashMap<int, THScrap>? scrapByMapiahID,
+    List<int>? scrapMapiahIDs,
+    List<int>? drawableElementMapiahIDs,
     LinkedHashMap<String, int>? mapiahIDByTHID,
     LinkedHashMap<int, String>? thIDByMapiahID,
     LinkedHashMap<int, THElement>? elementByMapiahID,
@@ -129,7 +131,9 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mapiahID: mapiahID ?? _mapiahID,
       childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
-      scrapByMapiahID: scrapByMapiahID ?? _scrapByMapiahID,
+      scrapMapiahIDs: scrapMapiahIDs ?? _scrapMapiahIDs,
+      drawableElementsMapiahID:
+          drawableElementMapiahIDs ?? _drawableElementMapiahIDs,
       mapiahIDByTHID: mapiahIDByTHID ?? _mapiahIDByTHID,
       thIDByMapiahID: thIDByMapiahID ?? _thIDByMapiahID,
       elementByMapiahID: elementByMapiahID ?? _elementByMapiahID,
@@ -146,7 +150,8 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
         other.encoding == encoding &&
         other._mapiahID == _mapiahID &&
         deepEq(other.childrenMapiahID, childrenMapiahID) &&
-        deepEq(other._scrapByMapiahID, _scrapByMapiahID) &&
+        deepEq(other._scrapMapiahIDs, _scrapMapiahIDs) &&
+        deepEq(other._drawableElementMapiahIDs, _drawableElementMapiahIDs) &&
         deepEq(other._mapiahIDByTHID, _mapiahIDByTHID) &&
         deepEq(other._thIDByMapiahID, _thIDByMapiahID) &&
         deepEq(other._elementByMapiahID, _elementByMapiahID);
@@ -158,7 +163,8 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
         encoding,
         _mapiahID,
         childrenMapiahID,
-        _scrapByMapiahID,
+        _scrapMapiahIDs,
+        _drawableElementMapiahIDs,
         _mapiahIDByTHID,
         _thIDByMapiahID,
         _elementByMapiahID,
@@ -172,8 +178,12 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     return _elementByMapiahID.length;
   }
 
-  LinkedHashMap<int, THScrap> get scraps {
-    return _scrapByMapiahID;
+  List<int> get scrapMapiahIDs {
+    return _scrapMapiahIDs;
+  }
+
+  List<int> get drawableElementMapiahIDs {
+    return _drawableElementMapiahIDs;
   }
 
   String thidByElement(THElement element) {
@@ -351,7 +361,9 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     }
 
     if (element is THScrap) {
-      _scrapByMapiahID[element.mapiahID] = element;
+      _scrapMapiahIDs.add(element.mapiahID);
+    } else if ((element is THPoint) || (element is THLine)) {
+      _drawableElementMapiahIDs.add(element.mapiahID);
     }
   }
 
@@ -374,7 +386,9 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     }
 
     if (element is THScrap) {
-      _scrapByMapiahID[element.mapiahID] = element;
+      _scrapMapiahIDs.remove(element.mapiahID);
+    } else if ((element is THPoint) || (element is THLine)) {
+      _drawableElementMapiahIDs.remove(element.mapiahID);
     }
 
     element.parent(this).deleteElementFromParent(this, element);
@@ -402,7 +416,7 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
 
   void clear() {
     _elementByMapiahID.clear();
-    _scrapByMapiahID.clear();
+    _scrapMapiahIDs.clear();
     _mapiahIDByTHID.clear();
     _thIDByMapiahID.clear();
     filename = '';
