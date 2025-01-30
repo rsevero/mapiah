@@ -66,14 +66,13 @@ class THLineHeightCommandOption extends THCommandOption {
   bool operator ==(covariant THLineHeightCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.height == height;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.height == height;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        height,
-      );
+  int get hashCode => super.hashCode ^ height.hashCode;
 
   @override
   String specToFile() {

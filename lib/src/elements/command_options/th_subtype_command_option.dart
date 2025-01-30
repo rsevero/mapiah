@@ -145,14 +145,13 @@ class THSubtypeCommandOption extends THCommandOption {
   bool operator ==(covariant THSubtypeCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.subtype == subtype;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.subtype == subtype;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        subtype,
-      );
+  int get hashCode => super.hashCode ^ subtype.hashCode;
 
   @override
   String specToFile() {

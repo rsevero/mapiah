@@ -60,14 +60,13 @@ class THIDCommandOption extends THCommandOption {
   bool operator ==(covariant THIDCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.thID == thID;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.thID == thID;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        thID,
-      );
+  int get hashCode => super.hashCode ^ thID.hashCode;
 
   @override
   String specToFile() {

@@ -140,6 +140,7 @@ class THProjectionCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.type == type &&
         other.index == index &&
         other.elevationAngle == elevationAngle &&
@@ -147,8 +148,9 @@ class THProjectionCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         type,
         index,
         elevationAngle,

@@ -110,14 +110,16 @@ class THPointScaleCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other._multipleChoiceSize == _multipleChoiceSize &&
         other._numericSize == _numericSize &&
         other._isNumeric == _isNumeric;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         _multipleChoiceSize,
         _numericSize,
         _isNumeric,

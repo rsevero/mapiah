@@ -90,6 +90,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.above == above &&
         other.below == below &&
         other.unit == unit &&
@@ -97,8 +98,9 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         above,
         below,
         unit,

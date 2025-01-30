@@ -73,13 +73,15 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.unit == unit;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         length,
         unit,
       );

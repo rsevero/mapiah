@@ -68,14 +68,13 @@ class THLSizeCommandOption extends THCommandOption {
   bool operator ==(covariant THLSizeCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.number == number;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.number == number;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        number,
-      );
+  int get hashCode => super.hashCode ^ number.hashCode;
 
   @override
   String specToFile() {

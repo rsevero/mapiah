@@ -73,14 +73,16 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.multipleChoiceType == multipleChoiceType &&
         other.choice == choice;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         parentElementType,
         multipleChoiceType,
         choice,

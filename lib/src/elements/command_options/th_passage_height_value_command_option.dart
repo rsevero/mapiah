@@ -119,6 +119,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.plusNumber == plusNumber &&
         other.minusNumber == minusNumber &&
         other.mode == mode &&
@@ -126,8 +127,9 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         plusNumber,
         minusNumber,
         mode,

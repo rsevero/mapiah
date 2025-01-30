@@ -62,14 +62,12 @@ class THScrapCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.reference == reference;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        reference,
-      );
+  int get hashCode => super.hashCode ^ reference.hashCode;
 
   @override
   String specToFile() {

@@ -137,6 +137,7 @@ class THLineScaleCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.multipleChoiceSize == multipleChoiceSize &&
         other.numericSize == numericSize &&
         other.type == type &&
@@ -144,8 +145,9 @@ class THLineScaleCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         multipleChoiceSize,
         numericSize,
         type,

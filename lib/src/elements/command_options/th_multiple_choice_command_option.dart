@@ -470,14 +470,16 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.multipleChoiceType == multipleChoiceType &&
         other.parentElementType == parentElementType &&
         other._choice == _choice;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         multipleChoiceType,
         parentElementType,
         _choice,

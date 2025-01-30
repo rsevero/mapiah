@@ -60,14 +60,13 @@ class THMarkCommandOption extends THCommandOption {
   bool operator ==(covariant THMarkCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.mark == mark;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.mark == mark;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        mark,
-      );
+  int get hashCode => super.hashCode ^ mark.hashCode;
 
   // set mark(String aMark) {
   //   if (!thKeywordRegex.hasMatch(aMark)) {

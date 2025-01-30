@@ -65,14 +65,13 @@ class THDateValueCommandOption extends THCommandOption {
   bool operator ==(covariant THDateValueCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.date == date;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.date == date;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        date,
-      );
+  int get hashCode => super.hashCode ^ date.hashCode;
 
   @override
   String specToFile() {

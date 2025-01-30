@@ -118,6 +118,7 @@ class THAltitudeValueCommandOption extends THCommandOption
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.isFix == isFix &&
         other.isNan == isNan &&
@@ -125,8 +126,9 @@ class THAltitudeValueCommandOption extends THCommandOption
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         length,
         isFix,
         isNan,

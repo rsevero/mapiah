@@ -63,14 +63,13 @@ class THOrientationCommandOption extends THCommandOption {
   bool operator ==(covariant THOrientationCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID && other.azimuth == azimuth;
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.azimuth == azimuth;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
-        azimuth,
-      );
+  int get hashCode => super.hashCode ^ azimuth.hashCode;
 
   // set azimuth(THDoublePart aAzimuth) {
   //   if ((aAzimuth.value < 0) || (aAzimuth.value > 360)) {

@@ -88,13 +88,15 @@ class THScrapScaleCommandOption extends THCommandOption {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other._numericSpecifications == _numericSpecifications &&
         other.unit == unit;
   }
 
   @override
-  int get hashCode => Object.hash(
-        parentMapiahID,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         _numericSpecifications,
         unit,
       );

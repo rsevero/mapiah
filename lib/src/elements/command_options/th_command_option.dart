@@ -204,6 +204,21 @@ abstract class THCommandOption {
     }
   }
 
+  @override
+  bool operator ==(covariant THCommandOption other) {
+    if (identical(this, other)) return true;
+
+    return other.parentMapiahID == parentMapiahID &&
+        other.originalLineInTH2File == originalLineInTH2File;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        optionType,
+        parentMapiahID,
+        originalLineInTH2File,
+      );
+
   THHasOptionsMixin optionParent(THFile thFile) =>
       thFile.elementByMapiahID(parentMapiahID) as THHasOptionsMixin;
 
