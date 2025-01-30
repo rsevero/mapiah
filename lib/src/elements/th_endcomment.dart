@@ -5,6 +5,7 @@ class THEndcomment extends THElement {
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
+    required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THEndcomment({
@@ -30,6 +31,7 @@ class THEndcomment extends THElement {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
     );
   }
 
@@ -43,6 +45,7 @@ class THEndcomment extends THElement {
     int? parentMapiahID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
   }) {
     return THEndcomment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -50,6 +53,8 @@ class THEndcomment extends THElement {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
     );
   }
 

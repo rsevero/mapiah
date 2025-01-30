@@ -10,6 +10,7 @@ class THXTherionConfig extends THElement {
     super.sameLineComment,
     required this.name,
     required this.value,
+    required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THXTherionConfig({
@@ -39,6 +40,7 @@ class THXTherionConfig extends THElement {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       name: map['name'],
       value: map['value'],
     );
@@ -53,9 +55,10 @@ class THXTherionConfig extends THElement {
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     String? name,
     String? value,
-    bool makeSameLineCommentNull = false,
   }) {
     return THXTherionConfig.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -63,6 +66,8 @@ class THXTherionConfig extends THElement {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       name: name ?? this.name,
       value: value ?? this.value,
     );

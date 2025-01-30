@@ -6,6 +6,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     required super.parentMapiahID,
     required List<int> childrenMapiahID,
     super.sameLineComment,
+    required super.originalLineInTH2File,
   }) : super.forCWJM() {
     this.childrenMapiahID.addAll(childrenMapiahID);
   }
@@ -35,6 +36,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
       parentMapiahID: map['parentMapiahID'],
       childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
     );
   }
 
@@ -49,6 +51,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     List<int>? childrenMapiahID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
   }) {
     return THMultiLineComment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -57,6 +60,8 @@ class THMultiLineComment extends THElement with THIsParentMixin {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
     );
   }
 

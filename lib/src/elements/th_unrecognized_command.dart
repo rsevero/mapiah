@@ -8,6 +8,7 @@ class THUnrecognizedCommand extends THElement {
     required super.parentMapiahID,
     super.sameLineComment,
     required List<dynamic> value,
+    required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _value = value;
   }
@@ -38,6 +39,7 @@ class THUnrecognizedCommand extends THElement {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       value: List<dynamic>.from(map['value']),
     );
   }
@@ -51,8 +53,9 @@ class THUnrecognizedCommand extends THElement {
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
-    List<dynamic>? value,
     bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
+    List<dynamic>? value,
   }) {
     return THUnrecognizedCommand.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -60,6 +63,8 @@ class THUnrecognizedCommand extends THElement {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       value: value ?? _value,
     );
   }

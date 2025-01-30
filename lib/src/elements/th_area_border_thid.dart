@@ -8,6 +8,7 @@ class THAreaBorderTHID extends THElement {
     required super.parentMapiahID,
     required super.sameLineComment,
     required this.id,
+    required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THAreaBorderTHID({
@@ -41,6 +42,7 @@ class THAreaBorderTHID extends THElement {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       id: map['id'],
     );
   }
@@ -54,12 +56,18 @@ class THAreaBorderTHID extends THElement {
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     String? id,
   }) {
     return THAreaBorderTHID.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      sameLineComment: sameLineComment ?? this.sameLineComment,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       id: id ?? this.id,
     );
   }

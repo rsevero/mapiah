@@ -161,6 +161,7 @@ class THPoint extends THElement
     required THPositionPart position,
     required String pointType,
     required LinkedHashMap<String, THCommandOption> optionsMap,
+    required super.originalLineInTH2File,
   })  : _position = position,
         _pointType = pointType,
         super.forCWJM() {
@@ -209,6 +210,7 @@ class THPoint extends THElement
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
       pointType: map['pointType'],
       optionsMap: LinkedHashMap<String, THCommandOption>.from(
@@ -227,10 +229,11 @@ class THPoint extends THElement
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     THPositionPart? position,
     String? pointType,
     LinkedHashMap<String, THCommandOption>? optionsMap,
-    bool makeSameLineCommentNull = false,
   }) {
     return THPoint.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -238,6 +241,8 @@ class THPoint extends THElement
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       position: position ?? this.position,
       pointType: pointType ?? this.pointType,
       optionsMap: optionsMap ?? this.optionsMap,

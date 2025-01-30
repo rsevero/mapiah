@@ -8,6 +8,7 @@ class THEncoding extends THElement {
     required super.parentMapiahID,
     super.sameLineComment,
     required this.encoding,
+    required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THEncoding({
@@ -35,6 +36,7 @@ class THEncoding extends THElement {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       encoding: map['encoding'],
     );
   }
@@ -48,8 +50,9 @@ class THEncoding extends THElement {
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
-    String? encoding,
     bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
+    String? encoding,
   }) {
     return THEncoding.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -57,6 +60,8 @@ class THEncoding extends THElement {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       encoding: encoding ?? this.encoding,
     );
   }

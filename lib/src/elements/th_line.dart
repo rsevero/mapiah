@@ -60,6 +60,7 @@ class THLine extends THElement
     required String lineType,
     required List<int> childrenMapiahID,
     required LinkedHashMap<String, THCommandOption> optionsMap,
+    required super.originalLineInTH2File,
   })  : _lineType = lineType,
         super.forCWJM() {
     this.childrenMapiahID.addAll(childrenMapiahID);
@@ -100,6 +101,7 @@ class THLine extends THElement
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       lineType: map['lineType'],
       childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       optionsMap: LinkedHashMap<String, THCommandOption>.from(
@@ -118,10 +120,11 @@ class THLine extends THElement
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     String? lineType,
     List<int>? childrenMapiahID,
     LinkedHashMap<String, THCommandOption>? optionsMap,
-    bool makeSameLineCommentNull = false,
   }) {
     return THLine.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -129,6 +132,8 @@ class THLine extends THElement
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       lineType: lineType ?? _lineType,
       childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       optionsMap: optionsMap ?? this.optionsMap,

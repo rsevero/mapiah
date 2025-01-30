@@ -8,6 +8,7 @@ class THComment extends THElement {
     required super.parentMapiahID,
     super.sameLineComment,
     required this.content,
+    required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THComment({
@@ -35,6 +36,7 @@ class THComment extends THElement {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       content: map['content'],
     );
   }
@@ -48,8 +50,9 @@ class THComment extends THElement {
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
-    String? content,
     bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
+    String? content,
   }) {
     return THComment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -57,6 +60,8 @@ class THComment extends THElement {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       content: content ?? this.content,
     );
   }

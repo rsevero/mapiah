@@ -76,8 +76,8 @@ abstract class THElement {
     required int mapiahID,
     required this.parentMapiahID,
     this.sameLineComment,
-  })  : _mapiahID = mapiahID,
-        originalLineInTH2File = '';
+    required this.originalLineInTH2File,
+  }) : _mapiahID = mapiahID;
 
   /// Main constructor.
   ///

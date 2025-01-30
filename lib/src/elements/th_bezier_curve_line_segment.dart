@@ -15,6 +15,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     required this.controlPoint2,
     required super.endPoint,
     required super.optionsMap,
+    required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THBezierCurveLineSegment({
@@ -62,6 +63,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       controlPoint1: THPositionPart.fromMap(map['controlPoint1']),
       controlPoint2: THPositionPart.fromMap(map['controlPoint2']),
       endPoint: THPositionPart.fromMap(map['endPoint']),
@@ -81,11 +83,12 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     THPositionPart? controlPoint1,
     THPositionPart? controlPoint2,
     THPositionPart? endPoint,
     LinkedHashMap<String, THCommandOption>? optionsMap,
-    bool makeSameLineCommentNull = false,
   }) {
     return THBezierCurveLineSegment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -93,6 +96,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       controlPoint1: controlPoint1 ?? this.controlPoint1,
       controlPoint2: controlPoint2 ?? this.controlPoint2,
       endPoint: endPoint ?? this.endPoint,

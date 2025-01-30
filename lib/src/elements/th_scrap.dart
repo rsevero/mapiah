@@ -33,6 +33,7 @@ class THScrap extends THElement
     required String thID,
     required List<int> childrenMapiahID,
     required LinkedHashMap<String, THCommandOption> optionsMap,
+    required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _thID = thID;
     this.childrenMapiahID.addAll(childrenMapiahID);
@@ -69,6 +70,7 @@ class THScrap extends THElement
       mapiahID: map['mapiahID'],
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       thID: map['thID'],
       childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       optionsMap: LinkedHashMap<String, THCommandOption>.from(
@@ -87,10 +89,11 @@ class THScrap extends THElement
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     String? thID,
     List<int>? childrenMapiahID,
     LinkedHashMap<String, THCommandOption>? optionsMap,
-    bool makeSameLineCommentNull = false,
   }) {
     return THScrap.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,
@@ -98,6 +101,8 @@ class THScrap extends THElement
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       thID: thID ?? _thID,
       childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       optionsMap: optionsMap ?? this.optionsMap,
