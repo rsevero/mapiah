@@ -96,7 +96,7 @@ class THFileWriter {
     final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
     final String newLine =
         "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
-    return _prepareLineWithOriginalRepresentation(newLine, thElement);
+    return newLine;
   }
 
   String serializeElement(THElement thElement) {
