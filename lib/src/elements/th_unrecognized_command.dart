@@ -81,10 +81,7 @@ class THUnrecognizedCommand extends THElement {
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        _value,
-      );
+  int get hashCode => super.hashCode ^ _value.hashCode;
 
   @override
   bool isSameClass(Object object) {

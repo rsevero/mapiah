@@ -98,11 +98,9 @@ abstract class THLineSegment extends THElement
   }
 
   @override
-  int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
-        originalLineInTH2File,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         endPoint,
         optionsMap,
       );

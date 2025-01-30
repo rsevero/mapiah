@@ -78,10 +78,7 @@ class THEncoding extends THElement {
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        encoding,
-      );
+  int get hashCode => super.hashCode ^ encoding.hashCode;
 
   @override
   bool isSameClass(Object object) {

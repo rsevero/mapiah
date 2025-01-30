@@ -263,8 +263,9 @@ class THPoint extends THElement
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         position,
         pointType,
         optionsMap,

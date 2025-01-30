@@ -78,10 +78,7 @@ class THComment extends THElement {
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        content,
-      );
+  int get hashCode => super.hashCode ^ content.hashCode;
 
   @override
   bool isSameClass(Object object) {

@@ -117,8 +117,9 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         controlPoint1,
         controlPoint2,
       );

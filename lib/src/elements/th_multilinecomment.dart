@@ -78,10 +78,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        childrenMapiahID,
-      );
+  int get hashCode => super.hashCode ^ childrenMapiahID.hashCode;
 
   @override
   bool isSameClass(Object object) {

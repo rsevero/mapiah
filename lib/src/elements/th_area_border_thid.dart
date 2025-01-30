@@ -84,10 +84,7 @@ class THAreaBorderTHID extends THElement {
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
-        id,
-      );
+  int get hashCode => super.hashCode ^ id.hashCode;
 
   @override
   bool isSameClass(Object object) {
