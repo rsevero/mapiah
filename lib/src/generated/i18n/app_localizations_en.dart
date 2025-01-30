@@ -90,7 +90,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageZoomOut => 'Zoom Out';
 
   @override
-  String get th2FileEditPageZoomShowAll => 'Show all';
+  String get th2FileEditPageZoomOutFile => 'Show file';
+
+  @override
+  String get th2FileEditPageZoomOutScrap => 'Show scrap';
 
   @override
   String get th2FilePickSelectTH2File => 'Select a TH2 file';

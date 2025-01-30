@@ -50,4 +50,6 @@ flutter:
     - assets/icons/change-scrap-tool.png
     - assets/icons/pan-tool.png
     - assets/icons/select-tool.png
-    - assets/icons/zoom_plus_minus.svg
+    - assets/icons/zoom-out-scrap.png
+    - assets/icons/zoom-plus-minus.svg
+

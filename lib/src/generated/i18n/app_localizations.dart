@@ -227,11 +227,17 @@ abstract class AppLocalizations {
   /// **'Zoom Out'**
   String get th2FileEditPageZoomOut;
 
-  /// The label for the show all zoom button
+  /// The label for the show file zoom button
   ///
   /// In en, this message translates to:
-  /// **'Show all'**
-  String get th2FileEditPageZoomShowAll;
+  /// **'Show file'**
+  String get th2FileEditPageZoomOutFile;
+
+  /// The label for the show scrap zoom button
+  ///
+  /// In en, this message translates to:
+  /// **'Show scrap'**
+  String get th2FileEditPageZoomOutScrap;
 
   /// The label for the TH2 file selection dialog
   ///

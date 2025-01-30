@@ -923,11 +923,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void zoomAll() {
+  void zoomOutAll({required bool wholeFile}) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.zoomAll');
+        name: 'TH2FileEditStoreBase.zoomOutAll');
     try {
-      return super.zoomAll();
+      return super.zoomOutAll(wholeFile: wholeFile);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

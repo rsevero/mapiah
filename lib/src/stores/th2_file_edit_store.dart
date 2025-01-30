@@ -956,11 +956,11 @@ abstract class TH2FileEditStoreBase with Store {
   }
 
   @action
-  void zoomAll() {
+  void zoomOutAll({required bool wholeFile}) {
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
 
-    _getFileDrawingSize();
+    _getFileDrawingSize(wholeFile: wholeFile);
 
     final double widthScale =
         (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
@@ -970,7 +970,7 @@ abstract class TH2FileEditStoreBase with Store {
     _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
     _canvasSize = _screenSize / _canvasScale;
 
-    _setCanvasCenterToDrawingCenter();
+    _setCanvasCenterToDrawingCenter(wholeFile: wholeFile);
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
     triggerAllElementsRedraw();
@@ -995,8 +995,8 @@ abstract class TH2FileEditStoreBase with Store {
     _dataHeight = newHeight;
   }
 
-  void _getFileDrawingSize() {
-    final Rect dataBoundingBox = _canvasScaleTranslationUndefined
+  void _getFileDrawingSize({required bool wholeFile}) {
+    final Rect dataBoundingBox = wholeFile
         ? _thFile.getBoundingBox()
         : (_thFile.elementByMapiahID(_activeScrap) as THScrap)
             .getBoundingBox(_thFile);
@@ -1010,8 +1010,11 @@ abstract class TH2FileEditStoreBase with Store {
         : dataBoundingBox.height;
   }
 
-  void _setCanvasCenterToDrawingCenter() {
-    final Rect dataBoundingBox = _thFile.getBoundingBox();
+  void _setCanvasCenterToDrawingCenter({required bool wholeFile}) {
+    final Rect dataBoundingBox = wholeFile
+        ? _thFile.getBoundingBox()
+        : (_thFile.elementByMapiahID(_activeScrap) as THScrap)
+            .getBoundingBox(_thFile);
 
     mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (dataBoundingBox.left + dataBoundingBox.right) / 2.0;

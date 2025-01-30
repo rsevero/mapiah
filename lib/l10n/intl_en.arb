@@ -142,9 +142,15 @@
     "type": "text"
   },
 
-  "th2FileEditPageZoomShowAll": "Show all",
-  "@th2FileEditPageZoomShowAll": {
-    "description": "The label for the show all zoom button",
+  "th2FileEditPageZoomOutFile": "Show file",
+  "@th2FileEditPageZoomOutFile": {
+    "description": "The label for the show file zoom button",
+    "type": "text"
+  },
+
+  "th2FileEditPageZoomOutScrap": "Show scrap",
+  "@th2FileEditPageZoomOutScrap": {
+    "description": "The label for the show scrap zoom button",
     "type": "text"
   },
 

@@ -23,6 +23,7 @@
     "th2FileEditPageZoomIn": "Aproximar",
     "th2FileEditPageZoomOptions": "Opções de zoom",
     "th2FileEditPageZoomOut": "Afastar",
-    "th2FileEditPageZoomShowAll": "Mostrar tudo",
+    "th2FileEditPageZoomOutFile": "Mostrar arquivo",
+    "th2FileEditPageZoomOutScrap": "Mostrar croqui",
     "th2FilePickSelectTH2File": "Selecione um arquivo TH2"
 }
