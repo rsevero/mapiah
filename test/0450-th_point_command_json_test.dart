@@ -20,7 +20,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"partType":"position","coordinates":{"dx":296.0,"dy":468.0},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
+            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.0 468.0 debris","position":{"partType":"position","coordinates":{"dx":296.0,"dy":468.0},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
       },
       {
         'file': 'th_file_parser-00075-point_only_with_extra_precision.th2',
@@ -32,7 +32,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":11},"pointType":"debris","optionsMap":{}}''',
+            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.48195403809 468.93754612064 debris","position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":11},"pointType":"debris","optionsMap":{}}''',
       },
     ];
 

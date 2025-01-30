@@ -23,7 +23,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"line","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"lineType":"wall","childrenMapiahID":[4],"optionsMap":{}}''',
+            r'''{"elementType":"line","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall","lineType":"wall","childrenMapiahID":[4],"optionsMap":{}}''',
       },
 //       {
 //         'file': 'th_file_parser-00081-line_with_last_line_with_spaces_only.th2',
