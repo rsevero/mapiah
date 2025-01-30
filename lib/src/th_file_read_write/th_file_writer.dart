@@ -67,10 +67,9 @@ class THFileWriter {
   }
 
   String _serializeMultiLineCommmentContent(THElement thElement) {
-    final THMultilineCommentContent thMultilineCommentContent =
-        thElement as THMultilineCommentContent;
-    final String newLine = thMultilineCommentContent.content;
-    return _prepareLineWithOriginalRepresentation(newLine, thElement);
+    final String newLine =
+        '${(thElement as THMultilineCommentContent).content}\n';
+    return newLine;
   }
 
   String _serializeScrap(THElement thElement) {
