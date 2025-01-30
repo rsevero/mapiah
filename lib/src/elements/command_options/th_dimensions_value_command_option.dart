@@ -10,6 +10,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
 
   THDimensionsValueCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.above,
     required this.below,
     required THLengthUnitPart unit,
@@ -50,6 +51,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDimensionsValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       above: THDoublePart.fromMap(map['above']),
       below: THDoublePart.fromMap(map['below']),
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -64,6 +66,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   @override
   THDimensionsValueCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? above,
     THDoublePart? below,
     THLengthUnitPart? unit,
@@ -71,6 +74,8 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }) {
     return THDimensionsValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       above: above ?? this.above,
       below: below ?? this.below,
       unit: unit ?? _unit,

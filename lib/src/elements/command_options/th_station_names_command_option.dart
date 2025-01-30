@@ -8,6 +8,7 @@ class THStationNamesCommandOption extends THCommandOption {
 
   THStationNamesCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.prefix,
     required this.suffix,
   }) : super.forCWJM();
@@ -38,6 +39,7 @@ class THStationNamesCommandOption extends THCommandOption {
   factory THStationNamesCommandOption.fromMap(Map<String, dynamic> map) {
     return THStationNamesCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       prefix: map['prefix'],
       suffix: map['suffix'],
     );
@@ -50,11 +52,14 @@ class THStationNamesCommandOption extends THCommandOption {
   @override
   THStationNamesCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? prefix,
     String? suffix,
   }) {
     return THStationNamesCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       prefix: prefix ?? this.prefix,
       suffix: suffix ?? this.suffix,
     );

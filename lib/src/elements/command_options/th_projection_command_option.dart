@@ -39,6 +39,7 @@ class THProjectionCommandOption extends THCommandOption {
 
   THProjectionCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.type,
     required this.index,
     this.elevationAngle,
@@ -92,6 +93,7 @@ class THProjectionCommandOption extends THCommandOption {
   factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {
     return THProjectionCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       type: stringToType[map['type']]!,
       index: map['index'],
       elevationAngle: map.containsKey('elevationAngle')
@@ -110,6 +112,7 @@ class THProjectionCommandOption extends THCommandOption {
   @override
   THProjectionCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THProjectionTypes? type,
     String? index,
     THDoublePart? elevationAngle,
@@ -119,6 +122,8 @@ class THProjectionCommandOption extends THCommandOption {
   }) {
     return THProjectionCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       type: type ?? this.type,
       index: index ?? this.index,
       elevationAngle: makeElevationAngleNull

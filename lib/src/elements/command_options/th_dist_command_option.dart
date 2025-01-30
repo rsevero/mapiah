@@ -6,6 +6,7 @@ part of 'th_command_option.dart';
 class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   THDistCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required THDoublePart length,
     required THLengthUnitPart unit,
   }) : super.forCWJM() {
@@ -39,6 +40,7 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   factory THDistCommandOption.fromMap(Map<String, dynamic> map) {
     return THDistCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       unit: map['unit'],
     );
@@ -51,11 +53,14 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   @override
   THDistCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {
     return THDistCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
       unit: unit ?? this.unit,
     );

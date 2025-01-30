@@ -14,6 +14,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
 
   THClipCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required super.parentElementType,
     required super.multipleChoiceType,
     required super.choice,
@@ -48,6 +49,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
     return THClipCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       multipleChoiceType: map['multipleChoiceType'],
       choice: map['choice'],
@@ -61,6 +63,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   @override
   THClipCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THElementType? parentElementType,
     String? multipleChoiceType,
     String? choice,
@@ -68,6 +71,8 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   }) {
     return THClipCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,
       multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,
       choice: makeChoiceNull ? '' : (choice ?? this.choice),

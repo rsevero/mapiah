@@ -9,6 +9,7 @@ class THCSCommandOption extends THCommandOption {
   /// Constructor necessary for dart_mappable support.
   THCSCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.cs,
   }) : super.forCWJM();
 
@@ -36,6 +37,7 @@ class THCSCommandOption extends THCommandOption {
   factory THCSCommandOption.fromMap(Map<String, dynamic> map) {
     return THCSCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       cs: THCSPart.fromMap(map['cs']),
     );
   }
@@ -47,10 +49,13 @@ class THCSCommandOption extends THCommandOption {
   @override
   THCSCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THCSPart? cs,
   }) {
     return THCSCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       cs: cs ?? this.cs,
     );
   }

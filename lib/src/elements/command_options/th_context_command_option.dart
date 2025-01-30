@@ -11,6 +11,7 @@ class THContextCommandOption extends THCommandOption {
 
   THContextCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.elementType,
     required this.symbolType,
   }) : super.forCWJM();
@@ -38,6 +39,7 @@ class THContextCommandOption extends THCommandOption {
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {
     return THContextCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       elementType: map['elementType'],
       symbolType: map['symbolType'],
     );
@@ -50,11 +52,14 @@ class THContextCommandOption extends THCommandOption {
   @override
   THContextCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? elementType,
     String? symbolType,
   }) {
     return THContextCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       elementType: elementType ?? this.elementType,
       symbolType: symbolType ?? this.symbolType,
     );

@@ -8,6 +8,7 @@ class THAltitudeValueCommandOption extends THCommandOption
     with THHasLengthMixin, THHasAltitudeMixin {
   THAltitudeValueCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required THDoublePart length,
     required bool isFix,
     required bool isNan,
@@ -78,6 +79,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   factory THAltitudeValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THAltitudeValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
       isNan: map['isNan'],
@@ -92,6 +94,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   @override
   THAltitudeValueCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? length,
     bool? isFix,
     bool? isNan,
@@ -99,6 +102,8 @@ class THAltitudeValueCommandOption extends THCommandOption
   }) {
     return THAltitudeValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,
       isNan: isNan ?? this.isNan,

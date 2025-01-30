@@ -8,6 +8,7 @@ class THSketchCommandOption extends THCommandOption {
 
   THSketchCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required String filename,
     required this.point,
   }) : super.forCWJM() {
@@ -44,6 +45,7 @@ class THSketchCommandOption extends THCommandOption {
   factory THSketchCommandOption.fromMap(Map<String, dynamic> map) {
     return THSketchCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       filename: map['filename']['content'],
       point: THPositionPart.fromMap(map['point']),
     );
@@ -56,11 +58,14 @@ class THSketchCommandOption extends THCommandOption {
   @override
   THSketchCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? filename,
     THPositionPart? point,
   }) {
     return THSketchCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       filename: filename ?? _filename.content,
       point: point ?? this.point,
     );

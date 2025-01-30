@@ -7,6 +7,7 @@ class THAuthorCommandOption extends THCommandOption {
 
   THAuthorCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.datetime,
     required this.person,
   }) : super.forCWJM();
@@ -44,6 +45,7 @@ class THAuthorCommandOption extends THCommandOption {
   factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
     return THAuthorCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       datetime: THDatetimePart.fromMap(map['datetime']),
       person: THPersonPart.fromMap(map['person']),
     );
@@ -56,11 +58,14 @@ class THAuthorCommandOption extends THCommandOption {
   @override
   THAuthorCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDatetimePart? datetime,
     THPersonPart? person,
   }) {
     return THAuthorCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       datetime: datetime ?? this.datetime,
       person: person ?? this.person,
     );

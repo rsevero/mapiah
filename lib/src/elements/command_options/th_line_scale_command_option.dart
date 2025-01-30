@@ -20,6 +20,7 @@ class THLineScaleCommandOption extends THCommandOption {
 
   THLineScaleCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.multipleChoiceSize,
     required this.numericSize,
     required this.type,
@@ -95,6 +96,7 @@ class THLineScaleCommandOption extends THCommandOption {
   factory THLineScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineScaleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
       numericSize: THDoublePart.fromMap(map['numericSize']),
@@ -111,6 +113,7 @@ class THLineScaleCommandOption extends THCommandOption {
   @override
   THLineScaleCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THMultipleChoicePart? multipleChoiceSize,
     THDoublePart? numericSize,
     THLineScaleCommandOptionType? type,
@@ -118,6 +121,8 @@ class THLineScaleCommandOption extends THCommandOption {
   }) {
     return THLineScaleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       multipleChoiceSize: multipleChoiceSize ?? this.multipleChoiceSize,
       numericSize: numericSize ?? this.numericSize,
       type: type ?? this.type,

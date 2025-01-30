@@ -7,6 +7,7 @@ class THLineHeightCommandOption extends THCommandOption {
 
   THLineHeightCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.height,
   }) : super.forCWJM();
 
@@ -36,6 +37,7 @@ class THLineHeightCommandOption extends THCommandOption {
   factory THLineHeightCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineHeightCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       height: THDoublePart.fromMap(map['height']),
     );
   }
@@ -47,10 +49,13 @@ class THLineHeightCommandOption extends THCommandOption {
   @override
   THLineHeightCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? height,
   }) {
     return THLineHeightCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       height: height ?? this.height,
     );
   }

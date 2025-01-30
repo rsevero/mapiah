@@ -98,7 +98,8 @@ abstract class THCommandOption {
 
   THCommandOption.forCWJM({
     required this.parentMapiahID,
-  }) : originalLineInTH2File = '';
+    required this.originalLineInTH2File,
+  });
 
   THCommandOption({
     required THHasOptionsMixin optionParent,

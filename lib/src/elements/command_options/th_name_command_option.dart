@@ -7,6 +7,7 @@ class THNameCommandOption extends THCommandOption {
 
   THNameCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.reference,
   }) : super.forCWJM();
 
@@ -31,6 +32,7 @@ class THNameCommandOption extends THCommandOption {
   factory THNameCommandOption.fromMap(Map<String, dynamic> map) {
     return THNameCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       reference: map['reference'],
     );
   }
@@ -42,10 +44,13 @@ class THNameCommandOption extends THCommandOption {
   @override
   THNameCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? reference,
   }) {
     return THNameCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       reference: reference ?? this.reference,
     );
   }

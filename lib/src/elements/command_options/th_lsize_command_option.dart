@@ -9,6 +9,7 @@ class THLSizeCommandOption extends THCommandOption {
 
   THLSizeCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.number,
   }) : super.forCWJM();
 
@@ -38,6 +39,7 @@ class THLSizeCommandOption extends THCommandOption {
   factory THLSizeCommandOption.fromMap(Map<String, dynamic> map) {
     return THLSizeCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       number: THDoublePart.fromMap(map['number']),
     );
   }
@@ -49,10 +51,13 @@ class THLSizeCommandOption extends THCommandOption {
   @override
   THLSizeCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? number,
   }) {
     return THLSizeCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       number: number ?? this.number,
     );
   }

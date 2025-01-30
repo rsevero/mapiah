@@ -19,6 +19,7 @@ class THScrapScaleCommandOption extends THCommandOption {
 
   THScrapScaleCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required List<THDoublePart> numericSpecifications,
     this.unit,
   })  : _numericSpecifications = numericSpecifications,
@@ -52,6 +53,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THScrapScaleCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       numericSpecifications: List<THDoublePart>.from(
           map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
       unit: map['unit'] != null ? THLengthUnitPart.fromMap(map['unit']) : null,
@@ -65,12 +67,15 @@ class THScrapScaleCommandOption extends THCommandOption {
   @override
   THScrapScaleCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     List<THDoublePart>? numericSpecifications,
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
   }) {
     return THScrapScaleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       numericSpecifications: numericSpecifications ?? _numericSpecifications,
       unit: makeUnitNull ? null : (unit ?? this.unit),
     );

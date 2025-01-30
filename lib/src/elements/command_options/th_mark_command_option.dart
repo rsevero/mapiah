@@ -6,6 +6,7 @@ class THMarkCommandOption extends THCommandOption {
 
   THMarkCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.mark,
   }) : super.forCWJM();
 
@@ -30,6 +31,7 @@ class THMarkCommandOption extends THCommandOption {
   factory THMarkCommandOption.fromMap(Map<String, dynamic> map) {
     return THMarkCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       mark: map['mark'],
     );
   }
@@ -41,10 +43,13 @@ class THMarkCommandOption extends THCommandOption {
   @override
   THMarkCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? mark,
   }) {
     return THMarkCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       mark: mark ?? this.mark,
     );
   }

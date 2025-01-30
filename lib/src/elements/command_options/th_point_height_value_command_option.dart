@@ -10,6 +10,7 @@ class THPointHeightValueCommandOption extends THCommandOption
 
   THPointHeightValueCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required THDoublePart length,
     required this.isPresumed,
     required THLengthUnitPart unit,
@@ -49,6 +50,7 @@ class THPointHeightValueCommandOption extends THCommandOption
   factory THPointHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPointHeightValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -62,12 +64,15 @@ class THPointHeightValueCommandOption extends THCommandOption
   @override
   THPointHeightValueCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? length,
     bool? isPresumed,
     THLengthUnitPart? unit,
   }) {
     return THPointHeightValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
       isPresumed: isPresumed ?? this.isPresumed,
       unit: unit ?? this.unit,

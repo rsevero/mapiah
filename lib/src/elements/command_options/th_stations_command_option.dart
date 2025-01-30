@@ -8,6 +8,7 @@ class THStationsCommandOption extends THCommandOption {
 
   THStationsCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.stations,
   }) : super.forCWJM();
 
@@ -32,6 +33,7 @@ class THStationsCommandOption extends THCommandOption {
   factory THStationsCommandOption.fromMap(Map<String, dynamic> map) {
     return THStationsCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       stations: List<String>.from(map['stations']),
     );
   }
@@ -43,10 +45,13 @@ class THStationsCommandOption extends THCommandOption {
   @override
   THStationsCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     List<String>? stations,
   }) {
     return THStationsCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       stations: stations ?? this.stations,
     );
   }

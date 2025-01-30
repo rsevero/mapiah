@@ -20,6 +20,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   THPassageHeightValueCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     this.plusNumber,
     this.minusNumber,
     String? unit,
@@ -70,6 +71,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   factory THPassageHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPassageHeightValueCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       plusNumber: map['plusNumber'] != null
           ? THDoublePart.fromMap(map['plusNumber'])
           : null,
@@ -90,6 +92,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   @override
   THPassageHeightValueCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
     THPassageHeightModes? mode,
@@ -99,6 +102,8 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }) {
     return THPassageHeightValueCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       plusNumber: makePlusNumberNull ? null : (plusNumber ?? this.plusNumber),
       minusNumber:
           makeMinusNumberNull ? null : (minusNumber ?? this.minusNumber),

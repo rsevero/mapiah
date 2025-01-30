@@ -378,6 +378,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
 
   THMultipleChoiceCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.multipleChoiceType,
     required this.parentElementType,
     required String choice,
@@ -432,6 +433,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   factory THMultipleChoiceCommandOption.fromMap(Map<String, dynamic> map) {
     return THMultipleChoiceCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       multipleChoiceType: map['multipleChoiceType'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: map['choice'],
@@ -445,6 +447,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   THMultipleChoiceCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? multipleChoiceType,
     THElementType? parentElementType,
     String? choice,
@@ -452,6 +455,8 @@ class THMultipleChoiceCommandOption extends THCommandOption {
   }) {
     return THMultipleChoiceCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       multipleChoiceType: multipleChoiceType ?? this.multipleChoiceType,
       parentElementType: parentElementType ?? this.parentElementType,
       choice: makeChoiceNull ? '' : (choice ?? _choice),

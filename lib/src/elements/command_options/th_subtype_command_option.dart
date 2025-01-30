@@ -91,6 +91,7 @@ class THSubtypeCommandOption extends THCommandOption {
 
   THSubtypeCommandOption.forCWJM({
     required super.parentMapiahID,
+    required super.originalLineInTH2File,
     required this.subtype,
   }) : super.forCWJM();
 
@@ -115,6 +116,7 @@ class THSubtypeCommandOption extends THCommandOption {
   factory THSubtypeCommandOption.fromMap(Map<String, dynamic> map) {
     return THSubtypeCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
+      originalLineInTH2File: map['originalLineInTH2File'],
       subtype: map['subtype'],
     );
   }
@@ -126,10 +128,13 @@ class THSubtypeCommandOption extends THCommandOption {
   @override
   THSubtypeCommandOption copyWith({
     int? parentMapiahID,
+    String? originalLineInTH2File,
     String? subtype,
   }) {
     return THSubtypeCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       subtype: subtype ?? this.subtype,
     );
   }
