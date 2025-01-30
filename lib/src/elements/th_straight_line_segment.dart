@@ -30,19 +30,6 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     endPoint = THPositionPart.fromStringList(list: pointDataList);
   }
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-      'endPoint': endPoint.toMap(),
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-    };
-  }
-
   factory THStraightLineSegment.fromMap(Map<String, dynamic> map) {
     return THStraightLineSegment.forCWJM(
       mapiahID: map['mapiahID'],

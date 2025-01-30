@@ -58,16 +58,16 @@ class THArea extends THElement
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'areaType': _areaType,
       'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
-    };
+    });
+
+    return map;
   }
 
   factory THArea.fromMap(Map<String, dynamic> map) {

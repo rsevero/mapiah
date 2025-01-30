@@ -22,13 +22,13 @@ class THComment extends THElement {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'content': content,
-    };
+    });
+
+    return map;
   }
 
   factory THComment.fromMap(Map<String, dynamic> map) {

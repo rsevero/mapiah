@@ -104,7 +104,33 @@ abstract class THElement {
     return jsonEncode(toMap());
   }
 
-  Map<String, dynamic> toMap();
+  Map<String, dynamic> toMap() {
+    return {
+      'elementType': elementType.name,
+      'mapiahID': mapiahID,
+      'parentMapiahID': parentMapiahID,
+      'sameLineComment': sameLineComment,
+      'originalLineInTH2File': originalLineInTH2File,
+    };
+  }
+
+  @override
+  bool operator ==(covariant THElement other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        originalLineInTH2File,
+      );
 
   THElement copyWith();
 

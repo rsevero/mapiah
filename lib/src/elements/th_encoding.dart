@@ -22,13 +22,13 @@ class THEncoding extends THElement {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'encoding': encoding,
-    };
+    });
+
+    return map;
   }
 
   factory THEncoding.fromMap(Map<String, dynamic> map) {

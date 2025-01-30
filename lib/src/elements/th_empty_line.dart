@@ -16,16 +16,6 @@ class THEmptyLine extends THElement {
   @override
   THElementType get elementType => THElementType.emptyLine;
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-    };
-  }
-
   factory THEmptyLine.fromMap(Map<String, dynamic> map) {
     return THEmptyLine.forCWJM(
       mapiahID: map['mapiahID'],

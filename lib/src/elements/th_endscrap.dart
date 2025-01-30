@@ -16,16 +16,6 @@ class THEndscrap extends THElement {
   @override
   THElementType get elementType => THElementType.endscrap;
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-    };
-  }
-
   factory THEndscrap.fromMap(Map<String, dynamic> map) {
     return THEndscrap.forCWJM(
       mapiahID: map['mapiahID'],

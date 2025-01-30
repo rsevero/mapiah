@@ -12,6 +12,7 @@ abstract class THLineSegment extends THElement
     super.sameLineComment,
     required this.endPoint,
     required LinkedHashMap<String, THCommandOption> optionsMap,
+    required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
   }
@@ -46,6 +47,19 @@ abstract class THLineSegment extends THElement
     return endPoint.decimalPositions;
   }
 
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
+      'endPoint': endPoint.toMap(),
+      'optionsMap':
+          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+    });
+
+    return map;
+  }
+
   static THLineSegment fromMap(Map<String, dynamic> map) {
     final THElementType elementType =
         THElementType.values.byName(map['elementType']);
@@ -65,9 +79,10 @@ abstract class THLineSegment extends THElement
     int? mapiahID,
     int? parentMapiahID,
     String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
     THPositionPart? endPoint,
     LinkedHashMap<String, THCommandOption>? optionsMap,
-    bool makeSameLineCommentNull = false,
   });
 
   Rect getBoundingBox(Offset startPoint) {

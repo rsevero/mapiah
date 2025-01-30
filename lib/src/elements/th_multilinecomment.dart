@@ -21,13 +21,13 @@ class THMultiLineComment extends THElement with THIsParentMixin {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'childrenMapiahID': childrenMapiahID.toList(),
-      'sameLineComment': sameLineComment,
-    };
+    });
+
+    return map;
   }
 
   factory THMultiLineComment.fromMap(Map<String, dynamic> map) {

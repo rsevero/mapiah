@@ -16,16 +16,6 @@ class THEndcomment extends THElement {
   @override
   THElementType get elementType => THElementType.endcomment;
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-    };
-  }
-
   factory THEndcomment.fromMap(Map<String, dynamic> map) {
     return THEndcomment.forCWJM(
       mapiahID: map['mapiahID'],

@@ -16,16 +16,6 @@ class THEndarea extends THElement {
   @override
   THElementType get elementType => THElementType.endarea;
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-    };
-  }
-
   factory THEndarea.fromMap(Map<String, dynamic> map) {
     return THEndarea.forCWJM(
       mapiahID: map['mapiahID'],

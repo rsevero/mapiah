@@ -25,14 +25,14 @@ class THXTherionConfig extends THElement {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'name': name,
       'value': value,
-    };
+    });
+
+    return map;
   }
 
   factory THXTherionConfig.fromMap(Map<String, dynamic> map) {

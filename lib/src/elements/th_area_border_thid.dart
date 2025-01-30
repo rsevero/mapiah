@@ -28,13 +28,13 @@ class THAreaBorderTHID extends THElement {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'id': id,
-    };
+    });
+
+    return map;
   }
 
   factory THAreaBorderTHID.fromMap(Map<String, dynamic> map) {

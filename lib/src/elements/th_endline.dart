@@ -16,16 +16,6 @@ class THEndline extends THElement {
   @override
   THElementType get elementType => THElementType.endline;
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
-      'sameLineComment': sameLineComment,
-    };
-  }
-
   factory THEndline.fromMap(Map<String, dynamic> map) {
     return THEndline.forCWJM(
       mapiahID: map['mapiahID'],
