@@ -23,12 +23,10 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     required super.originalLineInTH2File,
     this.plusNumber,
     this.minusNumber,
-    String? unit,
+    required this.unit,
     required this.mode,
     required this.plusHasSign,
-  }) : super.forCWJM() {
-    unitFromString(unit);
-  }
+  }) : super.forCWJM();
 
   THPassageHeightValueCommandOption.fromString({
     required super.optionParent,
@@ -80,7 +78,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
       minusNumber: map['minusNumber'] != null
           ? THDoublePart.fromMap(map['minusNumber'])
           : null,
-      unit: map['unit'],
+      unit: THLengthUnitPart.fromMap(map['unit']),
       mode: THPassageHeightModes.values
           .firstWhere((e) => e.toString() == map['mode']),
       plusHasSign: map['plusHasSign'],
@@ -97,6 +95,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     String? originalLineInTH2File,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
+    THLengthUnitPart? unit,
     THPassageHeightModes? mode,
     bool? plusHasSign,
     bool makePlusNumberNull = false,
@@ -109,6 +108,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
       plusNumber: makePlusNumberNull ? null : (plusNumber ?? this.plusNumber),
       minusNumber:
           makeMinusNumberNull ? null : (minusNumber ?? this.minusNumber),
+      unit: unit ?? this.unit,
       mode: mode ?? this.mode,
       plusHasSign: plusHasSign ?? this.plusHasSign,
     );
@@ -122,6 +122,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
         other.originalLineInTH2File == originalLineInTH2File &&
         other.plusNumber == plusNumber &&
         other.minusNumber == minusNumber &&
+        other.unit == unit &&
         other.mode == mode &&
         other.plusHasSign == plusHasSign;
   }
@@ -132,6 +133,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
       Object.hash(
         plusNumber,
         minusNumber,
+        unit,
         mode,
         plusHasSign,
       );

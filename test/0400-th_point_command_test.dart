@@ -1256,6 +1256,18 @@ endscrap
       },
       {
         'file':
+            'th_file_parser-00196-passage_height_point_with_value_option_with_unit_with_plus.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.96 0 meter \
+    ]
+  point 777 -1224 passage-height -value [ +7 feet ]
+endscrap
+''',
+      },
+      {
+        'file':
             'th_file_parser-02311-passage_height_point_with_value_option_with_invalid_unit-failure.th2',
         'length': 4,
         'encoding': 'UTF-8',
