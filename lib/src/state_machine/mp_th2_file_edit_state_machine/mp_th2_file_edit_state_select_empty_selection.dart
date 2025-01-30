@@ -13,9 +13,9 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// 1.1. If yes, select object. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
   /// 1.2. If no, do nothing.
   @override
-  void onTapUp(TapUpDetails details) {
+  void onPrimaryButtonClick(PointerUpEvent event) {
     final List<THElement> clickedElements =
-        th2FileEditStore.selectableElementsClicked(details.localPosition);
+        th2FileEditStore.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
       th2FileEditStore.setSelectedElements(clickedElements);
@@ -24,17 +24,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
   }
 
-  /// Marks the start point of the pan.
-  @override
-  void onPanStart(DragStartDetails details) {
-    th2FileEditStore.setPanStartCoordinates(details.localPosition);
-  }
-
   /// Draws the selection window.
   @override
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditStore
-        .setSelectionWindowScreenEndCoordinates(details.localPosition);
+        .setSelectionWindowScreenEndCoordinates(event.localPosition);
   }
 
   /// 1. Create a list of objects inside the selection window.
@@ -45,9 +39,9 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// current selection. Change to
   /// [MPTH2FileEditStateType.selectNonEmptySelection];
   @override
-  void onPanEnd(DragEndDetails details) {
+  void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final List<THElement> elementsInsideSelectionWindow =
-        _getObjectsInsideSelectionWindow(details.localPosition);
+        _getObjectsInsideSelectionWindow(event.localPosition);
 
     th2FileEditStore.clearSelectionWindow();
 

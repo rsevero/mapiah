@@ -3,24 +3,23 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateMoving extends MPTH2FileEditState {
   MPTH2FileEditStateMoving({required super.th2FileEditStore});
 
-  /// 1. Moves all selected objects by the distance indicated by [details].
+  /// 1. Moves all selected objects by the distance indicated by [event].
   @override
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditStore
-        .moveSelectedElementsToScreenCoordinates(details.localPosition);
+        .moveSelectedElementsToScreenCoordinates(event.localPosition);
   }
 
   /// 1. Records an MPCommand that moves the entire selection by the distance
-  /// indicated by [details].
+  /// indicated by [event].
   /// 2. Update cloned copies inside TH2FileEditStore.selectedElements.
   /// 3. Trigger redraw of selected elements.
   /// 4. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
-  void onPanEnd(DragEndDetails details) {
+  void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final int selectedCount = th2FileEditStore.selectedElements.length;
     final Offset panDeltaOnCanvas =
-        th2FileEditStore.offsetScreenToCanvas(details.localPosition) -
-            th2FileEditStore.panStartCanvasCoordinates;
+        th2FileEditStore.primaryButtonDragCanvasDelta;
     late MPCommand moveCommand;
 
     if (selectedCount == 1) {

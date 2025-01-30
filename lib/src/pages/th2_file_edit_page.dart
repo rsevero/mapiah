@@ -409,12 +409,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           th2FileEditStore.zoomOutAll(wholeFile: false),
                       tooltip: AppLocalizations.of(context)
                           .th2FileEditPageZoomOutScrap,
-                      // child: Icon(Icons.zoom_out_map,
-                      //     size: thFloatingActionIconSize),
                       child: Image.asset(
                         'assets/icons/zoom-out-scrap.png',
-                        width: 24,
-                        height: 24,
+                        width: thFloatingActionZoomIconSize,
+                        height: thFloatingActionZoomIconSize,
                       ),
                     ),
                     SizedBox(width: 8),

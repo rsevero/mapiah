@@ -24,9 +24,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 1.2.2. No. Clear selection. Change to
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
-  void onTapUp(TapUpDetails details) {
+  void onPrimaryButtonClick(PointerUpEvent event) {
     final List<THElement> clickedElements =
-        th2FileEditStore.selectableElementsClicked(details.localPosition);
+        th2FileEditStore.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
@@ -69,10 +69,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// selection. Change to [MPTH2FileEditStateType.moving];
   /// 2.2. No. Do nothing.
   @override
-  void onPanStart(DragStartDetails details) {
-    th2FileEditStore.setPanStartCoordinates(details.localPosition);
+  void onPrimaryButtonDragStart(PointerDownEvent event) {
     final List<THElement> clickedElements =
-        th2FileEditStore.selectableElementsClicked(details.localPosition);
+        th2FileEditStore.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
@@ -90,9 +89,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   /// Draw the selection window.
   @override
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditStore
-        .setSelectionWindowScreenEndCoordinates(details.localPosition);
+        .setSelectionWindowScreenEndCoordinates(event.localPosition);
   }
 
   /// 1. Create a list of objects inside the selection window.
@@ -106,9 +105,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// the current selection.
 
   @override
-  void onPanEnd(DragEndDetails details) {
+  void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final List<THElement> elementsInsideSelectionWindow =
-        _getObjectsInsideSelectionWindow(details.localPosition);
+        _getObjectsInsideSelectionWindow(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     th2FileEditStore.clearSelectionWindow();

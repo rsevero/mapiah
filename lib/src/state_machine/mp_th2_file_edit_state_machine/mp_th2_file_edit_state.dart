@@ -47,13 +47,29 @@ abstract class MPTH2FileEditState {
 
   void setStatusBarMessage() {}
 
-  void onTapUp(TapUpDetails details) {}
+  void onPrimaryButtonDragStart(PointerDownEvent event) {}
 
-  void onPanStart(DragStartDetails details) {}
+  void onSecondaryButtonDragStart(PointerDownEvent event) {}
 
-  void onPanUpdate(DragUpdateDetails details) {}
+  void onTertiaryButtonDragStart(PointerDownEvent event) {}
 
-  void onPanEnd(DragEndDetails details) {}
+  void onPrimaryButtonDragUpdate(PointerMoveEvent event) {}
+
+  void onSecondaryButtonDragUpdate(PointerMoveEvent event) {}
+
+  void onTertiaryButtonDragUpdate(PointerMoveEvent event) {}
+
+  void onPrimaryButtonDragEnd(PointerUpEvent event) {}
+
+  void onSecondaryButtonDragEnd(PointerUpEvent event) {}
+
+  void onTertiaryButtonDragEnd(PointerUpEvent event) {}
+
+  void onPrimaryButtonClick(PointerUpEvent event) {}
+
+  void onSecondaryButtonClick(PointerUpEvent event) {}
+
+  void onTertiaryButtonClick(PointerUpEvent event) {}
 
   void onChangeActiveScrapToolPressed() {}
 

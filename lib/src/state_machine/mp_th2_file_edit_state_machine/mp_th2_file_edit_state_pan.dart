@@ -10,8 +10,8 @@ class MPTH2FileEditStatePan extends MPTH2FileEditState {
 
   /// Moves the canvas
   @override
-  void onPanUpdate(DragUpdateDetails details) {
-    th2FileEditStore.onPanUpdatePanMode(details);
+  void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
+    th2FileEditStore.onPanUpdatePanMode(event);
   }
 
   @override
