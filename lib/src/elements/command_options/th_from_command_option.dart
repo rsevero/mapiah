@@ -12,6 +12,7 @@ class THFromCommandOption extends THCommandOption {
   THFromCommandOption({
     required super.optionParent,
     required this.station,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

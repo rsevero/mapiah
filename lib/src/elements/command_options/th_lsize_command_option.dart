@@ -15,6 +15,7 @@ class THLSizeCommandOption extends THCommandOption {
   THLSizeCommandOption.fromString({
     required super.optionParent,
     required String number,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.number = THDoublePart.fromString(valueString: number);
   }

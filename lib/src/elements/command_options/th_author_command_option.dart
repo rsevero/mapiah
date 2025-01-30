@@ -15,12 +15,14 @@ class THAuthorCommandOption extends THCommandOption {
     required super.optionParent,
     required this.datetime,
     required this.person,
+    super.originalLineInTH2File = '',
   }) : super();
 
   THAuthorCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required String person,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
     this.person = THPersonPart.fromString(name: person);

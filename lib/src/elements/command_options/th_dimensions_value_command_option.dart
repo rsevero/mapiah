@@ -22,6 +22,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
     required String above,
     required String below,
     String? unit,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.above = THDoublePart.fromString(valueString: above);
     this.below = THDoublePart.fromString(valueString: below);

@@ -18,6 +18,7 @@ class THSketchCommandOption extends THCommandOption {
     required super.optionParent,
     required String filename,
     required List<dynamic> pointList,
+    super.originalLineInTH2File = '',
   }) : super() {
     _filename = THStringPart(content: filename);
     pointFromStringList(pointList);

@@ -97,6 +97,7 @@ class THSubtypeCommandOption extends THCommandOption {
   THSubtypeCommandOption({
     required super.optionParent,
     required this.subtype,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

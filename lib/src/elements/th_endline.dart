@@ -9,7 +9,7 @@ class THEndline extends THElement {
 
   THEndline({
     required super.parentMapiahID,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   @override

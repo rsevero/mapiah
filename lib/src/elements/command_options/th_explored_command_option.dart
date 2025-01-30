@@ -17,6 +17,7 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     required super.optionParent,
     required String distance,
     String? unit,
+    super.originalLineInTH2File = '',
   }) : super() {
     length = THDoublePart.fromString(valueString: distance);
     unitFromString(unit);

@@ -94,13 +94,15 @@ enum THCommandOptionType {
 
 abstract class THCommandOption {
   late final int parentMapiahID;
+  final String originalLineInTH2File;
 
   THCommandOption.forCWJM({
     required this.parentMapiahID,
-  });
+  }) : originalLineInTH2File = '';
 
   THCommandOption({
     required THHasOptionsMixin optionParent,
+    this.originalLineInTH2File = '',
   }) : parentMapiahID = optionParent.mapiahID {
     optionParent.addUpdateOption(this);
   }

@@ -22,11 +22,13 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   THClipCommandOption({
     required super.optionParent,
     required super.choice,
+    super.originalLineInTH2File = '',
   }) : super(multipleChoiceType: thClipMultipleChoiceType);
 
   THClipCommandOption.fromChoice({
     required super.optionParent,
     required super.choice,
+    super.originalLineInTH2File = '',
   }) : super(multipleChoiceType: thClipMultipleChoiceType);
 
   @override

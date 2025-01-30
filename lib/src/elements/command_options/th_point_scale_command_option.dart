@@ -24,6 +24,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
+    super.originalLineInTH2File = '',
   }) : super() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
@@ -34,6 +35,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
+    super.originalLineInTH2File = '',
   }) : super() {
     _multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: '');
@@ -44,6 +46,7 @@ class THPointScaleCommandOption extends THCommandOption {
   THPointScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
+    super.originalLineInTH2File = '',
   }) : super() {
     _numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     _isNumeric = true;

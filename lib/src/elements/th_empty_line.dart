@@ -9,7 +9,7 @@ class THEmptyLine extends THElement {
 
   THEmptyLine({
     required super.parentMapiahID,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   @override

@@ -172,7 +172,7 @@ class THPoint extends THElement
     super.sameLineComment,
     required THPositionPart coordinates,
     required String pointType,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   })  : _position = coordinates,
         _pointType = pointType,
         super.addToParent();
@@ -185,7 +185,7 @@ class THPoint extends THElement
     super.sameLineComment,
     required List<dynamic> pointDataList,
     required String pointType,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   })  : _position = THPositionPart.fromStringList(list: pointDataList),
         _pointType = pointType,
         super.addToParent();

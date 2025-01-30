@@ -28,6 +28,7 @@ class THScrapScaleCommandOption extends THCommandOption {
     required super.optionParent,
     required List<THDoublePart> numericSpecifications,
     this.unit,
+    super.originalLineInTH2File = '',
   })  : _numericSpecifications = numericSpecifications,
         super();
 

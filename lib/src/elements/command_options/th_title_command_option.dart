@@ -12,6 +12,7 @@ class THTitleCommandOption extends THCommandOption {
   THTitleCommandOption({
     required super.optionParent,
     required String titleText,
+    super.originalLineInTH2File = '',
   })  : title = THStringPart(content: titleText),
         super();
 

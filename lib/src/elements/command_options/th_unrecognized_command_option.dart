@@ -11,6 +11,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   THUnrecognizedCommandOption({
     required super.optionParent,
     required this.value,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

@@ -16,6 +16,7 @@ class THCSCommandOption extends THCommandOption {
     required super.optionParent,
     required String csString,
     required bool forOutputOnly,
+    super.originalLineInTH2File = '',
   }) : super() {
     cs = THCSPart(name: csString, forOutputOnly: forOutputOnly);
   }

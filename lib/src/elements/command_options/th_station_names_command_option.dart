@@ -16,6 +16,7 @@ class THStationNamesCommandOption extends THCommandOption {
     required super.optionParent,
     required this.prefix,
     required this.suffix,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

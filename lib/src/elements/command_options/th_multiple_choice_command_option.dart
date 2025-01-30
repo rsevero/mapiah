@@ -389,6 +389,7 @@ class THMultipleChoiceCommandOption extends THCommandOption {
     required super.optionParent,
     required this.multipleChoiceType,
     required String choice,
+    super.originalLineInTH2File = '',
   })  : parentElementType = optionParent.elementType,
         super() {
     setChoice(choice);

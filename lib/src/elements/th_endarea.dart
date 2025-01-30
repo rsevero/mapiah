@@ -9,7 +9,7 @@ class THEndarea extends THElement {
 
   THEndarea({
     required super.parentMapiahID,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   @override

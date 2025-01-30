@@ -51,6 +51,7 @@ class THProjectionCommandOption extends THCommandOption {
     this.index = '',
     String? elevationAngle,
     String? elevationUnit,
+    super.originalLineInTH2File = '',
   }) : super() {
     typeFromString(type);
     if (elevationAngle == null) {

@@ -36,6 +36,7 @@ class THTextCommandOption extends THCommandOption {
   THTextCommandOption({
     required super.optionParent,
     required String textContent,
+    super.originalLineInTH2File = '',
   })  : text = THStringPart(content: textContent),
         super();
 

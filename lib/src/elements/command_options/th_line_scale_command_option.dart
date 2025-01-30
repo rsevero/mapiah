@@ -29,6 +29,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsMultipleChoice({
     required super.optionParent,
     required String textScaleSize,
+    super.originalLineInTH2File = '',
   }) : super() {
     multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
@@ -40,6 +41,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsText({
     required super.optionParent,
     required String textScale,
+    super.originalLineInTH2File = '',
   })  : textSize = textScale,
         super() {
     type = THLineScaleCommandOptionType.text;
@@ -51,6 +53,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumber({
     required super.optionParent,
     required THDoublePart numericScaleSize,
+    super.originalLineInTH2File = '',
   })  : numericSize = numericScaleSize,
         super() {
     type = THLineScaleCommandOptionType.numeric;
@@ -62,6 +65,7 @@ class THLineScaleCommandOption extends THCommandOption {
   THLineScaleCommandOption.sizeAsNumberFromString({
     required super.optionParent,
     required String numericScaleSize,
+    super.originalLineInTH2File = '',
   }) : super() {
     numericSize = THDoublePart.fromString(valueString: numericScaleSize);
     type = THLineScaleCommandOptionType.numeric;

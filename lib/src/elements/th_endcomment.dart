@@ -9,7 +9,7 @@ class THEndcomment extends THElement {
 
   THEndcomment({
     required super.parentMapiahID,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   @override

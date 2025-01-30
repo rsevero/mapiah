@@ -13,7 +13,7 @@ class THComment extends THElement {
   THComment({
     required super.parentMapiahID,
     required this.content,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   @override

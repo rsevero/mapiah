@@ -23,6 +23,7 @@ class THPointHeightValueCommandOption extends THCommandOption
     required String height,
     required this.isPresumed,
     String? unit,
+    super.originalLineInTH2File = '',
   }) : super() {
     length = THDoublePart.fromString(valueString: height);
     unitFromString(unit);

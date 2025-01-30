@@ -13,6 +13,7 @@ class THLineHeightCommandOption extends THCommandOption {
   THLineHeightCommandOption.fromString({
     required super.optionParent,
     required String height,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.height = THDoublePart.fromString(valueString: height);
   }

@@ -12,6 +12,7 @@ class THDateValueCommandOption extends THCommandOption {
   THDateValueCommandOption.fromString({
     required super.optionParent,
     required String date,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.date = THDatetimePart.fromString(datetime: date);
   }

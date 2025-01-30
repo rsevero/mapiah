@@ -70,7 +70,7 @@ class THLine extends THElement
     required super.parentMapiahID,
     required String lineType,
     super.sameLineComment,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   })  : _lineType = lineType,
         super.addToParent();
 

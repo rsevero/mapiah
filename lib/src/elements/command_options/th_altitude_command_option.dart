@@ -28,6 +28,7 @@ class THAltitudeCommandOption extends THCommandOption
     required bool isFix,
     bool isNan = false,
     required String? unit,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.length = length;
     this.isFix = isFix;
@@ -41,6 +42,7 @@ class THAltitudeCommandOption extends THCommandOption
     required bool isFix,
     bool isNan = false,
     String? unit,
+    super.originalLineInTH2File = '',
   }) : super() {
     length = THDoublePart.fromString(valueString: height);
     this.isFix = isFix;
@@ -48,7 +50,10 @@ class THAltitudeCommandOption extends THCommandOption
     unitFromString(unit);
   }
 
-  THAltitudeCommandOption.fromNan({required super.optionParent}) : super() {
+  THAltitudeCommandOption.fromNan({
+    required super.optionParent,
+    super.originalLineInTH2File = '',
+  }) : super() {
     length = THDoublePart.fromString(valueString: '0');
     isFix = false;
     isNan = true;

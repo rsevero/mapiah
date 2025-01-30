@@ -70,14 +70,14 @@ abstract class THElement {
   final int _mapiahID;
   final int parentMapiahID;
   String? sameLineComment;
-  final String originalRepresentationInFile;
+  final String originalLineInTH2File;
 
   THElement.forCWJM({
     required int mapiahID,
     required this.parentMapiahID,
     this.sameLineComment,
   })  : _mapiahID = mapiahID,
-        originalRepresentationInFile = '';
+        originalLineInTH2File = '';
 
   /// Main constructor.
   ///
@@ -87,7 +87,7 @@ abstract class THElement {
   THElement.addToParent({
     required this.parentMapiahID,
     this.sameLineComment,
-    this.originalRepresentationInFile = '',
+    this.originalLineInTH2File = '',
   }) : _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForElements();
 
   THIsParentMixin parent(THFile thFile) {

@@ -34,6 +34,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     required String plusNumber,
     required String minusNumber,
     String? unit,
+    super.originalLineInTH2File = '',
   }) : super() {
     unitFromString(unit);
     plusAndMinusNumbersFromString(plusNumber, minusNumber);

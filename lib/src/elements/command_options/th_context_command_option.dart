@@ -19,6 +19,7 @@ class THContextCommandOption extends THCommandOption {
     required super.optionParent,
     required this.elementType,
     required this.symbolType,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

@@ -13,6 +13,7 @@ class THNameCommandOption extends THCommandOption {
   THNameCommandOption({
     required super.optionParent,
     required this.reference,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

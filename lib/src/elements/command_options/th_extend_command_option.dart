@@ -13,6 +13,7 @@ class THExtendCommandOption extends THCommandOption {
   THExtendCommandOption({
     required super.optionParent,
     required this.station,
+    super.originalLineInTH2File = '',
   }) : super();
   //      {
   //   if ((optionParent is! THPoint) || (optionParent.plaType != 'station')) {

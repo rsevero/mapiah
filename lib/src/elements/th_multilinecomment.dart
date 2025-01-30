@@ -12,7 +12,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
 
   THMultiLineComment({
     required super.parentMapiahID,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   @override

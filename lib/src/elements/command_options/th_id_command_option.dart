@@ -12,6 +12,7 @@ class THIDCommandOption extends THCommandOption {
   THIDCommandOption({
     required super.optionParent,
     required this.thID,
+    super.originalLineInTH2File = '',
   }) : super(); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
 
   @override

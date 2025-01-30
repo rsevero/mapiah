@@ -13,6 +13,7 @@ class THOrientationCommandOption extends THCommandOption {
   THOrientationCommandOption.fromString({
     required super.optionParent,
     required String azimuth,
+    super.originalLineInTH2File = '',
   }) : super() {
     this.azimuth = THDoublePart.fromString(valueString: azimuth);
   }

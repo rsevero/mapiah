@@ -12,6 +12,7 @@ class THMarkCommandOption extends THCommandOption {
   THMarkCommandOption({
     required super.optionParent,
     required this.mark,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override

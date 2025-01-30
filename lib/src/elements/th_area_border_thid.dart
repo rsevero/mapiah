@@ -13,7 +13,7 @@ class THAreaBorderTHID extends THElement {
   THAreaBorderTHID({
     required super.parentMapiahID,
     required this.id,
-    super.originalRepresentationInFile = '',
+    super.originalLineInTH2File = '',
   }) : super.addToParent();
   //  {
   //   if (parent is! THArea) {

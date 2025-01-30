@@ -16,6 +16,7 @@ class THCopyrightCommandOption extends THCommandOption {
     required super.optionParent,
     required this.datetime,
     required String copyrightMessage,
+    super.originalLineInTH2File = '',
   })  : copyright = THStringPart(content: copyrightMessage),
         super();
 
@@ -23,6 +24,7 @@ class THCopyrightCommandOption extends THCommandOption {
     required super.optionParent,
     required String datetime,
     required String copyrightMessage,
+    super.originalLineInTH2File = '',
   })  : copyright = THStringPart(content: copyrightMessage),
         super() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);

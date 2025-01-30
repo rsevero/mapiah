@@ -13,6 +13,7 @@ class THScrapCommandOption extends THCommandOption {
   THScrapCommandOption({
     required super.optionParent,
     required this.reference,
+    super.originalLineInTH2File = '',
   }) : super();
 
   @override
