@@ -149,6 +149,7 @@ class THLine extends THElement
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other._lineType == _lineType &&
         deepEq(other.childrenMapiahID, childrenMapiahID) &&
         deepEq(other.optionsMap, optionsMap);
@@ -156,9 +157,7 @@ class THLine extends THElement
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
+        super.hashCode,
         _lineType,
         childrenMapiahID,
         optionsMap,

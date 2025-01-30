@@ -118,6 +118,7 @@ class THScrap extends THElement
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other._thID == _thID &&
         deepEq(other.childrenMapiahID, childrenMapiahID) &&
         deepEq(other.optionsMap, optionsMap);
@@ -125,9 +126,7 @@ class THScrap extends THElement
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
+        super.hashCode,
         _thID,
         childrenMapiahID,
         optionsMap,

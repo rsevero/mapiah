@@ -85,6 +85,28 @@ abstract class THLineSegment extends THElement
     LinkedHashMap<String, THCommandOption>? optionsMap,
   });
 
+  @override
+  bool operator ==(covariant THLineSegment other) {
+    if (identical(this, other)) return true;
+
+    return other.mapiahID == mapiahID &&
+        other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
+        other.endPoint == endPoint &&
+        mapEquals(other.optionsMap, optionsMap);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        mapiahID,
+        parentMapiahID,
+        sameLineComment,
+        originalLineInTH2File,
+        endPoint,
+        optionsMap,
+      );
+
   Rect getBoundingBox(Offset startPoint) {
     _boundingBox ??= _calculateBoundingBox(startPoint);
 

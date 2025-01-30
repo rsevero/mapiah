@@ -73,14 +73,13 @@ class THEncoding extends THElement {
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.encoding == encoding;
   }
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
+        super.hashCode,
         encoding,
       );
 

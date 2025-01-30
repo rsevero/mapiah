@@ -49,22 +49,6 @@ class THEndscrap extends THElement {
   }
 
   @override
-  bool operator ==(covariant THEndscrap other) {
-    if (identical(this, other)) return true;
-
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
-        other.sameLineComment == sameLineComment;
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
-      );
-
-  @override
   bool isSameClass(Object object) {
     return object is THEndscrap;
   }

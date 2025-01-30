@@ -123,6 +123,7 @@ class THArea extends THElement
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other._areaType == _areaType &&
         deepEq(other.childrenMapiahID, childrenMapiahID) &&
         deepEq(other.optionsMap, optionsMap);
@@ -130,9 +131,7 @@ class THArea extends THElement
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
+        super.hashCode,
         _areaType,
         childrenMapiahID,
         optionsMap,

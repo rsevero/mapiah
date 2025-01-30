@@ -80,15 +80,14 @@ class THXTherionConfig extends THElement {
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.name == name &&
         other.value == value;
   }
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
+        super.hashCode,
         name,
         value,
       );

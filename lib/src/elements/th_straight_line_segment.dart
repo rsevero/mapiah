@@ -72,26 +72,6 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
   }
 
   @override
-  bool operator ==(covariant THStraightLineSegment other) {
-    if (identical(this, other)) return true;
-
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
-        other.sameLineComment == sameLineComment &&
-        other.endPoint == endPoint &&
-        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
-  }
-
-  @override
-  int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
-        endPoint,
-        optionsMap,
-      );
-
-  @override
   bool isSameClass(Object object) {
     return object is THStraightLineSegment;
   }

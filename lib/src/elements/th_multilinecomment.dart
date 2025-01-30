@@ -71,17 +71,16 @@ class THMultiLineComment extends THElement with THIsParentMixin {
 
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
+        other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         const DeepCollectionEquality()
-            .equals(other.childrenMapiahID, childrenMapiahID) &&
-        other.sameLineComment == sameLineComment;
+            .equals(other.childrenMapiahID, childrenMapiahID);
   }
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
+        super.hashCode,
         childrenMapiahID,
-        sameLineComment,
       );
 
   @override

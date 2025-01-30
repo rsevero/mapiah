@@ -109,6 +109,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     return other.mapiahID == mapiahID &&
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.controlPoint1 == controlPoint1 &&
         other.controlPoint2 == controlPoint2 &&
         other.endPoint == endPoint &&
@@ -117,13 +118,9 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
-        sameLineComment,
+        super.hashCode,
         controlPoint1,
         controlPoint2,
-        endPoint,
-        optionsMap,
       );
 
   @override
