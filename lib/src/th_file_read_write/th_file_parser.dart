@@ -385,6 +385,7 @@ class THFileParser {
     final THAreaBorderTHID newElement = THAreaBorderTHID(
       parentMapiahID: _currentParentMapiahID,
       id: areaBorderID,
+      originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
         newElement, _currentParent);
