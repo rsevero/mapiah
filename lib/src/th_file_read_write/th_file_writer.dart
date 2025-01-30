@@ -15,18 +15,21 @@ class THFileWriter {
   final RegExp _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
   final RegExp _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
 
-  bool _includeEmptyLines = false;
+  late bool _includeEmptyLines;
+  late bool _useOriginalRepresentation;
   bool _insideMultiLineComment = false;
 
   late THFile _thFile;
 
-  String serialize(THFile thFile, {bool? includeEmptyLines}) {
+  String serialize(
+    THFile thFile, {
+    bool includeEmptyLines = false,
+    bool useOriginalRepresentation = false,
+  }) {
     _thFile = thFile;
+    _includeEmptyLines = includeEmptyLines;
+    _useOriginalRepresentation = useOriginalRepresentation;
     String asString = '';
-
-    if (includeEmptyLines != null) {
-      _includeEmptyLines = includeEmptyLines;
-    }
 
     _prefix = '';
     if (thFile.elementByMapiahID(thFile.childrenMapiahID[0]) is! THEncoding) {
@@ -38,6 +41,65 @@ class THFileWriter {
     return asString;
   }
 
+  String _prepareLineWithOriginalRepresentation(
+    String newText,
+    THElement thElement,
+  ) {
+    String newLine = _elementOriginalLineRepresentation(thElement);
+
+    if (newLine.isEmpty) {
+      newLine = _prepareLine(newText, thElement);
+    } else {
+      newLine += '\n';
+    }
+
+    return newLine;
+  }
+
+  String _serializeComment(THElement thElement) {
+    final THComment thComment = thElement as THComment;
+    final String newLine = '# ${thComment.content}';
+    return _prepareLineWithOriginalRepresentation(newLine, thElement);
+  }
+
+  String _serializeEmptyLine(THElement thElement) {
+    return (_includeEmptyLines || _insideMultiLineComment) ? '\n' : '';
+  }
+
+  String _serializeMultiLineCommmentContent(THElement thElement) {
+    final THMultilineCommentContent thMultilineCommentContent =
+        thElement as THMultilineCommentContent;
+    final String newLine = thMultilineCommentContent.content;
+    return _prepareLineWithOriginalRepresentation(newLine, thElement);
+  }
+
+  String _serializeScrap(THElement thElement) {
+    final THScrap thScrap = thElement as THScrap;
+
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      final String scrapOptions = thScrap.optionsAsString();
+      final String newLine = "scrap ${thScrap.thID} $scrapOptions".trim();
+      asString = _prepareLine(newLine, thScrap);
+    } else {
+      asString += '\n';
+    }
+
+    _increasePrefix();
+
+    asString += _childrenAsString(thScrap);
+
+    return asString;
+  }
+
+  String _serializeXTherionConfig(THElement thElement) {
+    final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
+    final String newLine =
+        "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
+    return _prepareLineWithOriginalRepresentation(newLine, thElement);
+  }
+
   String serializeElement(THElement thElement) {
     String asString = '';
     final THElementType type = thElement.elementType;
@@ -47,29 +109,45 @@ class THFileWriter {
         asString += _serializeArea(thElement);
       case THElementType.areaBorderTHID:
         final String newLine = (thElement as THAreaBorderTHID).id;
-        asString += _prepareLine(newLine, thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          newLine,
+          thElement,
+        );
       case THElementType.comment:
-        asString += '# ${(thElement as THComment).content}\n';
+        asString += _serializeComment(thElement);
       case THElementType.emptyLine:
-        if (_includeEmptyLines || _insideMultiLineComment) {
-          asString += '\n';
-        }
+        asString += _serializeEmptyLine(thElement);
       case THElementType.encoding:
         final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
-        asString += _prepareLine(newLine, thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          newLine,
+          thElement,
+        );
       case THElementType.endarea:
         _reducePrefix();
-        asString += _prepareLine('endarea', thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          'endarea',
+          thElement,
+        );
       case THElementType.endcomment:
         _reducePrefix();
         _insideMultiLineComment = false;
-        asString += _prepareLine('endcomment', thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          'endcomment',
+          thElement,
+        );
       case THElementType.endline:
         _reducePrefix();
-        asString += _prepareLine('endline', thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          'endline',
+          thElement,
+        );
       case THElementType.endscrap:
         _reducePrefix();
-        asString += _prepareLine('endscrap', thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          'endscrap',
+          thElement,
+        );
       case THElementType.line:
         asString += _serializeLine(thElement);
       case THElementType.bezierCurveLineSegment:
@@ -77,43 +155,51 @@ class THFileWriter {
       case THElementType.straightLineSegment:
         asString += _serializeLineSegment(thElement);
       case THElementType.multilineComment:
-        asString += _prepareLine('comment', thElement);
+        asString += _prepareLineWithOriginalRepresentation(
+          'comment',
+          thElement,
+        );
         _increasePrefix();
         _insideMultiLineComment = true;
         asString += _childrenAsString(thElement as THMultiLineComment);
       case THElementType.multilineCommentContent:
-        asString += '${(thElement as THMultilineCommentContent).content}\n';
+        asString += _serializeMultiLineCommmentContent(thElement);
       case THElementType.point:
         asString += _serializePoint(thElement);
       case THElementType.scrap:
-        final THScrap thScrap = thElement as THScrap;
-        final String scrapOptions = thScrap.optionsAsString();
-        final String newLine = "scrap ${thScrap.thID} $scrapOptions".trim();
-        asString += _prepareLine(newLine, thScrap);
-        _increasePrefix();
-        asString += _childrenAsString(thScrap);
+        asString += _serializeScrap(thElement);
       case THElementType.xTherionConfig:
-        final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
-        asString +=
-            "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
+        asString += _serializeXTherionConfig(thElement);
       case THElementType.unrecognizedCommand:
         final String newLine = "Unrecognized element: '$thElement'";
-        asString += _prepareLine(newLine, thElement);
+        asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
     }
 
     return asString;
   }
 
+  String _elementOriginalLineRepresentation(THElement element) {
+    return _useOriginalRepresentation ? element.originalLineInTH2File : '';
+  }
+
   String _serializeArea(THElement thElement) {
     final THArea thArea = thElement as THArea;
-    String newLine = "area ${thArea.plaType}";
-    if (thArea.optionIsSet('subtype')) {
-      newLine += ":${thArea.optionByType('subtype')!.specToFile()}";
+
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      String newLine = "area ${thArea.plaType}";
+      if (thArea.optionIsSet('subtype')) {
+        newLine += ":${thArea.optionByType('subtype')!.specToFile()}";
+      }
+      newLine += " ${thArea.optionsAsString()}";
+      newLine = newLine.trim();
+      asString = _prepareLine(newLine, thArea);
+    } else {
+      asString += '\n';
     }
-    newLine += " ${thArea.optionsAsString()}";
-    newLine = newLine.trim();
-    String asString = _prepareLine(newLine, thArea);
     _increasePrefix();
+
     asString += _childrenAsString(thArea);
 
     return asString;
@@ -121,14 +207,22 @@ class THFileWriter {
 
   String _serializeLine(THElement thElement) {
     final THLine thLine = thElement as THLine;
-    String newLine = "line ${thLine.plaType}";
-    if (thLine.optionIsSet('subtype')) {
-      newLine += ":${thLine.optionByType('subtype')!.specToFile()}";
+
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      String newLine = "line ${thLine.plaType}";
+      if (thLine.optionIsSet('subtype')) {
+        newLine += ":${thLine.optionByType('subtype')!.specToFile()}";
+      }
+      newLine += " ${thLine.optionsAsString()}";
+      newLine = newLine.trim();
+      asString = _prepareLine(newLine, thLine);
+    } else {
+      asString += '\n';
     }
-    newLine += " ${thLine.optionsAsString()}";
-    newLine = newLine.trim();
-    String asString = _prepareLine(newLine, thLine);
     _increasePrefix();
+
     asString += _childrenAsString(thLine);
 
     return asString;
@@ -136,36 +230,51 @@ class THFileWriter {
 
   String _serializePoint(THElement thElement) {
     final THPoint thPoint = thElement as THPoint;
-    String newLine = "point ${thPoint.position.toString()} ${thPoint.plaType}";
-    if (thPoint.optionIsSet('subtype')) {
-      newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
-    }
-    newLine += " ${thPoint.optionsAsString()}";
-    newLine = newLine.trim();
 
-    return _prepareLine(newLine, thPoint);
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      String newLine =
+          "point ${thPoint.position.toString()} ${thPoint.plaType}";
+      if (thPoint.optionIsSet('subtype')) {
+        newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
+      }
+      newLine += " ${thPoint.optionsAsString()}";
+      newLine = newLine.trim();
+      asString = _prepareLine(newLine, thPoint);
+    } else {
+      asString += '\n';
+    }
+
+    return asString;
   }
 
   String _serializeLineSegment(THElement thElement) {
     final String thType = thElement.runtimeType.toString();
-    String asString = '';
 
-    switch (thType) {
-      case 'THBezierCurveLineSegment':
-        final THBezierCurveLineSegment thBezierCurveLineSegment =
-            thElement as THBezierCurveLineSegment;
-        final String newLine =
-            "${thBezierCurveLineSegment.controlPoint1} ${thBezierCurveLineSegment.controlPoint2} ${thBezierCurveLineSegment.endPoint}";
-        asString += _prepareLine(newLine, thBezierCurveLineSegment);
-        asString += _linePointOptionsAsString(thBezierCurveLineSegment);
-      case 'THStraightLineSegment':
-        final THStraightLineSegment thStraightLineSegment =
-            thElement as THStraightLineSegment;
-        final String newLine = thStraightLineSegment.endPoint.toString();
-        asString += _prepareLine(newLine, thStraightLineSegment);
-        asString += _linePointOptionsAsString(thStraightLineSegment);
-      default:
-        throw THCustomException("Unrecognized line segment type: '$thType'.");
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      switch (thType) {
+        case 'THBezierCurveLineSegment':
+          final THBezierCurveLineSegment thBezierCurveLineSegment =
+              thElement as THBezierCurveLineSegment;
+          final String newLine =
+              "${thBezierCurveLineSegment.controlPoint1} ${thBezierCurveLineSegment.controlPoint2} ${thBezierCurveLineSegment.endPoint}";
+          asString += _prepareLine(newLine, thBezierCurveLineSegment);
+          asString += _linePointOptionsAsString(thBezierCurveLineSegment);
+        case 'THStraightLineSegment':
+          final THStraightLineSegment thStraightLineSegment =
+              thElement as THStraightLineSegment;
+          final String newLine = thStraightLineSegment.endPoint.toString();
+          asString += _prepareLine(newLine, thStraightLineSegment);
+          asString += _linePointOptionsAsString(thStraightLineSegment);
+        default:
+          throw THCustomException("Unrecognized line segment type: '$thType'.");
+      }
+    } else {
+      asString += '\n';
+      asString += _linePointOptionsAsString(thElement as THLineSegment);
     }
 
     return asString;
@@ -278,6 +387,10 @@ class THFileWriter {
     return newLine;
   }
 
+  String _commandOptionOriginalLineRepresentation(THCommandOption option) {
+    return _useOriginalRepresentation ? option.originalLineInTH2File : '';
+  }
+
   String _linePointOptionsAsString(THLineSegment lineSegment) {
     final THHasOptionsMixin thHasOptions = lineSegment as THHasOptionsMixin;
     final Iterable<String> optionTypeList = thHasOptions.optionsMap.keys;
@@ -288,9 +401,14 @@ class THFileWriter {
     for (String linePointOptionType in optionTypeList) {
       final THCommandOption option =
           thHasOptions.optionByType(linePointOptionType)!;
-      String newLine = "${option.typeToFile()} ";
-      newLine += option.specToFile().trim();
-      asString += "$_prefix${newLine.trim()}\n";
+      String newLine = _commandOptionOriginalLineRepresentation(option);
+      if (newLine.isEmpty) {
+        newLine = "${option.typeToFile()} ";
+        newLine += option.specToFile().trim();
+        asString += "$_prefix${newLine.trim()}\n";
+      } else {
+        asString += "$newLine\n";
+      }
     }
 
     _reducePrefix();
@@ -298,13 +416,19 @@ class THFileWriter {
     return asString;
   }
 
-  Future<List<int>> toBytes(THFile thFile,
-      {bool includeEmptyLines = false}) async {
+  Future<List<int>> toBytes(
+    THFile thFile, {
+    bool includeEmptyLines = false,
+    bool useOriginalRepresentation = false,
+  }) async {
     _thFile = thFile;
     String encoding = thFile.encoding;
     late List<int> fileContentEncoded;
-    String fileContent =
-        serialize(thFile, includeEmptyLines: includeEmptyLines);
+    String fileContent = serialize(
+      thFile,
+      includeEmptyLines: includeEmptyLines,
+      useOriginalRepresentation: useOriginalRepresentation,
+    );
     switch (encoding) {
       case 'UTF-8':
         fileContentEncoded = utf8.encode(fileContent);

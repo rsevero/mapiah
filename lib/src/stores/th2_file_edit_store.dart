@@ -1043,7 +1043,11 @@ abstract class TH2FileEditStoreBase with Store {
 
   Future<List<int>> _encodedFileContents() async {
     final THFileWriter thFileWriter = THFileWriter();
-    return await thFileWriter.toBytes(_thFile);
+    return await thFileWriter.toBytes(
+      _thFile,
+      includeEmptyLines: true,
+      useOriginalRepresentation: true,
+    );
   }
 
   Future<File?> saveAsTH2File() async {

@@ -262,21 +262,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           return Positioned(
                             top: popupTop,
                             left: popupLeft,
-                            // child: MouseRegion(
-                            //   onEnter: (PointerEvent event) {
-                            //     th2FileEditStore
-                            //         .changeScrapsPopupOverlayPortalControllerController
-                            //         .show();
-                            //     th2FileEditStore.isChangeScrapsPopupVisible =
-                            //         true;
-                            //   },
-                            //   onExit: (PointerEvent event) {
-                            //     th2FileEditStore
-                            //         .changeScrapsPopupOverlayPortalControllerController
-                            //         .hide();
-                            //     th2FileEditStore.isChangeScrapsPopupVisible =
-                            //         false;
-                            //   },
                             child: Material(
                               elevation: 4.0,
                               child: Container(
@@ -321,7 +306,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                                 ),
                               ),
                             ),
-                            // ),
                           );
                         },
                       ),
@@ -365,14 +349,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       },
     );
   }
-
-  // void _selectActiveScrapPressed(int scrapID) {
-  //   th2FileEditStore.changeScrapsPopupOverlayPortalControllerController.hide();
-  //   th2FileEditStore.isChangeScrapsPopupVisible = false;
-  //   th2FileEditStore.setActiveScrap(scrapID);
-  //   th2FileEditStore.updateSelectableElements();
-  //   th2FileEditStore.triggerAllElementsRedraw();
-  // }
 
   void _onChangeActiveScrapToolPressed() {
     th2FileEditStore.onChangeActiveScrapToolPressed();

@@ -198,7 +198,10 @@ class THFileParser {
   }
 
   void _injectEmptyLine() {
-    _currentElement = THEmptyLine(parentMapiahID: _currentParentMapiahID);
+    _currentElement = THEmptyLine(
+      parentMapiahID: _currentParentMapiahID,
+      originalLineInTH2File: _currentLine,
+    );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
         _currentElement, _currentParent);
   }
@@ -900,6 +903,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       multipleChoiceType: optionType,
       choice: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -918,6 +922,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       multipleChoiceType: optionType,
       choice: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -942,6 +947,7 @@ class THFileParser {
     THClipCommandOption.fromChoice(
       optionParent: _currentHasOptions,
       choice: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -956,12 +962,14 @@ class THFileParser {
         THDistCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
         );
       case 2:
         THDistCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
           unit: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -980,12 +988,14 @@ class THFileParser {
         THExploredCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
         );
       case 2:
         THExploredCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
           unit: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1002,6 +1012,7 @@ class THFileParser {
     THLineHeightCommandOption.fromString(
       optionParent: _currentHasOptions,
       height: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1015,6 +1026,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       elementType: _currentSpec[0],
       symbolType: _currentSpec[1],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1027,6 +1039,7 @@ class THFileParser {
     THFromCommandOption(
       optionParent: _currentHasOptions,
       station: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1042,6 +1055,7 @@ class THFileParser {
       THExtendCommandOption(
         optionParent: _currentHasOptions,
         station: _currentSpec[0],
+        originalLineInTH2File: _currentLine,
       );
     }
   }
@@ -1066,6 +1080,7 @@ class THFileParser {
     THNameCommandOption(
       optionParent: _currentHasOptions,
       reference: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1087,6 +1102,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       filename: filename,
       pointList: _currentSpec[1],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1100,6 +1116,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       prefix: _currentSpec[0],
       suffix: _currentSpec[1],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1118,6 +1135,7 @@ class THFileParser {
     THStationsCommandOption(
       optionParent: _currentHasOptions,
       stations: stations,
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1131,6 +1149,7 @@ class THFileParser {
     THLSizeCommandOption.fromString(
       optionParent: _currentHasOptions,
       number: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1144,6 +1163,7 @@ class THFileParser {
     THMarkCommandOption(
       optionParent: _currentHasOptions,
       mark: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1157,6 +1177,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       datetime: _currentSpec[0],
       person: _currentSpec[1],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1169,6 +1190,7 @@ class THFileParser {
     THSubtypeCommandOption(
       optionParent: _currentHasOptions,
       subtype: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1183,11 +1205,13 @@ class THFileParser {
         THPointScaleCommandOption.sizeAsNumberFromString(
           optionParent: _currentHasOptions,
           numericScaleSize: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       case 'multiplechoice':
         THPointScaleCommandOption.sizeAsMultipleChoice(
           optionParent: _currentHasOptions,
           textScaleSize: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1206,16 +1230,19 @@ class THFileParser {
         THLineScaleCommandOption.sizeAsNumberFromString(
           optionParent: _currentHasOptions,
           numericScaleSize: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       case 'multiplechoice':
         THLineScaleCommandOption.sizeAsMultipleChoice(
           optionParent: _currentHasOptions,
           textScaleSize: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       case 'text':
         THLineScaleCommandOption.sizeAsText(
           optionParent: _currentHasOptions,
           textScale: _currentSpec[1],
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1232,6 +1259,7 @@ class THFileParser {
     THScrapCommandOption(
       optionParent: _currentHasOptions,
       reference: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1244,6 +1272,7 @@ class THFileParser {
     THOrientationCommandOption.fromString(
       optionParent: _currentHasOptions,
       azimuth: _currentSpec[0],
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1259,6 +1288,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       datetime: _currentSpec[0],
       copyrightMessage: message,
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1271,6 +1301,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       csString: _currentSpec[0],
       forOutputOnly: false,
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1285,6 +1316,7 @@ class THFileParser {
     THTitleCommandOption(
       optionParent: _currentHasOptions,
       titleText: stringContent,
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1299,6 +1331,7 @@ class THFileParser {
     THTextCommandOption(
       optionParent: _currentHasOptions,
       textContent: stringContent,
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1346,10 +1379,14 @@ class THFileParser {
           height: specs[1],
           isFix: true,
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
       case 'hyphen':
       case 'nan':
-        THAltitudeCommandOption.fromNan(optionParent: _currentHasOptions);
+        THAltitudeCommandOption.fromNan(
+          optionParent: _currentHasOptions,
+          originalLineInTH2File: _currentLine,
+        );
       case 'one_number_with_optional_unit':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
@@ -1364,12 +1401,14 @@ class THFileParser {
           height: specs[0],
           isFix: false,
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
       case 'single_number':
         THAltitudeCommandOption.fromString(
           optionParent: _currentHasOptions,
           height: specs,
           isFix: false,
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1397,10 +1436,14 @@ class THFileParser {
           height: specs[1],
           isFix: true,
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
       case 'hyphen':
       case 'nan':
-        THAltitudeValueCommandOption.fromNan(optionParent: _currentHasOptions);
+        THAltitudeValueCommandOption.fromNan(
+          optionParent: _currentHasOptions,
+          originalLineInTH2File: _currentLine,
+        );
       case 'one_number_with_optional_unit':
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
@@ -1412,15 +1455,18 @@ class THFileParser {
             ? specs[1].toString()
             : '';
         THAltitudeValueCommandOption.fromString(
-            optionParent: _currentHasOptions,
-            height: specs[0],
-            isFix: false,
-            unit: unit);
+          optionParent: _currentHasOptions,
+          height: specs[0],
+          isFix: false,
+          unit: unit,
+          originalLineInTH2File: _currentLine,
+        );
       case 'single_number':
         THAltitudeValueCommandOption.fromString(
           optionParent: _currentHasOptions,
           height: specs,
           isFix: false,
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1441,6 +1487,7 @@ class THFileParser {
         THDateValueCommandOption.fromString(
           optionParent: _currentHasOptions,
           date: specs,
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1471,6 +1518,7 @@ class THFileParser {
           above: specs[0],
           below: specs[1],
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1504,12 +1552,14 @@ class THFileParser {
           height: value,
           isPresumed: isPresumed,
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
       case 'single_number':
         THPointHeightValueCommandOption.fromString(
           optionParent: _currentHasOptions,
           height: specs,
           isPresumed: false,
+          originalLineInTH2File: _currentLine,
         );
       default:
         throw THCustomException(
@@ -1527,12 +1577,14 @@ class THFileParser {
           optionParent: _currentHasOptions,
           plusNumber: specs,
           minusNumber: '',
+          originalLineInTH2File: _currentLine,
         );
       case 'plus_number_minus_number':
         THPassageHeightValueCommandOption.fromString(
           optionParent: _currentHasOptions,
           plusNumber: specs[0],
           minusNumber: specs[1],
+          originalLineInTH2File: _currentLine,
         );
       case 'one_number_with_optional_unit':
         final String unit = ((specs[1] != null) &&
@@ -1545,6 +1597,7 @@ class THFileParser {
           plusNumber: specs[0],
           minusNumber: '',
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
         break;
       case 'two_numbers_with_optional_unit':
@@ -1558,6 +1611,7 @@ class THFileParser {
           plusNumber: specs[0],
           minusNumber: specs[1],
           unit: unit,
+          originalLineInTH2File: _currentLine,
         );
         break;
       default:
@@ -1619,6 +1673,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       numericSpecifications: values,
       unit: unit,
+      originalLineInTH2File: _currentLine,
     );
   }
 
@@ -1650,6 +1705,7 @@ class THFileParser {
               (_currentSpec[3] != null))
           ? _currentSpec[3]
           : null,
+      originalLineInTH2File: _currentLine,
     );
   }
 
