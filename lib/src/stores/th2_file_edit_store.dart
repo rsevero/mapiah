@@ -21,6 +21,7 @@ import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
+import 'package:path/path.dart' as p;
 
 part 'th2_file_edit_store.g.dart';
 
@@ -1054,9 +1055,14 @@ abstract class TH2FileEditStoreBase with Store {
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Please select an output file:',
       fileName: _thFile.filename,
+      initialDirectory: mpLocator.mpGeneralStore.lastAccessedDirectory.isEmpty
+          ? null
+          : mpLocator.mpGeneralStore.lastAccessedDirectory,
     );
 
     if (filePath != null) {
+      String directoryPath = p.dirname(filePath);
+      mpLocator.mpGeneralStore.lastAccessedDirectory = directoryPath;
       final File file = File(filePath);
       final List<int> encodedContent = await _encodedFileContents();
       return await file.writeAsBytes(encodedContent, flush: true);

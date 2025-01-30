@@ -7,6 +7,17 @@ class MPGeneralStore {
   int _nextMapiahIDForElements = thFirstMapiahIDForElements;
   int _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
 
+  String _lastAccessedDirectory = '';
+
+  String get lastAccessedDirectory => _lastAccessedDirectory;
+
+  set lastAccessedDirectory(String value) {
+    if (!value.endsWith('/')) {
+      value += '/';
+    }
+    _lastAccessedDirectory = value;
+  }
+
   int nextMapiahIDForElements() {
     return _nextMapiahIDForElements++;
   }

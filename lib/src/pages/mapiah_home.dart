@@ -7,6 +7,7 @@ import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart' as p;
 import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatelessWidget {
@@ -94,27 +95,31 @@ class MapiahHome extends StatelessWidget {
         dialogTitle: AppLocalizations.of(context).th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2'],
-        initialDirectory: kDebugMode ? thDebugPath : './',
+        initialDirectory: mpLocator.mpGeneralStore.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralStore.lastAccessedDirectory,
       );
 
       if (result != null) {
-        // Use the file
         String? pickedFilePath = result.files.single.path;
+
         if (pickedFilePath == null) {
           return;
         }
+
+        String directoryPath = p.dirname(pickedFilePath);
+        mpLocator.mpGeneralStore.lastAccessedDirectory = directoryPath;
+
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => TH2FileEditPage(filename: pickedFilePath)),
         );
       } else {
-        // User canceled the picker
         mpLocator.mpLog.i('No file selected.');
       }
     } catch (e) {
       mpLocator.mpLog.e('Error picking file', error: e);
-      // Optionally, handle the error for the user
     }
   }
 
