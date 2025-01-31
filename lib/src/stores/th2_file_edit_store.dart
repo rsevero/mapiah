@@ -20,6 +20,7 @@ import 'package:mapiah/src/stores/types/th_point_paint.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
+import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -27,7 +28,7 @@ part 'th2_file_edit_store.g.dart';
 
 class TH2FileEditStore = TH2FileEditStoreBase with _$TH2FileEditStore;
 
-abstract class TH2FileEditStoreBase with Store {
+abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   // 'screen' is related to actual pixels on the screen.
   // 'canvas' is the virtual canvas used to draw.
   // 'data' is the actual data to be drawn.

@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatelessWidget {
-  final TH2FileEditStore th2FileEditStore;
+  final MPActuatorInterface th2FileEditStore;
   final Widget child;
 
   const MPListenerWidget({
