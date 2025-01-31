@@ -8,7 +8,7 @@ import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
-import 'package:mapiah/src/widgets/mp_get_line_segments_map_mixin.dart';
+import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 
 class MPSelectedElementsWidget extends StatelessWidget
     with MPGetLineSegmentsMapMixin {

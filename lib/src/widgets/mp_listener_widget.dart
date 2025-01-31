@@ -1,19 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/widgets/aux/mp_listener_widget_inner_state.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatelessWidget {
   final MPActuatorInterface actuator;
   final Widget child;
-  final MPListenerWidgetInnerState state = MPListenerWidgetInnerState();
+  final MPListenerWidgetInnerState state;
 
   MPListenerWidget({
-    super.key,
+    required Key key,
     required this.actuator,
     required this.child,
-  });
+  })  : state = mpLocator.mpGeneralStore.getMPListenerInnerState(key),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,15 +136,4 @@ class MPListenerWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-class MPListenerWidgetInnerState {
-  bool isPrimaryButtonDragging = false;
-  bool isSecondaryButtonDragging = false;
-  bool isTertiaryButtonDragging = false;
-  int currentPressedMouseButton = 0;
-  Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
-  Offset secondaryButtonDragStartScreenCoordinates = Offset.zero;
-  Offset tertiaryButtonDragStartScreenCoordinates = Offset.zero;
-  LogicalKeyboardKey? logicalKeyPressed;
 }
