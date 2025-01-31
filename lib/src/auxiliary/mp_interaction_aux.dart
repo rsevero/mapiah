@@ -7,4 +7,18 @@ class MPInteractionAux {
         HardwareKeyboard.instance.logicalKeysPressed
             .contains(LogicalKeyboardKey.shiftRight);
   }
+
+  static bool isControlPressed() {
+    return HardwareKeyboard.instance.logicalKeysPressed
+            .contains(LogicalKeyboardKey.controlLeft) ||
+        HardwareKeyboard.instance.logicalKeysPressed
+            .contains(LogicalKeyboardKey.controlRight);
+  }
+
+  static bool isAltPressed() {
+    return HardwareKeyboard.instance.logicalKeysPressed
+            .contains(LogicalKeyboardKey.altLeft) ||
+        HardwareKeyboard.instance.logicalKeysPressed
+            .contains(LogicalKeyboardKey.altRight);
+  }
 }
