@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -179,20 +180,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @computed
   bool get showUndoRedoButtons => isSelectMode;
-
-  bool _isPrimaryButtonDragging = false;
-
-  bool _isSecondaryButtonDragging = false;
-
-  bool _isTertiaryButtonDragging = false;
-
-  Offset _primaryButtonDragStartScreenCoordinates = Offset.zero;
-
-  Offset _secondaryButtonDragStartScreenCoordinates = Offset.zero;
-
-  Offset _tertiaryButtonDragStartScreenCoordinates = Offset.zero;
-
-  int _currentPressedButton = 0;
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
@@ -474,76 +461,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @override
-  void setCurrentPressedButton(int button) {
-    _currentPressedButton = button;
-  }
-
-  @override
-  int getCurrentPressedButton() {
-    return _currentPressedButton;
-  }
-
-  @override
-  void setIsPrimaryButtonDragging(bool isDragging) {
-    _isPrimaryButtonDragging = isDragging;
-  }
-
-  @override
-  bool getIsPrimaryButtonDragging() {
-    return _isPrimaryButtonDragging;
-  }
-
-  @override
-  void setIsSecondaryButtonDragging(bool isDragging) {
-    _isSecondaryButtonDragging = isDragging;
-  }
-
-  @override
-  bool getIsSecondaryButtonDragging() {
-    return _isSecondaryButtonDragging;
-  }
-
-  @override
-  void setIsTertiaryButtonDragging(bool isDragging) {
-    _isTertiaryButtonDragging = isDragging;
-  }
-
-  @override
-  bool getIsTertiaryButtonDragging() {
-    return _isTertiaryButtonDragging;
-  }
-
-  @override
-  void setPrimaryButtonDragStartScreenCoordinates(Offset coordinates) {
-    _primaryButtonDragStartScreenCoordinates = coordinates;
-  }
-
-  @override
-  Offset getPrimaryButtonDragStartScreenCoordinates() {
-    return _primaryButtonDragStartScreenCoordinates;
-  }
-
-  @override
-  void setSecondaryButtonDragStartScreenCoordinates(Offset coordinates) {
-    _secondaryButtonDragStartScreenCoordinates = coordinates;
-  }
-
-  @override
-  Offset getSecondaryButtonDragStartScreenCoordinates() {
-    return _secondaryButtonDragStartScreenCoordinates;
-  }
-
-  @override
-  void setTertiaryButtonDragStartScreenCoordinates(Offset coordinates) {
-    _tertiaryButtonDragStartScreenCoordinates = coordinates;
-  }
-
-  @override
-  Offset getTertiaryButtonDragStartScreenCoordinates() {
-    return _tertiaryButtonDragStartScreenCoordinates;
-  }
-
-  @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
     _state.onPrimaryButtonDragStart(event);
   }
@@ -606,6 +523,21 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @override
   void onTertiaryButtonScroll(PointerScrollEvent event) {
     _state.onTertiaryButtonScroll(event);
+  }
+
+  @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    _state.onKeyDownEvent(event);
+  }
+
+  @override
+  void onKeyRepeatEvent(KeyRepeatEvent event) {
+    _state.onKeyRepeatEvent(event);
+  }
+
+  @override
+  void onKeyUpEvent(KeyUpEvent event) {
+    _state.onKeyUpEvent(event);
   }
 
   void onChangeActiveScrapToolPressed() {

@@ -2,6 +2,7 @@ library;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -72,9 +73,13 @@ abstract class MPTH2FileEditState {
 
   void onTertiaryButtonScroll(PointerScrollEvent event) {}
 
-  void onChangeActiveScrapToolPressed() {}
+  void onKeyDownEvent(KeyDownEvent event) {}
 
-  void onPanToolPressed() {}
+  void onKeyRepeatEvent(KeyRepeatEvent event) {}
+
+  void onKeyUpEvent(KeyUpEvent event) {}
+
+  void onChangeActiveScrapToolPressed() {}
 
   void onSelectToolPressed() {}
 
