@@ -11,9 +11,9 @@ import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
-part 'mp_th2_file_edit_state_get_objects_inside_selection_window_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_get_objects_inside_selection_window_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mp_th2_file_edit_state_moving.dart';
-part 'mp_th2_file_edit_state_pan.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
 part 'mp_th2_file_edit_state_type.dart';
@@ -29,8 +29,6 @@ abstract class MPTH2FileEditState {
     required TH2FileEditStore thFileEditStore,
   }) {
     switch (type) {
-      case MPTH2FileEditStateType.pan:
-        return MPTH2FileEditStatePan(th2FileEditStore: thFileEditStore);
       case MPTH2FileEditStateType.selectEmptySelection:
         return MPTH2FileEditStateSelectEmptySelection(
             th2FileEditStore: thFileEditStore);
@@ -72,7 +70,7 @@ abstract class MPTH2FileEditState {
 
   void onTertiaryButtonClick(PointerUpEvent event) {}
 
-  void onMiddleButtonScroll(PointerScrollEvent event) {}
+  void onTertiaryButtonScroll(PointerScrollEvent event) {}
 
   void onChangeActiveScrapToolPressed() {}
 

@@ -48,7 +48,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   Offset _canvasTranslation = Offset.zero;
 
   @readonly
-  TH2FileEditMode _visualMode = TH2FileEditMode.pan;
+  TH2FileEditMode _visualMode = TH2FileEditMode.select;
 
   @readonly
   bool _isLoading = false;
@@ -76,9 +76,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @computed
   bool get isEditMode => _visualMode == TH2FileEditMode.edit;
-
-  @computed
-  bool get isPanMode => _visualMode == TH2FileEditMode.pan;
 
   @computed
   bool get isSelectMode => _visualMode == TH2FileEditMode.select;
@@ -275,7 +272,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   /// element: boundingBox() for example.
   final Map<int, Rect> _selectableBoundingBoxes = {};
 
-  Offset panStartCanvasCoordinates = Offset.zero;
+  Offset dragStartCanvasCoordinates = Offset.zero;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -316,7 +313,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _thFile = file;
     _thFileMapiahID = _thFile.mapiahID;
     _state = MPTH2FileEditState.getState(
-      type: MPTH2FileEditStateType.pan,
+      type: MPTH2FileEditStateType.selectEmptySelection,
       thFileEditStore: this as TH2FileEditStore,
     );
     _undoRedoController = MPUndoRedoController(this as TH2FileEditStore);
@@ -607,16 +604,12 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @override
-  void onMiddleButtonScroll(PointerScrollEvent event) {
-    _state.onMiddleButtonScroll(event);
+  void onTertiaryButtonScroll(PointerScrollEvent event) {
+    _state.onTertiaryButtonScroll(event);
   }
 
   void onChangeActiveScrapToolPressed() {
     _state.onChangeActiveScrapToolPressed();
-  }
-
-  void onPanToolPressed() {
-    _state.onPanToolPressed();
   }
 
   void onSelectToolPressed() {
@@ -659,7 +652,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
         offsetScreenToCanvas(screenEndCoordinates);
 
     setSelectionWindowCanvasCoordinates(
-      point1: panStartCanvasCoordinates,
+      point1: dragStartCanvasCoordinates,
       point2: canvasEndCoordinates,
     );
   }
@@ -784,8 +777,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     triggerSelectedListChanged();
   }
 
-  void setPanStartCoordinates(Offset screenCoordinates) {
-    panStartCanvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+  void setDragStartCoordinates(Offset screenCoordinates) {
+    dragStartCanvasCoordinates = offsetScreenToCanvas(screenCoordinates);
   }
 
   @action
@@ -816,7 +809,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     }
 
     final Offset localDeltaPositionOnCanvas =
-        canvasCoordinatesFinalPosition - panStartCanvasCoordinates;
+        canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
 
     for (final MPSelectedElement selectedElement in _selectedElements.values) {
       switch (selectedElement.originalElementClone) {
@@ -1014,7 +1007,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @action
-  void onPanUpdatePanMode(PointerMoveEvent event) {
+  void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
     _canvasTranslation += (event.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
     triggerAllElementsRedraw();

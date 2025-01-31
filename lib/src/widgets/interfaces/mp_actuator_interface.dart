@@ -58,5 +58,5 @@ abstract interface class MPActuatorInterface {
 
   void onTertiaryButtonClick(PointerUpEvent event);
 
-  void onMiddleButtonScroll(PointerScrollEvent event);
+  void onTertiaryButtonScroll(PointerScrollEvent event);
 }

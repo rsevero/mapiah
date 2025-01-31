@@ -1,7 +1,9 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
-    with MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin {
+    with
+        MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin,
+        MPTH2FileEditStateMoveCanvasMixin {
   MPTH2FileEditStateSelectEmptySelection({required super.th2FileEditStore});
 
   @override
@@ -27,7 +29,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// Marks the start point of the pan.
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
-    th2FileEditStore.setPanStartCoordinates(event.localPosition);
+    th2FileEditStore.setDragStartCoordinates(event.localPosition);
   }
 
   /// Draws the selection window.
@@ -64,12 +66,6 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     th2FileEditStore.clearSelectedElements();
     th2FileEditStore.updateSelectableElements();
     th2FileEditStore.triggerAllElementsRedraw();
-  }
-
-  /// Change to [MPTH2FileEditStateType.pan].
-  @override
-  void onPanToolPressed() {
-    th2FileEditStore.setState(MPTH2FileEditStateType.pan);
   }
 
   @override

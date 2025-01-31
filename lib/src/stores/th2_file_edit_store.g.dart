@@ -16,13 +16,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
       (_$isEditModeComputed ??= Computed<bool>(() => super.isEditMode,
               name: 'TH2FileEditStoreBase.isEditMode'))
           .value;
-  Computed<bool>? _$isPanModeComputed;
-
-  @override
-  bool get isPanMode =>
-      (_$isPanModeComputed ??= Computed<bool>(() => super.isPanMode,
-              name: 'TH2FileEditStoreBase.isPanMode'))
-          .value;
   Computed<bool>? _$isSelectModeComputed;
 
   @override
@@ -824,11 +817,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void onPanUpdatePanMode(PointerMoveEvent event) {
+  void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.onPanUpdatePanMode');
+        name: 'TH2FileEditStoreBase.onPointerMoveUpdateMoveCanvasMode');
     try {
-      return super.onPanUpdatePanMode(event);
+      return super.onPointerMoveUpdateMoveCanvasMode(event);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1020,7 +1013,6 @@ isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
 changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPortalControllerController},
 changeScrapsFABKey: ${changeScrapsFABKey},
 isEditMode: ${isEditMode},
-isPanMode: ${isPanMode},
 isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},

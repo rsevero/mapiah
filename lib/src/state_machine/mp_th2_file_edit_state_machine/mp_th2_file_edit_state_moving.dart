@@ -20,7 +20,7 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState {
     final int selectedCount = th2FileEditStore.selectedElements.length;
     final Offset panDeltaOnCanvas =
         th2FileEditStore.offsetScreenToCanvas(event.localPosition) -
-            th2FileEditStore.panStartCanvasCoordinates;
+            th2FileEditStore.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
     if (selectedCount == 1) {

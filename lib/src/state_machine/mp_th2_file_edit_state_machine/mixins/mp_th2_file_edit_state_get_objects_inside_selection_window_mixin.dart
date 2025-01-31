@@ -1,4 +1,4 @@
-part of 'mp_th2_file_edit_state.dart';
+part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin
     on MPTH2FileEditState {
@@ -6,7 +6,7 @@ mixin MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin
     Offset screenCoordinatesEndSelectionWindow,
   ) {
     final Offset startSelectionWindow =
-        th2FileEditStore.panStartCanvasCoordinates;
+        th2FileEditStore.dragStartCanvasCoordinates;
     final Offset endSelectionWindow = th2FileEditStore
         .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
     final Rect selectionWindow = MPNumericAux.orderedRectFromLTRB(

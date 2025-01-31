@@ -201,7 +201,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _actionButtons() {
     return Observer(
       builder: (context) {
-        final bool isPanMode = th2FileEditStore.isPanMode;
         final bool isSelectMode = th2FileEditStore.isSelectMode;
         final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
@@ -315,20 +314,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 SizedBox(height: 8),
               ],
               FloatingActionButton(
-                heroTag: 'pan_tool',
-                onPressed: _onPanToolPressed,
-                tooltip: AppLocalizations.of(context).th2FileEditPagePanTool,
-                child: Image.asset(
-                  'assets/icons/pan-tool.png',
-                  width: thFloatingActionIconSize,
-                  height: thFloatingActionIconSize,
-                  color: isPanMode ? colorScheme.onPrimary : null,
-                ),
-                backgroundColor: isPanMode ? colorScheme.primary : null,
-                elevation: isPanMode ? 0 : null,
-              ),
-              SizedBox(height: 8),
-              FloatingActionButton(
                 heroTag: 'select_tool',
                 onPressed: _onSelectToolPressed,
                 tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
@@ -352,10 +337,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   void _onChangeActiveScrapToolPressed() {
     th2FileEditStore.onChangeActiveScrapToolPressed();
-  }
-
-  void _onPanToolPressed() {
-    th2FileEditStore.onPanToolPressed();
   }
 
   void _onSelectToolPressed() {

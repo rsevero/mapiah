@@ -1,7 +1,9 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
-    with MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin {
+    with
+        MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin,
+        MPTH2FileEditStateMoveCanvasMixin {
   MPTH2FileEditStateSelectNonEmptySelection({required super.th2FileEditStore});
 
   @override
@@ -70,7 +72,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 2.2. No. Do nothing.
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
-    th2FileEditStore.setPanStartCoordinates(event.localPosition);
+    th2FileEditStore.setDragStartCoordinates(event.localPosition);
     final List<THElement> clickedElements =
         th2FileEditStore.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
@@ -133,14 +135,6 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     th2FileEditStore.updateSelectableElements();
     th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
     th2FileEditStore.triggerAllElementsRedraw();
-  }
-
-  /// 1. Clear selection.
-  /// 2. Change to [MPTH2FileEditStateType.pan].
-  @override
-  void onPanToolPressed() {
-    th2FileEditStore.clearSelectedElements();
-    th2FileEditStore.setState(MPTH2FileEditStateType.pan);
   }
 
   @override
