@@ -70,6 +70,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 2.2. No. Do nothing.
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
+    th2FileEditStore.setPanStartCoordinates(event.localPosition);
     final List<THElement> clickedElements =
         th2FileEditStore.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();

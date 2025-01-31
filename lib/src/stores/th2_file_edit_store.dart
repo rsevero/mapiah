@@ -181,83 +181,19 @@ abstract class TH2FileEditStoreBase with Store {
   @computed
   bool get showUndoRedoButtons => isSelectMode;
 
-  @readonly
-  bool _isPrimaryButtonDragging = false;
+  bool isPrimaryButtonDragging = false;
 
-  @readonly
-  bool _isSecondaryButtonDragging = false;
+  bool isSecondaryButtonDragging = false;
 
-  @readonly
-  bool _isTertiaryButtonDragging = false;
+  bool isTertiaryButtonDragging = false;
 
-  @readonly
-  Offset _primaryButtonDragStartScreenCoordinates = Offset.zero;
+  Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
 
-  @readonly
-  Offset _secondaryButtonDragStartScreenCoordinates = Offset.zero;
+  Offset secondaryButtonDragStartScreenCoordinates = Offset.zero;
 
-  @readonly
-  Offset _tertiaryButtonDragStartScreenCoordinates = Offset.zero;
+  Offset tertiaryButtonDragStartScreenCoordinates = Offset.zero;
 
-  @readonly
-  Offset _primaryButtonDragCurrentScreenCoordinates = Offset.zero;
-
-  @readonly
-  Offset _secondaryButtonDragCurrentScreenCoordinates = Offset.zero;
-
-  @readonly
-  Offset _tertiaryButtonDragCurrentScreenCoordinates = Offset.zero;
-
-  @computed
-  Offset get primaryButtonDragScreenDelta =>
-      _primaryButtonDragCurrentScreenCoordinates -
-      _primaryButtonDragStartScreenCoordinates;
-
-  @computed
-  Offset get secondaryButtonDragScreenDelta =>
-      _secondaryButtonDragCurrentScreenCoordinates -
-      _secondaryButtonDragStartScreenCoordinates;
-
-  @computed
-  Offset get tertiaryButtonDragScreenDelta =>
-      _tertiaryButtonDragCurrentScreenCoordinates -
-      _tertiaryButtonDragStartScreenCoordinates;
-
-  @computed
-  Offset get primaryButtonDragCanvasDelta =>
-      offsetScaleScreenToCanvas(primaryButtonDragScreenDelta);
-
-  @computed
-  Offset get secondaryButtonDragCanvasDelta =>
-      offsetScaleScreenToCanvas(secondaryButtonDragScreenDelta);
-
-  @computed
-  Offset get tertiaryButtonDragCanvasDelta =>
-      offsetScaleScreenToCanvas(tertiaryButtonDragScreenDelta);
-
-  @computed
-  Offset get primaryButtonDragStartCanvasCoordinates =>
-      offsetScreenToCanvas(_primaryButtonDragStartScreenCoordinates);
-
-  @computed
-  Offset get secondaryButtonDragStartCanvasCoordinates =>
-      offsetScreenToCanvas(_secondaryButtonDragStartScreenCoordinates);
-
-  @computed
-  Offset get tertiaryButtonDragStartCanvasCoordinates =>
-      offsetScreenToCanvas(_tertiaryButtonDragStartScreenCoordinates);
-
-  @computed
-  Offset get primaryButtonDragCurrentCanvasCoordinates =>
-      offsetScreenToCanvas(_primaryButtonDragCurrentScreenCoordinates);
-
-  @computed
-  Offset get secondaryButtonDragCurrentCanvasCoordinates =>
-      offsetScreenToCanvas(_secondaryButtonDragCurrentScreenCoordinates);
-
-  @computed
-  Offset get tertiaryButtonDragCurrentCanvasCoordinates =>
-      offsetScreenToCanvas(_tertiaryButtonDragCurrentScreenCoordinates);
+  int currentPressedButton = 0;
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
@@ -336,6 +272,8 @@ abstract class TH2FileEditStoreBase with Store {
   /// Used to search for selected elements by others characteristcs of the
   /// element: boundingBox() for example.
   final Map<int, Rect> _selectableBoundingBoxes = {};
+
+  Offset panStartCanvasCoordinates = Offset.zero;
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -536,52 +474,6 @@ abstract class TH2FileEditStoreBase with Store {
     return insideWindowElements.values.toList();
   }
 
-  @action
-  void setIsPrimaryButtonDragging(bool isDragging) {
-    _isPrimaryButtonDragging = isDragging;
-  }
-
-  @action
-  void setIsSecondaryButtonDragging(bool isDragging) {
-    _isSecondaryButtonDragging = isDragging;
-  }
-
-  @action
-  void setIsTertiaryButtonDragging(bool isDragging) {
-    _isTertiaryButtonDragging = isDragging;
-  }
-
-  @action
-  void setPrimaryButtonDragStartScreenCoordinates(Offset screenCoordinates) {
-    _primaryButtonDragStartScreenCoordinates = screenCoordinates;
-  }
-
-  @action
-  void setSecondaryButtonDragStartScreenCoordinates(Offset screenCoordinates) {
-    _secondaryButtonDragStartScreenCoordinates = screenCoordinates;
-  }
-
-  @action
-  void setTertiaryButtonDragStartScreenCoordinates(Offset screenCoordinates) {
-    _tertiaryButtonDragStartScreenCoordinates = screenCoordinates;
-  }
-
-  @action
-  void setPrimaryButtonDragCurrentScreenCoordinates(Offset screenCoordinates) {
-    _primaryButtonDragCurrentScreenCoordinates = screenCoordinates;
-  }
-
-  @action
-  void setSecondaryButtonDragCurrentScreenCoordinates(
-      Offset screenCoordinates) {
-    _secondaryButtonDragCurrentScreenCoordinates = screenCoordinates;
-  }
-
-  @action
-  void setTertiaryButtonDragCurrentScreenCoordinates(Offset screenCoordinates) {
-    _tertiaryButtonDragCurrentScreenCoordinates = screenCoordinates;
-  }
-
   void onPrimaryButtonDragStart(PointerDownEvent event) {
     _state.onPrimaryButtonDragStart(event);
   }
@@ -678,7 +570,7 @@ abstract class TH2FileEditStoreBase with Store {
         offsetScreenToCanvas(screenEndCoordinates);
 
     setSelectionWindowCanvasCoordinates(
-      point1: primaryButtonDragStartCanvasCoordinates,
+      point1: panStartCanvasCoordinates,
       point2: canvasEndCoordinates,
     );
   }
@@ -803,6 +695,10 @@ abstract class TH2FileEditStoreBase with Store {
     triggerSelectedListChanged();
   }
 
+  void setPanStartCoordinates(Offset screenCoordinates) {
+    panStartCanvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+  }
+
   @action
   void setState(MPTH2FileEditStateType type) {
     _state = MPTH2FileEditState.getState(
@@ -830,8 +726,8 @@ abstract class TH2FileEditStoreBase with Store {
       return;
     }
 
-    final Offset localDeltaPositionOnCanvas = canvasCoordinatesFinalPosition -
-        primaryButtonDragStartCanvasCoordinates;
+    final Offset localDeltaPositionOnCanvas =
+        canvasCoordinatesFinalPosition - panStartCanvasCoordinates;
 
     for (final MPSelectedElement selectedElement in _selectedElements.values) {
       switch (selectedElement.originalElementClone) {

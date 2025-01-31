@@ -6,7 +6,7 @@ mixin MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin
     Offset screenCoordinatesEndSelectionWindow,
   ) {
     final Offset startSelectionWindow =
-        th2FileEditStore.primaryButtonDragStartCanvasCoordinates;
+        th2FileEditStore.panStartCanvasCoordinates;
     final Offset endSelectionWindow = th2FileEditStore
         .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
     final Rect selectionWindow = MPNumericAux.orderedRectFromLTRB(

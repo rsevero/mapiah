@@ -38,24 +38,27 @@ class THFileWidget extends StatelessWidget {
             return Listener(
               onPointerDown: (PointerDownEvent event) {
                 if (event.buttons == kPrimaryButton) {
-                  th2FileEditStore.setPrimaryButtonDragStartScreenCoordinates(
-                      event.localPosition);
-                  th2FileEditStore.setIsPrimaryButtonDragging(false);
+                  th2FileEditStore.currentPressedButton = kPrimaryButton;
+                  th2FileEditStore.primaryButtonDragStartScreenCoordinates =
+                      event.localPosition;
+                  th2FileEditStore.isPrimaryButtonDragging = false;
                   th2FileEditStore.onPrimaryButtonDragStart(event);
                 } else if (event.buttons == kSecondaryButton) {
-                  th2FileEditStore.setSecondaryButtonDragStartScreenCoordinates(
-                      event.localPosition);
-                  th2FileEditStore.setIsSecondaryButtonDragging(false);
+                  th2FileEditStore.currentPressedButton = kSecondaryButton;
+                  th2FileEditStore.secondaryButtonDragStartScreenCoordinates =
+                      event.localPosition;
+                  th2FileEditStore.isSecondaryButtonDragging = false;
+                  th2FileEditStore.onSecondaryButtonDragStart(event);
                 } else if (event.buttons == kTertiaryButton) {
-                  th2FileEditStore.setTertiaryButtonDragStartScreenCoordinates(
-                      event.localPosition);
-                  th2FileEditStore.setIsTertiaryButtonDragging(false);
+                  th2FileEditStore.currentPressedButton = kTertiaryButton;
+                  th2FileEditStore.tertiaryButtonDragStartScreenCoordinates =
+                      event.localPosition;
+                  th2FileEditStore.isTertiaryButtonDragging = false;
+                  th2FileEditStore.onTertiaryButtonDragStart(event);
                 }
               },
               onPointerMove: (PointerMoveEvent event) {
                 if (event.buttons == kPrimaryButton) {
-                  th2FileEditStore.setPrimaryButtonDragCurrentScreenCoordinates(
-                      event.localPosition);
                   double distance = (event.localPosition -
                           th2FileEditStore
                               .primaryButtonDragStartScreenCoordinates)
@@ -63,15 +66,12 @@ class THFileWidget extends StatelessWidget {
 
                   if (distance > thClickDragThresholdSquared &&
                       !th2FileEditStore.isPrimaryButtonDragging) {
-                    th2FileEditStore.setIsPrimaryButtonDragging(true);
+                    th2FileEditStore.isPrimaryButtonDragging = true;
                   }
                   if (th2FileEditStore.isPrimaryButtonDragging) {
                     th2FileEditStore.onPrimaryButtonDragUpdate(event);
                   }
                 } else if (event.buttons == kSecondaryButton) {
-                  th2FileEditStore
-                      .setSecondaryButtonDragCurrentScreenCoordinates(
-                          event.localPosition);
                   double distance = (event.localPosition -
                           th2FileEditStore
                               .secondaryButtonDragStartScreenCoordinates)
@@ -79,12 +79,12 @@ class THFileWidget extends StatelessWidget {
 
                   if (distance > thClickDragThresholdSquared &&
                       !th2FileEditStore.isSecondaryButtonDragging) {
-                    th2FileEditStore.setIsSecondaryButtonDragging(true);
+                    th2FileEditStore.isSecondaryButtonDragging = true;
+                  }
+                  if (th2FileEditStore.isSecondaryButtonDragging) {
+                    th2FileEditStore.onSecondaryButtonDragUpdate(event);
                   }
                 } else if (event.buttons == kTertiaryButton) {
-                  th2FileEditStore
-                      .setTertiaryButtonDragCurrentScreenCoordinates(
-                          event.localPosition);
                   double distance = (event.localPosition -
                           th2FileEditStore
                               .tertiaryButtonDragStartScreenCoordinates)
@@ -92,7 +92,7 @@ class THFileWidget extends StatelessWidget {
 
                   if (distance > thClickDragThresholdSquared &&
                       !th2FileEditStore.isTertiaryButtonDragging) {
-                    th2FileEditStore.setIsTertiaryButtonDragging(true);
+                    th2FileEditStore.isTertiaryButtonDragging = true;
                   }
                   if (th2FileEditStore.isTertiaryButtonDragging) {
                     th2FileEditStore.onTertiaryButtonDragUpdate(event);
@@ -100,12 +100,31 @@ class THFileWidget extends StatelessWidget {
                 }
               },
               onPointerUp: (PointerUpEvent event) {
-                if (event.buttons == kPrimaryButton) {
+                if (th2FileEditStore.currentPressedButton == kPrimaryButton) {
+                  th2FileEditStore.currentPressedButton = 0;
                   if (th2FileEditStore.isPrimaryButtonDragging) {
                     th2FileEditStore.onPrimaryButtonDragEnd(event);
-                    th2FileEditStore.setIsPrimaryButtonDragging(false);
+                    th2FileEditStore.isPrimaryButtonDragging = false;
                   } else {
                     th2FileEditStore.onPrimaryButtonClick(event);
+                  }
+                } else if (th2FileEditStore.currentPressedButton ==
+                    kSecondaryButton) {
+                  th2FileEditStore.currentPressedButton = 0;
+                  if (th2FileEditStore.isSecondaryButtonDragging) {
+                    th2FileEditStore.onSecondaryButtonDragEnd(event);
+                    th2FileEditStore.isSecondaryButtonDragging = false;
+                  } else {
+                    th2FileEditStore.onSecondaryButtonClick(event);
+                  }
+                } else if (th2FileEditStore.currentPressedButton ==
+                    kTertiaryButton) {
+                  th2FileEditStore.currentPressedButton = 0;
+                  if (th2FileEditStore.isTertiaryButtonDragging) {
+                    th2FileEditStore.onTertiaryButtonDragEnd(event);
+                    th2FileEditStore.isTertiaryButtonDragging = false;
+                  } else {
+                    th2FileEditStore.onTertiaryButtonClick(event);
                   }
                 }
               },

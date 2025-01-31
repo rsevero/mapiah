@@ -24,6 +24,12 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
   }
 
+  /// Marks the start point of the pan.
+  @override
+  void onPrimaryButtonDragStart(PointerDownEvent event) {
+    th2FileEditStore.setPanStartCoordinates(event.localPosition);
+  }
+
   /// Draws the selection window.
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
