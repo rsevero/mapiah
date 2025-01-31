@@ -8,7 +8,7 @@ class MPInteractionAux {
             .contains(LogicalKeyboardKey.shiftRight);
   }
 
-  static bool isControlPressed() {
+  static bool isCtrlPressed() {
     return HardwareKeyboard.instance.logicalKeysPressed
             .contains(LogicalKeyboardKey.controlLeft) ||
         HardwareKeyboard.instance.logicalKeysPressed

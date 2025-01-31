@@ -1122,6 +1122,26 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _canvasTranslation = Offset(xOffset, yOffset);
   }
 
+  void moveCanvasVertically({required bool up}) {
+    double delta = _canvasSize.height * thCanvasMovementFactor;
+    if (up) {
+      delta = -delta;
+    }
+    _canvasCenterY += delta;
+    _calculateCanvasOffset();
+    triggerAllElementsRedraw();
+  }
+
+  void moveCanvasHorizontally({required bool left}) {
+    double delta = _canvasSize.width * thCanvasMovementFactor;
+    if (!left) {
+      delta = -delta;
+    }
+    _canvasCenterX += delta;
+    _calculateCanvasOffset();
+    triggerAllElementsRedraw();
+  }
+
   void updateDataWidth(double newWidth) {
     _dataWidth = newWidth;
   }
