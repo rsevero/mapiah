@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mapiah/main.dart';
 
 class MPListenerWidgetInnerState {
   bool isPrimaryButtonDragging = false;
