@@ -104,8 +104,7 @@ class MPListenerWidget extends StatelessWidget {
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
-        if (event is PointerScrollEvent &&
-            (event.buttons == kMiddleMouseButton)) {
+        if (event is PointerScrollEvent) {
           actuator.onMiddleButtonScroll(event);
         }
       },

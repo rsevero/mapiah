@@ -1073,8 +1073,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @action
-  void zoomIn() {
-    _canvasScale *= thZoomFactor;
+  void zoomIn({bool fineZoom = false}) {
+    _canvasScale *= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
@@ -1082,8 +1082,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @action
-  void zoomOut() {
-    _canvasScale /= thZoomFactor;
+  void zoomOut({bool fineZoom = false}) {
+    _canvasScale /= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;

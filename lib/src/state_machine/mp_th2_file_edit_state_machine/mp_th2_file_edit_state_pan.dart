@@ -15,6 +15,15 @@ class MPTH2FileEditStatePan extends MPTH2FileEditState {
   }
 
   @override
+  void onMiddleButtonScroll(PointerScrollEvent event) {
+    if (event.scrollDelta.dy < 0) {
+      th2FileEditStore.zoomIn(fineZoom: true);
+    } else if (event.scrollDelta.dy > 0) {
+      th2FileEditStore.zoomOut(fineZoom: true);
+    }
+  }
+
+  @override
   void onChangeActiveScrapToolPressed() {
     final int nextAvailableScrapID = th2FileEditStore.getNextAvailableScrapID();
     th2FileEditStore.setActiveScrap(nextAvailableScrapID);

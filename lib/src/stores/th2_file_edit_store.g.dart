@@ -901,22 +901,22 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void zoomIn() {
+  void zoomIn({bool fineZoom = false}) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.zoomIn');
     try {
-      return super.zoomIn();
+      return super.zoomIn(fineZoom: fineZoom);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void zoomOut() {
+  void zoomOut({bool fineZoom = false}) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.zoomOut');
     try {
-      return super.zoomOut();
+      return super.zoomOut(fineZoom: fineZoom);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

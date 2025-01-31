@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 
 abstract interface class MPActuatorInterface {
+  /// Threse methods are used for the internal control of the Listener widget.
+  /// They should not be used elsewhere.
   void setCurrentPressedButton(int button);
 
   int getCurrentPressedButton();
@@ -29,6 +31,9 @@ abstract interface class MPActuatorInterface {
 
   Offset getTertiaryButtonDragStartScreenCoordinates();
 
+  /// These methods are used to allow the Actuator to actually actuate on the
+  /// selected events. These are the methods whee the actual desired actions
+  /// should be performed when the events are triggered.
   void onPrimaryButtonDragStart(PointerDownEvent event);
 
   void onSecondaryButtonDragStart(PointerDownEvent event);

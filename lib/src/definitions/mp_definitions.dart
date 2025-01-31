@@ -33,7 +33,8 @@ const String thNullValueAsString = '!!! property has null value !!!';
 const double thCanvasVisibleMargin = 0.1;
 const double thCanvasOutOfSightMargin = 2.0;
 
-const double thZoomFactor = numerics.sqrt2;
+const double thRegularZoomFactor = numerics.sqrt2;
+const double thFineZoomFactor = (thRegularZoomFactor - 1) / 2 + 1;
 const double thMinimumSizeForDrawing = 10.0;
 
 const int thFirstMapiahIDForTHFiles = -1;
