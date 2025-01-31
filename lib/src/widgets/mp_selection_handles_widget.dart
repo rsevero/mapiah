@@ -19,6 +19,9 @@ class MPSelectionHandlesWidget extends StatelessWidget {
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
+          th2FileEditStore.redrawTriggerSelectedElements;
+          th2FileEditStore.canvasScale;
+
           final Map<MPSelectionHandleType, Offset> handleCenters =
               th2FileEditStore.getSelectionHandleCenters();
           final Paint handlePaint = th2FileEditStore.selectionHandlePaint.value;

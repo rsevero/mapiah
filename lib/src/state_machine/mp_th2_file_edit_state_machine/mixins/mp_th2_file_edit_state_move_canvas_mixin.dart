@@ -5,6 +5,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
   @override
   void onSecondaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditStore.onPointerMoveUpdateMoveCanvasMode(event);
+    th2FileEditStore.triggerAllElementsRedraw();
   }
 
   @override
@@ -27,5 +28,6 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         th2FileEditStore.zoomOut(fineZoom: true);
       }
     }
+    th2FileEditStore.triggerAllElementsRedraw();
   }
 }

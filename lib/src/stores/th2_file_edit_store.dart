@@ -264,7 +264,9 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
 
+  @readonly
   double _canvasCenterX = 0.0;
+  @readonly
   double _canvasCenterY = 0.0;
 
   final List<String> errorMessages = <String>[];
@@ -942,7 +944,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
     _canvasTranslation += (event.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
-    triggerAllElementsRedraw();
   }
 
   @action
@@ -1040,6 +1041,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     mpLocator.mpGeneralStore.removeFileStore(filename: _thFile.filename);
   }
 
+  @action
   void _calculateCanvasOffset() {
     final double xOffset = (_canvasSize.width / 2.0) - _canvasCenterX;
     final double yOffset = (_canvasSize.height / 2.0) + _canvasCenterY;
@@ -1047,6 +1049,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _canvasTranslation = Offset(xOffset, yOffset);
   }
 
+  @action
   void moveCanvasVertically({required bool up}) {
     double delta = _canvasSize.height * thCanvasMovementFactor;
     if (up) {
@@ -1057,6 +1060,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     triggerAllElementsRedraw();
   }
 
+  @action
   void moveCanvasHorizontally({required bool left}) {
     double delta = _canvasSize.width * thCanvasMovementFactor;
     if (!left) {

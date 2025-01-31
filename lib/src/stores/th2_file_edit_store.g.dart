@@ -668,6 +668,42 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_canvasCenterXAtom =
+      Atom(name: 'TH2FileEditStoreBase._canvasCenterX', context: context);
+
+  double get canvasCenterX {
+    _$_canvasCenterXAtom.reportRead();
+    return super._canvasCenterX;
+  }
+
+  @override
+  double get _canvasCenterX => canvasCenterX;
+
+  @override
+  set _canvasCenterX(double value) {
+    _$_canvasCenterXAtom.reportWrite(value, super._canvasCenterX, () {
+      super._canvasCenterX = value;
+    });
+  }
+
+  late final _$_canvasCenterYAtom =
+      Atom(name: 'TH2FileEditStoreBase._canvasCenterY', context: context);
+
+  double get canvasCenterY {
+    _$_canvasCenterYAtom.reportRead();
+    return super._canvasCenterY;
+  }
+
+  @override
+  double get _canvasCenterY => canvasCenterY;
+
+  @override
+  set _canvasCenterY(double value) {
+    _$_canvasCenterYAtom.reportWrite(value, super._canvasCenterY, () {
+      super._canvasCenterY = value;
+    });
+  }
+
   late final _$TH2FileEditStoreBaseActionController =
       ActionController(name: 'TH2FileEditStoreBase', context: context);
 
@@ -921,6 +957,39 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.zoomOutAll');
     try {
       return super.zoomOutAll(wholeFile: wholeFile);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _calculateCanvasOffset() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase._calculateCanvasOffset');
+    try {
+      return super._calculateCanvasOffset();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void moveCanvasVertically({required bool up}) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.moveCanvasVertically');
+    try {
+      return super.moveCanvasVertically(up: up);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void moveCanvasHorizontally({required bool left}) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.moveCanvasHorizontally');
+    try {
+      return super.moveCanvasHorizontally(left: left);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
