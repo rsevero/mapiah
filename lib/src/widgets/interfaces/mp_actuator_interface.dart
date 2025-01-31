@@ -1,13 +1,33 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 
 abstract interface class MPActuatorInterface {
-  late int currentPressedButton;
-  late bool isPrimaryButtonDragging;
-  late bool isSecondaryButtonDragging;
-  late bool isTertiaryButtonDragging;
-  late Offset primaryButtonDragStartScreenCoordinates;
-  late Offset secondaryButtonDragStartScreenCoordinates;
-  late Offset tertiaryButtonDragStartScreenCoordinates;
+  void setCurrentPressedButton(int button);
+
+  int getCurrentPressedButton();
+
+  void setIsPrimaryButtonDragging(bool isDragging);
+
+  bool getIsPrimaryButtonDragging();
+
+  void setIsSecondaryButtonDragging(bool isDragging);
+
+  bool getIsSecondaryButtonDragging();
+
+  void setIsTertiaryButtonDragging(bool isDragging);
+
+  bool getIsTertiaryButtonDragging();
+
+  void setPrimaryButtonDragStartScreenCoordinates(Offset coordinates);
+
+  Offset getPrimaryButtonDragStartScreenCoordinates();
+
+  void setSecondaryButtonDragStartScreenCoordinates(Offset coordinates);
+
+  Offset getSecondaryButtonDragStartScreenCoordinates();
+
+  void setTertiaryButtonDragStartScreenCoordinates(Offset coordinates);
+
+  Offset getTertiaryButtonDragStartScreenCoordinates();
 
   void onPrimaryButtonDragStart(PointerDownEvent event);
 
@@ -32,4 +52,6 @@ abstract interface class MPActuatorInterface {
   void onSecondaryButtonClick(PointerUpEvent event);
 
   void onTertiaryButtonClick(PointerUpEvent event);
+
+  void onMiddleButtonScroll(PointerScrollEvent event);
 }

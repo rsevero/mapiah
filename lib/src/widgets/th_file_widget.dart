@@ -34,7 +34,7 @@ class THFileWidget extends StatelessWidget {
             mpLocator.mpLog.finer("THFileWidget Observer()");
 
             return MPListenerWidget(
-              th2FileEditStore: th2FileEditStore,
+              actuator: th2FileEditStore,
               child: Stack(
                 children: [
                   MPNonSelectedElementsWidget(

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -182,19 +183,19 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @computed
   bool get showUndoRedoButtons => isSelectMode;
 
-  bool isPrimaryButtonDragging = false;
+  bool _isPrimaryButtonDragging = false;
 
-  bool isSecondaryButtonDragging = false;
+  bool _isSecondaryButtonDragging = false;
 
-  bool isTertiaryButtonDragging = false;
+  bool _isTertiaryButtonDragging = false;
 
-  Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
+  Offset _primaryButtonDragStartScreenCoordinates = Offset.zero;
 
-  Offset secondaryButtonDragStartScreenCoordinates = Offset.zero;
+  Offset _secondaryButtonDragStartScreenCoordinates = Offset.zero;
 
-  Offset tertiaryButtonDragStartScreenCoordinates = Offset.zero;
+  Offset _tertiaryButtonDragStartScreenCoordinates = Offset.zero;
 
-  int currentPressedButton = 0;
+  int _currentPressedButton = 0;
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
@@ -475,52 +476,139 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     return insideWindowElements.values.toList();
   }
 
+  @override
+  void setCurrentPressedButton(int button) {
+    _currentPressedButton = button;
+  }
+
+  @override
+  int getCurrentPressedButton() {
+    return _currentPressedButton;
+  }
+
+  @override
+  void setIsPrimaryButtonDragging(bool isDragging) {
+    _isPrimaryButtonDragging = isDragging;
+  }
+
+  @override
+  bool getIsPrimaryButtonDragging() {
+    return _isPrimaryButtonDragging;
+  }
+
+  @override
+  void setIsSecondaryButtonDragging(bool isDragging) {
+    _isSecondaryButtonDragging = isDragging;
+  }
+
+  @override
+  bool getIsSecondaryButtonDragging() {
+    return _isSecondaryButtonDragging;
+  }
+
+  @override
+  void setIsTertiaryButtonDragging(bool isDragging) {
+    _isTertiaryButtonDragging = isDragging;
+  }
+
+  @override
+  bool getIsTertiaryButtonDragging() {
+    return _isTertiaryButtonDragging;
+  }
+
+  @override
+  void setPrimaryButtonDragStartScreenCoordinates(Offset coordinates) {
+    _primaryButtonDragStartScreenCoordinates = coordinates;
+  }
+
+  @override
+  Offset getPrimaryButtonDragStartScreenCoordinates() {
+    return _primaryButtonDragStartScreenCoordinates;
+  }
+
+  @override
+  void setSecondaryButtonDragStartScreenCoordinates(Offset coordinates) {
+    _secondaryButtonDragStartScreenCoordinates = coordinates;
+  }
+
+  @override
+  Offset getSecondaryButtonDragStartScreenCoordinates() {
+    return _secondaryButtonDragStartScreenCoordinates;
+  }
+
+  @override
+  void setTertiaryButtonDragStartScreenCoordinates(Offset coordinates) {
+    _tertiaryButtonDragStartScreenCoordinates = coordinates;
+  }
+
+  @override
+  Offset getTertiaryButtonDragStartScreenCoordinates() {
+    return _tertiaryButtonDragStartScreenCoordinates;
+  }
+
+  @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
     _state.onPrimaryButtonDragStart(event);
   }
 
+  @override
   void onSecondaryButtonDragStart(PointerDownEvent event) {
     _state.onSecondaryButtonDragStart(event);
   }
 
+  @override
   void onTertiaryButtonDragStart(PointerDownEvent event) {
     _state.onTertiaryButtonDragStart(event);
   }
 
+  @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     _state.onPrimaryButtonDragUpdate(event);
   }
 
+  @override
   void onSecondaryButtonDragUpdate(PointerMoveEvent event) {
     _state.onSecondaryButtonDragUpdate(event);
   }
 
+  @override
   void onTertiaryButtonDragUpdate(PointerMoveEvent event) {
     _state.onTertiaryButtonDragUpdate(event);
   }
 
+  @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     _state.onPrimaryButtonDragEnd(event);
   }
 
+  @override
   void onSecondaryButtonDragEnd(PointerUpEvent event) {
     _state.onSecondaryButtonDragEnd(event);
   }
 
+  @override
   void onTertiaryButtonDragEnd(PointerUpEvent event) {
     _state.onTertiaryButtonDragEnd(event);
   }
 
+  @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     _state.onPrimaryButtonClick(event);
   }
 
+  @override
   void onSecondaryButtonClick(PointerUpEvent event) {
     _state.onSecondaryButtonClick(event);
   }
 
+  @override
   void onTertiaryButtonClick(PointerUpEvent event) {
     _state.onTertiaryButtonClick(event);
+  }
+
+  @override
+  void onMiddleButtonScroll(PointerScrollEvent event) {
+    _state.onMiddleButtonScroll(event);
   }
 
   void onChangeActiveScrapToolPressed() {

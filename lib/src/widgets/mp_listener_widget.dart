@@ -4,12 +4,12 @@ import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatelessWidget {
-  final MPActuatorInterface th2FileEditStore;
+  final MPActuatorInterface actuator;
   final Widget child;
 
   const MPListenerWidget({
     super.key,
-    required this.th2FileEditStore,
+    required this.actuator,
     required this.child,
   });
 
@@ -18,89 +18,95 @@ class MPListenerWidget extends StatelessWidget {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
         if (event.buttons == kPrimaryButton) {
-          th2FileEditStore.currentPressedButton = kPrimaryButton;
-          th2FileEditStore.primaryButtonDragStartScreenCoordinates =
-              event.localPosition;
-          th2FileEditStore.isPrimaryButtonDragging = false;
-          th2FileEditStore.onPrimaryButtonDragStart(event);
+          actuator.setCurrentPressedButton(kPrimaryButton);
+          actuator
+              .setPrimaryButtonDragStartScreenCoordinates(event.localPosition);
+          actuator.setIsPrimaryButtonDragging(false);
+          actuator.onPrimaryButtonDragStart(event);
         } else if (event.buttons == kSecondaryButton) {
-          th2FileEditStore.currentPressedButton = kSecondaryButton;
-          th2FileEditStore.secondaryButtonDragStartScreenCoordinates =
-              event.localPosition;
-          th2FileEditStore.isSecondaryButtonDragging = false;
-          th2FileEditStore.onSecondaryButtonDragStart(event);
+          actuator.setCurrentPressedButton(kSecondaryButton);
+          actuator.setSecondaryButtonDragStartScreenCoordinates(
+              event.localPosition);
+          actuator.setIsSecondaryButtonDragging(false);
+          actuator.onSecondaryButtonDragStart(event);
         } else if (event.buttons == kTertiaryButton) {
-          th2FileEditStore.currentPressedButton = kTertiaryButton;
-          th2FileEditStore.tertiaryButtonDragStartScreenCoordinates =
-              event.localPosition;
-          th2FileEditStore.isTertiaryButtonDragging = false;
-          th2FileEditStore.onTertiaryButtonDragStart(event);
+          actuator.setCurrentPressedButton(kTertiaryButton);
+          actuator
+              .setTertiaryButtonDragStartScreenCoordinates(event.localPosition);
+          actuator.setIsTertiaryButtonDragging(false);
+          actuator.onTertiaryButtonDragStart(event);
         }
       },
       onPointerMove: (PointerMoveEvent event) {
         if (event.buttons == kPrimaryButton) {
           double distance = (event.localPosition -
-                  th2FileEditStore.primaryButtonDragStartScreenCoordinates)
+                  actuator.getPrimaryButtonDragStartScreenCoordinates())
               .distanceSquared;
 
           if (distance > thClickDragThresholdSquared &&
-              !th2FileEditStore.isPrimaryButtonDragging) {
-            th2FileEditStore.isPrimaryButtonDragging = true;
+              !actuator.getIsPrimaryButtonDragging()) {
+            actuator.setIsPrimaryButtonDragging(true);
           }
-          if (th2FileEditStore.isPrimaryButtonDragging) {
-            th2FileEditStore.onPrimaryButtonDragUpdate(event);
+          if (actuator.getIsPrimaryButtonDragging()) {
+            actuator.onPrimaryButtonDragUpdate(event);
           }
         } else if (event.buttons == kSecondaryButton) {
           double distance = (event.localPosition -
-                  th2FileEditStore.secondaryButtonDragStartScreenCoordinates)
+                  actuator.getSecondaryButtonDragStartScreenCoordinates())
               .distanceSquared;
 
           if (distance > thClickDragThresholdSquared &&
-              !th2FileEditStore.isSecondaryButtonDragging) {
-            th2FileEditStore.isSecondaryButtonDragging = true;
+              !actuator.getIsSecondaryButtonDragging()) {
+            actuator.setIsSecondaryButtonDragging(true);
           }
-          if (th2FileEditStore.isSecondaryButtonDragging) {
-            th2FileEditStore.onSecondaryButtonDragUpdate(event);
+          if (actuator.getIsSecondaryButtonDragging()) {
+            actuator.onSecondaryButtonDragUpdate(event);
           }
         } else if (event.buttons == kTertiaryButton) {
           double distance = (event.localPosition -
-                  th2FileEditStore.tertiaryButtonDragStartScreenCoordinates)
+                  actuator.getTertiaryButtonDragStartScreenCoordinates())
               .distanceSquared;
 
           if (distance > thClickDragThresholdSquared &&
-              !th2FileEditStore.isTertiaryButtonDragging) {
-            th2FileEditStore.isTertiaryButtonDragging = true;
+              !actuator.getIsTertiaryButtonDragging()) {
+            actuator.setIsTertiaryButtonDragging(true);
           }
-          if (th2FileEditStore.isTertiaryButtonDragging) {
-            th2FileEditStore.onTertiaryButtonDragUpdate(event);
+          if (actuator.getIsTertiaryButtonDragging()) {
+            actuator.onTertiaryButtonDragUpdate(event);
           }
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        if (th2FileEditStore.currentPressedButton == kPrimaryButton) {
-          th2FileEditStore.currentPressedButton = 0;
-          if (th2FileEditStore.isPrimaryButtonDragging) {
-            th2FileEditStore.onPrimaryButtonDragEnd(event);
-            th2FileEditStore.isPrimaryButtonDragging = false;
+        if (actuator.getCurrentPressedButton() == kPrimaryButton) {
+          actuator.setCurrentPressedButton(0);
+          if (actuator.getIsPrimaryButtonDragging()) {
+            actuator.onPrimaryButtonDragEnd(event);
+            actuator.setIsPrimaryButtonDragging(false);
           } else {
-            th2FileEditStore.onPrimaryButtonClick(event);
+            actuator.onPrimaryButtonClick(event);
           }
-        } else if (th2FileEditStore.currentPressedButton == kSecondaryButton) {
-          th2FileEditStore.currentPressedButton = 0;
-          if (th2FileEditStore.isSecondaryButtonDragging) {
-            th2FileEditStore.onSecondaryButtonDragEnd(event);
-            th2FileEditStore.isSecondaryButtonDragging = false;
+        } else if (actuator.getCurrentPressedButton() == kSecondaryButton) {
+          actuator.setCurrentPressedButton(0);
+          if (actuator.getIsSecondaryButtonDragging()) {
+            actuator.onSecondaryButtonDragEnd(event);
+            actuator.setIsSecondaryButtonDragging(false);
           } else {
-            th2FileEditStore.onSecondaryButtonClick(event);
+            actuator.onSecondaryButtonClick(event);
           }
-        } else if (th2FileEditStore.currentPressedButton == kTertiaryButton) {
-          th2FileEditStore.currentPressedButton = 0;
-          if (th2FileEditStore.isTertiaryButtonDragging) {
-            th2FileEditStore.onTertiaryButtonDragEnd(event);
-            th2FileEditStore.isTertiaryButtonDragging = false;
+        } else if (actuator.getCurrentPressedButton() == kTertiaryButton) {
+          actuator.setCurrentPressedButton(0);
+          if (actuator.getIsTertiaryButtonDragging()) {
+            actuator.onTertiaryButtonDragEnd(event);
+            actuator.setIsTertiaryButtonDragging(false);
           } else {
-            th2FileEditStore.onTertiaryButtonClick(event);
+            actuator.onTertiaryButtonClick(event);
           }
+        }
+      },
+      onPointerSignal: (PointerSignalEvent event) {
+        if (event is PointerScrollEvent &&
+            (event.buttons == kMiddleMouseButton)) {
+          actuator.onMiddleButtonScroll(event);
         }
       },
       child: child,
