@@ -19,6 +19,7 @@ class MPListenerWidget extends StatefulWidget {
 }
 
 class MPListenerWidgetState extends State<MPListenerWidget> {
+  final FocusNode _focusNode = FocusNode();
   int currentPressedMouseButton = 0;
   Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
   Offset secondaryButtonDragStartScreenCoordinates = Offset.zero;
@@ -27,6 +28,12 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   bool isSecondaryButtonDragging = false;
   bool isTertiaryButtonDragging = false;
   LogicalKeyboardKey? logicalKeyPressed;
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,30 +129,16 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       },
       child: Focus(
         autofocus: true,
-        child: KeyboardListener(
-          focusNode: FocusNode(),
-          onKeyEvent: (KeyEvent event) {
-            if (event is KeyDownEvent) {
-              if (event.logicalKey != LogicalKeyboardKey.shiftLeft &&
-                  event.logicalKey != LogicalKeyboardKey.shiftRight &&
-                  event.logicalKey != LogicalKeyboardKey.controlLeft &&
-                  event.logicalKey != LogicalKeyboardKey.controlRight &&
-                  event.logicalKey != LogicalKeyboardKey.altLeft &&
-                  event.logicalKey != LogicalKeyboardKey.altRight &&
-                  event.logicalKey != LogicalKeyboardKey.metaLeft &&
-                  event.logicalKey != LogicalKeyboardKey.metaRight) {
-                logicalKeyPressed = event.logicalKey;
-              }
-              widget.actuator.onKeyDownEvent(event);
-            } else if (event is KeyRepeatEvent) {
-              widget.actuator.onKeyRepeatEvent(event);
-            } else if (event is KeyUpEvent) {
-              widget.actuator.onKeyUpEvent(event);
-              logicalKeyPressed = null;
-            }
-          },
-          child: widget.child,
-        ),
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent) {
+            widget.actuator.onKeyDownEvent(event);
+          } else if (event is KeyUpEvent) {
+            widget.actuator.onKeyUpEvent(event);
+            logicalKeyPressed = null;
+          }
+          return KeyEventResult.handled;
+        },
+        child: widget.child,
       ),
     );
   }
