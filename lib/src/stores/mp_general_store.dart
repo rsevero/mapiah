@@ -1,9 +1,7 @@
 import 'dart:collection';
 
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
-import 'package:mapiah/src/widgets/aux/mp_listener_widget_inner_state.dart';
 
 class MPGeneralStore {
   int _nextMapiahIDForElements = thFirstMapiahIDForElements;
@@ -15,9 +13,6 @@ class MPGeneralStore {
 
   final HashMap<String, TH2FileEditStore> _t2hFileEditStores =
       HashMap<String, TH2FileEditStore>();
-
-  final Map<Key, MPListenerWidgetInnerState> _mpListenerInnerStates =
-      <Key, MPListenerWidgetInnerState>{};
 
   set lastAccessedDirectory(String value) {
     if (!value.endsWith('/')) {
@@ -40,14 +35,6 @@ class MPGeneralStore {
     _nextMapiahIDForElements = thFirstMapiahIDForElements;
     _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
     _t2hFileEditStores.clear();
-  }
-
-  MPListenerWidgetInnerState getMPListenerInnerState(Key key) {
-    if (!_mpListenerInnerStates.containsKey(key)) {
-      _mpListenerInnerStates[key] = MPListenerWidgetInnerState();
-    }
-
-    return _mpListenerInnerStates[key]!;
   }
 
   TH2FileEditStore getTH2FileEditStore(

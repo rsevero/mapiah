@@ -9,6 +9,28 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
   }
 
   @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.minus:
+        if (isCtrlPressed) {
+          th2FileEditStore.zoomOut(fineZoom: false);
+        }
+        break;
+      case LogicalKeyboardKey.equal:
+        if (isCtrlPressed && isShiftPressed) {
+          th2FileEditStore.zoomIn(fineZoom: false);
+        }
+        break;
+      case LogicalKeyboardKey.numpadAdd:
+        th2FileEditStore.zoomIn(fineZoom: false);
+        break;
+    }
+  }
+
+  @override
   void onTertiaryButtonScroll(PointerScrollEvent event) {
     bool isShiftPressed = MPInteractionAux.isShiftPressed();
     bool isCtrlPressed = MPInteractionAux.isCtrlPressed();

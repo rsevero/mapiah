@@ -18,7 +18,7 @@ part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mp_th2_file_edit_state_moving.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
-part 'mp_th2_file_edit_state_type.dart';
+part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
   final TH2FileEditStore th2FileEditStore;
