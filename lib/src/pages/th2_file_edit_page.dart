@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
@@ -161,7 +162,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     foregroundColor: hasUndo
                         ? null
                         : Theme.of(context).colorScheme.surfaceContainerHighest,
-                    onPressed: hasUndo ? th2FileEditStore.onUndoPressed : null,
+                    onPressed: hasUndo ? onUndoPressed : null,
                     elevation: hasUndo ? 6.0 : 3.0,
                     child: const Icon(Icons.undo),
                   );
@@ -185,7 +186,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     foregroundColor: hasRedo
                         ? null
                         : Theme.of(context).colorScheme.surfaceContainerHighest,
-                    onPressed: hasRedo ? th2FileEditStore.onRedoPressed : null,
+                    onPressed: hasRedo ? onRedoPressed : null,
                     elevation: hasRedo ? 6.0 : 3.0,
                     child: const Icon(Icons.redo),
                   );
@@ -196,6 +197,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         );
       },
     );
+  }
+
+  void onUndoPressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.undo);
+  }
+
+  void onRedoPressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.redo);
   }
 
   Widget _actionButtons() {
@@ -336,11 +345,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void _onChangeActiveScrapToolPressed() {
-    th2FileEditStore.onChangeActiveScrapToolPressed();
+    th2FileEditStore.onButtonPressed(MPButtonType.changeScrap);
   }
 
   void _onSelectToolPressed() {
-    th2FileEditStore.onSelectToolPressed();
+    th2FileEditStore.onButtonPressed(MPButtonType.select);
   }
 
   Widget _zoomButtonWithOptions() {
@@ -361,7 +370,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 children: [
                   FloatingActionButton(
                     heroTag: 'zoom_in',
-                    onPressed: () => th2FileEditStore.zoomIn(),
+                    onPressed: zoomInPressed,
                     tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
                     child: Icon(
                       Icons.zoom_in,
@@ -372,8 +381,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   SizedBox(width: 8),
                   FloatingActionButton(
                     heroTag: 'zoom_out_file',
-                    onPressed: () =>
-                        th2FileEditStore.zoomOutAll(wholeFile: true),
+                    onPressed: zoomAllFilePressed,
                     tooltip:
                         AppLocalizations.of(context).th2FileEditPageZoomOutFile,
                     child: Icon(
@@ -386,8 +394,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   if (th2FileEditStore.hasMultipleScraps) ...[
                     FloatingActionButton(
                       heroTag: 'zoom_out_scrap',
-                      onPressed: () =>
-                          th2FileEditStore.zoomOutAll(wholeFile: false),
+                      onPressed: zoomAllScrapPressed,
                       tooltip: AppLocalizations.of(context)
                           .th2FileEditPageZoomOutScrap,
                       child: Image.asset(
@@ -400,7 +407,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   ],
                   FloatingActionButton(
                     heroTag: 'zoom_out',
-                    onPressed: () => th2FileEditStore.zoomOut(),
+                    onPressed: zoomOutPressed,
                     tooltip:
                         AppLocalizations.of(context).th2FileEditPageZoomOut,
                     child: Icon(
@@ -427,5 +434,21 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         ],
       ),
     );
+  }
+
+  void zoomInPressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.zoomIn);
+  }
+
+  void zoomAllFilePressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.zoomAllFile);
+  }
+
+  void zoomAllScrapPressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.zoomAllScrap);
+  }
+
+  void zoomOutPressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.zoomOut);
   }
 }

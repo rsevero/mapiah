@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/types/th_line_paint.dart';
 import 'package:mapiah/src/stores/types/th_point_paint.dart';
@@ -542,20 +543,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _state.onKeyUpEvent(event);
   }
 
-  void onChangeActiveScrapToolPressed() {
-    _state.onChangeActiveScrapToolPressed();
-  }
-
-  void onSelectToolPressed() {
-    _state.onSelectToolPressed();
-  }
-
-  void onUndoPressed() {
-    _state.onUndoPressed();
-  }
-
-  void onRedoPressed() {
-    _state.onRedoPressed();
+  void onButtonPressed(MPButtonType buttonType) {
+    _state.onButtonPressed(buttonType);
   }
 
   int getNextAvailableScrapID() {
@@ -1017,7 +1006,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @action
-  void zoomOutAll({required bool wholeFile}) {
+  void zoomAll({required bool wholeFile}) {
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
 

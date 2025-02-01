@@ -60,25 +60,6 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   }
 
   @override
-  void onChangeActiveScrapToolPressed() {
-    final int nextAvailableScrapID = th2FileEditStore.getNextAvailableScrapID();
-    th2FileEditStore.setActiveScrap(nextAvailableScrapID);
-    th2FileEditStore.clearSelectedElements();
-    th2FileEditStore.updateSelectableElements();
-    th2FileEditStore.triggerAllElementsRedraw();
-  }
-
-  @override
-  void onUndoPressed() {
-    th2FileEditStore.undo();
-  }
-
-  @override
-  void onRedoPressed() {
-    th2FileEditStore.redo();
-  }
-
-  @override
   MPTH2FileEditStateType get type =>
       MPTH2FileEditStateType.selectEmptySelection;
 }

@@ -26,7 +26,7 @@ class THFileWidget extends StatelessWidget {
             Size(constraints.maxWidth, constraints.maxHeight));
 
         if (th2FileEditStore.canvasScaleTranslationUndefined) {
-          th2FileEditStore.zoomOutAll(wholeFile: true);
+          th2FileEditStore.zoomAll(wholeFile: true);
         }
 
         return Observer(

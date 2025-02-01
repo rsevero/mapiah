@@ -9,6 +9,7 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/selection/mp_selected_element.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
@@ -79,11 +80,43 @@ abstract class MPTH2FileEditState {
 
   void onKeyUpEvent(KeyUpEvent event) {}
 
-  void onChangeActiveScrapToolPressed() {}
-
-  void onSelectToolPressed() {}
-
-  void onUndoPressed() {}
-
-  void onRedoPressed() {}
+  bool onButtonPressed(MPButtonType buttonType) {
+    switch (buttonType) {
+      case MPButtonType.changeScrap:
+        final int nextAvailableScrapID =
+            th2FileEditStore.getNextAvailableScrapID();
+        th2FileEditStore.setActiveScrap(nextAvailableScrapID);
+        th2FileEditStore.clearSelectedElements();
+        th2FileEditStore.updateSelectableElements();
+        th2FileEditStore.triggerAllElementsRedraw();
+        return true;
+      case MPButtonType.redo:
+        th2FileEditStore.redo();
+        return true;
+      case MPButtonType.select:
+        th2FileEditStore.setState(th2FileEditStore.selectedElements.isEmpty
+            ? MPTH2FileEditStateType.selectEmptySelection
+            : MPTH2FileEditStateType.selectNonEmptySelection);
+        return true;
+      case MPButtonType.undo:
+        th2FileEditStore.undo();
+        return true;
+      case MPButtonType.zoomAllFile:
+        th2FileEditStore.zoomAll(wholeFile: true);
+        return true;
+      case MPButtonType.zoomIn:
+        th2FileEditStore.zoomIn();
+        return true;
+      case MPButtonType.zoomOptions:
+        return true;
+      case MPButtonType.zoomOut:
+        th2FileEditStore.zoomOut();
+        return true;
+      case MPButtonType.zoomAllScrap:
+        th2FileEditStore.zoomAll(wholeFile: false);
+        return true;
+      default:
+        return false;
+    }
+  }
 }
