@@ -43,10 +43,13 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                   th2FileEditStore.getUnselectedPointPaint(element);
               painters.add(
                 THPointPainter(
-                    position: element.position.coordinates,
-                    pointRadius: pointPaint.radius,
-                    pointPaint: pointPaint.paint,
-                    th2FileEditStore: th2FileEditStore),
+                  position: element.position.coordinates,
+                  pointRadius: pointPaint.radius,
+                  pointPaint: pointPaint.paint,
+                  th2FileEditStore: th2FileEditStore,
+                  canvasScale: th2FileEditStore.canvasScale,
+                  canvasTranslation: th2FileEditStore.canvasTranslation,
+                ),
               );
               break;
             case THLine _:
@@ -58,6 +61,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                   lineSegmentsMap: segmentsMap,
                   linePaint: linePaint.paint,
                   th2FileEditStore: th2FileEditStore,
+                  canvasScale: th2FileEditStore.canvasScale,
+                  canvasTranslation: th2FileEditStore.canvasTranslation,
                 ),
               );
               break;
@@ -69,6 +74,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             painter: THElementsPainter(
               painters: painters,
               th2FileEditStore: th2FileEditStore,
+              canvasScale: th2FileEditStore.canvasScale,
+              canvasTranslation: th2FileEditStore.canvasTranslation,
             ),
             size: th2FileEditStore.screenSize,
           ),

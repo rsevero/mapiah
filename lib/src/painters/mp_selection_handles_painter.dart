@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
@@ -7,12 +8,16 @@ class MPSelectionHandlesPainter extends CustomPainter {
   final double handleSize;
   final TH2FileEditStore th2FileEditStore;
   final Paint handlePaint;
+  final double canvasScale;
+  final Offset canvasTranslation;
 
   MPSelectionHandlesPainter({
     required this.th2FileEditStore,
     required this.handleCenters,
     required this.handleSize,
     required this.handlePaint,
+    required this.canvasScale,
+    required this.canvasTranslation,
   });
 
   @override
@@ -76,6 +81,14 @@ class MPSelectionHandlesPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant MPSelectionHandlesPainter oldDelegate) {
-    return true;
+    if (identical(this, oldDelegate)) return false;
+
+    return handleSize != oldDelegate.handleSize ||
+        handlePaint != oldDelegate.handlePaint ||
+        canvasScale != oldDelegate.canvasScale ||
+        canvasTranslation != oldDelegate.canvasTranslation ||
+        !const DeepCollectionEquality()
+            .equals(handleCenters, oldDelegate.handleCenters) ||
+        th2FileEditStore != oldDelegate.th2FileEditStore;
   }
 }

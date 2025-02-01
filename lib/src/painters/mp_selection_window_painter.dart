@@ -8,6 +8,8 @@ class MPSelectionWindowPainter extends CustomPainter {
   final Paint fillPaint;
   final Paint borderPaint;
   final double dashInterval;
+  final double canvasScale;
+  final Offset canvasTranslation;
 
   MPSelectionWindowPainter({
     required this.selectionWindowPosition,
@@ -15,6 +17,8 @@ class MPSelectionWindowPainter extends CustomPainter {
     required this.fillPaint,
     required this.borderPaint,
     required this.dashInterval,
+    required this.canvasScale,
+    required this.canvasTranslation,
   });
 
   @override
@@ -40,6 +44,8 @@ class MPSelectionWindowPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return selectionWindowPosition != oldDelegate.selectionWindowPosition ||
+        canvasScale != oldDelegate.canvasScale ||
+        canvasTranslation != oldDelegate.canvasTranslation ||
         fillPaint != oldDelegate.fillPaint ||
         borderPaint != oldDelegate.borderPaint ||
         dashInterval != oldDelegate.dashInterval;

@@ -47,10 +47,13 @@ class MPSelectedElementsWidget extends StatelessWidget
             case THPoint _:
               painters.add(
                 THPointPainter(
-                    position: element.position.coordinates,
-                    pointRadius: pointRadius,
-                    pointPaint: pointPaint,
-                    th2FileEditStore: th2FileEditStore),
+                  position: element.position.coordinates,
+                  pointRadius: pointRadius,
+                  pointPaint: pointPaint,
+                  th2FileEditStore: th2FileEditStore,
+                  canvasScale: th2FileEditStore.canvasScale,
+                  canvasTranslation: th2FileEditStore.canvasTranslation,
+                ),
               );
               break;
             case THLine _:
@@ -60,6 +63,8 @@ class MPSelectedElementsWidget extends StatelessWidget
                   lineSegmentsMap: segmentsMap,
                   linePaint: linePaint,
                   th2FileEditStore: th2FileEditStore,
+                  canvasScale: th2FileEditStore.canvasScale,
+                  canvasTranslation: th2FileEditStore.canvasTranslation,
                 ),
               );
               break;
@@ -71,6 +76,8 @@ class MPSelectedElementsWidget extends StatelessWidget
             painter: THElementsPainter(
               painters: painters,
               th2FileEditStore: th2FileEditStore,
+              canvasScale: th2FileEditStore.canvasScale,
+              canvasTranslation: th2FileEditStore.canvasTranslation,
             ),
             size: th2FileEditStore.screenSize,
           ),

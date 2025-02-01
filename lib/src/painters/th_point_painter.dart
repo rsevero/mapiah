@@ -6,6 +6,8 @@ class THPointPainter extends CustomPainter {
   final double pointRadius;
   final Paint pointPaint;
   final TH2FileEditStore th2FileEditStore;
+  final double canvasScale;
+  final Offset canvasTranslation;
 
   THPointPainter({
     super.repaint,
@@ -13,6 +15,8 @@ class THPointPainter extends CustomPainter {
     required this.pointRadius,
     required this.pointPaint,
     required this.th2FileEditStore,
+    required this.canvasScale,
+    required this.canvasTranslation,
   });
 
   @override
@@ -30,6 +34,8 @@ class THPointPainter extends CustomPainter {
 
     return position != oldDelegate.position ||
         pointRadius != oldDelegate.pointRadius ||
-        pointPaint != oldDelegate.pointPaint;
+        pointPaint != oldDelegate.pointPaint ||
+        canvasScale != oldDelegate.canvasScale ||
+        canvasTranslation != oldDelegate.canvasTranslation;
   }
 }
