@@ -747,6 +747,26 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @action
+  void deselectAllElements() {
+    _clearSelectedElementsWithoutResettingRedrawTriggers();
+    triggerSelectedListChanged();
+  }
+
+  @action
+  void selectAllElements() {
+    final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+    final List<int> elementMapiahIDs = scrap.childrenMapiahID;
+
+    for (final int elementMapiahID in elementMapiahIDs) {
+      final THElement element = _thFile.elementByMapiahID(elementMapiahID);
+
+      if (element is THPoint || element is THLine) {
+        addSelectedElement(element);
+      }
+    }
+  }
+
+  @action
   void setSelectedElements(List<THElement> clickedElements) {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
 
