@@ -11,6 +11,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
@@ -290,7 +291,7 @@ class THFileParser {
     final THPoint newPoint = THPoint.fromString(
       parentMapiahID: _currentParentMapiahID,
       pointDataList: element[1],
-      pointType: element[2][0],
+      pointTypeString: element[2][0],
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
@@ -1340,17 +1341,17 @@ class THFileParser {
           '>= 2', _currentSpec);
     }
 
-    final pointType = (_currentHasOptions as THPoint).plaType;
+    final THPointType pointType = (_currentHasOptions as THPoint).pointType;
     switch (pointType) {
-      case 'altitude':
+      case THPointType.altitude:
         _injectAltitudeValueCommandOption();
-      case 'date':
+      case THPointType.date:
         _injectDateValueCommandOption();
-      case 'dimensions':
+      case THPointType.dimensions:
         _injectDimensionsValueCommandOption();
-      case 'height':
+      case THPointType.height:
         _injectHeightValueCommandOption();
-      case 'passage-height':
+      case THPointType.passageHeight:
         _injectPassageHeightValueCommandOption();
       default:
         throw THCustomException(

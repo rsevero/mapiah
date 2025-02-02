@@ -234,7 +234,7 @@ class THFileWriter {
 
     if (asString.isEmpty) {
       String newLine =
-          "point ${thPoint.position.toString()} ${thPoint.plaType}";
+          "point ${thPoint.position.toString()} ${thPoint.pointType.toFileString()}";
       if (thPoint.optionIsSet('subtype')) {
         newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
       }

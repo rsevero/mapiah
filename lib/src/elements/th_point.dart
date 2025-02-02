@@ -31,8 +31,8 @@ part of 'th_element.dart';
 class THPoint extends THElement
     with THHasOptionsMixin
     implements THHasPLATypeMixin, THPointInterface {
-  final THPositionPart _position;
-  final String _pointType;
+  final THPositionPart position;
+  final THPointType pointType;
   Rect? _boundingBox;
 
   static final _pointTypes = <String>{
@@ -158,25 +158,21 @@ class THPoint extends THElement
     required super.mapiahID,
     required super.parentMapiahID,
     super.sameLineComment,
-    required THPositionPart position,
-    required String pointType,
+    required this.position,
+    required this.pointType,
     required LinkedHashMap<String, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
-  })  : _position = position,
-        _pointType = pointType,
-        super.forCWJM() {
+  }) : super.forCWJM() {
     addOptionsMap(optionsMap);
   }
 
   THPoint({
     required super.parentMapiahID,
     super.sameLineComment,
-    required THPositionPart coordinates,
-    required String pointType,
+    required this.position,
+    required this.pointType,
     super.originalLineInTH2File = '',
-  })  : _position = coordinates,
-        _pointType = pointType,
-        super.addToParent();
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.point;
@@ -185,10 +181,10 @@ class THPoint extends THElement
     required super.parentMapiahID,
     super.sameLineComment,
     required List<dynamic> pointDataList,
-    required String pointType,
+    required String pointTypeString,
     super.originalLineInTH2File = '',
-  })  : _position = THPositionPart.fromStringList(list: pointDataList),
-        _pointType = pointType,
+  })  : position = THPositionPart.fromStringList(list: pointDataList),
+        pointType = THPointType.fromFileString(pointTypeString),
         super.addToParent();
 
   @override
@@ -197,7 +193,7 @@ class THPoint extends THElement
 
     map.addAll({
       'position': position.toMap(),
-      'pointType': pointType,
+      'pointType': pointType.name,
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
     });
@@ -212,7 +208,7 @@ class THPoint extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
-      pointType: map['pointType'],
+      pointType: THPointType.values.byName(map['pointType']),
       optionsMap: LinkedHashMap<String, THCommandOption>.from(
         map['optionsMap']
             .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
@@ -232,7 +228,7 @@ class THPoint extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THPositionPart? position,
-    String? pointType,
+    THPointType? pointType,
     LinkedHashMap<String, THCommandOption>? optionsMap,
   }) {
     return THPoint.forCWJM(
@@ -294,34 +290,22 @@ class THPoint extends THElement
     );
   }
 
-  String get pointType {
-    return _pointType;
-  }
-
   @override
   String get plaType {
-    return pointType;
-  }
-
-  THPositionPart get position {
-    return _position;
+    return pointType.name;
   }
 
   @override
   double get x {
-    return _position.coordinates.dx;
+    return position.coordinates.dx;
   }
 
   @override
   double get y {
-    return _position.coordinates.dy;
+    return position.coordinates.dy;
   }
 
   int get decimalPositions {
-    return _position.decimalPositions;
-  }
-
-  set decimalPositions(int decimalPositions) {
-    _position.decimalPositions = decimalPositions;
+    return position.decimalPositions;
   }
 }
