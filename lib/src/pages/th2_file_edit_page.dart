@@ -392,13 +392,18 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   SizedBox(width: 8),
                   FloatingActionButton(
                     heroTag: 'zoom_selection',
-                    onPressed: zoomSelection,
+                    onPressed: th2FileEditStore.selectedElements.isEmpty
+                        ? null
+                        : zoomSelection,
                     tooltip: AppLocalizations.of(context)
                         .th2FileEditPageZoomToSelection,
                     child: Image.asset(
                       'assets/icons/zoom_selection.png',
                       width: thFloatingActionZoomIconSize,
                       height: thFloatingActionZoomIconSize,
+                      color: th2FileEditStore.selectedElements.isEmpty
+                          ? Colors.grey
+                          : null,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -414,20 +419,23 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  if (th2FileEditStore.hasMultipleScraps) ...[
-                    FloatingActionButton(
-                      heroTag: 'zoom_out_scrap',
-                      onPressed: zoomAllScrapPressed,
-                      tooltip: AppLocalizations.of(context)
-                          .th2FileEditPageZoomOutScrap,
-                      child: Image.asset(
-                        'assets/icons/zoom-out-scrap.png',
-                        width: thFloatingActionZoomIconSize,
-                        height: thFloatingActionZoomIconSize,
-                      ),
+                  FloatingActionButton(
+                    heroTag: 'zoom_out_scrap',
+                    onPressed: th2FileEditStore.hasMultipleScraps
+                        ? zoomAllScrapPressed
+                        : null,
+                    tooltip: AppLocalizations.of(context)
+                        .th2FileEditPageZoomOutScrap,
+                    child: Image.asset(
+                      'assets/icons/zoom-out-scrap.png',
+                      width: thFloatingActionZoomIconSize,
+                      height: thFloatingActionZoomIconSize,
+                      color: th2FileEditStore.hasMultipleScraps
+                          ? null
+                          : Colors.grey,
                     ),
-                    SizedBox(width: 8),
-                  ],
+                  ),
+                  SizedBox(width: 8),
                   FloatingActionButton(
                     heroTag: 'zoom_out',
                     onPressed: zoomOutPressed,
