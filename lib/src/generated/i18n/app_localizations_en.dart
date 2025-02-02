@@ -43,6 +43,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mpLengthUnitCentimeterAbbreviation => 'cm';
+
+  @override
+  String get mpLengthUnitFootAbbreviation => 'ft';
+
+  @override
+  String get mpLengthUnitInchAbbreviation => 'in';
+
+  @override
+  String get mpLengthUnitMeterAbbreviation => 'm';
+
+  @override
+  String get mpLengthUnitYardAbbreviation => 'yd';
+
+  @override
   String get mpMoveBezierLineSegmentCommandDescription => 'Move Bézier line segment';
 
   @override

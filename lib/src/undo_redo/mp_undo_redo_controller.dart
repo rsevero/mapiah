@@ -1,5 +1,5 @@
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/auxiliary/mp_text_for_user.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
@@ -49,7 +49,7 @@ class MPUndoRedoController {
     if (_undo.isEmpty) {
       return '';
     }
-    return MPTextForUser.getCommandDescription(
+    return MPTextToUser.getCommandDescription(
       _undo.last.descriptionType,
     );
   }
@@ -58,7 +58,7 @@ class MPUndoRedoController {
     if (_redo.isEmpty) {
       return '';
     }
-    return MPTextForUser.getCommandDescription(
+    return MPTextToUser.getCommandDescription(
       _redo.last.descriptionType,
     );
   }

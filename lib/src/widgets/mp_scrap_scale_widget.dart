@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/painters/mp_scrap_scale_painter.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
@@ -20,8 +21,11 @@ class MPScrapScaleWidget extends StatelessWidget {
       builder: (_) {
         final double graphicalScaleLengthUnitsLength =
             th2FileEditStore.scrapLengthUnitsOnGraphicalScale;
-        final String scaleText =
-            "${MPNumericAux.roundNumberForScreen(graphicalScaleLengthUnitsLength)} ${th2FileEditStore.scrapLengthUnitType.name}";
+        final String scaleLength =
+            MPNumericAux.roundNumberForScreen(graphicalScaleLengthUnitsLength);
+        final String scaleUnit = MPTextToUser.getLengthUnitAbbreviation(
+            th2FileEditStore.scrapLengthUnitType);
+        final String scaleText = "$scaleLength $scaleUnit";
 
         return CustomPaint(
           painter: MPScrapScalePainter(

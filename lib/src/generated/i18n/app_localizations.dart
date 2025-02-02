@@ -137,6 +137,36 @@ abstract class AppLocalizations {
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
+  /// The abbreviation for the centimeter length unit
+  ///
+  /// In en, this message translates to:
+  /// **'cm'**
+  String get mpLengthUnitCentimeterAbbreviation;
+
+  /// The abbreviation for the foot length unit
+  ///
+  /// In en, this message translates to:
+  /// **'ft'**
+  String get mpLengthUnitFootAbbreviation;
+
+  /// The abbreviation for the inch length unit
+  ///
+  /// In en, this message translates to:
+  /// **'in'**
+  String get mpLengthUnitInchAbbreviation;
+
+  /// The abbreviation for the meter length unit
+  ///
+  /// In en, this message translates to:
+  /// **'m'**
+  String get mpLengthUnitMeterAbbreviation;
+
+  /// The abbreviation for the yard length unit
+  ///
+  /// In en, this message translates to:
+  /// **'yd'**
+  String get mpLengthUnitYardAbbreviation;
+
   /// The description for the move Bézier line segment command
   ///
   /// In en, this message translates to:

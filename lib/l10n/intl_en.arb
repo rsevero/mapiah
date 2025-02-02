@@ -49,6 +49,36 @@
     }
   },
 
+  "mpLengthUnitCentimeterAbbreviation": "cm",
+  "@mpLengthUnitCentimeterAbbreviation": {
+    "description": "The abbreviation for the centimeter length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitFootAbbreviation": "ft",
+  "@mpLengthUnitFootAbbreviation": {
+    "description": "The abbreviation for the foot length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitInchAbbreviation": "in",
+  "@mpLengthUnitInchAbbreviation": {
+    "description": "The abbreviation for the inch length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitMeterAbbreviation": "m",
+  "@mpLengthUnitMeterAbbreviation": {
+    "description": "The abbreviation for the meter length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitYardAbbreviation": "yd",
+  "@mpLengthUnitYardAbbreviation": {
+    "description": "The abbreviation for the yard length unit",
+    "type": "text"
+  },
+
   "mpMoveBezierLineSegmentCommandDescription": "Move Bézier line segment",
   "@mpMoveBezierLineSegmentCommandDescription": {
     "description": "The description for the move Bézier line segment command",
