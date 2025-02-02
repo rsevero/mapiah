@@ -6,8 +6,10 @@ enum MPButtonType {
   select,
   undo,
   zoomAllFile,
+  zoomAllScrap,
   zoomIn,
+  zoomOneToOne,
   zoomOptions,
   zoomOut,
-  zoomAllScrap,
+  zoomSelection,
 }

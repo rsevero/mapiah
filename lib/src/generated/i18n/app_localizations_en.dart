@@ -81,19 +81,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSelectTool => 'Select';
 
   @override
-  String get th2FileEditPageZoomIn => 'Zoom In';
+  String get th2FileEditPageZoomIn => 'Zoom In (Ctrl+)';
+
+  @override
+  String get th2FileEditPageZoomOneToOne => 'Zoom 1:1 (1)';
 
   @override
   String get th2FileEditPageZoomOptions => 'Zoom Options';
 
   @override
-  String get th2FileEditPageZoomOut => 'Zoom Out';
+  String get th2FileEditPageZoomOut => 'Zoom Out (Ctrl-)';
 
   @override
-  String get th2FileEditPageZoomOutFile => 'Show file';
+  String get th2FileEditPageZoomOutFile => 'Show file (3)';
 
   @override
-  String get th2FileEditPageZoomOutScrap => 'Show scrap';
+  String get th2FileEditPageZoomOutScrap => 'Show scrap (4)';
+
+  @override
+  String get th2FileEditPageZoomToSelection => 'Zoom to selection (2)';
 
   @override
   String get th2FilePickSelectTH2File => 'Select a TH2 file';

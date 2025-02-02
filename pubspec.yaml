@@ -21,7 +21,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_mobx: ^2.0.0
-  flutter_svg: ^2.0.17
   intl: any
   intl_utils: ^2.8.7
   logger: ^2.5.0
@@ -48,8 +47,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/change-scrap-tool.png
-    - assets/icons/pan-tool.png
     - assets/icons/select-tool.png
+    - assets/icons/zoom_minus.png
+    - assets/icons/zoom_one_to_one.png
     - assets/icons/zoom-out-scrap.png
-    - assets/icons/zoom-plus-minus.svg
+    - assets/icons/zoom_plus_minus.png
+    - assets/icons/zoom_plus.png
+    - assets/icons/zoom_selection.png
 

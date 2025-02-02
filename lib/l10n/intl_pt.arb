@@ -20,10 +20,12 @@
     "th2FileEditPageNoRedoAvailable": "Nenhuma ação para refazer",
     "th2FileEditPagePanTool": "Mover ponto de vista",
     "th2FileEditPageSelectTool": "Selecionar",
-    "th2FileEditPageZoomIn": "Aproximar",
+    "th2FileEditPageZoomIn": "Aproximar (Ctrl+)",
+    "th2FileEditPageZoomOneToOne": "Mostrar 1:1 (1)",
     "th2FileEditPageZoomOptions": "Opções de zoom",
-    "th2FileEditPageZoomOut": "Afastar",
-    "th2FileEditPageZoomOutFile": "Mostrar arquivo",
-    "th2FileEditPageZoomOutScrap": "Mostrar croqui",
+    "th2FileEditPageZoomOut": "Afastar (Ctrl-)",
+    "th2FileEditPageZoomOutFile": "Mostrar arquivo (3)",
+    "th2FileEditPageZoomOutScrap": "Mostrar croqui (4)",
+    "th2FileEditPageZoomToSelection": "Mostrar seleção (2)",
     "th2FilePickSelectTH2File": "Selecione um arquivo TH2"
 }

@@ -952,11 +952,22 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void zoomAll({required bool wholeFile}) {
+  void zoomOneToOne() {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase.zoomAll');
+        name: 'TH2FileEditStoreBase.zoomOneToOne');
     try {
-      return super.zoomAll(wholeFile: wholeFile);
+      return super.zoomOneToOne();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomToFit({required MPZoomToFitType zoomFitToType}) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.zoomToFit');
+    try {
+      return super.zoomToFit(zoomFitToType: zoomFitToType);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

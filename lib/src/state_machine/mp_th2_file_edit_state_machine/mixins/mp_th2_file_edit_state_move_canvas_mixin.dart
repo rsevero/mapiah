@@ -13,6 +13,22 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
 
     switch (event.logicalKey) {
+      case LogicalKeyboardKey.numpad1:
+      case LogicalKeyboardKey.digit1:
+        th2FileEditStore.zoomOneToOne();
+        break;
+      case LogicalKeyboardKey.numpad2:
+      case LogicalKeyboardKey.digit2:
+        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.selection);
+        break;
+      case LogicalKeyboardKey.numpad3:
+      case LogicalKeyboardKey.digit3:
+        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        break;
+      case LogicalKeyboardKey.numpad4:
+      case LogicalKeyboardKey.digit4:
+        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+        break;
       case LogicalKeyboardKey.minus:
       case LogicalKeyboardKey.numpadSubtract:
         if (isCtrlPressed) {

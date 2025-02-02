@@ -18,6 +18,7 @@ import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
+import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/stores/types/th_line_paint.dart';
 import 'package:mapiah/src/stores/types/th_point_paint.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
@@ -626,6 +627,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @action
   Rect _getSelectedElementsBoundingBox() {
     late Rect boundingBox;
+
     double minX = double.infinity;
     double minY = double.infinity;
     double maxX = double.negativeInfinity;
@@ -1006,11 +1008,20 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @action
-  void zoomAll({required bool wholeFile}) {
+  void zoomOneToOne() {
+    _canvasScale = 1;
+    _canvasSize = _screenSize / _canvasScale;
+    _calculateCanvasOffset();
+    _canvasScaleTranslationUndefined = false;
+    triggerAllElementsRedraw();
+  }
+
+  @action
+  void zoomToFit({required MPZoomToFitType zoomFitToType}) {
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
 
-    _getFileDrawingSize(wholeFile: wholeFile);
+    _getFileDrawingSize(zoomToFitType: zoomFitToType);
 
     final double widthScale =
         (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
@@ -1020,7 +1031,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
     _canvasSize = _screenSize / _canvasScale;
 
-    _setCanvasCenterToDrawingCenter(wholeFile: wholeFile);
+    _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
     triggerAllElementsRedraw();
@@ -1068,11 +1079,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _dataHeight = newHeight;
   }
 
-  void _getFileDrawingSize({required bool wholeFile}) {
-    final Rect dataBoundingBox = wholeFile
-        ? _thFile.getBoundingBox()
-        : (_thFile.elementByMapiahID(_activeScrap) as THScrap)
-            .getBoundingBox(_thFile);
+  void _getFileDrawingSize({required MPZoomToFitType zoomToFitType}) {
+    final Rect dataBoundingBox = _getZoomToFitBoundingBox(
+      zoomFitToType: zoomToFitType,
+    );
 
     _dataWidth = (dataBoundingBox.width < thMinimumSizeForDrawing)
         ? thMinimumSizeForDrawing
@@ -1083,11 +1093,23 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
         : dataBoundingBox.height;
   }
 
-  void _setCanvasCenterToDrawingCenter({required bool wholeFile}) {
-    final Rect dataBoundingBox = wholeFile
-        ? _thFile.getBoundingBox()
-        : (_thFile.elementByMapiahID(_activeScrap) as THScrap)
+  Rect _getZoomToFitBoundingBox({required MPZoomToFitType zoomFitToType}) {
+    switch (zoomFitToType) {
+      case MPZoomToFitType.file:
+        return _thFile.getBoundingBox();
+      case MPZoomToFitType.scrap:
+        return (_thFile.elementByMapiahID(_activeScrap) as THScrap)
             .getBoundingBox(_thFile);
+      case MPZoomToFitType.selection:
+        return _getSelectedElementsBoundingBox();
+    }
+  }
+
+  void _setCanvasCenterToDrawingCenter(
+      {required MPZoomToFitType zoomToFitType}) {
+    final Rect dataBoundingBox = _getZoomToFitBoundingBox(
+      zoomFitToType: zoomToFitType,
+    );
 
     mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (dataBoundingBox.left + dataBoundingBox.right) / 2.0;

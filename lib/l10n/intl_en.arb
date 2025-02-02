@@ -124,9 +124,15 @@
     "type": "text"
   },
 
-  "th2FileEditPageZoomIn": "Zoom In",
+  "th2FileEditPageZoomIn": "Zoom In (Ctrl+)",
   "@th2FileEditPageZoomIn": {
     "description": "The label for the zoom in button",
+    "type": "text"
+  },
+
+  "th2FileEditPageZoomOneToOne": "Zoom 1:1 (1)",
+  "@th2FileEditPageZoomOneToOne": {
+    "description": "The label for the zoom 1:1 button",
     "type": "text"
   },
 
@@ -136,21 +142,27 @@
     "type": "text"
   },
 
-  "th2FileEditPageZoomOut": "Zoom Out",
+  "th2FileEditPageZoomOut": "Zoom Out (Ctrl-)",
   "@th2FileEditPageZoomOut": {
     "description": "The label for the zoom out button",
     "type": "text"
   },
 
-  "th2FileEditPageZoomOutFile": "Show file",
+  "th2FileEditPageZoomOutFile": "Show file (3)",
   "@th2FileEditPageZoomOutFile": {
     "description": "The label for the show file zoom button",
     "type": "text"
   },
 
-  "th2FileEditPageZoomOutScrap": "Show scrap",
+  "th2FileEditPageZoomOutScrap": "Show scrap (4)",
   "@th2FileEditPageZoomOutScrap": {
     "description": "The label for the show scrap zoom button",
+    "type": "text"
+  },
+
+  "th2FileEditPageZoomToSelection": "Zoom to selection (2)",
+  "@th2FileEditPageZoomToSelection": {
+    "description": "The label for the zoom to selection button",
     "type": "text"
   },
 

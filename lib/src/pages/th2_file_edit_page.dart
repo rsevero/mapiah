@@ -1,5 +1,4 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
@@ -372,10 +371,34 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     heroTag: 'zoom_in',
                     onPressed: zoomInPressed,
                     tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
-                    child: Icon(
-                      Icons.zoom_in,
-                      size: thFloatingActionIconSize,
-                      color: Colors.black,
+                    child: Image.asset(
+                      'assets/icons/zoom_plus.png',
+                      width: thFloatingActionZoomIconSize,
+                      height: thFloatingActionZoomIconSize,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  FloatingActionButton(
+                    heroTag: 'zoom_1_1',
+                    onPressed: zoomOneToOne,
+                    tooltip: AppLocalizations.of(context)
+                        .th2FileEditPageZoomOneToOne,
+                    child: Image.asset(
+                      'assets/icons/zoom_one_to_one.png',
+                      width: thFloatingActionZoomIconSize,
+                      height: thFloatingActionZoomIconSize,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  FloatingActionButton(
+                    heroTag: 'zoom_selection',
+                    onPressed: zoomSelection,
+                    tooltip: AppLocalizations.of(context)
+                        .th2FileEditPageZoomToSelection,
+                    child: Image.asset(
+                      'assets/icons/zoom_selection.png',
+                      width: thFloatingActionZoomIconSize,
+                      height: thFloatingActionZoomIconSize,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -410,10 +433,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     onPressed: zoomOutPressed,
                     tooltip:
                         AppLocalizations.of(context).th2FileEditPageZoomOut,
-                    child: Icon(
-                      Icons.zoom_out,
-                      size: thFloatingActionIconSize,
-                      color: Colors.black,
+                    child: Image.asset(
+                      'assets/icons/zoom_minus.png',
+                      width: thFloatingActionZoomIconSize,
+                      height: thFloatingActionZoomIconSize,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -425,10 +448,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             heroTag: 'zoom_options',
             onPressed: () {},
             tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
-            child: SvgPicture.asset(
-              'assets/icons/zoom-plus-minus.svg',
-              width: thFloatingActionIconSize,
-              height: thFloatingActionIconSize,
+            child: Image.asset(
+              'assets/icons/zoom_plus_minus.png',
+              width: thFloatingActionZoomIconSize,
+              height: thFloatingActionZoomIconSize,
             ),
           ),
         ],
@@ -450,5 +473,13 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   void zoomOutPressed() {
     th2FileEditStore.onButtonPressed(MPButtonType.zoomOut);
+  }
+
+  void zoomOneToOne() {
+    th2FileEditStore.onButtonPressed(MPButtonType.zoomOneToOne);
+  }
+
+  void zoomSelection() {
+    th2FileEditStore.onButtonPressed(MPButtonType.zoomSelection);
   }
 }

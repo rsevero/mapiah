@@ -12,6 +12,7 @@ import 'package:mapiah/src/selection/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
 
 part 'mixins/mp_th2_file_edit_state_get_objects_inside_selection_window_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
@@ -102,18 +103,24 @@ abstract class MPTH2FileEditState {
         th2FileEditStore.undo();
         return true;
       case MPButtonType.zoomAllFile:
-        th2FileEditStore.zoomAll(wholeFile: true);
+        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        return true;
+      case MPButtonType.zoomAllScrap:
+        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         return true;
       case MPButtonType.zoomIn:
         th2FileEditStore.zoomIn();
+        return true;
+      case MPButtonType.zoomOneToOne:
+        th2FileEditStore.zoomOneToOne();
         return true;
       case MPButtonType.zoomOptions:
         return true;
       case MPButtonType.zoomOut:
         th2FileEditStore.zoomOut();
         return true;
-      case MPButtonType.zoomAllScrap:
-        th2FileEditStore.zoomAll(wholeFile: false);
+      case MPButtonType.zoomSelection:
+        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.selection);
         return true;
       default:
         return false;

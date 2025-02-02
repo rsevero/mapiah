@@ -212,8 +212,14 @@ abstract class AppLocalizations {
   /// The label for the zoom in button
   ///
   /// In en, this message translates to:
-  /// **'Zoom In'**
+  /// **'Zoom In (Ctrl+)'**
   String get th2FileEditPageZoomIn;
+
+  /// The label for the zoom 1:1 button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom 1:1 (1)'**
+  String get th2FileEditPageZoomOneToOne;
 
   /// The label for the zoom options button
   ///
@@ -224,20 +230,26 @@ abstract class AppLocalizations {
   /// The label for the zoom out button
   ///
   /// In en, this message translates to:
-  /// **'Zoom Out'**
+  /// **'Zoom Out (Ctrl-)'**
   String get th2FileEditPageZoomOut;
 
   /// The label for the show file zoom button
   ///
   /// In en, this message translates to:
-  /// **'Show file'**
+  /// **'Show file (3)'**
   String get th2FileEditPageZoomOutFile;
 
   /// The label for the show scrap zoom button
   ///
   /// In en, this message translates to:
-  /// **'Show scrap'**
+  /// **'Show scrap (4)'**
   String get th2FileEditPageZoomOutScrap;
+
+  /// The label for the zoom to selection button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom to selection (2)'**
+  String get th2FileEditPageZoomToSelection;
 
   /// The label for the TH2 file selection dialog
   ///

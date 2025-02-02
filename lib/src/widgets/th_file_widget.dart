@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
@@ -26,7 +27,7 @@ class THFileWidget extends StatelessWidget {
             Size(constraints.maxWidth, constraints.maxHeight));
 
         if (th2FileEditStore.canvasScaleTranslationUndefined) {
-          th2FileEditStore.zoomAll(wholeFile: true);
+          th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         }
 
         return Observer(

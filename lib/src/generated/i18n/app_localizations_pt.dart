@@ -81,19 +81,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSelectTool => 'Selecionar';
 
   @override
-  String get th2FileEditPageZoomIn => 'Aproximar';
+  String get th2FileEditPageZoomIn => 'Aproximar (Ctrl+)';
+
+  @override
+  String get th2FileEditPageZoomOneToOne => 'Mostrar 1:1 (1)';
 
   @override
   String get th2FileEditPageZoomOptions => 'Opções de zoom';
 
   @override
-  String get th2FileEditPageZoomOut => 'Afastar';
+  String get th2FileEditPageZoomOut => 'Afastar (Ctrl-)';
 
   @override
-  String get th2FileEditPageZoomOutFile => 'Mostrar arquivo';
+  String get th2FileEditPageZoomOutFile => 'Mostrar arquivo (3)';
 
   @override
-  String get th2FileEditPageZoomOutScrap => 'Mostrar croqui';
+  String get th2FileEditPageZoomOutScrap => 'Mostrar croqui (4)';
+
+  @override
+  String get th2FileEditPageZoomToSelection => 'Mostrar seleção (2)';
 
   @override
   String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
