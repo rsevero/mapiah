@@ -210,7 +210,7 @@ class THFileWriter {
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      String newLine = "line ${thLine.plaType}";
+      String newLine = "line ${thLine.lineType.toFileString()}";
       if (thLine.optionIsSet('subtype')) {
         newLine += ":${thLine.optionByType('subtype')!.specToFile()}";
       }

@@ -8,7 +8,7 @@ part of 'th_element.dart';
 class THLine extends THElement
     with THHasOptionsMixin, THIsParentMixin
     implements THHasPLATypeMixin {
-  late final String _lineType;
+  final THLineType lineType;
   Rect? _boundingBox;
 
   static final _lineTypes = <String>{
@@ -57,22 +57,21 @@ class THLine extends THElement
     required super.mapiahID,
     required super.parentMapiahID,
     required super.sameLineComment,
-    required String lineType,
+    required this.lineType,
     required List<int> childrenMapiahID,
     required LinkedHashMap<String, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
-  })  : _lineType = lineType,
-        super.forCWJM() {
+  }) : super.forCWJM() {
     this.childrenMapiahID.addAll(childrenMapiahID);
     addOptionsMap(optionsMap);
   }
 
   THLine({
     required super.parentMapiahID,
-    required String lineType,
+    required String lineTypeString,
     super.sameLineComment,
     super.originalLineInTH2File = '',
-  })  : _lineType = lineType,
+  })  : lineType = THLineType.fromFileString(lineTypeString),
         super.addToParent();
 
   static bool hasLineType(String aLineType) {
@@ -87,7 +86,7 @@ class THLine extends THElement
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineType': _lineType,
+      'lineType': lineType.name,
       'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
@@ -102,7 +101,7 @@ class THLine extends THElement
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      lineType: map['lineType'],
+      lineType: THLineType.values.byName(map['lineType']),
       childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       optionsMap: LinkedHashMap<String, THCommandOption>.from(
         map['optionsMap']
@@ -122,7 +121,7 @@ class THLine extends THElement
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
-    String? lineType,
+    THLineType? lineType,
     List<int>? childrenMapiahID,
     LinkedHashMap<String, THCommandOption>? optionsMap,
   }) {
@@ -134,7 +133,7 @@ class THLine extends THElement
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      lineType: lineType ?? _lineType,
+      lineType: lineType ?? this.lineType,
       childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       optionsMap: optionsMap ?? this.optionsMap,
     );
@@ -150,7 +149,7 @@ class THLine extends THElement
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        other._lineType == _lineType &&
+        other.lineType == lineType &&
         deepEq(other.childrenMapiahID, childrenMapiahID) &&
         deepEq(other.optionsMap, optionsMap);
   }
@@ -159,7 +158,7 @@ class THLine extends THElement
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        _lineType,
+        lineType,
         childrenMapiahID,
         optionsMap,
       );
@@ -226,12 +225,8 @@ class THLine extends THElement
     );
   }
 
-  String get lineType {
-    return _lineType;
-  }
-
   @override
   String get plaType {
-    return lineType;
+    return lineType.name;
   }
 }

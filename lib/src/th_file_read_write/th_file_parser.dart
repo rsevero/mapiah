@@ -552,7 +552,7 @@ class THFileParser {
 
     final THLine newLine = THLine(
       parentMapiahID: _currentParentMapiahID,
-      lineType: element[1][0],
+      lineTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
