@@ -15,7 +15,7 @@ class MapiahHome extends StatelessWidget {
   Widget build(BuildContext context) {
     setWindowTitle(AppLocalizations.of(context).appTitle);
 
-    initializeMPCommandLoclizations(context);
+    initializeMPCommandLocalizations(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -83,7 +83,7 @@ class MapiahHome extends StatelessWidget {
     );
   }
 
-  void initializeMPCommandLoclizations(BuildContext context) {
+  void initializeMPCommandLocalizations(BuildContext context) {
     mpLocator.resetAppLocalizations(context);
 
     MPCommandDescriptor.resetCommandDescriptions();

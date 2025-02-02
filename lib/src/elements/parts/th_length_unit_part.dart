@@ -26,11 +26,11 @@ class THLengthUnitPart extends THPart {
   };
 
   static const lengthUnitToString = {
-    THLengthUnitType.centimeter: 'centimeter',
-    THLengthUnitType.feet: 'feet',
-    THLengthUnitType.inch: 'inch',
-    THLengthUnitType.meter: 'meter',
-    THLengthUnitType.yard: 'yard',
+    THLengthUnitType.centimeter: 'cm',
+    THLengthUnitType.feet: 'ft',
+    THLengthUnitType.inch: 'in',
+    THLengthUnitType.meter: 'm',
+    THLengthUnitType.yard: 'yd',
   };
 
   THLengthUnitPart({required this.unit});

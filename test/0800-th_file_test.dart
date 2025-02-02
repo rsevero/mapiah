@@ -129,7 +129,7 @@ comment
 The scrap below is really complex.
 Take care!!
 endcomment
-scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
   point 42.1 -5448.8 guano -visibility off -id P1
   comment
 
@@ -153,7 +153,7 @@ comment
 The scrap below is really complex.
 Take care!!
 endcomment
-scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
   comment
 
 Another comment block.
@@ -176,7 +176,7 @@ comment
 The scrap below is really complex.
 Take care!!
 endcomment
-scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
   point 322.4 431.7 station -name A1
 endscrap
 """,
@@ -272,7 +272,7 @@ The scrap below is really complex.
 Take care!!
 endcomment
 
-scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 meter ]
+scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
   point 42.1 -5448.8 guano -visibility off -id P1
 
   comment

@@ -216,7 +216,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -4381 -253 extra -dist [ 2450 centimeter ]
+  point -4381 -253 extra -dist [ 2450 cm ]
 endscrap
 ''',
       },
@@ -276,7 +276,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -4381 -253 continuation -explored [ 2450 centimeter ]
+  point -4381 -253 continuation -explored [ 2450 cm ]
 endscrap
 ''',
       },
@@ -911,7 +911,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap U23-U28 -projection plan -scale [ -128 -2644 3414 -2644 0 0 \
-    89.96680000000002 0 meter ]
+    89.96680000000002 0 m ]
   point 2311 -1386 u:brokenstal -scale xs
 endscrap
 ''',
@@ -977,7 +977,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 1758 -1030 altitude -value [ fix 1300 meter ]
+  point 1758 -1030 altitude -value [ fix 1300 m ]
 endscrap
 ''',
       },
@@ -1118,7 +1118,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 1758 -1030 dimensions -value [ 7 3.3 yard ]
+  point 1758 -1030 dimensions -value [ 7 3.3 yd ]
 endscrap
 ''',
       },
@@ -1167,7 +1167,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -2885 604 height -value [ 40? feet ]
+  point -2885 604 height -value [ 40? ft ]
 endscrap
 ''',
       },
@@ -1227,7 +1227,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -3081 799 passage-height -value [ +6 -71 meter ]
+  point -3081 799 passage-height -value [ +6 -71 m ]
 endscrap
 ''',
       },
@@ -1238,7 +1238,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -3081 799 passage-height -value [ +6 meter ]
+  point -3081 799 passage-height -value [ +6 m ]
 endscrap
 ''',
       },
@@ -1248,9 +1248,8 @@ endscrap
         'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.96 0 meter \
-    ]
-  point 777 -1224 passage-height -value [ 7 feet ]
+scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.96 0 m ]
+  point 777 -1224 passage-height -value [ 7 ft ]
 endscrap
 ''',
       },
@@ -1260,9 +1259,8 @@ endscrap
         'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.96 0 meter \
-    ]
-  point 777 -1224 passage-height -value [ +7 feet ]
+scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.96 0 m ]
+  point 777 -1224 passage-height -value [ +7 ft ]
 endscrap
 ''',
       },
@@ -1273,7 +1271,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -3081 799 passage-height -value [ +6 -71 inch ]
+  point -3081 799 passage-height -value [ +6 -71 in ]
 endscrap
 ''',
       },
