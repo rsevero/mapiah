@@ -56,46 +56,10 @@ part 'th_subtype_command_option.dart';
 part 'th_text_command_option.dart';
 part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
-
-enum THCommandOptionType {
-  altitude,
-  altitudeValue,
-  author,
-  clip,
-  context,
-  copyright,
-  cs,
-  dateValue,
-  dimensionsValue,
-  dist,
-  explored,
-  extend,
-  from,
-  id,
-  lineHeight,
-  lineScale,
-  lSize,
-  mark,
-  multipleChoice,
-  name,
-  orientation,
-  passageHeightValue,
-  pointHeightValue,
-  pointScale,
-  projection,
-  scrap,
-  scrapScale,
-  sketch,
-  stationNames,
-  stations,
-  subtype,
-  text,
-  title,
-  unrecognizedCommandOption,
-}
+part 'types/th_command_option_type.dart';
 
 abstract class THCommandOption {
-  late final int parentMapiahID;
+  final int parentMapiahID;
   final String originalLineInTH2File;
 
   THCommandOption.forCWJM({
