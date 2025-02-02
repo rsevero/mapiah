@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/commands/mp_command_description_type.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 
 class MPUndoRedoCommand {
   final MPCommandType commandType;

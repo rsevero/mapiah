@@ -1,8 +1,8 @@
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/commands/mp_command_description_type.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
-class MPCommandDescriptor {
+class MPTextForUser {
   static final Map<MPCommandDescriptionType, String> _commandDescriptionMap =
       {};
 

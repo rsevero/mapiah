@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/commands/mp_command_descriptor.dart';
+import 'package:mapiah/src/auxiliary/mp_text_for_user.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -86,7 +86,7 @@ class MapiahHome extends StatelessWidget {
   void initializeMPCommandLocalizations(BuildContext context) {
     mpLocator.resetAppLocalizations(context);
 
-    MPCommandDescriptor.resetCommandDescriptions();
+    MPTextForUser.resetCommandDescriptions();
   }
 
   void _pickTh2File(BuildContext context) async {

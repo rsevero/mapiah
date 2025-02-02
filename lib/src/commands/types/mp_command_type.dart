@@ -1,4 +1,4 @@
-part of 'mp_command.dart';
+part of '../mp_command.dart';
 
 enum MPCommandType {
   moveBezierLineSegment,
