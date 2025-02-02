@@ -518,7 +518,7 @@ class THFileParser {
 
     final THArea newArea = THArea(
       parentMapiahID: _currentParentMapiahID,
-      areaType: element[1][0],
+      areaTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(

@@ -187,7 +187,7 @@ class THFileWriter {
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      String newLine = "area ${thArea.plaType}";
+      String newLine = "area ${thArea.areaType.toFileString()}";
       if (thArea.optionIsSet('subtype')) {
         newLine += ":${thArea.optionByType('subtype')!.specToFile()}";
       }

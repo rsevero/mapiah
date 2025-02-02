@@ -3,7 +3,7 @@ part of 'th_element.dart';
 class THArea extends THElement
     with THHasOptionsMixin, THIsParentMixin
     implements THHasPLATypeMixin {
-  late final String _areaType;
+  final THAreaType areaType;
 
   static final _areaTypes = <String>{
     'bedrock',
@@ -33,25 +33,20 @@ class THArea extends THElement
     required super.mapiahID,
     required super.parentMapiahID,
     required super.sameLineComment,
-    required String areaType,
+    required this.areaType,
     required List<int> childrenMapiahID,
     required LinkedHashMap<String, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
-    _areaType = areaType;
     addOptionsMap(optionsMap);
   }
 
   THArea({
     required super.parentMapiahID,
-    required String areaType,
+    required String areaTypeString,
     super.originalLineInTH2File = '',
-  })  : _areaType = areaType,
-        super.addToParent() {
-    if (!hasAreaType(areaType)) {
-      throw THCustomException("Unrecognized THArea type '$areaType'.");
-    }
-  }
+  })  : areaType = THAreaType.fromFileString(areaTypeString),
+        super.addToParent();
 
   @override
   THElementType get elementType => THElementType.area;
@@ -61,7 +56,7 @@ class THArea extends THElement
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'areaType': _areaType,
+      'areaType': areaType.name,
       'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
           optionsMap.map((key, value) => MapEntry(key, value.toMap())),
@@ -76,7 +71,7 @@ class THArea extends THElement
       parentMapiahID: map['parentMapiahID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      areaType: map['areaType'],
+      areaType: THAreaType.values.byName(map['areaType']),
       childrenMapiahID: List<int>.from(map['childrenMapiahID']),
       optionsMap: LinkedHashMap<String, THCommandOption>.from(
         map['optionsMap']
@@ -96,7 +91,7 @@ class THArea extends THElement
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
-    String? areaType,
+    THAreaType? areaType,
     List<int>? childrenMapiahID,
     LinkedHashMap<String, THCommandOption>? optionsMap,
   }) {
@@ -108,7 +103,7 @@ class THArea extends THElement
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      areaType: areaType ?? _areaType,
+      areaType: areaType ?? this.areaType,
       childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
       optionsMap: optionsMap ?? this.optionsMap,
     );
@@ -124,7 +119,7 @@ class THArea extends THElement
         other.parentMapiahID == parentMapiahID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        other._areaType == _areaType &&
+        other.areaType == areaType &&
         deepEq(other.childrenMapiahID, childrenMapiahID) &&
         deepEq(other.optionsMap, optionsMap);
   }
@@ -133,7 +128,7 @@ class THArea extends THElement
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        _areaType,
+        areaType,
         childrenMapiahID,
         optionsMap,
       );
@@ -142,22 +137,9 @@ class THArea extends THElement
     return _areaTypes.contains(areaType);
   }
 
-  // @override
-  // set plaType(String aAreaType) {
-  //   if (!hasAreaType(aAreaType)) {
-  //     throw THCustomException("Unrecognized THArea type '$aAreaType'.");
-  //   }
-
-  //   _areaType = aAreaType;
-  // }
-
   @override
   String get plaType {
-    return _areaType;
-  }
-
-  String get areaType {
-    return _areaType;
+    return areaType.name;
   }
 
   @override
