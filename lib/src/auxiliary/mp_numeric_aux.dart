@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -163,5 +165,95 @@ class MPNumericAux {
       right: point2.dx,
       bottom: point2.dy,
     );
+  }
+
+  static double log10(double x) {
+    return math.log(x) / thLogN10;
+  }
+
+  static double roundScale(double scale) {
+    final int scaleMagnitude = (log10(scale) - 1).floor();
+    final double scaleQuanta = math.pow(10, scaleMagnitude) as double;
+    final double rounded = floorToFives(scale / scaleQuanta) * scaleQuanta;
+
+    return rounded;
+  }
+
+  static String roundScaleAsTextPercentage(double scale) {
+    final double scaleMagnitude = log10(scale);
+    final double scaleMagnitudeInt = scaleMagnitude.floorToDouble();
+    final double roundTo = math.pow(10, scaleMagnitudeInt - 2) as double;
+    final double scaleInt = roundToFives(scale / roundTo) * roundTo * 100;
+    final int fractionalDigits =
+        (scaleMagnitude >= 0) ? 0 : scaleMagnitude.abs().floor();
+    return "${scaleInt.toStringAsFixed(fractionalDigits)}%";
+  }
+
+  static double calculateQuanta(double initialMagnitude) {
+    final double magnitudeFactorMin = initialMagnitude.floorToDouble();
+    final double magnitudeFactorMax = initialMagnitude.ceilToDouble();
+    final double magnitudeFactor =
+        ((initialMagnitude - magnitudeFactorMin).abs() > 0.5)
+            ? magnitudeFactorMax
+            : magnitudeFactorMin;
+    final double finalQuanta = math.pow(10, magnitudeFactor) as double;
+
+    return finalQuanta;
+  }
+
+  static double roundToFives(double value) {
+    return (value / 5).round() * 5;
+  }
+
+  static double floorToFives(double value) {
+    return (value / 5).floor() * 5;
+  }
+
+  static double calculateRoundToQuanta({
+    required double scale,
+    required double factor,
+    required bool isIncrease,
+  }) {
+    double desiredChange = scale * (factor - 1);
+    if (!isIncrease) {
+      desiredChange /= factor;
+    }
+
+    final double magnitudeFactorRef = log10(desiredChange) - 1;
+    final double quanta = calculateQuanta(magnitudeFactorRef);
+    final double rounded = roundToFives(desiredChange / quanta) * quanta;
+
+    return rounded > 0 ? rounded : 1;
+  }
+
+  static double roundChangedScale({
+    required double scale,
+    required double factor,
+    required bool isIncrease,
+  }) {
+    final double roundToQuanta = calculateRoundToQuanta(
+      scale: scale,
+      factor: factor,
+      isIncrease: isIncrease,
+    );
+
+    final int roundFactor = (scale / roundToQuanta).round();
+
+    return roundFactor * roundToQuanta;
+  }
+
+  static double calculateNextZoomLevel({
+    required double scale,
+    required double factor,
+    required bool isIncrease,
+  }) {
+    final double unroundedScale = isIncrease ? scale * factor : scale / factor;
+    final double roundedScale = roundChangedScale(
+      scale: unroundedScale,
+      factor: factor,
+      isIncrease: isIncrease,
+    );
+
+    return roundedScale;
   }
 }

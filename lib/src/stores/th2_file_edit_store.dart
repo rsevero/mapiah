@@ -47,6 +47,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @readonly
   double _canvasScale = 1.0;
 
+  @computed
+  String get canvasScaleAsPercentageText =>
+      MPNumericAux.roundScaleAsTextPercentage(_canvasScale);
+
   @readonly
   Offset _canvasTranslation = Offset.zero;
 
@@ -182,6 +186,9 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @computed
   bool get showUndoRedoButtons => isSelectMode;
+
+  @readonly
+  String _statusBarMessage = '';
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
@@ -413,11 +420,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _selectableBoundingBoxes.remove(mapiahID);
   }
 
-  @action
-  void setZoomButtonsHovered(bool isHovered) {
-    _isZoomButtonsHovered = isHovered;
-  }
-
   List<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
     final List<THElement> clickedElements = <THElement>[];
@@ -462,6 +464,16 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     }
 
     return insideWindowElements.values.toList();
+  }
+
+  @action
+  void setZoomButtonsHovered(bool isHovered) {
+    _isZoomButtonsHovered = isHovered;
+  }
+
+  @action
+  void setStatusMessage(String message) {
+    _statusBarMessage = message;
   }
 
   @override
@@ -971,16 +983,9 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     mpLocator.mpLog.finer("New center: $_canvasCenterX, $_canvasCenterY");
   }
 
-  void updateCanvasScale(double newScale) {
-    if (_canvasScale == newScale) {
-      return;
-    }
-    _updateCanvasScale(newScale);
-  }
-
   @action
-  void _updateCanvasScale(double newScale) {
-    _canvasScale = newScale;
+  void updateCanvasScale(double newScale) {
+    _canvasScale = MPNumericAux.roundScale(newScale);
     _canvasSize = _screenSize / _canvasScale;
   }
 
@@ -991,7 +996,12 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @action
   void zoomIn({bool fineZoom = false}) {
-    _canvasScale *= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
+    _canvasScale = MPNumericAux.calculateNextZoomLevel(
+      scale: _canvasScale,
+      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+      isIncrease: true,
+    );
+    // _canvasScale *= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
@@ -1000,7 +1010,12 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @action
   void zoomOut({bool fineZoom = false}) {
-    _canvasScale /= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
+    _canvasScale = MPNumericAux.calculateNextZoomLevel(
+      scale: _canvasScale,
+      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+      isIncrease: false,
+    );
+    // _canvasScale /= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
@@ -1028,7 +1043,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     final double heightScale =
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
 
-    _canvasScale = (widthScale < heightScale) ? widthScale : heightScale;
+    _canvasScale = MPNumericAux.roundScale(
+        (widthScale < heightScale) ? widthScale : heightScale);
     _canvasSize = _screenSize / _canvasScale;
 
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);

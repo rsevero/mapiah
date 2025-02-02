@@ -9,6 +9,14 @@ part of 'th2_file_edit_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
+  Computed<String>? _$canvasScaleAsPercentageTextComputed;
+
+  @override
+  String get canvasScaleAsPercentageText =>
+      (_$canvasScaleAsPercentageTextComputed ??= Computed<String>(
+              () => super.canvasScaleAsPercentageText,
+              name: 'TH2FileEditStoreBase.canvasScaleAsPercentageText'))
+          .value;
   Computed<bool>? _$isEditModeComputed;
 
   @override
@@ -552,6 +560,24 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_statusBarMessageAtom =
+      Atom(name: 'TH2FileEditStoreBase._statusBarMessage', context: context);
+
+  String get statusBarMessage {
+    _$_statusBarMessageAtom.reportRead();
+    return super._statusBarMessage;
+  }
+
+  @override
+  String get _statusBarMessage => statusBarMessage;
+
+  @override
+  set _statusBarMessage(String value) {
+    _$_statusBarMessageAtom.reportWrite(value, super._statusBarMessage, () {
+      super._statusBarMessage = value;
+    });
+  }
+
   late final _$_redrawTriggerSelectedElementsListChangedAtom = Atom(
       name: 'TH2FileEditStoreBase._redrawTriggerSelectedElementsListChanged',
       context: context);
@@ -713,6 +739,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         name: 'TH2FileEditStoreBase.setZoomButtonsHovered');
     try {
       return super.setZoomButtonsHovered(isHovered);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setStatusMessage(String message) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.setStatusMessage');
+    try {
+      return super.setStatusMessage(message);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -908,11 +945,11 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void _updateCanvasScale(double newScale) {
+  void updateCanvasScale(double newScale) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
-        name: 'TH2FileEditStoreBase._updateCanvasScale');
+        name: 'TH2FileEditStoreBase.updateCanvasScale');
     try {
-      return super._updateCanvasScale(newScale);
+      return super.updateCanvasScale(newScale);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -1092,6 +1129,7 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
 isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
 changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPortalControllerController},
 changeScrapsFABKey: ${changeScrapsFABKey},
+canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 isEditMode: ${isEditMode},
 isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},

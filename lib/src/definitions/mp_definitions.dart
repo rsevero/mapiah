@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
@@ -34,8 +36,10 @@ const double thCanvasVisibleMargin = 0.1;
 const double thCanvasOutOfSightMargin = 2.0;
 
 const double thRegularZoomFactor = numerics.sqrt2;
-const double thFineZoomFactor = (thRegularZoomFactor - 1) / 2 + 1;
+const double thRoundToFactor = thRegularZoomFactor - 1;
+const double thFineZoomFactor = thRoundToFactor / 2 + 1;
 const double thCanvasMovementFactor = 0.1;
+final double thLogN10 = math.log(10);
 
 const double thMinimumSizeForDrawing = 10.0;
 

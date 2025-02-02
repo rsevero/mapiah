@@ -122,6 +122,53 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               }
             },
           ),
+          bottomNavigationBar: BottomAppBar(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Observer(
+                      builder: (_) => Text(th2FileEditStore.statusBarMessage)),
+                  Row(
+                    children: [
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // Button action
+                      //   },
+                      //   child: Text('Button 1'),
+                      // ),
+                      // SizedBox(width: 8),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // Button action
+                      //   },
+                      //   child: Text('Button 2'),
+                      // ),
+                      // SizedBox(width: 8),
+                      // DropdownButton<String>(
+                      //   value: 'Option 1',
+                      //   items: <String>['Option 1', 'Option 2', 'Option 3']
+                      //       .map((String value) {
+                      //     return DropdownMenuItem<String>(
+                      //       value: value,
+                      //       child: Text(value),
+                      //     );
+                      //   }).toList(),
+                      //   onChanged: (String? newValue) {
+                      //     // Dropdown action
+                      //   },
+                      // ),
+                      Observer(
+                        builder: (_) => Text(
+                            "🔍 ${th2FileEditStore.canvasScaleAsPercentageText}"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
