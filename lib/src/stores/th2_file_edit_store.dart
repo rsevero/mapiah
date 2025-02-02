@@ -233,8 +233,13 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   double get scrapLengthUnitsOnGraphicalScale {
     double scrapLengthUnitsOnScreen = scrapLengthUnitsPerPointOnScreen *
         thDesiredGraphicalScaleScreenPointLength;
+
     scrapLengthUnitsOnScreen =
         MPNumericAux.roundNumber(scrapLengthUnitsOnScreen);
+    if (scrapLengthUnitsOnScreen < 1) {
+      scrapLengthUnitsOnScreen = 1;
+    }
+
     return scrapLengthUnitsOnScreen;
   }
 
