@@ -48,6 +48,11 @@ const int thFirstMapiahIDForElements = 1;
 
 const double thSizePointBoundingBox = 2.0;
 
+const double thDesiredGraphicalScaleScreenPointLength = 200.0;
+const double thGraphicalScalePadding = 80.0;
+const double thGraphicalScaleUptickLength = 8.0;
+const double thGraphicalScaleFontSize = 12.0;
+
 const String thDefaultLengthUnit = 'meter';
 
 const String thClipMultipleChoiceType = 'clip';

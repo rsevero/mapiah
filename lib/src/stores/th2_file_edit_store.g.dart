@@ -164,13 +164,21 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
           Computed<double>(() => super.scrapLengthUnitsPerPoint,
               name: 'TH2FileEditStoreBase.scrapLengthUnitsPerPoint'))
       .value;
-  Computed<double>? _$scrapLengthUnitsPerPointOnCanvasComputed;
+  Computed<double>? _$scrapLengthUnitsOnGraphicalScaleComputed;
 
   @override
-  double get scrapLengthUnitsPerPointOnCanvas =>
-      (_$scrapLengthUnitsPerPointOnCanvasComputed ??= Computed<double>(
-              () => super.scrapLengthUnitsPerPointOnCanvas,
-              name: 'TH2FileEditStoreBase.scrapLengthUnitsPerPointOnCanvas'))
+  double get scrapLengthUnitsOnGraphicalScale =>
+      (_$scrapLengthUnitsOnGraphicalScaleComputed ??= Computed<double>(
+              () => super.scrapLengthUnitsOnGraphicalScale,
+              name: 'TH2FileEditStoreBase.scrapLengthUnitsOnGraphicalScale'))
+          .value;
+  Computed<double>? _$scrapLengthUnitsPerPointOnScreenComputed;
+
+  @override
+  double get scrapLengthUnitsPerPointOnScreen =>
+      (_$scrapLengthUnitsPerPointOnScreenComputed ??= Computed<double>(
+              () => super.scrapLengthUnitsPerPointOnScreen,
+              name: 'TH2FileEditStoreBase.scrapLengthUnitsPerPointOnScreen'))
           .value;
 
   late final _$_screenSizeAtom =
@@ -1185,7 +1193,8 @@ showScrapScale: ${showScrapScale},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
-scrapLengthUnitsPerPointOnCanvas: ${scrapLengthUnitsPerPointOnCanvas}
+scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
     ''';
   }
 }

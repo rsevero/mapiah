@@ -230,7 +230,16 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   @computed
-  double get scrapLengthUnitsPerPointOnCanvas {
+  double get scrapLengthUnitsOnGraphicalScale {
+    double scrapLengthUnitsOnScreen = scrapLengthUnitsPerPointOnScreen *
+        thDesiredGraphicalScaleScreenPointLength;
+    scrapLengthUnitsOnScreen =
+        MPNumericAux.roundNumber(scrapLengthUnitsOnScreen);
+    return scrapLengthUnitsOnScreen;
+  }
+
+  @computed
+  double get scrapLengthUnitsPerPointOnScreen {
     return scrapLengthUnitsPerPoint / _canvasScale;
   }
 

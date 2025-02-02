@@ -6,6 +6,7 @@ import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
+import 'package:mapiah/src/widgets/mp_scrap_scale_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
@@ -58,7 +59,12 @@ class THFileWidget extends StatelessWidget {
                     MPSelectionWindowWidget(
                       key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
                       th2FileEditStore: th2FileEditStore,
-                    )
+                    ),
+                  if (th2FileEditStore.showScrapScale)
+                    MPScrapScaleWidget(
+                      key: ValueKey("MPScrapScaleWidget|$thFileMapiahID"),
+                      th2FileEditStore: th2FileEditStore,
+                    ),
                 ],
               ),
             );

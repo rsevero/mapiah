@@ -173,7 +173,7 @@ class MPNumericAux {
   }
 
   static double roundScale(double scale) {
-    final int scaleMagnitude = (log10(scale) - 1).floor();
+    final double scaleMagnitude = (log10(scale) - 1).floorToDouble();
     final double scaleQuanta = math.pow(10, scaleMagnitude) as double;
     final double rounded = floorToFives(scale / scaleQuanta) * scaleQuanta;
 
@@ -188,6 +188,32 @@ class MPNumericAux {
     final int fractionalDigits =
         (scaleMagnitude >= 0) ? 0 : scaleMagnitude.abs().floor();
     return "${scaleInt.toStringAsFixed(fractionalDigits)}%";
+  }
+
+  static double roundNumber(double value) {
+    final double valueMagnitude = (log10(value) - 1).floorToDouble();
+    final double valueQuanta = math.pow(10, valueMagnitude) as double;
+    final double rounded = roundToFives(value / valueQuanta) * valueQuanta;
+
+    return rounded;
+  }
+
+  static String roundNumberForScreen(double value) {
+    final double rounded = roundNumber(value);
+    final double valueMagnitude = (log10(value) - 1).floorToDouble();
+    final int fractionalDigits =
+        (valueMagnitude >= 0) ? 0 : valueMagnitude.abs().floor();
+    String asString = rounded.toStringAsFixed(fractionalDigits);
+    if (fractionalDigits > 0) {
+      while (asString.endsWith('0')) {
+        asString = asString.substring(0, asString.length - 1);
+      }
+      if (asString.endsWith('.')) {
+        asString = asString.substring(0, asString.length - 1);
+      }
+    }
+
+    return asString;
   }
 
   static double calculateQuanta(double initialMagnitude) {
