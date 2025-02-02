@@ -15,7 +15,6 @@ import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/exceptions/th_custom_with_list_parameter_exception.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
@@ -49,7 +48,6 @@ class THFileParser {
   THLineSegment? _lastLineSegment;
   late List<dynamic> _currentOptions;
   late List<dynamic> _currentSpec;
-  // final _parsedOptions = HashSet<String>();
   bool _runTraceParser = false;
 
   late THFile _parsedTHFile;
@@ -1647,16 +1645,12 @@ class THFileParser {
     }
 
     final List<THDoublePart> values = [];
-    THLengthUnitPart? unit;
-    bool unitFound = false;
+    THLengthUnitPart unit = THLengthUnitPart.fromString(
+      unitString: thDefaultLengthUnit,
+    );
 
     for (final value in _currentSpec) {
-      if (unitFound) {
-        throw THCustomWithListParameterException(
-            "Unknown element after unit found when creating a THScaleCommandOption object.",
-            _currentSpec);
-      }
-      final newDouble = double.tryParse(value);
+      final double? newDouble = double.tryParse(value);
 
       if (newDouble == null) {
         if (values.isEmpty) {
@@ -1664,7 +1658,6 @@ class THFileParser {
               "Can´t create THScaleCommandOption object without any value.");
         }
         unit = THLengthUnitPart.fromString(unitString: value);
-        unitFound = true;
       } else {
         values.add(THDoublePart.fromString(valueString: value));
       }
@@ -1673,7 +1666,7 @@ class THFileParser {
     THScrapScaleCommandOption(
       optionParent: _currentHasOptions,
       numericSpecifications: values,
-      unit: unit,
+      unitPart: unit,
       originalLineInTH2File: _currentLine,
     );
   }

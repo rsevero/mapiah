@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
@@ -255,5 +256,23 @@ class MPNumericAux {
     );
 
     return roundedScale;
+  }
+
+  static double lengthConversion({
+    required double original,
+    required THLengthUnitType originalUnit,
+    required THLengthUnitType targetUnit,
+  }) {
+    if (originalUnit == targetUnit) {
+      return original;
+    }
+
+    return original * lengthConversionFactors[originalUnit]![targetUnit]!;
+  }
+
+  static double calculatePointDistance(Offset point1, Offset point2) {
+    final double dx = point2.dx - point1.dx;
+    final double dy = point2.dy - point1.dy;
+    return math.sqrt(dx * dx + dy * dy);
   }
 }

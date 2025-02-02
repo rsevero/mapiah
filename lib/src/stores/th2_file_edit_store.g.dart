@@ -136,6 +136,42 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
           Computed<bool>(() => super.showUndoRedoButtons,
               name: 'TH2FileEditStoreBase.showUndoRedoButtons'))
       .value;
+  Computed<bool>? _$showScrapScaleComputed;
+
+  @override
+  bool get showScrapScale =>
+      (_$showScrapScaleComputed ??= Computed<bool>(() => super.showScrapScale,
+              name: 'TH2FileEditStoreBase.showScrapScale'))
+          .value;
+  Computed<bool>? _$scrapHasScaleOptionComputed;
+
+  @override
+  bool get scrapHasScaleOption => (_$scrapHasScaleOptionComputed ??=
+          Computed<bool>(() => super.scrapHasScaleOption,
+              name: 'TH2FileEditStoreBase.scrapHasScaleOption'))
+      .value;
+  Computed<THLengthUnitType>? _$scrapLengthUnitTypeComputed;
+
+  @override
+  THLengthUnitType get scrapLengthUnitType => (_$scrapLengthUnitTypeComputed ??=
+          Computed<THLengthUnitType>(() => super.scrapLengthUnitType,
+              name: 'TH2FileEditStoreBase.scrapLengthUnitType'))
+      .value;
+  Computed<double>? _$scrapLengthUnitsPerPointComputed;
+
+  @override
+  double get scrapLengthUnitsPerPoint => (_$scrapLengthUnitsPerPointComputed ??=
+          Computed<double>(() => super.scrapLengthUnitsPerPoint,
+              name: 'TH2FileEditStoreBase.scrapLengthUnitsPerPoint'))
+      .value;
+  Computed<double>? _$scrapLengthUnitsPerPointOnCanvasComputed;
+
+  @override
+  double get scrapLengthUnitsPerPointOnCanvas =>
+      (_$scrapLengthUnitsPerPointOnCanvasComputed ??= Computed<double>(
+              () => super.scrapLengthUnitsPerPointOnCanvas,
+              name: 'TH2FileEditStoreBase.scrapLengthUnitsPerPointOnCanvas'))
+          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditStoreBase._screenSize', context: context);
@@ -1144,7 +1180,12 @@ selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
 selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
 selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
-showUndoRedoButtons: ${showUndoRedoButtons}
+showUndoRedoButtons: ${showUndoRedoButtons},
+showScrapScale: ${showScrapScale},
+scrapHasScaleOption: ${scrapHasScaleOption},
+scrapLengthUnitType: ${scrapLengthUnitType},
+scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
+scrapLengthUnitsPerPointOnCanvas: ${scrapLengthUnitsPerPointOnCanvas}
     ''';
   }
 }

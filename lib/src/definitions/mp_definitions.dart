@@ -48,7 +48,7 @@ const int thFirstMapiahIDForElements = 1;
 
 const double thSizePointBoundingBox = 2.0;
 
-const String thDefaultLengthUnit = 'm';
+const String thDefaultLengthUnit = 'meter';
 
 const String thClipMultipleChoiceType = 'clip';
 
@@ -137,6 +137,40 @@ const double thFeetToYard = 1 / thYardToFeet;
 
 const double thYardToCentimeter = 1 / thCentimeterToYard;
 const double thYardToInch = 1 / thInchToYard;
+
+final Map<THLengthUnitType, Map<THLengthUnitType, double>>
+    lengthConversionFactors = {
+  THLengthUnitType.centimeter: {
+    THLengthUnitType.feet: thCentimeterToFeet,
+    THLengthUnitType.inch: thCentimeterToInch,
+    THLengthUnitType.meter: thCentimeterToMeter,
+    THLengthUnitType.yard: thCentimeterToYard,
+  },
+  THLengthUnitType.feet: {
+    THLengthUnitType.centimeter: thFeetToCentimeter,
+    THLengthUnitType.inch: thFeetToInch,
+    THLengthUnitType.meter: thFeetToMeter,
+    THLengthUnitType.yard: thFeetToYard,
+  },
+  THLengthUnitType.inch: {
+    THLengthUnitType.centimeter: thInchToCentimeter,
+    THLengthUnitType.feet: thInchToFeet,
+    THLengthUnitType.meter: thInchToMeter,
+    THLengthUnitType.yard: thInchToYard,
+  },
+  THLengthUnitType.meter: {
+    THLengthUnitType.centimeter: thMeterToCentimeter,
+    THLengthUnitType.feet: thMeterToFeet,
+    THLengthUnitType.inch: thMeterToInch,
+    THLengthUnitType.yard: thMeterToYard,
+  },
+  THLengthUnitType.yard: {
+    THLengthUnitType.centimeter: thYardToCentimeter,
+    THLengthUnitType.feet: thYardToFeet,
+    THLengthUnitType.inch: thYardToInch,
+    THLengthUnitType.meter: thYardToMeter,
+  },
+};
 
 const double thDefaultTHFileScale = 1.0;
 const THLengthUnitType thDefaultTHFileLengthUnit = THLengthUnitType.meter;

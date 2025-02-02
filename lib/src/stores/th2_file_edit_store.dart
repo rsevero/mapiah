@@ -10,7 +10,9 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/definitions/mp_paints.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
@@ -189,6 +191,48 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @readonly
   String _statusBarMessage = '';
+
+  @computed
+  bool get showScrapScale {
+    return !_isLoading && scrapHasScaleOption;
+  }
+
+  @computed
+  bool get scrapHasScaleOption {
+    final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+
+    return scrap.hasOption('scale');
+  }
+
+  @computed
+  THLengthUnitType get scrapLengthUnitType {
+    if (scrapHasScaleOption) {
+      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+
+      return (scrap.optionByType('scale') as THScrapScaleCommandOption)
+          .unitPart
+          .unit;
+    } else {
+      return THLengthUnitType.meter;
+    }
+  }
+
+  @computed
+  double get scrapLengthUnitsPerPoint {
+    if (scrapHasScaleOption) {
+      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+
+      return (scrap.optionByType('scale') as THScrapScaleCommandOption)
+          .lengthUnitsPerPoint;
+    } else {
+      return 1.0;
+    }
+  }
+
+  @computed
+  double get scrapLengthUnitsPerPointOnCanvas {
+    return scrapLengthUnitsPerPoint / _canvasScale;
+  }
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 

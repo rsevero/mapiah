@@ -160,8 +160,25 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       //   },
                       // ),
                       Observer(
+                        builder: (_) {
+                          if (th2FileEditStore.showScrapScale) {
+                            return Row(
+                              children: [
+                                Text(
+                                  "Scrap scale: ${th2FileEditStore.scrapLengthUnitsPerPointOnCanvas.toStringAsFixed(4)} ${th2FileEditStore.scrapLengthUnitType.name} / point",
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                      Observer(
                         builder: (_) => Text(
-                            "🔍 ${th2FileEditStore.canvasScaleAsPercentageText}"),
+                          "🔍 ${th2FileEditStore.canvasScaleAsPercentageText}",
+                        ),
                       ),
                     ],
                   ),

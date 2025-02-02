@@ -15,20 +15,20 @@ part of 'th_command_option.dart';
 // both scaling and rotation to the scrap.
 class THScrapScaleCommandOption extends THCommandOption {
   final List<THDoublePart> _numericSpecifications;
-  final THLengthUnitPart? unit;
+  final THLengthUnitPart unitPart;
 
   THScrapScaleCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
     required List<THDoublePart> numericSpecifications,
-    this.unit,
+    required this.unitPart,
   })  : _numericSpecifications = numericSpecifications,
         super.forCWJM();
 
   THScrapScaleCommandOption({
     required super.optionParent,
     required List<THDoublePart> numericSpecifications,
-    this.unit,
+    required this.unitPart,
     super.originalLineInTH2File = '',
   })  : _numericSpecifications = numericSpecifications,
         super();
@@ -46,7 +46,7 @@ class THScrapScaleCommandOption extends THCommandOption {
     map.addAll({
       'numericSpecifications':
           _numericSpecifications.map((e) => e.toMap()).toList(),
-      'unit': unit?.toMap(),
+      'unit': unitPart.toMap(),
     });
 
     return map;
@@ -58,7 +58,7 @@ class THScrapScaleCommandOption extends THCommandOption {
       originalLineInTH2File: map['originalLineInTH2File'],
       numericSpecifications: List<THDoublePart>.from(
           map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
-      unit: map['unit'] != null ? THLengthUnitPart.fromMap(map['unit']) : null,
+      unitPart: THLengthUnitPart.fromMap(map['unit']),
     );
   }
 
@@ -72,14 +72,13 @@ class THScrapScaleCommandOption extends THCommandOption {
     String? originalLineInTH2File,
     List<THDoublePart>? numericSpecifications,
     THLengthUnitPart? unit,
-    bool makeUnitNull = false,
   }) {
     return THScrapScaleCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       numericSpecifications: numericSpecifications ?? _numericSpecifications,
-      unit: makeUnitNull ? null : (unit ?? this.unit),
+      unitPart: unit ?? this.unitPart,
     );
   }
 
@@ -90,7 +89,7 @@ class THScrapScaleCommandOption extends THCommandOption {
     return other.parentMapiahID == parentMapiahID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other._numericSpecifications == _numericSpecifications &&
-        other.unit == unit;
+        other.unitPart == unitPart;
   }
 
   @override
@@ -98,8 +97,43 @@ class THScrapScaleCommandOption extends THCommandOption {
       super.hashCode ^
       Object.hash(
         _numericSpecifications,
-        unit,
+        unitPart,
       );
+
+  double get lengthUnitsPerPoint {
+    switch (_numericSpecifications.length) {
+      case 1:
+        return _numericSpecifications[0].value;
+      case 2:
+        return _numericSpecifications[1].value /
+            _numericSpecifications[0].value;
+      case 8:
+        double pointSize = MPNumericAux.calculatePointDistance(
+          Offset(
+            _numericSpecifications[0].value,
+            _numericSpecifications[1].value,
+          ),
+          Offset(
+            _numericSpecifications[2].value,
+            _numericSpecifications[3].value,
+          ),
+        );
+        double realSize = MPNumericAux.calculatePointDistance(
+          Offset(
+            _numericSpecifications[4].value,
+            _numericSpecifications[5].value,
+          ),
+          Offset(
+            _numericSpecifications[6].value,
+            _numericSpecifications[7].value,
+          ),
+        );
+        return realSize / pointSize;
+      default:
+        throw THCustomException(
+            'THScrapScaleCommandOption.lengthUnitsPerPoint');
+    }
+  }
 
   @override
   String specToFile() {
@@ -109,15 +143,8 @@ class THScrapScaleCommandOption extends THCommandOption {
       asString += ' ${aValue.toString()}';
     }
 
-    if (unit != null) {
-      asString += ' ${unit.toString()}';
-    }
-
-    asString = asString.trim();
-
-    if (asString.contains(' ')) {
-      asString = '[ $asString ]';
-    }
+    asString += ' ${unitPart.toString()}';
+    asString = '[ ${asString.trim()} ]';
 
     return asString;
   }
