@@ -6,10 +6,9 @@ part of 'th_element.dart';
 // side of a pitch, higher side of a chimney and interior of a passage are on the left side of
 // pitch, chimney or wall symbols, respectively.
 class THLine extends THElement
-    with THHasOptionsMixin, THIsParentMixin
+    with THHasOptionsMixin, THIsParentMixin, MPBoundingBox
     implements THHasPLATypeMixin {
   final THLineType lineType;
-  Rect? _boundingBox;
 
   static final _lineTypes = <String>{
     'abyss-entrance',
@@ -168,16 +167,13 @@ class THLine extends THElement
     return object is THLine;
   }
 
-  Rect getBoundingBox(THFile thFile) {
-    _boundingBox ??= _calculateBoundingBox(thFile);
-
-    return _boundingBox!;
-  }
-
-  Rect _calculateBoundingBox(THFile thFile) {
+  @override
+  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
     if (childrenMapiahID.isEmpty) {
       return Rect.zero;
     }
+
+    final THFile thFile = th2FileEditStore.thFile;
 
     double minX = double.infinity;
     double minY = double.infinity;

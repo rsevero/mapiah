@@ -11,12 +11,14 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/definitions/mp_paints.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
-import 'package:mapiah/src/selection/mp_selected_element.dart';
+import 'package:mapiah/src/selectable/mp_selectable.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
@@ -122,12 +124,12 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       mpLocator.mpSettingsStore.pointRadius / _canvasScale;
 
   @computed
-  double get selectionToleranceSquaredOnCanvas {
-    final double selectionTolerance =
-        mpLocator.mpSettingsStore.selectionTolerance;
+  double get selectionToleranceOnCanvas =>
+      mpLocator.mpSettingsStore.selectionTolerance / _canvasScale;
 
-    return (selectionTolerance * selectionTolerance) / _canvasScale;
-  }
+  @computed
+  double get selectionToleranceSquaredOnCanvas =>
+      (selectionToleranceOnCanvas * selectionToleranceOnCanvas);
 
   @computed
   bool get showSelectedElements => _selectedElements.isNotEmpty;
@@ -319,12 +321,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @observable
   GlobalKey changeScrapsFABKey = GlobalKey();
 
-  /// Used to serach for selected elements by list of selectable coordinates.
-  final Map<int, List<Offset>> _selectableCoordinates = {};
-
-  /// Used to search for selected elements by others characteristcs of the
-  /// element: boundingBox() for example.
-  final Map<int, Rect> _selectableBoundingBoxes = {};
+  /// Used to search for selected elements by list of selectable coordinates.
+  final Map<int, MPSelectable> _selectables = {};
 
   Offset dragStartCanvasCoordinates = Offset.zero;
 
@@ -391,8 +389,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     }
 
     _isSelected.clear();
-    _selectableCoordinates.clear();
-    _selectableBoundingBoxes.clear();
+    _selectables.clear();
 
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine) {
@@ -410,8 +407,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   void updateSelectableElements() {
-    _selectableCoordinates.clear();
-    _selectableBoundingBoxes.clear();
+    _selectables.clear();
 
     final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
 
@@ -423,21 +419,11 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     }
   }
 
-  /// We are sure that _selectableCoordinates[mapiahID] is already set to a list
-  /// because _addSelectableElement adds/resets it.
-  void _addSelectableElementCoordinates(
-    int mapiahID,
-    Offset selectableCanvasCoordinate,
-  ) {
-    _selectableCoordinates[mapiahID]!.add(selectableCanvasCoordinate);
-  }
-
   void _addSelectableElement(THElement element) {
     if ((element is! THPoint) && (element is! THLine)) {
       return;
     }
 
-    _selectableCoordinates[element.mapiahID] = <Offset>[];
     switch (element) {
       case THPoint _:
         _addPointSelectableElement(element);
@@ -449,55 +435,39 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   void _addPointSelectableElement(THPoint point) {
-    _selectableBoundingBoxes[point.mapiahID] = point.getBoundingBox();
-    _addSelectableElementCoordinates(
-        point.mapiahID, point.position.coordinates);
+    final MPSelectablePoint selectablePoint = MPSelectablePoint(
+      point: point,
+      th2fileEditStore: this as TH2FileEditStore,
+    );
+
+    _selectables[point.mapiahID] = selectablePoint;
   }
 
   void _addLineSelectableElement(THLine line) {
-    final int lineMapiahID = line.mapiahID;
-    final lineSegmentMapiahIDs = line.childrenMapiahID;
+    final MPSelectableLine selectableLine = MPSelectableLine(
+      line: line,
+      th2fileEditStore: this as TH2FileEditStore,
+    );
 
-    _selectableBoundingBoxes[lineMapiahID] = line.getBoundingBox(_thFile);
-
-    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
-      final THElement lineSegment =
-          _thFile.elementByMapiahID(lineSegmentMapiahID);
-
-      if (lineSegment is! THLineSegment) {
-        continue;
-      }
-
-      _addSelectableElementCoordinates(
-          lineMapiahID, lineSegment.endPoint.coordinates);
-    }
+    _selectables[line.mapiahID] = selectableLine;
   }
 
   void _removeSelectableElement(int mapiahID) {
-    _selectableCoordinates.remove(mapiahID);
-    _selectableBoundingBoxes.remove(mapiahID);
+    _selectables.remove(mapiahID);
   }
 
   List<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
     final List<THElement> clickedElements = <THElement>[];
-    final selectableElements = _selectableCoordinates.entries;
+    final selectableElements = _selectables.values;
 
     for (final selectableElement in selectableElements) {
-      final int mapiahID = selectableElement.key;
-      final List<Offset> selectableCanvasCoordinatesList =
-          selectableElement.value;
-
-      for (final selectableCoordinates in selectableCanvasCoordinatesList) {
-        if (offsetsInSelectionTolerance(
-            selectableCoordinates, canvasCoordinates)) {
-          final THElement selectedElement = _thFile.elementByMapiahID(mapiahID);
-          switch (selectedElement) {
-            case THPoint _:
-            case THLine _:
-              clickedElements.add(selectedElement);
-              break;
-          }
+      if (selectableElement.contains(canvasCoordinates)) {
+        switch (selectableElement.element) {
+          case THPoint _:
+          case THLine _:
+            clickedElements.addAll(selectableElement.selectedElements);
+            break;
         }
       }
     }
@@ -507,17 +477,16 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
-    final selectableElements = _selectableBoundingBoxes.entries;
 
-    for (final selectableElement in selectableElements) {
+    for (final selectableElement in _selectables.entries) {
+      final THElement element = selectableElement.value.element;
+
       if (MPNumericAux.isRect1InsideRect2(
-        rect1: selectableElement.value,
+        rect1:
+            (element as MPBoundingBox).getBoundingBox(this as TH2FileEditStore),
         rect2: canvasSelectionWindow,
       )) {
-        final int mapiahID = selectableElement.key;
-        final THElement selectedElement = _thFile.elementByMapiahID(mapiahID);
-
-        insideWindowElements[mapiahID] = selectedElement;
+        insideWindowElements[element.mapiahID] = element;
       }
     }
 
@@ -709,10 +678,9 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
           _thFile.elementByMapiahID(selectedElement.mapiahID);
       switch (element) {
         case THPoint _:
-          boundingBox = element.getBoundingBox();
-          break;
         case THLine _:
-          boundingBox = element.getBoundingBox(_thFile);
+          boundingBox = (element as MPBoundingBox)
+              .getBoundingBox(this as TH2FileEditStore);
           break;
         default:
           continue;
@@ -1190,10 +1158,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   Rect _getZoomToFitBoundingBox({required MPZoomToFitType zoomFitToType}) {
     switch (zoomFitToType) {
       case MPZoomToFitType.file:
-        return _thFile.getBoundingBox();
+        return _thFile.getBoundingBox(this as TH2FileEditStore);
       case MPZoomToFitType.scrap:
         return (_thFile.elementByMapiahID(_activeScrap) as THScrap)
-            .getBoundingBox(_thFile);
+            .getBoundingBox(this as TH2FileEditStore);
       case MPZoomToFitType.selection:
         return _getSelectedElementsBoundingBox();
     }

@@ -46,7 +46,7 @@ const double thMinimumSizeForDrawing = 10.0;
 const int thFirstMapiahIDForTHFiles = -1;
 const int thFirstMapiahIDForElements = 1;
 
-const double thSizePointBoundingBox = 2.0;
+const double thDesiredSegmentLengthOnScreen = 10.0;
 
 const double thDesiredGraphicalScaleScreenPointLength = 200.0;
 const double thGraphicalScalePadding = 80.0;

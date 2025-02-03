@@ -45,6 +45,14 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
           Computed<double>(() => super.pointRadiusOnCanvas,
               name: 'TH2FileEditStoreBase.pointRadiusOnCanvas'))
       .value;
+  Computed<double>? _$selectionToleranceOnCanvasComputed;
+
+  @override
+  double get selectionToleranceOnCanvas =>
+      (_$selectionToleranceOnCanvasComputed ??= Computed<double>(
+              () => super.selectionToleranceOnCanvas,
+              name: 'TH2FileEditStoreBase.selectionToleranceOnCanvas'))
+          .value;
   Computed<double>? _$selectionToleranceSquaredOnCanvasComputed;
 
   @override
@@ -1200,6 +1208,7 @@ isEditMode: ${isEditMode},
 isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
+selectionToleranceOnCanvas: ${selectionToleranceOnCanvas},
 selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
 showSelectedElements: ${showSelectedElements},
 showSelectionHandles: ${showSelectionHandles},

@@ -29,11 +29,10 @@ part of 'th_element.dart';
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
 class THPoint extends THElement
-    with THHasOptionsMixin
+    with THHasOptionsMixin, MPBoundingBox
     implements THHasPLATypeMixin, THPointInterface {
   final THPositionPart position;
   final THPointType pointType;
-  Rect? _boundingBox;
 
   static final _pointTypes = <String>{
     'air-draught',
@@ -276,17 +275,10 @@ class THPoint extends THElement
     return object is THPoint;
   }
 
-  Rect getBoundingBox() {
-    _boundingBox ??= _calculateBoundingBox();
-
-    return _boundingBox!;
-  }
-
-  Rect _calculateBoundingBox() {
-    return Rect.fromCenter(
+  @override
+  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
+    return MPNumericAux.orderedRectSmallestAroundPoint(
       center: position.coordinates,
-      width: thSizePointBoundingBox,
-      height: thSizePointBoundingBox,
     );
   }
 

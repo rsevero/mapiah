@@ -108,7 +108,7 @@ class THScrapScaleCommandOption extends THCommandOption {
         return _numericSpecifications[1].value /
             _numericSpecifications[0].value;
       case 8:
-        double pointSize = MPNumericAux.calculatePointDistance(
+        double pointSize = MPNumericAux.pointsDistance(
           Offset(
             _numericSpecifications[0].value,
             _numericSpecifications[1].value,
@@ -118,7 +118,7 @@ class THScrapScaleCommandOption extends THCommandOption {
             _numericSpecifications[3].value,
           ),
         );
-        double realSize = MPNumericAux.calculatePointDistance(
+        double realSize = MPNumericAux.pointsDistance(
           Offset(
             _numericSpecifications[4].value,
             _numericSpecifications[5].value,

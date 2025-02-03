@@ -8,7 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/selection/mp_selected_element.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';

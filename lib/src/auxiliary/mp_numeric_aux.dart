@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
@@ -116,6 +117,17 @@ class MPNumericAux {
     );
   }
 
+  static Rect orderedRectSmallestAroundPoint({
+    required Offset center,
+  }) {
+    return orderedRectFromLTRB(
+      left: nextDown(center.dx),
+      top: nextDown(center.dy),
+      right: nextUp(center.dx),
+      bottom: nextUp(center.dy),
+    );
+  }
+
   /// In Flutter, the Rect.fromCenter() method does not check if the width or
   /// the height is negative so I am providing this method to ensure that the
   /// Rect is ordered according to Flutter expectations.
@@ -165,6 +177,18 @@ class MPNumericAux {
       top: point1.dy,
       right: point2.dx,
       bottom: point2.dy,
+    );
+  }
+
+  static Rect orderedRectExpanded({
+    required Rect rect,
+    required double delta,
+  }) {
+    return MPNumericAux.orderedRectFromLTRB(
+      left: rect.left - delta,
+      top: rect.top - delta,
+      right: rect.right + delta,
+      bottom: rect.bottom + delta,
     );
   }
 
@@ -296,9 +320,152 @@ class MPNumericAux {
     return original * lengthConversionFactors[originalUnit]![targetUnit]!;
   }
 
-  static double calculatePointDistance(Offset point1, Offset point2) {
+  static double distanceSquaredToLineSegment({
+    required Offset point,
+    required Offset startPoint,
+    required Offset endPoint,
+  }) {
+    final Offset lineVector = endPoint - startPoint;
+    final Offset pointVector = point - startPoint;
+
+    final double dotProduct =
+        lineVector.dx * pointVector.dx + lineVector.dy * pointVector.dy;
+    final double lineLengthSquared =
+        lineVector.dx * lineVector.dx + lineVector.dy * lineVector.dy;
+
+    final double t = (lineLengthSquared == 0)
+        ? 0
+        : (dotProduct / lineLengthSquared).clamp(0, 1);
+
+    final Offset closestPoint = startPoint + lineVector * t;
+
+    return (point - closestPoint).distanceSquared;
+  }
+
+  static bool isPointNearLineSegment({
+    required Offset point,
+    required Offset segmentStart,
+    required Offset segmentEnd,
+    required double toleranceSquared,
+  }) {
+    return distanceSquaredToLineSegment(
+          point: point,
+          startPoint: segmentStart,
+          endPoint: segmentEnd,
+        ) <=
+        toleranceSquared;
+  }
+
+  static bool isPointNearBezierCurve({
+    required Offset point,
+    required List<Offset> controlPoints,
+    required double toleranceSquared,
+    int numOfSegmentsToCreate = 10,
+  }) {
+    List<Offset> pointsOnCurve = [];
+
+    for (int i = 0; i <= numOfSegmentsToCreate; i++) {
+      pointsOnCurve.add(deCasteljau(controlPoints, i / numOfSegmentsToCreate));
+    }
+
+    for (int i = 0; i < pointsOnCurve.length - 1; i++) {
+      if (isPointNearLineSegment(
+        point: point,
+        segmentStart: pointsOnCurve[i],
+        segmentEnd: pointsOnCurve[i + 1],
+        toleranceSquared: toleranceSquared,
+      )) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static double pointsDistance(Offset point1, Offset point2) {
     final double dx = point2.dx - point1.dx;
     final double dy = point2.dy - point1.dy;
+
     return math.sqrt(dx * dx + dy * dy);
+  }
+
+  static Offset lerp(Offset a, Offset b, double t) {
+    return a + (b - a) * t;
+  }
+
+  static Offset deCasteljau(List<Offset> points, double t) {
+    if (points.length == 1) {
+      return points[0];
+    }
+
+    final List<Offset> innerLevelPoints = [];
+
+    for (int i = 0; i < points.length - 1; i++) {
+      innerLevelPoints.add(lerp(points[i], points[i + 1], t));
+    }
+
+    return deCasteljau(innerLevelPoints, t);
+  }
+
+  static double estimateBezierLength(List<Offset> controlPoints) {
+    double length = 0;
+
+    for (int i = 0; i < controlPoints.length - 1; i++) {
+      length += (controlPoints[i + 1] - controlPoints[i]).distance;
+    }
+
+    return length;
+  }
+
+  static int calculateSegments(
+    double estimatedLength,
+    double desiredSegmentLength,
+  ) {
+    return (estimatedLength / desiredSegmentLength).ceil();
+  }
+
+  static double nextUp(double x) {
+    if (x.isNaN || x == double.infinity) {
+      return x;
+    }
+
+    if (x == double.negativeInfinity) {
+      return -double.maxFinite;
+    }
+
+    int bits = Float64List.fromList([x]).buffer.asByteData().getInt64(0);
+
+    if (x >= 0.0) {
+      bits = bits + 1;
+    } else {
+      bits = bits - 1;
+    }
+
+    return Float64List.fromList([bits.toDouble()])
+        .buffer
+        .asByteData()
+        .getFloat64(0);
+  }
+
+  static double nextDown(double x) {
+    if (x.isNaN || x == double.negativeInfinity) {
+      return x;
+    }
+
+    if (x == double.infinity) {
+      return double.maxFinite;
+    }
+
+    int bits = Float64List.fromList([x]).buffer.asByteData().getInt64(0);
+
+    if (x > 0.0) {
+      bits = bits - 1;
+    } else {
+      bits = bits + 1;
+    }
+
+    return Float64List.fromList([bits.toDouble()])
+        .buffer
+        .asByteData()
+        .getFloat64(0);
   }
 }

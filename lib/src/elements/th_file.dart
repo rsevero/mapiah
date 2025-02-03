@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -17,7 +18,8 @@ import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart'
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
+class THFile
+    with THIsParentMixin, THCalculateChildrenBoundingBoxMixin, MPBoundingBox {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -28,8 +30,6 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
   String filename = '';
 
   String encoding = thDefaultEncoding;
-
-  Rect? _boundingBox;
 
   late final int _mapiahID;
 
@@ -230,11 +230,7 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     unregisterElementTHIDByMapiahID(_mapiahIDByTHID[thID]!);
   }
 
-  Rect getBoundingBox() {
-    _boundingBox ??= _calculateBoundingBox();
-    return _boundingBox!;
-  }
-
+  // ignore: unused_element
   Rect _calculateBoundingBox() {
     return calculateChildrenBoundingBox(childrenMapiahID, this);
   }
@@ -299,7 +295,7 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
   }
 
   void _clearTHFileAndParentBoundingBoxes(THElement element) {
-    _boundingBox = null;
+    clearBoundingBox();
     final int parentMapiahID = element.parentMapiahID;
     if (parentMapiahID > 0) {
       final THElement parentElement = elementByMapiahID(parentMapiahID);
@@ -421,7 +417,7 @@ class THFile with THIsParentMixin, THCalculateChildrenBoundingBoxMixin {
     _thIDByMapiahID.clear();
     filename = '';
     encoding = thDefaultEncoding;
-    _boundingBox = null;
+    clearBoundingBox();
   }
 
   bool isSameClass(Object object) {
