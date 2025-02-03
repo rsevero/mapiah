@@ -432,18 +432,17 @@ class MPNumericAux {
       return -double.maxFinite;
     }
 
-    int bits = Float64List.fromList([x]).buffer.asByteData().getInt64(0);
+    ByteData bytes = ByteData(8);
+    bytes.setFloat64(0, x);
+    int signed64 = bytes.getInt64(0);
 
-    if (x >= 0.0) {
-      bits = bits + 1;
+    if (x > 0.0) {
+      signed64++;
     } else {
-      bits = bits - 1;
+      signed64--;
     }
 
-    return Float64List.fromList([bits.toDouble()])
-        .buffer
-        .asByteData()
-        .getFloat64(0);
+    return int64BitsToDouble(signed64);
   }
 
   static double nextDown(double x) {
@@ -455,17 +454,22 @@ class MPNumericAux {
       return double.maxFinite;
     }
 
-    int bits = Float64List.fromList([x]).buffer.asByteData().getInt64(0);
+    ByteData bytes = ByteData(8);
+    bytes.setFloat64(0, x);
+    int signed64 = bytes.getInt64(0);
 
     if (x > 0.0) {
-      bits = bits - 1;
+      signed64--;
     } else {
-      bits = bits + 1;
+      signed64++;
     }
 
-    return Float64List.fromList([bits.toDouble()])
-        .buffer
-        .asByteData()
-        .getFloat64(0);
+    return int64BitsToDouble(signed64);
+  }
+
+  static double int64BitsToDouble(int value) {
+    ByteData bytes = ByteData(8);
+    bytes.setInt64(0, value);
+    return bytes.getFloat64(0);
   }
 }

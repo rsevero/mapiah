@@ -13,6 +13,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
 /// THFile represents the complete contents of a .th or .th2 file.
 ///
@@ -230,9 +231,9 @@ class THFile
     unregisterElementTHIDByMapiahID(_mapiahIDByTHID[thID]!);
   }
 
-  // ignore: unused_element
-  Rect _calculateBoundingBox() {
-    return calculateChildrenBoundingBox(childrenMapiahID, this);
+  @override
+  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
+    return calculateChildrenBoundingBox(th2FileEditStore, childrenMapiahID);
   }
 
   /// Updates the thID of a given element of the THFile.

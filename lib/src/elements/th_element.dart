@@ -21,6 +21,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 
 part 'th_area_border_thid.dart';
 part 'th_area.dart';

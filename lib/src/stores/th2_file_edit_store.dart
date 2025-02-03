@@ -389,7 +389,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     }
 
     _isSelected.clear();
-    _selectables.clear();
 
     parsedFile.elements.forEach((key, value) {
       if (value is THPoint || value is THLine) {
