@@ -931,6 +931,19 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
+  void moveSelectedElementsToCanvasCoordinates(
+      Offset canvasCoordinatesFinalPosition) {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.moveSelectedElementsToCanvasCoordinates');
+    try {
+      return super.moveSelectedElementsToCanvasCoordinates(
+          canvasCoordinatesFinalPosition);
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setActiveScrap(int scrapMapiahID) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.setActiveScrap');

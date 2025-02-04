@@ -135,10 +135,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   bool get showSelectedElements => _selectedElements.isNotEmpty;
 
   @computed
-  bool get showSelectionHandles =>
-      showSelectedElements &&
-      isSelectMode &&
-      _state is! MPTH2FileEditStateMoving;
+  bool get showSelectionHandles => showSelectedElements && isSelectMode;
 
   @computed
   bool get showSelectionWindow =>
@@ -785,6 +782,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
   }
 
+  @action
   void moveSelectedElementsToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
@@ -872,7 +870,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       modifiedLineSegmentsMap[lineChild.mapiahID] = modifiedLineSegment;
     }
 
-    substituteLineSegmentsOfLine(line.mapiahID, modifiedLineSegmentsMap);
+    substituteLineAndLineSegments(line.copyWith(), modifiedLineSegmentsMap);
   }
 
   THPointPaint getUnselectedPointPaint(THPoint point) {
@@ -1261,13 +1259,14 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
         'Substituted element without add selectable element ${modifiedElement.mapiahID}');
   }
 
-  void substituteLineSegmentsOfLine(
-    int lineMapiahID,
+  void substituteLineAndLineSegments(
+    THLine line,
     LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap,
   ) {
     for (final lineSegment in modifiedLineSegmentsMap.values) {
       _thFile.substituteElement(lineSegment);
     }
+    _thFile.substituteElement(line);
   }
 
   void execute(MPCommand command) {
