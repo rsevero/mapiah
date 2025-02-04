@@ -70,8 +70,16 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @readonly
   late int _thFileMapiahID;
 
-  @readonly
-  String _filenameNoPath = '';
+  @computed
+  String get filenameAndScrap {
+    String filename = p.basename(_thFile.filename);
+    if (_hasMultipleScraps) {
+      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+      filename += ' | ${scrap.thID}';
+    }
+
+    return filename;
+  }
 
   @readonly
   Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
@@ -397,8 +405,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     });
 
     updateSelectableElements();
-
-    _filenameNoPath = p.basename(_thFile.filename);
 
     _isLoading = false;
 
@@ -1186,15 +1192,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void transformCanvas(Canvas canvas) {
     // Transformations are applied on the order they are defined.
     canvas.scale(_canvasScale);
-    // // Drawing canvas border
-    // canvas.drawRect(
-    //     Rect.fromPoints(
-    //         Offset(0, 0),
-    //         Offset(
-    //           thFileController.canvasSize.width,
-    //           thFileController.canvasSize.height,
-    //         )),
-    //     THPaints.thPaint7);
     canvas.translate(_canvasTranslation.dx, _canvasTranslation.dy);
     canvas.scale(1, -1);
   }

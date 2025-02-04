@@ -135,7 +135,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      th2FileEditStore.filenameNoPath,
+                      th2FileEditStore.filenameAndScrap,
                       style: statusBarTextStyle,
                     ),
                     Text(th2FileEditStore.statusBarMessage),

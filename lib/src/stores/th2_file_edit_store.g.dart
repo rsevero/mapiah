@@ -17,6 +17,13 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
               () => super.canvasScaleAsPercentageText,
               name: 'TH2FileEditStoreBase.canvasScaleAsPercentageText'))
           .value;
+  Computed<String>? _$filenameAndScrapComputed;
+
+  @override
+  String get filenameAndScrap => (_$filenameAndScrapComputed ??=
+          Computed<String>(() => super.filenameAndScrap,
+              name: 'TH2FileEditStoreBase.filenameAndScrap'))
+      .value;
   Computed<bool>? _$isEditModeComputed;
 
   @override
@@ -321,24 +328,6 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
         () {
       super._thFileMapiahID = value;
       __thFileMapiahIDIsInitialized = true;
-    });
-  }
-
-  late final _$_filenameNoPathAtom =
-      Atom(name: 'TH2FileEditStoreBase._filenameNoPath', context: context);
-
-  String get filenameNoPath {
-    _$_filenameNoPathAtom.reportRead();
-    return super._filenameNoPath;
-  }
-
-  @override
-  String get _filenameNoPath => filenameNoPath;
-
-  @override
-  set _filenameNoPath(String value) {
-    _$_filenameNoPathAtom.reportWrite(value, super._filenameNoPath, () {
-      super._filenameNoPath = value;
     });
   }
 
@@ -1235,6 +1224,7 @@ isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
 changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPortalControllerController},
 changeScrapsFABKey: ${changeScrapsFABKey},
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
+filenameAndScrap: ${filenameAndScrap},
 isEditMode: ${isEditMode},
 isSelectMode: ${isSelectMode},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
