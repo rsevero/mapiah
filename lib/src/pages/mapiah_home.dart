@@ -10,7 +10,16 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:window_size/window_size.dart';
 
-class MapiahHome extends StatelessWidget {
+class MapiahHome extends StatefulWidget {
+  const MapiahHome({super.key}) : super();
+
+  @override
+  State<MapiahHome> createState() => _MapiahHomeState();
+}
+
+class _MapiahHomeState extends State<MapiahHome> {
+  bool _isFilePickerOpen = false;
+
   @override
   Widget build(BuildContext context) {
     setWindowTitle(AppLocalizations.of(context).appTitle);
@@ -90,6 +99,12 @@ class MapiahHome extends StatelessWidget {
   }
 
   void pickTh2File(BuildContext context) async {
+    if (_isFilePickerOpen) {
+      return;
+    }
+
+    _isFilePickerOpen = true;
+
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: AppLocalizations.of(context).th2FilePickSelectTH2File,
@@ -120,6 +135,8 @@ class MapiahHome extends StatelessWidget {
       }
     } catch (e) {
       mpLocator.mpLog.e('Error picking file', error: e);
+    } finally {
+      _isFilePickerOpen = false;
     }
   }
 
