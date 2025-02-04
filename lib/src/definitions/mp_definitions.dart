@@ -46,7 +46,7 @@ const double thMinimumSizeForDrawing = 10.0;
 const int thFirstMapiahIDForTHFiles = -1;
 const int thFirstMapiahIDForElements = 1;
 
-const double thDesiredSegmentLengthOnScreen = 10.0;
+const double thDesiredSegmentLengthOnScreen = 15.0;
 
 const double thDesiredGraphicalScaleScreenPointLength = 200.0;
 const double thGraphicalScalePadding = 20.0;
@@ -85,7 +85,7 @@ const double thFloatingActionZoomIconSize = 24;
 const double thClickDragThreshold = 2.0;
 const double thClickDragThresholdSquared =
     thClickDragThreshold * thClickDragThreshold;
-const double thDefaultSelectionTolerance = 10.0;
+const double thDefaultSelectionTolerance = 5.0;
 const double thDefaultPointRadius = 5.0;
 const double thDefaultLineThickness = 2.0;
 const double thSelectionWindowBorderPaintDashInterval = 5.0;

@@ -73,8 +73,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @computed
   String get filenameAndScrap {
     String filename = p.basename(_thFile.filename);
+
     if (_hasMultipleScraps) {
       final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+
       filename += ' | ${scrap.thID}';
     }
 
