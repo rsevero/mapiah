@@ -10,7 +10,9 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
@@ -18,8 +20,29 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditStore.selectAllElements();
         }
         break;
-      case LogicalKeyboardKey.escape:
-        th2FileEditStore.deselectAllElements();
+      case LogicalKeyboardKey.keyC:
+        if (isAltPressed) {
+          th2FileEditStore.toggleToNextAvailableScrap();
+        }
+        break;
+      case LogicalKeyboardKey.keyS:
+        if (isCtrlPressed) {
+          if (isShiftPressed) {
+            th2FileEditStore.saveAsTH2File();
+          } else {
+            th2FileEditStore.saveTH2File();
+          }
+        }
+        break;
+      case LogicalKeyboardKey.keyY:
+        if (isCtrlPressed) {
+          th2FileEditStore.redo();
+        }
+        break;
+      case LogicalKeyboardKey.keyZ:
+        if (isCtrlPressed) {
+          th2FileEditStore.undo();
+        }
         break;
       case LogicalKeyboardKey.numpad1:
       case LogicalKeyboardKey.digit1:
@@ -39,17 +62,18 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
       case LogicalKeyboardKey.digit4:
         th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         break;
-      case LogicalKeyboardKey.minus:
-      case LogicalKeyboardKey.numpadSubtract:
-        if (isCtrlPressed) {
-          th2FileEditStore.zoomOut(fineZoom: false);
-        }
-        break;
       case LogicalKeyboardKey.add:
       case LogicalKeyboardKey.numpadAdd:
-        if (isCtrlPressed) {
-          th2FileEditStore.zoomIn(fineZoom: false);
-        }
+        th2FileEditStore.zoomIn(fineZoom: false);
+
+        break;
+      case LogicalKeyboardKey.escape:
+        th2FileEditStore.deselectAllElements();
+        break;
+      case LogicalKeyboardKey.minus:
+      case LogicalKeyboardKey.numpadSubtract:
+        th2FileEditStore.zoomOut(fineZoom: false);
+
         break;
     }
   }

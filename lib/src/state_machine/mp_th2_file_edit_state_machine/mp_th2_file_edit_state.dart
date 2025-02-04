@@ -85,12 +85,7 @@ abstract class MPTH2FileEditState {
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
       case MPButtonType.changeScrap:
-        final int nextAvailableScrapID =
-            th2FileEditStore.getNextAvailableScrapID();
-        th2FileEditStore.setActiveScrap(nextAvailableScrapID);
-        th2FileEditStore.clearSelectedElements();
-        th2FileEditStore.updateSelectableElements();
-        th2FileEditStore.triggerAllElementsRedraw();
+        th2FileEditStore.toggleToNextAvailableScrap();
         return true;
       case MPButtonType.redo:
         th2FileEditStore.redo();

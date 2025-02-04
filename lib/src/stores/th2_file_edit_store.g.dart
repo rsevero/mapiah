@@ -962,6 +962,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
+  void toggleToNextAvailableScrap() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.toggleToNextAvailableScrap');
+    try {
+      return super.toggleToNextAvailableScrap();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _updateScreenSize(Size newSize) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase._updateScreenSize');

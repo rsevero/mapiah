@@ -937,6 +937,16 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     return scraps;
   }
 
+  @action
+  void toggleToNextAvailableScrap() {
+    final int nextAvailableScrapID = getNextAvailableScrapID();
+
+    setActiveScrap(nextAvailableScrapID);
+    clearSelectedElements();
+    updateSelectableElements();
+    triggerAllElementsRedraw();
+  }
+
   bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {
     final double dx = offset1.dx - offset2.dx;
     final double dy = offset1.dy - offset2.dy;
@@ -1279,8 +1289,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void _updateUndoRedoStatus() {
     _hasUndo = _undoRedoController.hasUndo;
     _hasRedo = _undoRedoController.hasRedo;
-    _undoDescription = _undoRedoController.undoDescription;
-    _redoDescription = _undoRedoController.redoDescription;
+    _undoDescription = mpLocator.appLocalizations
+        .th2FileEditPageUndo(_undoRedoController.undoDescription);
+    _redoDescription = mpLocator.appLocalizations
+        .th2FileEditPageRedo(_undoRedoController.redoDescription);
   }
 
   void undo() {

@@ -60,10 +60,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 IconButton(
                   icon: Icon(Icons.save_outlined),
                   onPressed: () => th2FileEditStore.saveTH2File(),
+                  tooltip: mpLocator.appLocalizations.th2FileEditPageSave,
                 ),
                 IconButton(
                   icon: Icon(Icons.save_as_outlined),
                   onPressed: () => th2FileEditStore.saveAsTH2File(),
+                  tooltip: mpLocator.appLocalizations.th2FileEditPageSaveAs,
                 ),
               ],
               IconButton(

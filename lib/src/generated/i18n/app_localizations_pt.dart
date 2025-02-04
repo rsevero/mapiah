@@ -23,6 +23,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get close => 'Fechar';
 
   @override
+  String get initialPageAboutMapiahDialog => 'Sobre o Mapiah';
+
+  @override
+  String get initialPageLanguage => 'Idioma';
+
+  @override
+  String get initialPageOpenFile => 'Abrir arquivo (Ctrl+O)';
+
+  @override
   String get initialPagePresentation => 'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
 
   @override
@@ -76,7 +85,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
-  String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo';
+  String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';
 
   @override
   String th2FileEditPageLoadingFile(Object filename) {
@@ -93,10 +102,26 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPagePanTool => 'Mover ponto de vista';
 
   @override
+  String get th2FileEditPageSave => 'Salvar (Ctrl+S)';
+
+  @override
+  String get th2FileEditPageSaveAs => 'Salvar como (Shift+Ctrl+S)';
+
+  @override
+  String th2FileEditPageRedo(Object redoDescription) {
+    return 'Refazer \'$redoDescription\' (Ctrl+Y)';
+  }
+
+  @override
   String get th2FileEditPageSelectTool => 'Selecionar';
 
   @override
-  String get th2FileEditPageZoomIn => 'Aproximar (Ctrl+)';
+  String th2FileEditPageUndo(Object undoDescription) {
+    return 'DEsfazer \'$undoDescription\' (Ctrl+Z)';
+  }
+
+  @override
+  String get th2FileEditPageZoomIn => 'Aproximar (+)';
 
   @override
   String get th2FileEditPageZoomOneToOne => 'Mostrar 1:1 (1)';
@@ -105,7 +130,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageZoomOptions => 'Opções de zoom';
 
   @override
-  String get th2FileEditPageZoomOut => 'Afastar (Ctrl-)';
+  String get th2FileEditPageZoomOut => 'Afastar (-)';
 
   @override
   String get th2FileEditPageZoomOutFile => 'Mostrar arquivo (3)';

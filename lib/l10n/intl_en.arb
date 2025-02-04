@@ -28,6 +28,24 @@
     "type": "text"
   },
 
+  "initialPageAboutMapiahDialog": "About Mapiah",
+  "@initialPageAboutMapiahDialog": {
+    "description": "The label for the about Mapiah dialog",
+    "type": "text"
+  },
+
+  "initialPageLanguage": "Language",
+  "@initialPageLanguage": {
+    "description": "The label for the language selection",
+    "type": "text"
+  },
+
+  "initialPageOpenFile": "Open file (Ctrl+O)",
+  "@initialPageOpenFile": {
+    "description": "The label for the open file button",
+    "type": "text"
+  },
+
   "initialPagePresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
   "@initialPagePresentation": {
     "description": "The initial page presentation of the application",
@@ -115,7 +133,7 @@
     "type": "text"
   },
 
-  "th2FileEditPageChangeActiveScrapTool": "Change active scrap",
+  "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+C)",
   "@th2FileEditPageChangeActiveScrapTool": {
     "description": "The label for the change active scrap tool button",
     "type": "text"
@@ -148,13 +166,44 @@
     "type": "text"
   },
 
+  "th2FileEditPageSave": "Save (Ctrl+S)",
+  "@th2FileEditPageSave": {
+    "description": "The label for the save button",
+    "type": "text"
+  },
+
+  "th2FileEditPageSaveAs": "Save as (Shift+Ctrl+S)",
+  "@th2FileEditPageSaveAs": {
+    "description": "The label for the save as button",
+    "type": "text"
+  },
+
+  "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Y)",
+  "@th2FileEditPageRedo": {
+    "description": "The label for the redo shortcut",
+    "type": "text",
+    "placeholders": {
+      "redoDescription": {}
+    }
+  },
+
   "th2FileEditPageSelectTool": "Select",
   "@th2FileEditPageSelectTool": {
     "description": "The label for the select tool button",
     "type": "text"
   },
 
-  "th2FileEditPageZoomIn": "Zoom In (Ctrl+)",
+
+  "th2FileEditPageUndo": "Undo '{undoDescription}' (Ctrl+Z)",
+  "@th2FileEditPageUndo": {
+    "description": "The label for the undo shortcut",
+    "type": "text",
+    "placeholders": {
+      "undoDescription": {}
+    }
+  },
+
+  "th2FileEditPageZoomIn": "Zoom In (+)",
   "@th2FileEditPageZoomIn": {
     "description": "The label for the zoom in button",
     "type": "text"
@@ -172,7 +221,7 @@
     "type": "text"
   },
 
-  "th2FileEditPageZoomOut": "Zoom Out (Ctrl-)",
+  "th2FileEditPageZoomOut": "Zoom Out (-)",
   "@th2FileEditPageZoomOut": {
     "description": "The label for the zoom out button",
     "type": "text"

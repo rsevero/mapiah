@@ -119,6 +119,24 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
+  /// The label for the about Mapiah dialog
+  ///
+  /// In en, this message translates to:
+  /// **'About Mapiah'**
+  String get initialPageAboutMapiahDialog;
+
+  /// The label for the language selection
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get initialPageLanguage;
+
+  /// The label for the open file button
+  ///
+  /// In en, this message translates to:
+  /// **'Open file (Ctrl+O)'**
+  String get initialPageOpenFile;
+
   /// The initial page presentation of the application
   ///
   /// In en, this message translates to:
@@ -206,7 +224,7 @@ abstract class AppLocalizations {
   /// The label for the change active scrap tool button
   ///
   /// In en, this message translates to:
-  /// **'Change active scrap'**
+  /// **'Change active scrap (Alt+C)'**
   String get th2FileEditPageChangeActiveScrapTool;
 
   /// The label for the loading file message
@@ -233,16 +251,40 @@ abstract class AppLocalizations {
   /// **'Pan'**
   String get th2FileEditPagePanTool;
 
+  /// The label for the save button
+  ///
+  /// In en, this message translates to:
+  /// **'Save (Ctrl+S)'**
+  String get th2FileEditPageSave;
+
+  /// The label for the save as button
+  ///
+  /// In en, this message translates to:
+  /// **'Save as (Shift+Ctrl+S)'**
+  String get th2FileEditPageSaveAs;
+
+  /// The label for the redo shortcut
+  ///
+  /// In en, this message translates to:
+  /// **'Redo \'{redoDescription}\' (Ctrl+Y)'**
+  String th2FileEditPageRedo(Object redoDescription);
+
   /// The label for the select tool button
   ///
   /// In en, this message translates to:
   /// **'Select'**
   String get th2FileEditPageSelectTool;
 
+  /// The label for the undo shortcut
+  ///
+  /// In en, this message translates to:
+  /// **'Undo \'{undoDescription}\' (Ctrl+Z)'**
+  String th2FileEditPageUndo(Object undoDescription);
+
   /// The label for the zoom in button
   ///
   /// In en, this message translates to:
-  /// **'Zoom In (Ctrl+)'**
+  /// **'Zoom In (+)'**
   String get th2FileEditPageZoomIn;
 
   /// The label for the zoom 1:1 button
@@ -260,7 +302,7 @@ abstract class AppLocalizations {
   /// The label for the zoom out button
   ///
   /// In en, this message translates to:
-  /// **'Zoom Out (Ctrl-)'**
+  /// **'Zoom Out (-)'**
   String get th2FileEditPageZoomOut;
 
   /// The label for the show file zoom button

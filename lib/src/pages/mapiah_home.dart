@@ -34,10 +34,12 @@ class _MapiahHomeState extends State<MapiahHome> {
           IconButton(
             icon: Icon(Icons.file_open_outlined),
             onPressed: () => pickTh2File(context),
+            tooltip: mpLocator.appLocalizations.initialPageOpenFile,
           ),
           IconButton(
             icon: Icon(Icons.info_outline),
             onPressed: () => showAboutDialog(context),
+            tooltip: mpLocator.appLocalizations.initialPageAboutMapiahDialog,
           ),
           buildLanguageDropdown(context),
         ],
