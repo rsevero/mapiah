@@ -1051,11 +1051,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
       isIncrease: true,
     );
-    _canvasSize = _screenSize / _canvasScale;
-    _calculateCanvasOffset();
-    _canvasScaleTranslationUndefined = false;
-    warmSelectableElementsCanvasScaleChanged();
-    triggerAllElementsRedraw();
+
+    _changedCanvasScale();
   }
 
   @action
@@ -1065,21 +1062,15 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
       isIncrease: false,
     );
-    _canvasSize = _screenSize / _canvasScale;
-    _calculateCanvasOffset();
-    _canvasScaleTranslationUndefined = false;
-    warmSelectableElementsCanvasScaleChanged();
-    triggerAllElementsRedraw();
+
+    _changedCanvasScale();
   }
 
   @action
   void zoomOneToOne() {
     _canvasScale = 1;
-    _canvasSize = _screenSize / _canvasScale;
-    _calculateCanvasOffset();
-    _canvasScaleTranslationUndefined = false;
-    warmSelectableElementsCanvasScaleChanged();
-    triggerAllElementsRedraw();
+
+    _changedCanvasScale();
   }
 
   @action
@@ -1094,14 +1085,20 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     final double heightScale =
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
 
+    _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
+
     _canvasScale = MPNumericAux.roundScale(
         (widthScale < heightScale) ? widthScale : heightScale);
-    _canvasSize = _screenSize / _canvasScale;
 
-    _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
+    _changedCanvasScale();
+  }
+
+  void _changedCanvasScale() {
+    _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
     warmSelectableElementsCanvasScaleChanged();
+    _selectionHandleCenters = null;
     triggerAllElementsRedraw();
   }
 
