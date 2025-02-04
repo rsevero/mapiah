@@ -49,7 +49,7 @@ const int thFirstMapiahIDForElements = 1;
 const double thDesiredSegmentLengthOnScreen = 10.0;
 
 const double thDesiredGraphicalScaleScreenPointLength = 200.0;
-const double thGraphicalScalePadding = 80.0;
+const double thGraphicalScalePadding = 20.0;
 const double thGraphicalScaleUptickLength = 8.0;
 const double thGraphicalScaleFontSize = 12.0;
 

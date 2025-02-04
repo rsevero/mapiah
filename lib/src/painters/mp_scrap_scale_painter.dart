@@ -20,7 +20,7 @@ class MPScrapScalePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double left = thGraphicalScalePadding;
     final double right = left + lengthUnits / lengthUnitsPerScreenPoint;
-    final double bottom = size.height - (thGraphicalScalePadding / 4);
+    final double bottom = size.height - thGraphicalScalePadding;
 
     canvas.drawLine(
       Offset(left, bottom),
