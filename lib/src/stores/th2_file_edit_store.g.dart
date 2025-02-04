@@ -324,6 +324,24 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
+  late final _$_filenameNoPathAtom =
+      Atom(name: 'TH2FileEditStoreBase._filenameNoPath', context: context);
+
+  String get filenameNoPath {
+    _$_filenameNoPathAtom.reportRead();
+    return super._filenameNoPath;
+  }
+
+  @override
+  String get _filenameNoPath => filenameNoPath;
+
+  @override
+  set _filenameNoPath(String value) {
+    _$_filenameNoPathAtom.reportWrite(value, super._filenameNoPath, () {
+      super._filenameNoPath = value;
+    });
+  }
+
   late final _$_isSelectedAtom =
       Atom(name: 'TH2FileEditStoreBase._isSelected', context: context);
 

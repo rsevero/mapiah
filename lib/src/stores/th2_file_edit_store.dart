@@ -71,6 +71,9 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   late int _thFileMapiahID;
 
   @readonly
+  String _filenameNoPath = '';
+
+  @readonly
   Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
 
   @readonly
@@ -394,6 +397,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     });
 
     updateSelectableElements();
+
+    _filenameNoPath = p.basename(_thFile.filename);
 
     _isLoading = false;
 
