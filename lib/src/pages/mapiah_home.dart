@@ -24,13 +24,13 @@ class MapiahHome extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.file_open_outlined),
-            onPressed: () => _pickTh2File(context),
+            onPressed: () => pickTh2File(context),
           ),
           IconButton(
             icon: Icon(Icons.info_outline),
-            onPressed: () => _showAboutDialog(context),
+            onPressed: () => showAboutDialog(context),
           ),
-          _buildLanguageDropdown(context),
+          buildLanguageDropdown(context),
         ],
       ),
       body: Center(
@@ -38,7 +38,7 @@ class MapiahHome extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageDropdown(BuildContext context) {
+  Widget buildLanguageDropdown(BuildContext context) {
     final List<String> localeIDs = [
       'sys',
       ...AppLocalizations.supportedLocales.map((locale) => locale.languageCode),
@@ -89,7 +89,7 @@ class MapiahHome extends StatelessWidget {
     MPTextToUser.resetTextToUser();
   }
 
-  void _pickTh2File(BuildContext context) async {
+  void pickTh2File(BuildContext context) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: AppLocalizations.of(context).th2FilePickSelectTH2File,
@@ -123,7 +123,7 @@ class MapiahHome extends StatelessWidget {
     }
   }
 
-  void _showAboutDialog(BuildContext context) async {
+  void showAboutDialog(BuildContext context) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     final version = packageInfo.version;
