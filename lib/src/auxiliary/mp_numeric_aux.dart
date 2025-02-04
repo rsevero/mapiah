@@ -424,7 +424,7 @@ class MPNumericAux {
   }
 
   static double nextUp(double x) {
-    if (x.isNaN || x == double.infinity) {
+    if ((x.isNaN) || (x == double.infinity)) {
       return x;
     }
 
@@ -432,9 +432,11 @@ class MPNumericAux {
       return -double.maxFinite;
     }
 
-    ByteData bytes = ByteData(8);
-    bytes.setFloat64(0, x);
-    int signed64 = bytes.getInt64(0);
+    if ((x == 0.0) || (x == -0.0)) {
+      return double.minPositive;
+    }
+
+    int signed64 = doubleToInt64Bits(x);
 
     if (x > 0.0) {
       signed64++;
@@ -446,7 +448,7 @@ class MPNumericAux {
   }
 
   static double nextDown(double x) {
-    if (x.isNaN || x == double.negativeInfinity) {
+    if ((x.isNaN) || (x == double.negativeInfinity)) {
       return x;
     }
 
@@ -454,9 +456,11 @@ class MPNumericAux {
       return double.maxFinite;
     }
 
-    ByteData bytes = ByteData(8);
-    bytes.setFloat64(0, x);
-    int signed64 = bytes.getInt64(0);
+    if ((x == 0.0) || (x == -0.0)) {
+      return -double.minPositive;
+    }
+
+    int signed64 = doubleToInt64Bits(x);
 
     if (x > 0.0) {
       signed64--;
@@ -465,6 +469,12 @@ class MPNumericAux {
     }
 
     return int64BitsToDouble(signed64);
+  }
+
+  static int doubleToInt64Bits(double value) {
+    ByteData bytes = ByteData(8);
+    bytes.setFloat64(0, value);
+    return bytes.getInt64(0);
   }
 
   static double int64BitsToDouble(int value) {

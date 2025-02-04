@@ -492,6 +492,12 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     return insideWindowElements.values.toList();
   }
 
+  void warmSelectableElementsCanvasScaleChanged() {
+    for (final selectableElement in _selectables.values) {
+      selectableElement.canvasScaleChanged();
+    }
+  }
+
   @action
   void setZoomButtonsHovered(bool isHovered) {
     _isZoomButtonsHovered = isHovered;
@@ -742,10 +748,6 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
           (element is! THLine) &&
           (element is! THLineSegment)) {
         return;
-      }
-
-      if (element is THLineSegment) {
-        element = element.parent(_thFile) as THLine;
       }
 
       addSelectedElement(element);
@@ -1046,10 +1048,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
       isIncrease: true,
     );
-    // _canvasScale *= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
+    warmSelectableElementsCanvasScaleChanged();
     triggerAllElementsRedraw();
   }
 
@@ -1060,10 +1062,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
       isIncrease: false,
     );
-    // _canvasScale /= fineZoom ? thFineZoomFactor : thRegularZoomFactor;
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
+    warmSelectableElementsCanvasScaleChanged();
     triggerAllElementsRedraw();
   }
 
@@ -1073,6 +1075,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
+    warmSelectableElementsCanvasScaleChanged();
     triggerAllElementsRedraw();
   }
 
@@ -1095,6 +1098,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
+    warmSelectableElementsCanvasScaleChanged();
     triggerAllElementsRedraw();
   }
 

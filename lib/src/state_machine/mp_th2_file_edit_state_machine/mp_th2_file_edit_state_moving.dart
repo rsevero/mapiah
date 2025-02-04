@@ -1,7 +1,71 @@
 part of 'mp_th2_file_edit_state.dart';
 
-class MPTH2FileEditStateMoving extends MPTH2FileEditState {
+class MPTH2FileEditStateMoving extends MPTH2FileEditState
+    with MPTH2FileEditStateGetSelectedElementsMixin {
   MPTH2FileEditStateMoving({required super.th2FileEditStore});
+
+  /// 1. Clicked on an object?
+  /// 1.1. Yes. Was the object already selected?
+  /// 1.1.1. Yes. Is Shift pressed?
+  /// 1.1.1.1. Yes. Remove the object from the selection. Is the selection empty?
+  /// 1.1.1.1.1. Yes. Change to [MPTH2FileEditStateType.selectEmptySelection];
+  /// 1.1.1.1.2. No. Do nothing;
+  /// 1.1.1.2. No. Do nothing.
+  /// 1.1.2. No. Is Shift pressed?
+  /// 1.1.2.1. Yes. Add object to the selection;
+  /// 1.1.2.2. No. Replace current selection with the clicked object.
+  /// 1.2. No. Is Shift pressed?
+  /// 1.2.1. Yes. Do nothing;
+  /// 1.2.2. No. Clear selection. Change to
+  /// [MPTH2FileEditStateType.selectEmptySelection];
+  @override
+  void onPrimaryButtonClick(PointerUpEvent event) {
+    List<THElement> clickedElements =
+        th2FileEditStore.selectableElementsClicked(event.localPosition);
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+
+    if (clickedElements.isNotEmpty) {
+      clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
+        clickedElements,
+      );
+      final bool clickedElementAlreadySelected =
+          th2FileEditStore.getIsSelected(clickedElements.first);
+
+      if (clickedElementAlreadySelected) {
+        if (shiftPressed) {
+          th2FileEditStore.removeSelectedElement(clickedElements.first);
+          if (th2FileEditStore.selectedElements.isEmpty) {
+            th2FileEditStore
+                .setState(MPTH2FileEditStateType.selectEmptySelection);
+          } else {
+            th2FileEditStore
+                .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+          }
+        } else {
+          th2FileEditStore
+              .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+        }
+        return;
+      } else {
+        if (shiftPressed) {
+          th2FileEditStore.addSelectedElement(clickedElements.first);
+          th2FileEditStore
+              .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+          return;
+        } else {
+          th2FileEditStore.setSelectedElements([clickedElements.first]);
+          th2FileEditStore
+              .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+          return;
+        }
+      }
+    } else {
+      if (!shiftPressed) {
+        th2FileEditStore.clearSelectedElements();
+        th2FileEditStore.setState(MPTH2FileEditStateType.selectEmptySelection);
+      }
+    }
+  }
 
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override

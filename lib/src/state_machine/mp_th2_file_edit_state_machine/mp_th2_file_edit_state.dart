@@ -8,13 +8,14 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
 
-part 'mixins/mp_th2_file_edit_state_get_objects_inside_selection_window_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mp_th2_file_edit_state_moving.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';

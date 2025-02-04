@@ -2,7 +2,7 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     with
-        MPTH2FileEditStateGetObjectsInsideSelectionWindowMixin,
+        MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin {
   MPTH2FileEditStateSelectEmptySelection({required super.th2FileEditStore});
 
@@ -20,7 +20,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
         th2FileEditStore.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
-      th2FileEditStore.setSelectedElements(clickedElements);
+      th2FileEditStore.setSelectedElements(
+        getSelectedElementsWithLineSegmentsConvertedToLines(
+          clickedElements,
+        ),
+      );
     }
 
     th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
@@ -49,12 +53,16 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final List<THElement> elementsInsideSelectionWindow =
-        _getObjectsInsideSelectionWindow(event.localPosition);
+        getObjectsInsideSelectionWindow(event.localPosition);
 
     th2FileEditStore.clearSelectionWindow();
 
     if (elementsInsideSelectionWindow.isNotEmpty) {
-      th2FileEditStore.setSelectedElements(elementsInsideSelectionWindow);
+      th2FileEditStore.setSelectedElements(
+        getSelectedElementsWithLineSegmentsConvertedToLines(
+          elementsInsideSelectionWindow,
+        ),
+      );
       th2FileEditStore.setState(MPTH2FileEditStateType.selectNonEmptySelection);
     }
   }
