@@ -21,6 +21,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   late final TH2FileEditStore th2FileEditStore;
   late final Future<TH2FileEditStoreCreateResult> th2FileEditStoreCreateResult;
   bool _th2FileEditStoreLoaded = false;
+  late final ColorScheme colorScheme;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    colorScheme = Theme.of(context).colorScheme;
     return FutureBuilder<TH2FileEditStoreCreateResult>(
       future: th2FileEditStoreCreateResult,
       builder: (
@@ -58,18 +60,27 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             actions: <Widget>[
               if (fileReady) ...[
                 IconButton(
-                  icon: Icon(Icons.save_outlined),
+                  icon: Icon(
+                    Icons.save_outlined,
+                    color: colorScheme.onSecondaryContainer,
+                  ),
                   onPressed: () => th2FileEditStore.saveTH2File(),
                   tooltip: mpLocator.appLocalizations.th2FileEditPageSave,
                 ),
                 IconButton(
-                  icon: Icon(Icons.save_as_outlined),
+                  icon: Icon(
+                    Icons.save_as_outlined,
+                    color: colorScheme.onSecondaryContainer,
+                  ),
                   onPressed: () => th2FileEditStore.saveAsTH2File(),
                   tooltip: mpLocator.appLocalizations.th2FileEditPageSaveAs,
                 ),
               ],
               IconButton(
-                icon: Icon(Icons.close),
+                icon: Icon(
+                  Icons.close,
+                  color: colorScheme.onSecondaryContainer,
+                ),
                 onPressed: _onLeavePage,
               ),
             ],
@@ -183,12 +194,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         ? th2FileEditStore.undoDescription
                         : AppLocalizations.of(context)
                             .th2FileEditPageNoUndoAvailable,
-                    backgroundColor: hasUndo
-                        ? null
-                        : Theme.of(context).colorScheme.surfaceContainerLowest,
-                    foregroundColor: hasUndo
-                        ? null
-                        : Theme.of(context).colorScheme.surfaceContainerHighest,
+                    backgroundColor:
+                        hasUndo ? null : colorScheme.surfaceContainerLowest,
+                    foregroundColor:
+                        hasUndo ? null : colorScheme.surfaceContainerHighest,
                     onPressed: hasUndo ? onUndoPressed : null,
                     elevation: hasUndo ? 6.0 : 3.0,
                     child: const Icon(Icons.undo),
@@ -207,12 +216,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         ? th2FileEditStore.redoDescription
                         : AppLocalizations.of(context)
                             .th2FileEditPageNoRedoAvailable,
-                    backgroundColor: hasRedo
-                        ? null
-                        : Theme.of(context).colorScheme.surfaceContainerLowest,
-                    foregroundColor: hasRedo
-                        ? null
-                        : Theme.of(context).colorScheme.surfaceContainerHighest,
+                    backgroundColor:
+                        hasRedo ? null : colorScheme.surfaceContainerLowest,
+                    foregroundColor:
+                        hasRedo ? null : colorScheme.surfaceContainerHighest,
                     onPressed: hasRedo ? onRedoPressed : null,
                     elevation: hasRedo ? 6.0 : 3.0,
                     child: const Icon(Icons.redo),
@@ -238,7 +245,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     return Observer(
       builder: (context) {
         final bool isSelectMode = th2FileEditStore.isSelectMode;
-        final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
         return Positioned(
           bottom: 16,
@@ -277,6 +283,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                             'assets/icons/change-scrap-tool.png',
                             width: thFloatingActionIconSize,
                             height: thFloatingActionIconSize,
+                            color: colorScheme.onSecondaryContainer,
                           ),
                         ),
                       ),
@@ -357,9 +364,13 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   'assets/icons/select-tool.png',
                   width: thFloatingActionIconSize,
                   height: thFloatingActionIconSize,
-                  color: isSelectMode ? colorScheme.onPrimary : null,
+                  color: isSelectMode
+                      ? colorScheme.onPrimary
+                      : colorScheme.onSecondaryContainer,
                 ),
-                backgroundColor: isSelectMode ? colorScheme.primary : null,
+                backgroundColor: isSelectMode
+                    ? colorScheme.primary
+                    : colorScheme.onSecondaryContainer,
                 elevation: isSelectMode ? 0 : null,
               ),
               SizedBox(height: 8),
@@ -403,6 +414,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       'assets/icons/zoom_plus.png',
                       width: thFloatingActionZoomIconSize,
                       height: thFloatingActionZoomIconSize,
+                      color: colorScheme.onSecondaryContainer,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -415,6 +427,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       'assets/icons/zoom_one_to_one.png',
                       width: thFloatingActionZoomIconSize,
                       height: thFloatingActionZoomIconSize,
+                      color: colorScheme.onSecondaryContainer,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -431,7 +444,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       height: thFloatingActionZoomIconSize,
                       color: th2FileEditStore.selectedElements.isEmpty
                           ? Colors.grey
-                          : null,
+                          : colorScheme.onSecondaryContainer,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -443,7 +456,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     child: Icon(
                       Icons.zoom_out_map,
                       size: thFloatingActionIconSize,
-                      color: Colors.black,
+                      color: colorScheme.onSecondaryContainer,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -459,7 +472,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       width: thFloatingActionZoomIconSize,
                       height: thFloatingActionZoomIconSize,
                       color: th2FileEditStore.hasMultipleScraps
-                          ? null
+                          ? colorScheme.onSecondaryContainer
                           : Colors.grey,
                     ),
                   ),
@@ -473,6 +486,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       'assets/icons/zoom_minus.png',
                       width: thFloatingActionZoomIconSize,
                       height: thFloatingActionZoomIconSize,
+                      color: colorScheme.onSecondaryContainer,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -488,6 +502,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               'assets/icons/zoom_plus_minus.png',
               width: thFloatingActionZoomIconSize,
               height: thFloatingActionZoomIconSize,
+              color: colorScheme.onSecondaryContainer,
             ),
           ),
         ],
