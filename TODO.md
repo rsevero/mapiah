@@ -10,5 +10,5 @@
 [ ] - Change cursors to show current status
 [ ] - Rename Stores to Controllers
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
-[ ] - All buttons (including zoom buttons) should use default button color
+[X] - All buttons (including zoom buttons) should use default button color
 [ ] - Copy/Paste
