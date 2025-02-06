@@ -133,13 +133,14 @@ class MPMoveElementsCommand extends MPCommand {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'moveCommandParametersList':
           moveCommandParametersList.map((x) => x.toMap()).toList(),
-      'oppositeCommand': oppositeCommand?.toMap(),
-      'descriptionType': descriptionType.name,
-    };
+    });
+
+    return map;
   }
 
   factory MPMoveElementsCommand.fromMap(Map<String, dynamic> map) {
@@ -187,9 +188,6 @@ class MPMoveElementsCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => Object.hash(
-        Object.hashAll(moveCommandParametersList),
-        oppositeCommand,
-        descriptionType,
-      );
+  int get hashCode =>
+      super.hashCode ^ Object.hashAll(moveCommandParametersList);
 }

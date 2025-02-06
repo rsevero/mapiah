@@ -67,6 +67,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
+  String get mpAddElementsCommandDescription => 'Criar elementos';
+
+  @override
+  String get mpAddLineCommandDescription => 'Criar linha';
+
+  @override
+  String get mpAddPointCommandDescription => 'Criar ponto';
+
+  @override
+  String get mpDeleteElementsCommandDescription => 'Apagar elementos';
+
+  @override
+  String get mpDeleteLineCommandDescription => 'Apagar linha';
+
+  @override
+  String get mpDeletePointCommandDescription => 'Apagar ponto';
+
+  @override
   String get mpMoveBezierLineSegmentCommandDescription => 'Mover segmento de linha Bézier';
 
   @override
@@ -86,6 +104,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';
+
+  @override
+  String get th2FileEditPageDeleteButton => 'Apagar (Del)';
 
   @override
   String th2FileEditPageLoadingFile(Object filename) {
@@ -117,7 +138,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String th2FileEditPageUndo(Object undoDescription) {
-    return 'DEsfazer \'$undoDescription\' (Ctrl+Z)';
+    return 'Desfazer \'$undoDescription\' (Ctrl+Z)';
   }
 
   @override

@@ -151,6 +151,20 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
           Computed<bool>(() => super.showUndoRedoButtons,
               name: 'TH2FileEditStoreBase.showUndoRedoButtons'))
       .value;
+  Computed<bool>? _$showDeleteButtonComputed;
+
+  @override
+  bool get showDeleteButton => (_$showDeleteButtonComputed ??= Computed<bool>(
+          () => super.showDeleteButton,
+          name: 'TH2FileEditStoreBase.showDeleteButton'))
+      .value;
+  Computed<bool>? _$deleteButtonEnabledComputed;
+
+  @override
+  bool get deleteButtonEnabled => (_$deleteButtonEnabledComputed ??=
+          Computed<bool>(() => super.deleteButtonEnabled,
+              name: 'TH2FileEditStoreBase.deleteButtonEnabled'))
+      .value;
   Computed<bool>? _$showScrapScaleComputed;
 
   @override
@@ -850,6 +864,17 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
+  void deleteSelected() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase.deleteSelected');
+    try {
+      return super.deleteSelected();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addSelectedElement(THElement element) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.addSelectedElement');
@@ -1149,9 +1174,20 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void _undoRedoDone() {
+  void _updateUndoRedoStatus() {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase._updateUndoRedoStatus');
+    try {
+      return super._updateUndoRedoStatus();
+    } finally {
+      _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _undoRedoDone() {
+    final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
+        name: 'TH2FileEditStoreBase._undoRedoDone');
     try {
       return super._undoRedoDone();
     } finally {
@@ -1252,6 +1288,8 @@ selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
 selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
 showUndoRedoButtons: ${showUndoRedoButtons},
+showDeleteButton: ${showDeleteButton},
+deleteButtonEnabled: ${deleteButtonEnabled},
 showScrapScale: ${showScrapScale},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},

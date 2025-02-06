@@ -158,8 +158,9 @@ class MPMoveLineCommand extends MPCommand {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'lineMapiahID': lineMapiahID,
       'originalLineSegmentsMap': originalLineSegmentsMap.map(
         (key, value) => MapEntry(key.toString(), value.toMap()),
@@ -167,9 +168,9 @@ class MPMoveLineCommand extends MPCommand {
       'modifiedLineSegmentsMap': modifiedLineSegmentsMap.map(
         (key, value) => MapEntry(key.toString(), value.toMap()),
       ),
-      'oppositeCommand': oppositeCommand?.toMap(),
-      'descriptionType': descriptionType.name,
-    };
+    });
+
+    return map;
   }
 
   factory MPMoveLineCommand.fromMap(Map<String, dynamic> map) {
@@ -237,11 +238,11 @@ class MPMoveLineCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         lineMapiahID,
         Object.hashAll(originalLineSegmentsMap.entries),
         Object.hashAll(modifiedLineSegmentsMap.entries),
-        oppositeCommand,
-        descriptionType,
       );
 }

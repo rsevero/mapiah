@@ -180,12 +180,30 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
         final bool hasUndo = th2FileEditStore.hasUndo;
         final bool hasRedo = th2FileEditStore.hasRedo;
+        final bool deleteButtonEnabled = th2FileEditStore.deleteButtonEnabled;
 
         return Positioned(
           top: 16,
           right: 16,
           child: Row(
             children: [
+              if (th2FileEditStore.showDeleteButton) ...[
+                FloatingActionButton(
+                  heroTag: 'delete',
+                  mini: true,
+                  tooltip:
+                      AppLocalizations.of(context).th2FileEditPageDeleteButton,
+                  backgroundColor:
+                      hasUndo ? null : colorScheme.surfaceContainerLowest,
+                  foregroundColor: deleteButtonEnabled
+                      ? null
+                      : colorScheme.surfaceContainerHighest,
+                  onPressed: deleteButtonEnabled ? onDeletePressed : null,
+                  elevation: deleteButtonEnabled ? 6.0 : 3.0,
+                  child: const Icon(Icons.delete_outlined),
+                ),
+                SizedBox(width: 8),
+              ],
               FloatingActionButton(
                 heroTag: 'undo',
                 mini: true,
@@ -222,6 +240,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         );
       },
     );
+  }
+
+  void onDeletePressed() {
+    th2FileEditStore.onButtonPressed(MPButtonType.delete);
   }
 
   void onUndoPressed() {

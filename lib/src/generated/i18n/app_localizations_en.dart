@@ -67,6 +67,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
+  String get mpAddElementsCommandDescription => 'Add elements';
+
+  @override
+  String get mpAddLineCommandDescription => 'Add line';
+
+  @override
+  String get mpAddPointCommandDescription => 'Add point';
+
+  @override
+  String get mpDeleteElementsCommandDescription => 'Delete elements';
+
+  @override
+  String get mpDeleteLineCommandDescription => 'Delete line';
+
+  @override
+  String get mpDeletePointCommandDescription => 'Apagar ponto';
+
+  @override
   String get mpMoveBezierLineSegmentCommandDescription => 'Move Bézier line segment';
 
   @override
@@ -86,6 +104,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageChangeActiveScrapTool => 'Change active scrap (Alt+C)';
+
+  @override
+  String get th2FileEditPageDeleteButton => 'Delete (Del)';
 
   @override
   String th2FileEditPageLoadingFile(Object filename) {

@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_parameters.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 part 'types/mp_command_type.dart';
 part 'mp_move_bezier_line_segment_command.dart';
+part 'mp_delete_point_command.dart';
 part 'mp_move_elements_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
@@ -57,14 +59,47 @@ abstract class MPCommand {
     return jsonEncode(toMap());
   }
 
-  Map<String, dynamic> toMap();
+  Map<String, dynamic> toMap() {
+    return {
+      'commandType': type.name,
+      'oppositeCommand': oppositeCommand?.toMap(),
+      'descriptionType': descriptionType.name,
+    };
+  }
 
   static MPCommand fromJson(String jsonString) {
     return fromMap(jsonDecode(jsonString));
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MPCommand &&
+        other.oppositeCommand == oppositeCommand &&
+        other.descriptionType == descriptionType;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        oppositeCommand,
+        descriptionType,
+      );
+
   static MPCommand fromMap(Map<String, dynamic> map) {
     switch (MPCommandType.values.byName(map['commandType'])) {
+      // case MPCommandType.addElements:
+      //   return MPAddElementsCommand.fromMap(map);
+      // case MPCommandType.addLine:
+      //   return MPAddLineCommand.fromMap(map);
+      // case MPCommandType.addPoint:
+      //   return MPAddPointCommand.fromMap(map);
+      // case MPCommandType.deleteElements:
+      //   return MPDeleteElementsCommand.fromMap(map);
+      // case MPCommandType.deleteLine:
+      //   return MPDeleteLineCommand.fromMap(map);
+      case MPCommandType.deletePoint:
+        return MPDeletePointCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
       case MPCommandType.moveElements:
@@ -75,6 +110,8 @@ abstract class MPCommand {
         return MPMovePointCommand.fromMap(map);
       case MPCommandType.moveStraightLineSegment:
         return MPMoveStraightLineSegmentCommand.fromMap(map);
+      default:
+        throw UnimplementedError();
     }
   }
 }

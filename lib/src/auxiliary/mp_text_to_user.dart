@@ -11,6 +11,18 @@ class MPTextToUser {
   static void resetTextToUser() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
+    _commandDescriptionMap[MPCommandDescriptionType.addElements] =
+        localizations.mpAddElementsCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.addLine] =
+        localizations.mpAddLineCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.addPoint] =
+        localizations.mpAddPointCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.deleteElements] =
+        localizations.mpDeleteElementsCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.deleteLine] =
+        localizations.mpDeleteLineCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.deletePoint] =
+        localizations.mpDeletePointCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.moveBezierLineSegment] =
         localizations.mpMoveBezierLineSegmentCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.moveElements] =

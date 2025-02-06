@@ -62,8 +62,9 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'lineSegmentMapiahID': lineSegmentMapiahID,
       'originalEndPointCoordinates': {
         'dx': originalEndPointCoordinates.dx,
@@ -73,9 +74,9 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         'dx': modifiedEndPointCoordinates.dx,
         'dy': modifiedEndPointCoordinates.dy,
       },
-      'oppositeCommand': oppositeCommand?.toMap(),
-      'descriptionType': descriptionType.name,
-    };
+    });
+
+    return map;
   }
 
   factory MPMoveStraightLineSegmentCommand.fromMap(Map<String, dynamic> map) {
@@ -133,11 +134,11 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         lineSegmentMapiahID,
         originalEndPointCoordinates,
         modifiedEndPointCoordinates,
-        oppositeCommand,
-        descriptionType,
       );
 }

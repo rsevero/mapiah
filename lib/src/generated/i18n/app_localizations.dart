@@ -185,6 +185,42 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
+  /// The description for the add elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Add elements'**
+  String get mpAddElementsCommandDescription;
+
+  /// The description for the add line command
+  ///
+  /// In en, this message translates to:
+  /// **'Add line'**
+  String get mpAddLineCommandDescription;
+
+  /// The description for the add point command
+  ///
+  /// In en, this message translates to:
+  /// **'Add point'**
+  String get mpAddPointCommandDescription;
+
+  /// The description for the delete elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Delete elements'**
+  String get mpDeleteElementsCommandDescription;
+
+  /// The description for the delete line command
+  ///
+  /// In en, this message translates to:
+  /// **'Delete line'**
+  String get mpDeleteLineCommandDescription;
+
+  /// The description for the delete point command
+  ///
+  /// In en, this message translates to:
+  /// **'Apagar ponto'**
+  String get mpDeletePointCommandDescription;
+
   /// The description for the move Bézier line segment command
   ///
   /// In en, this message translates to:
@@ -226,6 +262,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change active scrap (Alt+C)'**
   String get th2FileEditPageChangeActiveScrapTool;
+
+  /// The label for the delete tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete (Del)'**
+  String get th2FileEditPageDeleteButton;
 
   /// The label for the loading file message
   ///

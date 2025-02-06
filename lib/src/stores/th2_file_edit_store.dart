@@ -201,6 +201,14 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @computed
   bool get showUndoRedoButtons => isSelectMode;
 
+  @computed
+  bool get showDeleteButton =>
+      ((_state is MPTH2FileEditStateSelectEmptySelection) ||
+          (_state is MPTH2FileEditStateSelectNonEmptySelection));
+
+  @computed
+  bool get deleteButtonEnabled => _selectedElements.isNotEmpty;
+
   @readonly
   String _statusBarMessage = '';
 
@@ -654,6 +662,23 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     _isSelected.forEach((key, value) => value.value = false);
     _selectedElementsBoundingBox = null;
     _selectionHandleCenters = null;
+  }
+
+  @action
+  void deleteSelected() {
+    if (_selectedElements.isEmpty) {
+      return;
+    }
+    late MPCommand mpCommand;
+    if (_selectedElements.length == 1) {
+      final THElement singleSelectedElement =
+          _selectedElements.values.toList().first.originalElementClone;
+      switch (singleSelectedElement) {
+        case THPoint _:
+        case THLine _:
+      }
+    } else {}
+    mpCommand.execute(this as TH2FileEditStore);
   }
 
   void updateSelectedElementsClones() {

@@ -62,8 +62,9 @@ class MPMovePointCommand extends MPCommand {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'pointMapiahID': pointMapiahID,
       'originalCoordinates': {
         'dx': originalCoordinates.dx,
@@ -73,9 +74,9 @@ class MPMovePointCommand extends MPCommand {
         'dx': modifiedCoordinates.dx,
         'dy': modifiedCoordinates.dy,
       },
-      'oppositeCommand': oppositeCommand?.toMap(),
-      'descriptionType': descriptionType.name,
-    };
+    });
+
+    return map;
   }
 
   factory MPMovePointCommand.fromMap(Map<String, dynamic> map) {
@@ -131,11 +132,11 @@ class MPMovePointCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         pointMapiahID,
         originalCoordinates,
         modifiedCoordinates,
-        oppositeCommand,
-        descriptionType,
       );
 }

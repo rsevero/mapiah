@@ -90,8 +90,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
       'lineSegmentMapiahID': lineSegmentMapiahID,
       'originalEndPointCoordinates': {
         'dx': originalEndPointCoordinates.dx,
@@ -117,9 +118,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         'dx': modifiedControlPoint2Coordinates.dx,
         'dy': modifiedControlPoint2Coordinates.dy,
       },
-      'oppositeCommand': oppositeCommand?.toMap(),
-      'descriptionType': descriptionType.name,
-    };
+    });
+
+    return map;
   }
 
   factory MPMoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
@@ -213,7 +214,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         lineSegmentMapiahID,
         originalEndPointCoordinates,
         modifiedEndPointCoordinates,
@@ -221,7 +224,5 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         modifiedControlPoint1Coordinates,
         originalControlPoint2Coordinates,
         modifiedControlPoint2Coordinates,
-        oppositeCommand,
-        descriptionType,
       );
 }

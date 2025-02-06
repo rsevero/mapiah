@@ -97,6 +97,42 @@
     "type": "text"
   },
 
+  "mpAddElementsCommandDescription": "Add elements",
+  "@mpAddElementsCommandDescription": {
+    "description": "The description for the add elements command",
+    "type": "text"
+  },
+
+  "mpAddLineCommandDescription": "Add line",
+  "@mpAddLineCommandDescription": {
+    "description": "The description for the add line command",
+    "type": "text"
+  },
+
+  "mpAddPointCommandDescription": "Add point",
+  "@mpAddPointCommandDescription": {
+    "description": "The description for the add point command",
+    "type": "text"
+  },
+
+  "mpDeleteElementsCommandDescription": "Delete elements",
+  "@mpDeleteElementsCommandDescription": {
+    "description": "The description for the delete elements command",
+    "type": "text"
+  },
+
+  "mpDeleteLineCommandDescription": "Delete line",
+  "@mpDeleteLineCommandDescription": {
+    "description": "The description for the delete line command",
+    "type": "text"
+  },
+
+  "mpDeletePointCommandDescription": "Apagar ponto",
+  "@mpDeletePointCommandDescription": {
+    "description": "The description for the delete point command",
+    "type": "text"
+  },
+
   "mpMoveBezierLineSegmentCommandDescription": "Move Bézier line segment",
   "@mpMoveBezierLineSegmentCommandDescription": {
     "description": "The description for the move Bézier line segment command",
@@ -136,6 +172,12 @@
   "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+C)",
   "@th2FileEditPageChangeActiveScrapTool": {
     "description": "The label for the change active scrap tool button",
+    "type": "text"
+  },
+
+  "th2FileEditPageDeleteButton": "Delete (Del)",
+  "@th2FileEditPageDeleteButton": {
+    "description": "The label for the delete tool button",
     "type": "text"
   },
 
