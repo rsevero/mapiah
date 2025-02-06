@@ -21,7 +21,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   late final TH2FileEditStore th2FileEditStore;
   late final Future<TH2FileEditStoreCreateResult> th2FileEditStoreCreateResult;
   bool _th2FileEditStoreLoaded = false;
-  late final ColorScheme colorScheme;
+  late ColorScheme colorScheme;
 
   @override
   void initState() {
@@ -113,8 +113,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           ),
                           th2FileEditStore: th2FileEditStore,
                         ),
-                        _undoRedoButtons(),
-                        _actionButtons(),
+                        _stateActionButtons(),
+                        _generalActionButtons(),
                       ],
                     ),
                   );
@@ -171,61 +171,52 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     Navigator.pop(context);
   }
 
-  Widget _undoRedoButtons() {
+  Widget _stateActionButtons() {
     return Observer(
       builder: (_) {
         if (!th2FileEditStore.showUndoRedoButtons) {
           return const SizedBox();
         }
 
+        final bool hasUndo = th2FileEditStore.hasUndo;
+        final bool hasRedo = th2FileEditStore.hasRedo;
+
         return Positioned(
           top: 16,
           right: 16,
           child: Row(
             children: [
-              Observer(
-                builder: (_) {
-                  final bool hasUndo = th2FileEditStore.hasUndo;
-
-                  return FloatingActionButton(
-                    heroTag: 'undo',
-                    mini: true,
-                    tooltip: hasUndo
-                        ? th2FileEditStore.undoDescription
-                        : AppLocalizations.of(context)
-                            .th2FileEditPageNoUndoAvailable,
-                    backgroundColor:
-                        hasUndo ? null : colorScheme.surfaceContainerLowest,
-                    foregroundColor:
-                        hasUndo ? null : colorScheme.surfaceContainerHighest,
-                    onPressed: hasUndo ? onUndoPressed : null,
-                    elevation: hasUndo ? 6.0 : 3.0,
-                    child: const Icon(Icons.undo),
-                  );
-                },
+              FloatingActionButton(
+                heroTag: 'undo',
+                mini: true,
+                tooltip: hasUndo
+                    ? th2FileEditStore.undoDescription
+                    : AppLocalizations.of(context)
+                        .th2FileEditPageNoUndoAvailable,
+                backgroundColor:
+                    hasUndo ? null : colorScheme.surfaceContainerLowest,
+                foregroundColor:
+                    hasUndo ? null : colorScheme.surfaceContainerHighest,
+                onPressed: hasUndo ? onUndoPressed : null,
+                elevation: hasUndo ? 6.0 : 3.0,
+                child: const Icon(Icons.undo),
               ),
-              const SizedBox(width: 8),
-              Observer(
-                builder: (_) {
-                  final bool hasRedo = th2FileEditStore.hasRedo;
-
-                  return FloatingActionButton(
-                    heroTag: 'redo',
-                    mini: true,
-                    tooltip: hasRedo
-                        ? th2FileEditStore.redoDescription
-                        : AppLocalizations.of(context)
-                            .th2FileEditPageNoRedoAvailable,
-                    backgroundColor:
-                        hasRedo ? null : colorScheme.surfaceContainerLowest,
-                    foregroundColor:
-                        hasRedo ? null : colorScheme.surfaceContainerHighest,
-                    onPressed: hasRedo ? onRedoPressed : null,
-                    elevation: hasRedo ? 6.0 : 3.0,
-                    child: const Icon(Icons.redo),
-                  );
-                },
-              ),
+              SizedBox(width: 8),
+              FloatingActionButton(
+                heroTag: 'redo',
+                mini: true,
+                tooltip: hasRedo
+                    ? th2FileEditStore.redoDescription
+                    : AppLocalizations.of(context)
+                        .th2FileEditPageNoRedoAvailable,
+                backgroundColor:
+                    hasRedo ? null : colorScheme.surfaceContainerLowest,
+                foregroundColor:
+                    hasRedo ? null : colorScheme.surfaceContainerHighest,
+                onPressed: hasRedo ? onRedoPressed : null,
+                elevation: hasRedo ? 6.0 : 3.0,
+                child: const Icon(Icons.redo),
+              )
             ],
           ),
         );
@@ -241,7 +232,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     th2FileEditStore.onButtonPressed(MPButtonType.redo);
   }
 
-  Widget _actionButtons() {
+  Widget _generalActionButtons() {
     return Observer(
       builder: (context) {
         final bool isSelectMode = th2FileEditStore.isSelectMode;
