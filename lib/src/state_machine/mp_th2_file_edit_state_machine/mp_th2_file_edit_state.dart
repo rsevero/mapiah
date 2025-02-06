@@ -82,6 +82,10 @@ abstract class MPTH2FileEditState {
 
   void onKeyUpEvent(KeyUpEvent event) {}
 
+  void onStateEnter(MPTH2FileEditState previousState) {}
+
+  void onStateLeave(MPTH2FileEditState nextState) {}
+
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
       case MPButtonType.changeScrap:

@@ -7,6 +7,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   MPTH2FileEditStateSelectEmptySelection({required super.th2FileEditStore});
 
   @override
+  void onStateEnter(MPTH2FileEditState previousState) {
+    th2FileEditStore.clearSelectedElements();
+  }
+
+  @override
   void setVisualMode() {
     th2FileEditStore.setVisualMode(TH2FileEditMode.select);
   }

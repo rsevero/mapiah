@@ -777,10 +777,16 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @action
   void setState(MPTH2FileEditStateType type) {
+    final MPTH2FileEditState previousState = _state;
+
     _state = MPTH2FileEditState.getState(
       type: type,
       thFileEditStore: this as TH2FileEditStore,
     );
+
+    previousState.onStateLeave(_state);
+
+    _state.onStateEnter(previousState);
     _state.setVisualMode();
     _state.setCursor();
     _state.setStatusBarMessage();
@@ -1021,6 +1027,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   triggerAllElementsRedraw() {
     _redrawTriggerSelectedElements++;
     _redrawTriggerNonSelectedElements++;
+    _selectionHandleCenters = null;
   }
 
   @action
@@ -1295,14 +1302,21 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
         .th2FileEditPageRedo(_undoRedoController.redoDescription);
   }
 
+  @action
+  void _undoRedoDone() {
+    _updateUndoRedoStatus();
+    _selectedElements.clear();
+    _selectionHandleCenters = null;
+  }
+
   void undo() {
     _undoRedoController.undo();
-    _updateUndoRedoStatus();
+    _undoRedoDone();
   }
 
   void redo() {
     _undoRedoController.redo();
-    _updateUndoRedoStatus();
+    _undoRedoDone();
   }
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
