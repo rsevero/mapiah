@@ -193,8 +193,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   mini: true,
                   tooltip:
                       AppLocalizations.of(context).th2FileEditPageDeleteButton,
-                  backgroundColor:
-                      hasUndo ? null : colorScheme.surfaceContainerLowest,
+                  backgroundColor: deleteButtonEnabled
+                      ? null
+                      : colorScheme.surfaceContainerLowest,
                   foregroundColor: deleteButtonEnabled
                       ? null
                       : colorScheme.surfaceContainerHighest,
