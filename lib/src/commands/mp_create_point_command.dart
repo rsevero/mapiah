@@ -1,28 +1,28 @@
 part of 'mp_command.dart';
 
-class MPDeletePointCommand extends MPCommand {
-  final THPoint originalPoint;
+class MPCreatePointCommand extends MPCommand {
+  final THPoint newPoint;
 
-  MPDeletePointCommand.forCWJM({
-    required this.originalPoint,
+  MPCreatePointCommand.forCWJM({
+    required this.newPoint,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.deletePoint,
+    super.descriptionType = MPCommandDescriptionType.createPoint,
   }) : super.forCWJM();
 
-  MPDeletePointCommand({
-    required this.originalPoint,
-    super.descriptionType = MPCommandDescriptionType.deletePoint,
+  MPCreatePointCommand({
+    required this.newPoint,
+    super.descriptionType = MPCommandDescriptionType.createPoint,
   }) : super();
 
   @override
   void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    th2FileEditStore.deleteElement(originalPoint);
+    th2FileEditStore.addElement(newPoint);
   }
 
   @override
   MPUndoRedoCommand _createOppositeCommand() {
-    final MPCreatePointCommand oppositeCommand = MPCreatePointCommand(
-      newPoint: originalPoint,
+    final MPDeletePointCommand oppositeCommand = MPDeletePointCommand(
+      originalPoint: newPoint,
       descriptionType: descriptionType,
     );
 
@@ -34,20 +34,20 @@ class MPDeletePointCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    THPoint? originalPoint,
+    THPoint? newPoint,
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
-    return MPDeletePointCommand.forCWJM(
-      originalPoint: originalPoint ?? this.originalPoint,
+    return MPCreatePointCommand.forCWJM(
+      newPoint: newPoint ?? this.newPoint,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPDeletePointCommand.fromMap(Map<String, dynamic> map) {
-    return MPDeletePointCommand.forCWJM(
-      originalPoint: THPoint.fromMap(map['originalPoint']),
+  factory MPCreatePointCommand.fromMap(Map<String, dynamic> map) {
+    return MPCreatePointCommand.forCWJM(
+      newPoint: THPoint.fromMap(map['newPoint']),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
@@ -56,8 +56,8 @@ class MPDeletePointCommand extends MPCommand {
     );
   }
 
-  factory MPDeletePointCommand.fromJson(String source) {
-    return MPDeletePointCommand.fromMap(jsonDecode(source));
+  factory MPCreatePointCommand.fromJson(String source) {
+    return MPCreatePointCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -65,7 +65,7 @@ class MPDeletePointCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'originalPoint': originalPoint.toMap(),
+      'newPoint': newPoint.toMap(),
     });
 
     return map;
@@ -75,15 +75,15 @@ class MPDeletePointCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPDeletePointCommand &&
-        other.originalPoint == originalPoint &&
+    return other is MPCreatePointCommand &&
+        other.newPoint == newPoint &&
         other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ originalPoint.hashCode;
+  int get hashCode => super.hashCode ^ newPoint.hashCode;
 
   @override
-  MPCommandType get type => MPCommandType.deletePoint;
+  MPCommandType get type => MPCommandType.createPoint;
 }

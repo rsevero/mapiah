@@ -185,23 +185,23 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
-  /// The description for the add elements command
+  /// The description for the create elements command
   ///
   /// In en, this message translates to:
-  /// **'Add elements'**
-  String get mpAddElementsCommandDescription;
+  /// **'Create elements'**
+  String get mpCreateElementsCommandDescription;
 
-  /// The description for the add line command
+  /// The description for the create line command
   ///
   /// In en, this message translates to:
-  /// **'Add line'**
-  String get mpAddLineCommandDescription;
+  /// **'Create line'**
+  String get mpCreateLineCommandDescription;
 
-  /// The description for the add point command
+  /// The description for the create point command
   ///
   /// In en, this message translates to:
-  /// **'Add point'**
-  String get mpAddPointCommandDescription;
+  /// **'Create point'**
+  String get mpCreatePointCommandDescription;
 
   /// The description for the delete elements command
   ///

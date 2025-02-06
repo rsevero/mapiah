@@ -11,12 +11,12 @@ class MPTextToUser {
   static void resetTextToUser() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
-    _commandDescriptionMap[MPCommandDescriptionType.addElements] =
-        localizations.mpAddElementsCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.addLine] =
-        localizations.mpAddLineCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.addPoint] =
-        localizations.mpAddPointCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.createElements] =
+        localizations.mpCreateElementsCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.createLine] =
+        localizations.mpCreateLineCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.createPoint] =
+        localizations.mpCreatePointCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.deleteElements] =
         localizations.mpDeleteElementsCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.deleteLine] =

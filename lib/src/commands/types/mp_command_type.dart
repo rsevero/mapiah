@@ -1,9 +1,9 @@
 part of '../mp_command.dart';
 
 enum MPCommandType {
-  addElements,
-  addLine,
-  addPoint,
+  createElements,
+  createLine,
+  createPoint,
   deleteElements,
   deleteLine,
   deletePoint,

@@ -669,16 +669,20 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     if (_selectedElements.isEmpty) {
       return;
     }
+
     late MPCommand mpCommand;
+
     if (_selectedElements.length == 1) {
       final THElement singleSelectedElement =
           _selectedElements.values.toList().first.originalElementClone;
       switch (singleSelectedElement) {
         case THPoint _:
+          mpCommand =
+              MPDeletePointCommand(originalPoint: singleSelectedElement);
         case THLine _:
       }
     } else {}
-    mpCommand.execute(this as TH2FileEditStore);
+    execute(mpCommand);
   }
 
   void updateSelectedElementsClones() {
@@ -1366,6 +1370,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void deleteElement(THElement element) {
     _thFile.deleteElement(element);
     _removeSelectableElement(element.mapiahID);
+    removeSelectedElement(element);
   }
 
   @action

@@ -91,6 +91,9 @@ abstract class MPTH2FileEditState {
       case MPButtonType.changeScrap:
         th2FileEditStore.toggleToNextAvailableScrap();
         return true;
+      case MPButtonType.delete:
+        th2FileEditStore.deleteSelected();
+        return true;
       case MPButtonType.redo:
         th2FileEditStore.redo();
         return true;

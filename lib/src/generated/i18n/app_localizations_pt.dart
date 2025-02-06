@@ -67,13 +67,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
-  String get mpAddElementsCommandDescription => 'Criar elementos';
+  String get mpCreateElementsCommandDescription => 'Criar elementos';
 
   @override
-  String get mpAddLineCommandDescription => 'Criar linha';
+  String get mpCreateLineCommandDescription => 'Criar linha';
 
   @override
-  String get mpAddPointCommandDescription => 'Criar ponto';
+  String get mpCreatePointCommandDescription => 'Criar ponto';
 
   @override
   String get mpDeleteElementsCommandDescription => 'Apagar elementos';

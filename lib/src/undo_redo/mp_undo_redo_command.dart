@@ -64,6 +64,10 @@ class MPUndoRedoCommand {
 
   MPCommand get command {
     switch (commandType) {
+      case MPCommandType.createPoint:
+        return MPCreatePointCommand.fromMap(map);
+      case MPCommandType.deletePoint:
+        return MPDeletePointCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
       case MPCommandType.moveElements:
@@ -74,6 +78,8 @@ class MPUndoRedoCommand {
         return MPMovePointCommand.fromMap(map);
       case MPCommandType.moveStraightLineSegment:
         return MPMoveStraightLineSegmentCommand.fromMap(map);
+      default:
+        throw UnimplementedError();
     }
   }
 }

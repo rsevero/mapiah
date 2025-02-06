@@ -97,21 +97,21 @@
     "type": "text"
   },
 
-  "mpAddElementsCommandDescription": "Add elements",
-  "@mpAddElementsCommandDescription": {
-    "description": "The description for the add elements command",
+  "mpCreateElementsCommandDescription": "Create elements",
+  "@mpCreateElementsCommandDescription": {
+    "description": "The description for the create elements command",
     "type": "text"
   },
 
-  "mpAddLineCommandDescription": "Add line",
-  "@mpAddLineCommandDescription": {
-    "description": "The description for the add line command",
+  "mpCreateLineCommandDescription": "Create line",
+  "@mpCreateLineCommandDescription": {
+    "description": "The description for the create line command",
     "type": "text"
   },
 
-  "mpAddPointCommandDescription": "Add point",
-  "@mpAddPointCommandDescription": {
-    "description": "The description for the add point command",
+  "mpCreatePointCommandDescription": "Create point",
+  "@mpCreatePointCommandDescription": {
+    "description": "The description for the create point command",
     "type": "text"
   },
 

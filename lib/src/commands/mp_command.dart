@@ -8,18 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_parameters.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-part 'types/mp_command_type.dart';
-part 'mp_move_bezier_line_segment_command.dart';
+part 'mp_create_point_command.dart';
 part 'mp_delete_point_command.dart';
+part 'mp_move_bezier_line_segment_command.dart';
 part 'mp_move_elements_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
+part 'types/mp_command_type.dart';
 
 /// Abstract class that defines the structure of a command.
 ///

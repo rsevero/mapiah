@@ -1,7 +1,7 @@
 enum MPCommandDescriptionType {
-  addElements,
-  addLine,
-  addPoint,
+  createElements,
+  createLine,
+  createPoint,
   deleteElements,
   deleteLine,
   deletePoint,
