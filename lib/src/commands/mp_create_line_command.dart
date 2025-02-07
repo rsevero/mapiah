@@ -32,6 +32,8 @@ class MPCreateLineCommand extends MPCommand {
         parentMapiahID: newLineMapiahID,
       );
     }
+
+    th2FileEditController.addSelectableElement(newLine);
   }
 
   @override
@@ -101,7 +103,8 @@ class MPCreateLineCommand extends MPCommand {
 
     return other is MPCreateLineCommand &&
         other.newLine == newLine &&
-        other.lineChildren == lineChildren &&
+        const DeepCollectionEquality()
+            .equals(other.lineChildren, lineChildren) &&
         other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }

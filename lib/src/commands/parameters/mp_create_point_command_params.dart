@@ -1,14 +1,14 @@
 part of 'mp_create_command_params.dart';
 
 class MPCreatePointCommandParams extends MPCreateCommandParams {
-  final int pointMapiahID;
+  final THPoint point;
 
-  MPCreatePointCommandParams({required this.pointMapiahID});
+  MPCreatePointCommandParams({required this.point});
 
   @override
-  MPCreateCommandParams copyWith({int? pointMapiahID}) {
+  MPCreateCommandParams copyWith({THPoint? point}) {
     return MPCreatePointCommandParams(
-      pointMapiahID: pointMapiahID ?? this.pointMapiahID,
+      point: point ?? this.point,
     );
   }
 
@@ -17,7 +17,7 @@ class MPCreatePointCommandParams extends MPCreateCommandParams {
     final map = super.toMap();
 
     map.addAll({
-      'pointMapiahID': pointMapiahID,
+      'point': point.toMap(),
     });
 
     return map;
@@ -25,7 +25,7 @@ class MPCreatePointCommandParams extends MPCreateCommandParams {
 
   factory MPCreatePointCommandParams.fromMap(Map<String, dynamic> map) {
     return MPCreatePointCommandParams(
-      pointMapiahID: map['pointMapiahID'],
+      point: THPoint.fromMap(map['point']),
     );
   }
 
@@ -37,12 +37,11 @@ class MPCreatePointCommandParams extends MPCreateCommandParams {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCreatePointCommandParams &&
-        other.pointMapiahID == pointMapiahID;
+    return other is MPCreatePointCommandParams && other.point == point;
   }
 
   @override
-  int get hashCode => pointMapiahID.hashCode;
+  int get hashCode => point.hashCode;
 
   @override
   MPCreateCommandParamsType get paramsType => MPCreateCommandParamsType.point;

@@ -1,21 +1,21 @@
 part of 'mp_create_command_params.dart';
 
 class MPCreateLineCommandParams extends MPCreateCommandParams {
-  final int lineMapiahID;
+  final THLine line;
   final List<THElement> lineChildren;
 
   MPCreateLineCommandParams({
-    required this.lineMapiahID,
+    required this.line,
     required this.lineChildren,
   });
 
   @override
   MPCreateCommandParams copyWith({
-    int? lineMapiahID,
+    THLine? line,
     List<THElement>? lineChildren,
   }) {
     return MPCreateLineCommandParams(
-      lineMapiahID: lineMapiahID ?? this.lineMapiahID,
+      line: line ?? this.line,
       lineChildren: lineChildren ?? this.lineChildren,
     );
   }
@@ -25,7 +25,7 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
     final map = super.toMap();
 
     map.addAll({
-      'lineMapiahID': lineMapiahID,
+      'line': line.toMap(),
       'lineChildren': lineChildren.map((x) => x.toMap()).toList(),
     });
 
@@ -34,7 +34,7 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
 
   factory MPCreateLineCommandParams.fromMap(Map<String, dynamic> map) {
     return MPCreateLineCommandParams(
-      lineMapiahID: map['lineMapiahID'],
+      line: THLine.fromMap(map['line']),
       lineChildren: List<THElement>.from(
         map['lineChildren'].map((x) => THElement.fromMap(x)),
       ),
@@ -50,12 +50,12 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
     if (identical(this, other)) return true;
 
     return other is MPCreateLineCommandParams &&
-        other.lineMapiahID == lineMapiahID &&
+        other.line == line &&
         other.lineChildren == lineChildren;
   }
 
   @override
-  int get hashCode => lineMapiahID.hashCode ^ Object.hashAll(lineChildren);
+  int get hashCode => line.hashCode ^ Object.hashAll(lineChildren);
 
   @override
   MPCreateCommandParamsType get paramsType => MPCreateCommandParamsType.line;

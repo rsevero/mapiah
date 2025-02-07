@@ -438,12 +438,12 @@ abstract class TH2FileEditControllerBase
     for (final int elementMapiahID in scrap.childrenMapiahID) {
       final THElement element = _thFile.elementByMapiahID(elementMapiahID);
       if (element is THPoint || element is THLine) {
-        _addSelectableElement(element);
+        addSelectableElement(element);
       }
     }
   }
 
-  void _addSelectableElement(THElement element) {
+  void addSelectableElement(THElement element) {
     if ((element is! THPoint) && (element is! THLine)) {
       return;
     }
@@ -1304,14 +1304,14 @@ abstract class TH2FileEditControllerBase
 
   void substituteElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
-    _addSelectableElement(modifiedElement);
+    addSelectableElement(modifiedElement);
     mpLocator.mpLog.finer('Substituted element ${modifiedElement.mapiahID}');
   }
 
   void substituteElements(List<THElement> modifiedElements) {
     for (final modifiedElement in modifiedElements) {
       _thFile.substituteElement(modifiedElement);
-      _addSelectableElement(modifiedElement);
+      addSelectableElement(modifiedElement);
       mpLocator.mpLog
           .finer('Substituted element ${modifiedElement.mapiahID} from list');
     }
@@ -1383,7 +1383,7 @@ abstract class TH2FileEditControllerBase
       parent.addElementToParent(newElement);
     }
 
-    _addSelectableElement(newElement);
+    addSelectableElement(newElement);
   }
 
   void addElementWithParentMapiahIDWithoutSelectableElement({
