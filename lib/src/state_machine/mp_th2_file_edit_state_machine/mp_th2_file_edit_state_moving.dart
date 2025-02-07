@@ -110,20 +110,19 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState
           break;
       }
     } else if (selectedCount > 1) {
-      final List<MPMoveCommandOriginalParameters>
+      final List<MPMoveCommandOriginalParams>
           moveCommandOriginalParametersList = th2FileEditStore
               .selectedElements.values
-              .map<MPMoveCommandOriginalParameters>(
-                  (MPSelectedElement selected) {
+              .map<MPMoveCommandOriginalParams>((MPSelectedElement selected) {
         final THElement selectedElement = selected.originalElementClone;
         switch (selected) {
           case MPSelectedPoint _:
-            return MPMoveCommandPointOriginalParameters(
+            return MPMoveCommandPointOriginalParams(
               mapiahID: selectedElement.mapiahID,
               coordinates: (selectedElement as THPoint).position.coordinates,
             );
           case MPSelectedLine _:
-            return MPMoveCommandLineOriginalParameters(
+            return MPMoveCommandLineOriginalParams(
               mapiahID: selectedElement.mapiahID,
               lineSegmentsMap: selected.originalLineSegmentsMapClone,
             );

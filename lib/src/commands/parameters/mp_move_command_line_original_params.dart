@@ -1,32 +1,33 @@
-part of 'mp_move_command_original_parameters.dart';
+part of 'mp_move_command_original_params.dart';
 
-class MPMoveCommandLineOriginalParameters
-    extends MPMoveCommandOriginalParameters {
+class MPMoveCommandLineOriginalParams extends MPMoveCommandOriginalParams {
   final LinkedHashMap<int, THLineSegment> lineSegmentsMap;
 
-  MPMoveCommandLineOriginalParameters({
+  MPMoveCommandLineOriginalParams({
     required super.mapiahID,
     required this.lineSegmentsMap,
   });
 
   @override
-  MPMoveCommandOriginalParametersType get type =>
-      MPMoveCommandOriginalParametersType.line;
+  MPMoveCommandOriginalParamsType get type =>
+      MPMoveCommandOriginalParamsType.line;
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'moveCommandOriginalParametersType': type.name,
+    final map = super.toMap();
+
+    map.addAll({
       'mapiahID': mapiahID,
       'lineSegmentsMap': lineSegmentsMap.map(
         (key, value) => MapEntry(key.toString(), value.toMap()),
       ),
-    };
+    });
+
+    return map;
   }
 
-  factory MPMoveCommandLineOriginalParameters.fromMap(
-      Map<String, dynamic> map) {
-    return MPMoveCommandLineOriginalParameters(
+  factory MPMoveCommandLineOriginalParams.fromMap(Map<String, dynamic> map) {
+    return MPMoveCommandLineOriginalParams(
       mapiahID: map['mapiahID'],
       lineSegmentsMap: LinkedHashMap<int, THLineSegment>.fromEntries(
         (map['lineSegmentsMap'] as Map<String, dynamic>).entries.map(
@@ -39,16 +40,16 @@ class MPMoveCommandLineOriginalParameters
     );
   }
 
-  factory MPMoveCommandLineOriginalParameters.fromJson(String source) {
-    return MPMoveCommandLineOriginalParameters.fromMap(jsonDecode(source));
+  factory MPMoveCommandLineOriginalParams.fromJson(String source) {
+    return MPMoveCommandLineOriginalParams.fromMap(jsonDecode(source));
   }
 
   @override
-  MPMoveCommandLineOriginalParameters copyWith({
+  MPMoveCommandLineOriginalParams copyWith({
     int? mapiahID,
     LinkedHashMap<int, THLineSegment>? lineSegmentsMap,
   }) {
-    return MPMoveCommandLineOriginalParameters(
+    return MPMoveCommandLineOriginalParams(
       mapiahID: mapiahID ?? this.mapiahID,
       lineSegmentsMap: lineSegmentsMap ?? this.lineSegmentsMap,
     );
@@ -58,7 +59,7 @@ class MPMoveCommandLineOriginalParameters
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPMoveCommandLineOriginalParameters &&
+    return other is MPMoveCommandLineOriginalParams &&
         other.mapiahID == mapiahID &&
         const DeepCollectionEquality()
             .equals(other.lineSegmentsMap, lineSegmentsMap);

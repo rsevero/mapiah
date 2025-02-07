@@ -1,33 +1,34 @@
-part of 'mp_move_command_original_parameters.dart';
+part of 'mp_move_command_original_params.dart';
 
-class MPMoveCommandPointOriginalParameters
-    extends MPMoveCommandOriginalParameters {
+class MPMoveCommandPointOriginalParams extends MPMoveCommandOriginalParams {
   final Offset coordinates;
 
-  MPMoveCommandPointOriginalParameters({
+  MPMoveCommandPointOriginalParams({
     required super.mapiahID,
     required this.coordinates,
   });
 
   @override
-  MPMoveCommandOriginalParametersType get type =>
-      MPMoveCommandOriginalParametersType.point;
+  MPMoveCommandOriginalParamsType get type =>
+      MPMoveCommandOriginalParamsType.point;
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'moveCommandOriginalParametersType': type.name,
+    final map = super.toMap();
+
+    map.addAll({
       'mapiahID': mapiahID,
       'coordinates': {
         'dx': coordinates.dx,
         'dy': coordinates.dy,
       },
-    };
+    });
+
+    return map;
   }
 
-  factory MPMoveCommandPointOriginalParameters.fromMap(
-      Map<String, dynamic> map) {
-    return MPMoveCommandPointOriginalParameters(
+  factory MPMoveCommandPointOriginalParams.fromMap(Map<String, dynamic> map) {
+    return MPMoveCommandPointOriginalParams(
       mapiahID: map['mapiahID'],
       coordinates: Offset(
         map['coordinates']['dx'],
@@ -36,16 +37,16 @@ class MPMoveCommandPointOriginalParameters
     );
   }
 
-  factory MPMoveCommandPointOriginalParameters.fromJson(String source) {
-    return MPMoveCommandPointOriginalParameters.fromMap(jsonDecode(source));
+  factory MPMoveCommandPointOriginalParams.fromJson(String source) {
+    return MPMoveCommandPointOriginalParams.fromMap(jsonDecode(source));
   }
 
   @override
-  MPMoveCommandPointOriginalParameters copyWith({
+  MPMoveCommandPointOriginalParams copyWith({
     int? mapiahID,
     Offset? coordinates,
   }) {
-    return MPMoveCommandPointOriginalParameters(
+    return MPMoveCommandPointOriginalParams(
       mapiahID: mapiahID ?? this.mapiahID,
       coordinates: coordinates ?? this.coordinates,
     );
@@ -55,7 +56,7 @@ class MPMoveCommandPointOriginalParameters
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPMoveCommandPointOriginalParameters &&
+    return other is MPMoveCommandPointOriginalParams &&
         other.mapiahID == mapiahID &&
         other.coordinates == coordinates;
   }

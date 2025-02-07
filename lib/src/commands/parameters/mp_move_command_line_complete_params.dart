@@ -1,34 +1,35 @@
-part of 'mp_move_command_complete_parameters.dart';
+part of 'mp_move_command_complete_params.dart';
 
-class MPMoveCommandLineCompleteParameters
-    extends MPMoveCommandCompleteParameters {
-  final MPMoveCommandLineOriginalParameters original;
+class MPMoveCommandLineCompleteParams extends MPMoveCommandCompleteParams {
+  final MPMoveCommandLineOriginalParams original;
   final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap;
 
-  MPMoveCommandLineCompleteParameters({
+  MPMoveCommandLineCompleteParams({
     required this.original,
     required this.modifiedLineSegmentsMap,
   });
 
   @override
-  MPMoveCommandCompleteParametersType get type =>
-      MPMoveCommandCompleteParametersType.line;
+  MPMoveCommandCompleteParamsType get type =>
+      MPMoveCommandCompleteParamsType.line;
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'moveCommandCompleteParametersType': type.name,
+    final map = super.toMap();
+
+    map.addAll({
       'original': original.toMap(),
       'modifiedLineSegmentsMap': modifiedLineSegmentsMap.map(
         (key, value) => MapEntry(key.toString(), value.toMap()),
       ),
-    };
+    });
+
+    return map;
   }
 
-  factory MPMoveCommandLineCompleteParameters.fromMap(
-      Map<String, dynamic> map) {
-    return MPMoveCommandLineCompleteParameters(
-      original: MPMoveCommandLineOriginalParameters.fromMap(map['original']),
+  factory MPMoveCommandLineCompleteParams.fromMap(Map<String, dynamic> map) {
+    return MPMoveCommandLineCompleteParams(
+      original: MPMoveCommandLineOriginalParams.fromMap(map['original']),
       modifiedLineSegmentsMap: LinkedHashMap<int, THLineSegment>.fromEntries(
         (map['modifiedLineSegmentsMap'] as Map<String, dynamic>).entries.map(
               (e) => MapEntry(
@@ -40,16 +41,16 @@ class MPMoveCommandLineCompleteParameters
     );
   }
 
-  factory MPMoveCommandLineCompleteParameters.fromJson(String source) {
-    return MPMoveCommandLineCompleteParameters.fromMap(jsonDecode(source));
+  factory MPMoveCommandLineCompleteParams.fromJson(String source) {
+    return MPMoveCommandLineCompleteParams.fromMap(jsonDecode(source));
   }
 
   @override
-  MPMoveCommandLineCompleteParameters copyWith({
-    MPMoveCommandLineOriginalParameters? original,
+  MPMoveCommandLineCompleteParams copyWith({
+    MPMoveCommandLineOriginalParams? original,
     LinkedHashMap<int, THLineSegment>? modifiedLineSegmentsMap,
   }) {
-    return MPMoveCommandLineCompleteParameters(
+    return MPMoveCommandLineCompleteParams(
       original: original ?? this.original,
       modifiedLineSegmentsMap:
           modifiedLineSegmentsMap ?? this.modifiedLineSegmentsMap,
@@ -60,7 +61,7 @@ class MPMoveCommandLineCompleteParameters
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPMoveCommandLineCompleteParameters &&
+    return other is MPMoveCommandLineCompleteParams &&
         other.original == original &&
         const DeepCollectionEquality()
             .equals(other.modifiedLineSegmentsMap, modifiedLineSegmentsMap);

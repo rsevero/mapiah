@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPMoveElementsCommand extends MPCommand {
-  late final List<MPMoveCommandCompleteParameters> moveCommandParametersList;
+  late final List<MPMoveCommandCompleteParams> moveCommandParametersList;
   final List<MPUndoRedoCommand> oppositeCommandList = [];
 
   MPMoveElementsCommand.forCWJM({
@@ -16,7 +16,7 @@ class MPMoveElementsCommand extends MPCommand {
   }) : super();
 
   MPMoveElementsCommand.fromDelta({
-    required List<MPMoveCommandOriginalParameters>
+    required List<MPMoveCommandOriginalParams>
         moveCommandOriginalParametersList,
     required Offset deltaOnCanvas,
     super.descriptionType = MPCommandDescriptionType.moveElements,
@@ -25,7 +25,7 @@ class MPMoveElementsCommand extends MPCommand {
     for (final moveCommandOriginalParameters
         in moveCommandOriginalParametersList) {
       switch (moveCommandOriginalParameters) {
-        case MPMoveCommandLineOriginalParameters _:
+        case MPMoveCommandLineOriginalParams _:
           final MPMoveLineCommand moveLineCommand = MPMoveLineCommand.fromDelta(
             lineMapiahID: moveCommandOriginalParameters.mapiahID,
             originalLineSegmentsMap:
@@ -34,13 +34,13 @@ class MPMoveElementsCommand extends MPCommand {
           );
 
           moveCommandParametersList.add(
-            MPMoveCommandLineCompleteParameters(
+            MPMoveCommandLineCompleteParams(
               original: moveCommandOriginalParameters,
               modifiedLineSegmentsMap: moveLineCommand.modifiedLineSegmentsMap,
             ),
           );
           break;
-        case MPMoveCommandPointOriginalParameters _:
+        case MPMoveCommandPointOriginalParams _:
           final MPMovePointCommand movePointCommand =
               MPMovePointCommand.fromDelta(
             pointMapiahID: moveCommandOriginalParameters.mapiahID,
@@ -49,7 +49,7 @@ class MPMoveElementsCommand extends MPCommand {
           );
 
           moveCommandParametersList.add(
-            MPMoveCommandPointCompleteParameters(
+            MPMoveCommandPointCompleteParams(
               original: moveCommandOriginalParameters,
               modifiedCoordinates: movePointCommand.modifiedCoordinates,
             ),
@@ -66,7 +66,7 @@ class MPMoveElementsCommand extends MPCommand {
 
     for (final moveCommandParameters in moveCommandParametersList) {
       switch (moveCommandParameters) {
-        case MPMoveCommandLineCompleteParameters _:
+        case MPMoveCommandLineCompleteParams _:
           moveCommand = MPMoveLineCommand(
             lineMapiahID: moveCommandParameters.original.mapiahID,
             originalLineSegmentsMap:
@@ -75,7 +75,7 @@ class MPMoveElementsCommand extends MPCommand {
                 moveCommandParameters.modifiedLineSegmentsMap,
           );
           break;
-        case MPMoveCommandPointCompleteParameters _:
+        case MPMoveCommandPointCompleteParams _:
           moveCommand = MPMovePointCommand(
             pointMapiahID: moveCommandParameters.original.mapiahID,
             originalCoordinates: moveCommandParameters.original.coordinates,
@@ -90,14 +90,14 @@ class MPMoveElementsCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
-    late MPMoveCommandCompleteParameters oppositeMoveCommandParameters;
-    final List<MPMoveCommandCompleteParameters>
-        oppositeMoveCommandParametersList = [];
+    late MPMoveCommandCompleteParams oppositeMoveCommandParameters;
+    final List<MPMoveCommandCompleteParams> oppositeMoveCommandParametersList =
+        [];
 
     for (final moveCommandParameters in moveCommandParametersList) {
       switch (moveCommandParameters) {
-        case MPMoveCommandLineCompleteParameters _:
-          oppositeMoveCommandParameters = MPMoveCommandLineCompleteParameters(
+        case MPMoveCommandLineCompleteParams _:
+          oppositeMoveCommandParameters = MPMoveCommandLineCompleteParams(
             original: moveCommandParameters.original.copyWith(
               lineSegmentsMap: moveCommandParameters.modifiedLineSegmentsMap,
             ),
@@ -105,8 +105,8 @@ class MPMoveElementsCommand extends MPCommand {
                 moveCommandParameters.original.lineSegmentsMap,
           );
           break;
-        case MPMoveCommandPointCompleteParameters _:
-          oppositeMoveCommandParameters = MPMoveCommandPointCompleteParameters(
+        case MPMoveCommandPointCompleteParams _:
+          oppositeMoveCommandParameters = MPMoveCommandPointCompleteParams(
             original: moveCommandParameters.original.copyWith(
               coordinates: moveCommandParameters.modifiedCoordinates,
             ),
@@ -145,9 +145,9 @@ class MPMoveElementsCommand extends MPCommand {
 
   factory MPMoveElementsCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveElementsCommand.forCWJM(
-      moveCommandParametersList: List<MPMoveCommandCompleteParameters>.from(
+      moveCommandParametersList: List<MPMoveCommandCompleteParams>.from(
         map['moveCommandParametersList'].map(
-          (x) => MPMoveCommandCompleteParameters.fromMap(x),
+          (x) => MPMoveCommandCompleteParams.fromMap(x),
         ),
       ),
       oppositeCommand: map['oppositeCommand'] == null
@@ -164,7 +164,7 @@ class MPMoveElementsCommand extends MPCommand {
 
   @override
   MPMoveElementsCommand copyWith({
-    List<MPMoveCommandCompleteParameters>? moveCommandParametersList,
+    List<MPMoveCommandCompleteParams>? moveCommandParametersList,
     MPUndoRedoCommand? oppositeCommand,
     MPCommandDescriptionType? descriptionType,
   }) {
