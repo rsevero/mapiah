@@ -10,9 +10,6 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
   });
 
   @override
-  MPCreateCommandParamsType get paramsType => MPCreateCommandParamsType.line;
-
-  @override
   MPCreateCommandParams copyWith({
     int? lineMapiahID,
     List<THElement>? lineChildren,
@@ -29,9 +26,37 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
 
     map.addAll({
       'lineMapiahID': lineMapiahID,
-      //  'lineChildren': ,
+      'lineChildren': lineChildren.map((x) => x.toMap()).toList(),
     });
 
     return map;
   }
+
+  factory MPCreateLineCommandParams.fromMap(Map<String, dynamic> map) {
+    return MPCreateLineCommandParams(
+      lineMapiahID: map['lineMapiahID'],
+      lineChildren: List<THElement>.from(
+        map['lineChildren'].map((x) => THElement.fromMap(x)),
+      ),
+    );
+  }
+
+  factory MPCreateLineCommandParams.fromJson(String source) {
+    return MPCreateLineCommandParams.fromMap(jsonDecode(source));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MPCreateLineCommandParams &&
+        other.lineMapiahID == lineMapiahID &&
+        other.lineChildren == lineChildren;
+  }
+
+  @override
+  int get hashCode => lineMapiahID.hashCode ^ Object.hashAll(lineChildren);
+
+  @override
+  MPCreateCommandParamsType get paramsType => MPCreateCommandParamsType.line;
 }

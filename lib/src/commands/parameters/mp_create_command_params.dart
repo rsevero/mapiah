@@ -34,12 +34,10 @@ abstract class MPCreateCommandParams {
   static MPCreateCommandParams fromMap(Map<String, dynamic> map) {
     switch (MPCreateCommandParamsType.values
         .byName(map['mpCreateCommandParamsType'])) {
-      // case MPCreateCommandParamsType.line:
-      //   return MPCreateLineCommandParams.fromMap(map);
-      // case MPCreateCommandParamsType.point:
-      //   return MPCreatePointCommandParams.fromMap(map);
-      default:
-        throw UnimplementedError();
+      case MPCreateCommandParamsType.line:
+        return MPCreateLineCommandParams.fromMap(map);
+      case MPCreateCommandParamsType.point:
+        return MPCreatePointCommandParams.fromMap(map);
     }
   }
 }
