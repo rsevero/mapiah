@@ -68,7 +68,9 @@ class THGrammar extends GrammarDefinition {
 
   /// Any string
   Parser anyString() =>
-      quotedString().trim() | unquotedString().flatten().trim();
+      quotedString().trim() |
+      bracketStringGeneral().trim() |
+      unquotedString().flatten().trim();
 
   /// Bracket string
   Parser bracketStringTemplate(Parser content) =>
@@ -170,11 +172,12 @@ class THGrammar extends GrammarDefinition {
 
   /// person
   Parser person() =>
+      quotedString().trim() |
+      bracketStringGeneral().trim() |
       unquotedString()
           .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
           .flatten()
-          .trim() |
-      quotedString().trim();
+          .trim();
 
   /// length unit
   Parser lengthUnit() => (
@@ -560,19 +563,19 @@ class THGrammar extends GrammarDefinition {
   Parser alignOption() => stringIgnoreCase('align') & alignOptions();
   Parser alignOptions() => (stringIgnoreCase('bottom-left') |
           stringIgnoreCase('bottom-right') |
-          stringIgnoreCase('bottom,') |
+          stringIgnoreCase('bottom') |
           stringIgnoreCase('bl') |
           stringIgnoreCase('br') |
           stringIgnoreCase('b') |
-          stringIgnoreCase('center,') |
+          stringIgnoreCase('center') |
           stringIgnoreCase('c') |
-          stringIgnoreCase('left,') |
+          stringIgnoreCase('left') |
           stringIgnoreCase('l') |
-          stringIgnoreCase('right,') |
+          stringIgnoreCase('right') |
           stringIgnoreCase('r') |
           stringIgnoreCase('top-left') |
           stringIgnoreCase('top-right') |
-          stringIgnoreCase('top,') |
+          stringIgnoreCase('top') |
           stringIgnoreCase('tl') |
           stringIgnoreCase('tr') |
           stringIgnoreCase('t'))

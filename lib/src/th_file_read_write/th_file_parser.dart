@@ -168,11 +168,6 @@ class THFileParser {
 
           /// Line data injects same line comment by themselves.
           continue;
-        case 'straightlinesegment':
-          _injectStraightLineSegment(element);
-
-          /// Line data injects same line comment by themselves.
-          continue;
         case 'multilinecomment':
           _injectStartMultiLineComment();
         case 'multilinecommentline':
@@ -184,6 +179,11 @@ class THFileParser {
           _injectPoint(element);
         case 'scrap':
           _injectScrap(element);
+        case 'straightlinesegment':
+          _injectStraightLineSegment(element);
+
+          /// Line data injects same line comment by themselves.
+          continue;
         case '##xtherion##':
           _injectXTherionSetting(element);
         default:
@@ -273,7 +273,10 @@ class THFileParser {
 
   void _injectPoint(List<dynamic> element) {
     final int elementSize = element.length;
-    if (kDebugMode) assert(elementSize >= 3);
+
+    if (kDebugMode) {
+      assert(elementSize >= 3);
+    }
 
     _checkParsedListAsPoint(element[1]);
 

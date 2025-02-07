@@ -865,6 +865,17 @@ scrap araras3
 endscrap
 ''',
       },
+      {
+        'file': 'th_file_parser-02296-point_with_text_on_square_brackets.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap extranotesSP -projection plan -scale [ -128 -128 698.865 -128 0 0 \
+    21.002371 0 m ]
+  point 284.25 34.25 label -text "Anchor SEB7529X" -align bottom
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

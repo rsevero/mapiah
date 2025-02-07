@@ -1,0 +1,4 @@
+encoding utf-8
+scrap extranotesSP -projection plan -scale [-128.0 -128.0 698.865 -128.0 0.0 0.0 21.002371 0.0 m]
+point 284.25 34.25 label -text [Anchor SEB7529X] -align bottom
+endscrap
