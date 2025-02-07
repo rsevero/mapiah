@@ -70,7 +70,7 @@ class MPMoveLineCommand extends MPCommand {
   MPCommandType get type => MPCommandType.moveLine;
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     for (final entry in originalLineSegmentsMap.entries) {
       final int originalLineSegmentMapiahID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
@@ -135,14 +135,16 @@ class MPMoveLineCommand extends MPCommand {
           }
           break;
       }
-      command.execute(th2FileEditStore);
+      command.execute(th2FileEditController);
     }
-    th2FileEditStore.substituteElement(
-        th2FileEditStore.thFile.elementByMapiahID(lineMapiahID).copyWith());
+    th2FileEditController.substituteElement(th2FileEditController.thFile
+        .elementByMapiahID(lineMapiahID)
+        .copyWith());
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
       lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: modifiedLineSegmentsMap,

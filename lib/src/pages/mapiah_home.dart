@@ -59,7 +59,7 @@ class _MapiahHomeState extends State<MapiahHome> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return PopupMenuButton<String>(
           onSelected: (String newValue) {
-            mpLocator.mpSettingsStore.setLocaleID(newValue);
+            mpLocator.mpSettingsController.setLocaleID(newValue);
           },
           itemBuilder: (BuildContext context) {
             return localeIDs.map<PopupMenuEntry<String>>((String localeID) {
@@ -69,7 +69,8 @@ class _MapiahHomeState extends State<MapiahHome> {
                   constraints: BoxConstraints(maxWidth: 300),
                   child: Row(
                     children: [
-                      if (localeID == mpLocator.mpSettingsStore.localeID) ...[
+                      if (localeID ==
+                          mpLocator.mpSettingsController.localeID) ...[
                         Icon(Icons.check,
                             color: Theme.of(context).colorScheme.primary),
                         const SizedBox(width: 8),
@@ -112,9 +113,10 @@ class _MapiahHomeState extends State<MapiahHome> {
         dialogTitle: AppLocalizations.of(context).th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2'],
-        initialDirectory: mpLocator.mpGeneralStore.lastAccessedDirectory.isEmpty
-            ? (kDebugMode ? thDebugPath : './')
-            : mpLocator.mpGeneralStore.lastAccessedDirectory,
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+                ? (kDebugMode ? thDebugPath : './')
+                : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
       if (result != null) {
@@ -125,7 +127,7 @@ class _MapiahHomeState extends State<MapiahHome> {
         }
 
         String directoryPath = p.dirname(pickedFilePath);
-        mpLocator.mpGeneralStore.lastAccessedDirectory = directoryPath;
+        mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
 
         Navigator.push(
           context,

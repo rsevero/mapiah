@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class THPointPainter extends CustomPainter {
   final Offset position;
   final double pointRadius;
   final Paint pointPaint;
-  final TH2FileEditStore th2FileEditStore;
+  final TH2FileEditController th2FileEditController;
   final double canvasScale;
   final Offset canvasTranslation;
 
@@ -14,7 +14,7 @@ class THPointPainter extends CustomPainter {
     required this.position,
     required this.pointRadius,
     required this.pointPaint,
-    required this.th2FileEditStore,
+    required this.th2FileEditController,
     required this.canvasScale,
     required this.canvasTranslation,
   });

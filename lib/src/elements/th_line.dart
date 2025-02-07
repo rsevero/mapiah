@@ -168,12 +168,12 @@ class THLine extends THElement
   }
 
   @override
-  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
     if (childrenMapiahID.isEmpty) {
       return Rect.zero;
     }
 
-    final THFile thFile = th2FileEditStore.thFile;
+    final THFile thFile = th2FileEditController.thFile;
 
     double minX = double.infinity;
     double minY = double.infinity;

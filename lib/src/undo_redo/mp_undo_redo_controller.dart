@@ -1,17 +1,17 @@
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 class MPUndoRedoController {
   final List<MPUndoRedoCommand> _undo = [];
   final List<MPUndoRedoCommand> _redo = [];
-  final TH2FileEditStore th2FileEditStore;
+  final TH2FileEditController th2FileEditController;
 
-  MPUndoRedoController(this.th2FileEditStore);
+  MPUndoRedoController(this.th2FileEditController);
 
   void execute(MPCommand command) {
-    final MPUndoRedoCommand undo = command.execute(th2FileEditStore);
+    final MPUndoRedoCommand undo = command.execute(th2FileEditController);
 
     if (_redo.isNotEmpty) {
       _undo.addAll(_redo);
@@ -26,8 +26,8 @@ class MPUndoRedoController {
       return;
     }
     final MPCommand command = _undo.removeLast().command;
-    final MPUndoRedoCommand redo = command.execute(th2FileEditStore);
-    th2FileEditStore.triggerAllElementsRedraw();
+    final MPUndoRedoCommand redo = command.execute(th2FileEditController);
+    th2FileEditController.triggerAllElementsRedraw();
     _redo.add(redo);
   }
 
@@ -36,8 +36,8 @@ class MPUndoRedoController {
       return;
     }
     final MPCommand command = _redo.removeLast().command;
-    final MPUndoRedoCommand undo = command.execute(th2FileEditStore);
-    th2FileEditStore.triggerAllElementsRedraw();
+    final MPUndoRedoCommand undo = command.execute(th2FileEditController);
+    th2FileEditController.triggerAllElementsRedraw();
     _undo.add(undo);
   }
 

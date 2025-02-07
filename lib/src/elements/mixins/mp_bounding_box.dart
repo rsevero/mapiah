@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 mixin MPBoundingBox {
   Rect? _boundingBox;
 
-  Rect getBoundingBox(TH2FileEditStore th2FileEditStore) {
-    _boundingBox ??= calculateBoundingBox(th2FileEditStore);
+  Rect getBoundingBox(TH2FileEditController th2FileEditController) {
+    _boundingBox ??= calculateBoundingBox(th2FileEditController);
 
     return _boundingBox!;
   }
@@ -14,5 +14,5 @@ mixin MPBoundingBox {
     _boundingBox = null;
   }
 
-  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore);
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController);
 }

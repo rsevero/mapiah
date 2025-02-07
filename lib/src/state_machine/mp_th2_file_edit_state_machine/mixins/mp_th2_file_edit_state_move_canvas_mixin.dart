@@ -4,8 +4,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
   /// Moves the canvas
   @override
   void onSecondaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditStore.onPointerMoveUpdateMoveCanvasMode(event);
-    th2FileEditStore.triggerAllElementsRedraw();
+    th2FileEditController.onPointerMoveUpdateMoveCanvasMode(event);
+    th2FileEditController.triggerAllElementsRedraw();
   }
 
   @override
@@ -17,64 +17,65 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
         if (isCtrlPressed) {
-          th2FileEditStore.selectAllElements();
+          th2FileEditController.selectAllElements();
         }
         break;
       case LogicalKeyboardKey.keyC:
         if (isAltPressed) {
-          th2FileEditStore.toggleToNextAvailableScrap();
+          th2FileEditController.toggleToNextAvailableScrap();
         }
         break;
       case LogicalKeyboardKey.keyS:
         if (isCtrlPressed) {
           if (isShiftPressed) {
-            th2FileEditStore.saveAsTH2File();
+            th2FileEditController.saveAsTH2File();
           } else {
-            th2FileEditStore.saveTH2File();
+            th2FileEditController.saveTH2File();
           }
         }
         break;
       case LogicalKeyboardKey.keyY:
         if (isCtrlPressed) {
-          th2FileEditStore.redo();
+          th2FileEditController.redo();
         }
         break;
       case LogicalKeyboardKey.keyZ:
         if (isCtrlPressed) {
-          th2FileEditStore.undo();
+          th2FileEditController.undo();
         }
         break;
       case LogicalKeyboardKey.numpad1:
       case LogicalKeyboardKey.digit1:
-        th2FileEditStore.zoomOneToOne();
+        th2FileEditController.zoomOneToOne();
         break;
       case LogicalKeyboardKey.numpad2:
       case LogicalKeyboardKey.digit2:
-        if (th2FileEditStore.selectedElements.isNotEmpty) {
-          th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.selection);
+        if (th2FileEditController.selectedElements.isNotEmpty) {
+          th2FileEditController.zoomToFit(
+              zoomFitToType: MPZoomToFitType.selection);
         }
         break;
       case LogicalKeyboardKey.numpad3:
       case LogicalKeyboardKey.digit3:
-        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         break;
       case LogicalKeyboardKey.numpad4:
       case LogicalKeyboardKey.digit4:
-        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         break;
       case LogicalKeyboardKey.add:
       case LogicalKeyboardKey.numpadAdd:
-        th2FileEditStore.zoomIn(fineZoom: false);
+        th2FileEditController.zoomIn(fineZoom: false);
         break;
       case LogicalKeyboardKey.delete:
-        th2FileEditStore.deleteSelected();
+        th2FileEditController.deleteSelected();
         break;
       case LogicalKeyboardKey.escape:
-        th2FileEditStore.deselectAllElements();
+        th2FileEditController.deselectAllElements();
         break;
       case LogicalKeyboardKey.minus:
       case LogicalKeyboardKey.numpadSubtract:
-        th2FileEditStore.zoomOut(fineZoom: false);
+        th2FileEditController.zoomOut(fineZoom: false);
 
         break;
     }
@@ -90,16 +91,17 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     }
 
     if (isShiftPressed) {
-      th2FileEditStore.moveCanvasHorizontally(left: event.scrollDelta.dy < 0);
+      th2FileEditController.moveCanvasHorizontally(
+          left: event.scrollDelta.dy < 0);
     } else if (isCtrlPressed) {
-      th2FileEditStore.moveCanvasVertically(up: event.scrollDelta.dy < 0);
+      th2FileEditController.moveCanvasVertically(up: event.scrollDelta.dy < 0);
     } else {
       if (event.scrollDelta.dy < 0) {
-        th2FileEditStore.zoomIn(fineZoom: true);
+        th2FileEditController.zoomIn(fineZoom: true);
       } else if (event.scrollDelta.dy > 0) {
-        th2FileEditStore.zoomOut(fineZoom: true);
+        th2FileEditController.zoomOut(fineZoom: true);
       }
     }
-    th2FileEditStore.triggerAllElementsRedraw();
+    th2FileEditController.triggerAllElementsRedraw();
   }
 }

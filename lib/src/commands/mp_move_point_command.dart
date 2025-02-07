@@ -33,18 +33,19 @@ class MPMovePointCommand extends MPCommand {
   MPCommandType get type => MPCommandType.movePoint;
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    final THPoint originalPoint =
-        th2FileEditStore.thFile.elementByMapiahID(pointMapiahID) as THPoint;
+  void _actualExecute(TH2FileEditController th2FileEditController) {
+    final THPoint originalPoint = th2FileEditController.thFile
+        .elementByMapiahID(pointMapiahID) as THPoint;
     final THPoint modifiedPoint = originalPoint.copyWith(
         position:
             originalPoint.position.copyWith(coordinates: modifiedCoordinates));
 
-    th2FileEditStore.substituteElement(modifiedPoint);
+    th2FileEditController.substituteElement(modifiedPoint);
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
     final MPMovePointCommand oppositeCommand = MPMovePointCommand(

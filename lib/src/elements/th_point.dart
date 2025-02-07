@@ -276,7 +276,7 @@ class THPoint extends THElement
   }
 
   @override
-  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
     return MPNumericAux.orderedRectSmallestAroundPoint(
       center: position.coordinates,
     );

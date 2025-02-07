@@ -21,7 +21,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 part 'th_area_border_thid.dart';
 part 'th_area.dart';
@@ -92,7 +92,7 @@ abstract class THElement {
     required this.parentMapiahID,
     this.sameLineComment,
     this.originalLineInTH2File = '',
-  }) : _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForElements();
+  }) : _mapiahID = mpLocator.mpGeneralController.nextMapiahIDForElements();
 
   THIsParentMixin parent(THFile thFile) {
     if (parentMapiahID < 0) {

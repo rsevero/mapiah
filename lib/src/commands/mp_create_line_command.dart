@@ -18,16 +18,16 @@ class MPCreateLineCommand extends MPCommand {
   }) : super();
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    th2FileEditStore.addElementWithParentMapiahIDWithoutSelectableElement(
+  void _actualExecute(TH2FileEditController th2FileEditController) {
+    th2FileEditController.addElementWithParentMapiahIDWithoutSelectableElement(
       newElement: newLine,
-      parentMapiahID: th2FileEditStore.activeScrapID,
+      parentMapiahID: th2FileEditController.activeScrapID,
     );
 
     final int newLineMapiahID = newLine.mapiahID;
 
     for (final THElement child in lineChildren) {
-      th2FileEditStore.addElement(
+      th2FileEditController.addElement(
         newElement: child,
         parentMapiahID: newLineMapiahID,
       );
@@ -35,7 +35,8 @@ class MPCreateLineCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
     final MPDeleteLineCommand oppositeCommand = MPDeleteLineCommand(
       lineMapiahID: newLine.mapiahID,
       descriptionType: descriptionType,

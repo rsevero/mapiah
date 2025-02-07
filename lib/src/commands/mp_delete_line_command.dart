@@ -15,22 +15,23 @@ class MPDeleteLineCommand extends MPCommand {
   }) : super();
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final List<int> lineChildren =
-        (th2FileEditStore.thFile.elementByMapiahID(lineMapiahID) as THLine)
+        (th2FileEditController.thFile.elementByMapiahID(lineMapiahID) as THLine)
             .childrenMapiahID
             .toList();
 
     for (final int childMapiahID in lineChildren) {
-      th2FileEditStore.deleteElementByMapiahID(childMapiahID);
+      th2FileEditController.deleteElementByMapiahID(childMapiahID);
     }
 
-    th2FileEditStore.deleteElementByMapiahID(lineMapiahID);
+    th2FileEditController.deleteElementByMapiahID(lineMapiahID);
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
-    final THFile thFile = th2FileEditStore.thFile;
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
     final THLine originalLine =
         thFile.elementByMapiahID(lineMapiahID) as THLine;
     final List<THElement> lineChildren = [];

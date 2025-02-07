@@ -3,32 +3,34 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/painters/mp_selection_handles_painter.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class MPSelectionHandlesWidget extends StatelessWidget {
-  final TH2FileEditStore th2FileEditStore;
+  final TH2FileEditController th2FileEditController;
   final int thFileMapiahID;
 
   MPSelectionHandlesWidget({
-    required this.th2FileEditStore,
+    required this.th2FileEditController,
     required super.key,
-  }) : thFileMapiahID = th2FileEditStore.thFileMapiahID;
+  }) : thFileMapiahID = th2FileEditController.thFileMapiahID;
 
   @override
   Widget build(Object context) {
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
-          th2FileEditStore.redrawTriggerSelectedElements;
-          th2FileEditStore.canvasScale;
+          th2FileEditController.redrawTriggerSelectedElements;
+          th2FileEditController.canvasScale;
 
           final Map<MPSelectionHandleType, Offset> handleCenters =
-              th2FileEditStore.getSelectionHandleCenters();
-          final Paint handlePaint = th2FileEditStore.selectionHandlePaint.value;
+              th2FileEditController.getSelectionHandleCenters();
+          final Paint handlePaint =
+              th2FileEditController.selectionHandlePaint.value;
 
-          final Rect boundingBox = th2FileEditStore.selectedElementsBoundingBox;
+          final Rect boundingBox =
+              th2FileEditController.selectedElementsBoundingBox;
           double handleSize =
-              th2FileEditStore.selectionHandleSizeOnCanvas.value;
+              th2FileEditController.selectionHandleSizeOnCanvas.value;
           final double handleSizeThreshold =
               handleSize * thSelectionHandleThresholdMultiplier;
           if ((boundingBox.width > handleSizeThreshold) &&
@@ -38,12 +40,12 @@ class MPSelectionHandlesWidget extends StatelessWidget {
 
           return CustomPaint(
             painter: MPSelectionHandlesPainter(
-              th2FileEditStore: th2FileEditStore,
+              th2FileEditController: th2FileEditController,
               handleCenters: handleCenters,
               handleSize: handleSize,
               handlePaint: handlePaint,
-              canvasScale: th2FileEditStore.canvasScale,
-              canvasTranslation: th2FileEditStore.canvasTranslation,
+              canvasScale: th2FileEditController.canvasScale,
+              canvasTranslation: th2FileEditController.canvasTranslation,
             ),
           );
         },

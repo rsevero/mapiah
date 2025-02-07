@@ -41,7 +41,7 @@ def legstostnshot(pos, firststn, pore):
 #        print(shot)
         x, y = shot[pore]
         #for splays must have a station position,
-        #work out shot, else store as orphan
+        #work out shot, else Controller as orphan
         if shot['to'] == '-':
             if shot['from'] in XVIstations:
                 fromx = XVIstations[shot['from']][0]

@@ -33,19 +33,21 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   MPCommandType get type => MPCommandType.moveStraightLineSegment;
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    final THStraightLineSegment originalLineSegment = th2FileEditStore.thFile
-        .elementByMapiahID(lineSegmentMapiahID) as THStraightLineSegment;
+  void _actualExecute(TH2FileEditController th2FileEditController) {
+    final THStraightLineSegment originalLineSegment =
+        th2FileEditController.thFile.elementByMapiahID(lineSegmentMapiahID)
+            as THStraightLineSegment;
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
         endPoint: originalLineSegment.endPoint
             .copyWith(coordinates: modifiedEndPointCoordinates));
 
-    th2FileEditStore
+    th2FileEditController
         .substituteElementWithoutAddSelectableElement(newLineSegment);
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
     final MPMoveStraightLineSegmentCommand oppositeCommand =
         MPMoveStraightLineSegmentCommand(
       lineSegmentMapiahID: lineSegmentMapiahID,

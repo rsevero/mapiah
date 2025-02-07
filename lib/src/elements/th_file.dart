@@ -13,7 +13,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 /// THFile represents the complete contents of a .th or .th2 file.
 ///
@@ -70,7 +70,7 @@ class THFile
   }
 
   THFile() {
-    _mapiahID = mpLocator.mpGeneralStore.nextMapiahIDForTHFiles();
+    _mapiahID = mpLocator.mpGeneralController.nextMapiahIDForTHFiles();
   }
 
   String toJson() {
@@ -232,8 +232,9 @@ class THFile
   }
 
   @override
-  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
-    return calculateChildrenBoundingBox(th2FileEditStore, childrenMapiahID);
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    return calculateChildrenBoundingBox(
+        th2FileEditController, childrenMapiahID);
   }
 
   /// Updates the thID of a given element of the THFile.

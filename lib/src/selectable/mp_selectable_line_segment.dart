@@ -6,7 +6,7 @@ abstract class MPSelectableLineSegment extends MPSelectable {
   MPSelectableLineSegment({
     required THLineSegment lineSegment,
     required this.startPoint,
-    required super.th2fileEditStore,
+    required super.th2fileEditController,
   }) : super(element: lineSegment);
 
   @override
@@ -16,7 +16,7 @@ abstract class MPSelectableLineSegment extends MPSelectable {
 
     return MPNumericAux.orderedRectExpanded(
       rect: lineBoundingBox,
-      delta: th2fileEditStore.selectionToleranceOnCanvas,
+      delta: th2fileEditController.selectionToleranceOnCanvas,
     );
   }
 

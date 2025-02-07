@@ -7,11 +7,12 @@ import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mobx/mobx.dart';
 import 'package:toml/toml.dart';
 
-part 'mp_settings_store.g.dart';
+part 'mp_settings_controller.g.dart';
 
-class MPSettingsStore = MPSettingsStoreBase with _$MPSettingsStore;
+class MPSettingsController = MPSettingsControllerBase
+    with _$MPSettingsController;
 
-abstract class MPSettingsStoreBase with Store {
+abstract class MPSettingsControllerBase with Store {
   bool _readingConfigFile = false;
 
   @readonly
@@ -29,7 +30,7 @@ abstract class MPSettingsStoreBase with Store {
   @readonly
   double _lineThickness = thDefaultLineThickness;
 
-  THSettingsStoreBase() {
+  THSettingsControllerBase() {
     _initialize();
   }
 

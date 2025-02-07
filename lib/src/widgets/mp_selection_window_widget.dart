@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/painters/mp_selection_window_painter.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class MPSelectionWindowWidget extends StatelessWidget {
-  final TH2FileEditStore th2FileEditStore;
+  final TH2FileEditController th2FileEditController;
   final int thFileMapiahID;
 
   MPSelectionWindowWidget({
-    required this.th2FileEditStore,
+    required this.th2FileEditController,
     required super.key,
-  }) : thFileMapiahID = th2FileEditStore.thFileMapiahID;
+  }) : thFileMapiahID = th2FileEditController.thFileMapiahID;
 
   @override
   Widget build(Object context) {
@@ -18,16 +18,16 @@ class MPSelectionWindowWidget extends StatelessWidget {
       child: Observer(
         builder: (_) => CustomPaint(
           painter: MPSelectionWindowPainter(
-            th2FileEditStore: th2FileEditStore,
+            th2FileEditController: th2FileEditController,
             selectionWindowPosition:
-                th2FileEditStore.selectionWindowCanvasCoordinates.value,
-            fillPaint: th2FileEditStore.selectionWindowFillPaint.value,
+                th2FileEditController.selectionWindowCanvasCoordinates.value,
+            fillPaint: th2FileEditController.selectionWindowFillPaint.value,
             borderPaint:
-                th2FileEditStore.selectionWindowBorderPaintComplete.value,
-            dashInterval: th2FileEditStore
+                th2FileEditController.selectionWindowBorderPaintComplete.value,
+            dashInterval: th2FileEditController
                 .selectionWindowBorderPaintDashIntervalOnCanvas.value,
-            canvasScale: th2FileEditStore.canvasScale,
-            canvasTranslation: th2FileEditStore.canvasTranslation,
+            canvasScale: th2FileEditController.canvasScale,
+            canvasTranslation: th2FileEditController.canvasTranslation,
           ),
         ),
       ),

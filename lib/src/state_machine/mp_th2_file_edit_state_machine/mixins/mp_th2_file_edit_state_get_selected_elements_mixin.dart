@@ -5,8 +5,8 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
     Offset screenCoordinatesEndSelectionWindow,
   ) {
     final Offset startSelectionWindow =
-        th2FileEditStore.dragStartCanvasCoordinates;
-    final Offset endSelectionWindow = th2FileEditStore
+        th2FileEditController.dragStartCanvasCoordinates;
+    final Offset endSelectionWindow = th2FileEditController
         .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
     final Rect selectionWindow = MPNumericAux.orderedRectFromLTRB(
       left: startSelectionWindow.dx,
@@ -15,7 +15,7 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
       bottom: endSelectionWindow.dy,
     );
     final List<THElement> elementsInsideSelectionWindow =
-        th2FileEditStore.selectableElementsInsideWindow(selectionWindow);
+        th2FileEditController.selectableElementsInsideWindow(selectionWindow);
 
     return elementsInsideSelectionWindow;
   }
@@ -24,7 +24,7 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
     List<THElement> selectedWithLineSegments,
   ) {
     final Set<THElement> selectedElementsWithLines = {};
-    final THFile thFile = th2FileEditStore.thFile;
+    final THFile thFile = th2FileEditController.thFile;
 
     for (final THElement element in selectedWithLineSegments) {
       if (element is THLineSegment) {

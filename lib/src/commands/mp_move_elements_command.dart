@@ -60,7 +60,7 @@ class MPMoveElementsCommand extends MPCommand {
   }
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     late MPCommand moveCommand;
     late MPUndoRedoCommand oppositeCommand;
 
@@ -83,13 +83,14 @@ class MPMoveElementsCommand extends MPCommand {
           );
           break;
       }
-      oppositeCommand = moveCommand.execute(th2FileEditStore);
+      oppositeCommand = moveCommand.execute(th2FileEditController);
       oppositeCommandList.add(oppositeCommand);
     }
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
     late MPMoveCommandCompleteParams oppositeMoveCommandParameters;
     final List<MPMoveCommandCompleteParams> oppositeMoveCommandParametersList =
         [];

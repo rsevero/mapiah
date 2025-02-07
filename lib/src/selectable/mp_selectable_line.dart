@@ -4,10 +4,10 @@ class MPSelectableLine extends MPSelectable {
   final List<THLineSegment> _selectedElements = [];
   final List<MPSelectableLineSegment> _seleactableLineSegments = [];
 
-  MPSelectableLine({required THLine line, required super.th2fileEditStore})
+  MPSelectableLine({required THLine line, required super.th2fileEditController})
       : super(element: line) {
     final List<int> lineSegmentMapiahIDs = line.childrenMapiahID;
-    final THFile thFile = th2fileEditStore.thFile;
+    final THFile thFile = th2fileEditController.thFile;
     Offset? startPoint;
 
     for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
@@ -28,14 +28,14 @@ class MPSelectableLine extends MPSelectable {
           _seleactableLineSegments.add(MPSelectableBezierCurveLineSegment(
             bezierCurveLineSegment: lineSegment,
             startPoint: startPoint,
-            th2fileEditStore: th2fileEditStore,
+            th2fileEditController: th2fileEditController,
           ));
           break;
         case THStraightLineSegment _:
           _seleactableLineSegments.add(MPSelectableStraightLineSegment(
             straightLineSegment: lineSegment,
             startPoint: startPoint,
-            th2fileEditStore: th2fileEditStore,
+            th2fileEditController: th2fileEditController,
           ));
           break;
         default:
@@ -49,11 +49,11 @@ class MPSelectableLine extends MPSelectable {
   @override
   Rect _calculateBoundingBox() {
     final Rect lineBoundingBox =
-        (element as THLine).getBoundingBox(th2fileEditStore);
+        (element as THLine).getBoundingBox(th2fileEditController);
 
     return MPNumericAux.orderedRectExpanded(
       rect: lineBoundingBox,
-      delta: th2fileEditStore.selectionToleranceOnCanvas,
+      delta: th2fileEditController.selectionToleranceOnCanvas,
     );
   }
 

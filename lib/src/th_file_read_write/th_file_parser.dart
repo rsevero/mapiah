@@ -16,7 +16,7 @@ import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
 import 'package:meta/meta.dart';
@@ -52,7 +52,7 @@ class THFileParser {
   bool _runTraceParser = false;
 
   late THFile _parsedTHFile;
-  late TH2FileEditStore _th2FileEditStore;
+  late TH2FileEditController _th2FileEditController;
 
   final List<String> _parseErrors = [];
 
@@ -201,7 +201,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -214,7 +214,7 @@ class THFileParser {
       content: content,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -222,7 +222,7 @@ class THFileParser {
 
   void _injectEndMultiLineComment() {
     _currentElement = THEndcomment(parentMapiahID: _currentParentMapiahID);
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -235,7 +235,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -256,7 +256,7 @@ class THFileParser {
       encoding: element[1],
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -277,7 +277,7 @@ class THFileParser {
       value: element[1][1],
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newElement,
       parent: _currentParent,
     );
@@ -309,7 +309,7 @@ class THFileParser {
       pointTypeString: element[2][0],
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newPoint,
       parent: _currentParent,
     );
@@ -377,7 +377,7 @@ class THFileParser {
       endPoint: endPoint,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newBezierCurveLineSegment,
       parent: _currentParent,
     );
@@ -405,7 +405,7 @@ class THFileParser {
       id: areaBorderID,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
         newElement: newElement, parent: _currentParent);
   }
 
@@ -433,7 +433,7 @@ class THFileParser {
       pointDataList: endPoint,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newStraightLineSegment,
       parent: _currentParent,
     );
@@ -458,7 +458,7 @@ class THFileParser {
       thID: element[1],
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newScrap,
       parent: _currentParent,
     );
@@ -476,7 +476,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -546,7 +546,7 @@ class THFileParser {
       areaTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newArea,
       parent: _currentParent,
     );
@@ -582,7 +582,7 @@ class THFileParser {
       lineTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newLine,
       parent: _currentParent,
     );
@@ -609,7 +609,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -622,7 +622,7 @@ class THFileParser {
       parentMapiahID: _currentParentMapiahID,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
     );
@@ -663,7 +663,7 @@ class THFileParser {
           content: element[1],
           originalLineInTH2File: _currentLine,
         );
-        _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+        _th2FileEditController.addElementWithParentWithoutSelectableElement(
           newElement: newElement,
           parent: _currentParent,
         );
@@ -682,7 +682,7 @@ class THFileParser {
           parentMapiahID: _currentParentMapiahID,
           value: element,
         );
-        _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+        _th2FileEditController.addElementWithParentWithoutSelectableElement(
           newElement: newElement,
           parent: _currentParent,
         );
@@ -1104,7 +1104,7 @@ class THFileParser {
     }
 
     THIDCommandOption(optionParent: _currentHasOptions, thID: _currentSpec[0]);
-    _th2FileEditStore.registerElementWithTHID(
+    _th2FileEditController.registerElementWithTHID(
         _currentHasOptions, _currentSpec[0]);
   }
 
@@ -1747,7 +1747,7 @@ class THFileParser {
       value: element,
       originalLineInTH2File: _currentLine,
     );
-    _th2FileEditStore.addElementWithParentWithoutSelectableElement(
+    _th2FileEditController.addElementWithParentWithoutSelectableElement(
       newElement: newElement,
       parent: _currentParent,
     );
@@ -1832,7 +1832,7 @@ class THFileParser {
     String filePath, {
     Parser? alternateStartParser,
     bool trace = false,
-    bool forceNewStore = false,
+    bool forceNewController = false,
   }) async {
     if (alternateStartParser == null) {
       _newRootParser(_th2FileFirstLineParser);
@@ -1844,9 +1844,10 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _th2FileEditStore = mpLocator.mpGeneralStore
-        .getTH2FileEditStore(filename: filePath, forceNewStore: forceNewStore);
-    _parsedTHFile = _th2FileEditStore.thFile;
+    _th2FileEditController = mpLocator.mpGeneralController
+        .getTH2FileEditController(
+            filename: filePath, forceNewController: forceNewController);
+    _parsedTHFile = _th2FileEditController.thFile;
     setCurrentParent(_parsedTHFile);
     _parseErrors.clear();
 

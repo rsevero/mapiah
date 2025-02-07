@@ -4,7 +4,7 @@ class MPSelectableStraightLineSegment extends MPSelectableLineSegment {
   MPSelectableStraightLineSegment({
     required THStraightLineSegment straightLineSegment,
     required super.startPoint,
-    required super.th2fileEditStore,
+    required super.th2fileEditController,
   }) : super(lineSegment: straightLineSegment);
 
   @override
@@ -13,7 +13,7 @@ class MPSelectableStraightLineSegment extends MPSelectableLineSegment {
       point: point,
       segmentStart: startPoint,
       segmentEnd: (element as THStraightLineSegment).endPoint.coordinates,
-      toleranceSquared: th2fileEditStore.selectionToleranceSquaredOnCanvas,
+      toleranceSquared: th2fileEditController.selectionToleranceSquaredOnCanvas,
     );
   }
 

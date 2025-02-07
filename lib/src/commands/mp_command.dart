@@ -10,7 +10,7 @@ import 'package:mapiah/src/commands/parameters/mp_move_command_complete_params.d
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 part 'mp_create_line_command.dart';
@@ -39,9 +39,9 @@ abstract class MPCommand {
 
   MPCommandType get type;
 
-  MPUndoRedoCommand execute(TH2FileEditStore th2FileEditStore) {
-    oppositeCommand = _createOppositeCommand(th2FileEditStore);
-    _actualExecute(th2FileEditStore);
+  MPUndoRedoCommand execute(TH2FileEditController th2FileEditController) {
+    oppositeCommand = _createOppositeCommand(th2FileEditController);
+    _actualExecute(th2FileEditController);
 
     return oppositeCommand!;
   }
@@ -49,9 +49,10 @@ abstract class MPCommand {
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore);
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController);
 
-  void _actualExecute(TH2FileEditStore th2FileEditStore);
+  void _actualExecute(TH2FileEditController th2FileEditController);
 
   MPCommand copyWith({
     MPCommandDescriptionType? descriptionType,

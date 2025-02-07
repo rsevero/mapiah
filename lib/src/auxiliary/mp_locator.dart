@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/stores/mp_general_store.dart';
-import 'package:mapiah/src/stores/mp_settings_store.dart';
+import 'package:mapiah/src/controllers/mp_general_controller.dart';
+import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 
 class MPLocator {
   static final MPLocator _instance = MPLocator._internal();
@@ -13,9 +13,9 @@ class MPLocator {
 
   MPLocator._internal();
 
-  final MPGeneralStore mpGeneralStore = MPGeneralStore();
+  final MPGeneralController mpGeneralController = MPGeneralController();
 
-  final MPSettingsStore mpSettingsStore = MPSettingsStore();
+  final MPSettingsController mpSettingsController = MPSettingsController();
 
   final MPLog mpLog = MPLog.instance;
 

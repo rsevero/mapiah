@@ -11,9 +11,9 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
-import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
-import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_mode.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
@@ -23,24 +23,25 @@ part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
-  final TH2FileEditStore th2FileEditStore;
+  final TH2FileEditController th2FileEditController;
   MPTH2FileEditStateType get type;
 
-  MPTH2FileEditState({required this.th2FileEditStore});
+  MPTH2FileEditState({required this.th2FileEditController});
 
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,
-    required TH2FileEditStore thFileEditStore,
+    required TH2FileEditController thFileEditController,
   }) {
     switch (type) {
       case MPTH2FileEditStateType.selectEmptySelection:
         return MPTH2FileEditStateSelectEmptySelection(
-            th2FileEditStore: thFileEditStore);
+            th2FileEditController: thFileEditController);
       case MPTH2FileEditStateType.selectNonEmptySelection:
         return MPTH2FileEditStateSelectNonEmptySelection(
-            th2FileEditStore: thFileEditStore);
+            th2FileEditController: thFileEditController);
       case MPTH2FileEditStateType.moving:
-        return MPTH2FileEditStateMoving(th2FileEditStore: thFileEditStore);
+        return MPTH2FileEditStateMoving(
+            th2FileEditController: thFileEditController);
     }
   }
 
@@ -89,41 +90,43 @@ abstract class MPTH2FileEditState {
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
       case MPButtonType.changeScrap:
-        th2FileEditStore.toggleToNextAvailableScrap();
+        th2FileEditController.toggleToNextAvailableScrap();
         return true;
       case MPButtonType.delete:
-        th2FileEditStore.deleteSelected();
+        th2FileEditController.deleteSelected();
         return true;
       case MPButtonType.redo:
-        th2FileEditStore.redo();
+        th2FileEditController.redo();
         return true;
       case MPButtonType.select:
-        th2FileEditStore.setState(th2FileEditStore.selectedElements.isEmpty
-            ? MPTH2FileEditStateType.selectEmptySelection
-            : MPTH2FileEditStateType.selectNonEmptySelection);
+        th2FileEditController.setState(
+            th2FileEditController.selectedElements.isEmpty
+                ? MPTH2FileEditStateType.selectEmptySelection
+                : MPTH2FileEditStateType.selectNonEmptySelection);
         return true;
       case MPButtonType.undo:
-        th2FileEditStore.undo();
+        th2FileEditController.undo();
         return true;
       case MPButtonType.zoomAllFile:
-        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         return true;
       case MPButtonType.zoomAllScrap:
-        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         return true;
       case MPButtonType.zoomIn:
-        th2FileEditStore.zoomIn();
+        th2FileEditController.zoomIn();
         return true;
       case MPButtonType.zoomOneToOne:
-        th2FileEditStore.zoomOneToOne();
+        th2FileEditController.zoomOneToOne();
         return true;
       case MPButtonType.zoomOptions:
         return true;
       case MPButtonType.zoomOut:
-        th2FileEditStore.zoomOut();
+        th2FileEditController.zoomOut();
         return true;
       case MPButtonType.zoomSelection:
-        th2FileEditStore.zoomToFit(zoomFitToType: MPZoomToFitType.selection);
+        th2FileEditController.zoomToFit(
+            zoomFitToType: MPZoomToFitType.selection);
         return true;
       default:
         return false;

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mp_settings_store.dart';
+part of 'mp_settings_controller.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,9 @@ part of 'mp_settings_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$MPSettingsStore on MPSettingsStoreBase, Store {
+mixin _$MPSettingsController on MPSettingsControllerBase, Store {
   late final _$_localeIDAtom =
-      Atom(name: 'MPSettingsStoreBase._localeID', context: context);
+      Atom(name: 'MPSettingsControllerBase._localeID', context: context);
 
   String get localeID {
     _$_localeIDAtom.reportRead();
@@ -28,7 +28,7 @@ mixin _$MPSettingsStore on MPSettingsStoreBase, Store {
   }
 
   late final _$_localeAtom =
-      Atom(name: 'MPSettingsStoreBase._locale', context: context);
+      Atom(name: 'MPSettingsControllerBase._locale', context: context);
 
   Locale get locale {
     _$_localeAtom.reportRead();
@@ -45,8 +45,8 @@ mixin _$MPSettingsStore on MPSettingsStoreBase, Store {
     });
   }
 
-  late final _$_selectionToleranceAtom =
-      Atom(name: 'MPSettingsStoreBase._selectionTolerance', context: context);
+  late final _$_selectionToleranceAtom = Atom(
+      name: 'MPSettingsControllerBase._selectionTolerance', context: context);
 
   double get selectionTolerance {
     _$_selectionToleranceAtom.reportRead();
@@ -64,7 +64,7 @@ mixin _$MPSettingsStore on MPSettingsStoreBase, Store {
   }
 
   late final _$_pointRadiusAtom =
-      Atom(name: 'MPSettingsStoreBase._pointRadius', context: context);
+      Atom(name: 'MPSettingsControllerBase._pointRadius', context: context);
 
   double get pointRadius {
     _$_pointRadiusAtom.reportRead();
@@ -82,7 +82,7 @@ mixin _$MPSettingsStore on MPSettingsStoreBase, Store {
   }
 
   late final _$_lineThicknessAtom =
-      Atom(name: 'MPSettingsStoreBase._lineThickness', context: context);
+      Atom(name: 'MPSettingsControllerBase._lineThickness', context: context);
 
   double get lineThickness {
     _$_lineThicknessAtom.reportRead();
@@ -99,50 +99,50 @@ mixin _$MPSettingsStore on MPSettingsStoreBase, Store {
     });
   }
 
-  late final _$MPSettingsStoreBaseActionController =
-      ActionController(name: 'MPSettingsStoreBase', context: context);
+  late final _$MPSettingsControllerBaseActionController =
+      ActionController(name: 'MPSettingsControllerBase', context: context);
 
   @override
   void setLocaleID(String localeID) {
-    final _$actionInfo = _$MPSettingsStoreBaseActionController.startAction(
-        name: 'MPSettingsStoreBase.setLocaleID');
+    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
+        name: 'MPSettingsControllerBase.setLocaleID');
     try {
       return super.setLocaleID(localeID);
     } finally {
-      _$MPSettingsStoreBaseActionController.endAction(_$actionInfo);
+      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setSelectionTolerance(double selectionTolerance) {
-    final _$actionInfo = _$MPSettingsStoreBaseActionController.startAction(
-        name: 'MPSettingsStoreBase.setSelectionTolerance');
+    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
+        name: 'MPSettingsControllerBase.setSelectionTolerance');
     try {
       return super.setSelectionTolerance(selectionTolerance);
     } finally {
-      _$MPSettingsStoreBaseActionController.endAction(_$actionInfo);
+      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setPointRadius(double pointRadius) {
-    final _$actionInfo = _$MPSettingsStoreBaseActionController.startAction(
-        name: 'MPSettingsStoreBase.setPointRadius');
+    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
+        name: 'MPSettingsControllerBase.setPointRadius');
     try {
       return super.setPointRadius(pointRadius);
     } finally {
-      _$MPSettingsStoreBaseActionController.endAction(_$actionInfo);
+      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setLineThickness(double lineThickness) {
-    final _$actionInfo = _$MPSettingsStoreBaseActionController.startAction(
-        name: 'MPSettingsStoreBase.setLineThickness');
+    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
+        name: 'MPSettingsControllerBase.setLineThickness');
     try {
       return super.setLineThickness(lineThickness);
     } finally {
-      _$MPSettingsStoreBaseActionController.endAction(_$actionInfo);
+      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 

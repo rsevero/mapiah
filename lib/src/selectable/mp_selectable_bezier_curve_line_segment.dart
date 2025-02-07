@@ -7,7 +7,7 @@ class MPSelectableBezierCurveLineSegment extends MPSelectableLineSegment {
   MPSelectableBezierCurveLineSegment({
     required THBezierCurveLineSegment bezierCurveLineSegment,
     required super.startPoint,
-    required super.th2fileEditStore,
+    required super.th2fileEditController,
   }) : super(lineSegment: bezierCurveLineSegment);
 
   int get numOfSegmentsToCreate {
@@ -19,7 +19,7 @@ class MPSelectableBezierCurveLineSegment extends MPSelectableLineSegment {
   int _calculateNumOfSegmentsToCreate() {
     final List<Offset> controlPointsOnScreen =
         controlPointsOnCanvas.map((point) {
-      return th2fileEditStore.offsetCanvasToScreen(point);
+      return th2fileEditController.offsetCanvasToScreen(point);
     }).toList();
 
     final double estimatedLength =
@@ -48,7 +48,7 @@ class MPSelectableBezierCurveLineSegment extends MPSelectableLineSegment {
     return MPNumericAux.isPointNearBezierCurve(
       point: point,
       controlPoints: controlPointsOnCanvas,
-      toleranceSquared: th2fileEditStore.selectionToleranceSquaredOnCanvas,
+      toleranceSquared: th2fileEditController.selectionToleranceSquaredOnCanvas,
       numOfSegmentsToCreate: numOfSegmentsToCreate,
     );
   }

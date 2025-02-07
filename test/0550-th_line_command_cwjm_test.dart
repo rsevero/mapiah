@@ -7,7 +7,7 @@ import 'th_test_aux.dart';
 final MPLocator mpLocator = MPLocator();
 void main() {
   group('line json', () {
-    mpLocator.mpGeneralStore.reset();
+    mpLocator.mpGeneralController.reset();
     final parser = THFileParser();
     // final writer = THFileWriter();
 

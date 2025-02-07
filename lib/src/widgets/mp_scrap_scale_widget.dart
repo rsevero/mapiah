@@ -3,12 +3,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/painters/mp_scrap_scale_painter.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class MPScrapScaleWidget extends StatelessWidget {
-  final TH2FileEditStore th2FileEditStore;
+  final TH2FileEditController th2FileEditController;
 
-  MPScrapScaleWidget({required super.key, required this.th2FileEditStore});
+  MPScrapScaleWidget({required super.key, required this.th2FileEditController});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,11 @@ class MPScrapScaleWidget extends StatelessWidget {
     return Observer(
       builder: (_) {
         final double graphicalScaleLengthUnitsLength =
-            th2FileEditStore.scrapLengthUnitsOnGraphicalScale;
+            th2FileEditController.scrapLengthUnitsOnGraphicalScale;
         final String scaleLength =
             MPNumericAux.roundNumberForScreen(graphicalScaleLengthUnitsLength);
         final String scaleUnit = MPTextToUser.getLengthUnitAbbreviation(
-            th2FileEditStore.scrapLengthUnitType);
+            th2FileEditController.scrapLengthUnitType);
         final String scaleText = "$scaleLength $scaleUnit";
 
         return CustomPaint(
@@ -32,11 +32,11 @@ class MPScrapScaleWidget extends StatelessWidget {
             lengthUnits: graphicalScaleLengthUnitsLength,
             scaleText: scaleText,
             lengthUnitsPerScreenPoint:
-                th2FileEditStore.scrapLengthUnitsPerPointOnScreen,
+                th2FileEditController.scrapLengthUnitsPerPointOnScreen,
             linePaint: linePaint,
             textColor: textColor,
           ),
-          size: th2FileEditStore.screenSize,
+          size: th2FileEditController.screenSize,
         );
       },
     );

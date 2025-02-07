@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/stores/th2_file_edit_store.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 mixin THCalculateChildrenBoundingBoxMixin {
   Rect calculateChildrenBoundingBox(
-    TH2FileEditStore th2FileEditStore,
+    TH2FileEditController th2FileEditController,
     List<int> childrenMapiahIDs,
   ) {
-    final THFile thFile = th2FileEditStore.thFile;
+    final THFile thFile = th2FileEditController.thFile;
 
     double minX = double.infinity;
     double minY = double.infinity;
@@ -22,13 +22,13 @@ mixin THCalculateChildrenBoundingBoxMixin {
 
       switch (child) {
         case THPoint _:
-          childBoundingBox = child.getBoundingBox(th2FileEditStore);
+          childBoundingBox = child.getBoundingBox(th2FileEditController);
           break;
         case THLine _:
-          childBoundingBox = child.getBoundingBox(th2FileEditStore);
+          childBoundingBox = child.getBoundingBox(th2FileEditController);
           break;
         case THScrap _:
-          childBoundingBox = child.getBoundingBox(th2FileEditStore);
+          childBoundingBox = child.getBoundingBox(th2FileEditController);
           break;
         default:
           continue;

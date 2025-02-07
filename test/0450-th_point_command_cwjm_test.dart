@@ -39,7 +39,7 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        mpLocator.mpGeneralStore.reset();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
@@ -80,7 +80,7 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        mpLocator.mpGeneralStore.reset();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);

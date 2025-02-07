@@ -38,7 +38,7 @@ class MapiahApp extends StatelessWidget {
         ),
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        locale: mpLocator.mpSettingsStore.locale,
+        locale: mpLocator.mpSettingsController.locale,
         supportedLocales: AppLocalizations.supportedLocales,
         home: MapiahHome(),
       ),

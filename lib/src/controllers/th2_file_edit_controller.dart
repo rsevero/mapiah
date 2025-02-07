@@ -21,10 +21,10 @@ import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
-import 'package:mapiah/src/stores/th2_file_edit_mode.dart';
-import 'package:mapiah/src/stores/types/mp_zoom_to_fit_type.dart';
-import 'package:mapiah/src/stores/types/th_line_paint.dart';
-import 'package:mapiah/src/stores/types/th_point_paint.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_mode.dart';
+import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/controllers/types/th_line_paint.dart';
+import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
@@ -32,11 +32,14 @@ import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
-part 'th2_file_edit_store.g.dart';
+part 'th2_file_edit_controller.g.dart';
 
-class TH2FileEditStore = TH2FileEditStoreBase with _$TH2FileEditStore;
+class TH2FileEditController = TH2FileEditControllerBase
+    with _$TH2FileEditController;
 
-abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
+abstract class TH2FileEditControllerBase
+    with Store
+    implements MPActuatorInterface {
   // 'screen' is related to actual pixels on the screen.
   // 'canvas' is the virtual canvas used to draw.
   // 'data' is the actual data to be drawn.
@@ -131,15 +134,15 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @computed
   double get lineThicknessOnCanvas =>
-      mpLocator.mpSettingsStore.lineThickness / _canvasScale;
+      mpLocator.mpSettingsController.lineThickness / _canvasScale;
 
   @computed
   double get pointRadiusOnCanvas =>
-      mpLocator.mpSettingsStore.pointRadius / _canvasScale;
+      mpLocator.mpSettingsController.pointRadius / _canvasScale;
 
   @computed
   double get selectionToleranceOnCanvas =>
-      mpLocator.mpSettingsStore.selectionTolerance / _canvasScale;
+      mpLocator.mpSettingsController.selectionTolerance / _canvasScale;
 
   @computed
   double get selectionToleranceSquaredOnCanvas =>
@@ -359,7 +362,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   late final MPUndoRedoController _undoRedoController;
 
-  Future<TH2FileEditStoreCreateResult> load() async {
+  Future<TH2FileEditControllerCreateResult> load() async {
     _preParseInitialize();
 
     final THFileParser parser = THFileParser();
@@ -369,29 +372,30 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
     _postParseInitialize(parsedFile, isSuccessful, errors);
 
-    return TH2FileEditStoreCreateResult(isSuccessful, errors);
+    return TH2FileEditControllerCreateResult(isSuccessful, errors);
   }
 
   /// This is a factory constructor that creates a new instance of
-  /// TH2FileEditStore with an empty THFile.
-  static TH2FileEditStore create(String filename) {
-    final TH2FileEditStore th2FileEditStore = TH2FileEditStore._create();
+  /// TH2FileEditController with an empty THFile.
+  static TH2FileEditController create(String filename) {
+    final TH2FileEditController th2FileEditController =
+        TH2FileEditController._create();
     final THFile thFile = THFile();
     thFile.filename = filename;
-    th2FileEditStore._basicInitialization(thFile);
-    return th2FileEditStore;
+    th2FileEditController._basicInitialization(thFile);
+    return th2FileEditController;
   }
 
-  TH2FileEditStoreBase._create();
+  TH2FileEditControllerBase._create();
 
   void _basicInitialization(THFile file) {
     _thFile = file;
     _thFileMapiahID = _thFile.mapiahID;
     _state = MPTH2FileEditState.getState(
       type: MPTH2FileEditStateType.selectEmptySelection,
-      thFileEditStore: this as TH2FileEditStore,
+      thFileEditController: this as TH2FileEditController,
     );
-    _undoRedoController = MPUndoRedoController(this as TH2FileEditStore);
+    _undoRedoController = MPUndoRedoController(this as TH2FileEditController);
   }
 
   void _preParseInitialize() {
@@ -457,7 +461,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void _addPointSelectableElement(THPoint point) {
     final MPSelectablePoint selectablePoint = MPSelectablePoint(
       point: point,
-      th2fileEditStore: this as TH2FileEditStore,
+      th2fileEditController: this as TH2FileEditController,
     );
 
     _selectables[point.mapiahID] = selectablePoint;
@@ -466,7 +470,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void _addLineSelectableElement(THLine line) {
     final MPSelectableLine selectableLine = MPSelectableLine(
       line: line,
-      th2fileEditStore: this as TH2FileEditStore,
+      th2fileEditController: this as TH2FileEditController,
     );
 
     _selectables[line.mapiahID] = selectableLine;
@@ -502,8 +506,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       final THElement element = selectableElement.value.element;
 
       if (MPNumericAux.isRect1InsideRect2(
-        rect1:
-            (element as MPBoundingBox).getBoundingBox(this as TH2FileEditStore),
+        rect1: (element as MPBoundingBox)
+            .getBoundingBox(this as TH2FileEditController),
         rect2: canvasSelectionWindow,
       )) {
         insideWindowElements[element.mapiahID] = element;
@@ -735,7 +739,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
         case THPoint _:
         case THLine _:
           boundingBox = (element as MPBoundingBox)
-              .getBoundingBox(this as TH2FileEditStore);
+              .getBoundingBox(this as TH2FileEditController);
           break;
         default:
           continue;
@@ -821,7 +825,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
     _state = MPTH2FileEditState.getState(
       type: type,
-      thFileEditStore: this as TH2FileEditStore,
+      thFileEditController: this as TH2FileEditController,
     );
 
     previousState.onStateLeave(_state);
@@ -1168,7 +1172,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   void close() {
-    mpLocator.mpGeneralStore.removeFileStore(filename: _thFile.filename);
+    mpLocator.mpGeneralController
+        .removeFileController(filename: _thFile.filename);
   }
 
   @action
@@ -1226,10 +1231,10 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   Rect _getZoomToFitBoundingBox({required MPZoomToFitType zoomFitToType}) {
     switch (zoomFitToType) {
       case MPZoomToFitType.file:
-        return _thFile.getBoundingBox(this as TH2FileEditStore);
+        return _thFile.getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.scrap:
         return (_thFile.elementByMapiahID(_activeScrapID) as THScrap)
-            .getBoundingBox(this as TH2FileEditStore);
+            .getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.selection:
         return _getSelectedElementsBoundingBox();
     }
@@ -1274,14 +1279,15 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Please select an output file:',
       fileName: _thFile.filename,
-      initialDirectory: mpLocator.mpGeneralStore.lastAccessedDirectory.isEmpty
-          ? null
-          : mpLocator.mpGeneralStore.lastAccessedDirectory,
+      initialDirectory:
+          mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+              ? null
+              : mpLocator.mpGeneralController.lastAccessedDirectory,
     );
 
     if (filePath != null) {
       String directoryPath = p.dirname(filePath);
-      mpLocator.mpGeneralStore.lastAccessedDirectory = directoryPath;
+      mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
       final File file = File(filePath);
       final List<int> encodedContent = await _encodedFileContents();
       return await file.writeAsBytes(encodedContent, flush: true);
@@ -1428,11 +1434,11 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 }
 
-class TH2FileEditStoreCreateResult {
+class TH2FileEditControllerCreateResult {
   final bool isSuccessful;
   final List<String> errors;
 
-  TH2FileEditStoreCreateResult(
+  TH2FileEditControllerCreateResult(
     this.isSuccessful,
     this.errors,
   );

@@ -151,7 +151,8 @@ class THScrap extends THElement
   }
 
   @override
-  Rect calculateBoundingBox(TH2FileEditStore th2FileEditStore) {
-    return calculateChildrenBoundingBox(th2FileEditStore, childrenMapiahID);
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    return calculateChildrenBoundingBox(
+        th2FileEditController, childrenMapiahID);
   }
 }

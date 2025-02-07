@@ -189,7 +189,7 @@ endcomment
     };
 
     test("${success['file']} in parts", () async {
-      mpLocator.mpGeneralStore.reset();
+      mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) =
           await parser.parse(THTestAux.testPath(success['file'] as String));
       expect(isSuccessful, true);
@@ -245,7 +245,7 @@ endcomment
     test("${success['file']} as once", () async {
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
-        forceNewStore: true,
+        forceNewController: true,
       );
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
@@ -298,7 +298,7 @@ endscrap
     test("${success['file']} as once", () async {
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
-        forceNewStore: true,
+        forceNewController: true,
       );
       expect(isSuccessful, true);
       expect(file, isA<THFile>());

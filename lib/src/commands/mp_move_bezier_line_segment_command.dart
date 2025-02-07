@@ -51,9 +51,10 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   MPCommandType get type => MPCommandType.moveBezierLineSegment;
 
   @override
-  void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    final THBezierCurveLineSegment originalLineSegment = th2FileEditStore.thFile
-        .elementByMapiahID(lineSegmentMapiahID) as THBezierCurveLineSegment;
+  void _actualExecute(TH2FileEditController th2FileEditController) {
+    final THBezierCurveLineSegment originalLineSegment =
+        th2FileEditController.thFile.elementByMapiahID(lineSegmentMapiahID)
+            as THBezierCurveLineSegment;
     final THBezierCurveLineSegment newLineSegment =
         originalLineSegment.copyWith(
             endPoint: originalLineSegment.endPoint
@@ -63,12 +64,13 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
             controlPoint2: originalLineSegment.controlPoint2
                 .copyWith(coordinates: modifiedControlPoint2Coordinates));
 
-    th2FileEditStore
+    th2FileEditController
         .substituteElementWithoutAddSelectableElement(newLineSegment);
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
+  MPUndoRedoCommand _createOppositeCommand(
+      TH2FileEditController th2FileEditController) {
     final MPMoveBezierLineSegmentCommand oppositeCommand =
         MPMoveBezierLineSegmentCommand(
       lineSegmentMapiahID: lineSegmentMapiahID,
