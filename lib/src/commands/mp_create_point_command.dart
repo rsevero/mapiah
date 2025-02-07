@@ -16,7 +16,10 @@ class MPCreatePointCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditStore th2FileEditStore) {
-    th2FileEditStore.addElement(newPoint);
+    th2FileEditStore.addElement(
+      newElement: newPoint,
+      parentMapiahID: th2FileEditStore.activeScrap,
+    );
   }
 
   @override

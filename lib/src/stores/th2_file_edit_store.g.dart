@@ -1196,11 +1196,13 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
   }
 
   @override
-  void addElement(THElement element) {
+  void addElement(
+      {required THElement newElement, required int parentMapiahID}) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name: 'TH2FileEditStoreBase.addElement');
     try {
-      return super.addElement(element);
+      return super
+          .addElement(newElement: newElement, parentMapiahID: parentMapiahID);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

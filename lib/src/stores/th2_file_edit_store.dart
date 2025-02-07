@@ -1351,10 +1351,21 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   MPUndoRedoController get undoRedoController => _undoRedoController;
 
   @action
-  void addElement(THElement element) {
-    _thFile.addElement(element);
-    _thFile.addElementToParent(element);
-    _addSelectableElement(element);
+  void addElement({
+    required THElement newElement,
+    required int parentMapiahID,
+  }) {
+    _thFile.addElement(newElement);
+
+    if (parentMapiahID < 0) {
+      _thFile.addElementToParent(newElement);
+    } else {
+      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+
+      scrap.addElementToParent(newElement);
+    }
+
+    _addSelectableElement(newElement);
   }
 
   @action
