@@ -142,7 +142,7 @@ class MPMoveLineCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
       lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: modifiedLineSegmentsMap,

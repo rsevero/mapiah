@@ -326,7 +326,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                                 color: Colors.white,
                                 child: Observer(
                                   builder: (_) {
-                                    th2FileEditStore.activeScrap;
+                                    th2FileEditStore.activeScrapID;
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:

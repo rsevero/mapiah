@@ -75,7 +75,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     String filename = p.basename(_thFile.filename);
 
     if (_hasMultipleScraps) {
-      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+      final THScrap scrap =
+          _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
       filename += ' | ${scrap.thID}';
     }
@@ -123,7 +124,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   late MPTH2FileEditState _state;
 
   @readonly
-  int _activeScrap = 0;
+  int _activeScrapID = 0;
 
   @readonly
   bool _hasMultipleScraps = false;
@@ -219,7 +220,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @computed
   bool get scrapHasScaleOption {
-    final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+    final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
     return scrap.hasOption('scale');
   }
@@ -227,7 +228,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @computed
   THLengthUnitType get scrapLengthUnitType {
     if (scrapHasScaleOption) {
-      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+      final THScrap scrap =
+          _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
       return (scrap.optionByType('scale') as THScrapScaleCommandOption)
           .unitPart
@@ -240,7 +242,8 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @computed
   double get scrapLengthUnitsPerPoint {
     if (scrapHasScaleOption) {
-      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+      final THScrap scrap =
+          _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
       return (scrap.optionByType('scale') as THScrapScaleCommandOption)
           .lengthUnitsPerPoint;
@@ -402,7 +405,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     List<String> errors,
   ) {
     if (_thFile.scrapMapiahIDs.isNotEmpty) {
-      _activeScrap = _thFile.scrapMapiahIDs.first;
+      _activeScrapID = _thFile.scrapMapiahIDs.first;
       _hasMultipleScraps = _thFile.scrapMapiahIDs.length > 1;
     }
 
@@ -426,7 +429,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   void updateSelectableElements() {
     _selectables.clear();
 
-    final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+    final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
     for (final int elementMapiahID in scrap.childrenMapiahID) {
       final THElement element = _thFile.elementByMapiahID(elementMapiahID);
@@ -612,7 +615,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   int getNextAvailableScrapID() {
     final List<int> scrapIDs = _thFile.scrapMapiahIDs;
-    final int currentIndex = scrapIDs.indexOf(_activeScrap);
+    final int currentIndex = scrapIDs.indexOf(_activeScrapID);
 
     if (currentIndex == -1 || scrapIDs.isEmpty) {
       throw Exception('Current active scrap ID not found in scrapIDs');
@@ -675,14 +678,22 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     if (_selectedElements.length == 1) {
       final THElement singleSelectedElement =
           _selectedElements.values.toList().first.originalElementClone;
+
       switch (singleSelectedElement) {
         case THPoint _:
-          mpCommand =
-              MPDeletePointCommand(originalPoint: singleSelectedElement);
+          mpCommand = MPDeletePointCommand(
+            pointMapiahID: singleSelectedElement.mapiahID,
+          );
         case THLine _:
+          mpCommand = MPDeleteLineCommand(
+            lineMapiahID: singleSelectedElement.mapiahID,
+          );
       }
     } else {}
+
     execute(mpCommand);
+    clearSelectedElements();
+    triggerSelectedElementsRedraw();
   }
 
   void updateSelectedElementsClones() {
@@ -766,7 +777,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
   @action
   void selectAllElements() {
-    final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+    final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
     final List<int> elementMapiahIDs = scrap.childrenMapiahID;
 
     for (final int elementMapiahID in elementMapiahIDs) {
@@ -952,12 +963,12 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   }
 
   bool isFromActiveScrap(THElement element) {
-    return element.parentMapiahID == _activeScrap;
+    return element.parentMapiahID == _activeScrapID;
   }
 
   @action
   void setActiveScrap(int scrapMapiahID) {
-    _activeScrap = scrapMapiahID;
+    _activeScrapID = scrapMapiahID;
   }
 
   List<(int, String, bool)> availableScraps() {
@@ -965,7 +976,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
 
     for (final int scrapMapiahID in _thFile.scrapMapiahIDs) {
       final THScrap scrap = _thFile.elementByMapiahID(scrapMapiahID) as THScrap;
-      final bool isActive = scrapMapiahID == _activeScrap;
+      final bool isActive = scrapMapiahID == _activeScrapID;
       scraps.add((scrapMapiahID, scrap.thID, isActive));
     }
 
@@ -1217,7 +1228,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
       case MPZoomToFitType.file:
         return _thFile.getBoundingBox(this as TH2FileEditStore);
       case MPZoomToFitType.scrap:
-        return (_thFile.elementByMapiahID(_activeScrap) as THScrap)
+        return (_thFile.elementByMapiahID(_activeScrapID) as THScrap)
             .getBoundingBox(this as TH2FileEditStore);
       case MPZoomToFitType.selection:
         return _getSelectedElementsBoundingBox();
@@ -1360,21 +1371,32 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
     if (parentMapiahID < 0) {
       _thFile.addElementToParent(newElement);
     } else {
-      final THScrap scrap = _thFile.elementByMapiahID(_activeScrap) as THScrap;
+      final THIsParentMixin parent =
+          _thFile.elementByMapiahID(parentMapiahID) as THIsParentMixin;
 
-      scrap.addElementToParent(newElement);
+      parent.addElementToParent(newElement);
     }
 
     _addSelectableElement(newElement);
   }
 
+  void addElementWithParentMapiahIDWithoutSelectableElement({
+    required THElement newElement,
+    required int parentMapiahID,
+  }) {
+    addElementWithParentWithoutSelectableElement(
+      newElement: newElement,
+      parent: _thFile.elementByMapiahID(parentMapiahID) as THIsParentMixin,
+    );
+  }
+
   @action
-  void addElementWithParentWithoutSelectableElement(
-    THElement element,
-    THIsParentMixin parent,
-  ) {
-    _thFile.addElement(element);
-    parent.addElementToParent(element);
+  void addElementWithParentWithoutSelectableElement({
+    required THElement newElement,
+    required THIsParentMixin parent,
+  }) {
+    _thFile.addElement(newElement);
+    parent.addElementToParent(newElement);
   }
 
   @action
@@ -1387,6 +1409,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @action
   void deleteElementByMapiahID(int mapiahID) {
     final THElement element = _thFile.elementByMapiahID(mapiahID);
+
     _thFile.deleteElement(element);
     _removeSelectableElement(mapiahID);
   }
@@ -1394,6 +1417,7 @@ abstract class TH2FileEditStoreBase with Store implements MPActuatorInterface {
   @action
   void deleteElementByTHID(String thID) {
     final THElement element = _thFile.elementByTHID(thID);
+
     _thFile.deleteElement(element);
     _removeSelectableElement(element.mapiahID);
   }

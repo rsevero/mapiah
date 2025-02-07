@@ -18,14 +18,14 @@ class MPCreatePointCommand extends MPCommand {
   void _actualExecute(TH2FileEditStore th2FileEditStore) {
     th2FileEditStore.addElement(
       newElement: newPoint,
-      parentMapiahID: th2FileEditStore.activeScrap,
+      parentMapiahID: th2FileEditStore.activeScrapID,
     );
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
     final MPDeletePointCommand oppositeCommand = MPDeletePointCommand(
-      originalPoint: newPoint,
+      pointMapiahID: newPoint.mapiahID,
       descriptionType: descriptionType,
     );
 

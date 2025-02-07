@@ -495,21 +495,21 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
     });
   }
 
-  late final _$_activeScrapAtom =
-      Atom(name: 'TH2FileEditStoreBase._activeScrap', context: context);
+  late final _$_activeScrapIDAtom =
+      Atom(name: 'TH2FileEditStoreBase._activeScrapID', context: context);
 
-  int get activeScrap {
-    _$_activeScrapAtom.reportRead();
-    return super._activeScrap;
+  int get activeScrapID {
+    _$_activeScrapIDAtom.reportRead();
+    return super._activeScrapID;
   }
 
   @override
-  int get _activeScrap => activeScrap;
+  int get _activeScrapID => activeScrapID;
 
   @override
-  set _activeScrap(int value) {
-    _$_activeScrapAtom.reportWrite(value, super._activeScrap, () {
-      super._activeScrap = value;
+  set _activeScrapID(int value) {
+    _$_activeScrapIDAtom.reportWrite(value, super._activeScrapID, () {
+      super._activeScrapID = value;
     });
   }
 
@@ -1210,13 +1210,13 @@ mixin _$TH2FileEditStore on TH2FileEditStoreBase, Store {
 
   @override
   void addElementWithParentWithoutSelectableElement(
-      THElement element, THIsParentMixin parent) {
+      {required THElement newElement, required THIsParentMixin parent}) {
     final _$actionInfo = _$TH2FileEditStoreBaseActionController.startAction(
         name:
             'TH2FileEditStoreBase.addElementWithParentWithoutSelectableElement');
     try {
-      return super
-          .addElementWithParentWithoutSelectableElement(element, parent);
+      return super.addElementWithParentWithoutSelectableElement(
+          newElement: newElement, parent: parent);
     } finally {
       _$TH2FileEditStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -202,7 +202,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
   }
 
   void _injectMultiLineCommentContent(List<dynamic> element) {
@@ -213,13 +215,17 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
   }
 
   void _injectEndMultiLineComment() {
     _currentElement = THEndcomment(parentMapiahID: _currentParentMapiahID);
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -230,7 +236,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
     setCurrentParent(_currentElement as THIsParentMixin);
     _addChildParser(_multiLineCommentContentParser);
   }
@@ -249,7 +257,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
   }
 
   void _injectXTherionSetting(List<dynamic> element) {
@@ -268,7 +278,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newElement, _currentParent);
+      newElement: newElement,
+      parent: _currentParent,
+    );
   }
 
   void _injectPoint(List<dynamic> element) {
@@ -298,7 +310,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newPoint, _currentParent);
+      newElement: newPoint,
+      parent: _currentParent,
+    );
 
     try {
       // Including subtype defined with type (type:subtype).
@@ -364,7 +378,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newBezierCurveLineSegment, _currentParent);
+      newElement: newBezierCurveLineSegment,
+      parent: _currentParent,
+    );
 
     // _currentElement = newBezierCurveLineSegment;
     _lastLineSegment = newBezierCurveLineSegment;
@@ -390,7 +406,7 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newElement, _currentParent);
+        newElement: newElement, parent: _currentParent);
   }
 
   void _injectStraightLineSegment(List<dynamic> element) {
@@ -418,7 +434,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newStraightLineSegment, _currentParent);
+      newElement: newStraightLineSegment,
+      parent: _currentParent,
+    );
 
     // _currentElement = newStraightLineSegment;
     _lastLineSegment = newStraightLineSegment;
@@ -441,7 +459,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newScrap, _currentParent);
+      newElement: newScrap,
+      parent: _currentParent,
+    );
 
     _currentElement = newScrap;
     setCurrentParent(newScrap);
@@ -457,7 +477,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -525,7 +547,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newArea, _currentParent);
+      newElement: newArea,
+      parent: _currentParent,
+    );
 
     _currentElement = newArea;
     setCurrentParent(newArea);
@@ -559,7 +583,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newLine, _currentParent);
+      newElement: newLine,
+      parent: _currentParent,
+    );
 
     _currentElement = newLine;
     setCurrentParent(newLine);
@@ -584,7 +610,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -595,7 +623,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        _currentElement, _currentParent);
+      newElement: _currentElement,
+      parent: _currentParent,
+    );
     setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
     _returnToParentParser();
   }
@@ -634,7 +664,9 @@ class THFileParser {
           originalLineInTH2File: _currentLine,
         );
         _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-            newElement, _currentParent);
+          newElement: newElement,
+          parent: _currentParent,
+        );
         break;
       case 'samelinecomment':
         if ((_currentElement.sameLineComment == null) ||
@@ -651,7 +683,9 @@ class THFileParser {
           value: element,
         );
         _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-            newElement, _currentParent);
+          newElement: newElement,
+          parent: _currentParent,
+        );
     }
   }
 
@@ -1714,7 +1748,9 @@ class THFileParser {
       originalLineInTH2File: _currentLine,
     );
     _th2FileEditStore.addElementWithParentWithoutSelectableElement(
-        newElement, _currentParent);
+      newElement: newElement,
+      parent: _currentParent,
+    );
   }
 
   @useResult

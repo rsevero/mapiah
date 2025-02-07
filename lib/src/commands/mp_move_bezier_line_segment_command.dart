@@ -68,7 +68,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
     final MPMoveBezierLineSegmentCommand oppositeCommand =
         MPMoveBezierLineSegmentCommand(
       lineSegmentMapiahID: lineSegmentMapiahID,

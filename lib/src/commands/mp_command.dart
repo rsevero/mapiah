@@ -9,10 +9,13 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_parameters.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_parameters.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/stores/th2_file_edit_store.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
+part 'mp_create_line_command.dart';
 part 'mp_create_point_command.dart';
+part 'mp_delete_line_command.dart';
 part 'mp_delete_point_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
 part 'mp_move_elements_command.dart';
@@ -37,7 +40,7 @@ abstract class MPCommand {
   MPCommandType get type;
 
   MPUndoRedoCommand execute(TH2FileEditStore th2FileEditStore) {
-    oppositeCommand = _createOppositeCommand();
+    oppositeCommand = _createOppositeCommand(th2FileEditStore);
     _actualExecute(th2FileEditStore);
 
     return oppositeCommand!;
@@ -46,7 +49,7 @@ abstract class MPCommand {
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
-  MPUndoRedoCommand _createOppositeCommand();
+  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore);
 
   void _actualExecute(TH2FileEditStore th2FileEditStore);
 
@@ -88,16 +91,16 @@ abstract class MPCommand {
 
   static MPCommand fromMap(Map<String, dynamic> map) {
     switch (MPCommandType.values.byName(map['commandType'])) {
-      // case MPCommandType.addElements:
-      //   return MPAddElementsCommand.fromMap(map);
-      // case MPCommandType.addLine:
-      //   return MPAddLineCommand.fromMap(map);
-      // case MPCommandType.addPoint:
-      //   return MPAddPointCommand.fromMap(map);
+      // case MPCommandType.createElements:
+      //   return MPCreateElementsCommand.fromMap(map);
+      case MPCommandType.createLine:
+        return MPCreateLineCommand.fromMap(map);
+      case MPCommandType.createPoint:
+        return MPCreatePointCommand.fromMap(map);
       // case MPCommandType.deleteElements:
       //   return MPDeleteElementsCommand.fromMap(map);
-      // case MPCommandType.deleteLine:
-      //   return MPDeleteLineCommand.fromMap(map);
+      case MPCommandType.deleteLine:
+        return MPDeleteLineCommand.fromMap(map);
       case MPCommandType.deletePoint:
         return MPDeletePointCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:

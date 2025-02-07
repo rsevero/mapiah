@@ -45,7 +45,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
     final MPMoveStraightLineSegmentCommand oppositeCommand =
         MPMoveStraightLineSegmentCommand(
       lineSegmentMapiahID: lineSegmentMapiahID,

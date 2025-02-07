@@ -44,7 +44,7 @@ class MPMovePointCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand() {
+  MPUndoRedoCommand _createOppositeCommand(TH2FileEditStore th2FileEditStore) {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
     final MPMovePointCommand oppositeCommand = MPMovePointCommand(

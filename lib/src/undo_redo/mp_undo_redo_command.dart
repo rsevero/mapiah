@@ -64,8 +64,12 @@ class MPUndoRedoCommand {
 
   MPCommand get command {
     switch (commandType) {
+      case MPCommandType.createLine:
+        return MPCreateLineCommand.fromMap(map);
       case MPCommandType.createPoint:
         return MPCreatePointCommand.fromMap(map);
+      case MPCommandType.deleteLine:
+        return MPDeleteLineCommand.fromMap(map);
       case MPCommandType.deletePoint:
         return MPDeletePointCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
