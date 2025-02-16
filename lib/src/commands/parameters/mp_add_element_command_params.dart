@@ -23,7 +23,7 @@ abstract class MPAddElementCommandParams {
 
   Map<String, dynamic> toMap() {
     return {
-      'mpCreateCommandParamsType': paramsType.name,
+      'mpAddElementCommandParamsType': paramsType.name,
     };
   }
 
@@ -33,7 +33,7 @@ abstract class MPAddElementCommandParams {
 
   static MPAddElementCommandParams fromMap(Map<String, dynamic> map) {
     switch (MPAddElementCommandParamsType.values
-        .byName(map['mpCreateCommandParamsType'])) {
+        .byName(map['mpAddElementCommandParamsType'])) {
       case MPAddElementCommandParamsType.line:
         return MPAddLineCommandParams.fromMap(map);
       case MPAddElementCommandParamsType.point:
