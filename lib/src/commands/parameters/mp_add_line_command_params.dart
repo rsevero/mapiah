@@ -1,10 +1,10 @@
-part of 'mp_create_command_params.dart';
+part of 'mp_add_element_command_params.dart';
 
-class MPCreateLineCommandParams extends MPCreateCommandParams {
+class MPAddLineCommandParams extends MPCreateCommandParams {
   final THLine line;
   final List<THElement> lineChildren;
 
-  MPCreateLineCommandParams({
+  MPAddLineCommandParams({
     required this.line,
     required this.lineChildren,
   });
@@ -14,7 +14,7 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
     THLine? line,
     List<THElement>? lineChildren,
   }) {
-    return MPCreateLineCommandParams(
+    return MPAddLineCommandParams(
       line: line ?? this.line,
       lineChildren: lineChildren ?? this.lineChildren,
     );
@@ -32,8 +32,8 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
     return map;
   }
 
-  factory MPCreateLineCommandParams.fromMap(Map<String, dynamic> map) {
-    return MPCreateLineCommandParams(
+  factory MPAddLineCommandParams.fromMap(Map<String, dynamic> map) {
+    return MPAddLineCommandParams(
       line: THLine.fromMap(map['line']),
       lineChildren: List<THElement>.from(
         map['lineChildren'].map((x) => THElement.fromMap(x)),
@@ -41,15 +41,15 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
     );
   }
 
-  factory MPCreateLineCommandParams.fromJson(String source) {
-    return MPCreateLineCommandParams.fromMap(jsonDecode(source));
+  factory MPAddLineCommandParams.fromJson(String source) {
+    return MPAddLineCommandParams.fromMap(jsonDecode(source));
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCreateLineCommandParams &&
+    return other is MPAddLineCommandParams &&
         other.line == line &&
         other.lineChildren == lineChildren;
   }
@@ -58,5 +58,6 @@ class MPCreateLineCommandParams extends MPCreateCommandParams {
   int get hashCode => line.hashCode ^ Object.hashAll(lineChildren);
 
   @override
-  MPCreateCommandParamsType get paramsType => MPCreateCommandParamsType.line;
+  MPAddElementCommandParamsType get paramsType =>
+      MPAddElementCommandParamsType.line;
 }

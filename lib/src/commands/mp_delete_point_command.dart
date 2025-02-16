@@ -25,7 +25,7 @@ class MPDeletePointCommand extends MPCommand {
     final THPoint originalPoint = th2FileEditController.thFile
         .elementByMapiahID(pointMapiahID) as THPoint;
 
-    final MPCreatePointCommand oppositeCommand = MPCreatePointCommand(
+    final MPAddPointCommand oppositeCommand = MPAddPointCommand(
       newPoint: originalPoint,
       descriptionType: descriptionType,
     );

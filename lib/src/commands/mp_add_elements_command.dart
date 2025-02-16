@@ -1,15 +1,15 @@
 part of 'mp_command.dart';
 
-class MPCreateElementsCommand extends MPCommand {
+class MPAddElementsCommand extends MPCommand {
   final List<MPCreateCommandParams> createParams;
 
-  MPCreateElementsCommand.forCWJM({
+  MPAddElementsCommand.forCWJM({
     required this.createParams,
     required super.oppositeCommand,
     super.descriptionType = MPCommandDescriptionType.createElements,
   }) : super.forCWJM();
 
-  MPCreateElementsCommand({
+  MPAddElementsCommand({
     required this.createParams,
     super.descriptionType = MPCommandDescriptionType.createElements,
   }) : super();
@@ -25,10 +25,10 @@ class MPCreateElementsCommand extends MPCommand {
 
     for (final params in createParams) {
       switch (params) {
-        case MPCreateLineCommandParams _:
+        case MPAddLineCommandParams _:
           mapiahIDs.add(params.line.mapiahID);
           break;
-        case MPCreatePointCommandParams _:
+        case MPAddPointCommandParams _:
           mapiahIDs.add(params.point.mapiahID);
           break;
       }
@@ -49,15 +49,15 @@ class MPCreateElementsCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
-    return MPCreateElementsCommand.forCWJM(
+    return MPAddElementsCommand.forCWJM(
       createParams: createParams ?? this.createParams,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPCreateElementsCommand.fromMap(Map<String, dynamic> map) {
-    return MPCreateElementsCommand.forCWJM(
+  factory MPAddElementsCommand.fromMap(Map<String, dynamic> map) {
+    return MPAddElementsCommand.forCWJM(
       createParams: List<MPCreateCommandParams>.from(
         map['createParams'].map(
           (x) => MPCreateCommandParams.fromMap(x),
@@ -71,8 +71,8 @@ class MPCreateElementsCommand extends MPCommand {
     );
   }
 
-  factory MPCreateElementsCommand.fromJson(String source) {
-    return MPCreateElementsCommand.fromMap(jsonDecode(source));
+  factory MPAddElementsCommand.fromJson(String source) {
+    return MPAddElementsCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -90,7 +90,7 @@ class MPCreateElementsCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCreateElementsCommand &&
+    return other is MPAddElementsCommand &&
         const DeepCollectionEquality()
             .equals(other.createParams, createParams) &&
         other.oppositeCommand == oppositeCommand &&

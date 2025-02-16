@@ -1,15 +1,15 @@
 part of 'mp_command.dart';
 
-class MPCreatePointCommand extends MPCommand {
+class MPAddPointCommand extends MPCommand {
   final THPoint newPoint;
 
-  MPCreatePointCommand.forCWJM({
+  MPAddPointCommand.forCWJM({
     required this.newPoint,
     required super.oppositeCommand,
     super.descriptionType = MPCommandDescriptionType.createPoint,
   }) : super.forCWJM();
 
-  MPCreatePointCommand({
+  MPAddPointCommand({
     required this.newPoint,
     super.descriptionType = MPCommandDescriptionType.createPoint,
   }) : super();
@@ -42,15 +42,15 @@ class MPCreatePointCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
-    return MPCreatePointCommand.forCWJM(
+    return MPAddPointCommand.forCWJM(
       newPoint: newPoint ?? this.newPoint,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPCreatePointCommand.fromMap(Map<String, dynamic> map) {
-    return MPCreatePointCommand.forCWJM(
+  factory MPAddPointCommand.fromMap(Map<String, dynamic> map) {
+    return MPAddPointCommand.forCWJM(
       newPoint: THPoint.fromMap(map['newPoint']),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
@@ -60,8 +60,8 @@ class MPCreatePointCommand extends MPCommand {
     );
   }
 
-  factory MPCreatePointCommand.fromJson(String source) {
-    return MPCreatePointCommand.fromMap(jsonDecode(source));
+  factory MPAddPointCommand.fromJson(String source) {
+    return MPAddPointCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -79,7 +79,7 @@ class MPCreatePointCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCreatePointCommand &&
+    return other is MPAddPointCommand &&
         other.newPoint == newPoint &&
         other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;

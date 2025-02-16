@@ -4,16 +4,16 @@ import 'dart:convert';
 
 import 'package:mapiah/src/elements/th_element.dart';
 
-part 'mp_create_line_command_params.dart';
-part 'mp_create_point_command_params.dart';
+part 'mp_add_line_command_params.dart';
+part 'mp_add_point_command_params.dart';
 
-enum MPCreateCommandParamsType {
+enum MPAddElementCommandParamsType {
   line,
   point,
 }
 
 abstract class MPCreateCommandParams {
-  MPCreateCommandParamsType get paramsType;
+  MPAddElementCommandParamsType get paramsType;
 
   MPCreateCommandParams copyWith();
 
@@ -32,12 +32,12 @@ abstract class MPCreateCommandParams {
   }
 
   static MPCreateCommandParams fromMap(Map<String, dynamic> map) {
-    switch (MPCreateCommandParamsType.values
+    switch (MPAddElementCommandParamsType.values
         .byName(map['mpCreateCommandParamsType'])) {
-      case MPCreateCommandParamsType.line:
-        return MPCreateLineCommandParams.fromMap(map);
-      case MPCreateCommandParamsType.point:
-        return MPCreatePointCommandParams.fromMap(map);
+      case MPAddElementCommandParamsType.line:
+        return MPAddLineCommandParams.fromMap(map);
+      case MPAddElementCommandParamsType.point:
+        return MPAddPointCommandParams.fromMap(map);
     }
   }
 }

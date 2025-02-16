@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/commands/parameters/mp_create_command_params.dart';
+import 'package:mapiah/src/commands/parameters/mp_add_element_command_params.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_params.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
@@ -14,9 +14,9 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
-part 'mp_create_elements_command.dart';
-part 'mp_create_line_command.dart';
-part 'mp_create_point_command.dart';
+part 'mp_add_elements_command.dart';
+part 'mp_add_line_command.dart';
+part 'mp_add_point_command.dart';
 part 'mp_delete_elements_command.dart';
 part 'mp_delete_line_command.dart';
 part 'mp_delete_point_command.dart';
@@ -98,9 +98,9 @@ abstract class MPCommand {
       // case MPCommandType.createElements:
       //   return MPCreateElementsCommand.fromMap(map);
       case MPCommandType.createLine:
-        return MPCreateLineCommand.fromMap(map);
+        return MPAddLineCommand.fromMap(map);
       case MPCommandType.createPoint:
-        return MPCreatePointCommand.fromMap(map);
+        return MPAddPointCommand.fromMap(map);
       // case MPCommandType.deleteElements:
       //   return MPDeleteElementsCommand.fromMap(map);
       case MPCommandType.deleteLine:

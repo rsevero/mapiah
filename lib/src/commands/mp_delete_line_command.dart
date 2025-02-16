@@ -43,7 +43,7 @@ class MPDeleteLineCommand extends MPCommand {
       lineChildren.add(childElement);
     }
 
-    final MPCreateLineCommand oppositeCommand = MPCreateLineCommand(
+    final MPAddLineCommand oppositeCommand = MPAddLineCommand(
       newLine: originalLine,
       lineChildren: lineChildren,
       descriptionType: descriptionType,

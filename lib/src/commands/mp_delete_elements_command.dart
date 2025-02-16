@@ -50,21 +50,21 @@ class MPDeleteElementsCommand extends MPCommand {
           final MPUndoRedoCommand undoRedoCommand =
               mpCommand._createOppositeCommand(th2FileEditController);
 
-          oppositeParams = MPCreateLineCommandParams(
+          oppositeParams = MPAddLineCommandParams(
             line: element,
             lineChildren: (undoRedoCommand.command.oppositeCommand!.command
-                    as MPCreateLineCommand)
+                    as MPAddLineCommand)
                 .lineChildren,
           );
           break;
         case THPoint _:
-          oppositeParams = MPCreatePointCommandParams(point: element);
+          oppositeParams = MPAddPointCommandParams(point: element);
           break;
       }
       oppositeParamsList.add(oppositeParams);
     }
 
-    final MPCreateElementsCommand oppositeCommand = MPCreateElementsCommand(
+    final MPAddElementsCommand oppositeCommand = MPAddElementsCommand(
       createParams: oppositeParamsList,
       descriptionType: descriptionType,
     );

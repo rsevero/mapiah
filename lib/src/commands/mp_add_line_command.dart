@@ -1,17 +1,17 @@
 part of 'mp_command.dart';
 
-class MPCreateLineCommand extends MPCommand {
+class MPAddLineCommand extends MPCommand {
   final THLine newLine;
   final List<THElement> lineChildren;
 
-  MPCreateLineCommand.forCWJM({
+  MPAddLineCommand.forCWJM({
     required this.newLine,
     required this.lineChildren,
     required super.oppositeCommand,
     super.descriptionType = MPCommandDescriptionType.deleteLine,
   }) : super.forCWJM();
 
-  MPCreateLineCommand({
+  MPAddLineCommand({
     required this.newLine,
     required this.lineChildren,
     super.descriptionType = MPCommandDescriptionType.deleteLine,
@@ -57,7 +57,7 @@ class MPCreateLineCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
-    return MPCreateLineCommand.forCWJM(
+    return MPAddLineCommand.forCWJM(
       newLine: newLine ?? this.newLine,
       lineChildren: lineChildren ?? this.lineChildren,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
@@ -65,8 +65,8 @@ class MPCreateLineCommand extends MPCommand {
     );
   }
 
-  factory MPCreateLineCommand.fromMap(Map<String, dynamic> map) {
-    return MPCreateLineCommand.forCWJM(
+  factory MPAddLineCommand.fromMap(Map<String, dynamic> map) {
+    return MPAddLineCommand.forCWJM(
       newLine: THLine.fromMap(map['newLine']),
       lineChildren: List<THElement>.from(
         map['lineChildren'].map(
@@ -81,8 +81,8 @@ class MPCreateLineCommand extends MPCommand {
     );
   }
 
-  factory MPCreateLineCommand.fromJson(String source) {
-    return MPCreateLineCommand.fromMap(jsonDecode(source));
+  factory MPAddLineCommand.fromJson(String source) {
+    return MPAddLineCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -101,7 +101,7 @@ class MPCreateLineCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCreateLineCommand &&
+    return other is MPAddLineCommand &&
         other.newLine == newLine &&
         const DeepCollectionEquality()
             .equals(other.lineChildren, lineChildren) &&

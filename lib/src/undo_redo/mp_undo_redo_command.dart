@@ -65,9 +65,9 @@ class MPUndoRedoCommand {
   MPCommand get command {
     switch (commandType) {
       case MPCommandType.createLine:
-        return MPCreateLineCommand.fromMap(map);
+        return MPAddLineCommand.fromMap(map);
       case MPCommandType.createPoint:
-        return MPCreatePointCommand.fromMap(map);
+        return MPAddPointCommand.fromMap(map);
       case MPCommandType.deleteLine:
         return MPDeleteLineCommand.fromMap(map);
       case MPCommandType.deletePoint:
