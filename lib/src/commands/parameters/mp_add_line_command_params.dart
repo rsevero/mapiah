@@ -1,6 +1,6 @@
 part of 'mp_add_element_command_params.dart';
 
-class MPAddLineCommandParams extends MPCreateCommandParams {
+class MPAddLineCommandParams extends MPAddElementCommandParams {
   final THLine line;
   final List<THElement> lineChildren;
 
@@ -10,7 +10,7 @@ class MPAddLineCommandParams extends MPCreateCommandParams {
   });
 
   @override
-  MPCreateCommandParams copyWith({
+  MPAddElementCommandParams copyWith({
     THLine? line,
     List<THElement>? lineChildren,
   }) {

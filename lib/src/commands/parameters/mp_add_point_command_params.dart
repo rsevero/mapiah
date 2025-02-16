@@ -1,12 +1,12 @@
 part of 'mp_add_element_command_params.dart';
 
-class MPAddPointCommandParams extends MPCreateCommandParams {
+class MPAddPointCommandParams extends MPAddElementCommandParams {
   final THPoint point;
 
   MPAddPointCommandParams({required this.point});
 
   @override
-  MPCreateCommandParams copyWith({THPoint? point}) {
+  MPAddElementCommandParams copyWith({THPoint? point}) {
     return MPAddPointCommandParams(
       point: point ?? this.point,
     );

@@ -12,10 +12,10 @@ enum MPAddElementCommandParamsType {
   point,
 }
 
-abstract class MPCreateCommandParams {
+abstract class MPAddElementCommandParams {
   MPAddElementCommandParamsType get paramsType;
 
-  MPCreateCommandParams copyWith();
+  MPAddElementCommandParams copyWith();
 
   String toJson() {
     return jsonEncode(toMap());
@@ -27,11 +27,11 @@ abstract class MPCreateCommandParams {
     };
   }
 
-  static MPCreateCommandParams fromJson(String jsonString) {
+  static MPAddElementCommandParams fromJson(String jsonString) {
     return fromMap(jsonDecode(jsonString));
   }
 
-  static MPCreateCommandParams fromMap(Map<String, dynamic> map) {
+  static MPAddElementCommandParams fromMap(Map<String, dynamic> map) {
     switch (MPAddElementCommandParamsType.values
         .byName(map['mpCreateCommandParamsType'])) {
       case MPAddElementCommandParamsType.line:

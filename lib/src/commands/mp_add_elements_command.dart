@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPAddElementsCommand extends MPCommand {
-  final List<MPCreateCommandParams> createParams;
+  final List<MPAddElementCommandParams> createParams;
 
   MPAddElementsCommand.forCWJM({
     required this.createParams,
@@ -45,7 +45,7 @@ class MPAddElementsCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    List<MPCreateCommandParams>? createParams,
+    List<MPAddElementCommandParams>? createParams,
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
@@ -58,9 +58,9 @@ class MPAddElementsCommand extends MPCommand {
 
   factory MPAddElementsCommand.fromMap(Map<String, dynamic> map) {
     return MPAddElementsCommand.forCWJM(
-      createParams: List<MPCreateCommandParams>.from(
+      createParams: List<MPAddElementCommandParams>.from(
         map['createParams'].map(
-          (x) => MPCreateCommandParams.fromMap(x),
+          (x) => MPAddElementCommandParams.fromMap(x),
         ),
       ),
       oppositeCommand: map['oppositeCommand'] == null
