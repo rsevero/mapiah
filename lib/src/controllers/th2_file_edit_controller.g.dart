@@ -479,6 +479,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_isAddElementButtonsHoveredAtom = Atom(
+      name: 'TH2FileEditControllerBase._isAddElementButtonsHovered',
+      context: context);
+
+  bool get isAddElementButtonsHovered {
+    _$_isAddElementButtonsHoveredAtom.reportRead();
+    return super._isAddElementButtonsHovered;
+  }
+
+  @override
+  bool get _isAddElementButtonsHovered => isAddElementButtonsHovered;
+
+  @override
+  set _isAddElementButtonsHovered(bool value) {
+    _$_isAddElementButtonsHoveredAtom
+        .reportWrite(value, super._isAddElementButtonsHovered, () {
+      super._isAddElementButtonsHovered = value;
+    });
+  }
+
   late final _$_stateAtom =
       Atom(name: 'TH2FileEditControllerBase._state', context: context);
 
@@ -820,6 +840,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setZoomButtonsHovered');
     try {
       return super.setZoomButtonsHovered(isHovered);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setAddElementButtonsHovered(bool isHovered) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setAddElementButtonsHovered');
+    try {
+      return super.setAddElementButtonsHovered(isHovered);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

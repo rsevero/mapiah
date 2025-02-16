@@ -1,5 +1,7 @@
 enum MPButtonType {
-  add,
+  addArea,
+  addLine,
+  addPoint,
   changeScrap,
   delete,
   redo,

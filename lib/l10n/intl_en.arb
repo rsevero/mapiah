@@ -169,6 +169,24 @@
     "type": "text"
   },
 
+  "th2FileEditPageAddArea": "Add area (A)",
+  "@th2FileEditPageAddArea": {
+    "description": "The label for the add area button",
+    "type": "text"
+  },
+
+  "th2FileEditPageAddLine": "Add line (L)",
+  "@th2FileEditPageAddLine": {
+    "description": "The label for the add line button",
+    "type": "text"
+  },
+
+  "th2FileEditPageAddPoint": "Add point (P)",
+  "@th2FileEditPageAddPoint": {
+    "description": "The label for the add point button",
+    "type": "text"
+  },
+  
   "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+C)",
   "@th2FileEditPageChangeActiveScrapTool": {
     "description": "The label for the change active scrap tool button",

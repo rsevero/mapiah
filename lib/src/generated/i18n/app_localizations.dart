@@ -257,6 +257,24 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// The label for the add area button
+  ///
+  /// In en, this message translates to:
+  /// **'Add area (A)'**
+  String get th2FileEditPageAddArea;
+
+  /// The label for the add line button
+  ///
+  /// In en, this message translates to:
+  /// **'Add line (L)'**
+  String get th2FileEditPageAddLine;
+
+  /// The label for the add point button
+  ///
+  /// In en, this message translates to:
+  /// **'Add point (P)'**
+  String get th2FileEditPageAddPoint;
+
   /// The label for the change active scrap tool button
   ///
   /// In en, this message translates to:

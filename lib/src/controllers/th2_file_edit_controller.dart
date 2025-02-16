@@ -124,6 +124,9 @@ abstract class TH2FileEditControllerBase
   bool _isZoomButtonsHovered = false;
 
   @readonly
+  bool _isAddElementButtonsHovered = false;
+
+  @readonly
   late MPTH2FileEditState _state;
 
   @readonly
@@ -526,6 +529,11 @@ abstract class TH2FileEditControllerBase
   @action
   void setZoomButtonsHovered(bool isHovered) {
     _isZoomButtonsHovered = isHovered;
+  }
+
+  @action
+  void setAddElementButtonsHovered(bool isHovered) {
+    _isAddElementButtonsHovered = isHovered;
   }
 
   @action
