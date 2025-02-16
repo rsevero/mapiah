@@ -269,110 +269,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (th2FileEditController.hasMultipleScraps) ...[
-                MouseRegion(
-                  onEnter: (PointerEvent event) {
-                    th2FileEditController
-                        .changeScrapsPopupOverlayPortalControllerController
-                        .show();
-                    th2FileEditController.isChangeScrapsPopupVisible = true;
-                  },
-                  onExit: (PointerEvent event) {
-                    th2FileEditController
-                        .changeScrapsPopupOverlayPortalControllerController
-                        .hide();
-                    th2FileEditController.isChangeScrapsPopupVisible = false;
-                  },
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding:
-                            th2FileEditController.isChangeScrapsPopupVisible
-                                ? const EdgeInsets.only(left: 48.0)
-                                : EdgeInsets.zero,
-                        child: FloatingActionButton(
-                          key: th2FileEditController.changeScrapsFABKey,
-                          heroTag: 'change_active_scrap_tool',
-                          onPressed: _onChangeActiveScrapToolPressed,
-                          tooltip: AppLocalizations.of(context)
-                              .th2FileEditPageChangeActiveScrapTool,
-                          child: Image.asset(
-                            'assets/icons/change-scrap-tool.png',
-                            width: thFloatingActionIconSize,
-                            height: thFloatingActionIconSize,
-                            color: colorScheme.onSecondaryContainer,
-                          ),
-                        ),
-                      ),
-                      OverlayPortal(
-                        controller: th2FileEditController
-                            .changeScrapsPopupOverlayPortalControllerController,
-                        overlayChildBuilder: (context) {
-                          final RenderBox fabBox = th2FileEditController
-                              .changeScrapsFABKey.currentContext!
-                              .findRenderObject() as RenderBox;
-                          final Offset fabPosition =
-                              fabBox.localToGlobal(Offset.zero);
-                          final Size fabSize = fabBox.size;
-                          final double popupTop =
-                              fabPosition.dy + fabSize.height / 2 - 50;
-                          final double popupLeft = fabPosition.dx - 250;
-
-                          return Positioned(
-                            top: popupTop,
-                            left: popupLeft,
-                            child: Material(
-                              elevation: 4.0,
-                              child: Container(
-                                padding: const EdgeInsets.all(8.0),
-                                width: 230,
-                                color: Colors.white,
-                                child: Observer(
-                                  builder: (_) {
-                                    th2FileEditController.activeScrapID;
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: th2FileEditController
-                                          .availableScraps()
-                                          .map(
-                                        (scrap) {
-                                          final int scrapID = scrap.$1;
-                                          final String scrapName = scrap.$2;
-                                          final bool isSelected = scrap.$3;
-
-                                          return PopupMenuItem<int>(
-                                            value: scrapID,
-                                            // onTap: () =>
-                                            //     _selectActiveScrapPressed(
-                                            //         scrapID),
-                                            child: Row(
-                                              children: [
-                                                Text(scrapName),
-                                                if (isSelected) ...[
-                                                  SizedBox(width: 8),
-                                                  Icon(Icons.check,
-                                                      color: Colors.blue),
-                                                ],
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ).toList(),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 8),
-              ],
+              if (th2FileEditController.hasMultipleScraps)
+                ..._changeScrapButton(),
               FloatingActionButton(
                 heroTag: 'select_tool',
                 onPressed: _onSelectToolPressed,
@@ -397,6 +295,108 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         );
       },
     );
+  }
+
+  List<Widget> _changeScrapButton() {
+    return [
+      MouseRegion(
+        onEnter: (PointerEvent event) {
+          th2FileEditController
+              .changeScrapsPopupOverlayPortalControllerController
+              .show();
+          th2FileEditController.isChangeScrapsPopupVisible = true;
+        },
+        onExit: (PointerEvent event) {
+          th2FileEditController
+              .changeScrapsPopupOverlayPortalControllerController
+              .hide();
+          th2FileEditController.isChangeScrapsPopupVisible = false;
+        },
+        child: Stack(
+          children: [
+            Padding(
+              padding: th2FileEditController.isChangeScrapsPopupVisible
+                  ? const EdgeInsets.only(left: 48.0)
+                  : EdgeInsets.zero,
+              child: FloatingActionButton(
+                key: th2FileEditController.changeScrapsFABKey,
+                heroTag: 'change_active_scrap_tool',
+                onPressed: _onChangeActiveScrapToolPressed,
+                tooltip: AppLocalizations.of(context)
+                    .th2FileEditPageChangeActiveScrapTool,
+                child: Image.asset(
+                  'assets/icons/change-scrap-tool.png',
+                  width: thFloatingActionIconSize,
+                  height: thFloatingActionIconSize,
+                  color: colorScheme.onSecondaryContainer,
+                ),
+              ),
+            ),
+            OverlayPortal(
+              controller: th2FileEditController
+                  .changeScrapsPopupOverlayPortalControllerController,
+              overlayChildBuilder: (context) {
+                final RenderBox fabBox = th2FileEditController
+                    .changeScrapsFABKey.currentContext!
+                    .findRenderObject() as RenderBox;
+                final Offset fabPosition = fabBox.localToGlobal(Offset.zero);
+                final Size fabSize = fabBox.size;
+                final double popupTop =
+                    fabPosition.dy + fabSize.height / 2 - 50;
+                final double popupLeft = fabPosition.dx - 250;
+
+                return Positioned(
+                  top: popupTop,
+                  left: popupLeft,
+                  child: Material(
+                    elevation: 4.0,
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      width: 230,
+                      color: Colors.white,
+                      child: Observer(
+                        builder: (_) {
+                          th2FileEditController.activeScrapID;
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:
+                                th2FileEditController.availableScraps().map(
+                              (scrap) {
+                                final int scrapID = scrap.$1;
+                                final String scrapName = scrap.$2;
+                                final bool isSelected = scrap.$3;
+
+                                return PopupMenuItem<int>(
+                                  value: scrapID,
+                                  // onTap: () =>
+                                  //     _selectActiveScrapPressed(
+                                  //         scrapID),
+                                  child: Row(
+                                    children: [
+                                      Text(scrapName),
+                                      if (isSelected) ...[
+                                        SizedBox(width: 8),
+                                        Icon(Icons.check, color: Colors.blue),
+                                      ],
+                                    ],
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: 8),
+    ];
   }
 
   void _onChangeActiveScrapToolPressed() {
