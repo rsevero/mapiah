@@ -299,96 +299,86 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     );
   }
 
+  List<Widget> _addElementButton({
+    required MPButtonType type,
+    required bool addSpacer,
+  }) {
+    final String typeName = type.name;
+    final String heroTag = 'add_element_$typeName';
+    late String tooltip;
+
+    switch (type) {
+      case MPButtonType.addArea:
+        tooltip = AppLocalizations.of(context).th2FileEditPageAddArea;
+        break;
+      case MPButtonType.addElement:
+        tooltip = AppLocalizations.of(context).th2FileEditPageAddElementOptions;
+        break;
+      case MPButtonType.addLine:
+        tooltip = AppLocalizations.of(context).th2FileEditPageAddLine;
+        break;
+      case MPButtonType.addPoint:
+        tooltip = AppLocalizations.of(context).th2FileEditPageAddPoint;
+        break;
+      default:
+        return [
+          SizedBox.shrink(),
+        ];
+    }
+
+    return [
+      FloatingActionButton(
+        heroTag: heroTag,
+        onPressed: () => _onAddElementButtonPressed(type),
+        tooltip: tooltip,
+        child: Image.asset(
+          'assets/icons/add_element-$typeName.png',
+          width: thFloatingActionIconSize,
+          height: thFloatingActionIconSize,
+          color: colorScheme.onSecondaryContainer,
+        ),
+      ),
+      if (addSpacer) SizedBox(width: 8),
+    ];
+  }
+
   Widget _addElementOptions() {
     return MouseRegion(
       onEnter: (_) => th2FileEditController.setAddElementButtonsHovered(true),
       onExit: (_) => th2FileEditController.setAddElementButtonsHovered(false),
-      child: Column(
-        children: [
-          Row(
+      child: Observer(
+        builder: (_) {
+          return Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Observer(
-                builder: (_) {
-                  if (!th2FileEditController.isAddElementButtonsHovered) {
-                    return const SizedBox();
-                  }
-
-                  return Row(
-                    children: [
-                      FloatingActionButton(
-                        heroTag: 'add_point',
-                        onPressed: onAddPointPressed,
-                        tooltip: AppLocalizations.of(context)
-                            .th2FileEditPageAddPoint,
-                        child: Image.asset(
-                          'assets/icons/point.png',
-                          width: thFloatingActionZoomIconSize,
-                          height: thFloatingActionZoomIconSize,
-                          color: colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      FloatingActionButton(
-                        heroTag: 'add_line',
-                        onPressed: onAddLinePressed,
-                        tooltip:
-                            AppLocalizations.of(context).th2FileEditPageAddLine,
-                        child: Image.asset(
-                          'assets/icons/line.png',
-                          width: thFloatingActionZoomIconSize,
-                          height: thFloatingActionZoomIconSize,
-                          color: colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      FloatingActionButton(
-                        heroTag: 'add_area',
-                        onPressed: onAddAreaPressed,
-                        tooltip:
-                            AppLocalizations.of(context).th2FileEditPageAddArea,
-                        child: Image.asset(
-                          'assets/icons/area.png',
-                          width: thFloatingActionZoomIconSize,
-                          height: thFloatingActionZoomIconSize,
-                          color: colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                    ],
-                  );
-                },
-              ),
-              FloatingActionButton(
-                heroTag: 'add_element_options',
-                onPressed: () {},
-                tooltip: AppLocalizations.of(context)
-                    .th2FileEditPageAddElementOptions,
-                child: Image.asset(
-                  'assets/icons/add_element.png',
-                  width: thFloatingActionZoomIconSize,
-                  height: thFloatingActionZoomIconSize,
-                  color: colorScheme.onSecondaryContainer,
+              if (th2FileEditController.isAddElementButtonsHovered) ...[
+                ..._addElementButton(
+                  type: MPButtonType.addPoint,
+                  addSpacer: true,
                 ),
+                ..._addElementButton(
+                  type: MPButtonType.addLine,
+                  addSpacer: true,
+                ),
+                ..._addElementButton(
+                  type: MPButtonType.addArea,
+                  addSpacer: true,
+                ),
+              ],
+              ..._addElementButton(
+                type: th2FileEditController.activeAddElementButton,
+                addSpacer: false,
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  void onAddPointPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.addPoint);
-  }
-
-  void onAddLinePressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.addLine);
-  }
-
-  void onAddAreaPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.addArea);
+  void _onAddElementButtonPressed(MPButtonType type) {
+    th2FileEditController.onButtonPressed(type);
   }
 
   List<Widget> _changeScrapButton() {

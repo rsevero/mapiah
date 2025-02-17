@@ -1,5 +1,6 @@
 enum MPButtonType {
   addArea,
+  addElement,
   addLine,
   addPoint,
   changeScrap,

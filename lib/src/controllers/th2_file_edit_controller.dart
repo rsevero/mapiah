@@ -127,6 +127,9 @@ abstract class TH2FileEditControllerBase
   bool _isAddElementButtonsHovered = false;
 
   @readonly
+  MPButtonType _activeAddElementButton = MPButtonType.addElement;
+
+  @readonly
   late MPTH2FileEditState _state;
 
   @readonly
@@ -534,6 +537,11 @@ abstract class TH2FileEditControllerBase
   @action
   void setAddElementButtonsHovered(bool isHovered) {
     _isAddElementButtonsHovered = isHovered;
+  }
+
+  @action
+  void setActiveAddElementButton(MPButtonType buttonType) {
+    _activeAddElementButton = buttonType;
   }
 
   @action

@@ -46,11 +46,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/add_element.png
-    - assets/icons/area.png
+    - assets/icons/add_element-addArea.png
+    - assets/icons/add_element-addElement.png
+    - assets/icons/add_element-addLine.png
+    - assets/icons/add_element-addPoint.png
     - assets/icons/change-scrap-tool.png
-    - assets/icons/line.png
-    - assets/icons/point.png
     - assets/icons/select-tool.png
     - assets/icons/zoom_minus.png
     - assets/icons/zoom_one_to_one.png

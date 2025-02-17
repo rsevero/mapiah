@@ -499,6 +499,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_activeAddElementButtonAtom = Atom(
+      name: 'TH2FileEditControllerBase._activeAddElementButton',
+      context: context);
+
+  MPButtonType get activeAddElementButton {
+    _$_activeAddElementButtonAtom.reportRead();
+    return super._activeAddElementButton;
+  }
+
+  @override
+  MPButtonType get _activeAddElementButton => activeAddElementButton;
+
+  @override
+  set _activeAddElementButton(MPButtonType value) {
+    _$_activeAddElementButtonAtom
+        .reportWrite(value, super._activeAddElementButton, () {
+      super._activeAddElementButton = value;
+    });
+  }
+
   late final _$_stateAtom =
       Atom(name: 'TH2FileEditControllerBase._state', context: context);
 
@@ -852,6 +872,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
             name: 'TH2FileEditControllerBase.setAddElementButtonsHovered');
     try {
       return super.setAddElementButtonsHovered(isHovered);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setActiveAddElementButton(MPButtonType buttonType) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setActiveAddElementButton');
+    try {
+      return super.setActiveAddElementButton(buttonType);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
