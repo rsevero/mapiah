@@ -519,6 +519,60 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_lastAddedPointTypeAtom = Atom(
+      name: 'TH2FileEditControllerBase._lastAddedPointType', context: context);
+
+  THPointType get lastAddedPointType {
+    _$_lastAddedPointTypeAtom.reportRead();
+    return super._lastAddedPointType;
+  }
+
+  @override
+  THPointType get _lastAddedPointType => lastAddedPointType;
+
+  @override
+  set _lastAddedPointType(THPointType value) {
+    _$_lastAddedPointTypeAtom.reportWrite(value, super._lastAddedPointType, () {
+      super._lastAddedPointType = value;
+    });
+  }
+
+  late final _$_lastAddedLineTypeAtom = Atom(
+      name: 'TH2FileEditControllerBase._lastAddedLineType', context: context);
+
+  THLineType get lastAddedLineType {
+    _$_lastAddedLineTypeAtom.reportRead();
+    return super._lastAddedLineType;
+  }
+
+  @override
+  THLineType get _lastAddedLineType => lastAddedLineType;
+
+  @override
+  set _lastAddedLineType(THLineType value) {
+    _$_lastAddedLineTypeAtom.reportWrite(value, super._lastAddedLineType, () {
+      super._lastAddedLineType = value;
+    });
+  }
+
+  late final _$_lastAddedAreaTypeAtom = Atom(
+      name: 'TH2FileEditControllerBase._lastAddedAreaType', context: context);
+
+  THAreaType get lastAddedAreaType {
+    _$_lastAddedAreaTypeAtom.reportRead();
+    return super._lastAddedAreaType;
+  }
+
+  @override
+  THAreaType get _lastAddedAreaType => lastAddedAreaType;
+
+  @override
+  set _lastAddedAreaType(THAreaType value) {
+    _$_lastAddedAreaTypeAtom.reportWrite(value, super._lastAddedAreaType, () {
+      super._lastAddedAreaType = value;
+    });
+  }
+
   late final _$_stateAtom =
       Atom(name: 'TH2FileEditControllerBase._state', context: context);
 
@@ -884,6 +938,39 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
             name: 'TH2FileEditControllerBase.setActiveAddElementButton');
     try {
       return super.setActiveAddElementButton(buttonType);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastAddedPointType(THPointType pointType) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setLastAddedPointType');
+    try {
+      return super.setLastAddedPointType(pointType);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastAddedLineType(THLineType lineType) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setLastAddedLineType');
+    try {
+      return super.setLastAddedLineType(lineType);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastAddedAreaType(THAreaType areaType) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setLastAddedAreaType');
+    try {
+      return super.setLastAddedAreaType(areaType);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

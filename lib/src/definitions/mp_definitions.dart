@@ -3,6 +3,10 @@ import 'dart:math' as math;
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 /// Constants and others definitioons that should be generally available.
 
@@ -179,3 +183,7 @@ final Map<THLengthUnitType, Map<THLengthUnitType, double>>
 
 const double thDefaultTHFileScale = 1.0;
 const THLengthUnitType thDefaultTHFileLengthUnit = THLengthUnitType.meter;
+
+const THPointType thDefaultPointType = THPointType.station;
+const THLineType thDefaultLineType = THLineType.wall;
+const THAreaType thDefaultAreaType = THAreaType.water;

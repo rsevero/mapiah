@@ -16,6 +16,9 @@ import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
@@ -128,6 +131,15 @@ abstract class TH2FileEditControllerBase
 
   @readonly
   MPButtonType _activeAddElementButton = MPButtonType.addElement;
+
+  @readonly
+  THPointType _lastAddedPointType = thDefaultPointType;
+
+  @readonly
+  THLineType _lastAddedLineType = thDefaultLineType;
+
+  @readonly
+  THAreaType _lastAddedAreaType = thDefaultAreaType;
 
   @readonly
   late MPTH2FileEditState _state;
@@ -542,6 +554,21 @@ abstract class TH2FileEditControllerBase
   @action
   void setActiveAddElementButton(MPButtonType buttonType) {
     _activeAddElementButton = buttonType;
+  }
+
+  @action
+  void setLastAddedPointType(THPointType pointType) {
+    _lastAddedPointType = pointType;
+  }
+
+  @action
+  void setLastAddedLineType(THLineType lineType) {
+    _lastAddedLineType = lineType;
+  }
+
+  @action
+  void setLastAddedAreaType(THAreaType areaType) {
+    _lastAddedAreaType = areaType;
   }
 
   @action
