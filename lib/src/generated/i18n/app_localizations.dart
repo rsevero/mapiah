@@ -263,6 +263,12 @@ abstract class AppLocalizations {
   /// **'Add area (A)'**
   String get th2FileEditPageAddArea;
 
+  /// The label for the add element options button
+  ///
+  /// In en, this message translates to:
+  /// **'Add element'**
+  String get th2FileEditPageAddElementOptions;
+
   /// The label for the add line button
   ///
   /// In en, this message translates to:

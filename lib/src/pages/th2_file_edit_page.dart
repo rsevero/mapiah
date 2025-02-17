@@ -290,6 +290,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               ),
               SizedBox(height: 8),
               _addElementOptions(),
+              SizedBox(height: 8),
               _zoomButtonWithOptions(),
             ],
           ),
@@ -302,75 +303,77 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     return MouseRegion(
       onEnter: (_) => th2FileEditController.setAddElementButtonsHovered(true),
       onExit: (_) => th2FileEditController.setAddElementButtonsHovered(false),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
         children: [
-          Observer(
-            builder: (_) {
-              if (!th2FileEditController.isAddElementButtonsHovered) {
-                return const SizedBox();
-              }
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Observer(
+                builder: (_) {
+                  if (!th2FileEditController.isAddElementButtonsHovered) {
+                    return const SizedBox();
+                  }
 
-              return Row(
-                children: [
-                  FloatingActionButton(
-                    heroTag: 'add_point',
-                    onPressed: onAddPointPressed,
-                    tooltip:
-                        AppLocalizations.of(context).th2FileEditPageAddPoint,
-                    child: Image.asset(
-                      'assets/icons/point.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'add_line',
-                    onPressed: onAddLinePressed,
-                    tooltip:
-                        AppLocalizations.of(context).th2FileEditPageAddLine,
-                    child: Image.asset(
-                      'assets/icons/line.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'add_area',
-                    onPressed: onAddAreaPressed,
-                    tooltip:
-                        AppLocalizations.of(context).th2FileEditPageAddArea,
-                    child: Image.asset(
-                      'assets/icons/area.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: th2FileEditController.selectedElements.isEmpty
-                          ? Colors.grey
-                          : colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                ],
-              );
-            },
+                  return Row(
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'add_point',
+                        onPressed: onAddPointPressed,
+                        tooltip: AppLocalizations.of(context)
+                            .th2FileEditPageAddPoint,
+                        child: Image.asset(
+                          'assets/icons/point.png',
+                          width: thFloatingActionZoomIconSize,
+                          height: thFloatingActionZoomIconSize,
+                          color: colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      FloatingActionButton(
+                        heroTag: 'add_line',
+                        onPressed: onAddLinePressed,
+                        tooltip:
+                            AppLocalizations.of(context).th2FileEditPageAddLine,
+                        child: Image.asset(
+                          'assets/icons/line.png',
+                          width: thFloatingActionZoomIconSize,
+                          height: thFloatingActionZoomIconSize,
+                          color: colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      FloatingActionButton(
+                        heroTag: 'add_area',
+                        onPressed: onAddAreaPressed,
+                        tooltip:
+                            AppLocalizations.of(context).th2FileEditPageAddArea,
+                        child: Image.asset(
+                          'assets/icons/area.png',
+                          width: thFloatingActionZoomIconSize,
+                          height: thFloatingActionZoomIconSize,
+                          color: colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                    ],
+                  );
+                },
+              ),
+              FloatingActionButton(
+                heroTag: 'add_element_options',
+                onPressed: () {},
+                tooltip: AppLocalizations.of(context)
+                    .th2FileEditPageAddElementOptions,
+                child: Image.asset(
+                  'assets/icons/add_element.png',
+                  width: thFloatingActionZoomIconSize,
+                  height: thFloatingActionZoomIconSize,
+                  color: colorScheme.onSecondaryContainer,
+                ),
+              ),
+            ],
           ),
-          FloatingActionButton(
-            heroTag: 'zoom_options',
-            onPressed: () {},
-            tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
-            child: Image.asset(
-              'assets/icons/zoom_plus_minus.png',
-              width: thFloatingActionZoomIconSize,
-              height: thFloatingActionZoomIconSize,
-              color: colorScheme.onSecondaryContainer,
-            ),
-          ),
-          SizedBox(width: 8),
         ],
       ),
     );

@@ -103,13 +103,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
-  String get th2FileEditPageAddArea => 'Adicionar área (A)';
+  String get th2FileEditPageAddArea => 'Criar área (A)';
 
   @override
-  String get th2FileEditPageAddLine => 'Adicionar linha (L)';
+  String get th2FileEditPageAddElementOptions => 'Criar elemento';
 
   @override
-  String get th2FileEditPageAddPoint => 'Adicionar ponto (P)';
+  String get th2FileEditPageAddLine => 'Criar linha (L)';
+
+  @override
+  String get th2FileEditPageAddPoint => 'Criar ponto (P)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';

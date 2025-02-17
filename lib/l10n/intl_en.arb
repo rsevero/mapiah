@@ -175,6 +175,12 @@
     "type": "text"
   },
 
+  "th2FileEditPageAddElementOptions": "Add element",
+  "@th2FileEditPageAddElementOptions": {
+    "description": "The label for the add element options button",
+    "type": "text"
+  },
+
   "th2FileEditPageAddLine": "Add line (L)",
   "@th2FileEditPageAddLine": {
     "description": "The label for the add line button",
