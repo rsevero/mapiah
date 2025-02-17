@@ -572,7 +572,7 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void setStatusMessage(String message) {
+  void setStatusBarMessage(String message) {
     _statusBarMessage = message;
   }
 

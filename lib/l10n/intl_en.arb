@@ -175,6 +175,15 @@
     "type": "text"
   },
 
+  "th2FileEditPageAddAreaStatusBarMessage": "Click to add a {type} area",
+  "@th2FileEditPageAddAreaStatusBarMessage": {
+    "description": "The status bar message for the add area tool",
+    "type": "text",
+    "placeholders": {
+      "type": {}
+    }
+  },
+
   "th2FileEditPageAddElementOptions": "Add element",
   "@th2FileEditPageAddElementOptions": {
     "description": "The label for the add element options button",
@@ -187,10 +196,28 @@
     "type": "text"
   },
 
+  "th2FileEditPageAddLineStatusBarMessage": "Click to add a {type}",
+  "@th2FileEditPageAddLineStatusBarMessage": {
+    "description": "The status bar message for the add line tool",
+    "type": "text",
+    "placeholders": {
+      "type": {}
+    }
+  },
+
   "th2FileEditPageAddPoint": "Add point (P)",
   "@th2FileEditPageAddPoint": {
     "description": "The label for the add point button",
     "type": "text"
+  },
+
+  "th2FileEditPageAddPointStatusBarMessage": "Click to add a {type} point",
+  "@th2FileEditPageAddPointStatusBarMessage": {
+    "description": "The status bar message for the add point tool",
+    "type": "text",
+    "placeholders": {
+      "type": {}
+    }
   },
   
   "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+C)",

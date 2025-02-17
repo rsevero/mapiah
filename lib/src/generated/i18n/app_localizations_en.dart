@@ -106,13 +106,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageAddArea => 'Add area (A)';
 
   @override
+  String th2FileEditPageAddAreaStatusBarMessage(Object type) {
+    return 'Click to add a $type area';
+  }
+
+  @override
   String get th2FileEditPageAddElementOptions => 'Add element';
 
   @override
   String get th2FileEditPageAddLine => 'Add line (L)';
 
   @override
+  String th2FileEditPageAddLineStatusBarMessage(Object type) {
+    return 'Click to add a $type';
+  }
+
+  @override
   String get th2FileEditPageAddPoint => 'Add point (P)';
+
+  @override
+  String th2FileEditPageAddPointStatusBarMessage(Object type) {
+    return 'Click to add a $type point';
+  }
 
   @override
   String get th2FileEditPageChangeActiveScrapTool => 'Change active scrap (Alt+C)';

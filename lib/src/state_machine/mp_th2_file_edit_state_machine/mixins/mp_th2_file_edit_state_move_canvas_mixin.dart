@@ -18,6 +18,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
       case LogicalKeyboardKey.keyA:
         if (isCtrlPressed) {
           th2FileEditController.selectAllElements();
+        } else if (!isAltPressed && !isShiftPressed) {
+          // th2FileEditController.setState(MPTH2FileEditStateType.addArea);
         }
         break;
       case LogicalKeyboardKey.keyC:
@@ -25,6 +27,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.toggleToNextAvailableScrap();
         }
         break;
+      case LogicalKeyboardKey.keyL:
+        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+          // th2FileEditController.setState(MPTH2FileEditStateType.addLine);
+        }
+      case LogicalKeyboardKey.keyP:
+        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+          th2FileEditController.setState(MPTH2FileEditStateType.addPoint);
+        }
       case LogicalKeyboardKey.keyS:
         if (isCtrlPressed) {
           if (isShiftPressed) {

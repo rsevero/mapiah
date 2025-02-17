@@ -263,6 +263,12 @@ abstract class AppLocalizations {
   /// **'Add area (A)'**
   String get th2FileEditPageAddArea;
 
+  /// The status bar message for the add area tool
+  ///
+  /// In en, this message translates to:
+  /// **'Click to add a {type} area'**
+  String th2FileEditPageAddAreaStatusBarMessage(Object type);
+
   /// The label for the add element options button
   ///
   /// In en, this message translates to:
@@ -275,11 +281,23 @@ abstract class AppLocalizations {
   /// **'Add line (L)'**
   String get th2FileEditPageAddLine;
 
+  /// The status bar message for the add line tool
+  ///
+  /// In en, this message translates to:
+  /// **'Click to add a {type}'**
+  String th2FileEditPageAddLineStatusBarMessage(Object type);
+
   /// The label for the add point button
   ///
   /// In en, this message translates to:
   /// **'Add point (P)'**
   String get th2FileEditPageAddPoint;
+
+  /// The status bar message for the add point tool
+  ///
+  /// In en, this message translates to:
+  /// **'Click to add a {type} point'**
+  String th2FileEditPageAddPointStatusBarMessage(Object type);
 
   /// The label for the change active scrap tool button
   ///

@@ -977,11 +977,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setStatusMessage(String message) {
+  void setStatusBarMessage(String message) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setStatusMessage');
+        .startAction(name: 'TH2FileEditControllerBase.setStatusBarMessage');
     try {
-      return super.setStatusMessage(message);
+      return super.setStatusBarMessage(message);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -106,13 +106,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddArea => 'Criar área (A)';
 
   @override
+  String th2FileEditPageAddAreaStatusBarMessage(Object type) {
+    return 'Clique para criar uma área do tipo $type';
+  }
+
+  @override
   String get th2FileEditPageAddElementOptions => 'Criar elemento';
 
   @override
   String get th2FileEditPageAddLine => 'Criar linha (L)';
 
   @override
+  String th2FileEditPageAddLineStatusBarMessage(Object type) {
+    return 'Clique para criar uma linha do tipo $type';
+  }
+
+  @override
   String get th2FileEditPageAddPoint => 'Criar ponto (P)';
+
+  @override
+  String th2FileEditPageAddPointStatusBarMessage(Object type) {
+    return 'Clique para criar um ponto do tipo $type';
+  }
 
   @override
   String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';
