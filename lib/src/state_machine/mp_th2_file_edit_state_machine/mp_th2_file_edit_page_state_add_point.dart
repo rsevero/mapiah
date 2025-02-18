@@ -8,7 +8,6 @@ class MPTH2FileEditPageStateAddPoint extends MPTH2FileEditState {
     th2FileEditController.setStatusBarMessage(mpLocator.appLocalizations
         .th2FileEditPageAddPointStatusBarMessage(
             th2FileEditController.lastAddedPointType));
-    th2FileEditController.setActiveAddElementButton(MPButtonType.addPoint);
   }
 
   @override

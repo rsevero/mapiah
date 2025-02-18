@@ -12,7 +12,6 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_mode.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 
@@ -55,8 +54,6 @@ abstract class MPTH2FileEditState {
         );
     }
   }
-
-  void setVisualMode() {}
 
   void setCursor() {}
 

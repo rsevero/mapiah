@@ -12,11 +12,6 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     th2FileEditController.clearSelectedElements();
   }
 
-  @override
-  void setVisualMode() {
-    th2FileEditController.setVisualMode(TH2FileEditMode.select);
-  }
-
   /// 1. Clicked on an object?
   /// 1.1. If yes, select object. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
   /// 1.2. If no, do nothing.

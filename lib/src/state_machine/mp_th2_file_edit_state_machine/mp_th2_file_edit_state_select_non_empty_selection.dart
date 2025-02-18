@@ -7,11 +7,6 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   MPTH2FileEditStateSelectNonEmptySelection(
       {required super.th2FileEditController});
 
-  @override
-  void setVisualMode() {
-    th2FileEditController.setVisualMode(TH2FileEditMode.select);
-  }
-
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
   /// 1.1.1. Yes. Is Shift pressed?

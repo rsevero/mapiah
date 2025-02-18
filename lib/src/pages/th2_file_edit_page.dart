@@ -285,7 +285,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 ),
                 backgroundColor: isSelectMode
                     ? colorScheme.primary
-                    : colorScheme.onSecondaryContainer,
+                    : colorScheme.secondaryContainer,
                 elevation: isSelectMode ? 0 : null,
               ),
               SizedBox(height: 8),

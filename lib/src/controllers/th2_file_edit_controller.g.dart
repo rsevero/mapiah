@@ -24,19 +24,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<String>(() => super.filenameAndScrap,
               name: 'TH2FileEditControllerBase.filenameAndScrap'))
       .value;
-  Computed<bool>? _$isEditModeComputed;
-
-  @override
-  bool get isEditMode =>
-      (_$isEditModeComputed ??= Computed<bool>(() => super.isEditMode,
-              name: 'TH2FileEditControllerBase.isEditMode'))
-          .value;
   Computed<bool>? _$isSelectModeComputed;
 
   @override
   bool get isSelectMode =>
       (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
               name: 'TH2FileEditControllerBase.isSelectMode'))
+          .value;
+  Computed<MPButtonType>? _$activeAddElementButtonComputed;
+
+  @override
+  MPButtonType get activeAddElementButton =>
+      (_$activeAddElementButtonComputed ??= Computed<MPButtonType>(
+              () => super.activeAddElementButton,
+              name: 'TH2FileEditControllerBase.activeAddElementButton'))
           .value;
   Computed<double>? _$lineThicknessOnCanvasComputed;
 
@@ -269,24 +270,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_visualModeAtom =
-      Atom(name: 'TH2FileEditControllerBase._visualMode', context: context);
-
-  TH2FileEditMode get visualMode {
-    _$_visualModeAtom.reportRead();
-    return super._visualMode;
-  }
-
-  @override
-  TH2FileEditMode get _visualMode => visualMode;
-
-  @override
-  set _visualMode(TH2FileEditMode value) {
-    _$_visualModeAtom.reportWrite(value, super._visualMode, () {
-      super._visualMode = value;
-    });
-  }
-
   late final _$_isLoadingAtom =
       Atom(name: 'TH2FileEditControllerBase._isLoading', context: context);
 
@@ -496,26 +479,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     _$_isAddElementButtonsHoveredAtom
         .reportWrite(value, super._isAddElementButtonsHovered, () {
       super._isAddElementButtonsHovered = value;
-    });
-  }
-
-  late final _$_activeAddElementButtonAtom = Atom(
-      name: 'TH2FileEditControllerBase._activeAddElementButton',
-      context: context);
-
-  MPButtonType get activeAddElementButton {
-    _$_activeAddElementButtonAtom.reportRead();
-    return super._activeAddElementButton;
-  }
-
-  @override
-  MPButtonType get _activeAddElementButton => activeAddElementButton;
-
-  @override
-  set _activeAddElementButton(MPButtonType value) {
-    _$_activeAddElementButtonAtom
-        .reportWrite(value, super._activeAddElementButton, () {
-      super._activeAddElementButton = value;
     });
   }
 
@@ -932,18 +895,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setActiveAddElementButton(MPButtonType buttonType) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.setActiveAddElementButton');
-    try {
-      return super.setActiveAddElementButton(buttonType);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setLastAddedPointType(THPointType pointType) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setLastAddedPointType');
@@ -1165,17 +1116,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase._updateScreenSize');
     try {
       return super._updateScreenSize(newSize);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setVisualMode(TH2FileEditMode visualMode) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setVisualMode');
-    try {
-      return super.setVisualMode(visualMode);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1443,8 +1383,8 @@ changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPo
 changeScrapsFABKey: ${changeScrapsFABKey},
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 filenameAndScrap: ${filenameAndScrap},
-isEditMode: ${isEditMode},
 isSelectMode: ${isSelectMode},
+activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
 selectionToleranceOnCanvas: ${selectionToleranceOnCanvas},

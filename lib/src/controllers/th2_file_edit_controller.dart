@@ -24,7 +24,6 @@ import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_mode.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
@@ -65,9 +64,6 @@ abstract class TH2FileEditControllerBase
   Offset _canvasTranslation = Offset.zero;
 
   @readonly
-  TH2FileEditMode _visualMode = TH2FileEditMode.select;
-
-  @readonly
   bool _isLoading = false;
 
   @readonly
@@ -106,10 +102,8 @@ abstract class TH2FileEditControllerBase
   Rect? _selectedElementsBoundingBox;
 
   @computed
-  bool get isEditMode => _visualMode == TH2FileEditMode.edit;
-
-  @computed
-  bool get isSelectMode => _visualMode == TH2FileEditMode.select;
+  bool get isSelectMode => (_state is MPTH2FileEditStateSelectEmptySelection ||
+      (_state is MPTH2FileEditStateSelectNonEmptySelection));
 
   @readonly
   bool _hasUndo = false;
@@ -129,8 +123,19 @@ abstract class TH2FileEditControllerBase
   @readonly
   bool _isAddElementButtonsHovered = false;
 
-  @readonly
-  MPButtonType _activeAddElementButton = MPButtonType.addElement;
+  @computed
+  MPButtonType get activeAddElementButton {
+    switch (_state) {
+      case MPTH2FileEditPageStateAddPoint _:
+        return MPButtonType.addPoint;
+      // case MPTH2FileEditPageStateAddLine _:
+      //   return MPButtonType.addLine;
+      // case MPTH2FileEditPageStateAddArea _:
+      //   return MPButtonType.addArea;
+      default:
+        return MPButtonType.addElement;
+    }
+  }
 
   @readonly
   THPointType _lastAddedPointType = thDefaultPointType;
@@ -552,11 +557,6 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void setActiveAddElementButton(MPButtonType buttonType) {
-    _activeAddElementButton = buttonType;
-  }
-
-  @action
   void setLastAddedPointType(THPointType pointType) {
     _lastAddedPointType = pointType;
   }
@@ -874,7 +874,6 @@ abstract class TH2FileEditControllerBase
     previousState.onStateLeave(_state);
 
     _state.onStateEnter(previousState);
-    _state.setVisualMode();
     _state.setCursor();
     _state.setStatusBarMessage();
   }
@@ -1097,11 +1096,6 @@ abstract class TH2FileEditControllerBase
 
   double scaleCanvasToScreen(double canvasValue) {
     return canvasValue * _canvasScale;
-  }
-
-  @action
-  void setVisualMode(TH2FileEditMode visualMode) {
-    _visualMode = visualMode;
   }
 
   @action
