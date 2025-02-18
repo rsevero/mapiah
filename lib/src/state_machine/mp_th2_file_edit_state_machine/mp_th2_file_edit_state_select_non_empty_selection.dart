@@ -7,6 +7,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   MPTH2FileEditStateSelectNonEmptySelection(
       {required super.th2FileEditController});
 
+  @override
+  void onStateEnter(MPTH2FileEditState previousState) {
+    th2FileEditController.setStatusBarMessage('');
+  }
+
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
   /// 1.1.1. Yes. Is Shift pressed?

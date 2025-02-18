@@ -232,6 +232,12 @@
     "type": "text"
   },
 
+  "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
+  "@th2FileEditPageEmptySelectionStatusBarMessage": {
+    "description": "The status bar message for the empty selection",
+    "type": "text"
+  },
+
   "th2FileEditPageLoadingFile": "Loading file {filename} ...",
   "@th2FileEditPageLoadingFile": {
     "description": "The label for the loading file message",

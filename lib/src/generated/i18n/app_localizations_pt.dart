@@ -136,6 +136,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageDeleteButton => 'Apagar (Del)';
 
   @override
+  String get th2FileEditPageEmptySelectionStatusBarMessage => 'Nenhum elemento selecionado';
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Lendo arquivo $filename ...';
   }

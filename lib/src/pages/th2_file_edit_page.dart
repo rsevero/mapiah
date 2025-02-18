@@ -143,6 +143,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               builder: (_) {
                 final TextStyle statusBarTextStyle = TextStyle(
                   color: Theme.of(context).colorScheme.onSecondary,
+                  fontStyle: FontStyle.italic,
+                );
+                final TextStyle statusBarInfoStyle = TextStyle(
+                  color: Theme.of(context).colorScheme.onSecondary,
                 );
 
                 return Row(
@@ -150,12 +154,15 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   children: [
                     Text(
                       th2FileEditController.filenameAndScrap,
+                      style: statusBarInfoStyle,
+                    ),
+                    Text(
+                      th2FileEditController.statusBarMessage,
                       style: statusBarTextStyle,
                     ),
-                    Text(th2FileEditController.statusBarMessage),
                     Text(
                       "🔍 ${th2FileEditController.canvasScaleAsPercentageText}",
-                      style: statusBarTextStyle,
+                      style: statusBarInfoStyle,
                     ),
                   ],
                 );

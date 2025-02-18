@@ -311,6 +311,12 @@ abstract class AppLocalizations {
   /// **'Delete (Del)'**
   String get th2FileEditPageDeleteButton;
 
+  /// The status bar message for the empty selection
+  ///
+  /// In en, this message translates to:
+  /// **'Empty selection'**
+  String get th2FileEditPageEmptySelectionStatusBarMessage;
+
   /// The label for the loading file message
   ///
   /// In en, this message translates to:

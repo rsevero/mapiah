@@ -7,7 +7,7 @@ class MPTH2FileEditPageStateAddPoint extends MPTH2FileEditState {
   void onStateEnter(MPTH2FileEditState previousState) {
     th2FileEditController.setStatusBarMessage(mpLocator.appLocalizations
         .th2FileEditPageAddPointStatusBarMessage(
-            th2FileEditController.lastAddedPointType));
+            th2FileEditController.lastAddedPointType.name));
   }
 
   @override
