@@ -30,6 +30,7 @@ const String thIndentation = '  ';
 const int thMaxEncodingLength = 20;
 const int thMaxFileLineLength = 80;
 const int thMaxDecimalPositions = 6;
+const int thDefaultDecimalPositions = 4;
 
 const String thDefaultEncoding = 'UTF-8';
 

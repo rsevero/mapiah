@@ -105,6 +105,15 @@ abstract class TH2FileEditControllerBase
   bool get isSelectMode => (_state is MPTH2FileEditStateSelectEmptySelection ||
       (_state is MPTH2FileEditStateSelectNonEmptySelection));
 
+  @computed
+  bool get isAddElementMode => (_state is MPTH2FileEditPageStateAddPoint
+
+      // ||
+      //     (_state is MPTH2FileEditStateAddLine) ||
+      //     (_state is MPTH2FileEditStateAddArea)
+
+      );
+
   @readonly
   bool _hasUndo = false;
 
@@ -145,6 +154,9 @@ abstract class TH2FileEditControllerBase
 
   @readonly
   THAreaType _lastAddedAreaType = thDefaultAreaType;
+
+  @readonly
+  int _currentDecimalPositions = thDefaultDecimalPositions;
 
   @readonly
   late MPTH2FileEditState _state;
@@ -226,7 +238,7 @@ abstract class TH2FileEditControllerBase
         ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
 
   @computed
-  bool get showUndoRedoButtons => isSelectMode;
+  bool get showUndoRedoButtons => isAddElementMode || isSelectMode;
 
   @computed
   bool get showDeleteButton =>
@@ -1405,11 +1417,10 @@ abstract class TH2FileEditControllerBase
   MPUndoRedoController get undoRedoController => _undoRedoController;
 
   @action
-  void addElement({
-    required THElement newElement,
-    required int parentMapiahID,
-  }) {
+  void addElement({required THElement newElement}) {
     _thFile.addElement(newElement);
+
+    final int parentMapiahID = newElement.parentMapiahID;
 
     if (parentMapiahID < 0) {
       _thFile.addElementToParent(newElement);

@@ -31,6 +31,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
               name: 'TH2FileEditControllerBase.isSelectMode'))
           .value;
+  Computed<bool>? _$isAddElementModeComputed;
+
+  @override
+  bool get isAddElementMode => (_$isAddElementModeComputed ??= Computed<bool>(
+          () => super.isAddElementMode,
+          name: 'TH2FileEditControllerBase.isAddElementMode'))
+      .value;
   Computed<MPButtonType>? _$activeAddElementButtonComputed;
 
   @override
@@ -533,6 +540,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _lastAddedAreaType(THAreaType value) {
     _$_lastAddedAreaTypeAtom.reportWrite(value, super._lastAddedAreaType, () {
       super._lastAddedAreaType = value;
+    });
+  }
+
+  late final _$_currentDecimalPositionsAtom = Atom(
+      name: 'TH2FileEditControllerBase._currentDecimalPositions',
+      context: context);
+
+  int get currentDecimalPositions {
+    _$_currentDecimalPositionsAtom.reportRead();
+    return super._currentDecimalPositions;
+  }
+
+  @override
+  int get _currentDecimalPositions => currentDecimalPositions;
+
+  @override
+  set _currentDecimalPositions(int value) {
+    _$_currentDecimalPositionsAtom
+        .reportWrite(value, super._currentDecimalPositions, () {
+      super._currentDecimalPositions = value;
     });
   }
 
@@ -1305,13 +1332,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void addElement(
-      {required THElement newElement, required int parentMapiahID}) {
+  void addElement({required THElement newElement}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.addElement');
     try {
-      return super
-          .addElement(newElement: newElement, parentMapiahID: parentMapiahID);
+      return super.addElement(newElement: newElement);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1384,6 +1409,7 @@ changeScrapsFABKey: ${changeScrapsFABKey},
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 filenameAndScrap: ${filenameAndScrap},
 isSelectMode: ${isSelectMode},
+isAddElementMode: ${isAddElementMode},
 activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},

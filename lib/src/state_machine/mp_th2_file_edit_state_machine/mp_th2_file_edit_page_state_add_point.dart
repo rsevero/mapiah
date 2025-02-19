@@ -11,5 +11,22 @@ class MPTH2FileEditPageStateAddPoint extends MPTH2FileEditState {
   }
 
   @override
+  void onPrimaryButtonClick(PointerUpEvent event) {
+    final THPoint newPoint = THPoint(
+      parentMapiahID: th2FileEditController.activeScrapID,
+      pointType: th2FileEditController.lastAddedPointType,
+      position: THPositionPart(
+        coordinates:
+            th2FileEditController.offsetScreenToCanvas(event.localPosition),
+        decimalPositions: th2FileEditController.currentDecimalPositions,
+      ),
+    );
+    final MPAddPointCommand command = MPAddPointCommand(newPoint: newPoint);
+
+    th2FileEditController.execute(command);
+    th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
+  @override
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.addPoint;
 }
