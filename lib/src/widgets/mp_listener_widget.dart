@@ -129,6 +129,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       },
       child: Focus(
         autofocus: true,
+        focusNode: _focusNode,
         onKeyEvent: (node, event) {
           if (event is KeyDownEvent) {
             widget.actuator.onKeyDownEvent(event);
