@@ -101,6 +101,7 @@ const double thSelectionHandleLineThickness = 2.0;
 final Paint thSelectionHandleFillPaint = Paint()
   ..color = Colors.black
   ..style = PaintingStyle.stroke;
+const double thWhiteBackgroundIncrease = 1.5;
 
 const String thMainConfigSection = 'Main';
 const String thMainConfigLocale = 'Locale';

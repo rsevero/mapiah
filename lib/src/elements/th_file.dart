@@ -311,11 +311,6 @@ class THFile
     final int mapiahID = newElement.mapiahID;
     final THElement oldElement = elementByMapiahID(mapiahID);
 
-    if (newElement.elementType != oldElement.elementType) {
-      throw THCustomException(
-          "Cannot substitute element of type '${oldElement.elementType}' with element of type '${newElement.elementType}'.");
-    }
-
     _elementByMapiahID[mapiahID] = newElement;
     _clearTHFileAndParentBoundingBoxes(newElement);
 

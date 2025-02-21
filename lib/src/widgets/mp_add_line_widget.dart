@@ -5,10 +5,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/painters/th_point_painter.dart';
+import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 
 class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
@@ -25,11 +27,13 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
       builder: (_) {
         th2FileEditController.redrawTriggerNewLine;
 
+        final THLine newLine = th2FileEditController.getNewLine();
+
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           LinkedHashMap<int, Offset> endPointsMap,
         ) = getLineSegmentsAndEndpointsMaps(
-          line: th2FileEditController.getNewLine(),
+          line: newLine,
           thFile: th2FileEditController.thFile,
           returnEndpoints: true,
         );
@@ -37,6 +41,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         final THPointPaint pointPaintInfo =
             th2FileEditController.getNewLinePointPaint();
         final double pointRadius = pointPaintInfo.radius;
+        final double pointWidth = pointRadius * 2;
         final Paint pointPaint = pointPaintInfo.paint;
 
         final THLinePaint linePaintInfo =
@@ -54,15 +59,42 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         final List<CustomPainter> painters = [painter];
 
         for (final Offset endPoint in endPointsMap.values) {
-          painter = THPointPainter(
+          painter = THEndPointPainter(
             position: endPoint,
+            pointPaint: pointPaint,
+            width: pointWidth,
+            th2FileEditController: th2FileEditController,
+            canvasScale: th2FileEditController.canvasScale,
+            canvasTranslation: th2FileEditController.canvasTranslation,
+          );
+          painters.add(painter);
+        }
+
+        final THLineSegment lastSegment = th2FileEditController.thFile
+            .elementByMapiahID(newLine.childrenMapiahID.last) as THLineSegment;
+
+        if (lastSegment is THBezierCurveLineSegment) {
+          final THControlPointPainter controlPoint1Painter =
+              THControlPointPainter(
+            position: lastSegment.controlPoint1.coordinates,
             pointPaint: pointPaint,
             pointRadius: pointRadius,
             th2FileEditController: th2FileEditController,
             canvasScale: th2FileEditController.canvasScale,
             canvasTranslation: th2FileEditController.canvasTranslation,
           );
-          painters.add(painter);
+          painters.add(controlPoint1Painter);
+
+          final THControlPointPainter controlPoint2Painter =
+              THControlPointPainter(
+            position: lastSegment.controlPoint2.coordinates,
+            pointPaint: pointPaint,
+            pointRadius: pointRadius,
+            th2FileEditController: th2FileEditController,
+            canvasScale: th2FileEditController.canvasScale,
+            canvasTranslation: th2FileEditController.canvasTranslation,
+          );
+          painters.add(controlPoint2Painter);
         }
 
         return RepaintBoundary(

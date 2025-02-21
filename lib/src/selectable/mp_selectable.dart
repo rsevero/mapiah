@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 part 'mp_selectable_line_segment.dart';

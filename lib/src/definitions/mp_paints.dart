@@ -119,7 +119,14 @@ class THPaints {
     ..style = PaintingStyle.stroke;
   static final thPaint20 = Paint()
     ..color = Colors.black
+    ..style = PaintingStyle.fill;
+
+  static final thPaintWhiteBackground = Paint()
+    ..color = Colors.white
+    ..style = PaintingStyle.fill;
+  static final thPaintBlackBorder = Paint()
+    ..color = Colors.black
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
-    ..style = PaintingStyle.fill;
+    ..style = PaintingStyle.stroke;
 }

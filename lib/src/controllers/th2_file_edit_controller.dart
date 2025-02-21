@@ -614,6 +614,55 @@ abstract class TH2FileEditControllerBase
     _lastAddedAreaType = areaType;
   }
 
+  void convertLastLineSegmentFromStraightToBezier() {
+    if ((_newLine == null) || (_newLine!.childrenMapiahID.length < 2)) {
+      return;
+    }
+
+    final THLineSegment lastLineSegment = _thFile
+        .elementByMapiahID(_newLine!.childrenMapiahID.last) as THLineSegment;
+
+    if (lastLineSegment is! THStraightLineSegment) {
+      return;
+    }
+
+    final THLineSegment secondToLastLineSegment = _thFile.elementByMapiahID(
+      _newLine!.childrenMapiahID
+          .elementAt(_newLine!.childrenMapiahID.length - 2),
+    ) as THLineSegment;
+
+    final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
+    final Offset endPoint = lastLineSegment.endPoint.coordinates;
+
+    final Offset third = (endPoint - startPoint) / 3;
+    final Offset controlPoint1 = startPoint + third;
+    final Offset controlPoint2 = controlPoint1 + third;
+
+    final THBezierCurveLineSegment bezierCurveLineSegment =
+        THBezierCurveLineSegment.forCWJM(
+      mapiahID: lastLineSegment.mapiahID,
+      parentMapiahID: _newLine!.mapiahID,
+      endPoint: THPositionPart(
+        coordinates: endPoint,
+        decimalPositions: _currentDecimalPositions,
+      ),
+      controlPoint1: THPositionPart(
+        coordinates: controlPoint1,
+        decimalPositions: _currentDecimalPositions,
+      ),
+      controlPoint2: THPositionPart(
+        coordinates: controlPoint2,
+        decimalPositions: _currentDecimalPositions,
+      ),
+      optionsMap: LinkedHashMap<String, THCommandOption>(),
+      originalLineInTH2File: '',
+      sameLineComment: '',
+    );
+
+    _thFile.substituteElement(bezierCurveLineSegment);
+    _redrawTriggerNewLine = !_redrawTriggerNewLine;
+  }
+
   @action
   void addNewLineLineSegment(Offset enPointScreenCoordinates) {
     final Offset endPointCanvasCoordinates =
@@ -1119,7 +1168,7 @@ abstract class TH2FileEditControllerBase
   THPointPaint getNewLinePointPaint() {
     return THPointPaint(
       radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaint20,
+      paint: THPaints.thPaintBlackBorder..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
