@@ -13,6 +13,7 @@ import 'package:mapiah/src/definitions/mp_paints.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -106,13 +107,15 @@ abstract class TH2FileEditControllerBase
       (_state is MPTH2FileEditStateSelectNonEmptySelection));
 
   @computed
-  bool get isAddElementMode => (_state is MPTH2FileEditPageStateAddPoint
+  bool get isAddElementMode => ((_state is MPTH2FileEditPageStateAddArea) ||
+      (_state is MPTH2FileEditPageStateAddLine) ||
+      (_state is MPTH2FileEditPageStateAddPoint));
 
-      // ||
-      //     (_state is MPTH2FileEditStateAddLine) ||
-      //     (_state is MPTH2FileEditStateAddArea)
+  @readonly
+  List<THLineSegment> _newLineLineSegments = [];
 
-      );
+  @readonly
+  bool _isLineSegmentStraight = true;
 
   @readonly
   bool _hasUndo = false;
@@ -137,10 +140,10 @@ abstract class TH2FileEditControllerBase
     switch (_state) {
       case MPTH2FileEditPageStateAddPoint _:
         return MPButtonType.addPoint;
-      // case MPTH2FileEditPageStateAddLine _:
-      //   return MPButtonType.addLine;
-      // case MPTH2FileEditPageStateAddArea _:
-      //   return MPButtonType.addArea;
+      case MPTH2FileEditPageStateAddLine _:
+        return MPButtonType.addLine;
+      case MPTH2FileEditPageStateAddArea _:
+        return MPButtonType.addArea;
       default:
         return MPButtonType.addElement;
     }
@@ -192,6 +195,9 @@ abstract class TH2FileEditControllerBase
   @computed
   bool get showSelectionWindow =>
       _selectionWindowCanvasCoordinates.value != Rect.zero;
+
+  @computed
+  bool get showAddLine => _newLine != null;
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -309,58 +315,6 @@ abstract class TH2FileEditControllerBase
     return scrapLengthUnitsPerPoint / _canvasScale;
   }
 
-  Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
-
-  Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
-    _selectionHandleCenters ??= _calculateSelectionHandleCenters();
-
-    return _selectionHandleCenters!;
-  }
-
-  Map<MPSelectionHandleType, Offset> _calculateSelectionHandleCenters() {
-    final Map<MPSelectionHandleType, Offset> handles =
-        <MPSelectionHandleType, Offset>{};
-
-    if (_selectedElements.isEmpty) {
-      return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
-    }
-
-    final double handleSize = selectionHandleSizeOnCanvas.value;
-    final double handleDistance = selectionHandleDistanceOnCanvas.value;
-    final Rect boundingBox = selectedElementsBoundingBox;
-    final double halfSize = handleSize / 2.0;
-
-    final double left = boundingBox.left - halfSize - handleDistance;
-    final double right = boundingBox.right + halfSize + handleDistance;
-    final double top = boundingBox.top - halfSize - handleDistance;
-    final double bottom = boundingBox.bottom + halfSize + handleDistance;
-
-    final double centerX = (boundingBox.left + boundingBox.right) / 2.0;
-    final double centerY = (boundingBox.top + boundingBox.bottom) / 2.0;
-
-    final Offset topLeft = Offset(left, top);
-    final Offset topRight = Offset(right, top);
-    final Offset bottomLeft = Offset(left, bottom);
-    final Offset bottomRight = Offset(right, bottom);
-    final Offset topCenter = Offset(centerX, top);
-    final Offset bottomCenter = Offset(centerX, bottom);
-    final Offset leftCenter = Offset(left, centerY);
-    final Offset rightCenter = Offset(right, centerY);
-
-    handles.addAll(<MPSelectionHandleType, Offset>{
-      MPSelectionHandleType.topLeft: topLeft,
-      MPSelectionHandleType.topRight: topRight,
-      MPSelectionHandleType.bottomLeft: bottomLeft,
-      MPSelectionHandleType.bottomRight: bottomRight,
-      MPSelectionHandleType.topCenter: topCenter,
-      MPSelectionHandleType.bottomCenter: bottomCenter,
-      MPSelectionHandleType.leftCenter: leftCenter,
-      MPSelectionHandleType.rightCenter: rightCenter,
-    });
-
-    return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
-  }
-
   @readonly
   int _redrawTriggerSelectedElementsListChanged = 0;
 
@@ -369,6 +323,9 @@ abstract class TH2FileEditControllerBase
 
   @readonly
   int _redrawTriggerNonSelectedElements = 0;
+
+  @readonly
+  bool _redrawTriggerNewLine = false;
 
   @observable
   bool isChangeScrapsPopupVisible = false;
@@ -380,6 +337,32 @@ abstract class TH2FileEditControllerBase
   @observable
   GlobalKey changeScrapsFABKey = GlobalKey();
 
+  @readonly
+  double _canvasCenterX = 0.0;
+  @readonly
+  double _canvasCenterY = 0.0;
+
+  @readonly
+  THLine? _newLine;
+
+  @action
+  THLine getNewLine() {
+    _newLine ??= THLine(
+      parentMapiahID: _activeScrapID,
+      lineType: _lastAddedLineType,
+    );
+
+    return _newLine!;
+  }
+
+  Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
+
+  Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
+    _selectionHandleCenters ??= _calculateSelectionHandleCenters();
+
+    return _selectionHandleCenters!;
+  }
+
   /// Used to search for selected elements by list of selectable coordinates.
   final Map<int, MPSelectable> _selectables = {};
 
@@ -387,11 +370,6 @@ abstract class TH2FileEditControllerBase
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
-
-  @readonly
-  double _canvasCenterX = 0.0;
-  @readonly
-  double _canvasCenterY = 0.0;
 
   final List<String> errorMessages = <String>[];
 
@@ -463,6 +441,50 @@ abstract class TH2FileEditControllerBase
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+  }
+
+  Map<MPSelectionHandleType, Offset> _calculateSelectionHandleCenters() {
+    final Map<MPSelectionHandleType, Offset> handles =
+        <MPSelectionHandleType, Offset>{};
+
+    if (_selectedElements.isEmpty) {
+      return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
+    }
+
+    final double handleSize = selectionHandleSizeOnCanvas.value;
+    final double handleDistance = selectionHandleDistanceOnCanvas.value;
+    final Rect boundingBox = selectedElementsBoundingBox;
+    final double halfSize = handleSize / 2.0;
+
+    final double left = boundingBox.left - halfSize - handleDistance;
+    final double right = boundingBox.right + halfSize + handleDistance;
+    final double top = boundingBox.top - halfSize - handleDistance;
+    final double bottom = boundingBox.bottom + halfSize + handleDistance;
+
+    final double centerX = (boundingBox.left + boundingBox.right) / 2.0;
+    final double centerY = (boundingBox.top + boundingBox.bottom) / 2.0;
+
+    final Offset topLeft = Offset(left, top);
+    final Offset topRight = Offset(right, top);
+    final Offset bottomLeft = Offset(left, bottom);
+    final Offset bottomRight = Offset(right, bottom);
+    final Offset topCenter = Offset(centerX, top);
+    final Offset bottomCenter = Offset(centerX, bottom);
+    final Offset leftCenter = Offset(left, centerY);
+    final Offset rightCenter = Offset(right, centerY);
+
+    handles.addAll(<MPSelectionHandleType, Offset>{
+      MPSelectionHandleType.topLeft: topLeft,
+      MPSelectionHandleType.topRight: topRight,
+      MPSelectionHandleType.bottomLeft: bottomLeft,
+      MPSelectionHandleType.bottomRight: bottomRight,
+      MPSelectionHandleType.topCenter: topCenter,
+      MPSelectionHandleType.bottomCenter: bottomCenter,
+      MPSelectionHandleType.leftCenter: leftCenter,
+      MPSelectionHandleType.rightCenter: rightCenter,
+    });
+
+    return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
   }
 
   void updateSelectableElements() {
@@ -581,6 +603,53 @@ abstract class TH2FileEditControllerBase
   @action
   void setLastAddedAreaType(THAreaType areaType) {
     _lastAddedAreaType = areaType;
+  }
+
+  @action
+  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
+    final Offset endPointCanvasCoordinates =
+        offsetScreenToCanvas(enPointScreenCoordinates);
+    late THLineSegment lineSegment;
+
+    if (_isLineSegmentStraight) {
+      lineSegment = THStraightLineSegment(
+        parentMapiahID: getNewLine().mapiahID,
+        endPoint: THPositionPart(
+          coordinates: endPointCanvasCoordinates,
+          decimalPositions: _currentDecimalPositions,
+        ),
+      );
+    } else {
+      // lineSegment = THBezierCurveLineSegment(
+      //   endPoint: THPositionPart(
+      //     coordinates: Offset(endPointCanvasCoordinates),
+      //     decimalPositions: _currentDecimalPositions
+      //   ),
+      //   controlPoint1: THPoint(
+      //     position: THPosition(
+      //       coordinates: dragStartCanvasCoordinates,
+      //     ),
+      //   ),
+      //   controlPoint2: THPoint(
+      //     position: THPosition(
+      //       coordinates: dragStartCanvasCoordinates,
+      //     ),
+      //   ),
+      // );
+    }
+    _newLineLineSegments.add(lineSegment);
+    _redrawTriggerNewLine = !_redrawTriggerNewLine;
+  }
+
+  @action
+  void clearNewLineLineSegments() {
+    _newLine = null;
+    _newLineLineSegments.clear();
+  }
+
+  @action
+  void setIsLineSegmentStraight(bool isLineSegmentStraight) {
+    _isLineSegmentStraight = isLineSegmentStraight;
   }
 
   @action
@@ -1017,6 +1086,12 @@ abstract class TH2FileEditControllerBase
   THLinePaint getSelectedLinePaint() {
     return THLinePaint(
       paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getNewLinePaint() {
+    return THLinePaint(
+      paint: THPaints.thPaint14..strokeWidth = lineThicknessOnCanvas,
     );
   }
 

@@ -65,13 +65,20 @@ class THLine extends THElement
     addOptionsMap(optionsMap);
   }
 
-  THLine({
+  THLine.fromString({
     required super.parentMapiahID,
     required String lineTypeString,
     super.sameLineComment,
     super.originalLineInTH2File = '',
   })  : lineType = THLineType.fromFileString(lineTypeString),
         super.addToParent();
+
+  THLine({
+    required super.parentMapiahID,
+    required this.lineType,
+    super.sameLineComment,
+    super.originalLineInTH2File = '',
+  }) : super.addToParent();
 
   static bool hasLineType(String aLineType) {
     return _lineTypes.contains(aLineType);

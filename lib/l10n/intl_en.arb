@@ -196,7 +196,7 @@
     "type": "text"
   },
 
-  "th2FileEditPageAddLineStatusBarMessage": "Click to add a {type}",
+  "th2FileEditPageAddLineStatusBarMessage": "Click to add a {type} line",
   "@th2FileEditPageAddLineStatusBarMessage": {
     "description": "The status bar message for the add line tool",
     "type": "text",

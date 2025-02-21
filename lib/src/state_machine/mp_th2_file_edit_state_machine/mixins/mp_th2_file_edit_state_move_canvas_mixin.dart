@@ -19,7 +19,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         if (isCtrlPressed) {
           th2FileEditController.selectAllElements();
         } else if (!isAltPressed && !isShiftPressed) {
-          // th2FileEditController.setState(MPTH2FileEditStateType.addArea);
+          th2FileEditController.setState(MPTH2FileEditStateType.addArea);
         }
         break;
       case LogicalKeyboardKey.keyC:
@@ -29,7 +29,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         break;
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          // th2FileEditController.setState(MPTH2FileEditStateType.addLine);
+          th2FileEditController.setState(MPTH2FileEditStateType.addLine);
         }
       case LogicalKeyboardKey.keyP:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {

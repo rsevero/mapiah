@@ -18,8 +18,8 @@ import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
-// part 'mp_th2_file_edit_page_state_add_area.dart';
-// part 'mp_th2_file_edit_page_state_add_line.dart';
+part 'mp_th2_file_edit_page_state_add_area.dart';
+part 'mp_th2_file_edit_page_state_add_line.dart';
 part 'mp_th2_file_edit_page_state_add_point.dart';
 part 'mp_th2_file_edit_state_moving.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
@@ -37,10 +37,19 @@ abstract class MPTH2FileEditState {
     required TH2FileEditController thFileEditController,
   }) {
     switch (type) {
+      case MPTH2FileEditStateType.addArea:
+        return MPTH2FileEditPageStateAddArea(
+          th2FileEditController: thFileEditController,
+        );
+      case MPTH2FileEditStateType.addLine:
+        return MPTH2FileEditPageStateAddLine(
+          th2FileEditController: thFileEditController,
+        );
       case MPTH2FileEditStateType.addPoint:
         return MPTH2FileEditPageStateAddPoint(
           th2FileEditController: thFileEditController,
         );
+
       case MPTH2FileEditStateType.moving:
         return MPTH2FileEditStateMoving(
           th2FileEditController: thFileEditController,
@@ -98,12 +107,12 @@ abstract class MPTH2FileEditState {
 
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
-      // case MPButtonType.addArea:
-      //   th2FileEditController.setState(MPTH2FileEditStateType.addArea);
-      //   return true;
-      // case MPButtonType.addLine:
-      //   th2FileEditController.setState(MPTH2FileEditStateType.addLine);
-      //   return true;
+      case MPButtonType.addArea:
+        th2FileEditController.setState(MPTH2FileEditStateType.addArea);
+        return true;
+      case MPButtonType.addLine:
+        th2FileEditController.setState(MPTH2FileEditStateType.addLine);
+        return true;
       case MPButtonType.addPoint:
         th2FileEditController.setState(MPTH2FileEditStateType.addPoint);
         return true;

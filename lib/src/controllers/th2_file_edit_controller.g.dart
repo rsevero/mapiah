@@ -98,6 +98,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.showSelectionWindow,
               name: 'TH2FileEditControllerBase.showSelectionWindow'))
       .value;
+  Computed<bool>? _$showAddLineComputed;
+
+  @override
+  bool get showAddLine =>
+      (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
+              name: 'TH2FileEditControllerBase.showAddLine'))
+          .value;
   Computed<Observable<Paint>>? _$selectionWindowBorderPaintCompleteComputed;
 
   @override
@@ -374,6 +381,45 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _selectedElements(ObservableMap<int, MPSelectedElement> value) {
     _$_selectedElementsAtom.reportWrite(value, super._selectedElements, () {
       super._selectedElements = value;
+    });
+  }
+
+  late final _$_newLineLineSegmentsAtom = Atom(
+      name: 'TH2FileEditControllerBase._newLineLineSegments', context: context);
+
+  List<THLineSegment> get newLineLineSegments {
+    _$_newLineLineSegmentsAtom.reportRead();
+    return super._newLineLineSegments;
+  }
+
+  @override
+  List<THLineSegment> get _newLineLineSegments => newLineLineSegments;
+
+  @override
+  set _newLineLineSegments(List<THLineSegment> value) {
+    _$_newLineLineSegmentsAtom.reportWrite(value, super._newLineLineSegments,
+        () {
+      super._newLineLineSegments = value;
+    });
+  }
+
+  late final _$_isLineSegmentStraightAtom = Atom(
+      name: 'TH2FileEditControllerBase._isLineSegmentStraight',
+      context: context);
+
+  bool get isLineSegmentStraight {
+    _$_isLineSegmentStraightAtom.reportRead();
+    return super._isLineSegmentStraight;
+  }
+
+  @override
+  bool get _isLineSegmentStraight => isLineSegmentStraight;
+
+  @override
+  set _isLineSegmentStraight(bool value) {
+    _$_isLineSegmentStraightAtom
+        .reportWrite(value, super._isLineSegmentStraight, () {
+      super._isLineSegmentStraight = value;
     });
   }
 
@@ -804,6 +850,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_redrawTriggerNewLineAtom = Atom(
+      name: 'TH2FileEditControllerBase._redrawTriggerNewLine',
+      context: context);
+
+  bool get redrawTriggerNewLine {
+    _$_redrawTriggerNewLineAtom.reportRead();
+    return super._redrawTriggerNewLine;
+  }
+
+  @override
+  bool get _redrawTriggerNewLine => redrawTriggerNewLine;
+
+  @override
+  set _redrawTriggerNewLine(bool value) {
+    _$_redrawTriggerNewLineAtom.reportWrite(value, super._redrawTriggerNewLine,
+        () {
+      super._redrawTriggerNewLine = value;
+    });
+  }
+
   late final _$isChangeScrapsPopupVisibleAtom = Atom(
       name: 'TH2FileEditControllerBase.isChangeScrapsPopupVisible',
       context: context);
@@ -895,8 +961,37 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_newLineAtom =
+      Atom(name: 'TH2FileEditControllerBase._newLine', context: context);
+
+  THLine? get newLine {
+    _$_newLineAtom.reportRead();
+    return super._newLine;
+  }
+
+  @override
+  THLine? get _newLine => newLine;
+
+  @override
+  set _newLine(THLine? value) {
+    _$_newLineAtom.reportWrite(value, super._newLine, () {
+      super._newLine = value;
+    });
+  }
+
   late final _$TH2FileEditControllerBaseActionController =
       ActionController(name: 'TH2FileEditControllerBase', context: context);
+
+  @override
+  THLine getNewLine() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.getNewLine');
+    try {
+      return super.getNewLine();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setZoomButtonsHovered(bool isHovered) {
@@ -949,6 +1044,41 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setLastAddedAreaType');
     try {
       return super.setLastAddedAreaType(areaType);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.addNewLineLineSegment');
+    try {
+      return super.addNewLineLineSegment(enPointScreenCoordinates);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearNewLineLineSegments() {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.clearNewLineLineSegments');
+    try {
+      return super.clearNewLineLineSegments();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsLineSegmentStraight(bool isLineSegmentStraight) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setIsLineSegmentStraight');
+    try {
+      return super.setIsLineSegmentStraight(isLineSegmentStraight);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1418,6 +1548,7 @@ selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
 showSelectedElements: ${showSelectedElements},
 showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
+showAddLine: ${showAddLine},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},

@@ -577,7 +577,7 @@ class THFileParser {
       assert(element[1][0] is String);
     }
 
-    final THLine newLine = THLine(
+    final THLine newLine = THLine.fromString(
       parentMapiahID: _currentParentMapiahID,
       lineTypeString: element[1][0],
       originalLineInTH2File: _currentLine,

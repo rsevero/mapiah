@@ -4,6 +4,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_scale_widget.dart';
@@ -58,6 +59,11 @@ class THFileWidget extends StatelessWidget {
                   if (th2FileEditController.showSelectionWindow)
                     MPSelectionWindowWidget(
                       key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
+                      th2FileEditController: th2FileEditController,
+                    ),
+                  if (th2FileEditController.showAddLine)
+                    MPAddLineWidget(
+                      key: ValueKey("MPAddLineWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
                     ),
                   if (th2FileEditController.showScrapScale)

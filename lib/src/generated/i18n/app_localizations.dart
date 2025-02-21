@@ -284,7 +284,7 @@ abstract class AppLocalizations {
   /// The status bar message for the add line tool
   ///
   /// In en, this message translates to:
-  /// **'Click to add a {type}'**
+  /// **'Click to add a {type} line'**
   String th2FileEditPageAddLineStatusBarMessage(Object type);
 
   /// The label for the add point button
