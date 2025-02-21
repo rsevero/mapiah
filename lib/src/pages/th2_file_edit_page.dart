@@ -308,10 +308,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   List<Widget> _addElementButton({
     required MPButtonType type,
-    required bool addSpacer,
+    required bool isTypeButton,
   }) {
     final String typeName = type.name;
     final String heroTag = 'add_element_$typeName';
+    final bool isPressedButton =
+        th2FileEditController.isAddElementMode && !isTypeButton;
     late String tooltip;
 
     switch (type) {
@@ -342,10 +344,16 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           'assets/icons/add_element-$typeName.png',
           width: thFloatingActionIconSize,
           height: thFloatingActionIconSize,
-          color: colorScheme.onSecondaryContainer,
+          color: isPressedButton
+              ? colorScheme.onPrimary
+              : colorScheme.onSecondaryContainer,
         ),
+        backgroundColor: isPressedButton
+            ? colorScheme.primary
+            : colorScheme.secondaryContainer,
+        elevation: isPressedButton ? 0 : null,
       ),
-      if (addSpacer) SizedBox(width: 8),
+      if (isTypeButton) SizedBox(width: 8),
     ];
   }
 
@@ -362,20 +370,20 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               if (th2FileEditController.isAddElementButtonsHovered) ...[
                 ..._addElementButton(
                   type: MPButtonType.addPoint,
-                  addSpacer: true,
+                  isTypeButton: true,
                 ),
                 ..._addElementButton(
                   type: MPButtonType.addLine,
-                  addSpacer: true,
+                  isTypeButton: true,
                 ),
                 ..._addElementButton(
                   type: MPButtonType.addArea,
-                  addSpacer: true,
+                  isTypeButton: true,
                 ),
               ],
               ..._addElementButton(
                 type: th2FileEditController.activeAddElementButton,
-                addSpacer: false,
+                isTypeButton: false,
               ),
             ],
           );
