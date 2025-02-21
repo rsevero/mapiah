@@ -1,16 +1,21 @@
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
 mixin MPGetLineSegmentsMapMixin {
-  LinkedHashMap<int, THLinePainterLineSegment> getLineSegmentsMap(
-    THLine line,
-    THFile thFile,
-  ) {
+  (LinkedHashMap<int, THLinePainterLineSegment>, LinkedHashMap<int, Offset>)
+      getLineSegmentsAndEndpointsMaps({
+    required THLine line,
+    required THFile thFile,
+    required bool returnEndpoints,
+  }) {
     final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLinePainterLineSegment>();
+    final LinkedHashMap<int, Offset> lineEndpointsMap =
+        LinkedHashMap<int, Offset>();
     final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
     bool isFirst = true;
 
@@ -19,6 +24,10 @@ mixin MPGetLineSegmentsMapMixin {
 
       if (lineChild is! THLineSegment) {
         continue;
+      }
+
+      if (returnEndpoints) {
+        lineEndpointsMap[lineChildMapiahID] = Offset(lineChild.x, lineChild.y);
       }
 
       if (isFirst) {
@@ -53,6 +62,6 @@ mixin MPGetLineSegmentsMapMixin {
       }
     }
 
-    return lineSegmentsMap;
+    return (lineSegmentsMap, lineEndpointsMap);
   }
 }

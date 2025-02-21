@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
@@ -6,6 +8,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
@@ -57,7 +60,14 @@ class MPSelectedElementsWidget extends StatelessWidget
               );
               break;
             case THLine _:
-              final segmentsMap = getLineSegmentsMap(element, thFile);
+              final (
+                LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
+                _
+              ) = getLineSegmentsAndEndpointsMaps(
+                line: element,
+                thFile: thFile,
+                returnEndpoints: false,
+              );
               painters.add(
                 THLinePainter(
                   lineSegmentsMap: segmentsMap,

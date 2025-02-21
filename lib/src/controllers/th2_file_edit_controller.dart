@@ -1094,6 +1094,13 @@ abstract class TH2FileEditControllerBase
     );
   }
 
+  THPointPaint getNewLinePointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaint20,
+    );
+  }
+
   THLinePaint getSelectedLinePaint() {
     return THLinePaint(
       paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,

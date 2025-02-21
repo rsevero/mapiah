@@ -117,4 +117,9 @@ class THPaints {
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
+  static final thPaint20 = Paint()
+    ..color = Colors.black
+    ..strokeWidth = 4
+    ..strokeCap = StrokeCap.round
+    ..style = PaintingStyle.fill;
 }
