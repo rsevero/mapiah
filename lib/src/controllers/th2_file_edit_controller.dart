@@ -112,9 +112,6 @@ abstract class TH2FileEditControllerBase
       (_state is MPTH2FileEditPageStateAddPoint));
 
   @readonly
-  List<THLineSegment> _newLineLineSegments = [];
-
-  @readonly
   bool _isLineSegmentStraight = true;
 
   @readonly
@@ -347,10 +344,7 @@ abstract class TH2FileEditControllerBase
 
   @action
   THLine getNewLine() {
-    _newLine ??= THLine(
-      parentMapiahID: _activeScrapID,
-      lineType: _lastAddedLineType,
-    );
+    _newLine ??= _createNewLine();
 
     return _newLine!;
   }
@@ -441,6 +435,20 @@ abstract class TH2FileEditControllerBase
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+  }
+
+  THLine _createNewLine() {
+    final THLine newLine = THLine(
+      parentMapiahID: _activeScrapID,
+      lineType: _lastAddedLineType,
+    );
+
+    addElementWithParentMapiahIDWithoutSelectableElement(
+      newElement: newLine,
+      parentMapiahID: _activeScrapID,
+    );
+
+    return newLine;
   }
 
   Map<MPSelectionHandleType, Offset> _calculateSelectionHandleCenters() {
@@ -610,10 +618,11 @@ abstract class TH2FileEditControllerBase
     final Offset endPointCanvasCoordinates =
         offsetScreenToCanvas(enPointScreenCoordinates);
     late THLineSegment lineSegment;
+    final int parentMapiahID = getNewLine().mapiahID;
 
     if (_isLineSegmentStraight) {
       lineSegment = THStraightLineSegment(
-        parentMapiahID: getNewLine().mapiahID,
+        parentMapiahID: parentMapiahID,
         endPoint: THPositionPart(
           coordinates: endPointCanvasCoordinates,
           decimalPositions: _currentDecimalPositions,
@@ -637,14 +646,16 @@ abstract class TH2FileEditControllerBase
       //   ),
       // );
     }
-    _newLineLineSegments.add(lineSegment);
+    addElementWithParentMapiahIDWithoutSelectableElement(
+      parentMapiahID: parentMapiahID,
+      newElement: lineSegment,
+    );
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
   }
 
   @action
-  void clearNewLineLineSegments() {
+  void clearNewLine() {
     _newLine = null;
-    _newLineLineSegments.clear();
   }
 
   @action
@@ -1091,7 +1102,7 @@ abstract class TH2FileEditControllerBase
 
   THLinePaint getNewLinePaint() {
     return THLinePaint(
-      paint: THPaints.thPaint14..strokeWidth = lineThicknessOnCanvas,
+      paint: THPaints.thPaint19..strokeWidth = lineThicknessOnCanvas,
     );
   }
 

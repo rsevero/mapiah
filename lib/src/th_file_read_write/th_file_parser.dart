@@ -382,7 +382,6 @@ class THFileParser {
       parent: _currentParent,
     );
 
-    // _currentElement = newBezierCurveLineSegment;
     _lastLineSegment = newBezierCurveLineSegment;
 
     /// Same line comments should be inserted in the line segment itself and not
@@ -438,7 +437,6 @@ class THFileParser {
       parent: _currentParent,
     );
 
-    // _currentElement = newStraightLineSegment;
     _lastLineSegment = newStraightLineSegment;
 
     /// Same line comments should be inserted in the line segment itself and not

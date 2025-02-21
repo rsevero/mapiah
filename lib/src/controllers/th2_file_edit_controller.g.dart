@@ -384,25 +384,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_newLineLineSegmentsAtom = Atom(
-      name: 'TH2FileEditControllerBase._newLineLineSegments', context: context);
-
-  List<THLineSegment> get newLineLineSegments {
-    _$_newLineLineSegmentsAtom.reportRead();
-    return super._newLineLineSegments;
-  }
-
-  @override
-  List<THLineSegment> get _newLineLineSegments => newLineLineSegments;
-
-  @override
-  set _newLineLineSegments(List<THLineSegment> value) {
-    _$_newLineLineSegmentsAtom.reportWrite(value, super._newLineLineSegments,
-        () {
-      super._newLineLineSegments = value;
-    });
-  }
-
   late final _$_isLineSegmentStraightAtom = Atom(
       name: 'TH2FileEditControllerBase._isLineSegmentStraight',
       context: context);
@@ -1061,12 +1042,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void clearNewLineLineSegments() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.clearNewLineLineSegments');
+  void clearNewLine() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.clearNewLine');
     try {
-      return super.clearNewLineLineSegments();
+      return super.clearNewLine();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
