@@ -502,6 +502,7 @@ abstract class TH2FileEditControllerBase
 
     for (final int elementMapiahID in scrap.childrenMapiahID) {
       final THElement element = _thFile.elementByMapiahID(elementMapiahID);
+
       if (element is THPoint || element is THLine) {
         addSelectableElement(element);
       }

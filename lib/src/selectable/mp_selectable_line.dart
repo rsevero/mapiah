@@ -6,18 +6,14 @@ class MPSelectableLine extends MPSelectable {
 
   MPSelectableLine({required THLine line, required super.th2fileEditController})
       : super(element: line) {
-    final List<int> lineSegmentMapiahIDs = line.childrenMapiahID;
-    final THFile thFile = th2fileEditController.thFile;
+    final List<THLineSegment> lineSegments =
+        th2fileEditController.getLineSegments(
+      line: line,
+      clone: false,
+    );
     Offset? startPoint;
 
-    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
-      final THElement lineSegment =
-          thFile.elementByMapiahID(lineSegmentMapiahID);
-
-      if (lineSegment is! THLineSegment) {
-        continue;
-      }
-
+    for (final THLineSegment lineSegment in lineSegments) {
       if (startPoint == null) {
         startPoint = lineSegment.endPoint.coordinates;
         continue;
