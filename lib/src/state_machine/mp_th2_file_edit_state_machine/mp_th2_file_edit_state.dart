@@ -103,7 +103,7 @@ abstract class MPTH2FileEditState {
 
   void onStateEnter(MPTH2FileEditState previousState) {}
 
-  void onStateLeave(MPTH2FileEditState nextState) {}
+  void onStateExit(MPTH2FileEditState nextState) {}
 
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {

@@ -946,7 +946,9 @@ abstract class TH2FileEditControllerBase
   @action
   void removeSelectedElement(THElement element) {
     _selectedElements.remove(element.mapiahID);
-    _isSelected[element.mapiahID]!.value = false;
+    if (_isSelected.containsKey(element.mapiahID)) {
+      _isSelected[element.mapiahID]!.value = false;
+    }
     triggerSelectedListChanged();
   }
 
@@ -963,7 +965,7 @@ abstract class TH2FileEditControllerBase
       thFileEditController: this as TH2FileEditController,
     );
 
-    previousState.onStateLeave(_state);
+    previousState.onStateExit(_state);
 
     _state.onStateEnter(previousState);
     _state.setCursor();
@@ -977,6 +979,25 @@ abstract class TH2FileEditControllerBase
         offsetScreenToCanvas(screenCoordinatesFinalPosition);
 
     moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
+  }
+
+  List<THLineSegment> getLineSegments({
+    required THLine line,
+    required bool clone,
+  }) {
+    final List<THLineSegment> lineSegments = <THLineSegment>[];
+    final List<int> lineSegmentMapiahIDs = line.childrenMapiahID;
+
+    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
+      final THElement lineSegment =
+          _thFile.elementByMapiahID(lineSegmentMapiahID);
+
+      if (lineSegment is THLineSegment) {
+        lineSegments.add(clone ? lineSegment.copyWith() : lineSegment);
+      }
+    }
+
+    return lineSegments;
   }
 
   @action
@@ -1475,6 +1496,7 @@ abstract class TH2FileEditControllerBase
     _thFile.substituteElement(line);
   }
 
+  @action
   void execute(MPCommand command) {
     _undoRedoController.execute(command);
     _updateUndoRedoStatus();
@@ -1572,6 +1594,25 @@ abstract class TH2FileEditControllerBase
   @action
   void registerElementWithTHID(THElement element, String thID) {
     _thFile.registerElementWithTHID(element, thID);
+  }
+
+  @action
+  void registerNewLineInFile() {
+    if (_newLine != null) {
+      final THLine newLine = _newLine!.copyWith(childrenMapiahID: <int>[]);
+      final List<THLineSegment> newLineSegments =
+          getLineSegments(line: _newLine!, clone: true);
+
+      deleteElement(_newLine!);
+      final MPAddLineCommand command = MPAddLineCommand(
+        newLine: newLine,
+        lineChildren: newLineSegments,
+      );
+
+      execute(command);
+      clearNewLine();
+      triggerNonSelectedElementsRedraw();
+    }
   }
 }
 

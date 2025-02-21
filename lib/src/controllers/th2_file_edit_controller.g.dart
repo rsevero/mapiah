@@ -1420,6 +1420,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void execute(MPCommand command) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.execute');
+    try {
+      return super.execute(command);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _updateUndoRedoStatus() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._updateUndoRedoStatus');
@@ -1505,6 +1516,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.registerElementWithTHID');
     try {
       return super.registerElementWithTHID(element, thID);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void registerNewLineInFile() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.registerNewLineInFile');
+    try {
+      return super.registerNewLineInFile();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
