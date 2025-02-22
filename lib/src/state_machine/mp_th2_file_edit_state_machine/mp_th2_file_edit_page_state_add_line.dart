@@ -23,7 +23,7 @@ class MPTH2FileEditPageStateAddLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditController.convertLastLineSegmentFromStraightToBezier();
+    th2FileEditController.updateBezierLineSegment(event.localPosition);
   }
 
   @override

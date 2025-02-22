@@ -1039,6 +1039,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void updateBezierLineSegment(
+      Offset quadraticControlPointPositionScreenCoordinates) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.updateBezierLineSegment');
+    try {
+      return super.updateBezierLineSegment(
+          quadraticControlPointPositionScreenCoordinates);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addNewLineLineSegment(Offset enPointScreenCoordinates) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.addNewLineLineSegment');

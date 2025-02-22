@@ -618,18 +618,16 @@ abstract class TH2FileEditControllerBase
     _lastAddedAreaType = areaType;
   }
 
-  void convertLastLineSegmentFromStraightToBezier() {
+  @action
+  void updateBezierLineSegment(
+    Offset quadraticControlPointPositionScreenCoordinates,
+  ) {
     if ((_newLine == null) || (_newLine!.childrenMapiahID.length < 2)) {
       return;
     }
 
     final THLineSegment lastLineSegment = _thFile
         .elementByMapiahID(_newLine!.childrenMapiahID.last) as THLineSegment;
-
-    if (lastLineSegment is! THStraightLineSegment) {
-      return;
-    }
-
     final THLineSegment secondToLastLineSegment = _thFile.elementByMapiahID(
       _newLine!.childrenMapiahID
           .elementAt(_newLine!.childrenMapiahID.length - 2),
@@ -638,32 +636,56 @@ abstract class TH2FileEditControllerBase
     final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
     final Offset endPoint = lastLineSegment.endPoint.coordinates;
 
-    final Offset third = (endPoint - startPoint) / 3;
-    final Offset controlPoint1 = startPoint + third;
-    final Offset controlPoint2 = controlPoint1 + third;
+    late THBezierCurveLineSegment bezierCurveLineSegment;
 
-    final THBezierCurveLineSegment bezierCurveLineSegment =
-        THBezierCurveLineSegment.forCWJM(
-      mapiahID: lastLineSegment.mapiahID,
-      parentMapiahID: _newLine!.mapiahID,
-      endPoint: THPositionPart(
-        coordinates: endPoint,
-        decimalPositions: _currentDecimalPositions,
-      ),
-      controlPoint1: THPositionPart(
-        coordinates: controlPoint1,
-        decimalPositions: _currentDecimalPositions,
-      ),
-      controlPoint2: THPositionPart(
-        coordinates: controlPoint2,
-        decimalPositions: _currentDecimalPositions,
-      ),
-      optionsMap: LinkedHashMap<String, THCommandOption>(),
-      originalLineInTH2File: '',
-      sameLineComment: '',
-    );
+    if (lastLineSegment is THStraightLineSegment) {
+      final Offset third = (endPoint - startPoint) / 3;
+      final Offset controlPoint1 = startPoint + third;
+      final Offset controlPoint2 = controlPoint1 + third;
 
-    _thFile.substituteElement(bezierCurveLineSegment);
+      bezierCurveLineSegment = THBezierCurveLineSegment.forCWJM(
+        mapiahID: lastLineSegment.mapiahID,
+        parentMapiahID: _newLine!.mapiahID,
+        endPoint: THPositionPart(
+          coordinates: endPoint,
+          decimalPositions: _currentDecimalPositions,
+        ),
+        controlPoint1: THPositionPart(
+          coordinates: controlPoint1,
+          decimalPositions: _currentDecimalPositions,
+        ),
+        controlPoint2: THPositionPart(
+          coordinates: controlPoint2,
+          decimalPositions: _currentDecimalPositions,
+        ),
+        optionsMap: LinkedHashMap<String, THCommandOption>(),
+        originalLineInTH2File: '',
+        sameLineComment: '',
+      );
+    } else {
+      final Offset quadraticControlPointPositionCanvasCoordinates =
+          offsetScreenToCanvas(quadraticControlPointPositionScreenCoordinates);
+      final Offset twoThirdsControlPoint =
+          quadraticControlPointPositionCanvasCoordinates * (2 / 3);
+
+      /// Based on https://pomax.github.io/bezierinfo/#reordering
+      final Offset controlPoint1 = (startPoint / 3) + twoThirdsControlPoint;
+      final Offset controlPoint2 = (endPoint / 3) + twoThirdsControlPoint;
+
+      bezierCurveLineSegment =
+          (lastLineSegment as THBezierCurveLineSegment).copyWith(
+        controlPoint1: THPositionPart(
+          coordinates: controlPoint1,
+          decimalPositions: _currentDecimalPositions,
+        ),
+        controlPoint2: THPositionPart(
+          coordinates: controlPoint2,
+          decimalPositions: _currentDecimalPositions,
+        ),
+      );
+    }
+
+    substituteElementWithoutAddSelectableElement(bezierCurveLineSegment);
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
   }
 
