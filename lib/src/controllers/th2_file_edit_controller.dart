@@ -112,9 +112,6 @@ abstract class TH2FileEditControllerBase
       (_state is MPTH2FileEditPageStateAddPoint));
 
   @readonly
-  bool _isLineSegmentStraight = true;
-
-  @readonly
   bool _hasUndo = false;
 
   @readonly
@@ -198,7 +195,8 @@ abstract class TH2FileEditControllerBase
       _selectionWindowCanvasCoordinates.value != Rect.zero;
 
   @computed
-  bool get showAddLine => _newLine != null;
+  bool get showAddLine =>
+      (_newLine != null) || (_lineStartScreenPosition != null);
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -352,6 +350,9 @@ abstract class TH2FileEditControllerBase
 
     return _newLine!;
   }
+
+  @readonly
+  Offset? _lineStartScreenPosition;
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
@@ -685,54 +686,47 @@ abstract class TH2FileEditControllerBase
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
   }
 
-  @action
-  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
-    final Offset endPointCanvasCoordinates =
-        offsetScreenToCanvas(enPointScreenCoordinates);
-    late THLineSegment lineSegment;
-    final int parentMapiahID = getNewLine().mapiahID;
+  void _createStraightLineSegment(Offset endpoint, int lineMapiahID) {
+    final Offset endPointCanvasCoordinates = offsetScreenToCanvas(endpoint);
 
-    if (_isLineSegmentStraight) {
-      lineSegment = THStraightLineSegment(
-        parentMapiahID: parentMapiahID,
-        endPoint: THPositionPart(
-          coordinates: endPointCanvasCoordinates,
-          decimalPositions: _currentDecimalPositions,
-        ),
-      );
-    } else {
-      // lineSegment = THBezierCurveLineSegment(
-      //   endPoint: THPositionPart(
-      //     coordinates: Offset(endPointCanvasCoordinates),
-      //     decimalPositions: _currentDecimalPositions
-      //   ),
-      //   controlPoint1: THPoint(
-      //     position: THPosition(
-      //       coordinates: dragStartCanvasCoordinates,
-      //     ),
-      //   ),
-      //   controlPoint2: THPoint(
-      //     position: THPosition(
-      //       coordinates: dragStartCanvasCoordinates,
-      //     ),
-      //   ),
-      // );
-    }
+    final THStraightLineSegment lineSegment = THStraightLineSegment(
+      parentMapiahID: lineMapiahID,
+      endPoint: THPositionPart(
+        coordinates: endPointCanvasCoordinates,
+        decimalPositions: _currentDecimalPositions,
+      ),
+    );
+
     addElementWithParentMapiahIDWithoutSelectableElement(
-      parentMapiahID: parentMapiahID,
+      parentMapiahID: lineMapiahID,
       newElement: lineSegment,
     );
+  }
+
+  @action
+  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
+    if (_newLine == null) {
+      if (_lineStartScreenPosition == null) {
+        _lineStartScreenPosition = enPointScreenCoordinates;
+      } else {
+        final int lineMapiahID = getNewLine().mapiahID;
+
+        _createStraightLineSegment(_lineStartScreenPosition!, lineMapiahID);
+        _createStraightLineSegment(enPointScreenCoordinates, lineMapiahID);
+      }
+    } else {
+      final int lineMapiahID = getNewLine().mapiahID;
+
+      _createStraightLineSegment(enPointScreenCoordinates, lineMapiahID);
+    }
+
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
   }
 
   @action
   void clearNewLine() {
     _newLine = null;
-  }
-
-  @action
-  void setIsLineSegmentStraight(bool isLineSegmentStraight) {
-    _isLineSegmentStraight = isLineSegmentStraight;
+    _lineStartScreenPosition = null;
   }
 
   @action

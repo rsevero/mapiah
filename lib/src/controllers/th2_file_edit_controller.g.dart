@@ -392,26 +392,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isLineSegmentStraightAtom = Atom(
-      name: 'TH2FileEditControllerBase._isLineSegmentStraight',
-      context: context);
-
-  bool get isLineSegmentStraight {
-    _$_isLineSegmentStraightAtom.reportRead();
-    return super._isLineSegmentStraight;
-  }
-
-  @override
-  bool get _isLineSegmentStraight => isLineSegmentStraight;
-
-  @override
-  set _isLineSegmentStraight(bool value) {
-    _$_isLineSegmentStraightAtom
-        .reportWrite(value, super._isLineSegmentStraight, () {
-      super._isLineSegmentStraight = value;
-    });
-  }
-
   late final _$_hasUndoAtom =
       Atom(name: 'TH2FileEditControllerBase._hasUndo', context: context);
 
@@ -968,6 +948,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_lineStartScreenPositionAtom = Atom(
+      name: 'TH2FileEditControllerBase._lineStartScreenPosition',
+      context: context);
+
+  Offset? get lineStartScreenPosition {
+    _$_lineStartScreenPositionAtom.reportRead();
+    return super._lineStartScreenPosition;
+  }
+
+  @override
+  Offset? get _lineStartScreenPosition => lineStartScreenPosition;
+
+  @override
+  set _lineStartScreenPosition(Offset? value) {
+    _$_lineStartScreenPositionAtom
+        .reportWrite(value, super._lineStartScreenPosition, () {
+      super._lineStartScreenPosition = value;
+    });
+  }
+
   late final _$TH2FileEditControllerBaseActionController =
       ActionController(name: 'TH2FileEditControllerBase', context: context);
 
@@ -1068,18 +1068,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.clearNewLine');
     try {
       return super.clearNewLine();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setIsLineSegmentStraight(bool isLineSegmentStraight) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.setIsLineSegmentStraight');
-    try {
-      return super.setIsLineSegmentStraight(isLineSegmentStraight);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
