@@ -172,6 +172,10 @@ abstract class TH2FileEditControllerBase
       mpLocator.mpSettingsController.lineThickness / _canvasScale;
 
   @computed
+  double get controlLineThicknessOnCanvas =>
+      lineThicknessOnCanvas * thControlLineThicknessFactor;
+
+  @computed
   double get pointRadiusOnCanvas =>
       mpLocator.mpSettingsController.pointRadius / _canvasScale;
 
@@ -1175,6 +1179,13 @@ abstract class TH2FileEditControllerBase
   THLinePaint getSelectedLinePaint() {
     return THLinePaint(
       paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getControlLinePaint() {
+    return THLinePaint(
+      paint: THPaints.thPaintBlackBorder
+        ..strokeWidth = controlLineThicknessOnCanvas,
     );
   }
 

@@ -92,6 +92,7 @@ const double thClickDragThresholdSquared =
 const double thDefaultSelectionTolerance = 5.0;
 const double thDefaultPointRadius = 5.0;
 const double thDefaultLineThickness = 2.0;
+const double thControlLineThicknessFactor = 0.5;
 const double thSelectionWindowBorderPaintDashInterval = 5.0;
 const double thSelectionHandleSize = 7.0;
 const double thSelectionHandleThresholdMultiplier = 10.0;

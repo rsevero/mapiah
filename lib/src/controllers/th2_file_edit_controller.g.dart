@@ -53,6 +53,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<double>(() => super.lineThicknessOnCanvas,
               name: 'TH2FileEditControllerBase.lineThicknessOnCanvas'))
       .value;
+  Computed<double>? _$controlLineThicknessOnCanvasComputed;
+
+  @override
+  double get controlLineThicknessOnCanvas =>
+      (_$controlLineThicknessOnCanvasComputed ??= Computed<double>(
+              () => super.controlLineThicknessOnCanvas,
+              name: 'TH2FileEditControllerBase.controlLineThicknessOnCanvas'))
+          .value;
   Computed<double>? _$pointRadiusOnCanvasComputed;
 
   @override
@@ -1544,6 +1552,7 @@ isSelectMode: ${isSelectMode},
 isAddElementMode: ${isAddElementMode},
 activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
+controlLineThicknessOnCanvas: ${controlLineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},
 selectionToleranceOnCanvas: ${selectionToleranceOnCanvas},
 selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},

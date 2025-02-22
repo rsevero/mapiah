@@ -61,6 +61,48 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final List<CustomPainter> painters = [painter];
 
+        final THLineSegment lastSegment = th2FileEditController.thFile
+            .elementByMapiahID(newLine.childrenMapiahID.last) as THLineSegment;
+
+        if ((endPointsMap.length >= 2) &&
+            (lastSegment is THBezierCurveLineSegment)) {
+          final double expandedPointRadius =
+              pointRadius * thWhiteBackgroundIncrease;
+          final THLinePaint controlLinePaint =
+              th2FileEditController.getControlLinePaint();
+          final List<int> keys = endPointsMap.keys.toList();
+          final Offset secondToLastSegmentPosition =
+              endPointsMap[keys.elementAt(keys.length - 2)]!;
+
+          final THControlPointPainter controlPoint1Painter =
+              THControlPointPainter(
+            controlPointPosition: lastSegment.controlPoint1.coordinates,
+            endPointPosition: secondToLastSegmentPosition,
+            pointPaint: pointPaint,
+            controlLinePaint: controlLinePaint.paint,
+            pointRadius: pointRadius,
+            expandedPointRadius: expandedPointRadius,
+            th2FileEditController: th2FileEditController,
+            canvasScale: th2FileEditController.canvasScale,
+            canvasTranslation: th2FileEditController.canvasTranslation,
+          );
+          painters.add(controlPoint1Painter);
+
+          final THControlPointPainter controlPoint2Painter =
+              THControlPointPainter(
+            controlPointPosition: lastSegment.controlPoint2.coordinates,
+            endPointPosition: lastSegment.endPoint.coordinates,
+            pointPaint: pointPaint,
+            controlLinePaint: controlLinePaint.paint,
+            pointRadius: pointRadius,
+            expandedPointRadius: expandedPointRadius,
+            th2FileEditController: th2FileEditController,
+            canvasScale: th2FileEditController.canvasScale,
+            canvasTranslation: th2FileEditController.canvasTranslation,
+          );
+          painters.add(controlPoint2Painter);
+        }
+
         for (final Offset endPoint in endPointsMap.values) {
           painter = THEndPointPainter(
             position: endPoint,
@@ -72,37 +114,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             canvasTranslation: th2FileEditController.canvasTranslation,
           );
           painters.add(painter);
-        }
-
-        final THLineSegment lastSegment = th2FileEditController.thFile
-            .elementByMapiahID(newLine.childrenMapiahID.last) as THLineSegment;
-
-        if (lastSegment is THBezierCurveLineSegment) {
-          final double expandedPointRadius =
-              pointRadius * thWhiteBackgroundIncrease;
-          final THControlPointPainter controlPoint1Painter =
-              THControlPointPainter(
-            position: lastSegment.controlPoint1.coordinates,
-            pointPaint: pointPaint,
-            pointRadius: pointRadius,
-            expandedPointRadius: expandedPointRadius,
-            th2FileEditController: th2FileEditController,
-            canvasScale: th2FileEditController.canvasScale,
-            canvasTranslation: th2FileEditController.canvasTranslation,
-          );
-          painters.add(controlPoint1Painter);
-
-          final THControlPointPainter controlPoint2Painter =
-              THControlPointPainter(
-            position: lastSegment.controlPoint2.coordinates,
-            pointPaint: pointPaint,
-            pointRadius: pointRadius,
-            expandedPointRadius: expandedPointRadius,
-            th2FileEditController: th2FileEditController,
-            canvasScale: th2FileEditController.canvasScale,
-            canvasTranslation: th2FileEditController.canvasTranslation,
-          );
-          painters.add(controlPoint2Painter);
         }
 
         return RepaintBoundary(
