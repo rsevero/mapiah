@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/definitions/mp_paints.dart';
@@ -24,12 +25,12 @@ class THEndPointPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final double whiteRectWidth = width * thWhiteBackgroundIncrease;
-    final Rect whiteRect = Rect.fromCenter(
+    final Rect whiteRect = MPNumericAux.orderedRectFromCenter(
       center: position,
       width: whiteRectWidth,
       height: whiteRectWidth,
     );
-    final Rect squareRect = Rect.fromCenter(
+    final Rect squareRect = MPNumericAux.orderedRectFromCenter(
       center: position,
       width: width,
       height: width,
