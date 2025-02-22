@@ -276,16 +276,6 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       }
     }
 
-    if (minX == maxX) {
-      minX = MPNumericAux.nextDown(minX);
-      maxX = MPNumericAux.nextUp(maxX);
-    }
-
-    if (minY == maxY) {
-      minY = MPNumericAux.nextDown(minY);
-      maxY = MPNumericAux.nextUp(maxY);
-    }
-
     return MPNumericAux.orderedRectFromLTRB(
       left: minX,
       top: minY,

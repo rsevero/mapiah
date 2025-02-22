@@ -91,10 +91,17 @@ class MPNumericAux {
     if (rectLeft > rectRight) {
       rectLeft = right;
       rectRight = left;
+    } else if (rectLeft == rectRight) {
+      rectLeft = nextDown(rectLeft);
+      rectRight = nextUp(rectRight);
     }
+
     if (rectTop > rectBottom) {
       rectTop = bottom;
       rectBottom = top;
+    } else if (rectTop == rectBottom) {
+      rectTop = nextDown(rectTop);
+      rectBottom = nextUp(rectBottom);
     }
 
     return Rect.fromLTRB(rectLeft, rectTop, rectRight, rectBottom);

@@ -78,41 +78,9 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
 
   @override
   Rect _calculateBoundingBox(Offset startPoint) {
-    final Rect boundingBox = MPNumericAux.orderedRectFromPoints(
+    return MPNumericAux.orderedRectFromPoints(
       point1: startPoint,
       point2: endPoint.coordinates,
     );
-
-    if ((boundingBox.width == 0) || (boundingBox.height == 0)) {
-      late double left;
-      late double top;
-      late double right;
-      late double bottom;
-
-      if (boundingBox.width == 0) {
-        left = MPNumericAux.nextDown(boundingBox.left);
-        right = MPNumericAux.nextUp(boundingBox.right);
-      } else {
-        left = boundingBox.left;
-        right = boundingBox.right;
-      }
-
-      if (boundingBox.height == 0) {
-        top = MPNumericAux.nextDown(boundingBox.top);
-        bottom = MPNumericAux.nextUp(boundingBox.bottom);
-      } else {
-        top = boundingBox.top;
-        bottom = boundingBox.bottom;
-      }
-
-      return MPNumericAux.orderedRectFromLTRB(
-        left: left,
-        top: top,
-        right: right,
-        bottom: bottom,
-      );
-    } else {
-      return boundingBox;
-    }
   }
 }
