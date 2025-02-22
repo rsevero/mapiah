@@ -46,6 +46,7 @@ class THEndPointPainter extends CustomPainter {
 
     return position != oldDelegate.position ||
         width != oldDelegate.width ||
+        expandedWidth != oldDelegate.expandedWidth ||
         pointPaint != oldDelegate.pointPaint ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;
