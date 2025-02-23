@@ -8,7 +8,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 mixin THCalculateChildrenBoundingBoxMixin {
   Rect calculateChildrenBoundingBox(
     TH2FileEditController th2FileEditController,
-    List<int> childrenMapiahIDs,
+    Set<int> childrenMapiahIDs,
   ) {
     final THFile thFile = th2FileEditController.thFile;
 

@@ -19,11 +19,6 @@ class MPAddLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.addElementWithParentMapiahIDWithoutSelectableElement(
-      newElement: newLine,
-      parentMapiahID: th2FileEditController.activeScrapID,
-    );
-
     for (final THElement child in lineChildren) {
       th2FileEditController.addElement(newElement: child);
     }

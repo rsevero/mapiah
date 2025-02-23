@@ -16,7 +16,7 @@ mixin MPGetLineSegmentsMapMixin {
         LinkedHashMap<int, THLinePainterLineSegment>();
     final LinkedHashMap<int, Offset> lineEndpointsMap =
         LinkedHashMap<int, Offset>();
-    final List<int> lineChildrenMapiahIDs = line.childrenMapiahID;
+    final Set<int> lineChildrenMapiahIDs = line.childrenMapiahID;
     bool isFirst = true;
 
     for (int lineChildMapiahID in lineChildrenMapiahIDs) {

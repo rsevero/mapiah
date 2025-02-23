@@ -33,8 +33,8 @@ class MPSelectedLine extends MPSelectedElement {
       );
     }
 
-    final List<int> childrenMapiahIDsClone =
-        originalLine.childrenMapiahID.toList();
+    final Set<int> childrenMapiahIDsClone =
+        originalLine.childrenMapiahID.toSet();
 
     final LinkedHashMap<String, THCommandOption> optionsMapClone =
         LinkedHashMap<String, THCommandOption>();

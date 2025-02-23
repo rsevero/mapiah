@@ -34,9 +34,9 @@ class THFile
 
   late final int _mapiahID;
 
-  final List<int> _scrapMapiahIDs = [];
+  final Set<int> _scrapMapiahIDs = {};
 
-  final List<int> _drawableElementMapiahIDs = [];
+  final Set<int> _drawableElementMapiahIDs = {};
 
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
@@ -54,9 +54,9 @@ class THFile
     required this.filename,
     required this.encoding,
     required int mapiahID,
-    required List<int> childrenMapiahID,
-    required List<int> scrapMapiahIDs,
-    required List<int> drawableElementsMapiahID,
+    required Set<int> childrenMapiahID,
+    required Set<int> scrapMapiahIDs,
+    required Set<int> drawableElementsMapiahID,
     required LinkedHashMap<String, int> mapiahIDByTHID,
     required LinkedHashMap<int, String> thIDByMapiahID,
     required LinkedHashMap<int, THElement> elementByMapiahID,
@@ -82,9 +82,9 @@ class THFile
       'filename': filename,
       'encoding': encoding,
       'mapiahID': _mapiahID,
-      'childrenMapiahID': childrenMapiahID.toList(),
-      'scrapMapiahIDs': _scrapMapiahIDs.toList(),
-      'drawableElementMapiahIDs': _drawableElementMapiahIDs.toList(),
+      'childrenMapiahID': childrenMapiahID.toSet(),
+      'scrapMapiahIDs': _scrapMapiahIDs.toSet(),
+      'drawableElementMapiahIDs': _drawableElementMapiahIDs.toSet(),
       'elementByTHID':
           _mapiahIDByTHID.map((key, value) => MapEntry(key, value)),
       'thIDByMapiahID': _thIDByMapiahID,
@@ -98,9 +98,9 @@ class THFile
       filename: map['filename'],
       encoding: map['encoding'],
       mapiahID: map['mapiahID'],
-      childrenMapiahID: List<int>.from(map['childrenMapiahID']),
-      scrapMapiahIDs: List<int>.from(map['scrapMapiahIDs']),
-      drawableElementsMapiahID: List<int>.from(map['drawableElementMapiahIDs']),
+      childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
+      scrapMapiahIDs: Set<int>.from(map['scrapMapiahIDs']),
+      drawableElementsMapiahID: Set<int>.from(map['drawableElementMapiahIDs']),
       mapiahIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
       thIDByMapiahID: LinkedHashMap<int, String>.from(map['thIDByMapiahID']),
       elementByMapiahID: LinkedHashMap<int, THElement>.from(
@@ -118,9 +118,9 @@ class THFile
     String? filename,
     String? encoding,
     int? mapiahID,
-    List<int>? childrenMapiahID,
-    List<int>? scrapMapiahIDs,
-    List<int>? drawableElementMapiahIDs,
+    Set<int>? childrenMapiahID,
+    Set<int>? scrapMapiahIDs,
+    Set<int>? drawableElementMapiahIDs,
     LinkedHashMap<String, int>? mapiahIDByTHID,
     LinkedHashMap<int, String>? thIDByMapiahID,
     LinkedHashMap<int, THElement>? elementByMapiahID,
@@ -179,11 +179,11 @@ class THFile
     return _elementByMapiahID.length;
   }
 
-  List<int> get scrapMapiahIDs {
+  Set<int> get scrapMapiahIDs {
     return _scrapMapiahIDs;
   }
 
-  List<int> get drawableElementMapiahIDs {
+  Set<int> get drawableElementMapiahIDs {
     return _drawableElementMapiahIDs;
   }
 

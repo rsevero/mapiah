@@ -535,7 +535,10 @@ abstract class TH2FileEditControllerBase
       th2fileEditController: this as TH2FileEditController,
     );
 
-    _selectables[point.mapiahID] = selectablePoint;
+    final int pointMapiahID = point.mapiahID;
+
+    _selectables[pointMapiahID] = selectablePoint;
+    _isSelected[pointMapiahID] = Observable(false);
   }
 
   void _addLineSelectableElement(THLine line) {
@@ -544,11 +547,15 @@ abstract class TH2FileEditControllerBase
       th2fileEditController: this as TH2FileEditController,
     );
 
-    _selectables[line.mapiahID] = selectableLine;
+    final int lineMapiahID = line.mapiahID;
+
+    _selectables[lineMapiahID] = selectableLine;
+    _isSelected[lineMapiahID] = Observable(false);
   }
 
   void _removeSelectableElement(int mapiahID) {
     _selectables.remove(mapiahID);
+    _isSelected.remove(mapiahID);
   }
 
   List<THElement> selectableElementsClicked(Offset screenCoordinates) {
@@ -845,13 +852,15 @@ abstract class TH2FileEditControllerBase
   }
 
   int getNextAvailableScrapID() {
-    final List<int> scrapIDs = _thFile.scrapMapiahIDs;
+    final List<int> scrapIDs = _thFile.scrapMapiahIDs.toList();
     final int currentIndex = scrapIDs.indexOf(_activeScrapID);
 
     if (currentIndex == -1 || scrapIDs.isEmpty) {
       throw Exception('Current active scrap ID not found in scrapIDs');
     }
+
     final int nextIndex = (currentIndex + 1) % scrapIDs.length;
+
     return scrapIDs[nextIndex];
   }
 
@@ -883,7 +892,11 @@ abstract class TH2FileEditControllerBase
   }
 
   bool getIsSelected(THElement element) {
-    return _selectedElements.containsKey(element.mapiahID);
+    return getIsSelectedByMapiahID(element.mapiahID);
+  }
+
+  bool getIsSelectedByMapiahID(int mapiahID) {
+    return _selectedElements.containsKey(mapiahID);
   }
 
   @action
@@ -1009,7 +1022,7 @@ abstract class TH2FileEditControllerBase
   @action
   void selectAllElements() {
     final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
-    final List<int> elementMapiahIDs = scrap.childrenMapiahID;
+    final Set<int> elementMapiahIDs = scrap.childrenMapiahID;
 
     for (final int elementMapiahID in elementMapiahIDs) {
       final THElement element = _thFile.elementByMapiahID(elementMapiahID);
@@ -1078,7 +1091,7 @@ abstract class TH2FileEditControllerBase
     required bool clone,
   }) {
     final List<THLineSegment> lineSegments = <THLineSegment>[];
-    final List<int> lineSegmentMapiahIDs = line.childrenMapiahID;
+    final Set<int> lineSegmentMapiahIDs = line.childrenMapiahID;
 
     for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
       final THElement lineSegment =

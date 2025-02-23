@@ -32,7 +32,8 @@ class THFileWriter {
     String asString = '';
 
     _prefix = '';
-    if (thFile.elementByMapiahID(thFile.childrenMapiahID[0]) is! THEncoding) {
+    if (thFile.elementByMapiahID(thFile.childrenMapiahID.first)
+        is! THEncoding) {
       final String newLine = 'encoding ${thFile.encoding}\n';
       asString += newLine;
     }

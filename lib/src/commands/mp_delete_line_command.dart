@@ -18,7 +18,7 @@ class MPDeleteLineCommand extends MPCommand {
   void _actualExecute(TH2FileEditController th2FileEditController) {
     final THLine line =
         th2FileEditController.thFile.elementByMapiahID(lineMapiahID) as THLine;
-    final List<int> lineChildren = line.childrenMapiahID.toList();
+    final Set<int> lineChildren = line.childrenMapiahID.toSet();
 
     for (final int childMapiahID in lineChildren) {
       th2FileEditController.deleteElementByMapiahID(childMapiahID);
@@ -34,7 +34,7 @@ class MPDeleteLineCommand extends MPCommand {
     final THLine originalLine =
         thFile.elementByMapiahID(lineMapiahID) as THLine;
     final List<THElement> lineChildren = [];
-    final List<int> lineChildrenMapiahIDs = originalLine.childrenMapiahID;
+    final Set<int> lineChildrenMapiahIDs = originalLine.childrenMapiahID;
 
     for (final int childMapiahID in lineChildrenMapiahIDs) {
       final THElement childElement = thFile.elementByMapiahID(childMapiahID);
