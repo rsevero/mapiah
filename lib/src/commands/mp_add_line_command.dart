@@ -8,13 +8,13 @@ class MPAddLineCommand extends MPCommand {
     required this.newLine,
     required this.lineChildren,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.deleteLine,
+    super.descriptionType = MPCommandDescriptionType.addLine,
   }) : super.forCWJM();
 
   MPAddLineCommand({
     required this.newLine,
     required this.lineChildren,
-    super.descriptionType = MPCommandDescriptionType.deleteLine,
+    super.descriptionType = MPCommandDescriptionType.addLine,
   }) : super();
 
   @override
@@ -40,9 +40,10 @@ class MPAddLineCommand extends MPCommand {
     );
 
     return MPUndoRedoCommand(
-        commandType: oppositeCommand.type,
-        descriptionType: descriptionType,
-        map: oppositeCommand.toMap());
+      commandType: oppositeCommand.type,
+      descriptionType: descriptionType,
+      map: oppositeCommand.toMap(),
+    );
   }
 
   @override

@@ -38,9 +38,10 @@ class MPAddElementsCommand extends MPCommand {
         MPDeleteElementsCommand(mapiahIDs: mapiahIDs);
 
     return MPUndoRedoCommand(
-        commandType: oppositeCommand.type,
-        descriptionType: descriptionType,
-        map: oppositeCommand.toMap());
+      commandType: oppositeCommand.type,
+      descriptionType: descriptionType,
+      map: oppositeCommand.toMap(),
+    );
   }
 
   @override

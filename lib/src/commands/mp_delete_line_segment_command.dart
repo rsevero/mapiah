@@ -22,16 +22,18 @@ class MPDeleteLineSegmentCommand extends MPCommand {
   @override
   MPUndoRedoCommand _createOppositeCommand(
       TH2FileEditController th2FileEditController) {
+    final THLineSegment newLineSegment = th2FileEditController.thFile
+        .elementByMapiahID(lineSegmentMapiahID) as THLineSegment;
     final MPAddLineSegmentCommand oppositeCommand = MPAddLineSegmentCommand(
-      newLineSegment: th2FileEditController.thFile
-          .elementByMapiahID(lineSegmentMapiahID) as THLineSegment,
+      newLineSegment: newLineSegment,
       descriptionType: descriptionType,
     );
 
     return MPUndoRedoCommand(
-        commandType: oppositeCommand.type,
-        descriptionType: descriptionType,
-        map: oppositeCommand.toMap());
+      commandType: oppositeCommand.type,
+      descriptionType: descriptionType,
+      map: oppositeCommand.toMap(),
+    );
   }
 
   @override
@@ -87,5 +89,5 @@ class MPDeleteLineSegmentCommand extends MPCommand {
   int get hashCode => super.hashCode ^ lineSegmentMapiahID.hashCode;
 
   @override
-  MPCommandType get type => MPCommandType.addElements;
+  MPCommandType get type => MPCommandType.deleteLineSegment;
 }

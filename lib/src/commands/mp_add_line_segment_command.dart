@@ -16,12 +16,7 @@ class MPAddLineSegmentCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.addElementWithParentMapiahIDWithoutSelectableElement(
-      newElement: newLineSegment,
-      parentMapiahID: newLineSegment.parentMapiahID,
-    );
-
-    th2FileEditController.addSelectableElement(newLineSegment);
+    th2FileEditController.addElement(newElement: newLineSegment);
   }
 
   @override
@@ -34,9 +29,10 @@ class MPAddLineSegmentCommand extends MPCommand {
     );
 
     return MPUndoRedoCommand(
-        commandType: oppositeCommand.type,
-        descriptionType: descriptionType,
-        map: oppositeCommand.toMap());
+      commandType: oppositeCommand.type,
+      descriptionType: descriptionType,
+      map: oppositeCommand.toMap(),
+    );
   }
 
   @override

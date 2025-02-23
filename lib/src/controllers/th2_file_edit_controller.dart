@@ -691,7 +691,9 @@ abstract class TH2FileEditControllerBase
   }
 
   THStraightLineSegment _createStraightLineSegment(
-      Offset endpoint, int lineMapiahID) {
+    Offset endpoint,
+    int lineMapiahID,
+  ) {
     final Offset endPointCanvasCoordinates = offsetScreenToCanvas(endpoint);
 
     final THStraightLineSegment lineSegment = THStraightLineSegment(
@@ -1331,6 +1333,7 @@ abstract class TH2FileEditControllerBase
   triggerAllElementsRedraw() {
     _redrawTriggerSelectedElements++;
     _redrawTriggerNonSelectedElements++;
+    _redrawTriggerNewLine = !_redrawTriggerNewLine;
     _selectionHandleCenters = null;
   }
 
@@ -1682,16 +1685,14 @@ abstract class TH2FileEditControllerBase
   void deleteElementByMapiahID(int mapiahID) {
     final THElement element = _thFile.elementByMapiahID(mapiahID);
 
-    _thFile.deleteElement(element);
-    _removeSelectableElement(mapiahID);
+    deleteElement(element);
   }
 
   @action
   void deleteElementByTHID(String thID) {
     final THElement element = _thFile.elementByTHID(thID);
 
-    _thFile.deleteElement(element);
-    _removeSelectableElement(element.mapiahID);
+    deleteElement(element);
   }
 
   @action
