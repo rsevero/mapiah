@@ -21,6 +21,17 @@ class MPUndoRedoController {
     _undo.add(undo);
   }
 
+  void executeAndSubstituteLastUndo(MPCommand command) {
+    if (_undo.isEmpty) {
+      return;
+    }
+
+    final MPUndoRedoCommand undo = command.execute(th2FileEditController);
+
+    _undo.removeLast();
+    _undo.add(undo);
+  }
+
   void undo() {
     if (_undo.isEmpty) {
       return;

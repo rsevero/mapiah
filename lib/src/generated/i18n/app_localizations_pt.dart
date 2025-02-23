@@ -67,13 +67,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
-  String get mpCreateElementsCommandDescription => 'Criar elementos';
+  String get mpAddElementsCommandDescription => 'Adicionar elementos';
 
   @override
-  String get mpCreateLineCommandDescription => 'Criar linha';
+  String get mpAddLineCommandDescription => 'Adicionar linha';
 
   @override
-  String get mpCreatePointCommandDescription => 'Criar ponto';
+  String get mpAddLineSegmentCommandDescription => 'Adicionar segmento de linha';
+
+  @override
+  String get mpAddPointCommandDescription => 'Adicionar ponto';
 
   @override
   String get mpDeleteElementsCommandDescription => 'Apagar elementos';
@@ -82,7 +85,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDeleteLineCommandDescription => 'Apagar linha';
 
   @override
+  String get mpDeleteLineSegmentCommandDescription => 'Apagar segmento de linha';
+
+  @override
   String get mpDeletePointCommandDescription => 'Apagar ponto';
+
+  @override
+  String get mpEditLineSegmentCommandDescription => 'Editar segmento de linha';
 
   @override
   String get mpMoveBezierLineSegmentCommandDescription => 'Mover segmento de linha Bézier';

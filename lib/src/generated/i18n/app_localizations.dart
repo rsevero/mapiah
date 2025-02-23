@@ -185,23 +185,29 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
-  /// The description for the create elements command
+  /// The description for the add elements command
   ///
   /// In en, this message translates to:
-  /// **'Create elements'**
-  String get mpCreateElementsCommandDescription;
+  /// **'Add elements'**
+  String get mpAddElementsCommandDescription;
 
-  /// The description for the create line command
+  /// The description for the add line command
   ///
   /// In en, this message translates to:
-  /// **'Create line'**
-  String get mpCreateLineCommandDescription;
+  /// **'Add line'**
+  String get mpAddLineCommandDescription;
 
-  /// The description for the create point command
+  /// The description for the add line segment command
   ///
   /// In en, this message translates to:
-  /// **'Create point'**
-  String get mpCreatePointCommandDescription;
+  /// **'Add line segment'**
+  String get mpAddLineSegmentCommandDescription;
+
+  /// The description for the add point command
+  ///
+  /// In en, this message translates to:
+  /// **'Add point'**
+  String get mpAddPointCommandDescription;
 
   /// The description for the delete elements command
   ///
@@ -215,11 +221,23 @@ abstract class AppLocalizations {
   /// **'Delete line'**
   String get mpDeleteLineCommandDescription;
 
+  /// The description for the delete line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Delete line segment'**
+  String get mpDeleteLineSegmentCommandDescription;
+
   /// The description for the delete point command
   ///
   /// In en, this message translates to:
   /// **'Apagar ponto'**
   String get mpDeletePointCommandDescription;
+
+  /// The description for the edit line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit line segment'**
+  String get mpEditLineSegmentCommandDescription;
 
   /// The description for the move Bézier line segment command
   ///

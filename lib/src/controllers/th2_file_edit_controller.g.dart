@@ -1440,6 +1440,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void executeAndSubstituteLastUndo(MPCommand command) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.executeAndSubstituteLastUndo');
+    try {
+      return super.executeAndSubstituteLastUndo(command);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _updateUndoRedoStatus() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._updateUndoRedoStatus');
@@ -1531,11 +1543,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void registerNewLineInFile() {
+  void finalizeNewLineCreation() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.registerNewLineInFile');
+        .startAction(name: 'TH2FileEditControllerBase.finalizeNewLineCreation');
     try {
-      return super.registerNewLineInFile();
+      return super.finalizeNewLineCreation();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

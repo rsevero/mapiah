@@ -6,12 +6,12 @@ class MPAddElementsCommand extends MPCommand {
   MPAddElementsCommand.forCWJM({
     required this.createParams,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.createElements,
+    super.descriptionType = MPCommandDescriptionType.addElements,
   }) : super.forCWJM();
 
   MPAddElementsCommand({
     required this.createParams,
-    super.descriptionType = MPCommandDescriptionType.createElements,
+    super.descriptionType = MPCommandDescriptionType.addElements,
   }) : super();
 
   @override
@@ -101,5 +101,5 @@ class MPAddElementsCommand extends MPCommand {
   int get hashCode => super.hashCode ^ Object.hashAll(createParams);
 
   @override
-  MPCommandType get type => MPCommandType.createElements;
+  MPCommandType get type => MPCommandType.addElements;
 }

@@ -11,18 +11,24 @@ class MPTextToUser {
   static void resetTextToUser() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
-    _commandDescriptionMap[MPCommandDescriptionType.createElements] =
-        localizations.mpCreateElementsCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.createLine] =
-        localizations.mpCreateLineCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.createPoint] =
-        localizations.mpCreatePointCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.addElements] =
+        localizations.mpAddElementsCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.addLine] =
+        localizations.mpAddLineCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.addLineSegment] =
+        localizations.mpAddLineSegmentCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.addPoint] =
+        localizations.mpAddPointCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.deleteElements] =
         localizations.mpDeleteElementsCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.deleteLine] =
+        localizations.mpDeleteLineSegmentCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.deleteLineSegment] =
         localizations.mpDeleteLineCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.deletePoint] =
         localizations.mpDeletePointCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.editLineSegment] =
+        localizations.mpEditLineSegmentCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.moveBezierLineSegment] =
         localizations.mpMoveBezierLineSegmentCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.moveElements] =

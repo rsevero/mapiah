@@ -13,7 +13,7 @@ class MPTH2FileEditPageStateAddLine extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    th2FileEditController.registerNewLineInFile();
+    th2FileEditController.finalizeNewLineCreation();
   }
 
   @override

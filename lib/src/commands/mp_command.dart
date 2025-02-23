@@ -16,10 +16,13 @@ import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
 
 part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
+part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
 part 'mp_delete_elements_command.dart';
 part 'mp_delete_line_command.dart';
+part 'mp_delete_line_segment_command.dart';
 part 'mp_delete_point_command.dart';
+part 'mp_edit_line_segment_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
 part 'mp_move_elements_command.dart';
 part 'mp_move_line_command.dart';
@@ -95,18 +98,24 @@ abstract class MPCommand {
 
   static MPCommand fromMap(Map<String, dynamic> map) {
     switch (MPCommandType.values.byName(map['commandType'])) {
-      // case MPCommandType.createElements:
-      //   return MPCreateElementsCommand.fromMap(map);
-      case MPCommandType.createLine:
+      case MPCommandType.addElements:
+        return MPAddElementsCommand.fromMap(map);
+      case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
-      case MPCommandType.createPoint:
+      case MPCommandType.addLineSegment:
+        return MPAddLineSegmentCommand.fromMap(map);
+      case MPCommandType.addPoint:
         return MPAddPointCommand.fromMap(map);
-      // case MPCommandType.deleteElements:
-      //   return MPDeleteElementsCommand.fromMap(map);
+      case MPCommandType.deleteElements:
+        return MPDeleteElementsCommand.fromMap(map);
       case MPCommandType.deleteLine:
         return MPDeleteLineCommand.fromMap(map);
+      case MPCommandType.deleteLineSegment:
+        return MPDeleteLineSegmentCommand.fromMap(map);
       case MPCommandType.deletePoint:
         return MPDeletePointCommand.fromMap(map);
+      case MPCommandType.editLineSegment:
+        return MPEditLineSegmentCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
       case MPCommandType.moveElements:
@@ -117,8 +126,6 @@ abstract class MPCommand {
         return MPMovePointCommand.fromMap(map);
       case MPCommandType.moveStraightLineSegment:
         return MPMoveStraightLineSegmentCommand.fromMap(map);
-      default:
-        throw UnimplementedError();
     }
   }
 }

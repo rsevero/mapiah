@@ -113,5 +113,5 @@ class MPAddLineCommand extends MPCommand {
       );
 
   @override
-  MPCommandType get type => MPCommandType.createLine;
+  MPCommandType get type => MPCommandType.addLine;
 }

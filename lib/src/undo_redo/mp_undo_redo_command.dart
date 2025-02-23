@@ -64,14 +64,24 @@ class MPUndoRedoCommand {
 
   MPCommand get command {
     switch (commandType) {
-      case MPCommandType.createLine:
+      case MPCommandType.addElements:
+        return MPAddElementsCommand.fromMap(map);
+      case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
-      case MPCommandType.createPoint:
+      case MPCommandType.addLineSegment:
+        return MPAddLineSegmentCommand.fromMap(map);
+      case MPCommandType.addPoint:
         return MPAddPointCommand.fromMap(map);
+      case MPCommandType.deleteElements:
+        return MPDeleteElementsCommand.fromMap(map);
       case MPCommandType.deleteLine:
         return MPDeleteLineCommand.fromMap(map);
+      case MPCommandType.deleteLineSegment:
+        return MPDeleteLineSegmentCommand.fromMap(map);
       case MPCommandType.deletePoint:
         return MPDeletePointCommand.fromMap(map);
+      case MPCommandType.editLineSegment:
+        return MPEditLineSegmentCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
       case MPCommandType.moveElements:
@@ -82,8 +92,6 @@ class MPUndoRedoCommand {
         return MPMovePointCommand.fromMap(map);
       case MPCommandType.moveStraightLineSegment:
         return MPMoveStraightLineSegmentCommand.fromMap(map);
-      default:
-        throw UnimplementedError();
     }
   }
 }

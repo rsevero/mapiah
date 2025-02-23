@@ -682,11 +682,16 @@ abstract class TH2FileEditControllerBase
       );
     }
 
-    substituteElementWithoutAddSelectableElement(bezierCurveLineSegment);
+    final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+      newLineSegment: bezierCurveLineSegment,
+    );
+
+    executeAndSubstituteLastUndo(command);
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
   }
 
-  void _createStraightLineSegment(Offset endpoint, int lineMapiahID) {
+  THStraightLineSegment _createStraightLineSegment(
+      Offset endpoint, int lineMapiahID) {
     final Offset endPointCanvasCoordinates = offsetScreenToCanvas(endpoint);
 
     final THStraightLineSegment lineSegment = THStraightLineSegment(
@@ -697,10 +702,7 @@ abstract class TH2FileEditControllerBase
       ),
     );
 
-    addElementWithParentMapiahIDWithoutSelectableElement(
-      parentMapiahID: lineMapiahID,
-      newElement: lineSegment,
-    );
+    return lineSegment;
   }
 
   @action
@@ -709,15 +711,37 @@ abstract class TH2FileEditControllerBase
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = enPointScreenCoordinates;
       } else {
-        final int lineMapiahID = getNewLine().mapiahID;
+        final THLine newLine = getNewLine();
+        final int lineMapiahID = newLine.mapiahID;
+        final List<THElement> lineSegments = <THElement>[];
 
-        _createStraightLineSegment(_lineStartScreenPosition!, lineMapiahID);
-        _createStraightLineSegment(enPointScreenCoordinates, lineMapiahID);
+        lineSegments.add(_createStraightLineSegment(
+          _lineStartScreenPosition!,
+          lineMapiahID,
+        ));
+        lineSegments.add(_createStraightLineSegment(
+          enPointScreenCoordinates,
+          lineMapiahID,
+        ));
+
+        final MPAddLineCommand command = MPAddLineCommand(
+          newLine: newLine,
+          lineChildren: lineSegments,
+        );
+
+        execute(command);
       }
     } else {
       final int lineMapiahID = getNewLine().mapiahID;
+      final THStraightLineSegment newLineSegment = _createStraightLineSegment(
+        enPointScreenCoordinates,
+        lineMapiahID,
+      );
+      final MPAddLineSegmentCommand command = MPAddLineSegmentCommand(
+        newLineSegment: newLineSegment,
+      );
 
-      _createStraightLineSegment(enPointScreenCoordinates, lineMapiahID);
+      execute(command);
     }
 
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
@@ -1576,6 +1600,12 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
+  void executeAndSubstituteLastUndo(MPCommand command) {
+    _undoRedoController.executeAndSubstituteLastUndo(command);
+    _updateUndoRedoStatus();
+  }
+
+  @action
   void _updateUndoRedoStatus() {
     _hasUndo = _undoRedoController.hasUndo;
     _hasRedo = _undoRedoController.hasRedo;
@@ -1670,22 +1700,9 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void registerNewLineInFile() {
-    if (_newLine != null) {
-      final THLine newLine = _newLine!.copyWith(childrenMapiahID: <int>[]);
-      final List<THLineSegment> newLineSegments =
-          getLineSegments(line: _newLine!, clone: true);
-
-      deleteElement(_newLine!);
-      final MPAddLineCommand command = MPAddLineCommand(
-        newLine: newLine,
-        lineChildren: newLineSegments,
-      );
-
-      execute(command);
-      clearNewLine();
-      triggerNonSelectedElementsRedraw();
-    }
+  void finalizeNewLineCreation() {
+    clearNewLine();
+    triggerNonSelectedElementsRedraw();
   }
 }
 

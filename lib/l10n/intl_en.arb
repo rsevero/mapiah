@@ -97,21 +97,27 @@
     "type": "text"
   },
 
-  "mpCreateElementsCommandDescription": "Create elements",
-  "@mpCreateElementsCommandDescription": {
-    "description": "The description for the create elements command",
+  "mpAddElementsCommandDescription": "Add elements",
+  "@mpAddElementsCommandDescription": {
+    "description": "The description for the add elements command",
     "type": "text"
   },
 
-  "mpCreateLineCommandDescription": "Create line",
-  "@mpCreateLineCommandDescription": {
-    "description": "The description for the create line command",
+  "mpAddLineCommandDescription": "Add line",
+  "@mpAddLineCommandDescription": {
+    "description": "The description for the add line command",
     "type": "text"
   },
 
-  "mpCreatePointCommandDescription": "Create point",
-  "@mpCreatePointCommandDescription": {
-    "description": "The description for the create point command",
+  "mpAddLineSegmentCommandDescription": "Add line segment",
+  "@mpAddLineSegmentCommandDescription": {
+    "description": "The description for the add line segment command",
+    "type": "text"
+  },
+
+  "mpAddPointCommandDescription": "Add point",
+  "@mpAddPointCommandDescription": {
+    "description": "The description for the add point command",
     "type": "text"
   },
 
@@ -127,9 +133,21 @@
     "type": "text"
   },
 
+  "mpDeleteLineSegmentCommandDescription": "Delete line segment",
+  "@mpDeleteLineSegmentCommandDescription": {
+    "description": "The description for the delete line segment command",
+    "type": "text"
+  },
+
   "mpDeletePointCommandDescription": "Apagar ponto",
   "@mpDeletePointCommandDescription": {
     "description": "The description for the delete point command",
+    "type": "text"
+  },
+  
+  "mpEditLineSegmentCommandDescription": "Edit line segment",
+  "@mpEditLineSegmentCommandDescription": {
+    "description": "The description for the edit line segment command",
     "type": "text"
   },
 

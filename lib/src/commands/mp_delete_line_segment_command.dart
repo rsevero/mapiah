@@ -1,29 +1,30 @@
 part of 'mp_command.dart';
 
-class MPAddPointCommand extends MPCommand {
-  final THPoint newPoint;
+class MPDeleteLineSegmentCommand extends MPCommand {
+  final int lineSegmentMapiahID;
 
-  MPAddPointCommand.forCWJM({
-    required this.newPoint,
+  MPDeleteLineSegmentCommand.forCWJM({
+    required this.lineSegmentMapiahID,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.addPoint,
+    super.descriptionType = MPCommandDescriptionType.deleteLineSegment,
   }) : super.forCWJM();
 
-  MPAddPointCommand({
-    required this.newPoint,
-    super.descriptionType = MPCommandDescriptionType.addPoint,
+  MPDeleteLineSegmentCommand({
+    required this.lineSegmentMapiahID,
+    super.descriptionType = MPCommandDescriptionType.deleteLineSegment,
   }) : super();
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.addElement(newElement: newPoint);
+    th2FileEditController.deleteElementByMapiahID(lineSegmentMapiahID);
   }
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
       TH2FileEditController th2FileEditController) {
-    final MPDeletePointCommand oppositeCommand = MPDeletePointCommand(
-      pointMapiahID: newPoint.mapiahID,
+    final MPAddLineSegmentCommand oppositeCommand = MPAddLineSegmentCommand(
+      newLineSegment: th2FileEditController.thFile
+          .elementByMapiahID(lineSegmentMapiahID) as THLineSegment,
       descriptionType: descriptionType,
     );
 
@@ -35,20 +36,20 @@ class MPAddPointCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    THPoint? newPoint,
+    int? lineSegmentMapiahID,
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
-    return MPAddPointCommand.forCWJM(
-      newPoint: newPoint ?? this.newPoint,
+    return MPDeleteLineSegmentCommand.forCWJM(
+      lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPAddPointCommand.fromMap(Map<String, dynamic> map) {
-    return MPAddPointCommand.forCWJM(
-      newPoint: THPoint.fromMap(map['newPoint']),
+  factory MPDeleteLineSegmentCommand.fromMap(Map<String, dynamic> map) {
+    return MPDeleteLineSegmentCommand.forCWJM(
+      lineSegmentMapiahID: map['lineSegmentMapiahID'],
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
@@ -57,8 +58,8 @@ class MPAddPointCommand extends MPCommand {
     );
   }
 
-  factory MPAddPointCommand.fromJson(String source) {
-    return MPAddPointCommand.fromMap(jsonDecode(source));
+  factory MPDeleteLineSegmentCommand.fromJson(String source) {
+    return MPDeleteLineSegmentCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -66,7 +67,7 @@ class MPAddPointCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'newPoint': newPoint.toMap(),
+      'lineSegmentMapiahID': lineSegmentMapiahID,
     });
 
     return map;
@@ -76,15 +77,15 @@ class MPAddPointCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPAddPointCommand &&
-        other.newPoint == newPoint &&
+    return other is MPDeleteLineSegmentCommand &&
+        other.lineSegmentMapiahID == lineSegmentMapiahID &&
         other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ newPoint.hashCode;
+  int get hashCode => super.hashCode ^ lineSegmentMapiahID.hashCode;
 
   @override
-  MPCommandType get type => MPCommandType.addPoint;
+  MPCommandType get type => MPCommandType.addElements;
 }
