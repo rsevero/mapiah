@@ -45,8 +45,10 @@ class MPDeleteElementsCommand extends MPCommand {
 
       switch (element) {
         case THLine _:
-          final MPDeleteLineCommand mpCommand =
-              MPDeleteLineCommand(lineMapiahID: element.mapiahID);
+          final MPDeleteLineCommand mpCommand = MPDeleteLineCommand(
+            lineMapiahID: element.mapiahID,
+            isInteractiveLineCreation: false,
+          );
           final MPUndoRedoCommand undoRedoCommand =
               mpCommand._createOppositeCommand(th2FileEditController);
 

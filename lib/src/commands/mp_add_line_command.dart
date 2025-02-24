@@ -3,10 +3,12 @@ part of 'mp_command.dart';
 class MPAddLineCommand extends MPCommand {
   final THLine newLine;
   final List<THElement> lineChildren;
+  final Offset? lineStartScreenPosition;
 
   MPAddLineCommand.forCWJM({
     required this.newLine,
     required this.lineChildren,
+    this.lineStartScreenPosition,
     required super.oppositeCommand,
     super.descriptionType = MPCommandDescriptionType.addLine,
   }) : super.forCWJM();
@@ -14,16 +16,17 @@ class MPAddLineCommand extends MPCommand {
   MPAddLineCommand({
     required this.newLine,
     required this.lineChildren,
+    this.lineStartScreenPosition,
     super.descriptionType = MPCommandDescriptionType.addLine,
   }) : super();
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    for (final THElement child in lineChildren) {
-      th2FileEditController.addElement(newElement: child);
-    }
-
-    th2FileEditController.addSelectableElement(newLine);
+    th2FileEditController.addLine(
+      newLine: newLine,
+      lineChildren: lineChildren,
+      lineStartScreenPosition: lineStartScreenPosition,
+    );
   }
 
   @override
@@ -32,6 +35,7 @@ class MPAddLineCommand extends MPCommand {
     final MPDeleteLineCommand oppositeCommand = MPDeleteLineCommand(
       lineMapiahID: newLine.mapiahID,
       descriptionType: descriptionType,
+      isInteractiveLineCreation: lineStartScreenPosition != null,
     );
 
     return MPUndoRedoCommand(
@@ -45,12 +49,17 @@ class MPAddLineCommand extends MPCommand {
   MPCommand copyWith({
     THLine? newLine,
     List<THElement>? lineChildren,
+    Offset? lineStartScreenPosition,
+    bool makeLineStartScreenPositionNull = false,
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
   }) {
     return MPAddLineCommand.forCWJM(
       newLine: newLine ?? this.newLine,
       lineChildren: lineChildren ?? this.lineChildren,
+      lineStartScreenPosition: makeLineStartScreenPositionNull
+          ? null
+          : (lineStartScreenPosition ?? this.lineStartScreenPosition),
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
@@ -64,6 +73,12 @@ class MPAddLineCommand extends MPCommand {
           (x) => THElement.fromMap(x),
         ),
       ),
+      lineStartScreenPosition: map.containsKey('lineStartScreenPosition')
+          ? Offset(
+              map['lineStartScreenPosition']['x'],
+              map['lineStartScreenPosition']['y'],
+            )
+          : null,
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
@@ -85,6 +100,15 @@ class MPAddLineCommand extends MPCommand {
       'lineChildren': lineChildren.map((x) => x.toMap()).toList(),
     });
 
+    if (lineStartScreenPosition != null) {
+      map.addAll({
+        'lineStartScreenPosition': {
+          'x': lineStartScreenPosition!.dx,
+          'y': lineStartScreenPosition!.dy,
+        },
+      });
+    }
+
     return map;
   }
 
@@ -96,6 +120,7 @@ class MPAddLineCommand extends MPCommand {
         other.newLine == newLine &&
         const DeepCollectionEquality()
             .equals(other.lineChildren, lineChildren) &&
+        other.lineStartScreenPosition == lineStartScreenPosition &&
         other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
@@ -106,6 +131,7 @@ class MPAddLineCommand extends MPCommand {
       Object.hash(
         newLine,
         Object.hashAll(lineChildren),
+        lineStartScreenPosition,
       );
 
   @override

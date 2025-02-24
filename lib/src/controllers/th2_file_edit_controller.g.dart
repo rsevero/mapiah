@@ -983,6 +983,40 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void clearNewLine() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.clearNewLine');
+    try {
+      return super.clearNewLine();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNewLine(THLine newLine) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setNewLine');
+    try {
+      return super.setNewLine(newLine);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setNewLineStartScreenPosition');
+    try {
+      return super.setNewLineStartScreenPosition(lineStartScreenPosition);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setZoomButtonsHovered(bool isHovered) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setZoomButtonsHovered');
@@ -1057,17 +1091,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.addNewLineLineSegment');
     try {
       return super.addNewLineLineSegment(enPointScreenCoordinates);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearNewLine() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.clearNewLine');
-    try {
-      return super.clearNewLine();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1526,6 +1549,23 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.deleteElementByTHID');
     try {
       return super.deleteElementByTHID(thID);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addLine(
+      {required THLine newLine,
+      required List<THElement> lineChildren,
+      Offset? lineStartScreenPosition}) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.addLine');
+    try {
+      return super.addLine(
+          newLine: newLine,
+          lineChildren: lineChildren,
+          lineStartScreenPosition: lineStartScreenPosition);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

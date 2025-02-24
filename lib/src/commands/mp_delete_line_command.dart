@@ -2,15 +2,18 @@ part of "mp_command.dart";
 
 class MPDeleteLineCommand extends MPCommand {
   final int lineMapiahID;
+  final bool isInteractiveLineCreation;
 
   MPDeleteLineCommand.forCWJM({
     required this.lineMapiahID,
+    required this.isInteractiveLineCreation,
     required super.oppositeCommand,
     super.descriptionType = MPCommandDescriptionType.deleteLine,
   }) : super.forCWJM();
 
   MPDeleteLineCommand({
     required this.lineMapiahID,
+    required this.isInteractiveLineCreation,
     super.descriptionType = MPCommandDescriptionType.deleteLine,
   }) : super();
 
@@ -22,6 +25,10 @@ class MPDeleteLineCommand extends MPCommand {
 
     for (final int childMapiahID in lineChildren) {
       th2FileEditController.deleteElementByMapiahID(childMapiahID);
+    }
+
+    if (isInteractiveLineCreation) {
+      th2FileEditController.clearNewLine();
     }
 
     th2FileEditController.deleteElement(line);
@@ -45,6 +52,7 @@ class MPDeleteLineCommand extends MPCommand {
     final MPAddLineCommand oppositeCommand = MPAddLineCommand(
       newLine: originalLine,
       lineChildren: lineChildren,
+      lineStartScreenPosition: th2FileEditController.lineStartScreenPosition,
       descriptionType: descriptionType,
     );
 
@@ -63,6 +71,7 @@ class MPDeleteLineCommand extends MPCommand {
   }) {
     return MPDeleteLineCommand.forCWJM(
       lineMapiahID: lineMapiahID ?? this.lineMapiahID,
+      isInteractiveLineCreation: isInteractiveLineCreation,
       oppositeCommand: oppositeCommand ?? this.oppositeCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
@@ -71,6 +80,7 @@ class MPDeleteLineCommand extends MPCommand {
   factory MPDeleteLineCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteLineCommand.forCWJM(
       lineMapiahID: map['lineMapiahID'],
+      isInteractiveLineCreation: map['isInteractiveLineCreation'],
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
@@ -89,6 +99,7 @@ class MPDeleteLineCommand extends MPCommand {
 
     map.addAll({
       'lineMapiahID': lineMapiahID,
+      'isInteractiveLineCreation': isInteractiveLineCreation,
     });
 
     return map;
@@ -100,12 +111,18 @@ class MPDeleteLineCommand extends MPCommand {
 
     return other is MPDeleteLineCommand &&
         other.lineMapiahID == lineMapiahID &&
+        other.isInteractiveLineCreation == isInteractiveLineCreation &&
         other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ lineMapiahID.hashCode;
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
+        lineMapiahID,
+        isInteractiveLineCreation,
+      );
 
   @override
   MPCommandType get type => MPCommandType.deleteLine;

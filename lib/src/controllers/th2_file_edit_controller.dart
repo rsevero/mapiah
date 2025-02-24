@@ -442,6 +442,12 @@ abstract class TH2FileEditControllerBase
     }
   }
 
+  @action
+  void clearNewLine() {
+    _newLine = null;
+    _lineStartScreenPosition = null;
+  }
+
   THLine _createNewLine() {
     final THLine newLine = THLine(
       parentMapiahID: _activeScrapID,
@@ -454,6 +460,16 @@ abstract class TH2FileEditControllerBase
     );
 
     return newLine;
+  }
+
+  @action
+  void setNewLine(THLine newLine) {
+    _newLine = newLine;
+  }
+
+  @action
+  void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
+    _lineStartScreenPosition = lineStartScreenPosition;
   }
 
   Map<MPSelectionHandleType, Offset> _calculateSelectionHandleCenters() {
@@ -736,6 +752,7 @@ abstract class TH2FileEditControllerBase
         final MPAddLineCommand command = MPAddLineCommand(
           newLine: newLine,
           lineChildren: lineSegments,
+          lineStartScreenPosition: _lineStartScreenPosition,
         );
 
         execute(command);
@@ -754,12 +771,6 @@ abstract class TH2FileEditControllerBase
     }
 
     _redrawTriggerNewLine = !_redrawTriggerNewLine;
-  }
-
-  @action
-  void clearNewLine() {
-    _newLine = null;
-    _lineStartScreenPosition = null;
   }
 
   @action
@@ -931,6 +942,7 @@ abstract class TH2FileEditControllerBase
         case THLine _:
           mpCommand = MPDeleteLineCommand(
             lineMapiahID: singleSelectedElement.mapiahID,
+            isInteractiveLineCreation: _lineStartScreenPosition != null,
           );
       }
     } else {}
@@ -1706,6 +1718,28 @@ abstract class TH2FileEditControllerBase
     final THElement element = _thFile.elementByTHID(thID);
 
     deleteElement(element);
+  }
+
+  @action
+  void addLine({
+    required THLine newLine,
+    required List<THElement> lineChildren,
+    Offset? lineStartScreenPosition,
+  }) {
+    final THLine newLineCopy = newLine.copyWith(childrenMapiahID: {});
+
+    addElement(newElement: newLineCopy);
+
+    for (final THElement child in lineChildren) {
+      addElement(newElement: child);
+    }
+
+    if (lineStartScreenPosition != null) {
+      setNewLine(newLineCopy);
+      setNewLineStartScreenPosition(lineStartScreenPosition);
+    }
+
+    addSelectableElement(newLineCopy);
   }
 
   @action
