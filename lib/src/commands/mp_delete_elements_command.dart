@@ -16,21 +16,7 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-
-    for (final int mapiahID in mapiahIDs) {
-      final THElement element = thFile.elementByMapiahID(mapiahID);
-
-      if (element is THLine) {
-        final List<int> lineChildren = element.childrenMapiahID.toList();
-
-        for (final int childMapiahID in lineChildren) {
-          th2FileEditController.deleteElementByMapiahID(childMapiahID);
-        }
-      }
-
-      th2FileEditController.deleteElementByMapiahID(mapiahID);
-    }
+    th2FileEditController.deleteElements(mapiahIDs);
   }
 
   @override

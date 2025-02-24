@@ -19,19 +19,7 @@ class MPDeleteLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THLine line =
-        th2FileEditController.thFile.elementByMapiahID(lineMapiahID) as THLine;
-    final Set<int> lineChildren = line.childrenMapiahID.toSet();
-
-    for (final int childMapiahID in lineChildren) {
-      th2FileEditController.deleteElementByMapiahID(childMapiahID);
-    }
-
-    if (isInteractiveLineCreation) {
-      th2FileEditController.clearNewLine();
-    }
-
-    th2FileEditController.deleteElement(line);
+    th2FileEditController.deleteLine(lineMapiahID);
   }
 
   @override

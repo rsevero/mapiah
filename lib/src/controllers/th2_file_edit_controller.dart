@@ -1721,6 +1721,13 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
+  void deleteElements(List<int> mapiahIDs) {
+    for (final int mapiahID in mapiahIDs) {
+      deleteElementByMapiahID(mapiahID);
+    }
+  }
+
+  @action
   void addLine({
     required THLine newLine,
     required List<THElement> lineChildren,
@@ -1740,6 +1747,14 @@ abstract class TH2FileEditControllerBase
     }
 
     addSelectableElement(newLineCopy);
+  }
+
+  @action
+  void deleteLine(int lineMapiahID) {
+    if ((_newLine != null) && (_newLine!.mapiahID == lineMapiahID)) {
+      clearNewLine();
+    }
+    deleteElementByMapiahID(lineMapiahID);
   }
 
   @action

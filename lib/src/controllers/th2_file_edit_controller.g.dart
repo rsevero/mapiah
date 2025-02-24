@@ -1555,6 +1555,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void deleteElements(List<int> mapiahIDs) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.deleteElements');
+    try {
+      return super.deleteElements(mapiahIDs);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addLine(
       {required THLine newLine,
       required List<THElement> lineChildren,
@@ -1566,6 +1577,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           newLine: newLine,
           lineChildren: lineChildren,
           lineStartScreenPosition: lineStartScreenPosition);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteLine(int lineMapiahID) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.deleteLine');
+    try {
+      return super.deleteLine(lineMapiahID);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
