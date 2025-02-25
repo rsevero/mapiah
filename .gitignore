@@ -6,6 +6,7 @@
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
 pubspec.lock
 
+# Miscelaneous development auxiliary files
 therion.log
 auxiliary/line_options_testing/.xtherion.dat
 auxiliary/line_options_testing/line_options_testing.pdf
@@ -95,4 +96,7 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+# MacOS auxiliary files
+**/.metada
 
