@@ -21,7 +21,8 @@ class MPDeletePointCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final THPoint originalPoint = th2FileEditController.thFile
         .elementByMapiahID(pointMapiahID) as THPoint;
 

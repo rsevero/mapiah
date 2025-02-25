@@ -90,7 +90,8 @@ class MPMoveElementsCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     late MPMoveCommandCompleteParams oppositeMoveCommandParameters;
     final List<MPMoveCommandCompleteParams> oppositeMoveCommandParametersList =
         [];

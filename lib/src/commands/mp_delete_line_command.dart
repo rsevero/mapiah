@@ -24,7 +24,8 @@ class MPDeleteLineCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final THFile thFile = th2FileEditController.thFile;
     final THLine originalLine =
         thFile.elementByMapiahID(lineMapiahID) as THLine;

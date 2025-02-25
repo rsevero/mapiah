@@ -17,11 +17,13 @@ class MPEditLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.substituteElement(newLineSegment);
+    th2FileEditController.triggerNewLineRedraw();
   }
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final THLineSegment currentLineSegment = th2FileEditController.thFile
         .elementByMapiahID(newLineSegment.mapiahID) as THLineSegment;
     final MPEditLineSegmentCommand oppositeCommand = MPEditLineSegmentCommand(

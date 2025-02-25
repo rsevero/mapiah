@@ -144,7 +144,8 @@ class MPMoveLineCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
       lineMapiahID: lineMapiahID,
       originalLineSegmentsMap: modifiedLineSegmentsMap,

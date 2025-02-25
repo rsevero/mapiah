@@ -21,7 +21,8 @@ class MPAddPointCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final MPDeletePointCommand oppositeCommand = MPDeletePointCommand(
       pointMapiahID: newPoint.mapiahID,
       descriptionType: descriptionType,

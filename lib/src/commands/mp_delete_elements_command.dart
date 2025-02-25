@@ -21,7 +21,8 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final List<MPAddElementCommandParams> oppositeParamsList = [];
     final THFile thFile = th2FileEditController.thFile;
     late MPAddElementCommandParams oppositeParams;

@@ -354,6 +354,8 @@ abstract class TH2FileEditControllerBase
   @readonly
   Offset? _lineStartScreenPosition;
 
+  bool _isStraightLineSegmentToBezierCurveChangePreserved = false;
+
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
   Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
@@ -669,10 +671,9 @@ abstract class TH2FileEditControllerBase
     final Offset controlPoint1 = (startPoint / 3) + twoThirdsControlPoint;
     final Offset controlPoint2 = (endPoint / 3) + twoThirdsControlPoint;
 
-    late THBezierCurveLineSegment bezierCurveLineSegment;
-
     if (lastLineSegment is THStraightLineSegment) {
-      bezierCurveLineSegment = THBezierCurveLineSegment.forCWJM(
+      final THBezierCurveLineSegment bezierCurveLineSegment =
+          THBezierCurveLineSegment.forCWJM(
         mapiahID: lastLineSegment.mapiahID,
         parentMapiahID: _newLine!.mapiahID,
         endPoint: THPositionPart(
@@ -691,8 +692,14 @@ abstract class TH2FileEditControllerBase
         originalLineInTH2File: '',
         sameLineComment: '',
       );
+      final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+        newLineSegment: bezierCurveLineSegment,
+      );
+
+      execute(command);
+      _isStraightLineSegmentToBezierCurveChangePreserved = false;
     } else {
-      bezierCurveLineSegment =
+      final THBezierCurveLineSegment bezierCurveLineSegment =
           (lastLineSegment as THBezierCurveLineSegment).copyWith(
         controlPoint1: THPositionPart(
           coordinates: controlPoint1,
@@ -703,14 +710,19 @@ abstract class TH2FileEditControllerBase
           decimalPositions: _currentDecimalPositions,
         ),
       );
+      final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+        newLineSegment: bezierCurveLineSegment,
+      );
+
+      if (_isStraightLineSegmentToBezierCurveChangePreserved) {
+        executeAndSubstituteLastUndo(command);
+      } else {
+        execute(command);
+        _isStraightLineSegmentToBezierCurveChangePreserved = true;
+      }
     }
 
-    final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
-      newLineSegment: bezierCurveLineSegment,
-    );
-
-    executeAndSubstituteLastUndo(command);
-    _redrawTriggerNewLine = !_redrawTriggerNewLine;
+    triggerNewLineRedraw();
   }
 
   THStraightLineSegment _createStraightLineSegment(
@@ -770,7 +782,7 @@ abstract class TH2FileEditControllerBase
       execute(command);
     }
 
-    _redrawTriggerNewLine = !_redrawTriggerNewLine;
+    triggerNewLineRedraw();
   }
 
   @action
@@ -1379,6 +1391,11 @@ abstract class TH2FileEditControllerBase
     _selectedElementsBoundingBox = null;
     _selectionHandleCenters = null;
     _redrawTriggerSelectedElementsListChanged++;
+  }
+
+  @action
+  void triggerNewLineRedraw() {
+    _redrawTriggerNewLine = !_redrawTriggerNewLine;
   }
 
   void _setCanvasCenterFromCurrent() {

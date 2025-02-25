@@ -56,7 +56,8 @@ abstract class MPCommand {
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController);
+    TH2FileEditController th2FileEditController,
+  );
 
   void _actualExecute(TH2FileEditController th2FileEditController);
 

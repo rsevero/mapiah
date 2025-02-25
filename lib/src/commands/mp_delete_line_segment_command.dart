@@ -21,7 +21,8 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
-      TH2FileEditController th2FileEditController) {
+    TH2FileEditController th2FileEditController,
+  ) {
     final THLineSegment newLineSegment = th2FileEditController.thFile
         .elementByMapiahID(lineSegmentMapiahID) as THLineSegment;
     final MPAddLineSegmentCommand oppositeCommand = MPAddLineSegmentCommand(

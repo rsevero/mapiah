@@ -298,9 +298,12 @@ class THFile
 
   void _clearTHFileAndParentBoundingBoxes(THElement element) {
     clearBoundingBox();
+
     final int parentMapiahID = element.parentMapiahID;
+
     if (parentMapiahID > 0) {
       final THElement parentElement = elementByMapiahID(parentMapiahID);
+
       if (parentElement is THScrap) {
         parentElement.clearBoundingBox();
       }
