@@ -324,7 +324,7 @@ abstract class TH2FileEditControllerBase
   int _redrawTriggerNonSelectedElements = 0;
 
   @readonly
-  bool _redrawTriggerNewLine = false;
+  int _redrawTriggerNewLine = 0;
 
   @observable
   bool isChangeScrapsPopupVisible = false;
@@ -1370,7 +1370,7 @@ abstract class TH2FileEditControllerBase
   triggerAllElementsRedraw() {
     _redrawTriggerSelectedElements++;
     _redrawTriggerNonSelectedElements++;
-    _redrawTriggerNewLine = !_redrawTriggerNewLine;
+    _redrawTriggerNewLine++;
     _selectionHandleCenters = null;
   }
 
@@ -1395,7 +1395,7 @@ abstract class TH2FileEditControllerBase
 
   @action
   void triggerNewLineRedraw() {
-    _redrawTriggerNewLine = !_redrawTriggerNewLine;
+    _redrawTriggerNewLine++;
   }
 
   void _setCanvasCenterFromCurrent() {

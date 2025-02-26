@@ -823,16 +823,16 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       name: 'TH2FileEditControllerBase._redrawTriggerNewLine',
       context: context);
 
-  bool get redrawTriggerNewLine {
+  int get redrawTriggerNewLine {
     _$_redrawTriggerNewLineAtom.reportRead();
     return super._redrawTriggerNewLine;
   }
 
   @override
-  bool get _redrawTriggerNewLine => redrawTriggerNewLine;
+  int get _redrawTriggerNewLine => redrawTriggerNewLine;
 
   @override
-  set _redrawTriggerNewLine(bool value) {
+  set _redrawTriggerNewLine(int value) {
     _$_redrawTriggerNewLineAtom.reportWrite(value, super._redrawTriggerNewLine,
         () {
       super._redrawTriggerNewLine = value;
