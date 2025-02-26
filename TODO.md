@@ -5,7 +5,7 @@
 [ ] - Config page
 [ ] - Line edit
 [X] - Point and line delete
-[ ] - Point and line add
+[X] - Point and line add
 [ ] - Status message totaling selected objects
 [ ] - Change cursors to show current status
 [X] - Rename Stores to Controllers
