@@ -16,15 +16,22 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
-        if (isCtrlPressed) {
+        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
           th2FileEditController.selectAllElements();
         } else if (!isAltPressed && !isShiftPressed) {
           th2FileEditController.setState(MPTH2FileEditStateType.addArea);
         }
         break;
       case LogicalKeyboardKey.keyC:
-        if (isAltPressed) {
+        if (isAltPressed && !isCtrlPressed && !isShiftPressed) {
           th2FileEditController.toggleToNextAvailableScrap();
+        } else if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+          if (th2FileEditController.selectedElements.isEmpty) {
+            th2FileEditController
+                .setState(MPTH2FileEditStateType.selectEmptySelection);
+          } else {
+            th2FileEditController.setNonEmptySelectionState();
+          }
         }
         break;
       case LogicalKeyboardKey.keyL:
@@ -36,7 +43,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.setState(MPTH2FileEditStateType.addPoint);
         }
       case LogicalKeyboardKey.keyS:
-        if (isCtrlPressed) {
+        if (isCtrlPressed && !isAltPressed) {
           if (isShiftPressed) {
             th2FileEditController.saveAsTH2File();
           } else {
@@ -45,12 +52,12 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         }
         break;
       case LogicalKeyboardKey.keyY:
-        if (isCtrlPressed) {
+        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
           th2FileEditController.redo();
         }
         break;
       case LogicalKeyboardKey.keyZ:
-        if (isCtrlPressed) {
+        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
           th2FileEditController.undo();
         }
         break;

@@ -1101,6 +1101,19 @@ abstract class TH2FileEditControllerBase
     _state.setStatusBarMessage();
   }
 
+  void setNonEmptySelectionState() {
+    if (_selectedElements.isEmpty) {
+      return;
+    }
+
+    if ((_selectedElements.length == 1) &&
+        (_selectedElements.values.first is MPSelectedLine)) {
+      setState(MPTH2FileEditStateType.editSingleLine);
+    } else {
+      setState(MPTH2FileEditStateType.selectNonEmptySelection);
+    }
+  }
+
   void moveSelectedElementsToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {

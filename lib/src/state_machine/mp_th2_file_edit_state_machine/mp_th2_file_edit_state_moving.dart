@@ -38,24 +38,20 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState
             th2FileEditController
                 .setState(MPTH2FileEditStateType.selectEmptySelection);
           } else {
-            th2FileEditController
-                .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+            th2FileEditController.setNonEmptySelectionState();
           }
         } else {
-          th2FileEditController
-              .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+          th2FileEditController.setNonEmptySelectionState();
         }
         return;
       } else {
         if (shiftPressed) {
           th2FileEditController.addSelectedElement(clickedElements.first);
-          th2FileEditController
-              .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+          th2FileEditController.setNonEmptySelectionState();
           return;
         } else {
           th2FileEditController.setSelectedElements([clickedElements.first]);
-          th2FileEditController
-              .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+          th2FileEditController.setNonEmptySelectionState();
           return;
         }
       }
@@ -143,8 +139,7 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState
 
     th2FileEditController.triggerSelectedElementsRedraw();
 
-    th2FileEditController
-        .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+    th2FileEditController.setNonEmptySelectionState();
   }
 
   @override

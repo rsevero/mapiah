@@ -30,8 +30,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
       );
     }
 
-    th2FileEditController
-        .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+    th2FileEditController.setNonEmptySelectionState();
   }
 
   /// Marks the start point of the pan.
@@ -67,8 +66,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
           elementsInsideSelectionWindow,
         ),
       );
-      th2FileEditController
-          .setState(MPTH2FileEditStateType.selectNonEmptySelection);
+      th2FileEditController.setNonEmptySelectionState();
     }
   }
 

@@ -51,7 +51,7 @@
     "th2FileEditPageSave": "Salvar (Ctrl+S)",
     "th2FileEditPageSaveAs": "Salvar como (Shift+Ctrl+S)",
     "th2FileEditPageRedo": "Refazer '{redoDescription}' (Ctrl+Y)",
-    "th2FileEditPageSelectTool": "Selecionar",
+    "th2FileEditPageSelectTool": "Selecionar (C)",
     "th2FileEditPageUndo": "Desfazer '{undoDescription}' (Ctrl+Z)",
     "th2FileEditPageZoomIn": "Aproximar (+)",
     "th2FileEditPageZoomOneToOne": "Mostrar 1:1 (1)",

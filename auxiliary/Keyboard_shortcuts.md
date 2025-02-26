@@ -12,6 +12,7 @@
 | Save file as | Shift+Ctrl+S |
 | Select all | Ctrl+A |
 | Select none | Esc |
+| Select tool | C |
 | Undo | Ctrl+Z |
 | Zoom 1:1 | 1 |
 | Zoom file | 3 |

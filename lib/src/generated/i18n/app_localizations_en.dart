@@ -188,7 +188,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get th2FileEditPageSelectTool => 'Select';
+  String get th2FileEditPageSelectTool => 'Select (C)';
 
   @override
   String th2FileEditPageUndo(Object undoDescription) {

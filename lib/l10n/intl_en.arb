@@ -332,7 +332,7 @@
     }
   },
 
-  "th2FileEditPageSelectTool": "Select",
+  "th2FileEditPageSelectTool": "Select (C)",
   "@th2FileEditPageSelectTool": {
     "description": "The label for the select tool button",
     "type": "text"

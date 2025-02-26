@@ -398,7 +398,7 @@ abstract class AppLocalizations {
   /// The label for the select tool button
   ///
   /// In en, this message translates to:
-  /// **'Select'**
+  /// **'Select (C)'**
   String get th2FileEditPageSelectTool;
 
   /// The label for the undo shortcut

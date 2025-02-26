@@ -21,6 +21,7 @@ part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mp_th2_file_edit_page_state_add_area.dart';
 part 'mp_th2_file_edit_page_state_add_line.dart';
 part 'mp_th2_file_edit_page_state_add_point.dart';
+part 'mp_th2_file_edit_page_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
@@ -49,7 +50,10 @@ abstract class MPTH2FileEditState {
         return MPTH2FileEditPageStateAddPoint(
           th2FileEditController: thFileEditController,
         );
-
+      case MPTH2FileEditStateType.editSingleLine:
+        return MPTH2FileEditPageStateEditSingleLine(
+          th2FileEditController: thFileEditController,
+        );
       case MPTH2FileEditStateType.moving:
         return MPTH2FileEditStateMoving(
           th2FileEditController: thFileEditController,
@@ -126,10 +130,12 @@ abstract class MPTH2FileEditState {
         th2FileEditController.redo();
         return true;
       case MPButtonType.select:
-        th2FileEditController.setState(
-            th2FileEditController.selectedElements.isEmpty
-                ? MPTH2FileEditStateType.selectEmptySelection
-                : MPTH2FileEditStateType.selectNonEmptySelection);
+        if (th2FileEditController.selectedElements.isEmpty) {
+          th2FileEditController
+              .setState(MPTH2FileEditStateType.selectEmptySelection);
+        } else {
+          th2FileEditController.setNonEmptySelectionState();
+        }
         return true;
       case MPButtonType.undo:
         th2FileEditController.undo();
