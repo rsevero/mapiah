@@ -39,87 +39,99 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
-        if (event.buttons == kPrimaryButton) {
-          currentPressedMouseButton = kPrimaryButton;
-          primaryButtonDragStartScreenCoordinates = event.localPosition;
-          isPrimaryButtonDragging = false;
-          widget.actuator.onPrimaryButtonDragStart(event);
-        } else if (event.buttons == kSecondaryButton) {
-          currentPressedMouseButton = kSecondaryButton;
-          secondaryButtonDragStartScreenCoordinates = event.localPosition;
-          isSecondaryButtonDragging = false;
-          widget.actuator.onSecondaryButtonDragStart(event);
-        } else if (event.buttons == kTertiaryButton) {
-          currentPressedMouseButton = kTertiaryButton;
-          tertiaryButtonDragStartScreenCoordinates = event.localPosition;
-          isTertiaryButtonDragging = false;
-          widget.actuator.onTertiaryButtonDragStart(event);
+        switch (event.buttons) {
+          case kPrimaryButton:
+            currentPressedMouseButton = kPrimaryButton;
+            primaryButtonDragStartScreenCoordinates = event.localPosition;
+            isPrimaryButtonDragging = false;
+            widget.actuator.onPrimaryButtonDragStart(event);
+            break;
+          case kSecondaryButton:
+            currentPressedMouseButton = kSecondaryButton;
+            secondaryButtonDragStartScreenCoordinates = event.localPosition;
+            isSecondaryButtonDragging = false;
+            widget.actuator.onSecondaryButtonDragStart(event);
+            break;
+          case kTertiaryButton:
+            currentPressedMouseButton = kTertiaryButton;
+            tertiaryButtonDragStartScreenCoordinates = event.localPosition;
+            isTertiaryButtonDragging = false;
+            widget.actuator.onTertiaryButtonDragStart(event);
+            break;
         }
       },
       onPointerMove: (PointerMoveEvent event) {
-        if (event.buttons == kPrimaryButton) {
-          double distance =
-              (event.localPosition - primaryButtonDragStartScreenCoordinates)
-                  .distanceSquared;
+        switch (event.buttons) {
+          case kPrimaryButton:
+            double distanceSquared =
+                (event.localPosition - primaryButtonDragStartScreenCoordinates)
+                    .distanceSquared;
 
-          if (distance > thClickDragThresholdSquared &&
-              !isPrimaryButtonDragging) {
-            isPrimaryButtonDragging = true;
-          }
-          if (isPrimaryButtonDragging) {
-            widget.actuator.onPrimaryButtonDragUpdate(event);
-          }
-        } else if (event.buttons == kSecondaryButton) {
-          double distance =
-              (event.localPosition - secondaryButtonDragStartScreenCoordinates)
-                  .distanceSquared;
+            if ((distanceSquared > thClickDragThresholdSquared) &&
+                !isPrimaryButtonDragging) {
+              isPrimaryButtonDragging = true;
+            }
+            if (isPrimaryButtonDragging) {
+              widget.actuator.onPrimaryButtonDragUpdate(event);
+            }
+            break;
+          case kSecondaryButton:
+            double distanceSquared = (event.localPosition -
+                    secondaryButtonDragStartScreenCoordinates)
+                .distanceSquared;
 
-          if (distance > thClickDragThresholdSquared &&
-              !isSecondaryButtonDragging) {
-            isSecondaryButtonDragging = true;
-          }
-          if (isSecondaryButtonDragging) {
-            widget.actuator.onSecondaryButtonDragUpdate(event);
-          }
-        } else if (event.buttons == kTertiaryButton) {
-          double distance =
-              (event.localPosition - tertiaryButtonDragStartScreenCoordinates)
-                  .distanceSquared;
+            if ((distanceSquared > thClickDragThresholdSquared) &&
+                !isSecondaryButtonDragging) {
+              isSecondaryButtonDragging = true;
+            }
+            if (isSecondaryButtonDragging) {
+              widget.actuator.onSecondaryButtonDragUpdate(event);
+            }
+            break;
+          case kTertiaryButton:
+            double distanceSquared =
+                (event.localPosition - tertiaryButtonDragStartScreenCoordinates)
+                    .distanceSquared;
 
-          if (distance > thClickDragThresholdSquared &&
-              !isTertiaryButtonDragging) {
-            isTertiaryButtonDragging = true;
-          }
-          if (isTertiaryButtonDragging) {
-            widget.actuator.onTertiaryButtonDragUpdate(event);
-          }
+            if ((distanceSquared > thClickDragThresholdSquared) &&
+                !isTertiaryButtonDragging) {
+              isTertiaryButtonDragging = true;
+            }
+            if (isTertiaryButtonDragging) {
+              widget.actuator.onTertiaryButtonDragUpdate(event);
+            }
+            break;
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        if (currentPressedMouseButton == kPrimaryButton) {
-          currentPressedMouseButton = 0;
-          if (isPrimaryButtonDragging) {
-            widget.actuator.onPrimaryButtonDragEnd(event);
-            isPrimaryButtonDragging = false;
-          } else {
-            widget.actuator.onPrimaryButtonClick(event);
-          }
-        } else if (currentPressedMouseButton == kSecondaryButton) {
-          currentPressedMouseButton = 0;
-          if (isSecondaryButtonDragging) {
-            widget.actuator.onSecondaryButtonDragEnd(event);
-            isSecondaryButtonDragging = false;
-          } else {
-            widget.actuator.onSecondaryButtonClick(event);
-          }
-        } else if (currentPressedMouseButton == kTertiaryButton) {
-          currentPressedMouseButton = 0;
-          if (isTertiaryButtonDragging) {
-            widget.actuator.onTertiaryButtonDragEnd(event);
-            isTertiaryButtonDragging = false;
-          } else {
-            widget.actuator.onTertiaryButtonClick(event);
-          }
+        switch (event.buttons) {
+          case kPrimaryButton:
+            currentPressedMouseButton = 0;
+            if (isPrimaryButtonDragging) {
+              widget.actuator.onPrimaryButtonDragEnd(event);
+              isPrimaryButtonDragging = false;
+            } else {
+              widget.actuator.onPrimaryButtonClick(event);
+            }
+            break;
+          case kSecondaryButton:
+            currentPressedMouseButton = 0;
+            if (isSecondaryButtonDragging) {
+              widget.actuator.onSecondaryButtonDragEnd(event);
+              isSecondaryButtonDragging = false;
+            } else {
+              widget.actuator.onSecondaryButtonClick(event);
+            }
+            break;
+          case kTertiaryButton:
+            currentPressedMouseButton = 0;
+            if (isTertiaryButtonDragging) {
+              widget.actuator.onTertiaryButtonDragEnd(event);
+              isTertiaryButtonDragging = false;
+            } else {
+              widget.actuator.onTertiaryButtonClick(event);
+            }
+            break;
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
