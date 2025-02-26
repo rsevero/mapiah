@@ -354,7 +354,7 @@ abstract class TH2FileEditControllerBase
   @readonly
   Offset? _lineStartScreenPosition;
 
-  bool _isStraightLineSegmentToBezierCurveChangePreserved = false;
+  int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
@@ -697,7 +697,7 @@ abstract class TH2FileEditControllerBase
       );
 
       execute(command);
-      _isStraightLineSegmentToBezierCurveChangePreserved = false;
+      _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
     } else {
       final THBezierCurveLineSegment bezierCurveLineSegment =
           (lastLineSegment as THBezierCurveLineSegment).copyWith(
@@ -714,11 +714,11 @@ abstract class TH2FileEditControllerBase
         newLineSegment: bezierCurveLineSegment,
       );
 
-      if (_isStraightLineSegmentToBezierCurveChangePreserved) {
+      if (_missingStepsPreserveStraightToBezierConversionUndoRedo == 0) {
         executeAndSubstituteLastUndo(command);
       } else {
         execute(command);
-        _isStraightLineSegmentToBezierCurveChangePreserved = true;
+        _missingStepsPreserveStraightToBezierConversionUndoRedo--;
       }
     }
 
