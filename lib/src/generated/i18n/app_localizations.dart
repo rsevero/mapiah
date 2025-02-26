@@ -335,6 +335,24 @@ abstract class AppLocalizations {
   /// **'Empty selection'**
   String get th2FileEditPageEmptySelectionStatusBarMessage;
 
+  /// The label for only lines selected status bar messagee
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} line(s) selected'**
+  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(Object amount);
+
+  /// The label for only points selected status bar messagee
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} point(s) selected'**
+  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(Object amount);
+
+  /// The label for points and lines selected status bar messagee
+  ///
+  /// In en, this message translates to:
+  /// **'{pointsAmount} point(s) and {linesAmount} line(s) selected'**
+  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(Object pointsAmount, Object linesAmount);
+
   /// The label for the loading file message
   ///
   /// In en, this message translates to:

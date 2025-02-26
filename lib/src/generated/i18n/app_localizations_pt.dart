@@ -148,6 +148,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Nenhum elemento selecionado';
 
   @override
+  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(Object amount) {
+    return '$amount linha(s) selecionadas';
+  }
+
+  @override
+  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(Object amount) {
+    return '$amount pontos(s) selecionados';
+  }
+
+  @override
+  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(Object pointsAmount, Object linesAmount) {
+    return '$pointsAmount pontos(s) e $linesAmount linhas(s) selecionados';
+  }
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Lendo arquivo $filename ...';
   }

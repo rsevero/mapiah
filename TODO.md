@@ -6,7 +6,7 @@
 [ ] - Line edit
 [X] - Point and line delete
 [X] - Point and line add
-[ ] - Status message totaling selected objects
+[X] - Status message totaling selected objects
 [ ] - Change cursors to show current status
 [X] - Rename Stores to Controllers
 [ ] - Implement Ctrl+O (open file) keyboard shortcut

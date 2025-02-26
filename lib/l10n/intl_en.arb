@@ -256,6 +256,34 @@
     "type": "text"
   },
 
+  "th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": "{amount} line(s) selected",
+  "@th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": {
+    "description": "The label for only lines selected status bar messagee",
+    "type": "text",
+    "placeholders": {
+      "amount": {}
+    }
+  },
+
+  "th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage": "{amount} point(s) selected",
+  "@th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage": {
+    "description": "The label for only points selected status bar messagee",
+    "type": "text",
+    "placeholders": {
+      "amount": {}
+    }
+  },
+
+  "th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage": "{pointsAmount} point(s) and {linesAmount} line(s) selected",
+  "@th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage": {
+    "description": "The label for points and lines selected status bar messagee",
+    "type": "text",
+    "placeholders": {
+      "pointsAmount": {},
+      "linesAmount": {}
+    }
+  },
+
   "th2FileEditPageLoadingFile": "Loading file {filename} ...",
   "@th2FileEditPageLoadingFile": {
     "description": "The label for the loading file message",

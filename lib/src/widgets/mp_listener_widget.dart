@@ -63,7 +63,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       onPointerMove: (PointerMoveEvent event) {
         switch (event.buttons) {
           case kPrimaryButton:
-            double distanceSquared =
+            final double distanceSquared =
                 (event.localPosition - primaryButtonDragStartScreenCoordinates)
                     .distanceSquared;
 
@@ -76,7 +76,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             }
             break;
           case kSecondaryButton:
-            double distanceSquared = (event.localPosition -
+            final double distanceSquared = (event.localPosition -
                     secondaryButtonDragStartScreenCoordinates)
                 .distanceSquared;
 
@@ -89,7 +89,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             }
             break;
           case kTertiaryButton:
-            double distanceSquared =
+            final double distanceSquared =
                 (event.localPosition - tertiaryButtonDragStartScreenCoordinates)
                     .distanceSquared;
 
@@ -104,7 +104,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        switch (event.buttons) {
+        switch (currentPressedMouseButton) {
           case kPrimaryButton:
             currentPressedMouseButton = 0;
             if (isPrimaryButtonDragging) {

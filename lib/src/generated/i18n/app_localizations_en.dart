@@ -148,6 +148,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';
 
   @override
+  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(Object amount) {
+    return '$amount line(s) selected';
+  }
+
+  @override
+  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(Object amount) {
+    return '$amount point(s) selected';
+  }
+
+  @override
+  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(Object pointsAmount, Object linesAmount) {
+    return '$pointsAmount point(s) and $linesAmount line(s) selected';
+  }
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Loading file $filename ...';
   }
