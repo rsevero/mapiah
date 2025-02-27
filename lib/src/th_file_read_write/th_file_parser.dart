@@ -719,7 +719,7 @@ class THFileParser {
           continue;
         }
 
-        if (THMultipleChoiceCommandOption.hasOptionType(
+        if (THMultipleChoiceAsStringCommandOption.hasOptionType(
             _currentHasOptions, optionType)) {
           _injectMultipleChoiceCommandOption(optionType);
           continue;
@@ -825,7 +825,7 @@ class THFileParser {
     /// Here we create the options found in [LINE DATA] that, in reality, are
     /// line options, not line segment options.
     /// The actual line segment options are created in _optionFromElement().
-    if (THMultipleChoiceCommandOption.hasOptionType(
+    if (THMultipleChoiceAsStringCommandOption.hasOptionType(
         _currentHasOptions, optionType)) {
       _optionParentAsCurrentElement();
       _injectMultipleChoiceCommandOption(optionType);
@@ -934,7 +934,7 @@ class THFileParser {
     } else {
       _optionParentAsCurrentElement();
     }
-    THMultipleChoiceCommandOption(
+    THMultipleChoiceAsStringCommandOption(
       optionParent: _currentHasOptions,
       multipleChoiceType: optionType,
       choice: _currentSpec[0],
@@ -953,7 +953,7 @@ class THFileParser {
           "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THMultipleChoiceCommandOption(
+    THMultipleChoiceAsStringCommandOption(
       optionParent: _currentHasOptions,
       multipleChoiceType: optionType,
       choice: _currentSpec[0],
@@ -979,7 +979,7 @@ class THFileParser {
           "One string parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THClipCommandOption.fromChoice(
+    THClipCommandOption.fromString(
       optionParent: _currentHasOptions,
       choice: _currentSpec[0],
       originalLineInTH2File: _currentLine,

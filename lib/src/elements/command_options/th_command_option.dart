@@ -40,6 +40,7 @@ part 'th_line_height_command_option.dart';
 part 'th_line_scale_command_option.dart';
 part 'th_lsize_command_option.dart';
 part 'th_mark_command_option.dart';
+part 'th_multiple_choice_as_string_command_option.dart';
 part 'th_multiple_choice_command_option.dart';
 part 'th_name_command_option.dart';
 part 'th_orientation_command_option.dart';
@@ -57,6 +58,7 @@ part 'th_text_command_option.dart';
 part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
 part 'types/th_command_option_type.dart';
+part 'types/th_option_choices_on_off_type.dart';
 
 abstract class THCommandOption {
   final int parentMapiahID;
@@ -136,7 +138,7 @@ abstract class THCommandOption {
       case THCommandOptionType.mark:
         return THMarkCommandOption.fromMap(map);
       case THCommandOptionType.multipleChoice:
-        return THMultipleChoiceCommandOption.fromMap(map);
+        return THMultipleChoiceAsStringCommandOption.fromMap(map);
       case THCommandOptionType.name:
         return THNameCommandOption.fromMap(map);
       case THCommandOptionType.orientation:

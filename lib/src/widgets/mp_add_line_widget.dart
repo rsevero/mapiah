@@ -127,7 +127,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               width: pointWidth,
               isSmooth: lineSegment.hasOption('smooth') &&
                   (lineSegment.optionByType('smooth')
-                              as THMultipleChoiceCommandOption)
+                              as THMultipleChoiceAsStringCommandOption)
                           .choice ==
                       'on',
               th2FileEditController: th2FileEditController,
