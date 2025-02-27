@@ -6,7 +6,6 @@ import 'package:mapiah/src/definitions/mp_paints.dart';
 class THEndPointPainter extends CustomPainter {
   final Offset position;
   final double width;
-  final double expandedWidth;
   final Paint pointPaint;
   final TH2FileEditController th2FileEditController;
   final double canvasScale;
@@ -16,7 +15,6 @@ class THEndPointPainter extends CustomPainter {
     super.repaint,
     required this.position,
     required this.width,
-    required this.expandedWidth,
     required this.pointPaint,
     required this.th2FileEditController,
     required this.canvasScale,
@@ -27,8 +25,8 @@ class THEndPointPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Rect whiteRect = MPNumericAux.orderedRectFromCenter(
       center: position,
-      width: expandedWidth,
-      height: expandedWidth,
+      width: width,
+      height: width,
     );
     final Rect squareRect = MPNumericAux.orderedRectFromCenter(
       center: position,
@@ -46,7 +44,6 @@ class THEndPointPainter extends CustomPainter {
 
     return position != oldDelegate.position ||
         width != oldDelegate.width ||
-        expandedWidth != oldDelegate.expandedWidth ||
         pointPaint != oldDelegate.pointPaint ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;

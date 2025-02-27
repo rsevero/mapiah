@@ -5,7 +5,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
@@ -32,8 +31,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             th2FileEditController.getNewLinePointPaint();
         final double pointRadius = pointPaintInfo.radius;
         final double pointWidth = pointRadius * 2;
-        final double expandedPointWidth =
-            pointWidth * thWhiteBackgroundIncrease;
         final Paint pointPaint = pointPaintInfo.paint;
 
         final THLinePaint linePaintInfo =
@@ -52,7 +49,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               position: startPoint,
               pointPaint: pointPaint,
               width: pointWidth,
-              expandedWidth: expandedPointWidth,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
@@ -87,8 +83,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
           if ((endPointsMap.length >= 2) &&
               (lastSegment is THBezierCurveLineSegment)) {
-            final double expandedPointRadius =
-                pointRadius * thWhiteBackgroundIncrease;
             final THLinePaint controlLinePaint =
                 th2FileEditController.getControlLinePaint();
             final List<int> keys = endPointsMap.keys.toList();
@@ -102,7 +96,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               pointPaint: pointPaint,
               controlLinePaint: controlLinePaint.paint,
               pointRadius: pointRadius,
-              expandedPointRadius: expandedPointRadius,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
@@ -116,7 +109,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               pointPaint: pointPaint,
               controlLinePaint: controlLinePaint.paint,
               pointRadius: pointRadius,
-              expandedPointRadius: expandedPointRadius,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
@@ -129,7 +121,6 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               position: endPoint,
               pointPaint: pointPaint,
               width: pointWidth,
-              expandedWidth: expandedPointWidth,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,

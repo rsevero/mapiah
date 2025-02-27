@@ -6,7 +6,6 @@ class THControlPointPainter extends CustomPainter {
   final Offset controlPointPosition;
   final Offset endPointPosition;
   final double pointRadius;
-  final double expandedPointRadius;
   final Paint pointPaint;
   final Paint controlLinePaint;
   final TH2FileEditController th2FileEditController;
@@ -18,7 +17,6 @@ class THControlPointPainter extends CustomPainter {
     required this.controlPointPosition,
     required this.endPointPosition,
     required this.pointRadius,
-    required this.expandedPointRadius,
     required this.pointPaint,
     required this.controlLinePaint,
     required this.th2FileEditController,
@@ -32,7 +30,7 @@ class THControlPointPainter extends CustomPainter {
 
     canvas.drawCircle(
       controlPointPosition,
-      expandedPointRadius,
+      pointRadius,
       THPaints.thPaintWhiteBackground,
     );
 
@@ -49,7 +47,6 @@ class THControlPointPainter extends CustomPainter {
 
     return controlPointPosition != oldDelegate.controlPointPosition ||
         pointRadius != oldDelegate.pointRadius ||
-        expandedPointRadius != oldDelegate.expandedPointRadius ||
         pointPaint != oldDelegate.pointPaint ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;
