@@ -24,7 +24,7 @@ class THOnOffCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  String get defaultChoice => '';
+  bool get hasDefaultChoice => false;
 
   @override
   String specToFile() {

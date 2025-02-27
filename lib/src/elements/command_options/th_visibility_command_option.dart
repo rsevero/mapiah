@@ -23,8 +23,10 @@ class THVisibilityCommandOption extends THOnOffCommandOption {
   @override
   THCommandOptionType get optionType => THCommandOptionType.visibility;
 
+  THOptionChoicesOnOffType get defaultChoice => THOptionChoicesOnOffType.on;
+
   @override
-  String get defaultChoice => '';
+  bool get hasDefaultChoice => true;
 
   @override
   String specToFile() {

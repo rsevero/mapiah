@@ -58,9 +58,7 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   int get hashCode => super.hashCode ^ parentElementType.hashCode;
 
-  bool get hasDefaultChoice => defaultChoice.isNotEmpty;
-
-  String get defaultChoice;
+  bool get hasDefaultChoice;
 
   // static bool hasOptionType(THHasOptionsMixin optionParent, String optionType) {
   //   final String optionParentElementType =

@@ -35,9 +35,6 @@ class THClipCommandOption extends THOnOffCommandOption {
   THCommandOptionType get optionType => THCommandOptionType.clip;
 
   @override
-  String get defaultChoice => '';
-
-  @override
   String specToFile() {
     return choice.name;
   }
