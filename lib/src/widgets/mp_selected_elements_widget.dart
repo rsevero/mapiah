@@ -66,7 +66,7 @@ class MPSelectedElementsWidget extends StatelessWidget
               ) = getLineSegmentsAndEndpointsMaps(
                 line: element,
                 thFile: thFile,
-                returnEndpoints: false,
+                returnLineSegments: false,
               );
               painters.add(
                 THLinePainter(

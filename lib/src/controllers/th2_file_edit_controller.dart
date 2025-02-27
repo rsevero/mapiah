@@ -344,6 +344,16 @@ abstract class TH2FileEditControllerBase
   @readonly
   THLine? _newLine;
 
+  @readonly
+  List<THLineSegment> _selectedLineSegments = [];
+
+  @readonly
+  List<THLineSegment> _editEnabledLineSegments = [];
+
+  @computed
+  bool get showEditLineSegment =>
+      _state is MPTH2FileEditPageStateEditSingleLine;
+
   @action
   THLine getNewLine() {
     _newLine ??= _createNewLine();
@@ -462,6 +472,26 @@ abstract class TH2FileEditControllerBase
     );
 
     return newLine;
+  }
+
+  @action
+  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
+    _selectedLineSegments = lineSegments;
+  }
+
+  @action
+  void clearSelectedLineSegments() {
+    _selectedLineSegments.clear();
+  }
+
+  @action
+  void setEditEnabledLineSegments(List<THLineSegment> lineSegments) {
+    _editEnabledLineSegments = lineSegments;
+  }
+
+  @action
+  void clearEditEnabledLineSegments() {
+    _editEnabledLineSegments.clear();
   }
 
   @action
@@ -692,6 +722,14 @@ abstract class TH2FileEditControllerBase
         originalLineInTH2File: '',
         sameLineComment: '',
       );
+      final THMultipleChoiceCommandOption smoothOn =
+          THMultipleChoiceCommandOption(
+              optionParent: bezierCurveLineSegment,
+              multipleChoiceType: 'smooth',
+              choice: 'on');
+
+      bezierCurveLineSegment.addUpdateOption(smoothOn);
+
       final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
         newLineSegment: bezierCurveLineSegment,
       );

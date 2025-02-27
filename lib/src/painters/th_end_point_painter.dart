@@ -7,6 +7,7 @@ class THEndPointPainter extends CustomPainter {
   final Offset position;
   final double width;
   final Paint pointPaint;
+  final bool isSmooth;
   final TH2FileEditController th2FileEditController;
   final double canvasScale;
   final Offset canvasTranslation;
@@ -16,6 +17,7 @@ class THEndPointPainter extends CustomPainter {
     required this.position,
     required this.width,
     required this.pointPaint,
+    required this.isSmooth,
     required this.th2FileEditController,
     required this.canvasScale,
     required this.canvasTranslation,
@@ -34,8 +36,19 @@ class THEndPointPainter extends CustomPainter {
       height: width,
     );
 
+    if (!isSmooth) {
+      canvas.save();
+      canvas.translate(position.dx, position.dy);
+      canvas.rotate(1);
+      canvas.translate(-position.dx, -position.dy);
+    }
+
     canvas.drawRect(whiteRect, THPaints.thPaintWhiteBackground);
     canvas.drawRect(squareRect, pointPaint);
+
+    if (!isSmooth) {
+      canvas.restore();
+    }
   }
 
   @override

@@ -237,6 +237,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               name:
                   'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen'))
           .value;
+  Computed<bool>? _$showEditLineSegmentComputed;
+
+  @override
+  bool get showEditLineSegment => (_$showEditLineSegmentComputed ??=
+          Computed<bool>(() => super.showEditLineSegment,
+              name: 'TH2FileEditControllerBase.showEditLineSegment'))
+      .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditControllerBase._screenSize', context: context);
@@ -948,6 +955,46 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_selectedLineSegmentsAtom = Atom(
+      name: 'TH2FileEditControllerBase._selectedLineSegments',
+      context: context);
+
+  List<THLineSegment> get selectedLineSegments {
+    _$_selectedLineSegmentsAtom.reportRead();
+    return super._selectedLineSegments;
+  }
+
+  @override
+  List<THLineSegment> get _selectedLineSegments => selectedLineSegments;
+
+  @override
+  set _selectedLineSegments(List<THLineSegment> value) {
+    _$_selectedLineSegmentsAtom.reportWrite(value, super._selectedLineSegments,
+        () {
+      super._selectedLineSegments = value;
+    });
+  }
+
+  late final _$_editEnabledLineSegmentsAtom = Atom(
+      name: 'TH2FileEditControllerBase._editEnabledLineSegments',
+      context: context);
+
+  List<THLineSegment> get editEnabledLineSegments {
+    _$_editEnabledLineSegmentsAtom.reportRead();
+    return super._editEnabledLineSegments;
+  }
+
+  @override
+  List<THLineSegment> get _editEnabledLineSegments => editEnabledLineSegments;
+
+  @override
+  set _editEnabledLineSegments(List<THLineSegment> value) {
+    _$_editEnabledLineSegmentsAtom
+        .reportWrite(value, super._editEnabledLineSegments, () {
+      super._editEnabledLineSegments = value;
+    });
+  }
+
   late final _$_lineStartScreenPositionAtom = Atom(
       name: 'TH2FileEditControllerBase._lineStartScreenPosition',
       context: context);
@@ -988,6 +1035,53 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.clearNewLine');
     try {
       return super.clearNewLine();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setSelectedLineSegments');
+    try {
+      return super.setSelectedLineSegments(lineSegments);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearSelectedLineSegments() {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.clearSelectedLineSegments');
+    try {
+      return super.clearSelectedLineSegments();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setEditEnabledLineSegments(List<THLineSegment> lineSegments) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setEditEnabledLineSegments');
+    try {
+      return super.setEditEnabledLineSegments(lineSegments);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearEditEnabledLineSegments() {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.clearEditEnabledLineSegments');
+    try {
+      return super.clearEditEnabledLineSegments();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1660,7 +1754,8 @@ scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
+showEditLineSegment: ${showEditLineSegment}
     ''';
   }
 }

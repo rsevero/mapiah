@@ -5,7 +5,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
@@ -14,10 +13,10 @@ import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 
-class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
+class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
   final TH2FileEditController th2FileEditController;
 
-  MPAddLineWidget({
+  MPEditLineWidget({
     required this.th2FileEditController,
     required super.key,
   });
@@ -50,7 +49,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               position: startPoint,
               pointPaint: pointPaint,
               width: pointWidth,
-              isSmooth: false,
+              isSmooth: true,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
@@ -125,11 +124,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               width: pointWidth,
-              isSmooth: lineSegment.hasOption('smooth') &&
-                  (lineSegment.optionByType('smooth')
-                              as THMultipleChoiceCommandOption)
-                          .choice ==
-                      'on',
+              isSmooth: lineSegment is THStraightLineSegment,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
