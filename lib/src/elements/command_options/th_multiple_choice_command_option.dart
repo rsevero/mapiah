@@ -18,9 +18,6 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   @override
   THCommandOptionType get optionType => THCommandOptionType.multipleChoice;
 
-  @override
-  String typeToFile();
-
   static String getParentTypeNameForChecking(String parentTypeName) {
     String parentTypeNameForChecking = parentTypeName;
 

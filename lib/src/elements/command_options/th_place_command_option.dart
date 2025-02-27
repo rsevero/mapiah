@@ -1,47 +1,45 @@
 part of 'th_command_option.dart';
 
-class THClipCommandOption extends THMultipleChoiceCommandOption {
-  final THOptionChoicesOnOffType choice;
-  // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
-  //   'altitude',
-  //   'date',
-  //   'height',
-  //   'label',
-  //   'passage-height',
-  //   'remark',
-  //   'station-name',
-  //   'station',
-  // });
+class THPlaceCommandOption extends THMultipleChoiceCommandOption {
+  final THOptionChoicesPlaceType choice;
 
-  THClipCommandOption.forCWJM({
+  THPlaceCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
-  THClipCommandOption({
+  THPlaceCommandOption({
     required super.optionParent,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
-  THClipCommandOption.fromString({
+  THPlaceCommandOption.fromString({
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  })  : choice = THOptionChoicesOnOffType.values.byName(choice),
+  })  : choice = _setChoiceFromString(choice),
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.clip;
+  THCommandOptionType get optionType => THCommandOptionType.place;
 
   @override
-  String get defaultChoice => '';
+  String get defaultChoice => 'default';
 
   @override
   String specToFile() {
-    return choice.name;
+    return (choice == THOptionChoicesPlaceType.defaultChoice)
+        ? 'default'
+        : choice.name;
+  }
+
+  static THOptionChoicesPlaceType _setChoiceFromString(String choice) {
+    return (choice == 'default')
+        ? THOptionChoicesPlaceType.defaultChoice
+        : THOptionChoicesPlaceType.values.byName(choice);
   }
 
   @override
@@ -55,27 +53,27 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
     return map;
   }
 
-  factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
-    return THClipCommandOption.forCWJM(
+  factory THPlaceCommandOption.fromMap(Map<String, dynamic> map) {
+    return THPlaceCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
-      choice: THOptionChoicesOnOffType.values.byName(map['choice']),
+      choice: _setChoiceFromString(map['choice']),
     );
   }
 
-  factory THClipCommandOption.fromJson(String jsonString) {
-    return THClipCommandOption.fromMap(jsonDecode(jsonString));
+  factory THPlaceCommandOption.fromJson(String jsonString) {
+    return THPlaceCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  THClipCommandOption copyWith({
+  THPlaceCommandOption copyWith({
     int? parentMapiahID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
-    THOptionChoicesOnOffType? choice,
+    THOptionChoicesPlaceType? choice,
   }) {
-    return THClipCommandOption.forCWJM(
+    return THPlaceCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -85,7 +83,7 @@ class THClipCommandOption extends THMultipleChoiceCommandOption {
   }
 
   @override
-  bool operator ==(covariant THClipCommandOption other) {
+  bool operator ==(covariant THPlaceCommandOption other) {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&

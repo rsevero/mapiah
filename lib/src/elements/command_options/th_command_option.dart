@@ -45,6 +45,7 @@ part 'th_multiple_choice_command_option.dart';
 part 'th_name_command_option.dart';
 part 'th_orientation_command_option.dart';
 part 'th_passage_height_value_command_option.dart';
+part 'th_place_command_option.dart';
 part 'th_point_height_value_command_option.dart';
 part 'th_point_scale_command_option.dart';
 part 'th_projection_command_option.dart';
@@ -59,6 +60,7 @@ part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
 part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_on_off_type.dart';
+part 'types/th_option_choices_place_type.dart';
 
 abstract class THCommandOption {
   final int parentMapiahID;
@@ -145,6 +147,8 @@ abstract class THCommandOption {
         return THOrientationCommandOption.fromMap(map);
       case THCommandOptionType.passageHeightValue:
         return THPassageHeightValueCommandOption.fromMap(map);
+      case THCommandOptionType.place:
+        return THPlaceCommandOption.fromMap(map);
       case THCommandOptionType.pointHeightValue:
         return THPointHeightValueCommandOption.fromMap(map);
       case THCommandOptionType.pointScale:

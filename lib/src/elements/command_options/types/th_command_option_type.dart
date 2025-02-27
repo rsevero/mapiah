@@ -23,6 +23,7 @@ enum THCommandOptionType {
   name,
   orientation,
   passageHeightValue,
+  place,
   pointHeightValue,
   pointScale,
   projection,

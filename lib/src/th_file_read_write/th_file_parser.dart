@@ -721,7 +721,7 @@ class THFileParser {
 
         if (THMultipleChoiceAsStringCommandOption.hasOptionType(
             _currentHasOptions, optionType)) {
-          _injectMultipleChoiceCommandOption(optionType);
+          _injectMultipleChoiceAsStringCommandOption(optionType);
           continue;
         }
 
@@ -741,7 +741,8 @@ class THFileParser {
 
     switch (optionType) {
       case 'clip':
-        _injectClipCommandOption();
+      case 'place':
+        _injectMultipleChoiceCommandOption(optionType);
       case 'context':
         _injectContextCommandOption();
       case 'dist':
@@ -828,7 +829,7 @@ class THFileParser {
     if (THMultipleChoiceAsStringCommandOption.hasOptionType(
         _currentHasOptions, optionType)) {
       _optionParentAsCurrentElement();
-      _injectMultipleChoiceCommandOption(optionType);
+      _injectMultipleChoiceAsStringCommandOption(optionType);
       return true;
     }
 
@@ -845,7 +846,8 @@ class THFileParser {
 
     switch (optionType) {
       case 'clip':
-        _injectClipCommandOption();
+      case 'place':
+        _injectMultipleChoiceCommandOption(optionType);
       case 'context':
         _injectContextCommandOption();
       case 'endarea':
@@ -864,7 +866,8 @@ class THFileParser {
 
     switch (optionType) {
       case 'clip':
-        _injectClipCommandOption();
+      case 'place':
+        _injectMultipleChoiceCommandOption(optionType);
       case 'context':
         _injectContextCommandOption();
       case 'height':
@@ -942,7 +945,7 @@ class THFileParser {
     );
   }
 
-  void _injectMultipleChoiceCommandOption(String optionType) {
+  void _injectMultipleChoiceAsStringCommandOption(String optionType) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
           "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
@@ -968,22 +971,35 @@ class THFileParser {
     }
   }
 
-  void _injectClipCommandOption() {
+  void _injectMultipleChoiceCommandOption(String type) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
+          "One parameter required to create a '$type' option for a '${_currentHasOptions.elementType}'");
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a 'clip' option for a '${_currentHasOptions.elementType}'");
+          "One string parameter required to create a '$type' option for a '${_currentHasOptions.elementType}'");
     }
 
-    THClipCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      choice: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
-    );
+    switch (type) {
+      case 'clip':
+        THClipCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'place':
+        THPlaceCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      default:
+        throw UnimplementedError();
+    }
   }
 
   void _injectDistCommandOption() {

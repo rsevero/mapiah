@@ -8,31 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'area': {
-      // clip <on/off> . specify whether a symbol is clipped by the scrap border.
-      'clip': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
-      // place <bottom/default/top> . changes displaying order in the map.
-      'place': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'bottom',
-          'default',
-          'top',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
       // visibility <on/off> . displays/hides the symbol.
       'visibility': {
         'hasDefault': true,
@@ -73,18 +48,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
         'plaTypesSupported': <String>{
           'slope',
         },
-      },
-
-      // clip <on/off> . specify whether a symbol is clipped by the scrap border.
-      'clip': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
       },
 
       // close <on/off/auto> . determines whether a line is closed or not
@@ -160,19 +123,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
           'in',
           'out',
           'none',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
-      // place <bottom/default/top> . changes displaying order in the map.
-      'place': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'bottom',
-          'default',
-          'top',
         },
         'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
@@ -308,33 +258,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
           'bl': 'bottom-left',
           'br': 'bottom-right',
         },
-        'plaTypesSupported': <String>{},
-      },
-
-      // clip <on/off> . specify whether a symbol is clipped by the scrap border. You cannot
-      // specify this option for the following symbols: station, station-name, label, remark,
-      // date, altitude, height, passage-height.
-      'clip': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
-      // place <bottom/default/top> . changes displaying order in the map.
-      'place': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'bottom',
-          'default',
-          'top',
-        },
-        'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
       },
 
