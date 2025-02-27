@@ -7,19 +7,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
 
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
-    'area': {
-      // visibility <on/off> . displays/hides the symbol.
-      'visibility': {
-        'hasDefault': true,
-        'default': 'on',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-    },
     'line': {
       // anchors <on/off> . this option can be specified only with the ‘rope’ line type.
       'anchors': {
@@ -153,18 +140,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
         'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
       },
-
-      // visibility <on/off> . displays/hides the symbol.
-      'visibility': {
-        'hasDefault': true,
-        'default': 'on',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
     },
     'linesegment': {
       // adjust <horizontal/vertical> . shifts the line point to be aligned horizontally/ver-
@@ -258,18 +233,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
           'bl': 'bottom-left',
           'br': 'bottom-right',
         },
-        'plaTypesSupported': <String>{},
-      },
-
-      // visibility <on/off> . displays/hides the symbol.
-      'visibility': {
-        'hasDefault': true,
-        'default': 'default',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
       },
     },

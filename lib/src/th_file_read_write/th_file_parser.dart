@@ -742,6 +742,7 @@ class THFileParser {
     switch (optionType) {
       case 'clip':
       case 'place':
+      case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
       case 'context':
         _injectContextCommandOption();
@@ -847,6 +848,7 @@ class THFileParser {
     switch (optionType) {
       case 'clip':
       case 'place':
+      case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
       case 'context':
         _injectContextCommandOption();
@@ -867,6 +869,7 @@ class THFileParser {
     switch (optionType) {
       case 'clip':
       case 'place':
+      case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
       case 'context':
         _injectContextCommandOption();
@@ -992,6 +995,13 @@ class THFileParser {
         break;
       case 'place':
         THPlaceCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'visibility':
+        THVisibilityCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

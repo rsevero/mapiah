@@ -43,6 +43,7 @@ part 'th_mark_command_option.dart';
 part 'th_multiple_choice_as_string_command_option.dart';
 part 'th_multiple_choice_command_option.dart';
 part 'th_name_command_option.dart';
+part 'th_on_off_command_option.dart';
 part 'th_orientation_command_option.dart';
 part 'th_passage_height_value_command_option.dart';
 part 'th_place_command_option.dart';
@@ -58,6 +59,7 @@ part 'th_subtype_command_option.dart';
 part 'th_text_command_option.dart';
 part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
+part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_on_off_type.dart';
 part 'types/th_option_choices_place_type.dart';
@@ -173,6 +175,8 @@ abstract class THCommandOption {
         return THTitleCommandOption.fromMap(map);
       case THCommandOptionType.unrecognizedCommandOption:
         return THUnrecognizedCommandOption.fromMap(map);
+      case THCommandOptionType.visibility:
+        return THVisibilityCommandOption.fromMap(map);
     }
   }
 

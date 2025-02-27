@@ -1,38 +1,27 @@
 part of 'th_command_option.dart';
 
-class THClipCommandOption extends THOnOffCommandOption {
-  // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
-  //   'altitude',
-  //   'date',
-  //   'height',
-  //   'label',
-  //   'passage-height',
-  //   'remark',
-  //   'station-name',
-  //   'station',
-  // });
+class THOnOffCommandOption extends THMultipleChoiceCommandOption {
+  final THOptionChoicesOnOffType choice;
 
-  THClipCommandOption.forCWJM({
+  THOnOffCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
     required super.parentElementType,
-    required super.choice,
+    required this.choice,
   }) : super.forCWJM();
 
-  THClipCommandOption({
+  THOnOffCommandOption({
     required super.optionParent,
-    required super.choice,
+    required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
-  THClipCommandOption.fromString({
+  THOnOffCommandOption.fromString({
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
-
-  @override
-  THCommandOptionType get optionType => THCommandOptionType.clip;
+  })  : choice = THOptionChoicesOnOffType.values.byName(choice),
+        super();
 
   @override
   String get defaultChoice => '';
@@ -53,8 +42,8 @@ class THClipCommandOption extends THOnOffCommandOption {
     return map;
   }
 
-  factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
-    return THClipCommandOption.forCWJM(
+  factory THOnOffCommandOption.fromMap(Map<String, dynamic> map) {
+    return THOnOffCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
@@ -62,18 +51,18 @@ class THClipCommandOption extends THOnOffCommandOption {
     );
   }
 
-  factory THClipCommandOption.fromJson(String jsonString) {
-    return THClipCommandOption.fromMap(jsonDecode(jsonString));
+  factory THOnOffCommandOption.fromJson(String jsonString) {
+    return THOnOffCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  THClipCommandOption copyWith({
+  THOnOffCommandOption copyWith({
     int? parentMapiahID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesOnOffType? choice,
   }) {
-    return THClipCommandOption.forCWJM(
+    return THOnOffCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -83,7 +72,7 @@ class THClipCommandOption extends THOnOffCommandOption {
   }
 
   @override
-  bool operator ==(covariant THClipCommandOption other) {
+  bool operator ==(covariant THOnOffCommandOption other) {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
@@ -91,4 +80,7 @@ class THClipCommandOption extends THOnOffCommandOption {
         other.parentElementType == parentElementType &&
         other.choice == choice;
   }
+
+  @override
+  int get hashCode => super.hashCode ^ choice.hashCode;
 }

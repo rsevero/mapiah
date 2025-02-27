@@ -35,5 +35,6 @@ enum THCommandOptionType {
   subtype,
   text,
   title,
-  unrecognizedCommandOption;
+  unrecognizedCommandOption,
+  visibility;
 }
