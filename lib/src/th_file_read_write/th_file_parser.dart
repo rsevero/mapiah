@@ -803,7 +803,7 @@ class THFileParser {
       case 'direction':
         _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
       case 'gradient':
-        _injectMultipleChoiceAsStringWithPointChoiceCommandOption(optionType);
+        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
       case 'l-size':
         _injectLSizeCommandOption();
       case 'mark':
@@ -873,6 +873,7 @@ class THFileParser {
       case 'clip':
       case 'close':
       case 'direction':
+      case 'gradient':
       case 'place':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
@@ -956,35 +957,16 @@ class THFileParser {
           originalLineInTH2File: _currentLine,
         );
         break;
+      case 'gradient':
+        THLinePointGradientCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
       default:
         throw UnimplementedError();
     }
-  }
-
-  void _injectMultipleChoiceAsStringWithPointChoiceCommandOption(
-    String optionType,
-  ) {
-    if (_currentSpec.isEmpty) {
-      throw THCustomException(
-          "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
-    }
-
-    if (_currentSpec[0] is! String) {
-      throw THCustomException(
-          "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
-    }
-
-    if (_currentSpec[0] == 'point') {
-      _optionParentAsTHLineSegment();
-    } else {
-      _optionParentAsCurrentElement();
-    }
-    THMultipleChoiceAsStringCommandOption(
-      optionParent: _currentHasOptions,
-      multipleChoiceType: optionType,
-      choice: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
-    );
   }
 
   void _injectMultipleChoiceAsStringCommandOption(String optionType) {
@@ -1054,6 +1036,13 @@ class THFileParser {
         break;
       case 'direction':
         THLineDirectionCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'gradient':
+        THLineGradientCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
