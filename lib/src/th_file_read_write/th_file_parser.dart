@@ -795,20 +795,15 @@ class THFileParser {
   }
 
   bool _lineSegmentRegularOptions(String optionType) {
-    bool optionIdentified = _lineRegularOptions(optionType);
+    bool optionIdentified = true;
 
-    if (optionIdentified) {
-      return true;
-    }
-
-    optionIdentified = true;
     switch (optionType) {
       case 'altitude':
         _injectAltitudeCommandOption();
       case 'direction':
         _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
       case 'gradient':
-        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
+        _injectMultipleChoiceAsStringWithPointChoiceCommandOption(optionType);
       case 'l-size':
         _injectLSizeCommandOption();
       case 'mark':
@@ -819,6 +814,12 @@ class THFileParser {
       default:
         optionIdentified = false;
     }
+
+    if (optionIdentified) {
+      return true;
+    }
+
+    optionIdentified = _lineRegularOptions(optionType);
 
     if (optionIdentified) {
       return true;
@@ -871,6 +872,7 @@ class THFileParser {
       case 'border':
       case 'clip':
       case 'close':
+      case 'direction':
       case 'place':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
@@ -927,7 +929,41 @@ class THFileParser {
     return optionIdentified;
   }
 
-  void _injectMultipleChoiceWithPointChoiceCommandOption(String optionType) {
+  void _injectMultipleChoiceWithPointChoiceCommandOption(
+    String optionType,
+  ) {
+    if (_currentSpec.isEmpty) {
+      throw THCustomException(
+          "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    if (_currentSpec[0] is! String) {
+      throw THCustomException(
+          "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
+    }
+
+    if (_currentSpec[0] == 'point') {
+      _optionParentAsTHLineSegment();
+    } else {
+      _optionParentAsCurrentElement();
+    }
+
+    switch (optionType) {
+      case 'direction':
+        THLinePointDirectionCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      default:
+        throw UnimplementedError();
+    }
+  }
+
+  void _injectMultipleChoiceAsStringWithPointChoiceCommandOption(
+    String optionType,
+  ) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
           "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
@@ -1011,6 +1047,13 @@ class THFileParser {
         break;
       case 'close':
         THCloseCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'direction':
+        THLineDirectionCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

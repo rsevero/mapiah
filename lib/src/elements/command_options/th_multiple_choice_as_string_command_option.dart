@@ -8,23 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // direction <begin/end/both/none/point> . can be used only with the section type.
-      // It indicates where to put a direction arrow on the section line. None is default.
-      'direction': {
-        'hasDefault': true,
-        'default': 'none',
-        'choices': <String>{
-          'begin',
-          'end',
-          'both',
-          'none',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'section',
-        },
-      },
-
       // gradient <none/center/point> . can be used only with the contour type and indi-
       // cates where to put a gradient mark on the contour line. If there is no gradient speci-
       // fication, behaviour is symbol-set dependent (e.g. no tick in UIS, tick in the middle in
@@ -111,24 +94,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
         },
         'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
-      },
-
-      // direction <begin/end/both/none/point> . can be used only with the section type.
-      // It indicates where to put a direction arrow on the section line. None is default.
-      'direction': {
-        'hasDefault': true,
-        'default': 'none',
-        'choices': <String>{
-          'begin',
-          'end',
-          'both',
-          'none',
-          'point',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'section',
-        },
       },
 
       // gradient <none/center/point> . can be used only with the contour type and indi-

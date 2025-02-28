@@ -39,7 +39,9 @@ part 'th_from_command_option.dart';
 part 'th_has_altitude_mixin.dart';
 part 'th_has_length_mixin.dart';
 part 'th_id_command_option.dart';
+part 'th_line_direction_command_option.dart';
 part 'th_line_height_command_option.dart';
+part 'th_line_point_direction_command_option.dart';
 part 'th_line_scale_command_option.dart';
 part 'th_lsize_command_option.dart';
 part 'th_mark_command_option.dart';
@@ -65,6 +67,8 @@ part 'th_unrecognized_command_option.dart';
 part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_close_type.dart';
+part 'types/th_option_choices_line_direction_type.dart';
+part 'types/th_option_choices_line_point_direction_type.dart';
 part 'types/th_option_choices_on_off_type.dart';
 part 'types/th_option_choices_place_type.dart';
 
@@ -143,8 +147,12 @@ abstract class THCommandOption {
         return THFromCommandOption.fromMap(map);
       case THCommandOptionType.id:
         return THIDCommandOption.fromMap(map);
+      case THCommandOptionType.lineDirection:
+        return THLineDirectionCommandOption.fromMap(map);
       case THCommandOptionType.lineHeight:
         return THLineHeightCommandOption.fromMap(map);
+      case THCommandOptionType.linePointDirection:
+        return THLinePointDirectionCommandOption.fromMap(map);
       case THCommandOptionType.lineScale:
         return THLineScaleCommandOption.fromMap(map);
       case THCommandOptionType.lSize:
