@@ -1,5 +1,7 @@
 part of 'th_command_option.dart';
 
+/// point, line and area:
+/// place <bottom/default/top> . changes displaying order in the map.
 class THPlaceCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesPlaceType choice;
 
