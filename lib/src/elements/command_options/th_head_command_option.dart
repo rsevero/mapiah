@@ -1,9 +1,7 @@
 part of 'th_command_option.dart';
 
-/// direction <begin/end/both/none/point> . can be used only with the section
-/// type. It indicates where to put a direction arrow on the section line.
-/// Default is |none|. The point option must be used inside [LINE DATA]. The
-/// others can (and should) be used as a line option.
+/// head <begin/end/both/none> . can be used only with the arrow type and
+/// indicates where to put an arrow head. Default is |end|.
 class THHeadCommandOption extends THArrowPositionCommandOption {
   THHeadCommandOption.forCWJM({
     required super.parentMapiahID,
@@ -26,6 +24,10 @@ class THHeadCommandOption extends THArrowPositionCommandOption {
 
   @override
   THCommandOptionType get optionType => THCommandOptionType.head;
+
+  @override
+  THOptionChoicesArrowPositionType get defaultChoice =>
+      THOptionChoicesArrowPositionType.end;
 
   factory THHeadCommandOption.fromMap(Map<String, dynamic> map) {
     return THHeadCommandOption.forCWJM(
