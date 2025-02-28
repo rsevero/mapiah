@@ -8,19 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // close <on/off/auto> . determines whether a line is closed or not
-      'close': {
-        'hasDefault': true,
-        'default': 'off',
-        'choices': <String>{
-          'on',
-          'off',
-          'auto',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
       // direction <begin/end/both/none/point> . can be used only with the section type.
       // It indicates where to put a direction arrow on the section line. None is default.
       'direction': {

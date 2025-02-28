@@ -7,6 +7,7 @@ enum THCommandOptionType {
   author,
   border,
   clip,
+  close,
   context,
   copyright,
   cs,

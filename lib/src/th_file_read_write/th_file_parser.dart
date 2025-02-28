@@ -870,6 +870,7 @@ class THFileParser {
       case 'anchors':
       case 'border':
       case 'clip':
+      case 'close':
       case 'place':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
@@ -1003,6 +1004,13 @@ class THFileParser {
         );
       case 'clip':
         THClipCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'close':
+        THCloseCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

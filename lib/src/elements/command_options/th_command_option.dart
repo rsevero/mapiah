@@ -26,6 +26,7 @@ part 'th_anchors_command_option.dart';
 part 'th_author_command_option.dart';
 part 'th_border_command_option.dart';
 part 'th_clip_command_option.dart';
+part 'th_close_command_option.dart';
 part 'th_context_command_option.dart';
 part 'th_copyright_command_option.dart';
 part 'th_cs_command_option.dart';
@@ -63,6 +64,7 @@ part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
 part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
+part 'types/th_option_choices_close_type.dart';
 part 'types/th_option_choices_on_off_type.dart';
 part 'types/th_option_choices_place_type.dart';
 
@@ -119,6 +121,8 @@ abstract class THCommandOption {
         return THBorderCommandOption.fromMap(map);
       case THCommandOptionType.clip:
         return THClipCommandOption.fromMap(map);
+      case THCommandOptionType.close:
+        return THCloseCommandOption.fromMap(map);
       case THCommandOptionType.context:
         return THContextCommandOption.fromMap(map);
       case THCommandOptionType.copyright:
