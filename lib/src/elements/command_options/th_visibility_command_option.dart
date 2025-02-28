@@ -30,22 +30,6 @@ class THVisibilityCommandOption extends THOnOffCommandOption {
   @override
   bool get hasDefaultChoice => true;
 
-  @override
-  String specToFile() {
-    return choice.name;
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = super.toMap();
-
-    map.addAll({
-      'choice': specToFile(),
-    });
-
-    return map;
-  }
-
   factory THVisibilityCommandOption.fromMap(Map<String, dynamic> map) {
     return THVisibilityCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
@@ -76,6 +60,7 @@ class THVisibilityCommandOption extends THOnOffCommandOption {
   }
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(covariant THVisibilityCommandOption other) {
     if (identical(this, other)) return true;
 

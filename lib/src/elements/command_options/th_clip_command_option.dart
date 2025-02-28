@@ -44,22 +44,6 @@ class THClipCommandOption extends THOnOffCommandOption {
   @override
   THCommandOptionType get optionType => THCommandOptionType.clip;
 
-  @override
-  String specToFile() {
-    return choice.name;
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = super.toMap();
-
-    map.addAll({
-      'choice': specToFile(),
-    });
-
-    return map;
-  }
-
   factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
     return THClipCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
@@ -90,6 +74,7 @@ class THClipCommandOption extends THOnOffCommandOption {
   }
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(covariant THClipCommandOption other) {
     if (identical(this, other)) return true;
 
