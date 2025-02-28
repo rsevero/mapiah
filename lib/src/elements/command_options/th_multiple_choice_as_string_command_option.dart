@@ -8,21 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // border <on/off> . this option can be specified only with the ‘slope’ symbol type. It
-      // switches on/off the border line of the slope.
-      'border': {
-        'hasDefault': true,
-        'default': 'off',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'slope',
-        },
-      },
-
       // close <on/off/auto> . determines whether a line is closed or not
       'close': {
         'hasDefault': true,

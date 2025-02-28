@@ -531,7 +531,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-03004-line_with_border_option_invalid_line_type-failure.th2',
+      // 'th_file_parser-03004-line_with_border_option_invalid_line_type-failure.th2',
       'th_file_parser-03005-line_with_invalid_border_option-failure.th2',
     ];
 
@@ -583,7 +583,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-03001-linepoint_with_border_option_invalid_line_type-failure.th2',
+      // 'th_file_parser-03001-linepoint_with_border_option_invalid_line_type-failure.th2',
       'th_file_parser-03002-linepoint_with_invalid_border_option-failure.th2',
     ];
 

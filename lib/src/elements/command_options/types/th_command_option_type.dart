@@ -5,6 +5,7 @@ enum THCommandOptionType {
   altitudeValue,
   anchors,
   author,
+  border,
   clip,
   context,
   copyright,

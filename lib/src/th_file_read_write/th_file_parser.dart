@@ -868,6 +868,7 @@ class THFileParser {
 
     switch (optionType) {
       case 'anchors':
+      case 'border':
       case 'clip':
       case 'place':
       case 'visibility':
@@ -994,6 +995,12 @@ class THFileParser {
           originalLineInTH2File: _currentLine,
         );
         break;
+      case 'border':
+        THBorderCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
       case 'clip':
         THClipCommandOption.fromString(
           optionParent: _currentHasOptions,
