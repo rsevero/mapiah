@@ -1,51 +1,31 @@
 part of 'th_command_option.dart';
 
-/// area:
-/// clip <on/off> . specify whether a symbol is clipped by the scrap border.
-///
-/// line:
-/// clip <on/off> . specify whether a symbol is clipped by the scrap border.
-///
-/// point:
-/// clip <on/off> . specify whether a symbol is clipped by the scrap border. You
-/// cannot specify this option for the following symbols: station, station-name,
-/// label, remark, date, altitude, height, passage-height.
-class THClipCommandOption extends THOnOffCommandOption {
-  // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
-  //   'altitude',
-  //   'date',
-  //   'height',
-  //   'label',
-  //   'passage-height',
-  //   'remark',
-  //   'station-name',
-  //   'station',
-  // });
-
-  THClipCommandOption.forCWJM({
+// anchors <on/off> . this option can be specified only with the ‘rope’ line type.
+class THAnchorsCommandOption extends THOnOffCommandOption {
+  THAnchorsCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required super.choice,
   }) : super.forCWJM();
 
-  THClipCommandOption({
+  THAnchorsCommandOption({
     required super.optionParent,
     required super.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
-  THClipCommandOption.fromString({
+  THAnchorsCommandOption.fromString({
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.clip;
+  THCommandOptionType get optionType => THCommandOptionType.anchors;
 
-  factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
-    return THClipCommandOption.forCWJM(
+  factory THAnchorsCommandOption.fromMap(Map<String, dynamic> map) {
+    return THAnchorsCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
@@ -53,18 +33,18 @@ class THClipCommandOption extends THOnOffCommandOption {
     );
   }
 
-  factory THClipCommandOption.fromJson(String jsonString) {
-    return THClipCommandOption.fromMap(jsonDecode(jsonString));
+  factory THAnchorsCommandOption.fromJson(String jsonString) {
+    return THAnchorsCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  THClipCommandOption copyWith({
+  THAnchorsCommandOption copyWith({
     int? parentMapiahID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesOnOffType? choice,
   }) {
-    return THClipCommandOption.forCWJM(
+    return THAnchorsCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -75,7 +55,7 @@ class THClipCommandOption extends THOnOffCommandOption {
 
   @override
   // ignore: hash_and_equals
-  bool operator ==(covariant THClipCommandOption other) {
+  bool operator ==(covariant THAnchorsCommandOption other) {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&

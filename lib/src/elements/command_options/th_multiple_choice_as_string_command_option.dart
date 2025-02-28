@@ -8,20 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // anchors <on/off> . this option can be specified only with the ‘rope’ line type.
-      'anchors': {
-        'hasDefault': true,
-        'default': 'on',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'rope',
-        },
-      },
-
       // border <on/off> . this option can be specified only with the ‘slope’ symbol type. It
       // switches on/off the border line of the slope.
       'border': {

@@ -413,7 +413,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-02394-line_with_anchors_option_invalid_line_type-failure.th2',
+      // 'th_file_parser-02394-line_with_anchors_option_invalid_line_type-failure.th2',
       'th_file_parser-02395-line_with_invalid_anchors_option-failure.th2',
     ];
 
@@ -465,7 +465,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      'th_file_parser-02391-linepoint_with_anchors_option_invalid_line_type-failure.th2',
+      // 'th_file_parser-02391-linepoint_with_anchors_option_invalid_line_type-failure.th2',
       'th_file_parser-02392-linepoint_with_invalid_anchors_option-failure.th2',
     ];
 

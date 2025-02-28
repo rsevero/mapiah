@@ -22,6 +22,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_altitude_command_option.dart';
 part 'th_altitude_value_command_option.dart';
+part 'th_anchors_command_option.dart';
 part 'th_author_command_option.dart';
 part 'th_clip_command_option.dart';
 part 'th_context_command_option.dart';
@@ -109,6 +110,8 @@ abstract class THCommandOption {
         return THAltitudeCommandOption.fromMap(map);
       case THCommandOptionType.altitudeValue:
         return THAltitudeValueCommandOption.fromMap(map);
+      case THCommandOptionType.anchors:
+        return THAnchorsCommandOption.fromMap(map);
       case THCommandOptionType.author:
         return THAuthorCommandOption.fromMap(map);
       case THCommandOptionType.clip:

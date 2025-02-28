@@ -3,6 +3,7 @@ part of '../th_command_option.dart';
 enum THCommandOptionType {
   altitude,
   altitudeValue,
+  anchors,
   author,
   clip,
   context,
