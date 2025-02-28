@@ -17,6 +17,7 @@ enum THCommandOptionType {
   explored,
   extend,
   from,
+  head,
   id,
   lineDirection,
   lineGradient,

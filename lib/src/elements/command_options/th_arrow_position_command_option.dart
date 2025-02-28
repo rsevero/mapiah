@@ -4,36 +4,50 @@ part of 'th_command_option.dart';
 /// type. It indicates where to put a direction arrow on the section line.
 /// Default is |none|. The point option must be used inside [LINE DATA]. The
 /// others can (and should) be used as a line option.
-class THLineDirectionCommandOption extends THArrowPositionCommandOption {
-  THLineDirectionCommandOption.forCWJM({
+class THArrowPositionCommandOption extends THMultipleChoiceCommandOption {
+  final THOptionChoicesArrowPositionType choice;
+
+  THArrowPositionCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
     required super.parentElementType,
-    required super.choice,
+    required this.choice,
   }) : super.forCWJM();
 
-  THLineDirectionCommandOption({
+  THArrowPositionCommandOption({
     required super.optionParent,
-    required super.choice,
+    required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
-  THLineDirectionCommandOption.fromString({
+  THArrowPositionCommandOption.fromString({
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  }) : super(choice: THOptionChoicesArrowPositionType.values.byName(choice));
+  })  : choice = THOptionChoicesArrowPositionType.values.byName(choice),
+        super();
+
+  THOptionChoicesArrowPositionType get defaultChoice =>
+      THOptionChoicesArrowPositionType.none;
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.lineDirection;
-
-  @override
-  String typeToFile() {
-    return 'direction';
+  String specToFile() {
+    return choice.name;
   }
 
-  factory THLineDirectionCommandOption.fromMap(Map<String, dynamic> map) {
-    return THLineDirectionCommandOption.forCWJM(
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = super.toMap();
+
+    map.addAll({
+      'choice': specToFile(),
+    });
+
+    return map;
+  }
+
+  factory THArrowPositionCommandOption.fromMap(Map<String, dynamic> map) {
+    return THArrowPositionCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
@@ -41,18 +55,18 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
     );
   }
 
-  factory THLineDirectionCommandOption.fromJson(String jsonString) {
-    return THLineDirectionCommandOption.fromMap(jsonDecode(jsonString));
+  factory THArrowPositionCommandOption.fromJson(String jsonString) {
+    return THArrowPositionCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  THLineDirectionCommandOption copyWith({
+  THArrowPositionCommandOption copyWith({
     int? parentMapiahID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesArrowPositionType? choice,
   }) {
-    return THLineDirectionCommandOption.forCWJM(
+    return THArrowPositionCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -62,8 +76,7 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
   }
 
   @override
-  // ignore: hash_and_equals
-  bool operator ==(covariant THLineDirectionCommandOption other) {
+  bool operator ==(covariant THArrowPositionCommandOption other) {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&
@@ -71,4 +84,7 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
         other.parentElementType == parentElementType &&
         other.choice == choice;
   }
+
+  @override
+  int get hashCode => super.hashCode ^ choice.hashCode;
 }

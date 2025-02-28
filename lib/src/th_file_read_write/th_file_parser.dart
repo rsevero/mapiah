@@ -874,6 +874,7 @@ class THFileParser {
       case 'close':
       case 'direction':
       case 'gradient':
+      case 'head':
       case 'place':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
@@ -1043,6 +1044,13 @@ class THFileParser {
         break;
       case 'gradient':
         THLineGradientCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'head':
+        THHeadCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

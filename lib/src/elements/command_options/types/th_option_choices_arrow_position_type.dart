@@ -1,6 +1,6 @@
 part of '../th_command_option.dart';
 
-enum THOptionChoicesLineDirectionType {
+enum THOptionChoicesArrowPositionType {
   begin,
   end,
   both,

@@ -23,6 +23,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 part 'th_altitude_command_option.dart';
 part 'th_altitude_value_command_option.dart';
 part 'th_anchors_command_option.dart';
+part 'th_arrow_position_command_option.dart';
 part 'th_author_command_option.dart';
 part 'th_border_command_option.dart';
 part 'th_clip_command_option.dart';
@@ -38,6 +39,7 @@ part 'th_extend_command_option.dart';
 part 'th_from_command_option.dart';
 part 'th_has_altitude_mixin.dart';
 part 'th_has_length_mixin.dart';
+part 'th_head_command_option.dart';
 part 'th_id_command_option.dart';
 part 'th_line_direction_command_option.dart';
 part 'th_line_gradient_command_option.dart';
@@ -68,8 +70,8 @@ part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
 part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
+part 'types/th_option_choices_arrow_position_type.dart';
 part 'types/th_option_choices_close_type.dart';
-part 'types/th_option_choices_line_direction_type.dart';
 part 'types/th_option_choices_line_gradient_type.dart';
 part 'types/th_option_choices_line_point_direction_type.dart';
 part 'types/th_option_choices_line_point_gradient_type.dart';
@@ -149,6 +151,8 @@ abstract class THCommandOption {
         return THExtendCommandOption.fromMap(map);
       case THCommandOptionType.from:
         return THFromCommandOption.fromMap(map);
+      case THCommandOptionType.head:
+        return THHeadCommandOption.fromMap(map);
       case THCommandOptionType.id:
         return THIDCommandOption.fromMap(map);
       case THCommandOptionType.lineDirection:

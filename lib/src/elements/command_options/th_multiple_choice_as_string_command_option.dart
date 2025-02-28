@@ -8,23 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // gradient <none/center/point> . can be used only with the contour type and indi-
-      // cates where to put a gradient mark on the contour line. If there is no gradient speci-
-      // fication, behaviour is symbol-set dependent (e.g. no tick in UIS, tick in the middle in
-      // SKBB).
-      'gradient': {
-        'hasDefault': true,
-        'default': 'none',
-        'choices': <String>{
-          'none',
-          'center',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'contour',
-        },
-      },
-
       // head <begin/end/both/none> . can be used only with the arrow type and indicates
       // where to put an arrow head. End is default.
       'head': {
@@ -94,24 +77,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
         },
         'alternateChoices': <String, String>{},
         'plaTypesSupported': <String>{},
-      },
-
-      // gradient <none/center/point> . can be used only with the contour type and indi-
-      // cates where to put a gradient mark on the contour line. If there is no gradient speci-
-      // fication, behaviour is symbol-set dependent (e.g. no tick in UIS, tick in the middle in
-      // SKBB).
-      'gradient': {
-        'hasDefault': true,
-        'default': 'none',
-        'choices': <String>{
-          'none',
-          'center',
-          'point',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'contour',
-        },
       },
 
       // smooth <on/off/auto> . whether the line is smooth at the given point. Auto is
