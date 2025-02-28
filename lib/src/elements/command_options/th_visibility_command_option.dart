@@ -25,11 +25,6 @@ class THVisibilityCommandOption extends THOnOffCommandOption {
   @override
   THCommandOptionType get optionType => THCommandOptionType.visibility;
 
-  THOptionChoicesOnOffType get defaultChoice => THOptionChoicesOnOffType.on;
-
-  @override
-  bool get hasDefaultChoice => true;
-
   factory THVisibilityCommandOption.fromMap(Map<String, dynamic> map) {
     return THVisibilityCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],

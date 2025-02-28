@@ -23,8 +23,7 @@ class THOnOffCommandOption extends THMultipleChoiceCommandOption {
   })  : choice = THOptionChoicesOnOffType.values.byName(choice),
         super();
 
-  @override
-  bool get hasDefaultChoice => false;
+  THOptionChoicesOnOffType get defaultChoice => THOptionChoicesOnOffType.on;
 
   @override
   String specToFile() {
