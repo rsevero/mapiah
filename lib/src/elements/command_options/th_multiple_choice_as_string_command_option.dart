@@ -8,19 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'linesegment': {
-      // adjust <horizontal/vertical> . shifts the line point to be aligned horizontally/ver-
-      // tically with the previous point. It can’t be set on the first point. The result is a
-      // horizontal/vertical line segment. This option is not allowed in the plan projection.
-      'adjust': {
-        'hasDefault': false,
-        'choices': <String>{
-          'horizontal',
-          'vertical',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
       // smooth <on/off/auto> . whether the line is smooth at the given point. Auto is
       // default.
       'smooth': {

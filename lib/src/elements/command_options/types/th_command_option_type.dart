@@ -1,6 +1,7 @@
 part of '../th_command_option.dart';
 
 enum THCommandOptionType {
+  adjust,
   altitude,
   altitudeValue,
   anchors,

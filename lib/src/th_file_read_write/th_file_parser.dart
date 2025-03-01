@@ -736,47 +736,6 @@ class THFileParser {
     }
   }
 
-  bool _pointRegularOptions(String optionType) {
-    bool optionIdentified = true;
-
-    switch (optionType) {
-      case 'clip':
-      case 'place':
-      case 'visibility':
-        _injectMultipleChoiceCommandOption(optionType);
-      case 'context':
-        _injectContextCommandOption();
-      case 'dist':
-        _injectDistCommandOption();
-      case 'id':
-        _injectIDCommandOption();
-      case 'explored':
-        _injectExploredCommandOption();
-      case 'extend':
-        _injectExtendCommandOption();
-      case 'from':
-        _injectFromCommandOption();
-      case 'name':
-        _injectNameCommandOption();
-      case 'orientation':
-        _injectOrientationCommandOption();
-      case 'scale':
-        _injectPointScaleCommandOption();
-      case 'scrap':
-        _injectScrapCommandOption();
-      case 'subtype':
-        _injectSubtypeCommandOption();
-      case 'text':
-        _injectTextCommandOption();
-      case 'value':
-        _injectValueCommandOption();
-      default:
-        optionIdentified = false;
-    }
-
-    return optionIdentified;
-  }
-
   void _optionParentAsTHLineSegment() {
     if (_lastLineSegment == null) {
       _addError("Line segment option without a line segment.",
@@ -786,61 +745,12 @@ class THFileParser {
 
     /// Changing _currentHasOptions to the line segment that is the parent of
     /// of the linepoint option. This change will be reverted by
-    /// _injectLineSegmentOption().
+    /// _injectLineCommandLikeOption().
     _currentHasOptions = _lastLineSegment as THHasOptionsMixin;
   }
 
   void _optionParentAsCurrentElement() {
     _currentHasOptions = _currentElement as THHasOptionsMixin;
-  }
-
-  bool _lineSegmentRegularOptions(String optionType) {
-    bool optionIdentified = true;
-
-    switch (optionType) {
-      case 'altitude':
-        _injectAltitudeCommandOption();
-      case 'direction':
-        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
-      case 'gradient':
-        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
-      case 'l-size':
-        _injectLSizeCommandOption();
-      case 'mark':
-        _injectMarkCommandOption();
-      case 'orientation':
-        _optionParentAsTHLineSegment();
-        _injectOrientationCommandOption();
-      default:
-        optionIdentified = false;
-    }
-
-    if (optionIdentified) {
-      return true;
-    }
-
-    optionIdentified = _lineRegularOptions(optionType);
-
-    if (optionIdentified) {
-      return true;
-    }
-
-    /// Here we create the options found in [LINE DATA] that, in reality, are
-    /// line options, not line segment options.
-    /// The actual line segment options are created in _optionFromElement().
-    if (THMultipleChoiceAsStringCommandOption.hasOptionType(
-        _currentHasOptions, optionType)) {
-      _optionParentAsCurrentElement();
-      _injectMultipleChoiceAsStringCommandOption(optionType);
-      return true;
-    }
-
-    /// Setting optionParent so actual line segment options are properly created
-    /// in _optionFromElement(). This change will be reverted by
-    /// _injectLineSegmentOption().
-    _optionParentAsTHLineSegment();
-
-    return false;
   }
 
   bool _areaRegularOptions(String optionType) {
@@ -900,9 +810,96 @@ class THFileParser {
     return optionIdentified;
   }
 
-  void setCurrentParent(THIsParentMixin parent) {
-    _currentParent = parent;
-    _currentParentMapiahID = parent.mapiahID;
+  bool _lineSegmentRegularOptions(String optionType) {
+    bool optionIdentified = true;
+
+    switch (optionType) {
+      case 'direction':
+      case 'gradient':
+        _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
+      case 'adjust':
+        _optionParentAsTHLineSegment();
+        _injectMultipleChoiceCommandOption(optionType);
+      case 'altitude':
+        _injectAltitudeCommandOption();
+      case 'l-size':
+        _injectLSizeCommandOption();
+      case 'mark':
+        _injectMarkCommandOption();
+      case 'orientation':
+        _optionParentAsTHLineSegment();
+        _injectOrientationCommandOption();
+      default:
+        optionIdentified = false;
+    }
+
+    if (optionIdentified) {
+      return true;
+    }
+
+    optionIdentified = _lineRegularOptions(optionType);
+
+    if (optionIdentified) {
+      return true;
+    }
+
+    /// Here we create the options found in [LINE DATA] that, in reality, are
+    /// line options, not line segment options.
+    /// The actual line segment options are created in _optionFromElement().
+    if (THMultipleChoiceAsStringCommandOption.hasOptionType(
+        _currentHasOptions, optionType)) {
+      _optionParentAsCurrentElement();
+      _injectMultipleChoiceAsStringCommandOption(optionType);
+      return true;
+    }
+
+    /// Setting optionParent so actual line segment options are properly created
+    /// in _optionFromElement(). This change will be reverted by
+    /// _injectLineCommandLikeOption().
+    _optionParentAsTHLineSegment();
+
+    return false;
+  }
+
+  bool _pointRegularOptions(String optionType) {
+    bool optionIdentified = true;
+
+    switch (optionType) {
+      case 'clip':
+      case 'place':
+      case 'visibility':
+        _injectMultipleChoiceCommandOption(optionType);
+      case 'context':
+        _injectContextCommandOption();
+      case 'dist':
+        _injectDistCommandOption();
+      case 'id':
+        _injectIDCommandOption();
+      case 'explored':
+        _injectExploredCommandOption();
+      case 'extend':
+        _injectExtendCommandOption();
+      case 'from':
+        _injectFromCommandOption();
+      case 'name':
+        _injectNameCommandOption();
+      case 'orientation':
+        _injectOrientationCommandOption();
+      case 'scale':
+        _injectPointScaleCommandOption();
+      case 'scrap':
+        _injectScrapCommandOption();
+      case 'subtype':
+        _injectSubtypeCommandOption();
+      case 'text':
+        _injectTextCommandOption();
+      case 'value':
+        _injectValueCommandOption();
+      default:
+        optionIdentified = false;
+    }
+
+    return optionIdentified;
   }
 
   bool _scrapRegularOptions(String optionType) {
@@ -934,6 +931,11 @@ class THFileParser {
     return optionIdentified;
   }
 
+  void setCurrentParent(THIsParentMixin parent) {
+    _currentParent = parent;
+    _currentParentMapiahID = parent.mapiahID;
+  }
+
   void _injectMultipleChoiceWithPointChoiceCommandOption(
     String optionType,
   ) {
@@ -960,14 +962,12 @@ class THFileParser {
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'gradient':
         THLinePointGradientCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       default:
         throw UnimplementedError();
     }
@@ -1011,13 +1011,18 @@ class THFileParser {
     }
 
     switch (type) {
+      case 'adjust':
+        THAdjustCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
       case 'anchors':
         THAnchorsCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'border':
         THBorderCommandOption.fromString(
           optionParent: _currentHasOptions,
@@ -1030,70 +1035,60 @@ class THFileParser {
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'close':
         THCloseCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'direction':
         THLineDirectionCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'gradient':
         THLineGradientCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'head':
         THHeadCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'outline':
         THOutlineCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'place':
         THPlaceCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'rebelays':
         THRebelaysCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'reverse':
         THReverseCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       case 'visibility':
         THVisibilityCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,
         );
-        break;
       default:
         throw UnimplementedError();
     }

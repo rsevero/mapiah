@@ -20,6 +20,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
+part 'th_adjust_command_option.dart';
 part 'th_altitude_command_option.dart';
 part 'th_altitude_value_command_option.dart';
 part 'th_anchors_command_option.dart';
@@ -73,6 +74,7 @@ part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
 part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
+part 'types/th_option_choices_adjust_type.dart';
 part 'types/th_option_choices_arrow_position_type.dart';
 part 'types/th_option_choices_close_type.dart';
 part 'types/th_option_choices_line_gradient_type.dart';
@@ -123,6 +125,8 @@ abstract class THCommandOption {
         THCommandOptionType.values.byName(map['optionType']);
 
     switch (type) {
+      case THCommandOptionType.adjust:
+        return THAdjustCommandOption.fromMap(map);
       case THCommandOptionType.altitude:
         return THAltitudeCommandOption.fromMap(map);
       case THCommandOptionType.altitudeValue:
