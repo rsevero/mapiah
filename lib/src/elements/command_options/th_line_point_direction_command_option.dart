@@ -28,7 +28,7 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.linePointDirection;
+  THCommandOptionType get type => THCommandOptionType.linePointDirection;
 
   THOptionChoicesLinePointDirectionType get defaultChoice =>
       THOptionChoicesLinePointDirectionType.none;

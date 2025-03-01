@@ -29,7 +29,7 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.adjust;
+  THCommandOptionType get type => THCommandOptionType.adjust;
 
   @override
   String specToFile() {

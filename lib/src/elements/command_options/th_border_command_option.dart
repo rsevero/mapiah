@@ -23,7 +23,7 @@ class THBorderCommandOption extends THOnOffCommandOption {
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.border;
+  THCommandOptionType get type => THCommandOptionType.border;
 
   factory THBorderCommandOption.fromMap(Map<String, dynamic> map) {
     return THBorderCommandOption.forCWJM(

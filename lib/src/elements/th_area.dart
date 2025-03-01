@@ -35,7 +35,7 @@ class THArea extends THElement
     required super.sameLineComment,
     required this.areaType,
     required Set<int> childrenMapiahID,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
@@ -59,7 +59,7 @@ class THArea extends THElement
       'areaType': areaType.name,
       'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
     });
 
     return map;
@@ -73,9 +73,13 @@ class THArea extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       areaType: THAreaType.values.byName(map['areaType']),
       childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
-        map['optionsMap']
-            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+        map['optionsMap'].map(
+          (key, value) => MapEntry(
+            THCommandOptionType.values.byName(key),
+            THCommandOption.fromMap(value),
+          ),
+        ),
       ),
     );
   }
@@ -93,7 +97,7 @@ class THArea extends THElement
     String? originalLineInTH2File,
     THAreaType? areaType,
     Set<int>? childrenMapiahID,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THArea.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,

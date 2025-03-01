@@ -102,7 +102,7 @@ class THSubtypeCommandOption extends THCommandOption {
   }) : super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.subtype;
+  THCommandOptionType get type => THCommandOptionType.subtype;
 
   @override
   Map<String, dynamic> toMap() {

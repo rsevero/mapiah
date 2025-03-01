@@ -23,7 +23,7 @@ class THVisibilityCommandOption extends THOnOffCommandOption {
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.visibility;
+  THCommandOptionType get type => THCommandOptionType.visibility;
 
   factory THVisibilityCommandOption.fromMap(Map<String, dynamic> map) {
     return THVisibilityCommandOption.forCWJM(

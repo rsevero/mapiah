@@ -27,7 +27,7 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.align;
+  THCommandOptionType get type => THCommandOptionType.align;
 
   @override
   String specToFile() {

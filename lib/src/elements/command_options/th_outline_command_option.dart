@@ -27,7 +27,7 @@ class THOutlineCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.outline;
+  THCommandOptionType get type => THCommandOptionType.outline;
 
   THOptionChoicesOutlineType get defaultChoice =>
       THOptionChoicesOutlineType.none;

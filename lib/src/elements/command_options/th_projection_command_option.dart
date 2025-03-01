@@ -56,7 +56,7 @@ class THProjectionCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.projection;
+  THCommandOptionType get type => THCommandOptionType.projection;
 
   @override
   Map<String, dynamic> toMap() {

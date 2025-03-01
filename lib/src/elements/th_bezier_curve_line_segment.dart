@@ -64,9 +64,13 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       controlPoint1: THPositionPart.fromMap(map['controlPoint1']),
       controlPoint2: THPositionPart.fromMap(map['controlPoint2']),
       endPoint: THPositionPart.fromMap(map['endPoint']),
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
-        map['optionsMap']
-            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+        map['optionsMap'].map(
+          (key, value) => MapEntry(
+            THCommandOptionType.values.byName(key),
+            THCommandOption.fromMap(value),
+          ),
+        ),
       ),
     );
   }
@@ -85,7 +89,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     THPositionPart? controlPoint1,
     THPositionPart? controlPoint2,
     THPositionPart? endPoint,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THBezierCurveLineSegment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,

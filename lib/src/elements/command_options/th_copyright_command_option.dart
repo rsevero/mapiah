@@ -32,7 +32,7 @@ class THCopyrightCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.copyright;
+  THCommandOptionType get type => THCommandOptionType.copyright;
 
   @override
   Map<String, dynamic> toMap() {

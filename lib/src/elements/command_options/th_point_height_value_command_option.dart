@@ -31,7 +31,7 @@ class THPointHeightValueCommandOption extends THCommandOption
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.pointHeightValue;
+  THCommandOptionType get type => THCommandOptionType.pointHeightValue;
 
   @override
   String typeToFile() => 'value';

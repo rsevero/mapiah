@@ -26,7 +26,7 @@ class THPlaceCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.place;
+  THCommandOptionType get type => THCommandOptionType.place;
 
   THOptionChoicesPlaceType get defaultChoice =>
       THOptionChoicesPlaceType.defaultChoice;

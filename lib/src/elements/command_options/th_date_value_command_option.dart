@@ -19,7 +19,7 @@ class THDateValueCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.dateValue;
+  THCommandOptionType get type => THCommandOptionType.dateValue;
 
   @override
   String typeToFile() => 'value';

@@ -20,7 +20,7 @@ class THLineHeightCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.lineHeight;
+  THCommandOptionType get type => THCommandOptionType.lineHeight;
 
   @override
   String typeToFile() => 'height';

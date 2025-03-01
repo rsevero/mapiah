@@ -40,7 +40,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.passageHeightValue;
+  THCommandOptionType get type => THCommandOptionType.passageHeightValue;
 
   @override
   String typeToFile() => 'value';

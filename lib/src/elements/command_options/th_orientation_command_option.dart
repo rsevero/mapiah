@@ -20,7 +20,7 @@ class THOrientationCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.orientation;
+  THCommandOptionType get type => THCommandOptionType.orientation;
 
   @override
   Map<String, dynamic> toMap() {

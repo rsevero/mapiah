@@ -159,7 +159,7 @@ class THPoint extends THElement
     super.sameLineComment,
     required this.position,
     required this.pointType,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
@@ -194,7 +194,7 @@ class THPoint extends THElement
       'position': position.toMap(),
       'pointType': pointType.name,
       'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
     });
 
     return map;
@@ -208,9 +208,13 @@ class THPoint extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
       pointType: THPointType.values.byName(map['pointType']),
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
-        map['optionsMap']
-            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+        map['optionsMap'].map(
+          (key, value) => MapEntry(
+            THCommandOptionType.values.byName(key),
+            THCommandOption.fromMap(value),
+          ),
+        ),
       ),
     );
   }
@@ -228,7 +232,7 @@ class THPoint extends THElement
     String? originalLineInTH2File,
     THPositionPart? position,
     THPointType? pointType,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THPoint.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,

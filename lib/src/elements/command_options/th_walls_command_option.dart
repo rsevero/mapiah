@@ -21,7 +21,7 @@ class THWallsCommandOption extends THOnOffAutoCommandOption {
   }) : super(choice: THOptionChoicesOnOffAutoType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.walls;
+  THCommandOptionType get type => THCommandOptionType.walls;
 
   factory THWallsCommandOption.fromMap(Map<String, dynamic> map) {
     return THWallsCommandOption.forCWJM(

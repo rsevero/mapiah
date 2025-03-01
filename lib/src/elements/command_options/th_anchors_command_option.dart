@@ -22,7 +22,7 @@ class THAnchorsCommandOption extends THOnOffCommandOption {
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.anchors;
+  THCommandOptionType get type => THCommandOptionType.anchors;
 
   factory THAnchorsCommandOption.fromMap(Map<String, dynamic> map) {
     return THAnchorsCommandOption.forCWJM(

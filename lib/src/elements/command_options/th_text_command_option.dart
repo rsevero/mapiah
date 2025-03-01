@@ -42,7 +42,7 @@ class THTextCommandOption extends THCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.text;
+  THCommandOptionType get type => THCommandOptionType.text;
 
   @override
   Map<String, dynamic> toMap() {

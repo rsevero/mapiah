@@ -21,7 +21,7 @@ class THStationNamesCommandOption extends THCommandOption {
   }) : super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.stationNames;
+  THCommandOptionType get type => THCommandOptionType.stationNames;
 
   @override
   String typeToFile() => 'station-names';

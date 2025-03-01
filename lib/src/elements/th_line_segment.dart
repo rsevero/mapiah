@@ -11,7 +11,7 @@ abstract class THLineSegment extends THElement
     required super.parentMapiahID,
     super.sameLineComment,
     required this.endPoint,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
@@ -54,7 +54,7 @@ abstract class THLineSegment extends THElement
     map.addAll({
       'endPoint': endPoint.toMap(),
       'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
     });
 
     return map;
@@ -82,7 +82,7 @@ abstract class THLineSegment extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THPositionPart? endPoint,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   });
 
   @override

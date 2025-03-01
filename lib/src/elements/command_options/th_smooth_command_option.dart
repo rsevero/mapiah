@@ -32,7 +32,7 @@ class THSmoothCommandOption extends THOnOffAutoCommandOption {
   }) : super(choice: THOptionChoicesOnOffAutoType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.smooth;
+  THCommandOptionType get type => THCommandOptionType.smooth;
 
   factory THSmoothCommandOption.fromMap(Map<String, dynamic> map) {
     return THSmoothCommandOption.forCWJM(

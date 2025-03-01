@@ -42,7 +42,7 @@ class THClipCommandOption extends THOnOffCommandOption {
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.clip;
+  THCommandOptionType get type => THCommandOptionType.clip;
 
   factory THClipCommandOption.fromMap(Map<String, dynamic> map) {
     return THClipCommandOption.forCWJM(

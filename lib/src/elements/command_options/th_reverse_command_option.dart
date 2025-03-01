@@ -23,7 +23,7 @@ class THReverseCommandOption extends THOnOffCommandOption {
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.reverse;
+  THCommandOptionType get type => THCommandOptionType.reverse;
 
   @override
   THOptionChoicesOnOffType get defaultChoice => THOptionChoicesOnOffType.off;

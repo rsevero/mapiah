@@ -22,7 +22,7 @@ class THLSizeCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.lSize;
+  THCommandOptionType get type => THCommandOptionType.lSize;
 
   @override
   String typeToFile() => 'l-size';

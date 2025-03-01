@@ -37,9 +37,13 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       endPoint: THPositionPart.fromMap(map['endPoint']),
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
-        map['optionsMap']
-            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+        map['optionsMap'].map(
+          (key, value) => MapEntry(
+            THCommandOptionType.values.byName(key),
+            THCommandOption.fromMap(value),
+          ),
+        ),
       ),
     );
   }
@@ -56,7 +60,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THPositionPart? endPoint,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THStraightLineSegment.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,

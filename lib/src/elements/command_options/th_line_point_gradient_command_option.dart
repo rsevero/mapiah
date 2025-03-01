@@ -29,7 +29,7 @@ class THLinePointGradientCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.place;
+  THCommandOptionType get type => THCommandOptionType.place;
 
   @override
   String specToFile() {

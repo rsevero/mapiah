@@ -26,7 +26,7 @@ class THSketchCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.sketch;
+  THCommandOptionType get type => THCommandOptionType.sketch;
 
   void pointFromStringList(List<dynamic> list) {
     point = THPositionPart.fromStringList(list: list);

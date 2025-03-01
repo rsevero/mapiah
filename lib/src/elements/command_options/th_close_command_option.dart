@@ -23,7 +23,7 @@ class THCloseCommandOption extends THOnOffAutoCommandOption {
   }) : super(choice: THOptionChoicesOnOffAutoType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.close;
+  THCommandOptionType get type => THCommandOptionType.close;
 
   factory THCloseCommandOption.fromMap(Map<String, dynamic> map) {
     return THCloseCommandOption.forCWJM(

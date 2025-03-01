@@ -334,7 +334,7 @@ class THFile
     }
   }
 
-  bool hasOption(THElement element, String optionType) {
+  bool hasOption(THElement element, THCommandOptionType optionType) {
     if (THElement is! THHasOptionsMixin) {
       return false;
     }
@@ -347,10 +347,10 @@ class THFile
 
     if (element is THHasTHID) {
       registerElementWithTHID(element, (element as THHasTHID).thID);
-    } else if (hasOption(element, 'id')) {
+    } else if (hasOption(element, THCommandOptionType.id)) {
       registerElementWithTHID(
         element,
-        ((element as THHasOptionsMixin).optionByType('id')!
+        ((element as THHasOptionsMixin).optionByType(THCommandOptionType.id)!
                 as THIDCommandOption)
             .thID,
       );
@@ -377,7 +377,7 @@ class THFile
       }
     }
 
-    if ((element is THHasTHID) || hasOption(element, 'id')) {
+    if ((element is THHasTHID) || hasOption(element, THCommandOptionType.id)) {
       unregisterElementTHIDByElement(element);
     }
 

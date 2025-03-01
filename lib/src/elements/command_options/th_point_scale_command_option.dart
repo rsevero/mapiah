@@ -54,7 +54,7 @@ class THPointScaleCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.pointScale;
+  THCommandOptionType get type => THCommandOptionType.pointScale;
 
   @override
   String typeToFile() => 'scale';

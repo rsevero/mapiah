@@ -59,7 +59,7 @@ class THAltitudeValueCommandOption extends THCommandOption
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.altitudeValue;
+  THCommandOptionType get type => THCommandOptionType.altitudeValue;
 
   @override
   String typeToFile() => 'value';

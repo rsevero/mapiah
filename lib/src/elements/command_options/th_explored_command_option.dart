@@ -25,7 +25,7 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.explored;
+  THCommandOptionType get type => THCommandOptionType.explored;
 
   @override
   Map<String, dynamic> toMap() {

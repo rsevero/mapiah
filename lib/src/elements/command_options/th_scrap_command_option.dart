@@ -18,7 +18,7 @@ class THScrapCommandOption extends THCommandOption {
   }) : super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.scrap;
+  THCommandOptionType get type => THCommandOptionType.scrap;
 
   @override
   Map<String, dynamic> toMap() {

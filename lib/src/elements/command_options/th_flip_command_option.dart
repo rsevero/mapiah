@@ -26,7 +26,7 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.flip;
+  THCommandOptionType get type => THCommandOptionType.flip;
 
   THOptionChoicesFlipType get defautChoice => THOptionChoicesFlipType.none;
 

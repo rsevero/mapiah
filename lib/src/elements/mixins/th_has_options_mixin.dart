@@ -1,43 +1,43 @@
 part of '../th_element.dart';
 
 mixin THHasOptionsMixin on THElement {
-  final LinkedHashMap<String, THCommandOption> _optionsMap =
-      LinkedHashMap<String, THCommandOption>();
+  final LinkedHashMap<THCommandOptionType, THCommandOption> _optionsMap =
+      LinkedHashMap<THCommandOptionType, THCommandOption>();
 
   void addUpdateOption(THCommandOption option) {
-    _optionsMap[option.typeToFile()] = option;
+    _optionsMap[option.type] = option;
   }
 
-  bool hasOption(String optionStringType) {
-    return _optionsMap.containsKey(optionStringType);
+  bool hasOption(THCommandOptionType type) {
+    return _optionsMap.containsKey(type);
   }
 
-  bool optionIsSet(String optionStringType) {
-    return _optionsMap.containsKey(optionStringType);
+  bool optionIsSet(THCommandOptionType type) {
+    return _optionsMap.containsKey(type);
   }
 
-  THCommandOption? optionByType(String optionStringType) {
-    return _optionsMap[optionStringType];
+  THCommandOption? optionByType(THCommandOptionType type) {
+    return _optionsMap[type];
   }
 
-  bool deleteOption(String optionStringType) {
-    if (!hasOption(optionStringType)) {
+  bool deleteOption(THCommandOptionType type) {
+    if (!hasOption(type)) {
       return false;
     }
 
-    if (kDebugMode) assert(_optionsMap.containsKey(optionStringType));
-    return (_optionsMap.remove(optionStringType) != null);
+    if (kDebugMode) assert(_optionsMap.containsKey(type));
+    return (_optionsMap.remove(type) != null);
   }
 
   String optionsAsString() {
     String asString = '';
 
-    final Iterable<String> optionTypeList = _optionsMap.keys;
+    final Iterable<THCommandOptionType> optionTypeList = _optionsMap.keys;
 
-    for (String type in optionTypeList) {
+    for (THCommandOptionType type in optionTypeList) {
       /// subtype option is serialized in the ':subtype' format, not in the
       /// -subtype <subtype> format.
-      if (type == 'subtype') {
+      if (type == THCommandOptionType.subtype) {
         continue;
       }
       final THCommandOption option = optionByType(type)!;
@@ -51,10 +51,11 @@ mixin THHasOptionsMixin on THElement {
     return asString;
   }
 
-  LinkedHashMap<String, THCommandOption> get optionsMap => _optionsMap;
+  LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
+      _optionsMap;
 
-  void addOptionsMap(Map<String, THCommandOption> optionsMap) {
-    for (final String type in optionsMap.keys) {
+  void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
+    for (final THCommandOptionType type in optionsMap.keys) {
       addUpdateOption(optionsMap[type]!);
     }
   }

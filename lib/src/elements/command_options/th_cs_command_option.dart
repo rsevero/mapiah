@@ -23,7 +23,7 @@ class THCSCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.cs;
+  THCommandOptionType get type => THCommandOptionType.cs;
 
   @override
   Map<String, dynamic> toMap() {

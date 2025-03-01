@@ -24,7 +24,7 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.close;
+  THCommandOptionType get type => THCommandOptionType.close;
 
   THOptionChoicesOnOffAutoType get defaultChoice =>
       THOptionChoicesOnOffAutoType.auto;

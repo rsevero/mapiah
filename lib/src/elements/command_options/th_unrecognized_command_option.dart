@@ -16,8 +16,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   }) : super();
 
   @override
-  THCommandOptionType get optionType =>
-      THCommandOptionType.unrecognizedCommandOption;
+  THCommandOptionType get type => THCommandOptionType.unrecognizedCommandOption;
 
   @override
   Map<String, dynamic> toMap() {

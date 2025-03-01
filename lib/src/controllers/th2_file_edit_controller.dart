@@ -265,7 +265,7 @@ abstract class TH2FileEditControllerBase
   bool get scrapHasScaleOption {
     final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
-    return scrap.hasOption('scale');
+    return scrap.hasOption(THCommandOptionType.scrapScale);
   }
 
   @computed
@@ -274,7 +274,8 @@ abstract class TH2FileEditControllerBase
       final THScrap scrap =
           _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
-      return (scrap.optionByType('scale') as THScrapScaleCommandOption)
+      return (scrap.optionByType(THCommandOptionType.scrapScale)
+              as THScrapScaleCommandOption)
           .unitPart
           .unit;
     } else {
@@ -288,7 +289,8 @@ abstract class TH2FileEditControllerBase
       final THScrap scrap =
           _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
-      return (scrap.optionByType('scale') as THScrapScaleCommandOption)
+      return (scrap.optionByType(THCommandOptionType.scrapScale)
+              as THScrapScaleCommandOption)
           .lengthUnitsPerPoint;
     } else {
       return 1.0;
@@ -718,7 +720,7 @@ abstract class TH2FileEditControllerBase
           coordinates: controlPoint2,
           decimalPositions: _currentDecimalPositions,
         ),
-        optionsMap: LinkedHashMap<String, THCommandOption>(),
+        optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>(),
         originalLineInTH2File: '',
         sameLineComment: '',
       );

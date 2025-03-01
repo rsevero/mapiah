@@ -34,7 +34,7 @@ class THScrapScaleCommandOption extends THCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.scrapScale;
+  THCommandOptionType get type => THCommandOptionType.scrapScale;
 
   @override
   String typeToFile() => 'scale';

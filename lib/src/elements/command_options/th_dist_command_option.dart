@@ -25,7 +25,7 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.dist;
+  THCommandOptionType get type => THCommandOptionType.dist;
 
   @override
   Map<String, dynamic> toMap() {

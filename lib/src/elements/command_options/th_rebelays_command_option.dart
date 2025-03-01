@@ -23,7 +23,7 @@ class THRebelaysCommandOption extends THOnOffCommandOption {
   }) : super(choice: THOptionChoicesOnOffType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.rebelays;
+  THCommandOptionType get type => THCommandOptionType.rebelays;
 
   factory THRebelaysCommandOption.fromMap(Map<String, dynamic> map) {
     return THRebelaysCommandOption.forCWJM(

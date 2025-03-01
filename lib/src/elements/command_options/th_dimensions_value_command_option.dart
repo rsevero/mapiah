@@ -31,7 +31,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.dimensionsValue;
+  THCommandOptionType get type => THCommandOptionType.dimensionsValue;
 
   @override
   String typeToFile() => 'value';

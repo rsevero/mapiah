@@ -62,7 +62,7 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.altitude;
+  THCommandOptionType get type => THCommandOptionType.altitude;
 
   @override
   Map<String, dynamic> toMap() {

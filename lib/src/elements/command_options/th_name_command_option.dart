@@ -18,7 +18,7 @@ class THNameCommandOption extends THCommandOption {
   }) : super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.name;
+  THCommandOptionType get type => THCommandOptionType.name;
 
   @override
   Map<String, dynamic> toMap() {

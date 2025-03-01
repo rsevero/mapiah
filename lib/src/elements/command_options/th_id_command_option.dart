@@ -17,7 +17,7 @@ class THIDCommandOption extends THCommandOption {
   }) : super(); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.id;
+  THCommandOptionType get type => THCommandOptionType.id;
 
   @override
   Map<String, dynamic> toMap() {

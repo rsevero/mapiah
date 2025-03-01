@@ -24,7 +24,7 @@ class THExtendCommandOption extends THCommandOption {
   // }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.extend;
+  THCommandOptionType get type => THCommandOptionType.extend;
 
   @override
   Map<String, dynamic> toMap() {

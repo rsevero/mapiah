@@ -189,8 +189,9 @@ class THFileWriter {
 
     if (asString.isEmpty) {
       String newLine = "area ${thArea.areaType.toFileString()}";
-      if (thArea.optionIsSet('subtype')) {
-        newLine += ":${thArea.optionByType('subtype')!.specToFile()}";
+      if (thArea.optionIsSet(THCommandOptionType.subtype)) {
+        newLine +=
+            ":${thArea.optionByType(THCommandOptionType.subtype)!.specToFile()}";
       }
       newLine += " ${thArea.optionsAsString()}";
       newLine = newLine.trim();
@@ -212,8 +213,9 @@ class THFileWriter {
 
     if (asString.isEmpty) {
       String newLine = "line ${thLine.lineType.toFileString()}";
-      if (thLine.optionIsSet('subtype')) {
-        newLine += ":${thLine.optionByType('subtype')!.specToFile()}";
+      if (thLine.optionIsSet(THCommandOptionType.subtype)) {
+        newLine +=
+            ":${thLine.optionByType(THCommandOptionType.subtype)!.specToFile()}";
       }
       newLine += " ${thLine.optionsAsString()}";
       newLine = newLine.trim();
@@ -236,8 +238,9 @@ class THFileWriter {
     if (asString.isEmpty) {
       String newLine =
           "point ${thPoint.position.toString()} ${thPoint.pointType.toFileString()}";
-      if (thPoint.optionIsSet('subtype')) {
-        newLine += ":${thPoint.optionByType('subtype')!.specToFile()}";
+      if (thPoint.optionIsSet(THCommandOptionType.subtype)) {
+        newLine +=
+            ":${thPoint.optionByType(THCommandOptionType.subtype)!.specToFile()}";
       }
       newLine += " ${thPoint.optionsAsString()}";
       newLine = newLine.trim();
@@ -393,12 +396,13 @@ class THFileWriter {
 
   String _linePointOptionsAsString(THLineSegment lineSegment) {
     final THHasOptionsMixin thHasOptions = lineSegment as THHasOptionsMixin;
-    final Iterable<String> optionTypeList = thHasOptions.optionsMap.keys;
+    final Iterable<THCommandOptionType> optionTypeList =
+        thHasOptions.optionsMap.keys;
     String asString = '';
 
     _increasePrefix();
 
-    for (String linePointOptionType in optionTypeList) {
+    for (THCommandOptionType linePointOptionType in optionTypeList) {
       final THCommandOption option =
           thHasOptions.optionByType(linePointOptionType)!;
       String newLine = _commandOptionOriginalLineRepresentation(option);

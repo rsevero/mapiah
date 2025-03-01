@@ -30,7 +30,7 @@ class THAuthorCommandOption extends THCommandOption {
   }
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.author;
+  THCommandOptionType get type => THCommandOptionType.author;
 
   @override
   Map<String, dynamic> toMap() {

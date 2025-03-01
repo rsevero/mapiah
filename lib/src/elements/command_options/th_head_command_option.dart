@@ -23,7 +23,7 @@ class THHeadCommandOption extends THArrowPositionCommandOption {
   }) : super(choice: THOptionChoicesArrowPositionType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.head;
+  THCommandOptionType get type => THCommandOptionType.head;
 
   @override
   THOptionChoicesArrowPositionType get defaultChoice =>

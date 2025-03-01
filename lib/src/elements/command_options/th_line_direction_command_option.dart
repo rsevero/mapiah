@@ -25,7 +25,7 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
   }) : super(choice: THOptionChoicesArrowPositionType.values.byName(choice));
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.lineDirection;
+  THCommandOptionType get type => THCommandOptionType.lineDirection;
 
   @override
   String typeToFile() {

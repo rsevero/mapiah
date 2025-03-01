@@ -58,7 +58,7 @@ class THLine extends THElement
     required super.sameLineComment,
     required this.lineType,
     required Set<int> childrenMapiahID,
-    required LinkedHashMap<String, THCommandOption> optionsMap,
+    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     this.childrenMapiahID.addAll(childrenMapiahID);
@@ -95,7 +95,7 @@ class THLine extends THElement
       'lineType': lineType.name,
       'childrenMapiahID': childrenMapiahID.toList(),
       'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key, value.toMap())),
+          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
     });
 
     return map;
@@ -109,9 +109,13 @@ class THLine extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       lineType: THLineType.values.byName(map['lineType']),
       childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
-      optionsMap: LinkedHashMap<String, THCommandOption>.from(
-        map['optionsMap']
-            .map((key, value) => MapEntry(key, THCommandOption.fromMap(value))),
+      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+        map['optionsMap'].map(
+          (key, value) => MapEntry(
+            THCommandOptionType.values.byName(key),
+            THCommandOption.fromMap(value),
+          ),
+        ),
       ),
     );
   }
@@ -129,7 +133,7 @@ class THLine extends THElement
     String? originalLineInTH2File,
     THLineType? lineType,
     Set<int>? childrenMapiahID,
-    LinkedHashMap<String, THCommandOption>? optionsMap,
+    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THLine.forCWJM(
       mapiahID: mapiahID ?? this.mapiahID,

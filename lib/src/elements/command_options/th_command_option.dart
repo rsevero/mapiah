@@ -105,10 +105,10 @@ abstract class THCommandOption {
     optionParent.addUpdateOption(this);
   }
 
-  THCommandOptionType get optionType;
+  THCommandOptionType get type;
 
   String typeToFile() {
-    return optionType.name;
+    return type.name;
   }
 
   String toJson() {
@@ -117,7 +117,7 @@ abstract class THCommandOption {
 
   Map<String, dynamic> toMap() {
     return {
-      'optionType': optionType.name,
+      'optionType': type.name,
       'parentMapiahID': parentMapiahID,
       'originalLineInTH2File': originalLineInTH2File,
     };
@@ -245,7 +245,7 @@ abstract class THCommandOption {
 
   @override
   int get hashCode => Object.hash(
-        optionType,
+        type,
         parentMapiahID,
         originalLineInTH2File,
       );
