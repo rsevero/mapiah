@@ -75,14 +75,7 @@ class THScrap extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       thID: map['thID'],
       childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
-      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
-        map['optionsMap'].map(
-          (key, value) => MapEntry(
-            THCommandOptionType.values.byName(key),
-            THCommandOption.fromMap(value),
-          ),
-        ),
-      ),
+      optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
 

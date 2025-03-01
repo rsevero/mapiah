@@ -73,14 +73,7 @@ class THArea extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       areaType: THAreaType.values.byName(map['areaType']),
       childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
-      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
-        map['optionsMap'].map(
-          (key, value) => MapEntry(
-            THCommandOptionType.values.byName(key),
-            THCommandOption.fromMap(value),
-          ),
-        ),
-      ),
+      optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
 

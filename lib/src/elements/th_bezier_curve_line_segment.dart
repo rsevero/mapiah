@@ -64,14 +64,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       controlPoint1: THPositionPart.fromMap(map['controlPoint1']),
       controlPoint2: THPositionPart.fromMap(map['controlPoint2']),
       endPoint: THPositionPart.fromMap(map['endPoint']),
-      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
-        map['optionsMap'].map(
-          (key, value) => MapEntry(
-            THCommandOptionType.values.byName(key),
-            THCommandOption.fromMap(value),
-          ),
-        ),
-      ),
+      optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
 

@@ -37,14 +37,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       endPoint: THPositionPart.fromMap(map['endPoint']),
-      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
-        map['optionsMap'].map(
-          (key, value) => MapEntry(
-            THCommandOptionType.values.byName(key),
-            THCommandOption.fromMap(value),
-          ),
-        ),
-      ),
+      optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
 

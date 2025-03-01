@@ -51,6 +51,17 @@ mixin THHasOptionsMixin on THElement {
     return asString;
   }
 
+  static LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapFromMap(
+          Map<String, dynamic> map) =>
+      LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+        map.map(
+          (key, value) => MapEntry(
+            THCommandOptionType.values.byName(key),
+            THCommandOption.fromMap(value),
+          ),
+        ),
+      );
+
   LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
       _optionsMap;
 

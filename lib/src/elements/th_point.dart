@@ -208,14 +208,7 @@ class THPoint extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
       pointType: THPointType.values.byName(map['pointType']),
-      optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>.from(
-        map['optionsMap'].map(
-          (key, value) => MapEntry(
-            THCommandOptionType.values.byName(key),
-            THCommandOption.fromMap(value),
-          ),
-        ),
-      ),
+      optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
 
