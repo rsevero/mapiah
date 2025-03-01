@@ -1,6 +1,6 @@
 part of 'th_command_option.dart';
 
-class THOnOffCommandOption extends THMultipleChoiceCommandOption {
+abstract class THOnOffCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesOnOffType choice;
 
   THOnOffCommandOption.forCWJM({
@@ -39,35 +39,6 @@ class THOnOffCommandOption extends THMultipleChoiceCommandOption {
     });
 
     return map;
-  }
-
-  factory THOnOffCommandOption.fromMap(Map<String, dynamic> map) {
-    return THOnOffCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
-      originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
-      choice: THOptionChoicesOnOffType.values.byName(map['choice']),
-    );
-  }
-
-  factory THOnOffCommandOption.fromJson(String jsonString) {
-    return THOnOffCommandOption.fromMap(jsonDecode(jsonString));
-  }
-
-  @override
-  THOnOffCommandOption copyWith({
-    int? parentMapiahID,
-    String? originalLineInTH2File,
-    THElementType? parentElementType,
-    THOptionChoicesOnOffType? choice,
-  }) {
-    return THOnOffCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
-      choice: choice ?? this.choice,
-    );
   }
 
   @override

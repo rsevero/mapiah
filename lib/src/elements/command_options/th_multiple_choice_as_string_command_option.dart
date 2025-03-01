@@ -8,23 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // head <begin/end/both/none> . can be used only with the arrow type and indicates
-      // where to put an arrow head. End is default.
-      'head': {
-        'hasDefault': true,
-        'default': 'end',
-        'choices': <String>{
-          'begin',
-          'end',
-          'both',
-          'none',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'arrow',
-        },
-      },
-
       // outline <in/out/none> . determines whether the line serves as a border line for a
       // scrap. Default value is ‘out’ for walls, ‘none’ for all other lines. Use -outline in for
       // large pillars etc.

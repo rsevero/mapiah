@@ -53,15 +53,4 @@ class THVisibilityCommandOption extends THOnOffCommandOption {
       choice: choice ?? this.choice,
     );
   }
-
-  @override
-  // ignore: hash_and_equals
-  bool operator ==(covariant THVisibilityCommandOption other) {
-    if (identical(this, other)) return true;
-
-    return other.parentMapiahID == parentMapiahID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.parentElementType == parentElementType &&
-        other.choice == choice;
-  }
 }

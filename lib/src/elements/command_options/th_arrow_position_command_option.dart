@@ -1,10 +1,7 @@
 part of 'th_command_option.dart';
 
-/// direction <begin/end/both/none/point> . can be used only with the section
-/// type. It indicates where to put a direction arrow on the section line.
-/// Default is |none|. The point option must be used inside [LINE DATA]. The
-/// others can (and should) be used as a line option.
-class THArrowPositionCommandOption extends THMultipleChoiceCommandOption {
+abstract class THArrowPositionCommandOption
+    extends THMultipleChoiceCommandOption {
   final THOptionChoicesArrowPositionType choice;
 
   THArrowPositionCommandOption.forCWJM({
@@ -44,35 +41,6 @@ class THArrowPositionCommandOption extends THMultipleChoiceCommandOption {
     });
 
     return map;
-  }
-
-  factory THArrowPositionCommandOption.fromMap(Map<String, dynamic> map) {
-    return THArrowPositionCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
-      originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
-      choice: THOptionChoicesArrowPositionType.values.byName(map['choice']),
-    );
-  }
-
-  factory THArrowPositionCommandOption.fromJson(String jsonString) {
-    return THArrowPositionCommandOption.fromMap(jsonDecode(jsonString));
-  }
-
-  @override
-  THArrowPositionCommandOption copyWith({
-    int? parentMapiahID,
-    String? originalLineInTH2File,
-    THElementType? parentElementType,
-    THOptionChoicesArrowPositionType? choice,
-  }) {
-    return THArrowPositionCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
-      choice: choice ?? this.choice,
-    );
   }
 
   @override
