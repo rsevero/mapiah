@@ -133,6 +133,7 @@ class THFileParser {
           : null;
 
       final String elementType = (element[0] as String).toLowerCase();
+
       switch (elementType) {
         case 'area':
           _injectArea(element);
@@ -866,6 +867,7 @@ class THFileParser {
     bool optionIdentified = true;
 
     switch (optionType) {
+      case 'align':
       case 'clip':
       case 'place':
       case 'visibility':
@@ -1014,6 +1016,12 @@ class THFileParser {
     switch (type) {
       case 'adjust':
         THAdjustCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+      case 'align':
+        THAlignCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

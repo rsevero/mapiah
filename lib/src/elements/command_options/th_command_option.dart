@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_text_aux.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_cs_part.dart';
@@ -21,6 +22,7 @@ import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_adjust_command_option.dart';
+part 'th_align_command_option.dart';
 part 'th_altitude_command_option.dart';
 part 'th_altitude_value_command_option.dart';
 part 'th_anchors_command_option.dart';
@@ -77,6 +79,7 @@ part 'th_unrecognized_command_option.dart';
 part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_adjust_type.dart';
+part 'types/th_option_choices_align_type.dart';
 part 'types/th_option_choices_arrow_position_type.dart';
 part 'types/th_option_choices_line_gradient_type.dart';
 part 'types/th_option_choices_line_point_direction_type.dart';
@@ -129,6 +132,8 @@ abstract class THCommandOption {
     switch (type) {
       case THCommandOptionType.adjust:
         return THAdjustCommandOption.fromMap(map);
+      case THCommandOptionType.align:
+        return THAlignCommandOption.fromMap(map);
       case THCommandOptionType.altitude:
         return THAltitudeCommandOption.fromMap(map);
       case THCommandOptionType.altitudeValue:

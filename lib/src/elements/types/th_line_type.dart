@@ -1,3 +1,5 @@
+import 'package:mapiah/src/auxiliary/mp_text_aux.dart';
+
 enum THLineType {
   abyssEntrance,
   arrow,
@@ -40,18 +42,12 @@ enum THLineType {
   waterFlow;
 
   static THLineType fromFileString(String value) {
-    final String modifiedValue = value.replaceAllMapped(
-      RegExp(r'-[a-z]'),
-      (Match match) => match.group(0)![1].toUpperCase(),
-    );
+    value = MPTextAux.convertHyphenatedToCamelCase(value);
 
-    return THLineType.values.byName(modifiedValue);
+    return THLineType.values.byName(value);
   }
 
   String toFileString() {
-    return name.replaceAllMapped(
-      RegExp(r'[A-Z]'),
-      (Match match) => '-${match.group(0)!.toLowerCase()}',
-    );
+    return MPTextAux.convertCamelCaseToHyphenated(name);
   }
 }

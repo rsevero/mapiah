@@ -1,3 +1,5 @@
+import 'package:mapiah/src/auxiliary/mp_text_aux.dart';
+
 enum THAreaType {
   bedrock,
   blocks,
@@ -22,18 +24,12 @@ enum THAreaType {
   water;
 
   static THAreaType fromFileString(String value) {
-    final String modifiedValue = value.replaceAllMapped(
-      RegExp(r'-[a-z]'),
-      (Match match) => match.group(0)![1].toUpperCase(),
-    );
+    value = MPTextAux.convertHyphenatedToCamelCase(value);
 
-    return THAreaType.values.byName(modifiedValue);
+    return THAreaType.values.byName(value);
   }
 
   String toFileString() {
-    return name.replaceAllMapped(
-      RegExp(r'[A-Z]'),
-      (Match match) => '-${match.group(0)!.toLowerCase()}',
-    );
+    return MPTextAux.convertCamelCaseToHyphenated(name);
   }
 }
