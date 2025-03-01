@@ -60,8 +60,7 @@ class THScrap extends THElement
     map.addAll({
       'thID': _thID,
       'childrenMapiahID': childrenMapiahID.toList(),
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
+      'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
     });
 
     return map;

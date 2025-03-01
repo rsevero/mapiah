@@ -94,8 +94,7 @@ class THLine extends THElement
     map.addAll({
       'lineType': lineType.name,
       'childrenMapiahID': childrenMapiahID.toList(),
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
+      'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
     });
 
     return map;

@@ -193,8 +193,7 @@ class THPoint extends THElement
     map.addAll({
       'position': position.toMap(),
       'pointType': pointType.name,
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
+      'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
     });
 
     return map;

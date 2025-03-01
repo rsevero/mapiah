@@ -53,8 +53,7 @@ abstract class THLineSegment extends THElement
 
     map.addAll({
       'endPoint': endPoint.toMap(),
-      'optionsMap':
-          optionsMap.map((key, value) => MapEntry(key.name, value.toMap())),
+      'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
     });
 
     return map;
