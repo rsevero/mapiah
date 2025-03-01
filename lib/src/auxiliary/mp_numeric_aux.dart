@@ -156,6 +156,24 @@ class MPNumericAux {
     );
   }
 
+  static Rect orderedRectFromCenterHalfLength({
+    required Offset center,
+    required double halfWidth,
+    required double halfHeight,
+  }) {
+    final double left = center.dx - halfWidth;
+    final double top = center.dy - halfHeight;
+    final double right = center.dx + halfWidth;
+    final double bottom = center.dy + halfHeight;
+
+    return orderedRectFromLTRB(
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom,
+    );
+  }
+
   /// In Flutter, the Rect.fromCircle() method does not check if the radius is
   /// negative so I am providing this method to ensure that the Rect is ordered
   /// according to Flutter expectations.

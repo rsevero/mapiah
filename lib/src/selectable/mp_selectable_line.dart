@@ -1,6 +1,6 @@
 part of 'mp_selectable.dart';
 
-class MPSelectableLine extends MPSelectable {
+class MPSelectableLine extends MPSelectableElement {
   final List<THLineSegment> _selectedElements = [];
   final List<MPSelectableLineSegment> _seleactableLineSegments = [];
 

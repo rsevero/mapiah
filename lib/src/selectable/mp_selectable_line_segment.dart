@@ -1,6 +1,6 @@
 part of 'mp_selectable.dart';
 
-abstract class MPSelectableLineSegment extends MPSelectable {
+abstract class MPSelectableLineSegment extends MPSelectableElement {
   final Offset startPoint;
 
   MPSelectableLineSegment({

@@ -377,7 +377,13 @@ abstract class TH2FileEditControllerBase
   }
 
   /// Used to search for selected elements by list of selectable coordinates.
-  final Map<int, MPSelectable> _selectables = {};
+  final Map<int, MPSelectable> _selectableElements = {};
+
+  final Map<int, MPSelectableEndpoint> _selectableEndpoints = {};
+
+  final Map<int, MPSelectableControlpoint> _selectedEndpoints = {};
+
+  final List<MPSelectableControlpoint> _selectableControlpoints = [];
 
   Offset dragStartCanvasCoordinates = Offset.zero;
 
@@ -551,7 +557,7 @@ abstract class TH2FileEditControllerBase
   }
 
   void updateSelectableElements() {
-    _selectables.clear();
+    _selectableElements.clear();
 
     final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
 
@@ -587,7 +593,7 @@ abstract class TH2FileEditControllerBase
 
     final int pointMapiahID = point.mapiahID;
 
-    _selectables[pointMapiahID] = selectablePoint;
+    _selectableElements[pointMapiahID] = selectablePoint;
     _isSelected[pointMapiahID] = Observable(false);
   }
 
@@ -599,27 +605,29 @@ abstract class TH2FileEditControllerBase
 
     final int lineMapiahID = line.mapiahID;
 
-    _selectables[lineMapiahID] = selectableLine;
+    _selectableElements[lineMapiahID] = selectableLine;
     _isSelected[lineMapiahID] = Observable(false);
   }
 
   void _removeSelectableElement(int mapiahID) {
-    _selectables.remove(mapiahID);
+    _selectableElements.remove(mapiahID);
     _isSelected.remove(mapiahID);
   }
 
   List<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
     final List<THElement> clickedElements = <THElement>[];
-    final selectableElements = _selectables.values;
+    final selectableElements = _selectableElements.values;
 
     for (final selectableElement in selectableElements) {
       if (selectableElement.contains(canvasCoordinates)) {
-        switch (selectableElement.element) {
-          case THPoint _:
-          case THLine _:
-            clickedElements.addAll(selectableElement.selectedElements);
-            break;
+        if (selectableElement is MPSelectableElement) {
+          switch (selectableElement.element) {
+            case THPoint _:
+            case THLine _:
+              clickedElements.addAll(selectableElement.selectedElements);
+              break;
+          }
         }
       }
     }
@@ -630,23 +638,69 @@ abstract class TH2FileEditControllerBase
   List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
 
-    for (final selectableElement in _selectables.entries) {
-      final THElement element = selectableElement.value.element;
+    for (final selectableElement in _selectableElements.values) {
+      if (selectableElement is MPSelectableElement) {
+        final THElement element = selectableElement.element;
 
-      if (MPNumericAux.isRect1InsideRect2(
-        rect1: (element as MPBoundingBox)
-            .getBoundingBox(this as TH2FileEditController),
-        rect2: canvasSelectionWindow,
-      )) {
-        insideWindowElements[element.mapiahID] = element;
+        if (MPNumericAux.isRect1InsideRect2(
+          rect1: (element as MPBoundingBox)
+              .getBoundingBox(this as TH2FileEditController),
+          rect2: canvasSelectionWindow,
+        )) {
+          insideWindowElements[element.mapiahID] = element;
+        }
       }
     }
 
     return insideWindowElements.values.toList();
   }
 
+  void updateSelectableEndAndControlPoints() {
+    _selectableControlpoints.clear();
+    _selectableEndpoints.clear();
+
+    if ((_selectedElements.length != 1) ||
+        (_selectedElements.values.first is! MPSelectableLine)) {
+      return;
+    }
+
+    final Set<int> lineSegmentMapiahIDs =
+        ((_selectedElements.values.first as MPSelectableLine).element as THLine)
+            .childrenMapiahID;
+
+    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
+      final THLineSegment lineSegment =
+          _thFile.elementByMapiahID(lineSegmentMapiahID) as THLineSegment;
+
+      if (_selectedEndpoints.containsKey(lineSegmentMapiahID)) {
+        if (lineSegment is THBezierCurveLineSegment) {
+          _selectableControlpoints.add(
+            MPSelectableControlpoint(
+              lineSegment: lineSegment,
+              position: lineSegment.controlPoint1.coordinates,
+              th2fileEditController: this as TH2FileEditController,
+            ),
+          );
+          _selectableControlpoints.add(
+            MPSelectableControlpoint(
+              lineSegment: lineSegment,
+              position: lineSegment.controlPoint2.coordinates,
+              th2fileEditController: this as TH2FileEditController,
+            ),
+          );
+        }
+      } else {
+        _selectableEndpoints[lineSegmentMapiahID] = MPSelectableEndpoint(
+          lineSegment: lineSegment,
+          position: lineSegment.endPoint.coordinates,
+          th2fileEditController: this as TH2FileEditController,
+        );
+      }
+    }
+  }
+
   void warmSelectableElementsCanvasScaleChanged() {
-    for (final selectableElement in _selectables.values) {
+    for (final selectableElement in _selectableElements.values) {
       selectableElement.canvasScaleChanged();
     }
   }
