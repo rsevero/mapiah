@@ -29,6 +29,7 @@ enum THCommandOptionType {
   mark,
   multipleChoice,
   name,
+  outline,
   orientation,
   passageHeightValue,
   place,

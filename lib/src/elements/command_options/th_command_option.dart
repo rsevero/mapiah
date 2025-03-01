@@ -54,6 +54,7 @@ part 'th_multiple_choice_command_option.dart';
 part 'th_name_command_option.dart';
 part 'th_on_off_command_option.dart';
 part 'th_orientation_command_option.dart';
+part 'th_outline_command_option.dart';
 part 'th_passage_height_value_command_option.dart';
 part 'th_place_command_option.dart';
 part 'th_point_height_value_command_option.dart';
@@ -76,6 +77,7 @@ part 'types/th_option_choices_line_gradient_type.dart';
 part 'types/th_option_choices_line_point_direction_type.dart';
 part 'types/th_option_choices_line_point_gradient_type.dart';
 part 'types/th_option_choices_on_off_type.dart';
+part 'types/th_option_choices_outline_type.dart';
 part 'types/th_option_choices_place_type.dart';
 
 abstract class THCommandOption {
@@ -177,6 +179,8 @@ abstract class THCommandOption {
         return THNameCommandOption.fromMap(map);
       case THCommandOptionType.orientation:
         return THOrientationCommandOption.fromMap(map);
+      case THCommandOptionType.outline:
+        return THOutlineCommandOption.fromMap(map);
       case THCommandOptionType.passageHeightValue:
         return THPassageHeightValueCommandOption.fromMap(map);
       case THCommandOptionType.place:

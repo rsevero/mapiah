@@ -8,20 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // outline <in/out/none> . determines whether the line serves as a border line for a
-      // scrap. Default value is ‘out’ for walls, ‘none’ for all other lines. Use -outline in for
-      // large pillars etc.
-      'outline': {
-        'hasDefault': false,
-        'choices': <String>{
-          'in',
-          'out',
-          'none',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-
       // rebelays <on/off> . this option can be specified only with the ‘rope’ line type.
       'rebelays': {
         'hasDefault': true,
