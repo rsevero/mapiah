@@ -60,6 +60,7 @@ part 'th_place_command_option.dart';
 part 'th_point_height_value_command_option.dart';
 part 'th_point_scale_command_option.dart';
 part 'th_projection_command_option.dart';
+part 'th_rebelays_command_option.dart';
 part 'th_scrap_command_option.dart';
 part 'th_scrap_scale_command_option.dart';
 part 'th_sketch_command_option.dart';
@@ -191,6 +192,8 @@ abstract class THCommandOption {
         return THPointScaleCommandOption.fromMap(map);
       case THCommandOptionType.projection:
         return THProjectionCommandOption.fromMap(map);
+      case THCommandOptionType.rebelays:
+        return THRebelaysCommandOption.fromMap(map);
       case THCommandOptionType.scrap:
         return THScrapCommandOption.fromMap(map);
       case THCommandOptionType.scrapScale:

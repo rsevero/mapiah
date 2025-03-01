@@ -877,6 +877,7 @@ class THFileParser {
       case 'head':
       case 'outline':
       case 'place':
+      case 'rebelays':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
       case 'context':
@@ -1066,6 +1067,13 @@ class THFileParser {
         break;
       case 'place':
         THPlaceCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+        break;
+      case 'rebelays':
+        THRebelaysCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

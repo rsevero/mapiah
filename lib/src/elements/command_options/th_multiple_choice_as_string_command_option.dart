@@ -8,20 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'line': {
-      // rebelays <on/off> . this option can be specified only with the ‘rope’ line type.
-      'rebelays': {
-        'hasDefault': true,
-        'default': 'on',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{
-          'rope',
-        },
-      },
-
       // reverse <on/off> . whether points are given in reverse order.
       'reverse': {
         'hasDefault': true,

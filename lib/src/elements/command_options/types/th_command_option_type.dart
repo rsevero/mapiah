@@ -36,6 +36,7 @@ enum THCommandOptionType {
   pointHeightValue,
   pointScale,
   projection,
+  rebelays,
   scrap,
   scrapScale,
   sketch,
