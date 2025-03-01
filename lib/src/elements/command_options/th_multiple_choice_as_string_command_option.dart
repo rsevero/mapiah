@@ -7,19 +7,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
 
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
-    'line': {
-      // reverse <on/off> . whether points are given in reverse order.
-      'reverse': {
-        'hasDefault': true,
-        'default': 'off',
-        'choices': <String>{
-          'on',
-          'off',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-    },
     'linesegment': {
       // adjust <horizontal/vertical> . shifts the line point to be aligned horizontally/ver-
       // tically with the previous point. It can’t be set on the first point. The result is a
