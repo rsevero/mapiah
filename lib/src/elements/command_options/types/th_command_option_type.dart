@@ -42,6 +42,7 @@ enum THCommandOptionType {
   scrap,
   scrapScale,
   sketch,
+  smooth,
   stationNames,
   stations,
   subtype,

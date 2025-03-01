@@ -7,21 +7,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
 
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
-    'linesegment': {
-      // smooth <on/off/auto> . whether the line is smooth at the given point. Auto is
-      // default.
-      'smooth': {
-        'hasDefault': true,
-        'default': 'auto',
-        'choices': <String>{
-          'on',
-          'off',
-          'auto',
-        },
-        'alternateChoices': <String, String>{},
-        'plaTypesSupported': <String>{},
-      },
-    },
     'point': {
       // align . alignment of the symbol or text. The following values are accepted: center, c,
       // top, t, bottom, b, left, l, right, r, top-left, tl, top-right, tr, bottom-left, bl, bottom-right,

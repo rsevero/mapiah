@@ -818,6 +818,7 @@ class THFileParser {
       case 'gradient':
         _injectMultipleChoiceWithPointChoiceCommandOption(optionType);
       case 'adjust':
+      case 'smooth':
         _optionParentAsTHLineSegment();
         _injectMultipleChoiceCommandOption(optionType);
       case 'altitude':
@@ -1079,6 +1080,12 @@ class THFileParser {
         );
       case 'reverse':
         THReverseCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+      case 'smooth':
+        THSmoothCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

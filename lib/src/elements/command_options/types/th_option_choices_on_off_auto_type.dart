@@ -1,6 +1,6 @@
 part of '../th_command_option.dart';
 
-enum THOptionChoicesCloseType {
+enum THOptionChoicesOnOffAutoType {
   on,
   off,
   auto;

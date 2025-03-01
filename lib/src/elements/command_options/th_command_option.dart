@@ -53,6 +53,7 @@ part 'th_mark_command_option.dart';
 part 'th_multiple_choice_as_string_command_option.dart';
 part 'th_multiple_choice_command_option.dart';
 part 'th_name_command_option.dart';
+part 'th_on_off_auto_command_option.dart';
 part 'th_on_off_command_option.dart';
 part 'th_orientation_command_option.dart';
 part 'th_outline_command_option.dart';
@@ -66,6 +67,7 @@ part 'th_reverse_command_option.dart';
 part 'th_scrap_command_option.dart';
 part 'th_scrap_scale_command_option.dart';
 part 'th_sketch_command_option.dart';
+part 'th_smooth_command_option.dart';
 part 'th_station_names_command_option.dart';
 part 'th_stations_command_option.dart';
 part 'th_subtype_command_option.dart';
@@ -76,10 +78,10 @@ part 'th_visibility_command_option.dart';
 part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_adjust_type.dart';
 part 'types/th_option_choices_arrow_position_type.dart';
-part 'types/th_option_choices_close_type.dart';
 part 'types/th_option_choices_line_gradient_type.dart';
 part 'types/th_option_choices_line_point_direction_type.dart';
 part 'types/th_option_choices_line_point_gradient_type.dart';
+part 'types/th_option_choices_on_off_auto_type.dart';
 part 'types/th_option_choices_on_off_type.dart';
 part 'types/th_option_choices_outline_type.dart';
 part 'types/th_option_choices_place_type.dart';
@@ -207,6 +209,8 @@ abstract class THCommandOption {
         return THScrapScaleCommandOption.fromMap(map);
       case THCommandOptionType.sketch:
         return THSketchCommandOption.fromMap(map);
+      case THCommandOptionType.smooth:
+        return THSmoothCommandOption.fromMap(map);
       case THCommandOptionType.stationNames:
         return THStationNamesCommandOption.fromMap(map);
       case THCommandOptionType.stations:
