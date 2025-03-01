@@ -1815,7 +1815,7 @@ class THFileParser {
 
     THProjectionCommandOption.fromString(
       optionParent: _currentHasOptions,
-      type: _currentSpec[0],
+      projectionType: _currentSpec[0],
       index: (currentLengthOnePlus && (_currentSpec[1] != null))
           ? _currentSpec[1]
           : '',

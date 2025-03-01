@@ -17,7 +17,6 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_adjust_command_option.dart';

@@ -18,29 +18,15 @@ enum THProjectionTypes {
 // a view direction as an argument (e.g. [elevation 10] or [elevation 10 deg]).
 // 4. extended . extended elevation (a.k.a. extended profile).
 class THProjectionCommandOption extends THCommandOption {
-  late final THProjectionTypes type;
+  final THProjectionTypes projectionType;
   final String index;
   late final THDoublePart? elevationAngle;
   late final THAngleUnitPart? elevationUnit;
 
-  static const stringToType = {
-    'elevation': THProjectionTypes.elevation,
-    'extended': THProjectionTypes.extended,
-    'none': THProjectionTypes.none,
-    'plan': THProjectionTypes.plan,
-  };
-
-  static const typeToString = {
-    THProjectionTypes.elevation: 'elevation',
-    THProjectionTypes.extended: 'extended',
-    THProjectionTypes.none: 'none',
-    THProjectionTypes.plan: 'plan',
-  };
-
   THProjectionCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
-    required this.type,
+    required this.projectionType,
     required this.index,
     this.elevationAngle,
     this.elevationUnit,
@@ -48,13 +34,13 @@ class THProjectionCommandOption extends THCommandOption {
 
   THProjectionCommandOption.fromString({
     required super.optionParent,
-    required String type,
+    required String projectionType,
     this.index = '',
     String? elevationAngle,
     String? elevationUnit,
     super.originalLineInTH2File = '',
-  }) : super() {
-    typeFromString(type);
+  })  : projectionType = THProjectionTypes.values.byName(projectionType),
+        super() {
     if (elevationAngle == null) {
       this.elevationAngle = null;
     } else {
@@ -77,7 +63,7 @@ class THProjectionCommandOption extends THCommandOption {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'type': typeToString[type],
+      'projectionType': projectionType.name,
       'index': index,
     });
 
@@ -95,7 +81,7 @@ class THProjectionCommandOption extends THCommandOption {
     return THProjectionCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      type: stringToType[map['type']]!,
+      projectionType: THProjectionTypes.values.byName(map['projectionType']),
       index: map['index'],
       elevationAngle: map.containsKey('elevationAngle')
           ? THDoublePart.fromMap(map['elevationAngle'])
@@ -114,7 +100,7 @@ class THProjectionCommandOption extends THCommandOption {
   THProjectionCommandOption copyWith({
     int? parentMapiahID,
     String? originalLineInTH2File,
-    THProjectionTypes? type,
+    THProjectionTypes? projectionType,
     String? index,
     THDoublePart? elevationAngle,
     makeElevationAngleNull = false,
@@ -125,7 +111,7 @@ class THProjectionCommandOption extends THCommandOption {
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      type: type ?? this.type,
+      projectionType: projectionType ?? this.projectionType,
       index: index ?? this.index,
       elevationAngle: makeElevationAngleNull
           ? null
@@ -141,7 +127,7 @@ class THProjectionCommandOption extends THCommandOption {
 
     return other.parentMapiahID == parentMapiahID &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        other.type == type &&
+        other.projectionType == projectionType &&
         other.index == index &&
         other.elevationAngle == elevationAngle &&
         other.elevationUnit == elevationUnit;
@@ -151,35 +137,23 @@ class THProjectionCommandOption extends THCommandOption {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        type,
+        projectionType,
         index,
         elevationAngle,
         elevationUnit,
       );
 
-  static bool isType(String type) {
-    return stringToType.containsKey(type);
-  }
-
-  void typeFromString(String type) {
-    if (!THProjectionCommandOption.isType(type)) {
-      throw THConvertFromStringException(runtimeType.toString(), type);
-    }
-
-    this.type = stringToType[type]!;
-  }
-
   @override
   String specToFile() {
     String asString = '';
 
-    asString += THProjectionCommandOption.typeToString[type]!;
+    asString += projectionType.name;
 
     if (index.isNotEmpty && index.trim().isNotEmpty) {
       asString += ':${index.trim()}';
     }
 
-    if (type == THProjectionTypes.elevation) {
+    if (projectionType == THProjectionTypes.elevation) {
       if (elevationAngle != null) {
         asString += " ${elevationAngle.toString()}";
         if (elevationUnit != null) {

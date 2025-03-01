@@ -88,7 +88,7 @@ class THLineScaleCommandOption extends THCommandOption {
     map.addAll({
       'multipleChoiceSize': multipleChoiceSize.toMap(),
       'numericSize': numericSize.toMap(),
-      'type': scaleType.toString(),
+      'scaleType': scaleType.name,
       'textSize': textSize,
     });
 
@@ -102,8 +102,7 @@ class THLineScaleCommandOption extends THCommandOption {
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
       numericSize: THDoublePart.fromMap(map['numericSize']),
-      scaleType: THLineScaleCommandOptionType.values
-          .firstWhere((e) => e.toString() == map['type']),
+      scaleType: THLineScaleCommandOptionType.values.byName(map['scaleType']),
       textSize: map['textSize'],
     );
   }
@@ -118,7 +117,7 @@ class THLineScaleCommandOption extends THCommandOption {
     String? originalLineInTH2File,
     THMultipleChoicePart? multipleChoiceSize,
     THDoublePart? numericSize,
-    THLineScaleCommandOptionType? type,
+    THLineScaleCommandOptionType? scaleType,
     String? textSize,
   }) {
     return THLineScaleCommandOption.forCWJM(
@@ -127,7 +126,7 @@ class THLineScaleCommandOption extends THCommandOption {
           originalLineInTH2File ?? this.originalLineInTH2File,
       multipleChoiceSize: multipleChoiceSize ?? this.multipleChoiceSize,
       numericSize: numericSize ?? this.numericSize,
-      scaleType: type ?? this.scaleType,
+      scaleType: scaleType ?? this.scaleType,
       textSize: textSize ?? this.textSize,
     );
   }
