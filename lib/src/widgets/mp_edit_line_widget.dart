@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
@@ -124,7 +125,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               width: pointWidth,
-              isSmooth: lineSegment is THStraightLineSegment,
+              isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,

@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
@@ -125,11 +125,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               width: pointWidth,
-              isSmooth: lineSegment.hasOption(THCommandOptionType.smooth) &&
-                  (lineSegment.optionByType(THCommandOptionType.smooth)
-                              as THSmoothCommandOption)
-                          .choice ==
-                      THOptionChoicesOnOffAutoType.on,
+              isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
