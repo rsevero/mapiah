@@ -1,27 +1,24 @@
 part of 'th_command_option.dart';
 
-/// adjust <horizontal/vertical> - shifts the line point to be aligned
-/// horizontally/vertically with the previous point. It can't be set on the
-/// first point. The result is a horizontal/vertical line segment. This option
-/// is not allowed in the |plan| projection. Default is unset where the line
-/// point isn't automatically aligned with the previous line point.
-class THAdjustCommandOption extends THMultipleChoiceCommandOption {
-  final THOptionChoicesAdjustType choice;
+/// |flip none/horizontal/vertical - flips the scrap after scale transformation.
+/// Default is none.
+class THFlipCommandOption extends THMultipleChoiceCommandOption {
+  final THOptionChoicesFlipType choice;
 
-  THAdjustCommandOption.forCWJM({
+  THFlipCommandOption.forCWJM({
     required super.parentMapiahID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
-  THAdjustCommandOption({
+  THFlipCommandOption({
     required super.optionParent,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
-  THAdjustCommandOption.fromString({
+  THFlipCommandOption.fromString({
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
@@ -29,21 +26,23 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get optionType => THCommandOptionType.adjust;
+  THCommandOptionType get optionType => THCommandOptionType.flip;
+
+  THOptionChoicesFlipType get defautChoice => THOptionChoicesFlipType.none;
 
   @override
   String specToFile() {
     return choice.name;
   }
 
-  static THOptionChoicesAdjustType _setChoiceFromString(String choice) {
+  static THOptionChoicesFlipType _setChoiceFromString(String choice) {
     switch (choice) {
       case 'horiz':
-        return THOptionChoicesAdjustType.horizontal;
+        return THOptionChoicesFlipType.horizontal;
       case 'vert':
-        return THOptionChoicesAdjustType.vertical;
+        return THOptionChoicesFlipType.vertical;
       default:
-        return THOptionChoicesAdjustType.values.byName(choice);
+        return THOptionChoicesFlipType.values.byName(choice);
     }
   }
 
@@ -58,8 +57,8 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
     return map;
   }
 
-  factory THAdjustCommandOption.fromMap(Map<String, dynamic> map) {
-    return THAdjustCommandOption.forCWJM(
+  factory THFlipCommandOption.fromMap(Map<String, dynamic> map) {
+    return THFlipCommandOption.forCWJM(
       parentMapiahID: map['parentMapiahID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
@@ -67,18 +66,18 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
     );
   }
 
-  factory THAdjustCommandOption.fromJson(String jsonString) {
-    return THAdjustCommandOption.fromMap(jsonDecode(jsonString));
+  factory THFlipCommandOption.fromJson(String jsonString) {
+    return THFlipCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  THAdjustCommandOption copyWith({
+  THFlipCommandOption copyWith({
     int? parentMapiahID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
-    THOptionChoicesAdjustType? choice,
+    THOptionChoicesFlipType? choice,
   }) {
-    return THAdjustCommandOption.forCWJM(
+    return THFlipCommandOption.forCWJM(
       parentMapiahID: parentMapiahID ?? this.parentMapiahID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -88,7 +87,7 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
   }
 
   @override
-  bool operator ==(covariant THAdjustCommandOption other) {
+  bool operator ==(covariant THFlipCommandOption other) {
     if (identical(this, other)) return true;
 
     return other.parentMapiahID == parentMapiahID &&

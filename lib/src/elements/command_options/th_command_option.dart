@@ -39,6 +39,7 @@ part 'th_dimensions_value_command_option.dart';
 part 'th_dist_command_option.dart';
 part 'th_explored_command_option.dart';
 part 'th_extend_command_option.dart';
+part 'th_flip_command_option.dart';
 part 'th_from_command_option.dart';
 part 'th_has_altitude_mixin.dart';
 part 'th_has_length_mixin.dart';
@@ -81,6 +82,7 @@ part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_adjust_type.dart';
 part 'types/th_option_choices_align_type.dart';
 part 'types/th_option_choices_arrow_position_type.dart';
+part 'types/th_option_choices_flip_type.dart';
 part 'types/th_option_choices_line_gradient_type.dart';
 part 'types/th_option_choices_line_point_direction_type.dart';
 part 'types/th_option_choices_line_point_gradient_type.dart';
@@ -164,6 +166,8 @@ abstract class THCommandOption {
         return THExploredCommandOption.fromMap(map);
       case THCommandOptionType.extend:
         return THExtendCommandOption.fromMap(map);
+      case THCommandOptionType.flip:
+        return THFlipCommandOption.fromMap(map);
       case THCommandOptionType.from:
         return THFromCommandOption.fromMap(map);
       case THCommandOptionType.head:

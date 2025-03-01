@@ -909,6 +909,8 @@ class THFileParser {
     bool optionIdentified = true;
 
     switch (optionType) {
+      case 'flip':
+        _injectMultipleChoiceCommandOption(optionType);
       case 'author':
         _injectAuthorCommandOption();
       case 'copyright':
@@ -1052,6 +1054,12 @@ class THFileParser {
         );
       case 'direction':
         THLineDirectionCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+      case 'flip':
+        THFlipCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

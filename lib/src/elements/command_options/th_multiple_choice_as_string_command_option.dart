@@ -8,18 +8,6 @@ class THMultipleChoiceAsStringCommandOption extends THCommandOption {
   static const Map<String, Map<String, Map<String, Object>>> _supportedOptions =
       {
     'scrap': {
-      // flip (none)/horizontal/vertical . flips the scrap after scale transformation
-      'flip': {
-        'hasDefault': true,
-        'default': 'none',
-        'choices': <String>{
-          'none',
-          'horizontal',
-          'vertical',
-        },
-        'alternateChoices': <String, String>{},
-      },
-
       // walls <on/off/auto> . specify if the scrap should be used in 3D model reconstruction
       'walls': {
         'hasDefault': false,

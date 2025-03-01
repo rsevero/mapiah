@@ -18,6 +18,7 @@ enum THCommandOptionType {
   dist,
   explored,
   extend,
+  flip,
   from,
   head,
   id,
