@@ -2,7 +2,7 @@ part of 'th_command_option.dart';
 
 /// align - alignment of the symbol or text. The following values are accepted:
 /// center, c, top, t, bottom, b, left, l, right, r, top-left, tl, top-right,
-/// tr, bottom-left, bl, bottom-right, br. Default is unset.
+/// tr, bottom-left, bl, bottom-right, br. Default is center.
 class THAlignCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesAlignType choice;
 
@@ -28,6 +28,8 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
 
   @override
   THCommandOptionType get type => THCommandOptionType.align;
+
+  THOptionChoicesAlignType get defaultChoice => THOptionChoicesAlignType.center;
 
   @override
   String specToFile() {

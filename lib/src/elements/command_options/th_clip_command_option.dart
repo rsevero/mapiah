@@ -2,14 +2,16 @@ part of 'th_command_option.dart';
 
 /// area:
 /// clip <on/off> . specify whether a symbol is clipped by the scrap border.
+/// Default is on.
 ///
 /// line:
 /// clip <on/off> . specify whether a symbol is clipped by the scrap border.
+/// Default is on.
 ///
 /// point:
 /// clip <on/off> . specify whether a symbol is clipped by the scrap border. You
 /// cannot specify this option for the following symbols: station, station-name,
-/// label, remark, date, altitude, height, passage-height.
+/// label, remark, date, altitude, height, passage-height. Default is on.
 class THClipCommandOption extends THOnOffCommandOption {
   // static final HashSet<String> _unsupportedPointTypes = HashSet<String>.from({
   //   'altitude',
