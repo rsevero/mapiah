@@ -13,7 +13,7 @@ enum THLineScaleCommandOptionType {
 class THLineScaleCommandOption extends THCommandOption {
   late final THMultipleChoicePart multipleChoiceSize;
   late final THDoublePart numericSize;
-  late final THLineScaleCommandOptionType type;
+  late final THLineScaleCommandOptionType scaleType;
   late final String textSize;
 
   static const String _scaleMultipleChoiceName = 'point|scale';
@@ -23,7 +23,7 @@ class THLineScaleCommandOption extends THCommandOption {
     required super.originalLineInTH2File,
     required this.multipleChoiceSize,
     required this.numericSize,
-    required this.type,
+    required this.scaleType,
     required this.textSize,
   }) : super.forCWJM();
 
@@ -34,7 +34,7 @@ class THLineScaleCommandOption extends THCommandOption {
   }) : super() {
     multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: textScaleSize);
-    type = THLineScaleCommandOptionType.multiplechoice;
+    scaleType = THLineScaleCommandOptionType.multiplechoice;
     numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
     textSize = '';
   }
@@ -45,7 +45,7 @@ class THLineScaleCommandOption extends THCommandOption {
     super.originalLineInTH2File = '',
   })  : textSize = textScale,
         super() {
-    type = THLineScaleCommandOptionType.text;
+    scaleType = THLineScaleCommandOptionType.text;
     multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: '');
     numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
@@ -57,7 +57,7 @@ class THLineScaleCommandOption extends THCommandOption {
     super.originalLineInTH2File = '',
   })  : numericSize = numericScaleSize,
         super() {
-    type = THLineScaleCommandOptionType.numeric;
+    scaleType = THLineScaleCommandOptionType.numeric;
     multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: '');
     textSize = '';
@@ -69,7 +69,7 @@ class THLineScaleCommandOption extends THCommandOption {
     super.originalLineInTH2File = '',
   }) : super() {
     numericSize = THDoublePart.fromString(valueString: numericScaleSize);
-    type = THLineScaleCommandOptionType.numeric;
+    scaleType = THLineScaleCommandOptionType.numeric;
     multipleChoiceSize = THMultipleChoicePart(
         multipleChoiceName: _scaleMultipleChoiceName, choice: '');
     textSize = '';
@@ -88,7 +88,7 @@ class THLineScaleCommandOption extends THCommandOption {
     map.addAll({
       'multipleChoiceSize': multipleChoiceSize.toMap(),
       'numericSize': numericSize.toMap(),
-      'type': type.toString(),
+      'type': scaleType.toString(),
       'textSize': textSize,
     });
 
@@ -102,7 +102,7 @@ class THLineScaleCommandOption extends THCommandOption {
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
       numericSize: THDoublePart.fromMap(map['numericSize']),
-      type: THLineScaleCommandOptionType.values
+      scaleType: THLineScaleCommandOptionType.values
           .firstWhere((e) => e.toString() == map['type']),
       textSize: map['textSize'],
     );
@@ -127,7 +127,7 @@ class THLineScaleCommandOption extends THCommandOption {
           originalLineInTH2File ?? this.originalLineInTH2File,
       multipleChoiceSize: multipleChoiceSize ?? this.multipleChoiceSize,
       numericSize: numericSize ?? this.numericSize,
-      type: type ?? this.type,
+      scaleType: type ?? this.scaleType,
       textSize: textSize ?? this.textSize,
     );
   }
@@ -140,7 +140,7 @@ class THLineScaleCommandOption extends THCommandOption {
         other.originalLineInTH2File == originalLineInTH2File &&
         other.multipleChoiceSize == multipleChoiceSize &&
         other.numericSize == numericSize &&
-        other.type == type &&
+        other.scaleType == scaleType &&
         other.textSize == textSize;
   }
 
@@ -150,16 +150,12 @@ class THLineScaleCommandOption extends THCommandOption {
       Object.hash(
         multipleChoiceSize,
         numericSize,
-        type,
+        scaleType,
         textSize,
       );
 
-  THLineScaleCommandOptionType get scaleType {
-    return type;
-  }
-
   dynamic get size {
-    switch (type) {
+    switch (scaleType) {
       case THLineScaleCommandOptionType.numeric:
         return numericSize;
       case THLineScaleCommandOptionType.multiplechoice:
@@ -171,7 +167,7 @@ class THLineScaleCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    switch (type) {
+    switch (scaleType) {
       case THLineScaleCommandOptionType.numeric:
         return numericSize.toString();
       case THLineScaleCommandOptionType.multiplechoice:
