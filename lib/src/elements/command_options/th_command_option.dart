@@ -1,6 +1,5 @@
 library;
 
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -53,7 +52,6 @@ part 'th_line_point_gradient_command_option.dart';
 part 'th_line_scale_command_option.dart';
 part 'th_lsize_command_option.dart';
 part 'th_mark_command_option.dart';
-part 'th_multiple_choice_as_string_command_option.dart';
 part 'th_multiple_choice_command_option.dart';
 part 'th_name_command_option.dart';
 part 'th_on_off_auto_command_option.dart';
@@ -78,6 +76,7 @@ part 'th_text_command_option.dart';
 part 'th_title_command_option.dart';
 part 'th_unrecognized_command_option.dart';
 part 'th_visibility_command_option.dart';
+part 'th_walls_command_option.dart';
 part 'types/th_command_option_type.dart';
 part 'types/th_option_choices_adjust_type.dart';
 part 'types/th_option_choices_align_type.dart';
@@ -190,8 +189,6 @@ abstract class THCommandOption {
         return THLSizeCommandOption.fromMap(map);
       case THCommandOptionType.mark:
         return THMarkCommandOption.fromMap(map);
-      case THCommandOptionType.multipleChoice:
-        return THMultipleChoiceAsStringCommandOption.fromMap(map);
       case THCommandOptionType.name:
         return THNameCommandOption.fromMap(map);
       case THCommandOptionType.orientation:
@@ -234,6 +231,8 @@ abstract class THCommandOption {
         return THUnrecognizedCommandOption.fromMap(map);
       case THCommandOptionType.visibility:
         return THVisibilityCommandOption.fromMap(map);
+      case THCommandOptionType.walls:
+        return THWallsCommandOption.fromMap(map);
     }
   }
 

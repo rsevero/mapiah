@@ -722,11 +722,10 @@ abstract class TH2FileEditControllerBase
         originalLineInTH2File: '',
         sameLineComment: '',
       );
-      final THMultipleChoiceAsStringCommandOption smoothOn =
-          THMultipleChoiceAsStringCommandOption(
-              optionParent: bezierCurveLineSegment,
-              multipleChoiceType: 'smooth',
-              choice: 'on');
+      final THSmoothCommandOption smoothOn = THSmoothCommandOption(
+        optionParent: bezierCurveLineSegment,
+        choice: THOptionChoicesOnOffAutoType.on,
+      );
 
       bezierCurveLineSegment.addUpdateOption(smoothOn);
 

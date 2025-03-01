@@ -720,12 +720,6 @@ class THFileParser {
           continue;
         }
 
-        if (THMultipleChoiceAsStringCommandOption.hasOptionType(
-            _currentHasOptions, optionType)) {
-          _injectMultipleChoiceAsStringCommandOption(optionType);
-          continue;
-        }
-
         final String errorMessage =
             "Unrecognized command option '$optionType'. This should never happen.";
         if (kDebugMode) assert(false, errorMessage);
@@ -841,26 +835,7 @@ class THFileParser {
 
     optionIdentified = _lineRegularOptions(optionType);
 
-    if (optionIdentified) {
-      return true;
-    }
-
-    /// Here we create the options found in [LINE DATA] that, in reality, are
-    /// line options, not line segment options.
-    /// The actual line segment options are created in _optionFromElement().
-    if (THMultipleChoiceAsStringCommandOption.hasOptionType(
-        _currentHasOptions, optionType)) {
-      _optionParentAsCurrentElement();
-      _injectMultipleChoiceAsStringCommandOption(optionType);
-      return true;
-    }
-
-    /// Setting optionParent so actual line segment options are properly created
-    /// in _optionFromElement(). This change will be reverted by
-    /// _injectLineCommandLikeOption().
-    _optionParentAsTHLineSegment();
-
-    return false;
+    return optionIdentified;
   }
 
   bool _pointRegularOptions(String optionType) {
@@ -910,6 +885,7 @@ class THFileParser {
 
     switch (optionType) {
       case 'flip':
+      case 'walls':
         _injectMultipleChoiceCommandOption(optionType);
       case 'author':
         _injectAuthorCommandOption();
@@ -976,25 +952,6 @@ class THFileParser {
       default:
         throw UnimplementedError();
     }
-  }
-
-  void _injectMultipleChoiceAsStringCommandOption(String optionType) {
-    if (_currentSpec.isEmpty) {
-      throw THCustomException(
-          "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
-    }
-
-    if (_currentSpec[0] is! String) {
-      throw THCustomException(
-          "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
-    }
-
-    THMultipleChoiceAsStringCommandOption(
-      optionParent: _currentHasOptions,
-      multipleChoiceType: optionType,
-      choice: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
-    );
   }
 
   void _checkParsedListAsPoint(List<dynamic> list) {
@@ -1108,6 +1065,12 @@ class THFileParser {
         );
       case 'visibility':
         THVisibilityCommandOption.fromString(
+          optionParent: _currentHasOptions,
+          choice: _currentSpec[0],
+          originalLineInTH2File: _currentLine,
+        );
+      case 'walls':
+        THWallsCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
           originalLineInTH2File: _currentLine,

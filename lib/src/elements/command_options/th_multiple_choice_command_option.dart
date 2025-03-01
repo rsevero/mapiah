@@ -15,9 +15,6 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   })  : parentElementType = optionParent.elementType,
         super();
 
-  @override
-  THCommandOptionType get optionType => THCommandOptionType.multipleChoice;
-
   static String getParentTypeNameForChecking(String parentTypeName) {
     String parentTypeNameForChecking = parentTypeName;
 
@@ -57,33 +54,4 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
 
   @override
   int get hashCode => super.hashCode ^ parentElementType.hashCode;
-
-  // static bool hasOptionType(THHasOptionsMixin optionParent, String optionType) {
-  //   final String optionParentElementType =
-  //       getParentTypeNameForChecking(optionParent.elementType.name);
-
-  //   if (!_supportedOptions.containsKey(optionParentElementType)) {
-  //     return false;
-  //   }
-
-  //   if (!_supportedOptions[optionParentElementType]!.containsKey(optionType)) {
-  //     return false;
-  //   }
-
-  //   if (optionParent is THHasPLATypeMixin) {
-  //     final String plaType = (optionParent as THHasPLATypeMixin).plaType;
-
-  //     final Set<String> plaTypesSupported = _supportedOptions[
-  //             optionParentElementType]![optionType]!['plaTypesSupported']
-  //         as Set<String>;
-
-  //     if (plaTypesSupported.isEmpty) {
-  //       return true;
-  //     } else {
-  //       return plaTypesSupported.contains(plaType);
-  //     }
-  //   }
-
-  //   return true;
-  // }
 }

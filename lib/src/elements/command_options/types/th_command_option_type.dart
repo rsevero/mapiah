@@ -30,7 +30,6 @@ enum THCommandOptionType {
   lineScale,
   lSize,
   mark,
-  multipleChoice,
   name,
   outline,
   orientation,
@@ -51,5 +50,6 @@ enum THCommandOptionType {
   text,
   title,
   unrecognizedCommandOption,
-  visibility;
+  visibility,
+  walls;
 }
