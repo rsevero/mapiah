@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_text_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
 import 'package:mapiah/src/definitions/mp_definitions.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_cs_part.dart';

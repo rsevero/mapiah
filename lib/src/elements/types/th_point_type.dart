@@ -1,4 +1,4 @@
-import 'package:mapiah/src/auxiliary/mp_text_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
 
 enum THPointType {
   airDraught,
@@ -119,12 +119,12 @@ enum THPointType {
   wheelchair;
 
   static THPointType fromFileString(String value) {
-    value = MPTextAux.convertHyphenatedToCamelCase(value);
+    value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
     return THPointType.values.byName(value);
   }
 
   String toFileString() {
-    return MPTextAux.convertCamelCaseToHyphenated(name);
+    return MPTypeAux.convertCamelCaseToHyphenated(name);
   }
 }

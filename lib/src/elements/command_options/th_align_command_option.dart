@@ -31,7 +31,7 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
 
   @override
   String specToFile() {
-    return MPTextAux.convertCamelCaseToHyphenated(choice.name);
+    return MPTypeAux.convertCamelCaseToHyphenated(choice.name);
   }
 
   static THOptionChoicesAlignType _setChoiceFromString(String choice) {
@@ -55,7 +55,7 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
       case 'br':
         return THOptionChoicesAlignType.bottomRight;
       default:
-        choice = MPTextAux.convertHyphenatedToCamelCase(choice);
+        choice = MPTypeAux.convertHyphenatedToCamelCase(choice);
 
         return THOptionChoicesAlignType.values.byName(choice);
     }

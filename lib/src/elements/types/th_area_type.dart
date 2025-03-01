@@ -1,4 +1,4 @@
-import 'package:mapiah/src/auxiliary/mp_text_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
 
 enum THAreaType {
   bedrock,
@@ -24,12 +24,12 @@ enum THAreaType {
   water;
 
   static THAreaType fromFileString(String value) {
-    value = MPTextAux.convertHyphenatedToCamelCase(value);
+    value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
     return THAreaType.values.byName(value);
   }
 
   String toFileString() {
-    return MPTextAux.convertCamelCaseToHyphenated(name);
+    return MPTypeAux.convertCamelCaseToHyphenated(name);
   }
 }
