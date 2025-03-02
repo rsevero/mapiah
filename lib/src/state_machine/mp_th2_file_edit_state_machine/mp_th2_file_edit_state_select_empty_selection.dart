@@ -23,6 +23,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
         th2FileEditController.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
+      /// TODO: deal with multiple end points returned on same click.
       th2FileEditController.setSelectedElements(
         getSelectedElementsWithLineSegmentsConvertedToLines(
           clickedElements,

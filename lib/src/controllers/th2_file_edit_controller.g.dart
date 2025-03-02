@@ -999,17 +999,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       name: 'TH2FileEditControllerBase._selectableEndControlPoints',
       context: context);
 
-  List<MPSelectableEndControlPoint> get selectableEndControlPoints {
+  Set<MPSelectableEndControlPoint> get selectableEndControlPoints {
     _$_selectableEndControlPointsAtom.reportRead();
     return super._selectableEndControlPoints;
   }
 
   @override
-  List<MPSelectableEndControlPoint> get _selectableEndControlPoints =>
+  Set<MPSelectableEndControlPoint> get _selectableEndControlPoints =>
       selectableEndControlPoints;
 
   @override
-  set _selectableEndControlPoints(List<MPSelectableEndControlPoint> value) {
+  set _selectableEndControlPoints(Set<MPSelectableEndControlPoint> value) {
     _$_selectableEndControlPointsAtom
         .reportWrite(value, super._selectableEndControlPoints, () {
       super._selectableEndControlPoints = value;

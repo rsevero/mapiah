@@ -36,6 +36,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
         clickedElements,
       );
+
+      /// TODO: deal with multiple end points returned on same click.
       final bool clickedElementAlreadySelected =
           th2FileEditController.isElementSelected(clickedElements.first);
 

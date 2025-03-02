@@ -87,7 +87,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         painters.add(painter);
 
         final List<THEndPointPainter> endPointPainters = [];
-        final List<MPSelectableEndControlPoint> endControlPoints =
+        final Set<MPSelectableEndControlPoint> endControlPoints =
             th2FileEditController.selectableEndControlPoints;
         late MPSelectableEndControlPoint lastEndpoint;
 

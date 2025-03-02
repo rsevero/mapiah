@@ -353,7 +353,7 @@ abstract class TH2FileEditControllerBase
   Set<THLineSegment> _selectedLineSegments = {};
 
   @readonly
-  List<MPSelectableEndControlPoint> _selectableEndControlPoints = [];
+  Set<MPSelectableEndControlPoint> _selectableEndControlPoints = {};
 
   @computed
   bool get showEditLineSegment =>
@@ -734,8 +734,8 @@ abstract class TH2FileEditControllerBase
     _selectedLineSegments.addAll(lineSegments);
   }
 
-  void removeSelectedLineSegment(THLineSegment lineSegment) {
-    _selectedLineSegments.remove(lineSegment);
+  void removeSelectedLineSegments(List<THLineSegment> lineSegments) {
+    _selectedLineSegments.removeAll(lineSegments);
   }
 
   bool getIsLineSegmentSelected(THLineSegment lineSegment) {
@@ -745,6 +745,26 @@ abstract class TH2FileEditControllerBase
   void warmSelectableElementsCanvasScaleChanged() {
     for (final selectableElement in _selectableElements.values) {
       selectableElement.canvasScaleChanged();
+    }
+  }
+
+  List<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
+    final THLine line =
+        _thFile.elementByMapiahID(lineSegment.parentMapiahID) as THLine;
+    final List<THLineSegment> lineSegments = getLineSegments(
+      line: line,
+      clone: false,
+    );
+
+    final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
+
+    if (lineSegmentIndex == 0) {
+      return <THLineSegment>[lineSegment];
+    } else {
+      return <THLineSegment>[
+        lineSegments[lineSegmentIndex - 1],
+        lineSegment,
+      ];
     }
   }
 
