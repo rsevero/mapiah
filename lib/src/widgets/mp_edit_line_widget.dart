@@ -69,11 +69,11 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
-          LinkedHashMap<int, THLineSegment> lineSegments,
+          _,
         ) = getLineSegmentsAndEndpointsMaps(
           line: line,
           thFile: th2FileEditController.thFile,
-          returnLineSegments: true,
+          returnLineSegments: false,
         );
 
         CustomPainter painter = THLinePainter(
@@ -86,6 +86,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         painters.add(painter);
 
+        final List<THEndPointPainter> endPointPainters = [];
         final List<MPSelectableEndControlPoint> endControlPoints =
             th2FileEditController.selectableEndControlPoints;
         late MPSelectableEndControlPoint lastEndpoint;
@@ -115,7 +116,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
                 canvasTranslation: th2FileEditController.canvasTranslation,
               );
 
-              painters.add(endPointPainter);
+              endPointPainters.add(endPointPainter);
               lastEndpoint = point;
             case MPSelectableControlpoint _:
               final THControlPointPainter controlPointPainter =
@@ -134,6 +135,8 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               throw UnimplementedError('Unknown MPSelectableEndControlPoint');
           }
         }
+
+        painters.addAll(endPointPainters);
 
         return RepaintBoundary(
           child: CustomPaint(
