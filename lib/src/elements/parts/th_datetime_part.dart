@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MPDirectoryAux {

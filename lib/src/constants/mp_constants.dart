@@ -1,13 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:dart_numerics/dart_numerics.dart' as numerics;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
-
-/// Constants and others definitioons that should be generally available.
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
@@ -39,11 +36,11 @@ const String thNullValueAsString = '!!! property has null value !!!';
 const double thCanvasVisibleMargin = 0.1;
 const double thCanvasOutOfSightMargin = 2.0;
 
-const double thRegularZoomFactor = numerics.sqrt2;
+const double thRegularZoomFactor = math.sqrt2;
 const double thRoundToFactor = thRegularZoomFactor - 1;
 const double thFineZoomFactor = thRoundToFactor / 2 + 1;
 const double thCanvasMovementFactor = 0.1;
-final double thLogN10 = math.log(10);
+const double thLogN10 = math.ln10;
 
 const double thMinimumSizeForDrawing = 10.0;
 
@@ -93,6 +90,8 @@ const double thDefaultSelectionTolerance = 5.0;
 const double thDefaultPointRadius = 5.0;
 const double thDefaultLineThickness = 2.0;
 const double thControlLineThicknessFactor = 0.5;
+const double thControlPointRadiusFactor = 1.5;
+const double thSelectedEndPointFactor = 1.25;
 const double thSelectionWindowBorderPaintDashInterval = 5.0;
 const double thSelectionHandleSize = 7.0;
 const double thSelectionHandleThresholdMultiplier = 10.0;

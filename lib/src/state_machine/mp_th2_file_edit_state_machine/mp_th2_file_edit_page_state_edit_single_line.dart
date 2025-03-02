@@ -14,16 +14,49 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+    List<MPSelectableEndControlPoint> clickedEndControlPoints =
+        th2FileEditController.selectableEndControlPointsClicked(
+      event.localPosition,
+      false,
+    );
+
+    if (clickedEndControlPoints.isNotEmpty) {
+      /// TODO: deal with multiple end points returned on same click.
+      final MPSelectableEndControlPoint clickedEndControlPoint =
+          clickedEndControlPoints.first;
+      final THLineSegment clickedEndControlPointLineSegment =
+          clickedEndControlPoint.element as THLineSegment;
+      final bool clickedEndControlPointAlreadySelected = th2FileEditController
+          .isEndpointSelected(clickedEndControlPointLineSegment);
+
+      if (shiftPressed) {
+        if (clickedEndControlPointAlreadySelected) {
+          th2FileEditController
+              .removeSelectedLineSegment(clickedEndControlPointLineSegment);
+        } else {
+          th2FileEditController
+              .addSelectedLineSegments([clickedEndControlPointLineSegment]);
+        }
+      } else {
+        th2FileEditController
+            .setSelectedLineSegments([clickedEndControlPointLineSegment]);
+      }
+
+      th2FileEditController.updateSelectableEndAndControlPoints();
+      th2FileEditController.triggerEditLineRedraw();
+      return;
+    }
+
     List<THElement> clickedElements =
         th2FileEditController.selectableElementsClicked(event.localPosition);
-    final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
       clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
         clickedElements,
       );
       final bool clickedElementAlreadySelected =
-          th2FileEditController.getIsSelected(clickedElements.first);
+          th2FileEditController.isElementSelected(clickedElements.first);
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {

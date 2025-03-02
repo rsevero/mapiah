@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
@@ -13,7 +14,6 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 /// THFile represents the complete contents of a .th or .th2 file.
 ///

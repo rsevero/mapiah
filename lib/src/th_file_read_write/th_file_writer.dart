@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:charset/charset.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';

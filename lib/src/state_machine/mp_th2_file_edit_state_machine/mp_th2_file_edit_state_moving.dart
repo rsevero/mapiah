@@ -29,7 +29,7 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState
         clickedElements,
       );
       final bool clickedElementAlreadySelected =
-          th2FileEditController.getIsSelected(clickedElements.first);
+          th2FileEditController.isElementSelected(clickedElements.first);
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {

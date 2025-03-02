@@ -2,11 +2,10 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
-import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
 class MPNumericAux {
   static RegExp endingZeroes = RegExp(r'0*$');
@@ -31,12 +30,10 @@ class MPNumericAux {
 
   static String doubleToString(double value, int decimalPositions) {
     /// Adapted from https://stackoverflow.com/a/67497099/11754455
-    final double incrementValue = numerics.positiveEpsilonOf(value);
-
     if (value < 0) {
-      value -= incrementValue;
+      value = nextDown(value);
     } else {
-      value += incrementValue;
+      value = nextUp(value);
     }
 
     final String valueString = value.toStringAsFixed(decimalPositions);
@@ -217,6 +214,7 @@ class MPNumericAux {
     );
   }
 
+  /// Base 10 logarithm of x.
   static double log10(double x) {
     return math.log(x) / thLogN10;
   }
@@ -448,6 +446,18 @@ class MPNumericAux {
     return (estimatedLength / desiredSegmentLength).ceil();
   }
 
+  static int doubleToInt64Bits(double value) {
+    ByteData bytes = ByteData(8);
+    bytes.setFloat64(0, value);
+    return bytes.getInt64(0);
+  }
+
+  static double int64BitsToDouble(int value) {
+    ByteData bytes = ByteData(8);
+    bytes.setInt64(0, value);
+    return bytes.getFloat64(0);
+  }
+
   static double nextUp(double x) {
     if ((x.isNaN) || (x == double.infinity)) {
       return x;
@@ -494,17 +504,5 @@ class MPNumericAux {
     }
 
     return int64BitsToDouble(signed64);
-  }
-
-  static int doubleToInt64Bits(double value) {
-    ByteData bytes = ByteData(8);
-    bytes.setFloat64(0, value);
-    return bytes.getInt64(0);
-  }
-
-  static double int64BitsToDouble(int value) {
-    ByteData bytes = ByteData(8);
-    bytes.setInt64(0, value);
-    return bytes.getFloat64(0);
   }
 }

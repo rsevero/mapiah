@@ -13,7 +13,6 @@ dependencies:
   analyzer: ^6.0.0
   charset: ^2.0.0
   collection: ^1.19.0
-  dart_numerics: ^0.0.6
   file_picker: ^8.0.0
   flutter:
     sdk: flutter

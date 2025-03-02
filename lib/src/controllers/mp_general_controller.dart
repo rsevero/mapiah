@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class MPGeneralController {

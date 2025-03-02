@@ -37,7 +37,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         clickedElements,
       );
       final bool clickedElementAlreadySelected =
-          th2FileEditController.getIsSelected(clickedElements.first);
+          th2FileEditController.isElementSelected(clickedElements.first);
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
@@ -95,7 +95,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         );
 
         for (final THElement element in clickedElements) {
-          if (th2FileEditController.getIsSelected(element)) {
+          if (th2FileEditController.isElementSelected(element)) {
             alreadySelected = true;
           } else {
             newlySelectedElements.add(element);

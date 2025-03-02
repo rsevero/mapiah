@@ -8,8 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/definitions/mp_paints.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
+import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/controllers/types/th_line_paint.dart';
+import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
@@ -25,9 +28,6 @@ import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
-import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
-import 'package:mapiah/src/controllers/types/th_line_paint.dart';
-import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
@@ -632,6 +632,28 @@ abstract class TH2FileEditControllerBase
     return insideWindowElements.values.toList();
   }
 
+  List<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
+    Offset screenCoordinates,
+    bool includeControlPoints,
+  ) {
+    final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
+    final List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
+
+    for (final MPSelectableEndControlPoint endControlPoint
+        in _selectableEndControlPoints) {
+      if (endControlPoint.contains(canvasCoordinates)) {
+        if (endControlPoint is MPSelectableEndpoint) {
+          clickedEndControlPoints.add(endControlPoint);
+        } else if (includeControlPoints &&
+            (endControlPoint is MPSelectableControlpoint)) {
+          clickedEndControlPoints.add(endControlPoint);
+        }
+      }
+    }
+
+    return clickedEndControlPoints;
+  }
+
   void updateSelectableEndAndControlPoints() {
     _selectableEndControlPoints.clear();
 
@@ -710,6 +732,10 @@ abstract class TH2FileEditControllerBase
 
   void addSelectedLineSegments(List<THLineSegment> lineSegments) {
     _selectedLineSegments.addAll(lineSegments);
+  }
+
+  void removeSelectedLineSegment(THLineSegment lineSegment) {
+    _selectedLineSegments.remove(lineSegment);
   }
 
   bool getIsLineSegmentSelected(THLineSegment lineSegment) {
@@ -1024,12 +1050,16 @@ abstract class TH2FileEditControllerBase
     _selectionWindowCanvasCoordinates.value = Rect.zero;
   }
 
-  bool getIsSelected(THElement element) {
-    return getIsSelectedByMapiahID(element.mapiahID);
+  bool isElementSelected(THElement element) {
+    return isElementSelectedByMapiahID(element.mapiahID);
   }
 
-  bool getIsSelectedByMapiahID(int mapiahID) {
+  bool isElementSelectedByMapiahID(int mapiahID) {
     return _selectedElements.containsKey(mapiahID);
+  }
+
+  bool isEndpointSelected(THLineSegment lineSegment) {
+    return _selectedLineSegments.contains(lineSegment);
   }
 
   @action
@@ -1360,6 +1390,13 @@ abstract class TH2FileEditControllerBase
     );
   }
 
+  THLinePaint getControlPointLinePaint() {
+    return THLinePaint(
+      paint: THPaints.thPaintBlackBorder
+        ..strokeWidth = controlLineThicknessOnCanvas,
+    );
+  }
+
   THPointPaint getSelectedPointPaint() {
     return THPointPaint(
       radius: pointRadiusOnCanvas,
@@ -1376,7 +1413,7 @@ abstract class TH2FileEditControllerBase
 
   THPointPaint getControlPointPaint() {
     return THPointPaint(
-      radius: pointRadiusOnCanvas,
+      radius: pointRadiusOnCanvas * thControlPointRadiusFactor,
       paint: THPaints.thPaintBlackBorder
         ..strokeWidth = controlLineThicknessOnCanvas,
     );
@@ -1384,7 +1421,7 @@ abstract class TH2FileEditControllerBase
 
   THPointPaint getSelectedEndPointPaint() {
     return THPointPaint(
-      radius: pointRadiusOnCanvas * 1.25,
+      radius: pointRadiusOnCanvas * thSelectedEndPointFactor,
       paint: THPaints.thPaintBlackBackground,
     );
   }

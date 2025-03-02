@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/definitions/mp_paints.dart';
 
 class THControlPointPainter extends CustomPainter {
   final Offset controlPointPosition;

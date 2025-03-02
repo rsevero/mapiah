@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 
 class MPScrapScalePainter extends CustomPainter {
   final double lengthUnits;

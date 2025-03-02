@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
@@ -9,9 +9,9 @@ import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
+import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
@@ -52,6 +52,10 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             th2FileEditController.getControlPointPaint();
         final double controlPointRadius = controlPointPaintInfo.radius;
         final Paint controlPointPaint = controlPointPaintInfo.paint;
+
+        final THLinePaint controlPointLinePaintInfo =
+            th2FileEditController.getControlPointLinePaint();
+        final Paint controlPointLinePaint = controlPointLinePaintInfo.paint;
 
         final THLinePaint linePaintInfo =
             th2FileEditController.getEditLinePaint();
@@ -119,7 +123,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
                 controlPointPosition: point.position,
                 endPointPosition: lastEndpoint.position,
                 pointPaint: controlPointPaint,
-                controlLinePaint: linePaint,
+                controlLinePaint: controlPointLinePaint,
                 pointRadius: controlPointRadius,
                 th2FileEditController: th2FileEditController,
                 canvasScale: th2FileEditController.canvasScale,

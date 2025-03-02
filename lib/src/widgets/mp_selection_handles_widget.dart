@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
-import 'package:mapiah/src/definitions/mp_definitions.dart';
-import 'package:mapiah/src/painters/mp_selection_handles_painter.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/painters/mp_selection_handles_painter.dart';
+import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 
 class MPSelectionHandlesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
