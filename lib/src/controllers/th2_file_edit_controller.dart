@@ -328,6 +328,9 @@ abstract class TH2FileEditControllerBase
   @readonly
   int _redrawTriggerNewLine = 0;
 
+  @readonly
+  int _redrawTriggerEditLine = 0;
+
   @observable
   bool isChangeScrapsPopupVisible = false;
 
@@ -347,10 +350,10 @@ abstract class TH2FileEditControllerBase
   THLine? _newLine;
 
   @readonly
-  List<THLineSegment> _selectedLineSegments = [];
+  Set<THLineSegment> _selectedLineSegments = {};
 
   @readonly
-  List<THLineSegment> _editEnabledLineSegments = [];
+  List<MPSelectableEndControlPoint> _selectableEndControlPoints = [];
 
   @computed
   bool get showEditLineSegment =>
@@ -378,12 +381,6 @@ abstract class TH2FileEditControllerBase
 
   /// Used to search for selected elements by list of selectable coordinates.
   final Map<int, MPSelectable> _selectableElements = {};
-
-  final Map<int, MPSelectableEndpoint> _selectableEndpoints = {};
-
-  final Map<int, MPSelectableControlpoint> _selectedEndpoints = {};
-
-  final List<MPSelectableControlpoint> _selectableControlpoints = [];
 
   Offset dragStartCanvasCoordinates = Offset.zero;
 
@@ -480,26 +477,6 @@ abstract class TH2FileEditControllerBase
     );
 
     return newLine;
-  }
-
-  @action
-  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
-    _selectedLineSegments = lineSegments;
-  }
-
-  @action
-  void clearSelectedLineSegments() {
-    _selectedLineSegments.clear();
-  }
-
-  @action
-  void setEditEnabledLineSegments(List<THLineSegment> lineSegments) {
-    _editEnabledLineSegments = lineSegments;
-  }
-
-  @action
-  void clearEditEnabledLineSegments() {
-    _editEnabledLineSegments.clear();
   }
 
   @action
@@ -656,47 +633,87 @@ abstract class TH2FileEditControllerBase
   }
 
   void updateSelectableEndAndControlPoints() {
-    _selectableControlpoints.clear();
-    _selectableEndpoints.clear();
+    _selectableEndControlPoints.clear();
 
     if ((_selectedElements.length != 1) ||
-        (_selectedElements.values.first is! MPSelectableLine)) {
+        (_selectedElements.values.first is! MPSelectedLine)) {
       return;
     }
 
-    final Set<int> lineSegmentMapiahIDs =
-        ((_selectedElements.values.first as MPSelectableLine).element as THLine)
-            .childrenMapiahID;
+    final THLine line = _thFile.elementByMapiahID(
+      _selectedElements.values.first.mapiahID,
+    ) as THLine;
+    final List<THLineSegment> lineSegments = getLineSegments(
+      line: line,
+      clone: false,
+    );
+    bool isFirst = true;
+    bool previousLineSegmentSelected = false;
 
-    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
-      final THLineSegment lineSegment =
-          _thFile.elementByMapiahID(lineSegmentMapiahID) as THLineSegment;
+    for (final THLineSegment lineSegment in lineSegments) {
+      if (isFirst) {
+        _selectableEndControlPoints.add(
+          MPSelectableEndpoint(
+            lineSegment: lineSegment,
+            position: lineSegment.endPoint.coordinates,
+            th2fileEditController: this as TH2FileEditController,
+          ),
+        );
+        isFirst = false;
+        previousLineSegmentSelected =
+            _selectedLineSegments.contains(lineSegment);
+        continue;
+      }
 
-      if (_selectedEndpoints.containsKey(lineSegmentMapiahID)) {
-        if (lineSegment is THBezierCurveLineSegment) {
-          _selectableControlpoints.add(
-            MPSelectableControlpoint(
-              lineSegment: lineSegment,
-              position: lineSegment.controlPoint1.coordinates,
-              th2fileEditController: this as TH2FileEditController,
-            ),
-          );
-          _selectableControlpoints.add(
-            MPSelectableControlpoint(
-              lineSegment: lineSegment,
-              position: lineSegment.controlPoint2.coordinates,
-              th2fileEditController: this as TH2FileEditController,
-            ),
-          );
-        }
-      } else {
-        _selectableEndpoints[lineSegmentMapiahID] = MPSelectableEndpoint(
+      final bool currentLineSegmentSelected =
+          _selectedLineSegments.contains(lineSegment);
+      final bool addControlPoints =
+          (previousLineSegmentSelected || currentLineSegmentSelected) &&
+              (lineSegment is THBezierCurveLineSegment);
+
+      if (addControlPoints) {
+        _selectableEndControlPoints.add(
+          MPSelectableControlpoint(
+            lineSegment: lineSegment,
+            position: lineSegment.controlPoint1.coordinates,
+            th2fileEditController: this as TH2FileEditController,
+          ),
+        );
+      }
+      _selectableEndControlPoints.add(
+        MPSelectableEndpoint(
           lineSegment: lineSegment,
           position: lineSegment.endPoint.coordinates,
           th2fileEditController: this as TH2FileEditController,
+        ),
+      );
+      if (addControlPoints) {
+        _selectableEndControlPoints.add(
+          MPSelectableControlpoint(
+            lineSegment: lineSegment,
+            position: lineSegment.controlPoint2.coordinates,
+            th2fileEditController: this as TH2FileEditController,
+          ),
         );
       }
+      previousLineSegmentSelected = currentLineSegmentSelected;
     }
+  }
+
+  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
+    _selectedLineSegments = lineSegments.toSet();
+  }
+
+  void clearSelectedLineSegments() {
+    _selectedLineSegments.clear();
+  }
+
+  void addSelectedLineSegments(List<THLineSegment> lineSegments) {
+    _selectedLineSegments.addAll(lineSegments);
+  }
+
+  bool getIsLineSegmentSelected(THLineSegment lineSegment) {
+    return _selectedLineSegments.contains(lineSegment);
   }
 
   void warmSelectableElementsCanvasScaleChanged() {
@@ -1357,6 +1374,28 @@ abstract class TH2FileEditControllerBase
     );
   }
 
+  THPointPaint getControlPointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaintBlackBorder
+        ..strokeWidth = controlLineThicknessOnCanvas,
+    );
+  }
+
+  THPointPaint getSelectedEndPointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas * 1.25,
+      paint: THPaints.thPaintBlackBackground,
+    );
+  }
+
+  THPointPaint getUnselectablePointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas,
+      paint: THPaints.thPaintBlackBorder..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
   THLinePaint getSelectedLinePaint() {
     return THLinePaint(
       paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
@@ -1373,6 +1412,12 @@ abstract class TH2FileEditControllerBase
   THLinePaint getNewLinePaint() {
     return THLinePaint(
       paint: THPaints.thPaint19..strokeWidth = lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getEditLinePaint() {
+    return THLinePaint(
+      paint: THPaints.thPaint13..strokeWidth = lineThicknessOnCanvas,
     );
   }
 
@@ -1477,6 +1522,7 @@ abstract class TH2FileEditControllerBase
     _redrawTriggerSelectedElements++;
     _redrawTriggerNonSelectedElements++;
     _redrawTriggerNewLine++;
+    _redrawTriggerEditLine++;
     _selectionHandleCenters = null;
   }
 
@@ -1502,6 +1548,11 @@ abstract class TH2FileEditControllerBase
   @action
   void triggerNewLineRedraw() {
     _redrawTriggerNewLine++;
+  }
+
+  @action
+  void triggerEditLineRedraw() {
+    _redrawTriggerEditLine++;
   }
 
   void _setCanvasCenterFromCurrent() {

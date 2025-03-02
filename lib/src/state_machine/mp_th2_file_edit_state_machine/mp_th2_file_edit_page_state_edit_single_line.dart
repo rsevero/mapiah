@@ -9,6 +9,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
     th2FileEditController.updateSelectableEndAndControlPoints();
+    th2FileEditController.triggerEditLineRedraw();
   }
 
   @override

@@ -30,8 +30,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final THPointPaint pointPaintInfo =
             th2FileEditController.getNewLinePointPaint();
-        final double pointRadius = pointPaintInfo.radius;
-        final double pointWidth = pointRadius * 2;
+        final double pointHalfLength = pointPaintInfo.radius;
         final Paint pointPaint = pointPaintInfo.paint;
 
         final THLinePaint linePaintInfo =
@@ -49,7 +48,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             final painter = THEndPointPainter(
               position: startPoint,
               pointPaint: pointPaint,
-              width: pointWidth,
+              halfLength: pointHalfLength,
               isSmooth: false,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
@@ -99,7 +98,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               endPointPosition: secondToLastSegmentPosition,
               pointPaint: pointPaint,
               controlLinePaint: controlLinePaint.paint,
-              pointRadius: pointRadius,
+              pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
@@ -112,7 +111,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               endPointPosition: lastSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               controlLinePaint: controlLinePaint.paint,
-              pointRadius: pointRadius,
+              pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,
               canvasTranslation: th2FileEditController.canvasTranslation,
@@ -124,7 +123,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             painter = THEndPointPainter(
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
-              width: pointWidth,
+              halfLength: pointHalfLength,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
               canvasScale: th2FileEditController.canvasScale,

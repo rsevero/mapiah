@@ -124,6 +124,9 @@ class THPaints {
   static final thPaintWhiteBackground = Paint()
     ..color = Colors.white
     ..style = PaintingStyle.fill;
+  static final thPaintBlackBackground = Paint()
+    ..color = Colors.black
+    ..style = PaintingStyle.fill;
   static final thPaintBlackBorder = Paint()
     ..color = Colors.black
     ..strokeWidth = 4

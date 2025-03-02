@@ -5,7 +5,7 @@ import 'package:mapiah/src/definitions/mp_paints.dart';
 
 class THEndPointPainter extends CustomPainter {
   final Offset position;
-  final double width;
+  final double halfLength;
   final Paint pointPaint;
   final bool isSmooth;
   final TH2FileEditController th2FileEditController;
@@ -15,7 +15,7 @@ class THEndPointPainter extends CustomPainter {
   THEndPointPainter({
     super.repaint,
     required this.position,
-    required this.width,
+    required this.halfLength,
     required this.pointPaint,
     required this.isSmooth,
     required this.th2FileEditController,
@@ -25,15 +25,15 @@ class THEndPointPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Rect whiteRect = MPNumericAux.orderedRectFromCenter(
+    final Rect whiteRect = MPNumericAux.orderedRectFromCenterHalfLength(
       center: position,
-      width: width,
-      height: width,
+      halfHeight: halfLength,
+      halfWidth: halfLength,
     );
-    final Rect squareRect = MPNumericAux.orderedRectFromCenter(
+    final Rect squareRect = MPNumericAux.orderedRectFromCenterHalfLength(
       center: position,
-      width: width,
-      height: width,
+      halfHeight: halfLength,
+      halfWidth: halfLength,
     );
 
     if (!isSmooth) {
@@ -56,7 +56,7 @@ class THEndPointPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return position != oldDelegate.position ||
-        width != oldDelegate.width ||
+        halfLength != oldDelegate.halfLength ||
         pointPaint != oldDelegate.pointPaint ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;

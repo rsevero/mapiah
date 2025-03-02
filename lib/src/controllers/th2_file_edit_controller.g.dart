@@ -846,6 +846,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_redrawTriggerEditLineAtom = Atom(
+      name: 'TH2FileEditControllerBase._redrawTriggerEditLine',
+      context: context);
+
+  int get redrawTriggerEditLine {
+    _$_redrawTriggerEditLineAtom.reportRead();
+    return super._redrawTriggerEditLine;
+  }
+
+  @override
+  int get _redrawTriggerEditLine => redrawTriggerEditLine;
+
+  @override
+  set _redrawTriggerEditLine(int value) {
+    _$_redrawTriggerEditLineAtom
+        .reportWrite(value, super._redrawTriggerEditLine, () {
+      super._redrawTriggerEditLine = value;
+    });
+  }
+
   late final _$isChangeScrapsPopupVisibleAtom = Atom(
       name: 'TH2FileEditControllerBase.isChangeScrapsPopupVisible',
       context: context);
@@ -959,39 +979,40 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       name: 'TH2FileEditControllerBase._selectedLineSegments',
       context: context);
 
-  List<THLineSegment> get selectedLineSegments {
+  Set<THLineSegment> get selectedLineSegments {
     _$_selectedLineSegmentsAtom.reportRead();
     return super._selectedLineSegments;
   }
 
   @override
-  List<THLineSegment> get _selectedLineSegments => selectedLineSegments;
+  Set<THLineSegment> get _selectedLineSegments => selectedLineSegments;
 
   @override
-  set _selectedLineSegments(List<THLineSegment> value) {
+  set _selectedLineSegments(Set<THLineSegment> value) {
     _$_selectedLineSegmentsAtom.reportWrite(value, super._selectedLineSegments,
         () {
       super._selectedLineSegments = value;
     });
   }
 
-  late final _$_editEnabledLineSegmentsAtom = Atom(
-      name: 'TH2FileEditControllerBase._editEnabledLineSegments',
+  late final _$_selectableEndControlPointsAtom = Atom(
+      name: 'TH2FileEditControllerBase._selectableEndControlPoints',
       context: context);
 
-  List<THLineSegment> get editEnabledLineSegments {
-    _$_editEnabledLineSegmentsAtom.reportRead();
-    return super._editEnabledLineSegments;
+  List<MPSelectableEndControlPoint> get selectableEndControlPoints {
+    _$_selectableEndControlPointsAtom.reportRead();
+    return super._selectableEndControlPoints;
   }
 
   @override
-  List<THLineSegment> get _editEnabledLineSegments => editEnabledLineSegments;
+  List<MPSelectableEndControlPoint> get _selectableEndControlPoints =>
+      selectableEndControlPoints;
 
   @override
-  set _editEnabledLineSegments(List<THLineSegment> value) {
-    _$_editEnabledLineSegmentsAtom
-        .reportWrite(value, super._editEnabledLineSegments, () {
-      super._editEnabledLineSegments = value;
+  set _selectableEndControlPoints(List<MPSelectableEndControlPoint> value) {
+    _$_selectableEndControlPointsAtom
+        .reportWrite(value, super._selectableEndControlPoints, () {
+      super._selectableEndControlPoints = value;
     });
   }
 
@@ -1035,53 +1056,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.clearNewLine');
     try {
       return super.clearNewLine();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setSelectedLineSegments');
-    try {
-      return super.setSelectedLineSegments(lineSegments);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearSelectedLineSegments() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.clearSelectedLineSegments');
-    try {
-      return super.clearSelectedLineSegments();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setEditEnabledLineSegments(List<THLineSegment> lineSegments) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.setEditEnabledLineSegments');
-    try {
-      return super.setEditEnabledLineSegments(lineSegments);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearEditEnabledLineSegments() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.clearEditEnabledLineSegments');
-    try {
-      return super.clearEditEnabledLineSegments();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1451,6 +1425,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.triggerNewLineRedraw');
     try {
       return super.triggerNewLineRedraw();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerEditLineRedraw() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.triggerEditLineRedraw');
+    try {
+      return super.triggerEditLineRedraw();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
