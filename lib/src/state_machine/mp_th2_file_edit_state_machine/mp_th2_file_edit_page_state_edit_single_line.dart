@@ -55,11 +55,11 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       return;
     }
 
-    List<THElement> clickedElements =
+    Set<THElement> clickedElements =
         th2FileEditController.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
-      final List<THElement> clickedPointsLines =
+      final Set<THElement> clickedPointsLines =
           getSelectedElementsWithLineSegmentsConvertedToLines(
         clickedElements,
       );
@@ -95,7 +95,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         if (shiftPressed) {
           th2FileEditController.addSelectedElement(clickedElements.first);
         } else {
-          th2FileEditController.setSelectedElements([clickedElements.first]);
+          th2FileEditController.setSelectedElements({clickedElements.first});
         }
         th2FileEditController.setNonEmptySelectionState();
         return;

@@ -1245,7 +1245,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void addSelectedElements(List<THElement> elements) {
+  void addSelectedElements(Set<THElement> elements) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.addSelectedElements');
     try {
@@ -1278,7 +1278,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setSelectedElements(List<THElement> clickedElements) {
+  void setSelectedElements(Set<THElement> clickedElements) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setSelectedElements');
     try {

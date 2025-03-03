@@ -19,7 +19,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// 1.2. If no, do nothing.
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
-    final List<THElement> clickedElements =
+    final Set<THElement> clickedElements =
         th2FileEditController.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
@@ -56,7 +56,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectNonEmptySelection];
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final List<THElement> elementsInsideSelectionWindow =
+    final Set<THElement> elementsInsideSelectionWindow =
         getObjectsInsideSelectionWindow(event.localPosition);
 
     th2FileEditController.clearSelectionWindow();

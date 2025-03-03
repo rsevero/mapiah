@@ -591,9 +591,9 @@ abstract class TH2FileEditControllerBase
     _isSelected.remove(mapiahID);
   }
 
-  List<THElement> selectableElementsClicked(Offset screenCoordinates) {
+  Set<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
-    final List<THElement> clickedElements = <THElement>[];
+    final Set<THElement> clickedElements = <THElement>{};
     final selectableElements = _selectableElements.values;
 
     for (final selectableElement in selectableElements) {
@@ -612,7 +612,7 @@ abstract class TH2FileEditControllerBase
     return clickedElements;
   }
 
-  List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
+  Set<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
 
     for (final selectableElement in _selectableElements.values) {
@@ -629,7 +629,7 @@ abstract class TH2FileEditControllerBase
       }
     }
 
-    return insideWindowElements.values.toList();
+    return insideWindowElements.values.toSet();
   }
 
   List<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
@@ -1191,7 +1191,7 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void addSelectedElements(List<THElement> elements) {
+  void addSelectedElements(Set<THElement> elements) {
     for (THElement element in elements) {
       addSelectedElement(element);
     }
@@ -1218,7 +1218,7 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void setSelectedElements(List<THElement> clickedElements) {
+  void setSelectedElements(Set<THElement> clickedElements) {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
 
     for (THElement element in clickedElements) {
