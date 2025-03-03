@@ -632,12 +632,12 @@ abstract class TH2FileEditControllerBase
     return insideWindowElements.values.toSet();
   }
 
-  List<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
+  Set<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
     Offset screenCoordinates,
     bool includeControlPoints,
   ) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
-    final List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
+    final Set<MPSelectableEndControlPoint> clickedEndControlPoints = {};
 
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
@@ -1222,9 +1222,7 @@ abstract class TH2FileEditControllerBase
     _clearSelectedElementsWithoutResettingRedrawTriggers();
 
     for (THElement element in clickedElements) {
-      if ((element is! THPoint) &&
-          (element is! THLine) &&
-          (element is! THLineSegment)) {
+      if ((element is! THPoint) && (element is! THLine)) {
         return;
       }
 

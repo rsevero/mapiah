@@ -22,7 +22,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
-    List<MPSelectableEndControlPoint> clickedEndControlPoints =
+    Set<MPSelectableEndControlPoint> clickedEndControlPoints =
         th2FileEditController.selectableEndControlPointsClicked(
       event.localPosition,
       false,
@@ -93,9 +93,11 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         return;
       } else {
         if (shiftPressed) {
-          th2FileEditController.addSelectedElement(clickedElements.first);
+          /// TODO: deal with multiple end points returned on same click.
+          th2FileEditController.addSelectedElement(clickedPointsLines.first);
         } else {
-          th2FileEditController.setSelectedElements({clickedElements.first});
+          /// TODO: deal with multiple end points returned on same click.
+          th2FileEditController.setSelectedElements({clickedPointsLines.first});
         }
         th2FileEditController.setNonEmptySelectionState();
         return;
