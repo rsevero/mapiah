@@ -27,11 +27,11 @@ class MPSelectedElementsWidget extends StatelessWidget
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        final List<CustomPainter> painters = [];
-        final selectedElements = th2FileEditController.selectedElements.values;
-
         th2FileEditController.redrawTriggerSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
+
+        final List<CustomPainter> painters = [];
+        final selectedElements = th2FileEditController.selectedElements.values;
 
         final THPointPaint pointPaintInfo =
             th2FileEditController.getSelectedPointPaint();

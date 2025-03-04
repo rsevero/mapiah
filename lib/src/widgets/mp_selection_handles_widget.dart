@@ -20,7 +20,6 @@ class MPSelectionHandlesWidget extends StatelessWidget {
       child: Observer(
         builder: (_) {
           th2FileEditController.redrawTriggerSelectedElements;
-          th2FileEditController.canvasScale;
 
           final Map<MPSelectionHandleType, Offset> handleCenters =
               th2FileEditController.getSelectionHandleCenters();

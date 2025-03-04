@@ -33,54 +33,89 @@ class THFileWidget extends StatelessWidget {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         }
 
-        return Observer(
-          builder: (context) {
-            mpLocator.mpLog.finer("THFileWidget Observer()");
-
-            return MPListenerWidget(
-              key: ValueKey("MPListenerWidget|$thFileMapiahID"),
-              actuator: th2FileEditController,
-              child: Stack(
-                children: [
-                  MPNonSelectedElementsWidget(
-                    key:
-                        ValueKey("MPNonSelectedElementsWidget|$thFileMapiahID"),
-                    th2FileEditController: th2FileEditController,
-                  ),
-                  if (th2FileEditController.showSelectedElements)
-                    MPSelectedElementsWidget(
+        return MPListenerWidget(
+          key: ValueKey("MPListenerWidget|$thFileMapiahID"),
+          actuator: th2FileEditController,
+          child: Stack(
+            children: [
+              MPNonSelectedElementsWidget(
+                key: ValueKey("MPNonSelectedElementsWidget|$thFileMapiahID"),
+                th2FileEditController: th2FileEditController,
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showSelectedElements) {
+                    return MPSelectedElementsWidget(
                       key: ValueKey("MPSelectedElementsWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
-                    ),
-                  if (th2FileEditController.showSelectionHandles)
-                    MPSelectionHandlesWidget(
-                      key: ValueKey("MPSelectionHandlesWidget|$thFileMapiahID"),
-                      th2FileEditController: th2FileEditController,
-                    ),
-                  if (th2FileEditController.showSelectionWindow)
-                    MPSelectionWindowWidget(
-                      key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
-                      th2FileEditController: th2FileEditController,
-                    ),
-                  if (th2FileEditController.showAddLine)
-                    MPAddLineWidget(
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showAddLine) {
+                    return MPAddLineWidget(
                       key: ValueKey("MPAddLineWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
-                    ),
-                  if (th2FileEditController.showEditLineSegment)
-                    MPEditLineWidget(
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showEditLineSegment) {
+                    return MPEditLineWidget(
                       key: ValueKey("MPEditLineWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
-                    ),
-                  if (th2FileEditController.showScrapScale)
-                    MPScrapScaleWidget(
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showSelectionHandles) {
+                    return MPSelectionHandlesWidget(
+                      key: ValueKey("MPSelectionHandlesWidget|$thFileMapiahID"),
+                      th2FileEditController: th2FileEditController,
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showSelectionWindow) {
+                    return MPSelectionWindowWidget(
+                      key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
+                      th2FileEditController: th2FileEditController,
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showScrapScale) {
+                    return MPScrapScaleWidget(
                       key: ValueKey("MPScrapScaleWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
-                    ),
-                ],
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
               ),
-            );
-          },
+            ],
+          ),
         );
       },
     );

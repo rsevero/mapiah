@@ -75,9 +75,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 2.1. Yes. Is Shift pressed?
   /// 2.1.1. Yes. Do nothing.
   /// 2.1.2. No. Was the object already selected?
-  /// 2.1.2.1. Yes. Change to [MPTH2FileEditStateType.moving];
+  /// 2.1.2.1. Yes. Change to [MPTH2FileEditStateType.movingElements];
   /// 2.1.2.2. No. Clear current selection; include clicked object in the
-  /// selection. Change to [MPTH2FileEditStateType.moving];
+  /// selection. Change to [MPTH2FileEditStateType.movingElements];
   /// 2.2. No. Do nothing.
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
@@ -105,10 +105,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         }
 
         if (alreadySelected) {
-          th2FileEditController.setState(MPTH2FileEditStateType.moving);
+          th2FileEditController.setState(MPTH2FileEditStateType.movingElements);
         } else {
           th2FileEditController.setSelectedElements(newlySelectedElements);
-          th2FileEditController.setState(MPTH2FileEditStateType.moving);
+          th2FileEditController.setState(MPTH2FileEditStateType.movingElements);
         }
       }
     }

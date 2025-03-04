@@ -104,7 +104,8 @@ abstract class TH2FileEditControllerBase
 
   @computed
   bool get isSelectMode => (_state is MPTH2FileEditStateSelectEmptySelection ||
-      (_state is MPTH2FileEditStateSelectNonEmptySelection));
+      (_state is MPTH2FileEditStateSelectNonEmptySelection) ||
+      _state is MPTH2FileEditStateMovingElements);
 
   @computed
   bool get isAddElementMode => ((_state is MPTH2FileEditPageStateAddArea) ||
@@ -185,7 +186,8 @@ abstract class TH2FileEditControllerBase
       (selectionToleranceOnCanvas * selectionToleranceOnCanvas);
 
   @computed
-  bool get showSelectedElements => _selectedElements.isNotEmpty;
+  bool get showSelectedElements =>
+      _selectedElements.isNotEmpty && !showEditLineSegment;
 
   @computed
   bool get showSelectionHandles => showSelectedElements && isSelectMode;
@@ -1272,15 +1274,6 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  void moveSelectedElementsToScreenCoordinates(
-    Offset screenCoordinatesFinalPosition,
-  ) {
-    final Offset canvasCoordinatesFinalPosition =
-        offsetScreenToCanvas(screenCoordinatesFinalPosition);
-
-    moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
-  }
-
   List<THLineSegment> getLineSegments({
     required THLine line,
     required bool clone,
@@ -1298,6 +1291,15 @@ abstract class TH2FileEditControllerBase
     }
 
     return lineSegments;
+  }
+
+  void moveSelectedElementsToScreenCoordinates(
+    Offset screenCoordinatesFinalPosition,
+  ) {
+    final Offset canvasCoordinatesFinalPosition =
+        offsetScreenToCanvas(screenCoordinatesFinalPosition);
+
+    moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
   }
 
   @action
@@ -1329,6 +1331,7 @@ abstract class TH2FileEditControllerBase
           break;
       }
     }
+
     triggerSelectedElementsRedraw();
   }
 

@@ -1,23 +1,10 @@
 part of 'mp_th2_file_edit_state.dart';
 
-class MPTH2FileEditStateMoving extends MPTH2FileEditState
+class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     with MPTH2FileEditStateGetSelectedElementsMixin {
-  MPTH2FileEditStateMoving({required super.th2FileEditController});
+  MPTH2FileEditStateMovingEndControlPoints(
+      {required super.th2FileEditController});
 
-  /// 1. Clicked on an object?
-  /// 1.1. Yes. Was the object already selected?
-  /// 1.1.1. Yes. Is Shift pressed?
-  /// 1.1.1.1. Yes. Remove the object from the selection. Is the selection empty?
-  /// 1.1.1.1.1. Yes. Change to [MPTH2FileEditStateType.selectEmptySelection];
-  /// 1.1.1.1.2. No. Do nothing;
-  /// 1.1.1.2. No. Do nothing.
-  /// 1.1.2. No. Is Shift pressed?
-  /// 1.1.2.1. Yes. Add object to the selection;
-  /// 1.1.2.2. No. Replace current selection with the clicked object.
-  /// 1.2. No. Is Shift pressed?
-  /// 1.2.1. Yes. Do nothing;
-  /// 1.2.2. No. Clear selection. Change to
-  /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     Set<THElement> clickedElements =
@@ -64,18 +51,12 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState
     }
   }
 
-  /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditController
         .moveSelectedElementsToScreenCoordinates(event.localPosition);
   }
 
-  /// 1. Records an MPCommand that moves the entire selection by the distance
-  /// indicated by [event].
-  /// 2. Update cloned copies inside TH2FileEditController.selectedElements.
-  /// 3. Trigger redraw of selected elements.
-  /// 4. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final int selectedCount = th2FileEditController.selectedElements.length;
@@ -143,5 +124,6 @@ class MPTH2FileEditStateMoving extends MPTH2FileEditState
   }
 
   @override
-  MPTH2FileEditStateType get type => MPTH2FileEditStateType.moving;
+  MPTH2FileEditStateType get type =>
+      MPTH2FileEditStateType.movingEndControlPoints;
 }
