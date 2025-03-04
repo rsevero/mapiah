@@ -45,62 +45,59 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             primaryButtonDragStartScreenCoordinates = event.localPosition;
             isPrimaryButtonDragging = false;
             widget.actuator.onPrimaryButtonDragStart(event);
-            break;
           case kSecondaryButton:
             currentPressedMouseButton = kSecondaryButton;
             secondaryButtonDragStartScreenCoordinates = event.localPosition;
             isSecondaryButtonDragging = false;
             widget.actuator.onSecondaryButtonDragStart(event);
-            break;
           case kTertiaryButton:
             currentPressedMouseButton = kTertiaryButton;
             tertiaryButtonDragStartScreenCoordinates = event.localPosition;
             isTertiaryButtonDragging = false;
             widget.actuator.onTertiaryButtonDragStart(event);
-            break;
         }
       },
       onPointerMove: (PointerMoveEvent event) {
         switch (event.buttons) {
           case kPrimaryButton:
-            final double distanceSquared =
-                (event.localPosition - primaryButtonDragStartScreenCoordinates)
-                    .distanceSquared;
-
-            if ((distanceSquared > thClickDragThresholdSquared) &&
-                !isPrimaryButtonDragging) {
-              isPrimaryButtonDragging = true;
-            }
             if (isPrimaryButtonDragging) {
               widget.actuator.onPrimaryButtonDragUpdate(event);
-            }
-            break;
-          case kSecondaryButton:
-            final double distanceSquared = (event.localPosition -
-                    secondaryButtonDragStartScreenCoordinates)
-                .distanceSquared;
+            } else {
+              final double distanceSquared = (event.localPosition -
+                      primaryButtonDragStartScreenCoordinates)
+                  .distanceSquared;
 
-            if ((distanceSquared > thClickDragThresholdSquared) &&
-                !isSecondaryButtonDragging) {
-              isSecondaryButtonDragging = true;
+              if (distanceSquared > thClickDragThresholdSquared) {
+                isPrimaryButtonDragging = true;
+                widget.actuator.onPrimaryButtonDragUpdate(event);
+              }
             }
+          case kSecondaryButton:
             if (isSecondaryButtonDragging) {
               widget.actuator.onSecondaryButtonDragUpdate(event);
-            }
-            break;
-          case kTertiaryButton:
-            final double distanceSquared =
-                (event.localPosition - tertiaryButtonDragStartScreenCoordinates)
-                    .distanceSquared;
+            } else {
+              final double distanceSquared = (event.localPosition -
+                      secondaryButtonDragStartScreenCoordinates)
+                  .distanceSquared;
 
-            if ((distanceSquared > thClickDragThresholdSquared) &&
-                !isTertiaryButtonDragging) {
-              isTertiaryButtonDragging = true;
+              if (distanceSquared > thClickDragThresholdSquared) {
+                isSecondaryButtonDragging = true;
+                widget.actuator.onSecondaryButtonDragUpdate(event);
+              }
             }
+          case kTertiaryButton:
             if (isTertiaryButtonDragging) {
               widget.actuator.onTertiaryButtonDragUpdate(event);
+            } else {
+              final double distanceSquared = (event.localPosition -
+                      tertiaryButtonDragStartScreenCoordinates)
+                  .distanceSquared;
+
+              if (distanceSquared > thClickDragThresholdSquared) {
+                isTertiaryButtonDragging = true;
+                widget.actuator.onTertiaryButtonDragUpdate(event);
+              }
             }
-            break;
         }
       },
       onPointerUp: (PointerUpEvent event) {
@@ -113,7 +110,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             } else {
               widget.actuator.onPrimaryButtonClick(event);
             }
-            break;
           case kSecondaryButton:
             currentPressedMouseButton = 0;
             if (isSecondaryButtonDragging) {
@@ -122,7 +118,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             } else {
               widget.actuator.onSecondaryButtonClick(event);
             }
-            break;
           case kTertiaryButton:
             currentPressedMouseButton = 0;
             if (isTertiaryButtonDragging) {
@@ -131,7 +126,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             } else {
               widget.actuator.onTertiaryButtonClick(event);
             }
-            break;
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
