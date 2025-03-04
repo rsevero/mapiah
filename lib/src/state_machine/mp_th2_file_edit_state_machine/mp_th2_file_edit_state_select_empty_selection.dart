@@ -3,7 +3,8 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     with
         MPTH2FileEditStateGetSelectedElementsMixin,
-        MPTH2FileEditStateMoveCanvasMixin {
+        MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateSelectEmptySelection(
       {required super.th2FileEditController});
 

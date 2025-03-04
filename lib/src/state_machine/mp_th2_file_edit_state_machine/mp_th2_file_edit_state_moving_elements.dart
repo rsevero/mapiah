@@ -1,7 +1,9 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
-    with MPTH2FileEditStateGetSelectedElementsMixin {
+    with
+        MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateMovingElements({required super.th2FileEditController});
 
   /// 1. Clicked on an object?

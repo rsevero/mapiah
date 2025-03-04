@@ -3,7 +3,8 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
-        MPTH2FileEditStateGetSelectedElementsMixin {
+        MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditPageStateEditSingleLine({required super.th2FileEditController});
 
   @override
@@ -97,18 +98,25 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         th2FileEditController.triggerEditLineRedraw();
         return;
       } else {
+        late bool stateChanged;
+
         if (shiftPressed) {
           /// TODO: deal with multiple end points returned on same click.
-          th2FileEditController.addSelectedElement(
+          stateChanged = th2FileEditController.addSelectedElement(
             clickedPointsLines.first,
             setState: true,
           );
         } else {
           /// TODO: deal with multiple end points returned on same click.
-          th2FileEditController.setSelectedElements(
+          stateChanged = th2FileEditController.setSelectedElements(
             {clickedPointsLines.first},
             setState: true,
           );
+        }
+
+        if (!stateChanged) {
+          th2FileEditController.updateSelectableEndAndControlPoints();
+          th2FileEditController.triggerEditLineRedraw();
         }
 
         return;

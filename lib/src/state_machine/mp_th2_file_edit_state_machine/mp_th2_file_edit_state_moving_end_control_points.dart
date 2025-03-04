@@ -1,7 +1,9 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
-    with MPTH2FileEditStateGetSelectedElementsMixin {
+    with
+        MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateMovingEndControlPoints(
       {required super.th2FileEditController});
 
