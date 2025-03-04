@@ -26,12 +26,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         if (isAltPressed && !isCtrlPressed && !isShiftPressed) {
           th2FileEditController.toggleToNextAvailableScrap();
         } else if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          if (th2FileEditController.selectedElements.isEmpty) {
-            th2FileEditController
-                .setState(MPTH2FileEditStateType.selectEmptySelection);
-          } else {
-            th2FileEditController.setNonEmptySelectionState();
-          }
+          th2FileEditController.setSelectionState();
         }
         break;
       case LogicalKeyboardKey.keyL:

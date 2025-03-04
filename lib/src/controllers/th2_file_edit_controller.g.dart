@@ -1222,11 +1222,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void addSelectedElement(THElement element) {
+  bool addSelectedElement(THElement element, {bool setState = false}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.addSelectedElement');
     try {
-      return super.addSelectedElement(element);
+      return super.addSelectedElement(element, setState: setState);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1245,11 +1245,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void addSelectedElements(Set<THElement> elements) {
+  bool addSelectedElements(Set<THElement> elements, {bool setState = false}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.addSelectedElements');
     try {
-      return super.addSelectedElements(elements);
+      return super.addSelectedElements(elements, setState: setState);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1278,18 +1278,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setSelectedElements(Set<THElement> clickedElements) {
+  bool setSelectedElements(Set<THElement> clickedElements,
+      {bool setState = false}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setSelectedElements');
     try {
-      return super.setSelectedElements(clickedElements);
+      return super.setSelectedElements(clickedElements, setState: setState);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void removeSelectedElement(THElement element) {
+  bool removeSelectedElement(THElement element) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.removeSelectedElement');
     try {
@@ -1300,7 +1301,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setState(MPTH2FileEditStateType type) {
+  bool setState(MPTH2FileEditStateType type) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setState');
     try {
@@ -1384,12 +1385,12 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  dynamic triggerSelectedElementsRedraw() {
+  dynamic triggerSelectedElementsRedraw({bool setState = false}) {
     final _$actionInfo =
         _$TH2FileEditControllerBaseActionController.startAction(
             name: 'TH2FileEditControllerBase.triggerSelectedElementsRedraw');
     try {
-      return super.triggerSelectedElementsRedraw();
+      return super.triggerSelectedElementsRedraw(setState: setState);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

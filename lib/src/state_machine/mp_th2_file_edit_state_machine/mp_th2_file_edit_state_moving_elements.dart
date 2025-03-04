@@ -34,26 +34,25 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
           th2FileEditController.removeSelectedElement(clickedElements.first);
-          if (th2FileEditController.selectedElements.isEmpty) {
-            th2FileEditController
-                .setState(MPTH2FileEditStateType.selectEmptySelection);
-          } else {
-            th2FileEditController.setNonEmptySelectionState();
-          }
         } else {
-          th2FileEditController.setNonEmptySelectionState();
+          th2FileEditController.setSelectionState();
         }
+
         return;
       } else {
         if (shiftPressed) {
-          th2FileEditController.addSelectedElement(clickedElements.first);
-          th2FileEditController.setNonEmptySelectionState();
-          return;
+          th2FileEditController.addSelectedElement(
+            clickedElements.first,
+            setState: true,
+          );
         } else {
-          th2FileEditController.setSelectedElements({clickedElements.first});
-          th2FileEditController.setNonEmptySelectionState();
-          return;
+          th2FileEditController.setSelectedElements(
+            {clickedElements.first},
+            setState: true,
+          );
         }
+
+        return;
       }
     } else {
       if (!shiftPressed) {
@@ -133,13 +132,10 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         deltaOnCanvas: panDeltaOnCanvas,
       );
     }
+
     th2FileEditController.execute(moveCommand);
-
     th2FileEditController.updateSelectedElementsClones();
-
-    th2FileEditController.triggerSelectedElementsRedraw();
-
-    th2FileEditController.setNonEmptySelectionState();
+    th2FileEditController.triggerSelectedElementsRedraw(setState: true);
   }
 
   @override

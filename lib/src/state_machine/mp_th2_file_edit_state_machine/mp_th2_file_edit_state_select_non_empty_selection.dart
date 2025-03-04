@@ -44,22 +44,26 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
           th2FileEditController.removeSelectedElement(clickedElements.first);
-          if (th2FileEditController.selectedElements.isEmpty) {
-            th2FileEditController
-                .setState(MPTH2FileEditStateType.selectEmptySelection);
-          }
         }
         return;
       } else {
+        late bool stateChanged;
+
         if (shiftPressed) {
-          th2FileEditController.addSelectedElement(clickedElements.first);
-          _updateStatusBarMessage();
-          return;
+          stateChanged = th2FileEditController.addSelectedElement(
+            clickedElements.first,
+            setState: true,
+          );
         } else {
-          th2FileEditController.setSelectedElements({clickedElements.first});
-          _updateStatusBarMessage();
-          return;
+          stateChanged = th2FileEditController.setSelectedElements(
+            {clickedElements.first},
+            setState: true,
+          );
         }
+        if (!stateChanged) {
+          _updateStatusBarMessage();
+        }
+        return;
       }
     } else {
       if (!shiftPressed) {
@@ -144,17 +148,26 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     th2FileEditController.clearSelectionWindow();
 
     if (shiftPressed) {
-      th2FileEditController.addSelectedElements(elementsInsideSelectionWindow);
-      _updateStatusBarMessage();
+      final bool stateChanged = th2FileEditController.addSelectedElements(
+        elementsInsideSelectionWindow,
+        setState: true,
+      );
+      if (!stateChanged) {
+        _updateStatusBarMessage();
+      }
     } else {
-      th2FileEditController.clearSelectedElements();
       if (elementsInsideSelectionWindow.isEmpty) {
+        th2FileEditController.clearSelectedElements();
         th2FileEditController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       } else {
-        th2FileEditController
-            .setSelectedElements(elementsInsideSelectionWindow);
-        _updateStatusBarMessage();
+        final stateChanged = th2FileEditController.setSelectedElements(
+          elementsInsideSelectionWindow,
+          setState: true,
+        );
+        if (!stateChanged) {
+          _updateStatusBarMessage();
+        }
       }
     }
   }

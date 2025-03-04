@@ -42,22 +42,24 @@ class MPMoveLineCommand extends MPCommand {
       switch (originalLineSegment) {
         case THStraightLineSegment _:
           modifiedLineSegment = originalLineSegment.copyWith(
-              endPoint: originalLineSegment.endPoint.copyWith(
-            coordinates:
-                originalLineSegment.endPoint.coordinates + deltaOnCanvas,
-          ));
+            endPoint: originalLineSegment.endPoint.copyWith(
+              coordinates:
+                  originalLineSegment.endPoint.coordinates + deltaOnCanvas,
+            ),
+          );
           break;
         case THBezierCurveLineSegment _:
           modifiedLineSegment = originalLineSegment.copyWith(
-              endPoint: originalLineSegment.endPoint.copyWith(
-                  coordinates:
-                      originalLineSegment.endPoint.coordinates + deltaOnCanvas),
-              controlPoint1: originalLineSegment.controlPoint1.copyWith(
-                  coordinates: originalLineSegment.controlPoint1.coordinates +
-                      deltaOnCanvas),
-              controlPoint2: originalLineSegment.controlPoint2.copyWith(
-                  coordinates: originalLineSegment.controlPoint2.coordinates +
-                      deltaOnCanvas));
+            endPoint: originalLineSegment.endPoint.copyWith(
+                coordinates:
+                    originalLineSegment.endPoint.coordinates + deltaOnCanvas),
+            controlPoint1: originalLineSegment.controlPoint1.copyWith(
+                coordinates: originalLineSegment.controlPoint1.coordinates +
+                    deltaOnCanvas),
+            controlPoint2: originalLineSegment.controlPoint2.copyWith(
+                coordinates: originalLineSegment.controlPoint2.coordinates +
+                    deltaOnCanvas),
+          );
           break;
       }
 

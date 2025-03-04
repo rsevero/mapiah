@@ -136,12 +136,7 @@ abstract class MPTH2FileEditState {
         th2FileEditController.redo();
         return true;
       case MPButtonType.select:
-        if (th2FileEditController.selectedElements.isEmpty) {
-          th2FileEditController
-              .setState(MPTH2FileEditStateType.selectEmptySelection);
-        } else {
-          th2FileEditController.setNonEmptySelectionState();
-        }
+        th2FileEditController.setSelectionState();
         return true;
       case MPButtonType.undo:
         th2FileEditController.undo();

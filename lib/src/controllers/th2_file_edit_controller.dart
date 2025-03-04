@@ -1133,7 +1133,7 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void addSelectedElement(THElement element) {
+  bool addSelectedElement(THElement element, {bool setState = false}) {
     switch (element) {
       case THLine _:
         _selectedElements[element.mapiahID] =
@@ -1146,6 +1146,12 @@ abstract class TH2FileEditControllerBase
     }
     _isSelected[element.mapiahID]!.value = true;
     triggerSelectedListChanged();
+
+    if (setState) {
+      return setSelectionState();
+    }
+
+    return false;
   }
 
   @action
@@ -1193,10 +1199,16 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void addSelectedElements(Set<THElement> elements) {
+  bool addSelectedElements(Set<THElement> elements, {bool setState = false}) {
     for (THElement element in elements) {
       addSelectedElement(element);
     }
+
+    if (setState) {
+      return setSelectionState();
+    }
+
+    return false;
   }
 
   @action
@@ -1220,25 +1232,37 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void setSelectedElements(Set<THElement> clickedElements) {
+  bool setSelectedElements(
+    Set<THElement> clickedElements, {
+    bool setState = false,
+  }) {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
 
     for (THElement element in clickedElements) {
       if ((element is! THPoint) && (element is! THLine)) {
-        return;
+        continue;
       }
 
       addSelectedElement(element);
     }
+
+    if (setState) {
+      return setSelectionState();
+    }
+
+    return false;
   }
 
   @action
-  void removeSelectedElement(THElement element) {
+  bool removeSelectedElement(THElement element) {
     _selectedElements.remove(element.mapiahID);
     if (_isSelected.containsKey(element.mapiahID)) {
       _isSelected[element.mapiahID]!.value = false;
     }
+
     triggerSelectedListChanged();
+
+    return setSelectionState();
   }
 
   void setDragStartCoordinates(Offset screenCoordinates) {
@@ -1246,7 +1270,11 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void setState(MPTH2FileEditStateType type) {
+  bool setState(MPTH2FileEditStateType type) {
+    if (_state.type == type) {
+      return false;
+    }
+
     final MPTH2FileEditState previousState = _state;
 
     _state = MPTH2FileEditState.getState(
@@ -1259,18 +1287,18 @@ abstract class TH2FileEditControllerBase
     _state.onStateEnter(previousState);
     _state.setCursor();
     _state.setStatusBarMessage();
+
+    return true;
   }
 
-  void setNonEmptySelectionState() {
+  bool setSelectionState() {
     if (_selectedElements.isEmpty) {
-      return;
-    }
-
-    if ((_selectedElements.length == 1) &&
+      return setState(MPTH2FileEditStateType.selectEmptySelection);
+    } else if ((_selectedElements.length == 1) &&
         (_selectedElements.values.first is MPSelectedLine)) {
-      setState(MPTH2FileEditStateType.editSingleLine);
+      return setState(MPTH2FileEditStateType.editSingleLine);
     } else {
-      setState(MPTH2FileEditStateType.selectNonEmptySelection);
+      return setState(MPTH2FileEditStateType.selectNonEmptySelection);
     }
   }
 
@@ -1585,10 +1613,14 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  triggerSelectedElementsRedraw() {
+  triggerSelectedElementsRedraw({bool setState = false}) {
     _selectedElementsBoundingBox = null;
     _selectionHandleCenters = null;
     _redrawTriggerSelectedElements++;
+
+    if (setState) {
+      setSelectionState();
+    }
   }
 
   @action
