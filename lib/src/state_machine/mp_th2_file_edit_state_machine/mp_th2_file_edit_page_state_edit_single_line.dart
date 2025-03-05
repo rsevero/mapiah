@@ -169,8 +169,8 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         }
         if (!alreadySelected) {
           th2FileEditController.setSelectedLineSegments(newlySelectedEndPoints);
-          _dragShouldMovePoints = true;
         }
+        _dragShouldMovePoints = true;
       }
     }
   }
@@ -188,26 +188,47 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final Offset panDeltaOnCanvas =
-        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
-            th2FileEditController.dragStartCanvasCoordinates;
-    final MPSelectedLine selected =
-        th2FileEditController.selectedElements.values.first as MPSelectedLine;
-    final THElement selectedElement = selected.originalElementClone;
-    final LinkedHashMap<int, THLineSegment> newLineSegmentsMap =
-        th2FileEditController.getLineSegmentsMap(selectedElement as THLine);
-    final MPCommand lineEditCommand = MPMoveLineCommand(
-      lineMapiahID: selectedElement.mapiahID,
-      originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
-      modifiedLineSegmentsMap: newLineSegmentsMap,
-      deltaOnCanvas: panDeltaOnCanvas,
-      descriptionType: MPCommandDescriptionType.editLine,
-    );
+    final Set<THLineSegment> endpointsInsideSelectionWindow =
+        getEndPointsInsideSelectionWindow(event.localPosition);
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
-    th2FileEditController.execute(lineEditCommand);
-    th2FileEditController.updateSelectedElementsClones();
-    th2FileEditController.triggerSelectedElementsRedraw();
-    th2FileEditController.setSelectionState();
+    th2FileEditController.clearSelectionWindow();
+
+    if (shiftPressed) {
+      if (endpointsInsideSelectionWindow.isNotEmpty) {
+        th2FileEditController.addSelectedLineSegments(
+          endpointsInsideSelectionWindow,
+        );
+      }
+    } else {
+      if (endpointsInsideSelectionWindow.isEmpty) {
+        th2FileEditController.clearSelectedLineSegments();
+      } else {
+        th2FileEditController.setSelectedLineSegments(
+          endpointsInsideSelectionWindow,
+        );
+      }
+    }
+    th2FileEditController.updateSelectableEndAndControlPoints();
+  }
+
+  Set<THLineSegment> getEndPointsInsideSelectionWindow(
+    Offset screenCoordinatesEndSelectionWindow,
+  ) {
+    final Offset startSelectionWindow =
+        th2FileEditController.dragStartCanvasCoordinates;
+    final Offset endSelectionWindow = th2FileEditController
+        .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
+    final Rect selectionWindow = MPNumericAux.orderedRectFromLTRB(
+      left: startSelectionWindow.dx,
+      top: startSelectionWindow.dy,
+      right: endSelectionWindow.dx,
+      bottom: endSelectionWindow.dy,
+    );
+    final Set<THLineSegment> lineSegmentsInsideSelectionWindow =
+        th2FileEditController.selectableEndPointsInsideWindow(selectionWindow);
+
+    return lineSegmentsInsideSelectionWindow;
   }
 
   @override

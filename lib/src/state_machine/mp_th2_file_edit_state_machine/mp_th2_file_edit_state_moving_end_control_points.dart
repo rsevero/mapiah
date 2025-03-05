@@ -56,65 +56,26 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final int selectedCount = th2FileEditController.selectedElements.length;
     final Offset panDeltaOnCanvas =
         th2FileEditController.offsetScreenToCanvas(event.localPosition) -
             th2FileEditController.dragStartCanvasCoordinates;
-    late MPCommand moveCommand;
+    final MPSelectedLine selected =
+        th2FileEditController.selectedElements.values.first as MPSelectedLine;
+    final THElement selectedElement = selected.originalElementClone;
+    final LinkedHashMap<int, THLineSegment> newLineSegmentsMap =
+        th2FileEditController.getLineSegmentsMap(selectedElement as THLine);
+    final MPCommand lineEditCommand = MPMoveLineCommand(
+      lineMapiahID: selectedElement.mapiahID,
+      originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
+      modifiedLineSegmentsMap: newLineSegmentsMap,
+      deltaOnCanvas: panDeltaOnCanvas,
+      descriptionType: MPCommandDescriptionType.editLine,
+    );
 
-    if (selectedCount == 1) {
-      final MPSelectedElement selected =
-          th2FileEditController.selectedElements.values.first;
-      final THElement selectedElement = selected.originalElementClone;
-
-      switch (selected) {
-        case MPSelectedPoint _:
-          moveCommand = MPMovePointCommand.fromDelta(
-            pointMapiahID: selectedElement.mapiahID,
-            originalCoordinates:
-                (selectedElement as THPoint).position.coordinates,
-            deltaOnCanvas: panDeltaOnCanvas,
-          );
-          break;
-        case MPSelectedLine _:
-          moveCommand = MPMoveLineCommand.fromDelta(
-            lineMapiahID: selectedElement.mapiahID,
-            originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
-            deltaOnCanvas: panDeltaOnCanvas,
-          );
-          break;
-      }
-    } else if (selectedCount > 1) {
-      final List<MPMoveCommandOriginalParams>
-          moveCommandOriginalParametersList = th2FileEditController
-              .selectedElements.values
-              .map<MPMoveCommandOriginalParams>((MPSelectedElement selected) {
-        final THElement selectedElement = selected.originalElementClone;
-        switch (selected) {
-          case MPSelectedPoint _:
-            return MPMoveCommandPointOriginalParams(
-              mapiahID: selectedElement.mapiahID,
-              coordinates: (selectedElement as THPoint).position.coordinates,
-            );
-          case MPSelectedLine _:
-            return MPMoveCommandLineOriginalParams(
-              mapiahID: selectedElement.mapiahID,
-              lineSegmentsMap: selected.originalLineSegmentsMapClone,
-            );
-          default:
-            throw UnimplementedError();
-        }
-      }).toList();
-
-      moveCommand = MPMoveElementsCommand.fromDelta(
-        moveCommandOriginalParametersList: moveCommandOriginalParametersList,
-        deltaOnCanvas: panDeltaOnCanvas,
-      );
-    }
-
-    th2FileEditController.execute(moveCommand);
+    th2FileEditController.execute(lineEditCommand);
     th2FileEditController.updateSelectedElementsClones();
-    th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+    th2FileEditController.triggerEditLineRedraw();
+    th2FileEditController.setSelectionState();
   }
 
   @override

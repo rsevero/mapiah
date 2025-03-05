@@ -653,6 +653,25 @@ abstract class TH2FileEditControllerBase
     return clickedEndControlPoints;
   }
 
+  Set<THLineSegment> selectableEndPointsInsideWindow(
+    Rect canvasSelectionWindow,
+  ) {
+    final Map<int, THLineSegment> insideWindowElements = <int, THLineSegment>{};
+
+    for (final selectableEndControlPoint in _selectableEndControlPoints) {
+      if (selectableEndControlPoint is MPSelectableEndpoint) {
+        final THLineSegment element =
+            selectableEndControlPoint.element as THLineSegment;
+
+        if (canvasSelectionWindow.contains(element.endPoint.coordinates)) {
+          insideWindowElements[element.mapiahID] = element;
+        }
+      }
+    }
+
+    return insideWindowElements.values.toSet();
+  }
+
   void updateSelectableEndAndControlPoints() {
     _selectableEndControlPoints.clear();
 
