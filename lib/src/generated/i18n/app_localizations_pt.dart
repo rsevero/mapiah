@@ -52,21 +52,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get mpLengthUnitCentimeterAbbreviation => 'cm';
-
-  @override
-  String get mpLengthUnitFootAbbreviation => 'ft';
-
-  @override
-  String get mpLengthUnitInchAbbreviation => 'in';
-
-  @override
-  String get mpLengthUnitMeterAbbreviation => 'm';
-
-  @override
-  String get mpLengthUnitYardAbbreviation => 'yd';
-
-  @override
   String get mpAddElementsCommandDescription => 'Adicionar elementos';
 
   @override
@@ -91,7 +76,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDeletePointCommandDescription => 'Apagar ponto';
 
   @override
+  String get mpEditLineCommandDescription => 'Editar linha';
+
+  @override
   String get mpEditLineSegmentCommandDescription => 'Editar segmento de linha';
+
+  @override
+  String get mpLengthUnitCentimeterAbbreviation => 'cm';
+
+  @override
+  String get mpLengthUnitFootAbbreviation => 'ft';
+
+  @override
+  String get mpLengthUnitInchAbbreviation => 'in';
+
+  @override
+  String get mpLengthUnitMeterAbbreviation => 'm';
+
+  @override
+  String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
   String get mpMoveBezierLineSegmentCommandDescription => 'Mover segmento de linha Bézier';

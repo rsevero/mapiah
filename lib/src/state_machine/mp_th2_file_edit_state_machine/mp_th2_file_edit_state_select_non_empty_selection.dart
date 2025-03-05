@@ -109,12 +109,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           }
         }
 
-        if (alreadySelected) {
-          th2FileEditController.setState(MPTH2FileEditStateType.movingElements);
-        } else {
+        if (!alreadySelected) {
           th2FileEditController.setSelectedElements(newlySelectedElements);
-          th2FileEditController.setState(MPTH2FileEditStateType.movingElements);
         }
+        th2FileEditController.setState(MPTH2FileEditStateType.movingElements);
       }
     }
   }

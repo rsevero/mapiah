@@ -27,6 +27,8 @@ class MPTextToUser {
         localizations.mpDeleteLineCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.deletePoint] =
         localizations.mpDeletePointCommandDescription;
+    _commandDescriptionMap[MPCommandDescriptionType.editLine] =
+        localizations.mpEditLineCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.editLineSegment] =
         localizations.mpEditLineSegmentCommandDescription;
     _commandDescriptionMap[MPCommandDescriptionType.moveBezierLineSegment] =

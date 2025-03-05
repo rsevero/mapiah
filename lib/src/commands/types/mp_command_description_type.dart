@@ -7,6 +7,7 @@ enum MPCommandDescriptionType {
   deleteLine,
   deleteLineSegment,
   deletePoint,
+  editLine,
   editLineSegment,
   moveBezierLineSegment,
   moveElements,

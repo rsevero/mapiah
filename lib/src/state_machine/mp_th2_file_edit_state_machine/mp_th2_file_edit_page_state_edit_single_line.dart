@@ -5,6 +5,8 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
+  bool _dragShouldMovePoints = false;
+
   MPTH2FileEditPageStateEditSingleLine({required super.th2FileEditController});
 
   @override
@@ -16,13 +18,15 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    if (nextState is MPTH2FileEditStateMovingEndControlPoints) {
+    if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
+        .contains(nextState.type)) {
+      if (nextState is! MPTH2FileEditStateMovingEndControlPoints) {
+        th2FileEditController.clearSelectedLineSegments();
+      }
       return;
+    } else {
+      clearAllSelections();
     }
-
-    th2FileEditController.clearSelectedLineSegments();
-    th2FileEditController.updateSelectableEndAndControlPoints();
-    th2FileEditController.triggerEditLineRedraw();
   }
 
   @override
@@ -33,6 +37,8 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       event.localPosition,
       false,
     );
+
+    _dragShouldMovePoints = false;
 
     if (clickedEndControlPoints.isNotEmpty) {
       /// TODO: deal with multiple end points returned on same click.
@@ -46,14 +52,14 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       if (shiftPressed) {
         if (clickedEndControlPointAlreadySelected) {
           th2FileEditController
-              .removeSelectedLineSegments([clickedEndControlPointLineSegment]);
+              .removeSelectedLineSegments({clickedEndControlPointLineSegment});
         } else {
           th2FileEditController
-              .addSelectedLineSegments([clickedEndControlPointLineSegment]);
+              .addSelectedLineSegments({clickedEndControlPointLineSegment});
         }
       } else {
         th2FileEditController
-            .setSelectedLineSegments([clickedEndControlPointLineSegment]);
+            .setSelectedLineSegments({clickedEndControlPointLineSegment});
       }
 
       th2FileEditController.updateSelectableEndAndControlPoints();
@@ -77,7 +83,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       if (clickedElementAlreadySelected) {
         final THLineSegment clickedLineSegment =
             clickedElements.first as THLineSegment;
-        final List<THLineSegment> lineSegments =
+        final Set<THLineSegment> lineSegments =
             th2FileEditController.getLineSegmentAndPrevious(clickedLineSegment);
 
         if (shiftPressed) {
@@ -99,6 +105,8 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         return;
       } else {
         late bool stateChanged;
+
+        th2FileEditController.clearSelectedLineSegments();
 
         if (shiftPressed) {
           /// TODO: deal with multiple end points returned on same click.
@@ -141,6 +149,8 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       false,
     );
 
+    _dragShouldMovePoints = false;
+
     if (clickedEndControlPoints.isNotEmpty) {
       if (!shiftPressed) {
         bool alreadySelected = false;
@@ -150,6 +160,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
             in clickedEndControlPoints) {
           final THLineSegment element =
               endControlPoint.element as THLineSegment;
+
           if (th2FileEditController.isEndpointSelected(element)) {
             alreadySelected = true;
           } else {
@@ -157,18 +168,22 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
           }
         }
         if (!alreadySelected) {
-          th2FileEditController.setSelectedElements(newlySelectedEndPoints);
+          th2FileEditController.setSelectedLineSegments(newlySelectedEndPoints);
+          _dragShouldMovePoints = true;
         }
-        th2FileEditController
-            .setState(MPTH2FileEditStateType.movingEndControlPoints);
       }
     }
   }
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditController
-        .setSelectionWindowScreenEndCoordinates(event.localPosition);
+    if (_dragShouldMovePoints) {
+      th2FileEditController
+          .setState(MPTH2FileEditStateType.movingEndControlPoints);
+    } else {
+      th2FileEditController
+          .setSelectionWindowScreenEndCoordinates(event.localPosition);
+    }
   }
 
   @override
@@ -176,62 +191,23 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
     final Offset panDeltaOnCanvas =
         th2FileEditController.offsetScreenToCanvas(event.localPosition) -
             th2FileEditController.dragStartCanvasCoordinates;
-    late MPCommand lineEdit;
+    final MPSelectedLine selected =
+        th2FileEditController.selectedElements.values.first as MPSelectedLine;
+    final THElement selectedElement = selected.originalElementClone;
+    final LinkedHashMap<int, THLineSegment> newLineSegmentsMap =
+        th2FileEditController.getLineSegmentsMap(selectedElement as THLine);
+    final MPCommand lineEditCommand = MPMoveLineCommand(
+      lineMapiahID: selectedElement.mapiahID,
+      originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
+      modifiedLineSegmentsMap: newLineSegmentsMap,
+      deltaOnCanvas: panDeltaOnCanvas,
+      descriptionType: MPCommandDescriptionType.editLine,
+    );
 
-    // if (selectedCount == 1) {
-    //   final MPSelectedElement selected =
-    //       th2FileEditController.selectedElements.values.first;
-    //   final THElement selectedElement = selected.originalElementClone;
-
-    //   switch (selected) {
-    //     case MPSelectedPoint _:
-    //       moveCommand = MPMovePointCommand.fromDelta(
-    //         pointMapiahID: selectedElement.mapiahID,
-    //         originalCoordinates:
-    //             (selectedElement as THPoint).position.coordinates,
-    //         deltaOnCanvas: panDeltaOnCanvas,
-    //       );
-    //       break;
-    //     case MPSelectedLine _:
-    //       moveCommand = MPMoveLineCommand.fromDelta(
-    //         lineMapiahID: selectedElement.mapiahID,
-    //         originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
-    //         deltaOnCanvas: panDeltaOnCanvas,
-    //       );
-    //       break;
-    //   }
-    // } else if (selectedCount > 1) {
-    //   final List<MPMoveCommandOriginalParams>
-    //       moveCommandOriginalParametersList = th2FileEditController
-    //           .selectedElements.values
-    //           .map<MPMoveCommandOriginalParams>((MPSelectedElement selected) {
-    //     final THElement selectedElement = selected.originalElementClone;
-    //     switch (selected) {
-    //       case MPSelectedPoint _:
-    //         return MPMoveCommandPointOriginalParams(
-    //           mapiahID: selectedElement.mapiahID,
-    //           coordinates: (selectedElement as THPoint).position.coordinates,
-    //         );
-    //       case MPSelectedLine _:
-    //         return MPMoveCommandLineOriginalParams(
-    //           mapiahID: selectedElement.mapiahID,
-    //           lineSegmentsMap: selected.originalLineSegmentsMapClone,
-    //         );
-    //       default:
-    //         throw UnimplementedError();
-    //     }
-    //   }).toList();
-
-    //   moveCommand = MPMoveElementsCommand.fromDelta(
-    //     moveCommandOriginalParametersList: moveCommandOriginalParametersList,
-    //     deltaOnCanvas: panDeltaOnCanvas,
-    //   );
-    // }
-
-    // th2FileEditController.execute(moveCommand);
-    // th2FileEditController.updateSelectedElementsClones();
-    // th2FileEditController.triggerSelectedElementsRedraw();
-    // th2FileEditController.setNonEmptySelectionState();
+    th2FileEditController.execute(lineEditCommand);
+    th2FileEditController.updateSelectedElementsClones();
+    th2FileEditController.triggerSelectedElementsRedraw();
+    th2FileEditController.setSelectionState();
   }
 
   @override

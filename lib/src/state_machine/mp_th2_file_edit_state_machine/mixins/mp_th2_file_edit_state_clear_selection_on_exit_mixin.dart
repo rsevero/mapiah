@@ -1,7 +1,7 @@
 part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditStateClearSelectionOnExitMixin on MPTH2FileEditState {
-  static const _selectionStatesTypes = [
+  static const selectionStatesTypes = [
     MPTH2FileEditStateType.editSingleLine,
     MPTH2FileEditStateType.movingElements,
     MPTH2FileEditStateType.movingEndControlPoints,
@@ -11,10 +11,12 @@ mixin MPTH2FileEditStateClearSelectionOnExitMixin on MPTH2FileEditState {
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    if (_selectionStatesTypes.contains(nextState.type)) {
-      return;
+    if (!selectionStatesTypes.contains(nextState.type)) {
+      clearAllSelections();
     }
+  }
 
+  void clearAllSelections() {
     th2FileEditController.clearSelectedElements();
     th2FileEditController.clearSelectedLineSegments();
   }

@@ -557,10 +557,8 @@ abstract class TH2FileEditControllerBase
     switch (element) {
       case THPoint _:
         _addPointSelectableElement(element);
-        break;
       case THLine _:
         _addLineSelectableElement(element);
-        break;
     }
   }
 
@@ -605,7 +603,6 @@ abstract class TH2FileEditControllerBase
             case THPoint _:
             case THLine _:
               clickedElements.addAll(selectableElement.selectedElements);
-              break;
           }
         }
       }
@@ -667,7 +664,7 @@ abstract class TH2FileEditControllerBase
     final THLine line = _thFile.elementByMapiahID(
       _selectedElements.values.first.mapiahID,
     ) as THLine;
-    final List<THLineSegment> lineSegments = getLineSegments(
+    final Set<THLineSegment> lineSegments = getLineSegmentsSet(
       line: line,
       clone: false,
     );
@@ -724,19 +721,19 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
-    _selectedLineSegments = lineSegments.toSet();
+  void setSelectedLineSegments(Set<THLineSegment> lineSegments) {
+    _selectedLineSegments = lineSegments;
   }
 
   void clearSelectedLineSegments() {
     _selectedLineSegments.clear();
   }
 
-  void addSelectedLineSegments(List<THLineSegment> lineSegments) {
+  void addSelectedLineSegments(Set<THLineSegment> lineSegments) {
     _selectedLineSegments.addAll(lineSegments);
   }
 
-  void removeSelectedLineSegments(List<THLineSegment> lineSegments) {
+  void removeSelectedLineSegments(Set<THLineSegment> lineSegments) {
     _selectedLineSegments.removeAll(lineSegments);
   }
 
@@ -750,23 +747,23 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  List<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
+  Set<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
     final THLine line =
         _thFile.elementByMapiahID(lineSegment.parentMapiahID) as THLine;
-    final List<THLineSegment> lineSegments = getLineSegments(
+    final List<THLineSegment> lineSegments = getLineSegmentsSet(
       line: line,
       clone: false,
-    );
+    ).toList();
 
     final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
 
     if (lineSegmentIndex == 0) {
-      return <THLineSegment>[lineSegment];
+      return <THLineSegment>{lineSegment};
     } else {
-      return <THLineSegment>[
+      return <THLineSegment>{
         lineSegments[lineSegmentIndex - 1],
         lineSegment,
-      ];
+      };
     }
   }
 
@@ -1138,11 +1135,9 @@ abstract class TH2FileEditControllerBase
       case THLine _:
         _selectedElements[element.mapiahID] =
             MPSelectedLine(thFile: _thFile, originalLine: element);
-        break;
       case THPoint _:
         _selectedElements[element.mapiahID] =
             MPSelectedPoint(originalPoint: element);
-        break;
     }
     _isSelected[element.mapiahID]!.value = true;
     triggerSelectedListChanged();
@@ -1172,7 +1167,6 @@ abstract class TH2FileEditControllerBase
         case THLine _:
           boundingBox = (element as MPBoundingBox)
               .getBoundingBox(this as TH2FileEditController);
-          break;
         default:
           continue;
       }
@@ -1302,11 +1296,11 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  List<THLineSegment> getLineSegments({
+  Set<THLineSegment> getLineSegmentsSet({
     required THLine line,
     required bool clone,
   }) {
-    final List<THLineSegment> lineSegments = <THLineSegment>[];
+    final Set<THLineSegment> lineSegments = <THLineSegment>{};
     final Set<int> lineSegmentMapiahIDs = line.childrenMapiahID;
 
     for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
@@ -1319,6 +1313,23 @@ abstract class TH2FileEditControllerBase
     }
 
     return lineSegments;
+  }
+
+  LinkedHashMap<int, THLineSegment> getLineSegmentsMap(THLine line) {
+    final LinkedHashMap<int, THLineSegment> lineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+    final Set<int> lineSegmentMapiahIDs = line.childrenMapiahID;
+
+    for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
+      final THElement lineSegment =
+          _thFile.elementByMapiahID(lineSegmentMapiahID);
+
+      if (lineSegment is THLineSegment) {
+        lineSegmentsMap[lineSegment.mapiahID] = lineSegment;
+      }
+    }
+
+    return lineSegmentsMap;
   }
 
   void moveSelectedElementsToScreenCoordinates(
@@ -1348,15 +1359,11 @@ abstract class TH2FileEditControllerBase
             selectedElement as MPSelectedPoint,
             localDeltaPositionOnCanvas,
           );
-          break;
         case THLine _:
           _updateTHLinePosition(
             selectedElement as MPSelectedLine,
             localDeltaPositionOnCanvas,
           );
-          break;
-        default:
-          break;
       }
     }
 
@@ -1399,7 +1406,6 @@ abstract class TH2FileEditControllerBase
               endPoint: lineChild.endPoint.copyWith(
                   coordinates: lineChild.endPoint.coordinates +
                       localDeltaPositionOnCanvas));
-          break;
         case THBezierCurveLineSegment _:
           modifiedLineSegment = lineChild.copyWith(
               endPoint: lineChild.endPoint.copyWith(
@@ -1411,7 +1417,6 @@ abstract class TH2FileEditControllerBase
               controlPoint2: lineChild.controlPoint2.copyWith(
                   coordinates: lineChild.controlPoint2.coordinates +
                       localDeltaPositionOnCanvas));
-          break;
         default:
           throw Exception('Unknown line segment type');
       }

@@ -67,36 +67,6 @@
     }
   },
 
-  "mpLengthUnitCentimeterAbbreviation": "cm",
-  "@mpLengthUnitCentimeterAbbreviation": {
-    "description": "The abbreviation for the centimeter length unit",
-    "type": "text"
-  },
-
-  "mpLengthUnitFootAbbreviation": "ft",
-  "@mpLengthUnitFootAbbreviation": {
-    "description": "The abbreviation for the foot length unit",
-    "type": "text"
-  },
-
-  "mpLengthUnitInchAbbreviation": "in",
-  "@mpLengthUnitInchAbbreviation": {
-    "description": "The abbreviation for the inch length unit",
-    "type": "text"
-  },
-
-  "mpLengthUnitMeterAbbreviation": "m",
-  "@mpLengthUnitMeterAbbreviation": {
-    "description": "The abbreviation for the meter length unit",
-    "type": "text"
-  },
-
-  "mpLengthUnitYardAbbreviation": "yd",
-  "@mpLengthUnitYardAbbreviation": {
-    "description": "The abbreviation for the yard length unit",
-    "type": "text"
-  },
-
   "mpAddElementsCommandDescription": "Add elements",
   "@mpAddElementsCommandDescription": {
     "description": "The description for the add elements command",
@@ -144,10 +114,46 @@
     "description": "The description for the delete point command",
     "type": "text"
   },
-  
+
+  "mpEditLineCommandDescription": "Edit line",
+  "@mpEditLineCommandDescription": {
+    "description": "The description for the edit line command",
+    "type": "text"
+  },
+
   "mpEditLineSegmentCommandDescription": "Edit line segment",
   "@mpEditLineSegmentCommandDescription": {
     "description": "The description for the edit line segment command",
+    "type": "text"
+  },
+
+  "mpLengthUnitCentimeterAbbreviation": "cm",
+  "@mpLengthUnitCentimeterAbbreviation": {
+    "description": "The abbreviation for the centimeter length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitFootAbbreviation": "ft",
+  "@mpLengthUnitFootAbbreviation": {
+    "description": "The abbreviation for the foot length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitInchAbbreviation": "in",
+  "@mpLengthUnitInchAbbreviation": {
+    "description": "The abbreviation for the inch length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitMeterAbbreviation": "m",
+  "@mpLengthUnitMeterAbbreviation": {
+    "description": "The abbreviation for the meter length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitYardAbbreviation": "yd",
+  "@mpLengthUnitYardAbbreviation": {
+    "description": "The abbreviation for the yard length unit",
     "type": "text"
   },
 
@@ -237,7 +243,7 @@
       "type": {}
     }
   },
-  
+
   "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+C)",
   "@th2FileEditPageChangeActiveScrapTool": {
     "description": "The label for the change active scrap tool button",
