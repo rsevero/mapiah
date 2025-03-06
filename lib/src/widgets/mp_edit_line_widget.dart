@@ -63,8 +63,8 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final List<CustomPainter> painters = [];
 
-        final THLine line =
-            th2FileEditController.selectedElements.values.first as THLine;
+        final THLine line = th2FileEditController
+            .selectedElements.values.first.originalElementClone as THLine;
 
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,

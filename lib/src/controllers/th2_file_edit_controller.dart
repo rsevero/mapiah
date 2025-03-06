@@ -890,6 +890,7 @@ abstract class TH2FileEditControllerBase
     }
 
     substituteLineSegments(modifiedLineSegments);
+    updateSelectableEndAndControlPoints();
     triggerEditLineRedraw();
   }
 
