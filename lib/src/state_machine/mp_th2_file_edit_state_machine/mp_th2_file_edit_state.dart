@@ -23,10 +23,10 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp
 part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
-part 'mp_th2_file_edit_page_state_add_area.dart';
-part 'mp_th2_file_edit_page_state_add_line.dart';
-part 'mp_th2_file_edit_page_state_add_point.dart';
-part 'mp_th2_file_edit_page_state_edit_single_line.dart';
+part 'mp_th2_file_edit_state_add_area.dart';
+part 'mp_th2_file_edit_state_add_line.dart';
+part 'mp_th2_file_edit_state_add_point.dart';
+part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
@@ -45,19 +45,19 @@ abstract class MPTH2FileEditState {
   }) {
     switch (type) {
       case MPTH2FileEditStateType.addArea:
-        return MPTH2FileEditPageStateAddArea(
+        return MPTH2FileEditStateAddArea(
           th2FileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.addLine:
-        return MPTH2FileEditPageStateAddLine(
+        return MPTH2FileEditStateAddLine(
           th2FileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.addPoint:
-        return MPTH2FileEditPageStateAddPoint(
+        return MPTH2FileEditStateAddPoint(
           th2FileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:
-        return MPTH2FileEditPageStateEditSingleLine(
+        return MPTH2FileEditStateEditSingleLine(
           th2FileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.movingElements:

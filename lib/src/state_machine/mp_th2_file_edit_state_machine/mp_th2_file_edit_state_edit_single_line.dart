@@ -1,6 +1,6 @@
 part of 'mp_th2_file_edit_state.dart';
 
-class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
+class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
@@ -8,7 +8,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
   bool _dragShouldMovePoints = false;
   List<THLineSegment> _selectedLineSegmentsOnDragStart = [];
 
-  MPTH2FileEditPageStateEditSingleLine({required super.th2FileEditController});
+  MPTH2FileEditStateEditSingleLine({required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {

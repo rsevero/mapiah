@@ -108,9 +108,9 @@ abstract class TH2FileEditControllerBase
       _state is MPTH2FileEditStateMovingElements);
 
   @computed
-  bool get isAddElementMode => ((_state is MPTH2FileEditPageStateAddArea) ||
-      (_state is MPTH2FileEditPageStateAddLine) ||
-      (_state is MPTH2FileEditPageStateAddPoint));
+  bool get isAddElementMode => ((_state is MPTH2FileEditStateAddArea) ||
+      (_state is MPTH2FileEditStateAddLine) ||
+      (_state is MPTH2FileEditStateAddPoint));
 
   @readonly
   bool _hasUndo = false;
@@ -133,11 +133,11 @@ abstract class TH2FileEditControllerBase
   @computed
   MPButtonType get activeAddElementButton {
     switch (_state) {
-      case MPTH2FileEditPageStateAddPoint _:
+      case MPTH2FileEditStateAddPoint _:
         return MPButtonType.addPoint;
-      case MPTH2FileEditPageStateAddLine _:
+      case MPTH2FileEditStateAddLine _:
         return MPButtonType.addLine;
-      case MPTH2FileEditPageStateAddArea _:
+      case MPTH2FileEditStateAddArea _:
         return MPButtonType.addArea;
       default:
         return MPButtonType.addElement;
@@ -360,7 +360,8 @@ abstract class TH2FileEditControllerBase
 
   @computed
   bool get showEditLineSegment =>
-      _state is MPTH2FileEditPageStateEditSingleLine;
+      (_state is MPTH2FileEditStateEditSingleLine) ||
+      (_state is MPTH2FileEditStateMovingEndControlPoints);
 
   @action
   THLine getNewLine() {
@@ -871,13 +872,13 @@ abstract class TH2FileEditControllerBase
           final THBezierCurveLineSegment originalNextLineSegment =
               originalLineSegments[nextLineSegmentMapiahID]
                   as THBezierCurveLineSegment;
-          final THBezierCurveLineSegment referenceLineSegment =
+          final THBezierCurveLineSegment referenceNextLineSegment =
               (modifiedLineSegments.containsKey(nextLineSegmentMapiahID)
                   ? modifiedLineSegments[nextLineSegmentMapiahID]
                   : originalNextLineSegment) as THBezierCurveLineSegment;
 
-          modifiedLineSegments[selectedLineSegmentMapiahID] =
-              referenceLineSegment.copyWith(
+          modifiedLineSegments[nextLineSegmentMapiahID] =
+              referenceNextLineSegment.copyWith(
             controlPoint1: THPositionPart(
               coordinates: originalNextLineSegment.controlPoint1.coordinates +
                   localDeltaPositionOnCanvas,
@@ -888,33 +889,16 @@ abstract class TH2FileEditControllerBase
       }
     }
 
-    final THLineSegment? afterLastLineSegment = nextLineSegment(
-      _selectedLineSegments[_selectedLineSegments.keys.last]!,
-      lineSegments: originalLineSegments.values.toList(),
-    );
-
-    if ((afterLastLineSegment != null) &&
-        (afterLastLineSegment is THBezierCurveLineSegment)) {
-      modifiedLineSegments[afterLastLineSegment.mapiahID] =
-          afterLastLineSegment.copyWith(
-        controlPoint1: THPositionPart(
-          coordinates: afterLastLineSegment.controlPoint1.coordinates +
-              localDeltaPositionOnCanvas,
-          decimalPositions: _currentDecimalPositions,
-        ),
-      );
-    }
-
     substituteLineSegments(modifiedLineSegments);
     triggerEditLineRedraw();
   }
 
   List<int> getSelectedLineLineSegmentsMapiahIDs() {
-    _selectedLineLineSegmentsMapiahIDs ??= ((_selectedElements.values
-                .toList()[_selectedElements.keys.first] as MPSelectedLine)
-            .originalElementClone as THLine)
-        .childrenMapiahID
-        .where((childMapiahID) {
+    _selectedLineLineSegmentsMapiahIDs ??=
+        ((_selectedElements[_selectedElements.keys.first] as MPSelectedLine)
+                .originalElementClone as THLine)
+            .childrenMapiahID
+            .where((childMapiahID) {
       return _thFile.elementByMapiahID(childMapiahID) is THLineSegment;
     }).toList();
 

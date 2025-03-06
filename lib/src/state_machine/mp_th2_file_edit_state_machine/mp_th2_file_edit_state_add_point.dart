@@ -1,8 +1,8 @@
 part of 'mp_th2_file_edit_state.dart';
 
-class MPTH2FileEditPageStateAddPoint extends MPTH2FileEditState
+class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
     with MPTH2FileEditStateMoveCanvasMixin {
-  MPTH2FileEditPageStateAddPoint({required super.th2FileEditController});
+  MPTH2FileEditStateAddPoint({required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
