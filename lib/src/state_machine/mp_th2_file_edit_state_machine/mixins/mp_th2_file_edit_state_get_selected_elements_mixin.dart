@@ -1,7 +1,7 @@
 part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
-  Set<THElement> getObjectsInsideSelectionWindow(
+  List<THElement> getObjectsInsideSelectionWindow(
     Offset screenCoordinatesEndSelectionWindow,
   ) {
     final Offset startSelectionWindow =
@@ -14,16 +14,16 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
       right: endSelectionWindow.dx,
       bottom: endSelectionWindow.dy,
     );
-    final Set<THElement> elementsInsideSelectionWindow =
+    final List<THElement> elementsInsideSelectionWindow =
         th2FileEditController.selectableElementsInsideWindow(selectionWindow);
 
     return elementsInsideSelectionWindow;
   }
 
-  Set<THElement> getSelectedElementsWithLineSegmentsConvertedToLines(
-    Set<THElement> selectedWithLineSegments,
+  List<THElement> getSelectedElementsWithLineSegmentsConvertedToLines(
+    List<THElement> selectedWithLineSegments,
   ) {
-    final Set<THElement> selectedElementsWithLines = {};
+    final List<THElement> selectedElementsWithLines = [];
     final THFile thFile = th2FileEditController.thFile;
 
     for (final THElement element in selectedWithLineSegments) {

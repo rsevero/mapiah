@@ -22,7 +22,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
-    Set<THElement> clickedElements =
+    List<THElement> clickedElements =
         th2FileEditController.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
@@ -49,7 +49,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           );
         } else {
           th2FileEditController.setSelectedElements(
-            {clickedElements.first},
+            [clickedElements.first],
             setState: true,
           );
         }

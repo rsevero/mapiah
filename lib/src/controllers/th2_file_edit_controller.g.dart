@@ -979,16 +979,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       name: 'TH2FileEditControllerBase._selectedLineSegments',
       context: context);
 
-  Set<THLineSegment> get selectedLineSegments {
+  LinkedHashMap<int, THLineSegment> get selectedLineSegments {
     _$_selectedLineSegmentsAtom.reportRead();
     return super._selectedLineSegments;
   }
 
   @override
-  Set<THLineSegment> get _selectedLineSegments => selectedLineSegments;
+  LinkedHashMap<int, THLineSegment> get _selectedLineSegments =>
+      selectedLineSegments;
 
   @override
-  set _selectedLineSegments(Set<THLineSegment> value) {
+  set _selectedLineSegments(LinkedHashMap<int, THLineSegment> value) {
     _$_selectedLineSegmentsAtom.reportWrite(value, super._selectedLineSegments,
         () {
       super._selectedLineSegments = value;
@@ -1079,6 +1080,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
             name: 'TH2FileEditControllerBase.setNewLineStartScreenPosition');
     try {
       return super.setNewLineStartScreenPosition(lineStartScreenPosition);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void moveSelectedEndcontrolPointsToCanvasCoordinates(
+      Offset canvasCoordinatesFinalPosition) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
+        name:
+            'TH2FileEditControllerBase.moveSelectedEndcontrolPointsToCanvasCoordinates');
+    try {
+      return super.moveSelectedEndcontrolPointsToCanvasCoordinates(
+          canvasCoordinatesFinalPosition);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1245,7 +1260,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  bool addSelectedElements(Set<THElement> elements, {bool setState = false}) {
+  bool addSelectedElements(List<THElement> elements, {bool setState = false}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.addSelectedElements');
     try {
@@ -1278,7 +1293,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  bool setSelectedElements(Set<THElement> clickedElements,
+  bool setSelectedElements(List<THElement> clickedElements,
       {bool setState = false}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setSelectedElements');

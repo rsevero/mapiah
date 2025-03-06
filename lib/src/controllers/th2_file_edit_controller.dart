@@ -352,7 +352,8 @@ abstract class TH2FileEditControllerBase
   THLine? _newLine;
 
   @readonly
-  Set<THLineSegment> _selectedLineSegments = {};
+  LinkedHashMap<int, THLineSegment> _selectedLineSegments =
+      LinkedHashMap<int, THLineSegment>();
 
   @readonly
   Set<MPSelectableEndControlPoint> _selectableEndControlPoints = {};
@@ -370,6 +371,8 @@ abstract class TH2FileEditControllerBase
 
   @readonly
   Offset? _lineStartScreenPosition;
+
+  List<int>? _selectedLineLineSegmentsMapiahIDs;
 
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
@@ -591,9 +594,9 @@ abstract class TH2FileEditControllerBase
     _isSelected.remove(mapiahID);
   }
 
-  Set<THElement> selectableElementsClicked(Offset screenCoordinates) {
+  List<THElement> selectableElementsClicked(Offset screenCoordinates) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
-    final Set<THElement> clickedElements = <THElement>{};
+    final List<THElement> clickedElements = [];
     final selectableElements = _selectableElements.values;
 
     for (final selectableElement in selectableElements) {
@@ -611,7 +614,7 @@ abstract class TH2FileEditControllerBase
     return clickedElements;
   }
 
-  Set<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
+  List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
 
     for (final selectableElement in _selectableElements.values) {
@@ -628,15 +631,15 @@ abstract class TH2FileEditControllerBase
       }
     }
 
-    return insideWindowElements.values.toSet();
+    return insideWindowElements.values.toList();
   }
 
-  Set<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
+  List<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
     Offset screenCoordinates,
     bool includeControlPoints,
   ) {
     final Offset canvasCoordinates = offsetScreenToCanvas(screenCoordinates);
-    final Set<MPSelectableEndControlPoint> clickedEndControlPoints = {};
+    final List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
 
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
@@ -653,7 +656,7 @@ abstract class TH2FileEditControllerBase
     return clickedEndControlPoints;
   }
 
-  Set<THLineSegment> selectableEndPointsInsideWindow(
+  List<THLineSegment> selectableEndPointsInsideWindow(
     Rect canvasSelectionWindow,
   ) {
     final Map<int, THLineSegment> insideWindowElements = <int, THLineSegment>{};
@@ -669,7 +672,7 @@ abstract class TH2FileEditControllerBase
       }
     }
 
-    return insideWindowElements.values.toSet();
+    return insideWindowElements.values.toList();
   }
 
   void updateSelectableEndAndControlPoints() {
@@ -683,7 +686,7 @@ abstract class TH2FileEditControllerBase
     final THLine line = _thFile.elementByMapiahID(
       _selectedElements.values.first.mapiahID,
     ) as THLine;
-    final Set<THLineSegment> lineSegments = getLineSegmentsSet(
+    final List<THLineSegment> lineSegments = getLineSegmentsList(
       line: line,
       clone: false,
     );
@@ -701,12 +704,12 @@ abstract class TH2FileEditControllerBase
         );
         isFirst = false;
         previousLineSegmentSelected =
-            _selectedLineSegments.contains(lineSegment);
+            _selectedLineSegments.containsKey(lineSegment.mapiahID);
         continue;
       }
 
       final bool currentLineSegmentSelected =
-          _selectedLineSegments.contains(lineSegment);
+          _selectedLineSegments.containsKey(lineSegment.mapiahID);
       final bool addControlPoints =
           (previousLineSegmentSelected || currentLineSegmentSelected) &&
               (lineSegment is THBezierCurveLineSegment);
@@ -740,24 +743,29 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  void setSelectedLineSegments(Set<THLineSegment> lineSegments) {
-    _selectedLineSegments = lineSegments;
+  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
+    _selectedLineSegments.clear();
+    addSelectedLineSegments(lineSegments);
   }
 
   void clearSelectedLineSegments() {
     _selectedLineSegments.clear();
   }
 
-  void addSelectedLineSegments(Set<THLineSegment> lineSegments) {
-    _selectedLineSegments.addAll(lineSegments);
+  void addSelectedLineSegments(List<THLineSegment> lineSegments) {
+    for (final THLineSegment lineSegment in lineSegments) {
+      _selectedLineSegments[lineSegment.mapiahID] = lineSegment;
+    }
   }
 
-  void removeSelectedLineSegments(Set<THLineSegment> lineSegments) {
-    _selectedLineSegments.removeAll(lineSegments);
+  void removeSelectedLineSegments(List<THLineSegment> lineSegments) {
+    for (final THLineSegment lineSegment in lineSegments) {
+      _selectedLineSegments.remove(lineSegment.mapiahID);
+    }
   }
 
   bool getIsLineSegmentSelected(THLineSegment lineSegment) {
-    return _selectedLineSegments.contains(lineSegment);
+    return _selectedLineSegments.containsKey(lineSegment.mapiahID);
   }
 
   void warmSelectableElementsCanvasScaleChanged() {
@@ -766,23 +774,190 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  Set<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
+  List<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
     final THLine line =
         _thFile.elementByMapiahID(lineSegment.parentMapiahID) as THLine;
-    final List<THLineSegment> lineSegments = getLineSegmentsSet(
+    final List<THLineSegment> lineSegments = getLineSegmentsList(
       line: line,
       clone: false,
-    ).toList();
+    );
 
     final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
 
     if (lineSegmentIndex == 0) {
-      return <THLineSegment>{lineSegment};
+      return <THLineSegment>[lineSegment];
     } else {
-      return <THLineSegment>{
+      return <THLineSegment>[
         lineSegments[lineSegmentIndex - 1],
         lineSegment,
-      };
+      ];
+    }
+  }
+
+  void moveSelectedEndControlPointsToScreenCoordinates(
+    Offset screenCoordinatesFinalPosition,
+  ) {
+    final Offset canvasCoordinatesFinalPosition =
+        offsetScreenToCanvas(screenCoordinatesFinalPosition);
+
+    moveSelectedEndcontrolPointsToCanvasCoordinates(
+        canvasCoordinatesFinalPosition);
+  }
+
+  @action
+  void moveSelectedEndcontrolPointsToCanvasCoordinates(
+    Offset canvasCoordinatesFinalPosition,
+  ) {
+    if (_selectedLineSegments.isEmpty) {
+      return;
+    }
+
+    final Offset localDeltaPositionOnCanvas =
+        canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
+    final LinkedHashMap<int, THLineSegment> originalLineSegments =
+        (_selectedElements.values.first as MPSelectedLine)
+            .originalLineSegmentsMapClone;
+    final List<int> lineLineSegmentsMapiahIDs =
+        getSelectedLineLineSegmentsMapiahIDs();
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegments =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final THLineSegment selectedLineSegment
+        in _selectedLineSegments.values) {
+      final int selectedLineSegmentMapiahID = selectedLineSegment.mapiahID;
+      final THLineSegment originalLineSegment =
+          originalLineSegments[selectedLineSegmentMapiahID]!;
+
+      switch (originalLineSegment) {
+        case THStraightLineSegment _:
+          modifiedLineSegments[selectedLineSegmentMapiahID] =
+              originalLineSegment.copyWith(
+            endPoint: THPositionPart(
+              coordinates: originalLineSegment.endPoint.coordinates +
+                  localDeltaPositionOnCanvas,
+              decimalPositions: _currentDecimalPositions,
+            ),
+          );
+        case THBezierCurveLineSegment _:
+          final THBezierCurveLineSegment referenceLineSegment =
+              modifiedLineSegments.containsKey(selectedLineSegmentMapiahID)
+                  ? modifiedLineSegments[selectedLineSegmentMapiahID]
+                      as THBezierCurveLineSegment
+                  : originalLineSegment;
+
+          modifiedLineSegments[selectedLineSegmentMapiahID] =
+              referenceLineSegment.copyWith(
+            endPoint: THPositionPart(
+              coordinates: originalLineSegment.endPoint.coordinates +
+                  localDeltaPositionOnCanvas,
+              decimalPositions: _currentDecimalPositions,
+            ),
+            controlPoint2: THPositionPart(
+              coordinates: originalLineSegment.controlPoint2.coordinates +
+                  localDeltaPositionOnCanvas,
+              decimalPositions: _currentDecimalPositions,
+            ),
+          );
+      }
+
+      final int? nextLineSegmentMapiahID = getNextLineSegmentMapiahID(
+          selectedLineSegmentMapiahID, lineLineSegmentsMapiahIDs);
+
+      if (nextLineSegmentMapiahID != null) {
+        final THLineSegment nextLineSegment =
+            _thFile.elementByMapiahID(nextLineSegmentMapiahID) as THLineSegment;
+
+        if (nextLineSegment is THBezierCurveLineSegment) {
+          final THBezierCurveLineSegment originalNextLineSegment =
+              originalLineSegments[nextLineSegmentMapiahID]
+                  as THBezierCurveLineSegment;
+          final THBezierCurveLineSegment referenceLineSegment =
+              (modifiedLineSegments.containsKey(nextLineSegmentMapiahID)
+                  ? modifiedLineSegments[nextLineSegmentMapiahID]
+                  : originalNextLineSegment) as THBezierCurveLineSegment;
+
+          modifiedLineSegments[selectedLineSegmentMapiahID] =
+              referenceLineSegment.copyWith(
+            controlPoint1: THPositionPart(
+              coordinates: originalNextLineSegment.controlPoint1.coordinates +
+                  localDeltaPositionOnCanvas,
+              decimalPositions: _currentDecimalPositions,
+            ),
+          );
+        }
+      }
+    }
+
+    final THLineSegment? afterLastLineSegment = nextLineSegment(
+      _selectedLineSegments[_selectedLineSegments.keys.last]!,
+      lineSegments: originalLineSegments.values.toList(),
+    );
+
+    if ((afterLastLineSegment != null) &&
+        (afterLastLineSegment is THBezierCurveLineSegment)) {
+      modifiedLineSegments[afterLastLineSegment.mapiahID] =
+          afterLastLineSegment.copyWith(
+        controlPoint1: THPositionPart(
+          coordinates: afterLastLineSegment.controlPoint1.coordinates +
+              localDeltaPositionOnCanvas,
+          decimalPositions: _currentDecimalPositions,
+        ),
+      );
+    }
+
+    substituteLineSegments(modifiedLineSegments);
+    triggerEditLineRedraw();
+  }
+
+  List<int> getSelectedLineLineSegmentsMapiahIDs() {
+    _selectedLineLineSegmentsMapiahIDs ??= ((_selectedElements.values
+                .toList()[_selectedElements.keys.first] as MPSelectedLine)
+            .originalElementClone as THLine)
+        .childrenMapiahID
+        .where((childMapiahID) {
+      return _thFile.elementByMapiahID(childMapiahID) is THLineSegment;
+    }).toList();
+
+    return _selectedLineLineSegmentsMapiahIDs!;
+  }
+
+  void resetSelectedLineLineSegmentsMapiahIDs() {
+    _selectedLineLineSegmentsMapiahIDs = null;
+  }
+
+  int? getNextLineSegmentMapiahID(
+      int lineSegmentMapiahID, List<int> lineLineSegmentsMapiahIDs) {
+    final int lineSegmentIndex =
+        lineLineSegmentsMapiahIDs.indexOf(lineSegmentMapiahID);
+
+    if ((lineSegmentIndex == -1) ||
+        (lineSegmentIndex == lineLineSegmentsMapiahIDs.length - 1)) {
+      return null;
+    }
+
+    return lineLineSegmentsMapiahIDs[lineSegmentIndex + 1];
+  }
+
+  THLineSegment? nextLineSegment(
+    THLineSegment lineSegment, {
+    List<THLineSegment>? lineSegments,
+  }) {
+    if (lineSegments == null) {
+      final THLine line =
+          _thFile.elementByMapiahID(lineSegment.parentMapiahID) as THLine;
+
+      lineSegments = getLineSegmentsList(
+        line: line,
+        clone: false,
+      );
+    }
+
+    final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
+
+    if (lineSegmentIndex == lineSegments.length - 1) {
+      return null;
+    } else {
+      return lineSegments[lineSegmentIndex + 1];
     }
   }
 
@@ -1097,7 +1272,7 @@ abstract class TH2FileEditControllerBase
   }
 
   bool isEndpointSelected(THLineSegment lineSegment) {
-    return _selectedLineSegments.contains(lineSegment);
+    return _selectedLineSegments.containsKey(lineSegment.mapiahID);
   }
 
   @action
@@ -1212,7 +1387,7 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  bool addSelectedElements(Set<THElement> elements, {bool setState = false}) {
+  bool addSelectedElements(List<THElement> elements, {bool setState = false}) {
     for (THElement element in elements) {
       addSelectedElement(element);
     }
@@ -1246,7 +1421,7 @@ abstract class TH2FileEditControllerBase
 
   @action
   bool setSelectedElements(
-    Set<THElement> clickedElements, {
+    List<THElement> clickedElements, {
     bool setState = false,
   }) {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
@@ -1315,11 +1490,11 @@ abstract class TH2FileEditControllerBase
     }
   }
 
-  Set<THLineSegment> getLineSegmentsSet({
+  List<THLineSegment> getLineSegmentsList({
     required THLine line,
     required bool clone,
   }) {
-    final Set<THLineSegment> lineSegments = <THLineSegment>{};
+    final List<THLineSegment> lineSegments = <THLineSegment>[];
     final Set<int> lineSegmentMapiahIDs = line.childrenMapiahID;
 
     for (final int lineSegmentMapiahID in lineSegmentMapiahIDs) {
@@ -1405,7 +1580,6 @@ abstract class TH2FileEditControllerBase
     MPSelectedLine selectedLine,
     Offset localDeltaPositionOnCanvas,
   ) {
-    final THLine line = selectedLine.originalLineClone;
     final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
 
@@ -1443,7 +1617,7 @@ abstract class TH2FileEditControllerBase
       modifiedLineSegmentsMap[lineChild.mapiahID] = modifiedLineSegment;
     }
 
-    substituteLineAndLineSegments(line.copyWith(), modifiedLineSegmentsMap);
+    substituteLineSegments(modifiedLineSegmentsMap);
   }
 
   THPointPaint getUnselectedPointPaint(THPoint point) {
@@ -1899,14 +2073,16 @@ abstract class TH2FileEditControllerBase
         'Substituted element without add selectable element ${modifiedElement.mapiahID}');
   }
 
-  void substituteLineAndLineSegments(
-    THLine line,
+  void substituteLineSegments(
     LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap,
   ) {
-    for (final lineSegment in modifiedLineSegmentsMap.values) {
+    for (final THLineSegment lineSegment in modifiedLineSegmentsMap.values) {
       _thFile.substituteElement(lineSegment);
     }
-    _thFile.substituteElement(line);
+
+    final THLine line = _thFile.elementByMapiahID(
+        modifiedLineSegmentsMap.values.first.parentMapiahID) as THLine;
+    line.clearBoundingBox();
   }
 
   @action

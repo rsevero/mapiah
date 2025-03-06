@@ -1,57 +1,14 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
-    with
-        MPTH2FileEditStateGetSelectedElementsMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin {
+    with MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateMovingEndControlPoints(
       {required super.th2FileEditController});
 
   @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
-    Set<THElement> clickedElements =
-        th2FileEditController.selectableElementsClicked(event.localPosition);
-    final bool shiftPressed = MPInteractionAux.isShiftPressed();
-
-    if (clickedElements.isNotEmpty) {
-      clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
-        clickedElements,
-      );
-      final bool clickedElementAlreadySelected =
-          th2FileEditController.isElementSelected(clickedElements.first);
-
-      if (clickedElementAlreadySelected) {
-        if (shiftPressed) {
-          th2FileEditController.removeSelectedElement(clickedElements.first);
-        }
-      } else {
-        if (shiftPressed) {
-          th2FileEditController.addSelectedElement(
-            clickedElements.first,
-            setState: true,
-          );
-        } else {
-          th2FileEditController.setSelectedElements(
-            {clickedElements.first},
-            setState: true,
-          );
-        }
-      }
-
-      return;
-    } else {
-      if (!shiftPressed) {
-        th2FileEditController.clearSelectedElements();
-        th2FileEditController
-            .setState(MPTH2FileEditStateType.selectEmptySelection);
-      }
-    }
-  }
-
-  @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditController
-        .moveSelectedElementsToScreenCoordinates(event.localPosition);
+        .moveSelectedEndControlPointsToScreenCoordinates(event.localPosition);
   }
 
   @override
@@ -61,13 +18,50 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
             th2FileEditController.dragStartCanvasCoordinates;
     final MPSelectedLine selected =
         th2FileEditController.selectedElements.values.first as MPSelectedLine;
-    final THElement selectedElement = selected.originalElementClone;
-    final LinkedHashMap<int, THLineSegment> newLineSegmentsMap =
-        th2FileEditController.getLineSegmentsMap(selectedElement as THLine);
+    final THLine selectedLine = selected.originalElementClone as THLine;
+    final List<int> lineLineSegmentsMapiahIDs =
+        th2FileEditController.getSelectedLineLineSegmentsMapiahIDs();
+    final List<int> selectedLineSegmentMapiahIDs =
+        th2FileEditController.selectedLineSegments.keys.toList();
+    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
+        selected.originalLineSegmentsMapClone;
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final int selectedLineSegmentMapiahID
+        in selectedLineSegmentMapiahIDs) {
+      if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMapiahID)) {
+        modifiedLineSegmentsMap[selectedLineSegmentMapiahID] =
+            th2FileEditController.thFile
+                    .elementByMapiahID(selectedLineSegmentMapiahID)
+                as THLineSegment;
+        originalLineSegmentsMap[selectedLineSegmentMapiahID] =
+            originalLineSegmentsMapClone[selectedLineSegmentMapiahID]!;
+      }
+
+      final int? nextLineSegmentMapiahID =
+          th2FileEditController.getNextLineSegmentMapiahID(
+              selectedLineSegmentMapiahID, lineLineSegmentsMapiahIDs);
+
+      if ((nextLineSegmentMapiahID != null) &&
+          !modifiedLineSegmentsMap.containsKey(nextLineSegmentMapiahID)) {
+        final THLineSegment nextLineSegment = th2FileEditController.thFile
+            .elementByMapiahID(nextLineSegmentMapiahID) as THLineSegment;
+
+        if (nextLineSegment is THBezierCurveLineSegment) {
+          modifiedLineSegmentsMap[nextLineSegmentMapiahID] = nextLineSegment;
+          originalLineSegmentsMap[nextLineSegmentMapiahID] =
+              originalLineSegmentsMapClone[nextLineSegmentMapiahID]!;
+        }
+      }
+    }
+
     final MPCommand lineEditCommand = MPMoveLineCommand(
-      lineMapiahID: selectedElement.mapiahID,
-      originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
-      modifiedLineSegmentsMap: newLineSegmentsMap,
+      lineMapiahID: selectedLine.mapiahID,
+      originalLineSegmentsMap: originalLineSegmentsMap,
+      modifiedLineSegmentsMap: modifiedLineSegmentsMap,
       deltaOnCanvas: panDeltaOnCanvas,
       descriptionType: MPCommandDescriptionType.editLine,
     );

@@ -6,6 +6,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
   bool _dragShouldMovePoints = false;
+  List<THLineSegment> _selectedLineSegmentsOnDragStart = [];
 
   MPTH2FileEditPageStateEditSingleLine({required super.th2FileEditController});
 
@@ -14,6 +15,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
     th2FileEditController.updateSelectableEndAndControlPoints();
     th2FileEditController.triggerEditLineRedraw();
     th2FileEditController.setStatusBarMessage('');
+    th2FileEditController.resetSelectedLineLineSegmentsMapiahIDs();
   }
 
   @override
@@ -32,7 +34,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
-    final Set<MPSelectableEndControlPoint> clickedEndControlPoints =
+    final List<MPSelectableEndControlPoint> clickedEndControlPoints =
         th2FileEditController.selectableEndControlPointsClicked(
       event.localPosition,
       false,
@@ -52,14 +54,14 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       if (shiftPressed) {
         if (clickedEndControlPointAlreadySelected) {
           th2FileEditController
-              .removeSelectedLineSegments({clickedEndControlPointLineSegment});
+              .removeSelectedLineSegments([clickedEndControlPointLineSegment]);
         } else {
           th2FileEditController
-              .addSelectedLineSegments({clickedEndControlPointLineSegment});
+              .addSelectedLineSegments([clickedEndControlPointLineSegment]);
         }
       } else {
         th2FileEditController
-            .setSelectedLineSegments({clickedEndControlPointLineSegment});
+            .setSelectedLineSegments([clickedEndControlPointLineSegment]);
       }
 
       th2FileEditController.updateSelectableEndAndControlPoints();
@@ -67,11 +69,11 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       return;
     }
 
-    final Set<THElement> clickedElements =
+    final List<THElement> clickedElements =
         th2FileEditController.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
-      final Set<THElement> clickedPointsLines =
+      final List<THElement> clickedPointsLines =
           getSelectedElementsWithLineSegmentsConvertedToLines(
         clickedElements,
       );
@@ -83,7 +85,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       if (clickedElementAlreadySelected) {
         final THLineSegment clickedLineSegment =
             clickedElements.first as THLineSegment;
-        final Set<THLineSegment> lineSegments =
+        final List<THLineSegment> lineSegments =
             th2FileEditController.getLineSegmentAndPrevious(clickedLineSegment);
 
         if (shiftPressed) {
@@ -117,7 +119,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
         } else {
           /// TODO: deal with multiple end points returned on same click.
           stateChanged = th2FileEditController.setSelectedElements(
-            {clickedPointsLines.first},
+            [clickedPointsLines.first],
             setState: true,
           );
         }
@@ -143,7 +145,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
     th2FileEditController.setDragStartCoordinates(event.localPosition);
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
-    final Set<MPSelectableEndControlPoint> clickedEndControlPoints =
+    final List<MPSelectableEndControlPoint> clickedEndControlPoints =
         th2FileEditController.selectableEndControlPointsClicked(
       event.localPosition,
       false,
@@ -153,22 +155,15 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
 
     if (clickedEndControlPoints.isNotEmpty) {
       if (!shiftPressed) {
-        bool alreadySelected = false;
-        final Set<THLineSegment> newlySelectedEndPoints = {};
-
+        _selectedLineSegmentsOnDragStart.clear();
         for (final MPSelectableEndControlPoint endControlPoint
             in clickedEndControlPoints) {
           final THLineSegment element =
               endControlPoint.element as THLineSegment;
 
-          if (th2FileEditController.isEndpointSelected(element)) {
-            alreadySelected = true;
-          } else {
-            newlySelectedEndPoints.add(element);
+          if (!th2FileEditController.isEndpointSelected(element)) {
+            _selectedLineSegmentsOnDragStart.add(element);
           }
-        }
-        if (!alreadySelected) {
-          th2FileEditController.setSelectedLineSegments(newlySelectedEndPoints);
         }
         _dragShouldMovePoints = true;
       }
@@ -178,6 +173,12 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     if (_dragShouldMovePoints) {
+      if (_selectedLineSegmentsOnDragStart.isNotEmpty) {
+        th2FileEditController.setSelectedLineSegments(
+          _selectedLineSegmentsOnDragStart,
+        );
+        _selectedLineSegmentsOnDragStart.clear();
+      }
       th2FileEditController
           .setState(MPTH2FileEditStateType.movingEndControlPoints);
     } else {
@@ -188,7 +189,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final Set<THLineSegment> endpointsInsideSelectionWindow =
+    final List<THLineSegment> endpointsInsideSelectionWindow =
         getEndPointsInsideSelectionWindow(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
@@ -210,9 +211,10 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       }
     }
     th2FileEditController.updateSelectableEndAndControlPoints();
+    th2FileEditController.triggerEditLineRedraw();
   }
 
-  Set<THLineSegment> getEndPointsInsideSelectionWindow(
+  List<THLineSegment> getEndPointsInsideSelectionWindow(
     Offset screenCoordinatesEndSelectionWindow,
   ) {
     final Offset startSelectionWindow =
@@ -225,7 +227,7 @@ class MPTH2FileEditPageStateEditSingleLine extends MPTH2FileEditState
       right: endSelectionWindow.dx,
       bottom: endSelectionWindow.dy,
     );
-    final Set<THLineSegment> lineSegmentsInsideSelectionWindow =
+    final List<THLineSegment> lineSegmentsInsideSelectionWindow =
         th2FileEditController.selectableEndPointsInsideWindow(selectionWindow);
 
     return lineSegmentsInsideSelectionWindow;
