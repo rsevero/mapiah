@@ -24,13 +24,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<String>(() => super.filenameAndScrap,
               name: 'TH2FileEditControllerBase.filenameAndScrap'))
       .value;
-  Computed<bool>? _$isSelectModeComputed;
-
-  @override
-  bool get isSelectMode =>
-      (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
-              name: 'TH2FileEditControllerBase.isSelectMode'))
-          .value;
   Computed<bool>? _$isAddElementModeComputed;
 
   @override
@@ -38,6 +31,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           () => super.isAddElementMode,
           name: 'TH2FileEditControllerBase.isAddElementMode'))
       .value;
+  Computed<bool>? _$isEditLineModeComputed;
+
+  @override
+  bool get isEditLineMode =>
+      (_$isEditLineModeComputed ??= Computed<bool>(() => super.isEditLineMode,
+              name: 'TH2FileEditControllerBase.isEditLineMode'))
+          .value;
+  Computed<bool>? _$isSelectModeComputed;
+
+  @override
+  bool get isSelectMode =>
+      (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
+              name: 'TH2FileEditControllerBase.isSelectMode'))
+          .value;
   Computed<MPButtonType>? _$activeAddElementButtonComputed;
 
   @override
@@ -170,19 +177,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.selectionHandlePaint,
               name: 'TH2FileEditControllerBase.selectionHandlePaint'))
           .value;
-  Computed<bool>? _$showUndoRedoButtonsComputed;
-
-  @override
-  bool get showUndoRedoButtons => (_$showUndoRedoButtonsComputed ??=
-          Computed<bool>(() => super.showUndoRedoButtons,
-              name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
-      .value;
   Computed<bool>? _$showDeleteButtonComputed;
 
   @override
   bool get showDeleteButton => (_$showDeleteButtonComputed ??= Computed<bool>(
           () => super.showDeleteButton,
           name: 'TH2FileEditControllerBase.showDeleteButton'))
+      .value;
+  Computed<bool>? _$showEditLineSegmentComputed;
+
+  @override
+  bool get showEditLineSegment => (_$showEditLineSegmentComputed ??=
+          Computed<bool>(() => super.showEditLineSegment,
+              name: 'TH2FileEditControllerBase.showEditLineSegment'))
+      .value;
+  Computed<bool>? _$showUndoRedoButtonsComputed;
+
+  @override
+  bool get showUndoRedoButtons => (_$showUndoRedoButtonsComputed ??=
+          Computed<bool>(() => super.showUndoRedoButtons,
+              name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
       .value;
   Computed<bool>? _$deleteButtonEnabledComputed;
 
@@ -237,13 +251,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               name:
                   'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen'))
           .value;
-  Computed<bool>? _$showEditLineSegmentComputed;
-
-  @override
-  bool get showEditLineSegment => (_$showEditLineSegmentComputed ??=
-          Computed<bool>(() => super.showEditLineSegment,
-              name: 'TH2FileEditControllerBase.showEditLineSegment'))
-      .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditControllerBase._screenSize', context: context);
@@ -1729,8 +1736,9 @@ changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPo
 changeScrapsFABKey: ${changeScrapsFABKey},
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 filenameAndScrap: ${filenameAndScrap},
-isSelectMode: ${isSelectMode},
 isAddElementMode: ${isAddElementMode},
+isEditLineMode: ${isEditLineMode},
+isSelectMode: ${isSelectMode},
 activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 controlLineThicknessOnCanvas: ${controlLineThicknessOnCanvas},
@@ -1747,16 +1755,16 @@ selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
 selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
 selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
-showUndoRedoButtons: ${showUndoRedoButtons},
 showDeleteButton: ${showDeleteButton},
+showEditLineSegment: ${showEditLineSegment},
+showUndoRedoButtons: ${showUndoRedoButtons},
 deleteButtonEnabled: ${deleteButtonEnabled},
 showScrapScale: ${showScrapScale},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
-showEditLineSegment: ${showEditLineSegment}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
     ''';
   }
 }

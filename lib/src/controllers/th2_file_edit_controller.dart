@@ -103,14 +103,19 @@ abstract class TH2FileEditControllerBase
   Rect? _selectedElementsBoundingBox;
 
   @computed
-  bool get isSelectMode => (_state is MPTH2FileEditStateSelectEmptySelection ||
-      (_state is MPTH2FileEditStateSelectNonEmptySelection) ||
-      _state is MPTH2FileEditStateMovingElements);
-
-  @computed
   bool get isAddElementMode => ((_state is MPTH2FileEditStateAddArea) ||
       (_state is MPTH2FileEditStateAddLine) ||
       (_state is MPTH2FileEditStateAddPoint));
+
+  @computed
+  bool get isEditLineMode =>
+      (_state is MPTH2FileEditStateEditSingleLine) ||
+      (_state is MPTH2FileEditStateMovingEndControlPoints);
+
+  @computed
+  bool get isSelectMode => (_state is MPTH2FileEditStateSelectEmptySelection ||
+      (_state is MPTH2FileEditStateSelectNonEmptySelection) ||
+      _state is MPTH2FileEditStateMovingElements);
 
   @readonly
   bool _hasUndo = false;
@@ -187,7 +192,7 @@ abstract class TH2FileEditControllerBase
 
   @computed
   bool get showSelectedElements =>
-      _selectedElements.isNotEmpty && !showEditLineSegment;
+      _selectedElements.isNotEmpty && !isEditLineMode;
 
   @computed
   bool get showSelectionHandles => showSelectedElements && isSelectMode;
@@ -245,12 +250,16 @@ abstract class TH2FileEditControllerBase
         ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
 
   @computed
-  bool get showUndoRedoButtons => isAddElementMode || isSelectMode;
-
-  @computed
   bool get showDeleteButton =>
       ((_state is MPTH2FileEditStateSelectEmptySelection) ||
           (_state is MPTH2FileEditStateSelectNonEmptySelection));
+
+  @computed
+  bool get showEditLineSegment => isEditLineMode;
+
+  @computed
+  bool get showUndoRedoButtons =>
+      isAddElementMode || isSelectMode || isEditLineMode;
 
   @computed
   bool get deleteButtonEnabled => _selectedElements.isNotEmpty;
@@ -357,11 +366,6 @@ abstract class TH2FileEditControllerBase
 
   @readonly
   Set<MPSelectableEndControlPoint> _selectableEndControlPoints = {};
-
-  @computed
-  bool get showEditLineSegment =>
-      (_state is MPTH2FileEditStateEditSingleLine) ||
-      (_state is MPTH2FileEditStateMovingEndControlPoints);
 
   @action
   THLine getNewLine() {
@@ -822,9 +826,10 @@ abstract class TH2FileEditControllerBase
         getSelectedLineLineSegmentsMapiahIDs();
     final LinkedHashMap<int, THLineSegment> modifiedLineSegments =
         LinkedHashMap<int, THLineSegment>();
+    final Iterable<THLineSegment> selectedLineSegments =
+        _selectedLineSegments.values;
 
-    for (final THLineSegment selectedLineSegment
-        in _selectedLineSegments.values) {
+    for (final THLineSegment selectedLineSegment in selectedLineSegments) {
       final int selectedLineSegmentMapiahID = selectedLineSegment.mapiahID;
       final THLineSegment originalLineSegment =
           originalLineSegments[selectedLineSegmentMapiahID]!;
