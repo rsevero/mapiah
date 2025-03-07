@@ -1,66 +1,59 @@
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPTextToUser {
-  static final Map<MPCommandDescriptionType, String> _commandDescriptionMap =
-      {};
-  static final Map<THLengthUnitType, String> _lengthUnitMap = {};
-
-  static void resetTextToUser() {
-    final AppLocalizations localizations = mpLocator.appLocalizations;
-
-    _commandDescriptionMap[MPCommandDescriptionType.addElements] =
-        localizations.mpAddElementsCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.addLine] =
-        localizations.mpAddLineCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.addLineSegment] =
-        localizations.mpAddLineSegmentCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.addPoint] =
-        localizations.mpAddPointCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.deleteElements] =
-        localizations.mpDeleteElementsCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.deleteLine] =
-        localizations.mpDeleteLineSegmentCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.deleteLineSegment] =
-        localizations.mpDeleteLineCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.deletePoint] =
-        localizations.mpDeletePointCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.editBezierCurve] =
-        localizations.mpEditBezierCurveCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.editLine] =
-        localizations.mpEditLineCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.editLineSegment] =
-        localizations.mpEditLineSegmentCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.moveBezierLineSegment] =
-        localizations.mpMoveBezierLineSegmentCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.moveElements] =
-        localizations.mpMoveElementsCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.moveLine] =
-        localizations.mpMoveLineCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.movePoint] =
-        localizations.mpMovePointCommandDescription;
-    _commandDescriptionMap[MPCommandDescriptionType.moveStraightLineSegment] =
-        localizations.mpMoveStraightLineSegmentCommandDescription;
-
-    _lengthUnitMap[THLengthUnitType.centimeter] =
-        localizations.mpLengthUnitCentimeterAbbreviation;
-    _lengthUnitMap[THLengthUnitType.feet] =
-        localizations.mpLengthUnitFootAbbreviation;
-    _lengthUnitMap[THLengthUnitType.inch] =
-        localizations.mpLengthUnitInchAbbreviation;
-    _lengthUnitMap[THLengthUnitType.meter] =
-        localizations.mpLengthUnitMeterAbbreviation;
-    _lengthUnitMap[THLengthUnitType.yard] =
-        localizations.mpLengthUnitYardAbbreviation;
-  }
-
   static String getCommandDescription(MPCommandDescriptionType commandType) {
-    return _commandDescriptionMap[commandType]!;
+    switch (commandType) {
+      case MPCommandDescriptionType.addElements:
+        return mpLocator.appLocalizations.mpAddElementsCommandDescription;
+      case MPCommandDescriptionType.addLine:
+        return mpLocator.appLocalizations.mpAddLineCommandDescription;
+      case MPCommandDescriptionType.addLineSegment:
+        return mpLocator.appLocalizations.mpAddLineSegmentCommandDescription;
+      case MPCommandDescriptionType.addPoint:
+        return mpLocator.appLocalizations.mpAddPointCommandDescription;
+      case MPCommandDescriptionType.deleteElements:
+        return mpLocator.appLocalizations.mpDeleteElementsCommandDescription;
+      case MPCommandDescriptionType.deleteLine:
+        return mpLocator.appLocalizations.mpDeleteLineSegmentCommandDescription;
+      case MPCommandDescriptionType.deleteLineSegment:
+        return mpLocator.appLocalizations.mpDeleteLineCommandDescription;
+      case MPCommandDescriptionType.deletePoint:
+        return mpLocator.appLocalizations.mpDeletePointCommandDescription;
+      case MPCommandDescriptionType.editBezierCurve:
+        return mpLocator.appLocalizations.mpEditBezierCurveCommandDescription;
+      case MPCommandDescriptionType.editLine:
+        return mpLocator.appLocalizations.mpEditLineCommandDescription;
+      case MPCommandDescriptionType.editLineSegment:
+        return mpLocator.appLocalizations.mpEditLineSegmentCommandDescription;
+      case MPCommandDescriptionType.moveBezierLineSegment:
+        return mpLocator
+            .appLocalizations.mpMoveBezierLineSegmentCommandDescription;
+      case MPCommandDescriptionType.moveElements:
+        return mpLocator.appLocalizations.mpMoveElementsCommandDescription;
+      case MPCommandDescriptionType.moveLine:
+        return mpLocator.appLocalizations.mpMoveLineCommandDescription;
+      case MPCommandDescriptionType.movePoint:
+        return mpLocator.appLocalizations.mpMovePointCommandDescription;
+      case MPCommandDescriptionType.moveStraightLineSegment:
+        return mpLocator
+            .appLocalizations.mpMoveStraightLineSegmentCommandDescription;
+    }
   }
 
   static String getLengthUnitAbbreviation(THLengthUnitType lengthUnitType) {
-    return _lengthUnitMap[lengthUnitType]!;
+    switch (lengthUnitType) {
+      case THLengthUnitType.centimeter:
+        return mpLocator.appLocalizations.mpLengthUnitCentimeterAbbreviation;
+      case THLengthUnitType.feet:
+        return mpLocator.appLocalizations.mpLengthUnitFootAbbreviation;
+      case THLengthUnitType.inch:
+        return mpLocator.appLocalizations.mpLengthUnitInchAbbreviation;
+      case THLengthUnitType.meter:
+        return mpLocator.appLocalizations.mpLengthUnitMeterAbbreviation;
+      case THLengthUnitType.yard:
+        return mpLocator.appLocalizations.mpLengthUnitYardAbbreviation;
+    }
   }
 }
