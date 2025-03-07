@@ -280,6 +280,22 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void moveSelectedElementsToCanvasCoordinates(
+      Offset canvasCoordinatesFinalPosition) {
+    final _$actionInfo =
+        _$TH2FileEditSelectionControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditSelectionControllerBase.moveSelectedElementsToCanvasCoordinates');
+    try {
+      return super.moveSelectedElementsToCanvasCoordinates(
+          canvasCoordinatesFinalPosition);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void moveSelectedEndControlPointsToCanvasCoordinates(
       Offset canvasCoordinatesFinalPosition) {
     final _$actionInfo =

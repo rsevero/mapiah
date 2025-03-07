@@ -568,6 +568,102 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
+  void moveSelectedElementsToScreenCoordinates(
+    Offset screenCoordinatesFinalPosition,
+  ) {
+    final Offset canvasCoordinatesFinalPosition = _th2FileEditController
+        .offsetScreenToCanvas(screenCoordinatesFinalPosition);
+
+    moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
+  }
+
+  @action
+  void moveSelectedElementsToCanvasCoordinates(
+    Offset canvasCoordinatesFinalPosition,
+  ) {
+    if ((_selectedElements.isEmpty) || !_th2FileEditController.isSelectMode) {
+      return;
+    }
+
+    final Offset localDeltaPositionOnCanvas =
+        canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
+    final selectedElements = _selectedElements.values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      switch (selectedElement.originalElementClone) {
+        case THPoint _:
+          _updateTHPointPosition(
+            selectedElement as MPSelectedPoint,
+            localDeltaPositionOnCanvas,
+          );
+        case THLine _:
+          _updateTHLinePosition(
+            selectedElement as MPSelectedLine,
+            localDeltaPositionOnCanvas,
+          );
+      }
+    }
+
+    _th2FileEditController.triggerSelectedElementsRedraw();
+  }
+
+  void _updateTHPointPosition(
+    MPSelectedPoint selectedPoint,
+    Offset localDeltaPositionOnCanvas,
+  ) {
+    final THPoint originalPoint = selectedPoint.originalPointClone;
+    final THPoint modifiedPoint = originalPoint.copyWith(
+        position: originalPoint.position.copyWith(
+            coordinates: originalPoint.position.coordinates +
+                localDeltaPositionOnCanvas));
+    _th2FileEditController
+        .substituteElementWithoutAddSelectableElement(modifiedPoint);
+  }
+
+  void _updateTHLinePosition(
+    MPSelectedLine selectedLine,
+    Offset localDeltaPositionOnCanvas,
+  ) {
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final lineSegmentEntry
+        in selectedLine.originalLineSegmentsMapClone.entries) {
+      final THElement lineChild = lineSegmentEntry.value;
+
+      if (lineChild is! THLineSegment) {
+        continue;
+      }
+
+      late THLineSegment modifiedLineSegment;
+
+      switch (lineChild) {
+        case THStraightLineSegment _:
+          modifiedLineSegment = lineChild.copyWith(
+              endPoint: lineChild.endPoint.copyWith(
+                  coordinates: lineChild.endPoint.coordinates +
+                      localDeltaPositionOnCanvas));
+        case THBezierCurveLineSegment _:
+          modifiedLineSegment = lineChild.copyWith(
+              endPoint: lineChild.endPoint.copyWith(
+                  coordinates: lineChild.endPoint.coordinates +
+                      localDeltaPositionOnCanvas),
+              controlPoint1: lineChild.controlPoint1.copyWith(
+                  coordinates: lineChild.controlPoint1.coordinates +
+                      localDeltaPositionOnCanvas),
+              controlPoint2: lineChild.controlPoint2.copyWith(
+                  coordinates: lineChild.controlPoint2.coordinates +
+                      localDeltaPositionOnCanvas));
+        default:
+          throw Exception('Unknown line segment type');
+      }
+
+      modifiedLineSegmentsMap[lineChild.mapiahID] = modifiedLineSegment;
+    }
+
+    _th2FileEditController.substituteLineSegments(modifiedLineSegmentsMap);
+  }
+
   void moveSelectedEndControlPointsToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
