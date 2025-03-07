@@ -1,7 +1,7 @@
 part of 'mp_selectable.dart';
 
-class MPSelectableEndpoint extends MPSelectableEndControlPoint {
-  MPSelectableEndpoint({
+class MPSelectableEndPoint extends MPSelectableEndControlPoint {
+  MPSelectableEndPoint({
     required super.lineSegment,
     required super.th2fileEditController,
     required super.position,

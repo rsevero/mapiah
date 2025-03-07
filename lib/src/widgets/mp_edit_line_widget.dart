@@ -92,7 +92,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         for (final MPSelectableEndControlPoint point in endControlPoints) {
           switch (point) {
-            case MPSelectableEndpoint _:
+            case MPSelectableEndPoint _:
               final THLineSegment lineSegment = point.element as THLineSegment;
               late Paint pointPaint;
               late double pointHalfLength;
@@ -117,7 +117,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
               endPointPainters.add(endPointPainter);
               lastEndpoint = point;
-            case MPSelectableControlpoint _:
+            case MPSelectableControlPoint _:
               final THControlPointPainter controlPointPainter =
                   THControlPointPainter(
                 controlPointPosition: point.position,

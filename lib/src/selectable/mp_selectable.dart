@@ -8,10 +8,10 @@ import 'package:mapiah/src/elements/th_element.dart';
 
 part 'mixins/mp_selectable_point_mixin.dart';
 part 'mp_selectable_bezier_curve_line_segment.dart';
-part 'mp_selectable_controlpoint.dart';
+part 'mp_selectable_control_point.dart';
 part 'mp_selectable_element.dart';
-part 'mp_selectable_endcontrolpoint.dart';
-part 'mp_selectable_endpoint.dart';
+part 'mp_selectable_end_control_point.dart';
+part 'mp_selectable_end_point.dart';
 part 'mp_selectable_line_segment.dart';
 part 'mp_selectable_line.dart';
 part 'mp_selectable_point.dart';

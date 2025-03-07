@@ -7,6 +7,7 @@ enum MPTH2FileEditStateType {
   editSingleLine,
   movingElements,
   movingEndControlPoints,
+  movingSingleControlPoint,
   selectEmptySelection,
   selectNonEmptySelection;
 }

@@ -406,6 +406,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_selectedControlPointAtom = Atom(
+      name: 'TH2FileEditControllerBase._selectedControlPoint',
+      context: context);
+
+  MPSelectableControlPoint? get selectedControlPoint {
+    _$_selectedControlPointAtom.reportRead();
+    return super._selectedControlPoint;
+  }
+
+  @override
+  MPSelectableControlPoint? get _selectedControlPoint => selectedControlPoint;
+
+  @override
+  set _selectedControlPoint(MPSelectableControlPoint? value) {
+    _$_selectedControlPointAtom.reportWrite(value, super._selectedControlPoint,
+        () {
+      super._selectedControlPoint = value;
+    });
+  }
+
   late final _$_hasUndoAtom =
       Atom(name: 'TH2FileEditControllerBase._hasUndo', context: context);
 
@@ -1093,13 +1113,27 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void moveSelectedEndcontrolPointsToCanvasCoordinates(
+  void moveSelectedEndControlPointsToCanvasCoordinates(
       Offset canvasCoordinatesFinalPosition) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
         name:
-            'TH2FileEditControllerBase.moveSelectedEndcontrolPointsToCanvasCoordinates');
+            'TH2FileEditControllerBase.moveSelectedEndControlPointsToCanvasCoordinates');
     try {
-      return super.moveSelectedEndcontrolPointsToCanvasCoordinates(
+      return super.moveSelectedEndControlPointsToCanvasCoordinates(
+          canvasCoordinatesFinalPosition);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void moveSelectedControlPointToCanvasCoordinates(
+      Offset canvasCoordinatesFinalPosition) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
+        name:
+            'TH2FileEditControllerBase.moveSelectedControlPointToCanvasCoordinates');
+    try {
+      return super.moveSelectedControlPointToCanvasCoordinates(
           canvasCoordinatesFinalPosition);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);

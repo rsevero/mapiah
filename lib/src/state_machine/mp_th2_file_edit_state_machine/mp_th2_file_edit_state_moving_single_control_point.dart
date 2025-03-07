@@ -1,8 +1,8 @@
 part of 'mp_th2_file_edit_state.dart';
 
-class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
+class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     with MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingEndControlPoints(
+  MPTH2FileEditStateMovingSingleControlPoint(
       {required super.th2FileEditController});
 
   @override
@@ -19,12 +19,13 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     } else {
       clearAllSelections();
     }
+    th2FileEditController.clearSelectedControlPoint();
   }
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditController
-        .moveSelectedEndControlPointsToScreenCoordinates(event.localPosition);
+        .moveSelectedControlPointToScreenCoordinates(event.localPosition);
   }
 
   @override
@@ -90,5 +91,5 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   MPTH2FileEditStateType get type =>
-      MPTH2FileEditStateType.movingEndControlPoints;
+      MPTH2FileEditStateType.movingSingleControlPoint;
 }
