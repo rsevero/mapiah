@@ -3,7 +3,7 @@
 [X] - Make output identical to original except on changed lines
 [ ] - Deal with click on more than one object at a time
 [ ] - Config page
-[ ] - Line edit
+[X] - Line edit
 [X] - Point and line delete
 [X] - Point and line add
 [X] - Status message totaling selected objects
