@@ -4,7 +4,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     with
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingElements({required super.th2FileEditController});
+  MPTH2FileEditStateMovingElements({required super.fileEditController});
 
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
@@ -23,7 +23,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     List<THElement> clickedElements =
-        th2FileEditController.selectableElementsClicked(event.localPosition);
+        selectionController.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
@@ -31,24 +31,24 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         clickedElements,
       );
       final bool clickedElementAlreadySelected =
-          th2FileEditController.isElementSelected(clickedElements.first);
+          selectionController.isElementSelected(clickedElements.first);
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          th2FileEditController.removeSelectedElement(clickedElements.first);
+          selectionController.removeSelectedElement(clickedElements.first);
         } else {
-          th2FileEditController.setSelectionState();
+          selectionController.setSelectionState();
         }
 
         return;
       } else {
         if (shiftPressed) {
-          th2FileEditController.addSelectedElement(
+          selectionController.addSelectedElement(
             clickedElements.first,
             setState: true,
           );
         } else {
-          th2FileEditController.setSelectedElements(
+          selectionController.setSelectedElements(
             [clickedElements.first],
             setState: true,
           );
@@ -58,8 +58,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       }
     } else {
       if (!shiftPressed) {
-        th2FileEditController.clearSelectedElements();
-        th2FileEditController
+        selectionController.clearSelectedElements();
+        fileEditController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
@@ -68,7 +68,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditController
+    fileEditController
         .moveSelectedElementsToScreenCoordinates(event.localPosition);
   }
 
@@ -79,15 +79,15 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 4. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final int selectedCount = th2FileEditController.selectedElements.length;
+    final int selectedCount = selectionController.selectedElements.length;
     final Offset panDeltaOnCanvas =
-        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
-            th2FileEditController.dragStartCanvasCoordinates;
+        fileEditController.offsetScreenToCanvas(event.localPosition) -
+            selectionController.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
     if (selectedCount == 1) {
       final MPSelectedElement selected =
-          th2FileEditController.selectedElements.values.first;
+          selectionController.selectedElements.values.first;
       final THElement selectedElement = selected.originalElementClone;
 
       switch (selected) {
@@ -109,7 +109,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       }
     } else if (selectedCount > 1) {
       final List<MPMoveCommandOriginalParams>
-          moveCommandOriginalParametersList = th2FileEditController
+          moveCommandOriginalParametersList = selectionController
               .selectedElements.values
               .map<MPMoveCommandOriginalParams>((MPSelectedElement selected) {
         final THElement selectedElement = selected.originalElementClone;
@@ -135,9 +135,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       );
     }
 
-    th2FileEditController.execute(moveCommand);
-    th2FileEditController.updateSelectedElementsClones();
-    th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+    fileEditController.execute(moveCommand);
+    selectionController.updateSelectedElementsClones();
+    fileEditController.triggerSelectedElementsRedraw(setState: true);
   }
 
   @override

@@ -18,7 +18,7 @@ mixin MPTH2FileEditStateClearSelectionOnExitMixin on MPTH2FileEditState {
   }
 
   void clearAllSelections() {
-    th2FileEditController.clearSelectedElements();
-    th2FileEditController.clearSelectedLineSegments();
+    selectionController.clearSelectedElements();
+    selectionController.clearSelectedLineSegments();
   }
 }

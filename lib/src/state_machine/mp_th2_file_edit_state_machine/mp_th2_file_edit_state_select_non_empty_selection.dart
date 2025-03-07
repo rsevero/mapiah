@@ -6,7 +6,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateSelectNonEmptySelection(
-      {required super.th2FileEditController});
+      {required super.fileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
@@ -30,7 +30,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     List<THElement> clickedElements =
-        th2FileEditController.selectableElementsClicked(event.localPosition);
+        selectionController.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
@@ -40,23 +40,23 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
       /// TODO: deal with multiple end points returned on same click.
       final bool clickedElementAlreadySelected =
-          th2FileEditController.isElementSelected(clickedElements.first);
+          selectionController.isElementSelected(clickedElements.first);
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          th2FileEditController.removeSelectedElement(clickedElements.first);
+          selectionController.removeSelectedElement(clickedElements.first);
         }
         return;
       } else {
         late bool stateChanged;
 
         if (shiftPressed) {
-          stateChanged = th2FileEditController.addSelectedElement(
+          stateChanged = selectionController.addSelectedElement(
             clickedElements.first,
             setState: true,
           );
         } else {
-          stateChanged = th2FileEditController.setSelectedElements(
+          stateChanged = selectionController.setSelectedElements(
             [clickedElements.first],
             setState: true,
           );
@@ -68,8 +68,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       }
     } else {
       if (!shiftPressed) {
-        th2FileEditController.clearSelectedElements();
-        th2FileEditController
+        selectionController.clearSelectedElements();
+        fileEditController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
@@ -86,10 +86,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 2.2. No. Do nothing.
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
-    th2FileEditController.setDragStartCoordinates(event.localPosition);
+    selectionController.setDragStartCoordinates(event.localPosition);
 
     List<THElement> clickedElements =
-        th2FileEditController.selectableElementsClicked(event.localPosition);
+        selectionController.selectableElementsClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
@@ -102,7 +102,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         );
 
         for (final THElement element in clickedElements) {
-          if (th2FileEditController.isElementSelected(element)) {
+          if (selectionController.isElementSelected(element)) {
             alreadySelected = true;
           } else {
             newlySelectedElements.add(element);
@@ -110,9 +110,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         }
 
         if (!alreadySelected) {
-          th2FileEditController.setSelectedElements(newlySelectedElements);
+          selectionController.setSelectedElements(newlySelectedElements);
         }
-        th2FileEditController.setState(MPTH2FileEditStateType.movingElements);
+        fileEditController.setState(MPTH2FileEditStateType.movingElements);
       }
     }
   }
@@ -120,7 +120,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// Draw the selection window.
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditController
+    selectionController
         .setSelectionWindowScreenEndCoordinates(event.localPosition);
   }
 
@@ -144,10 +144,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     );
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
-    th2FileEditController.clearSelectionWindow();
+    selectionController.clearSelectionWindow();
 
     if (shiftPressed) {
-      final bool stateChanged = th2FileEditController.addSelectedElements(
+      final bool stateChanged = selectionController.addSelectedElements(
         elementsInsideSelectionWindow,
         setState: true,
       );
@@ -156,11 +156,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       }
     } else {
       if (elementsInsideSelectionWindow.isEmpty) {
-        th2FileEditController.clearSelectedElements();
-        th2FileEditController
+        selectionController.clearSelectedElements();
+        fileEditController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       } else {
-        final stateChanged = th2FileEditController.setSelectedElements(
+        final stateChanged = selectionController.setSelectedElements(
           elementsInsideSelectionWindow,
           setState: true,
         );
@@ -175,7 +175,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     int pointCount = 0;
     int lineCount = 0;
 
-    final selectedElements = th2FileEditController.selectedElements.values;
+    final selectedElements = selectionController.selectedElements.values;
 
     for (final selectedElement in selectedElements) {
       switch (selectedElement) {
@@ -208,7 +208,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       );
     }
 
-    th2FileEditController.setStatusBarMessage(statusBarMessage);
+    fileEditController.setStatusBarMessage(statusBarMessage);
   }
 
   @override

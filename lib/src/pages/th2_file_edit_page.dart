@@ -520,6 +520,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 return const SizedBox();
               }
 
+              final bool selectedElementsEmpty = th2FileEditController
+                  .selectionController.selectedElements.isEmpty;
+
               return Row(
                 children: [
                   FloatingActionButton(
@@ -549,16 +552,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   SizedBox(width: 8),
                   FloatingActionButton(
                     heroTag: 'zoom_selection',
-                    onPressed: th2FileEditController.selectedElements.isEmpty
-                        ? null
-                        : zoomSelection,
+                    onPressed: selectedElementsEmpty ? null : zoomSelection,
                     tooltip: AppLocalizations.of(context)
                         .th2FileEditPageZoomToSelection,
                     child: Image.asset(
                       'assets/icons/zoom_selection.png',
                       width: thFloatingActionZoomIconSize,
                       height: thFloatingActionZoomIconSize,
-                      color: th2FileEditController.selectedElements.isEmpty
+                      color: selectedElementsEmpty
                           ? Colors.grey
                           : colorScheme.onSecondaryContainer,
                     ),

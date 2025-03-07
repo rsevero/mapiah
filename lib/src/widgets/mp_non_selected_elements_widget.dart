@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -16,12 +17,14 @@ import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 class MPNonSelectedElementsWidget extends StatelessWidget
     with MPGetLineSegmentsMapMixin {
   final TH2FileEditController th2FileEditController;
+  final TH2FileEditSelectionController selectionController;
   final THFile thFile;
 
   MPNonSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
-  }) : thFile = th2FileEditController.thFile;
+  })  : selectionController = th2FileEditController.selectionController,
+        thFile = th2FileEditController.thFile;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             thFile.drawableElementMapiahIDs;
 
         for (final int drawableElementMapiahID in drawableElementMapiahIDs) {
-          if (th2FileEditController
+          if (selectionController
               .isElementSelectedByMapiahID(drawableElementMapiahID)) {
             continue;
           }

@@ -369,63 +369,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isSelectedAtom =
-      Atom(name: 'TH2FileEditControllerBase._isSelected', context: context);
-
-  Map<int, Observable<bool>> get isSelected {
-    _$_isSelectedAtom.reportRead();
-    return super._isSelected;
-  }
-
-  @override
-  Map<int, Observable<bool>> get _isSelected => isSelected;
-
-  @override
-  set _isSelected(Map<int, Observable<bool>> value) {
-    _$_isSelectedAtom.reportWrite(value, super._isSelected, () {
-      super._isSelected = value;
-    });
-  }
-
-  late final _$_selectedElementsAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectedElements', context: context);
-
-  ObservableMap<int, MPSelectedElement> get selectedElements {
-    _$_selectedElementsAtom.reportRead();
-    return super._selectedElements;
-  }
-
-  @override
-  ObservableMap<int, MPSelectedElement> get _selectedElements =>
-      selectedElements;
-
-  @override
-  set _selectedElements(ObservableMap<int, MPSelectedElement> value) {
-    _$_selectedElementsAtom.reportWrite(value, super._selectedElements, () {
-      super._selectedElements = value;
-    });
-  }
-
-  late final _$_selectedControlPointAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectedControlPoint',
-      context: context);
-
-  MPSelectableControlPoint? get selectedControlPoint {
-    _$_selectedControlPointAtom.reportRead();
-    return super._selectedControlPoint;
-  }
-
-  @override
-  MPSelectableControlPoint? get _selectedControlPoint => selectedControlPoint;
-
-  @override
-  set _selectedControlPoint(MPSelectableControlPoint? value) {
-    _$_selectedControlPointAtom.reportWrite(value, super._selectedControlPoint,
-        () {
-      super._selectedControlPoint = value;
-    });
-  }
-
   late final _$_hasUndoAtom =
       Atom(name: 'TH2FileEditControllerBase._hasUndo', context: context);
 
@@ -690,27 +633,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_selectionWindowCanvasCoordinatesAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionWindowCanvasCoordinates',
-      context: context);
-
-  Observable<Rect> get selectionWindowCanvasCoordinates {
-    _$_selectionWindowCanvasCoordinatesAtom.reportRead();
-    return super._selectionWindowCanvasCoordinates;
-  }
-
-  @override
-  Observable<Rect> get _selectionWindowCanvasCoordinates =>
-      selectionWindowCanvasCoordinates;
-
-  @override
-  set _selectionWindowCanvasCoordinates(Observable<Rect> value) {
-    _$_selectionWindowCanvasCoordinatesAtom
-        .reportWrite(value, super._selectionWindowCanvasCoordinates, () {
-      super._selectionWindowCanvasCoordinates = value;
-    });
-  }
-
   late final _$_selectionWindowFillPaintAtom = Atom(
       name: 'TH2FileEditControllerBase._selectionWindowFillPaint',
       context: context);
@@ -788,6 +710,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _statusBarMessage(String value) {
     _$_statusBarMessageAtom.reportWrite(value, super._statusBarMessage, () {
       super._statusBarMessage = value;
+    });
+  }
+
+  late final _$_lineStartScreenPositionAtom = Atom(
+      name: 'TH2FileEditControllerBase._lineStartScreenPosition',
+      context: context);
+
+  Offset? get lineStartScreenPosition {
+    _$_lineStartScreenPositionAtom.reportRead();
+    return super._lineStartScreenPosition;
+  }
+
+  @override
+  Offset? get _lineStartScreenPosition => lineStartScreenPosition;
+
+  @override
+  set _lineStartScreenPosition(Offset? value) {
+    _$_lineStartScreenPositionAtom
+        .reportWrite(value, super._lineStartScreenPosition, () {
+      super._lineStartScreenPosition = value;
     });
   }
 
@@ -1002,68 +944,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_selectedLineSegmentsAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectedLineSegments',
-      context: context);
-
-  LinkedHashMap<int, THLineSegment> get selectedLineSegments {
-    _$_selectedLineSegmentsAtom.reportRead();
-    return super._selectedLineSegments;
-  }
-
-  @override
-  LinkedHashMap<int, THLineSegment> get _selectedLineSegments =>
-      selectedLineSegments;
-
-  @override
-  set _selectedLineSegments(LinkedHashMap<int, THLineSegment> value) {
-    _$_selectedLineSegmentsAtom.reportWrite(value, super._selectedLineSegments,
-        () {
-      super._selectedLineSegments = value;
-    });
-  }
-
-  late final _$_selectableEndControlPointsAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectableEndControlPoints',
-      context: context);
-
-  Set<MPSelectableEndControlPoint> get selectableEndControlPoints {
-    _$_selectableEndControlPointsAtom.reportRead();
-    return super._selectableEndControlPoints;
-  }
-
-  @override
-  Set<MPSelectableEndControlPoint> get _selectableEndControlPoints =>
-      selectableEndControlPoints;
-
-  @override
-  set _selectableEndControlPoints(Set<MPSelectableEndControlPoint> value) {
-    _$_selectableEndControlPointsAtom
-        .reportWrite(value, super._selectableEndControlPoints, () {
-      super._selectableEndControlPoints = value;
-    });
-  }
-
-  late final _$_lineStartScreenPositionAtom = Atom(
-      name: 'TH2FileEditControllerBase._lineStartScreenPosition',
-      context: context);
-
-  Offset? get lineStartScreenPosition {
-    _$_lineStartScreenPositionAtom.reportRead();
-    return super._lineStartScreenPosition;
-  }
-
-  @override
-  Offset? get _lineStartScreenPosition => lineStartScreenPosition;
-
-  @override
-  set _lineStartScreenPosition(Offset? value) {
-    _$_lineStartScreenPositionAtom
-        .reportWrite(value, super._lineStartScreenPosition, () {
-      super._lineStartScreenPosition = value;
-    });
-  }
-
   late final _$TH2FileEditControllerBaseActionController =
       ActionController(name: 'TH2FileEditControllerBase', context: context);
 
@@ -1073,6 +953,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.getNewLine');
     try {
       return super.getNewLine();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setNewLineStartScreenPosition');
+    try {
+      return super.setNewLineStartScreenPosition(lineStartScreenPosition);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1095,46 +987,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setNewLine');
     try {
       return super.setNewLine(newLine);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.setNewLineStartScreenPosition');
-    try {
-      return super.setNewLineStartScreenPosition(lineStartScreenPosition);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void moveSelectedEndControlPointsToCanvasCoordinates(
-      Offset canvasCoordinatesFinalPosition) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
-        name:
-            'TH2FileEditControllerBase.moveSelectedEndControlPointsToCanvasCoordinates');
-    try {
-      return super.moveSelectedEndControlPointsToCanvasCoordinates(
-          canvasCoordinatesFinalPosition);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void moveSelectedControlPointToCanvasCoordinates(
-      Offset canvasCoordinatesFinalPosition) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
-        name:
-            'TH2FileEditControllerBase.moveSelectedControlPointToCanvasCoordinates');
-    try {
-      return super.moveSelectedControlPointToCanvasCoordinates(
-          canvasCoordinatesFinalPosition);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1226,131 +1078,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setStatusBarMessage');
     try {
       return super.setStatusBarMessage(message);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setSelectionWindowCanvasCoordinates(
-      {required Offset point1, required Offset point2}) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
-        name: 'TH2FileEditControllerBase.setSelectionWindowCanvasCoordinates');
-    try {
-      return super
-          .setSelectionWindowCanvasCoordinates(point1: point1, point2: point2);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearSelectionWindow() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.clearSelectionWindow');
-    try {
-      return super.clearSelectionWindow();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearSelectedElements() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.clearSelectedElements');
-    try {
-      return super.clearSelectedElements();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void deleteSelected() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.deleteSelected');
-    try {
-      return super.deleteSelected();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  bool addSelectedElement(THElement element, {bool setState = false}) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.addSelectedElement');
-    try {
-      return super.addSelectedElement(element, setState: setState);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Rect _getSelectedElementsBoundingBox() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase._getSelectedElementsBoundingBox');
-    try {
-      return super._getSelectedElementsBoundingBox();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  bool addSelectedElements(List<THElement> elements, {bool setState = false}) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.addSelectedElements');
-    try {
-      return super.addSelectedElements(elements, setState: setState);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void deselectAllElements() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.deselectAllElements');
-    try {
-      return super.deselectAllElements();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void selectAllElements() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.selectAllElements');
-    try {
-      return super.selectAllElements();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  bool setSelectedElements(List<THElement> clickedElements,
-      {bool setState = false}) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setSelectedElements');
-    try {
-      return super.setSelectedElements(clickedElements, setState: setState);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  bool removeSelectedElement(THElement element) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.removeSelectedElement');
-    try {
-      return super.removeSelectedElement(element);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -12,6 +12,7 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -35,10 +36,12 @@ part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
-  final TH2FileEditController th2FileEditController;
+  final TH2FileEditController fileEditController;
+  final TH2FileEditSelectionController selectionController;
   MPTH2FileEditStateType get type;
 
-  MPTH2FileEditState({required this.th2FileEditController});
+  MPTH2FileEditState({required this.fileEditController})
+      : selectionController = fileEditController.selectionController;
 
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,
@@ -47,39 +50,39 @@ abstract class MPTH2FileEditState {
     switch (type) {
       case MPTH2FileEditStateType.addArea:
         return MPTH2FileEditStateAddArea(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.addLine:
         return MPTH2FileEditStateAddLine(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.addPoint:
         return MPTH2FileEditStateAddPoint(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:
         return MPTH2FileEditStateEditSingleLine(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.movingElements:
         return MPTH2FileEditStateMovingElements(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.movingEndControlPoints:
         return MPTH2FileEditStateMovingEndControlPoints(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.movingSingleControlPoint:
         return MPTH2FileEditStateMovingSingleControlPoint(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.selectEmptySelection:
         return MPTH2FileEditStateSelectEmptySelection(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
       case MPTH2FileEditStateType.selectNonEmptySelection:
         return MPTH2FileEditStateSelectNonEmptySelection(
-          th2FileEditController: thFileEditController,
+          fileEditController: thFileEditController,
         );
     }
   }
@@ -127,49 +130,48 @@ abstract class MPTH2FileEditState {
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
       case MPButtonType.addArea:
-        th2FileEditController.setState(MPTH2FileEditStateType.addArea);
+        fileEditController.setState(MPTH2FileEditStateType.addArea);
         return true;
       case MPButtonType.addLine:
-        th2FileEditController.setState(MPTH2FileEditStateType.addLine);
+        fileEditController.setState(MPTH2FileEditStateType.addLine);
         return true;
       case MPButtonType.addPoint:
-        th2FileEditController.setState(MPTH2FileEditStateType.addPoint);
+        fileEditController.setState(MPTH2FileEditStateType.addPoint);
         return true;
       case MPButtonType.changeScrap:
-        th2FileEditController.toggleToNextAvailableScrap();
+        fileEditController.toggleToNextAvailableScrap();
         return true;
       case MPButtonType.delete:
-        th2FileEditController.deleteSelected();
+        selectionController.deleteSelected();
         return true;
       case MPButtonType.redo:
-        th2FileEditController.redo();
+        fileEditController.redo();
         return true;
       case MPButtonType.select:
-        th2FileEditController.setSelectionState();
+        selectionController.setSelectionState();
         return true;
       case MPButtonType.undo:
-        th2FileEditController.undo();
+        fileEditController.undo();
         return true;
       case MPButtonType.zoomAllFile:
-        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        fileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         return true;
       case MPButtonType.zoomAllScrap:
-        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+        fileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         return true;
       case MPButtonType.zoomIn:
-        th2FileEditController.zoomIn();
+        fileEditController.zoomIn();
         return true;
       case MPButtonType.zoomOneToOne:
-        th2FileEditController.zoomOneToOne();
+        fileEditController.zoomOneToOne();
         return true;
       case MPButtonType.zoomOptions:
         return true;
       case MPButtonType.zoomOut:
-        th2FileEditController.zoomOut();
+        fileEditController.zoomOut();
         return true;
       case MPButtonType.zoomSelection:
-        th2FileEditController.zoomToFit(
-            zoomFitToType: MPZoomToFitType.selection);
+        fileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.selection);
         return true;
       default:
         return false;

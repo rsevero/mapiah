@@ -5,13 +5,12 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateSelectEmptySelection(
-      {required super.th2FileEditController});
+  MPTH2FileEditStateSelectEmptySelection({required super.fileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    th2FileEditController.clearSelectedElements();
-    th2FileEditController.setStatusBarMessage(mpLocator
+    selectionController.clearSelectedElements();
+    fileEditController.setStatusBarMessage(mpLocator
         .appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage);
   }
 
@@ -21,11 +20,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     final List<THElement> clickedElements =
-        th2FileEditController.selectableElementsClicked(event.localPosition);
+        selectionController.selectableElementsClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
       /// TODO: deal with multiple end points returned on same click.
-      th2FileEditController.setSelectedElements(
+      selectionController.setSelectedElements(
         getSelectedElementsWithLineSegmentsConvertedToLines(
           clickedElements,
         ),
@@ -37,13 +36,13 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// Marks the start point of the pan.
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
-    th2FileEditController.setDragStartCoordinates(event.localPosition);
+    selectionController.setDragStartCoordinates(event.localPosition);
   }
 
   /// Draws the selection window.
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditController
+    selectionController
         .setSelectionWindowScreenEndCoordinates(event.localPosition);
   }
 
@@ -59,10 +58,10 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     final List<THElement> elementsInsideSelectionWindow =
         getObjectsInsideSelectionWindow(event.localPosition);
 
-    th2FileEditController.clearSelectionWindow();
+    selectionController.clearSelectionWindow();
 
     if (elementsInsideSelectionWindow.isNotEmpty) {
-      th2FileEditController.setSelectedElements(
+      selectionController.setSelectedElements(
         getSelectedElementsWithLineSegmentsConvertedToLines(
           elementsInsideSelectionWindow,
         ),

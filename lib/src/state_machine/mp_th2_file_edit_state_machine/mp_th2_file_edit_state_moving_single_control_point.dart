@@ -3,7 +3,7 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     with MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateMovingSingleControlPoint(
-      {required super.th2FileEditController});
+      {required super.fileEditController});
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
@@ -13,33 +13,33 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
         .contains(nextStateType)) {
       if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes
           .contains(nextStateType)) {
-        th2FileEditController.clearSelectedLineSegments();
+        selectionController.clearSelectedLineSegments();
       }
       return;
     } else {
       clearAllSelections();
     }
-    th2FileEditController.clearSelectedControlPoint();
+    selectionController.clearSelectedControlPoint();
   }
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    th2FileEditController
+    selectionController
         .moveSelectedControlPointToScreenCoordinates(event.localPosition);
   }
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final Offset panDeltaOnCanvas =
-        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
-            th2FileEditController.dragStartCanvasCoordinates;
+        fileEditController.offsetScreenToCanvas(event.localPosition) -
+            selectionController.dragStartCanvasCoordinates;
     final MPSelectedLine selected =
-        th2FileEditController.selectedElements.values.first as MPSelectedLine;
+        selectionController.selectedElements.values.first as MPSelectedLine;
     final THLine selectedLine = selected.originalElementClone as THLine;
     final List<int> lineLineSegmentsMapiahIDs =
-        th2FileEditController.getSelectedLineLineSegmentsMapiahIDs();
+        selectionController.getSelectedLineLineSegmentsMapiahIDs();
     final List<int> selectedLineSegmentMapiahIDs =
-        th2FileEditController.selectedLineSegments.keys.toList();
+        selectionController.selectedLineSegments.keys.toList();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
         selected.originalLineSegmentsMapClone;
     final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
@@ -51,20 +51,19 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
         in selectedLineSegmentMapiahIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMapiahID)) {
         modifiedLineSegmentsMap[selectedLineSegmentMapiahID] =
-            th2FileEditController.thFile
-                    .elementByMapiahID(selectedLineSegmentMapiahID)
-                as THLineSegment;
+            fileEditController.thFile.elementByMapiahID(
+                selectedLineSegmentMapiahID) as THLineSegment;
         originalLineSegmentsMap[selectedLineSegmentMapiahID] =
             originalLineSegmentsMapClone[selectedLineSegmentMapiahID]!;
       }
 
       final int? nextLineSegmentMapiahID =
-          th2FileEditController.getNextLineSegmentMapiahID(
+          selectionController.getNextLineSegmentMapiahID(
               selectedLineSegmentMapiahID, lineLineSegmentsMapiahIDs);
 
       if ((nextLineSegmentMapiahID != null) &&
           !modifiedLineSegmentsMap.containsKey(nextLineSegmentMapiahID)) {
-        final THLineSegment nextLineSegment = th2FileEditController.thFile
+        final THLineSegment nextLineSegment = fileEditController.thFile
             .elementByMapiahID(nextLineSegmentMapiahID) as THLineSegment;
 
         if (nextLineSegment is THBezierCurveLineSegment) {
@@ -83,10 +82,10 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
       descriptionType: MPCommandDescriptionType.editBezierCurve,
     );
 
-    th2FileEditController.execute(lineEditCommand);
-    th2FileEditController.updateSelectedElementsClones();
-    th2FileEditController.triggerEditLineRedraw();
-    th2FileEditController.setSelectionState();
+    fileEditController.execute(lineEditCommand);
+    selectionController.updateSelectedElementsClones();
+    fileEditController.triggerEditLineRedraw();
+    selectionController.setSelectionState();
   }
 
   @override

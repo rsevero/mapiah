@@ -2,30 +2,30 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
     with MPTH2FileEditStateMoveCanvasMixin {
-  MPTH2FileEditStateAddPoint({required super.th2FileEditController});
+  MPTH2FileEditStateAddPoint({required super.fileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    th2FileEditController.setStatusBarMessage(mpLocator.appLocalizations
+    fileEditController.setStatusBarMessage(mpLocator.appLocalizations
         .th2FileEditPageAddPointStatusBarMessage(
-            th2FileEditController.lastAddedPointType.name));
+            fileEditController.lastAddedPointType.name));
   }
 
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     final THPoint newPoint = THPoint(
-      parentMapiahID: th2FileEditController.activeScrapID,
-      pointType: th2FileEditController.lastAddedPointType,
+      parentMapiahID: fileEditController.activeScrapID,
+      pointType: fileEditController.lastAddedPointType,
       position: THPositionPart(
         coordinates:
-            th2FileEditController.offsetScreenToCanvas(event.localPosition),
-        decimalPositions: th2FileEditController.currentDecimalPositions,
+            fileEditController.offsetScreenToCanvas(event.localPosition),
+        decimalPositions: fileEditController.currentDecimalPositions,
       ),
     );
     final MPAddPointCommand command = MPAddPointCommand(newPoint: newPoint);
 
-    th2FileEditController.execute(command);
-    th2FileEditController.triggerNonSelectedElementsRedraw();
+    fileEditController.execute(command);
+    fileEditController.triggerNonSelectedElementsRedraw();
   }
 
   @override

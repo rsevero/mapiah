@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -18,11 +19,12 @@ import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 
 class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
   final TH2FileEditController th2FileEditController;
+  final TH2FileEditSelectionController selectionController;
 
   MPEditLineWidget({
     required this.th2FileEditController,
     required super.key,
-  });
+  }) : selectionController = th2FileEditController.selectionController;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,8 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
       builder: (_) {
         th2FileEditController.redrawTriggerEditLine;
 
-        if ((th2FileEditController.selectedElements.values.length != 1) ||
-            (th2FileEditController.selectedElements.values.first
+        if ((selectionController.selectedElements.values.length != 1) ||
+            (selectionController.selectedElements.values.first
                 is! MPSelectedLine)) {
           return SizedBox.shrink();
         }
@@ -63,7 +65,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final List<CustomPainter> painters = [];
 
-        final THLine line = th2FileEditController
+        final THLine line = selectionController
             .selectedElements.values.first.originalElementClone as THLine;
 
         final (
@@ -87,7 +89,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final List<THEndPointPainter> endPointPainters = [];
         final Set<MPSelectableEndControlPoint> endControlPoints =
-            th2FileEditController.selectableEndControlPoints;
+            selectionController.selectableEndControlPoints;
         late MPSelectableEndControlPoint lastEndpoint;
 
         for (final MPSelectableEndControlPoint point in endControlPoints) {
@@ -97,7 +99,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               late Paint pointPaint;
               late double pointHalfLength;
 
-              if (th2FileEditController.getIsLineSegmentSelected(lineSegment)) {
+              if (selectionController.getIsLineSegmentSelected(lineSegment)) {
                 pointPaint = selectedEndPointPaint;
                 pointHalfLength = selectedEndPointHalfSize;
               } else {
