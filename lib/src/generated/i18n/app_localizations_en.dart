@@ -73,7 +73,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDeleteLineSegmentCommandDescription => 'Delete line segment';
 
   @override
-  String get mpDeletePointCommandDescription => 'Apagar ponto';
+  String get mpDeletePointCommandDescription => 'Delete point';
+
+  @override
+  String get mpEditBezierCurveCommandDescription => 'Edit Bézier curve';
 
   @override
   String get mpEditLineCommandDescription => 'Edit line';

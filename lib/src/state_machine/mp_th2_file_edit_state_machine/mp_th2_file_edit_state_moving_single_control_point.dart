@@ -80,7 +80,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
       originalLineSegmentsMap: originalLineSegmentsMap,
       modifiedLineSegmentsMap: modifiedLineSegmentsMap,
       deltaOnCanvas: panDeltaOnCanvas,
-      descriptionType: MPCommandDescriptionType.editLine,
+      descriptionType: MPCommandDescriptionType.editBezierCurve,
     );
 
     th2FileEditController.execute(lineEditCommand);

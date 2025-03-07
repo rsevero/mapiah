@@ -109,9 +109,15 @@
     "type": "text"
   },
 
-  "mpDeletePointCommandDescription": "Apagar ponto",
+  "mpDeletePointCommandDescription": "Delete point",
   "@mpDeletePointCommandDescription": {
     "description": "The description for the delete point command",
+    "type": "text"
+  },
+
+  "mpEditBezierCurveCommandDescription": "Edit Bézier curve",
+  "@mpEditBezierCurveCommandDescription": {
+    "description": "The description for the edit Bézier curve command",
     "type": "text"
   },
 

@@ -200,8 +200,14 @@ abstract class AppLocalizations {
   /// The description for the delete point command
   ///
   /// In en, this message translates to:
-  /// **'Apagar ponto'**
+  /// **'Delete point'**
   String get mpDeletePointCommandDescription;
+
+  /// The description for the edit Bézier curve command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Bézier curve'**
+  String get mpEditBezierCurveCommandDescription;
 
   /// The description for the edit line command
   ///

@@ -76,6 +76,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDeletePointCommandDescription => 'Apagar ponto';
 
   @override
+  String get mpEditBezierCurveCommandDescription => 'Editar curva Bézier';
+
+  @override
   String get mpEditLineCommandDescription => 'Editar linha';
 
   @override

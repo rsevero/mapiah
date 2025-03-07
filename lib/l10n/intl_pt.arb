@@ -19,6 +19,7 @@
     "mpDeleteLineCommandDescription": "Apagar linha",
     "mpDeleteLineSegmentCommandDescription": "Apagar segmento de linha",
     "mpDeletePointCommandDescription": "Apagar ponto",
+    "mpEditBezierCurveCommandDescription": "Editar curva Bézier",
     "mpEditLineCommandDescription": "Editar linha",
     "mpEditLineSegmentCommandDescription": "Editar segmento de linha",
     "mpLengthUnitCentimeterAbbreviation": "cm",
