@@ -8,22 +8,22 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     fileEditController.setStatusBarMessage(mpLocator.appLocalizations
         .th2FileEditPageAddLineStatusBarMessage(
-            fileEditController.lastAddedLineType.name));
+            addElementController.lastAddedLineType.name));
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    fileEditController.finalizeNewLineCreation();
+    addElementController.finalizeNewLineCreation();
   }
 
   @override
   void onPrimaryButtonDragStart(PointerDownEvent event) {
-    fileEditController.addNewLineLineSegment(event.localPosition);
+    addElementController.addNewLineLineSegment(event.localPosition);
   }
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    fileEditController.updateBezierLineSegment(event.localPosition);
+    addElementController.updateBezierLineSegment(event.localPosition);
   }
 
   @override

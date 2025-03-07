@@ -137,8 +137,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         case THLine _:
           mpCommand = MPDeleteLineCommand(
             lineMapiahID: singleSelectedElement.mapiahID,
-            isInteractiveLineCreation:
-                _th2FileEditController.lineStartScreenPosition != null,
+            isInteractiveLineCreation: _th2FileEditController
+                    .addElementController.lineStartScreenPosition !=
+                null,
           );
       }
     } else {}

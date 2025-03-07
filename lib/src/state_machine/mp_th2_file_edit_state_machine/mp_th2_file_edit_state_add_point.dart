@@ -8,14 +8,14 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     fileEditController.setStatusBarMessage(mpLocator.appLocalizations
         .th2FileEditPageAddPointStatusBarMessage(
-            fileEditController.lastAddedPointType.name));
+            addElementController.lastAddedPointType.name));
   }
 
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     final THPoint newPoint = THPoint(
       parentMapiahID: fileEditController.activeScrapID,
-      pointType: fileEditController.lastAddedPointType,
+      pointType: addElementController.lastAddedPointType,
       position: THPositionPart(
         coordinates:
             fileEditController.offsetScreenToCanvas(event.localPosition),

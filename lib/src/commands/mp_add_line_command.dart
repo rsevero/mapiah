@@ -22,7 +22,7 @@ class MPAddLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.addLine(
+    th2FileEditController.addElementController.addLine(
       newLine: newLine,
       lineChildren: lineChildren,
       lineStartScreenPosition: lineStartScreenPosition,

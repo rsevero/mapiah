@@ -10,19 +10,16 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_add_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
@@ -41,6 +38,7 @@ class TH2FileEditController = TH2FileEditControllerBase
 abstract class TH2FileEditControllerBase
     with Store
     implements MPActuatorInterface {
+  late final TH2FileEditAddElementController addElementController;
   late final TH2FileEditSelectionController selectionController;
 
   // 'screen' is related to actual pixels on the screen.
@@ -136,15 +134,6 @@ abstract class TH2FileEditControllerBase
   }
 
   @readonly
-  THPointType _lastAddedPointType = thDefaultPointType;
-
-  @readonly
-  THLineType _lastAddedLineType = thDefaultLineType;
-
-  @readonly
-  THAreaType _lastAddedAreaType = thDefaultAreaType;
-
-  @readonly
   int _currentDecimalPositions = thDefaultDecimalPositions;
 
   @readonly
@@ -189,7 +178,8 @@ abstract class TH2FileEditControllerBase
 
   @computed
   bool get showAddLine =>
-      (_newLine != null) || (_lineStartScreenPosition != null);
+      (addElementController.newLine != null) ||
+      (addElementController.lineStartScreenPosition != null);
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -255,9 +245,6 @@ abstract class TH2FileEditControllerBase
   bool get showScrapScale {
     return !_isLoading && scrapHasScaleOption;
   }
-
-  @readonly
-  Offset? _lineStartScreenPosition;
 
   @computed
   bool get scrapHasScaleOption {
@@ -344,18 +331,6 @@ abstract class TH2FileEditControllerBase
   @readonly
   double _canvasCenterY = 0.0;
 
-  @readonly
-  THLine? _newLine;
-
-  @action
-  THLine getNewLine() {
-    _newLine ??= _createNewLine();
-
-    return _newLine!;
-  }
-
-  int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
-
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
 
@@ -391,6 +366,8 @@ abstract class TH2FileEditControllerBase
 
   void _basicInitialization(THFile file) {
     _thFile = file;
+    addElementController =
+        TH2FileEditAddElementController(this as TH2FileEditController);
     selectionController =
         TH2FileEditSelectionController(this as TH2FileEditController);
     _thFileMapiahID = _thFile.mapiahID;
@@ -434,36 +411,6 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
-    _lineStartScreenPosition = lineStartScreenPosition;
-  }
-
-  @action
-  void clearNewLine() {
-    _newLine = null;
-    _lineStartScreenPosition = null;
-  }
-
-  THLine _createNewLine() {
-    final THLine newLine = THLine(
-      parentMapiahID: _activeScrapID,
-      lineType: _lastAddedLineType,
-    );
-
-    addElementWithParentMapiahIDWithoutSelectableElement(
-      newElement: newLine,
-      parentMapiahID: _activeScrapID,
-    );
-
-    return newLine;
-  }
-
-  @action
-  void setNewLine(THLine newLine) {
-    _newLine = newLine;
-  }
-
-  @action
   void setZoomButtonsHovered(bool isHovered) {
     _isZoomButtonsHovered = isHovered;
   }
@@ -471,169 +418,6 @@ abstract class TH2FileEditControllerBase
   @action
   void setAddElementButtonsHovered(bool isHovered) {
     _isAddElementButtonsHovered = isHovered;
-  }
-
-  @action
-  void setLastAddedPointType(THPointType pointType) {
-    _lastAddedPointType = pointType;
-  }
-
-  @action
-  void setLastAddedLineType(THLineType lineType) {
-    _lastAddedLineType = lineType;
-  }
-
-  @action
-  void setLastAddedAreaType(THAreaType areaType) {
-    _lastAddedAreaType = areaType;
-  }
-
-  @action
-  void updateBezierLineSegment(
-    Offset quadraticControlPointPositionScreenCoordinates,
-  ) {
-    if ((_newLine == null) || (_newLine!.childrenMapiahID.length < 2)) {
-      return;
-    }
-
-    final THLineSegment lastLineSegment = _thFile
-        .elementByMapiahID(_newLine!.childrenMapiahID.last) as THLineSegment;
-    final THLineSegment secondToLastLineSegment = _thFile.elementByMapiahID(
-      _newLine!.childrenMapiahID
-          .elementAt(_newLine!.childrenMapiahID.length - 2),
-    ) as THLineSegment;
-
-    final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
-    final Offset endPoint = lastLineSegment.endPoint.coordinates;
-
-    final Offset quadraticControlPointPositionCanvasCoordinates =
-        offsetScreenToCanvas(quadraticControlPointPositionScreenCoordinates);
-    final Offset twoThirdsControlPoint =
-        quadraticControlPointPositionCanvasCoordinates * (2 / 3);
-
-    /// Based on https://pomax.github.io/bezierinfo/#reordering
-    final Offset controlPoint1 = (startPoint / 3) + twoThirdsControlPoint;
-    final Offset controlPoint2 = (endPoint / 3) + twoThirdsControlPoint;
-
-    if (lastLineSegment is THStraightLineSegment) {
-      final THBezierCurveLineSegment bezierCurveLineSegment =
-          THBezierCurveLineSegment.forCWJM(
-        mapiahID: lastLineSegment.mapiahID,
-        parentMapiahID: _newLine!.mapiahID,
-        endPoint: THPositionPart(
-          coordinates: endPoint,
-          decimalPositions: _currentDecimalPositions,
-        ),
-        controlPoint1: THPositionPart(
-          coordinates: controlPoint1,
-          decimalPositions: _currentDecimalPositions,
-        ),
-        controlPoint2: THPositionPart(
-          coordinates: controlPoint2,
-          decimalPositions: _currentDecimalPositions,
-        ),
-        optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>(),
-        originalLineInTH2File: '',
-        sameLineComment: '',
-      );
-      final THSmoothCommandOption smoothOn = THSmoothCommandOption(
-        optionParent: bezierCurveLineSegment,
-        choice: THOptionChoicesOnOffAutoType.on,
-      );
-
-      bezierCurveLineSegment.addUpdateOption(smoothOn);
-
-      final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
-        newLineSegment: bezierCurveLineSegment,
-      );
-
-      execute(command);
-      _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
-    } else {
-      final THBezierCurveLineSegment bezierCurveLineSegment =
-          (lastLineSegment as THBezierCurveLineSegment).copyWith(
-        controlPoint1: THPositionPart(
-          coordinates: controlPoint1,
-          decimalPositions: _currentDecimalPositions,
-        ),
-        controlPoint2: THPositionPart(
-          coordinates: controlPoint2,
-          decimalPositions: _currentDecimalPositions,
-        ),
-      );
-      final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
-        newLineSegment: bezierCurveLineSegment,
-      );
-
-      if (_missingStepsPreserveStraightToBezierConversionUndoRedo == 0) {
-        executeAndSubstituteLastUndo(command);
-      } else {
-        execute(command);
-        _missingStepsPreserveStraightToBezierConversionUndoRedo--;
-      }
-    }
-
-    triggerNewLineRedraw();
-  }
-
-  THStraightLineSegment _createStraightLineSegment(
-    Offset endpoint,
-    int lineMapiahID,
-  ) {
-    final Offset endPointCanvasCoordinates = offsetScreenToCanvas(endpoint);
-
-    final THStraightLineSegment lineSegment = THStraightLineSegment(
-      parentMapiahID: lineMapiahID,
-      endPoint: THPositionPart(
-        coordinates: endPointCanvasCoordinates,
-        decimalPositions: _currentDecimalPositions,
-      ),
-    );
-
-    return lineSegment;
-  }
-
-  @action
-  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
-    if (_newLine == null) {
-      if (_lineStartScreenPosition == null) {
-        _lineStartScreenPosition = enPointScreenCoordinates;
-      } else {
-        final THLine newLine = getNewLine();
-        final int lineMapiahID = newLine.mapiahID;
-        final List<THElement> lineSegments = <THElement>[];
-
-        lineSegments.add(_createStraightLineSegment(
-          _lineStartScreenPosition!,
-          lineMapiahID,
-        ));
-        lineSegments.add(_createStraightLineSegment(
-          enPointScreenCoordinates,
-          lineMapiahID,
-        ));
-
-        final MPAddLineCommand command = MPAddLineCommand(
-          newLine: newLine,
-          lineChildren: lineSegments,
-          lineStartScreenPosition: _lineStartScreenPosition,
-        );
-
-        execute(command);
-      }
-    } else {
-      final int lineMapiahID = getNewLine().mapiahID;
-      final THStraightLineSegment newLineSegment = _createStraightLineSegment(
-        enPointScreenCoordinates,
-        lineMapiahID,
-      );
-      final MPAddLineSegmentCommand command = MPAddLineSegmentCommand(
-        newLineSegment: newLineSegment,
-      );
-
-      execute(command);
-    }
-
-    triggerNewLineRedraw();
   }
 
   @action
@@ -1462,44 +1246,8 @@ abstract class TH2FileEditControllerBase
   }
 
   @action
-  void addLine({
-    required THLine newLine,
-    required List<THElement> lineChildren,
-    Offset? lineStartScreenPosition,
-  }) {
-    final THLine newLineCopy = newLine.copyWith(childrenMapiahID: {});
-
-    addElement(newElement: newLineCopy);
-
-    for (final THElement child in lineChildren) {
-      addElement(newElement: child);
-    }
-
-    if (lineStartScreenPosition != null) {
-      setNewLine(newLineCopy);
-      setNewLineStartScreenPosition(lineStartScreenPosition);
-    }
-
-    selectionController.addSelectableElement(newLineCopy);
-  }
-
-  @action
-  void deleteLine(int lineMapiahID) {
-    if ((_newLine != null) && (_newLine!.mapiahID == lineMapiahID)) {
-      clearNewLine();
-    }
-    deleteElementByMapiahID(lineMapiahID);
-  }
-
-  @action
   void registerElementWithTHID(THElement element, String thID) {
     _thFile.registerElementWithTHID(element, thID);
-  }
-
-  @action
-  void finalizeNewLineCreation() {
-    clearNewLine();
-    triggerNonSelectedElementsRedraw();
   }
 }
 

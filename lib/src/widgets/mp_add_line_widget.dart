@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_add_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
@@ -16,11 +17,12 @@ import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 
 class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
   final TH2FileEditController th2FileEditController;
+  final TH2FileEditAddElementController addElementController;
 
   MPAddLineWidget({
     required this.th2FileEditController,
     required super.key,
-  });
+  }) : addElementController = th2FileEditController.addElementController;
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +41,11 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
         final List<CustomPainter> painters = [];
 
-        if (th2FileEditController.newLine == null) {
-          if (th2FileEditController.lineStartScreenPosition != null) {
+        if (addElementController.newLine == null) {
+          if (addElementController.lineStartScreenPosition != null) {
             final Offset startPoint =
                 th2FileEditController.offsetScreenToCanvas(
-                    th2FileEditController.lineStartScreenPosition!);
+                    addElementController.lineStartScreenPosition!);
 
             final painter = THEndPointPainter(
               position: startPoint,
@@ -57,7 +59,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             painters.add(painter);
           }
         } else {
-          final THLine newLine = th2FileEditController.getNewLine();
+          final THLine newLine = addElementController.getNewLine();
 
           final (
             LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,

@@ -11,6 +11,7 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_add_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
@@ -37,11 +38,13 @@ part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
   final TH2FileEditController fileEditController;
+  final TH2FileEditAddElementController addElementController;
   final TH2FileEditSelectionController selectionController;
   MPTH2FileEditStateType get type;
 
   MPTH2FileEditState({required this.fileEditController})
-      : selectionController = fileEditController.selectionController;
+      : addElementController = fileEditController.addElementController,
+        selectionController = fileEditController.selectionController;
 
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,
