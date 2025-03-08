@@ -617,7 +617,16 @@ abstract class TH2FileEditControllerBase
     );
   }
 
-  THPointPaint getControlPointPaint() {
+  THPointPaint getSelectedControlPointPaint() {
+    return THPointPaint(
+      radius: pointRadiusOnCanvas *
+          thControlPointRadiusFactor *
+          thSelectedEndControlPointFactor,
+      paint: THPaints.thPaintBlackBackground,
+    );
+  }
+
+  THPointPaint getUnselectedControlPointPaint() {
     return THPointPaint(
       radius: pointRadiusOnCanvas * thControlPointRadiusFactor,
       paint: THPaints.thPaintBlackBorder
@@ -627,7 +636,7 @@ abstract class TH2FileEditControllerBase
 
   THPointPaint getSelectedEndPointPaint() {
     return THPointPaint(
-      radius: pointRadiusOnCanvas * thSelectedEndPointFactor,
+      radius: pointRadiusOnCanvas * thSelectedEndControlPointFactor,
       paint: THPaints.thPaintBlackBackground,
     );
   }

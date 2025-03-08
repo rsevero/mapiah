@@ -50,10 +50,19 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             unselectedEndPointPaintInfo.radius;
         final Paint unselectedEndPointPaint = unselectedEndPointPaintInfo.paint;
 
-        final THPointPaint controlPointPaintInfo =
-            th2FileEditController.getControlPointPaint();
-        final double controlPointRadius = controlPointPaintInfo.radius;
-        final Paint controlPointPaint = controlPointPaintInfo.paint;
+        final THPointPaint unselectedControlPointPaintInfo =
+            th2FileEditController.getUnselectedControlPointPaint();
+        final double unselectedControlPointRadius =
+            unselectedControlPointPaintInfo.radius;
+        final Paint unselectedControlPointPaint =
+            unselectedControlPointPaintInfo.paint;
+
+        final THPointPaint selectedControlPointPaintInfo =
+            th2FileEditController.getSelectedControlPointPaint();
+        final double selectedControlPointRadius =
+            selectedControlPointPaintInfo.radius;
+        final Paint selectedControlPointPaint =
+            selectedControlPointPaintInfo.paint;
 
         final THLinePaint controlPointLinePaintInfo =
             th2FileEditController.getControlPointLinePaint();
@@ -62,6 +71,9 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         final THLinePaint linePaintInfo =
             th2FileEditController.getEditLinePaint();
         final Paint linePaint = linePaintInfo.paint;
+
+        final MPSelectableControlPoint? selectedControlPoint =
+            selectionController.selectedControlPoint;
 
         final List<CustomPainter> painters = [];
 
@@ -120,17 +132,26 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               endPointPainters.add(endPointPainter);
               lastEndpoint = point;
             case MPSelectableControlPoint _:
+              final bool isSelected = (selectedControlPoint != null) &&
+                  (point.element.mapiahID ==
+                      selectedControlPoint.element.mapiahID) &&
+                  (point.type == selectedControlPoint.type);
               final THControlPointPainter controlPointPainter =
                   THControlPointPainter(
                 controlPointPosition: point.position,
                 endPointPosition: lastEndpoint.position,
-                pointPaint: controlPointPaint,
+                pointPaint: isSelected
+                    ? selectedControlPointPaint
+                    : unselectedControlPointPaint,
+                pointRadius: isSelected
+                    ? selectedControlPointRadius
+                    : unselectedControlPointRadius,
                 controlLinePaint: controlPointLinePaint,
-                pointRadius: controlPointRadius,
                 th2FileEditController: th2FileEditController,
                 canvasScale: th2FileEditController.canvasScale,
                 canvasTranslation: th2FileEditController.canvasTranslation,
               );
+
               painters.add(controlPointPainter);
             default:
               throw UnimplementedError('Unknown MPSelectableEndControlPoint');

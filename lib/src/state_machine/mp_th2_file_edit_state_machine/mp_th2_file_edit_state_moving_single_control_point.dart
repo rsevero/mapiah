@@ -83,6 +83,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     );
 
     fileEditController.execute(lineEditCommand);
+    selectionController.clearSelectedControlPoint();
     selectionController.updateSelectedElementsClones();
     fileEditController.triggerEditLineRedraw();
     selectionController.setSelectionState();
