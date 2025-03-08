@@ -8,12 +8,12 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPTextToUser {
-  static const Map<MPCommandDescriptionType, String> _commandTypeAsString = {};
-  static const Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
-  static const Map<THElementType, String> _elementTypeAsString = {};
-  static const Map<THPointType, String> _pointTypeAsString = {};
-  static const Map<THLineType, String> _lineTypeAsString = {};
-  static const Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
+  static final Map<MPCommandDescriptionType, String> _commandTypeAsString = {};
+  static final Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
+  static final Map<THElementType, String> _elementTypeAsString = {};
+  static final Map<THPointType, String> _pointTypeAsString = {};
+  static final Map<THLineType, String> _lineTypeAsString = {};
+  static final Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
 
   static void initialize() {
     _initializeCommandTypeAsString();

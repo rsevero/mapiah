@@ -23,7 +23,7 @@ class MPScrapScaleWidget extends StatelessWidget {
             th2FileEditController.scrapLengthUnitsOnGraphicalScale;
         final String scaleLength =
             MPNumericAux.roundNumberForScreen(graphicalScaleLengthUnitsLength);
-        final String scaleUnit = MPTextToUser.getLengthUnitAbbreviation(
+        final String scaleUnit = MPTextToUser.getLengthUnitType(
             th2FileEditController.scrapLengthUnitType);
         final String scaleText = "$scaleLength $scaleUnit";
 
