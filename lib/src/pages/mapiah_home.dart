@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -96,6 +97,8 @@ class _MapiahHomeState extends State<MapiahHome> {
 
   void initializeMPCommandLocalizations(BuildContext context) {
     mpLocator.resetAppLocalizations(context);
+
+    MPTextToUser.initialize();
   }
 
   void pickTh2File(BuildContext context) async {

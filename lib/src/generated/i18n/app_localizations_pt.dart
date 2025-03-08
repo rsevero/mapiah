@@ -224,4 +224,409 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
+
+  @override
+  String get thElementArea => 'Área';
+
+  @override
+  String get thElementAreaBorderTHID => 'ID de borda de área';
+
+  @override
+  String get thElementBezierCurveLineSegment => 'Segmento de linha Bézier';
+
+  @override
+  String get thElementComment => 'Comentário';
+
+  @override
+  String get thElementEmptyLine => 'Linha vazia';
+
+  @override
+  String get thElementEncoding => 'Codificação';
+
+  @override
+  String get thElementEndArea => 'Fim de área';
+
+  @override
+  String get thElementEndComment => 'Fim de comentário';
+
+  @override
+  String get thElementEndLine => 'Fim de linha';
+
+  @override
+  String get thElementEndScrap => 'Fim de croqui';
+
+  @override
+  String get thElementLine => 'Linha';
+
+  @override
+  String get thElementLineSegment => 'Segmento de linha';
+
+  @override
+  String get thElementMultilineCommentContent => 'Conteúdo de comentário multilinha';
+
+  @override
+  String get thElementMultilineComment => 'Comentário multilinha';
+
+  @override
+  String get thElementPoint => 'Ponto';
+
+  @override
+  String get thElementScrap => 'Croqui';
+
+  @override
+  String get thElementStraightLineSegment => 'Segmento de linha reta';
+
+  @override
+  String get thElementUnrecognized => 'Elemento não reconhecido';
+
+  @override
+  String get thElementXTherionConfig => 'Configuração XTherion';
+
+  @override
+  String get thPointAirDraught => 'Corrente de ar';
+
+  @override
+  String get thPointAltar => 'Altar';
+
+  @override
+  String get thPointAltitude => 'Altitude';
+
+  @override
+  String get thPointAnastomosis => 'Anastomose';
+
+  @override
+  String get thPointAnchor => 'Âncora';
+
+  @override
+  String get thPointAragonite => 'Aragonita';
+
+  @override
+  String get thPointArcheoExcavation => 'Escavação arqueológica';
+
+  @override
+  String get thPointArcheoMaterial => 'Material arqueológico';
+
+  @override
+  String get thPointAudio => 'Áudio';
+
+  @override
+  String get thPointBat => 'Morcego';
+
+  @override
+  String get thPointBedrock => 'Rocha matriz';
+
+  @override
+  String get thPointBlocks => 'Blocos';
+
+  @override
+  String get thPointBones => 'Ossos';
+
+  @override
+  String get thPointBreakdownChoke => 'Bloqueio de desmoronamento';
+
+  @override
+  String get thPointBridge => 'Ponte';
+
+  @override
+  String get thPointCamp => 'Acampamento';
+
+  @override
+  String get thPointCavePearl => 'Pérola de caverna';
+
+  @override
+  String get thPointClay => 'Argila';
+
+  @override
+  String get thPointClayChoke => 'Bloqueio de argila';
+
+  @override
+  String get thPointClayTree => 'Árvore de argila';
+
+  @override
+  String get thPointContinuation => 'Continuação';
+
+  @override
+  String get thPointCrystal => 'Cristal';
+
+  @override
+  String get thPointCurtain => 'Cortina';
+
+  @override
+  String get thPointCurtains => 'Cortinas';
+
+  @override
+  String get thPointDanger => 'Perigo';
+
+  @override
+  String get thPointDate => 'Data';
+
+  @override
+  String get thPointDebris => 'Detritos';
+
+  @override
+  String get thPointDig => 'Escavação';
+
+  @override
+  String get thPointDimensions => 'Dimensões';
+
+  @override
+  String get thPointDiscPillar => 'Pilar de disco';
+
+  @override
+  String get thPointDiscPillars => 'Pilares de disco';
+
+  @override
+  String get thPointDiscStalactite => 'Estalactite de disco';
+
+  @override
+  String get thPointDiscStalactites => 'Estalactites de disco';
+
+  @override
+  String get thPointDiscStalagmite => 'Estalagmite de disco';
+
+  @override
+  String get thPointDiscStalagmites => 'Estalagmites de disco';
+
+  @override
+  String get thPointDisk => 'Disco';
+
+  @override
+  String get thPointElectricLight => 'Luz elétrica';
+
+  @override
+  String get thPointEntrance => 'Entrada';
+
+  @override
+  String get thPointExtra => 'Extra';
+
+  @override
+  String get thPointExVoto => 'Ex-voto';
+
+  @override
+  String get thPointFixedLadder => 'Escada fixa';
+
+  @override
+  String get thPointFlowstone => 'Travertino';
+
+  @override
+  String get thPointFlowstoneChoke => 'Bloqueio de travertino';
+
+  @override
+  String get thPointFlute => 'Flauta';
+
+  @override
+  String get thPointGate => 'Portão';
+
+  @override
+  String get thPointGradient => 'Gradiente';
+
+  @override
+  String get thPointGuano => 'Guano';
+
+  @override
+  String get thPointGypsum => 'Gesso';
+
+  @override
+  String get thPointGypsumFlower => 'Flor de gesso';
+
+  @override
+  String get thPointHandrail => 'Corrimão';
+
+  @override
+  String get thPointHeight => 'Altura';
+
+  @override
+  String get thPointHelictite => 'Helictite';
+
+  @override
+  String get thPointHelictites => 'Helictites';
+
+  @override
+  String get thPointHumanBones => 'Ossos humanos';
+
+  @override
+  String get thPointIce => 'Gelo';
+
+  @override
+  String get thPointIcePillar => 'Pilar de gelo';
+
+  @override
+  String get thPointIceStalactite => 'Estalactite de gelo';
+
+  @override
+  String get thPointIceStalagmite => 'Estalagmite de gelo';
+
+  @override
+  String get thPointKarren => 'Karren';
+
+  @override
+  String get thPointLabel => 'Rótulo';
+
+  @override
+  String get thPointLowEnd => 'Extremidade baixa';
+
+  @override
+  String get thPointMapConnection => 'Conexão de mapa';
+
+  @override
+  String get thPointMasonry => 'Alvenaria';
+
+  @override
+  String get thPointMoonmilk => 'Leite de lua';
+
+  @override
+  String get thPointMud => 'Lama';
+
+  @override
+  String get thPointMudcrack => 'Rachadura de lama';
+
+  @override
+  String get thPointNamePlate => 'Placa de nome';
+
+  @override
+  String get thPointNarrowEnd => 'Extremidade estreita';
+
+  @override
+  String get thPointNoEquipment => 'Sem equipamento';
+
+  @override
+  String get thPointNoWheelchair => 'Sem cadeira de rodas';
+
+  @override
+  String get thPointPaleoMaterial => 'Material paleontológico';
+
+  @override
+  String get thPointPassageHeight => 'Altura da passagem';
+
+  @override
+  String get thPointPebbles => 'Seixos';
+
+  @override
+  String get thPointPendant => 'Pendente';
+
+  @override
+  String get thPointPhoto => 'Foto';
+
+  @override
+  String get thPointPillar => 'Pilar';
+
+  @override
+  String get thPointPillarsWithCurtains => 'Pilares com cortinas';
+
+  @override
+  String get thPointPillarWithCurtains => 'Pilar com cortinas';
+
+  @override
+  String get thPointPopcorn => 'Popcorn';
+
+  @override
+  String get thPointRaft => 'Balsa';
+
+  @override
+  String get thPointRaftCone => 'Cone de balsa';
+
+  @override
+  String get thPointRemark => 'Observação';
+
+  @override
+  String get thPointRimstoneDam => 'Dique de travertino';
+
+  @override
+  String get thPointRimstonePool => 'Piscina de travertino';
+
+  @override
+  String get thPointRoot => 'Raiz';
+
+  @override
+  String get thPointRope => 'Corda';
+
+  @override
+  String get thPointRopeLadder => 'Escada de corda';
+
+  @override
+  String get thPointSand => 'Areia';
+
+  @override
+  String get thPointScallop => 'Escalope';
+
+  @override
+  String get thPointSection => 'Seção';
+
+  @override
+  String get thPointSeedGermination => 'Germinação de sementes';
+
+  @override
+  String get thPointSink => 'Pia';
+
+  @override
+  String get thPointSnow => 'Neve';
+
+  @override
+  String get thPointSodaStraw => 'Canudo de refrigerante';
+
+  @override
+  String get thPointSpring => 'Fonte';
+
+  @override
+  String get thPointStalactite => 'Estalactite';
+
+  @override
+  String get thPointStalactites => 'Estalactites';
+
+  @override
+  String get thPointStalactitesStalagmites => 'Estalactites e estalagmites';
+
+  @override
+  String get thPointStalactiteStalagmite => 'Estalactite e estalagmite';
+
+  @override
+  String get thPointStalagmite => 'Estalagmite';
+
+  @override
+  String get thPointStalagmites => 'Estalagmites';
+
+  @override
+  String get thPointStation => 'Estação';
+
+  @override
+  String get thPointStationName => 'Nome da estação';
+
+  @override
+  String get thPointSteps => 'Degraus';
+
+  @override
+  String get thPointTraverse => 'Travessia';
+
+  @override
+  String get thPointTreeTrunk => 'Tronco de árvore';
+
+  @override
+  String get thPointU => 'U';
+
+  @override
+  String get thPointVegetableDebris => 'Detritos vegetais';
+
+  @override
+  String get thPointViaFerrata => 'Via Ferrata';
+
+  @override
+  String get thPointVolcano => 'Vulcão';
+
+  @override
+  String get thPointWalkway => 'Passarela';
+
+  @override
+  String get thPointWallCalcite => 'Calcita de parede';
+
+  @override
+  String get thPointWater => 'Água';
+
+  @override
+  String get thPointWaterDrip => 'Gotejamento de água';
+
+  @override
+  String get thPointWaterFlow => 'Fluxo de água';
+
+  @override
+  String get thPointWheelchair => 'Cadeira de rodas';
 }

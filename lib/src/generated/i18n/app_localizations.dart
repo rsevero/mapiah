@@ -466,6 +466,816 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a TH2 file'**
   String get th2FilePickSelectTH2File;
+
+  /// The label for the area element type
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get thElementArea;
+
+  /// The label for the area border ID element type
+  ///
+  /// In en, this message translates to:
+  /// **'Area border ID'**
+  String get thElementAreaBorderTHID;
+
+  /// The label for the Bézier curve line segment element type
+  ///
+  /// In en, this message translates to:
+  /// **'Bézier curve line segment'**
+  String get thElementBezierCurveLineSegment;
+
+  /// The label for the comment element type
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get thElementComment;
+
+  /// The label for the empty line element type
+  ///
+  /// In en, this message translates to:
+  /// **'Empty line'**
+  String get thElementEmptyLine;
+
+  /// The label for the encoding element type
+  ///
+  /// In en, this message translates to:
+  /// **'Encoding'**
+  String get thElementEncoding;
+
+  /// The label for the end area element type
+  ///
+  /// In en, this message translates to:
+  /// **'End area'**
+  String get thElementEndArea;
+
+  /// The label for the end comment element type
+  ///
+  /// In en, this message translates to:
+  /// **'End comment'**
+  String get thElementEndComment;
+
+  /// The label for the end line element type
+  ///
+  /// In en, this message translates to:
+  /// **'End line'**
+  String get thElementEndLine;
+
+  /// The label for the end scrap element type
+  ///
+  /// In en, this message translates to:
+  /// **'End scrap'**
+  String get thElementEndScrap;
+
+  /// The label for the line element type
+  ///
+  /// In en, this message translates to:
+  /// **'Line'**
+  String get thElementLine;
+
+  /// The label for the line segment element type
+  ///
+  /// In en, this message translates to:
+  /// **'Line segment'**
+  String get thElementLineSegment;
+
+  /// The label for the multiline comment content element type
+  ///
+  /// In en, this message translates to:
+  /// **'Multiline comment content'**
+  String get thElementMultilineCommentContent;
+
+  /// The label for the multiline comment element type
+  ///
+  /// In en, this message translates to:
+  /// **'Multiline comment'**
+  String get thElementMultilineComment;
+
+  /// The label for the point element type
+  ///
+  /// In en, this message translates to:
+  /// **'Point'**
+  String get thElementPoint;
+
+  /// The label for the scrap element type
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap'**
+  String get thElementScrap;
+
+  /// The label for the straight line segment element type
+  ///
+  /// In en, this message translates to:
+  /// **'Straight line segment'**
+  String get thElementStraightLineSegment;
+
+  /// The label for the unrecognized element type
+  ///
+  /// In en, this message translates to:
+  /// **'Unrecognized '**
+  String get thElementUnrecognized;
+
+  /// The label for the XTherion config element type
+  ///
+  /// In en, this message translates to:
+  /// **'XTherion config'**
+  String get thElementXTherionConfig;
+
+  /// The label for the air draught point type
+  ///
+  /// In en, this message translates to:
+  /// **'Air draught'**
+  String get thPointAirDraught;
+
+  /// The label for the altar point type
+  ///
+  /// In en, this message translates to:
+  /// **'Altar'**
+  String get thPointAltar;
+
+  /// The label for the altitude point type
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get thPointAltitude;
+
+  /// The label for the anastomosis point type
+  ///
+  /// In en, this message translates to:
+  /// **'Anastomosis'**
+  String get thPointAnastomosis;
+
+  /// The label for the anchor point type
+  ///
+  /// In en, this message translates to:
+  /// **'Anchor'**
+  String get thPointAnchor;
+
+  /// The label for the aragonite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Aragonite'**
+  String get thPointAragonite;
+
+  /// The label for the archeo excavation point type
+  ///
+  /// In en, this message translates to:
+  /// **'Archeo Excavation'**
+  String get thPointArcheoExcavation;
+
+  /// The label for the archeo material point type
+  ///
+  /// In en, this message translates to:
+  /// **'Archeo Material'**
+  String get thPointArcheoMaterial;
+
+  /// The label for the audio point type
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get thPointAudio;
+
+  /// The label for the bat point type
+  ///
+  /// In en, this message translates to:
+  /// **'Bat'**
+  String get thPointBat;
+
+  /// The label for the bedrock point type
+  ///
+  /// In en, this message translates to:
+  /// **'Bedrock'**
+  String get thPointBedrock;
+
+  /// The label for the blocks point type
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks'**
+  String get thPointBlocks;
+
+  /// The label for the bones point type
+  ///
+  /// In en, this message translates to:
+  /// **'Bones'**
+  String get thPointBones;
+
+  /// The label for the breakdown choke point type
+  ///
+  /// In en, this message translates to:
+  /// **'Breakdown Choke'**
+  String get thPointBreakdownChoke;
+
+  /// The label for the bridge point type
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge'**
+  String get thPointBridge;
+
+  /// The label for the camp point type
+  ///
+  /// In en, this message translates to:
+  /// **'Camp'**
+  String get thPointCamp;
+
+  /// The label for the cave pearl point type
+  ///
+  /// In en, this message translates to:
+  /// **'Cave Pearl'**
+  String get thPointCavePearl;
+
+  /// The label for the clay point type
+  ///
+  /// In en, this message translates to:
+  /// **'Clay'**
+  String get thPointClay;
+
+  /// The label for the clay choke point type
+  ///
+  /// In en, this message translates to:
+  /// **'Clay Choke'**
+  String get thPointClayChoke;
+
+  /// The label for the clay tree point type
+  ///
+  /// In en, this message translates to:
+  /// **'Clay Tree'**
+  String get thPointClayTree;
+
+  /// The label for the continuation point type
+  ///
+  /// In en, this message translates to:
+  /// **'Continuation'**
+  String get thPointContinuation;
+
+  /// The label for the crystal point type
+  ///
+  /// In en, this message translates to:
+  /// **'Crystal'**
+  String get thPointCrystal;
+
+  /// The label for the curtain point type
+  ///
+  /// In en, this message translates to:
+  /// **'Curtain'**
+  String get thPointCurtain;
+
+  /// The label for the curtains point type
+  ///
+  /// In en, this message translates to:
+  /// **'Curtains'**
+  String get thPointCurtains;
+
+  /// The label for the danger point type
+  ///
+  /// In en, this message translates to:
+  /// **'Danger'**
+  String get thPointDanger;
+
+  /// The label for the date point type
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get thPointDate;
+
+  /// The label for the debris point type
+  ///
+  /// In en, this message translates to:
+  /// **'Debris'**
+  String get thPointDebris;
+
+  /// The label for the dig point type
+  ///
+  /// In en, this message translates to:
+  /// **'Dig'**
+  String get thPointDig;
+
+  /// The label for the dimensions point type
+  ///
+  /// In en, this message translates to:
+  /// **'Dimensions'**
+  String get thPointDimensions;
+
+  /// The label for the disc pillar point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disc Pillar'**
+  String get thPointDiscPillar;
+
+  /// The label for the disc pillars point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disc Pillars'**
+  String get thPointDiscPillars;
+
+  /// The label for the disc stalactite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disc Stalactite'**
+  String get thPointDiscStalactite;
+
+  /// The label for the disc stalactites point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disc Stalactites'**
+  String get thPointDiscStalactites;
+
+  /// The label for the disc stalagmite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disc Stalagmite'**
+  String get thPointDiscStalagmite;
+
+  /// The label for the disc stalagmites point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disc Stalagmites'**
+  String get thPointDiscStalagmites;
+
+  /// The label for the disk point type
+  ///
+  /// In en, this message translates to:
+  /// **'Disk'**
+  String get thPointDisk;
+
+  /// The label for the electric light point type
+  ///
+  /// In en, this message translates to:
+  /// **'Electric Light'**
+  String get thPointElectricLight;
+
+  /// The label for the entrance point type
+  ///
+  /// In en, this message translates to:
+  /// **'Entrance'**
+  String get thPointEntrance;
+
+  /// The label for the extra point type
+  ///
+  /// In en, this message translates to:
+  /// **'Extra'**
+  String get thPointExtra;
+
+  /// The label for the ex voto point type
+  ///
+  /// In en, this message translates to:
+  /// **'Ex Voto'**
+  String get thPointExVoto;
+
+  /// The label for the fixed ladder point type
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed Ladder'**
+  String get thPointFixedLadder;
+
+  /// The label for the flowstone point type
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone'**
+  String get thPointFlowstone;
+
+  /// The label for the flowstone choke point type
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone Choke'**
+  String get thPointFlowstoneChoke;
+
+  /// The label for the flute point type
+  ///
+  /// In en, this message translates to:
+  /// **'Flute'**
+  String get thPointFlute;
+
+  /// The label for the gate point type
+  ///
+  /// In en, this message translates to:
+  /// **'Gate'**
+  String get thPointGate;
+
+  /// The label for the gradient point type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thPointGradient;
+
+  /// The label for the guano point type
+  ///
+  /// In en, this message translates to:
+  /// **'Guano'**
+  String get thPointGuano;
+
+  /// The label for the gypsum point type
+  ///
+  /// In en, this message translates to:
+  /// **'Gypsum'**
+  String get thPointGypsum;
+
+  /// The label for the gypsum flower point type
+  ///
+  /// In en, this message translates to:
+  /// **'Gypsum Flower'**
+  String get thPointGypsumFlower;
+
+  /// The label for the handrail point type
+  ///
+  /// In en, this message translates to:
+  /// **'Handrail'**
+  String get thPointHandrail;
+
+  /// The label for the height point type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get thPointHeight;
+
+  /// The label for the helictite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Helictite'**
+  String get thPointHelictite;
+
+  /// The label for the helictites point type
+  ///
+  /// In en, this message translates to:
+  /// **'Helictites'**
+  String get thPointHelictites;
+
+  /// The label for the human bones point type
+  ///
+  /// In en, this message translates to:
+  /// **'Human Bones'**
+  String get thPointHumanBones;
+
+  /// The label for the ice point type
+  ///
+  /// In en, this message translates to:
+  /// **'Ice'**
+  String get thPointIce;
+
+  /// The label for the ice pillar point type
+  ///
+  /// In en, this message translates to:
+  /// **'Ice Pillar'**
+  String get thPointIcePillar;
+
+  /// The label for the ice stalactite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Ice Stalactite'**
+  String get thPointIceStalactite;
+
+  /// The label for the ice stalagmite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Ice Stalagmite'**
+  String get thPointIceStalagmite;
+
+  /// The label for the karren point type
+  ///
+  /// In en, this message translates to:
+  /// **'Karren'**
+  String get thPointKarren;
+
+  /// The label for the label point type
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get thPointLabel;
+
+  /// The label for the low end point type
+  ///
+  /// In en, this message translates to:
+  /// **'Low End'**
+  String get thPointLowEnd;
+
+  /// The label for the map connection point type
+  ///
+  /// In en, this message translates to:
+  /// **'Map Connection'**
+  String get thPointMapConnection;
+
+  /// The label for the masonry point type
+  ///
+  /// In en, this message translates to:
+  /// **'Masonry'**
+  String get thPointMasonry;
+
+  /// The label for the moonmilk point type
+  ///
+  /// In en, this message translates to:
+  /// **'Moonmilk'**
+  String get thPointMoonmilk;
+
+  /// The label for the mud point type
+  ///
+  /// In en, this message translates to:
+  /// **'Mud'**
+  String get thPointMud;
+
+  /// The label for the mudcrack point type
+  ///
+  /// In en, this message translates to:
+  /// **'Mudcrack'**
+  String get thPointMudcrack;
+
+  /// The label for the name plate point type
+  ///
+  /// In en, this message translates to:
+  /// **'Name Plate'**
+  String get thPointNamePlate;
+
+  /// The label for the narrow end point type
+  ///
+  /// In en, this message translates to:
+  /// **'Narrow End'**
+  String get thPointNarrowEnd;
+
+  /// The label for the no equipment point type
+  ///
+  /// In en, this message translates to:
+  /// **'No Equipment'**
+  String get thPointNoEquipment;
+
+  /// The label for the no wheelchair point type
+  ///
+  /// In en, this message translates to:
+  /// **'No Wheelchair'**
+  String get thPointNoWheelchair;
+
+  /// The label for the paleo material point type
+  ///
+  /// In en, this message translates to:
+  /// **'Paleo Material'**
+  String get thPointPaleoMaterial;
+
+  /// The label for the passage height point type
+  ///
+  /// In en, this message translates to:
+  /// **'Passage Height'**
+  String get thPointPassageHeight;
+
+  /// The label for the pebbles point type
+  ///
+  /// In en, this message translates to:
+  /// **'Pebbles'**
+  String get thPointPebbles;
+
+  /// The label for the pendant point type
+  ///
+  /// In en, this message translates to:
+  /// **'Pendant'**
+  String get thPointPendant;
+
+  /// The label for the photo point type
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get thPointPhoto;
+
+  /// The label for the pillar point type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar'**
+  String get thPointPillar;
+
+  /// The label for the pillars with curtains point type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillars With Curtains'**
+  String get thPointPillarsWithCurtains;
+
+  /// The label for the pillar with curtains point type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar With Curtains'**
+  String get thPointPillarWithCurtains;
+
+  /// The label for the popcorn point type
+  ///
+  /// In en, this message translates to:
+  /// **'Popcorn'**
+  String get thPointPopcorn;
+
+  /// The label for the raft point type
+  ///
+  /// In en, this message translates to:
+  /// **'Raft'**
+  String get thPointRaft;
+
+  /// The label for the raft cone point type
+  ///
+  /// In en, this message translates to:
+  /// **'Raft Cone'**
+  String get thPointRaftCone;
+
+  /// The label for the remark point type
+  ///
+  /// In en, this message translates to:
+  /// **'Remark'**
+  String get thPointRemark;
+
+  /// The label for the rimstone dam point type
+  ///
+  /// In en, this message translates to:
+  /// **'Rimstone Dam'**
+  String get thPointRimstoneDam;
+
+  /// The label for the rimstone pool point type
+  ///
+  /// In en, this message translates to:
+  /// **'Rimstone Pool'**
+  String get thPointRimstonePool;
+
+  /// The label for the root point type
+  ///
+  /// In en, this message translates to:
+  /// **'Root'**
+  String get thPointRoot;
+
+  /// The label for the rope point type
+  ///
+  /// In en, this message translates to:
+  /// **'Rope'**
+  String get thPointRope;
+
+  /// The label for the rope ladder point type
+  ///
+  /// In en, this message translates to:
+  /// **'Rope Ladder'**
+  String get thPointRopeLadder;
+
+  /// The label for the sand point type
+  ///
+  /// In en, this message translates to:
+  /// **'Sand'**
+  String get thPointSand;
+
+  /// The label for the scallop point type
+  ///
+  /// In en, this message translates to:
+  /// **'Scallop'**
+  String get thPointScallop;
+
+  /// The label for the section point type
+  ///
+  /// In en, this message translates to:
+  /// **'Section'**
+  String get thPointSection;
+
+  /// The label for the seed germination point type
+  ///
+  /// In en, this message translates to:
+  /// **'Seed Germination'**
+  String get thPointSeedGermination;
+
+  /// The label for the sink point type
+  ///
+  /// In en, this message translates to:
+  /// **'Sink'**
+  String get thPointSink;
+
+  /// The label for the snow point type
+  ///
+  /// In en, this message translates to:
+  /// **'Snow'**
+  String get thPointSnow;
+
+  /// The label for the soda straw point type
+  ///
+  /// In en, this message translates to:
+  /// **'Soda Straw'**
+  String get thPointSodaStraw;
+
+  /// The label for the spring point type
+  ///
+  /// In en, this message translates to:
+  /// **'Spring'**
+  String get thPointSpring;
+
+  /// The label for the stalactite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactite'**
+  String get thPointStalactite;
+
+  /// The label for the stalactites point type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactites'**
+  String get thPointStalactites;
+
+  /// The label for the stalactites stalagmites point type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactites Stalagmites'**
+  String get thPointStalactitesStalagmites;
+
+  /// The label for the stalactite stalagmite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactite Stalagmite'**
+  String get thPointStalactiteStalagmite;
+
+  /// The label for the stalagmite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalagmite'**
+  String get thPointStalagmite;
+
+  /// The label for the stalagmites point type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalagmites'**
+  String get thPointStalagmites;
+
+  /// The label for the station point type
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get thPointStation;
+
+  /// The label for the station name point type
+  ///
+  /// In en, this message translates to:
+  /// **'Station Name'**
+  String get thPointStationName;
+
+  /// The label for the steps point type
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get thPointSteps;
+
+  /// The label for the traverse point type
+  ///
+  /// In en, this message translates to:
+  /// **'Traverse'**
+  String get thPointTraverse;
+
+  /// The label for the tree trunk point type
+  ///
+  /// In en, this message translates to:
+  /// **'Tree Trunk'**
+  String get thPointTreeTrunk;
+
+  /// The label for the user defined point type
+  ///
+  /// In en, this message translates to:
+  /// **'user defined'**
+  String get thPointU;
+
+  /// The label for the vegetable debris point type
+  ///
+  /// In en, this message translates to:
+  /// **'Vegetable Debris'**
+  String get thPointVegetableDebris;
+
+  /// The label for the via ferrata point type
+  ///
+  /// In en, this message translates to:
+  /// **'Via Ferrata'**
+  String get thPointViaFerrata;
+
+  /// The label for the volcano point type
+  ///
+  /// In en, this message translates to:
+  /// **'Volcano'**
+  String get thPointVolcano;
+
+  /// The label for the walkway point type
+  ///
+  /// In en, this message translates to:
+  /// **'Walkway'**
+  String get thPointWalkway;
+
+  /// The label for the wall calcite point type
+  ///
+  /// In en, this message translates to:
+  /// **'Wall Calcite'**
+  String get thPointWallCalcite;
+
+  /// The label for the water point type
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get thPointWater;
+
+  /// The label for the water drip point type
+  ///
+  /// In en, this message translates to:
+  /// **'Water Drip'**
+  String get thPointWaterDrip;
+
+  /// The label for the water flow point type
+  ///
+  /// In en, this message translates to:
+  /// **'Water Flow'**
+  String get thPointWaterFlow;
+
+  /// The label for the wheelchair point type
+  ///
+  /// In en, this message translates to:
+  /// **'Wheelchair'**
+  String get thPointWheelchair;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

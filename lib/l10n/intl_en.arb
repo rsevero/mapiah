@@ -406,5 +406,814 @@
   "@th2FilePickSelectTH2File": {
     "description": "The label for the TH2 file selection dialog",
     "type": "text"
+  },
+
+  "thElementArea": "Area",
+  "@thElementArea": {
+    "description": "The label for the area element type",
+    "type": "text"
+  },
+
+  "thElementAreaBorderTHID": "Area border ID",
+  "@thElementAreaBorderTHID": {
+    "description": "The label for the area border ID element type",
+    "type": "text"
+  },
+
+  "thElementBezierCurveLineSegment": "Bézier curve line segment",
+  "@thElementBezierCurveLineSegment": {
+    "description": "The label for the Bézier curve line segment element type",
+    "type": "text"
+  },
+
+  "thElementComment": "Comment",
+  "@thElementComment": {
+    "description": "The label for the comment element type",
+    "type": "text"
+  },
+
+  "thElementEmptyLine": "Empty line",
+  "@thElementEmptyLine": {
+    "description": "The label for the empty line element type",
+    "type": "text"
+  },
+
+  "thElementEncoding": "Encoding",
+  "@thElementEncoding": {
+    "description": "The label for the encoding element type",
+    "type": "text"
+  },
+
+  "thElementEndArea": "End area",
+  "@thElementEndArea": {
+    "description": "The label for the end area element type",
+    "type": "text"
+  },
+
+  "thElementEndComment": "End comment",
+  "@thElementEndComment": {
+    "description": "The label for the end comment element type",
+    "type": "text"
+  },
+
+  "thElementEndLine": "End line",
+  "@thElementEndLine": {
+    "description": "The label for the end line element type",
+    "type": "text"
+  },
+
+  "thElementEndScrap": "End scrap",
+  "@thElementEndScrap": {
+    "description": "The label for the end scrap element type",
+    "type": "text"
+  },
+
+  "thElementLine": "Line",
+  "@thElementLine": {
+    "description": "The label for the line element type",
+    "type": "text"
+  },
+
+  "thElementLineSegment": "Line segment",
+  "@thElementLineSegment": {
+    "description": "The label for the line segment element type",
+    "type": "text"
+  },
+
+  "thElementMultilineCommentContent": "Multiline comment content",
+  "@thElementMultilineCommentContent": {
+    "description": "The label for the multiline comment content element type",
+    "type": "text"
+  },
+
+  "thElementMultilineComment": "Multiline comment",
+  "@thElementMultilineComment": {
+    "description": "The label for the multiline comment element type",
+    "type": "text"
+  },
+
+  "thElementPoint": "Point",
+  "@thElementPoint": {
+    "description": "The label for the point element type",
+    "type": "text"
+  },
+
+  "thElementScrap": "Scrap",
+  "@thElementScrap": {
+    "description": "The label for the scrap element type",
+    "type": "text"
+  },
+
+  "thElementStraightLineSegment": "Straight line segment",
+  "@thElementStraightLineSegment": {
+    "description": "The label for the straight line segment element type",
+    "type": "text"
+  },
+
+  "thElementUnrecognized": "Unrecognized ",
+  "@thElementUnrecognized": {
+    "description": "The label for the unrecognized element type",
+    "type": "text"
+  },
+
+  "thElementXTherionConfig": "XTherion config",
+  "@thElementXTherionConfig": {
+    "description": "The label for the XTherion config element type",
+    "type": "text"
+  },
+
+  "thPointAirDraught": "Air draught",
+  "@thPointAirDraught": {
+    "description": "The label for the air draught point type",
+    "type": "text"
+  },
+
+  "thPointAltar": "Altar",
+  "@thPointAltar": {
+    "description": "The label for the altar point type",
+    "type": "text"
+  },
+
+  "thPointAltitude": "Altitude",
+  "@thPointAltitude": {
+    "description": "The label for the altitude point type",
+    "type": "text"
+  },
+
+  "thPointAnastomosis": "Anastomosis",
+  "@thPointAnastomosis": {
+    "description": "The label for the anastomosis point type",
+    "type": "text"
+  },
+  "thPointAnchor": "Anchor",
+  "@thPointAnchor": {
+    "description": "The label for the anchor point type",
+    "type": "text"
+  },
+  "thPointAragonite": "Aragonite",
+  "@thPointAragonite": {
+    "description": "The label for the aragonite point type",
+    "type": "text"
+  },
+
+
+  "thPointArcheoExcavation": "Archeo Excavation",
+  "@thPointArcheoExcavation": {
+    "description": "The label for the archeo excavation point type",
+    "type": "text"
+  },
+
+  "thPointArcheoMaterial": "Archeo Material",
+  "@thPointArcheoMaterial": {
+    "description": "The label for the archeo material point type",
+    "type": "text"
+  },
+
+  "thPointAudio": "Audio",
+  "@thPointAudio": {
+    "description": "The label for the audio point type",
+    "type": "text"
+  },
+
+  "thPointBat": "Bat",
+  "@thPointBat": {
+    "description": "The label for the bat point type",
+    "type": "text"
+  },
+
+  "thPointBedrock": "Bedrock",
+  "@thPointBedrock": {
+    "description": "The label for the bedrock point type",
+    "type": "text"
+  },
+
+  "thPointBlocks": "Blocks",
+  "@thPointBlocks": {
+    "description": "The label for the blocks point type",
+    "type": "text"
+  },
+
+  "thPointBones": "Bones",
+  "@thPointBones": {
+    "description": "The label for the bones point type",
+    "type": "text"
+  },
+
+  "thPointBreakdownChoke": "Breakdown Choke",
+  "@thPointBreakdownChoke": {
+    "description": "The label for the breakdown choke point type",
+    "type": "text"
+  },
+
+  "thPointBridge": "Bridge",
+  "@thPointBridge": {
+    "description": "The label for the bridge point type",
+    "type": "text"
+  },
+
+  "thPointCamp": "Camp",
+  "@thPointCamp": {
+    "description": "The label for the camp point type",
+    "type": "text"
+  },
+
+  "thPointCavePearl": "Cave Pearl",
+  "@thPointCavePearl": {
+    "description": "The label for the cave pearl point type",
+    "type": "text"
+  },
+
+  "thPointClay": "Clay",
+  "@thPointClay": {
+    "description": "The label for the clay point type",
+    "type": "text"
+  },
+
+  "thPointClayChoke": "Clay Choke",
+  "@thPointClayChoke": {
+    "description": "The label for the clay choke point type",
+    "type": "text"
+  },
+
+  "thPointClayTree": "Clay Tree",
+  "@thPointClayTree": {
+    "description": "The label for the clay tree point type",
+    "type": "text"
+  },
+
+  "thPointContinuation": "Continuation",
+  "@thPointContinuation": {
+    "description": "The label for the continuation point type",
+    "type": "text"
+  },
+
+  "thPointCrystal": "Crystal",
+  "@thPointCrystal": {
+    "description": "The label for the crystal point type",
+    "type": "text"
+  },
+
+  "thPointCurtain": "Curtain",
+  "@thPointCurtain": {
+    "description": "The label for the curtain point type",
+    "type": "text"
+  },
+
+  "thPointCurtains": "Curtains",
+  "@thPointCurtains": {
+    "description": "The label for the curtains point type",
+    "type": "text"
+  },
+
+  "thPointDanger": "Danger",
+  "@thPointDanger": {
+    "description": "The label for the danger point type",
+    "type": "text"
+  },
+
+  "thPointDate": "Date",
+  "@thPointDate": {
+    "description": "The label for the date point type",
+    "type": "text"
+  },
+
+  "thPointDebris": "Debris",
+  "@thPointDebris": {
+    "description": "The label for the debris point type",
+    "type": "text"
+  },
+
+  "thPointDig": "Dig",
+  "@thPointDig": {
+    "description": "The label for the dig point type",
+    "type": "text"
+  },
+
+  "thPointDimensions": "Dimensions",
+  "@thPointDimensions": {
+    "description": "The label for the dimensions point type",
+    "type": "text"
+  },
+
+  "thPointDiscPillar": "Disc Pillar",
+  "@thPointDiscPillar": {
+    "description": "The label for the disc pillar point type",
+    "type": "text"
+  },
+
+  "thPointDiscPillars": "Disc Pillars",
+  "@thPointDiscPillars": {
+    "description": "The label for the disc pillars point type",
+    "type": "text"
+  },
+
+  "thPointDiscStalactite": "Disc Stalactite",
+  "@thPointDiscStalactite": {
+    "description": "The label for the disc stalactite point type",
+    "type": "text"
+  },
+
+  "thPointDiscStalactites": "Disc Stalactites",
+  "@thPointDiscStalactites": {
+    "description": "The label for the disc stalactites point type",
+    "type": "text"
+  },
+
+  "thPointDiscStalagmite": "Disc Stalagmite",
+  "@thPointDiscStalagmite": {
+    "description": "The label for the disc stalagmite point type",
+    "type": "text"
+  },
+
+  "thPointDiscStalagmites": "Disc Stalagmites",
+  "@thPointDiscStalagmites": {
+    "description": "The label for the disc stalagmites point type",
+    "type": "text"
+  },
+
+  "thPointDisk": "Disk",
+  "@thPointDisk": {
+    "description": "The label for the disk point type",
+    "type": "text"
+  },
+
+  "thPointElectricLight": "Electric Light",
+  "@thPointElectricLight": {
+    "description": "The label for the electric light point type",
+    "type": "text"
+  },
+
+  "thPointEntrance": "Entrance",
+  "@thPointEntrance": {
+    "description": "The label for the entrance point type",
+    "type": "text"
+  },
+
+  "thPointExtra": "Extra",
+  "@thPointExtra": {
+    "description": "The label for the extra point type",
+    "type": "text"
+  },
+
+  "thPointExVoto": "Ex Voto",
+  "@thPointExVoto": {
+    "description": "The label for the ex voto point type",
+    "type": "text"
+  },
+
+  "thPointFixedLadder": "Fixed Ladder",
+  "@thPointFixedLadder": {
+    "description": "The label for the fixed ladder point type",
+    "type": "text"
+  },
+
+  "thPointFlowstone": "Flowstone",
+  "@thPointFlowstone": {
+    "description": "The label for the flowstone point type",
+    "type": "text"
+  },
+
+  "thPointFlowstoneChoke": "Flowstone Choke",
+  "@thPointFlowstoneChoke": {
+    "description": "The label for the flowstone choke point type",
+    "type": "text"
+  },
+
+  "thPointFlute": "Flute",
+  "@thPointFlute": {
+    "description": "The label for the flute point type",
+    "type": "text"
+  },
+
+  "thPointGate": "Gate",
+  "@thPointGate": {
+    "description": "The label for the gate point type",
+    "type": "text"
+  },
+
+  "thPointGradient": "Gradient",
+  "@thPointGradient": {
+    "description": "The label for the gradient point type",
+    "type": "text"
+  },
+
+  "thPointGuano": "Guano",
+  "@thPointGuano": {
+    "description": "The label for the guano point type",
+    "type": "text"
+  },
+
+  "thPointGypsum": "Gypsum",
+  "@thPointGypsum": {
+    "description": "The label for the gypsum point type",
+    "type": "text"
+  },
+
+  "thPointGypsumFlower": "Gypsum Flower",
+  "@thPointGypsumFlower": {
+    "description": "The label for the gypsum flower point type",
+    "type": "text"
+  },
+
+  "thPointHandrail": "Handrail",
+  "@thPointHandrail": {
+    "description": "The label for the handrail point type",
+    "type": "text"
+  },
+
+  "thPointHeight": "Height",
+  "@thPointHeight": {
+    "description": "The label for the height point type",
+    "type": "text"
+  },
+
+  "thPointHelictite": "Helictite",
+  "@thPointHelictite": {
+    "description": "The label for the helictite point type",
+    "type": "text"
+  },
+
+  "thPointHelictites": "Helictites",
+  "@thPointHelictites": {
+    "description": "The label for the helictites point type",
+    "type": "text"
+  },
+
+  "thPointHumanBones": "Human Bones",
+  "@thPointHumanBones": {
+    "description": "The label for the human bones point type",
+    "type": "text"
+  },
+
+  "thPointIce": "Ice",
+  "@thPointIce": {
+    "description": "The label for the ice point type",
+    "type": "text"
+  },
+
+  "thPointIcePillar": "Ice Pillar",
+  "@thPointIcePillar": {
+    "description": "The label for the ice pillar point type",
+    "type": "text"
+  },
+
+  "thPointIceStalactite": "Ice Stalactite",
+  "@thPointIceStalactite": {
+    "description": "The label for the ice stalactite point type",
+    "type": "text"
+  },
+
+  "thPointIceStalagmite": "Ice Stalagmite",
+  "@thPointIceStalagmite": {
+    "description": "The label for the ice stalagmite point type",
+    "type": "text"
+  },
+
+  "thPointKarren": "Karren",
+  "@thPointKarren": {
+    "description": "The label for the karren point type",
+    "type": "text"
+  },
+
+  "thPointLabel": "Label",
+  "@thPointLabel": {
+    "description": "The label for the label point type",
+    "type": "text"
+  },
+
+  "thPointLowEnd": "Low End",
+  "@thPointLowEnd": {
+    "description": "The label for the low end point type",
+    "type": "text"
+  },
+
+  "thPointMapConnection": "Map Connection",
+  "@thPointMapConnection": {
+    "description": "The label for the map connection point type",
+    "type": "text"
+  },
+
+  "thPointMasonry": "Masonry",
+  "@thPointMasonry": {
+    "description": "The label for the masonry point type",
+    "type": "text"
+  },
+
+  "thPointMoonmilk": "Moonmilk",
+  "@thPointMoonmilk": {
+    "description": "The label for the moonmilk point type",
+    "type": "text"
+  },
+
+  "thPointMud": "Mud",
+  "@thPointMud": {
+    "description": "The label for the mud point type",
+    "type": "text"
+  },
+
+  "thPointMudcrack": "Mudcrack",
+  "@thPointMudcrack": {
+    "description": "The label for the mudcrack point type",
+    "type": "text"
+  },
+
+  "thPointNamePlate": "Name Plate",
+  "@thPointNamePlate": {
+    "description": "The label for the name plate point type",
+    "type": "text"
+  },
+
+  "thPointNarrowEnd": "Narrow End",
+  "@thPointNarrowEnd": {
+    "description": "The label for the narrow end point type",
+    "type": "text"
+  },
+
+  "thPointNoEquipment": "No Equipment",
+  "@thPointNoEquipment": {
+    "description": "The label for the no equipment point type",
+    "type": "text"
+  },
+
+  "thPointNoWheelchair": "No Wheelchair",
+  "@thPointNoWheelchair": {
+    "description": "The label for the no wheelchair point type",
+    "type": "text"
+  },
+
+  "thPointPaleoMaterial": "Paleo Material",
+  "@thPointPaleoMaterial": {
+    "description": "The label for the paleo material point type",
+    "type": "text"
+  },
+
+  "thPointPassageHeight": "Passage Height",
+  "@thPointPassageHeight": {
+    "description": "The label for the passage height point type",
+    "type": "text"
+  },
+
+  "thPointPebbles": "Pebbles",
+  "@thPointPebbles": {
+    "description": "The label for the pebbles point type",
+    "type": "text"
+  },
+
+  "thPointPendant": "Pendant",
+  "@thPointPendant": {
+    "description": "The label for the pendant point type",
+    "type": "text"
+  },
+
+  "thPointPhoto": "Photo",
+  "@thPointPhoto": {
+    "description": "The label for the photo point type",
+    "type": "text"
+  },
+
+  "thPointPillar": "Pillar",
+  "@thPointPillar": {
+    "description": "The label for the pillar point type",
+    "type": "text"
+  },
+
+  "thPointPillarsWithCurtains": "Pillars With Curtains",
+  "@thPointPillarsWithCurtains": {
+    "description": "The label for the pillars with curtains point type",
+    "type": "text"
+  },
+
+  "thPointPillarWithCurtains": "Pillar With Curtains",
+  "@thPointPillarWithCurtains": {
+    "description": "The label for the pillar with curtains point type",
+    "type": "text"
+  },
+
+  "thPointPopcorn": "Popcorn",
+  "@thPointPopcorn": {
+    "description": "The label for the popcorn point type",
+    "type": "text"
+  },
+
+  "thPointRaft": "Raft",
+  "@thPointRaft": {
+    "description": "The label for the raft point type",
+    "type": "text"
+  },
+
+  "thPointRaftCone": "Raft Cone",
+  "@thPointRaftCone": {
+    "description": "The label for the raft cone point type",
+    "type": "text"
+  },
+
+  "thPointRemark": "Remark",
+  "@thPointRemark": {
+    "description": "The label for the remark point type",
+    "type": "text"
+  },
+
+  "thPointRimstoneDam": "Rimstone Dam",
+  "@thPointRimstoneDam": {
+    "description": "The label for the rimstone dam point type",
+    "type": "text"
+  },
+
+  "thPointRimstonePool": "Rimstone Pool",
+  "@thPointRimstonePool": {
+    "description": "The label for the rimstone pool point type",
+    "type": "text"
+  },
+
+  "thPointRoot": "Root",
+  "@thPointRoot": {
+    "description": "The label for the root point type",
+    "type": "text"
+  },
+
+  "thPointRope": "Rope",
+  "@thPointRope": {
+    "description": "The label for the rope point type",
+    "type": "text"
+  },
+
+  "thPointRopeLadder": "Rope Ladder",
+  "@thPointRopeLadder": {
+    "description": "The label for the rope ladder point type",
+    "type": "text"
+  },
+
+  "thPointSand": "Sand",
+  "@thPointSand": {
+    "description": "The label for the sand point type",
+    "type": "text"
+  },
+
+  "thPointScallop": "Scallop",
+  "@thPointScallop": {
+    "description": "The label for the scallop point type",
+    "type": "text"
+  },
+
+  "thPointSection": "Section",
+  "@thPointSection": {
+    "description": "The label for the section point type",
+    "type": "text"
+  },
+
+  "thPointSeedGermination": "Seed Germination",
+  "@thPointSeedGermination": {
+    "description": "The label for the seed germination point type",
+    "type": "text"
+  },
+
+  "thPointSink": "Sink",
+  "@thPointSink": {
+    "description": "The label for the sink point type",
+    "type": "text"
+  },
+
+  "thPointSnow": "Snow",
+  "@thPointSnow": {
+    "description": "The label for the snow point type",
+    "type": "text"
+  },
+
+  "thPointSodaStraw": "Soda Straw",
+  "@thPointSodaStraw": {
+    "description": "The label for the soda straw point type",
+    "type": "text"
+  },
+
+  "thPointSpring": "Spring",
+  "@thPointSpring": {
+    "description": "The label for the spring point type",
+    "type": "text"
+  },
+
+  "thPointStalactite": "Stalactite",
+  "@thPointStalactite": {
+    "description": "The label for the stalactite point type",
+    "type": "text"
+  },
+
+  "thPointStalactites": "Stalactites",
+  "@thPointStalactites": {
+    "description": "The label for the stalactites point type",
+    "type": "text"
+  },
+
+  "thPointStalactitesStalagmites": "Stalactites Stalagmites",
+  "@thPointStalactitesStalagmites": {
+    "description": "The label for the stalactites stalagmites point type",
+    "type": "text"
+  },
+
+  "thPointStalactiteStalagmite": "Stalactite Stalagmite",
+  "@thPointStalactiteStalagmite": {
+    "description": "The label for the stalactite stalagmite point type",
+    "type": "text"
+  },
+
+  "thPointStalagmite": "Stalagmite",
+  "@thPointStalagmite": {
+    "description": "The label for the stalagmite point type",
+    "type": "text"
+  },
+
+  "thPointStalagmites": "Stalagmites",
+  "@thPointStalagmites": {
+    "description": "The label for the stalagmites point type",
+    "type": "text"
+  },
+
+  "thPointStation": "Station",
+  "@thPointStation": {
+    "description": "The label for the station point type",
+    "type": "text"
+  },
+
+  "thPointStationName": "Station Name",
+  "@thPointStationName": {
+    "description": "The label for the station name point type",
+    "type": "text"
+  },
+
+  "thPointSteps": "Steps",
+  "@thPointSteps": {
+    "description": "The label for the steps point type",
+    "type": "text"
+  },
+
+  "thPointTraverse": "Traverse",
+  "@thPointTraverse": {
+    "description": "The label for the traverse point type",
+    "type": "text"
+  },
+
+  "thPointTreeTrunk": "Tree Trunk",
+  "@thPointTreeTrunk": {
+    "description": "The label for the tree trunk point type",
+    "type": "text"
+  },
+
+  "thPointU": "user defined",
+  "@thPointU": {
+    "description": "The label for the user defined point type",
+    "type": "text"
+  },
+
+  "thPointVegetableDebris": "Vegetable Debris",
+  "@thPointVegetableDebris": {
+    "description": "The label for the vegetable debris point type",
+    "type": "text"
+  },
+
+  "thPointViaFerrata": "Via Ferrata",
+  "@thPointViaFerrata": {
+    "description": "The label for the via ferrata point type",
+    "type": "text"
+  },
+
+  "thPointVolcano": "Volcano",
+  "@thPointVolcano": {
+    "description": "The label for the volcano point type",
+    "type": "text"
+  },
+
+  "thPointWalkway": "Walkway",
+  "@thPointWalkway": {
+    "description": "The label for the walkway point type",
+    "type": "text"
+  },
+
+  "thPointWallCalcite": "Wall Calcite",
+  "@thPointWallCalcite": {
+    "description": "The label for the wall calcite point type",
+    "type": "text"
+  },
+
+  "thPointWater": "Water",
+  "@thPointWater": {
+    "description": "The label for the water point type",
+    "type": "text"
+  },
+
+  "thPointWaterDrip": "Water Drip",
+  "@thPointWaterDrip": {
+    "description": "The label for the water drip point type",
+    "type": "text"
+  },
+
+  "thPointWaterFlow": "Water Flow",
+  "@thPointWaterFlow": {
+    "description": "The label for the water flow point type",
+    "type": "text"
+  },
+
+  "thPointWheelchair": "Wheelchair",
+  "@thPointWheelchair": {
+    "description": "The label for the wheelchair point type",
+    "type": "text"
   }
 }

@@ -1,59 +1,303 @@
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPTextToUser {
-  static String getCommandDescription(MPCommandDescriptionType commandType) {
-    switch (commandType) {
-      case MPCommandDescriptionType.addElements:
-        return mpLocator.appLocalizations.mpAddElementsCommandDescription;
-      case MPCommandDescriptionType.addLine:
-        return mpLocator.appLocalizations.mpAddLineCommandDescription;
-      case MPCommandDescriptionType.addLineSegment:
-        return mpLocator.appLocalizations.mpAddLineSegmentCommandDescription;
-      case MPCommandDescriptionType.addPoint:
-        return mpLocator.appLocalizations.mpAddPointCommandDescription;
-      case MPCommandDescriptionType.deleteElements:
-        return mpLocator.appLocalizations.mpDeleteElementsCommandDescription;
-      case MPCommandDescriptionType.deleteLine:
-        return mpLocator.appLocalizations.mpDeleteLineSegmentCommandDescription;
-      case MPCommandDescriptionType.deleteLineSegment:
-        return mpLocator.appLocalizations.mpDeleteLineCommandDescription;
-      case MPCommandDescriptionType.deletePoint:
-        return mpLocator.appLocalizations.mpDeletePointCommandDescription;
-      case MPCommandDescriptionType.editBezierCurve:
-        return mpLocator.appLocalizations.mpEditBezierCurveCommandDescription;
-      case MPCommandDescriptionType.editLine:
-        return mpLocator.appLocalizations.mpEditLineCommandDescription;
-      case MPCommandDescriptionType.editLineSegment:
-        return mpLocator.appLocalizations.mpEditLineSegmentCommandDescription;
-      case MPCommandDescriptionType.moveBezierLineSegment:
-        return mpLocator
-            .appLocalizations.mpMoveBezierLineSegmentCommandDescription;
-      case MPCommandDescriptionType.moveElements:
-        return mpLocator.appLocalizations.mpMoveElementsCommandDescription;
-      case MPCommandDescriptionType.moveLine:
-        return mpLocator.appLocalizations.mpMoveLineCommandDescription;
-      case MPCommandDescriptionType.movePoint:
-        return mpLocator.appLocalizations.mpMovePointCommandDescription;
-      case MPCommandDescriptionType.moveStraightLineSegment:
-        return mpLocator
-            .appLocalizations.mpMoveStraightLineSegmentCommandDescription;
-    }
+  static const Map<MPCommandDescriptionType, String> _commandTypeAsString = {};
+  static const Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
+  static const Map<THElementType, String> _elementTypeAsString = {};
+  static const Map<THPointType, String> _pointTypeAsString = {};
+  // static const Map<THLineType, String> _lineTypeAsString = {};
+  // static const Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
+
+  static void initialize() {
+    _initializeCommandTypeAsString();
+    _initializeLengthUnitTypeAsString();
+    _initializeElementTypeAsString();
+    _initializePointTypeAsString();
+    // _initializeLineTypeAsString();
+    // _initializeCommandOptionTypeAsString();
   }
 
-  static String getLengthUnitAbbreviation(THLengthUnitType lengthUnitType) {
-    switch (lengthUnitType) {
-      case THLengthUnitType.centimeter:
-        return mpLocator.appLocalizations.mpLengthUnitCentimeterAbbreviation;
-      case THLengthUnitType.feet:
-        return mpLocator.appLocalizations.mpLengthUnitFootAbbreviation;
-      case THLengthUnitType.inch:
-        return mpLocator.appLocalizations.mpLengthUnitInchAbbreviation;
-      case THLengthUnitType.meter:
-        return mpLocator.appLocalizations.mpLengthUnitMeterAbbreviation;
-      case THLengthUnitType.yard:
-        return mpLocator.appLocalizations.mpLengthUnitYardAbbreviation;
-    }
+  static void _initializeCommandTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _commandTypeAsString[MPCommandDescriptionType.addElements] =
+        localizations.mpAddElementsCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.addLine] =
+        localizations.mpAddLineCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.addLineSegment] =
+        localizations.mpAddLineSegmentCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.addPoint] =
+        localizations.mpAddPointCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.deleteElements] =
+        localizations.mpDeleteElementsCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.deleteLine] =
+        localizations.mpDeleteLineSegmentCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.deleteLineSegment] =
+        localizations.mpDeleteLineCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.deletePoint] =
+        localizations.mpDeletePointCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.editBezierCurve] =
+        localizations.mpEditBezierCurveCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.editLine] =
+        localizations.mpEditLineCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.editLineSegment] =
+        localizations.mpEditLineSegmentCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.moveBezierLineSegment] =
+        localizations.mpMoveBezierLineSegmentCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.moveElements] =
+        localizations.mpMoveElementsCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.moveLine] =
+        localizations.mpMoveLineCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.movePoint] =
+        localizations.mpMovePointCommandDescription;
+    _commandTypeAsString[MPCommandDescriptionType.moveStraightLineSegment] =
+        localizations.mpMoveStraightLineSegmentCommandDescription;
+  }
+
+  static String getCommandDescription(MPCommandDescriptionType commandType) {
+    return _commandTypeAsString.containsKey(commandType)
+        ? _commandTypeAsString[commandType]!
+        : commandType.name;
+  }
+
+  static void _initializeLengthUnitTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _lengthUnitTypeAsString[THLengthUnitType.centimeter] =
+        localizations.mpLengthUnitCentimeterAbbreviation;
+    _lengthUnitTypeAsString[THLengthUnitType.feet] =
+        localizations.mpLengthUnitFootAbbreviation;
+    _lengthUnitTypeAsString[THLengthUnitType.inch] =
+        localizations.mpLengthUnitInchAbbreviation;
+    _lengthUnitTypeAsString[THLengthUnitType.meter] =
+        localizations.mpLengthUnitMeterAbbreviation;
+    _lengthUnitTypeAsString[THLengthUnitType.yard] =
+        localizations.mpLengthUnitYardAbbreviation;
+  }
+
+  static String getLengthUnitType(THLengthUnitType lengthUnitType) {
+    return _lengthUnitTypeAsString.containsKey(lengthUnitType)
+        ? _lengthUnitTypeAsString[lengthUnitType]!
+        : lengthUnitType.name;
+  }
+
+  static void _initializeElementTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _elementTypeAsString[THElementType.area] = localizations.thElementArea;
+    _elementTypeAsString[THElementType.areaBorderTHID] =
+        localizations.thElementAreaBorderTHID;
+    _elementTypeAsString[THElementType.bezierCurveLineSegment] =
+        localizations.thElementBezierCurveLineSegment;
+    _elementTypeAsString[THElementType.comment] =
+        localizations.thElementComment;
+    _elementTypeAsString[THElementType.emptyLine] =
+        localizations.thElementEmptyLine;
+    _elementTypeAsString[THElementType.encoding] =
+        localizations.thElementEncoding;
+    _elementTypeAsString[THElementType.endarea] =
+        localizations.thElementEndArea;
+    _elementTypeAsString[THElementType.endcomment] =
+        localizations.thElementEndComment;
+    _elementTypeAsString[THElementType.endline] =
+        localizations.thElementEndLine;
+    _elementTypeAsString[THElementType.endscrap] =
+        localizations.thElementEndScrap;
+    _elementTypeAsString[THElementType.line] = localizations.thElementLine;
+    _elementTypeAsString[THElementType.lineSegment] =
+        localizations.thElementLineSegment;
+    _elementTypeAsString[THElementType.multilineCommentContent] =
+        localizations.thElementMultilineCommentContent;
+    _elementTypeAsString[THElementType.multilineComment] =
+        localizations.thElementMultilineComment;
+    _elementTypeAsString[THElementType.point] = localizations.thElementPoint;
+    _elementTypeAsString[THElementType.scrap] = localizations.thElementScrap;
+    _elementTypeAsString[THElementType.straightLineSegment] =
+        localizations.thElementStraightLineSegment;
+    _elementTypeAsString[THElementType.unrecognizedCommand] =
+        localizations.thElementUnrecognized;
+    _elementTypeAsString[THElementType.xTherionConfig] =
+        localizations.thElementXTherionConfig;
+  }
+
+  static String getElementType(THElementType elementType) {
+    return _elementTypeAsString.containsKey(elementType)
+        ? _elementTypeAsString[elementType]!
+        : elementType.name;
+  }
+
+  static void _initializePointTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _pointTypeAsString[THPointType.airDraught] =
+        localizations.thPointAirDraught;
+    _pointTypeAsString[THPointType.altar] = localizations.thPointAltar;
+    _pointTypeAsString[THPointType.altitude] = localizations.thPointAltitude;
+    _pointTypeAsString[THPointType.anastomosis] =
+        localizations.thPointAnastomosis;
+    _pointTypeAsString[THPointType.anchor] = localizations.thPointAnchor;
+    _pointTypeAsString[THPointType.aragonite] = localizations.thPointAragonite;
+    _pointTypeAsString[THPointType.archeoExcavation] =
+        localizations.thPointArcheoExcavation;
+    _pointTypeAsString[THPointType.archeoMaterial] =
+        localizations.thPointArcheoMaterial;
+    _pointTypeAsString[THPointType.audio] = localizations.thPointAudio;
+    _pointTypeAsString[THPointType.bat] = localizations.thPointBat;
+    _pointTypeAsString[THPointType.bedrock] = localizations.thPointBedrock;
+    _pointTypeAsString[THPointType.blocks] = localizations.thPointBlocks;
+    _pointTypeAsString[THPointType.bones] = localizations.thPointBones;
+    _pointTypeAsString[THPointType.breakdownChoke] =
+        localizations.thPointBreakdownChoke;
+    _pointTypeAsString[THPointType.bridge] = localizations.thPointBridge;
+    _pointTypeAsString[THPointType.camp] = localizations.thPointCamp;
+    _pointTypeAsString[THPointType.cavePearl] = localizations.thPointCavePearl;
+    _pointTypeAsString[THPointType.clay] = localizations.thPointClay;
+    _pointTypeAsString[THPointType.clayChoke] = localizations.thPointClayChoke;
+    _pointTypeAsString[THPointType.clayTree] = localizations.thPointClayTree;
+    _pointTypeAsString[THPointType.continuation] =
+        localizations.thPointContinuation;
+    _pointTypeAsString[THPointType.crystal] = localizations.thPointCrystal;
+    _pointTypeAsString[THPointType.curtain] = localizations.thPointCurtain;
+    _pointTypeAsString[THPointType.curtains] = localizations.thPointCurtains;
+    _pointTypeAsString[THPointType.danger] = localizations.thPointDanger;
+    _pointTypeAsString[THPointType.date] = localizations.thPointDate;
+    _pointTypeAsString[THPointType.debris] = localizations.thPointDebris;
+    _pointTypeAsString[THPointType.dig] = localizations.thPointDig;
+    _pointTypeAsString[THPointType.dimensions] =
+        localizations.thPointDimensions;
+    _pointTypeAsString[THPointType.discPillar] =
+        localizations.thPointDiscPillar;
+    _pointTypeAsString[THPointType.discPillars] =
+        localizations.thPointDiscPillars;
+    _pointTypeAsString[THPointType.discStalactite] =
+        localizations.thPointDiscStalactite;
+    _pointTypeAsString[THPointType.discStalactites] =
+        localizations.thPointDiscStalactites;
+    _pointTypeAsString[THPointType.discStalagmite] =
+        localizations.thPointDiscStalagmite;
+    _pointTypeAsString[THPointType.discStalagmites] =
+        localizations.thPointDiscStalagmites;
+    _pointTypeAsString[THPointType.disk] = localizations.thPointDisk;
+    _pointTypeAsString[THPointType.electricLight] =
+        localizations.thPointElectricLight;
+    _pointTypeAsString[THPointType.entrance] = localizations.thPointEntrance;
+    _pointTypeAsString[THPointType.extra] = localizations.thPointExtra;
+    _pointTypeAsString[THPointType.exVoto] = localizations.thPointExVoto;
+    _pointTypeAsString[THPointType.fixedLadder] =
+        localizations.thPointFixedLadder;
+    _pointTypeAsString[THPointType.flowstone] = localizations.thPointFlowstone;
+    _pointTypeAsString[THPointType.flowstoneChoke] =
+        localizations.thPointFlowstoneChoke;
+    _pointTypeAsString[THPointType.flute] = localizations.thPointFlute;
+    _pointTypeAsString[THPointType.gate] = localizations.thPointGate;
+    _pointTypeAsString[THPointType.gradient] = localizations.thPointGradient;
+    _pointTypeAsString[THPointType.guano] = localizations.thPointGuano;
+    _pointTypeAsString[THPointType.gypsum] = localizations.thPointGypsum;
+    _pointTypeAsString[THPointType.gypsumFlower] =
+        localizations.thPointGypsumFlower;
+    _pointTypeAsString[THPointType.handrail] = localizations.thPointHandrail;
+    _pointTypeAsString[THPointType.height] = localizations.thPointHeight;
+    _pointTypeAsString[THPointType.helictite] = localizations.thPointHelictite;
+    _pointTypeAsString[THPointType.helictites] =
+        localizations.thPointHelictites;
+    _pointTypeAsString[THPointType.humanBones] =
+        localizations.thPointHumanBones;
+    _pointTypeAsString[THPointType.ice] = localizations.thPointIce;
+    _pointTypeAsString[THPointType.icePillar] = localizations.thPointIcePillar;
+    _pointTypeAsString[THPointType.iceStalactite] =
+        localizations.thPointIceStalactite;
+    _pointTypeAsString[THPointType.iceStalagmite] =
+        localizations.thPointIceStalagmite;
+    _pointTypeAsString[THPointType.karren] = localizations.thPointKarren;
+    _pointTypeAsString[THPointType.label] = localizations.thPointLabel;
+    _pointTypeAsString[THPointType.lowEnd] = localizations.thPointLowEnd;
+    _pointTypeAsString[THPointType.mapConnection] =
+        localizations.thPointMapConnection;
+    _pointTypeAsString[THPointType.masonry] = localizations.thPointMasonry;
+    _pointTypeAsString[THPointType.moonmilk] = localizations.thPointMoonmilk;
+    _pointTypeAsString[THPointType.mud] = localizations.thPointMud;
+    _pointTypeAsString[THPointType.mudcrack] = localizations.thPointMudcrack;
+    _pointTypeAsString[THPointType.namePlate] = localizations.thPointNamePlate;
+    _pointTypeAsString[THPointType.narrowEnd] = localizations.thPointNarrowEnd;
+    _pointTypeAsString[THPointType.noEquipment] =
+        localizations.thPointNoEquipment;
+    _pointTypeAsString[THPointType.noWheelchair] =
+        localizations.thPointNoWheelchair;
+    _pointTypeAsString[THPointType.paleoMaterial] =
+        localizations.thPointPaleoMaterial;
+    _pointTypeAsString[THPointType.passageHeight] =
+        localizations.thPointPassageHeight;
+    _pointTypeAsString[THPointType.pebbles] = localizations.thPointPebbles;
+    _pointTypeAsString[THPointType.pendant] = localizations.thPointPendant;
+    _pointTypeAsString[THPointType.photo] = localizations.thPointPhoto;
+    _pointTypeAsString[THPointType.pillar] = localizations.thPointPillar;
+    _pointTypeAsString[THPointType.pillarsWithCurtains] =
+        localizations.thPointPillarsWithCurtains;
+    _pointTypeAsString[THPointType.pillarWithCurtains] =
+        localizations.thPointPillarWithCurtains;
+    _pointTypeAsString[THPointType.popcorn] = localizations.thPointPopcorn;
+    _pointTypeAsString[THPointType.raft] = localizations.thPointRaft;
+    _pointTypeAsString[THPointType.raftCone] = localizations.thPointRaftCone;
+    _pointTypeAsString[THPointType.remark] = localizations.thPointRemark;
+    _pointTypeAsString[THPointType.rimstoneDam] =
+        localizations.thPointRimstoneDam;
+    _pointTypeAsString[THPointType.rimstonePool] =
+        localizations.thPointRimstonePool;
+    _pointTypeAsString[THPointType.root] = localizations.thPointRoot;
+    _pointTypeAsString[THPointType.rope] = localizations.thPointRope;
+    _pointTypeAsString[THPointType.ropeLadder] =
+        localizations.thPointRopeLadder;
+    _pointTypeAsString[THPointType.sand] = localizations.thPointSand;
+    _pointTypeAsString[THPointType.scallop] = localizations.thPointScallop;
+    _pointTypeAsString[THPointType.section] = localizations.thPointSection;
+    _pointTypeAsString[THPointType.seedGermination] =
+        localizations.thPointSeedGermination;
+    _pointTypeAsString[THPointType.sink] = localizations.thPointSink;
+    _pointTypeAsString[THPointType.snow] = localizations.thPointSnow;
+    _pointTypeAsString[THPointType.sodaStraw] = localizations.thPointSodaStraw;
+    _pointTypeAsString[THPointType.spring] = localizations.thPointSpring;
+    _pointTypeAsString[THPointType.stalactite] =
+        localizations.thPointStalactite;
+    _pointTypeAsString[THPointType.stalactites] =
+        localizations.thPointStalactites;
+    _pointTypeAsString[THPointType.stalactitesStalagmites] =
+        localizations.thPointStalactitesStalagmites;
+    _pointTypeAsString[THPointType.stalactiteStalagmite] =
+        localizations.thPointStalactiteStalagmite;
+    _pointTypeAsString[THPointType.stalagmite] =
+        localizations.thPointStalagmite;
+    _pointTypeAsString[THPointType.stalagmites] =
+        localizations.thPointStalagmites;
+    _pointTypeAsString[THPointType.station] = localizations.thPointStation;
+    _pointTypeAsString[THPointType.stationName] =
+        localizations.thPointStationName;
+    _pointTypeAsString[THPointType.steps] = localizations.thPointSteps;
+    _pointTypeAsString[THPointType.traverse] = localizations.thPointTraverse;
+    _pointTypeAsString[THPointType.treeTrunk] = localizations.thPointTreeTrunk;
+    _pointTypeAsString[THPointType.u] = localizations.thPointU;
+    _pointTypeAsString[THPointType.vegetableDebris] =
+        localizations.thPointVegetableDebris;
+    _pointTypeAsString[THPointType.viaFerrata] =
+        localizations.thPointViaFerrata;
+    _pointTypeAsString[THPointType.volcano] = localizations.thPointVolcano;
+    _pointTypeAsString[THPointType.walkway] = localizations.thPointWalkway;
+    _pointTypeAsString[THPointType.wallCalcite] =
+        localizations.thPointWallCalcite;
+    _pointTypeAsString[THPointType.water] = localizations.thPointWater;
+    _pointTypeAsString[THPointType.waterDrip] = localizations.thPointWaterDrip;
+    _pointTypeAsString[THPointType.waterFlow] = localizations.thPointWaterFlow;
+    _pointTypeAsString[THPointType.wheelchair] =
+        localizations.thPointWheelchair;
+  }
+
+  static String getPointType(THPointType pointType) {
+    return _pointTypeAsString.containsKey(pointType)
+        ? _pointTypeAsString[pointType]!
+        : pointType.name;
   }
 }
