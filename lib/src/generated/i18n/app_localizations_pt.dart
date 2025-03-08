@@ -746,4 +746,157 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thLineWaterFlow => 'Fluxo de Água';
+
+  @override
+  String get thCommandOptionAdjust => 'Ajustar';
+
+  @override
+  String get thCommandOptionAlign => 'Alinhar';
+
+  @override
+  String get thCommandOptionAltitude => 'Altitude';
+
+  @override
+  String get thCommandOptionAltitudeValue => 'Altitude';
+
+  @override
+  String get thCommandOptionAnchors => 'Âncoras';
+
+  @override
+  String get thCommandOptionAuthor => 'Autor';
+
+  @override
+  String get thCommandOptionBorder => 'Borda';
+
+  @override
+  String get thCommandOptionClip => 'Recortar';
+
+  @override
+  String get thCommandOptionClose => 'Fechar';
+
+  @override
+  String get thCommandOptionContext => 'Contexto';
+
+  @override
+  String get thCommandOptionCopyright => 'Direitos Autorais';
+
+  @override
+  String get thCommandOptionCs => 'CS';
+
+  @override
+  String get thCommandOptionDateValue => 'Data';
+
+  @override
+  String get thCommandOptionDimensionsValue => 'Dimensões';
+
+  @override
+  String get thCommandOptionDist => 'Distância';
+
+  @override
+  String get thCommandOptionExplored => 'Explorado';
+
+  @override
+  String get thCommandOptionExtend => 'Estender';
+
+  @override
+  String get thCommandOptionFlip => 'Virar';
+
+  @override
+  String get thCommandOptionFrom => 'De';
+
+  @override
+  String get thCommandOptionHead => 'Cabeça';
+
+  @override
+  String get thCommandOptionId => 'ID';
+
+  @override
+  String get thCommandOptionLineDirection => 'Direção';
+
+  @override
+  String get thCommandOptionLineGradient => 'Gradiente';
+
+  @override
+  String get thCommandOptionLineHeight => 'Altura';
+
+  @override
+  String get thCommandOptionLinePointDirection => 'Direção';
+
+  @override
+  String get thCommandOptionLinePointGradient => 'Gradiente';
+
+  @override
+  String get thCommandOptionLineScale => 'Escala';
+
+  @override
+  String get thCommandOptionLSize => 'Tamanho L';
+
+  @override
+  String get thCommandOptionMark => 'Marca';
+
+  @override
+  String get thCommandOptionName => 'Nome';
+
+  @override
+  String get thCommandOptionOutline => 'Contorno';
+
+  @override
+  String get thCommandOptionOrientation => 'Orientação';
+
+  @override
+  String get thCommandOptionPassageHeightValue => 'Altura da Passagem';
+
+  @override
+  String get thCommandOptionPlace => 'Lugar';
+
+  @override
+  String get thCommandOptionPointHeightValue => 'Altura do Ponto';
+
+  @override
+  String get thCommandOptionPointScale => 'Escala';
+
+  @override
+  String get thCommandOptionProjection => 'Projeção';
+
+  @override
+  String get thCommandOptionRebelays => 'Rebelays';
+
+  @override
+  String get thCommandOptionReverse => 'Reverter';
+
+  @override
+  String get thCommandOptionScrap => 'Sucata';
+
+  @override
+  String get thCommandOptionScrapScale => 'Escala';
+
+  @override
+  String get thCommandOptionSketch => 'Esboço';
+
+  @override
+  String get thCommandOptionSmooth => 'Suavizar';
+
+  @override
+  String get thCommandOptionStationNames => 'Nomes das estações';
+
+  @override
+  String get thCommandOptionStations => 'Estações';
+
+  @override
+  String get thCommandOptionSubtype => 'Subtipo';
+
+  @override
+  String get thCommandOptionText => 'Texto';
+
+  @override
+  String get thCommandOptionTitle => 'Título';
+
+  @override
+  String get thCommandOptionUnrecognizedCommandOption => 'Opção de Comando Não Reconhecida';
+
+  @override
+  String get thCommandOptionVisibility => 'Visibilidade';
+
+  @override
+  String get thCommandOptionWalls => 'Paredes';
 }

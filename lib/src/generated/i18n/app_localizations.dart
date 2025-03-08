@@ -1484,7 +1484,7 @@ abstract class AppLocalizations {
   /// The label for the U line type
   ///
   /// In en, this message translates to:
-  /// **'U'**
+  /// **'Usuário'**
   String get thLineU;
 
   /// The label for the via ferrata line type
@@ -1510,6 +1510,312 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Water Flow'**
   String get thLineWaterFlow;
+
+  /// The label for the adjust command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust'**
+  String get thCommandOptionAdjust;
+
+  /// The label for the align command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Align'**
+  String get thCommandOptionAlign;
+
+  /// The label for the altitude command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get thCommandOptionAltitude;
+
+  /// The label for the altitude value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get thCommandOptionAltitudeValue;
+
+  /// The label for the anchors command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Anchors'**
+  String get thCommandOptionAnchors;
+
+  /// The label for the author command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get thCommandOptionAuthor;
+
+  /// The label for the border command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Border'**
+  String get thCommandOptionBorder;
+
+  /// The label for the clip command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Clip'**
+  String get thCommandOptionClip;
+
+  /// The label for the close command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get thCommandOptionClose;
+
+  /// The label for the context command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Context'**
+  String get thCommandOptionContext;
+
+  /// The label for the copyright command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright'**
+  String get thCommandOptionCopyright;
+
+  /// The label for the CS command option type
+  ///
+  /// In en, this message translates to:
+  /// **'CS'**
+  String get thCommandOptionCs;
+
+  /// The label for the date value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get thCommandOptionDateValue;
+
+  /// The label for the dimensions value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Dimensions'**
+  String get thCommandOptionDimensionsValue;
+
+  /// The label for the dist command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get thCommandOptionDist;
+
+  /// The label for the explored command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Explored'**
+  String get thCommandOptionExplored;
+
+  /// The label for the extend command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Extend'**
+  String get thCommandOptionExtend;
+
+  /// The label for the flip command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Flip'**
+  String get thCommandOptionFlip;
+
+  /// The label for the from command option type
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get thCommandOptionFrom;
+
+  /// The label for the head command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Head'**
+  String get thCommandOptionHead;
+
+  /// The label for the ID command option type
+  ///
+  /// In en, this message translates to:
+  /// **'ID'**
+  String get thCommandOptionId;
+
+  /// The label for the line direction command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Direction'**
+  String get thCommandOptionLineDirection;
+
+  /// The label for the line gradient command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thCommandOptionLineGradient;
+
+  /// The label for the line height command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get thCommandOptionLineHeight;
+
+  /// The label for the line point direction command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Direction'**
+  String get thCommandOptionLinePointDirection;
+
+  /// The label for the line point gradient command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thCommandOptionLinePointGradient;
+
+  /// The label for the line scale command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get thCommandOptionLineScale;
+
+  /// The label for the L size command option type
+  ///
+  /// In en, this message translates to:
+  /// **'L-Size'**
+  String get thCommandOptionLSize;
+
+  /// The label for the mark command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Mark'**
+  String get thCommandOptionMark;
+
+  /// The label for the name command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get thCommandOptionName;
+
+  /// The label for the outline command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Outline'**
+  String get thCommandOptionOutline;
+
+  /// The label for the orientation command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Orientation'**
+  String get thCommandOptionOrientation;
+
+  /// The label for the passage height value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Passage Height'**
+  String get thCommandOptionPassageHeightValue;
+
+  /// The label for the place command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get thCommandOptionPlace;
+
+  /// The label for the point height value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get thCommandOptionPointHeightValue;
+
+  /// The label for the point scale command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get thCommandOptionPointScale;
+
+  /// The label for the projection command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Projection'**
+  String get thCommandOptionProjection;
+
+  /// The label for the rebelays command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Rebelays'**
+  String get thCommandOptionRebelays;
+
+  /// The label for the reverse command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse'**
+  String get thCommandOptionReverse;
+
+  /// The label for the scrap command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap'**
+  String get thCommandOptionScrap;
+
+  /// The label for the scrap scale command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get thCommandOptionScrapScale;
+
+  /// The label for the sketch command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Sketch'**
+  String get thCommandOptionSketch;
+
+  /// The label for the smooth command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Smooth'**
+  String get thCommandOptionSmooth;
+
+  /// The label for the station names command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Station Names'**
+  String get thCommandOptionStationNames;
+
+  /// The label for the stations command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Stations'**
+  String get thCommandOptionStations;
+
+  /// The label for the subtype command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Subtype'**
+  String get thCommandOptionSubtype;
+
+  /// The label for the text command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get thCommandOptionText;
+
+  /// The label for the title command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get thCommandOptionTitle;
+
+  /// The label for the unrecognized command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Unrecognized Command Option'**
+  String get thCommandOptionUnrecognizedCommandOption;
+
+  /// The label for the visibility command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility'**
+  String get thCommandOptionVisibility;
+
+  /// The label for the walls command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Walls'**
+  String get thCommandOptionWalls;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

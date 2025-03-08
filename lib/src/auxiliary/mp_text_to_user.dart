@@ -1,5 +1,6 @@
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -12,7 +13,7 @@ class MPTextToUser {
   static const Map<THElementType, String> _elementTypeAsString = {};
   static const Map<THPointType, String> _pointTypeAsString = {};
   static const Map<THLineType, String> _lineTypeAsString = {};
-  // static const Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
+  static const Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
 
   static void initialize() {
     _initializeCommandTypeAsString();
@@ -20,7 +21,7 @@ class MPTextToUser {
     _initializeElementTypeAsString();
     _initializePointTypeAsString();
     _initializeLineTypeAsString();
-    // _initializeCommandOptionTypeAsString();
+    _initializeCommandOptionTypeAsString();
   }
 
   static void _initializeCommandTypeAsString() {
@@ -355,5 +356,118 @@ class MPTextToUser {
     return _lineTypeAsString.containsKey(lineType)
         ? _lineTypeAsString[lineType]!
         : lineType.name;
+  }
+
+  static void _initializeCommandOptionTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _commandOptionTypeAsString[THCommandOptionType.adjust] =
+        localizations.thCommandOptionAdjust;
+    _commandOptionTypeAsString[THCommandOptionType.align] =
+        localizations.thCommandOptionAlign;
+    _commandOptionTypeAsString[THCommandOptionType.altitude] =
+        localizations.thCommandOptionAltitude;
+    _commandOptionTypeAsString[THCommandOptionType.altitudeValue] =
+        localizations.thCommandOptionAltitudeValue;
+    _commandOptionTypeAsString[THCommandOptionType.anchors] =
+        localizations.thCommandOptionAnchors;
+    _commandOptionTypeAsString[THCommandOptionType.author] =
+        localizations.thCommandOptionAuthor;
+    _commandOptionTypeAsString[THCommandOptionType.border] =
+        localizations.thCommandOptionBorder;
+    _commandOptionTypeAsString[THCommandOptionType.clip] =
+        localizations.thCommandOptionClip;
+    _commandOptionTypeAsString[THCommandOptionType.close] =
+        localizations.thCommandOptionClose;
+    _commandOptionTypeAsString[THCommandOptionType.context] =
+        localizations.thCommandOptionContext;
+    _commandOptionTypeAsString[THCommandOptionType.copyright] =
+        localizations.thCommandOptionCopyright;
+    _commandOptionTypeAsString[THCommandOptionType.cs] =
+        localizations.thCommandOptionCs;
+    _commandOptionTypeAsString[THCommandOptionType.dateValue] =
+        localizations.thCommandOptionDateValue;
+    _commandOptionTypeAsString[THCommandOptionType.dimensionsValue] =
+        localizations.thCommandOptionDimensionsValue;
+    _commandOptionTypeAsString[THCommandOptionType.dist] =
+        localizations.thCommandOptionDist;
+    _commandOptionTypeAsString[THCommandOptionType.explored] =
+        localizations.thCommandOptionExplored;
+    _commandOptionTypeAsString[THCommandOptionType.extend] =
+        localizations.thCommandOptionExtend;
+    _commandOptionTypeAsString[THCommandOptionType.flip] =
+        localizations.thCommandOptionFlip;
+    _commandOptionTypeAsString[THCommandOptionType.from] =
+        localizations.thCommandOptionFrom;
+    _commandOptionTypeAsString[THCommandOptionType.head] =
+        localizations.thCommandOptionHead;
+    _commandOptionTypeAsString[THCommandOptionType.id] =
+        localizations.thCommandOptionId;
+    _commandOptionTypeAsString[THCommandOptionType.lineDirection] =
+        localizations.thCommandOptionLineDirection;
+    _commandOptionTypeAsString[THCommandOptionType.lineGradient] =
+        localizations.thCommandOptionLineGradient;
+    _commandOptionTypeAsString[THCommandOptionType.lineHeight] =
+        localizations.thCommandOptionLineHeight;
+    _commandOptionTypeAsString[THCommandOptionType.linePointDirection] =
+        localizations.thCommandOptionLinePointDirection;
+    _commandOptionTypeAsString[THCommandOptionType.linePointGradient] =
+        localizations.thCommandOptionLinePointGradient;
+    _commandOptionTypeAsString[THCommandOptionType.lineScale] =
+        localizations.thCommandOptionLineScale;
+    _commandOptionTypeAsString[THCommandOptionType.lSize] =
+        localizations.thCommandOptionLSize;
+    _commandOptionTypeAsString[THCommandOptionType.mark] =
+        localizations.thCommandOptionMark;
+    _commandOptionTypeAsString[THCommandOptionType.name] =
+        localizations.thCommandOptionName;
+    _commandOptionTypeAsString[THCommandOptionType.outline] =
+        localizations.thCommandOptionOutline;
+    _commandOptionTypeAsString[THCommandOptionType.orientation] =
+        localizations.thCommandOptionOrientation;
+    _commandOptionTypeAsString[THCommandOptionType.passageHeightValue] =
+        localizations.thCommandOptionPassageHeightValue;
+    _commandOptionTypeAsString[THCommandOptionType.place] =
+        localizations.thCommandOptionPlace;
+    _commandOptionTypeAsString[THCommandOptionType.pointHeightValue] =
+        localizations.thCommandOptionPointHeightValue;
+    _commandOptionTypeAsString[THCommandOptionType.pointScale] =
+        localizations.thCommandOptionPointScale;
+    _commandOptionTypeAsString[THCommandOptionType.projection] =
+        localizations.thCommandOptionProjection;
+    _commandOptionTypeAsString[THCommandOptionType.rebelays] =
+        localizations.thCommandOptionRebelays;
+    _commandOptionTypeAsString[THCommandOptionType.reverse] =
+        localizations.thCommandOptionReverse;
+    _commandOptionTypeAsString[THCommandOptionType.scrap] =
+        localizations.thCommandOptionScrap;
+    _commandOptionTypeAsString[THCommandOptionType.scrapScale] =
+        localizations.thCommandOptionScrapScale;
+    _commandOptionTypeAsString[THCommandOptionType.sketch] =
+        localizations.thCommandOptionSketch;
+    _commandOptionTypeAsString[THCommandOptionType.smooth] =
+        localizations.thCommandOptionSmooth;
+    _commandOptionTypeAsString[THCommandOptionType.stationNames] =
+        localizations.thCommandOptionStationNames;
+    _commandOptionTypeAsString[THCommandOptionType.stations] =
+        localizations.thCommandOptionStations;
+    _commandOptionTypeAsString[THCommandOptionType.subtype] =
+        localizations.thCommandOptionSubtype;
+    _commandOptionTypeAsString[THCommandOptionType.text] =
+        localizations.thCommandOptionText;
+    _commandOptionTypeAsString[THCommandOptionType.title] =
+        localizations.thCommandOptionTitle;
+    _commandOptionTypeAsString[THCommandOptionType.unrecognizedCommandOption] =
+        localizations.thCommandOptionUnrecognizedCommandOption;
+    _commandOptionTypeAsString[THCommandOptionType.visibility] =
+        localizations.thCommandOptionVisibility;
+    _commandOptionTypeAsString[THCommandOptionType.walls] =
+        localizations.thCommandOptionWalls;
+  }
+
+  static String getCommandOptionType(THCommandOptionType commandOptionType) {
+    return _commandOptionTypeAsString.containsKey(commandOptionType)
+        ? _commandOptionTypeAsString[commandOptionType]!
+        : commandOptionType.name;
   }
 }

@@ -1421,7 +1421,7 @@
     "type": "text"
   },
 
-  "thLineU": "U",
+  "thLineU": "Usuário",
   "@thLineU": {
     "description": "The label for the U line type",
     "type": "text"
@@ -1448,6 +1448,312 @@
   "thLineWaterFlow": "Water Flow",
   "@thLineWaterFlow": {
     "description": "The label for the water flow line type",
+    "type": "text"
+  },
+
+  "thCommandOptionAdjust": "Adjust",
+  "@thCommandOptionAdjust": {
+    "description": "The label for the adjust command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionAlign": "Align",
+  "@thCommandOptionAlign": {
+    "description": "The label for the align command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionAltitude": "Altitude",
+  "@thCommandOptionAltitude": {
+    "description": "The label for the altitude command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionAltitudeValue": "Altitude",
+  "@thCommandOptionAltitudeValue": {
+    "description": "The label for the altitude value command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionAnchors": "Anchors",
+  "@thCommandOptionAnchors": {
+    "description": "The label for the anchors command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionAuthor": "Author",
+  "@thCommandOptionAuthor": {
+    "description": "The label for the author command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionBorder": "Border",
+  "@thCommandOptionBorder": {
+    "description": "The label for the border command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionClip": "Clip",
+  "@thCommandOptionClip": {
+    "description": "The label for the clip command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionClose": "Close",
+  "@thCommandOptionClose": {
+    "description": "The label for the close command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionContext": "Context",
+  "@thCommandOptionContext": {
+    "description": "The label for the context command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionCopyright": "Copyright",
+  "@thCommandOptionCopyright": {
+    "description": "The label for the copyright command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionCs": "CS",
+  "@thCommandOptionCs": {
+    "description": "The label for the CS command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionDateValue": "Date",
+  "@thCommandOptionDateValue": {
+    "description": "The label for the date value command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionDimensionsValue": "Dimensions",
+  "@thCommandOptionDimensionsValue": {
+    "description": "The label for the dimensions value command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionDist": "Distance",
+  "@thCommandOptionDist": {
+    "description": "The label for the dist command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionExplored": "Explored",
+  "@thCommandOptionExplored": {
+    "description": "The label for the explored command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionExtend": "Extend",
+  "@thCommandOptionExtend": {
+    "description": "The label for the extend command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionFlip": "Flip",
+  "@thCommandOptionFlip": {
+    "description": "The label for the flip command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionFrom": "From",
+  "@thCommandOptionFrom": {
+    "description": "The label for the from command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionHead": "Head",
+  "@thCommandOptionHead": {
+    "description": "The label for the head command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionId": "ID",
+  "@thCommandOptionId": {
+    "description": "The label for the ID command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLineDirection": "Direction",
+  "@thCommandOptionLineDirection": {
+    "description": "The label for the line direction command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLineGradient": "Gradient",
+  "@thCommandOptionLineGradient": {
+    "description": "The label for the line gradient command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLineHeight": "Height",
+  "@thCommandOptionLineHeight": {
+    "description": "The label for the line height command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLinePointDirection": "Direction",
+  "@thCommandOptionLinePointDirection": {
+    "description": "The label for the line point direction command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLinePointGradient": "Gradient",
+  "@thCommandOptionLinePointGradient": {
+    "description": "The label for the line point gradient command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLineScale": "Scale",
+  "@thCommandOptionLineScale": {
+    "description": "The label for the line scale command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLSize": "L-Size",
+  "@thCommandOptionLSize": {
+    "description": "The label for the L size command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionMark": "Mark",
+  "@thCommandOptionMark": {
+    "description": "The label for the mark command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionName": "Name",
+  "@thCommandOptionName": {
+    "description": "The label for the name command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionOutline": "Outline",
+  "@thCommandOptionOutline": {
+    "description": "The label for the outline command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionOrientation": "Orientation",
+  "@thCommandOptionOrientation": {
+    "description": "The label for the orientation command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionPassageHeightValue": "Passage Height",
+  "@thCommandOptionPassageHeightValue": {
+    "description": "The label for the passage height value command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionPlace": "Place",
+  "@thCommandOptionPlace": {
+    "description": "The label for the place command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionPointHeightValue": "Height",
+  "@thCommandOptionPointHeightValue": {
+    "description": "The label for the point height value command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionPointScale": "Scale",
+  "@thCommandOptionPointScale": {
+    "description": "The label for the point scale command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionProjection": "Projection",
+  "@thCommandOptionProjection": {
+    "description": "The label for the projection command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionRebelays": "Rebelays",
+  "@thCommandOptionRebelays": {
+    "description": "The label for the rebelays command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionReverse": "Reverse",
+  "@thCommandOptionReverse": {
+    "description": "The label for the reverse command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionScrap": "Scrap",
+  "@thCommandOptionScrap": {
+    "description": "The label for the scrap command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionScrapScale": "Scale",
+  "@thCommandOptionScrapScale": {
+    "description": "The label for the scrap scale command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionSketch": "Sketch",
+  "@thCommandOptionSketch": {
+    "description": "The label for the sketch command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionSmooth": "Smooth",
+  "@thCommandOptionSmooth": {
+    "description": "The label for the smooth command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionStationNames": "Station Names",
+  "@thCommandOptionStationNames": {
+    "description": "The label for the station names command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionStations": "Stations",
+  "@thCommandOptionStations": {
+    "description": "The label for the stations command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionSubtype": "Subtype",
+  "@thCommandOptionSubtype": {
+    "description": "The label for the subtype command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionText": "Text",
+  "@thCommandOptionText": {
+    "description": "The label for the text command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionTitle": "Title",
+  "@thCommandOptionTitle": {
+    "description": "The label for the title command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionUnrecognizedCommandOption": "Unrecognized Command Option",
+  "@thCommandOptionUnrecognizedCommandOption": {
+    "description": "The label for the unrecognized command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionVisibility": "Visibility",
+  "@thCommandOptionVisibility": {
+    "description": "The label for the visibility command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionWalls": "Walls",
+  "@thCommandOptionWalls": {
+    "description": "The label for the walls command option type",
     "type": "text"
   }
 }
