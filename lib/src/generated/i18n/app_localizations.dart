@@ -1276,6 +1276,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wheelchair'**
   String get thPointWheelchair;
+
+  /// The label for the abyss entrance line type
+  ///
+  /// In en, this message translates to:
+  /// **'Abyss Entrance'**
+  String get thLineAbyssEntrance;
+
+  /// The label for the arrow line type
+  ///
+  /// In en, this message translates to:
+  /// **'Arrow'**
+  String get thLineArrow;
+
+  /// The label for the border line type
+  ///
+  /// In en, this message translates to:
+  /// **'Border'**
+  String get thLineBorder;
+
+  /// The label for the ceiling meander line type
+  ///
+  /// In en, this message translates to:
+  /// **'Ceiling Meander'**
+  String get thLineCeilingMeander;
+
+  /// The label for the ceiling step line type
+  ///
+  /// In en, this message translates to:
+  /// **'Ceiling Step'**
+  String get thLineCeilingStep;
+
+  /// The label for the chimney line type
+  ///
+  /// In en, this message translates to:
+  /// **'Chimney'**
+  String get thLineChimney;
+
+  /// The label for the contour line type
+  ///
+  /// In en, this message translates to:
+  /// **'Contour'**
+  String get thLineContour;
+
+  /// The label for the dripline line type
+  ///
+  /// In en, this message translates to:
+  /// **'Dripline'**
+  String get thLineDripline;
+
+  /// The label for the fault line type
+  ///
+  /// In en, this message translates to:
+  /// **'Fault'**
+  String get thLineFault;
+
+  /// The label for the fixed ladder line type
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed Ladder'**
+  String get thLineFixedLadder;
+
+  /// The label for the floor meander line type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor Meander'**
+  String get thLineFloorMeander;
+
+  /// The label for the floor step line type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor Step'**
+  String get thLineFloorStep;
+
+  /// The label for the flowstone line type
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone'**
+  String get thLineFlowstone;
+
+  /// The label for the gradient line type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thLineGradient;
+
+  /// The label for the handrail line type
+  ///
+  /// In en, this message translates to:
+  /// **'Handrail'**
+  String get thLineHandrail;
+
+  /// The label for the joint line type
+  ///
+  /// In en, this message translates to:
+  /// **'Joint'**
+  String get thLineJoint;
+
+  /// The label for the label line type
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get thLineLabel;
+
+  /// The label for the low ceiling line type
+  ///
+  /// In en, this message translates to:
+  /// **'Low Ceiling'**
+  String get thLineLowCeiling;
+
+  /// The label for the map connection line type
+  ///
+  /// In en, this message translates to:
+  /// **'Map Connection'**
+  String get thLineMapConnection;
+
+  /// The label for the moonmilk line type
+  ///
+  /// In en, this message translates to:
+  /// **'Moonmilk'**
+  String get thLineMoonmilk;
+
+  /// The label for the overhang line type
+  ///
+  /// In en, this message translates to:
+  /// **'Overhang'**
+  String get thLineOverhang;
+
+  /// The label for the pit line type
+  ///
+  /// In en, this message translates to:
+  /// **'Pit'**
+  String get thLinePit;
+
+  /// The label for the pitch line type
+  ///
+  /// In en, this message translates to:
+  /// **'Pitch'**
+  String get thLinePitch;
+
+  /// The label for the pit chimney line type
+  ///
+  /// In en, this message translates to:
+  /// **'Pit Chimney'**
+  String get thLinePitChimney;
+
+  /// The label for the rimstone dam line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rimstone Dam'**
+  String get thLineRimstoneDam;
+
+  /// The label for the rimstone pool line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rimstone Pool'**
+  String get thLineRimstonePool;
+
+  /// The label for the rock border line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rock Border'**
+  String get thLineRockBorder;
+
+  /// The label for the rock edge line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rock Edge'**
+  String get thLineRockEdge;
+
+  /// The label for the rope line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rope'**
+  String get thLineRope;
+
+  /// The label for the rope ladder line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rope Ladder'**
+  String get thLineRopeLadder;
+
+  /// The label for the section line type
+  ///
+  /// In en, this message translates to:
+  /// **'Section'**
+  String get thLineSection;
+
+  /// The label for the slope line type
+  ///
+  /// In en, this message translates to:
+  /// **'Slope'**
+  String get thLineSlope;
+
+  /// The label for the steps line type
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get thLineSteps;
+
+  /// The label for the survey line type
+  ///
+  /// In en, this message translates to:
+  /// **'Survey'**
+  String get thLineSurvey;
+
+  /// The label for the U line type
+  ///
+  /// In en, this message translates to:
+  /// **'U'**
+  String get thLineU;
+
+  /// The label for the via ferrata line type
+  ///
+  /// In en, this message translates to:
+  /// **'Via Ferrata'**
+  String get thLineViaFerrata;
+
+  /// The label for the walkway line type
+  ///
+  /// In en, this message translates to:
+  /// **'Walkway'**
+  String get thLineWalkWay;
+
+  /// The label for the wall line type
+  ///
+  /// In en, this message translates to:
+  /// **'Wall'**
+  String get thLineWall;
+
+  /// The label for the water flow line type
+  ///
+  /// In en, this message translates to:
+  /// **'Water Flow'**
+  String get thLineWaterFlow;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -2,6 +2,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
@@ -10,7 +11,7 @@ class MPTextToUser {
   static const Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
   static const Map<THElementType, String> _elementTypeAsString = {};
   static const Map<THPointType, String> _pointTypeAsString = {};
-  // static const Map<THLineType, String> _lineTypeAsString = {};
+  static const Map<THLineType, String> _lineTypeAsString = {};
   // static const Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
 
   static void initialize() {
@@ -18,7 +19,7 @@ class MPTextToUser {
     _initializeLengthUnitTypeAsString();
     _initializeElementTypeAsString();
     _initializePointTypeAsString();
-    // _initializeLineTypeAsString();
+    _initializeLineTypeAsString();
     // _initializeCommandOptionTypeAsString();
   }
 
@@ -299,5 +300,60 @@ class MPTextToUser {
     return _pointTypeAsString.containsKey(pointType)
         ? _pointTypeAsString[pointType]!
         : pointType.name;
+  }
+
+  static void _initializeLineTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _lineTypeAsString[THLineType.abyssEntrance] =
+        localizations.thLineAbyssEntrance;
+    _lineTypeAsString[THLineType.arrow] = localizations.thLineArrow;
+    _lineTypeAsString[THLineType.border] = localizations.thLineBorder;
+    _lineTypeAsString[THLineType.ceilingMeander] =
+        localizations.thLineCeilingMeander;
+    _lineTypeAsString[THLineType.ceilingStep] = localizations.thLineCeilingStep;
+    _lineTypeAsString[THLineType.chimney] = localizations.thLineChimney;
+    _lineTypeAsString[THLineType.contour] = localizations.thLineContour;
+    _lineTypeAsString[THLineType.dripline] = localizations.thLineDripline;
+    _lineTypeAsString[THLineType.fault] = localizations.thLineFault;
+    _lineTypeAsString[THLineType.fixedLadder] = localizations.thLineFixedLadder;
+    _lineTypeAsString[THLineType.floorMeander] =
+        localizations.thLineFloorMeander;
+    _lineTypeAsString[THLineType.floorStep] = localizations.thLineFloorStep;
+    _lineTypeAsString[THLineType.flowstone] = localizations.thLineFlowstone;
+    _lineTypeAsString[THLineType.gradient] = localizations.thLineGradient;
+    _lineTypeAsString[THLineType.handrail] = localizations.thLineHandrail;
+    _lineTypeAsString[THLineType.joint] = localizations.thLineJoint;
+    _lineTypeAsString[THLineType.label] = localizations.thLineLabel;
+    _lineTypeAsString[THLineType.lowCeiling] = localizations.thLineLowCeiling;
+    _lineTypeAsString[THLineType.mapConnection] =
+        localizations.thLineMapConnection;
+    _lineTypeAsString[THLineType.moonmilk] = localizations.thLineMoonmilk;
+    _lineTypeAsString[THLineType.overhang] = localizations.thLineOverhang;
+    _lineTypeAsString[THLineType.pit] = localizations.thLinePit;
+    _lineTypeAsString[THLineType.pitch] = localizations.thLinePitch;
+    _lineTypeAsString[THLineType.pitChimney] = localizations.thLinePitChimney;
+    _lineTypeAsString[THLineType.rimstoneDam] = localizations.thLineRimstoneDam;
+    _lineTypeAsString[THLineType.rimstonePool] =
+        localizations.thLineRimstonePool;
+    _lineTypeAsString[THLineType.rockBorder] = localizations.thLineRockBorder;
+    _lineTypeAsString[THLineType.rockEdge] = localizations.thLineRockEdge;
+    _lineTypeAsString[THLineType.rope] = localizations.thLineRope;
+    _lineTypeAsString[THLineType.ropeLadder] = localizations.thLineRopeLadder;
+    _lineTypeAsString[THLineType.section] = localizations.thLineSection;
+    _lineTypeAsString[THLineType.slope] = localizations.thLineSlope;
+    _lineTypeAsString[THLineType.steps] = localizations.thLineSteps;
+    _lineTypeAsString[THLineType.survey] = localizations.thLineSurvey;
+    _lineTypeAsString[THLineType.u] = localizations.thLineU;
+    _lineTypeAsString[THLineType.viaFerrata] = localizations.thLineViaFerrata;
+    _lineTypeAsString[THLineType.walkWay] = localizations.thLineWalkWay;
+    _lineTypeAsString[THLineType.wall] = localizations.thLineWall;
+    _lineTypeAsString[THLineType.waterFlow] = localizations.thLineWaterFlow;
+  }
+
+  static String getLineType(THLineType lineType) {
+    return _lineTypeAsString.containsKey(lineType)
+        ? _lineTypeAsString[lineType]!
+        : lineType.name;
   }
 }

@@ -1215,5 +1215,239 @@
   "@thPointWheelchair": {
     "description": "The label for the wheelchair point type",
     "type": "text"
+  },
+
+  "thLineAbyssEntrance": "Abyss Entrance",
+  "@thLineAbyssEntrance": {
+    "description": "The label for the abyss entrance line type",
+    "type": "text"
+  },
+
+  "thLineArrow": "Arrow",
+  "@thLineArrow": {
+    "description": "The label for the arrow line type",
+    "type": "text"
+  },
+
+  "thLineBorder": "Border",
+  "@thLineBorder": {
+    "description": "The label for the border line type",
+    "type": "text"
+  },
+
+  "thLineCeilingMeander": "Ceiling Meander",
+  "@thLineCeilingMeander": {
+    "description": "The label for the ceiling meander line type",
+    "type": "text"
+  },
+
+  "thLineCeilingStep": "Ceiling Step",
+  "@thLineCeilingStep": {
+    "description": "The label for the ceiling step line type",
+    "type": "text"
+  },
+
+  "thLineChimney": "Chimney",
+  "@thLineChimney": {
+    "description": "The label for the chimney line type",
+    "type": "text"
+  },
+
+  "thLineContour": "Contour",
+  "@thLineContour": {
+    "description": "The label for the contour line type",
+    "type": "text"
+  },
+
+  "thLineDripline": "Dripline",
+  "@thLineDripline": {
+    "description": "The label for the dripline line type",
+    "type": "text"
+  },
+
+  "thLineFault": "Fault",
+  "@thLineFault": {
+    "description": "The label for the fault line type",
+    "type": "text"
+  },
+
+  "thLineFixedLadder": "Fixed Ladder",
+  "@thLineFixedLadder": {
+    "description": "The label for the fixed ladder line type",
+    "type": "text"
+  },
+
+  "thLineFloorMeander": "Floor Meander",
+  "@thLineFloorMeander": {
+    "description": "The label for the floor meander line type",
+    "type": "text"
+  },
+
+  "thLineFloorStep": "Floor Step",
+  "@thLineFloorStep": {
+    "description": "The label for the floor step line type",
+    "type": "text"
+  },
+
+  "thLineFlowstone": "Flowstone",
+  "@thLineFlowstone": {
+    "description": "The label for the flowstone line type",
+    "type": "text"
+  },
+
+  "thLineGradient": "Gradient",
+  "@thLineGradient": {
+    "description": "The label for the gradient line type",
+    "type": "text"
+  },
+
+  "thLineHandrail": "Handrail",
+  "@thLineHandrail": {
+    "description": "The label for the handrail line type",
+    "type": "text"
+  },
+
+  "thLineJoint": "Joint",
+  "@thLineJoint": {
+    "description": "The label for the joint line type",
+    "type": "text"
+  },
+
+  "thLineLabel": "Label",
+  "@thLineLabel": {
+    "description": "The label for the label line type",
+    "type": "text"
+  },
+
+  "thLineLowCeiling": "Low Ceiling",
+  "@thLineLowCeiling": {
+    "description": "The label for the low ceiling line type",
+    "type": "text"
+  },
+
+  "thLineMapConnection": "Map Connection",
+  "@thLineMapConnection": {
+    "description": "The label for the map connection line type",
+    "type": "text"
+  },
+
+  "thLineMoonmilk": "Moonmilk",
+  "@thLineMoonmilk": {
+    "description": "The label for the moonmilk line type",
+    "type": "text"
+  },
+
+  "thLineOverhang": "Overhang",
+  "@thLineOverhang": {
+    "description": "The label for the overhang line type",
+    "type": "text"
+  },
+
+  "thLinePit": "Pit",
+  "@thLinePit": {
+    "description": "The label for the pit line type",
+    "type": "text"
+  },
+
+  "thLinePitch": "Pitch",
+  "@thLinePitch": {
+    "description": "The label for the pitch line type",
+    "type": "text"
+  },
+
+  "thLinePitChimney": "Pit Chimney",
+  "@thLinePitChimney": {
+    "description": "The label for the pit chimney line type",
+    "type": "text"
+  },
+
+  "thLineRimstoneDam": "Rimstone Dam",
+  "@thLineRimstoneDam": {
+    "description": "The label for the rimstone dam line type",
+    "type": "text"
+  },
+
+  "thLineRimstonePool": "Rimstone Pool",
+  "@thLineRimstonePool": {
+    "description": "The label for the rimstone pool line type",
+    "type": "text"
+  },
+
+  "thLineRockBorder": "Rock Border",
+  "@thLineRockBorder": {
+    "description": "The label for the rock border line type",
+    "type": "text"
+  },
+
+  "thLineRockEdge": "Rock Edge",
+  "@thLineRockEdge": {
+    "description": "The label for the rock edge line type",
+    "type": "text"
+  },
+
+  "thLineRope": "Rope",
+  "@thLineRope": {
+    "description": "The label for the rope line type",
+    "type": "text"
+  },
+
+  "thLineRopeLadder": "Rope Ladder",
+  "@thLineRopeLadder": {
+    "description": "The label for the rope ladder line type",
+    "type": "text"
+  },
+
+  "thLineSection": "Section",
+  "@thLineSection": {
+    "description": "The label for the section line type",
+    "type": "text"
+  },
+
+  "thLineSlope": "Slope",
+  "@thLineSlope": {
+    "description": "The label for the slope line type",
+    "type": "text"
+  },
+
+  "thLineSteps": "Steps",
+  "@thLineSteps": {
+    "description": "The label for the steps line type",
+    "type": "text"
+  },
+
+  "thLineSurvey": "Survey",
+  "@thLineSurvey": {
+    "description": "The label for the survey line type",
+    "type": "text"
+  },
+
+  "thLineU": "U",
+  "@thLineU": {
+    "description": "The label for the U line type",
+    "type": "text"
+  },
+
+  "thLineViaFerrata": "Via Ferrata",
+  "@thLineViaFerrata": {
+    "description": "The label for the via ferrata line type",
+    "type": "text"
+  },
+
+  "thLineWalkWay": "Walkway",
+  "@thLineWalkWay": {
+    "description": "The label for the walkway line type",
+    "type": "text"
+  },
+
+  "thLineWall": "Wall",
+  "@thLineWall": {
+    "description": "The label for the wall line type",
+    "type": "text"
+  },
+
+  "thLineWaterFlow": "Water Flow",
+  "@thLineWaterFlow": {
+    "description": "The label for the water flow line type",
+    "type": "text"
   }
 }

@@ -629,4 +629,121 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thPointWheelchair => 'Wheelchair';
+
+  @override
+  String get thLineAbyssEntrance => 'Abyss Entrance';
+
+  @override
+  String get thLineArrow => 'Arrow';
+
+  @override
+  String get thLineBorder => 'Border';
+
+  @override
+  String get thLineCeilingMeander => 'Ceiling Meander';
+
+  @override
+  String get thLineCeilingStep => 'Ceiling Step';
+
+  @override
+  String get thLineChimney => 'Chimney';
+
+  @override
+  String get thLineContour => 'Contour';
+
+  @override
+  String get thLineDripline => 'Dripline';
+
+  @override
+  String get thLineFault => 'Fault';
+
+  @override
+  String get thLineFixedLadder => 'Fixed Ladder';
+
+  @override
+  String get thLineFloorMeander => 'Floor Meander';
+
+  @override
+  String get thLineFloorStep => 'Floor Step';
+
+  @override
+  String get thLineFlowstone => 'Flowstone';
+
+  @override
+  String get thLineGradient => 'Gradient';
+
+  @override
+  String get thLineHandrail => 'Handrail';
+
+  @override
+  String get thLineJoint => 'Joint';
+
+  @override
+  String get thLineLabel => 'Label';
+
+  @override
+  String get thLineLowCeiling => 'Low Ceiling';
+
+  @override
+  String get thLineMapConnection => 'Map Connection';
+
+  @override
+  String get thLineMoonmilk => 'Moonmilk';
+
+  @override
+  String get thLineOverhang => 'Overhang';
+
+  @override
+  String get thLinePit => 'Pit';
+
+  @override
+  String get thLinePitch => 'Pitch';
+
+  @override
+  String get thLinePitChimney => 'Pit Chimney';
+
+  @override
+  String get thLineRimstoneDam => 'Rimstone Dam';
+
+  @override
+  String get thLineRimstonePool => 'Rimstone Pool';
+
+  @override
+  String get thLineRockBorder => 'Rock Border';
+
+  @override
+  String get thLineRockEdge => 'Rock Edge';
+
+  @override
+  String get thLineRope => 'Rope';
+
+  @override
+  String get thLineRopeLadder => 'Rope Ladder';
+
+  @override
+  String get thLineSection => 'Section';
+
+  @override
+  String get thLineSlope => 'Slope';
+
+  @override
+  String get thLineSteps => 'Steps';
+
+  @override
+  String get thLineSurvey => 'Survey';
+
+  @override
+  String get thLineU => 'U';
+
+  @override
+  String get thLineViaFerrata => 'Via Ferrata';
+
+  @override
+  String get thLineWalkWay => 'Walkway';
+
+  @override
+  String get thLineWall => 'Wall';
+
+  @override
+  String get thLineWaterFlow => 'Water Flow';
 }

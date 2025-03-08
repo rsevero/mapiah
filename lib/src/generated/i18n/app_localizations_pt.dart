@@ -601,7 +601,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointTreeTrunk => 'Tronco de árvore';
 
   @override
-  String get thPointU => 'U';
+  String get thPointU => 'Usuário';
 
   @override
   String get thPointVegetableDebris => 'Detritos vegetais';
@@ -629,4 +629,121 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thPointWheelchair => 'Cadeira de rodas';
+
+  @override
+  String get thLineAbyssEntrance => 'Entrada do Abismo';
+
+  @override
+  String get thLineArrow => 'Seta';
+
+  @override
+  String get thLineBorder => 'Borda';
+
+  @override
+  String get thLineCeilingMeander => 'Meandro do Teto';
+
+  @override
+  String get thLineCeilingStep => 'Degrau do Teto';
+
+  @override
+  String get thLineChimney => 'Chaminé';
+
+  @override
+  String get thLineContour => 'Contorno';
+
+  @override
+  String get thLineDripline => 'Linha de Gotejamento';
+
+  @override
+  String get thLineFault => 'Falha';
+
+  @override
+  String get thLineFixedLadder => 'Escada Fixa';
+
+  @override
+  String get thLineFloorMeander => 'Meandro do Piso';
+
+  @override
+  String get thLineFloorStep => 'Degrau do Piso';
+
+  @override
+  String get thLineFlowstone => 'Travertino';
+
+  @override
+  String get thLineGradient => 'Gradiente';
+
+  @override
+  String get thLineHandrail => 'Corrimão';
+
+  @override
+  String get thLineJoint => 'Junta';
+
+  @override
+  String get thLineLabel => 'Rótulo';
+
+  @override
+  String get thLineLowCeiling => 'Teto Baixo';
+
+  @override
+  String get thLineMapConnection => 'Conexão de Mapa';
+
+  @override
+  String get thLineMoonmilk => 'Leite de Lua';
+
+  @override
+  String get thLineOverhang => 'Saliente';
+
+  @override
+  String get thLinePit => 'Poço';
+
+  @override
+  String get thLinePitch => 'Lance';
+
+  @override
+  String get thLinePitChimney => 'Chaminé do Poço';
+
+  @override
+  String get thLineRimstoneDam => 'Dique de Travertino';
+
+  @override
+  String get thLineRimstonePool => 'Piscina de Travertino';
+
+  @override
+  String get thLineRockBorder => 'Borda de Rocha';
+
+  @override
+  String get thLineRockEdge => 'Borda de Rocha';
+
+  @override
+  String get thLineRope => 'Corda';
+
+  @override
+  String get thLineRopeLadder => 'Escada de Corda';
+
+  @override
+  String get thLineSection => 'Seção';
+
+  @override
+  String get thLineSlope => 'Declive';
+
+  @override
+  String get thLineSteps => 'Degraus';
+
+  @override
+  String get thLineSurvey => 'Levantamento';
+
+  @override
+  String get thLineU => 'Usuário';
+
+  @override
+  String get thLineViaFerrata => 'Via Ferrata';
+
+  @override
+  String get thLineWalkWay => 'Passarela';
+
+  @override
+  String get thLineWall => 'Parede';
+
+  @override
+  String get thLineWaterFlow => 'Fluxo de Água';
 }
