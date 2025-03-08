@@ -35,7 +35,7 @@ class THFileWidget extends StatelessWidget {
 
         return MPListenerWidget(
           key: ValueKey("MPListenerWidget|$thFileMapiahID"),
-          actuator: th2FileEditController,
+          actuator: th2FileEditController.stateController,
           child: Stack(
             children: [
               MPNonSelectedElementsWidget(

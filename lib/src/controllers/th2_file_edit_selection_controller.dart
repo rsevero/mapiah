@@ -961,14 +961,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   bool setSelectionState() {
     if (_selectedElements.isEmpty) {
-      return _th2FileEditController
+      return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.selectEmptySelection);
     } else if ((_selectedElements.length == 1) &&
         (_selectedElements.values.first is MPSelectedLine)) {
-      return _th2FileEditController
+      return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.editSingleLine);
     } else {
-      return _th2FileEditController
+      return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.selectNonEmptySelection);
     }
   }

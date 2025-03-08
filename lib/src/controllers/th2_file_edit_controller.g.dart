@@ -501,28 +501,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_stateAtom =
-      Atom(name: 'TH2FileEditControllerBase._state', context: context);
-
-  MPTH2FileEditState get state {
-    _$_stateAtom.reportRead();
-    return super._state;
-  }
-
-  @override
-  MPTH2FileEditState get _state => state;
-
-  bool __stateIsInitialized = false;
-
-  @override
-  set _state(MPTH2FileEditState value) {
-    _$_stateAtom.reportWrite(value, __stateIsInitialized ? super._state : null,
-        () {
-      super._state = value;
-      __stateIsInitialized = true;
-    });
-  }
-
   late final _$_activeScrapIDAtom =
       Atom(name: 'TH2FileEditControllerBase._activeScrapID', context: context);
 
@@ -884,17 +862,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setStatusBarMessage');
     try {
       return super.setStatusBarMessage(message);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  bool setState(MPTH2FileEditStateType type) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setState');
-    try {
-      return super.setState(type);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

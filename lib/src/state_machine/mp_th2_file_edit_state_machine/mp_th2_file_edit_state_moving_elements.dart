@@ -59,7 +59,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         selectionController.clearSelectedElements();
-        fileEditController
+        fileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }

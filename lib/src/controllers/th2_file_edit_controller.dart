@@ -2,9 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -12,6 +10,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_add_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/controllers/types/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/th_point_paint.dart';
@@ -25,7 +24,6 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
-import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -34,11 +32,10 @@ part 'th2_file_edit_controller.g.dart';
 class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
-abstract class TH2FileEditControllerBase
-    with Store
-    implements MPActuatorInterface {
+abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditAddElementController addElementController;
   late final TH2FileEditSelectionController selectionController;
+  late final TH2FileEditStateController stateController;
 
   // 'screen' is related to actual pixels on the screen.
   // 'canvas' is the virtual canvas used to draw.
@@ -85,20 +82,31 @@ abstract class TH2FileEditControllerBase
   }
 
   @computed
-  bool get isAddElementMode => ((_state is MPTH2FileEditStateAddArea) ||
-      (_state is MPTH2FileEditStateAddLine) ||
-      (_state is MPTH2FileEditStateAddPoint));
+  bool get isAddElementMode {
+    final MPTH2FileEditState state = stateController.state;
+
+    return ((state is MPTH2FileEditStateAddArea) ||
+        (state is MPTH2FileEditStateAddLine) ||
+        (state is MPTH2FileEditStateAddPoint));
+  }
 
   @computed
-  bool get isEditLineMode =>
-      (_state is MPTH2FileEditStateEditSingleLine) ||
-      (_state is MPTH2FileEditStateMovingEndControlPoints) ||
-      (_state is MPTH2FileEditStateMovingSingleControlPoint);
+  bool get isEditLineMode {
+    final MPTH2FileEditState state = stateController.state;
+
+    return (state is MPTH2FileEditStateEditSingleLine) ||
+        (state is MPTH2FileEditStateMovingEndControlPoints) ||
+        (state is MPTH2FileEditStateMovingSingleControlPoint);
+  }
 
   @computed
-  bool get isSelectMode => (_state is MPTH2FileEditStateSelectEmptySelection ||
-      (_state is MPTH2FileEditStateSelectNonEmptySelection) ||
-      _state is MPTH2FileEditStateMovingElements);
+  bool get isSelectMode {
+    final MPTH2FileEditState state = stateController.state;
+
+    return (state is MPTH2FileEditStateSelectEmptySelection ||
+        (state is MPTH2FileEditStateSelectNonEmptySelection) ||
+        state is MPTH2FileEditStateMovingElements);
+  }
 
   @readonly
   bool _hasUndo = false;
@@ -120,7 +128,7 @@ abstract class TH2FileEditControllerBase
 
   @computed
   MPButtonType get activeAddElementButton {
-    switch (_state) {
+    switch (stateController.state) {
       case MPTH2FileEditStateAddPoint _:
         return MPButtonType.addPoint;
       case MPTH2FileEditStateAddLine _:
@@ -134,9 +142,6 @@ abstract class TH2FileEditControllerBase
 
   @readonly
   int _currentDecimalPositions = thDefaultDecimalPositions;
-
-  @readonly
-  late MPTH2FileEditState _state;
 
   @readonly
   int _activeScrapID = 0;
@@ -222,9 +227,12 @@ abstract class TH2FileEditControllerBase
         ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
 
   @computed
-  bool get showDeleteButton =>
-      ((_state is MPTH2FileEditStateSelectEmptySelection) ||
-          (_state is MPTH2FileEditStateSelectNonEmptySelection));
+  bool get showDeleteButton {
+    final MPTH2FileEditState state = stateController.state;
+
+    return ((state is MPTH2FileEditStateSelectEmptySelection) ||
+        (state is MPTH2FileEditStateSelectNonEmptySelection));
+  }
 
   @computed
   bool get showEditLineSegment => isEditLineMode;
@@ -369,11 +377,8 @@ abstract class TH2FileEditControllerBase
         TH2FileEditAddElementController(this as TH2FileEditController);
     selectionController =
         TH2FileEditSelectionController(this as TH2FileEditController);
+    stateController = TH2FileEditStateController(this as TH2FileEditController);
     _thFileMapiahID = _thFile.mapiahID;
-    _state = MPTH2FileEditState.getState(
-      type: MPTH2FileEditStateType.selectEmptySelection,
-      thFileEditController: this as TH2FileEditController,
-    );
     _undoRedoController = MPUndoRedoController(this as TH2FileEditController);
   }
 
@@ -424,90 +429,6 @@ abstract class TH2FileEditControllerBase
     _statusBarMessage = message;
   }
 
-  @override
-  void onPrimaryButtonDragStart(PointerDownEvent event) {
-    _state.onPrimaryButtonDragStart(event);
-  }
-
-  @override
-  void onSecondaryButtonDragStart(PointerDownEvent event) {
-    _state.onSecondaryButtonDragStart(event);
-  }
-
-  @override
-  void onTertiaryButtonDragStart(PointerDownEvent event) {
-    _state.onTertiaryButtonDragStart(event);
-  }
-
-  @override
-  void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    _state.onPrimaryButtonDragUpdate(event);
-  }
-
-  @override
-  void onSecondaryButtonDragUpdate(PointerMoveEvent event) {
-    _state.onSecondaryButtonDragUpdate(event);
-  }
-
-  @override
-  void onTertiaryButtonDragUpdate(PointerMoveEvent event) {
-    _state.onTertiaryButtonDragUpdate(event);
-  }
-
-  @override
-  void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    _state.onPrimaryButtonDragEnd(event);
-  }
-
-  @override
-  void onSecondaryButtonDragEnd(PointerUpEvent event) {
-    _state.onSecondaryButtonDragEnd(event);
-  }
-
-  @override
-  void onTertiaryButtonDragEnd(PointerUpEvent event) {
-    _state.onTertiaryButtonDragEnd(event);
-  }
-
-  @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
-    _state.onPrimaryButtonClick(event);
-  }
-
-  @override
-  void onSecondaryButtonClick(PointerUpEvent event) {
-    _state.onSecondaryButtonClick(event);
-  }
-
-  @override
-  void onTertiaryButtonClick(PointerUpEvent event) {
-    _state.onTertiaryButtonClick(event);
-  }
-
-  @override
-  void onTertiaryButtonScroll(PointerScrollEvent event) {
-    _state.onTertiaryButtonScroll(event);
-  }
-
-  @override
-  void onKeyDownEvent(KeyDownEvent event) {
-    _state.onKeyDownEvent(event);
-  }
-
-  @override
-  void onKeyRepeatEvent(KeyRepeatEvent event) {
-    _state.onKeyRepeatEvent(event);
-  }
-
-  @override
-  void onKeyUpEvent(KeyUpEvent event) {
-    _state.onKeyUpEvent(event);
-  }
-
-  void onButtonPressed(MPButtonType buttonType) {
-    _state.onButtonPressed(buttonType);
-  }
-
   int getNextAvailableScrapID() {
     final List<int> scrapIDs = _thFile.scrapMapiahIDs.toList();
     final int currentIndex = scrapIDs.indexOf(_activeScrapID);
@@ -519,28 +440,6 @@ abstract class TH2FileEditControllerBase
     final int nextIndex = (currentIndex + 1) % scrapIDs.length;
 
     return scrapIDs[nextIndex];
-  }
-
-  @action
-  bool setState(MPTH2FileEditStateType type) {
-    if (_state.type == type) {
-      return false;
-    }
-
-    final MPTH2FileEditState previousState = _state;
-
-    _state = MPTH2FileEditState.getState(
-      type: type,
-      thFileEditController: this as TH2FileEditController,
-    );
-
-    previousState.onStateExit(_state);
-
-    _state.onStateEnter(previousState);
-    _state.setCursor();
-    _state.setStatusBarMessage();
-
-    return true;
   }
 
   List<THLineSegment> getLineSegmentsList({

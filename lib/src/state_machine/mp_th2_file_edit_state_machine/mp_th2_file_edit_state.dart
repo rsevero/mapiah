@@ -133,13 +133,16 @@ abstract class MPTH2FileEditState {
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
       case MPButtonType.addArea:
-        fileEditController.setState(MPTH2FileEditStateType.addArea);
+        fileEditController.stateController
+            .setState(MPTH2FileEditStateType.addArea);
         return true;
       case MPButtonType.addLine:
-        fileEditController.setState(MPTH2FileEditStateType.addLine);
+        fileEditController.stateController
+            .setState(MPTH2FileEditStateType.addLine);
         return true;
       case MPButtonType.addPoint:
-        fileEditController.setState(MPTH2FileEditStateType.addPoint);
+        fileEditController.stateController
+            .setState(MPTH2FileEditStateType.addPoint);
         return true;
       case MPButtonType.changeScrap:
         fileEditController.toggleToNextAvailableScrap();

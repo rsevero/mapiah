@@ -253,15 +253,15 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void onDeletePressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.delete);
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.delete);
   }
 
   void onUndoPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.undo);
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.undo);
   }
 
   void onRedoPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.redo);
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.redo);
   }
 
   Widget _generalActionButtons() {
@@ -393,7 +393,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void _onAddElementButtonPressed(MPButtonType type) {
-    th2FileEditController.onButtonPressed(type);
+    th2FileEditController.stateController.onButtonPressed(type);
   }
 
   List<Widget> _changeScrapButton() {
@@ -499,11 +499,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void _onChangeActiveScrapToolPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.changeScrap);
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.changeScrap);
   }
 
   void _onSelectToolPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.select);
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.select);
   }
 
   Widget _zoomButtonWithOptions() {
@@ -628,26 +629,30 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void zoomInPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.zoomIn);
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.zoomIn);
   }
 
   void zoomAllFilePressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.zoomAllFile);
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.zoomAllFile);
   }
 
   void zoomAllScrapPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.zoomAllScrap);
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.zoomAllScrap);
   }
 
   void zoomOutPressed() {
-    th2FileEditController.onButtonPressed(MPButtonType.zoomOut);
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.zoomOut);
   }
 
   void zoomOneToOne() {
-    th2FileEditController.onButtonPressed(MPButtonType.zoomOneToOne);
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.zoomOneToOne);
   }
 
   void zoomSelection() {
-    th2FileEditController.onButtonPressed(MPButtonType.zoomSelection);
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.zoomSelection);
   }
 }

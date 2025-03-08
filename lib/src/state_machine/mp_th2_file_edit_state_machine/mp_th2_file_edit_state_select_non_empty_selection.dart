@@ -69,7 +69,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         selectionController.clearSelectedElements();
-        fileEditController
+        fileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
@@ -112,7 +112,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         if (!alreadySelected) {
           selectionController.setSelectedElements(newlySelectedElements);
         }
-        fileEditController.setState(MPTH2FileEditStateType.movingElements);
+        fileEditController.stateController
+            .setState(MPTH2FileEditStateType.movingElements);
       }
     }
   }
@@ -157,7 +158,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     } else {
       if (elementsInsideSelectionWindow.isEmpty) {
         selectionController.clearSelectedElements();
-        fileEditController
+        fileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       } else {
         final stateChanged = selectionController.setSelectedElements(
