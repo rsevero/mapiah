@@ -142,7 +142,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                 null,
           );
       }
-    } else {}
+    } else {
+      final List<int> selectedMapiahIDs = _selectedElements.keys.toList();
+
+      mpCommand = MPDeleteElementsCommand(
+        mapiahIDs: selectedMapiahIDs,
+      );
+    }
 
     _th2FileEditController.execute(mpCommand);
     clearSelectedElements();

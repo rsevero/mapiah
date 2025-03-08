@@ -32,23 +32,20 @@ class MPDeleteElementsCommand extends MPCommand {
 
       switch (element) {
         case THLine _:
-          final MPDeleteLineCommand mpCommand = MPDeleteLineCommand(
-            lineMapiahID: element.mapiahID,
-            isInteractiveLineCreation: false,
-          );
-          final MPUndoRedoCommand undoRedoCommand =
-              mpCommand._createOppositeCommand(th2FileEditController);
+          final List<THElement> lineChildren = [];
+          final Set<int> childMapiahIDs = element.childrenMapiahID;
+
+          for (final int childMapiahID in childMapiahIDs) {
+            lineChildren
+                .add(thFile.elementByMapiahID(childMapiahID).copyWith());
+          }
 
           oppositeParams = MPAddLineCommandParams(
-            line: element,
-            lineChildren: (undoRedoCommand.command.oppositeCommand!.command
-                    as MPAddLineCommand)
-                .lineChildren,
+            line: element.copyWith(),
+            lineChildren: lineChildren,
           );
-          break;
         case THPoint _:
-          oppositeParams = MPAddPointCommandParams(point: element);
-          break;
+          oppositeParams = MPAddPointCommandParams(point: element.copyWith());
       }
       oppositeParamsList.add(oppositeParams);
     }
@@ -80,7 +77,7 @@ class MPDeleteElementsCommand extends MPCommand {
 
   factory MPDeleteElementsCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteElementsCommand.forCWJM(
-      mapiahIDs: List<int>.from(map['pointMapiahID']),
+      mapiahIDs: List<int>.from(map['mapiahIDs']),
       oppositeCommand: map['oppositeCommand'] == null
           ? null
           : MPUndoRedoCommand.fromMap(map['oppositeCommand']),

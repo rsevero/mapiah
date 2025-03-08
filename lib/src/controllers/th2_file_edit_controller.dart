@@ -1128,7 +1128,6 @@ abstract class TH2FileEditControllerBase
     selectionController.removeSelectedElement(element);
   }
 
-  @action
   void deleteElementByMapiahID(int mapiahID) {
     final THElement element = _thFile.elementByMapiahID(mapiahID);
 

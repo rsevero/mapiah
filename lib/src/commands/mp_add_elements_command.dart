@@ -15,7 +15,24 @@ class MPAddElementsCommand extends MPCommand {
   }) : super();
 
   @override
-  void _actualExecute(TH2FileEditController th2FileEditController) {}
+  void _actualExecute(TH2FileEditController th2FileEditController) {
+    final TH2FileEditAddElementController addElementController =
+        th2FileEditController.addElementController;
+
+    for (final MPAddElementCommandParams params in createParams) {
+      switch (params) {
+        case MPAddLineCommandParams _:
+          addElementController.addLine(
+            newLine: params.line,
+            lineChildren: params.lineChildren,
+          );
+        case MPAddPointCommandParams _:
+          th2FileEditController.addElement(newElement: params.point);
+      }
+    }
+
+    th2FileEditController.triggerAllElementsRedraw();
+  }
 
   @override
   MPUndoRedoCommand _createOppositeCommand(
@@ -23,14 +40,12 @@ class MPAddElementsCommand extends MPCommand {
   ) {
     final List<int> mapiahIDs = [];
 
-    for (final params in createParams) {
+    for (final MPAddElementCommandParams params in createParams) {
       switch (params) {
         case MPAddLineCommandParams _:
           mapiahIDs.add(params.line.mapiahID);
-          break;
         case MPAddPointCommandParams _:
           mapiahIDs.add(params.point.mapiahID);
-          break;
       }
     }
 

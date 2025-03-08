@@ -1199,17 +1199,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void deleteElementByMapiahID(int mapiahID) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.deleteElementByMapiahID');
-    try {
-      return super.deleteElementByMapiahID(mapiahID);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void deleteElementByTHID(String thID) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.deleteElementByTHID');
