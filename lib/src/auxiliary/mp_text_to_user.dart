@@ -28,37 +28,37 @@ class MPTextToUser {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
     _commandTypeAsString[MPCommandDescriptionType.addElements] =
-        localizations.mpAddElementsCommandDescription;
+        localizations.mpCommandDescriptionAddElements;
     _commandTypeAsString[MPCommandDescriptionType.addLine] =
-        localizations.mpAddLineCommandDescription;
+        localizations.mpCommandDescriptionAddLine;
     _commandTypeAsString[MPCommandDescriptionType.addLineSegment] =
-        localizations.mpAddLineSegmentCommandDescription;
+        localizations.mpCommandDescriptionAddLineSegment;
     _commandTypeAsString[MPCommandDescriptionType.addPoint] =
-        localizations.mpAddPointCommandDescription;
+        localizations.mpCommandDescriptionAddPoint;
     _commandTypeAsString[MPCommandDescriptionType.deleteElements] =
-        localizations.mpDeleteElementsCommandDescription;
+        localizations.mpCommandDescriptionDeleteElements;
     _commandTypeAsString[MPCommandDescriptionType.deleteLine] =
-        localizations.mpDeleteLineSegmentCommandDescription;
+        localizations.mpCommandDescriptionDeleteLineSegment;
     _commandTypeAsString[MPCommandDescriptionType.deleteLineSegment] =
-        localizations.mpDeleteLineCommandDescription;
+        localizations.mpCommandDescriptionDeleteLine;
     _commandTypeAsString[MPCommandDescriptionType.deletePoint] =
-        localizations.mpDeletePointCommandDescription;
+        localizations.mpCommandDescriptionDeletePoint;
     _commandTypeAsString[MPCommandDescriptionType.editBezierCurve] =
-        localizations.mpEditBezierCurveCommandDescription;
+        localizations.mpCommandDescriptionEditBezierCurve;
     _commandTypeAsString[MPCommandDescriptionType.editLine] =
-        localizations.mpEditLineCommandDescription;
+        localizations.mpCommandDescriptionEditLine;
     _commandTypeAsString[MPCommandDescriptionType.editLineSegment] =
-        localizations.mpEditLineSegmentCommandDescription;
+        localizations.mpCommandDescriptionEditLineSegment;
     _commandTypeAsString[MPCommandDescriptionType.moveBezierLineSegment] =
-        localizations.mpMoveBezierLineSegmentCommandDescription;
+        localizations.mpCommandDescriptionMoveBezierLineSegment;
     _commandTypeAsString[MPCommandDescriptionType.moveElements] =
-        localizations.mpMoveElementsCommandDescription;
+        localizations.mpCommandDescriptionMoveElements;
     _commandTypeAsString[MPCommandDescriptionType.moveLine] =
-        localizations.mpMoveLineCommandDescription;
+        localizations.mpCommandDescriptionMoveLine;
     _commandTypeAsString[MPCommandDescriptionType.movePoint] =
-        localizations.mpMovePointCommandDescription;
+        localizations.mpCommandDescriptionMovePoint;
     _commandTypeAsString[MPCommandDescriptionType.moveStraightLineSegment] =
-        localizations.mpMoveStraightLineSegmentCommandDescription;
+        localizations.mpCommandDescriptionMoveStraightLineSegment;
   }
 
   static String getCommandDescription(MPCommandDescriptionType commandType) {

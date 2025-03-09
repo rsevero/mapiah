@@ -52,37 +52,57 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get mpAddElementsCommandDescription => 'Adicionar elementos';
+  String get mpCommandDescriptionAddElements => 'Adicionar elementos';
 
   @override
-  String get mpAddLineCommandDescription => 'Adicionar linha';
+  String get mpCommandDescriptionAddLine => 'Adicionar linha';
 
   @override
-  String get mpAddLineSegmentCommandDescription => 'Adicionar segmento de linha';
+  String get mpCommandDescriptionAddLineSegment => 'Adicionar segmento de linha';
 
   @override
-  String get mpAddPointCommandDescription => 'Adicionar ponto';
+  String get mpCommandDescriptionAddPoint => 'Adicionar ponto';
 
   @override
-  String get mpDeleteElementsCommandDescription => 'Apagar elementos';
+  String get mpCommandDescriptionDeleteElements => 'Apagar elementos';
 
   @override
-  String get mpDeleteLineCommandDescription => 'Apagar linha';
+  String get mpCommandDescriptionDeleteLine => 'Apagar linha';
 
   @override
-  String get mpDeleteLineSegmentCommandDescription => 'Apagar segmento de linha';
+  String get mpCommandDescriptionDeleteLineSegment => 'Apagar segmento de linha';
 
   @override
-  String get mpDeletePointCommandDescription => 'Apagar ponto';
+  String get mpCommandDescriptionDeletePoint => 'Apagar ponto';
 
   @override
-  String get mpEditBezierCurveCommandDescription => 'Editar curva Bézier';
+  String get mpCommandDescriptionEditBezierCurve => 'Editar curva Bézier';
 
   @override
-  String get mpEditLineCommandDescription => 'Editar linha';
+  String get mpCommandDescriptionEditLine => 'Editar linha';
 
   @override
-  String get mpEditLineSegmentCommandDescription => 'Editar segmento de linha';
+  String get mpCommandDescriptionEditLineSegment => 'Editar segmento de linha';
+
+  @override
+  String get mpCommandDescriptionMoveBezierLineSegment => 'Mover segmento de linha Bézier';
+
+  @override
+  String get mpCommandDescriptionMoveElements => 'Mover elementos';
+
+  @override
+  String get mpCommandDescriptionMoveLine => 'Mover linha';
+
+  @override
+  String get mpCommandDescriptionMovePoint => 'Mover ponto';
+
+  @override
+  String get mpCommandDescriptionMoveStraightLineSegment => 'Mover segmento de linha reta';
+
+  @override
+  String mpCommandDescriptionUndoOf(Object description) {
+    return 'Desfazer \'$description\'';
+  }
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
@@ -98,21 +118,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpLengthUnitYardAbbreviation => 'yd';
-
-  @override
-  String get mpMoveBezierLineSegmentCommandDescription => 'Mover segmento de linha Bézier';
-
-  @override
-  String get mpMoveElementsCommandDescription => 'Mover elementos';
-
-  @override
-  String get mpMoveLineCommandDescription => 'Mover linha';
-
-  @override
-  String get mpMovePointCommandDescription => 'Mover ponto';
-
-  @override
-  String get mpMoveStraightLineSegmentCommandDescription => 'Mover segmento de linha reta';
 
   @override
   String get parsingErrors => 'Erros na interpretação do arquivo';

@@ -67,70 +67,109 @@
     }
   },
 
-  "mpAddElementsCommandDescription": "Add elements",
-  "@mpAddElementsCommandDescription": {
+  "mpCommandDescriptionAddElements": "Add elements",
+  "@mpCommandDescriptionAddElements": {
     "description": "The description for the add elements command",
     "type": "text"
   },
 
-  "mpAddLineCommandDescription": "Add line",
-  "@mpAddLineCommandDescription": {
+  "mpCommandDescriptionAddLine": "Add line",
+  "@mpCommandDescriptionAddLine": {
     "description": "The description for the add line command",
     "type": "text"
   },
 
-  "mpAddLineSegmentCommandDescription": "Add line segment",
-  "@mpAddLineSegmentCommandDescription": {
+  "mpCommandDescriptionAddLineSegment": "Add line segment",
+  "@mpCommandDescriptionAddLineSegment": {
     "description": "The description for the add line segment command",
     "type": "text"
   },
 
-  "mpAddPointCommandDescription": "Add point",
-  "@mpAddPointCommandDescription": {
+  "mpCommandDescriptionAddPoint": "Add point",
+  "@mpCommandDescriptionAddPoint": {
     "description": "The description for the add point command",
     "type": "text"
   },
 
-  "mpDeleteElementsCommandDescription": "Delete elements",
-  "@mpDeleteElementsCommandDescription": {
+  "mpCommandDescriptionDeleteElements": "Delete elements",
+  "@mpCommandDescriptionDeleteElements": {
     "description": "The description for the delete elements command",
     "type": "text"
   },
 
-  "mpDeleteLineCommandDescription": "Delete line",
-  "@mpDeleteLineCommandDescription": {
+  "mpCommandDescriptionDeleteLine": "Delete line",
+  "@mpCommandDescriptionDeleteLine": {
     "description": "The description for the delete line command",
     "type": "text"
   },
 
-  "mpDeleteLineSegmentCommandDescription": "Delete line segment",
-  "@mpDeleteLineSegmentCommandDescription": {
+  "mpCommandDescriptionDeleteLineSegment": "Delete line segment",
+  "@mpCommandDescriptionDeleteLineSegment": {
     "description": "The description for the delete line segment command",
     "type": "text"
   },
 
-  "mpDeletePointCommandDescription": "Delete point",
-  "@mpDeletePointCommandDescription": {
+  "mpCommandDescriptionDeletePoint": "Delete point",
+  "@mpCommandDescriptionDeletePoint": {
     "description": "The description for the delete point command",
     "type": "text"
   },
 
-  "mpEditBezierCurveCommandDescription": "Edit Bézier curve",
-  "@mpEditBezierCurveCommandDescription": {
+  "mpCommandDescriptionEditBezierCurve": "Edit Bézier curve",
+  "@mpCommandDescriptionEditBezierCurve": {
     "description": "The description for the edit Bézier curve command",
     "type": "text"
   },
 
-  "mpEditLineCommandDescription": "Edit line",
-  "@mpEditLineCommandDescription": {
+  "mpCommandDescriptionEditLine": "Edit line",
+  "@mpCommandDescriptionEditLine": {
     "description": "The description for the edit line command",
     "type": "text"
   },
 
-  "mpEditLineSegmentCommandDescription": "Edit line segment",
-  "@mpEditLineSegmentCommandDescription": {
+  "mpCommandDescriptionEditLineSegment": "Edit line segment",
+  "@mpCommandDescriptionEditLineSegment": {
     "description": "The description for the edit line segment command",
     "type": "text"
+  },
+
+  "mpCommandDescriptionMoveBezierLineSegment": "Move Bézier line segment",
+  "@mpCommandDescriptionMoveBezierLineSegment": {
+    "description": "The description for the move Bézier line segment command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionMoveElements": "Move elements",
+  "@mpCommandDescriptionMoveElements": {
+    "description": "The description for the move elements command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionMoveLine": "Move line",
+  "@mpCommandDescriptionMoveLine": {
+    "description": "The description for the move line command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionMovePoint": "Move point",
+  "@mpCommandDescriptionMovePoint": {
+    "description": "The description for the move point command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionMoveStraightLineSegment": "Move straight line segment",
+  "@mpCommandDescriptionMoveStraightLineSegment": {
+    "description": "The description for the move straight line segment command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionUndoOf": "Undo of {description}",
+  "@mpCommandDescriptionUndoOf": {
+    "description": "The description for the 'undo of' command (used when the user do some new action: existing redo commands should be stored)",
+    "type": "text",
+    "placeholders": {
+      "description": {}
+    }
   },
 
   "mpLengthUnitCentimeterAbbreviation": "cm",
@@ -160,36 +199,6 @@
   "mpLengthUnitYardAbbreviation": "yd",
   "@mpLengthUnitYardAbbreviation": {
     "description": "The abbreviation for the yard length unit",
-    "type": "text"
-  },
-
-  "mpMoveBezierLineSegmentCommandDescription": "Move Bézier line segment",
-  "@mpMoveBezierLineSegmentCommandDescription": {
-    "description": "The description for the move Bézier line segment command",
-    "type": "text"
-  },
-
-  "mpMoveElementsCommandDescription": "Move elements",
-  "@mpMoveElementsCommandDescription": {
-    "description": "The description for the move elements command",
-    "type": "text"
-  },
-
-  "mpMoveLineCommandDescription": "Move line",
-  "@mpMoveLineCommandDescription": {
-    "description": "The description for the move line command",
-    "type": "text"
-  },
-
-  "mpMovePointCommandDescription": "Move point",
-  "@mpMovePointCommandDescription": {
-    "description": "The description for the move point command",
-    "type": "text"
-  },
-
-  "mpMoveStraightLineSegmentCommandDescription": "Move straight line segment",
-  "@mpMoveStraightLineSegmentCommandDescription": {
-    "description": "The description for the move straight line segment command",
     "type": "text"
   },
 

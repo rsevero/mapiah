@@ -52,37 +52,57 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mpAddElementsCommandDescription => 'Add elements';
+  String get mpCommandDescriptionAddElements => 'Add elements';
 
   @override
-  String get mpAddLineCommandDescription => 'Add line';
+  String get mpCommandDescriptionAddLine => 'Add line';
 
   @override
-  String get mpAddLineSegmentCommandDescription => 'Add line segment';
+  String get mpCommandDescriptionAddLineSegment => 'Add line segment';
 
   @override
-  String get mpAddPointCommandDescription => 'Add point';
+  String get mpCommandDescriptionAddPoint => 'Add point';
 
   @override
-  String get mpDeleteElementsCommandDescription => 'Delete elements';
+  String get mpCommandDescriptionDeleteElements => 'Delete elements';
 
   @override
-  String get mpDeleteLineCommandDescription => 'Delete line';
+  String get mpCommandDescriptionDeleteLine => 'Delete line';
 
   @override
-  String get mpDeleteLineSegmentCommandDescription => 'Delete line segment';
+  String get mpCommandDescriptionDeleteLineSegment => 'Delete line segment';
 
   @override
-  String get mpDeletePointCommandDescription => 'Delete point';
+  String get mpCommandDescriptionDeletePoint => 'Delete point';
 
   @override
-  String get mpEditBezierCurveCommandDescription => 'Edit Bézier curve';
+  String get mpCommandDescriptionEditBezierCurve => 'Edit Bézier curve';
 
   @override
-  String get mpEditLineCommandDescription => 'Edit line';
+  String get mpCommandDescriptionEditLine => 'Edit line';
 
   @override
-  String get mpEditLineSegmentCommandDescription => 'Edit line segment';
+  String get mpCommandDescriptionEditLineSegment => 'Edit line segment';
+
+  @override
+  String get mpCommandDescriptionMoveBezierLineSegment => 'Move Bézier line segment';
+
+  @override
+  String get mpCommandDescriptionMoveElements => 'Move elements';
+
+  @override
+  String get mpCommandDescriptionMoveLine => 'Move line';
+
+  @override
+  String get mpCommandDescriptionMovePoint => 'Move point';
+
+  @override
+  String get mpCommandDescriptionMoveStraightLineSegment => 'Move straight line segment';
+
+  @override
+  String mpCommandDescriptionUndoOf(Object description) {
+    return 'Undo of $description';
+  }
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
@@ -98,21 +118,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpLengthUnitYardAbbreviation => 'yd';
-
-  @override
-  String get mpMoveBezierLineSegmentCommandDescription => 'Move Bézier line segment';
-
-  @override
-  String get mpMoveElementsCommandDescription => 'Move elements';
-
-  @override
-  String get mpMoveLineCommandDescription => 'Move line';
-
-  @override
-  String get mpMovePointCommandDescription => 'Move point';
-
-  @override
-  String get mpMoveStraightLineSegmentCommandDescription => 'Move straight line segment';
 
   @override
   String get parsingErrors => 'Parsing errors';

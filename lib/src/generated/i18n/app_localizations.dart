@@ -159,67 +159,103 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Add elements'**
-  String get mpAddElementsCommandDescription;
+  String get mpCommandDescriptionAddElements;
 
   /// The description for the add line command
   ///
   /// In en, this message translates to:
   /// **'Add line'**
-  String get mpAddLineCommandDescription;
+  String get mpCommandDescriptionAddLine;
 
   /// The description for the add line segment command
   ///
   /// In en, this message translates to:
   /// **'Add line segment'**
-  String get mpAddLineSegmentCommandDescription;
+  String get mpCommandDescriptionAddLineSegment;
 
   /// The description for the add point command
   ///
   /// In en, this message translates to:
   /// **'Add point'**
-  String get mpAddPointCommandDescription;
+  String get mpCommandDescriptionAddPoint;
 
   /// The description for the delete elements command
   ///
   /// In en, this message translates to:
   /// **'Delete elements'**
-  String get mpDeleteElementsCommandDescription;
+  String get mpCommandDescriptionDeleteElements;
 
   /// The description for the delete line command
   ///
   /// In en, this message translates to:
   /// **'Delete line'**
-  String get mpDeleteLineCommandDescription;
+  String get mpCommandDescriptionDeleteLine;
 
   /// The description for the delete line segment command
   ///
   /// In en, this message translates to:
   /// **'Delete line segment'**
-  String get mpDeleteLineSegmentCommandDescription;
+  String get mpCommandDescriptionDeleteLineSegment;
 
   /// The description for the delete point command
   ///
   /// In en, this message translates to:
   /// **'Delete point'**
-  String get mpDeletePointCommandDescription;
+  String get mpCommandDescriptionDeletePoint;
 
   /// The description for the edit Bézier curve command
   ///
   /// In en, this message translates to:
   /// **'Edit Bézier curve'**
-  String get mpEditBezierCurveCommandDescription;
+  String get mpCommandDescriptionEditBezierCurve;
 
   /// The description for the edit line command
   ///
   /// In en, this message translates to:
   /// **'Edit line'**
-  String get mpEditLineCommandDescription;
+  String get mpCommandDescriptionEditLine;
 
   /// The description for the edit line segment command
   ///
   /// In en, this message translates to:
   /// **'Edit line segment'**
-  String get mpEditLineSegmentCommandDescription;
+  String get mpCommandDescriptionEditLineSegment;
+
+  /// The description for the move Bézier line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Move Bézier line segment'**
+  String get mpCommandDescriptionMoveBezierLineSegment;
+
+  /// The description for the move elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Move elements'**
+  String get mpCommandDescriptionMoveElements;
+
+  /// The description for the move line command
+  ///
+  /// In en, this message translates to:
+  /// **'Move line'**
+  String get mpCommandDescriptionMoveLine;
+
+  /// The description for the move point command
+  ///
+  /// In en, this message translates to:
+  /// **'Move point'**
+  String get mpCommandDescriptionMovePoint;
+
+  /// The description for the move straight line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Move straight line segment'**
+  String get mpCommandDescriptionMoveStraightLineSegment;
+
+  /// The description for the 'undo of' command (used when the user do some new action: existing redo commands should be stored)
+  ///
+  /// In en, this message translates to:
+  /// **'Undo of {description}'**
+  String mpCommandDescriptionUndoOf(Object description);
 
   /// The abbreviation for the centimeter length unit
   ///
@@ -250,36 +286,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
-
-  /// The description for the move Bézier line segment command
-  ///
-  /// In en, this message translates to:
-  /// **'Move Bézier line segment'**
-  String get mpMoveBezierLineSegmentCommandDescription;
-
-  /// The description for the move elements command
-  ///
-  /// In en, this message translates to:
-  /// **'Move elements'**
-  String get mpMoveElementsCommandDescription;
-
-  /// The description for the move line command
-  ///
-  /// In en, this message translates to:
-  /// **'Move line'**
-  String get mpMoveLineCommandDescription;
-
-  /// The description for the move point command
-  ///
-  /// In en, this message translates to:
-  /// **'Move point'**
-  String get mpMovePointCommandDescription;
-
-  /// The description for the move straight line segment command
-  ///
-  /// In en, this message translates to:
-  /// **'Move straight line segment'**
-  String get mpMoveStraightLineSegmentCommandDescription;
 
   /// The label for the parsing errors dialog
   ///
