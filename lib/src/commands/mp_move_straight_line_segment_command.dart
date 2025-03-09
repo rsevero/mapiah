@@ -4,33 +4,39 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   final int lineSegmentMapiahID;
   final Offset originalEndPointCoordinates;
   late final Offset modifiedEndPointCoordinates;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.moveStraightLineSegment;
 
   MPMoveStraightLineSegmentCommand.forCWJM({
     required this.lineSegmentMapiahID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.moveStraightLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveStraightLineSegmentCommand({
     required this.lineSegmentMapiahID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
-    super.descriptionType = MPCommandDescriptionType.moveStraightLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDelta({
     required this.lineSegmentMapiahID,
     required this.originalEndPointCoordinates,
     required Offset deltaOnCanvas,
-    super.descriptionType = MPCommandDescriptionType.moveStraightLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   })  : modifiedEndPointCoordinates =
             originalEndPointCoordinates + deltaOnCanvas,
         super();
 
   @override
   MPCommandType get type => MPCommandType.moveStraightLineSegment;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -59,7 +65,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }

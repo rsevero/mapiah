@@ -14,5 +14,5 @@ enum MPCommandDescriptionType {
   moveElements,
   moveLine,
   movePoint,
-  moveStraightLineSegment,
+  moveStraightLineSegment;
 }

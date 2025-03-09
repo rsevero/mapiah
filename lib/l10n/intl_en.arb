@@ -163,15 +163,6 @@
     "type": "text"
   },
 
-  "mpCommandDescriptionUndoOf": "Undo of {description}",
-  "@mpCommandDescriptionUndoOf": {
-    "description": "The description for the 'undo of' command (used when the user do some new action: existing redo commands should be stored)",
-    "type": "text",
-    "placeholders": {
-      "description": {}
-    }
-  },
-
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "@mpLengthUnitCentimeterAbbreviation": {
     "description": "The abbreviation for the centimeter length unit",

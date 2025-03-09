@@ -2,17 +2,26 @@ part of 'mp_command.dart';
 
 class MPDeleteLineSegmentCommand extends MPCommand {
   final int lineSegmentMapiahID;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.deleteLineSegment;
 
   MPDeleteLineSegmentCommand.forCWJM({
     required this.lineSegmentMapiahID,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.deleteLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeleteLineSegmentCommand({
     required this.lineSegmentMapiahID,
-    super.descriptionType = MPCommandDescriptionType.deleteLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.deleteLineSegment;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -32,7 +41,6 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -91,7 +99,4 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
   @override
   int get hashCode => super.hashCode ^ lineSegmentMapiahID.hashCode;
-
-  @override
-  MPCommandType get type => MPCommandType.deleteLineSegment;
 }

@@ -100,11 +100,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionMoveStraightLineSegment => 'Move straight line segment';
 
   @override
-  String mpCommandDescriptionUndoOf(Object description) {
-    return 'Undo of $description';
-  }
-
-  @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
 
   @override

@@ -3,23 +3,25 @@ part of 'mp_command.dart';
 class MPMoveElementsCommand extends MPCommand {
   late final List<MPMoveCommandCompleteParams> moveCommandParametersList;
   final List<MPUndoRedoCommand> oppositeCommandList = [];
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.moveElements;
 
   MPMoveElementsCommand.forCWJM({
     required this.moveCommandParametersList,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.moveElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveElementsCommand({
     required this.moveCommandParametersList,
-    super.descriptionType = MPCommandDescriptionType.moveElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveElementsCommand.fromDelta({
     required List<MPMoveCommandOriginalParams>
         moveCommandOriginalParametersList,
     required Offset deltaOnCanvas,
-    super.descriptionType = MPCommandDescriptionType.moveElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super() {
     moveCommandParametersList = [];
     for (final moveCommandOriginalParameters
@@ -125,13 +127,16 @@ class MPMoveElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
 
   @override
   MPCommandType get type => MPCommandType.moveElements;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   Map<String, dynamic> toMap() {

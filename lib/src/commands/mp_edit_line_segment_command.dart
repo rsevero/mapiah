@@ -2,17 +2,26 @@ part of 'mp_command.dart';
 
 class MPEditLineSegmentCommand extends MPCommand {
   final THLineSegment newLineSegment;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.editLineSegment;
 
   MPEditLineSegmentCommand.forCWJM({
     required this.newLineSegment,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.editLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPEditLineSegmentCommand({
     required this.newLineSegment,
-    super.descriptionType = MPCommandDescriptionType.editLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.editLineSegment;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -33,7 +42,6 @@ class MPEditLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -93,7 +101,4 @@ class MPEditLineSegmentCommand extends MPCommand {
 
   @override
   int get hashCode => super.hashCode ^ newLineSegment.hashCode;
-
-  @override
-  MPCommandType get type => MPCommandType.editLineSegment;
 }

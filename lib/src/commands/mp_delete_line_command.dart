@@ -3,19 +3,28 @@ part of "mp_command.dart";
 class MPDeleteLineCommand extends MPCommand {
   final int lineMapiahID;
   final bool isInteractiveLineCreation;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.deleteLine;
 
   MPDeleteLineCommand.forCWJM({
     required this.lineMapiahID,
     required this.isInteractiveLineCreation,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.deleteLine,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeleteLineCommand({
     required this.lineMapiahID,
     required this.isInteractiveLineCreation,
-    super.descriptionType = MPCommandDescriptionType.deleteLine,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.deleteLine;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -48,7 +57,6 @@ class MPDeleteLineCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -116,7 +124,4 @@ class MPDeleteLineCommand extends MPCommand {
         lineMapiahID,
         isInteractiveLineCreation,
       );
-
-  @override
-  MPCommandType get type => MPCommandType.deleteLine;
 }

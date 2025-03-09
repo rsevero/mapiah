@@ -6,31 +6,33 @@ class MPMoveLineCommand extends MPCommand {
   late final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap;
   final Offset deltaOnCanvas;
   final bool isFromDelta;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.moveLine;
 
   MPMoveLineCommand.forCWJM({
     required this.lineMapiahID,
     required this.originalLineSegmentsMap,
     required this.modifiedLineSegmentsMap,
-    required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.moveLine,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
+    required super.oppositeCommand,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveLineCommand({
     required this.lineMapiahID,
     required this.originalLineSegmentsMap,
     required this.modifiedLineSegmentsMap,
-    super.descriptionType = MPCommandDescriptionType.moveLine,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveLineCommand.fromDelta({
     required this.lineMapiahID,
     required this.originalLineSegmentsMap,
     required this.deltaOnCanvas,
-    super.descriptionType = MPCommandDescriptionType.moveLine,
+    super.descriptionType = _defaultDescriptionType,
   })  : isFromDelta = true,
         super() {
     modifiedLineSegmentsMap = LinkedHashMap<int, THLineSegment>();
@@ -70,6 +72,10 @@ class MPMoveLineCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.moveLine;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -157,7 +163,6 @@ class MPMoveLineCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }

@@ -2,17 +2,26 @@ part of 'mp_command.dart';
 
 class MPDeletePointCommand extends MPCommand {
   final int pointMapiahID;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.deletePoint;
 
   MPDeletePointCommand.forCWJM({
     required this.pointMapiahID,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.deletePoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeletePointCommand({
     required this.pointMapiahID,
-    super.descriptionType = MPCommandDescriptionType.deletePoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.deletePoint;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -33,7 +42,6 @@ class MPDeletePointCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -92,7 +100,4 @@ class MPDeletePointCommand extends MPCommand {
 
   @override
   int get hashCode => super.hashCode ^ pointMapiahID.hashCode;
-
-  @override
-  MPCommandType get type => MPCommandType.deletePoint;
 }

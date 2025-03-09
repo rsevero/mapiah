@@ -2,17 +2,26 @@ part of 'mp_command.dart';
 
 class MPDeleteElementsCommand extends MPCommand {
   final List<int> mapiahIDs;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.deleteElements;
 
   MPDeleteElementsCommand.forCWJM({
     required this.mapiahIDs,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.deleteElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeleteElementsCommand({
     required this.mapiahIDs,
-    super.descriptionType = MPCommandDescriptionType.deleteElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.deleteElements;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -57,7 +66,6 @@ class MPDeleteElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -68,6 +76,7 @@ class MPDeleteElementsCommand extends MPCommand {
     MPUndoRedoCommand? oppositeCommand,
     bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
+    bool? isUndoOf,
   }) {
     return MPDeleteElementsCommand.forCWJM(
       mapiahIDs: mapiahIDs ?? this.mapiahIDs,
@@ -116,7 +125,4 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   int get hashCode => super.hashCode ^ mapiahIDs.hashCode;
-
-  @override
-  MPCommandType get type => MPCommandType.deleteElements;
 }

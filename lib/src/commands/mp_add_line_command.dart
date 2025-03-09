@@ -4,21 +4,30 @@ class MPAddLineCommand extends MPCommand {
   final THLine newLine;
   final List<THElement> lineChildren;
   final Offset? lineStartScreenPosition;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.addLine;
 
   MPAddLineCommand.forCWJM({
     required this.newLine,
     required this.lineChildren,
     this.lineStartScreenPosition,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.addLine,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddLineCommand({
     required this.newLine,
     required this.lineChildren,
     this.lineStartScreenPosition,
-    super.descriptionType = MPCommandDescriptionType.addLine,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.addLine;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -41,7 +50,6 @@ class MPAddLineCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -137,7 +145,4 @@ class MPAddLineCommand extends MPCommand {
         Object.hashAll(lineChildren),
         lineStartScreenPosition,
       );
-
-  @override
-  MPCommandType get type => MPCommandType.addLine;
 }

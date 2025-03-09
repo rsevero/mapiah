@@ -4,33 +4,39 @@ class MPMovePointCommand extends MPCommand {
   late final int pointMapiahID;
   late final Offset originalCoordinates;
   late final Offset modifiedCoordinates;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.movePoint;
 
   MPMovePointCommand.forCWJM({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.movePoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMovePointCommand({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
-    super.descriptionType = MPCommandDescriptionType.movePoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMovePointCommand.fromDelta({
     required this.pointMapiahID,
     required this.originalCoordinates,
     required Offset deltaOnCanvas,
-    super.descriptionType = MPCommandDescriptionType.movePoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super() {
     modifiedCoordinates = originalCoordinates + deltaOnCanvas;
   }
 
   @override
   MPCommandType get type => MPCommandType.movePoint;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -58,7 +64,6 @@ class MPMovePointCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }

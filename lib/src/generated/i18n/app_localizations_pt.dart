@@ -100,11 +100,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMoveStraightLineSegment => 'Mover segmento de linha reta';
 
   @override
-  String mpCommandDescriptionUndoOf(Object description) {
-    return 'Desfazer \'$description\'';
-  }
-
-  @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
 
   @override

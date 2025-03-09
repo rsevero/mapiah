@@ -2,17 +2,26 @@ part of 'mp_command.dart';
 
 class MPAddPointCommand extends MPCommand {
   final THPoint newPoint;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.addPoint;
 
   MPAddPointCommand.forCWJM({
     required this.newPoint,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.addPoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddPointCommand({
     required this.newPoint,
-    super.descriptionType = MPCommandDescriptionType.addPoint,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.addPoint;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -30,7 +39,6 @@ class MPAddPointCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -89,7 +97,4 @@ class MPAddPointCommand extends MPCommand {
 
   @override
   int get hashCode => super.hashCode ^ newPoint.hashCode;
-
-  @override
-  MPCommandType get type => MPCommandType.addPoint;
 }

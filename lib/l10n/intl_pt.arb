@@ -28,7 +28,6 @@
   "mpCommandDescriptionMoveLine": "Mover linha",
   "mpCommandDescriptionMovePoint": "Mover ponto",
   "mpCommandDescriptionMoveStraightLineSegment": "Mover segmento de linha reta",
-  "mpCommandDescriptionUndoOf": "Desfazer '{description}'",
 
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFootAbbreviation": "ft",

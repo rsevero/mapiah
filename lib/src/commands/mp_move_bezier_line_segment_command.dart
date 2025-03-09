@@ -8,6 +8,8 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   late final Offset modifiedEndPointCoordinates;
   late final Offset modifiedControlPoint1Coordinates;
   late final Offset modifiedControlPoint2Coordinates;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.moveBezierLineSegment;
 
   MPMoveBezierLineSegmentCommand.forCWJM({
     required this.lineSegmentMapiahID,
@@ -18,7 +20,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint2Coordinates,
     required this.modifiedControlPoint2Coordinates,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.moveBezierLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveBezierLineSegmentCommand({
@@ -29,7 +31,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.modifiedControlPoint1Coordinates,
     required this.originalControlPoint2Coordinates,
     required this.modifiedControlPoint2Coordinates,
-    super.descriptionType = MPCommandDescriptionType.moveBezierLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveBezierLineSegmentCommand.fromDelta({
@@ -38,7 +40,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint1Coordinates,
     required this.originalControlPoint2Coordinates,
     required Offset deltaOnCanvas,
-    super.descriptionType = MPCommandDescriptionType.moveBezierLineSegment,
+    super.descriptionType = _defaultDescriptionType,
   })  : modifiedEndPointCoordinates =
             originalEndPointCoordinates + deltaOnCanvas,
         modifiedControlPoint1Coordinates =
@@ -49,6 +51,10 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.moveBezierLineSegment;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -86,7 +92,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }

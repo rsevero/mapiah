@@ -36,15 +36,19 @@ part 'types/mp_command_type.dart';
 /// It is responsible both for executing and undoing the command, therefore, all
 /// actions that should support undo must be impmentend as a command.
 abstract class MPCommand {
-  late final MPCommandDescriptionType descriptionType;
+  final MPCommandDescriptionType descriptionType;
   MPUndoRedoCommand? oppositeCommand;
 
-  MPCommand.forCWJM(
-      {required this.descriptionType, required this.oppositeCommand});
+  MPCommand.forCWJM({
+    required this.descriptionType,
+    required this.oppositeCommand,
+  });
 
   MPCommand({required this.descriptionType});
 
   MPCommandType get type;
+
+  MPCommandDescriptionType get defaultDescriptionType;
 
   MPUndoRedoCommand execute(TH2FileEditController th2FileEditController) {
     oppositeCommand ??= _createOppositeCommand(th2FileEditController);

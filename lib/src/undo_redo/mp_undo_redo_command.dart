@@ -5,18 +5,16 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 
 class MPUndoRedoCommand {
   final MPCommandType commandType;
-  final MPCommandDescriptionType descriptionType;
   final Map<String, dynamic> map;
 
-  MPUndoRedoCommand(
-      {required this.commandType,
-      required this.descriptionType,
-      required this.map});
+  MPUndoRedoCommand({
+    required this.commandType,
+    required this.map,
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'commandType': commandType.name,
-      'descriptionType': descriptionType,
       'map': map,
     };
   }
@@ -24,8 +22,6 @@ class MPUndoRedoCommand {
   factory MPUndoRedoCommand.fromMap(Map<String, dynamic> map) {
     return MPUndoRedoCommand(
       commandType: MPCommandType.values.byName(map['commandType']),
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
       map: map['map'],
     );
   }
@@ -41,7 +37,6 @@ class MPUndoRedoCommand {
   }) {
     return MPUndoRedoCommand(
       commandType: commandType ?? this.commandType,
-      descriptionType: descriptionType ?? this.descriptionType,
       map: map ?? this.map,
     );
   }
@@ -50,48 +45,16 @@ class MPUndoRedoCommand {
   bool operator ==(covariant MPUndoRedoCommand other) {
     if (identical(this, other)) return true;
 
-    return other.commandType == commandType &&
-        other.descriptionType == descriptionType &&
-        other.map == map;
+    return other.commandType == commandType && other.map == map;
   }
 
   @override
   int get hashCode => Object.hash(
         commandType,
-        descriptionType,
         map,
       );
 
   MPCommand get command {
-    switch (commandType) {
-      case MPCommandType.addElements:
-        return MPAddElementsCommand.fromMap(map);
-      case MPCommandType.addLine:
-        return MPAddLineCommand.fromMap(map);
-      case MPCommandType.addLineSegment:
-        return MPAddLineSegmentCommand.fromMap(map);
-      case MPCommandType.addPoint:
-        return MPAddPointCommand.fromMap(map);
-      case MPCommandType.deleteElements:
-        return MPDeleteElementsCommand.fromMap(map);
-      case MPCommandType.deleteLine:
-        return MPDeleteLineCommand.fromMap(map);
-      case MPCommandType.deleteLineSegment:
-        return MPDeleteLineSegmentCommand.fromMap(map);
-      case MPCommandType.deletePoint:
-        return MPDeletePointCommand.fromMap(map);
-      case MPCommandType.editLineSegment:
-        return MPEditLineSegmentCommand.fromMap(map);
-      case MPCommandType.moveBezierLineSegment:
-        return MPMoveBezierLineSegmentCommand.fromMap(map);
-      case MPCommandType.moveElements:
-        return MPMoveElementsCommand.fromMap(map);
-      case MPCommandType.moveLine:
-        return MPMoveLineCommand.fromMap(map);
-      case MPCommandType.movePoint:
-        return MPMovePointCommand.fromMap(map);
-      case MPCommandType.moveStraightLineSegment:
-        return MPMoveStraightLineSegmentCommand.fromMap(map);
-    }
+    return MPCommand.fromMap(map);
   }
 }

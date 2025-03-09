@@ -2,17 +2,26 @@ part of 'mp_command.dart';
 
 class MPAddElementsCommand extends MPCommand {
   final List<MPAddElementCommandParams> createParams;
+  static const MPCommandDescriptionType _defaultDescriptionType =
+      MPCommandDescriptionType.addElements;
 
   MPAddElementsCommand.forCWJM({
     required this.createParams,
     required super.oppositeCommand,
-    super.descriptionType = MPCommandDescriptionType.addElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddElementsCommand({
     required this.createParams,
-    super.descriptionType = MPCommandDescriptionType.addElements,
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  @override
+  MPCommandType get type => MPCommandType.addElements;
+
+  @override
+  MPCommandDescriptionType get defaultDescriptionType =>
+      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -54,7 +63,6 @@ class MPAddElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      descriptionType: descriptionType,
       map: oppositeCommand.toMap(),
     );
   }
@@ -118,7 +126,4 @@ class MPAddElementsCommand extends MPCommand {
 
   @override
   int get hashCode => super.hashCode ^ Object.hashAll(createParams);
-
-  @override
-  MPCommandType get type => MPCommandType.addElements;
 }

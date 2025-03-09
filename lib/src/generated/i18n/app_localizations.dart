@@ -251,12 +251,6 @@ abstract class AppLocalizations {
   /// **'Move straight line segment'**
   String get mpCommandDescriptionMoveStraightLineSegment;
 
-  /// The description for the 'undo of' command (used when the user do some new action: existing redo commands should be stored)
-  ///
-  /// In en, this message translates to:
-  /// **'Undo of {description}'**
-  String mpCommandDescriptionUndoOf(Object description);
-
   /// The abbreviation for the centimeter length unit
   ///
   /// In en, this message translates to:

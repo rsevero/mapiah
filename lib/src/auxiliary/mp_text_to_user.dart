@@ -61,10 +61,11 @@ class MPTextToUser {
         localizations.mpCommandDescriptionMoveStraightLineSegment;
   }
 
-  static String getCommandDescription(MPCommandDescriptionType commandType) {
-    return _commandTypeAsString.containsKey(commandType)
-        ? _commandTypeAsString[commandType]!
-        : commandType.name;
+  static String getCommandDescription(
+      MPCommandDescriptionType commandDescriptionType) {
+    return _commandTypeAsString.containsKey(commandDescriptionType)
+        ? _commandTypeAsString[commandDescriptionType]!
+        : commandDescriptionType.name;
   }
 
   static void _initializeLengthUnitTypeAsString() {
