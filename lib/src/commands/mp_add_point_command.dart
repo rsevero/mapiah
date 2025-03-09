@@ -38,12 +38,15 @@ class MPAddPointCommand extends MPCommand {
   @override
   MPCommand copyWith({
     THPoint? newPoint,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddPointCommand.forCWJM(
       newPoint: newPoint ?? this.newPoint,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

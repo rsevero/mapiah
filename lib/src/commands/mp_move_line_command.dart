@@ -216,6 +216,7 @@ class MPMoveLineCommand extends MPCommand {
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
     LinkedHashMap<int, THLineSegment>? modifiedLineSegmentsMap,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveLineCommand.forCWJM(
@@ -224,7 +225,9 @@ class MPMoveLineCommand extends MPCommand {
           originalLineSegmentsMap ?? this.originalLineSegmentsMap,
       modifiedLineSegmentsMap:
           modifiedLineSegmentsMap ?? this.modifiedLineSegmentsMap,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

@@ -56,13 +56,16 @@ class MPDeleteLineCommand extends MPCommand {
   @override
   MPCommand copyWith({
     int? lineMapiahID,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteLineCommand.forCWJM(
       lineMapiahID: lineMapiahID ?? this.lineMapiahID,
       isInteractiveLineCreation: isInteractiveLineCreation,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

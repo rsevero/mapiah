@@ -39,12 +39,15 @@ class MPAddLineSegmentCommand extends MPCommand {
   @override
   MPCommand copyWith({
     THLineSegment? newLineSegment,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

@@ -175,6 +175,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     Offset? originalControlPoint2Coordinates,
     Offset? modifiedControlPoint2Coordinates,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
@@ -191,7 +192,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
           this.originalControlPoint2Coordinates,
       modifiedControlPoint2Coordinates: modifiedControlPoint2Coordinates ??
           this.modifiedControlPoint2Coordinates,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

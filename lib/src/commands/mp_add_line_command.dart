@@ -52,8 +52,9 @@ class MPAddLineCommand extends MPCommand {
     List<THElement>? lineChildren,
     Offset? lineStartScreenPosition,
     bool makeLineStartScreenPositionNull = false,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineCommand.forCWJM(
       newLine: newLine ?? this.newLine,
@@ -61,7 +62,9 @@ class MPAddLineCommand extends MPCommand {
       lineStartScreenPosition: makeLineStartScreenPositionNull
           ? null
           : (lineStartScreenPosition ?? this.lineStartScreenPosition),
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

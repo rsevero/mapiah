@@ -168,12 +168,15 @@ class MPMoveElementsCommand extends MPCommand {
   MPMoveElementsCommand copyWith({
     List<MPMoveCommandCompleteParams>? moveCommandParametersList,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveElementsCommand.forCWJM(
       moveCommandParametersList:
           moveCommandParametersList ?? this.moveCommandParametersList,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

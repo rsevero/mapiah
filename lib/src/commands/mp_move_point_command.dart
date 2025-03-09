@@ -111,13 +111,16 @@ class MPMovePointCommand extends MPCommand {
     Offset? originalCoordinates,
     Offset? modifiedCoordinates,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
       modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

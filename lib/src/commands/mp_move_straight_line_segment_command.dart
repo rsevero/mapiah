@@ -112,6 +112,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     Offset? originalEndPointCoordinates,
     Offset? modifiedEndPointCoordinates,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
@@ -120,7 +121,9 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
           originalEndPointCoordinates ?? this.originalEndPointCoordinates,
       modifiedEndPointCoordinates:
           modifiedEndPointCoordinates ?? this.modifiedEndPointCoordinates,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

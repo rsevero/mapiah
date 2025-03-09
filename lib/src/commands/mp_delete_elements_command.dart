@@ -65,13 +65,16 @@ class MPDeleteElementsCommand extends MPCommand {
   @override
   MPCommand copyWith({
     List<int>? mapiahIDs,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteElementsCommand.forCWJM(
       mapiahIDs: mapiahIDs ?? this.mapiahIDs,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
     );
   }
 

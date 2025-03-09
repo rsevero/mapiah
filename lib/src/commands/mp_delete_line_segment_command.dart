@@ -40,12 +40,15 @@ class MPDeleteLineSegmentCommand extends MPCommand {
   @override
   MPCommand copyWith({
     int? lineSegmentMapiahID,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteLineSegmentCommand.forCWJM(
       lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

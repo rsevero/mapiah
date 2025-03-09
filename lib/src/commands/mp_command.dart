@@ -47,7 +47,7 @@ abstract class MPCommand {
   MPCommandType get type;
 
   MPUndoRedoCommand execute(TH2FileEditController th2FileEditController) {
-    oppositeCommand = _createOppositeCommand(th2FileEditController);
+    oppositeCommand ??= _createOppositeCommand(th2FileEditController);
     _actualExecute(th2FileEditController);
 
     return oppositeCommand!;
@@ -65,6 +65,7 @@ abstract class MPCommand {
   MPCommand copyWith({
     MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
   });
 
   String toJson() {

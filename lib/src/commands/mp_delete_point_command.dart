@@ -41,12 +41,15 @@ class MPDeletePointCommand extends MPCommand {
   @override
   MPCommand copyWith({
     int? pointMapiahID,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeletePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

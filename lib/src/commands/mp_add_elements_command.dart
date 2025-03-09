@@ -62,12 +62,15 @@ class MPAddElementsCommand extends MPCommand {
   @override
   MPCommand copyWith({
     List<MPAddElementCommandParams>? createParams,
-    MPCommandDescriptionType? descriptionType,
     MPUndoRedoCommand? oppositeCommand,
+    bool makeOppositeCommandNull = false,
+    MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddElementsCommand.forCWJM(
       createParams: createParams ?? this.createParams,
-      oppositeCommand: oppositeCommand ?? this.oppositeCommand,
+      oppositeCommand: makeOppositeCommandNull
+          ? null
+          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
