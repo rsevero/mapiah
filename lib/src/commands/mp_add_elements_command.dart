@@ -36,7 +36,8 @@ class MPAddElementsCommand extends MPCommand {
             lineChildren: params.lineChildren,
           );
         case MPAddPointCommandParams _:
-          th2FileEditController.addElement(newElement: params.point);
+          th2FileEditController.elementEditController
+              .addElement(newElement: params.point);
       }
     }
 

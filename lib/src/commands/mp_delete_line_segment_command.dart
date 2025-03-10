@@ -25,7 +25,8 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.deleteElementByMapiahID(lineSegmentMapiahID);
+    th2FileEditController.elementEditController
+        .deleteElementByMapiahID(lineSegmentMapiahID);
   }
 
   @override

@@ -462,7 +462,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       _selectedElements.values.first.mapiahID,
     ) as THLine;
     final List<THLineSegment> lineSegments =
-        _th2FileEditController.getLineSegmentsList(
+        _th2FileEditController.elementEditController.getLineSegmentsList(
       line: line,
       clone: false,
     );
@@ -559,7 +559,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final THLine line =
         _thFile.elementByMapiahID(lineSegment.parentMapiahID) as THLine;
     final List<THLineSegment> lineSegments =
-        _th2FileEditController.getLineSegmentsList(
+        _th2FileEditController.elementEditController.getLineSegmentsList(
       line: line,
       clone: false,
     );
@@ -624,7 +624,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         position: originalPoint.position.copyWith(
             coordinates: originalPoint.position.coordinates +
                 localDeltaPositionOnCanvas));
-    _th2FileEditController
+    _th2FileEditController.elementEditController
         .substituteElementWithoutAddSelectableElement(modifiedPoint);
   }
 
@@ -669,7 +669,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       modifiedLineSegmentsMap[lineChild.mapiahID] = modifiedLineSegment;
     }
 
-    _th2FileEditController.substituteLineSegments(modifiedLineSegmentsMap);
+    _th2FileEditController.elementEditController
+        .substituteLineSegments(modifiedLineSegmentsMap);
   }
 
   void moveSelectedEndControlPointsToScreenCoordinates(
@@ -769,7 +770,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       }
     }
 
-    _th2FileEditController.substituteLineSegments(modifiedLineSegments);
+    _th2FileEditController.elementEditController
+        .substituteLineSegments(modifiedLineSegments);
     updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }
@@ -831,7 +833,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         );
     }
 
-    _th2FileEditController.substituteLineSegments(modifiedLineSegments);
+    _th2FileEditController.elementEditController
+        .substituteLineSegments(modifiedLineSegments);
     updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }
@@ -873,7 +876,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       final THLine line =
           _thFile.elementByMapiahID(lineSegment.parentMapiahID) as THLine;
 
-      lineSegments = _th2FileEditController.getLineSegmentsList(
+      lineSegments =
+          _th2FileEditController.elementEditController.getLineSegmentsList(
         line: line,
         clone: false,
       );

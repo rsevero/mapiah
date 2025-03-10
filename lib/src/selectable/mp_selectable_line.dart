@@ -7,7 +7,7 @@ class MPSelectableLine extends MPSelectableElement {
   MPSelectableLine({required THLine line, required super.th2fileEditController})
       : super(element: line) {
     final List<THLineSegment> lineSegments =
-        th2fileEditController.getLineSegmentsList(
+        th2fileEditController.elementEditController.getLineSegmentsList(
       line: line,
       clone: false,
     );

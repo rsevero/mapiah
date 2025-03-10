@@ -25,7 +25,7 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.deleteElements(mapiahIDs);
+    th2FileEditController.elementEditController.deleteElements(mapiahIDs);
   }
 
   @override

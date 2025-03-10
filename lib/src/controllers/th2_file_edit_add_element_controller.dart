@@ -4,6 +4,7 @@ import 'package:flutter/animation.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_page_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -71,7 +72,8 @@ abstract class TH2FileEditAddElementControllerBase with Store {
       lineType: _lastAddedLineType,
     );
 
-    _th2FileEditController.addElementWithParentMapiahIDWithoutSelectableElement(
+    _th2FileEditController.elementEditController
+        .addElementWithParentMapiahIDWithoutSelectableElement(
       newElement: newLine,
       parentMapiahID: _th2FileEditController.activeScrapID,
     );
@@ -258,12 +260,14 @@ abstract class TH2FileEditAddElementControllerBase with Store {
     required List<THElement> lineChildren,
     Offset? lineStartScreenPosition,
   }) {
+    final TH2FileEditElementEditController elementEditController =
+        _th2FileEditController.elementEditController;
     final THLine newLineCopy = newLine.copyWith(childrenMapiahID: {});
 
-    _th2FileEditController.addElement(newElement: newLineCopy);
+    elementEditController.addElement(newElement: newLineCopy);
 
     for (final THElement child in lineChildren) {
-      _th2FileEditController.addElement(newElement: child);
+      elementEditController.addElement(newElement: child);
     }
 
     if (lineStartScreenPosition != null) {
@@ -280,7 +284,8 @@ abstract class TH2FileEditAddElementControllerBase with Store {
     if ((_newLine != null) && (_newLine!.mapiahID == lineMapiahID)) {
       clearNewLine();
     }
-    _th2FileEditController.deleteElementByMapiahID(lineMapiahID);
+    _th2FileEditController.elementEditController
+        .deleteElementByMapiahID(lineMapiahID);
   }
 
   @action
