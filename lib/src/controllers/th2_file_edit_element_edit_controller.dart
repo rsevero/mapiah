@@ -16,7 +16,7 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mobx/mobx.dart';
 
-part 'th2_file_edit_page_element_edit_controller.g.dart';
+part 'th2_file_edit_element_edit_controller.g.dart';
 
 class TH2FileEditElementEditController = TH2FileEditElementEditControllerBase
     with _$TH2FileEditElementEditController;

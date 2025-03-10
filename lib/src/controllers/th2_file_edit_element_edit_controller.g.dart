@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'th2_file_edit_page_element_edit_controller.dart';
+part of 'th2_file_edit_element_edit_controller.dart';
 
 // **************************************************************************
 // StoreGenerator
