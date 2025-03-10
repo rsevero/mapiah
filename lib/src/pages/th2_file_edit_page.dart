@@ -23,6 +23,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       th2FileEditControllerCreateResult;
   bool _th2FileEditControllerLoaded = false;
   late ColorScheme colorScheme;
+  bool isSelectMode = false;
 
   @override
   void initState() {
@@ -174,100 +175,89 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     );
   }
 
-  void _onLeavePage() {
-    th2FileEditController.close();
-    Navigator.pop(context);
-  }
+  List<Widget> _editElementButtons() {
+    final bool isEditLineMode = th2FileEditController.isEditLineMode;
+    final bool isNodeEditButtonEnabled =
+        th2FileEditController.isNodeEditButtonEnabled;
+    final bool isOptionEditMode = th2FileEditController.isOptionEditMode;
+    final bool isOptionEditButtonEnabled =
+        th2FileEditController.isOptionEditButtonEnabled;
 
-  Widget _stateActionButtons() {
-    return Observer(
-      builder: (_) {
-        if (!th2FileEditController.showUndoRedoButtons) {
-          return const SizedBox();
-        }
-
-        final bool hasUndo = th2FileEditController.hasUndo;
-        final bool hasRedo = th2FileEditController.hasRedo;
-        final bool deleteButtonEnabled =
-            th2FileEditController.deleteButtonEnabled;
-
-        return Positioned(
-          top: 16,
-          right: 16,
-          child: Row(
-            children: [
-              if (th2FileEditController.showDeleteButton) ...[
-                FloatingActionButton(
-                  heroTag: 'delete',
-                  mini: true,
-                  tooltip:
-                      AppLocalizations.of(context).th2FileEditPageDeleteButton,
-                  backgroundColor: deleteButtonEnabled
-                      ? null
-                      : colorScheme.surfaceContainerLowest,
-                  foregroundColor: deleteButtonEnabled
-                      ? null
-                      : colorScheme.surfaceContainerHighest,
-                  onPressed: deleteButtonEnabled ? onDeletePressed : null,
-                  elevation: deleteButtonEnabled ? 6.0 : 3.0,
-                  child: const Icon(Icons.delete_outlined),
-                ),
-                SizedBox(width: 8),
-              ],
-              FloatingActionButton(
-                heroTag: 'undo',
-                mini: true,
-                tooltip: hasUndo
-                    ? th2FileEditController.undoDescription
-                    : AppLocalizations.of(context)
-                        .th2FileEditPageNoUndoAvailable,
-                backgroundColor:
-                    hasUndo ? null : colorScheme.surfaceContainerLowest,
-                foregroundColor:
-                    hasUndo ? null : colorScheme.surfaceContainerHighest,
-                onPressed: hasUndo ? onUndoPressed : null,
-                elevation: hasUndo ? 6.0 : 3.0,
-                child: const Icon(Icons.undo),
-              ),
-              SizedBox(width: 8),
-              FloatingActionButton(
-                heroTag: 'redo',
-                mini: true,
-                tooltip: hasRedo
-                    ? th2FileEditController.redoDescription
-                    : AppLocalizations.of(context)
-                        .th2FileEditPageNoRedoAvailable,
-                backgroundColor:
-                    hasRedo ? null : colorScheme.surfaceContainerLowest,
-                foregroundColor:
-                    hasRedo ? null : colorScheme.surfaceContainerHighest,
-                onPressed: hasRedo ? onRedoPressed : null,
-                elevation: hasRedo ? 6.0 : 3.0,
-                child: const Icon(Icons.redo),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void onDeletePressed() {
-    th2FileEditController.stateController.onButtonPressed(MPButtonType.delete);
-  }
-
-  void onUndoPressed() {
-    th2FileEditController.stateController.onButtonPressed(MPButtonType.undo);
-  }
-
-  void onRedoPressed() {
-    th2FileEditController.stateController.onButtonPressed(MPButtonType.redo);
+    return [
+      FloatingActionButton(
+        heroTag: 'select_tool',
+        onPressed: _onSelectToolPressed,
+        tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
+        child: Image.asset(
+          'assets/icons/select-tool.png',
+          width: thFloatingActionIconSize,
+          height: thFloatingActionIconSize,
+          color: isSelectMode
+              ? colorScheme.onPrimary
+              : colorScheme.onSecondaryContainer,
+        ),
+        backgroundColor:
+            isSelectMode ? colorScheme.primary : colorScheme.secondaryContainer,
+        elevation: isSelectMode ? 0 : null,
+      ),
+      SizedBox(height: 8),
+      FloatingActionButton(
+        heroTag: 'node_edit_tool',
+        onPressed: _onNodeEditToolPressed,
+        tooltip: AppLocalizations.of(context).th2FileEditPageNodeEditTool,
+        child: Icon(
+          Icons.polyline_outlined,
+          size: thFloatingActionIconSize,
+          color: isNodeEditButtonEnabled
+              ? (isEditLineMode
+                  ? colorScheme.onPrimary
+                  : colorScheme.onSecondaryContainer)
+              : colorScheme.surfaceContainerHighest,
+        ),
+        backgroundColor: isNodeEditButtonEnabled
+            ? (isEditLineMode
+                ? colorScheme.primary
+                : colorScheme.secondaryContainer)
+            : colorScheme.surfaceContainerLowest,
+        elevation: isEditLineMode ? 0 : null,
+      ),
+      SizedBox(height: 8),
+      FloatingActionButton(
+        heroTag: 'options_tool',
+        onPressed: _onOptionsToolPressed,
+        tooltip: AppLocalizations.of(context).th2FileEditPageOptionTool,
+        child: Icon(
+          Icons.list,
+          size: thFloatingActionIconSize,
+          color: isOptionEditButtonEnabled
+              ? (isOptionEditMode
+                  ? colorScheme.onPrimary
+                  : colorScheme.onSecondaryContainer)
+              : colorScheme.surfaceContainerHighest,
+        ),
+        backgroundColor: isOptionEditButtonEnabled
+            ? (isOptionEditMode
+                ? colorScheme.primary
+                : colorScheme.secondaryContainer)
+            : colorScheme.surfaceContainerLowest,
+        elevation: isOptionEditMode ? 0 : null,
+      ),
+      SizedBox(height: 8),
+    ];
   }
 
   Widget _generalActionButtons() {
     return Observer(
       builder: (context) {
-        final bool isSelectMode = th2FileEditController.isSelectMode;
+        final List<Widget> generalActionButtons =
+            th2FileEditController.hasMultipleScraps ? _changeScrapButton() : [];
+
+        isSelectMode = th2FileEditController.isSelectMode;
+
+        generalActionButtons.addAll(_editElementButtons());
+        generalActionButtons.add(_addElementOptions());
+        generalActionButtons.add(SizedBox(height: 8));
+        generalActionButtons.add(_zoomButtonWithOptions());
 
         return Positioned(
           bottom: 16,
@@ -275,31 +265,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (th2FileEditController.hasMultipleScraps)
-                ..._changeScrapButton(),
-              FloatingActionButton(
-                heroTag: 'select_tool',
-                onPressed: _onSelectToolPressed,
-                tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
-                child: Image.asset(
-                  'assets/icons/select-tool.png',
-                  width: thFloatingActionIconSize,
-                  height: thFloatingActionIconSize,
-                  color: isSelectMode
-                      ? colorScheme.onPrimary
-                      : colorScheme.onSecondaryContainer,
-                ),
-                backgroundColor: isSelectMode
-                    ? colorScheme.primary
-                    : colorScheme.secondaryContainer,
-                elevation: isSelectMode ? 0 : null,
-              ),
-              SizedBox(height: 8),
-              _addElementOptions(),
-              SizedBox(height: 8),
-              _zoomButtonWithOptions(),
-            ],
+            children: generalActionButtons,
           ),
         );
       },
@@ -390,10 +356,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         },
       ),
     );
-  }
-
-  void _onAddElementButtonPressed(MPButtonType type) {
-    th2FileEditController.stateController.onButtonPressed(type);
   }
 
   List<Widget> _changeScrapButton() {
@@ -498,13 +460,117 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     ];
   }
 
+  void _onAddElementButtonPressed(MPButtonType type) {
+    th2FileEditController.stateController.onButtonPressed(type);
+  }
+
   void _onChangeActiveScrapToolPressed() {
     th2FileEditController.stateController
         .onButtonPressed(MPButtonType.changeScrap);
   }
 
+  void onDeletePressed() {
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.delete);
+  }
+
+  void _onLeavePage() {
+    th2FileEditController.close();
+    Navigator.pop(context);
+  }
+
+  void _onNodeEditToolPressed() {
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.nodeEdit);
+  }
+
+  void _onOptionsToolPressed() {
+    th2FileEditController.stateController
+        .onButtonPressed(MPButtonType.optionsEdit);
+  }
+
+  void onRedoPressed() {
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.redo);
+  }
+
   void _onSelectToolPressed() {
     th2FileEditController.stateController.onButtonPressed(MPButtonType.select);
+  }
+
+  void onUndoPressed() {
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.undo);
+  }
+
+  Widget _stateActionButtons() {
+    return Observer(
+      builder: (_) {
+        if (!th2FileEditController.showUndoRedoButtons) {
+          return const SizedBox();
+        }
+
+        final bool hasUndo = th2FileEditController.hasUndo;
+        final bool hasRedo = th2FileEditController.hasRedo;
+        final bool deleteButtonEnabled =
+            th2FileEditController.deleteButtonEnabled;
+
+        return Positioned(
+          top: 16,
+          right: 16,
+          child: Row(
+            children: [
+              if (th2FileEditController.showDeleteButton) ...[
+                FloatingActionButton(
+                  heroTag: 'delete',
+                  mini: true,
+                  tooltip:
+                      AppLocalizations.of(context).th2FileEditPageDeleteButton,
+                  backgroundColor: deleteButtonEnabled
+                      ? null
+                      : colorScheme.surfaceContainerLowest,
+                  foregroundColor: deleteButtonEnabled
+                      ? null
+                      : colorScheme.surfaceContainerHighest,
+                  onPressed: deleteButtonEnabled ? onDeletePressed : null,
+                  elevation: deleteButtonEnabled ? 6.0 : 3.0,
+                  child: const Icon(Icons.delete_outlined),
+                ),
+                SizedBox(width: 8),
+              ],
+              FloatingActionButton(
+                heroTag: 'undo',
+                mini: true,
+                tooltip: hasUndo
+                    ? th2FileEditController.undoDescription
+                    : AppLocalizations.of(context)
+                        .th2FileEditPageNoUndoAvailable,
+                backgroundColor:
+                    hasUndo ? null : colorScheme.surfaceContainerLowest,
+                foregroundColor:
+                    hasUndo ? null : colorScheme.surfaceContainerHighest,
+                onPressed: hasUndo ? onUndoPressed : null,
+                elevation: hasUndo ? 6.0 : 3.0,
+                child: const Icon(Icons.undo),
+              ),
+              SizedBox(width: 8),
+              FloatingActionButton(
+                heroTag: 'redo',
+                mini: true,
+                tooltip: hasRedo
+                    ? th2FileEditController.redoDescription
+                    : AppLocalizations.of(context)
+                        .th2FileEditPageNoRedoAvailable,
+                backgroundColor:
+                    hasRedo ? null : colorScheme.surfaceContainerLowest,
+                foregroundColor:
+                    hasRedo ? null : colorScheme.surfaceContainerHighest,
+                onPressed: hasRedo ? onRedoPressed : null,
+                elevation: hasRedo ? 6.0 : 3.0,
+                child: const Icon(Icons.redo),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _zoomButtonWithOptions() {

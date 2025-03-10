@@ -268,6 +268,21 @@
     "type": "text"
   },
 
+  "th2FileEditPageLoadingFile": "Loading file {filename} ...",
+  "@th2FileEditPageLoadingFile": {
+    "description": "The label for the loading file message",
+    "type": "text",
+    "placeholders": {
+      "filename": {}
+    }
+  },
+
+  "th2FileEditPageNodeEditTool": "Node edit (N)",
+  "@th2FileEditPageNodeEditTool": {
+    "description": "The label for the node edit tool button",
+    "type": "text"
+  },
+
   "th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": "{amount} line(s) selected",
   "@th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": {
     "description": "The label for only lines selected status bar messagee",
@@ -296,15 +311,6 @@
     }
   },
 
-  "th2FileEditPageLoadingFile": "Loading file {filename} ...",
-  "@th2FileEditPageLoadingFile": {
-    "description": "The label for the loading file message",
-    "type": "text",
-    "placeholders": {
-      "filename": {}
-    }
-  },
-
   "th2FileEditPageNoUndoAvailable": "No undo available",
   "@th2FileEditPageNoUndoAvailable": {
     "description": "The label for the no undo available message",
@@ -314,6 +320,12 @@
   "th2FileEditPageNoRedoAvailable": "No redo available",
   "@th2FileEditPageNoRedoAvailable": {
     "description": "The label for the no redo available message",
+    "type": "text"
+  },
+
+  "th2FileEditPageOptionTool": "Option edit (O)",
+  "@th2FileEditPageOptionTool": {
+    "description": "The label for the option tool button",
     "type": "text"
   },
 

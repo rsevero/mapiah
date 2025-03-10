@@ -38,6 +38,27 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       (_$isEditLineModeComputed ??= Computed<bool>(() => super.isEditLineMode,
               name: 'TH2FileEditControllerBase.isEditLineMode'))
           .value;
+  Computed<bool>? _$isNodeEditButtonEnabledComputed;
+
+  @override
+  bool get isNodeEditButtonEnabled => (_$isNodeEditButtonEnabledComputed ??=
+          Computed<bool>(() => super.isNodeEditButtonEnabled,
+              name: 'TH2FileEditControllerBase.isNodeEditButtonEnabled'))
+      .value;
+  Computed<bool>? _$isOptionEditModeComputed;
+
+  @override
+  bool get isOptionEditMode => (_$isOptionEditModeComputed ??= Computed<bool>(
+          () => super.isOptionEditMode,
+          name: 'TH2FileEditControllerBase.isOptionEditMode'))
+      .value;
+  Computed<bool>? _$isOptionEditButtonEnabledComputed;
+
+  @override
+  bool get isOptionEditButtonEnabled => (_$isOptionEditButtonEnabledComputed ??=
+          Computed<bool>(() => super.isOptionEditButtonEnabled,
+              name: 'TH2FileEditControllerBase.isOptionEditButtonEnabled'))
+      .value;
   Computed<bool>? _$isSelectModeComputed;
 
   @override
@@ -1208,6 +1229,9 @@ canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 filenameAndScrap: ${filenameAndScrap},
 isAddElementMode: ${isAddElementMode},
 isEditLineMode: ${isEditLineMode},
+isNodeEditButtonEnabled: ${isNodeEditButtonEnabled},
+isOptionEditMode: ${isOptionEditMode},
+isOptionEditButtonEnabled: ${isOptionEditButtonEnabled},
 isSelectMode: ${isSelectMode},
 activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},

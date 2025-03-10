@@ -347,6 +347,18 @@ abstract class AppLocalizations {
   /// **'Empty selection'**
   String get th2FileEditPageEmptySelectionStatusBarMessage;
 
+  /// The label for the loading file message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading file {filename} ...'**
+  String th2FileEditPageLoadingFile(Object filename);
+
+  /// The label for the node edit tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Node edit (N)'**
+  String get th2FileEditPageNodeEditTool;
+
   /// The label for only lines selected status bar messagee
   ///
   /// In en, this message translates to:
@@ -365,12 +377,6 @@ abstract class AppLocalizations {
   /// **'{pointsAmount} point(s) and {linesAmount} line(s) selected'**
   String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(Object pointsAmount, Object linesAmount);
 
-  /// The label for the loading file message
-  ///
-  /// In en, this message translates to:
-  /// **'Loading file {filename} ...'**
-  String th2FileEditPageLoadingFile(Object filename);
-
   /// The label for the no undo available message
   ///
   /// In en, this message translates to:
@@ -382,6 +388,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No redo available'**
   String get th2FileEditPageNoRedoAvailable;
+
+  /// The label for the option tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Option edit (O)'**
+  String get th2FileEditPageOptionTool;
 
   /// The label for the pan tool button
   ///

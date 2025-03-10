@@ -70,7 +70,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   /// Used to search for selected elements by list of selectable coordinates.
-  final Map<int, MPSelectable> _selectableElements = {};
+  @readonly
+  ObservableMap<int, MPSelectable> _selectableElements =
+      ObservableMap<int, MPSelectable>();
 
   Offset dragStartCanvasCoordinates = Offset.zero;
 
@@ -963,10 +965,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if (_selectedElements.isEmpty) {
       return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.selectEmptySelection);
-    } else if ((_selectedElements.length == 1) &&
-        (_selectedElements.values.first is MPSelectedLine)) {
-      return _th2FileEditController.stateController
-          .setState(MPTH2FileEditStateType.editSingleLine);
     } else {
       return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.selectNonEmptySelection);

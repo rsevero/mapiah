@@ -19,6 +19,7 @@ import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
@@ -98,6 +99,21 @@ abstract class TH2FileEditControllerBase with Store {
         (state is MPTH2FileEditStateMovingEndControlPoints) ||
         (state is MPTH2FileEditStateMovingSingleControlPoint);
   }
+
+  @computed
+  bool get isNodeEditButtonEnabled =>
+      (selectionController.selectedElements.length == 1) &&
+      (selectionController
+              .selectedElements[selectionController.selectedElements.keys.first]
+          is MPSelectedLine);
+
+  @computed
+  bool get isOptionEditMode =>
+      stateController.state is MPTH2FileEditStateOptionEdit;
+
+  @computed
+  bool get isOptionEditButtonEnabled =>
+      selectionController.selectedElements.isNotEmpty;
 
   @computed
   bool get isSelectMode {

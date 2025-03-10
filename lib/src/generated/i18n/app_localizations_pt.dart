@@ -154,6 +154,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Nenhum elemento selecionado';
 
   @override
+  String th2FileEditPageLoadingFile(Object filename) {
+    return 'Lendo arquivo $filename ...';
+  }
+
+  @override
+  String get th2FileEditPageNodeEditTool => 'Editar nós (N)';
+
+  @override
   String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(Object amount) {
     return '$amount linha(s) selecionadas';
   }
@@ -169,15 +177,13 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String th2FileEditPageLoadingFile(Object filename) {
-    return 'Lendo arquivo $filename ...';
-  }
-
-  @override
   String get th2FileEditPageNoUndoAvailable => 'Nenhuma ação para desfazer';
 
   @override
   String get th2FileEditPageNoRedoAvailable => 'Nenhuma ação para refazer';
+
+  @override
+  String get th2FileEditPageOptionTool => 'Opções (O)';
 
   @override
   String get th2FileEditPagePanTool => 'Mover ponto de vista';

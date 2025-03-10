@@ -7,6 +7,8 @@
 | Create line | L |
 | Create point | P |
 | Open file | Ctrl+O |
+| Options edit | O |
+| Line node edit | N |
 | Redo | Ctrl+Y |
 | Save file | Ctrl+S |
 | Save file as | Shift+Ctrl+S |

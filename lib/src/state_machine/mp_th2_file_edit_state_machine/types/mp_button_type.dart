@@ -5,6 +5,8 @@ enum MPButtonType {
   addPoint,
   changeScrap,
   delete,
+  nodeEdit,
+  optionsEdit,
   redo,
   select,
   undo,
