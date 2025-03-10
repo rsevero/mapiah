@@ -7,7 +7,6 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_add_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_page_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
@@ -33,7 +32,6 @@ class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
 abstract class TH2FileEditControllerBase with Store {
-  late final TH2FileEditAddElementController addElementController;
   late final TH2FileEditElementEditController elementEditController;
   late final TH2FileEditSelectionController selectionController;
   late final TH2FileEditStateController stateController;
@@ -198,8 +196,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showAddLine =>
-      (addElementController.newLine != null) ||
-      (addElementController.lineStartScreenPosition != null);
+      (elementEditController.newLine != null) ||
+      (elementEditController.lineStartScreenPosition != null);
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -389,8 +387,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   void _basicInitialization(THFile file) {
     _thFile = file;
-    addElementController =
-        TH2FileEditAddElementController(this as TH2FileEditController);
     elementEditController =
         TH2FileEditElementEditController(this as TH2FileEditController);
     selectionController =

@@ -28,7 +28,7 @@ class MPDeleteLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.addElementController.deleteLine(lineMapiahID);
+    th2FileEditController.elementEditController.deleteLine(lineMapiahID);
   }
 
   @override
@@ -51,7 +51,7 @@ class MPDeleteLineCommand extends MPCommand {
       newLine: originalLine,
       lineChildren: lineChildren,
       lineStartScreenPosition:
-          th2FileEditController.addElementController.lineStartScreenPosition,
+          th2FileEditController.elementEditController.lineStartScreenPosition,
       descriptionType: descriptionType,
     );
 

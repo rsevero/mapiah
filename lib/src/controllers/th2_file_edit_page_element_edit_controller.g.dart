@@ -48,6 +48,101 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
+  late final _$_lastAddedPointTypeAtom = Atom(
+      name: 'TH2FileEditElementEditControllerBase._lastAddedPointType',
+      context: context);
+
+  THPointType get lastAddedPointType {
+    _$_lastAddedPointTypeAtom.reportRead();
+    return super._lastAddedPointType;
+  }
+
+  @override
+  THPointType get _lastAddedPointType => lastAddedPointType;
+
+  @override
+  set _lastAddedPointType(THPointType value) {
+    _$_lastAddedPointTypeAtom.reportWrite(value, super._lastAddedPointType, () {
+      super._lastAddedPointType = value;
+    });
+  }
+
+  late final _$_lastAddedLineTypeAtom = Atom(
+      name: 'TH2FileEditElementEditControllerBase._lastAddedLineType',
+      context: context);
+
+  THLineType get lastAddedLineType {
+    _$_lastAddedLineTypeAtom.reportRead();
+    return super._lastAddedLineType;
+  }
+
+  @override
+  THLineType get _lastAddedLineType => lastAddedLineType;
+
+  @override
+  set _lastAddedLineType(THLineType value) {
+    _$_lastAddedLineTypeAtom.reportWrite(value, super._lastAddedLineType, () {
+      super._lastAddedLineType = value;
+    });
+  }
+
+  late final _$_lastAddedAreaTypeAtom = Atom(
+      name: 'TH2FileEditElementEditControllerBase._lastAddedAreaType',
+      context: context);
+
+  THAreaType get lastAddedAreaType {
+    _$_lastAddedAreaTypeAtom.reportRead();
+    return super._lastAddedAreaType;
+  }
+
+  @override
+  THAreaType get _lastAddedAreaType => lastAddedAreaType;
+
+  @override
+  set _lastAddedAreaType(THAreaType value) {
+    _$_lastAddedAreaTypeAtom.reportWrite(value, super._lastAddedAreaType, () {
+      super._lastAddedAreaType = value;
+    });
+  }
+
+  late final _$_lineStartScreenPositionAtom = Atom(
+      name: 'TH2FileEditElementEditControllerBase._lineStartScreenPosition',
+      context: context);
+
+  Offset? get lineStartScreenPosition {
+    _$_lineStartScreenPositionAtom.reportRead();
+    return super._lineStartScreenPosition;
+  }
+
+  @override
+  Offset? get _lineStartScreenPosition => lineStartScreenPosition;
+
+  @override
+  set _lineStartScreenPosition(Offset? value) {
+    _$_lineStartScreenPositionAtom
+        .reportWrite(value, super._lineStartScreenPosition, () {
+      super._lineStartScreenPosition = value;
+    });
+  }
+
+  late final _$_newLineAtom = Atom(
+      name: 'TH2FileEditElementEditControllerBase._newLine', context: context);
+
+  THLine? get newLine {
+    _$_newLineAtom.reportRead();
+    return super._newLine;
+  }
+
+  @override
+  THLine? get _newLine => newLine;
+
+  @override
+  set _newLine(THLine? value) {
+    _$_newLineAtom.reportWrite(value, super._newLine, () {
+      super._newLine = value;
+    });
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditElementEditControllerBase', context: context);
@@ -127,6 +222,168 @@ mixin _$TH2FileEditElementEditController
                 'TH2FileEditElementEditControllerBase.registerElementWithTHID');
     try {
       return super.registerElementWithTHID(element, thID);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  THLine getNewLine() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.getNewLine');
+    try {
+      return super.getNewLine();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.setNewLineStartScreenPosition');
+    try {
+      return super.setNewLineStartScreenPosition(lineStartScreenPosition);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearNewLine() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.clearNewLine');
+    try {
+      return super.clearNewLine();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNewLine(THLine newLine) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.setNewLine');
+    try {
+      return super.setNewLine(newLine);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastAddedPointType(THPointType pointType) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditElementEditControllerBase.setLastAddedPointType');
+    try {
+      return super.setLastAddedPointType(pointType);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastAddedLineType(THLineType lineType) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditElementEditControllerBase.setLastAddedLineType');
+    try {
+      return super.setLastAddedLineType(lineType);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastAddedAreaType(THAreaType areaType) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditElementEditControllerBase.setLastAddedAreaType');
+    try {
+      return super.setLastAddedAreaType(areaType);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateBezierLineSegment(
+      Offset quadraticControlPointPositionScreenCoordinates) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.updateBezierLineSegment');
+    try {
+      return super.updateBezierLineSegment(
+          quadraticControlPointPositionScreenCoordinates);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditElementEditControllerBase.addNewLineLineSegment');
+    try {
+      return super.addNewLineLineSegment(enPointScreenCoordinates);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addLine(
+      {required THLine newLine,
+      required List<THElement> lineChildren,
+      Offset? lineStartScreenPosition}) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.addLine');
+    try {
+      return super.addLine(
+          newLine: newLine,
+          lineChildren: lineChildren,
+          lineStartScreenPosition: lineStartScreenPosition);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteLine(int lineMapiahID) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.deleteLine');
+    try {
+      return super.deleteLine(lineMapiahID);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void finalizeNewLineCreation() {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.finalizeNewLineCreation');
+    try {
+      return super.finalizeNewLineCreation();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

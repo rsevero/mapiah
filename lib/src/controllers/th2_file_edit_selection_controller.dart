@@ -140,7 +140,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           mpCommand = MPDeleteLineCommand(
             lineMapiahID: singleSelectedElement.mapiahID,
             isInteractiveLineCreation: _th2FileEditController
-                    .addElementController.lineStartScreenPosition !=
+                    .elementEditController.lineStartScreenPosition !=
                 null,
           );
       }

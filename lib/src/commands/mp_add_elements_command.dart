@@ -25,13 +25,13 @@ class MPAddElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final TH2FileEditAddElementController addElementController =
-        th2FileEditController.addElementController;
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
 
     for (final MPAddElementCommandParams params in createParams) {
       switch (params) {
         case MPAddLineCommandParams _:
-          addElementController.addLine(
+          elementEditController.addLine(
             newLine: params.line,
             lineChildren: params.lineChildren,
           );
