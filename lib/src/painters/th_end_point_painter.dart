@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
@@ -39,7 +40,7 @@ class THEndPointPainter extends CustomPainter {
     if (!isSmooth) {
       canvas.save();
       canvas.translate(position.dx, position.dy);
-      canvas.rotate(1);
+      canvas.rotate(th45Degrees);
       canvas.translate(-position.dx, -position.dy);
     }
 
