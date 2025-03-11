@@ -110,8 +110,7 @@ abstract class TH2FileEditControllerBase with Store {
       stateController.state is MPTH2FileEditStateOptionEdit;
 
   @computed
-  bool get isOptionEditButtonEnabled =>
-      selectionController.selectedElements.isNotEmpty;
+  bool get isOptionEditButtonEnabled => true;
 
   @computed
   bool get isSelectMode {
@@ -252,6 +251,10 @@ abstract class TH2FileEditControllerBase with Store {
   bool get showEditLineSegment => isEditLineMode;
 
   @computed
+  bool get showOptionsEdit =>
+      stateController.state is MPTH2FileEditStateOptionEdit;
+
+  @computed
   bool get showUndoRedoButtons =>
       isAddElementMode || isSelectMode || isEditLineMode;
 
@@ -351,6 +354,9 @@ abstract class TH2FileEditControllerBase with Store {
   double _canvasCenterX = 0.0;
   @readonly
   double _canvasCenterY = 0.0;
+
+  @readonly
+  ObservableMap<Key, Rect> _ignoreRects = ObservableMap<Key, Rect>();
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -936,6 +942,22 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
+
+  @action
+  void clearIgnoredRects() {
+    _ignoreRects.clear();
+  }
+
+  @action
+  void setIgnoreRects(Map<Key, Rect> ignoreRects) {
+    _ignoreRects.clear();
+    _ignoreRects.addAll(ignoreRects);
+  }
+
+  @action
+  void updateIgnoreRect(Key key, Rect rect) {
+    _ignoreRects[key] = rect;
+  }
 }
 
 class TH2FileEditControllerCreateResult {

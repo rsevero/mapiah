@@ -212,6 +212,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.showEditLineSegment,
               name: 'TH2FileEditControllerBase.showEditLineSegment'))
       .value;
+  Computed<bool>? _$showOptionsEditComputed;
+
+  @override
+  bool get showOptionsEdit =>
+      (_$showOptionsEditComputed ??= Computed<bool>(() => super.showOptionsEdit,
+              name: 'TH2FileEditControllerBase.showOptionsEdit'))
+          .value;
   Computed<bool>? _$showUndoRedoButtonsComputed;
 
   @override
@@ -851,6 +858,24 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_ignoreRectsAtom =
+      Atom(name: 'TH2FileEditControllerBase._ignoreRects', context: context);
+
+  ObservableMap<Key, Rect> get ignoreRects {
+    _$_ignoreRectsAtom.reportRead();
+    return super._ignoreRects;
+  }
+
+  @override
+  ObservableMap<Key, Rect> get _ignoreRects => ignoreRects;
+
+  @override
+  set _ignoreRects(ObservableMap<Key, Rect> value) {
+    _$_ignoreRectsAtom.reportWrite(value, super._ignoreRects, () {
+      super._ignoreRects = value;
+    });
+  }
+
   late final _$TH2FileEditControllerBaseActionController =
       ActionController(name: 'TH2FileEditControllerBase', context: context);
 
@@ -1151,6 +1176,39 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void clearIgnoredRects() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.clearIgnoredRects');
+    try {
+      return super.clearIgnoredRects();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIgnoreRects(Map<Key, Rect> ignoreRects) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setIgnoreRects');
+    try {
+      return super.setIgnoreRects(ignoreRects);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateIgnoreRect(Key key, Rect rect) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.updateIgnoreRect');
+    try {
+      return super.updateIgnoreRect(key, rect);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
@@ -1182,6 +1240,7 @@ selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
 showDeleteButton: ${showDeleteButton},
 showEditLineSegment: ${showEditLineSegment},
+showOptionsEdit: ${showOptionsEdit},
 showUndoRedoButtons: ${showUndoRedoButtons},
 deleteButtonEnabled: ${deleteButtonEnabled},
 showScrapScale: ${showScrapScale},

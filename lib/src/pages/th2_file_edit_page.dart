@@ -116,7 +116,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           th2FileEditController: th2FileEditController,
                         ),
                         _stateActionButtons(),
-                        _generalActionButtons(),
+                        _actionButtons(),
                       ],
                     ),
                   );
@@ -175,78 +175,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     );
   }
 
-  List<Widget> _editElementButtons() {
-    final bool isEditLineMode = th2FileEditController.isEditLineMode;
-    final bool isNodeEditButtonEnabled =
-        th2FileEditController.isNodeEditButtonEnabled;
-    final bool isOptionEditMode = th2FileEditController.isOptionEditMode;
-    final bool isOptionEditButtonEnabled =
-        th2FileEditController.isOptionEditButtonEnabled;
-
-    return [
-      FloatingActionButton(
-        heroTag: 'select_tool',
-        onPressed: _onSelectToolPressed,
-        tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
-        child: Image.asset(
-          'assets/icons/select-tool.png',
-          width: thFloatingActionIconSize,
-          height: thFloatingActionIconSize,
-          color: isSelectMode
-              ? colorScheme.onPrimary
-              : colorScheme.onSecondaryContainer,
-        ),
-        backgroundColor:
-            isSelectMode ? colorScheme.primary : colorScheme.secondaryContainer,
-        elevation: isSelectMode ? 0 : null,
-      ),
-      SizedBox(height: 8),
-      FloatingActionButton(
-        heroTag: 'node_edit_tool',
-        onPressed: _onNodeEditToolPressed,
-        tooltip: AppLocalizations.of(context).th2FileEditPageNodeEditTool,
-        child: Icon(
-          Icons.polyline_outlined,
-          size: thFloatingActionIconSize,
-          color: isNodeEditButtonEnabled
-              ? (isEditLineMode
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSecondaryContainer)
-              : colorScheme.surfaceContainerHighest,
-        ),
-        backgroundColor: isNodeEditButtonEnabled
-            ? (isEditLineMode
-                ? colorScheme.primary
-                : colorScheme.secondaryContainer)
-            : colorScheme.surfaceContainerLowest,
-        elevation: isEditLineMode ? 0 : null,
-      ),
-      SizedBox(height: 8),
-      FloatingActionButton(
-        heroTag: 'options_tool',
-        onPressed: _onOptionsToolPressed,
-        tooltip: AppLocalizations.of(context).th2FileEditPageOptionTool,
-        child: Icon(
-          Icons.list,
-          size: thFloatingActionIconSize,
-          color: isOptionEditButtonEnabled
-              ? (isOptionEditMode
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSecondaryContainer)
-              : colorScheme.surfaceContainerHighest,
-        ),
-        backgroundColor: isOptionEditButtonEnabled
-            ? (isOptionEditMode
-                ? colorScheme.primary
-                : colorScheme.secondaryContainer)
-            : colorScheme.surfaceContainerLowest,
-        elevation: isOptionEditMode ? 0 : null,
-      ),
-      SizedBox(height: 8),
-    ];
-  }
-
-  Widget _generalActionButtons() {
+  Widget _actionButtons() {
     return Observer(
       builder: (context) {
         final List<Widget> generalActionButtons =
@@ -460,6 +389,77 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     ];
   }
 
+  List<Widget> _editElementButtons() {
+    final bool isEditLineMode = th2FileEditController.isEditLineMode;
+    final bool isNodeEditButtonEnabled =
+        th2FileEditController.isNodeEditButtonEnabled;
+    final bool isOptionEditMode = th2FileEditController.isOptionEditMode;
+    final bool isOptionEditButtonEnabled =
+        th2FileEditController.isOptionEditButtonEnabled;
+
+    return [
+      FloatingActionButton(
+        heroTag: 'select_tool',
+        onPressed: _onSelectToolPressed,
+        tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
+        child: Image.asset(
+          'assets/icons/select-tool.png',
+          width: thFloatingActionIconSize,
+          height: thFloatingActionIconSize,
+          color: isSelectMode
+              ? colorScheme.onPrimary
+              : colorScheme.onSecondaryContainer,
+        ),
+        backgroundColor:
+            isSelectMode ? colorScheme.primary : colorScheme.secondaryContainer,
+        elevation: isSelectMode ? 0 : null,
+      ),
+      SizedBox(height: 8),
+      FloatingActionButton(
+        heroTag: 'node_edit_tool',
+        onPressed: _onNodeEditToolPressed,
+        tooltip: AppLocalizations.of(context).th2FileEditPageNodeEditTool,
+        child: Icon(
+          Icons.polyline_outlined,
+          size: thFloatingActionIconSize,
+          color: isNodeEditButtonEnabled
+              ? (isEditLineMode
+                  ? colorScheme.onPrimary
+                  : colorScheme.onSecondaryContainer)
+              : colorScheme.surfaceContainerHighest,
+        ),
+        backgroundColor: isNodeEditButtonEnabled
+            ? (isEditLineMode
+                ? colorScheme.primary
+                : colorScheme.secondaryContainer)
+            : colorScheme.surfaceContainerLowest,
+        elevation: isEditLineMode ? 0 : null,
+      ),
+      SizedBox(height: 8),
+      FloatingActionButton(
+        heroTag: 'options_tool',
+        onPressed: () => _onOptionsToolPressed(context),
+        tooltip: AppLocalizations.of(context).th2FileEditPageOptionTool,
+        child: Icon(
+          Icons.list,
+          size: thFloatingActionIconSize,
+          color: isOptionEditButtonEnabled
+              ? (isOptionEditMode
+                  ? colorScheme.onPrimary
+                  : colorScheme.onSecondaryContainer)
+              : colorScheme.surfaceContainerHighest,
+        ),
+        backgroundColor: isOptionEditButtonEnabled
+            ? (isOptionEditMode
+                ? colorScheme.primary
+                : colorScheme.secondaryContainer)
+            : colorScheme.surfaceContainerLowest,
+        elevation: isOptionEditMode ? 0 : null,
+      ),
+      SizedBox(height: 8),
+    ];
+  }
+
   void _onAddElementButtonPressed(MPButtonType type) {
     th2FileEditController.stateController.onButtonPressed(type);
   }
@@ -483,7 +483,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         .onButtonPressed(MPButtonType.nodeEdit);
   }
 
-  void _onOptionsToolPressed() {
+  void _onOptionsToolPressed(BuildContext context) {
     th2FileEditController.stateController
         .onButtonPressed(MPButtonType.optionsEdit);
   }

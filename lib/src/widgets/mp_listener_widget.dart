@@ -6,11 +6,13 @@ import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatefulWidget {
   final MPActuatorInterface actuator;
+  final Map<Key, Rect> ignoreRects;
   final Widget child;
 
   MPListenerWidget({
     super.key,
     required this.actuator,
+    required this.ignoreRects,
     required this.child,
   });
 
@@ -39,6 +41,13 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
+        final ignoreRects = widget.ignoreRects.values;
+
+        for (final Rect ignoreRect in ignoreRects) {
+          if (ignoreRect.contains(event.localPosition)) {
+            return;
+          }
+        }
         switch (event.buttons) {
           case kPrimaryButton:
             currentPressedMouseButton = kPrimaryButton;
@@ -58,6 +67,13 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerMove: (PointerMoveEvent event) {
+        final ignoreRects = widget.ignoreRects.values;
+
+        for (final Rect ignoreRect in ignoreRects) {
+          if (ignoreRect.contains(event.localPosition)) {
+            return;
+          }
+        }
         switch (event.buttons) {
           case kPrimaryButton:
             if (isPrimaryButtonDragging) {
@@ -101,6 +117,13 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
+        final ignoreRects = widget.ignoreRects.values;
+
+        for (final Rect ignoreRect in ignoreRects) {
+          if (ignoreRect.contains(event.localPosition)) {
+            return;
+          }
+        }
         switch (currentPressedMouseButton) {
           case kPrimaryButton:
             currentPressedMouseButton = 0;
@@ -129,6 +152,13 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
+        final ignoreRects = widget.ignoreRects.values;
+
+        for (final Rect ignoreRect in ignoreRects) {
+          if (ignoreRect.contains(event.localPosition)) {
+            return;
+          }
+        }
         if (event is PointerScrollEvent) {
           widget.actuator.onTertiaryButtonScroll(event);
         }
