@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -356,7 +357,10 @@ abstract class TH2FileEditControllerBase with Store {
   double _canvasCenterY = 0.0;
 
   @readonly
-  ObservableMap<Key, Rect> _ignoreRects = ObservableMap<Key, Rect>();
+  Map<int, List<Rect>> _overlayWindowRects = {};
+
+  @readonly
+  Map<GlobalKey, MPOverlayWindowInfo> _overlayWindows = {};
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -943,20 +947,36 @@ abstract class TH2FileEditControllerBase with Store {
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
 
-  @action
-  void clearIgnoredRects() {
-    _ignoreRects.clear();
+  void clearOverlayWindowRects() {
+    _overlayWindows.clear();
+    _overlayWindowRects.clear();
   }
 
-  @action
-  void setIgnoreRects(Map<Key, Rect> ignoreRects) {
-    _ignoreRects.clear();
-    _ignoreRects.addAll(ignoreRects);
+  void updateOverlayWindowInfo(MPOverlayWindowInfo info) {
+    _overlayWindows[info.key] = info;
+    _updateOverlayWindowInfos();
   }
 
-  @action
-  void updateIgnoreRect(Key key, Rect rect) {
-    _ignoreRects[key] = rect;
+  void _updateOverlayWindowInfos() {
+    final List<GlobalKey> keys = _overlayWindows.keys.toList();
+
+    _overlayWindowRects.clear();
+
+    for (final GlobalKey key in keys) {
+      final Rect? rect = MPInteractionAux.getWidgetRect(key);
+
+      if (rect == null) {
+        _overlayWindows.remove(key);
+      } else {
+        final MPOverlayWindowInfo info = _overlayWindows[key]!;
+        final List<Rect> rects = _overlayWindowRects.putIfAbsent(
+          info.zOrder,
+          () => <Rect>[],
+        );
+
+        rects.add(rect);
+      }
+    }
   }
 }
 
@@ -968,4 +988,14 @@ class TH2FileEditControllerCreateResult {
     this.isSuccessful,
     this.errors,
   );
+}
+
+class MPOverlayWindowInfo {
+  final int zOrder;
+  final GlobalKey key;
+
+  MPOverlayWindowInfo({
+    required this.zOrder,
+    required this.key,
+  });
 }

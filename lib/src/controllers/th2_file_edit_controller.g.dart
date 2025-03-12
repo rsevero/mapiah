@@ -858,21 +858,42 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_ignoreRectsAtom =
-      Atom(name: 'TH2FileEditControllerBase._ignoreRects', context: context);
+  late final _$_overlayWindowRectsAtom = Atom(
+      name: 'TH2FileEditControllerBase._overlayWindowRects', context: context);
 
-  ObservableMap<Key, Rect> get ignoreRects {
-    _$_ignoreRectsAtom.reportRead();
-    return super._ignoreRects;
+  Map<int, List<Rect>> get overlayWindowRects {
+    _$_overlayWindowRectsAtom.reportRead();
+    return super._overlayWindowRects;
   }
 
   @override
-  ObservableMap<Key, Rect> get _ignoreRects => ignoreRects;
+  Map<int, List<Rect>> get _overlayWindowRects => overlayWindowRects;
 
   @override
-  set _ignoreRects(ObservableMap<Key, Rect> value) {
-    _$_ignoreRectsAtom.reportWrite(value, super._ignoreRects, () {
-      super._ignoreRects = value;
+  set _overlayWindowRects(Map<int, List<Rect>> value) {
+    _$_overlayWindowRectsAtom.reportWrite(value, super._overlayWindowRects, () {
+      super._overlayWindowRects = value;
+    });
+  }
+
+  late final _$_overlayWindowsAtom =
+      Atom(name: 'TH2FileEditControllerBase._overlayWindows', context: context);
+
+  Map<GlobalKey<State<StatefulWidget>>, MPOverlayWindowInfo>
+      get overlayWindows {
+    _$_overlayWindowsAtom.reportRead();
+    return super._overlayWindows;
+  }
+
+  @override
+  Map<GlobalKey<State<StatefulWidget>>, MPOverlayWindowInfo>
+      get _overlayWindows => overlayWindows;
+
+  @override
+  set _overlayWindows(
+      Map<GlobalKey<State<StatefulWidget>>, MPOverlayWindowInfo> value) {
+    _$_overlayWindowsAtom.reportWrite(value, super._overlayWindows, () {
+      super._overlayWindows = value;
     });
   }
 
@@ -1170,39 +1191,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase._undoRedoDone');
     try {
       return super._undoRedoDone();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearIgnoredRects() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.clearIgnoredRects');
-    try {
-      return super.clearIgnoredRects();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setIgnoreRects(Map<Key, Rect> ignoreRects) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setIgnoreRects');
-    try {
-      return super.setIgnoreRects(ignoreRects);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updateIgnoreRect(Key key, Rect rect) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.updateIgnoreRect');
-    try {
-      return super.updateIgnoreRect(key, rect);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -100,3 +100,8 @@ fabric.properties
 # MacOS auxiliary files
 **/.metadata
 
+# Flutter 3.29 started creating bunch of files as a side effect of the work to
+# include debug symbols in app bundles, specifically this PR:
+# https://github.com/flutter/flutter/pull/160260.
+android/app/.cxx/
+

@@ -85,6 +85,8 @@ const String thEnglishLocaleID = 'en';
 const double thFloatingActionIconSize = 32;
 const double thFloatingActionZoomIconSize = 24;
 
+const int mpDefaultListenerZOrder = 0;
+
 const double thClickDragThreshold = 2.0;
 const double thClickDragThresholdSquared =
     thClickDragThreshold * thClickDragThreshold;

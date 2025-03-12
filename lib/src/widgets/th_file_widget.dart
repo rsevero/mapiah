@@ -37,7 +37,7 @@ class THFileWidget extends StatelessWidget {
         return MPListenerWidget(
           key: ValueKey("MPListenerWidget|$thFileMapiahID"),
           actuator: th2FileEditController.stateController,
-          ignoreRects: th2FileEditController.ignoreRects,
+          th2FileEditController: th2FileEditController,
           child: Stack(
             children: [
               MPNonSelectedElementsWidget(
@@ -123,6 +123,7 @@ class THFileWidget extends StatelessWidget {
                       key: ValueKey("MPOptionsEditWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
                       position: Offset(57, 48),
+                      zOrder: 1000,
                     );
                   } else {
                     return SizedBox.shrink();

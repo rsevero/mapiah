@@ -1,18 +1,21 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatefulWidget {
+  final TH2FileEditController th2FileEditController;
   final MPActuatorInterface actuator;
-  final Map<Key, Rect> ignoreRects;
   final Widget child;
 
   MPListenerWidget({
     super.key,
+    required this.th2FileEditController,
     required this.actuator,
-    required this.ignoreRects,
     required this.child,
   });
 
@@ -21,6 +24,7 @@ class MPListenerWidget extends StatefulWidget {
 }
 
 class MPListenerWidgetState extends State<MPListenerWidget> {
+  late final TH2FileEditController th2FileEditController;
   final FocusNode _focusNode = FocusNode();
   int currentPressedMouseButton = 0;
   Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
@@ -32,6 +36,12 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   LogicalKeyboardKey? logicalKeyPressed;
 
   @override
+  void initState() {
+    super.initState();
+    th2FileEditController = widget.th2FileEditController;
+  }
+
+  @override
   void dispose() {
     _focusNode.dispose();
     super.dispose();
@@ -41,13 +51,16 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
-        final ignoreRects = widget.ignoreRects.values;
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerDown()");
 
-        for (final Rect ignoreRect in ignoreRects) {
-          if (ignoreRect.contains(event.localPosition)) {
-            return;
-          }
+        if (MPInteractionAux.ignoreClick(
+          th2FileEditController.overlayWindowRects,
+          mpDefaultListenerZOrder,
+          event.localPosition,
+        )) {
+          return;
         }
+
         switch (event.buttons) {
           case kPrimaryButton:
             currentPressedMouseButton = kPrimaryButton;
@@ -67,13 +80,16 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerMove: (PointerMoveEvent event) {
-        final ignoreRects = widget.ignoreRects.values;
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerMove()");
 
-        for (final Rect ignoreRect in ignoreRects) {
-          if (ignoreRect.contains(event.localPosition)) {
-            return;
-          }
+        if (MPInteractionAux.ignoreClick(
+          th2FileEditController.overlayWindowRects,
+          mpDefaultListenerZOrder,
+          event.localPosition,
+        )) {
+          return;
         }
+
         switch (event.buttons) {
           case kPrimaryButton:
             if (isPrimaryButtonDragging) {
@@ -117,13 +133,16 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        final ignoreRects = widget.ignoreRects.values;
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerUp()");
 
-        for (final Rect ignoreRect in ignoreRects) {
-          if (ignoreRect.contains(event.localPosition)) {
-            return;
-          }
+        if (MPInteractionAux.ignoreClick(
+          th2FileEditController.overlayWindowRects,
+          mpDefaultListenerZOrder,
+          event.localPosition,
+        )) {
+          return;
         }
+
         switch (currentPressedMouseButton) {
           case kPrimaryButton:
             currentPressedMouseButton = 0;
@@ -152,13 +171,16 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
-        final ignoreRects = widget.ignoreRects.values;
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal()");
 
-        for (final Rect ignoreRect in ignoreRects) {
-          if (ignoreRect.contains(event.localPosition)) {
-            return;
-          }
+        if (MPInteractionAux.ignoreClick(
+          th2FileEditController.overlayWindowRects,
+          mpDefaultListenerZOrder,
+          event.localPosition,
+        )) {
+          return;
         }
+
         if (event is PointerScrollEvent) {
           widget.actuator.onTertiaryButtonScroll(event);
         }
