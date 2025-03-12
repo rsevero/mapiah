@@ -446,15 +446,24 @@ class MPNumericAux {
     return (estimatedLength / desiredSegmentLength).ceil();
   }
 
-  static int doubleToInt64Bits(double value) {
+  static (int, int, int) doubleToComponents(double value) {
     ByteData bytes = ByteData(8);
     bytes.setFloat64(0, value);
-    return bytes.getInt64(0);
+    final int sign = bytes.getUint8(0) >> 7;
+    final int exponent =
+        ((bytes.getUint8(0) & 0x7F) << 4) | ((bytes.getUint8(1) >> 4));
+    final int precision = ((bytes.getUint8(1) & 0x0F) << 48) +
+        (bytes.getUint32(2) << 16) +
+        (bytes.getUint16(6));
+    return (sign, exponent, precision);
   }
 
-  static double int64BitsToDouble(int value) {
+  static double componentsToDouble(int sign, int exponent, int precision) {
     ByteData bytes = ByteData(8);
-    bytes.setInt64(0, value);
+    bytes.setUint8(0, (sign << 7) + (exponent >> 4));
+    bytes.setUint8(1, ((exponent & 0xF) << 4) + (precision >> 48));
+    bytes.setUint32(2, (precision >> 16) & 0xFFFFFFFF);
+    bytes.setUint16(6, precision & 0xFFFF);
     return bytes.getFloat64(0);
   }
 
@@ -471,15 +480,15 @@ class MPNumericAux {
       return double.minPositive;
     }
 
-    int signed64 = doubleToInt64Bits(x);
+    var (sign, exponent, precision) = doubleToComponents(x);
 
     if (x > 0.0) {
-      signed64++;
+      precision++;
     } else {
-      signed64--;
+      precision--;
     }
 
-    return int64BitsToDouble(signed64);
+    return componentsToDouble(sign, exponent, precision);
   }
 
   static double nextDown(double x) {
@@ -495,14 +504,14 @@ class MPNumericAux {
       return -double.minPositive;
     }
 
-    int signed64 = doubleToInt64Bits(x);
+    var (sign, exponent, precision) = doubleToComponents(x);
 
     if (x > 0.0) {
-      signed64--;
+      precision--;
     } else {
-      signed64++;
+      precision++;
     }
 
-    return int64BitsToDouble(signed64);
+    return componentsToDouble(sign, exponent, precision);
   }
 }
