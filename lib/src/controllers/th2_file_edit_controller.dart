@@ -141,6 +141,9 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   bool _isAddElementButtonsHovered = false;
 
+  @readonly
+  int _refZOrder = mpInitialZOrder;
+
   @computed
   MPButtonType get activeAddElementButton {
     switch (stateController.state) {
@@ -944,6 +947,12 @@ abstract class TH2FileEditControllerBase with Store {
     _undoRedoDone();
   }
 
+  int getNewZOrder() {
+    _refZOrder += mpDefaultZOrderIncrement;
+
+    return _refZOrder;
+  }
+
   void removeOverlayWindowInfo(GlobalKey key) {
     if (!_overlayWindowZOrders.containsKey(key)) {
       return;
@@ -958,6 +967,10 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     _overlayWindowRects.remove(zOrder);
+
+    if (_overlayWindowRects.isEmpty) {
+      _refZOrder = mpInitialZOrder;
+    }
   }
 
   void updateOverlayWindowInfo(GlobalKey key, int zOrder) {

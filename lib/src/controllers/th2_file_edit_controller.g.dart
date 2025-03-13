@@ -509,6 +509,24 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_refZOrderAtom =
+      Atom(name: 'TH2FileEditControllerBase._refZOrder', context: context);
+
+  int get refZOrder {
+    _$_refZOrderAtom.reportRead();
+    return super._refZOrder;
+  }
+
+  @override
+  int get _refZOrder => refZOrder;
+
+  @override
+  set _refZOrder(int value) {
+    _$_refZOrderAtom.reportWrite(value, super._refZOrder, () {
+      super._refZOrder = value;
+    });
+  }
+
   late final _$_currentDecimalPositionsAtom = Atom(
       name: 'TH2FileEditControllerBase._currentDecimalPositions',
       context: context);

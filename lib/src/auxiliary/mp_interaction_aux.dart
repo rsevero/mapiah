@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 
@@ -31,14 +32,14 @@ class MPInteractionAux {
 
     final RenderBox renderBox =
         widgetKey.currentContext!.findRenderObject() as RenderBox;
-    final Offset position = renderBox.localToGlobal(Offset.zero);
+    final Offset position = (renderBox.parentData! as BoxParentData).offset;
     final Size size = renderBox.size;
 
     return MPNumericAux.orderedRectFromLTWH(
-      left: position.dy,
-      top: position.dx,
-      width: position.dy + size.height,
-      height: position.dx + size.width,
+      left: position.dx,
+      top: position.dy,
+      width: position.dx + size.width,
+      height: position.dy + size.height,
     );
   }
 

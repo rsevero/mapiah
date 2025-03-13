@@ -50,10 +50,10 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
+      key: widgetKey,
       left: position.dx,
       top: position.dy,
       child: Listener(
-        key: widgetKey,
         onPointerDown: (PointerDownEvent event) {
           mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerDown()");
         },
