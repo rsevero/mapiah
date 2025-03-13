@@ -11,7 +11,6 @@ class MPAddLineCommand extends MPCommand {
     required this.newLine,
     required this.lineChildren,
     this.lineStartScreenPosition,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -39,7 +38,7 @@ class MPAddLineCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final MPDeleteLineCommand oppositeCommand = MPDeleteLineCommand(
@@ -50,7 +49,8 @@ class MPAddLineCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -60,8 +60,6 @@ class MPAddLineCommand extends MPCommand {
     List<THElement>? lineChildren,
     Offset? lineStartScreenPosition,
     bool makeLineStartScreenPositionNull = false,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineCommand.forCWJM(
@@ -70,9 +68,6 @@ class MPAddLineCommand extends MPCommand {
       lineStartScreenPosition: makeLineStartScreenPositionNull
           ? null
           : (lineStartScreenPosition ?? this.lineStartScreenPosition),
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -91,9 +86,6 @@ class MPAddLineCommand extends MPCommand {
               map['lineStartScreenPosition']['y'],
             )
           : null,
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -133,7 +125,6 @@ class MPAddLineCommand extends MPCommand {
         const DeepCollectionEquality()
             .equals(other.lineChildren, lineChildren) &&
         other.lineStartScreenPosition == lineStartScreenPosition &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

@@ -9,7 +9,6 @@ class MPDeleteLineCommand extends MPCommand {
   MPDeleteLineCommand.forCWJM({
     required this.lineMapiahID,
     required this.isInteractiveLineCreation,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -32,7 +31,7 @@ class MPDeleteLineCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
@@ -57,23 +56,19 @@ class MPDeleteLineCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
   @override
   MPCommand copyWith({
     int? lineMapiahID,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteLineCommand.forCWJM(
       lineMapiahID: lineMapiahID ?? this.lineMapiahID,
       isInteractiveLineCreation: isInteractiveLineCreation,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -82,9 +77,6 @@ class MPDeleteLineCommand extends MPCommand {
     return MPDeleteLineCommand.forCWJM(
       lineMapiahID: map['lineMapiahID'],
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -113,7 +105,6 @@ class MPDeleteLineCommand extends MPCommand {
     return other is MPDeleteLineCommand &&
         other.lineMapiahID == lineMapiahID &&
         other.isInteractiveLineCreation == isInteractiveLineCreation &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

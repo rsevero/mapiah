@@ -7,7 +7,6 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
   MPDeleteLineSegmentCommand.forCWJM({
     required this.lineSegmentMapiahID,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -30,7 +29,7 @@ class MPDeleteLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final THLineSegment newLineSegment = th2FileEditController.thFile
@@ -42,22 +41,18 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
   @override
   MPCommand copyWith({
     int? lineSegmentMapiahID,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteLineSegmentCommand.forCWJM(
       lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -65,9 +60,6 @@ class MPDeleteLineSegmentCommand extends MPCommand {
   factory MPDeleteLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteLineSegmentCommand.forCWJM(
       lineSegmentMapiahID: map['lineSegmentMapiahID'],
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -94,7 +86,6 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
     return other is MPDeleteLineSegmentCommand &&
         other.lineSegmentMapiahID == lineSegmentMapiahID &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

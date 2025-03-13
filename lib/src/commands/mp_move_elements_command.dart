@@ -2,13 +2,12 @@ part of 'mp_command.dart';
 
 class MPMoveElementsCommand extends MPCommand {
   late final List<MPMoveCommandCompleteParams> moveCommandParametersList;
-  final List<MPUndoRedoCommand> oppositeCommandList = [];
+  final List<MPUndoRedoCommand> undoRedoList = [];
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveElements;
 
   MPMoveElementsCommand.forCWJM({
     required this.moveCommandParametersList,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -64,7 +63,6 @@ class MPMoveElementsCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     late MPCommand moveCommand;
-    late MPUndoRedoCommand oppositeCommand;
 
     for (final moveCommandParameters in moveCommandParametersList) {
       switch (moveCommandParameters) {
@@ -85,13 +83,16 @@ class MPMoveElementsCommand extends MPCommand {
           );
           break;
       }
-      oppositeCommand = moveCommand.execute(th2FileEditController);
-      oppositeCommandList.add(oppositeCommand);
+      final undoRedoCommand =
+          moveCommand._createUndoRedoCommand(th2FileEditController);
+
+      undoRedoList.add(undoRedoCommand);
+      moveCommand._actualExecute(th2FileEditController);
     }
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     late MPMoveCommandCompleteParams oppositeMoveCommandParameters;
@@ -127,7 +128,8 @@ class MPMoveElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -157,9 +159,6 @@ class MPMoveElementsCommand extends MPCommand {
           (x) => MPMoveCommandCompleteParams.fromMap(x),
         ),
       ),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -172,16 +171,11 @@ class MPMoveElementsCommand extends MPCommand {
   @override
   MPMoveElementsCommand copyWith({
     List<MPMoveCommandCompleteParams>? moveCommandParametersList,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveElementsCommand.forCWJM(
       moveCommandParametersList:
           moveCommandParametersList ?? this.moveCommandParametersList,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -193,7 +187,6 @@ class MPMoveElementsCommand extends MPCommand {
     return other is MPMoveElementsCommand &&
         const DeepCollectionEquality().equals(
             other.moveCommandParametersList, moveCommandParametersList) &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

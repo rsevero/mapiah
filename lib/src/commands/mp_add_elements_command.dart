@@ -7,7 +7,6 @@ class MPAddElementsCommand extends MPCommand {
 
   MPAddElementsCommand.forCWJM({
     required this.createParams,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -45,7 +44,7 @@ class MPAddElementsCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final List<int> mapiahIDs = [];
@@ -64,22 +63,18 @@ class MPAddElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
   @override
   MPCommand copyWith({
     List<MPAddElementCommandParams>? createParams,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddElementsCommand.forCWJM(
       createParams: createParams ?? this.createParams,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -91,9 +86,6 @@ class MPAddElementsCommand extends MPCommand {
           (x) => MPAddElementCommandParams.fromMap(x),
         ),
       ),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -121,7 +113,6 @@ class MPAddElementsCommand extends MPCommand {
     return other is MPAddElementsCommand &&
         const DeepCollectionEquality()
             .equals(other.createParams, createParams) &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

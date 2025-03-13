@@ -11,7 +11,10 @@ class MPUndoRedoController {
   MPUndoRedoController(this.th2FileEditController);
 
   void execute(MPCommand command) {
-    final MPUndoRedoCommand undo = command.execute(th2FileEditController);
+    final MPUndoRedoCommand undo =
+        command.getUndoRedoCommand(th2FileEditController);
+
+    command.execute(th2FileEditController);
 
     if (_redo.isNotEmpty) {
       final int redoLastIndex = _redo.length - 1;
@@ -22,19 +25,22 @@ class MPUndoRedoController {
       /// all redo commands with their respective undo commands:
       ///
       /// 1. Iterate over the redo list starting from last to first.
-      /// 2. Execute the redo command to get it's undo command.
+      /// 2. Get opposite of redo command.
       /// 3. Create a new redo command with the original redo command map and
       ///    the undo command description type to properly describe this new
       ///    redo command.
       /// 4. Create lists with the new undo and redo commands.
       for (int i = redoLastIndex; i >= 0; i--) {
         final MPUndoRedoCommand redoOriginal = _redo[i];
-        final MPCommand redoCommandOriginal = redoOriginal.command;
-        final MPUndoRedoCommand undoRedoOriginal =
-            redoCommandOriginal.execute(th2FileEditController);
-        final MPCommand undoRedoCommandOriginal = undoRedoOriginal.command;
+        final MPCommand redoCommandOriginal = redoOriginal.undoCommand;
+        final MPUndoRedoCommand oppositeRedoOriginal = redoOriginal.copyWith(
+          mapUndo: redoOriginal.mapRedo,
+          mapRedo: redoOriginal.mapUndo,
+        );
+        final MPCommand undoRedoCommandOriginal =
+            oppositeRedoOriginal.undoCommand;
         final MPUndoRedoCommand redoFinal = redoOriginal.copyWith(
-          map: redoCommandOriginal
+          mapUndo: redoCommandOriginal
               .copyWith(
                 descriptionType: undoRedoCommandOriginal.defaultDescriptionType,
               )
@@ -42,24 +48,18 @@ class MPUndoRedoController {
         );
 
         redoFromRedoCommands.add(redoFinal);
-        undoFromRedoCommands.add(undoRedoOriginal);
+        undoFromRedoCommands.add(oppositeRedoOriginal);
       }
 
-      /// 5. Execute the created undo commands to get the original state we had
-      ///    before the execution of the redo commands on step 2.
-      for (int i = redoLastIndex; i >= 0; i--) {
-        undoFromRedoCommands[i].command.execute(th2FileEditController);
-      }
-
-      /// 6. Add the new undo commands to the undo list.
+      /// 5. Add the new undo commands to the undo list.
       _undo.addAll(undoFromRedoCommands);
 
-      /// 7. Add the new redo commands in reverse order to the undo list.
+      /// 6. Add the new redo commands in reverse order to the undo list.
       for (int i = redoLastIndex; i >= 0; i--) {
         _undo.add(redoFromRedoCommands[i]);
       }
 
-      /// 8. Clear the redo list.
+      /// 7. Clear the redo list.
       _redo.clear();
     }
 
@@ -71,7 +71,10 @@ class MPUndoRedoController {
       return;
     }
 
-    final MPUndoRedoCommand undo = command.execute(th2FileEditController);
+    final MPUndoRedoCommand undo =
+        command.getUndoRedoCommand(th2FileEditController);
+
+    command.execute(th2FileEditController);
 
     _undo.removeLast();
     _undo.add(undo);
@@ -82,8 +85,14 @@ class MPUndoRedoController {
       return;
     }
 
-    final MPCommand command = _undo.removeLast().command;
-    final MPUndoRedoCommand redo = command.execute(th2FileEditController);
+    final MPUndoRedoCommand lastUndo = _undo.removeLast();
+    final MPCommand command = lastUndo.undoCommand;
+    final MPUndoRedoCommand redo = lastUndo.copyWith(
+      mapUndo: lastUndo.mapRedo,
+      mapRedo: lastUndo.mapUndo,
+    );
+
+    command.execute(th2FileEditController);
 
     _redo.add(redo);
     th2FileEditController.triggerAllElementsRedraw();
@@ -94,8 +103,14 @@ class MPUndoRedoController {
       return;
     }
 
-    final MPCommand command = _redo.removeLast().command;
-    final MPUndoRedoCommand undo = command.execute(th2FileEditController);
+    final MPUndoRedoCommand lastRedo = _redo.removeLast();
+    final MPCommand command = lastRedo.undoCommand;
+    final MPUndoRedoCommand undo = lastRedo.copyWith(
+      mapUndo: lastRedo.mapRedo,
+      mapRedo: lastRedo.mapUndo,
+    );
+
+    command.execute(th2FileEditController);
 
     th2FileEditController.triggerAllElementsRedraw();
     _undo.add(undo);
@@ -107,7 +122,7 @@ class MPUndoRedoController {
 
   String _undoRedoDescription(MPUndoRedoCommand undoRedoCommand) {
     return MPTextToUser.getCommandDescription(
-      undoRedoCommand.command.descriptionType,
+      undoRedoCommand.undoCommand.descriptionType,
     );
   }
 

@@ -7,7 +7,6 @@ class MPAddLineSegmentCommand extends MPCommand {
 
   MPAddLineSegmentCommand.forCWJM({
     required this.newLineSegment,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -30,7 +29,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final MPDeleteLineSegmentCommand oppositeCommand =
@@ -41,22 +40,18 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
   @override
   MPCommand copyWith({
     THLineSegment? newLineSegment,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -64,9 +59,6 @@ class MPAddLineSegmentCommand extends MPCommand {
   factory MPAddLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -93,7 +85,6 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     return other is MPAddLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

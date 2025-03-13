@@ -7,7 +7,6 @@ class MPEditLineSegmentCommand extends MPCommand {
 
   MPEditLineSegmentCommand.forCWJM({
     required this.newLineSegment,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -31,7 +30,7 @@ class MPEditLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final THLineSegment currentLineSegment = th2FileEditController.thFile
@@ -43,7 +42,8 @@ class MPEditLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -51,15 +51,10 @@ class MPEditLineSegmentCommand extends MPCommand {
   MPCommand copyWith({
     THLineSegment? currentLineSegment,
     THLineSegment? newLineSegment,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -67,9 +62,6 @@ class MPEditLineSegmentCommand extends MPCommand {
   factory MPEditLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPEditLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -96,7 +88,6 @@ class MPEditLineSegmentCommand extends MPCommand {
 
     return other is MPEditLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

@@ -19,7 +19,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.modifiedControlPoint1Coordinates,
     required this.originalControlPoint2Coordinates,
     required this.modifiedControlPoint2Coordinates,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -75,7 +74,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final MPMoveBezierLineSegmentCommand oppositeCommand =
@@ -92,7 +91,8 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -158,9 +158,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         map['modifiedControlPoint2Coordinates']['dx'],
         map['modifiedControlPoint2Coordinates']['dy'],
       ),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -179,8 +176,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     Offset? modifiedControlPoint1Coordinates,
     Offset? originalControlPoint2Coordinates,
     Offset? modifiedControlPoint2Coordinates,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
@@ -197,9 +192,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
           this.originalControlPoint2Coordinates,
       modifiedControlPoint2Coordinates: modifiedControlPoint2Coordinates ??
           this.modifiedControlPoint2Coordinates,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -220,7 +212,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
             originalControlPoint2Coordinates &&
         other.modifiedControlPoint2Coordinates ==
             modifiedControlPoint2Coordinates &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

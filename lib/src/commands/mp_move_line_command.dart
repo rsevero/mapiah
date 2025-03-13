@@ -15,7 +15,6 @@ class MPMoveLineCommand extends MPCommand {
     required this.modifiedLineSegmentsMap,
     this.deltaOnCanvas = Offset.zero,
     this.isFromDelta = false,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -143,7 +142,7 @@ class MPMoveLineCommand extends MPCommand {
           }
           break;
       }
-      command.execute(th2FileEditController);
+      command._actualExecute(th2FileEditController);
     }
     th2FileEditController.elementEditController.substituteElement(
         th2FileEditController.thFile
@@ -152,7 +151,7 @@ class MPMoveLineCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
@@ -164,7 +163,8 @@ class MPMoveLineCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -204,9 +204,6 @@ class MPMoveLineCommand extends MPCommand {
               ),
             ),
       ),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -221,8 +218,6 @@ class MPMoveLineCommand extends MPCommand {
     int? lineMapiahID,
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
     LinkedHashMap<int, THLineSegment>? modifiedLineSegmentsMap,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveLineCommand.forCWJM(
@@ -231,9 +226,6 @@ class MPMoveLineCommand extends MPCommand {
           originalLineSegmentsMap ?? this.originalLineSegmentsMap,
       modifiedLineSegmentsMap:
           modifiedLineSegmentsMap ?? this.modifiedLineSegmentsMap,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -248,7 +240,6 @@ class MPMoveLineCommand extends MPCommand {
             .equals(other.originalLineSegmentsMap, originalLineSegmentsMap) &&
         const DeepCollectionEquality()
             .equals(other.modifiedLineSegmentsMap, modifiedLineSegmentsMap) &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

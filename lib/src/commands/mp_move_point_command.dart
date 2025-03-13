@@ -11,7 +11,6 @@ class MPMovePointCommand extends MPCommand {
     required this.pointMapiahID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -51,7 +50,7 @@ class MPMovePointCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     /// The original description is kept for the undo/redo command so the
@@ -65,7 +64,8 @@ class MPMovePointCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -99,9 +99,6 @@ class MPMovePointCommand extends MPCommand {
         map['modifiedCoordinates']['dx'],
         map['modifiedCoordinates']['dy'],
       ),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -116,17 +113,12 @@ class MPMovePointCommand extends MPCommand {
     int? pointMapiahID,
     Offset? originalCoordinates,
     Offset? modifiedCoordinates,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
       pointMapiahID: pointMapiahID ?? this.pointMapiahID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
       modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -139,7 +131,6 @@ class MPMovePointCommand extends MPCommand {
         other.pointMapiahID == pointMapiahID &&
         other.originalCoordinates == originalCoordinates &&
         other.modifiedCoordinates == modifiedCoordinates &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

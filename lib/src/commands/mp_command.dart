@@ -37,11 +37,10 @@ part 'types/mp_command_type.dart';
 /// actions that should support undo must be impmentend as a command.
 abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
-  MPUndoRedoCommand? oppositeCommand;
+  MPUndoRedoCommand? _undoRedoCommand;
 
   MPCommand.forCWJM({
     required this.descriptionType,
-    required this.oppositeCommand,
   });
 
   MPCommand({required this.descriptionType});
@@ -50,26 +49,30 @@ abstract class MPCommand {
 
   MPCommandDescriptionType get defaultDescriptionType;
 
-  MPUndoRedoCommand execute(TH2FileEditController th2FileEditController) {
-    oppositeCommand ??= _createOppositeCommand(th2FileEditController);
-    _actualExecute(th2FileEditController);
+  MPUndoRedoCommand getUndoRedoCommand(
+    TH2FileEditController th2FileEditController,
+  ) {
+    _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
 
-    return oppositeCommand!;
+    return _undoRedoCommand!;
   }
 
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even
   /// if the actual original and opposite commands are different.
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   );
+
+  void execute(TH2FileEditController th2FileEditController) {
+    _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
+    _actualExecute(th2FileEditController);
+  }
 
   void _actualExecute(TH2FileEditController th2FileEditController);
 
   MPCommand copyWith({
     MPCommandDescriptionType? descriptionType,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
   });
 
   String toJson() {
@@ -79,7 +82,6 @@ abstract class MPCommand {
   Map<String, dynamic> toMap() {
     return {
       'commandType': type.name,
-      'oppositeCommand': oppositeCommand?.toMap(),
       'descriptionType': descriptionType.name,
     };
   }
@@ -92,16 +94,11 @@ abstract class MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCommand &&
-        other.oppositeCommand == oppositeCommand &&
-        other.descriptionType == descriptionType;
+    return other is MPCommand && other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => Object.hash(
-        oppositeCommand,
-        descriptionType,
-      );
+  int get hashCode => descriptionType.hashCode;
 
   static MPCommand fromMap(Map<String, dynamic> map) {
     switch (MPCommandType.values.byName(map['commandType'])) {

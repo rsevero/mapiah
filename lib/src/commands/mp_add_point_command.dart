@@ -7,7 +7,6 @@ class MPAddPointCommand extends MPCommand {
 
   MPAddPointCommand.forCWJM({
     required this.newPoint,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -30,7 +29,7 @@ class MPAddPointCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final MPDeletePointCommand oppositeCommand = MPDeletePointCommand(
@@ -40,22 +39,18 @@ class MPAddPointCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
   @override
   MPCommand copyWith({
     THPoint? newPoint,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddPointCommand.forCWJM(
       newPoint: newPoint ?? this.newPoint,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -63,9 +58,6 @@ class MPAddPointCommand extends MPCommand {
   factory MPAddPointCommand.fromMap(Map<String, dynamic> map) {
     return MPAddPointCommand.forCWJM(
       newPoint: THPoint.fromMap(map['newPoint']),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -92,7 +84,6 @@ class MPAddPointCommand extends MPCommand {
 
     return other is MPAddPointCommand &&
         other.newPoint == newPoint &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

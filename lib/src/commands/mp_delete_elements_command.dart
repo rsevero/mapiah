@@ -7,7 +7,6 @@ class MPDeleteElementsCommand extends MPCommand {
 
   MPDeleteElementsCommand.forCWJM({
     required this.mapiahIDs,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -29,7 +28,7 @@ class MPDeleteElementsCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final List<MPAddElementCommandParams> oppositeParamsList = [];
@@ -66,23 +65,19 @@ class MPDeleteElementsCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
   @override
   MPCommand copyWith({
     List<int>? mapiahIDs,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
     bool? isUndoOf,
   }) {
     return MPDeleteElementsCommand.forCWJM(
       mapiahIDs: mapiahIDs ?? this.mapiahIDs,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -90,9 +85,6 @@ class MPDeleteElementsCommand extends MPCommand {
   factory MPDeleteElementsCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteElementsCommand.forCWJM(
       mapiahIDs: List<int>.from(map['mapiahIDs']),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -119,7 +111,6 @@ class MPDeleteElementsCommand extends MPCommand {
 
     return other is MPDeleteElementsCommand &&
         const DeepCollectionEquality().equals(other.mapiahIDs, mapiahIDs) &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 

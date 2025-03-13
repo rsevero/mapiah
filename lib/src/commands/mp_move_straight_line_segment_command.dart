@@ -11,7 +11,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.lineSegmentMapiahID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
-    required super.oppositeCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -52,7 +51,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPUndoRedoCommand _createOppositeCommand(
+  MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
     final MPMoveStraightLineSegmentCommand oppositeCommand =
@@ -65,7 +64,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,
-      map: oppositeCommand.toMap(),
+      mapUndo: oppositeCommand.toMap(),
+      mapRedo: toMap(),
     );
   }
 
@@ -99,9 +99,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         map['modifiedEndPointCoordinates']['dx'],
         map['modifiedEndPointCoordinates']['dy'],
       ),
-      oppositeCommand: map['oppositeCommand'] == null
-          ? null
-          : MPUndoRedoCommand.fromMap(map['oppositeCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -116,8 +113,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     int? lineSegmentMapiahID,
     Offset? originalEndPointCoordinates,
     Offset? modifiedEndPointCoordinates,
-    MPUndoRedoCommand? oppositeCommand,
-    bool makeOppositeCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
@@ -126,9 +121,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
           originalEndPointCoordinates ?? this.originalEndPointCoordinates,
       modifiedEndPointCoordinates:
           modifiedEndPointCoordinates ?? this.modifiedEndPointCoordinates,
-      oppositeCommand: makeOppositeCommandNull
-          ? null
-          : (oppositeCommand ?? this.oppositeCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -141,7 +133,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         other.lineSegmentMapiahID == lineSegmentMapiahID &&
         other.originalEndPointCoordinates == originalEndPointCoordinates &&
         other.modifiedEndPointCoordinates == modifiedEndPointCoordinates &&
-        other.oppositeCommand == oppositeCommand &&
         other.descriptionType == descriptionType;
   }
 
