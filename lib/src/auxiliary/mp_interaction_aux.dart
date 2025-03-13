@@ -43,7 +43,7 @@ class MPInteractionAux {
   }
 
   static bool ignoreClick(
-    Map<int, Map<GlobalKey, Rect>> overlayWindowRects,
+    Map<int, Rect> overlayWindowRects,
     int zOrder,
     Offset position,
   ) {
@@ -52,12 +52,8 @@ class MPInteractionAux {
         continue;
       }
 
-      final rects = entry.value.values;
-
-      for (final Rect rect in rects) {
-        if (rect.contains(position)) {
-          return true;
-        }
+      if (entry.value.contains(position)) {
+        return true;
       }
     }
 

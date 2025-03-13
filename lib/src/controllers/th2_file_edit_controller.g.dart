@@ -861,18 +861,16 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   late final _$_overlayWindowRectsAtom = Atom(
       name: 'TH2FileEditControllerBase._overlayWindowRects', context: context);
 
-  Map<int, Map<GlobalKey<State<StatefulWidget>>, Rect>> get overlayWindowRects {
+  Map<int, Rect> get overlayWindowRects {
     _$_overlayWindowRectsAtom.reportRead();
     return super._overlayWindowRects;
   }
 
   @override
-  Map<int, Map<GlobalKey<State<StatefulWidget>>, Rect>>
-      get _overlayWindowRects => overlayWindowRects;
+  Map<int, Rect> get _overlayWindowRects => overlayWindowRects;
 
   @override
-  set _overlayWindowRects(
-      Map<int, Map<GlobalKey<State<StatefulWidget>>, Rect>> value) {
+  set _overlayWindowRects(Map<int, Rect> value) {
     _$_overlayWindowRectsAtom.reportWrite(value, super._overlayWindowRects, () {
       super._overlayWindowRects = value;
     });

@@ -358,7 +358,7 @@ abstract class TH2FileEditControllerBase with Store {
   double _canvasCenterY = 0.0;
 
   @readonly
-  Map<int, Map<GlobalKey, Rect>> _overlayWindowRects = {};
+  Map<int, Rect> _overlayWindowRects = {};
 
   @readonly
   Map<GlobalKey, int> _overlayWindowZOrders = {};
@@ -953,16 +953,11 @@ abstract class TH2FileEditControllerBase with Store {
 
     _overlayWindowZOrders.remove(key);
 
-    if (!_overlayWindowRects.containsKey(zOrder) ||
-        !_overlayWindowRects[zOrder]!.containsKey(key)) {
+    if (!_overlayWindowRects.containsKey(zOrder)) {
       return;
     }
 
-    _overlayWindowRects[zOrder]!.remove(key);
-
-    if (_overlayWindowRects[zOrder]!.isEmpty) {
-      _overlayWindowRects.remove(zOrder);
-    }
+    _overlayWindowRects.remove(zOrder);
   }
 
   void updateOverlayWindowInfo(GlobalKey key, int zOrder) {
@@ -977,12 +972,7 @@ abstract class TH2FileEditControllerBase with Store {
       removeOverlayWindowInfo(key);
     } else {
       _overlayWindowZOrders[key] = zOrder;
-
-      if (!_overlayWindowRects.containsKey(zOrder)) {
-        _overlayWindowRects[zOrder] = {};
-      }
-
-      _overlayWindowRects[zOrder]![key] = rect;
+      _overlayWindowRects[zOrder] = rect;
     }
   }
 }
