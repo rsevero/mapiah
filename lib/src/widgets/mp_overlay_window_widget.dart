@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 
 class MPOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -23,6 +24,7 @@ class MPOverlayWindowWidget extends StatefulWidget {
 class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   final GlobalKey widgetKey = GlobalKey();
   late final TH2FileEditController th2FileEditController;
+  late final TH2FileEditOverlayWindowController overlayWindowController;
   late final int zOrder;
   late final Offset position;
 
@@ -30,6 +32,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   void initState() {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
+    overlayWindowController = th2FileEditController.overlayWindowController;
     zOrder = widget.zOrder;
     position = widget.position;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -39,12 +42,12 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
 
   @override
   void dispose() {
-    th2FileEditController.removeOverlayWindowInfo(widgetKey);
+    overlayWindowController.removeOverlayWindowInfo(widgetKey);
     super.dispose();
   }
 
   void _updateCoordinates() {
-    th2FileEditController.updateOverlayWindowInfo(widgetKey, zOrder);
+    overlayWindowController.updateOverlayWindowInfo(widgetKey, zOrder);
   }
 
   @override

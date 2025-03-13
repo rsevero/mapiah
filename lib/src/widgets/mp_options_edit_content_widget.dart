@@ -26,7 +26,7 @@ class _MPOptionsEditContentWidgetState
   void initState() {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
-    zOrder = th2FileEditController.getNewZOrder();
+    zOrder = th2FileEditController.overlayWindowController.getNewZOrder();
   }
 
   @override

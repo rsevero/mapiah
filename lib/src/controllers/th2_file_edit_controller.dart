@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
@@ -34,6 +34,7 @@ class TH2FileEditController = TH2FileEditControllerBase
 
 abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditElementEditController elementEditController;
+  late final TH2FileEditOverlayWindowController overlayWindowController;
   late final TH2FileEditSelectionController selectionController;
   late final TH2FileEditStateController stateController;
   late final MPUndoRedoController undoRedoController;
@@ -140,9 +141,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   bool _isAddElementButtonsHovered = false;
-
-  @readonly
-  int _refZOrder = mpInitialZOrder;
 
   @computed
   MPButtonType get activeAddElementButton {
@@ -360,12 +358,6 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   double _canvasCenterY = 0.0;
 
-  @readonly
-  Map<int, Rect> _overlayWindowRects = {};
-
-  @readonly
-  Map<GlobalKey, int> _overlayWindowZOrders = {};
-
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
 
@@ -401,11 +393,13 @@ abstract class TH2FileEditControllerBase with Store {
     _thFile = file;
     elementEditController =
         TH2FileEditElementEditController(this as TH2FileEditController);
+    overlayWindowController =
+        TH2FileEditOverlayWindowController(this as TH2FileEditController);
     selectionController =
         TH2FileEditSelectionController(this as TH2FileEditController);
     stateController = TH2FileEditStateController(this as TH2FileEditController);
-    _thFileMapiahID = _thFile.mapiahID;
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
+    _thFileMapiahID = _thFile.mapiahID;
   }
 
   void _preParseInitialize() {
@@ -945,51 +939,6 @@ abstract class TH2FileEditControllerBase with Store {
   void redo() {
     undoRedoController.redo();
     _undoRedoDone();
-  }
-
-  int getNewZOrder() {
-    _refZOrder += mpDefaultZOrderIncrement;
-
-    return _refZOrder;
-  }
-
-  void removeOverlayWindowInfo(GlobalKey key) {
-    if (!_overlayWindowZOrders.containsKey(key)) {
-      return;
-    }
-
-    final int zOrder = _overlayWindowZOrders[key]!;
-
-    _overlayWindowZOrders.remove(key);
-
-    if (!_overlayWindowRects.containsKey(zOrder)) {
-      return;
-    }
-
-    _overlayWindowRects.remove(zOrder);
-
-    if (_overlayWindowZOrders.values.isEmpty) {
-      _refZOrder = mpInitialZOrder;
-    } else {
-      _refZOrder = _overlayWindowZOrders.values.reduce((a, b) => a > b ? a : b);
-    }
-  }
-
-  void updateOverlayWindowInfo(GlobalKey key, int zOrder) {
-    removeOverlayWindowInfo(key);
-
-    while (_overlayWindowZOrders.containsValue(zOrder)) {
-      zOrder++;
-    }
-
-    final Rect? rect = MPInteractionAux.getWidgetRect(key);
-
-    if (rect == null) {
-      removeOverlayWindowInfo(key);
-    } else {
-      _overlayWindowZOrders[key] = zOrder;
-      _overlayWindowRects[zOrder] = rect;
-    }
   }
 }
 

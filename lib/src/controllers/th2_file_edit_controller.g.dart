@@ -509,24 +509,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_refZOrderAtom =
-      Atom(name: 'TH2FileEditControllerBase._refZOrder', context: context);
-
-  int get refZOrder {
-    _$_refZOrderAtom.reportRead();
-    return super._refZOrder;
-  }
-
-  @override
-  int get _refZOrder => refZOrder;
-
-  @override
-  set _refZOrder(int value) {
-    _$_refZOrderAtom.reportWrite(value, super._refZOrder, () {
-      super._refZOrder = value;
-    });
-  }
-
   late final _$_currentDecimalPositionsAtom = Atom(
       name: 'TH2FileEditControllerBase._currentDecimalPositions',
       context: context);
@@ -873,45 +855,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _canvasCenterY(double value) {
     _$_canvasCenterYAtom.reportWrite(value, super._canvasCenterY, () {
       super._canvasCenterY = value;
-    });
-  }
-
-  late final _$_overlayWindowRectsAtom = Atom(
-      name: 'TH2FileEditControllerBase._overlayWindowRects', context: context);
-
-  Map<int, Rect> get overlayWindowRects {
-    _$_overlayWindowRectsAtom.reportRead();
-    return super._overlayWindowRects;
-  }
-
-  @override
-  Map<int, Rect> get _overlayWindowRects => overlayWindowRects;
-
-  @override
-  set _overlayWindowRects(Map<int, Rect> value) {
-    _$_overlayWindowRectsAtom.reportWrite(value, super._overlayWindowRects, () {
-      super._overlayWindowRects = value;
-    });
-  }
-
-  late final _$_overlayWindowZOrdersAtom = Atom(
-      name: 'TH2FileEditControllerBase._overlayWindowZOrders',
-      context: context);
-
-  Map<GlobalKey<State<StatefulWidget>>, int> get overlayWindowZOrders {
-    _$_overlayWindowZOrdersAtom.reportRead();
-    return super._overlayWindowZOrders;
-  }
-
-  @override
-  Map<GlobalKey<State<StatefulWidget>>, int> get _overlayWindowZOrders =>
-      overlayWindowZOrders;
-
-  @override
-  set _overlayWindowZOrders(Map<GlobalKey<State<StatefulWidget>>, int> value) {
-    _$_overlayWindowZOrdersAtom.reportWrite(value, super._overlayWindowZOrders,
-        () {
-      super._overlayWindowZOrders = value;
     });
   }
 

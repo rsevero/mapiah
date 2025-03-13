@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatefulWidget {
@@ -25,6 +26,7 @@ class MPListenerWidget extends StatefulWidget {
 
 class MPListenerWidgetState extends State<MPListenerWidget> {
   late final TH2FileEditController th2FileEditController;
+  late final TH2FileEditOverlayWindowController overlayWindowController;
   final FocusNode _focusNode = FocusNode();
   int currentPressedMouseButton = 0;
   Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
@@ -39,6 +41,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   void initState() {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
+    overlayWindowController = th2FileEditController.overlayWindowController;
   }
 
   @override
@@ -54,7 +57,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() entered");
 
         if (MPInteractionAux.ignoreClick(
-          th2FileEditController.overlayWindowRects,
+          overlayWindowController.overlayWindowRects,
           mpInitialZOrder,
           event.localPosition,
         )) {
@@ -85,7 +88,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() entered");
 
         if (MPInteractionAux.ignoreClick(
-          th2FileEditController.overlayWindowRects,
+          overlayWindowController.overlayWindowRects,
           mpInitialZOrder,
           event.localPosition,
         )) {
@@ -140,7 +143,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() entered");
 
         if (MPInteractionAux.ignoreClick(
-          th2FileEditController.overlayWindowRects,
+          overlayWindowController.overlayWindowRects,
           mpInitialZOrder,
           event.localPosition,
         )) {
@@ -180,7 +183,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() entered");
 
         if (MPInteractionAux.ignoreClick(
-          th2FileEditController.overlayWindowRects,
+          overlayWindowController.overlayWindowRects,
           mpInitialZOrder,
           event.localPosition,
         )) {
