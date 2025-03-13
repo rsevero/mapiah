@@ -123,7 +123,6 @@ class THFileWidget extends StatelessWidget {
                       key: ValueKey("MPOptionsEditWidget|$thFileMapiahID"),
                       th2FileEditController: th2FileEditController,
                       position: Offset(57, 48),
-                      zOrder: 1000,
                     );
                   } else {
                     return SizedBox.shrink();

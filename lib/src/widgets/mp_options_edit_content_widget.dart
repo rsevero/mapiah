@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 
 class MPOptionsEditContentWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
-  final int zOrder;
 
   const MPOptionsEditContentWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
-    required this.zOrder,
   });
 
   @override
@@ -21,74 +20,47 @@ class MPOptionsEditContentWidget extends StatefulWidget {
 
 class _MPOptionsEditContentWidgetState
     extends State<MPOptionsEditContentWidget> {
-  final GlobalKey _widgetKey = GlobalKey();
-  late final TH2FileEditController th2FileEditController;
-
-  @override
-  void initState() {
-    super.initState();
-    th2FileEditController = widget.th2FileEditController;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateCoordinates();
-    });
-  }
-
-  @override
-  void dispose() {
-    th2FileEditController.removeOverlayWindowInfo(_widgetKey);
-    super.dispose();
-  }
-
-  void _updateCoordinates() {
-    th2FileEditController.updateOverlayWindowInfo(_widgetKey, widget.zOrder);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: widget.position.dx,
-      top: widget.position.dy,
-      child: Listener(
-        onPointerDown: (PointerDownEvent event) {
-          mpLocator.mpLog.fine("MPOptionsEditContentWidget.onPointerDown()");
-        },
-        onPointerUp: (PointerUpEvent event) {
-          mpLocator.mpLog.fine("MPOptionsEditContentWidget.onPointerUp()");
-        },
-        child: Center(
-          child: Material(
-            key: _widgetKey,
-            elevation: 8.0,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text('Extra Information',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  // Add your interactive elements (dropdowns, buttons, etc.)
-                  DropdownButton<String>(
-                    dropdownColor: Colors.white.withAlpha(230),
-                    items: <String>['Option 1', 'Option 2'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Material(
-                          child: Text(value),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      // Handle dropdown changes
-                    },
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle button press
-                    },
-                    child: const Text('Do Something'),
-                  ),
-                ],
-              ),
+    final TH2FileEditController th2FileEditController =
+        widget.th2FileEditController;
+
+    return MPOverlayWindowWidget(
+      position: widget.position,
+      th2FileEditController: th2FileEditController,
+      zOrder: mpDefaultCommandOptionsZOrder,
+      child: Center(
+        child: Material(
+          elevation: 8.0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Text('Extra Information',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                // Add your interactive elements (dropdowns, buttons, etc.)
+                DropdownButton<String>(
+                  dropdownColor: Colors.white.withAlpha(230),
+                  items: <String>['Option 1', 'Option 2'].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Material(
+                        child: Text(value),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    // Handle dropdown changes
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle button press
+                  },
+                  child: const Text('Do Something'),
+                ),
+              ],
             ),
           ),
         ),

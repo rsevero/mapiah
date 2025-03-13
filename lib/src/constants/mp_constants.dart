@@ -86,6 +86,7 @@ const double thFloatingActionIconSize = 32;
 const double thFloatingActionZoomIconSize = 24;
 
 const int mpDefaultListenerZOrder = 0;
+const int mpDefaultCommandOptionsZOrder = 1000;
 
 const double thClickDragThreshold = 2.0;
 const double thClickDragThresholdSquared =
