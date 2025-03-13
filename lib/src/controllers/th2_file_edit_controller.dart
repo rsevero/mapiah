@@ -968,8 +968,10 @@ abstract class TH2FileEditControllerBase with Store {
 
     _overlayWindowRects.remove(zOrder);
 
-    if (_overlayWindowRects.isEmpty) {
+    if (_overlayWindowZOrders.values.isEmpty) {
       _refZOrder = mpInitialZOrder;
+    } else {
+      _refZOrder = _overlayWindowZOrders.values.reduce((a, b) => a > b ? a : b);
     }
   }
 
