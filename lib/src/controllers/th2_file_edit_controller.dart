@@ -976,9 +976,10 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void updateOverlayWindowInfo(GlobalKey key, int zOrder) {
-    if ((_overlayWindowZOrders.containsKey(key)) &&
-        (_overlayWindowZOrders[key]! != zOrder)) {
-      removeOverlayWindowInfo(key);
+    removeOverlayWindowInfo(key);
+
+    while (_overlayWindowZOrders.containsValue(zOrder)) {
+      zOrder++;
     }
 
     final Rect? rect = MPInteractionAux.getWidgetRect(key);
