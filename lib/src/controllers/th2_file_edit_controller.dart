@@ -357,10 +357,10 @@ abstract class TH2FileEditControllerBase with Store {
   double _canvasCenterY = 0.0;
 
   @readonly
-  Map<int, List<Rect>> _overlayWindowRects = {};
+  Map<int, Map<GlobalKey, Rect>> _overlayWindowRects = {};
 
   @readonly
-  Map<GlobalKey, MPOverlayWindowInfo> _overlayWindows = {};
+  Map<GlobalKey, int> _overlayWindowZOrders = {};
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
@@ -947,35 +947,45 @@ abstract class TH2FileEditControllerBase with Store {
 
   MPUndoRedoController get undoRedoController => _undoRedoController;
 
-  void clearOverlayWindowRects() {
-    _overlayWindows.clear();
-    _overlayWindowRects.clear();
+  void removeOverlayWindowInfo(GlobalKey key) {
+    if (!_overlayWindowZOrders.containsKey(key)) {
+      return;
+    }
+
+    final int zOrder = _overlayWindowZOrders[key]!;
+
+    _overlayWindowZOrders.remove(key);
+
+    if (!_overlayWindowRects.containsKey(zOrder) ||
+        !_overlayWindowRects[zOrder]!.containsKey(key)) {
+      return;
+    }
+
+    _overlayWindowRects[zOrder]!.remove(key);
+
+    if (_overlayWindowRects[zOrder]!.isEmpty) {
+      _overlayWindowRects.remove(zOrder);
+    }
   }
 
-  void updateOverlayWindowInfo(MPOverlayWindowInfo info) {
-    _overlayWindows[info.key] = info;
-    _updateOverlayWindowInfos();
-  }
+  void updateOverlayWindowInfo(GlobalKey key, int zOrder) {
+    if ((_overlayWindowZOrders.containsKey(key)) &&
+        (_overlayWindowZOrders[key]! != zOrder)) {
+      removeOverlayWindowInfo(key);
+    }
 
-  void _updateOverlayWindowInfos() {
-    final List<GlobalKey> keys = _overlayWindows.keys.toList();
+    final Rect? rect = MPInteractionAux.getWidgetRect(key);
 
-    _overlayWindowRects.clear();
+    if (rect == null) {
+      removeOverlayWindowInfo(key);
+    } else {
+      _overlayWindowZOrders[key] = zOrder;
 
-    for (final GlobalKey key in keys) {
-      final Rect? rect = MPInteractionAux.getWidgetRect(key);
-
-      if (rect == null) {
-        _overlayWindows.remove(key);
-      } else {
-        final MPOverlayWindowInfo info = _overlayWindows[key]!;
-        final List<Rect> rects = _overlayWindowRects.putIfAbsent(
-          info.zOrder,
-          () => <Rect>[],
-        );
-
-        rects.add(rect);
+      if (!_overlayWindowRects.containsKey(zOrder)) {
+        _overlayWindowRects[zOrder] = {};
       }
+
+      _overlayWindowRects[zOrder]![key] = rect;
     }
   }
 }
@@ -988,14 +998,4 @@ class TH2FileEditControllerCreateResult {
     this.isSuccessful,
     this.errors,
   );
-}
-
-class MPOverlayWindowInfo {
-  final int zOrder;
-  final GlobalKey key;
-
-  MPOverlayWindowInfo({
-    required this.zOrder,
-    required this.key,
-  });
 }

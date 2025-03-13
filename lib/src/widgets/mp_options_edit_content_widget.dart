@@ -22,22 +22,25 @@ class MPOptionsEditContentWidget extends StatefulWidget {
 class _MPOptionsEditContentWidgetState
     extends State<MPOptionsEditContentWidget> {
   final GlobalKey _widgetKey = GlobalKey();
+  late final TH2FileEditController th2FileEditController;
 
   @override
   void initState() {
     super.initState();
+    th2FileEditController = widget.th2FileEditController;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateCoordinates();
     });
   }
 
+  @override
+  void dispose() {
+    th2FileEditController.removeOverlayWindowInfo(_widgetKey);
+    super.dispose();
+  }
+
   void _updateCoordinates() {
-    widget.th2FileEditController.updateOverlayWindowInfo(
-      MPOverlayWindowInfo(
-        key: _widgetKey,
-        zOrder: widget.zOrder,
-      ),
-    );
+    th2FileEditController.updateOverlayWindowInfo(_widgetKey, widget.zOrder);
   }
 
   @override

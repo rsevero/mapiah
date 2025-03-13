@@ -861,39 +861,41 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   late final _$_overlayWindowRectsAtom = Atom(
       name: 'TH2FileEditControllerBase._overlayWindowRects', context: context);
 
-  Map<int, List<Rect>> get overlayWindowRects {
+  Map<int, Map<GlobalKey<State<StatefulWidget>>, Rect>> get overlayWindowRects {
     _$_overlayWindowRectsAtom.reportRead();
     return super._overlayWindowRects;
   }
 
   @override
-  Map<int, List<Rect>> get _overlayWindowRects => overlayWindowRects;
+  Map<int, Map<GlobalKey<State<StatefulWidget>>, Rect>>
+      get _overlayWindowRects => overlayWindowRects;
 
   @override
-  set _overlayWindowRects(Map<int, List<Rect>> value) {
+  set _overlayWindowRects(
+      Map<int, Map<GlobalKey<State<StatefulWidget>>, Rect>> value) {
     _$_overlayWindowRectsAtom.reportWrite(value, super._overlayWindowRects, () {
       super._overlayWindowRects = value;
     });
   }
 
-  late final _$_overlayWindowsAtom =
-      Atom(name: 'TH2FileEditControllerBase._overlayWindows', context: context);
+  late final _$_overlayWindowZOrdersAtom = Atom(
+      name: 'TH2FileEditControllerBase._overlayWindowZOrders',
+      context: context);
 
-  Map<GlobalKey<State<StatefulWidget>>, MPOverlayWindowInfo>
-      get overlayWindows {
-    _$_overlayWindowsAtom.reportRead();
-    return super._overlayWindows;
+  Map<GlobalKey<State<StatefulWidget>>, int> get overlayWindowZOrders {
+    _$_overlayWindowZOrdersAtom.reportRead();
+    return super._overlayWindowZOrders;
   }
 
   @override
-  Map<GlobalKey<State<StatefulWidget>>, MPOverlayWindowInfo>
-      get _overlayWindows => overlayWindows;
+  Map<GlobalKey<State<StatefulWidget>>, int> get _overlayWindowZOrders =>
+      overlayWindowZOrders;
 
   @override
-  set _overlayWindows(
-      Map<GlobalKey<State<StatefulWidget>>, MPOverlayWindowInfo> value) {
-    _$_overlayWindowsAtom.reportWrite(value, super._overlayWindows, () {
-      super._overlayWindows = value;
+  set _overlayWindowZOrders(Map<GlobalKey<State<StatefulWidget>>, int> value) {
+    _$_overlayWindowZOrdersAtom.reportWrite(value, super._overlayWindowZOrders,
+        () {
+      super._overlayWindowZOrders = value;
     });
   }
 
