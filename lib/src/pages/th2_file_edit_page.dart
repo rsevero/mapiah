@@ -503,10 +503,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _stateActionButtons() {
     return Observer(
       builder: (_) {
-        if (!th2FileEditController.showUndoRedoButtons) {
-          return const SizedBox();
-        }
-
         final bool hasUndo = th2FileEditController.hasUndo;
         final bool hasRedo = th2FileEditController.hasRedo;
         final bool deleteButtonEnabled =
@@ -533,39 +529,41 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   elevation: deleteButtonEnabled ? 6.0 : 3.0,
                   child: const Icon(Icons.delete_outlined),
                 ),
-                SizedBox(width: 8),
               ],
-              FloatingActionButton(
-                heroTag: 'undo',
-                mini: true,
-                tooltip: hasUndo
-                    ? th2FileEditController.undoDescription
-                    : AppLocalizations.of(context)
-                        .th2FileEditPageNoUndoAvailable,
-                backgroundColor:
-                    hasUndo ? null : colorScheme.surfaceContainerLowest,
-                foregroundColor:
-                    hasUndo ? null : colorScheme.surfaceContainerHighest,
-                onPressed: hasUndo ? onUndoPressed : null,
-                elevation: hasUndo ? 6.0 : 3.0,
-                child: const Icon(Icons.undo),
-              ),
-              SizedBox(width: 8),
-              FloatingActionButton(
-                heroTag: 'redo',
-                mini: true,
-                tooltip: hasRedo
-                    ? th2FileEditController.redoDescription
-                    : AppLocalizations.of(context)
-                        .th2FileEditPageNoRedoAvailable,
-                backgroundColor:
-                    hasRedo ? null : colorScheme.surfaceContainerLowest,
-                foregroundColor:
-                    hasRedo ? null : colorScheme.surfaceContainerHighest,
-                onPressed: hasRedo ? onRedoPressed : null,
-                elevation: hasRedo ? 6.0 : 3.0,
-                child: const Icon(Icons.redo),
-              )
+              if (th2FileEditController.showUndoRedoButtons) ...[
+                SizedBox(width: 8),
+                FloatingActionButton(
+                  heroTag: 'undo',
+                  mini: true,
+                  tooltip: hasUndo
+                      ? th2FileEditController.undoDescription
+                      : AppLocalizations.of(context)
+                          .th2FileEditPageNoUndoAvailable,
+                  backgroundColor:
+                      hasUndo ? null : colorScheme.surfaceContainerLowest,
+                  foregroundColor:
+                      hasUndo ? null : colorScheme.surfaceContainerHighest,
+                  onPressed: hasUndo ? onUndoPressed : null,
+                  elevation: hasUndo ? 6.0 : 3.0,
+                  child: const Icon(Icons.undo),
+                ),
+                SizedBox(width: 8),
+                FloatingActionButton(
+                  heroTag: 'redo',
+                  mini: true,
+                  tooltip: hasRedo
+                      ? th2FileEditController.redoDescription
+                      : AppLocalizations.of(context)
+                          .th2FileEditPageNoRedoAvailable,
+                  backgroundColor:
+                      hasRedo ? null : colorScheme.surfaceContainerLowest,
+                  foregroundColor:
+                      hasRedo ? null : colorScheme.surfaceContainerHighest,
+                  onPressed: hasRedo ? onRedoPressed : null,
+                  elevation: hasRedo ? 6.0 : 3.0,
+                  child: const Icon(Icons.redo),
+                ),
+              ],
             ],
           ),
         );

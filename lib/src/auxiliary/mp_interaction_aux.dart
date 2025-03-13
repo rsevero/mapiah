@@ -31,8 +31,8 @@ class MPInteractionAux {
 
     final RenderBox renderBox =
         widgetKey.currentContext!.findRenderObject() as RenderBox;
-    final position = renderBox.localToGlobal(Offset.zero);
-    final size = renderBox.size;
+    final Offset position = renderBox.localToGlobal(Offset.zero);
+    final Size size = renderBox.size;
 
     return MPNumericAux.orderedRectFromLTWH(
       left: position.dy,
