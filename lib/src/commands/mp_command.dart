@@ -13,7 +13,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
+import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 
 part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
