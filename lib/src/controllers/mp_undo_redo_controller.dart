@@ -1,20 +1,34 @@
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/undo_redo/mp_undo_redo_command.dart';
+import 'package:mobx/mobx.dart';
 
-class MPUndoRedoController {
+part 'mp_undo_redo_controller.g.dart';
+
+class MPUndoRedoController = MPUndoRedoControllerBase
+    with _$MPUndoRedoController;
+
+abstract class MPUndoRedoControllerBase with Store {
+  @readonly
+  THFile _thFile;
+
+  @readonly
+  TH2FileEditController _th2FileEditController;
+
+  MPUndoRedoControllerBase(TH2FileEditController th2FileEditController)
+      : _th2FileEditController = th2FileEditController,
+        _thFile = th2FileEditController.thFile;
+
   final List<MPUndoRedoCommand> _undo = [];
   final List<MPUndoRedoCommand> _redo = [];
-  final TH2FileEditController th2FileEditController;
-
-  MPUndoRedoController(this.th2FileEditController);
 
   void execute(MPCommand command) {
     final MPUndoRedoCommand undo =
-        command.getUndoRedoCommand(th2FileEditController);
+        command.getUndoRedoCommand(_th2FileEditController);
 
-    command.execute(th2FileEditController);
+    command.execute(_th2FileEditController);
 
     if (_redo.isNotEmpty) {
       final int redoLastIndex = _redo.length - 1;
@@ -72,9 +86,9 @@ class MPUndoRedoController {
     }
 
     final MPUndoRedoCommand undo =
-        command.getUndoRedoCommand(th2FileEditController);
+        command.getUndoRedoCommand(_th2FileEditController);
 
-    command.execute(th2FileEditController);
+    command.execute(_th2FileEditController);
 
     _undo.removeLast();
     _undo.add(undo);
@@ -92,10 +106,10 @@ class MPUndoRedoController {
       mapRedo: lastUndo.mapUndo,
     );
 
-    command.execute(th2FileEditController);
+    command.execute(_th2FileEditController);
 
     _redo.add(redo);
-    th2FileEditController.triggerAllElementsRedraw();
+    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   void redo() {
@@ -110,9 +124,9 @@ class MPUndoRedoController {
       mapRedo: lastRedo.mapUndo,
     );
 
-    command.execute(th2FileEditController);
+    command.execute(_th2FileEditController);
 
-    th2FileEditController.triggerAllElementsRedraw();
+    _th2FileEditController.triggerAllElementsRedraw();
     _undo.add(undo);
   }
 

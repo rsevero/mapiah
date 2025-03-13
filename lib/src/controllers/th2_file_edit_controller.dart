@@ -23,7 +23,7 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_f
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-import 'package:mapiah/src/undo_redo/mp_undo_redo_controller.dart';
+import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -36,6 +36,7 @@ abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditElementEditController elementEditController;
   late final TH2FileEditSelectionController selectionController;
   late final TH2FileEditStateController stateController;
+  late final MPUndoRedoController undoRedoController;
 
   // 'screen' is related to actual pixels on the screen.
   // 'canvas' is the virtual canvas used to draw.
@@ -66,6 +67,18 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   late int _thFileMapiahID;
+
+  @readonly
+  bool _hasUndo = false;
+
+  @readonly
+  bool _hasRedo = false;
+
+  @readonly
+  String _undoDescription = '';
+
+  @readonly
+  String _redoDescription = '';
 
   @computed
   String get filenameAndScrap {
@@ -121,18 +134,6 @@ abstract class TH2FileEditControllerBase with Store {
         (state is MPTH2FileEditStateSelectNonEmptySelection) ||
         state is MPTH2FileEditStateMovingElements);
   }
-
-  @readonly
-  bool _hasUndo = false;
-
-  @readonly
-  bool _hasRedo = false;
-
-  @readonly
-  String _undoDescription = '';
-
-  @readonly
-  String _redoDescription = '';
 
   @readonly
   bool _isZoomButtonsHovered = false;
@@ -367,8 +368,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   final List<String> errorMessages = <String>[];
 
-  late final MPUndoRedoController _undoRedoController;
-
   Future<TH2FileEditControllerCreateResult> load() async {
     _preParseInitialize();
 
@@ -403,7 +402,7 @@ abstract class TH2FileEditControllerBase with Store {
         TH2FileEditSelectionController(this as TH2FileEditController);
     stateController = TH2FileEditStateController(this as TH2FileEditController);
     _thFileMapiahID = _thFile.mapiahID;
-    _undoRedoController = MPUndoRedoController(this as TH2FileEditController);
+    undoRedoController = MPUndoRedoController(this as TH2FileEditController);
   }
 
   void _preParseInitialize() {
@@ -909,24 +908,24 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void execute(MPCommand command) {
-    _undoRedoController.execute(command);
+    undoRedoController.execute(command);
     _updateUndoRedoStatus();
   }
 
   @action
   void executeAndSubstituteLastUndo(MPCommand command) {
-    _undoRedoController.executeAndSubstituteLastUndo(command);
+    undoRedoController.executeAndSubstituteLastUndo(command);
     _updateUndoRedoStatus();
   }
 
   @action
   void _updateUndoRedoStatus() {
-    _hasUndo = _undoRedoController.hasUndo;
-    _hasRedo = _undoRedoController.hasRedo;
+    _hasUndo = undoRedoController.hasUndo;
+    _hasRedo = undoRedoController.hasRedo;
     _undoDescription = mpLocator.appLocalizations
-        .th2FileEditPageUndo(_undoRedoController.undoDescription);
+        .th2FileEditPageUndo(undoRedoController.undoDescription);
     _redoDescription = mpLocator.appLocalizations
-        .th2FileEditPageRedo(_undoRedoController.redoDescription);
+        .th2FileEditPageRedo(undoRedoController.redoDescription);
   }
 
   @action
@@ -936,16 +935,14 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void undo() {
-    _undoRedoController.undo();
+    undoRedoController.undo();
     _undoRedoDone();
   }
 
   void redo() {
-    _undoRedoController.redo();
+    undoRedoController.redo();
     _undoRedoDone();
   }
-
-  MPUndoRedoController get undoRedoController => _undoRedoController;
 
   void removeOverlayWindowInfo(GlobalKey key) {
     if (!_overlayWindowZOrders.containsKey(key)) {
