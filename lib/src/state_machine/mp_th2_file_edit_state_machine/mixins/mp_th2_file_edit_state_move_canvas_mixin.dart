@@ -4,8 +4,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
   /// Moves the canvas
   @override
   void onSecondaryButtonDragUpdate(PointerMoveEvent event) {
-    fileEditController.onPointerMoveUpdateMoveCanvasMode(event);
-    fileEditController.triggerAllElementsRedraw();
+    th2FileEditController.onPointerMoveUpdateMoveCanvasMode(event);
+    th2FileEditController.triggerAllElementsRedraw();
   }
 
   @override
@@ -19,78 +19,78 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
           selectionController.selectAllElements();
         } else if (!isAltPressed && !isShiftPressed) {
-          fileEditController.stateController
+          th2FileEditController.stateController
               .setState(MPTH2FileEditStateType.addArea);
         }
         break;
       case LogicalKeyboardKey.keyC:
         if (isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          fileEditController.toggleToNextAvailableScrap();
+          th2FileEditController.toggleToNextAvailableScrap();
         } else if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
           selectionController.setSelectionState();
         }
         break;
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          fileEditController.stateController
+          th2FileEditController.stateController
               .setState(MPTH2FileEditStateType.addLine);
         }
       case LogicalKeyboardKey.keyN:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          fileEditController.stateController
+          th2FileEditController.stateController
               .setState(MPTH2FileEditStateType.editSingleLine);
         }
       case LogicalKeyboardKey.keyO:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          fileEditController.stateController
+          th2FileEditController.stateController
               .setState(MPTH2FileEditStateType.optionsEdit);
         }
       case LogicalKeyboardKey.keyP:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          fileEditController.stateController
+          th2FileEditController.stateController
               .setState(MPTH2FileEditStateType.addPoint);
         }
       case LogicalKeyboardKey.keyS:
         if (isCtrlPressed && !isAltPressed) {
           if (isShiftPressed) {
-            fileEditController.saveAsTH2File();
+            th2FileEditController.saveAsTH2File();
           } else {
-            fileEditController.saveTH2File();
+            th2FileEditController.saveTH2File();
           }
         }
         break;
       case LogicalKeyboardKey.keyY:
         if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
-          fileEditController.redo();
+          th2FileEditController.redo();
         }
         break;
       case LogicalKeyboardKey.keyZ:
         if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
-          fileEditController.undo();
+          th2FileEditController.undo();
         }
         break;
       case LogicalKeyboardKey.numpad1:
       case LogicalKeyboardKey.digit1:
-        fileEditController.zoomOneToOne();
+        th2FileEditController.zoomOneToOne();
         break;
       case LogicalKeyboardKey.numpad2:
       case LogicalKeyboardKey.digit2:
         if (selectionController.selectedElements.isNotEmpty) {
-          fileEditController.zoomToFit(
+          th2FileEditController.zoomToFit(
               zoomFitToType: MPZoomToFitType.selection);
         }
         break;
       case LogicalKeyboardKey.numpad3:
       case LogicalKeyboardKey.digit3:
-        fileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         break;
       case LogicalKeyboardKey.numpad4:
       case LogicalKeyboardKey.digit4:
-        fileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         break;
       case LogicalKeyboardKey.add:
       case LogicalKeyboardKey.numpadAdd:
-        fileEditController.zoomIn(fineZoom: false);
+        th2FileEditController.zoomIn(fineZoom: false);
         break;
       case LogicalKeyboardKey.delete:
         selectionController.deleteSelected();
@@ -100,7 +100,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         break;
       case LogicalKeyboardKey.minus:
       case LogicalKeyboardKey.numpadSubtract:
-        fileEditController.zoomOut(fineZoom: false);
+        th2FileEditController.zoomOut(fineZoom: false);
 
         break;
     }
@@ -116,16 +116,17 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     }
 
     if (isShiftPressed) {
-      fileEditController.moveCanvasHorizontally(left: event.scrollDelta.dy < 0);
+      th2FileEditController.moveCanvasHorizontally(
+          left: event.scrollDelta.dy < 0);
     } else if (isCtrlPressed) {
-      fileEditController.moveCanvasVertically(up: event.scrollDelta.dy < 0);
+      th2FileEditController.moveCanvasVertically(up: event.scrollDelta.dy < 0);
     } else {
       if (event.scrollDelta.dy < 0) {
-        fileEditController.zoomIn(fineZoom: true);
+        th2FileEditController.zoomIn(fineZoom: true);
       } else if (event.scrollDelta.dy > 0) {
-        fileEditController.zoomOut(fineZoom: true);
+        th2FileEditController.zoomOut(fineZoom: true);
       }
     }
-    fileEditController.triggerAllElementsRedraw();
+    th2FileEditController.triggerAllElementsRedraw();
   }
 }

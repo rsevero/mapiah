@@ -6,7 +6,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateSelectNonEmptySelection(
-      {required super.fileEditController});
+      {required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
@@ -69,7 +69,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         selectionController.clearSelectedElements();
-        fileEditController.stateController
+        th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
@@ -112,7 +112,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         if (!alreadySelected) {
           selectionController.setSelectedElements(newlySelectedElements);
         }
-        fileEditController.stateController
+        th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.movingElements);
       }
     }
@@ -158,7 +158,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     } else {
       if (elementsInsideSelectionWindow.isEmpty) {
         selectionController.clearSelectedElements();
-        fileEditController.stateController
+        th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       } else {
         final stateChanged = selectionController.setSelectedElements(
@@ -209,7 +209,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       );
     }
 
-    fileEditController.setStatusBarMessage(statusBarMessage);
+    th2FileEditController.setStatusBarMessage(statusBarMessage);
   }
 
   @override

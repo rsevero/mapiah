@@ -15,13 +15,13 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
     MPTH2FileEditStateType.movingEndControlPoints,
   };
 
-  MPTH2FileEditStateOptionEdit({required super.fileEditController});
+  MPTH2FileEditStateOptionEdit({required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.updateSelectableEndAndControlPoints();
-    fileEditController.triggerEditLineRedraw();
-    fileEditController.setStatusBarMessage('');
+    th2FileEditController.triggerEditLineRedraw();
+    th2FileEditController.setStatusBarMessage('');
     selectionController.resetSelectedLineLineSegmentsMapiahIDs();
   }
 
@@ -75,7 +75,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
       }
 
       selectionController.updateSelectableEndAndControlPoints();
-      fileEditController.triggerEditLineRedraw();
+      th2FileEditController.triggerEditLineRedraw();
       return;
     }
 
@@ -113,7 +113,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
           selectionController.setSelectedLineSegments(lineSegments);
         }
         selectionController.updateSelectableEndAndControlPoints();
-        fileEditController.triggerEditLineRedraw();
+        th2FileEditController.triggerEditLineRedraw();
         return;
       } else {
         late bool stateChanged;
@@ -136,7 +136,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
 
         if (!stateChanged) {
           selectionController.updateSelectableEndAndControlPoints();
-          fileEditController.triggerEditLineRedraw();
+          th2FileEditController.triggerEditLineRedraw();
         }
 
         return;
@@ -144,7 +144,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         selectionController.clearSelectedElements();
-        fileEditController.stateController
+        th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
@@ -192,7 +192,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
     if (_dragShouldMovePoints) {
       _dragShouldMovePoints = false;
       if (_selectedEndControlPointsOnDragStart.isEmpty) {
-        fileEditController.stateController.setState(
+        th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.movingEndControlPoints,
         );
       } else {
@@ -205,14 +205,14 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
             selectionController.moveSelectedControlPointToScreenCoordinates(
               event.localPosition,
             );
-            fileEditController.stateController.setState(
+            th2FileEditController.stateController.setState(
               MPTH2FileEditStateType.movingSingleControlPoint,
             );
           case MPSelectableEndPoint _:
             selectionController.setSelectedLineSegments(
               [clickedEndControlPoint.element as THLineSegment],
             );
-            fileEditController.stateController.setState(
+            th2FileEditController.stateController.setState(
               MPTH2FileEditStateType.movingEndControlPoints,
             );
           default:
@@ -249,7 +249,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
       }
     }
     selectionController.updateSelectableEndAndControlPoints();
-    fileEditController.triggerEditLineRedraw();
+    th2FileEditController.triggerEditLineRedraw();
   }
 
   List<THLineSegment> getEndPointsInsideSelectionWindow(
@@ -257,7 +257,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
   ) {
     final Offset startSelectionWindow =
         selectionController.dragStartCanvasCoordinates;
-    final Offset endSelectionWindow = fileEditController
+    final Offset endSelectionWindow = th2FileEditController
         .offsetScreenToCanvas(screenCoordinatesEndSelectionWindow);
     final Rect selectionWindow = MPNumericAux.orderedRectFromLTRB(
       left: startSelectionWindow.dx,

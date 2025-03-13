@@ -4,7 +4,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     with
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingElements({required super.fileEditController});
+  MPTH2FileEditStateMovingElements({required super.th2FileEditController});
 
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
@@ -59,7 +59,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         selectionController.clearSelectedElements();
-        fileEditController.stateController
+        th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
@@ -81,7 +81,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final int selectedCount = selectionController.selectedElements.length;
     final Offset panDeltaOnCanvas =
-        fileEditController.offsetScreenToCanvas(event.localPosition) -
+        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
             selectionController.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
@@ -135,9 +135,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       );
     }
 
-    fileEditController.execute(moveCommand);
+    th2FileEditController.execute(moveCommand);
     selectionController.updateSelectedElementsClones();
-    fileEditController.triggerSelectedElementsRedraw(setState: true);
+    th2FileEditController.triggerSelectedElementsRedraw(setState: true);
   }
 
   @override

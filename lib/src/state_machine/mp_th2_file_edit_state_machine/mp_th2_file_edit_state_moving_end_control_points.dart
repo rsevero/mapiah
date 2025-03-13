@@ -2,7 +2,8 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     with MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingEndControlPoints({required super.fileEditController});
+  MPTH2FileEditStateMovingEndControlPoints(
+      {required super.th2FileEditController});
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
@@ -29,7 +30,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final Offset panDeltaOnCanvas =
-        fileEditController.offsetScreenToCanvas(event.localPosition) -
+        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
             selectionController.dragStartCanvasCoordinates;
     final MPSelectedLine selected =
         selectionController.selectedElements.values.first as MPSelectedLine;
@@ -49,8 +50,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         in selectedLineSegmentMapiahIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMapiahID)) {
         modifiedLineSegmentsMap[selectedLineSegmentMapiahID] =
-            fileEditController.thFile.elementByMapiahID(
-                selectedLineSegmentMapiahID) as THLineSegment;
+            th2FileEditController.thFile
+                    .elementByMapiahID(selectedLineSegmentMapiahID)
+                as THLineSegment;
         originalLineSegmentsMap[selectedLineSegmentMapiahID] =
             originalLineSegmentsMapClone[selectedLineSegmentMapiahID]!;
       }
@@ -61,7 +63,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
       if ((nextLineSegmentMapiahID != null) &&
           !modifiedLineSegmentsMap.containsKey(nextLineSegmentMapiahID)) {
-        final THLineSegment nextLineSegment = fileEditController.thFile
+        final THLineSegment nextLineSegment = th2FileEditController.thFile
             .elementByMapiahID(nextLineSegmentMapiahID) as THLineSegment;
 
         if (nextLineSegment is THBezierCurveLineSegment) {
@@ -80,9 +82,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
       descriptionType: MPCommandDescriptionType.editLine,
     );
 
-    fileEditController.execute(lineEditCommand);
+    th2FileEditController.execute(lineEditCommand);
     selectionController.updateSelectedElementsClones();
-    fileEditController.triggerEditLineRedraw();
+    th2FileEditController.triggerEditLineRedraw();
     selectionController.setSelectionState();
   }
 

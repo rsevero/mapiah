@@ -2,11 +2,11 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     with MPTH2FileEditStateMoveCanvasMixin {
-  MPTH2FileEditStateAddLine({required super.fileEditController});
+  MPTH2FileEditStateAddLine({required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    fileEditController.setStatusBarMessage(mpLocator.appLocalizations
+    th2FileEditController.setStatusBarMessage(mpLocator.appLocalizations
         .th2FileEditPageAddLineStatusBarMessage(
             elementEditController.lastAddedLineType.name));
   }
