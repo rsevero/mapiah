@@ -17,6 +17,9 @@ void main() {
   // );
 
   // mainContext.spy(print);
+
+  // /// For layout debugging.
+  // debugPaintSizeEnabled = true;
   runApp(MapiahApp());
 }
 

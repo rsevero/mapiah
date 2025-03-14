@@ -384,6 +384,9 @@ abstract class TH2FileEditControllerBase with Store {
       _isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow;
 
   @readonly
+  Offset _mousePosition = Offset.zero;
+
+  @readonly
   double _canvasCenterX = 0.0;
   @readonly
   double _canvasCenterY = 0.0;
@@ -979,6 +982,11 @@ abstract class TH2FileEditControllerBase with Store {
   void redo() {
     undoRedoController.redo();
     _undoRedoDone();
+  }
+
+  @action
+  void setMousePosition(Offset position) {
+    _mousePosition = position;
   }
 }
 

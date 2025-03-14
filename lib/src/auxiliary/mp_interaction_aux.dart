@@ -32,14 +32,20 @@ class MPInteractionAux {
 
     final RenderBox renderBox =
         widgetKey.currentContext!.findRenderObject() as RenderBox;
-    final Offset position = (renderBox.parentData! as BoxParentData).offset;
+    final Offset position = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
 
-    return MPNumericAux.orderedRectFromLTWH(
+    /// I believe position is bottom/left and not top/left as expected because
+    /// the canvas Y axe is inverted to match Therion's Y axe. But the canvas
+    /// transformation should affect only the canvas coordinates and not the
+    /// screen coordinates. Maybe it's something completely different but with
+    /// the Rect below getWidgetRect returns the actual coordinates of the
+    /// requested widget.
+    return MPNumericAux.orderedRectFromLTRB(
+      bottom: position.dy,
       left: position.dx,
-      top: position.dy,
-      width: position.dx + size.width,
-      height: position.dy + size.height,
+      top: position.dy - size.height,
+      right: position.dx + size.width,
     );
   }
 

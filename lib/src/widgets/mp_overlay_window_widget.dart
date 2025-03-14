@@ -58,30 +58,34 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
       if (renderBox != null) {
         final Size size = renderBox.size;
 
-        setState(() {
-          switch (widget.positionType) {
-            case MPWidgetPositionType.bottomCenter:
-              position = widget.position - Offset(size.width / 2, size.height);
-            case MPWidgetPositionType.bottomLeft:
-              position = widget.position - Offset(0, size.height);
-            case MPWidgetPositionType.bottomRight:
-              position = widget.position - Offset(size.width, size.height);
-            case MPWidgetPositionType.center:
-              position =
-                  widget.position - (Offset(size.width, size.height) / 2);
-            case MPWidgetPositionType.leftCenter:
-              position = widget.position - Offset(0, size.height / 2);
-            case MPWidgetPositionType.rightCenter:
-              position = widget.position - Offset(size.width, size.height / 2);
-            case MPWidgetPositionType.topCenter:
-              position = widget.position - Offset(size.width / 2, 0);
-            case MPWidgetPositionType.topLeft:
-              position = widget.position;
-            case MPWidgetPositionType.topRight:
-              position = widget.position - Offset(size.width, 0);
-          }
-          _initialPositionSet = true;
-        });
+        setState(
+          () {
+            switch (widget.positionType) {
+              case MPWidgetPositionType.bottomCenter:
+                position =
+                    widget.position - Offset(size.width / 2, size.height);
+              case MPWidgetPositionType.bottomLeft:
+                position = widget.position - Offset(0, size.height);
+              case MPWidgetPositionType.bottomRight:
+                position = widget.position - Offset(size.width, size.height);
+              case MPWidgetPositionType.center:
+                position =
+                    widget.position - (Offset(size.width, size.height) / 2);
+              case MPWidgetPositionType.leftCenter:
+                position = widget.position - Offset(0, size.height / 2);
+              case MPWidgetPositionType.rightCenter:
+                position =
+                    widget.position - Offset(size.width, size.height / 2);
+              case MPWidgetPositionType.topCenter:
+                position = widget.position - Offset(size.width / 2, 0);
+              case MPWidgetPositionType.topLeft:
+                position = widget.position;
+              case MPWidgetPositionType.topRight:
+                position = widget.position - Offset(size.width, 0);
+            }
+            _initialPositionSet = true;
+          },
+        );
       }
     }
 

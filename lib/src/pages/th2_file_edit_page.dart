@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
@@ -108,18 +109,37 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 final List<String> errorMessages = snapshot.data!.errors;
 
                 if (snapshot.data!.isSuccessful) {
-                  return Center(
-                    child: Stack(
-                      children: [
-                        THFileWidget(
-                          key: ValueKey(
-                            "THFileWidget|${th2FileEditController.thFileMapiahID}",
+                  return MouseRegion(
+                    onHover: (PointerHoverEvent event) {
+                      th2FileEditController.setMousePosition(
+                        event.localPosition,
+                      );
+                    },
+                    child: Center(
+                      child: Stack(
+                        children: [
+                          THFileWidget(
+                            key: ValueKey(
+                              "THFileWidget|${th2FileEditController.thFileMapiahID}",
+                            ),
+                            th2FileEditController: th2FileEditController,
                           ),
-                          th2FileEditController: th2FileEditController,
-                        ),
-                        _stateActionButtons(),
-                        _actionButtons(),
-                      ],
+                          _stateActionButtons(),
+                          _actionButtons(),
+                          Observer(
+                            builder: (_) {
+                              return Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Text(
+                                  'Mouse: ${th2FileEditController.mousePosition.dx.toStringAsFixed(2)}, ${th2FileEditController.mousePosition.dy.toStringAsFixed(2)}',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 } else {
@@ -309,6 +329,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               ? const EdgeInsets.only(left: 48.0)
               : EdgeInsets.zero,
           child: FloatingActionButton(
+            key: th2FileEditController
+                    .overlayWindowController.globalKeyWidgetKeyByType[
+                MPGlobalKeyWidgetType.changeScrapButton]!,
             heroTag: 'change_active_scrap_tool',
             onPressed: _onChangeActiveScrapToolPressed,
             tooltip: AppLocalizations.of(context)

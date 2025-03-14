@@ -48,6 +48,29 @@ mixin _$TH2FileEditOverlayWindowController
     });
   }
 
+  late final _$_globalKeyWidgetKeyByTypeAtom = Atom(
+      name: 'TH2FileEditOverlayWindowControllerBase._globalKeyWidgetKeyByType',
+      context: context);
+
+  Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>>
+      get globalKeyWidgetKeyByType {
+    _$_globalKeyWidgetKeyByTypeAtom.reportRead();
+    return super._globalKeyWidgetKeyByType;
+  }
+
+  @override
+  Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>>
+      get _globalKeyWidgetKeyByType => globalKeyWidgetKeyByType;
+
+  @override
+  set _globalKeyWidgetKeyByType(
+      Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>> value) {
+    _$_globalKeyWidgetKeyByTypeAtom
+        .reportWrite(value, super._globalKeyWidgetKeyByType, () {
+      super._globalKeyWidgetKeyByType = value;
+    });
+  }
+
   late final _$_overlayWindowKeyByTypeAtom = Atom(
       name: 'TH2FileEditOverlayWindowControllerBase._overlayWindowKeyByType',
       context: context);
@@ -194,13 +217,12 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   @override
-  void showOverlayWindow(MPOverlayWindowType type,
-      {Offset position = Offset.zero}) {
+  void showOverlayWindow(MPOverlayWindowType type) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name: 'TH2FileEditOverlayWindowControllerBase.showOverlayWindow');
     try {
-      return super.showOverlayWindow(type, position: position);
+      return super.showOverlayWindow(type);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

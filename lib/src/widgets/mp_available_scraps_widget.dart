@@ -8,14 +8,12 @@ class MPAvailableScrapsWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final GlobalKey globalKey;
-  final MPWidgetPositionType positionType;
 
   const MPAvailableScrapsWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
     required this.globalKey,
-    required this.positionType,
   });
 
   @override
@@ -39,7 +37,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     return MPOverlayWindowWidget(
       globalKey: widget.globalKey,
       position: widget.position,
-      positionType: widget.positionType,
+      positionType: MPWidgetPositionType.rightCenter,
       th2FileEditController: th2FileEditController,
       child: Material(
         elevation: 4.0,

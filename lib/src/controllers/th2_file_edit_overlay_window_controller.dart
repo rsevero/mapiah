@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
@@ -26,6 +27,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _isOverlayWindowShown[type] = false;
     }
 
+    for (MPGlobalKeyWidgetType type in MPGlobalKeyWidgetType.values) {
+      _globalKeyWidgetKeyByType[type] = GlobalKey();
+    }
+
     reaction(
       (_) => _th2FileEditController.showChangeScrapOverlayWindow,
       (bool show) {
@@ -37,6 +42,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       },
     );
   }
+
+  @readonly
+  Map<MPGlobalKeyWidgetType, GlobalKey> _globalKeyWidgetKeyByType = {};
 
   @readonly
   Map<MPOverlayWindowType, GlobalKey> _overlayWindowKeyByType = {};
@@ -78,19 +86,23 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   @action
-  void showOverlayWindow(
-    MPOverlayWindowType type, {
-    Offset position = Offset.zero,
-  }) {
-    final Widget widget = MPOverlayWindowFactory.create(
-      th2FileEditController: _th2FileEditController,
-      position: getPositionFromSelectedElements(),
-      type: type,
-    );
+  void showOverlayWindow(MPOverlayWindowType type) {
     final GlobalKey key = _overlayWindowKeyByType[type]!;
 
+    if (_overlayWindows.containsKey(key)) {
+      final Widget overlayWindow = _overlayWindows[key]!;
+
+      _overlayWindows.remove(key);
+      _overlayWindows[key] = overlayWindow;
+    } else {
+      _overlayWindows[key] = MPOverlayWindowFactory.create(
+        th2FileEditController: _th2FileEditController,
+        position: getPositionFromSelectedElements(),
+        type: type,
+      );
+    }
+
     _updateOverlayWindowAsActive(type);
-    _overlayWindows[key] = widget;
     _isOverlayWindowShown[type] = true;
   }
 
