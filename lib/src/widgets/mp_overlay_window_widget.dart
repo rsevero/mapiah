@@ -25,7 +25,8 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   late final TH2FileEditController th2FileEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
   late final int zOrder;
-  late final Offset position;
+  late Offset position;
+  bool _initialPositionSet = false;
 
   @override
   void initState() {
@@ -47,6 +48,20 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   }
 
   void _updateCoordinates() {
+    if (!_initialPositionSet) {
+      final RenderBox? renderBox =
+          widget.globalKey.currentContext?.findRenderObject() as RenderBox?;
+
+      if (renderBox != null) {
+        final Size size = renderBox.size;
+
+        setState(() {
+          position = widget.position - (Offset(size.width, size.height) / 2);
+          _initialPositionSet = true;
+        });
+      }
+    }
+
     overlayWindowController.updateOverlayWindowInfo(
       MPOverlayWindowType.commandOptions,
     );
@@ -58,14 +73,17 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
       key: widget.globalKey,
       left: position.dx,
       top: position.dy,
-      child: Listener(
-        onPointerDown: (PointerDownEvent event) {
-          // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerDown()");
-        },
-        onPointerUp: (PointerUpEvent event) {
-          // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp()");
-        },
-        child: widget.child,
+      child: Visibility.maintain(
+        visible: _initialPositionSet,
+        child: Listener(
+          onPointerDown: (PointerDownEvent event) {
+            // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerDown()");
+          },
+          onPointerUp: (PointerUpEvent event) {
+            // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp()");
+          },
+          child: widget.child,
+        ),
       ),
     );
   }
