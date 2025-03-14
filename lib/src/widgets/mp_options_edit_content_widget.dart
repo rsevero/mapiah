@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOptionsEditContentWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final GlobalKey globalKey;
+  final MPWidgetPositionType positionType;
 
   const MPOptionsEditContentWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
     required this.globalKey,
+    required this.positionType,
   });
 
   @override
@@ -36,6 +39,7 @@ class _MPOptionsEditContentWidgetState
     return MPOverlayWindowWidget(
       globalKey: widget.globalKey,
       position: widget.position,
+      positionType: widget.positionType,
       th2FileEditController: th2FileEditController,
       child: Material(
         elevation: 8.0,

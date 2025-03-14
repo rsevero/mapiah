@@ -6,5 +6,5 @@ enum MPSelectionHandleType {
   leftCenter,
   rightCenter,
   topCenter,
-  bottomCenter,
+  bottomCenter;
 }

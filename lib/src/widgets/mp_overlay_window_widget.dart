@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final Widget child;
   final GlobalKey globalKey;
+  final MPWidgetPositionType positionType;
 
   const MPOverlayWindowWidget({
     super.key,
@@ -15,6 +17,7 @@ class MPOverlayWindowWidget extends StatefulWidget {
     required this.position,
     required this.child,
     required this.globalKey,
+    required this.positionType,
   });
 
   @override
@@ -56,7 +59,27 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
         final Size size = renderBox.size;
 
         setState(() {
-          position = widget.position - (Offset(size.width, size.height) / 2);
+          switch (widget.positionType) {
+            case MPWidgetPositionType.bottomCenter:
+              position = widget.position - Offset(size.width / 2, size.height);
+            case MPWidgetPositionType.bottomLeft:
+              position = widget.position - Offset(0, size.height);
+            case MPWidgetPositionType.bottomRight:
+              position = widget.position - Offset(size.width, size.height);
+            case MPWidgetPositionType.center:
+              position =
+                  widget.position - (Offset(size.width, size.height) / 2);
+            case MPWidgetPositionType.leftCenter:
+              position = widget.position - Offset(0, size.height / 2);
+            case MPWidgetPositionType.rightCenter:
+              position = widget.position - Offset(size.width, size.height / 2);
+            case MPWidgetPositionType.topCenter:
+              position = widget.position - Offset(size.width / 2, 0);
+            case MPWidgetPositionType.topLeft:
+              position = widget.position;
+            case MPWidgetPositionType.topRight:
+              position = widget.position - Offset(size.width, 0);
+          }
           _initialPositionSet = true;
         });
       }

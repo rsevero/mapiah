@@ -12,8 +12,8 @@ import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.d
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
-import 'package:mapiah/src/controllers/types/th_line_paint.dart';
-import 'package:mapiah/src/controllers/types/th_point_paint.dart';
+import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
+import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
