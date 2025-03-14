@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
@@ -28,6 +29,8 @@ class MPOverlayWindowFactory {
         if (rect != null) {
           position = Offset(rect.left, rect.center.dy);
         }
+
+        position = Offset(position.dx - mpButtonSpace, position.dy);
 
         return MPAvailableScrapsWidget(
           th2FileEditController: th2FileEditController,

@@ -84,6 +84,7 @@ const String thEnglishLocaleID = 'en';
 
 const double thFloatingActionIconSize = 32;
 const double thFloatingActionZoomIconSize = 24;
+const double mpButtonSpace = 8;
 
 const int mpInitialZOrder = 0;
 const int mpDefaultZOrderIncrement = 1000;

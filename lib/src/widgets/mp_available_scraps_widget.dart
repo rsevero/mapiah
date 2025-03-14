@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
@@ -42,7 +43,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
       child: Material(
         elevation: 4.0,
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(mpButtonSpace),
           width: 230,
           color: Colors.white,
           child: Observer(
@@ -66,7 +67,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                         children: [
                           Text(scrapName),
                           if (isSelected) ...[
-                            SizedBox(width: 8),
+                            SizedBox(width: mpButtonSpace),
                             Icon(Icons.check, color: Colors.blue),
                           ],
                         ],

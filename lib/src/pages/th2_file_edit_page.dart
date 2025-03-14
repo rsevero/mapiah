@@ -272,13 +272,13 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             : colorScheme.secondaryContainer,
         elevation: isPressedButton ? 0 : null,
       ),
-      if (isTypeButton) SizedBox(width: 8),
+      if (isTypeButton) SizedBox(width: mpButtonSpace),
     ];
   }
 
   List<Widget> _addElementButtons() {
     return [
-      SizedBox(height: 8),
+      SizedBox(height: mpButtonSpace),
       MouseRegion(
         onEnter: (_) => th2FileEditController.setAddElementButtonsHovered(true),
         onExit: (_) => th2FileEditController.setAddElementButtonsHovered(false),
@@ -316,7 +316,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   List<Widget> _changeScrapButton() {
     return [
-      SizedBox(height: 8),
+      SizedBox(height: mpButtonSpace),
       MouseRegion(
         onEnter: (PointerEnterEvent event) {
           th2FileEditController.setIsMouseOverChangeScrapsButton(true);
@@ -357,7 +357,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         th2FileEditController.isOptionEditButtonEnabled;
 
     return [
-      SizedBox(height: 8),
+      SizedBox(height: mpButtonSpace),
       FloatingActionButton(
         heroTag: 'select_tool',
         onPressed: _onSelectToolPressed,
@@ -374,7 +374,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             isSelectMode ? colorScheme.primary : colorScheme.secondaryContainer,
         elevation: isSelectMode ? 0 : null,
       ),
-      SizedBox(height: 8),
+      SizedBox(height: mpButtonSpace),
       FloatingActionButton(
         heroTag: 'node_edit_tool',
         onPressed: _onNodeEditToolPressed,
@@ -395,7 +395,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             : colorScheme.surfaceContainerLowest,
         elevation: isEditLineMode ? 0 : null,
       ),
-      SizedBox(height: 8),
+      SizedBox(height: mpButtonSpace),
       FloatingActionButton(
         heroTag: 'options_tool',
         onPressed: () => _onOptionsToolPressed(context),
@@ -490,7 +490,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 ),
               ],
               if (th2FileEditController.showUndoRedoButtons) ...[
-                SizedBox(width: 8),
+                SizedBox(width: mpButtonSpace),
                 FloatingActionButton(
                   heroTag: 'undo',
                   mini: true,
@@ -506,7 +506,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   elevation: hasUndo ? 6.0 : 3.0,
                   child: const Icon(Icons.undo),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: mpButtonSpace),
                 FloatingActionButton(
                   heroTag: 'redo',
                   mini: true,
@@ -532,7 +532,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   List<Widget> _zoomButtonWithOptions() {
     return [
-      SizedBox(height: 8),
+      SizedBox(height: mpButtonSpace),
       MouseRegion(
         onEnter: (_) => th2FileEditController.setZoomButtonsHovered(true),
         onExit: (_) => th2FileEditController.setZoomButtonsHovered(false),
@@ -563,7 +563,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: colorScheme.onSecondaryContainer,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
                       heroTag: 'zoom_1_1',
                       onPressed: zoomOneToOne,
@@ -576,7 +576,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: colorScheme.onSecondaryContainer,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
                       heroTag: 'zoom_selection',
                       onPressed: selectedElementsEmpty ? null : zoomSelection,
@@ -591,7 +591,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                             : colorScheme.onSecondaryContainer,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
                       heroTag: 'zoom_out_file',
                       onPressed: zoomAllFilePressed,
@@ -603,7 +603,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: colorScheme.onSecondaryContainer,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
                       heroTag: 'zoom_out_scrap',
                       onPressed: th2FileEditController.hasMultipleScraps
@@ -620,7 +620,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                             : Colors.grey,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
                       heroTag: 'zoom_out',
                       onPressed: zoomOutPressed,
@@ -633,7 +633,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: colorScheme.onSecondaryContainer,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: mpButtonSpace),
                   ],
                 );
               },
