@@ -300,6 +300,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               name:
                   'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen'))
           .value;
+  Computed<bool>? _$showChangeScrapOverlayWindowComputed;
+
+  @override
+  bool get showChangeScrapOverlayWindow =>
+      (_$showChangeScrapOverlayWindowComputed ??= Computed<bool>(
+              () => super.showChangeScrapOverlayWindow,
+              name: 'TH2FileEditControllerBase.showChangeScrapOverlayWindow'))
+          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditControllerBase._screenSize', context: context);
@@ -806,58 +814,44 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$isChangeScrapsPopupVisibleAtom = Atom(
-      name: 'TH2FileEditControllerBase.isChangeScrapsPopupVisible',
+  late final _$_isMouseOverChangeScrapButtonAtom = Atom(
+      name: 'TH2FileEditControllerBase._isMouseOverChangeScrapButton',
       context: context);
 
-  @override
-  bool get isChangeScrapsPopupVisible {
-    _$isChangeScrapsPopupVisibleAtom.reportRead();
-    return super.isChangeScrapsPopupVisible;
+  bool get isMouseOverChangeScrapButton {
+    _$_isMouseOverChangeScrapButtonAtom.reportRead();
+    return super._isMouseOverChangeScrapButton;
   }
 
   @override
-  set isChangeScrapsPopupVisible(bool value) {
-    _$isChangeScrapsPopupVisibleAtom
-        .reportWrite(value, super.isChangeScrapsPopupVisible, () {
-      super.isChangeScrapsPopupVisible = value;
+  bool get _isMouseOverChangeScrapButton => isMouseOverChangeScrapButton;
+
+  @override
+  set _isMouseOverChangeScrapButton(bool value) {
+    _$_isMouseOverChangeScrapButtonAtom
+        .reportWrite(value, super._isMouseOverChangeScrapButton, () {
+      super._isMouseOverChangeScrapButton = value;
     });
   }
 
-  late final _$changeScrapsPopupOverlayPortalControllerControllerAtom = Atom(
-      name:
-          'TH2FileEditControllerBase.changeScrapsPopupOverlayPortalControllerController',
+  late final _$_isMouseOverChangeScrapOverlayWindowAtom = Atom(
+      name: 'TH2FileEditControllerBase._isMouseOverChangeScrapOverlayWindow',
       context: context);
 
-  @override
-  OverlayPortalController
-      get changeScrapsPopupOverlayPortalControllerController {
-    _$changeScrapsPopupOverlayPortalControllerControllerAtom.reportRead();
-    return super.changeScrapsPopupOverlayPortalControllerController;
+  bool get isMouseOverChangeScrapOverlayWindow {
+    _$_isMouseOverChangeScrapOverlayWindowAtom.reportRead();
+    return super._isMouseOverChangeScrapOverlayWindow;
   }
 
   @override
-  set changeScrapsPopupOverlayPortalControllerController(
-      OverlayPortalController value) {
-    _$changeScrapsPopupOverlayPortalControllerControllerAtom.reportWrite(
-        value, super.changeScrapsPopupOverlayPortalControllerController, () {
-      super.changeScrapsPopupOverlayPortalControllerController = value;
-    });
-  }
-
-  late final _$changeScrapsFABKeyAtom = Atom(
-      name: 'TH2FileEditControllerBase.changeScrapsFABKey', context: context);
+  bool get _isMouseOverChangeScrapOverlayWindow =>
+      isMouseOverChangeScrapOverlayWindow;
 
   @override
-  GlobalKey<State<StatefulWidget>> get changeScrapsFABKey {
-    _$changeScrapsFABKeyAtom.reportRead();
-    return super.changeScrapsFABKey;
-  }
-
-  @override
-  set changeScrapsFABKey(GlobalKey<State<StatefulWidget>> value) {
-    _$changeScrapsFABKeyAtom.reportWrite(value, super.changeScrapsFABKey, () {
-      super.changeScrapsFABKey = value;
+  set _isMouseOverChangeScrapOverlayWindow(bool value) {
+    _$_isMouseOverChangeScrapOverlayWindowAtom
+        .reportWrite(value, super._isMouseOverChangeScrapOverlayWindow, () {
+      super._isMouseOverChangeScrapOverlayWindow = value;
     });
   }
 
@@ -1140,6 +1134,41 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void setIsMouseOverChangeScrapsButton(bool isMouseOver) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.setIsMouseOverChangeScrapsButton');
+    try {
+      return super.setIsMouseOverChangeScrapsButton(isMouseOver);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsMouseOverChangeScrapsOverlayWindow(bool isMouseOver) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
+        name:
+            'TH2FileEditControllerBase.setIsMouseOverChangeScrapsOverlayWindow');
+    try {
+      return super.setIsMouseOverChangeScrapsOverlayWindow(isMouseOver);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateHasMultipleScraps() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.updateHasMultipleScraps');
+    try {
+      return super.updateHasMultipleScraps();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void execute(MPCommand command) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.execute');
@@ -1187,9 +1216,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   @override
   String toString() {
     return '''
-isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
-changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPortalControllerController},
-changeScrapsFABKey: ${changeScrapsFABKey},
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 canvasBoundingBox: ${canvasBoundingBox},
 screenBoundingBox: ${screenBoundingBox},
@@ -1227,7 +1253,8 @@ scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
+showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow}
     ''';
   }
 }

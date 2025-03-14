@@ -3,13 +3,13 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPOptionsEditContentWidget extends StatefulWidget {
+class MPOptionsEditWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final GlobalKey globalKey;
   final MPWidgetPositionType positionType;
 
-  const MPOptionsEditContentWidget({
+  const MPOptionsEditWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
@@ -18,12 +18,10 @@ class MPOptionsEditContentWidget extends StatefulWidget {
   });
 
   @override
-  State<MPOptionsEditContentWidget> createState() =>
-      _MPOptionsEditContentWidgetState();
+  State<MPOptionsEditWidget> createState() => _MPOptionsEditWidgetState();
 }
 
-class _MPOptionsEditContentWidgetState
-    extends State<MPOptionsEditContentWidget> {
+class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
   late final TH2FileEditController th2FileEditController;
   late final int zOrder;
 

@@ -373,15 +373,15 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   int _redrawTriggerEditLine = 0;
 
-  @observable
-  bool isChangeScrapsPopupVisible = false;
+  @readonly
+  bool _isMouseOverChangeScrapButton = false;
 
-  @observable
-  OverlayPortalController changeScrapsPopupOverlayPortalControllerController =
-      OverlayPortalController();
+  @readonly
+  bool _isMouseOverChangeScrapOverlayWindow = false;
 
-  @observable
-  GlobalKey changeScrapsFABKey = GlobalKey();
+  @computed
+  bool get showChangeScrapOverlayWindow =>
+      _isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow;
 
   @readonly
   double _canvasCenterX = 0.0;
@@ -444,7 +444,7 @@ abstract class TH2FileEditControllerBase with Store {
   ) {
     if (_thFile.scrapMapiahIDs.isNotEmpty) {
       _activeScrapID = _thFile.scrapMapiahIDs.first;
-      _hasMultipleScraps = _thFile.scrapMapiahIDs.length > 1;
+      updateHasMultipleScraps();
     }
 
     selectionController.clearIsSelected();
@@ -926,6 +926,21 @@ abstract class TH2FileEditControllerBase with Store {
     final String filename = _thFile.filename;
 
     return File(filename);
+  }
+
+  @action
+  void setIsMouseOverChangeScrapsButton(bool isMouseOver) {
+    _isMouseOverChangeScrapButton = isMouseOver;
+  }
+
+  @action
+  void setIsMouseOverChangeScrapsOverlayWindow(bool isMouseOver) {
+    _isMouseOverChangeScrapOverlayWindow = isMouseOver;
+  }
+
+  @action
+  void updateHasMultipleScraps() {
+    _hasMultipleScraps = _thFile.scrapMapiahIDs.length > 1;
   }
 
   @action

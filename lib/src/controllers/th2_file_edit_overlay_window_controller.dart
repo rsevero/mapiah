@@ -25,6 +25,17 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _overlayWindowKeyByType[type] = GlobalKey();
       _isOverlayWindowShown[type] = false;
     }
+
+    reaction(
+      (_) => _th2FileEditController.showChangeScrapOverlayWindow,
+      (bool show) {
+        if (show) {
+          showOverlayWindow(MPOverlayWindowType.availableScraps);
+        } else {
+          hideOverlayWindow(MPOverlayWindowType.availableScraps);
+        }
+      },
+    );
   }
 
   @readonly

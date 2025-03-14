@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
@@ -179,15 +180,17 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   Widget _actionButtons() {
     return Observer(
       builder: (context) {
-        final List<Widget> generalActionButtons =
-            th2FileEditController.hasMultipleScraps ? _changeScrapButton() : [];
+        final List<Widget> generalActionButtons = [];
 
         isSelectMode = th2FileEditController.isSelectMode;
 
+        if (th2FileEditController.hasMultipleScraps) {
+          generalActionButtons.addAll(_changeScrapButton());
+        }
+
         generalActionButtons.addAll(_editElementButtons());
-        generalActionButtons.add(_addElementOptions());
-        generalActionButtons.add(SizedBox(height: 8));
-        generalActionButtons.add(_zoomButtonWithOptions());
+        generalActionButtons.addAll(_addElementButtons());
+        generalActionButtons.addAll(_zoomButtonWithOptions());
 
         return Positioned(
           bottom: 16,
@@ -253,140 +256,72 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     ];
   }
 
-  Widget _addElementOptions() {
-    return MouseRegion(
-      onEnter: (_) => th2FileEditController.setAddElementButtonsHovered(true),
-      onExit: (_) => th2FileEditController.setAddElementButtonsHovered(false),
-      child: Observer(
-        builder: (_) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (th2FileEditController.isAddElementButtonsHovered) ...[
+  List<Widget> _addElementButtons() {
+    return [
+      SizedBox(height: 8),
+      MouseRegion(
+        onEnter: (_) => th2FileEditController.setAddElementButtonsHovered(true),
+        onExit: (_) => th2FileEditController.setAddElementButtonsHovered(false),
+        child: Observer(
+          builder: (_) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (th2FileEditController.isAddElementButtonsHovered) ...[
+                  ..._addElementButton(
+                    type: MPButtonType.addPoint,
+                    isTypeButton: true,
+                  ),
+                  ..._addElementButton(
+                    type: MPButtonType.addLine,
+                    isTypeButton: true,
+                  ),
+                  ..._addElementButton(
+                    type: MPButtonType.addArea,
+                    isTypeButton: true,
+                  ),
+                ],
                 ..._addElementButton(
-                  type: MPButtonType.addPoint,
-                  isTypeButton: true,
-                ),
-                ..._addElementButton(
-                  type: MPButtonType.addLine,
-                  isTypeButton: true,
-                ),
-                ..._addElementButton(
-                  type: MPButtonType.addArea,
-                  isTypeButton: true,
+                  type: th2FileEditController.activeAddElementButton,
+                  isTypeButton: false,
                 ),
               ],
-              ..._addElementButton(
-                type: th2FileEditController.activeAddElementButton,
-                isTypeButton: false,
-              ),
-            ],
-          );
-        },
-      ),
-    );
+            );
+          },
+        ),
+      )
+    ];
   }
 
   List<Widget> _changeScrapButton() {
     return [
+      SizedBox(height: 8),
       MouseRegion(
-        onEnter: (PointerEvent event) {
-          th2FileEditController
-              .changeScrapsPopupOverlayPortalControllerController
-              .show();
-          th2FileEditController.isChangeScrapsPopupVisible = true;
+        onEnter: (PointerEnterEvent event) {
+          th2FileEditController.setIsMouseOverChangeScrapsButton(true);
         },
-        onExit: (PointerEvent event) {
-          th2FileEditController
-              .changeScrapsPopupOverlayPortalControllerController
-              .hide();
-          th2FileEditController.isChangeScrapsPopupVisible = false;
+        onExit: (PointerExitEvent event) {
+          th2FileEditController.setIsMouseOverChangeScrapsButton(false);
         },
-        child: Stack(
-          children: [
-            Padding(
-              padding: th2FileEditController.isChangeScrapsPopupVisible
-                  ? const EdgeInsets.only(left: 48.0)
-                  : EdgeInsets.zero,
-              child: FloatingActionButton(
-                key: th2FileEditController.changeScrapsFABKey,
-                heroTag: 'change_active_scrap_tool',
-                onPressed: _onChangeActiveScrapToolPressed,
-                tooltip: AppLocalizations.of(context)
-                    .th2FileEditPageChangeActiveScrapTool,
-                child: Image.asset(
-                  'assets/icons/change-scrap-tool.png',
-                  width: thFloatingActionIconSize,
-                  height: thFloatingActionIconSize,
-                  color: colorScheme.onSecondaryContainer,
-                ),
-              ),
+        child: Padding(
+          padding: th2FileEditController.showChangeScrapOverlayWindow
+              ? const EdgeInsets.only(left: 48.0)
+              : EdgeInsets.zero,
+          child: FloatingActionButton(
+            heroTag: 'change_active_scrap_tool',
+            onPressed: _onChangeActiveScrapToolPressed,
+            tooltip: AppLocalizations.of(context)
+                .th2FileEditPageChangeActiveScrapTool,
+            child: Image.asset(
+              'assets/icons/change-scrap-tool.png',
+              width: thFloatingActionIconSize,
+              height: thFloatingActionIconSize,
+              color: colorScheme.onSecondaryContainer,
             ),
-            OverlayPortal(
-              controller: th2FileEditController
-                  .changeScrapsPopupOverlayPortalControllerController,
-              overlayChildBuilder: (context) {
-                final RenderBox fabBox = th2FileEditController
-                    .changeScrapsFABKey.currentContext!
-                    .findRenderObject() as RenderBox;
-                final Offset fabPosition = fabBox.localToGlobal(Offset.zero);
-                final Size fabSize = fabBox.size;
-                final double popupTop =
-                    fabPosition.dy + fabSize.height / 2 - 50;
-                final double popupLeft = fabPosition.dx - 250;
-
-                return Positioned(
-                  top: popupTop,
-                  left: popupLeft,
-                  child: Material(
-                    elevation: 4.0,
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      width: 230,
-                      color: Colors.white,
-                      child: Observer(
-                        builder: (_) {
-                          th2FileEditController.activeScrapID;
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:
-                                th2FileEditController.availableScraps().map(
-                              (scrap) {
-                                final int scrapID = scrap.$1;
-                                final String scrapName = scrap.$2;
-                                final bool isSelected = scrap.$3;
-
-                                return PopupMenuItem<int>(
-                                  value: scrapID,
-                                  // onTap: () =>
-                                  //     _selectActiveScrapPressed(
-                                  //         scrapID),
-                                  child: Row(
-                                    children: [
-                                      Text(scrapName),
-                                      if (isSelected) ...[
-                                        SizedBox(width: 8),
-                                        Icon(Icons.check, color: Colors.blue),
-                                      ],
-                                    ],
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+          ),
         ),
       ),
-      SizedBox(height: 8),
     ];
   }
 
@@ -399,6 +334,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         th2FileEditController.isOptionEditButtonEnabled;
 
     return [
+      SizedBox(height: 8),
       FloatingActionButton(
         heroTag: 'select_tool',
         onPressed: _onSelectToolPressed,
@@ -457,7 +393,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             : colorScheme.surfaceContainerLowest,
         elevation: isOptionEditMode ? 0 : null,
       ),
-      SizedBox(height: 8),
     ];
   }
 
@@ -572,125 +507,129 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     );
   }
 
-  Widget _zoomButtonWithOptions() {
-    return MouseRegion(
-      onEnter: (_) => th2FileEditController.setZoomButtonsHovered(true),
-      onExit: (_) => th2FileEditController.setZoomButtonsHovered(false),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Observer(
-            builder: (_) {
-              if (!th2FileEditController.isZoomButtonsHovered) {
-                return const SizedBox();
-              }
+  List<Widget> _zoomButtonWithOptions() {
+    return [
+      SizedBox(height: 8),
+      MouseRegion(
+        onEnter: (_) => th2FileEditController.setZoomButtonsHovered(true),
+        onExit: (_) => th2FileEditController.setZoomButtonsHovered(false),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Observer(
+              builder: (_) {
+                if (!th2FileEditController.isZoomButtonsHovered) {
+                  return const SizedBox();
+                }
 
-              final bool selectedElementsEmpty = th2FileEditController
-                  .selectionController.selectedElements.isEmpty;
+                final bool selectedElementsEmpty = th2FileEditController
+                    .selectionController.selectedElements.isEmpty;
 
-              return Row(
-                children: [
-                  FloatingActionButton(
-                    heroTag: 'zoom_in',
-                    onPressed: zoomInPressed,
-                    tooltip: AppLocalizations.of(context).th2FileEditPageZoomIn,
-                    child: Image.asset(
-                      'assets/icons/zoom_plus.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: colorScheme.onSecondaryContainer,
+                return Row(
+                  children: [
+                    FloatingActionButton(
+                      heroTag: 'zoom_in',
+                      onPressed: zoomInPressed,
+                      tooltip:
+                          AppLocalizations.of(context).th2FileEditPageZoomIn,
+                      child: Image.asset(
+                        'assets/icons/zoom_plus.png',
+                        width: thFloatingActionZoomIconSize,
+                        height: thFloatingActionZoomIconSize,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'zoom_1_1',
-                    onPressed: zoomOneToOne,
-                    tooltip: AppLocalizations.of(context)
-                        .th2FileEditPageZoomOneToOne,
-                    child: Image.asset(
-                      'assets/icons/zoom_one_to_one.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: colorScheme.onSecondaryContainer,
+                    SizedBox(width: 8),
+                    FloatingActionButton(
+                      heroTag: 'zoom_1_1',
+                      onPressed: zoomOneToOne,
+                      tooltip: AppLocalizations.of(context)
+                          .th2FileEditPageZoomOneToOne,
+                      child: Image.asset(
+                        'assets/icons/zoom_one_to_one.png',
+                        width: thFloatingActionZoomIconSize,
+                        height: thFloatingActionZoomIconSize,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'zoom_selection',
-                    onPressed: selectedElementsEmpty ? null : zoomSelection,
-                    tooltip: AppLocalizations.of(context)
-                        .th2FileEditPageZoomToSelection,
-                    child: Image.asset(
-                      'assets/icons/zoom_selection.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: selectedElementsEmpty
-                          ? Colors.grey
-                          : colorScheme.onSecondaryContainer,
+                    SizedBox(width: 8),
+                    FloatingActionButton(
+                      heroTag: 'zoom_selection',
+                      onPressed: selectedElementsEmpty ? null : zoomSelection,
+                      tooltip: AppLocalizations.of(context)
+                          .th2FileEditPageZoomToSelection,
+                      child: Image.asset(
+                        'assets/icons/zoom_selection.png',
+                        width: thFloatingActionZoomIconSize,
+                        height: thFloatingActionZoomIconSize,
+                        color: selectedElementsEmpty
+                            ? Colors.grey
+                            : colorScheme.onSecondaryContainer,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'zoom_out_file',
-                    onPressed: zoomAllFilePressed,
-                    tooltip:
-                        AppLocalizations.of(context).th2FileEditPageZoomOutFile,
-                    child: Icon(
-                      Icons.zoom_out_map,
-                      size: thFloatingActionIconSize,
-                      color: colorScheme.onSecondaryContainer,
+                    SizedBox(width: 8),
+                    FloatingActionButton(
+                      heroTag: 'zoom_out_file',
+                      onPressed: zoomAllFilePressed,
+                      tooltip: AppLocalizations.of(context)
+                          .th2FileEditPageZoomOutFile,
+                      child: Icon(
+                        Icons.zoom_out_map,
+                        size: thFloatingActionIconSize,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'zoom_out_scrap',
-                    onPressed: th2FileEditController.hasMultipleScraps
-                        ? zoomAllScrapPressed
-                        : null,
-                    tooltip: AppLocalizations.of(context)
-                        .th2FileEditPageZoomOutScrap,
-                    child: Image.asset(
-                      'assets/icons/zoom-out-scrap.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: th2FileEditController.hasMultipleScraps
-                          ? colorScheme.onSecondaryContainer
-                          : Colors.grey,
+                    SizedBox(width: 8),
+                    FloatingActionButton(
+                      heroTag: 'zoom_out_scrap',
+                      onPressed: th2FileEditController.hasMultipleScraps
+                          ? zoomAllScrapPressed
+                          : null,
+                      tooltip: AppLocalizations.of(context)
+                          .th2FileEditPageZoomOutScrap,
+                      child: Image.asset(
+                        'assets/icons/zoom-out-scrap.png',
+                        width: thFloatingActionZoomIconSize,
+                        height: thFloatingActionZoomIconSize,
+                        color: th2FileEditController.hasMultipleScraps
+                            ? colorScheme.onSecondaryContainer
+                            : Colors.grey,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  FloatingActionButton(
-                    heroTag: 'zoom_out',
-                    onPressed: zoomOutPressed,
-                    tooltip:
-                        AppLocalizations.of(context).th2FileEditPageZoomOut,
-                    child: Image.asset(
-                      'assets/icons/zoom_minus.png',
-                      width: thFloatingActionZoomIconSize,
-                      height: thFloatingActionZoomIconSize,
-                      color: colorScheme.onSecondaryContainer,
+                    SizedBox(width: 8),
+                    FloatingActionButton(
+                      heroTag: 'zoom_out',
+                      onPressed: zoomOutPressed,
+                      tooltip:
+                          AppLocalizations.of(context).th2FileEditPageZoomOut,
+                      child: Image.asset(
+                        'assets/icons/zoom_minus.png',
+                        width: thFloatingActionZoomIconSize,
+                        height: thFloatingActionZoomIconSize,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                ],
-              );
-            },
-          ),
-          FloatingActionButton(
-            heroTag: 'zoom_options',
-            onPressed: () {},
-            tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
-            child: Image.asset(
-              'assets/icons/zoom_plus_minus.png',
-              width: thFloatingActionZoomIconSize,
-              height: thFloatingActionZoomIconSize,
-              color: colorScheme.onSecondaryContainer,
+                    SizedBox(width: 8),
+                  ],
+                );
+              },
             ),
-          ),
-        ],
-      ),
-    );
+            FloatingActionButton(
+              heroTag: 'zoom_options',
+              onPressed: () {},
+              tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
+              child: Image.asset(
+                'assets/icons/zoom_plus_minus.png',
+                width: thFloatingActionZoomIconSize,
+                height: thFloatingActionZoomIconSize,
+                color: colorScheme.onSecondaryContainer,
+              ),
+            ),
+          ],
+        ),
+      )
+    ];
   }
 
   void zoomInPressed() {

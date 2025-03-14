@@ -137,6 +137,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.selectionController.addSelectableElement(newElement);
+    _th2FileEditController.updateHasMultipleScraps();
   }
 
   void addElementWithParentMapiahIDWithoutSelectableElement({
@@ -156,6 +157,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     _thFile.addElement(newElement);
     parent.addElementToParent(newElement);
+    _th2FileEditController.updateHasMultipleScraps();
   }
 
   @action
@@ -166,6 +168,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _thFile.deleteElement(element);
     selectionController.removeSelectableElement(element.mapiahID);
     selectionController.removeSelectedElement(element);
+    _th2FileEditController.updateHasMultipleScraps();
   }
 
   void deleteElementByMapiahID(int mapiahID) {
