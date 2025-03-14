@@ -244,6 +244,21 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   @override
+  void updateOverlayWindowWithBoundingBox(
+      GlobalKey<State<StatefulWidget>> key, Rect boundingBox) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.updateOverlayWindowWithBoundingBox');
+    try {
+      return super.updateOverlayWindowWithBoundingBox(key, boundingBox);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void hideOverlayWindow(MPOverlayWindowType type) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(

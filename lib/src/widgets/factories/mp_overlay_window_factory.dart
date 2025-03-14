@@ -27,10 +27,8 @@ class MPOverlayWindowFactory {
         final Rect? rect = MPInteractionAux.getWidgetRect(changeScrapButtonKey);
 
         if (rect != null) {
-          position = Offset(rect.left, rect.center.dy);
+          position = Offset(rect.left - mpButtonSpace, rect.center.dy);
         }
-
-        position = Offset(position.dx - mpButtonSpace, position.dy);
 
         return MPAvailableScrapsWidget(
           th2FileEditController: th2FileEditController,

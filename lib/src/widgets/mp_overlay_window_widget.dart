@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
@@ -51,6 +52,8 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   }
 
   void _updateCoordinates() {
+    bool overlayWindowUpdated = false;
+
     if (!_initialPositionSet) {
       final RenderBox? renderBox =
           widget.globalKey.currentContext?.findRenderObject() as RenderBox?;
@@ -86,12 +89,24 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
             _initialPositionSet = true;
           },
         );
+        overlayWindowController.updateOverlayWindowWithBoundingBox(
+          widget.globalKey,
+          MPNumericAux.orderedRectFromLTWH(
+            left: position.dx,
+            top: position.dy,
+            width: size.width,
+            height: size.height,
+          ),
+        );
+        overlayWindowUpdated = true;
       }
     }
 
-    overlayWindowController.updateOverlayWindowInfo(
-      MPOverlayWindowType.commandOptions,
-    );
+    if (!overlayWindowUpdated) {
+      overlayWindowController.updateOverlayWindowInfo(
+        MPOverlayWindowType.commandOptions,
+      );
+    }
   }
 
   @override
