@@ -3,7 +3,6 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
-import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
 import 'package:mobx/mobx.dart';
@@ -144,7 +143,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     } else {
       final Rect selectedElementsBoundingBox = _th2FileEditController
           .selectionController.selectedElementsBoundingBox;
-      final Offset selectedElementsCenter = selectedElementsBoundingBox.center;
+      final Offset selectedElementsCenter = _th2FileEditController
+          .offsetCanvasToScreen(selectedElementsBoundingBox.center);
 
       return selectedElementsCenter;
     }

@@ -76,13 +76,11 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   Rect get screenBoundingBox {
-    final Offset topLeft = offsetScaleCanvasToScreen(canvasBoundingBox.topLeft);
-    final Offset bottomRight = offsetScaleCanvasToScreen(
-      canvasBoundingBox.bottomRight,
-    );
-    final Rect screenBoundingBox = MPNumericAux.orderedRectFromPoints(
-      point1: topLeft,
-      point2: bottomRight,
+    final Rect screenBoundingBox = MPNumericAux.orderedRectFromLTWH(
+      top: 0,
+      left: 0,
+      width: _screenSize.width,
+      height: _screenSize.height,
     );
 
     return screenBoundingBox;
