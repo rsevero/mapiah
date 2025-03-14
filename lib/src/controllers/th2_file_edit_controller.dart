@@ -39,15 +39,16 @@ abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditStateController stateController;
   late final MPUndoRedoController undoRedoController;
 
-  // 'screen' is related to actual pixels on the screen.
-  // 'canvas' is the virtual canvas used to draw.
-  // 'data' is the actual data to be drawn.
-  // 'canvas' and 'data' are on the same scale. They are both scaled and
-  // translated to be shown on the screen.
+  /// 'screen' is related to actual pixels on the screen.
+  /// 'canvas' is the virtual canvas used to draw.
+  /// 'data' is the actual data to be drawn.
+  /// 'canvas' and 'data' are on the same scale. They are both scaled and
+  /// translated to be shown on the screen.
 
   @readonly
   Size _screenSize = Size.zero;
 
+  @readonly
   Size _canvasSize = Size.zero;
 
   @readonly
@@ -59,6 +60,33 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   Offset _canvasTranslation = Offset.zero;
+
+  @computed
+  Rect get canvasBoundingBox {
+    final Offset topLeft = _canvasTranslation;
+    final Offset bottomRight =
+        topLeft + Offset(_canvasSize.width, _canvasSize.height);
+    final Rect canvasBoundingBox = MPNumericAux.orderedRectFromPoints(
+      point1: topLeft,
+      point2: bottomRight,
+    );
+
+    return canvasBoundingBox;
+  }
+
+  @computed
+  Rect get screenBoundingBox {
+    final Offset topLeft = offsetScaleCanvasToScreen(canvasBoundingBox.topLeft);
+    final Offset bottomRight = offsetScaleCanvasToScreen(
+      canvasBoundingBox.bottomRight,
+    );
+    final Rect screenBoundingBox = MPNumericAux.orderedRectFromPoints(
+      point1: topLeft,
+      point2: bottomRight,
+    );
+
+    return screenBoundingBox;
+  }
 
   @readonly
   bool _isLoading = false;
@@ -200,6 +228,10 @@ abstract class TH2FileEditControllerBase with Store {
   bool get showAddLine =>
       (elementEditController.newLine != null) ||
       (elementEditController.lineStartScreenPosition != null);
+
+  @computed
+  bool get showOverlayWindows =>
+      overlayWindowController.overlayWindows.isNotEmpty;
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -707,11 +739,6 @@ abstract class TH2FileEditControllerBase with Store {
   void updateCanvasScale(double newScale) {
     _canvasScale = MPNumericAux.roundScale(newScale);
     _canvasSize = _screenSize / _canvasScale;
-  }
-
-  @action
-  void updateCanvasOffsetDrawing(Offset newOffset) {
-    _canvasTranslation = newOffset;
   }
 
   @action

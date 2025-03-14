@@ -1,0 +1,4 @@
+enum MPOverlayWindowType {
+  availableScraps,
+  commandOptions,
+}

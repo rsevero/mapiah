@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
@@ -8,7 +9,6 @@ import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_edit_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
-import 'package:mapiah/src/widgets/mp_options_edit_content_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_scale_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
@@ -19,6 +19,8 @@ class THFileWidget extends StatelessWidget {
 
   late final THFile thFile = th2FileEditController.thFile;
   late final int thFileMapiahID = th2FileEditController.thFileMapiahID;
+  late final TH2FileEditOverlayWindowController overlayWindowController =
+      th2FileEditController.overlayWindowController;
 
   THFileWidget({required super.key, required this.th2FileEditController});
 
@@ -118,15 +120,12 @@ class THFileWidget extends StatelessWidget {
               ),
               Observer(
                 builder: (_) {
-                  if (th2FileEditController.showOptionsEdit) {
-                    return MPOptionsEditContentWidget(
-                      key: ValueKey("MPOptionsEditWidget|$thFileMapiahID"),
-                      th2FileEditController: th2FileEditController,
-                      position: Offset(57, 48),
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
+                  return Stack(
+                    children: overlayWindowController.overlayWindows.entries
+                        .map((entry) {
+                      return entry.value;
+                    }).toList(),
+                  );
                 },
               ),
             ],

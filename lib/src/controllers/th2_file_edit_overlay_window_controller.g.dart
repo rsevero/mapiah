@@ -48,6 +48,50 @@ mixin _$TH2FileEditOverlayWindowController
     });
   }
 
+  late final _$_overlayWindowKeyByTypeAtom = Atom(
+      name: 'TH2FileEditOverlayWindowControllerBase._overlayWindowKeyByType',
+      context: context);
+
+  Map<MPOverlayWindowType, GlobalKey<State<StatefulWidget>>>
+      get overlayWindowKeyByType {
+    _$_overlayWindowKeyByTypeAtom.reportRead();
+    return super._overlayWindowKeyByType;
+  }
+
+  @override
+  Map<MPOverlayWindowType, GlobalKey<State<StatefulWidget>>>
+      get _overlayWindowKeyByType => overlayWindowKeyByType;
+
+  @override
+  set _overlayWindowKeyByType(
+      Map<MPOverlayWindowType, GlobalKey<State<StatefulWidget>>> value) {
+    _$_overlayWindowKeyByTypeAtom
+        .reportWrite(value, super._overlayWindowKeyByType, () {
+      super._overlayWindowKeyByType = value;
+    });
+  }
+
+  late final _$_isOverlayWindowShownAtom = Atom(
+      name: 'TH2FileEditOverlayWindowControllerBase._isOverlayWindowShown',
+      context: context);
+
+  ObservableMap<MPOverlayWindowType, bool> get isOverlayWindowShown {
+    _$_isOverlayWindowShownAtom.reportRead();
+    return super._isOverlayWindowShown;
+  }
+
+  @override
+  ObservableMap<MPOverlayWindowType, bool> get _isOverlayWindowShown =>
+      isOverlayWindowShown;
+
+  @override
+  set _isOverlayWindowShown(ObservableMap<MPOverlayWindowType, bool> value) {
+    _$_isOverlayWindowShownAtom.reportWrite(value, super._isOverlayWindowShown,
+        () {
+      super._isOverlayWindowShown = value;
+    });
+  }
+
   late final _$_activeOverlayWindowKeyAtom = Atom(
       name: 'TH2FileEditOverlayWindowControllerBase._activeOverlayWindowKey',
       context: context);
@@ -66,27 +110,6 @@ mixin _$TH2FileEditOverlayWindowController
     _$_activeOverlayWindowKeyAtom
         .reportWrite(value, super._activeOverlayWindowKey, () {
       super._activeOverlayWindowKey = value;
-    });
-  }
-
-  late final _$_overlayWindowKeysAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._overlayWindowKeys',
-      context: context);
-
-  ObservableList<GlobalKey<State<StatefulWidget>>> get overlayWindowKeys {
-    _$_overlayWindowKeysAtom.reportRead();
-    return super._overlayWindowKeys;
-  }
-
-  @override
-  ObservableList<GlobalKey<State<StatefulWidget>>> get _overlayWindowKeys =>
-      overlayWindowKeys;
-
-  @override
-  set _overlayWindowKeys(
-      ObservableList<GlobalKey<State<StatefulWidget>>> value) {
-    _$_overlayWindowKeysAtom.reportWrite(value, super._overlayWindowKeys, () {
-      super._overlayWindowKeys = value;
     });
   }
 
@@ -113,40 +136,116 @@ mixin _$TH2FileEditOverlayWindowController
       name: 'TH2FileEditOverlayWindowControllerBase._overlayWindowZOrders',
       context: context);
 
-  Map<GlobalKey<State<StatefulWidget>>, int> get overlayWindowZOrders {
+  ObservableMap<GlobalKey<State<StatefulWidget>>, int>
+      get overlayWindowZOrders {
     _$_overlayWindowZOrdersAtom.reportRead();
     return super._overlayWindowZOrders;
   }
 
   @override
-  Map<GlobalKey<State<StatefulWidget>>, int> get _overlayWindowZOrders =>
-      overlayWindowZOrders;
+  ObservableMap<GlobalKey<State<StatefulWidget>>, int>
+      get _overlayWindowZOrders => overlayWindowZOrders;
 
   @override
-  set _overlayWindowZOrders(Map<GlobalKey<State<StatefulWidget>>, int> value) {
+  set _overlayWindowZOrders(
+      ObservableMap<GlobalKey<State<StatefulWidget>>, int> value) {
     _$_overlayWindowZOrdersAtom.reportWrite(value, super._overlayWindowZOrders,
         () {
       super._overlayWindowZOrders = value;
     });
   }
 
-  late final _$_refZOrderAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._refZOrder',
+  late final _$_overlayWindowsAtom = Atom(
+      name: 'TH2FileEditOverlayWindowControllerBase._overlayWindows',
       context: context);
 
-  int get refZOrder {
-    _$_refZOrderAtom.reportRead();
-    return super._refZOrder;
+  ObservableMap<GlobalKey<State<StatefulWidget>>, Widget> get overlayWindows {
+    _$_overlayWindowsAtom.reportRead();
+    return super._overlayWindows;
   }
 
   @override
-  int get _refZOrder => refZOrder;
+  ObservableMap<GlobalKey<State<StatefulWidget>>, Widget> get _overlayWindows =>
+      overlayWindows;
 
   @override
-  set _refZOrder(int value) {
-    _$_refZOrderAtom.reportWrite(value, super._refZOrder, () {
-      super._refZOrder = value;
+  set _overlayWindows(
+      ObservableMap<GlobalKey<State<StatefulWidget>>, Widget> value) {
+    _$_overlayWindowsAtom.reportWrite(value, super._overlayWindows, () {
+      super._overlayWindows = value;
     });
+  }
+
+  late final _$TH2FileEditOverlayWindowControllerBaseActionController =
+      ActionController(
+          name: 'TH2FileEditOverlayWindowControllerBase', context: context);
+
+  @override
+  dynamic toggleOverlayWindow(MPOverlayWindowType type) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name: 'TH2FileEditOverlayWindowControllerBase.toggleOverlayWindow');
+    try {
+      return super.toggleOverlayWindow(type);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void showOverlayWindow(MPOverlayWindowType type,
+      {Offset position = Offset.zero}) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name: 'TH2FileEditOverlayWindowControllerBase.showOverlayWindow');
+    try {
+      return super.showOverlayWindow(type, position: position);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateOverlayWindowInfo(MPOverlayWindowType type) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.updateOverlayWindowInfo');
+    try {
+      return super.updateOverlayWindowInfo(type);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void hideOverlayWindow(MPOverlayWindowType type) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name: 'TH2FileEditOverlayWindowControllerBase.hideOverlayWindow');
+    try {
+      return super.hideOverlayWindow(type);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleOverlayWindowVisibility(MPOverlayWindowType type) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.toggleOverlayWindowVisibility');
+    try {
+      return super.toggleOverlayWindowVisibility(type);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
   }
 
   @override

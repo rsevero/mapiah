@@ -5,11 +5,13 @@ import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 class MPOptionsEditContentWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
+  final GlobalKey globalKey;
 
   const MPOptionsEditContentWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
+    required this.globalKey,
   });
 
   @override
@@ -32,9 +34,9 @@ class _MPOptionsEditContentWidgetState
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
+      globalKey: widget.globalKey,
       position: widget.position,
       th2FileEditController: th2FileEditController,
-      zOrder: zOrder,
       child: Material(
         elevation: 8.0,
         child: Padding(

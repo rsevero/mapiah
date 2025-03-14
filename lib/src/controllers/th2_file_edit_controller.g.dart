@@ -17,6 +17,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.canvasScaleAsPercentageText,
               name: 'TH2FileEditControllerBase.canvasScaleAsPercentageText'))
           .value;
+  Computed<Rect>? _$canvasBoundingBoxComputed;
+
+  @override
+  Rect get canvasBoundingBox => (_$canvasBoundingBoxComputed ??= Computed<Rect>(
+          () => super.canvasBoundingBox,
+          name: 'TH2FileEditControllerBase.canvasBoundingBox'))
+      .value;
+  Computed<Rect>? _$screenBoundingBoxComputed;
+
+  @override
+  Rect get screenBoundingBox => (_$screenBoundingBoxComputed ??= Computed<Rect>(
+          () => super.screenBoundingBox,
+          name: 'TH2FileEditControllerBase.screenBoundingBox'))
+      .value;
   Computed<String>? _$filenameAndScrapComputed;
 
   @override
@@ -141,6 +155,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
               name: 'TH2FileEditControllerBase.showAddLine'))
           .value;
+  Computed<bool>? _$showOverlayWindowsComputed;
+
+  @override
+  bool get showOverlayWindows => (_$showOverlayWindowsComputed ??=
+          Computed<bool>(() => super.showOverlayWindows,
+              name: 'TH2FileEditControllerBase.showOverlayWindows'))
+      .value;
   Computed<Observable<Paint>>? _$selectionWindowBorderPaintCompleteComputed;
 
   @override
@@ -295,6 +316,24 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _screenSize(Size value) {
     _$_screenSizeAtom.reportWrite(value, super._screenSize, () {
       super._screenSize = value;
+    });
+  }
+
+  late final _$_canvasSizeAtom =
+      Atom(name: 'TH2FileEditControllerBase._canvasSize', context: context);
+
+  Size get canvasSize {
+    _$_canvasSizeAtom.reportRead();
+    return super._canvasSize;
+  }
+
+  @override
+  Size get _canvasSize => canvasSize;
+
+  @override
+  set _canvasSize(Size value) {
+    _$_canvasSizeAtom.reportWrite(value, super._canvasSize, () {
+      super._canvasSize = value;
     });
   }
 
@@ -1024,18 +1063,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void updateCanvasOffsetDrawing(Offset newOffset) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.updateCanvasOffsetDrawing');
-    try {
-      return super.updateCanvasOffsetDrawing(newOffset);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void zoomIn({bool fineZoom = false}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.zoomIn');
@@ -1164,6 +1191,8 @@ isChangeScrapsPopupVisible: ${isChangeScrapsPopupVisible},
 changeScrapsPopupOverlayPortalControllerController: ${changeScrapsPopupOverlayPortalControllerController},
 changeScrapsFABKey: ${changeScrapsFABKey},
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
+canvasBoundingBox: ${canvasBoundingBox},
+screenBoundingBox: ${screenBoundingBox},
 filenameAndScrap: ${filenameAndScrap},
 isAddElementMode: ${isAddElementMode},
 isEditLineMode: ${isEditLineMode},
@@ -1181,6 +1210,7 @@ showSelectedElements: ${showSelectedElements},
 showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
 showAddLine: ${showAddLine},
+showOverlayWindows: ${showOverlayWindows},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
