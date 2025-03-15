@@ -11,6 +11,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
@@ -378,10 +379,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   bool _isMouseOverChangeScrapOverlayWindow = false;
-
-  @computed
-  bool get showChangeScrapOverlayWindow =>
-      _isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow;
 
   @readonly
   Offset _mousePosition = Offset.zero;
@@ -934,11 +931,28 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void setIsMouseOverChangeScrapsButton(bool isMouseOver) {
     _isMouseOverChangeScrapButton = isMouseOver;
+    _setShowChangeScrapOverlayWindow();
   }
 
   @action
   void setIsMouseOverChangeScrapsOverlayWindow(bool isMouseOver) {
     _isMouseOverChangeScrapOverlayWindow = isMouseOver;
+    _setShowChangeScrapOverlayWindow();
+  }
+
+  @action
+  void _setShowChangeScrapOverlayWindow() {
+    if (_isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow) {
+      overlayWindowController.setShowOverlayWindow(
+        MPOverlayWindowType.availableScraps,
+        true,
+      );
+    } else {
+      overlayWindowController.setShowOverlayWindow(
+        MPOverlayWindowType.availableScraps,
+        false,
+      );
+    }
   }
 
   @action

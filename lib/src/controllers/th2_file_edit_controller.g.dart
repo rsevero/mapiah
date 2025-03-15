@@ -300,14 +300,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               name:
                   'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen'))
           .value;
-  Computed<bool>? _$showChangeScrapOverlayWindowComputed;
-
-  @override
-  bool get showChangeScrapOverlayWindow =>
-      (_$showChangeScrapOverlayWindowComputed ??= Computed<bool>(
-              () => super.showChangeScrapOverlayWindow,
-              name: 'TH2FileEditControllerBase.showChangeScrapOverlayWindow'))
-          .value;
 
   late final _$_screenSizeAtom =
       Atom(name: 'TH2FileEditControllerBase._screenSize', context: context);
@@ -1176,6 +1168,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void _setShowChangeScrapOverlayWindow() {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase._setShowChangeScrapOverlayWindow');
+    try {
+      return super._setShowChangeScrapOverlayWindow();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateHasMultipleScraps() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.updateHasMultipleScraps');
@@ -1282,8 +1286,7 @@ scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
-showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
     ''';
   }
 }

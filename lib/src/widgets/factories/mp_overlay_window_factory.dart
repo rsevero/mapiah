@@ -17,8 +17,6 @@ class MPOverlayWindowFactory {
   }) {
     final TH2FileEditOverlayWindowController overlayWindowController =
         th2FileEditController.overlayWindowController;
-    final GlobalKey globalKey =
-        overlayWindowController.overlayWindowKeyByType[type]!;
 
     switch (type) {
       case MPOverlayWindowType.availableScraps:
@@ -33,14 +31,12 @@ class MPOverlayWindowFactory {
         return MPAvailableScrapsWidget(
           th2FileEditController: th2FileEditController,
           position: position,
-          globalKey: globalKey,
         );
       case MPOverlayWindowType.commandOptions:
         return MPOptionsEditWidget(
           th2FileEditController: th2FileEditController,
           position: position,
           positionType: MPWidgetPositionType.center,
-          globalKey: globalKey,
         );
     }
   }

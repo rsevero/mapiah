@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
@@ -23,155 +21,84 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   TH2FileEditOverlayWindowControllerBase(this._th2FileEditController)
       : _thFile = _th2FileEditController.thFile {
     for (MPOverlayWindowType type in MPOverlayWindowType.values) {
-      _overlayWindowKeyByType[type] = GlobalKey();
-      _isOverlayWindowShown[type] = false;
+      _isOverlayWindowShown[type] = Observable(false);
     }
 
     for (MPGlobalKeyWidgetType type in MPGlobalKeyWidgetType.values) {
       _globalKeyWidgetKeyByType[type] = GlobalKey();
     }
-
-    reaction(
-      (_) => _th2FileEditController.showChangeScrapOverlayWindow,
-      (bool show) {
-        if (show) {
-          showOverlayWindow(MPOverlayWindowType.availableScraps);
-        } else {
-          hideOverlayWindow(MPOverlayWindowType.availableScraps);
-        }
-      },
-    );
   }
 
   @readonly
   Map<MPGlobalKeyWidgetType, GlobalKey> _globalKeyWidgetKeyByType = {};
 
   @readonly
-  Map<MPOverlayWindowType, GlobalKey> _overlayWindowKeyByType = {};
+  ObservableMap<MPOverlayWindowType, Observable<bool>> _isOverlayWindowShown =
+      ObservableMap<MPOverlayWindowType, Observable<bool>>();
 
   @readonly
-  ObservableMap<MPOverlayWindowType, bool> _isOverlayWindowShown =
-      ObservableMap<MPOverlayWindowType, bool>();
+  MPOverlayWindowType? _activeOverlayWindow;
 
   @readonly
-  GlobalKey? _activeOverlayWindowKey;
+  ObservableMap<MPOverlayWindowType, Widget> _overlayWindows =
+      ObservableMap<MPOverlayWindowType, Widget>();
 
-  @readonly
-  Map<int, Rect> _overlayWindowRects = {};
+  @computed
+  bool get showChangeScrapOverlayWindow =>
+      _isOverlayWindowShown[MPOverlayWindowType.availableScraps]!.value;
 
-  @readonly
-  ObservableMap<GlobalKey, int> _overlayWindowZOrders =
-      ObservableMap<GlobalKey, int>();
-
-  @readonly
-  ObservableMap<GlobalKey, Widget> _overlayWindows =
-      ObservableMap<GlobalKey, Widget>();
-
-  int getNewZOrder() {
-    if (_overlayWindowZOrders.isEmpty) {
-      return 1;
-    } else {
-      return _overlayWindowZOrders.values.reduce((a, b) => a > b ? a : b) +
-          mpDefaultZOrderIncrement;
-    }
-  }
+  bool processingPointerDownEvent = false;
+  bool processingPointerMoveEvent = false;
+  bool processingPointerUpEvent = false;
+  bool processingPointerSignalEvent = false;
 
   @action
   toggleOverlayWindow(MPOverlayWindowType type) {
-    if (_isOverlayWindowShown[type]!) {
-      hideOverlayWindow(type);
+    if (_isOverlayWindowShown[type]!.value) {
+      _hideOverlayWindow(type);
     } else {
-      showOverlayWindow(type);
+      _showOverlayWindow(type);
     }
   }
 
-  @action
-  void showOverlayWindow(MPOverlayWindowType type) {
-    final GlobalKey key = _overlayWindowKeyByType[type]!;
+  void _showOverlayWindow(MPOverlayWindowType type) {
+    if (_overlayWindows.containsKey(type)) {
+      final Widget overlayWindow = _overlayWindows[type]!;
 
-    if (_overlayWindows.containsKey(key)) {
-      final Widget overlayWindow = _overlayWindows[key]!;
-
-      _overlayWindows.remove(key);
-      _overlayWindows[key] = overlayWindow;
+      _overlayWindows.remove(type);
+      _overlayWindows[type] = overlayWindow;
     } else {
-      _overlayWindows[key] = MPOverlayWindowFactory.create(
+      _overlayWindows[type] = MPOverlayWindowFactory.create(
         th2FileEditController: _th2FileEditController,
         position: getPositionFromSelectedElements(),
         type: type,
       );
     }
 
-    _updateOverlayWindowAsActive(type);
-    _isOverlayWindowShown[type] = true;
+    _activeOverlayWindow = type;
   }
 
   @action
-  void updateOverlayWindowInfo(MPOverlayWindowType type) {
-    _updateOverlayWindowAsActive(type);
-  }
-
-  @action
-  void updateOverlayWindowWithBoundingBox(
-    MPOverlayWindowType type,
-    Rect boundingBox,
-  ) {
-    _removeOverlayWindowInfo(type);
-
-    final int zOrder = getNewZOrder();
-
-    final GlobalKey key = _overlayWindowKeyByType[type]!;
-
-    _overlayWindowZOrders[key] = zOrder;
-    _overlayWindowRects[zOrder] = boundingBox;
-    _activeOverlayWindowKey = key;
-  }
-
-  void _updateOverlayWindowAsActive(MPOverlayWindowType type) {
-    _removeOverlayWindowInfo(type);
-
-    final GlobalKey key = _overlayWindowKeyByType[type]!;
-    final Rect? rect = MPInteractionAux.getWidgetRect(key);
-
-    if (rect != null) {
-      final int zOrder = getNewZOrder();
-
-      _overlayWindowZOrders[key] = zOrder;
-      _overlayWindowRects[zOrder] = rect;
-      _activeOverlayWindowKey = key;
+  void _hideOverlayWindow(MPOverlayWindowType type) {
+    if (_activeOverlayWindow == type) {
+      _activeOverlayWindow = null;
     }
-  }
-
-  void _removeOverlayWindowInfo(MPOverlayWindowType type) {
-    final GlobalKey key = _overlayWindowKeyByType[type]!;
-
-    if (_activeOverlayWindowKey == key) {
-      _activeOverlayWindowKey = null;
-    }
-
-    if (!_overlayWindowZOrders.containsKey(key)) {
-      return;
-    }
-
-    _overlayWindowRects.remove(_overlayWindowZOrders[key]);
-    _overlayWindowZOrders.remove(key);
-  }
-
-  @action
-  void hideOverlayWindow(MPOverlayWindowType type) {
-    final GlobalKey key = _overlayWindowKeyByType[type]!;
-
-    _isOverlayWindowShown[type] = false;
-    _removeOverlayWindowInfo(type);
-    _overlayWindows.remove(key);
+    _overlayWindows.remove(type);
   }
 
   @action
   void toggleOverlayWindowVisibility(MPOverlayWindowType type) {
-    if (_isOverlayWindowShown[type]!) {
-      hideOverlayWindow(type);
+    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!.value);
+  }
+
+  @action
+  void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
+    _isOverlayWindowShown[type] = Observable(show);
+
+    if (show) {
+      _showOverlayWindow(type);
     } else {
-      showOverlayWindow(type);
+      _hideOverlayWindow(type);
     }
   }
 

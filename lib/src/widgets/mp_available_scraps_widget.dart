@@ -9,13 +9,11 @@ import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 class MPAvailableScrapsWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
-  final GlobalKey globalKey;
 
   const MPAvailableScrapsWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
-    required this.globalKey,
   });
 
   @override
@@ -31,13 +29,11 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   void initState() {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
-    zOrder = th2FileEditController.overlayWindowController.getNewZOrder();
   }
 
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      globalKey: widget.globalKey,
       position: widget.position,
       positionType: MPWidgetPositionType.rightCenter,
       overlayWindowType: MPOverlayWindowType.availableScraps,

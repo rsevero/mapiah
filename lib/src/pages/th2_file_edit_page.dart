@@ -306,7 +306,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           th2FileEditController.setIsMouseOverChangeScrapsButton(false);
         },
         child: Padding(
-          padding: th2FileEditController.showChangeScrapOverlayWindow
+          padding: th2FileEditController
+                  .overlayWindowController.showChangeScrapOverlayWindow
               ? const EdgeInsets.only(left: mpButtonSpace)
               : EdgeInsets.zero,
           child: FloatingActionButton(

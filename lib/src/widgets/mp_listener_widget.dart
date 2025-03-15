@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
@@ -56,11 +55,8 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       onPointerDown: (PointerDownEvent event) {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() entered");
 
-        if (MPInteractionAux.ignoreClick(
-          overlayWindowController.overlayWindowRects,
-          mpInitialZOrder,
-          event.localPosition,
-        )) {
+        if (overlayWindowController.processingPointerDownEvent) {
+          overlayWindowController.processingPointerDownEvent = false;
           return;
         }
 
@@ -87,11 +83,8 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       onPointerMove: (PointerMoveEvent event) {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() entered");
 
-        if (MPInteractionAux.ignoreClick(
-          overlayWindowController.overlayWindowRects,
-          mpInitialZOrder,
-          event.localPosition,
-        )) {
+        if (overlayWindowController.processingPointerMoveEvent) {
+          overlayWindowController.processingPointerMoveEvent = false;
           return;
         }
 
@@ -142,11 +135,8 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       onPointerUp: (PointerUpEvent event) {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() entered");
 
-        if (MPInteractionAux.ignoreClick(
-          overlayWindowController.overlayWindowRects,
-          mpInitialZOrder,
-          event.localPosition,
-        )) {
+        if (overlayWindowController.processingPointerUpEvent) {
+          overlayWindowController.processingPointerUpEvent = false;
           return;
         }
 
@@ -182,11 +172,8 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       onPointerSignal: (PointerSignalEvent event) {
         mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() entered");
 
-        if (MPInteractionAux.ignoreClick(
-          overlayWindowController.overlayWindowRects,
-          mpInitialZOrder,
-          event.localPosition,
-        )) {
+        if (overlayWindowController.processingPointerSignalEvent) {
+          overlayWindowController.processingPointerSignalEvent = false;
           return;
         }
 

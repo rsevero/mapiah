@@ -1,6 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
@@ -10,7 +10,6 @@ class MPOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final Widget child;
-  final GlobalKey globalKey;
   final MPOverlayWindowType overlayWindowType;
   final MPWidgetPositionType positionType;
 
@@ -19,7 +18,6 @@ class MPOverlayWindowWidget extends StatefulWidget {
     required this.th2FileEditController,
     required this.position,
     required this.child,
-    required this.globalKey,
     required this.positionType,
     required this.overlayWindowType,
   });
@@ -31,7 +29,6 @@ class MPOverlayWindowWidget extends StatefulWidget {
 class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   late final TH2FileEditController th2FileEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
-  late final int zOrder;
   late Offset position;
   bool _initialPositionSet = false;
 
@@ -46,20 +43,9 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
     });
   }
 
-  @override
-  void dispose() {
-    overlayWindowController.hideOverlayWindow(
-      MPOverlayWindowType.commandOptions,
-    );
-    super.dispose();
-  }
-
   void _updateCoordinates() {
-    bool overlayWindowUpdated = false;
-
     if (!_initialPositionSet) {
-      final RenderBox? renderBox =
-          widget.globalKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
 
       if (renderBox != null) {
         final Size size = renderBox.size;
@@ -92,40 +78,72 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
             _initialPositionSet = true;
           },
         );
-        overlayWindowController.updateOverlayWindowWithBoundingBox(
-          widget.overlayWindowType,
-          MPNumericAux.orderedRectFromLTWH(
-            left: position.dx,
-            top: position.dy,
-            width: size.width,
-            height: size.height,
-          ),
-        );
-        overlayWindowUpdated = true;
       }
-    }
-
-    if (!overlayWindowUpdated) {
-      overlayWindowController.updateOverlayWindowInfo(
-        MPOverlayWindowType.commandOptions,
-      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      key: widget.globalKey,
       left: position.dx,
       top: position.dy,
       child: Visibility.maintain(
         visible: _initialPositionSet,
         child: Listener(
           onPointerDown: (PointerDownEvent event) {
-            mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerDown()");
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerDown() entered");
+
+            if (overlayWindowController.processingPointerDownEvent) {
+              return;
+            }
+            overlayWindowController.processingPointerDownEvent = true;
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerDown() to be executed");
+
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerDown() executed");
           },
           onPointerUp: (PointerUpEvent event) {
-            mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp()");
+            mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp() entered");
+
+            if (overlayWindowController.processingPointerUpEvent) {
+              return;
+            }
+            overlayWindowController.processingPointerUpEvent = true;
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerUp() to be executed");
+
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerUp() executed");
+          },
+          onPointerMove: (PointerMoveEvent event) {
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerMove() entered");
+
+            if (overlayWindowController.processingPointerMoveEvent) {
+              return;
+            }
+            overlayWindowController.processingPointerMoveEvent = true;
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerMove() to be executed");
+
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerMove() executed");
+          },
+          onPointerSignal: (PointerSignalEvent event) {
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerSignal() entered");
+
+            if (overlayWindowController.processingPointerSignalEvent) {
+              return;
+            }
+            overlayWindowController.processingPointerSignalEvent = true;
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerSignal() to be executed");
+
+            mpLocator.mpLog
+                .fine("MPOverlayWindowWidget.onPointerSignal() executed");
           },
           child: widget.child,
         ),
