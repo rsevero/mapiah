@@ -40,43 +40,48 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
       position: widget.position,
       positionType: MPWidgetPositionType.rightCenter,
       th2FileEditController: th2FileEditController,
-      child: Material(
-        elevation: 4.0,
-        child: Container(
-          padding: const EdgeInsets.all(mpButtonSpace),
-          width: 230,
-          color: Colors.white,
-          child: Observer(
-            builder: (_) {
-              th2FileEditController.activeScrapID;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: th2FileEditController.availableScraps().map(
-                  (scrap) {
-                    final int scrapID = scrap.$1;
-                    final String scrapName = scrap.$2;
-                    final bool isSelected = scrap.$3;
+      child: MouseRegion(
+        onEnter: (_) =>
+            th2FileEditController.setIsMouseOverChangeScrapsOverlayWindow(true),
+        onExit: (_) => th2FileEditController
+            .setIsMouseOverChangeScrapsOverlayWindow(false),
+        child: Material(
+          elevation: 4.0,
+          child: Container(
+            padding: const EdgeInsets.all(mpButtonSpace),
+            width: 230,
+            color: Colors.white,
+            child: Observer(
+              builder: (_) {
+                th2FileEditController.activeScrapID;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: th2FileEditController.availableScraps().map(
+                    (scrap) {
+                      final int scrapID = scrap.$1;
+                      final String scrapName = scrap.$2;
+                      final bool isSelected = scrap.$3;
 
-                    return PopupMenuItem<int>(
-                      value: scrapID,
-                      // onTap: () =>
-                      //     _selectActiveScrapPressed(
-                      //         scrapID),
-                      child: Row(
-                        children: [
-                          Text(scrapName),
-                          if (isSelected) ...[
-                            SizedBox(width: mpButtonSpace),
-                            Icon(Icons.check, color: Colors.blue),
+                      return PopupMenuItem<int>(
+                        value: scrapID,
+                        onTap: () =>
+                            th2FileEditController.setActiveScrap(scrapID),
+                        child: Row(
+                          children: [
+                            Text(scrapName),
+                            if (isSelected) ...[
+                              SizedBox(width: mpButtonSpace),
+                              Icon(Icons.check, color: Colors.blue),
+                            ],
                           ],
-                        ],
-                      ),
-                    );
-                  },
-                ).toList(),
-              );
-            },
+                        ),
+                      );
+                    },
+                  ).toList(),
+                );
+              },
+            ),
           ),
         ),
       ),

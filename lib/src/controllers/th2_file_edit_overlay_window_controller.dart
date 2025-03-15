@@ -162,10 +162,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _activeOverlayWindowKey = null;
     }
 
-    _overlayWindows.remove(key);
     _isOverlayWindowShown[type] = false;
-
     _removeOverlayWindowInfo(type);
+    _overlayWindows.remove(key);
   }
 
   @action

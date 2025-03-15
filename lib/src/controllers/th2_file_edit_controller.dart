@@ -596,6 +596,9 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void setActiveScrap(int scrapMapiahID) {
     _activeScrapID = scrapMapiahID;
+    selectionController.clearSelectedElements();
+    selectionController.updateSelectableElements();
+    triggerAllElementsRedraw();
   }
 
   List<(int, String, bool)> availableScraps() {
@@ -615,9 +618,6 @@ abstract class TH2FileEditControllerBase with Store {
     final int nextAvailableScrapID = getNextAvailableScrapID();
 
     setActiveScrap(nextAvailableScrapID);
-    selectionController.clearSelectedElements();
-    selectionController.updateSelectableElements();
-    triggerAllElementsRedraw();
   }
 
   bool offsetsInSelectionTolerance(Offset offset1, Offset offset2) {

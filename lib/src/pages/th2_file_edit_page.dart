@@ -326,7 +326,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         },
         child: Padding(
           padding: th2FileEditController.showChangeScrapOverlayWindow
-              ? const EdgeInsets.only(left: 48.0)
+              ? const EdgeInsets.only(left: mpButtonSpace)
               : EdgeInsets.zero,
           child: FloatingActionButton(
             key: th2FileEditController
