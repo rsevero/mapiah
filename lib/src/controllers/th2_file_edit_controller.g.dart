@@ -806,6 +806,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_redrawTriggerOverlayWindowsAtom = Atom(
+      name: 'TH2FileEditControllerBase._redrawTriggerOverlayWindows',
+      context: context);
+
+  int get redrawTriggerOverlayWindows {
+    _$_redrawTriggerOverlayWindowsAtom.reportRead();
+    return super._redrawTriggerOverlayWindows;
+  }
+
+  @override
+  int get _redrawTriggerOverlayWindows => redrawTriggerOverlayWindows;
+
+  @override
+  set _redrawTriggerOverlayWindows(int value) {
+    _$_redrawTriggerOverlayWindowsAtom
+        .reportWrite(value, super._redrawTriggerOverlayWindows, () {
+      super._redrawTriggerOverlayWindows = value;
+    });
+  }
+
   late final _$_isMouseOverChangeScrapButtonAtom = Atom(
       name: 'TH2FileEditControllerBase._isMouseOverChangeScrapButton',
       context: context);
@@ -1050,6 +1070,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.triggerEditLineRedraw');
     try {
       return super.triggerEditLineRedraw();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerOverlayWindowsRedraw() {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.triggerOverlayWindowsRedraw');
+    try {
+      return super.triggerOverlayWindowsRedraw();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -375,6 +375,9 @@ abstract class TH2FileEditControllerBase with Store {
   int _redrawTriggerEditLine = 0;
 
   @readonly
+  int _redrawTriggerOverlayWindows = 0;
+
+  @readonly
   bool _isMouseOverChangeScrapButton = false;
 
   @readonly
@@ -722,6 +725,11 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void triggerEditLineRedraw() {
     _redrawTriggerEditLine++;
+  }
+
+  @action
+  void triggerOverlayWindowsRedraw() {
+    _redrawTriggerOverlayWindows++;
   }
 
   void _setCanvasCenterFromCurrent() {

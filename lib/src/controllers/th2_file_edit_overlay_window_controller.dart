@@ -54,11 +54,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   toggleOverlayWindow(MPOverlayWindowType type) {
-    if (_isOverlayWindowShown[type]!.value) {
-      _hideOverlayWindow(type);
-    } else {
-      _showOverlayWindow(type);
-    }
+    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!.value);
   }
 
   void _showOverlayWindow(MPOverlayWindowType type) {
@@ -76,6 +72,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     }
 
     _activeOverlayWindow = type;
+    _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
   @action
@@ -84,6 +81,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _activeOverlayWindow = null;
     }
     _overlayWindows.remove(type);
+    _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
   @action

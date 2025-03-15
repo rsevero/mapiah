@@ -120,6 +120,8 @@ class THFileWidget extends StatelessWidget {
               ),
               Observer(
                 builder: (_) {
+                  th2FileEditController.redrawTriggerOverlayWindows;
+
                   return Stack(
                     children: overlayWindowController.overlayWindows.entries
                         .map((entry) {
