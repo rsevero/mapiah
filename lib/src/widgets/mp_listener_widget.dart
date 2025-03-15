@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -53,7 +54,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() entered");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() entered");
 
         if (MPInteractionAux.ignoreClick(
           overlayWindowController.overlayWindowRects,
@@ -63,7 +64,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
           return;
         }
 
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() executed");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() executed");
 
         switch (event.buttons) {
           case kPrimaryButton:
@@ -84,7 +85,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerMove: (PointerMoveEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() entered");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() entered");
 
         if (MPInteractionAux.ignoreClick(
           overlayWindowController.overlayWindowRects,
@@ -94,7 +95,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
           return;
         }
 
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() executed");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() executed");
 
         switch (event.buttons) {
           case kPrimaryButton:
@@ -139,7 +140,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() entered");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() entered");
 
         if (MPInteractionAux.ignoreClick(
           overlayWindowController.overlayWindowRects,
@@ -149,7 +150,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
           return;
         }
 
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() executed");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() executed");
 
         switch (currentPressedMouseButton) {
           case kPrimaryButton:
@@ -179,7 +180,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() entered");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() entered");
 
         if (MPInteractionAux.ignoreClick(
           overlayWindowController.overlayWindowRects,
@@ -189,7 +190,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
           return;
         }
 
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() executed");
+        mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() executed");
 
         if (event is PointerScrollEvent) {
           widget.actuator.onTertiaryButtonScroll(event);

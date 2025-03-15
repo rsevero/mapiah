@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
@@ -10,6 +11,7 @@ class MPOverlayWindowWidget extends StatefulWidget {
   final Offset position;
   final Widget child;
   final GlobalKey globalKey;
+  final MPOverlayWindowType overlayWindowType;
   final MPWidgetPositionType positionType;
 
   const MPOverlayWindowWidget({
@@ -19,6 +21,7 @@ class MPOverlayWindowWidget extends StatefulWidget {
     required this.child,
     required this.globalKey,
     required this.positionType,
+    required this.overlayWindowType,
   });
 
   @override
@@ -90,7 +93,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
           },
         );
         overlayWindowController.updateOverlayWindowWithBoundingBox(
-          widget.globalKey,
+          widget.overlayWindowType,
           MPNumericAux.orderedRectFromLTWH(
             left: position.dx,
             top: position.dy,
@@ -119,10 +122,10 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
         visible: _initialPositionSet,
         child: Listener(
           onPointerDown: (PointerDownEvent event) {
-            // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerDown()");
+            mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerDown()");
           },
           onPointerUp: (PointerUpEvent event) {
-            // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp()");
+            mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp()");
           },
           child: widget.child,
         ),

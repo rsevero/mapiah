@@ -113,15 +113,14 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void updateOverlayWindowWithBoundingBox(
-    GlobalKey key,
+    MPOverlayWindowType type,
     Rect boundingBox,
   ) {
-    final MPOverlayWindowType type = _overlayWindowKeyByType.entries
-        .firstWhere((entry) => entry.value == key)
-        .key;
     _removeOverlayWindowInfo(type);
 
     final int zOrder = getNewZOrder();
+
+    final GlobalKey key = _overlayWindowKeyByType[type]!;
 
     _overlayWindowZOrders[key] = zOrder;
     _overlayWindowRects[zOrder] = boundingBox;
@@ -146,6 +145,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   void _removeOverlayWindowInfo(MPOverlayWindowType type) {
     final GlobalKey key = _overlayWindowKeyByType[type]!;
 
+    if (_activeOverlayWindowKey == key) {
+      _activeOverlayWindowKey = null;
+    }
+
     if (!_overlayWindowZOrders.containsKey(key)) {
       return;
     }
@@ -157,10 +160,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void hideOverlayWindow(MPOverlayWindowType type) {
     final GlobalKey key = _overlayWindowKeyByType[type]!;
-
-    if (_activeOverlayWindowKey == key) {
-      _activeOverlayWindowKey = null;
-    }
 
     _isOverlayWindowShown[type] = false;
     _removeOverlayWindowInfo(type);

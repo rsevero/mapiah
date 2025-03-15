@@ -109,37 +109,18 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 final List<String> errorMessages = snapshot.data!.errors;
 
                 if (snapshot.data!.isSuccessful) {
-                  return MouseRegion(
-                    onHover: (PointerHoverEvent event) {
-                      th2FileEditController.setMousePosition(
-                        event.localPosition,
-                      );
-                    },
-                    child: Center(
-                      child: Stack(
-                        children: [
-                          THFileWidget(
-                            key: ValueKey(
-                              "THFileWidget|${th2FileEditController.thFileMapiahID}",
-                            ),
-                            th2FileEditController: th2FileEditController,
+                  return Center(
+                    child: Stack(
+                      children: [
+                        THFileWidget(
+                          key: ValueKey(
+                            "THFileWidget|${th2FileEditController.thFileMapiahID}",
                           ),
-                          _stateActionButtons(),
-                          _actionButtons(),
-                          Observer(
-                            builder: (_) {
-                              return Positioned(
-                                left: 0,
-                                top: 0,
-                                child: Text(
-                                  'Mouse: ${th2FileEditController.mousePosition.dx.toStringAsFixed(2)}, ${th2FileEditController.mousePosition.dy.toStringAsFixed(2)}',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                          th2FileEditController: th2FileEditController,
+                        ),
+                        _stateActionButtons(),
+                        _actionButtons(),
+                      ],
                     ),
                   );
                 } else {

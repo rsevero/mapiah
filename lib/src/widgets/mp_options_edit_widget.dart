@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -38,6 +39,7 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
       globalKey: widget.globalKey,
       position: widget.position,
       positionType: widget.positionType,
+      overlayWindowType: MPOverlayWindowType.commandOptions,
       th2FileEditController: th2FileEditController,
       child: Material(
         elevation: 8.0,
