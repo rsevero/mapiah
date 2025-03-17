@@ -152,9 +152,6 @@ abstract class TH2FileEditControllerBase with Store {
       stateController.state is MPTH2FileEditStateOptionEdit;
 
   @computed
-  bool get isOptionEditButtonEnabled => true;
-
-  @computed
   bool get isSelectMode {
     final MPTH2FileEditState state = stateController.state;
 

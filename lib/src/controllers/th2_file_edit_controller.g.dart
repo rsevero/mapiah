@@ -66,13 +66,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           () => super.isOptionEditMode,
           name: 'TH2FileEditControllerBase.isOptionEditMode'))
       .value;
-  Computed<bool>? _$isOptionEditButtonEnabledComputed;
-
-  @override
-  bool get isOptionEditButtonEnabled => (_$isOptionEditButtonEnabledComputed ??=
-          Computed<bool>(() => super.isOptionEditButtonEnabled,
-              name: 'TH2FileEditControllerBase.isOptionEditButtonEnabled'))
-      .value;
   Computed<bool>? _$isSelectModeComputed;
 
   @override
@@ -1289,7 +1282,6 @@ isAddElementMode: ${isAddElementMode},
 isEditLineMode: ${isEditLineMode},
 isNodeEditButtonEnabled: ${isNodeEditButtonEnabled},
 isOptionEditMode: ${isOptionEditMode},
-isOptionEditButtonEnabled: ${isOptionEditButtonEnabled},
 isSelectMode: ${isSelectMode},
 activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},

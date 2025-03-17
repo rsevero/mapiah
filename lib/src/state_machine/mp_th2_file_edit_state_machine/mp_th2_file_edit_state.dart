@@ -14,6 +14,7 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -25,6 +26,7 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp
 part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';

@@ -6,7 +6,6 @@ import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
@@ -332,9 +331,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     final bool isEditLineMode = th2FileEditController.isEditLineMode;
     final bool isNodeEditButtonEnabled =
         th2FileEditController.isNodeEditButtonEnabled;
-    final bool isOptionEditMode = th2FileEditController.isOptionEditMode;
-    final bool isOptionEditButtonEnabled =
-        th2FileEditController.isOptionEditButtonEnabled;
 
     return [
       SizedBox(height: mpButtonSpace),
@@ -375,27 +371,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             : colorScheme.surfaceContainerLowest,
         elevation: isEditLineMode ? 0 : null,
       ),
-      SizedBox(height: mpButtonSpace),
-      FloatingActionButton(
-        heroTag: 'options_tool',
-        onPressed: () => _onOptionsToolPressed(context),
-        tooltip: AppLocalizations.of(context).th2FileEditPageOptionTool,
-        child: Icon(
-          Icons.list,
-          size: thFloatingActionIconSize,
-          color: isOptionEditButtonEnabled
-              ? (isOptionEditMode
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSecondaryContainer)
-              : colorScheme.surfaceContainerHighest,
-        ),
-        backgroundColor: isOptionEditButtonEnabled
-            ? (isOptionEditMode
-                ? colorScheme.primary
-                : colorScheme.secondaryContainer)
-            : colorScheme.surfaceContainerLowest,
-        elevation: isOptionEditMode ? 0 : null,
-      ),
     ];
   }
 
@@ -420,11 +395,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   void _onNodeEditToolPressed() {
     th2FileEditController.stateController
         .onButtonPressed(MPButtonType.nodeEdit);
-  }
-
-  void _onOptionsToolPressed(BuildContext context) {
-    th2FileEditController.overlayWindowController
-        .toggleOverlayWindow(MPOverlayWindowType.commandOptions);
   }
 
   void onRedoPressed() {

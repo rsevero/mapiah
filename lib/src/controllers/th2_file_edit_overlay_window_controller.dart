@@ -90,15 +90,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
     _isOverlayWindowShown[type] = Observable(show);
-    // mpLocator.mpLog.fine(
-    //     "TH2FileEditOverlayWindowController.setShowOverlayWindow() type: $type, show: $show");
     if (show) {
-      // mpLocator.mpLog.fine(
-      //     "TH2FileEditOverlayWindowController.setShowOverlayWindow() showing overlay window");
       _showOverlayWindow(type);
     } else {
-      // mpLocator.mpLog.fine(
-      //     "TH2FileEditOverlayWindowController.setShowOverlayWindow() hiding overlay window");
       _hideOverlayWindow(type);
     }
   }

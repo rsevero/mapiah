@@ -4,7 +4,8 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     with
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin {
+        MPTH2FileEditStateClearSelectionOnExitMixin,
+        MPTH2FileEditStateOptionsEditMixin {
   MPTH2FileEditStateSelectEmptySelection(
       {required super.th2FileEditController});
 
