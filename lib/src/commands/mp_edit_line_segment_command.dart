@@ -34,7 +34,7 @@ class MPEditLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THLineSegment currentLineSegment = th2FileEditController.thFile
-        .elementByMapiahID(newLineSegment.mapiahID) as THLineSegment;
+        .elementByMPID(newLineSegment.mpID) as THLineSegment;
     final MPEditLineSegmentCommand oppositeCommand = MPEditLineSegmentCommand(
       newLineSegment: currentLineSegment,
       descriptionType: descriptionType,

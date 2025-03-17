@@ -28,7 +28,7 @@ class MPMoveElementsCommand extends MPCommand {
       switch (moveCommandOriginalParameters) {
         case MPMoveCommandLineOriginalParams _:
           final MPMoveLineCommand moveLineCommand = MPMoveLineCommand.fromDelta(
-            lineMapiahID: moveCommandOriginalParameters.mapiahID,
+            lineMPID: moveCommandOriginalParameters.mpID,
             originalLineSegmentsMap:
                 moveCommandOriginalParameters.lineSegmentsMap,
             deltaOnCanvas: deltaOnCanvas,
@@ -44,7 +44,7 @@ class MPMoveElementsCommand extends MPCommand {
         case MPMoveCommandPointOriginalParams _:
           final MPMovePointCommand movePointCommand =
               MPMovePointCommand.fromDelta(
-            pointMapiahID: moveCommandOriginalParameters.mapiahID,
+            pointMPID: moveCommandOriginalParameters.mpID,
             originalCoordinates: moveCommandOriginalParameters.coordinates,
             deltaOnCanvas: deltaOnCanvas,
           );
@@ -68,7 +68,7 @@ class MPMoveElementsCommand extends MPCommand {
       switch (moveCommandParameters) {
         case MPMoveCommandLineCompleteParams _:
           moveCommand = MPMoveLineCommand(
-            lineMapiahID: moveCommandParameters.original.mapiahID,
+            lineMPID: moveCommandParameters.original.mpID,
             originalLineSegmentsMap:
                 moveCommandParameters.original.lineSegmentsMap,
             modifiedLineSegmentsMap:
@@ -77,7 +77,7 @@ class MPMoveElementsCommand extends MPCommand {
           break;
         case MPMoveCommandPointCompleteParams _:
           moveCommand = MPMovePointCommand(
-            pointMapiahID: moveCommandParameters.original.mapiahID,
+            pointMPID: moveCommandParameters.original.mpID,
             originalCoordinates: moveCommandParameters.original.coordinates,
             modifiedCoordinates: moveCommandParameters.modifiedCoordinates,
           );

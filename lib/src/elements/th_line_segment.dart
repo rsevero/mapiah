@@ -7,8 +7,8 @@ abstract class THLineSegment extends THElement
   Rect? _boundingBox;
 
   THLineSegment.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.endPoint,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
@@ -18,14 +18,14 @@ abstract class THLineSegment extends THElement
   }
 
   THLineSegment.withEndPoint({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.endPoint,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
 
   THLineSegment.withoutEndPoint({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
@@ -75,8 +75,8 @@ abstract class THLineSegment extends THElement
 
   @override
   THLineSegment copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
@@ -88,8 +88,8 @@ abstract class THLineSegment extends THElement
   bool operator ==(covariant THLineSegment other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.endPoint == endPoint &&

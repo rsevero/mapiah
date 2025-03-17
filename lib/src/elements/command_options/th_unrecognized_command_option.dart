@@ -4,7 +4,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   String? value;
 
   THUnrecognizedCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.value,
   }) : super.forCWJM();
@@ -31,7 +31,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
 
   factory THUnrecognizedCommandOption.fromMap(Map<String, dynamic> map) {
     return THUnrecognizedCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       value: map['value'],
     );
@@ -43,12 +43,12 @@ class THUnrecognizedCommandOption extends THCommandOption {
 
   @override
   THUnrecognizedCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? value,
   }) {
     return THUnrecognizedCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       value: value ?? this.value,
@@ -59,7 +59,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   bool operator ==(covariant THUnrecognizedCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.value == value;
   }

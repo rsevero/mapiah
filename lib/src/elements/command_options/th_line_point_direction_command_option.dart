@@ -8,7 +8,7 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesLinePointDirectionType choice;
 
   THLinePointDirectionCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
@@ -56,7 +56,7 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
 
   factory THLinePointDirectionCommandOption.fromMap(Map<String, dynamic> map) {
     return THLinePointDirectionCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice:
@@ -70,13 +70,13 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
 
   @override
   THLinePointDirectionCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesLinePointDirectionType? choice,
   }) {
     return THLinePointDirectionCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,
@@ -88,7 +88,7 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
   bool operator ==(covariant THLinePointDirectionCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.choice == choice;

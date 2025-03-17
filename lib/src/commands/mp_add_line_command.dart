@@ -42,7 +42,7 @@ class MPAddLineCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPDeleteLineCommand oppositeCommand = MPDeleteLineCommand(
-      lineMapiahID: newLine.mapiahID,
+      lineMPID: newLine.mpID,
       descriptionType: descriptionType,
       isInteractiveLineCreation: lineStartScreenPosition != null,
     );

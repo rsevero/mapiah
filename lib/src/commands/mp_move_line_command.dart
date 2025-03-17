@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPMoveLineCommand extends MPCommand {
-  final int lineMapiahID;
+  final int lineMPID;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap;
   late final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap;
   final Offset deltaOnCanvas;
@@ -10,7 +10,7 @@ class MPMoveLineCommand extends MPCommand {
       MPCommandDescriptionType.moveLine;
 
   MPMoveLineCommand.forCWJM({
-    required this.lineMapiahID,
+    required this.lineMPID,
     required this.originalLineSegmentsMap,
     required this.modifiedLineSegmentsMap,
     this.deltaOnCanvas = Offset.zero,
@@ -19,7 +19,7 @@ class MPMoveLineCommand extends MPCommand {
   }) : super.forCWJM();
 
   MPMoveLineCommand({
-    required this.lineMapiahID,
+    required this.lineMPID,
     required this.originalLineSegmentsMap,
     required this.modifiedLineSegmentsMap,
     this.deltaOnCanvas = Offset.zero,
@@ -28,7 +28,7 @@ class MPMoveLineCommand extends MPCommand {
   }) : super();
 
   MPMoveLineCommand.fromDelta({
-    required this.lineMapiahID,
+    required this.lineMPID,
     required this.originalLineSegmentsMap,
     required this.deltaOnCanvas,
     super.descriptionType = _defaultDescriptionType,
@@ -36,7 +36,7 @@ class MPMoveLineCommand extends MPCommand {
         super() {
     modifiedLineSegmentsMap = LinkedHashMap<int, THLineSegment>();
     for (var entry in originalLineSegmentsMap.entries) {
-      final int originalLineSegmentMapiahID = entry.key;
+      final int originalLineSegmentMPID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
       late THLineSegment modifiedLineSegment;
 
@@ -64,8 +64,7 @@ class MPMoveLineCommand extends MPCommand {
           break;
       }
 
-      modifiedLineSegmentsMap[originalLineSegmentMapiahID] =
-          modifiedLineSegment;
+      modifiedLineSegmentsMap[originalLineSegmentMPID] = modifiedLineSegment;
     }
   }
 
@@ -79,7 +78,7 @@ class MPMoveLineCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     for (final entry in originalLineSegmentsMap.entries) {
-      final int originalLineSegmentMapiahID = entry.key;
+      final int originalLineSegmentMPID = entry.key;
       final THLineSegment originalLineSegment = entry.value;
       late MPCommand command;
 
@@ -87,7 +86,7 @@ class MPMoveLineCommand extends MPCommand {
         case THStraightLineSegment _:
           if (isFromDelta) {
             command = MPMoveStraightLineSegmentCommand.fromDelta(
-              lineSegmentMapiahID: originalLineSegmentMapiahID,
+              lineSegmentMPID: originalLineSegmentMPID,
               originalEndPointCoordinates:
                   originalLineSegment.endPoint.coordinates,
               deltaOnCanvas: deltaOnCanvas,
@@ -95,11 +94,11 @@ class MPMoveLineCommand extends MPCommand {
             );
           } else {
             command = MPMoveStraightLineSegmentCommand(
-              lineSegmentMapiahID: originalLineSegmentMapiahID,
+              lineSegmentMPID: originalLineSegmentMPID,
               originalEndPointCoordinates:
                   originalLineSegment.endPoint.coordinates,
               modifiedEndPointCoordinates:
-                  modifiedLineSegmentsMap[originalLineSegmentMapiahID]!
+                  modifiedLineSegmentsMap[originalLineSegmentMPID]!
                       .endPoint
                       .coordinates,
               descriptionType: descriptionType,
@@ -108,12 +107,12 @@ class MPMoveLineCommand extends MPCommand {
           break;
         case THBezierCurveLineSegment _:
           THBezierCurveLineSegment newLineSegment =
-              modifiedLineSegmentsMap[originalLineSegmentMapiahID]
+              modifiedLineSegmentsMap[originalLineSegmentMPID]
                   as THBezierCurveLineSegment;
 
           if (isFromDelta) {
             command = MPMoveBezierLineSegmentCommand.fromDelta(
-              lineSegmentMapiahID: originalLineSegmentMapiahID,
+              lineSegmentMPID: originalLineSegmentMPID,
               originalEndPointCoordinates:
                   originalLineSegment.endPoint.coordinates,
               originalControlPoint1Coordinates:
@@ -125,7 +124,7 @@ class MPMoveLineCommand extends MPCommand {
             );
           } else {
             command = MPMoveBezierLineSegmentCommand(
-              lineSegmentMapiahID: originalLineSegmentMapiahID,
+              lineSegmentMPID: originalLineSegmentMPID,
               originalEndPointCoordinates:
                   originalLineSegment.endPoint.coordinates,
               modifiedEndPointCoordinates: newLineSegment.endPoint.coordinates,
@@ -145,9 +144,7 @@ class MPMoveLineCommand extends MPCommand {
       command._actualExecute(th2FileEditController);
     }
     th2FileEditController.elementEditController.substituteElement(
-        th2FileEditController.thFile
-            .elementByMapiahID(lineMapiahID)
-            .copyWith());
+        th2FileEditController.thFile.elementByMPID(lineMPID).copyWith());
   }
 
   @override
@@ -155,7 +152,7 @@ class MPMoveLineCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPMoveLineCommand oppositeCommand = MPMoveLineCommand(
-      lineMapiahID: lineMapiahID,
+      lineMPID: lineMPID,
       originalLineSegmentsMap: modifiedLineSegmentsMap,
       modifiedLineSegmentsMap: originalLineSegmentsMap,
       descriptionType: descriptionType,
@@ -173,7 +170,7 @@ class MPMoveLineCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineMapiahID': lineMapiahID,
+      'lineMPID': lineMPID,
       'originalLineSegmentsMap': originalLineSegmentsMap.map(
         (key, value) => MapEntry(key.toString(), value.toMap()),
       ),
@@ -187,7 +184,7 @@ class MPMoveLineCommand extends MPCommand {
 
   factory MPMoveLineCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveLineCommand.forCWJM(
-      lineMapiahID: map['lineMapiahID'],
+      lineMPID: map['lineMPID'],
       originalLineSegmentsMap: LinkedHashMap<int, THLineSegment>.fromEntries(
         (map['originalLineSegmentsMap'] as Map<String, dynamic>).entries.map(
               (e) => MapEntry(
@@ -215,13 +212,13 @@ class MPMoveLineCommand extends MPCommand {
 
   @override
   MPMoveLineCommand copyWith({
-    int? lineMapiahID,
+    int? lineMPID,
     LinkedHashMap<int, THLineSegment>? originalLineSegmentsMap,
     LinkedHashMap<int, THLineSegment>? modifiedLineSegmentsMap,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveLineCommand.forCWJM(
-      lineMapiahID: lineMapiahID ?? this.lineMapiahID,
+      lineMPID: lineMPID ?? this.lineMPID,
       originalLineSegmentsMap:
           originalLineSegmentsMap ?? this.originalLineSegmentsMap,
       modifiedLineSegmentsMap:
@@ -235,7 +232,7 @@ class MPMoveLineCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPMoveLineCommand &&
-        other.lineMapiahID == lineMapiahID &&
+        other.lineMPID == lineMPID &&
         const DeepCollectionEquality()
             .equals(other.originalLineSegmentsMap, originalLineSegmentsMap) &&
         const DeepCollectionEquality()
@@ -247,7 +244,7 @@ class MPMoveLineCommand extends MPCommand {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        lineMapiahID,
+        lineMPID,
         Object.hashAll(originalLineSegmentsMap.entries),
         Object.hashAll(modifiedLineSegmentsMap.entries),
       );

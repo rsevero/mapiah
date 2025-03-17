@@ -135,8 +135,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               lastEndpoint = point;
             case MPSelectableControlPoint _:
               final bool isSelected = (selectedControlPoint != null) &&
-                  (point.element.mapiahID ==
-                      selectedControlPoint.element.mapiahID) &&
+                  (point.element.mpID == selectedControlPoint.element.mpID) &&
                   (point.type == selectedControlPoint.type);
               final THControlPointPainter controlPointPainter =
                   THControlPointPainter(

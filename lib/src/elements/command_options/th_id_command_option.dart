@@ -5,7 +5,7 @@ class THIDCommandOption extends THCommandOption {
   late final String thID;
 
   THIDCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.thID,
   }) : super.forCWJM();
@@ -32,7 +32,7 @@ class THIDCommandOption extends THCommandOption {
 
   factory THIDCommandOption.fromMap(Map<String, dynamic> map) {
     return THIDCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       thID: map['thID'],
     );
@@ -44,12 +44,12 @@ class THIDCommandOption extends THCommandOption {
 
   @override
   THIDCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? thID,
   }) {
     return THIDCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       thID: thID ?? this.thID,
@@ -60,7 +60,7 @@ class THIDCommandOption extends THCommandOption {
   bool operator ==(covariant THIDCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.thID == thID;
   }

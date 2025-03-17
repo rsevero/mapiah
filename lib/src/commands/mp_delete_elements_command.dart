@@ -1,17 +1,17 @@
 part of 'mp_command.dart';
 
 class MPDeleteElementsCommand extends MPCommand {
-  final List<int> mapiahIDs;
+  final List<int> mpIDs;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.deleteElements;
 
   MPDeleteElementsCommand.forCWJM({
-    required this.mapiahIDs,
+    required this.mpIDs,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeleteElementsCommand({
-    required this.mapiahIDs,
+    required this.mpIDs,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -24,7 +24,7 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.deleteElements(mapiahIDs);
+    th2FileEditController.elementEditController.deleteElements(mpIDs);
   }
 
   @override
@@ -35,17 +35,16 @@ class MPDeleteElementsCommand extends MPCommand {
     final THFile thFile = th2FileEditController.thFile;
     late MPAddElementCommandParams oppositeParams;
 
-    for (final int mapiahID in mapiahIDs) {
-      final THElement element = thFile.elementByMapiahID(mapiahID);
+    for (final int mpID in mpIDs) {
+      final THElement element = thFile.elementByMPID(mpID);
 
       switch (element) {
         case THLine _:
           final List<THElement> lineChildren = [];
-          final Set<int> childMapiahIDs = element.childrenMapiahID;
+          final Set<int> childMPIDs = element.childrenMPID;
 
-          for (final int childMapiahID in childMapiahIDs) {
-            lineChildren
-                .add(thFile.elementByMapiahID(childMapiahID).copyWith());
+          for (final int childMPID in childMPIDs) {
+            lineChildren.add(thFile.elementByMPID(childMPID).copyWith());
           }
 
           oppositeParams = MPAddLineCommandParams(
@@ -72,19 +71,19 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    List<int>? mapiahIDs,
+    List<int>? mpIDs,
     MPCommandDescriptionType? descriptionType,
     bool? isUndoOf,
   }) {
     return MPDeleteElementsCommand.forCWJM(
-      mapiahIDs: mapiahIDs ?? this.mapiahIDs,
+      mpIDs: mpIDs ?? this.mpIDs,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   factory MPDeleteElementsCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteElementsCommand.forCWJM(
-      mapiahIDs: List<int>.from(map['mapiahIDs']),
+      mpIDs: List<int>.from(map['mpIDs']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -99,7 +98,7 @@ class MPDeleteElementsCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'mapiahIDs': mapiahIDs.toList(),
+      'mpIDs': mpIDs.toList(),
     });
 
     return map;
@@ -110,10 +109,10 @@ class MPDeleteElementsCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPDeleteElementsCommand &&
-        const DeepCollectionEquality().equals(other.mapiahIDs, mapiahIDs) &&
+        const DeepCollectionEquality().equals(other.mpIDs, mpIDs) &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ mapiahIDs.hashCode;
+  int get hashCode => super.hashCode ^ mpIDs.hashCode;
 }

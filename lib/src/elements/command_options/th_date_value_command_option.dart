@@ -5,7 +5,7 @@ class THDateValueCommandOption extends THCommandOption {
   late final THDatetimePart date;
 
   THDateValueCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.date,
   }) : super.forCWJM();
@@ -37,7 +37,7 @@ class THDateValueCommandOption extends THCommandOption {
 
   factory THDateValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDateValueCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       date: THDatetimePart.fromMap(map['date']),
     );
@@ -49,12 +49,12 @@ class THDateValueCommandOption extends THCommandOption {
 
   @override
   THDateValueCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDatetimePart? date,
   }) {
     return THDateValueCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       date: date ?? this.date,
@@ -65,7 +65,7 @@ class THDateValueCommandOption extends THCommandOption {
   bool operator ==(covariant THDateValueCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.date == date;
   }

@@ -4,7 +4,7 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   final THElementType parentElementType;
 
   THMultipleChoiceCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.parentElementType,
   }) : super.forCWJM();
@@ -47,7 +47,7 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   bool operator ==(covariant THMultipleChoiceCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType;
   }

@@ -93,7 +93,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       switch (selected) {
         case MPSelectedPoint _:
           moveCommand = MPMovePointCommand.fromDelta(
-            pointMapiahID: selectedElement.mapiahID,
+            pointMPID: selectedElement.mpID,
             originalCoordinates:
                 (selectedElement as THPoint).position.coordinates,
             deltaOnCanvas: panDeltaOnCanvas,
@@ -101,7 +101,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           break;
         case MPSelectedLine _:
           moveCommand = MPMoveLineCommand.fromDelta(
-            lineMapiahID: selectedElement.mapiahID,
+            lineMPID: selectedElement.mpID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
             deltaOnCanvas: panDeltaOnCanvas,
           );
@@ -116,12 +116,12 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         switch (selected) {
           case MPSelectedPoint _:
             return MPMoveCommandPointOriginalParams(
-              mapiahID: selectedElement.mapiahID,
+              mpID: selectedElement.mpID,
               coordinates: (selectedElement as THPoint).position.coordinates,
             );
           case MPSelectedLine _:
             return MPMoveCommandLineOriginalParams(
-              mapiahID: selectedElement.mapiahID,
+              mpID: selectedElement.mpID,
               lineSegmentsMap: selected.originalLineSegmentsMapClone,
             );
           default:

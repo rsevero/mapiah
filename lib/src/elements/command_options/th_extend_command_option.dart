@@ -6,7 +6,7 @@ class THExtendCommandOption extends THCommandOption {
   final String station;
 
   THExtendCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.station,
   }) : super.forCWJM();
@@ -39,7 +39,7 @@ class THExtendCommandOption extends THCommandOption {
 
   factory THExtendCommandOption.fromMap(Map<String, dynamic> map) {
     return THExtendCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       station: map['station'],
     );
@@ -51,12 +51,12 @@ class THExtendCommandOption extends THCommandOption {
 
   @override
   THExtendCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? station,
   }) {
     return THExtendCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       station: station ?? this.station,
@@ -67,7 +67,7 @@ class THExtendCommandOption extends THCommandOption {
   bool operator ==(covariant THExtendCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.station == station;
   }

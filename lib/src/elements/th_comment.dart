@@ -4,15 +4,15 @@ class THComment extends THElement {
   final String content;
 
   THComment.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.content,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THComment({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required this.content,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
@@ -33,8 +33,8 @@ class THComment extends THElement {
 
   factory THComment.fromMap(Map<String, dynamic> map) {
     return THComment.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       content: map['content'],
@@ -47,16 +47,16 @@ class THComment extends THElement {
 
   @override
   THComment copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     String? content,
   }) {
     return THComment.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -70,8 +70,8 @@ class THComment extends THElement {
   bool operator ==(covariant THComment other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.content == content;

@@ -10,7 +10,7 @@ class THContextCommandOption extends THCommandOption {
   // static const _supportedElementTypes = <String>{'point', 'line', 'area'};
 
   THContextCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.elementType,
     required this.symbolType,
@@ -40,7 +40,7 @@ class THContextCommandOption extends THCommandOption {
 
   factory THContextCommandOption.fromMap(Map<String, dynamic> map) {
     return THContextCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       elementType: map['elementType'],
       symbolType: map['symbolType'],
@@ -53,13 +53,13 @@ class THContextCommandOption extends THCommandOption {
 
   @override
   THContextCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? elementType,
     String? symbolType,
   }) {
     return THContextCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       elementType: elementType ?? this.elementType,
@@ -71,7 +71,7 @@ class THContextCommandOption extends THCommandOption {
   bool operator ==(covariant THContextCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.elementType == elementType &&
         other.symbolType == symbolType;

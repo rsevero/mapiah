@@ -16,9 +16,9 @@ enum MPMoveCommandOriginalParamsType {
 }
 
 sealed class MPMoveCommandOriginalParams {
-  final int mapiahID;
+  final int mpID;
 
-  MPMoveCommandOriginalParams({required this.mapiahID});
+  MPMoveCommandOriginalParams({required this.mpID});
 
   MPMoveCommandOriginalParamsType get type;
 

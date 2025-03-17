@@ -2,17 +2,17 @@ part of 'th_element.dart';
 
 class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
-    required Set<int> childrenMapiahID,
+    required super.mpID,
+    required super.parentMPID,
+    required Set<int> childrenMPID,
     super.sameLineComment,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
-    this.childrenMapiahID.addAll(childrenMapiahID);
+    this.childrenMPID.addAll(childrenMPID);
   }
 
   THMultiLineComment({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
 
@@ -24,7 +24,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'childrenMapiahID': childrenMapiahID.toList(),
+      'childrenMPID': childrenMPID.toList(),
     });
 
     return map;
@@ -32,9 +32,9 @@ class THMultiLineComment extends THElement with THIsParentMixin {
 
   factory THMultiLineComment.fromMap(Map<String, dynamic> map) {
     return THMultiLineComment.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
-      childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
+      childrenMPID: Set<int>.from(map['childrenMPID']),
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
     );
@@ -46,17 +46,17 @@ class THMultiLineComment extends THElement with THIsParentMixin {
 
   @override
   THMultiLineComment copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
-    Set<int>? childrenMapiahID,
+    int? mpID,
+    int? parentMPID,
+    Set<int>? childrenMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
   }) {
     return THMultiLineComment.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
-      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
+      childrenMPID: childrenMPID ?? this.childrenMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -69,16 +69,15 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   bool operator ==(covariant THMultiLineComment other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        const DeepCollectionEquality()
-            .equals(other.childrenMapiahID, childrenMapiahID);
+        const DeepCollectionEquality().equals(other.childrenMPID, childrenMPID);
   }
 
   @override
-  int get hashCode => super.hashCode ^ childrenMapiahID.hashCode;
+  int get hashCode => super.hashCode ^ childrenMPID.hashCode;
 
   @override
   bool isSameClass(Object object) {

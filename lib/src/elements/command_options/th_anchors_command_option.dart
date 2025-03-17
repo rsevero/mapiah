@@ -4,7 +4,7 @@ part of 'th_command_option.dart';
 /// type. Default is on.
 class THAnchorsCommandOption extends THOnOffCommandOption {
   THAnchorsCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required super.choice,
@@ -27,7 +27,7 @@ class THAnchorsCommandOption extends THOnOffCommandOption {
 
   factory THAnchorsCommandOption.fromMap(Map<String, dynamic> map) {
     return THAnchorsCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesOnOffType.values.byName(map['choice']),
@@ -40,13 +40,13 @@ class THAnchorsCommandOption extends THOnOffCommandOption {
 
   @override
   THAnchorsCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesOnOffType? choice,
   }) {
     return THAnchorsCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,

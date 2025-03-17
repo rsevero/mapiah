@@ -4,7 +4,7 @@ class MPMoveCommandPointOriginalParams extends MPMoveCommandOriginalParams {
   final Offset coordinates;
 
   MPMoveCommandPointOriginalParams({
-    required super.mapiahID,
+    required super.mpID,
     required this.coordinates,
   });
 
@@ -17,7 +17,7 @@ class MPMoveCommandPointOriginalParams extends MPMoveCommandOriginalParams {
     final map = super.toMap();
 
     map.addAll({
-      'mapiahID': mapiahID,
+      'mpID': mpID,
       'coordinates': {
         'dx': coordinates.dx,
         'dy': coordinates.dy,
@@ -29,7 +29,7 @@ class MPMoveCommandPointOriginalParams extends MPMoveCommandOriginalParams {
 
   factory MPMoveCommandPointOriginalParams.fromMap(Map<String, dynamic> map) {
     return MPMoveCommandPointOriginalParams(
-      mapiahID: map['mapiahID'],
+      mpID: map['mpID'],
       coordinates: Offset(
         map['coordinates']['dx'],
         map['coordinates']['dy'],
@@ -43,11 +43,11 @@ class MPMoveCommandPointOriginalParams extends MPMoveCommandOriginalParams {
 
   @override
   MPMoveCommandPointOriginalParams copyWith({
-    int? mapiahID,
+    int? mpID,
     Offset? coordinates,
   }) {
     return MPMoveCommandPointOriginalParams(
-      mapiahID: mapiahID ?? this.mapiahID,
+      mpID: mpID ?? this.mpID,
       coordinates: coordinates ?? this.coordinates,
     );
   }
@@ -57,10 +57,10 @@ class MPMoveCommandPointOriginalParams extends MPMoveCommandOriginalParams {
     if (identical(this, other)) return true;
 
     return other is MPMoveCommandPointOriginalParams &&
-        other.mapiahID == mapiahID &&
+        other.mpID == mpID &&
         other.coordinates == coordinates;
   }
 
   @override
-  int get hashCode => Object.hash(mapiahID, coordinates);
+  int get hashCode => Object.hash(mpID, coordinates);
 }

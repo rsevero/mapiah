@@ -1,17 +1,17 @@
 part of 'mp_command.dart';
 
 class MPDeleteLineSegmentCommand extends MPCommand {
-  final int lineSegmentMapiahID;
+  final int lineSegmentMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.deleteLineSegment;
 
   MPDeleteLineSegmentCommand.forCWJM({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeleteLineSegmentCommand({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -25,7 +25,7 @@ class MPDeleteLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController
-        .deleteElementByMapiahID(lineSegmentMapiahID);
+        .deleteElementByMPID(lineSegmentMPID);
   }
 
   @override
@@ -33,7 +33,7 @@ class MPDeleteLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THLineSegment newLineSegment = th2FileEditController.thFile
-        .elementByMapiahID(lineSegmentMapiahID) as THLineSegment;
+        .elementByMPID(lineSegmentMPID) as THLineSegment;
     final MPAddLineSegmentCommand oppositeCommand = MPAddLineSegmentCommand(
       newLineSegment: newLineSegment,
       descriptionType: descriptionType,
@@ -48,18 +48,18 @@ class MPDeleteLineSegmentCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    int? lineSegmentMapiahID,
+    int? lineSegmentMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteLineSegmentCommand.forCWJM(
-      lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
+      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   factory MPDeleteLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteLineSegmentCommand.forCWJM(
-      lineSegmentMapiahID: map['lineSegmentMapiahID'],
+      lineSegmentMPID: map['lineSegmentMPID'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -74,7 +74,7 @@ class MPDeleteLineSegmentCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineSegmentMapiahID': lineSegmentMapiahID,
+      'lineSegmentMPID': lineSegmentMPID,
     });
 
     return map;
@@ -85,10 +85,10 @@ class MPDeleteLineSegmentCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPDeleteLineSegmentCommand &&
-        other.lineSegmentMapiahID == lineSegmentMapiahID &&
+        other.lineSegmentMPID == lineSegmentMPID &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ lineSegmentMapiahID.hashCode;
+  int get hashCode => super.hashCode ^ lineSegmentMPID.hashCode;
 }

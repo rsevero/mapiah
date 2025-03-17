@@ -19,7 +19,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   late final bool plusHasSign;
 
   THPassageHeightValueCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     this.plusNumber,
     this.minusNumber,
@@ -70,7 +70,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   factory THPassageHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPassageHeightValueCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       plusNumber: map['plusNumber'] != null
           ? THDoublePart.fromMap(map['plusNumber'])
@@ -91,7 +91,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   @override
   THPassageHeightValueCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? plusNumber,
     THDoublePart? minusNumber,
@@ -102,7 +102,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     bool makeMinusNumberNull = false,
   }) {
     return THPassageHeightValueCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       plusNumber: makePlusNumberNull ? null : (plusNumber ?? this.plusNumber),
@@ -118,7 +118,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   bool operator ==(covariant THPassageHeightValueCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.plusNumber == plusNumber &&
         other.minusNumber == minusNumber &&

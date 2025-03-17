@@ -46,8 +46,8 @@ const double th45Degrees = math.pi / 4;
 
 const double thMinimumSizeForDrawing = 10.0;
 
-const int thFirstMapiahIDForTHFiles = -1;
-const int thFirstMapiahIDForElements = 1;
+const int thFirstMPIDForTHFiles = -1;
+const int thFirstMPIDForElements = 1;
 
 const double thDesiredSegmentLengthOnScreen = 15.0;
 

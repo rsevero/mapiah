@@ -13,7 +13,7 @@ part of 'th_command_option.dart';
 /// straight one.
 class THSmoothCommandOption extends THOnOffAutoCommandOption {
   THSmoothCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required super.choice,
@@ -36,7 +36,7 @@ class THSmoothCommandOption extends THOnOffAutoCommandOption {
 
   factory THSmoothCommandOption.fromMap(Map<String, dynamic> map) {
     return THSmoothCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesOnOffAutoType.values.byName(map['choice']),
@@ -49,13 +49,13 @@ class THSmoothCommandOption extends THOnOffAutoCommandOption {
 
   @override
   THSmoothCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesOnOffAutoType? choice,
   }) {
     return THSmoothCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,

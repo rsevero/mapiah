@@ -93,7 +93,7 @@ abstract class TH2FileEditControllerBase with Store {
   late THFile _thFile;
 
   @readonly
-  late int _thFileMapiahID;
+  late int _thFileMPID;
 
   @readonly
   bool _hasUndo = false;
@@ -112,8 +112,7 @@ abstract class TH2FileEditControllerBase with Store {
     String filename = p.basename(_thFile.filename);
 
     if (_hasMultipleScraps) {
-      final THScrap scrap =
-          _thFile.elementByMapiahID(_activeScrapID) as THScrap;
+      final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
 
       filename += ' | ${scrap.thID}';
     }
@@ -302,7 +301,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get scrapHasScaleOption {
-    final THScrap scrap = _thFile.elementByMapiahID(_activeScrapID) as THScrap;
+    final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
 
     return scrap.hasOption(THCommandOptionType.scrapScale);
   }
@@ -310,8 +309,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   THLengthUnitType get scrapLengthUnitType {
     if (scrapHasScaleOption) {
-      final THScrap scrap =
-          _thFile.elementByMapiahID(_activeScrapID) as THScrap;
+      final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
 
       return (scrap.optionByType(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
@@ -325,8 +323,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   double get scrapLengthUnitsPerPoint {
     if (scrapHasScaleOption) {
-      final THScrap scrap =
-          _thFile.elementByMapiahID(_activeScrapID) as THScrap;
+      final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
 
       return (scrap.optionByType(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
@@ -427,7 +424,7 @@ abstract class TH2FileEditControllerBase with Store {
     stateController = TH2FileEditStateController(this as TH2FileEditController);
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
     visualController = MPVisualController(this as TH2FileEditController);
-    _thFileMapiahID = _thFile.mapiahID;
+    _thFileMPID = _thFile.mpID;
   }
 
   void _preParseInitialize() {
@@ -440,8 +437,8 @@ abstract class TH2FileEditControllerBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
-    if (_thFile.scrapMapiahIDs.isNotEmpty) {
-      _activeScrapID = _thFile.scrapMapiahIDs.first;
+    if (_thFile.scrapMPIDs.isNotEmpty) {
+      _activeScrapID = _thFile.scrapMPIDs.first;
       updateHasMultipleScraps();
     }
 
@@ -478,7 +475,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   int getNextAvailableScrapID() {
-    final List<int> scrapIDs = _thFile.scrapMapiahIDs.toList();
+    final List<int> scrapIDs = _thFile.scrapMPIDs.toList();
     final int currentIndex = scrapIDs.indexOf(_activeScrapID);
 
     if (currentIndex == -1 || scrapIDs.isEmpty) {
@@ -491,12 +488,12 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   bool isFromActiveScrap(THElement element) {
-    return element.parentMapiahID == _activeScrapID;
+    return element.parentMPID == _activeScrapID;
   }
 
   @action
-  void setActiveScrap(int scrapMapiahID) {
-    _activeScrapID = scrapMapiahID;
+  void setActiveScrap(int scrapMPID) {
+    _activeScrapID = scrapMPID;
     selectionController.clearSelectedElements();
     selectionController.updateSelectableElements();
     triggerAllElementsRedraw();
@@ -505,10 +502,10 @@ abstract class TH2FileEditControllerBase with Store {
   List<(int, String, bool)> availableScraps() {
     final List<(int, String, bool)> scraps = <(int, String, bool)>[];
 
-    for (final int scrapMapiahID in _thFile.scrapMapiahIDs) {
-      final THScrap scrap = _thFile.elementByMapiahID(scrapMapiahID) as THScrap;
-      final bool isActive = scrapMapiahID == _activeScrapID;
-      scraps.add((scrapMapiahID, scrap.thID, isActive));
+    for (final int scrapMPID in _thFile.scrapMPIDs) {
+      final THScrap scrap = _thFile.elementByMPID(scrapMPID) as THScrap;
+      final bool isActive = scrapMPID == _activeScrapID;
+      scraps.add((scrapMPID, scrap.thID, isActive));
     }
 
     return scraps;
@@ -768,7 +765,7 @@ abstract class TH2FileEditControllerBase with Store {
       case MPZoomToFitType.file:
         return _thFile.getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.scrap:
-        return (_thFile.elementByMapiahID(_activeScrapID) as THScrap)
+        return (_thFile.elementByMPID(_activeScrapID) as THScrap)
             .getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.selection:
         return selectionController.getSelectedElementsBoundingBox();
@@ -859,7 +856,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void updateHasMultipleScraps() {
-    _hasMultipleScraps = _thFile.scrapMapiahIDs.length > 1;
+    _hasMultipleScraps = _thFile.scrapMPIDs.length > 1;
   }
 
   @action

@@ -1,28 +1,28 @@
 part of 'mp_command.dart';
 
 class MPMoveStraightLineSegmentCommand extends MPCommand {
-  final int lineSegmentMapiahID;
+  final int lineSegmentMPID;
   final Offset originalEndPointCoordinates;
   late final Offset modifiedEndPointCoordinates;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveStraightLineSegment;
 
   MPMoveStraightLineSegmentCommand.forCWJM({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveStraightLineSegmentCommand({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDelta({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     required this.originalEndPointCoordinates,
     required Offset deltaOnCanvas,
     super.descriptionType = _defaultDescriptionType,
@@ -40,7 +40,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     final THStraightLineSegment originalLineSegment =
-        th2FileEditController.thFile.elementByMapiahID(lineSegmentMapiahID)
+        th2FileEditController.thFile.elementByMPID(lineSegmentMPID)
             as THStraightLineSegment;
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
         endPoint: originalLineSegment.endPoint
@@ -56,7 +56,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   ) {
     final MPMoveStraightLineSegmentCommand oppositeCommand =
         MPMoveStraightLineSegmentCommand(
-      lineSegmentMapiahID: lineSegmentMapiahID,
+      lineSegmentMPID: lineSegmentMPID,
       originalEndPointCoordinates: modifiedEndPointCoordinates,
       modifiedEndPointCoordinates: originalEndPointCoordinates,
       descriptionType: descriptionType,
@@ -74,7 +74,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineSegmentMapiahID': lineSegmentMapiahID,
+      'lineSegmentMPID': lineSegmentMPID,
       'originalEndPointCoordinates': {
         'dx': originalEndPointCoordinates.dx,
         'dy': originalEndPointCoordinates.dy,
@@ -90,7 +90,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
   factory MPMoveStraightLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
-      lineSegmentMapiahID: map['lineSegmentMapiahID'],
+      lineSegmentMPID: map['lineSegmentMPID'],
       originalEndPointCoordinates: Offset(
         map['originalEndPointCoordinates']['dx'],
         map['originalEndPointCoordinates']['dy'],
@@ -110,13 +110,13 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
   @override
   MPMoveStraightLineSegmentCommand copyWith({
-    int? lineSegmentMapiahID,
+    int? lineSegmentMPID,
     Offset? originalEndPointCoordinates,
     Offset? modifiedEndPointCoordinates,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
-      lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
+      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
       originalEndPointCoordinates:
           originalEndPointCoordinates ?? this.originalEndPointCoordinates,
       modifiedEndPointCoordinates:
@@ -130,7 +130,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPMoveStraightLineSegmentCommand &&
-        other.lineSegmentMapiahID == lineSegmentMapiahID &&
+        other.lineSegmentMPID == lineSegmentMPID &&
         other.originalEndPointCoordinates == originalEndPointCoordinates &&
         other.modifiedEndPointCoordinates == modifiedEndPointCoordinates &&
         other.descriptionType == descriptionType;
@@ -140,7 +140,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        lineSegmentMapiahID,
+        lineSegmentMPID,
         originalEndPointCoordinates,
         modifiedEndPointCoordinates,
       );

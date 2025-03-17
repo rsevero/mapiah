@@ -7,7 +7,7 @@ class THSketchCommandOption extends THCommandOption {
   late final THPositionPart point;
 
   THSketchCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required String filename,
     required this.point,
@@ -46,7 +46,7 @@ class THSketchCommandOption extends THCommandOption {
 
   factory THSketchCommandOption.fromMap(Map<String, dynamic> map) {
     return THSketchCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       filename: map['filename']['content'],
       point: THPositionPart.fromMap(map['point']),
@@ -59,13 +59,13 @@ class THSketchCommandOption extends THCommandOption {
 
   @override
   THSketchCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? filename,
     THPositionPart? point,
   }) {
     return THSketchCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       filename: filename ?? _filename.content,
@@ -77,7 +77,7 @@ class THSketchCommandOption extends THCommandOption {
   bool operator ==(covariant THSketchCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other._filename == _filename &&
         other.point == point;

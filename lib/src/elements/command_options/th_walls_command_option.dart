@@ -2,7 +2,7 @@ part of 'th_command_option.dart';
 
 class THWallsCommandOption extends THOnOffAutoCommandOption {
   THWallsCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required super.choice,
@@ -25,7 +25,7 @@ class THWallsCommandOption extends THOnOffAutoCommandOption {
 
   factory THWallsCommandOption.fromMap(Map<String, dynamic> map) {
     return THWallsCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesOnOffAutoType.values.byName(map['choice']),
@@ -38,13 +38,13 @@ class THWallsCommandOption extends THOnOffAutoCommandOption {
 
   @override
   THWallsCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesOnOffAutoType? choice,
   }) {
     return THWallsCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,

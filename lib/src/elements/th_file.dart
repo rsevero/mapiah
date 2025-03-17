@@ -26,17 +26,17 @@ class THFile
   ///
   /// Not to be confused with the thID, which is the ID used by Therion, the
   /// ones mentioned in Therion Book.
-  final LinkedHashMap<int, THElement> _elementByMapiahID =
+  final LinkedHashMap<int, THElement> _elementByMPID =
       LinkedHashMap<int, THElement>();
   String filename = '';
 
   String encoding = thDefaultEncoding;
 
-  late final int _mapiahID;
+  late final int _mpID;
 
-  final Set<int> _scrapMapiahIDs = {};
+  final Set<int> _scrapMPIDs = {};
 
-  final Set<int> _drawableElementMapiahIDs = {};
+  final Set<int> _drawableElementMPIDs = {};
 
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
@@ -45,32 +45,30 @@ class THFile
   ///
   /// Not to be confused with Mapiah IDs, which are internal and unique only
   /// during a run.
-  final LinkedHashMap<String, int> _mapiahIDByTHID =
-      LinkedHashMap<String, int>();
-  final LinkedHashMap<int, String> _thIDByMapiahID =
-      LinkedHashMap<int, String>();
+  final LinkedHashMap<String, int> _mpIDByTHID = LinkedHashMap<String, int>();
+  final LinkedHashMap<int, String> _thIDByMPID = LinkedHashMap<int, String>();
 
   THFile.forCWJM({
     required this.filename,
     required this.encoding,
-    required int mapiahID,
-    required Set<int> childrenMapiahID,
-    required Set<int> scrapMapiahIDs,
-    required Set<int> drawableElementsMapiahID,
-    required LinkedHashMap<String, int> mapiahIDByTHID,
-    required LinkedHashMap<int, String> thIDByMapiahID,
-    required LinkedHashMap<int, THElement> elementByMapiahID,
-  }) : _mapiahID = mapiahID {
-    this.childrenMapiahID.addAll(childrenMapiahID);
-    _scrapMapiahIDs.addAll(scrapMapiahIDs);
-    _drawableElementMapiahIDs.addAll(drawableElementsMapiahID);
-    _mapiahIDByTHID.addAll(mapiahIDByTHID);
-    _thIDByMapiahID.addAll(thIDByMapiahID);
-    _elementByMapiahID.addAll(elementByMapiahID);
+    required int mpID,
+    required Set<int> childrenMPID,
+    required Set<int> scrapMPIDs,
+    required Set<int> drawableElementsMPID,
+    required LinkedHashMap<String, int> mpIDByTHID,
+    required LinkedHashMap<int, String> thIDByMPID,
+    required LinkedHashMap<int, THElement> elementByMPID,
+  }) : _mpID = mpID {
+    this.childrenMPID.addAll(childrenMPID);
+    _scrapMPIDs.addAll(scrapMPIDs);
+    _drawableElementMPIDs.addAll(drawableElementsMPID);
+    _mpIDByTHID.addAll(mpIDByTHID);
+    _thIDByMPID.addAll(thIDByMPID);
+    _elementByMPID.addAll(elementByMPID);
   }
 
   THFile() {
-    _mapiahID = mpLocator.mpGeneralController.nextMapiahIDForTHFiles();
+    _mpID = mpLocator.mpGeneralController.nextMPIDForTHFiles();
   }
 
   String toJson() {
@@ -81,15 +79,14 @@ class THFile
     return {
       'filename': filename,
       'encoding': encoding,
-      'mapiahID': _mapiahID,
-      'childrenMapiahID': childrenMapiahID.toSet(),
-      'scrapMapiahIDs': _scrapMapiahIDs.toSet(),
-      'drawableElementMapiahIDs': _drawableElementMapiahIDs.toSet(),
-      'elementByTHID':
-          _mapiahIDByTHID.map((key, value) => MapEntry(key, value)),
-      'thIDByMapiahID': _thIDByMapiahID,
-      'elementByMapiahID':
-          _elementByMapiahID.map((key, value) => MapEntry(key, value.toMap())),
+      'mpID': _mpID,
+      'childrenMPID': childrenMPID.toSet(),
+      'scrapMPIDs': _scrapMPIDs.toSet(),
+      'drawableElementMPIDs': _drawableElementMPIDs.toSet(),
+      'elementByTHID': _mpIDByTHID.map((key, value) => MapEntry(key, value)),
+      'thIDByMPID': _thIDByMPID,
+      'elementByMPID':
+          _elementByMPID.map((key, value) => MapEntry(key, value.toMap())),
     };
   }
 
@@ -97,14 +94,14 @@ class THFile
     return THFile.forCWJM(
       filename: map['filename'],
       encoding: map['encoding'],
-      mapiahID: map['mapiahID'],
-      childrenMapiahID: Set<int>.from(map['childrenMapiahID']),
-      scrapMapiahIDs: Set<int>.from(map['scrapMapiahIDs']),
-      drawableElementsMapiahID: Set<int>.from(map['drawableElementMapiahIDs']),
-      mapiahIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
-      thIDByMapiahID: LinkedHashMap<int, String>.from(map['thIDByMapiahID']),
-      elementByMapiahID: LinkedHashMap<int, THElement>.from(
-        map['elementByMapiahID']
+      mpID: map['mpID'],
+      childrenMPID: Set<int>.from(map['childrenMPID']),
+      scrapMPIDs: Set<int>.from(map['scrapMPIDs']),
+      drawableElementsMPID: Set<int>.from(map['drawableElementMPIDs']),
+      mpIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
+      thIDByMPID: LinkedHashMap<int, String>.from(map['thIDByMPID']),
+      elementByMPID: LinkedHashMap<int, THElement>.from(
+        map['elementByMPID']
             .map((key, value) => MapEntry(key, THElement.fromMap(value))),
       ),
     );
@@ -117,27 +114,26 @@ class THFile
   THFile copyWith({
     String? filename,
     String? encoding,
-    int? mapiahID,
-    Set<int>? childrenMapiahID,
-    Set<int>? scrapMapiahIDs,
-    Set<int>? drawableElementMapiahIDs,
-    LinkedHashMap<String, int>? mapiahIDByTHID,
-    LinkedHashMap<int, String>? thIDByMapiahID,
-    LinkedHashMap<int, THElement>? elementByMapiahID,
+    int? mpID,
+    Set<int>? childrenMPID,
+    Set<int>? scrapMPIDs,
+    Set<int>? drawableElementMPIDs,
+    LinkedHashMap<String, int>? mpIDByTHID,
+    LinkedHashMap<int, String>? thIDByMPID,
+    LinkedHashMap<int, THElement>? elementByMPID,
     bool makeFilenameNull = false,
     bool makeEncodingNull = false,
   }) {
     return THFile.forCWJM(
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
-      mapiahID: mapiahID ?? _mapiahID,
-      childrenMapiahID: childrenMapiahID ?? this.childrenMapiahID,
-      scrapMapiahIDs: scrapMapiahIDs ?? _scrapMapiahIDs,
-      drawableElementsMapiahID:
-          drawableElementMapiahIDs ?? _drawableElementMapiahIDs,
-      mapiahIDByTHID: mapiahIDByTHID ?? _mapiahIDByTHID,
-      thIDByMapiahID: thIDByMapiahID ?? _thIDByMapiahID,
-      elementByMapiahID: elementByMapiahID ?? _elementByMapiahID,
+      mpID: mpID ?? _mpID,
+      childrenMPID: childrenMPID ?? this.childrenMPID,
+      scrapMPIDs: scrapMPIDs ?? _scrapMPIDs,
+      drawableElementsMPID: drawableElementMPIDs ?? _drawableElementMPIDs,
+      mpIDByTHID: mpIDByTHID ?? _mpIDByTHID,
+      thIDByMPID: thIDByMPID ?? _thIDByMPID,
+      elementByMPID: elementByMPID ?? _elementByMPID,
     );
   }
 
@@ -149,92 +145,91 @@ class THFile
 
     return other.filename == filename &&
         other.encoding == encoding &&
-        other._mapiahID == _mapiahID &&
-        deepEq(other.childrenMapiahID, childrenMapiahID) &&
-        deepEq(other._scrapMapiahIDs, _scrapMapiahIDs) &&
-        deepEq(other._drawableElementMapiahIDs, _drawableElementMapiahIDs) &&
-        deepEq(other._mapiahIDByTHID, _mapiahIDByTHID) &&
-        deepEq(other._thIDByMapiahID, _thIDByMapiahID) &&
-        deepEq(other._elementByMapiahID, _elementByMapiahID);
+        other._mpID == _mpID &&
+        deepEq(other.childrenMPID, childrenMPID) &&
+        deepEq(other._scrapMPIDs, _scrapMPIDs) &&
+        deepEq(other._drawableElementMPIDs, _drawableElementMPIDs) &&
+        deepEq(other._mpIDByTHID, _mpIDByTHID) &&
+        deepEq(other._thIDByMPID, _thIDByMPID) &&
+        deepEq(other._elementByMPID, _elementByMPID);
   }
 
   @override
   int get hashCode => Object.hash(
         filename,
         encoding,
-        _mapiahID,
-        childrenMapiahID,
-        _scrapMapiahIDs,
-        _drawableElementMapiahIDs,
-        _mapiahIDByTHID,
-        _thIDByMapiahID,
-        _elementByMapiahID,
+        _mpID,
+        childrenMPID,
+        _scrapMPIDs,
+        _drawableElementMPIDs,
+        _mpIDByTHID,
+        _thIDByMPID,
+        _elementByMPID,
       );
 
   Map<int, THElement> get elements {
-    return _elementByMapiahID;
+    return _elementByMPID;
   }
 
   int countElements() {
-    return _elementByMapiahID.length;
+    return _elementByMPID.length;
   }
 
-  Set<int> get scrapMapiahIDs {
-    return _scrapMapiahIDs;
+  Set<int> get scrapMPIDs {
+    return _scrapMPIDs;
   }
 
-  Set<int> get drawableElementMapiahIDs {
-    return _drawableElementMapiahIDs;
+  Set<int> get drawableElementMPIDs {
+    return _drawableElementMPIDs;
   }
 
   String thidByElement(THElement element) {
-    return thidByMapiahID(element.mapiahID);
+    return thidByMPID(element.mpID);
   }
 
-  String thidByMapiahID(int mapiahID) {
-    if (!_thIDByMapiahID.containsKey(mapiahID)) {
+  String thidByMPID(int mpID) {
+    if (!_thIDByMPID.containsKey(mpID)) {
       throw THCustomException(
-          "Element with mapiahID '$mapiahID' has no registered thID.");
+          "Element with mpID '$mpID' has no registered thID.");
     }
 
-    return _thIDByMapiahID[mapiahID]!;
+    return _thIDByMPID[mpID]!;
   }
 
   void unregisterElementTHIDByElement(THElement element) {
-    final int mapiahID = element.mapiahID;
+    final int mpID = element.mpID;
 
-    unregisterElementTHIDByMapiahID(mapiahID);
+    unregisterElementTHIDByMPID(mpID);
   }
 
-  void unregisterElementTHIDByMapiahID(int mapiahID) {
-    if (!_thIDByMapiahID.containsKey(mapiahID)) {
+  void unregisterElementTHIDByMPID(int mpID) {
+    if (!_thIDByMPID.containsKey(mpID)) {
       throw THCustomException(
-          "Element with MapiahID '$mapiahID' has no registered thID.");
+          "Element with MPID '$mpID' has no registered thID.");
     }
 
-    final String thID = _thIDByMapiahID[mapiahID]!;
+    final String thID = _thIDByMPID[mpID]!;
 
-    if (!_mapiahIDByTHID.containsKey(thID)) {
+    if (!_mpIDByTHID.containsKey(thID)) {
       throw THCustomException(
-          "thID '$thID' gotten from element with Mapiah ID '$mapiahID' is not registered.");
+          "thID '$thID' gotten from element with Mapiah ID '$mpID' is not registered.");
     }
 
-    _thIDByMapiahID.remove(mapiahID);
-    _mapiahIDByTHID.remove(thID);
+    _thIDByMPID.remove(mpID);
+    _mpIDByTHID.remove(thID);
   }
 
   void unregisterElementTHIDByTHID(String thID) {
-    if (!_mapiahIDByTHID.containsKey(thID)) {
+    if (!_mpIDByTHID.containsKey(thID)) {
       throw THCustomException("thID '$thID' is not registered.");
     }
 
-    unregisterElementTHIDByMapiahID(_mapiahIDByTHID[thID]!);
+    unregisterElementTHIDByMPID(_mpIDByTHID[thID]!);
   }
 
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    return calculateChildrenBoundingBox(
-        th2FileEditController, childrenMapiahID);
+    return calculateChildrenBoundingBox(th2FileEditController, childrenMPID);
   }
 
   /// Updates the thID of a given element of the THFile.
@@ -242,42 +237,42 @@ class THFile
   /// @param newTHID The new thID to be set.
   /// @throws THCustomException If the element has no registered thID.
   void updateTHID(THElement element, String newTHID) {
-    final int mapiahID = element.mapiahID;
+    final int mpID = element.mpID;
 
-    if (!_thIDByMapiahID.containsKey(mapiahID)) {
+    if (!_thIDByMPID.containsKey(mpID)) {
       throw THCustomException("Element '$element' had no registered thID.");
     }
-    final String oldTHID = _thIDByMapiahID[mapiahID]!;
+    final String oldTHID = _thIDByMPID[mpID]!;
 
-    if (_mapiahIDByTHID.containsKey(newTHID)) {
+    if (_mpIDByTHID.containsKey(newTHID)) {
       throw THCustomException("Duplicate element with thID '$newTHID'.");
     }
 
-    _mapiahIDByTHID.remove(oldTHID);
-    _mapiahIDByTHID[newTHID] = mapiahID;
+    _mpIDByTHID.remove(oldTHID);
+    _mpIDByTHID[newTHID] = mpID;
 
-    _thIDByMapiahID[mapiahID] = newTHID;
+    _thIDByMPID[mpID] = newTHID;
   }
 
   void registerElementWithTHID(THElement element, String thID) {
-    if (_mapiahIDByTHID.containsKey(thID)) {
+    if (_mpIDByTHID.containsKey(thID)) {
       throw THCustomException("Duplicate thID: '$thID'.");
     }
-    final int mapiahID = element.mapiahID;
-    _mapiahIDByTHID[thID] = mapiahID;
+    final int mpID = element.mpID;
+    _mpIDByTHID[thID] = mpID;
 
-    if (_thIDByMapiahID.containsKey(mapiahID)) {
+    if (_thIDByMPID.containsKey(mpID)) {
       throw THCustomException("'${element.elementType}' already included.");
     }
-    _thIDByMapiahID[mapiahID] = thID;
+    _thIDByMPID[mpID] = thID;
   }
 
   bool hasElementByTHID(String thID) {
-    return _mapiahIDByTHID.containsKey(thID);
+    return _mpIDByTHID.containsKey(thID);
   }
 
   bool hasTHIDByElement(THElement element) {
-    return _thIDByMapiahID.containsKey(element.mapiahID);
+    return _thIDByMPID.containsKey(element.mpID);
   }
 
   THElement elementByTHID(String thID) {
@@ -285,24 +280,24 @@ class THFile
       throw THCustomException("No element with thID '$thID' found.");
     }
 
-    return elementByMapiahID(_mapiahIDByTHID[thID]!);
+    return elementByMPID(_mpIDByTHID[thID]!);
   }
 
-  int mapiahIDByTHID(String thID) {
+  int mpIDByTHID(String thID) {
     if (!hasElementByTHID(thID)) {
       throw THCustomException("No element with thID '$thID' found.");
     }
 
-    return _mapiahIDByTHID[thID]!;
+    return _mpIDByTHID[thID]!;
   }
 
   void _clearTHFileAndParentBoundingBoxes(THElement element) {
     clearBoundingBox();
 
-    final int parentMapiahID = element.parentMapiahID;
+    final int parentMPID = element.parentMPID;
 
-    if (parentMapiahID > 0) {
-      final THElement parentElement = elementByMapiahID(parentMapiahID);
+    if (parentMPID > 0) {
+      final THElement parentElement = elementByMPID(parentMPID);
 
       if (parentElement is THScrap) {
         parentElement.clearBoundingBox();
@@ -311,26 +306,26 @@ class THFile
   }
 
   void substituteElement(THElement newElement) {
-    final int mapiahID = newElement.mapiahID;
-    final THElement oldElement = elementByMapiahID(mapiahID);
+    final int mpID = newElement.mpID;
+    final THElement oldElement = elementByMPID(mpID);
 
-    _elementByMapiahID[mapiahID] = newElement;
+    _elementByMPID[mpID] = newElement;
     _clearTHFileAndParentBoundingBoxes(newElement);
 
     if (newElement is THHasTHID) {
       final String oldTHID = (oldElement as THHasTHID).thID;
       final String newTHID = (newElement as THHasTHID).thID;
 
-      if (_mapiahIDByTHID.containsKey(oldTHID)) {
-        _mapiahIDByTHID.remove(oldTHID);
+      if (_mpIDByTHID.containsKey(oldTHID)) {
+        _mpIDByTHID.remove(oldTHID);
       }
-      if (_mapiahIDByTHID.containsKey(newTHID)) {
+      if (_mpIDByTHID.containsKey(newTHID)) {
         throw THCustomException(
             "Duplicate thID in _elementByTHID: '$newTHID'.");
       }
 
-      _mapiahIDByTHID[newTHID] = mapiahID;
-      _thIDByMapiahID[mapiahID] = newTHID;
+      _mpIDByTHID[newTHID] = mpID;
+      _thIDByMPID[mpID] = newTHID;
     }
   }
 
@@ -343,7 +338,7 @@ class THFile
   }
 
   void addElement(THElement element) {
-    _elementByMapiahID[element.mapiahID] = element;
+    _elementByMPID[element.mpID] = element;
 
     if (element is THHasTHID) {
       registerElementWithTHID(element, (element as THHasTHID).thID);
@@ -357,9 +352,9 @@ class THFile
     }
 
     if (element is THScrap) {
-      _scrapMapiahIDs.add(element.mapiahID);
+      _scrapMPIDs.add(element.mpID);
     } else if ((element is THPoint) || (element is THLine)) {
-      _drawableElementMapiahIDs.add(element.mapiahID);
+      _drawableElementMPIDs.add(element.mpID);
     }
   }
 
@@ -370,10 +365,10 @@ class THFile
 
   void deleteElement(THElement element) {
     if (element is THIsParentMixin) {
-      final List<int> childrenMapiahIDsCopy =
-          (element as THIsParentMixin).childrenMapiahID.toList();
-      for (final int childMapiahID in childrenMapiahIDsCopy) {
-        deleteElement(elementByMapiahID(childMapiahID));
+      final List<int> childrenMPIDsCopy =
+          (element as THIsParentMixin).childrenMPID.toList();
+      for (final int childMPID in childrenMPIDsCopy) {
+        deleteElement(elementByMPID(childMPID));
       }
     }
 
@@ -382,39 +377,39 @@ class THFile
     }
 
     if (element is THScrap) {
-      _scrapMapiahIDs.remove(element.mapiahID);
+      _scrapMPIDs.remove(element.mpID);
     } else if ((element is THPoint) || (element is THLine)) {
-      _drawableElementMapiahIDs.remove(element.mapiahID);
+      _drawableElementMPIDs.remove(element.mpID);
     }
 
     element.parent(this).deleteElementFromParent(this, element);
-    _elementByMapiahID.remove(element.mapiahID);
+    _elementByMPID.remove(element.mpID);
   }
 
-  bool hasElementByMapiahID(int mapiahID) {
-    if (mapiahID == 0) {
+  bool hasElementByMPID(int mpID) {
+    if (mpID == 0) {
       return true;
     }
-    return _elementByMapiahID.containsKey(mapiahID);
+    return _elementByMPID.containsKey(mpID);
   }
 
-  THElement elementByMapiahID(int mapiahID) {
-    if (!_elementByMapiahID.containsKey(mapiahID)) {
-      throw THNoElementByMapiahIDException(filename, mapiahID);
+  THElement elementByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
     }
 
-    return _elementByMapiahID[mapiahID]!;
+    return _elementByMPID[mpID]!;
   }
 
   THElement elementByPosition(int position) {
-    return _elementByMapiahID.values.elementAt(position);
+    return _elementByMPID.values.elementAt(position);
   }
 
   void clear() {
-    _elementByMapiahID.clear();
-    _scrapMapiahIDs.clear();
-    _mapiahIDByTHID.clear();
-    _thIDByMapiahID.clear();
+    _elementByMPID.clear();
+    _scrapMPIDs.clear();
+    _mpIDByTHID.clear();
+    _thIDByMPID.clear();
     filename = '';
     encoding = thDefaultEncoding;
     clearBoundingBox();
@@ -425,5 +420,5 @@ class THFile
   }
 
   @override
-  int get mapiahID => _mapiahID;
+  int get mpID => _mpID;
 }

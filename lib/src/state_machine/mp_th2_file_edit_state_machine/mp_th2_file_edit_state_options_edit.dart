@@ -22,7 +22,7 @@ class MPTH2FileEditStateOptionEdit extends MPTH2FileEditState
     selectionController.updateSelectableEndAndControlPoints();
     th2FileEditController.triggerEditLineRedraw();
     th2FileEditController.setStatusBarMessage('');
-    selectionController.resetSelectedLineLineSegmentsMapiahIDs();
+    selectionController.resetSelectedLineLineSegmentsMPIDs();
   }
 
   @override

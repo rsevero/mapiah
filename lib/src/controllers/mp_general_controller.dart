@@ -4,8 +4,8 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class MPGeneralController {
-  int _nextMapiahIDForElements = thFirstMapiahIDForElements;
-  int _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
+  int _nextMPIDForElements = thFirstMPIDForElements;
+  int _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
 
   String _lastAccessedDirectory = '';
 
@@ -21,19 +21,19 @@ class MPGeneralController {
     _lastAccessedDirectory = value;
   }
 
-  int nextMapiahIDForElements() {
-    return _nextMapiahIDForElements++;
+  int nextMPIDForElements() {
+    return _nextMPIDForElements++;
   }
 
-  int nextMapiahIDForTHFiles() {
-    return _nextMapiahIDForTHFiles--;
+  int nextMPIDForTHFiles() {
+    return _nextMPIDForTHFiles--;
   }
 
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
   void reset() {
-    _nextMapiahIDForElements = thFirstMapiahIDForElements;
-    _nextMapiahIDForTHFiles = thFirstMapiahIDForTHFiles;
+    _nextMPIDForElements = thFirstMPIDForElements;
+    _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
     _t2hFileEditControllers.clear();
   }
 

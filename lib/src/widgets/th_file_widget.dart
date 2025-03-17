@@ -18,7 +18,7 @@ class THFileWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 
   late final THFile thFile = th2FileEditController.thFile;
-  late final int thFileMapiahID = th2FileEditController.thFileMapiahID;
+  late final int thFileMPID = th2FileEditController.thFileMPID;
   late final TH2FileEditOverlayWindowController overlayWindowController =
       th2FileEditController.overlayWindowController;
 
@@ -37,21 +37,21 @@ class THFileWidget extends StatelessWidget {
         }
 
         return MPListenerWidget(
-          key: ValueKey("MPListenerWidget|$thFileMapiahID"),
+          key: ValueKey("MPListenerWidget|$thFileMPID"),
           actuator: th2FileEditController.stateController,
           th2FileEditController: th2FileEditController,
           child: Stack(
-            key: ValueKey("THFileWidgetStack|$thFileMapiahID"),
+            key: ValueKey("THFileWidgetStack|$thFileMPID"),
             children: [
               MPNonSelectedElementsWidget(
-                key: ValueKey("MPNonSelectedElementsWidget|$thFileMapiahID"),
+                key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
                 th2FileEditController: th2FileEditController,
               ),
               Observer(
                 builder: (_) {
                   if (th2FileEditController.showScrapScale) {
                     return MPScrapScaleWidget(
-                      key: ValueKey("MPScrapScaleWidget|$thFileMapiahID"),
+                      key: ValueKey("MPScrapScaleWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     );
                   } else {
@@ -63,7 +63,7 @@ class THFileWidget extends StatelessWidget {
                 builder: (_) {
                   if (th2FileEditController.showSelectedElements) {
                     return MPSelectedElementsWidget(
-                      key: ValueKey("MPSelectedElementsWidget|$thFileMapiahID"),
+                      key: ValueKey("MPSelectedElementsWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     );
                   } else {
@@ -75,7 +75,7 @@ class THFileWidget extends StatelessWidget {
                 builder: (_) {
                   if (th2FileEditController.showAddLine) {
                     return MPAddLineWidget(
-                      key: ValueKey("MPAddLineWidget|$thFileMapiahID"),
+                      key: ValueKey("MPAddLineWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     );
                   } else {
@@ -87,7 +87,7 @@ class THFileWidget extends StatelessWidget {
                 builder: (_) {
                   if (th2FileEditController.showEditLineSegment) {
                     return MPEditLineWidget(
-                      key: ValueKey("MPEditLineWidget|$thFileMapiahID"),
+                      key: ValueKey("MPEditLineWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     );
                   } else {
@@ -99,7 +99,7 @@ class THFileWidget extends StatelessWidget {
                 builder: (_) {
                   if (th2FileEditController.showSelectionHandles) {
                     return MPSelectionHandlesWidget(
-                      key: ValueKey("MPSelectionHandlesWidget|$thFileMapiahID"),
+                      key: ValueKey("MPSelectionHandlesWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     );
                   } else {
@@ -111,7 +111,7 @@ class THFileWidget extends StatelessWidget {
                 builder: (_) {
                   if (th2FileEditController.showSelectionWindow) {
                     return MPSelectionWindowWidget(
-                      key: ValueKey("MPSelectionWindowWidget|$thFileMapiahID"),
+                      key: ValueKey("MPSelectionWindowWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     );
                   } else {
@@ -123,7 +123,7 @@ class THFileWidget extends StatelessWidget {
                 builder: (_) {
                   th2FileEditController.redrawTriggerOverlayWindows;
                   return Stack(
-                    key: ValueKey("OverlayWindowsStack|$thFileMapiahID"),
+                    key: ValueKey("OverlayWindowsStack|$thFileMPID"),
                     children:
                         overlayWindowController.overlayWindows.values.toList(),
                   );

@@ -10,12 +10,12 @@ class MPSelectedLine extends MPSelectedElement {
   }
 
   void _createClone(THLine originalLine, THFile thFile) {
-    final Iterable<int> lineSegmentMapiahIDs = originalLine.childrenMapiahID;
+    final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPID;
 
     originalLineSegmentsMapClone.clear();
 
-    for (final int mapiahID in lineSegmentMapiahIDs) {
-      final THElement element = thFile.elementByMapiahID(mapiahID);
+    for (final int mpID in lineSegmentMPIDs) {
+      final THElement element = thFile.elementByMPID(mpID);
 
       if (element is! THLineSegment) {
         continue;
@@ -28,13 +28,12 @@ class MPSelectedLine extends MPSelectedElement {
         optionsMap[key] = value.copyWith();
       });
 
-      originalLineSegmentsMapClone[element.mapiahID] = element.copyWith(
+      originalLineSegmentsMapClone[element.mpID] = element.copyWith(
         optionsMap: optionsMap,
       );
     }
 
-    final Set<int> childrenMapiahIDsClone =
-        originalLine.childrenMapiahID.toSet();
+    final Set<int> childrenMPIDsClone = originalLine.childrenMPID.toSet();
 
     final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
         LinkedHashMap<THCommandOptionType, THCommandOption>();
@@ -43,15 +42,14 @@ class MPSelectedLine extends MPSelectedElement {
     });
 
     originalLineClone = originalLine.copyWith(
-      childrenMapiahID: childrenMapiahIDsClone,
+      childrenMPID: childrenMPIDsClone,
       optionsMap: optionsMapClone,
     );
   }
 
   @override
   void updateClone(THFile thFile) {
-    final THLine updatedOriginalLine =
-        thFile.elementByMapiahID(mapiahID) as THLine;
+    final THLine updatedOriginalLine = thFile.elementByMPID(mpID) as THLine;
     _createClone(updatedOriginalLine, thFile);
   }
 

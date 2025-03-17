@@ -6,7 +6,7 @@ part of 'th_command_option.dart';
 /// others can (and should) be used as a line option.
 class THLineDirectionCommandOption extends THArrowPositionCommandOption {
   THLineDirectionCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required super.choice,
@@ -34,7 +34,7 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
 
   factory THLineDirectionCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineDirectionCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesArrowPositionType.values.byName(map['choice']),
@@ -47,13 +47,13 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
 
   @override
   THLineDirectionCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesArrowPositionType? choice,
   }) {
     return THLineDirectionCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,

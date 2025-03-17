@@ -4,7 +4,7 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesOnOffAutoType choice;
 
   THOnOffAutoCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
@@ -49,7 +49,7 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
   bool operator ==(covariant THOnOffAutoCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.choice == choice;

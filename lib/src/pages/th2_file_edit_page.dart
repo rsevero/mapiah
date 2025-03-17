@@ -112,7 +112,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     children: [
                       THFileWidget(
                         key: ValueKey(
-                          "THFileWidget|${th2FileEditController.thFileMapiahID}",
+                          "THFileWidget|${th2FileEditController.thFileMPID}",
                         ),
                         th2FileEditController: th2FileEditController,
                       ),

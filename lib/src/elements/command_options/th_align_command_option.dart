@@ -7,7 +7,7 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesAlignType choice;
 
   THAlignCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
@@ -76,7 +76,7 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
 
   factory THAlignCommandOption.fromMap(Map<String, dynamic> map) {
     return THAlignCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: _setChoiceFromString(map['choice']),
@@ -89,13 +89,13 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
 
   @override
   THAlignCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesAlignType? choice,
   }) {
     return THAlignCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,
@@ -107,7 +107,7 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
   bool operator ==(covariant THAlignCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.choice == choice;

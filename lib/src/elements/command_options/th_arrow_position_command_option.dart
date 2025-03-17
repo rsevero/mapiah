@@ -5,7 +5,7 @@ abstract class THArrowPositionCommandOption
   final THOptionChoicesArrowPositionType choice;
 
   THArrowPositionCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
@@ -47,7 +47,7 @@ abstract class THArrowPositionCommandOption
   bool operator ==(covariant THArrowPositionCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.choice == choice;

@@ -1,28 +1,28 @@
 part of 'mp_command.dart';
 
 class MPMovePointCommand extends MPCommand {
-  late final int pointMapiahID;
+  late final int pointMPID;
   late final Offset originalCoordinates;
   late final Offset modifiedCoordinates;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.movePoint;
 
   MPMovePointCommand.forCWJM({
-    required this.pointMapiahID,
+    required this.pointMPID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMovePointCommand({
-    required this.pointMapiahID,
+    required this.pointMPID,
     required this.originalCoordinates,
     required this.modifiedCoordinates,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMovePointCommand.fromDelta({
-    required this.pointMapiahID,
+    required this.pointMPID,
     required this.originalCoordinates,
     required Offset deltaOnCanvas,
     super.descriptionType = _defaultDescriptionType,
@@ -39,8 +39,8 @@ class MPMovePointCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THPoint originalPoint = th2FileEditController.thFile
-        .elementByMapiahID(pointMapiahID) as THPoint;
+    final THPoint originalPoint =
+        th2FileEditController.thFile.elementByMPID(pointMPID) as THPoint;
     final THPoint modifiedPoint = originalPoint.copyWith(
         position:
             originalPoint.position.copyWith(coordinates: modifiedCoordinates));
@@ -56,7 +56,7 @@ class MPMovePointCommand extends MPCommand {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
     final MPMovePointCommand oppositeCommand = MPMovePointCommand(
-      pointMapiahID: pointMapiahID,
+      pointMPID: pointMPID,
       originalCoordinates: modifiedCoordinates,
       modifiedCoordinates: originalCoordinates,
       descriptionType: descriptionType,
@@ -74,7 +74,7 @@ class MPMovePointCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'pointMapiahID': pointMapiahID,
+      'pointMPID': pointMPID,
       'originalCoordinates': {
         'dx': originalCoordinates.dx,
         'dy': originalCoordinates.dy,
@@ -90,7 +90,7 @@ class MPMovePointCommand extends MPCommand {
 
   factory MPMovePointCommand.fromMap(Map<String, dynamic> map) {
     return MPMovePointCommand.forCWJM(
-      pointMapiahID: map['pointMapiahID'],
+      pointMPID: map['pointMPID'],
       originalCoordinates: Offset(
         map['originalCoordinates']['dx'],
         map['originalCoordinates']['dy'],
@@ -110,13 +110,13 @@ class MPMovePointCommand extends MPCommand {
 
   @override
   MPMovePointCommand copyWith({
-    int? pointMapiahID,
+    int? pointMPID,
     Offset? originalCoordinates,
     Offset? modifiedCoordinates,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
-      pointMapiahID: pointMapiahID ?? this.pointMapiahID,
+      pointMPID: pointMPID ?? this.pointMPID,
       originalCoordinates: originalCoordinates ?? this.originalCoordinates,
       modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
       descriptionType: descriptionType ?? this.descriptionType,
@@ -128,7 +128,7 @@ class MPMovePointCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPMovePointCommand &&
-        other.pointMapiahID == pointMapiahID &&
+        other.pointMPID == pointMPID &&
         other.originalCoordinates == originalCoordinates &&
         other.modifiedCoordinates == modifiedCoordinates &&
         other.descriptionType == descriptionType;
@@ -138,7 +138,7 @@ class MPMovePointCommand extends MPCommand {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        pointMapiahID,
+        pointMPID,
         originalCoordinates,
         modifiedCoordinates,
       );

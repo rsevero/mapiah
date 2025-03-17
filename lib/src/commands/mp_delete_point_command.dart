@@ -1,17 +1,17 @@
 part of 'mp_command.dart';
 
 class MPDeletePointCommand extends MPCommand {
-  final int pointMapiahID;
+  final int pointMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.deletePoint;
 
   MPDeletePointCommand.forCWJM({
-    required this.pointMapiahID,
+    required this.pointMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeletePointCommand({
-    required this.pointMapiahID,
+    required this.pointMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -24,16 +24,15 @@ class MPDeletePointCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController
-        .deleteElementByMapiahID(pointMapiahID);
+    th2FileEditController.elementEditController.deleteElementByMPID(pointMPID);
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THPoint originalPoint = th2FileEditController.thFile
-        .elementByMapiahID(pointMapiahID) as THPoint;
+    final THPoint originalPoint =
+        th2FileEditController.thFile.elementByMPID(pointMPID) as THPoint;
 
     final MPAddPointCommand oppositeCommand = MPAddPointCommand(
       newPoint: originalPoint,
@@ -49,18 +48,18 @@ class MPDeletePointCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    int? pointMapiahID,
+    int? pointMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeletePointCommand.forCWJM(
-      pointMapiahID: pointMapiahID ?? this.pointMapiahID,
+      pointMPID: pointMPID ?? this.pointMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   factory MPDeletePointCommand.fromMap(Map<String, dynamic> map) {
     return MPDeletePointCommand.forCWJM(
-      pointMapiahID: map['pointMapiahID'],
+      pointMPID: map['pointMPID'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -75,7 +74,7 @@ class MPDeletePointCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'pointMapiahID': pointMapiahID,
+      'pointMPID': pointMPID,
     });
 
     return map;
@@ -86,10 +85,10 @@ class MPDeletePointCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPDeletePointCommand &&
-        other.pointMapiahID == pointMapiahID &&
+        other.pointMPID == pointMPID &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ pointMapiahID.hashCode;
+  int get hashCode => super.hashCode ^ pointMPID.hashCode;
 }

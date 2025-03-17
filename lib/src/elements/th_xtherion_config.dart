@@ -5,8 +5,8 @@ class THXTherionConfig extends THElement {
   String value;
 
   THXTherionConfig.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.name,
     required this.value,
@@ -14,7 +14,7 @@ class THXTherionConfig extends THElement {
   }) : super.forCWJM();
 
   THXTherionConfig({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required this.name,
     required this.value,
     super.originalLineInTH2File = '',
@@ -37,8 +37,8 @@ class THXTherionConfig extends THElement {
 
   factory THXTherionConfig.fromMap(Map<String, dynamic> map) {
     return THXTherionConfig.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       name: map['name'],
@@ -52,8 +52,8 @@ class THXTherionConfig extends THElement {
 
   @override
   THXTherionConfig copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
@@ -61,8 +61,8 @@ class THXTherionConfig extends THElement {
     String? value,
   }) {
     return THXTherionConfig.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -77,8 +77,8 @@ class THXTherionConfig extends THElement {
   bool operator ==(covariant THXTherionConfig other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.name == name &&

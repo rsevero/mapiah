@@ -7,14 +7,14 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 /// Mixin that provides parenting capabilities.
 mixin THIsParentMixin {
   // Here are registered all children mapiah IDs.
-  final Set<int> childrenMapiahID = <int>{};
+  final Set<int> childrenMPID = <int>{};
 
   void addElementToParent(THElement element) {
-    childrenMapiahID.add(element.mapiahID);
+    childrenMPID.add(element.mpID);
   }
 
   void deleteElementFromParent(THFile thFile, THElement element) {
-    if (!childrenMapiahID.remove(element.mapiahID)) {
+    if (!childrenMPID.remove(element.mpID)) {
       throw THCustomException("'$element' not found.");
     }
 
@@ -23,5 +23,5 @@ mixin THIsParentMixin {
     }
   }
 
-  int get mapiahID;
+  int get mpID;
 }

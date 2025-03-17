@@ -6,7 +6,7 @@ class THAuthorCommandOption extends THCommandOption {
   late final THPersonPart person;
 
   THAuthorCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.datetime,
     required this.person,
@@ -46,7 +46,7 @@ class THAuthorCommandOption extends THCommandOption {
 
   factory THAuthorCommandOption.fromMap(Map<String, dynamic> map) {
     return THAuthorCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       datetime: THDatetimePart.fromMap(map['datetime']),
       person: THPersonPart.fromMap(map['person']),
@@ -59,13 +59,13 @@ class THAuthorCommandOption extends THCommandOption {
 
   @override
   THAuthorCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDatetimePart? datetime,
     THPersonPart? person,
   }) {
     return THAuthorCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       datetime: datetime ?? this.datetime,
@@ -77,7 +77,7 @@ class THAuthorCommandOption extends THCommandOption {
   bool operator ==(covariant THAuthorCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.datetime == datetime &&
         other.person == person;

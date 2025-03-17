@@ -9,7 +9,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   late final bool unitSet;
 
   THDimensionsValueCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.above,
     required this.below,
@@ -52,7 +52,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
 
   factory THDimensionsValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THDimensionsValueCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       above: THDoublePart.fromMap(map['above']),
       below: THDoublePart.fromMap(map['below']),
@@ -67,7 +67,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
 
   @override
   THDimensionsValueCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? above,
     THDoublePart? below,
@@ -75,7 +75,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
     bool? unitSet,
   }) {
     return THDimensionsValueCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       above: above ?? this.above,
@@ -89,7 +89,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
   bool operator ==(covariant THDimensionsValueCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.above == above &&
         other.below == below &&

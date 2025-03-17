@@ -24,7 +24,7 @@ class THProjectionCommandOption extends THCommandOption {
   late final THAngleUnitPart? elevationUnit;
 
   THProjectionCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.projectionType,
     required this.index,
@@ -79,7 +79,7 @@ class THProjectionCommandOption extends THCommandOption {
 
   factory THProjectionCommandOption.fromMap(Map<String, dynamic> map) {
     return THProjectionCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       projectionType: THProjectionTypes.values.byName(map['projectionType']),
       index: map['index'],
@@ -98,7 +98,7 @@ class THProjectionCommandOption extends THCommandOption {
 
   @override
   THProjectionCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THProjectionTypes? projectionType,
     String? index,
@@ -108,7 +108,7 @@ class THProjectionCommandOption extends THCommandOption {
     makeElevationUnitNull = false,
   }) {
     return THProjectionCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       projectionType: projectionType ?? this.projectionType,
@@ -125,7 +125,7 @@ class THProjectionCommandOption extends THCommandOption {
   bool operator ==(covariant THProjectionCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.projectionType == projectionType &&
         other.index == index &&

@@ -4,7 +4,7 @@ part of 'th_command_option.dart';
 /// off.
 class THReverseCommandOption extends THOnOffCommandOption {
   THReverseCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required super.choice,
@@ -30,7 +30,7 @@ class THReverseCommandOption extends THOnOffCommandOption {
 
   factory THReverseCommandOption.fromMap(Map<String, dynamic> map) {
     return THReverseCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesOnOffType.values.byName(map['choice']),
@@ -43,13 +43,13 @@ class THReverseCommandOption extends THOnOffCommandOption {
 
   @override
   THReverseCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesOnOffType? choice,
   }) {
     return THReverseCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,

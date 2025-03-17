@@ -47,19 +47,19 @@ class MPAddElementsCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final List<int> mapiahIDs = [];
+    final List<int> mpIDs = [];
 
     for (final MPAddElementCommandParams params in createParams) {
       switch (params) {
         case MPAddLineCommandParams _:
-          mapiahIDs.add(params.line.mapiahID);
+          mpIDs.add(params.line.mpID);
         case MPAddPointCommandParams _:
-          mapiahIDs.add(params.point.mapiahID);
+          mpIDs.add(params.point.mpID);
       }
     }
 
     final MPDeleteElementsCommand oppositeCommand =
-        MPDeleteElementsCommand(mapiahIDs: mapiahIDs);
+        MPDeleteElementsCommand(mpIDs: mpIDs);
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,

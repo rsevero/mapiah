@@ -9,13 +9,13 @@ import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 class MPSelectionHandlesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
-  final int thFileMapiahID;
+  final int thFileMPID;
 
   MPSelectionHandlesWidget({
     required this.th2FileEditController,
     required super.key,
   })  : selectionController = th2FileEditController.selectionController,
-        thFileMapiahID = th2FileEditController.thFileMapiahID;
+        thFileMPID = th2FileEditController.thFileMPID;
 
   @override
   Widget build(Object context) {

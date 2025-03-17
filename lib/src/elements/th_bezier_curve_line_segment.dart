@@ -8,8 +8,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
   // Used by dart_mappable.
   THBezierCurveLineSegment.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.controlPoint1,
     required this.controlPoint2,
@@ -19,7 +19,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   }) : super.forCWJM();
 
   THBezierCurveLineSegment({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.controlPoint1,
     required this.controlPoint2,
@@ -28,7 +28,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   }) : super.withEndPoint();
 
   THBezierCurveLineSegment.fromString({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required List<dynamic> controlPoint1,
     required List<dynamic> controlPoint2,
@@ -57,8 +57,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
   factory THBezierCurveLineSegment.fromMap(Map<String, dynamic> map) {
     return THBezierCurveLineSegment.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       controlPoint1: THPositionPart.fromMap(map['controlPoint1']),
@@ -74,8 +74,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
   @override
   THBezierCurveLineSegment copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
@@ -85,8 +85,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THBezierCurveLineSegment.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -103,8 +103,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   bool operator ==(covariant THBezierCurveLineSegment other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.controlPoint1 == controlPoint1 &&

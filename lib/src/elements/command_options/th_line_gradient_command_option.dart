@@ -9,7 +9,7 @@ class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesLineGradientType choice;
 
   THLineGradientCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
@@ -57,7 +57,7 @@ class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
 
   factory THLineGradientCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineGradientCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesLineGradientType.values.byName(map['choice']),
@@ -70,13 +70,13 @@ class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
 
   @override
   THLineGradientCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesLineGradientType? choice,
   }) {
     return THLineGradientCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,
@@ -88,7 +88,7 @@ class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
   bool operator ==(covariant THLineGradientCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.choice == choice;

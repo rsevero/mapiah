@@ -23,7 +23,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"line","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall","lineType":"wall","childrenMapiahID":[4],"optionsMap":{}}''',
+            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall","lineType":"wall","childrenMPID":[4],"optionsMap":{}}''',
       },
     ];
 
@@ -33,7 +33,7 @@ endscrap
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
 
-        THElement expected = file.elementByMapiahID(3);
+        THElement expected = file.elementByMPID(3);
 
         Map<String, dynamic> asMap = expected.toMap();
         THLine fromMap = THLine.fromMap(asMap);

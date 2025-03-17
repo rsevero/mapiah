@@ -8,7 +8,7 @@ class THCSCommandOption extends THCommandOption {
 
   /// Constructor necessary for dart_mappable support.
   THCSCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.cs,
   }) : super.forCWJM();
@@ -38,7 +38,7 @@ class THCSCommandOption extends THCommandOption {
 
   factory THCSCommandOption.fromMap(Map<String, dynamic> map) {
     return THCSCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       cs: THCSPart.fromMap(map['cs']),
     );
@@ -50,12 +50,12 @@ class THCSCommandOption extends THCommandOption {
 
   @override
   THCSCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THCSPart? cs,
   }) {
     return THCSCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       cs: cs ?? this.cs,
@@ -66,7 +66,7 @@ class THCSCommandOption extends THCommandOption {
   bool operator ==(covariant THCSCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.cs == cs;
   }

@@ -5,7 +5,7 @@ part of 'th_command_option.dart';
 // statistics.
 class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   THExploredCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required THDoublePart length,
     required THLengthUnitPart unit,
@@ -41,7 +41,7 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
 
   factory THExploredCommandOption.fromMap(Map<String, dynamic> map) {
     return THExploredCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       unit: THLengthUnitPart.fromMap(map['unit']),
@@ -54,13 +54,13 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
 
   @override
   THExploredCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? length,
     THLengthUnitPart? unit,
   }) {
     return THExploredCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
@@ -72,7 +72,7 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   bool operator ==(covariant THExploredCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.unit == unit;

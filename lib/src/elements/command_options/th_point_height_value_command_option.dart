@@ -9,7 +9,7 @@ class THPointHeightValueCommandOption extends THCommandOption
   late bool isPresumed;
 
   THPointHeightValueCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required THDoublePart length,
     required this.isPresumed,
@@ -51,7 +51,7 @@ class THPointHeightValueCommandOption extends THCommandOption
 
   factory THPointHeightValueCommandOption.fromMap(Map<String, dynamic> map) {
     return THPointHeightValueCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
@@ -65,14 +65,14 @@ class THPointHeightValueCommandOption extends THCommandOption
 
   @override
   THPointHeightValueCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? length,
     bool? isPresumed,
     THLengthUnitPart? unit,
   }) {
     return THPointHeightValueCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
@@ -85,7 +85,7 @@ class THPointHeightValueCommandOption extends THCommandOption
   bool operator ==(covariant THPointHeightValueCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.isPresumed == isPresumed &&

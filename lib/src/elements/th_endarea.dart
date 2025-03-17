@@ -2,14 +2,14 @@ part of 'th_element.dart';
 
 class THEndarea extends THElement {
   THEndarea.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THEndarea({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
 
@@ -18,8 +18,8 @@ class THEndarea extends THElement {
 
   factory THEndarea.fromMap(Map<String, dynamic> map) {
     return THEndarea.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
     );
@@ -31,15 +31,15 @@ class THEndarea extends THElement {
 
   @override
   THEndarea copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
   }) {
     return THEndarea.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),

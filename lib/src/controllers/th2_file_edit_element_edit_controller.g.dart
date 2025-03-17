@@ -202,12 +202,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void deleteElements(List<int> mapiahIDs) {
+  void deleteElements(List<int> mpIDs) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name: 'TH2FileEditElementEditControllerBase.deleteElements');
     try {
-      return super.deleteElements(mapiahIDs);
+      return super.deleteElements(mpIDs);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -365,11 +365,11 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void deleteLine(int lineMapiahID) {
+  void deleteLine(int lineMPID) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(name: 'TH2FileEditElementEditControllerBase.deleteLine');
     try {
-      return super.deleteLine(lineMapiahID);
+      return super.deleteLine(lineMPID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

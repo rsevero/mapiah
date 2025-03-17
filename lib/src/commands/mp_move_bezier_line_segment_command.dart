@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPMoveBezierLineSegmentCommand extends MPCommand {
-  final int lineSegmentMapiahID;
+  final int lineSegmentMPID;
   final Offset originalEndPointCoordinates;
   final Offset originalControlPoint1Coordinates;
   final Offset originalControlPoint2Coordinates;
@@ -12,7 +12,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
       MPCommandDescriptionType.moveBezierLineSegment;
 
   MPMoveBezierLineSegmentCommand.forCWJM({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
     required this.originalControlPoint1Coordinates,
@@ -23,7 +23,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }) : super.forCWJM();
 
   MPMoveBezierLineSegmentCommand({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     required this.originalEndPointCoordinates,
     required this.modifiedEndPointCoordinates,
     required this.originalControlPoint1Coordinates,
@@ -34,7 +34,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }) : super();
 
   MPMoveBezierLineSegmentCommand.fromDelta({
-    required this.lineSegmentMapiahID,
+    required this.lineSegmentMPID,
     required this.originalEndPointCoordinates,
     required this.originalControlPoint1Coordinates,
     required this.originalControlPoint2Coordinates,
@@ -58,7 +58,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     final THBezierCurveLineSegment originalLineSegment =
-        th2FileEditController.thFile.elementByMapiahID(lineSegmentMapiahID)
+        th2FileEditController.thFile.elementByMPID(lineSegmentMPID)
             as THBezierCurveLineSegment;
     final THBezierCurveLineSegment newLineSegment =
         originalLineSegment.copyWith(
@@ -79,7 +79,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   ) {
     final MPMoveBezierLineSegmentCommand oppositeCommand =
         MPMoveBezierLineSegmentCommand(
-      lineSegmentMapiahID: lineSegmentMapiahID,
+      lineSegmentMPID: lineSegmentMPID,
       originalEndPointCoordinates: modifiedEndPointCoordinates,
       modifiedEndPointCoordinates: originalEndPointCoordinates,
       originalControlPoint1Coordinates: modifiedControlPoint1Coordinates,
@@ -101,7 +101,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineSegmentMapiahID': lineSegmentMapiahID,
+      'lineSegmentMPID': lineSegmentMPID,
       'originalEndPointCoordinates': {
         'dx': originalEndPointCoordinates.dx,
         'dy': originalEndPointCoordinates.dy,
@@ -133,7 +133,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   factory MPMoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
-      lineSegmentMapiahID: map['lineSegmentMapiahID'],
+      lineSegmentMPID: map['lineSegmentMPID'],
       originalEndPointCoordinates: Offset(
         map['originalEndPointCoordinates']['dx'],
         map['originalEndPointCoordinates']['dy'],
@@ -169,7 +169,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   MPMoveBezierLineSegmentCommand copyWith({
-    int? lineSegmentMapiahID,
+    int? lineSegmentMPID,
     Offset? originalEndPointCoordinates,
     Offset? modifiedEndPointCoordinates,
     Offset? originalControlPoint1Coordinates,
@@ -179,7 +179,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
-      lineSegmentMapiahID: lineSegmentMapiahID ?? this.lineSegmentMapiahID,
+      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
       originalEndPointCoordinates:
           originalEndPointCoordinates ?? this.originalEndPointCoordinates,
       modifiedEndPointCoordinates:
@@ -201,7 +201,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPMoveBezierLineSegmentCommand &&
-        other.lineSegmentMapiahID == lineSegmentMapiahID &&
+        other.lineSegmentMPID == lineSegmentMPID &&
         other.originalEndPointCoordinates == originalEndPointCoordinates &&
         other.modifiedEndPointCoordinates == modifiedEndPointCoordinates &&
         other.originalControlPoint1Coordinates ==
@@ -219,7 +219,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        lineSegmentMapiahID,
+        lineSegmentMPID,
         originalEndPointCoordinates,
         modifiedEndPointCoordinates,
         originalControlPoint1Coordinates,

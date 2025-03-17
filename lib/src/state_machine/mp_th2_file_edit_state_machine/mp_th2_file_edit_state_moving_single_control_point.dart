@@ -36,9 +36,9 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     final MPSelectedLine selected =
         selectionController.selectedElements.values.first as MPSelectedLine;
     final THLine selectedLine = selected.originalElementClone as THLine;
-    final List<int> lineLineSegmentsMapiahIDs =
-        selectionController.getSelectedLineLineSegmentsMapiahIDs();
-    final List<int> selectedLineSegmentMapiahIDs =
+    final List<int> lineLineSegmentsMPIDs =
+        selectionController.getSelectedLineLineSegmentsMPIDs();
+    final List<int> selectedLineSegmentMPIDs =
         selectionController.selectedLineSegments.keys.toList();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
         selected.originalLineSegmentsMapClone;
@@ -47,36 +47,34 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
 
-    for (final int selectedLineSegmentMapiahID
-        in selectedLineSegmentMapiahIDs) {
-      if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMapiahID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMapiahID] =
-            th2FileEditController.thFile
-                    .elementByMapiahID(selectedLineSegmentMapiahID)
+    for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
+      if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] =
+            th2FileEditController.thFile.elementByMPID(selectedLineSegmentMPID)
                 as THLineSegment;
-        originalLineSegmentsMap[selectedLineSegmentMapiahID] =
-            originalLineSegmentsMapClone[selectedLineSegmentMapiahID]!;
+        originalLineSegmentsMap[selectedLineSegmentMPID] =
+            originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
 
-      final int? nextLineSegmentMapiahID =
-          selectionController.getNextLineSegmentMapiahID(
-              selectedLineSegmentMapiahID, lineLineSegmentsMapiahIDs);
+      final int? nextLineSegmentMPID =
+          selectionController.getNextLineSegmentMPID(
+              selectedLineSegmentMPID, lineLineSegmentsMPIDs);
 
-      if ((nextLineSegmentMapiahID != null) &&
-          !modifiedLineSegmentsMap.containsKey(nextLineSegmentMapiahID)) {
+      if ((nextLineSegmentMPID != null) &&
+          !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
         final THLineSegment nextLineSegment = th2FileEditController.thFile
-            .elementByMapiahID(nextLineSegmentMapiahID) as THLineSegment;
+            .elementByMPID(nextLineSegmentMPID) as THLineSegment;
 
         if (nextLineSegment is THBezierCurveLineSegment) {
-          modifiedLineSegmentsMap[nextLineSegmentMapiahID] = nextLineSegment;
-          originalLineSegmentsMap[nextLineSegmentMapiahID] =
-              originalLineSegmentsMapClone[nextLineSegmentMapiahID]!;
+          modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
+          originalLineSegmentsMap[nextLineSegmentMPID] =
+              originalLineSegmentsMapClone[nextLineSegmentMPID]!;
         }
       }
     }
 
     final MPCommand lineEditCommand = MPMoveLineCommand(
-      lineMapiahID: selectedLine.mapiahID,
+      lineMPID: selectedLine.mpID,
       originalLineSegmentsMap: originalLineSegmentsMap,
       modifiedLineSegmentsMap: modifiedLineSegmentsMap,
       deltaOnCanvas: panDeltaOnCanvas,

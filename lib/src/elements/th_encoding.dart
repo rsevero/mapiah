@@ -4,15 +4,15 @@ class THEncoding extends THElement {
   late final String encoding;
 
   THEncoding.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.encoding,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THEncoding({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required this.encoding,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
@@ -33,8 +33,8 @@ class THEncoding extends THElement {
 
   factory THEncoding.fromMap(Map<String, dynamic> map) {
     return THEncoding.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       encoding: map['encoding'],
@@ -47,16 +47,16 @@ class THEncoding extends THElement {
 
   @override
   THEncoding copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     String? encoding,
   }) {
     return THEncoding.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -70,8 +70,8 @@ class THEncoding extends THElement {
   bool operator ==(covariant THEncoding other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.encoding == encoding;

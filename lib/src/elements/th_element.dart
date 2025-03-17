@@ -71,17 +71,17 @@ enum THElementType {
 abstract class THElement {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
-  final int _mapiahID;
-  final int parentMapiahID;
+  final int _mpID;
+  final int parentMPID;
   String? sameLineComment;
   final String originalLineInTH2File;
 
   THElement.forCWJM({
-    required int mapiahID,
-    required this.parentMapiahID,
+    required int mpID,
+    required this.parentMPID,
     this.sameLineComment,
     required this.originalLineInTH2File,
-  }) : _mapiahID = mapiahID;
+  }) : _mpID = mpID;
 
   /// Main constructor.
   ///
@@ -89,17 +89,17 @@ abstract class THElement {
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
   THElement.addToParent({
-    required this.parentMapiahID,
+    required this.parentMPID,
     this.sameLineComment,
     this.originalLineInTH2File = '',
-  }) : _mapiahID = mpLocator.mpGeneralController.nextMapiahIDForElements();
+  }) : _mpID = mpLocator.mpGeneralController.nextMPIDForElements();
 
   THIsParentMixin parent(THFile thFile) {
-    if (parentMapiahID < 0) {
+    if (parentMPID < 0) {
       return thFile;
     }
 
-    return thFile.elementByMapiahID(parentMapiahID) as THIsParentMixin;
+    return thFile.elementByMPID(parentMPID) as THIsParentMixin;
   }
 
   THElementType get elementType;
@@ -111,8 +111,8 @@ abstract class THElement {
   Map<String, dynamic> toMap() {
     return {
       'elementType': elementType.name,
-      'mapiahID': mapiahID,
-      'parentMapiahID': parentMapiahID,
+      'mpID': mpID,
+      'parentMPID': parentMPID,
       'sameLineComment': sameLineComment,
       'originalLineInTH2File': originalLineInTH2File,
     };
@@ -122,16 +122,16 @@ abstract class THElement {
   bool operator ==(covariant THElement other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
   int get hashCode => Object.hash(
-        mapiahID,
-        parentMapiahID,
+        mpID,
+        parentMPID,
         sameLineComment,
         originalLineInTH2File,
       );
@@ -184,7 +184,7 @@ abstract class THElement {
     }
   }
 
-  int get mapiahID => _mapiahID;
+  int get mpID => _mpID;
 
   bool isSameClass(Object object);
 }

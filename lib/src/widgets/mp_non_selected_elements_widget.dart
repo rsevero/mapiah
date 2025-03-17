@@ -37,17 +37,15 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         final MPVisualController visualController =
             th2FileEditController.visualController;
         final List<CustomPainter> painters = [];
-        final Set<int> drawableElementMapiahIDs =
-            thFile.drawableElementMapiahIDs;
+        final Set<int> drawableElementMPIDs = thFile.drawableElementMPIDs;
 
-        for (final int drawableElementMapiahID in drawableElementMapiahIDs) {
+        for (final int drawableElementMPID in drawableElementMPIDs) {
           if (selectionController
-              .isElementSelectedByMapiahID(drawableElementMapiahID)) {
+              .isElementSelectedByMPID(drawableElementMPID)) {
             continue;
           }
 
-          final THElement element =
-              thFile.elementByMapiahID(drawableElementMapiahID);
+          final THElement element = thFile.elementByMPID(drawableElementMPID);
 
           switch (element) {
             case THPoint _:

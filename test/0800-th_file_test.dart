@@ -12,7 +12,7 @@ void main() {
     final file = THFile();
 
     test("THFile", () {
-      expect(file.mapiahID, -1);
+      expect(file.mpID, -1);
       expect(file.elements.length, 0);
     });
   });
@@ -206,7 +206,7 @@ endcomment
       expect(pointStation, isA<THPoint>());
       expect((pointStation as THPoint).plaType, 'station');
 
-      pointStation = file.elementByMapiahID(25);
+      pointStation = file.elementByMPID(25);
       expect(pointStation, isA<THPoint>());
       expect((pointStation as THPoint).plaType, 'station');
 
@@ -221,11 +221,11 @@ endcomment
       asFile = writer.serialize(file);
       expect(asFile, success['asFile2']);
 
-      final multilineComment = file.elementByMapiahID(10);
+      final multilineComment = file.elementByMPID(10);
       expect(multilineComment, isA<THMultiLineComment>());
 
       countDeletedElements +=
-          (multilineComment as THMultiLineComment).childrenMapiahID.length + 1;
+          (multilineComment as THMultiLineComment).childrenMPID.length + 1;
       file.deleteElement(multilineComment);
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
@@ -233,7 +233,7 @@ endcomment
       expect(asFile, success['asFile3']);
 
       var scrap = file.elementByTHID('poco_surubim_SCP01');
-      countDeletedElements += (scrap as THScrap).childrenMapiahID.length + 1;
+      countDeletedElements += (scrap as THScrap).childrenMPID.length + 1;
       file.deleteElementByTHID('poco_surubim_SCP01');
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);

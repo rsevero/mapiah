@@ -20,7 +20,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.0 468.0 debris","position":{"partType":"position","coordinates":{"dx":296.0,"dy":468.0},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
+            r'''{"elementType":"point","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.0 468.0 debris","position":{"partType":"position","coordinates":{"dx":296.0,"dy":468.0},"decimalPositions":1},"pointType":"debris","optionsMap":{}}''',
       },
       {
         'file': 'th_file_parser-00075-point_only_with_extra_precision.th2',
@@ -32,7 +32,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"point","mapiahID":3,"parentMapiahID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.48195403809 468.93754612064 debris","position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":11},"pointType":"debris","optionsMap":{}}''',
+            r'''{"elementType":"point","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.48195403809 468.93754612064 debris","position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":11},"pointType":"debris","optionsMap":{}}''',
       },
       // th_file_parser-00195-passage_height_point_with_value_option_with_unit.th2
     ];
@@ -44,7 +44,7 @@ endscrap
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
 
-        THElement expected = file.elementByMapiahID(3);
+        THElement expected = file.elementByMPID(3);
 
         Map<String, dynamic> asMap = expected.toMap();
         THPoint fromMap = THPoint.fromMap(asMap);
@@ -85,7 +85,7 @@ endscrap
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
 
-        THElement expected = file.elementByMapiahID(3);
+        THElement expected = file.elementByMPID(3);
 
         Map<String, dynamic> asMap = expected.toMap();
         THPoint fromMap = THPoint.fromMap(asMap);

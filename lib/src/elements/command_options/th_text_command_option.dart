@@ -29,7 +29,7 @@ class THTextCommandOption extends THCommandOption {
   // };
 
   THTextCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.text,
   }) : super.forCWJM();
@@ -57,7 +57,7 @@ class THTextCommandOption extends THCommandOption {
 
   factory THTextCommandOption.fromMap(Map<String, dynamic> map) {
     return THTextCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       text: THStringPart.fromMap(map['text']),
     );
@@ -69,12 +69,12 @@ class THTextCommandOption extends THCommandOption {
 
   @override
   THTextCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THStringPart? text,
   }) {
     return THTextCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       text: text ?? this.text,
@@ -85,7 +85,7 @@ class THTextCommandOption extends THCommandOption {
   bool operator ==(covariant THTextCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.text == text;
   }

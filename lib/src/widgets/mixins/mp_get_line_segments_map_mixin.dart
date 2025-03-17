@@ -17,22 +17,22 @@ mixin MPGetLineSegmentsMapMixin {
         LinkedHashMap<int, THLinePainterLineSegment>();
     final LinkedHashMap<int, THLineSegment> lineEndpointsMap =
         LinkedHashMap<int, THLineSegment>();
-    final Set<int> lineChildrenMapiahIDs = line.childrenMapiahID;
+    final Set<int> lineChildrenMPIDs = line.childrenMPID;
     bool isFirst = true;
 
-    for (int lineChildMapiahID in lineChildrenMapiahIDs) {
-      final THElement lineChild = thFile.elementByMapiahID(lineChildMapiahID);
+    for (int lineChildMPID in lineChildrenMPIDs) {
+      final THElement lineChild = thFile.elementByMPID(lineChildMPID);
 
       if (lineChild is! THLineSegment) {
         continue;
       }
 
       if (returnLineSegments) {
-        lineEndpointsMap[lineChildMapiahID] = lineChild;
+        lineEndpointsMap[lineChildMPID] = lineChild;
       }
 
       if (isFirst) {
-        lineSegmentsMap[lineChildMapiahID] = THLinePainterStraightLineSegment(
+        lineSegmentsMap[lineChildMPID] = THLinePainterStraightLineSegment(
           x: lineChild.x,
           y: lineChild.y,
         );
@@ -42,8 +42,7 @@ mixin MPGetLineSegmentsMapMixin {
 
       switch (lineChild) {
         case THBezierCurveLineSegment _:
-          lineSegmentsMap[lineChildMapiahID] =
-              THLinePainterBezierCurveLineSegment(
+          lineSegmentsMap[lineChildMPID] = THLinePainterBezierCurveLineSegment(
             x: lineChild.x,
             y: lineChild.y,
             controlPoint1X: lineChild.controlPoint1X,
@@ -53,7 +52,7 @@ mixin MPGetLineSegmentsMapMixin {
           );
           break;
         case THStraightLineSegment _:
-          lineSegmentsMap[lineChildMapiahID] = THLinePainterStraightLineSegment(
+          lineSegmentsMap[lineChildMPID] = THLinePainterStraightLineSegment(
             x: lineChild.x,
             y: lineChild.y,
           );

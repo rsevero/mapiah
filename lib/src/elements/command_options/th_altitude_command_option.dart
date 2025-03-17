@@ -10,7 +10,7 @@ part of 'th_command_option.dart';
 class THAltitudeCommandOption extends THCommandOption
     with THHasLengthMixin, THHasAltitudeMixin {
   THAltitudeCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required THDoublePart length,
     required bool isFix,
@@ -80,7 +80,7 @@ class THAltitudeCommandOption extends THCommandOption
 
   factory THAltitudeCommandOption.fromMap(Map<String, dynamic> map) {
     return THAltitudeCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
@@ -95,7 +95,7 @@ class THAltitudeCommandOption extends THCommandOption
 
   @override
   THAltitudeCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? length,
     bool? isFix,
@@ -104,7 +104,7 @@ class THAltitudeCommandOption extends THCommandOption
     bool makeUnitNull = false,
   }) {
     return THAltitudeCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
@@ -118,7 +118,7 @@ class THAltitudeCommandOption extends THCommandOption
   bool operator ==(covariant THAltitudeCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.isFix == isFix &&

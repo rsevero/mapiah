@@ -32,8 +32,7 @@ class THFileWriter {
     String asString = '';
 
     _prefix = '';
-    if (thFile.elementByMapiahID(thFile.childrenMapiahID.first)
-        is! THEncoding) {
+    if (thFile.elementByMPID(thFile.childrenMPID.first) is! THEncoding) {
       final String newLine = 'encoding ${thFile.encoding}\n';
       asString += newLine;
     }
@@ -286,8 +285,8 @@ class THFileWriter {
   String _childrenAsString(THIsParentMixin thParent) {
     String asString = '';
 
-    for (final int childMapiahID in thParent.childrenMapiahID) {
-      asString += serializeElement(_thFile.elementByMapiahID(childMapiahID));
+    for (final int childMPID in thParent.childrenMPID) {
+      asString += serializeElement(_thFile.elementByMPID(childMPID));
     }
 
     return asString;

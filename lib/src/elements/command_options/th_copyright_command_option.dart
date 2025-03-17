@@ -7,7 +7,7 @@ class THCopyrightCommandOption extends THCommandOption {
 
   /// Constructor necessary for dart_mappable support.
   THCopyrightCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.datetime,
     required this.copyright,
@@ -48,7 +48,7 @@ class THCopyrightCommandOption extends THCommandOption {
 
   factory THCopyrightCommandOption.fromMap(Map<String, dynamic> map) {
     return THCopyrightCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       datetime: THDatetimePart.fromMap(map['datetime']),
       copyright: THStringPart.fromMap(map['copyrightMessage']),
@@ -61,13 +61,13 @@ class THCopyrightCommandOption extends THCommandOption {
 
   @override
   THCopyrightCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDatetimePart? datetime,
     THStringPart? copyright,
   }) {
     return THCopyrightCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       datetime: datetime ?? this.datetime,
@@ -79,7 +79,7 @@ class THCopyrightCommandOption extends THCommandOption {
   bool operator ==(covariant THCopyrightCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.datetime == datetime &&
         other.copyright == copyright;

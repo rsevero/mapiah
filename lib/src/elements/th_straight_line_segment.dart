@@ -3,8 +3,8 @@ part of 'th_element.dart';
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
   THStraightLineSegment.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required super.endPoint,
     required super.optionsMap,
@@ -12,7 +12,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
   }) : super.forCWJM();
 
   THStraightLineSegment({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required super.endPoint,
     super.originalLineInTH2File = '',
@@ -22,7 +22,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
   THElementType get elementType => THElementType.straightLineSegment;
 
   THStraightLineSegment.fromString({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required List<dynamic> pointDataList,
     super.originalLineInTH2File = '',
@@ -32,8 +32,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
 
   factory THStraightLineSegment.fromMap(Map<String, dynamic> map) {
     return THStraightLineSegment.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       endPoint: THPositionPart.fromMap(map['endPoint']),
@@ -47,8 +47,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
 
   @override
   THStraightLineSegment copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
@@ -56,8 +56,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THStraightLineSegment.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),

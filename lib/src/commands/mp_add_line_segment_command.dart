@@ -34,7 +34,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   ) {
     final MPDeleteLineSegmentCommand oppositeCommand =
         MPDeleteLineSegmentCommand(
-      lineSegmentMapiahID: newLineSegment.mapiahID,
+      lineSegmentMPID: newLineSegment.mpID,
       descriptionType: descriptionType,
     );
 

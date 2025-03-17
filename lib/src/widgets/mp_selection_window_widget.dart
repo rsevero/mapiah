@@ -5,12 +5,12 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class MPSelectionWindowWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
-  final int thFileMapiahID;
+  final int thFileMPID;
 
   MPSelectionWindowWidget({
     required this.th2FileEditController,
     required super.key,
-  }) : thFileMapiahID = th2FileEditController.thFileMapiahID;
+  }) : thFileMPID = th2FileEditController.thFileMPID;
 
   @override
   Widget build(Object context) {

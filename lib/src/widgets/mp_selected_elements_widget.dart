@@ -44,8 +44,7 @@ class MPSelectedElementsWidget extends StatelessWidget
         final Paint linePaint = linePaintInfo.paint;
 
         for (final selectedElement in selectedElements) {
-          final THElement element =
-              thFile.elementByMapiahID(selectedElement.mapiahID);
+          final THElement element = thFile.elementByMPID(selectedElement.mpID);
 
           switch (element) {
             case THPoint _:

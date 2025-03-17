@@ -12,7 +12,7 @@ class THPointScaleCommandOption extends THCommandOption {
   static const _scaleMultipleChoiceName = 'point|scale';
 
   THPointScaleCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required THMultipleChoicePart multipleChoiceSize,
     required THDoublePart numericSize,
@@ -74,7 +74,7 @@ class THPointScaleCommandOption extends THCommandOption {
 
   factory THPointScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THPointScaleCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       multipleChoiceSize:
           THMultipleChoicePart.fromMap(map['multipleChoiceSize']),
@@ -89,14 +89,14 @@ class THPointScaleCommandOption extends THCommandOption {
 
   @override
   THPointScaleCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THMultipleChoicePart? multipleChoiceSize,
     THDoublePart? numericSize,
     bool? isNumeric,
   }) {
     return THPointScaleCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       multipleChoiceSize: multipleChoiceSize ?? _multipleChoiceSize,
@@ -109,7 +109,7 @@ class THPointScaleCommandOption extends THCommandOption {
   bool operator ==(covariant THPointScaleCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other._multipleChoiceSize == _multipleChoiceSize &&
         other._numericSize == _numericSize &&

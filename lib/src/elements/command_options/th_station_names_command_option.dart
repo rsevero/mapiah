@@ -7,7 +7,7 @@ class THStationNamesCommandOption extends THCommandOption {
   late final String suffix;
 
   THStationNamesCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.prefix,
     required this.suffix,
@@ -40,7 +40,7 @@ class THStationNamesCommandOption extends THCommandOption {
 
   factory THStationNamesCommandOption.fromMap(Map<String, dynamic> map) {
     return THStationNamesCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       prefix: map['prefix'],
       suffix: map['suffix'],
@@ -53,13 +53,13 @@ class THStationNamesCommandOption extends THCommandOption {
 
   @override
   THStationNamesCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? prefix,
     String? suffix,
   }) {
     return THStationNamesCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       prefix: prefix ?? this.prefix,
@@ -71,7 +71,7 @@ class THStationNamesCommandOption extends THCommandOption {
   bool operator ==(covariant THStationNamesCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.prefix == prefix &&
         other.suffix == suffix;

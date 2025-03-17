@@ -6,7 +6,7 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
   final THOptionChoicesFlipType choice;
 
   THFlipCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required super.parentElementType,
     required this.choice,
@@ -59,7 +59,7 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
 
   factory THFlipCommandOption.fromMap(Map<String, dynamic> map) {
     return THFlipCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: _setChoiceFromString(map['choice']),
@@ -72,13 +72,13 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
 
   @override
   THFlipCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THElementType? parentElementType,
     THOptionChoicesFlipType? choice,
   }) {
     return THFlipCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       parentElementType: parentElementType ?? this.parentElementType,
@@ -90,7 +90,7 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
   bool operator ==(covariant THFlipCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.parentElementType == parentElementType &&
         other.choice == choice;

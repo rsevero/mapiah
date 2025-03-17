@@ -6,7 +6,7 @@ class THNameCommandOption extends THCommandOption {
   late final String reference;
 
   THNameCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.reference,
   }) : super.forCWJM();
@@ -33,7 +33,7 @@ class THNameCommandOption extends THCommandOption {
 
   factory THNameCommandOption.fromMap(Map<String, dynamic> map) {
     return THNameCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       reference: map['reference'],
     );
@@ -45,12 +45,12 @@ class THNameCommandOption extends THCommandOption {
 
   @override
   THNameCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? reference,
   }) {
     return THNameCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       reference: reference ?? this.reference,
@@ -61,7 +61,7 @@ class THNameCommandOption extends THCommandOption {
   bool operator ==(covariant THNameCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.reference == reference;
   }

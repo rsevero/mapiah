@@ -1,19 +1,19 @@
 part of "mp_command.dart";
 
 class MPDeleteLineCommand extends MPCommand {
-  final int lineMapiahID;
+  final int lineMPID;
   final bool isInteractiveLineCreation;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.deleteLine;
 
   MPDeleteLineCommand.forCWJM({
-    required this.lineMapiahID,
+    required this.lineMPID,
     required this.isInteractiveLineCreation,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPDeleteLineCommand({
-    required this.lineMapiahID,
+    required this.lineMPID,
     required this.isInteractiveLineCreation,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
@@ -27,7 +27,7 @@ class MPDeleteLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.deleteLine(lineMapiahID);
+    th2FileEditController.elementEditController.deleteLine(lineMPID);
   }
 
   @override
@@ -35,13 +35,12 @@ class MPDeleteLineCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final THLine originalLine =
-        thFile.elementByMapiahID(lineMapiahID) as THLine;
+    final THLine originalLine = thFile.elementByMPID(lineMPID) as THLine;
     final List<THElement> lineChildren = [];
-    final Set<int> lineChildrenMapiahIDs = originalLine.childrenMapiahID;
+    final Set<int> lineChildrenMPIDs = originalLine.childrenMPID;
 
-    for (final int childMapiahID in lineChildrenMapiahIDs) {
-      final THElement childElement = thFile.elementByMapiahID(childMapiahID);
+    for (final int childMPID in lineChildrenMPIDs) {
+      final THElement childElement = thFile.elementByMPID(childMPID);
 
       lineChildren.add(childElement);
     }
@@ -63,11 +62,11 @@ class MPDeleteLineCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    int? lineMapiahID,
+    int? lineMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPDeleteLineCommand.forCWJM(
-      lineMapiahID: lineMapiahID ?? this.lineMapiahID,
+      lineMPID: lineMPID ?? this.lineMPID,
       isInteractiveLineCreation: isInteractiveLineCreation,
       descriptionType: descriptionType ?? this.descriptionType,
     );
@@ -75,7 +74,7 @@ class MPDeleteLineCommand extends MPCommand {
 
   factory MPDeleteLineCommand.fromMap(Map<String, dynamic> map) {
     return MPDeleteLineCommand.forCWJM(
-      lineMapiahID: map['lineMapiahID'],
+      lineMPID: map['lineMPID'],
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
@@ -91,7 +90,7 @@ class MPDeleteLineCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineMapiahID': lineMapiahID,
+      'lineMPID': lineMPID,
       'isInteractiveLineCreation': isInteractiveLineCreation,
     });
 
@@ -103,7 +102,7 @@ class MPDeleteLineCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPDeleteLineCommand &&
-        other.lineMapiahID == lineMapiahID &&
+        other.lineMPID == lineMPID &&
         other.isInteractiveLineCreation == isInteractiveLineCreation &&
         other.descriptionType == descriptionType;
   }
@@ -112,7 +111,7 @@ class MPDeleteLineCommand extends MPCommand {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        lineMapiahID,
+        lineMPID,
         isInteractiveLineCreation,
       );
 }

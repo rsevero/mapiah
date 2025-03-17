@@ -5,7 +5,7 @@ class THTitleCommandOption extends THCommandOption {
   final THStringPart title;
 
   THTitleCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.title,
   }) : super.forCWJM();
@@ -33,7 +33,7 @@ class THTitleCommandOption extends THCommandOption {
 
   factory THTitleCommandOption.fromMap(Map<String, dynamic> map) {
     return THTitleCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       title: THStringPart.fromMap(map['title']),
     );
@@ -45,12 +45,12 @@ class THTitleCommandOption extends THCommandOption {
 
   @override
   THTitleCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THStringPart? title,
   }) {
     return THTitleCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       title: title ?? this.title,
@@ -61,7 +61,7 @@ class THTitleCommandOption extends THCommandOption {
   bool operator ==(covariant THTitleCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.title == title;
   }

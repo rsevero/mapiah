@@ -90,18 +90,18 @@ part 'types/th_option_choices_outline_type.dart';
 part 'types/th_option_choices_place_type.dart';
 
 abstract class THCommandOption {
-  final int parentMapiahID;
+  final int parentMPID;
   final String originalLineInTH2File;
 
   THCommandOption.forCWJM({
-    required this.parentMapiahID,
+    required this.parentMPID,
     required this.originalLineInTH2File,
   });
 
   THCommandOption({
     required THHasOptionsMixin optionParent,
     this.originalLineInTH2File = '',
-  }) : parentMapiahID = optionParent.mapiahID {
+  }) : parentMPID = optionParent.mpID {
     optionParent.addUpdateOption(this);
   }
 
@@ -118,7 +118,7 @@ abstract class THCommandOption {
   Map<String, dynamic> toMap() {
     return {
       'optionType': type.name,
-      'parentMapiahID': parentMapiahID,
+      'parentMPID': parentMPID,
       'originalLineInTH2File': originalLineInTH2File,
     };
   }
@@ -239,19 +239,19 @@ abstract class THCommandOption {
   bool operator ==(covariant THCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
   int get hashCode => Object.hash(
         type,
-        parentMapiahID,
+        parentMPID,
         originalLineInTH2File,
       );
 
   THHasOptionsMixin optionParent(THFile thFile) =>
-      thFile.elementByMapiahID(parentMapiahID) as THHasOptionsMixin;
+      thFile.elementByMPID(parentMPID) as THHasOptionsMixin;
 
   String specToFile();
 }

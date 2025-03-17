@@ -154,8 +154,8 @@ class THPoint extends THElement
   };
 
   THPoint.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.position,
     required this.pointType,
@@ -166,7 +166,7 @@ class THPoint extends THElement
   }
 
   THPoint({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required this.position,
     required this.pointType,
@@ -177,7 +177,7 @@ class THPoint extends THElement
   THElementType get elementType => THElementType.point;
 
   THPoint.fromString({
-    required super.parentMapiahID,
+    required super.parentMPID,
     super.sameLineComment,
     required List<dynamic> pointDataList,
     required String pointTypeString,
@@ -201,8 +201,8 @@ class THPoint extends THElement
 
   factory THPoint.fromMap(Map<String, dynamic> map) {
     return THPoint.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
@@ -217,8 +217,8 @@ class THPoint extends THElement
 
   @override
   THPoint copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
@@ -227,8 +227,8 @@ class THPoint extends THElement
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THPoint.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -244,8 +244,8 @@ class THPoint extends THElement
   bool operator ==(covariant THPoint other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.position == position &&

@@ -6,7 +6,7 @@ class THLineHeightCommandOption extends THCommandOption {
   late final THDoublePart height;
 
   THLineHeightCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.height,
   }) : super.forCWJM();
@@ -38,7 +38,7 @@ class THLineHeightCommandOption extends THCommandOption {
 
   factory THLineHeightCommandOption.fromMap(Map<String, dynamic> map) {
     return THLineHeightCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       height: THDoublePart.fromMap(map['height']),
     );
@@ -50,12 +50,12 @@ class THLineHeightCommandOption extends THCommandOption {
 
   @override
   THLineHeightCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? height,
   }) {
     return THLineHeightCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       height: height ?? this.height,
@@ -66,7 +66,7 @@ class THLineHeightCommandOption extends THCommandOption {
   bool operator ==(covariant THLineHeightCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.height == height;
   }

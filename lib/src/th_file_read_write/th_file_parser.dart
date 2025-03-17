@@ -44,7 +44,7 @@ class THFileParser {
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
   late THIsParentMixin _currentParent;
-  late int _currentParentMapiahID;
+  late int _currentParentMPID;
   late THElement _currentElement;
   late THHasOptionsMixin _currentHasOptions;
   THLineSegment? _lastLineSegment;
@@ -201,7 +201,7 @@ class THFileParser {
 
   void _injectEmptyLine() {
     _currentElement = THEmptyLine(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -213,7 +213,7 @@ class THFileParser {
   void _injectMultiLineCommentContent(List<dynamic> element) {
     final content = (element.isEmpty) ? '' : element[1].toString();
     _currentElement = THMultilineCommentContent(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       content: content,
       originalLineInTH2File: _currentLine,
     );
@@ -224,7 +224,7 @@ class THFileParser {
   }
 
   void _injectEndMultiLineComment() {
-    _currentElement = THEndcomment(parentMapiahID: _currentParentMapiahID);
+    _currentElement = THEndcomment(parentMPID: _currentParentMPID);
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
       parent: _currentParent,
@@ -235,7 +235,7 @@ class THFileParser {
 
   void _injectStartMultiLineComment() {
     _currentElement = THMultiLineComment(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -255,7 +255,7 @@ class THFileParser {
     }
 
     _currentElement = THEncoding(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       encoding: element[1],
       originalLineInTH2File: _currentLine,
     );
@@ -275,7 +275,7 @@ class THFileParser {
     }
 
     final THXTherionConfig newElement = THXTherionConfig(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       name: element[1][0],
       value: element[1][1],
       originalLineInTH2File: _currentLine,
@@ -307,7 +307,7 @@ class THFileParser {
     }
 
     final THPoint newPoint = THPoint.fromString(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       pointDataList: element[1],
       pointTypeString: element[2][0],
       originalLineInTH2File: _currentLine,
@@ -374,7 +374,7 @@ class THFileParser {
     _checkParsedListAsPoint(endPoint);
 
     final newBezierCurveLineSegment = THBezierCurveLineSegment.fromString(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       controlPoint1: controlPoint1,
       controlPoint2: controlPoint2,
       endPoint: endPoint,
@@ -403,7 +403,7 @@ class THFileParser {
     if (kDebugMode) assert(areaBorderID is String);
 
     final THAreaBorderTHID newElement = THAreaBorderTHID(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       id: areaBorderID,
       originalLineInTH2File: _currentLine,
     );
@@ -431,7 +431,7 @@ class THFileParser {
 
     final THStraightLineSegment newStraightLineSegment =
         THStraightLineSegment.fromString(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       pointDataList: endPoint,
       originalLineInTH2File: _currentLine,
     );
@@ -455,7 +455,7 @@ class THFileParser {
     if (kDebugMode) assert(elementSize >= 2);
 
     final THScrap newScrap = THScrap(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       thID: element[1],
       originalLineInTH2File: _currentLine,
     );
@@ -474,7 +474,7 @@ class THFileParser {
 
   void _injectEndscrap() {
     _currentElement = THEndscrap(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -543,7 +543,7 @@ class THFileParser {
     }
 
     final THArea newArea = THArea(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       areaTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
     );
@@ -579,7 +579,7 @@ class THFileParser {
     }
 
     final THLine newLine = THLine.fromString(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       lineTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
     );
@@ -607,7 +607,7 @@ class THFileParser {
 
   void _injectEndarea() {
     _currentElement = THEndarea(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -620,7 +620,7 @@ class THFileParser {
 
   void _injectEndline() {
     _currentElement = THEndline(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -660,7 +660,7 @@ class THFileParser {
     switch (element[0]) {
       case 'fulllinecomment':
         final THElement newElement = THComment(
-          parentMapiahID: _currentParentMapiahID,
+          parentMPID: _currentParentMPID,
           content: element[1],
           originalLineInTH2File: _currentLine,
         );
@@ -681,7 +681,7 @@ class THFileParser {
         break;
       default:
         final THElement newElement = THUnrecognizedCommand(
-          parentMapiahID: _currentParentMapiahID,
+          parentMPID: _currentParentMPID,
           value: element,
         );
         _th2FileElementEditController
@@ -918,7 +918,7 @@ class THFileParser {
 
   void setCurrentParent(THIsParentMixin parent) {
     _currentParent = parent;
-    _currentParentMapiahID = parent.mapiahID;
+    _currentParentMPID = parent.mpID;
   }
 
   void _injectMultipleChoiceWithPointChoiceCommandOption(
@@ -1839,7 +1839,7 @@ class THFileParser {
 
   void _injectUnknown(List<dynamic> element) {
     final THElement newElement = THUnrecognizedCommand(
-      parentMapiahID: _currentParentMapiahID,
+      parentMPID: _currentParentMPID,
       value: element,
       originalLineInTH2File: _currentLine,
     );

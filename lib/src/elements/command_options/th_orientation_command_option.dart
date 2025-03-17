@@ -6,7 +6,7 @@ class THOrientationCommandOption extends THCommandOption {
   late THDoublePart azimuth;
 
   THOrientationCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.azimuth,
   }) : super.forCWJM();
@@ -35,7 +35,7 @@ class THOrientationCommandOption extends THCommandOption {
 
   factory THOrientationCommandOption.fromMap(Map<String, dynamic> map) {
     return THOrientationCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       azimuth: THDoublePart.fromMap(map['azimuth']),
     );
@@ -47,12 +47,12 @@ class THOrientationCommandOption extends THCommandOption {
 
   @override
   THOrientationCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     THDoublePart? azimuth,
   }) {
     return THOrientationCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       azimuth: azimuth ?? this.azimuth,
@@ -63,7 +63,7 @@ class THOrientationCommandOption extends THCommandOption {
   bool operator ==(covariant THOrientationCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.azimuth == azimuth;
   }

@@ -90,7 +90,7 @@ class THSubtypeCommandOption extends THCommandOption {
   // };
 
   THSubtypeCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required this.subtype,
   }) : super.forCWJM();
@@ -117,7 +117,7 @@ class THSubtypeCommandOption extends THCommandOption {
 
   factory THSubtypeCommandOption.fromMap(Map<String, dynamic> map) {
     return THSubtypeCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       subtype: map['subtype'],
     );
@@ -129,12 +129,12 @@ class THSubtypeCommandOption extends THCommandOption {
 
   @override
   THSubtypeCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     String? subtype,
   }) {
     return THSubtypeCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       subtype: subtype ?? this.subtype,
@@ -145,7 +145,7 @@ class THSubtypeCommandOption extends THCommandOption {
   bool operator ==(covariant THSubtypeCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.subtype == subtype;
   }

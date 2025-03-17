@@ -14,7 +14,7 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
   @override
   void onPrimaryButtonClick(PointerUpEvent event) {
     final THPoint newPoint = THPoint(
-      parentMapiahID: th2FileEditController.activeScrapID,
+      parentMPID: th2FileEditController.activeScrapID,
       pointType: elementEditController.lastAddedPointType,
       position: THPositionPart(
         coordinates:

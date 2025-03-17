@@ -18,7 +18,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   final THLengthUnitPart unitPart;
 
   THScrapScaleCommandOption.forCWJM({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required super.originalLineInTH2File,
     required List<THDoublePart> numericSpecifications,
     required this.unitPart,
@@ -54,7 +54,7 @@ class THScrapScaleCommandOption extends THCommandOption {
 
   factory THScrapScaleCommandOption.fromMap(Map<String, dynamic> map) {
     return THScrapScaleCommandOption.forCWJM(
-      parentMapiahID: map['parentMapiahID'],
+      parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       numericSpecifications: List<THDoublePart>.from(
           map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
@@ -68,13 +68,13 @@ class THScrapScaleCommandOption extends THCommandOption {
 
   @override
   THScrapScaleCommandOption copyWith({
-    int? parentMapiahID,
+    int? parentMPID,
     String? originalLineInTH2File,
     List<THDoublePart>? numericSpecifications,
     THLengthUnitPart? unit,
   }) {
     return THScrapScaleCommandOption.forCWJM(
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       numericSpecifications: numericSpecifications ?? _numericSpecifications,
@@ -86,7 +86,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   bool operator ==(covariant THScrapScaleCommandOption other) {
     if (identical(this, other)) return true;
 
-    return other.parentMapiahID == parentMapiahID &&
+    return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other._numericSpecifications == _numericSpecifications &&
         other.unitPart == unitPart;

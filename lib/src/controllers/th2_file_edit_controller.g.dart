@@ -406,26 +406,25 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_thFileMapiahIDAtom =
-      Atom(name: 'TH2FileEditControllerBase._thFileMapiahID', context: context);
+  late final _$_thFileMPIDAtom =
+      Atom(name: 'TH2FileEditControllerBase._thFileMPID', context: context);
 
-  int get thFileMapiahID {
-    _$_thFileMapiahIDAtom.reportRead();
-    return super._thFileMapiahID;
+  int get thFileMPID {
+    _$_thFileMPIDAtom.reportRead();
+    return super._thFileMPID;
   }
 
   @override
-  int get _thFileMapiahID => thFileMapiahID;
+  int get _thFileMPID => thFileMPID;
 
-  bool __thFileMapiahIDIsInitialized = false;
+  bool __thFileMPIDIsInitialized = false;
 
   @override
-  set _thFileMapiahID(int value) {
-    _$_thFileMapiahIDAtom.reportWrite(
-        value, __thFileMapiahIDIsInitialized ? super._thFileMapiahID : null,
-        () {
-      super._thFileMapiahID = value;
-      __thFileMapiahIDIsInitialized = true;
+  set _thFileMPID(int value) {
+    _$_thFileMPIDAtom.reportWrite(
+        value, __thFileMPIDIsInitialized ? super._thFileMPID : null, () {
+      super._thFileMPID = value;
+      __thFileMPIDIsInitialized = true;
     });
   }
 
@@ -911,11 +910,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setActiveScrap(int scrapMapiahID) {
+  void setActiveScrap(int scrapMPID) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setActiveScrap');
     try {
-      return super.setActiveScrap(scrapMapiahID);
+      return super.setActiveScrap(scrapMPID);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

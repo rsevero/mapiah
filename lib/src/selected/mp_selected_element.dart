@@ -10,7 +10,7 @@ part 'mp_selected_line.dart';
 part 'mp_selected_point.dart';
 
 abstract class MPSelectedElement {
-  int get mapiahID => originalElementClone.mapiahID;
+  int get mpID => originalElementClone.mpID;
 
   THElement get originalElementClone;
 

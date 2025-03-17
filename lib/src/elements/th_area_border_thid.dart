@@ -4,15 +4,15 @@ class THAreaBorderTHID extends THElement {
   late final String id;
 
   THAreaBorderTHID.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     required super.sameLineComment,
     required this.id,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THAreaBorderTHID({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required this.id,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
@@ -39,8 +39,8 @@ class THAreaBorderTHID extends THElement {
 
   factory THAreaBorderTHID.fromMap(Map<String, dynamic> map) {
     return THAreaBorderTHID.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       id: map['id'],
@@ -53,16 +53,16 @@ class THAreaBorderTHID extends THElement {
 
   @override
   THAreaBorderTHID copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     String? id,
   }) {
     return THAreaBorderTHID.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -76,8 +76,8 @@ class THAreaBorderTHID extends THElement {
   bool operator ==(covariant THAreaBorderTHID other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.id == id;

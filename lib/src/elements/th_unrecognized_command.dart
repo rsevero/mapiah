@@ -4,8 +4,8 @@ class THUnrecognizedCommand extends THElement {
   late final List<dynamic> _value;
 
   THUnrecognizedCommand.forCWJM({
-    required super.mapiahID,
-    required super.parentMapiahID,
+    required super.mpID,
+    required super.parentMPID,
     super.sameLineComment,
     required List<dynamic> value,
     required super.originalLineInTH2File,
@@ -14,7 +14,7 @@ class THUnrecognizedCommand extends THElement {
   }
 
   THUnrecognizedCommand({
-    required super.parentMapiahID,
+    required super.parentMPID,
     required List<dynamic> value,
     super.originalLineInTH2File = '',
   })  : _value = value,
@@ -36,8 +36,8 @@ class THUnrecognizedCommand extends THElement {
 
   factory THUnrecognizedCommand.fromMap(Map<String, dynamic> map) {
     return THUnrecognizedCommand.forCWJM(
-      mapiahID: map['mapiahID'],
-      parentMapiahID: map['parentMapiahID'],
+      mpID: map['mpID'],
+      parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       value: List<dynamic>.from(map['value']),
@@ -50,16 +50,16 @@ class THUnrecognizedCommand extends THElement {
 
   @override
   THUnrecognizedCommand copyWith({
-    int? mapiahID,
-    int? parentMapiahID,
+    int? mpID,
+    int? parentMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     List<dynamic>? value,
   }) {
     return THUnrecognizedCommand.forCWJM(
-      mapiahID: mapiahID ?? this.mapiahID,
-      parentMapiahID: parentMapiahID ?? this.parentMapiahID,
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -73,8 +73,8 @@ class THUnrecognizedCommand extends THElement {
   bool operator ==(covariant THUnrecognizedCommand other) {
     if (identical(this, other)) return true;
 
-    return other.mapiahID == mapiahID &&
-        other.parentMapiahID == parentMapiahID &&
+    return other.mpID == mpID &&
+        other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other._value == _value;

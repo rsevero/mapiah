@@ -33,7 +33,7 @@ class MPAddPointCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPDeletePointCommand oppositeCommand = MPDeletePointCommand(
-      pointMapiahID: newPoint.mapiahID,
+      pointMPID: newPoint.mpID,
       descriptionType: descriptionType,
     );
 
