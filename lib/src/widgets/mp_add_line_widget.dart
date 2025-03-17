@@ -31,12 +31,12 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         th2FileEditController.redrawTriggerNewLine;
 
         final THPointPaint pointPaintInfo =
-            th2FileEditController.getNewLinePointPaint();
+            th2FileEditController.visualController.getNewLinePointPaint();
         final double pointHalfLength = pointPaintInfo.radius;
         final Paint pointPaint = pointPaintInfo.paint;
 
         final THLinePaint linePaintInfo =
-            th2FileEditController.getNewLinePaint();
+            th2FileEditController.visualController.getNewLinePaint();
         final Paint linePaint = linePaintInfo.paint;
 
         final List<CustomPainter> painters = [];
@@ -87,7 +87,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
           if ((lineSegments.length >= 2) &&
               (lastSegment is THBezierCurveLineSegment)) {
             final THLinePaint controlLinePaint =
-                th2FileEditController.getControlLinePaint();
+                th2FileEditController.visualController.getControlLinePaint();
             final List<int> keys = lineSegments.keys.toList();
             final Offset secondToLastSegmentPosition =
                 lineSegments[keys.elementAt(keys.length - 2)]!

@@ -320,6 +320,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 height: thFloatingActionIconSize,
                 color: colorScheme.onSecondaryContainer,
               ),
+              backgroundColor: colorScheme.secondaryContainer,
             ),
           ),
         ),

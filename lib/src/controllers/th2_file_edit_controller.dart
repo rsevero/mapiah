@@ -6,15 +6,13 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/constants/mp_paints.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
-import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
-import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -34,11 +32,12 @@ class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
 abstract class TH2FileEditControllerBase with Store {
+  late final MPUndoRedoController undoRedoController;
+  late final MPVisualController visualController;
   late final TH2FileEditElementEditController elementEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
   late final TH2FileEditSelectionController selectionController;
   late final TH2FileEditStateController stateController;
-  late final MPUndoRedoController undoRedoController;
 
   /// 'screen' is related to actual pixels on the screen.
   /// 'canvas' is the virtual canvas used to draw.
@@ -427,6 +426,7 @@ abstract class TH2FileEditControllerBase with Store {
         TH2FileEditSelectionController(this as TH2FileEditController);
     stateController = TH2FileEditStateController(this as TH2FileEditController);
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
+    visualController = MPVisualController(this as TH2FileEditController);
     _thFileMapiahID = _thFile.mapiahID;
   }
 
@@ -488,100 +488,6 @@ abstract class TH2FileEditControllerBase with Store {
     final int nextIndex = (currentIndex + 1) % scrapIDs.length;
 
     return scrapIDs[nextIndex];
-  }
-
-  THPointPaint getUnselectedPointPaint(THPoint point) {
-    final Paint paint =
-        isFromActiveScrap(point) ? THPaints.thPaint1 : THPaints.thPaint4;
-    return THPointPaint(
-      radius: pointRadiusOnCanvas,
-      paint: paint..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THLinePaint getUnselectedLinePaint(THLine line) {
-    final Paint paint =
-        isFromActiveScrap(line) ? THPaints.thPaint3 : THPaints.thPaint4;
-    return THLinePaint(
-      paint: paint..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THLinePaint getControlPointLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaintBlackBorder
-        ..strokeWidth = controlLineThicknessOnCanvas,
-    );
-  }
-
-  THPointPaint getSelectedPointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THPointPaint getNewLinePointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaintBlackBorder..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THPointPaint getSelectedControlPointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas *
-          thControlPointRadiusFactor *
-          thSelectedEndControlPointFactor,
-      paint: THPaints.thPaintBlackBackground,
-    );
-  }
-
-  THPointPaint getUnselectedControlPointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas * thControlPointRadiusFactor,
-      paint: THPaints.thPaintBlackBorder
-        ..strokeWidth = controlLineThicknessOnCanvas,
-    );
-  }
-
-  THPointPaint getSelectedEndPointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas * thSelectedEndControlPointFactor,
-      paint: THPaints.thPaintBlackBackground,
-    );
-  }
-
-  THPointPaint getUnselectablePointPaint() {
-    return THPointPaint(
-      radius: pointRadiusOnCanvas,
-      paint: THPaints.thPaintBlackBorder..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THLinePaint getSelectedLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaint2..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THLinePaint getControlLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaintBlackBorder
-        ..strokeWidth = controlLineThicknessOnCanvas,
-    );
-  }
-
-  THLinePaint getNewLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaint19..strokeWidth = lineThicknessOnCanvas,
-    );
-  }
-
-  THLinePaint getEditLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaint13..strokeWidth = lineThicknessOnCanvas,
-    );
   }
 
   bool isFromActiveScrap(THElement element) {

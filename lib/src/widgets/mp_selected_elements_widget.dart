@@ -35,12 +35,12 @@ class MPSelectedElementsWidget extends StatelessWidget
             th2FileEditController.selectionController.selectedElements.values;
 
         final THPointPaint pointPaintInfo =
-            th2FileEditController.getSelectedPointPaint();
+            th2FileEditController.visualController.getSelectedPointPaint();
         final double pointRadius = pointPaintInfo.radius;
         final Paint pointPaint = pointPaintInfo.paint;
 
         final THLinePaint linePaintInfo =
-            th2FileEditController.getSelectedLinePaint();
+            th2FileEditController.visualController.getSelectedLinePaint();
         final Paint linePaint = linePaintInfo.paint;
 
         for (final selectedElement in selectedElements) {

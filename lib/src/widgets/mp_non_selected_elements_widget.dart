@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
@@ -33,6 +34,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
 
+        final MPVisualController visualController =
+            th2FileEditController.visualController;
         final List<CustomPainter> painters = [];
         final Set<int> drawableElementMapiahIDs =
             thFile.drawableElementMapiahIDs;
@@ -49,7 +52,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
           switch (element) {
             case THPoint _:
               final THPointPaint pointPaint =
-                  th2FileEditController.getUnselectedPointPaint(element);
+                  visualController.getUnselectedPointPaint(element);
               painters.add(
                 THCirclePointPainter(
                   position: element.position.coordinates,
@@ -63,7 +66,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               break;
             case THLine _:
               final THLinePaint linePaint =
-                  th2FileEditController.getUnselectedLinePaint(element);
+                  visualController.getUnselectedLinePaint(element);
               final (
                 LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                 _

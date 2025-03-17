@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
-import 'package:mapiah/src/themes/material_theme.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
+import 'package:mapiah/src/themes/orange_purple.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';

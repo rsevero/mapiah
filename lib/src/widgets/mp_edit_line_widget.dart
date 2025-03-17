@@ -39,37 +39,39 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         }
 
         final THPointPaint selectedEndPointPaintInfo =
-            th2FileEditController.getSelectedEndPointPaint();
+            th2FileEditController.visualController.getSelectedEndPointPaint();
         final double selectedEndPointHalfSize =
             selectedEndPointPaintInfo.radius;
         final Paint selectedEndPointPaint = selectedEndPointPaintInfo.paint;
 
         final THPointPaint unselectedEndPointPaintInfo =
-            th2FileEditController.getUnselectablePointPaint();
+            th2FileEditController.visualController.getUnselectablePointPaint();
         final double unselectedEndPointHalfSize =
             unselectedEndPointPaintInfo.radius;
         final Paint unselectedEndPointPaint = unselectedEndPointPaintInfo.paint;
 
         final THPointPaint unselectedControlPointPaintInfo =
-            th2FileEditController.getUnselectedControlPointPaint();
+            th2FileEditController.visualController
+                .getUnselectedControlPointPaint();
         final double unselectedControlPointRadius =
             unselectedControlPointPaintInfo.radius;
         final Paint unselectedControlPointPaint =
             unselectedControlPointPaintInfo.paint;
 
-        final THPointPaint selectedControlPointPaintInfo =
-            th2FileEditController.getSelectedControlPointPaint();
+        final THPointPaint selectedControlPointPaintInfo = th2FileEditController
+            .visualController
+            .getSelectedControlPointPaint();
         final double selectedControlPointRadius =
             selectedControlPointPaintInfo.radius;
         final Paint selectedControlPointPaint =
             selectedControlPointPaintInfo.paint;
 
         final THLinePaint controlPointLinePaintInfo =
-            th2FileEditController.getControlPointLinePaint();
+            th2FileEditController.visualController.getControlPointLinePaint();
         final Paint controlPointLinePaint = controlPointLinePaintInfo.paint;
 
         final THLinePaint linePaintInfo =
-            th2FileEditController.getEditLinePaint();
+            th2FileEditController.visualController.getEditLinePaint();
         final Paint linePaint = linePaintInfo.paint;
 
         final MPSelectableControlPoint? selectedControlPoint =
