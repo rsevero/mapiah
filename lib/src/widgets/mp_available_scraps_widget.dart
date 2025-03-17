@@ -61,11 +61,11 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                       final String scrapName = scrap.$2;
                       final bool isSelected = scrap.$3;
 
-                      return PopupMenuItem<int>(
-                        value: scrapID,
-                        onTap: () =>
-                            th2FileEditController.setActiveScrap(scrapID),
-                        child: Row(
+                      return ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                        onTap: () => _onTapSelectScrap(scrapID),
+                        title: Row(
                           children: [
                             Text(scrapName),
                             if (isSelected) ...[
@@ -84,5 +84,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
         ),
       ),
     );
+  }
+
+  void _onTapSelectScrap(int scrapID) {
+    th2FileEditController.setActiveScrap(scrapID);
   }
 }
