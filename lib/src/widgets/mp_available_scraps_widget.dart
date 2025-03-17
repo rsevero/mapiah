@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -54,32 +55,40 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: th2FileEditController.availableScraps().map(
-                      (scrap) {
-                        final int scrapID = scrap.$1;
-                        final String scrapName = scrap.$2;
-                        final bool isSelected = scrap.$3;
+                    children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context)
+                                .th2FileEditPageChangeActiveScrapTool,
+                          )
+                        ] +
+                        th2FileEditController.availableScraps().map(
+                          (scrap) {
+                            final int scrapID = scrap.$1;
+                            final String scrapName = scrap.$2;
+                            final bool isSelected = scrap.$3;
 
-                        return ListTile(
-                          dense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                          onTap: () => _onTapSelectScrap(scrapID),
-                          title: Row(
-                            children: [
-                              Text(scrapName),
-                              SizedBox(width: mpButtonSpace),
-                              Visibility(
-                                visible: isSelected,
-                                maintainSize: true,
-                                maintainAnimation: true,
-                                maintainState: true,
-                                child: Icon(Icons.check, color: Colors.blue),
+                            return ListTile(
+                              dense: true,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 8.0),
+                              onTap: () => _onTapSelectScrap(scrapID),
+                              title: Row(
+                                children: [
+                                  Text(scrapName),
+                                  SizedBox(width: mpButtonSpace),
+                                  Visibility(
+                                    visible: isSelected,
+                                    maintainSize: true,
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    child:
+                                        Icon(Icons.check, color: Colors.blue),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    ).toList(),
+                            );
+                          },
+                        ).toList(),
                   );
                 },
               ),

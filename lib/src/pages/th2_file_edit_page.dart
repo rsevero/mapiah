@@ -314,8 +314,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   MPGlobalKeyWidgetType.changeScrapButton]!,
               heroTag: 'change_active_scrap_tool',
               onPressed: _onChangeActiveScrapToolPressed,
-              tooltip: AppLocalizations.of(context)
-                  .th2FileEditPageChangeActiveScrapTool,
               child: Image.asset(
                 'assets/icons/change-scrap-tool.png',
                 width: thFloatingActionIconSize,
