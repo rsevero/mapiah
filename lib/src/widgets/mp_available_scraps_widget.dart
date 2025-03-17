@@ -23,7 +23,6 @@ class MPAvailableScrapsWidget extends StatefulWidget {
 
 class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   late final TH2FileEditController th2FileEditController;
-  late final int zOrder;
 
   @override
   void initState() {
@@ -45,40 +44,45 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
             .setIsMouseOverChangeScrapsOverlayWindow(false),
         child: Material(
           elevation: 4.0,
-          child: Container(
-            padding: const EdgeInsets.all(mpButtonSpace),
-            width: 230,
-            color: Colors.white,
-            child: Observer(
-              builder: (_) {
-                th2FileEditController.activeScrapID;
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: th2FileEditController.availableScraps().map(
-                    (scrap) {
-                      final int scrapID = scrap.$1;
-                      final String scrapName = scrap.$2;
-                      final bool isSelected = scrap.$3;
+          child: IntrinsicWidth(
+            child: Container(
+              padding: const EdgeInsets.all(mpButtonSpace),
+              color: Colors.white,
+              child: Observer(
+                builder: (_) {
+                  th2FileEditController.activeScrapID;
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: th2FileEditController.availableScraps().map(
+                      (scrap) {
+                        final int scrapID = scrap.$1;
+                        final String scrapName = scrap.$2;
+                        final bool isSelected = scrap.$3;
 
-                      return ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                        onTap: () => _onTapSelectScrap(scrapID),
-                        title: Row(
-                          children: [
-                            Text(scrapName),
-                            if (isSelected) ...[
+                        return ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                          onTap: () => _onTapSelectScrap(scrapID),
+                          title: Row(
+                            children: [
+                              Text(scrapName),
                               SizedBox(width: mpButtonSpace),
-                              Icon(Icons.check, color: Colors.blue),
+                              Visibility(
+                                visible: isSelected,
+                                maintainSize: true,
+                                maintainAnimation: true,
+                                maintainState: true,
+                                child: Icon(Icons.check, color: Colors.blue),
+                              ),
                             ],
-                          ],
-                        ),
-                      );
-                    },
-                  ).toList(),
-                );
-              },
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  );
+                },
+              ),
             ),
           ),
         ),
