@@ -124,10 +124,8 @@ class THFileWidget extends StatelessWidget {
                   th2FileEditController.redrawTriggerOverlayWindows;
                   return Stack(
                     key: ValueKey("OverlayWindowsStack|$thFileMapiahID"),
-                    children: overlayWindowController.overlayWindows.entries
-                        .map((entry) {
-                      return entry.value;
-                    }).toList(),
+                    children:
+                        overlayWindowController.overlayWindows.values.toList(),
                   );
                 },
               ),

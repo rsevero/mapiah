@@ -819,47 +819,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isMouseOverChangeScrapButtonAtom = Atom(
-      name: 'TH2FileEditControllerBase._isMouseOverChangeScrapButton',
-      context: context);
-
-  bool get isMouseOverChangeScrapButton {
-    _$_isMouseOverChangeScrapButtonAtom.reportRead();
-    return super._isMouseOverChangeScrapButton;
-  }
-
-  @override
-  bool get _isMouseOverChangeScrapButton => isMouseOverChangeScrapButton;
-
-  @override
-  set _isMouseOverChangeScrapButton(bool value) {
-    _$_isMouseOverChangeScrapButtonAtom
-        .reportWrite(value, super._isMouseOverChangeScrapButton, () {
-      super._isMouseOverChangeScrapButton = value;
-    });
-  }
-
-  late final _$_isMouseOverChangeScrapOverlayWindowAtom = Atom(
-      name: 'TH2FileEditControllerBase._isMouseOverChangeScrapOverlayWindow',
-      context: context);
-
-  bool get isMouseOverChangeScrapOverlayWindow {
-    _$_isMouseOverChangeScrapOverlayWindowAtom.reportRead();
-    return super._isMouseOverChangeScrapOverlayWindow;
-  }
-
-  @override
-  bool get _isMouseOverChangeScrapOverlayWindow =>
-      isMouseOverChangeScrapOverlayWindow;
-
-  @override
-  set _isMouseOverChangeScrapOverlayWindow(bool value) {
-    _$_isMouseOverChangeScrapOverlayWindowAtom
-        .reportWrite(value, super._isMouseOverChangeScrapOverlayWindow, () {
-      super._isMouseOverChangeScrapOverlayWindow = value;
-    });
-  }
-
   late final _$_mousePositionAtom =
       Atom(name: 'TH2FileEditControllerBase._mousePosition', context: context);
 

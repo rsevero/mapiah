@@ -21,7 +21,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   TH2FileEditOverlayWindowControllerBase(this._th2FileEditController)
       : _thFile = _th2FileEditController.thFile {
     for (MPOverlayWindowType type in MPOverlayWindowType.values) {
-      _isOverlayWindowShown[type] = Observable(false);
+      _isOverlayWindowShown[type] = false;
     }
 
     for (MPGlobalKeyWidgetType type in MPGlobalKeyWidgetType.values) {
@@ -33,8 +33,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   Map<MPGlobalKeyWidgetType, GlobalKey> _globalKeyWidgetKeyByType = {};
 
   @readonly
-  ObservableMap<MPOverlayWindowType, Observable<bool>> _isOverlayWindowShown =
-      ObservableMap<MPOverlayWindowType, Observable<bool>>();
+  ObservableMap<MPOverlayWindowType, bool> _isOverlayWindowShown =
+      ObservableMap<MPOverlayWindowType, bool>();
 
   @readonly
   MPOverlayWindowType? _activeOverlayWindow;
@@ -45,7 +45,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @computed
   bool get showChangeScrapOverlayWindow =>
-      _isOverlayWindowShown[MPOverlayWindowType.availableScraps]!.value;
+      _isOverlayWindowShown[MPOverlayWindowType.availableScraps]!;
 
   bool processingPointerDownEvent = false;
   bool processingPointerMoveEvent = false;
@@ -53,7 +53,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool processingPointerSignalEvent = false;
 
   toggleOverlayWindow(MPOverlayWindowType type) {
-    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!.value);
+    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
   }
 
   void _showOverlayWindow(MPOverlayWindowType type) {
@@ -83,13 +83,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   @action
-  void toggleOverlayWindowVisibility(MPOverlayWindowType type) {
-    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!.value);
-  }
-
-  @action
   void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
-    _isOverlayWindowShown[type] = Observable(show);
+    _isOverlayWindowShown[type] = show;
     if (show) {
       _showOverlayWindow(type);
     } else {

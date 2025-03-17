@@ -374,10 +374,8 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   int _redrawTriggerOverlayWindows = 0;
 
-  @readonly
   bool _isMouseOverChangeScrapButton = false;
 
-  @readonly
   bool _isMouseOverChangeScrapOverlayWindow = false;
 
   @readonly
@@ -947,17 +945,10 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void _setShowChangeScrapOverlayWindow() {
-    if (_isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow) {
-      overlayWindowController.setShowOverlayWindow(
-        MPOverlayWindowType.availableScraps,
-        true,
-      );
-    } else {
-      overlayWindowController.setShowOverlayWindow(
-        MPOverlayWindowType.availableScraps,
-        false,
-      );
-    }
+    overlayWindowController.setShowOverlayWindow(
+      MPOverlayWindowType.availableScraps,
+      (_isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow),
+    );
   }
 
   @action

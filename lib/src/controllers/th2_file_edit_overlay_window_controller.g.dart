@@ -85,19 +85,17 @@ mixin _$TH2FileEditOverlayWindowController
       name: 'TH2FileEditOverlayWindowControllerBase._isOverlayWindowShown',
       context: context);
 
-  ObservableMap<MPOverlayWindowType, Observable<bool>>
-      get isOverlayWindowShown {
+  ObservableMap<MPOverlayWindowType, bool> get isOverlayWindowShown {
     _$_isOverlayWindowShownAtom.reportRead();
     return super._isOverlayWindowShown;
   }
 
   @override
-  ObservableMap<MPOverlayWindowType, Observable<bool>>
-      get _isOverlayWindowShown => isOverlayWindowShown;
+  ObservableMap<MPOverlayWindowType, bool> get _isOverlayWindowShown =>
+      isOverlayWindowShown;
 
   @override
-  set _isOverlayWindowShown(
-      ObservableMap<MPOverlayWindowType, Observable<bool>> value) {
+  set _isOverlayWindowShown(ObservableMap<MPOverlayWindowType, bool> value) {
     _$_isOverlayWindowShownAtom.reportWrite(value, super._isOverlayWindowShown,
         () {
       super._isOverlayWindowShown = value;
@@ -147,20 +145,6 @@ mixin _$TH2FileEditOverlayWindowController
   late final _$TH2FileEditOverlayWindowControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditOverlayWindowControllerBase', context: context);
-
-  @override
-  void toggleOverlayWindowVisibility(MPOverlayWindowType type) {
-    final _$actionInfo =
-        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.toggleOverlayWindowVisibility');
-    try {
-      return super.toggleOverlayWindowVisibility(type);
-    } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
 
   @override
   void setShowOverlayWindow(MPOverlayWindowType type, bool show) {

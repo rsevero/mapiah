@@ -302,24 +302,26 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         onExit: (PointerExitEvent event) {
           th2FileEditController.setIsMouseOverChangeScrapsButton(false);
         },
-        child: Padding(
-          padding: th2FileEditController
-                  .overlayWindowController.showChangeScrapOverlayWindow
-              ? const EdgeInsets.only(left: mpButtonSpace)
-              : EdgeInsets.zero,
-          child: FloatingActionButton(
-            key: th2FileEditController
-                    .overlayWindowController.globalKeyWidgetKeyByType[
-                MPGlobalKeyWidgetType.changeScrapButton]!,
-            heroTag: 'change_active_scrap_tool',
-            onPressed: _onChangeActiveScrapToolPressed,
-            tooltip: AppLocalizations.of(context)
-                .th2FileEditPageChangeActiveScrapTool,
-            child: Image.asset(
-              'assets/icons/change-scrap-tool.png',
-              width: thFloatingActionIconSize,
-              height: thFloatingActionIconSize,
-              color: colorScheme.onSecondaryContainer,
+        child: Observer(
+          builder: (_) => Padding(
+            padding: th2FileEditController
+                    .overlayWindowController.showChangeScrapOverlayWindow
+                ? const EdgeInsets.only(left: mpButtonSpace)
+                : EdgeInsets.zero,
+            child: FloatingActionButton(
+              key: th2FileEditController
+                      .overlayWindowController.globalKeyWidgetKeyByType[
+                  MPGlobalKeyWidgetType.changeScrapButton]!,
+              heroTag: 'change_active_scrap_tool',
+              onPressed: _onChangeActiveScrapToolPressed,
+              tooltip: AppLocalizations.of(context)
+                  .th2FileEditPageChangeActiveScrapTool,
+              child: Image.asset(
+                'assets/icons/change-scrap-tool.png',
+                width: thFloatingActionIconSize,
+                height: thFloatingActionIconSize,
+                color: colorScheme.onSecondaryContainer,
+              ),
             ),
           ),
         ),
