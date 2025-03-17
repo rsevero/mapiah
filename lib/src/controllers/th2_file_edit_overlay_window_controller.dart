@@ -52,7 +52,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool processingPointerUpEvent = false;
   bool processingPointerSignalEvent = false;
 
-  @action
   toggleOverlayWindow(MPOverlayWindowType type) {
     setShowOverlayWindow(type, !_isOverlayWindowShown[type]!.value);
   }
@@ -75,7 +74,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
-  @action
   void _hideOverlayWindow(MPOverlayWindowType type) {
     if (_activeOverlayWindow == type) {
       _activeOverlayWindow = null;
@@ -92,10 +90,15 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
     _isOverlayWindowShown[type] = Observable(show);
-
+    // mpLocator.mpLog.fine(
+    //     "TH2FileEditOverlayWindowController.setShowOverlayWindow() type: $type, show: $show");
     if (show) {
+      // mpLocator.mpLog.fine(
+      //     "TH2FileEditOverlayWindowController.setShowOverlayWindow() showing overlay window");
       _showOverlayWindow(type);
     } else {
+      // mpLocator.mpLog.fine(
+      //     "TH2FileEditOverlayWindowController.setShowOverlayWindow() hiding overlay window");
       _hideOverlayWindow(type);
     }
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
@@ -91,59 +90,59 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
         visible: _initialPositionSet,
         child: Listener(
           onPointerDown: (PointerDownEvent event) {
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerDown() entered");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerDown() entered");
 
             if (overlayWindowController.processingPointerDownEvent) {
               return;
             }
             overlayWindowController.processingPointerDownEvent = true;
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerDown() to be executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerDown() to be executed");
 
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerDown() executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerDown() executed");
           },
           onPointerUp: (PointerUpEvent event) {
-            mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp() entered");
+            // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp() entered");
 
             if (overlayWindowController.processingPointerUpEvent) {
               return;
             }
             overlayWindowController.processingPointerUpEvent = true;
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerUp() to be executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerUp() to be executed");
 
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerUp() executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerUp() executed");
           },
           onPointerMove: (PointerMoveEvent event) {
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerMove() entered");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerMove() entered");
 
             if (overlayWindowController.processingPointerMoveEvent) {
               return;
             }
             overlayWindowController.processingPointerMoveEvent = true;
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerMove() to be executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerMove() to be executed");
 
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerMove() executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerMove() executed");
           },
           onPointerSignal: (PointerSignalEvent event) {
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerSignal() entered");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerSignal() entered");
 
             if (overlayWindowController.processingPointerSignalEvent) {
               return;
             }
             overlayWindowController.processingPointerSignalEvent = true;
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerSignal() to be executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerSignal() to be executed");
 
-            mpLocator.mpLog
-                .fine("MPOverlayWindowWidget.onPointerSignal() executed");
+            // mpLocator.mpLog
+            //     .fine("MPOverlayWindowWidget.onPointerSignal() executed");
           },
           child: widget.child,
         ),

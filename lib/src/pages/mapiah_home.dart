@@ -132,7 +132,11 @@ class _MapiahHomeState extends State<MapiahHome> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => TH2FileEditPage(filename: pickedFilePath)),
+            builder: (context) => TH2FileEditPage(
+              key: ValueKey("TH2FileEditPage|$pickedFilePath"),
+              filename: pickedFilePath,
+            ),
+          ),
         );
       } else {
         mpLocator.mpLog.i('No file selected.');

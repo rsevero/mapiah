@@ -14,7 +14,7 @@ import 'package:mapiah/src/widgets/th_file_widget.dart';
 class TH2FileEditPage extends StatefulWidget {
   final String filename;
 
-  TH2FileEditPage({required this.filename});
+  TH2FileEditPage({required this.filename, super.key});
 
   @override
   State<TH2FileEditPage> createState() => _TH2FileEditPageState();
@@ -109,19 +109,17 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 final List<String> errorMessages = snapshot.data!.errors;
 
                 if (snapshot.data!.isSuccessful) {
-                  return Center(
-                    child: Stack(
-                      children: [
-                        THFileWidget(
-                          key: ValueKey(
-                            "THFileWidget|${th2FileEditController.thFileMapiahID}",
-                          ),
-                          th2FileEditController: th2FileEditController,
+                  return Stack(
+                    children: [
+                      THFileWidget(
+                        key: ValueKey(
+                          "THFileWidget|${th2FileEditController.thFileMapiahID}",
                         ),
-                        _stateActionButtons(),
-                        _actionButtons(),
-                      ],
-                    ),
+                        th2FileEditController: th2FileEditController,
+                      ),
+                      _stateActionButtons(),
+                      _actionButtons(),
+                    ],
                   );
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {

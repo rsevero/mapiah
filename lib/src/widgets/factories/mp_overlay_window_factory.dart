@@ -17,6 +17,7 @@ class MPOverlayWindowFactory {
   }) {
     final TH2FileEditOverlayWindowController overlayWindowController =
         th2FileEditController.overlayWindowController;
+    final int thFileMapiahID = th2FileEditController.thFileMapiahID;
 
     switch (type) {
       case MPOverlayWindowType.availableScraps:
@@ -29,11 +30,13 @@ class MPOverlayWindowFactory {
         }
 
         return MPAvailableScrapsWidget(
+          key: ValueKey("MPAvailableScrapsWidget|$thFileMapiahID"),
           th2FileEditController: th2FileEditController,
           position: position,
         );
       case MPOverlayWindowType.commandOptions:
         return MPOptionsEditWidget(
+          key: ValueKey("MPOptionsEditWidget|$thFileMapiahID"),
           th2FileEditController: th2FileEditController,
           position: position,
           positionType: MPWidgetPositionType.center,

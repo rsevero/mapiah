@@ -41,10 +41,23 @@ class THFileWidget extends StatelessWidget {
           actuator: th2FileEditController.stateController,
           th2FileEditController: th2FileEditController,
           child: Stack(
+            key: ValueKey("THFileWidgetStack|$thFileMapiahID"),
             children: [
               MPNonSelectedElementsWidget(
                 key: ValueKey("MPNonSelectedElementsWidget|$thFileMapiahID"),
                 th2FileEditController: th2FileEditController,
+              ),
+              Observer(
+                builder: (_) {
+                  if (th2FileEditController.showScrapScale) {
+                    return MPScrapScaleWidget(
+                      key: ValueKey("MPScrapScaleWidget|$thFileMapiahID"),
+                      th2FileEditController: th2FileEditController,
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
               ),
               Observer(
                 builder: (_) {
@@ -108,21 +121,9 @@ class THFileWidget extends StatelessWidget {
               ),
               Observer(
                 builder: (_) {
-                  if (th2FileEditController.showScrapScale) {
-                    return MPScrapScaleWidget(
-                      key: ValueKey("MPScrapScaleWidget|$thFileMapiahID"),
-                      th2FileEditController: th2FileEditController,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
                   th2FileEditController.redrawTriggerOverlayWindows;
-
                   return Stack(
+                    key: ValueKey("OverlayWindowsStack|$thFileMapiahID"),
                     children: overlayWindowController.overlayWindows.entries
                         .map((entry) {
                       return entry.value;
