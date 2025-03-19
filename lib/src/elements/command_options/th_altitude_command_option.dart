@@ -16,11 +16,13 @@ class THAltitudeCommandOption extends THCommandOption
     required bool isFix,
     required bool isNan,
     required THLengthUnitPart unit,
+    required bool unitSet,
   }) : super.forCWJM() {
     this.length = length;
     this.isFix = isFix;
     this.isNan = isNan;
     this.unit = unit;
+    this.unitSet = unitSet;
   }
 
   THAltitudeCommandOption({
@@ -73,6 +75,7 @@ class THAltitudeCommandOption extends THCommandOption
       'isFix': isFix,
       'isNan': isNan,
       'unit': unit.toMap(),
+      'unitSet': unitSet,
     });
 
     return map;
@@ -85,7 +88,8 @@ class THAltitudeCommandOption extends THCommandOption
       length: THDoublePart.fromMap(map['length']),
       isFix: map['isFix'],
       isNan: map['isNan'],
-      unit: map['unit'],
+      unit: THLengthUnitPart.fromMap(map['unit']),
+      unitSet: map['unitSet'],
     );
   }
 
@@ -102,6 +106,7 @@ class THAltitudeCommandOption extends THCommandOption
     bool? isNan,
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
+    bool? unitSet,
   }) {
     return THAltitudeCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
@@ -110,7 +115,10 @@ class THAltitudeCommandOption extends THCommandOption
       length: length ?? this.length,
       isFix: isFix ?? this.isFix,
       isNan: isNan ?? this.isNan,
-      unit: unit ?? this.unit,
+      unit: makeUnitNull
+          ? THLengthUnitPart.fromString(unitString: '')
+          : (unit ?? this.unit),
+      unitSet: unitSet ?? this.unitSet,
     );
   }
 
@@ -123,7 +131,8 @@ class THAltitudeCommandOption extends THCommandOption
         other.length == length &&
         other.isFix == isFix &&
         other.isNan == isNan &&
-        other.unit == unit;
+        other.unit == unit &&
+        other.unitSet == unitSet;
   }
 
   @override
@@ -134,5 +143,6 @@ class THAltitudeCommandOption extends THCommandOption
         isFix,
         isNan,
         unit,
+        unitSet,
       );
 }

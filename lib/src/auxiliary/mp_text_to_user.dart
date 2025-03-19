@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -470,5 +471,82 @@ class MPTextToUser {
     return _commandOptionTypeAsString.containsKey(commandOptionType)
         ? _commandOptionTypeAsString[commandOptionType]!
         : commandOptionType.name;
+  }
+
+  static removeDiacritics(String text) {
+    const Map<String, String> diacritics = {
+      'á': 'a',
+      'à': 'a',
+      'ã': 'a',
+      'â': 'a',
+      'ä': 'a',
+      'é': 'e',
+      'è': 'e',
+      'ẽ': 'e',
+      'ê': 'e',
+      'ë': 'e',
+      'í': 'i',
+      'ì': 'i',
+      'î': 'i',
+      'ĩ': 'i',
+      'ï': 'i',
+      'ó': 'o',
+      'ò': 'o',
+      'ô': 'o',
+      'õ': 'o',
+      'ö': 'o',
+      'ú': 'u',
+      'ù': 'u',
+      'û': 'u',
+      'ũ': 'u',
+      'ü': 'u',
+      'ç': 'c',
+    };
+
+    for (final entry in diacritics.entries) {
+      text = text.replaceAll(entry.key, entry.value);
+    }
+
+    return text;
+  }
+
+  static int compareStringsNoDiacritics(final String a, final String b) {
+    if (a == b) {
+      return 0;
+    }
+
+    final String aSpaceNormalized = a.replaceAll(RegExp(r'\s+'), ' ').trim();
+    final String bSpaceNormalized = b.replaceAll(RegExp(r'\s+'), ' ').trim();
+
+    if (aSpaceNormalized == bSpaceNormalized) {
+      return a.compareTo(b);
+    }
+
+    final String aLower = a.toLowerCase();
+    final String bLower = b.toLowerCase();
+
+    if (aLower == bLower) {
+      return aSpaceNormalized.compareTo(bSpaceNormalized);
+    }
+
+    final String aNoDiacritic = removeDiacritics(aLower);
+    final String bNoDiacritic = removeDiacritics(bLower);
+
+    if (aNoDiacritic == bNoDiacritic) {
+      return aLower.compareTo(bLower);
+    }
+
+    return aNoDiacritic.compareTo(bNoDiacritic);
+  }
+
+  static int compareStringsUsingLocale(
+    final String a,
+    final String b,
+    final Locale locale,
+  ) {
+    switch (locale.toLanguageTag()) {
+      default:
+        return compareStringsNoDiacritics(a, b);
+    }
   }
 }

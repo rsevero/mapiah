@@ -9,9 +9,11 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     required super.originalLineInTH2File,
     required THDoublePart length,
     required THLengthUnitPart unit,
+    required bool unitSet,
   }) : super.forCWJM() {
     this.length = length;
     this.unit = unit;
+    this.unitSet = unitSet;
   }
 
   THExploredCommandOption.fromString({
@@ -34,6 +36,7 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     map.addAll({
       'length': length.toMap(),
       'unit': unit.toMap(),
+      'unitSet': unitSet,
     });
 
     return map;
@@ -45,6 +48,7 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
       originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       unit: THLengthUnitPart.fromMap(map['unit']),
+      unitSet: map['unitSet'],
     );
   }
 
@@ -58,13 +62,18 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     String? originalLineInTH2File,
     THDoublePart? length,
     THLengthUnitPart? unit,
+    bool makeUnitNull = false,
+    bool? unitSet,
   }) {
     return THExploredCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
-      unit: unit ?? this.unit,
+      unit: makeUnitNull
+          ? THLengthUnitPart.fromString(unitString: '')
+          : unit ?? this.unit,
+      unitSet: unitSet ?? this.unitSet,
     );
   }
 
@@ -75,7 +84,8 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
-        other.unit == unit;
+        other.unit == unit &&
+        other.unitSet == unitSet;
   }
 
   @override
@@ -84,5 +94,6 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
       Object.hash(
         length,
         unit,
+        unitSet,
       );
 }

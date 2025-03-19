@@ -48,6 +48,92 @@ mixin _$TH2FileEditOptionEditController
     });
   }
 
+  late final _$_optionStateMapAtom = Atom(
+      name: 'TH2FileEditOptionEditControllerBase._optionStateMap',
+      context: context);
+
+  ObservableMap<THCommandOptionType, Observable<MPOptionStateType>>
+      get optionStateMap {
+    _$_optionStateMapAtom.reportRead();
+    return super._optionStateMap;
+  }
+
+  @override
+  ObservableMap<THCommandOptionType, Observable<MPOptionStateType>>
+      get _optionStateMap => optionStateMap;
+
+  @override
+  set _optionStateMap(
+      ObservableMap<THCommandOptionType, Observable<MPOptionStateType>> value) {
+    _$_optionStateMapAtom.reportWrite(value, super._optionStateMap, () {
+      super._optionStateMap = value;
+    });
+  }
+
+  late final _$_openedOptionTypeAtom = Atom(
+      name: 'TH2FileEditOptionEditControllerBase._openedOptionType',
+      context: context);
+
+  THCommandOptionType? get openedOptionType {
+    _$_openedOptionTypeAtom.reportRead();
+    return super._openedOptionType;
+  }
+
+  @override
+  THCommandOptionType? get _openedOptionType => openedOptionType;
+
+  @override
+  set _openedOptionType(THCommandOptionType? value) {
+    _$_openedOptionTypeAtom.reportWrite(value, super._openedOptionType, () {
+      super._openedOptionType = value;
+    });
+  }
+
+  late final _$TH2FileEditOptionEditControllerBaseActionController =
+      ActionController(
+          name: 'TH2FileEditOptionEditControllerBase', context: context);
+
+  @override
+  void updateOptionStateMap() {
+    final _$actionInfo =
+        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditOptionEditControllerBase.updateOptionStateMap');
+    try {
+      return super.updateOptionStateMap();
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleOptionShownStatus(THCommandOptionType optionType) {
+    final _$actionInfo =
+        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOptionEditControllerBase.toggleOptionShownStatus');
+    try {
+      return super.toggleOptionShownStatus(optionType);
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void showOptionsOverlayWindow() {
+    final _$actionInfo =
+        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOptionEditControllerBase.showOptionsOverlayWindow');
+    try {
+      return super.showOptionsOverlayWindow();
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

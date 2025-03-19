@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -31,6 +33,48 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> optionWidgets = [const Text('Options')];
+
+    final mpSelectedElements =
+        th2FileEditController.selectionController.selectedElements.values;
+
+    if (mpSelectedElements.length == 1) {
+      final THElementType selectedElementType =
+          mpSelectedElements.first.originalElementClone.elementType;
+
+      switch (selectedElementType) {
+        case THElementType.area:
+          optionWidgets.add(const ListTile(title: Text('Area Type')));
+        case THElementType.line:
+          optionWidgets.add(const ListTile(title: Text('Line Type')));
+        case THElementType.straightLineSegment:
+          optionWidgets
+              .add(const ListTile(title: Text('Straight Line Segment Type')));
+        case THElementType.bezierCurveLineSegment:
+          optionWidgets.add(
+              const ListTile(title: Text('Bezier Curve Line Segment Type')));
+        case THElementType.point:
+          optionWidgets.add(const ListTile(title: Text('Point Type')));
+        case THElementType.scrap:
+          optionWidgets.add(const ListTile(title: Text('Scrap Type')));
+        default:
+          throw Exception('Unknown element type: $selectedElementType');
+      }
+    }
+
+    final optionsStateMap =
+        th2FileEditController.optionEditController.optionStateMap.entries;
+
+    for (final option in optionsStateMap) {
+      optionWidgets.add(
+        MPOptionWidget(
+          type: option.key,
+          state: option.value.value,
+          th2FileEditController: th2FileEditController,
+        ),
+      );
+    }
+
     return MPOverlayWindowWidget(
       position: widget.position,
       positionType: widget.positionType,
@@ -38,35 +82,16 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
       th2FileEditController: th2FileEditController,
       child: Material(
         elevation: 8.0,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text('Extra Information',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              // Add your interactive elements (dropdowns, buttons, etc.)
-              DropdownButton<String>(
-                dropdownColor: Colors.white.withAlpha(230),
-                items: <String>['Option 1', 'Option 2'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Material(
-                      child: Text(value),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  // Handle dropdown changes
-                },
+        child: IntrinsicWidth(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: optionWidgets,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // Handle button press
-                },
-                child: const Text('Do Something'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

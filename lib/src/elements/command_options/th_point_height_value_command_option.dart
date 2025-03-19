@@ -14,9 +14,11 @@ class THPointHeightValueCommandOption extends THCommandOption
     required THDoublePart length,
     required this.isPresumed,
     required THLengthUnitPart unit,
+    required bool unitSet,
   }) : super.forCWJM() {
     this.length = length;
     this.unit = unit;
+    this.unitSet = unitSet;
   }
 
   THPointHeightValueCommandOption.fromString({
@@ -44,6 +46,7 @@ class THPointHeightValueCommandOption extends THCommandOption
       'length': length.toMap(),
       'isPresumed': isPresumed,
       'unit': unit.toMap(),
+      'unitSet': unitSet,
     });
 
     return map;
@@ -56,6 +59,7 @@ class THPointHeightValueCommandOption extends THCommandOption
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
       unit: THLengthUnitPart.fromMap(map['unit']),
+      unitSet: map['unitSet'],
     );
   }
 
@@ -70,6 +74,8 @@ class THPointHeightValueCommandOption extends THCommandOption
     THDoublePart? length,
     bool? isPresumed,
     THLengthUnitPart? unit,
+    bool makeUnitNull = false,
+    bool? unitSet,
   }) {
     return THPointHeightValueCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
@@ -77,7 +83,10 @@ class THPointHeightValueCommandOption extends THCommandOption
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
       isPresumed: isPresumed ?? this.isPresumed,
-      unit: unit ?? this.unit,
+      unit: makeUnitNull
+          ? THLengthUnitPart.fromString(unitString: '')
+          : unit ?? this.unit,
+      unitSet: unitSet ?? this.unitSet,
     );
   }
 
@@ -89,7 +98,8 @@ class THPointHeightValueCommandOption extends THCommandOption
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.isPresumed == isPresumed &&
-        other.unit == unit;
+        other.unit == unit &&
+        other.unitSet == unitSet;
   }
 
   @override
@@ -99,6 +109,7 @@ class THPointHeightValueCommandOption extends THCommandOption
         length,
         isPresumed,
         unit,
+        unitSet,
       );
 
   @override

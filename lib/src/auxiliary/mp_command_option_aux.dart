@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -216,6 +219,23 @@ class MPCommandOptionAux {
     }
 
     return commonOptions.toList();
+  }
+
+  static List<THCommandOptionType> getOrderedList(
+    Iterable<THCommandOptionType> unorderedList,
+  ) {
+    final List<THCommandOptionType> orderedList = List.from(unorderedList);
+    final Locale locale = mpLocator.mpSettingsController.locale;
+
+    orderedList.sort((a, b) {
+      return MPTextToUser.compareStringsUsingLocale(
+        MPTextToUser.getCommandOptionType(a),
+        MPTextToUser.getCommandOptionType(b),
+        locale,
+      );
+    });
+
+    return orderedList;
   }
 
   static bool isSmooth(THHasOptionsMixin element) {
