@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
-import 'package:mapiah/src/themes/orange_purple.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
@@ -33,12 +32,15 @@ class MapiahApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: MaterialTheme.lightScheme().toColorScheme(),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Color.fromARGB(255, 0xe2, 0x5b, 0x30),
+            dynamicSchemeVariant: DynamicSchemeVariant.content,
+          ),
         ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: MaterialTheme.darkScheme().toColorScheme(),
-        ),
+        // darkTheme: ThemeData(
+        //   useMaterial3: true,
+        //   colorScheme: MaterialTheme.darkScheme().toColorScheme(),
+        // ),
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         locale: mpLocator.mpSettingsController.locale,

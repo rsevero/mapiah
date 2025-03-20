@@ -47,10 +47,17 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool get showChangeScrapOverlayWindow =>
       _isOverlayWindowShown[MPOverlayWindowType.availableScraps]!;
 
+  @readonly
+  bool _isAutoDismissWindowOpen = false;
+
   bool processingPointerDownEvent = false;
   bool processingPointerMoveEvent = false;
   bool processingPointerUpEvent = false;
   bool processingPointerSignalEvent = false;
+
+  final autoDismissOverlayWindowTypes = {
+    MPOverlayWindowType.commandOptions,
+  };
 
   toggleOverlayWindow(MPOverlayWindowType type) {
     setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
@@ -86,9 +93,34 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
     _isOverlayWindowShown[type] = show;
     if (show) {
+      if (autoDismissOverlayWindowTypes.contains(type)) {
+        _isAutoDismissWindowOpen = true;
+      }
+
       _showOverlayWindow(type);
     } else {
+      bool autoDismiss = false;
+
+      for (MPOverlayWindowType autoDismissType
+          in autoDismissOverlayWindowTypes) {
+        if (_isOverlayWindowShown[autoDismissType]!) {
+          autoDismiss = true;
+          break;
+        }
+      }
+
+      _isAutoDismissWindowOpen = autoDismiss;
+
       _hideOverlayWindow(type);
+    }
+  }
+
+  @action
+  void closeAutoDismissOverlayWindows() {
+    for (MPOverlayWindowType type in autoDismissOverlayWindowTypes) {
+      if (_isOverlayWindowShown[type]!) {
+        setShowOverlayWindow(type, false);
+      }
     }
   }
 

@@ -141,6 +141,10 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
 
         // mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() executed");
 
+        if (overlayWindowController.isAutoDismissWindowOpen) {
+          overlayWindowController.closeAutoDismissOverlayWindows();
+        }
+
         switch (currentPressedMouseButton) {
           case kPrimaryButton:
             currentPressedMouseButton = 0;

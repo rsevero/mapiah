@@ -142,6 +142,26 @@ mixin _$TH2FileEditOverlayWindowController
     });
   }
 
+  late final _$_isAutoDismissWindowOpenAtom = Atom(
+      name: 'TH2FileEditOverlayWindowControllerBase._isAutoDismissWindowOpen',
+      context: context);
+
+  bool get isAutoDismissWindowOpen {
+    _$_isAutoDismissWindowOpenAtom.reportRead();
+    return super._isAutoDismissWindowOpen;
+  }
+
+  @override
+  bool get _isAutoDismissWindowOpen => isAutoDismissWindowOpen;
+
+  @override
+  set _isAutoDismissWindowOpen(bool value) {
+    _$_isAutoDismissWindowOpenAtom
+        .reportWrite(value, super._isAutoDismissWindowOpen, () {
+      super._isAutoDismissWindowOpen = value;
+    });
+  }
+
   late final _$TH2FileEditOverlayWindowControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditOverlayWindowControllerBase', context: context);
@@ -154,6 +174,20 @@ mixin _$TH2FileEditOverlayWindowController
                 'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
     try {
       return super.setShowOverlayWindow(type, show);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void closeAutoDismissOverlayWindows() {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.closeAutoDismissOverlayWindows');
+    try {
+      return super.closeAutoDismissOverlayWindows();
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

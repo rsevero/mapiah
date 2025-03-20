@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -34,6 +36,8 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> optionWidgets = [const Text('Options')];
+    final TH2FileEditOptionEditController optionEditController =
+        th2FileEditController.optionEditController;
 
     final mpSelectedElements =
         th2FileEditController.selectionController.selectedElements.values;
@@ -62,15 +66,17 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
       }
     }
 
-    final optionsStateMap =
-        th2FileEditController.optionEditController.optionStateMap.entries;
+    final optionsStateMap = optionEditController.optionStateMap.entries;
 
     for (final option in optionsStateMap) {
+      final THCommandOptionType optionType = option.key;
+
       optionWidgets.add(
         MPOptionWidget(
-          type: option.key,
+          type: optionType,
           state: option.value.value,
           th2FileEditController: th2FileEditController,
+          isSelected: optionType == optionEditController.openedOptionType,
         ),
       );
     }
