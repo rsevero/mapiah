@@ -32,57 +32,64 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @action
   void updateOptionStateMap() {
-    final Set<THHasOptionsMixin> selectedElements = {};
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
     final Map<THCommandOptionType, MPOptionStateType> optionStateMap = {};
 
-    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-      selectedElements
-          .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
-    }
-
-    final List<THCommandOptionType> optionTypesList =
-        MPCommandOptionAux.getSupportedOptionsForElements(
-            selectedElements.toList());
-
-    /// Defining the state of each shared option.
-    for (final optionType in optionTypesList) {
-      MPOptionStateType optionStateType = MPOptionStateType.unset;
-      String? optionValue;
-
-      for (final THHasOptionsMixin selectedElement in selectedElements) {
-        if (selectedElement.hasOption(optionType)) {
-          switch (optionStateType) {
-            case MPOptionStateType.unset:
-              optionStateType = MPOptionStateType.set;
-              optionValue =
-                  selectedElement.optionByType(optionType)!.specToFile();
-            case MPOptionStateType.set:
-              final String newOptionValue =
-                  selectedElement.optionByType(optionType)!.specToFile();
-              if (optionValue != newOptionValue) {
-                optionStateType = MPOptionStateType.setMixed;
-              }
-            default:
-          }
-        } else if (optionStateType == MPOptionStateType.set) {
-          optionStateType = MPOptionStateType.setMixed;
-        }
-
-        if (optionStateType == MPOptionStateType.setMixed) {
-          break;
-        }
+    if (mpSelectedElements.isEmpty) {
+      for (final optionType in THCommandOptionType.values) {
+        optionStateMap[optionType] = MPOptionStateType.unset;
       }
-      optionStateMap[optionType] = optionStateType;
-    }
+    } else {
+      final Set<THHasOptionsMixin> selectedElements = {};
 
-    /// Looking for set but unsupported options.
-    for (final THHasOptionsMixin selectedElement in selectedElements) {
-      for (final THCommandOptionType optionType
-          in selectedElement.optionsMap.keys) {
-        if (!optionStateMap.containsKey(optionType)) {
-          optionStateMap[optionType] = MPOptionStateType.setUnsupported;
+      for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+        selectedElements
+            .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
+      }
+
+      final List<THCommandOptionType> optionTypesList =
+          MPCommandOptionAux.getSupportedOptionsForElements(
+              selectedElements.toList());
+
+      /// Defining the state of each shared option.
+      for (final optionType in optionTypesList) {
+        MPOptionStateType optionStateType = MPOptionStateType.unset;
+        String? optionValue;
+
+        for (final THHasOptionsMixin selectedElement in selectedElements) {
+          if (selectedElement.hasOption(optionType)) {
+            switch (optionStateType) {
+              case MPOptionStateType.unset:
+                optionStateType = MPOptionStateType.set;
+                optionValue =
+                    selectedElement.optionByType(optionType)!.specToFile();
+              case MPOptionStateType.set:
+                final String newOptionValue =
+                    selectedElement.optionByType(optionType)!.specToFile();
+                if (optionValue != newOptionValue) {
+                  optionStateType = MPOptionStateType.setMixed;
+                }
+              default:
+            }
+          } else if (optionStateType == MPOptionStateType.set) {
+            optionStateType = MPOptionStateType.setMixed;
+          }
+
+          if (optionStateType == MPOptionStateType.setMixed) {
+            break;
+          }
+        }
+        optionStateMap[optionType] = optionStateType;
+      }
+
+      /// Looking for set but unsupported options.
+      for (final THHasOptionsMixin selectedElement in selectedElements) {
+        for (final THCommandOptionType optionType
+            in selectedElement.optionsMap.keys) {
+          if (!optionStateMap.containsKey(optionType)) {
+            optionStateMap[optionType] = MPOptionStateType.setUnsupported;
+          }
         }
       }
     }
