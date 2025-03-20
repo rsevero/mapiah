@@ -866,17 +866,17 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void execute(MPCommand command) {
     undoRedoController.execute(command);
-    _updateUndoRedoStatus();
+    updateUndoRedoStatus();
   }
 
   @action
   void executeAndSubstituteLastUndo(MPCommand command) {
     undoRedoController.executeAndSubstituteLastUndo(command);
-    _updateUndoRedoStatus();
+    updateUndoRedoStatus();
   }
 
   @action
-  void _updateUndoRedoStatus() {
+  void updateUndoRedoStatus() {
     _hasUndo = undoRedoController.hasUndo;
     _hasRedo = undoRedoController.hasRedo;
     _undoDescription = mpLocator.appLocalizations
@@ -887,7 +887,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void _undoRedoDone() {
-    _updateUndoRedoStatus();
+    updateUndoRedoStatus();
     selectionController.clearSelectedElementsAndSelectionHandleCenters();
   }
 

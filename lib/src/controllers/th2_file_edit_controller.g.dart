@@ -1197,11 +1197,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void _updateUndoRedoStatus() {
+  void updateUndoRedoStatus() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase._updateUndoRedoStatus');
+        .startAction(name: 'TH2FileEditControllerBase.updateUndoRedoStatus');
     try {
-      return super._updateUndoRedoStatus();
+      return super.updateUndoRedoStatus();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

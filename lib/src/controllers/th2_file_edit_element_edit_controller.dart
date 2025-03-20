@@ -435,9 +435,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void finalizeNewLineCreation() {
-    _th2FileEditController.selectionController.addSelectableElement(_newLine!);
+    if (_newLine != null) {
+      _th2FileEditController.selectionController
+          .addSelectableElement(_newLine!);
+    }
+
     clearNewLine();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
     _th2FileEditController.triggerNewLineRedraw();
+    _th2FileEditController.updateUndoRedoStatus();
   }
 }
