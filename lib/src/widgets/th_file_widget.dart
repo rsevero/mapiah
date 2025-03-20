@@ -40,96 +40,99 @@ class THFileWidget extends StatelessWidget {
           key: ValueKey("MPListenerWidget|$thFileMPID"),
           actuator: th2FileEditController.stateController,
           th2FileEditController: th2FileEditController,
-          child: Stack(
-            key: ValueKey("THFileWidgetStack|$thFileMPID"),
-            children: [
-              MPNonSelectedElementsWidget(
-                key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
-                th2FileEditController: th2FileEditController,
-              ),
-              Observer(
-                builder: (_) {
-                  if (th2FileEditController.showScrapScale) {
-                    return MPScrapScaleWidget(
-                      key: ValueKey("MPScrapScaleWidget|$thFileMPID"),
-                      th2FileEditController: th2FileEditController,
+          child: Container(
+            color: Theme.of(context).colorScheme.surfaceBright,
+            child: Stack(
+              key: ValueKey("THFileWidgetStack|$thFileMPID"),
+              children: [
+                MPNonSelectedElementsWidget(
+                  key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
+                  th2FileEditController: th2FileEditController,
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showScrapScale) {
+                      return MPScrapScaleWidget(
+                        key: ValueKey("MPScrapScaleWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showSelectedElements) {
+                      return MPSelectedElementsWidget(
+                        key: ValueKey("MPSelectedElementsWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showAddLine) {
+                      return MPAddLineWidget(
+                        key: ValueKey("MPAddLineWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showEditLineSegment) {
+                      return MPEditLineWidget(
+                        key: ValueKey("MPEditLineWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showSelectionHandles) {
+                      return MPSelectionHandlesWidget(
+                        key: ValueKey("MPSelectionHandlesWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showSelectionWindow) {
+                      return MPSelectionWindowWidget(
+                        key: ValueKey("MPSelectionWindowWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    th2FileEditController.redrawTriggerOverlayWindows;
+                    return Stack(
+                      key: ValueKey("OverlayWindowsStack|$thFileMPID"),
+                      children: overlayWindowController.overlayWindows.values
+                          .toList(),
                     );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  if (th2FileEditController.showSelectedElements) {
-                    return MPSelectedElementsWidget(
-                      key: ValueKey("MPSelectedElementsWidget|$thFileMPID"),
-                      th2FileEditController: th2FileEditController,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  if (th2FileEditController.showAddLine) {
-                    return MPAddLineWidget(
-                      key: ValueKey("MPAddLineWidget|$thFileMPID"),
-                      th2FileEditController: th2FileEditController,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  if (th2FileEditController.showEditLineSegment) {
-                    return MPEditLineWidget(
-                      key: ValueKey("MPEditLineWidget|$thFileMPID"),
-                      th2FileEditController: th2FileEditController,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  if (th2FileEditController.showSelectionHandles) {
-                    return MPSelectionHandlesWidget(
-                      key: ValueKey("MPSelectionHandlesWidget|$thFileMPID"),
-                      th2FileEditController: th2FileEditController,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  if (th2FileEditController.showSelectionWindow) {
-                    return MPSelectionWindowWidget(
-                      key: ValueKey("MPSelectionWindowWidget|$thFileMPID"),
-                      th2FileEditController: th2FileEditController,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  th2FileEditController.redrawTriggerOverlayWindows;
-                  return Stack(
-                    key: ValueKey("OverlayWindowsStack|$thFileMPID"),
-                    children:
-                        overlayWindowController.overlayWindows.values.toList(),
-                  );
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
