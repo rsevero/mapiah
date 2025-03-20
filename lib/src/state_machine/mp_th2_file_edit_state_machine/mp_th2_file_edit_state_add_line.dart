@@ -27,5 +27,22 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   }
 
   @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.enter:
+        if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
+          elementEditController.finalizeNewLineCreation();
+          return;
+        }
+    }
+
+    _onKeyDownEvent(event);
+  }
+
+  @override
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.addLine;
 }

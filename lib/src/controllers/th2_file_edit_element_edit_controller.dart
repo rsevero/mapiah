@@ -438,5 +438,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.selectionController.addSelectableElement(_newLine!);
     clearNewLine();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
+    _th2FileEditController.triggerNewLineRedraw();
   }
 }
