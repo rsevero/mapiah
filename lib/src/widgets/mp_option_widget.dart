@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -36,47 +35,45 @@ class MPOptionWidget extends StatelessWidget {
     } else {
       switch (state) {
         case MPOptionStateType.set:
-          mpLocator.mpLog.fine("MPOptionWidget.build() MPOptionStateType.set");
+          // mpLocator.mpLog.fine("MPOptionWidget.build() MPOptionStateType.set");
           iconColor = colorScheme.onTertiaryFixed;
           textColor = colorScheme.onTertiaryFixed;
           tileColor = colorScheme.tertiaryFixed;
 
         case MPOptionStateType.setMixed:
-          mpLocator.mpLog
-              .fine("MPOptionWidget.build() MPOptionStateType.setMixed");
+          // mpLocator.mpLog
+          //     .fine("MPOptionWidget.build() MPOptionStateType.setMixed");
           iconColor = colorScheme.onTertiaryContainer;
           textColor = colorScheme.onTertiaryContainer;
           tileColor = colorScheme.tertiaryContainer;
         case MPOptionStateType.setUnsupported:
-          mpLocator.mpLog
-              .fine("MPOptionWidget.build() MPOptionStateType.setUnsupported");
+          // mpLocator.mpLog
+          //     .fine("MPOptionWidget.build() MPOptionStateType.setUnsupported");
           iconColor = colorScheme.onTertiary;
           textColor = colorScheme.onTertiary;
           tileColor = colorScheme.tertiary;
         case MPOptionStateType.unset:
-          mpLocator.mpLog
-              .fine("MPOptionWidget.build() MPOptionStateType.unset");
+          // mpLocator.mpLog
+          //     .fine("MPOptionWidget.build() MPOptionStateType.unset");
           iconColor = colorScheme.onSurfaceVariant;
           textColor = colorScheme.onSurfaceVariant;
           tileColor = colorScheme.surfaceContainer;
       }
     }
 
-    mpLocator.mpLog.fine("MPOptionWidget.build() $tileColor");
+    // mpLocator.mpLog.fine("MPOptionWidget.build() $tileColor");
 
-    return IntrinsicWidth(
-      child: ListTile(
-        title: Text(MPTextToUser.getCommandOptionType(type)),
-        onTap: () => onOptionTap(type),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-        visualDensity: VisualDensity.compact,
-        dense: true,
-        minLeadingWidth: 0,
-        iconColor: iconColor,
-        textColor: textColor,
-        tileColor: tileColor,
-        selected: isSelected,
-      ),
+    return ListTile(
+      title: Text("${MPTextToUser.getCommandOptionType(type)}: ${state.name}"),
+      onTap: () => onOptionTap(type),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+      visualDensity: VisualDensity.compact,
+      dense: true,
+      minLeadingWidth: 0,
+      iconColor: iconColor,
+      textColor: textColor,
+      tileColor: tileColor,
+      selected: isSelected,
     );
   }
 
