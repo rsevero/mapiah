@@ -8,7 +8,7 @@ import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPOptionsEditWidget extends StatefulWidget {
+class MPOptionsEditWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final MPWidgetPositionType positionType;
@@ -19,19 +19,6 @@ class MPOptionsEditWidget extends StatefulWidget {
     required this.position,
     required this.positionType,
   });
-
-  @override
-  State<MPOptionsEditWidget> createState() => _MPOptionsEditWidgetState();
-}
-
-class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
-  late final TH2FileEditController th2FileEditController;
-
-  @override
-  void initState() {
-    super.initState();
-    th2FileEditController = widget.th2FileEditController;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +69,8 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
     }
 
     return MPOverlayWindowWidget(
-      position: widget.position,
-      positionType: widget.positionType,
+      position: position,
+      positionType: positionType,
       overlayWindowType: MPOverlayWindowType.commandOptions,
       th2FileEditController: th2FileEditController,
       child: Material(
