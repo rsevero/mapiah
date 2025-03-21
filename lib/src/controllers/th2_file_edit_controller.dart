@@ -109,6 +109,8 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   String _redoDescription = '';
 
+  final GlobalKey thFileWidgetKey = GlobalKey();
+
   @computed
   String get filenameAndScrap {
     String filename = p.basename(_thFile.filename);

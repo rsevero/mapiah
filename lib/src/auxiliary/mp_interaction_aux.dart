@@ -24,30 +24,30 @@ class MPInteractionAux {
             .contains(LogicalKeyboardKey.altRight);
   }
 
-  static Rect? getWidgetRectFromGlobalKey(GlobalKey widgetKey) {
-    if (widgetKey.currentContext == null) {
+  static Rect? getWidgetRectFromGlobalKey({
+    required GlobalKey widgetGlobalKey,
+    required GlobalKey ancestorGlobalKey,
+  }) {
+    if (widgetGlobalKey.currentContext == null) {
       return null;
     }
 
-    return getWidgetRectFromContext(widgetKey.currentContext!);
-  }
+    final RenderObject? ancestor =
+        ancestorGlobalKey.currentContext?.findRenderObject();
 
-  static Rect? getWidgetRectFromContext(BuildContext context) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final Offset position = renderBox.localToGlobal(Offset.zero);
+    final RenderBox renderBox =
+        widgetGlobalKey.currentContext!.findRenderObject() as RenderBox;
+    final Offset position = renderBox.localToGlobal(
+      Offset.zero,
+      ancestor: ancestor,
+    );
     final Size size = renderBox.size;
 
-    /// I believe position is bottom/left and not top/left as expected because
-    /// the canvas Y axe is inverted to match Therion's Y axe. But the canvas
-    /// transformation should affect only the canvas coordinates and not the
-    /// screen coordinates. Maybe it's something completely different but with
-    /// the Rect below getWidgetRect returns the actual coordinates of the
-    /// requested widget.
-    return MPNumericAux.orderedRectFromLTRB(
-      bottom: position.dy,
+    return MPNumericAux.orderedRectFromLTWH(
+      top: position.dy,
       left: position.dx,
-      top: position.dy - size.height,
-      right: position.dx + size.width,
+      width: size.width,
+      height: size.height,
     );
   }
 

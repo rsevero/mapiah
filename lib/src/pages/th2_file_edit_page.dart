@@ -115,9 +115,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       child: Stack(
                         children: [
                           THFileWidget(
-                            key: ValueKey(
-                              "THFileWidget|${th2FileEditController.thFileMPID}",
-                            ),
+                            key: th2FileEditController.thFileWidgetKey,
                             th2FileEditController: th2FileEditController,
                           ),
                           _stateActionButtons(),
@@ -129,9 +127,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     return Stack(
                       children: [
                         THFileWidget(
-                          key: ValueKey(
-                            "THFileWidget|${th2FileEditController.thFileMPID}",
-                          ),
+                          key: th2FileEditController.thFileWidgetKey,
                           th2FileEditController: th2FileEditController,
                         ),
                         _stateActionButtons(),

@@ -27,8 +27,10 @@ class MPOverlayWindowFactory {
       case MPOverlayWindowType.availableScraps:
         final GlobalKey changeScrapButtonKey = overlayWindowController
             .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
-        final Rect? rect =
-            MPInteractionAux.getWidgetRectFromGlobalKey(changeScrapButtonKey);
+        final Rect? rect = MPInteractionAux.getWidgetRectFromGlobalKey(
+          widgetGlobalKey: changeScrapButtonKey,
+          ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+        );
 
         if (rect != null) {
           position = Offset(rect.left - mpButtonSpace, rect.center.dy);
