@@ -32,11 +32,20 @@ class MPInteractionAux {
       return null;
     }
 
+    return getWidgetRectFromContext(
+      context: widgetGlobalKey.currentContext!,
+      ancestorGlobalKey: ancestorGlobalKey,
+    );
+  }
+
+  static Rect? getWidgetRectFromContext({
+    required BuildContext context,
+    required GlobalKey ancestorGlobalKey,
+  }) {
     final RenderObject? ancestor =
         ancestorGlobalKey.currentContext?.findRenderObject();
 
-    final RenderBox renderBox =
-        widgetGlobalKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final Offset position = renderBox.localToGlobal(
       Offset.zero,
       ancestor: ancestor,

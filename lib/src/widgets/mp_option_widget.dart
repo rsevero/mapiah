@@ -13,11 +13,9 @@ class MPOptionWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditOptionEditController optionEditController;
   final bool isSelected;
-  final GlobalKey optionGlobalKey;
 
   MPOptionWidget({
     super.key,
-    required this.optionGlobalKey,
     required this.type,
     required this.state,
     this.option,
@@ -68,7 +66,6 @@ class MPOptionWidget extends StatelessWidget {
     // mpLocator.mpLog.fine("MPOptionWidget.build() $tileColor");
 
     return ListTile(
-      key: optionGlobalKey,
       title: Text("${MPTextToUser.getCommandOptionType(type)}: ${state.name}"),
       onTap: () => onOptionTap(context, type),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -83,8 +80,8 @@ class MPOptionWidget extends StatelessWidget {
   }
 
   void onOptionTap(BuildContext context, THCommandOptionType type) {
-    Rect? boundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
-      widgetGlobalKey: optionGlobalKey,
+    Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(
+      context: context,
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
     );
 

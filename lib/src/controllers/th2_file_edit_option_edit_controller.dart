@@ -22,11 +22,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditOptionEditControllerBase(this._th2FileEditController)
-      : _thFile = _th2FileEditController.thFile {
-    for (final commandOptionType in THCommandOptionType.values) {
-      _optionGlobalKeys[commandOptionType] = GlobalKey();
-    }
-  }
+      : _thFile = _th2FileEditController.thFile;
 
   @readonly
   ObservableMap<THCommandOptionType, Observable<MPOptionStateType>>
@@ -34,8 +30,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @readonly
   THCommandOptionType? _openedOptionType;
-
-  final Map<THCommandOptionType, GlobalKey> _optionGlobalKeys = {};
 
   @action
   void updateOptionStateMap() {
@@ -143,6 +137,4 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     _th2FileEditController.overlayWindowController
         .toggleOverlayWindow(MPOverlayWindowType.commandOptions);
   }
-
-  Map<THCommandOptionType, GlobalKey> get optionGlobalKeys => _optionGlobalKeys;
 }
