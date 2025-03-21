@@ -27,7 +27,8 @@ class MPOverlayWindowFactory {
       case MPOverlayWindowType.availableScraps:
         final GlobalKey changeScrapButtonKey = overlayWindowController
             .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
-        final Rect? rect = MPInteractionAux.getWidgetRect(changeScrapButtonKey);
+        final Rect? rect =
+            MPInteractionAux.getWidgetRectFromGlobalKey(changeScrapButtonKey);
 
         if (rect != null) {
           position = Offset(rect.left - mpButtonSpace, rect.center.dy);
@@ -209,107 +210,53 @@ class MPOverlayWindowFactory {
     final String? defaultChoiceAsString = defaultChoice == null
         ? null
         : MPTextToUser.getCommandOptionType(defaultChoice);
+    late Map<String, String> choices;
 
     switch (type) {
       case THCommandOptionType.adjust:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getAdjustOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getAdjustOptions();
       case THCommandOptionType.align:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getAlignOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getAlignOptions();
       case THCommandOptionType.anchors:
       case THCommandOptionType.border:
       case THCommandOptionType.clip:
       case THCommandOptionType.rebelays:
       case THCommandOptionType.reverse:
       case THCommandOptionType.visibility:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getOnOffOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getOnOffOptions();
       case THCommandOptionType.close:
       case THCommandOptionType.smooth:
       case THCommandOptionType.walls:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getOnOffAutoOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getOnOffAutoOptions();
       case THCommandOptionType.flip:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getFlipOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getFlipOptions();
       case THCommandOptionType.head:
       case THCommandOptionType.lineDirection:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getArrowPositionOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getArrowPositionOptions();
       case THCommandOptionType.lineGradient:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getLineGradientOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getLineGradientOptions();
       case THCommandOptionType.linePointDirection:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getLinePointDirectionOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getLinePointDirectionOptions();
       case THCommandOptionType.linePointGradient:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getLinePointGradientOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getLinePointGradientOptions();
       case THCommandOptionType.outline:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getOutlineOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getOutlineOptions();
       case THCommandOptionType.place:
-        return MPMultipleChoicesWidget(
-          key: key,
-          type: type,
-          choices: getOptionChoicesWithUnset(getPlaceOptions()),
-          selectedChoice: selectedChoiceAsString,
-          defaultChoice: defaultChoiceAsString,
-        );
+        choices = getPlaceOptions();
       default:
         return Container(child: Text('${type.name} choice'));
       // throw Exception('Unknown option type: $type');
     }
+
+    return MPMultipleChoicesWidget(
+      th2FileEditController: th2FileEditController,
+      key: key,
+      type: type,
+      choices: getOptionChoicesWithUnset(choices),
+      selectedChoice: selectedChoiceAsString,
+      defaultChoice: defaultChoiceAsString,
+      position: position,
+      positionType: MPWidgetPositionType.leftCenter,
+    );
   }
 }

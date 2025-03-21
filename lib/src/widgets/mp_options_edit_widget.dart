@@ -6,6 +6,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOptionsEditWidget extends StatelessWidget {
@@ -73,20 +74,8 @@ class MPOptionsEditWidget extends StatelessWidget {
       positionType: positionType,
       overlayWindowType: MPOverlayWindowType.commandOptions,
       th2FileEditController: th2FileEditController,
-      child: Material(
-        elevation: 8.0,
-        child: IntrinsicWidth(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: optionWidgets,
-              ),
-            ),
-          ),
-        ),
+      child: MPSingleColumnListOverlayWindowContentWidget(
+        children: optionWidgets,
       ),
     );
   }

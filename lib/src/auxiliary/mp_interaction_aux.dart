@@ -24,13 +24,16 @@ class MPInteractionAux {
             .contains(LogicalKeyboardKey.altRight);
   }
 
-  static Rect? getWidgetRect(GlobalKey widgetKey) {
+  static Rect? getWidgetRectFromGlobalKey(GlobalKey widgetKey) {
     if (widgetKey.currentContext == null) {
       return null;
     }
 
-    final RenderBox renderBox =
-        widgetKey.currentContext!.findRenderObject() as RenderBox;
+    return getWidgetRectFromContext(widgetKey.currentContext!);
+  }
+
+  static Rect? getWidgetRectFromContext(BuildContext context) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final Offset position = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
 

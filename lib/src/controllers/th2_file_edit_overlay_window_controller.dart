@@ -64,7 +64,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
   }
 
-  void _showOverlayWindow(MPOverlayWindowType type) {
+  void _showOverlayWindow(MPOverlayWindowType type, {Offset? position}) {
     if (_overlayWindows.containsKey(type)) {
       final Widget overlayWindow = _overlayWindows[type]!;
 
@@ -74,7 +74,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       if (type == MPOverlayWindowType.optionChoices) {
         _overlayWindows[type] = MPOverlayWindowFactory.createOptionChoices(
           th2FileEditController: _th2FileEditController,
-          position: getPositionFromSelectedElements(),
+          position: position ?? getPositionFromSelectedElements(),
           type: _th2FileEditController.optionEditController.openedOptionType!,
         );
       } else {
@@ -99,7 +99,11 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   @action
-  void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
+  void setShowOverlayWindow(
+    MPOverlayWindowType type,
+    bool show, {
+    Offset? position,
+  }) {
     _isOverlayWindowShown[type] = show;
 
     if (show) {
@@ -107,7 +111,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         _isAutoDismissWindowOpen = true;
       }
 
-      _showOverlayWindow(type);
+      _showOverlayWindow(type, position: position);
     } else {
       bool autoDismiss = false;
 

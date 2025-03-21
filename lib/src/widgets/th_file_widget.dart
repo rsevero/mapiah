@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -131,6 +132,21 @@ class THFileWidget extends StatelessWidget {
                     );
                   },
                 ),
+                if (mpDebugMousePosition)
+                  Positioned(
+                    bottom: 32,
+                    left: 16,
+                    child: Observer(
+                      builder: (_) => Text(
+                        'Mouse Position: (x: ${th2FileEditController.mousePosition.dx.toStringAsFixed(1)}, y: ${th2FileEditController.mousePosition.dy.toStringAsFixed(1)})',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

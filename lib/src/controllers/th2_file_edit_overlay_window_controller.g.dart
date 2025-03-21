@@ -167,13 +167,14 @@ mixin _$TH2FileEditOverlayWindowController
           name: 'TH2FileEditOverlayWindowControllerBase', context: context);
 
   @override
-  void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
+  void setShowOverlayWindow(MPOverlayWindowType type, bool show,
+      {Offset? position}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
     try {
-      return super.setShowOverlayWindow(type, show);
+      return super.setShowOverlayWindow(type, show, position: position);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

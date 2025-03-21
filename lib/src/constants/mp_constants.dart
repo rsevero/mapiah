@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
+const bool mpDebugMousePosition = true;
 
 const String thCommentChar = '#';
 const String thDecimalSeparator = '.';

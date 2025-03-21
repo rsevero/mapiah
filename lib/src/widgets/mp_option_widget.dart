@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -79,18 +79,12 @@ class MPOptionWidget extends StatelessWidget {
   }
 
   void onOptionTap(BuildContext context, THCommandOptionType type) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(context);
 
-    final Offset position = renderBox.localToGlobal(Offset.zero);
-    final Size size = renderBox.size;
-    final Rect boundingBox = MPNumericAux.orderedRectFromLTWH(
-      left: position.dx,
-      top: position.dy,
-      width: size.width,
-      height: size.height,
-    );
+    final Offset position = boundingBox == null
+        ? th2FileEditController.screenBoundingBox.center
+        : boundingBox.centerRight;
 
-    // Perform your existing logic
-    optionEditController.toggleOptionShownStatus(type, boundingBox);
+    optionEditController.toggleOptionShownStatus(type, position);
   }
 }

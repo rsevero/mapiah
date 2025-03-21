@@ -108,18 +108,37 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 final List<String> errorMessages = snapshot.data!.errors;
 
                 if (snapshot.data!.isSuccessful) {
-                  return Stack(
-                    children: [
-                      THFileWidget(
-                        key: ValueKey(
-                          "THFileWidget|${th2FileEditController.thFileMPID}",
-                        ),
-                        th2FileEditController: th2FileEditController,
+                  if (mpDebugMousePosition) {
+                    return MouseRegion(
+                      onHover: (event) => th2FileEditController
+                          .setMousePosition(event.localPosition),
+                      child: Stack(
+                        children: [
+                          THFileWidget(
+                            key: ValueKey(
+                              "THFileWidget|${th2FileEditController.thFileMPID}",
+                            ),
+                            th2FileEditController: th2FileEditController,
+                          ),
+                          _stateActionButtons(),
+                          _actionButtons(),
+                        ],
                       ),
-                      _stateActionButtons(),
-                      _actionButtons(),
-                    ],
-                  );
+                    );
+                  } else {
+                    return Stack(
+                      children: [
+                        THFileWidget(
+                          key: ValueKey(
+                            "THFileWidget|${th2FileEditController.thFileMPID}",
+                          ),
+                          th2FileEditController: th2FileEditController,
+                        ),
+                        _stateActionButtons(),
+                        _actionButtons(),
+                      ],
+                    );
+                  }
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     showDialog(
