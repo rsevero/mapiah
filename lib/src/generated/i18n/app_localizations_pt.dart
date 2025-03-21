@@ -905,4 +905,73 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thCommandOptionWalls => 'Paredes';
+
+  @override
+  String get mpMultipleChoiceUnset => 'Não definido';
+
+  @override
+  String get thMultipleChoiceAdjustHorizontal => 'Horizontal';
+
+  @override
+  String get thMultipleChoiceAdjustVertical => 'Vertical';
+
+  @override
+  String get thMultipleChoiceAlignBottom => 'Inferior';
+
+  @override
+  String get thMultipleChoiceAlignBottomLeft => 'Inferior Esquerdo';
+
+  @override
+  String get thMultipleChoiceAlignBottomRight => 'Inferior Direito';
+
+  @override
+  String get thMultipleChoiceAlignCenter => 'Centro';
+
+  @override
+  String get thMultipleChoiceAlignLeft => 'Esquerda';
+
+  @override
+  String get thMultipleChoiceAlignRight => 'Direita';
+
+  @override
+  String get thMultipleChoiceAlignTop => 'Superior';
+
+  @override
+  String get thMultipleChoiceAlignTopLeft => 'Superior Esquerdo';
+
+  @override
+  String get thMultipleChoiceAlignTopRight => 'Superior Direito';
+
+  @override
+  String get thMultipleChoiceOnOffOff => 'Desligado';
+
+  @override
+  String get thMultipleChoiceOnOffOn => 'Ligado';
+
+  @override
+  String get thMultipleChoiceOnOffAutoAuto => 'Automático';
+
+  @override
+  String get thMultipleChoiceFlipNone => 'Nenhum';
+
+  @override
+  String get thMultipleChoiceArrowPositionBegin => 'Início';
+
+  @override
+  String get thMultipleChoiceArrowPositionBoth => 'Ambos';
+
+  @override
+  String get thMultipleChoiceArrowPositionEnd => 'Fim';
+
+  @override
+  String get thMultipleChoiceLinePointGradientPoint => 'Ponto';
+
+  @override
+  String get thMultipleChoiceOutlineIn => 'Dentro';
+
+  @override
+  String get thMultipleChoiceOutlineOut => 'Fora';
+
+  @override
+  String get thMultipleChoicePlaceDefault => 'Padrão';
 }

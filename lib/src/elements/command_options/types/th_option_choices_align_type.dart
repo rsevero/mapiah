@@ -1,13 +1,13 @@
 part of '../th_command_option.dart';
 
 enum THOptionChoicesAlignType {
-  center,
-  top,
   bottom,
+  bottomLeft,
+  bottomRight,
+  center,
   left,
   right,
+  top,
   topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight;
+  topRight;
 }

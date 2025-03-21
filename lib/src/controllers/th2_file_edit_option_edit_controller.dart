@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
@@ -32,9 +33,9 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @action
   void updateOptionStateMap() {
+    final Map<THCommandOptionType, MPOptionStateType> optionStateMap = {};
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
-    final Map<THCommandOptionType, MPOptionStateType> optionStateMap = {};
 
     if (mpSelectedElements.isEmpty) {
       for (final optionType in THCommandOptionType.values) {
@@ -104,11 +105,28 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   }
 
   @action
-  void toggleOptionShownStatus(THCommandOptionType optionType) {
+  void toggleOptionShownStatus(
+    THCommandOptionType optionType,
+    Rect boundingBox,
+  ) {
     if (_openedOptionType == optionType) {
+      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        MPOverlayWindowType.optionChoices,
+        false,
+      );
       _openedOptionType = null;
     } else {
+      if (_openedOptionType != null) {
+        _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+          MPOverlayWindowType.optionChoices,
+          false,
+        );
+      }
       _openedOptionType = optionType;
+      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        MPOverlayWindowType.optionChoices,
+        true,
+      );
     }
   }
 

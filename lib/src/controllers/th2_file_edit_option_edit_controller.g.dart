@@ -107,13 +107,14 @@ mixin _$TH2FileEditOptionEditController
   }
 
   @override
-  void toggleOptionShownStatus(THCommandOptionType optionType) {
+  void toggleOptionShownStatus(
+      THCommandOptionType optionType, Rect boundingBox) {
     final _$actionInfo =
         _$TH2FileEditOptionEditControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOptionEditControllerBase.toggleOptionShownStatus');
     try {
-      return super.toggleOptionShownStatus(optionType);
+      return super.toggleOptionShownStatus(optionType, boundingBox);
     } finally {
       _$TH2FileEditOptionEditControllerBaseActionController
           .endAction(_$actionInfo);

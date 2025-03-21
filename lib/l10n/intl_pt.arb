@@ -297,5 +297,38 @@
   "thCommandOptionTitle": "Título",
   "thCommandOptionUnrecognizedCommandOption": "Opção de Comando Não Reconhecida",
   "thCommandOptionVisibility": "Visibilidade",
-  "thCommandOptionWalls": "Paredes"
+  "thCommandOptionWalls": "Paredes",
+
+  "mpMultipleChoiceUnset": "Não definido",
+
+  "thMultipleChoiceAdjustHorizontal": "Horizontal",
+  "thMultipleChoiceAdjustVertical": "Vertical",
+
+  "thMultipleChoiceAlignBottom": "Inferior",
+  "thMultipleChoiceAlignBottomLeft": "Inferior Esquerdo",
+  "thMultipleChoiceAlignBottomRight": "Inferior Direito",
+  "thMultipleChoiceAlignCenter": "Centro",
+  "thMultipleChoiceAlignLeft": "Esquerda",
+  "thMultipleChoiceAlignRight": "Direita",
+  "thMultipleChoiceAlignTop": "Superior",
+  "thMultipleChoiceAlignTopLeft": "Superior Esquerdo",
+  "thMultipleChoiceAlignTopRight": "Superior Direito",
+
+  "thMultipleChoiceOnOffOff": "Desligado",
+  "thMultipleChoiceOnOffOn": "Ligado",
+
+  "thMultipleChoiceOnOffAutoAuto": "Automático",
+
+  "thMultipleChoiceFlipNone": "Nenhum",
+
+  "thMultipleChoiceArrowPositionBegin": "Início",
+  "thMultipleChoiceArrowPositionBoth": "Ambos",
+  "thMultipleChoiceArrowPositionEnd": "Fim",
+
+  "thMultipleChoiceLinePointGradientPoint": "Ponto",
+
+  "thMultipleChoiceOutlineIn": "Dentro",
+  "thMultipleChoiceOutlineOut": "Fora",
+
+  "thMultipleChoicePlaceDefault": "Padrão"
 }

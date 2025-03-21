@@ -1828,6 +1828,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Walls'**
   String get thCommandOptionWalls;
+
+  /// The label for the unset multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Unset'**
+  String get mpMultipleChoiceUnset;
+
+  /// The label for the horizontal adjust multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Horizontal'**
+  String get thMultipleChoiceAdjustHorizontal;
+
+  /// The label for the vertical adjust multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Vertical'**
+  String get thMultipleChoiceAdjustVertical;
+
+  /// The label for the bottom align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom'**
+  String get thMultipleChoiceAlignBottom;
+
+  /// The label for the bottom left align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom Left'**
+  String get thMultipleChoiceAlignBottomLeft;
+
+  /// The label for the bottom right align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom Right'**
+  String get thMultipleChoiceAlignBottomRight;
+
+  /// The label for the center align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Center'**
+  String get thMultipleChoiceAlignCenter;
+
+  /// The label for the left align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get thMultipleChoiceAlignLeft;
+
+  /// The label for the right align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get thMultipleChoiceAlignRight;
+
+  /// The label for the top align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Top'**
+  String get thMultipleChoiceAlignTop;
+
+  /// The label for the top left align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Top Left'**
+  String get thMultipleChoiceAlignTopLeft;
+
+  /// The label for the top right align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Top Right'**
+  String get thMultipleChoiceAlignTopRight;
+
+  /// The label for the off on/off multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get thMultipleChoiceOnOffOff;
+
+  /// The label for the on on/off multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get thMultipleChoiceOnOffOn;
+
+  /// The label for the auto auto/on/off multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get thMultipleChoiceOnOffAutoAuto;
+
+  /// The label for the none flip multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get thMultipleChoiceFlipNone;
+
+  /// The label for the begin arrow position multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Begin'**
+  String get thMultipleChoiceArrowPositionBegin;
+
+  /// The label for the both arrow position multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Both'**
+  String get thMultipleChoiceArrowPositionBoth;
+
+  /// The label for the end arrow position multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get thMultipleChoiceArrowPositionEnd;
+
+  /// The label for the point line point gradient multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Point'**
+  String get thMultipleChoiceLinePointGradientPoint;
+
+  /// The label for the in outline multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'In'**
+  String get thMultipleChoiceOutlineIn;
+
+  /// The label for the out outline multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Out'**
+  String get thMultipleChoiceOutlineOut;
+
+  /// The label for the default place multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get thMultipleChoicePlaceDefault;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

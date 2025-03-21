@@ -57,6 +57,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   final autoDismissOverlayWindowTypes = {
     MPOverlayWindowType.commandOptions,
+    MPOverlayWindowType.optionChoices,
   };
 
   toggleOverlayWindow(MPOverlayWindowType type) {
@@ -70,11 +71,19 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _overlayWindows.remove(type);
       _overlayWindows[type] = overlayWindow;
     } else {
-      _overlayWindows[type] = MPOverlayWindowFactory.create(
-        th2FileEditController: _th2FileEditController,
-        position: getPositionFromSelectedElements(),
-        type: type,
-      );
+      if (type == MPOverlayWindowType.optionChoices) {
+        _overlayWindows[type] = MPOverlayWindowFactory.createOptionChoices(
+          th2FileEditController: _th2FileEditController,
+          position: getPositionFromSelectedElements(),
+          type: _th2FileEditController.optionEditController.openedOptionType!,
+        );
+      } else {
+        _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
+          th2FileEditController: _th2FileEditController,
+          position: getPositionFromSelectedElements(),
+          type: type,
+        );
+      }
     }
 
     _activeOverlayWindow = type;
@@ -92,6 +101,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void setShowOverlayWindow(MPOverlayWindowType type, bool show) {
     _isOverlayWindowShown[type] = show;
+
     if (show) {
       if (autoDismissOverlayWindowTypes.contains(type)) {
         _isAutoDismissWindowOpen = true;

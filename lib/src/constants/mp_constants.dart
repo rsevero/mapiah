@@ -58,8 +58,6 @@ const double thGraphicalScaleFontSize = 12.0;
 
 const String thDefaultLengthUnit = 'meter';
 
-const String thClipMultipleChoiceType = 'clip';
-
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 
@@ -124,37 +122,30 @@ final Paint thSelectionWindowBorderPaint = Paint()
   ..style = PaintingStyle.stroke;
 const double thSelectionWindowBorderPaintStrokeWidth = 2;
 
+const double thCentimeterToMeter = 0.01;
 const double thMeterToCentimeter = 100.0;
 const double thInchToCentimeter = 2.54;
 const double thFeetToInch = 12.0;
 const double thYardToFeet = 3.0;
 
 const double thMeterToInch = thMeterToCentimeter / thInchToCentimeter;
-const double thMeterToFeet =
-    thMeterToCentimeter / (thInchToCentimeter * thFeetToInch);
-const double thMeterToYard =
-    thMeterToCentimeter / (thInchToCentimeter * thFeetToInch * thYardToFeet);
-
-const double thInchToMeter = 1 / thMeterToInch;
-const double thFeetToMeter = 1 / thMeterToFeet;
-const double thYardToMeter = 1 / thMeterToYard;
-const double thCentimeterToMeter = 1 / thMeterToCentimeter;
-
+const double thFeetToCentimeter = thFeetToInch * thInchToCentimeter;
+const double thMeterToFeet = thMeterToCentimeter / thFeetToCentimeter;
+const double thYardToCentimeter =
+    thYardToFeet * thFeetToInch * thInchToCentimeter;
+const double thMeterToYard = thMeterToCentimeter / thYardToCentimeter;
+const double thInchToMeter = thInchToCentimeter / thMeterToCentimeter;
+const double thFeetToMeter = thFeetToCentimeter / thMeterToCentimeter;
+const double thYardToMeter = thYardToCentimeter / thMeterToCentimeter;
 const double thCentimeterToInch = 1 / thInchToCentimeter;
-const double thCentimeterToFeet = 1 / (thInchToCentimeter * thFeetToInch);
-const double thCentimeterToYard =
-    1 / (thInchToCentimeter * thFeetToInch * thYardToFeet);
-
+const double thCentimeterToFeet = 1 / thFeetToCentimeter;
+const double thCentimeterToYard = 1 / thYardToCentimeter;
 const double thInchToFeet = 1 / thFeetToInch;
-const double thInchToYard = 1 / (thFeetToInch * thYardToFeet);
-
-const double thFeetToCentimeter = 1 / thCentimeterToFeet;
+const double thYardToInch = thFeetToInch * thYardToFeet;
+const double thInchToYard = 1 / thYardToInch;
 const double thFeetToYard = 1 / thYardToFeet;
 
-const double thYardToCentimeter = 1 / thCentimeterToYard;
-const double thYardToInch = 1 / thInchToYard;
-
-final Map<THLengthUnitType, Map<THLengthUnitType, double>>
+const Map<THLengthUnitType, Map<THLengthUnitType, double>>
     lengthConversionFactors = {
   THLengthUnitType.centimeter: {
     THLengthUnitType.feet: thCentimeterToFeet,
@@ -194,3 +185,5 @@ const THLengthUnitType thDefaultTHFileLengthUnit = THLengthUnitType.meter;
 const THPointType thDefaultPointType = THPointType.station;
 const THLineType thDefaultLineType = THLineType.wall;
 const THAreaType thDefaultAreaType = THAreaType.water;
+
+const String mpMultipleChoiceUnsetID = 'UNSET';

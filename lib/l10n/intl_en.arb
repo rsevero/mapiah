@@ -557,17 +557,18 @@
     "description": "The label for the anastomosis point type",
     "type": "text"
   },
+
   "thPointAnchor": "Anchor",
   "@thPointAnchor": {
     "description": "The label for the anchor point type",
     "type": "text"
   },
+
   "thPointAragonite": "Aragonite",
   "@thPointAragonite": {
     "description": "The label for the aragonite point type",
     "type": "text"
   },
-
 
   "thPointArcheoExcavation": "Archeo Excavation",
   "@thPointArcheoExcavation": {
@@ -1766,6 +1767,144 @@
   "thCommandOptionWalls": "Walls",
   "@thCommandOptionWalls": {
     "description": "The label for the walls command option type",
+    "type": "text"
+  },
+
+  "mpMultipleChoiceUnset": "Unset",
+  "@mpMultipleChoiceUnset": {
+    "description": "The label for the unset multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAdjustHorizontal": "Horizontal",
+  "@thMultipleChoiceAdjustHorizontal": {
+    "description": "The label for the horizontal adjust multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAdjustVertical": "Vertical",
+  "@thMultipleChoiceAdjustVertical": {
+    "description": "The label for the vertical adjust multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignBottom": "Bottom",
+  "@thMultipleChoiceAlignBottom": {
+    "description": "The label for the bottom align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignBottomLeft": "Bottom Left",
+  "@thMultipleChoiceAlignBottomLeft": {
+    "description": "The label for the bottom left align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignBottomRight": "Bottom Right",
+  "@thMultipleChoiceAlignBottomRight": {
+    "description": "The label for the bottom right align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignCenter": "Center",
+  "@thMultipleChoiceAlignCenter": {
+    "description": "The label for the center align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignLeft": "Left",
+  "@thMultipleChoiceAlignLeft": {
+    "description": "The label for the left align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignRight": "Right",
+  "@thMultipleChoiceAlignRight": {
+    "description": "The label for the right align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignTop": "Top",
+  "@thMultipleChoiceAlignTop": {
+    "description": "The label for the top align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignTopLeft": "Top Left",
+  "@thMultipleChoiceAlignTopLeft": {
+    "description": "The label for the top left align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceAlignTopRight": "Top Right",
+  "@thMultipleChoiceAlignTopRight": {
+    "description": "The label for the top right align multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceOnOffOff": "Off",
+  "@thMultipleChoiceOnOffOff": {
+    "description": "The label for the off on/off multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceOnOffOn": "On",
+  "@thMultipleChoiceOnOffOn": {
+    "description": "The label for the on on/off multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceOnOffAutoAuto": "Auto",
+  "@thMultipleChoiceOnOffAutoAuto": {
+    "description": "The label for the auto auto/on/off multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceFlipNone": "None",
+  "@thMultipleChoiceFlipNone": {
+    "description": "The label for the none flip multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceArrowPositionBegin": "Begin",
+  "@thMultipleChoiceArrowPositionBegin": {
+    "description": "The label for the begin arrow position multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceArrowPositionBoth": "Both",
+  "@thMultipleChoiceArrowPositionBoth": {
+    "description": "The label for the both arrow position multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceArrowPositionEnd": "End",
+  "@thMultipleChoiceArrowPositionEnd": {
+    "description": "The label for the end arrow position multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceLinePointGradientPoint": "Point",
+  "@thMultipleChoiceLinePointGradientPoint": {
+    "description": "The label for the point line point gradient multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceOutlineIn": "In",
+  "@thMultipleChoiceOutlineIn": {
+    "description": "The label for the in outline multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoiceOutlineOut": "Out",
+  "@thMultipleChoiceOutlineOut": {
+    "description": "The label for the out outline multiple choice type",
+    "type": "text"
+  },
+
+  "thMultipleChoicePlaceDefault": "Default",
+  "@thMultipleChoicePlaceDefault": {
+    "description": "The label for the default place multiple choice type",
     "type": "text"
   }
 }

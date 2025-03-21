@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -65,7 +66,7 @@ class MPOptionWidget extends StatelessWidget {
 
     return ListTile(
       title: Text("${MPTextToUser.getCommandOptionType(type)}: ${state.name}"),
-      onTap: () => onOptionTap(type),
+      onTap: () => onOptionTap(context, type),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
       visualDensity: VisualDensity.compact,
       dense: true,
@@ -77,7 +78,19 @@ class MPOptionWidget extends StatelessWidget {
     );
   }
 
-  void onOptionTap(THCommandOptionType type) {
-    optionEditController.toggleOptionShownStatus(type);
+  void onOptionTap(BuildContext context, THCommandOptionType type) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    final Offset position = renderBox.localToGlobal(Offset.zero);
+    final Size size = renderBox.size;
+    final Rect boundingBox = MPNumericAux.orderedRectFromLTWH(
+      left: position.dx,
+      top: position.dy,
+      width: size.width,
+      height: size.height,
+    );
+
+    // Perform your existing logic
+    optionEditController.toggleOptionShownStatus(type, boundingBox);
   }
 }

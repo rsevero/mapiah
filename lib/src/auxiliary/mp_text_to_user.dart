@@ -15,6 +15,29 @@ class MPTextToUser {
   static final Map<THPointType, String> _pointTypeAsString = {};
   static final Map<THLineType, String> _lineTypeAsString = {};
   static final Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
+  static final Map<THOptionChoicesAdjustType, String>
+      _multipleChoiceAdjustChoiceAsString = {};
+  static final Map<THOptionChoicesAlignType, String>
+      _multipleChoiceAlignChoiceAsString = {};
+  static final Map<THOptionChoicesOnOffType, String>
+      _multipleChoiceOnOffChoiceAsString = {};
+  static final Map<THOptionChoicesOnOffAutoType, String>
+      _multipleChoiceOnOffAutoChoiceAsString = {};
+  static final Map<THOptionChoicesFlipType, String>
+      _multipleChoiceFlipChoiceAsString = {};
+  static final Map<THOptionChoicesArrowPositionType, String>
+      _multipleChoiceArrowPositionChoiceAsString = {};
+  static final Map<THOptionChoicesLineGradientType, String>
+      _multipleChoiceLineGradientChoiceAsString = {};
+  static final Map<THOptionChoicesLinePointDirectionType, String>
+      _multipleChoiceLinePointDirectionChoiceAsString = {};
+  static final Map<THOptionChoicesLinePointGradientType, String>
+      _multipleChoiceLinePointGradientChoiceAsString = {};
+  static final Map<THOptionChoicesOutlineType, String>
+      _multipleChoiceOutlineChoiceAsString = {};
+  static final Map<THOptionChoicesPlaceType, String>
+      _multipleChoicePlaceChoiceAsString = {};
+  static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
     _initializeCommandTypeAsString();
@@ -23,10 +46,23 @@ class MPTextToUser {
     _initializePointTypeAsString();
     _initializeLineTypeAsString();
     _initializeCommandOptionTypeAsString();
+    _initializeMultipleChoiceAdjustChoiceAsString();
+    _initializeMultipleChoiceAlignChoiceAsString();
+    _initializeMultipleChoiceOnOffChoiceAsString();
+    _initializeMultipleChoiceOnOffAutoChoiceAsString();
+    _initializeMultipleChoiceFlipChoiceAsString();
+    _initializeMultipleChoiceArrowPositionChoiceAsString();
+    _initializeMultipleChoiceLineGradientChoiceAsString();
+    _initializeMultipleChoiceLinePointDirectionChoiceAsString();
+    _initializeMultipleChoiceLinePointGradientChoiceAsString();
+    _initializeMultipleChoiceOutlineChoiceAsString();
+    _initializeMultipleChoicePlaceChoiceAsString();
   }
 
   static void _initializeCommandTypeAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _locale = mpLocator.mpSettingsController.locale;
 
     _commandTypeAsString[MPCommandDescriptionType.addElements] =
         localizations.mpCommandDescriptionAddElements;
@@ -473,6 +509,220 @@ class MPTextToUser {
         : commandOptionType.name;
   }
 
+  static void _initializeMultipleChoiceAdjustChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceAdjustChoiceAsString[THOptionChoicesAdjustType.horizontal] =
+        localizations.thMultipleChoiceAdjustHorizontal;
+    _multipleChoiceAdjustChoiceAsString[THOptionChoicesAdjustType.vertical] =
+        localizations.thMultipleChoiceAdjustVertical;
+  }
+
+  static String getMultipleChoiceAdjustChoice(THOptionChoicesAdjustType type) {
+    return _multipleChoiceAdjustChoiceAsString.containsKey(type)
+        ? _multipleChoiceAdjustChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceAlignChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.bottom] =
+        localizations.thMultipleChoiceAlignBottom;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.bottomLeft] =
+        localizations.thMultipleChoiceAlignBottomLeft;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.bottomRight] =
+        localizations.thMultipleChoiceAlignBottomRight;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.center] =
+        localizations.thMultipleChoiceAlignCenter;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.left] =
+        localizations.thMultipleChoiceAlignLeft;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.right] =
+        localizations.thMultipleChoiceAlignRight;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.top] =
+        localizations.thMultipleChoiceAlignTop;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.topLeft] =
+        localizations.thMultipleChoiceAlignTopLeft;
+    _multipleChoiceAlignChoiceAsString[THOptionChoicesAlignType.topRight] =
+        localizations.thMultipleChoiceAlignTopRight;
+  }
+
+  static String getMultipleChoiceAlignChoice(THOptionChoicesAlignType type) {
+    return _multipleChoiceAlignChoiceAsString.containsKey(type)
+        ? _multipleChoiceAlignChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceOnOffChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceOnOffChoiceAsString[THOptionChoicesOnOffType.off] =
+        localizations.thMultipleChoiceOnOffOff;
+    _multipleChoiceOnOffChoiceAsString[THOptionChoicesOnOffType.on] =
+        localizations.thMultipleChoiceOnOffOn;
+  }
+
+  static String getMultipleChoiceOnOffChoice(THOptionChoicesOnOffType type) {
+    return _multipleChoiceOnOffChoiceAsString.containsKey(type)
+        ? _multipleChoiceOnOffChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceOnOffAutoChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceOnOffAutoChoiceAsString[THOptionChoicesOnOffAutoType.off] =
+        localizations.thMultipleChoiceOnOffOff;
+    _multipleChoiceOnOffAutoChoiceAsString[THOptionChoicesOnOffAutoType.on] =
+        localizations.thMultipleChoiceOnOffOn;
+    _multipleChoiceOnOffAutoChoiceAsString[THOptionChoicesOnOffAutoType.auto] =
+        localizations.thMultipleChoiceOnOffAutoAuto;
+  }
+
+  static String getMultipleChoiceOnOffAutoChoice(
+    THOptionChoicesOnOffAutoType type,
+  ) {
+    return _multipleChoiceOnOffAutoChoiceAsString.containsKey(type)
+        ? _multipleChoiceOnOffAutoChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceFlipChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceFlipChoiceAsString[THOptionChoicesFlipType.horizontal] =
+        localizations.thMultipleChoiceAdjustHorizontal;
+    _multipleChoiceFlipChoiceAsString[THOptionChoicesFlipType.none] =
+        localizations.thMultipleChoiceFlipNone;
+    _multipleChoiceFlipChoiceAsString[THOptionChoicesFlipType.vertical] =
+        localizations.thMultipleChoiceAdjustVertical;
+  }
+
+  static String getMultipleChoiceFlipChoice(THOptionChoicesFlipType type) {
+    return _multipleChoiceFlipChoiceAsString.containsKey(type)
+        ? _multipleChoiceFlipChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceArrowPositionChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
+        .begin] = localizations.thMultipleChoiceArrowPositionBegin;
+    _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
+        .both] = localizations.thMultipleChoiceArrowPositionBoth;
+    _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
+        .end] = localizations.thMultipleChoiceArrowPositionEnd;
+    _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
+        .none] = localizations.thMultipleChoiceFlipNone;
+  }
+
+  static String getMultipleChoiceArrowPositionChoice(
+    THOptionChoicesArrowPositionType type,
+  ) {
+    return _multipleChoiceArrowPositionChoiceAsString.containsKey(type)
+        ? _multipleChoiceArrowPositionChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceLineGradientChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceLineGradientChoiceAsString[THOptionChoicesLineGradientType
+        .center] = localizations.thMultipleChoiceAlignCenter;
+    _multipleChoiceLineGradientChoiceAsString[THOptionChoicesLineGradientType
+        .none] = localizations.thMultipleChoiceFlipNone;
+  }
+
+  static String getMultipleChoiceLineGradientChoice(
+    THOptionChoicesLineGradientType type,
+  ) {
+    return _multipleChoiceLineGradientChoiceAsString.containsKey(type)
+        ? _multipleChoiceLineGradientChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceLinePointDirectionChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceLinePointDirectionChoiceAsString[
+            THOptionChoicesLinePointDirectionType.begin] =
+        localizations.thMultipleChoiceArrowPositionBegin;
+    _multipleChoiceLinePointDirectionChoiceAsString[
+            THOptionChoicesLinePointDirectionType.both] =
+        localizations.thMultipleChoiceArrowPositionBoth;
+    _multipleChoiceLinePointDirectionChoiceAsString[
+            THOptionChoicesLinePointDirectionType.end] =
+        localizations.thMultipleChoiceArrowPositionEnd;
+    _multipleChoiceLinePointDirectionChoiceAsString[
+            THOptionChoicesLinePointDirectionType.none] =
+        localizations.thMultipleChoiceFlipNone;
+  }
+
+  static String getMultipleChoiceLinePointDirectionChoice(
+    THOptionChoicesLinePointDirectionType type,
+  ) {
+    return _multipleChoiceLinePointDirectionChoiceAsString.containsKey(type)
+        ? _multipleChoiceLinePointDirectionChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceLinePointGradientChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceLinePointGradientChoiceAsString[
+            THOptionChoicesLinePointGradientType.center] =
+        localizations.thMultipleChoiceAlignCenter;
+    _multipleChoiceLinePointGradientChoiceAsString[
+            THOptionChoicesLinePointGradientType.none] =
+        localizations.thMultipleChoiceFlipNone;
+    _multipleChoiceLinePointGradientChoiceAsString[
+            THOptionChoicesLinePointGradientType.point] =
+        localizations.thMultipleChoiceLinePointGradientPoint;
+  }
+
+  static String getMultipleChoiceLinePointGradientChoice(
+      THOptionChoicesLinePointGradientType type) {
+    return _multipleChoiceLinePointGradientChoiceAsString.containsKey(type)
+        ? _multipleChoiceLinePointGradientChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoiceOutlineChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoiceOutlineChoiceAsString[THOptionChoicesOutlineType.inChoice] =
+        localizations.thMultipleChoiceOutlineIn;
+    _multipleChoiceOutlineChoiceAsString[THOptionChoicesOutlineType.none] =
+        localizations.thMultipleChoiceFlipNone;
+    _multipleChoiceOutlineChoiceAsString[THOptionChoicesOutlineType.out] =
+        localizations.thMultipleChoiceOutlineOut;
+  }
+
+  static String getMultipleChoiceOutlineChoice(
+      THOptionChoicesOutlineType type) {
+    return _multipleChoiceOutlineChoiceAsString.containsKey(type)
+        ? _multipleChoiceOutlineChoiceAsString[type]!
+        : type.name;
+  }
+
+  static void _initializeMultipleChoicePlaceChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _multipleChoicePlaceChoiceAsString[THOptionChoicesPlaceType.bottom] =
+        localizations.thMultipleChoiceAlignBottom;
+    _multipleChoicePlaceChoiceAsString[THOptionChoicesPlaceType.defaultChoice] =
+        localizations.thMultipleChoicePlaceDefault;
+    _multipleChoicePlaceChoiceAsString[THOptionChoicesPlaceType.top] =
+        localizations.thMultipleChoiceAlignTop;
+  }
+
+  static String getMultipleChoicePlaceChoice(THOptionChoicesPlaceType type) {
+    return _multipleChoicePlaceChoiceAsString.containsKey(type)
+        ? _multipleChoicePlaceChoiceAsString[type]!
+        : type.name;
+  }
+
   static removeDiacritics(String text) {
     const Map<String, String> diacritics = {
       'á': 'a',
@@ -542,9 +792,8 @@ class MPTextToUser {
   static int compareStringsUsingLocale(
     final String a,
     final String b,
-    final Locale locale,
   ) {
-    switch (locale.toLanguageTag()) {
+    switch (_locale.toLanguageTag()) {
       default:
         return compareStringsNoDiacritics(a, b);
     }
