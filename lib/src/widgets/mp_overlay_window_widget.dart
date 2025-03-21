@@ -74,6 +74,32 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
               case MPWidgetPositionType.topRight:
                 position = widget.position - Offset(size.width, 0);
             }
+
+            final Rect screenBoundingBox =
+                th2FileEditController.screenBoundingBox;
+
+            if (position.dy + size.height > screenBoundingBox.bottom) {
+              position = Offset(
+                position.dx,
+                screenBoundingBox.bottom - size.height,
+              );
+            }
+
+            if (position.dy < screenBoundingBox.top) {
+              position = Offset(position.dx, screenBoundingBox.top);
+            }
+
+            if (position.dx + size.width > screenBoundingBox.right) {
+              position = Offset(
+                screenBoundingBox.right - size.width,
+                position.dy,
+              );
+            }
+
+            if (position.dx < screenBoundingBox.left) {
+              position = Offset(screenBoundingBox.left, position.dy);
+            }
+
             _initialPositionSet = true;
           },
         );
