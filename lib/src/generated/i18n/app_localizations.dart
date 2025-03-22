@@ -173,6 +173,12 @@ abstract class AppLocalizations {
   /// **'Add line segment'**
   String get mpCommandDescriptionAddLineSegment;
 
+  /// The description for the add option command
+  ///
+  /// In en, this message translates to:
+  /// **'Add option'**
+  String get mpCommandDescriptionAddOptionToElement;
+
   /// The description for the add point command
   ///
   /// In en, this message translates to:
@@ -244,6 +250,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove line segment'**
   String get mpCommandDescriptionRemoveLineSegment;
+
+  /// The description for the remove option command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove option'**
+  String get mpCommandDescriptionRemoveOptionFromElement;
 
   /// The description for the remove point command
   ///

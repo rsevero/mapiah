@@ -55,5 +55,12 @@ class MPMultipleChoicesWidget extends StatelessWidget {
 
   void _onChoiceSelected(BuildContext context, String newValue) {
     th2FileEditController.optionEditController.setOptionChoice(type, newValue);
+    th2FileEditController.optionEditController.clearOpennedOptionType();
+    th2FileEditController.selectionController.updateSelectedElementsClones();
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPOverlayWindowType.optionChoices,
+      false,
+    );
+    th2FileEditController.triggerOptionsListRedraw();
   }
 }

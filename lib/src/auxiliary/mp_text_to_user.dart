@@ -9,7 +9,8 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPTextToUser {
-  static final Map<MPCommandDescriptionType, String> _commandTypeAsString = {};
+  static final Map<MPCommandDescriptionType, String>
+      _commandDescriptionTypeAsString = {};
   static final Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
   static final Map<THElementType, String> _elementTypeAsString = {};
   static final Map<THPointType, String> _pointTypeAsString = {};
@@ -64,44 +65,53 @@ class MPTextToUser {
 
     _locale = mpLocator.mpSettingsController.locale;
 
-    _commandTypeAsString[MPCommandDescriptionType.addElements] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addElements] =
         localizations.mpCommandDescriptionAddElements;
-    _commandTypeAsString[MPCommandDescriptionType.addLine] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addLine] =
         localizations.mpCommandDescriptionAddLine;
-    _commandTypeAsString[MPCommandDescriptionType.addLineSegment] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addLineSegment] =
         localizations.mpCommandDescriptionAddLineSegment;
-    _commandTypeAsString[MPCommandDescriptionType.addPoint] =
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.addOptionToElement] =
+        localizations.mpCommandDescriptionAddOptionToElement;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addPoint] =
         localizations.mpCommandDescriptionAddPoint;
-    _commandTypeAsString[MPCommandDescriptionType.editBezierCurve] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editBezierCurve] =
         localizations.mpCommandDescriptionEditBezierCurve;
-    _commandTypeAsString[MPCommandDescriptionType.editLine] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editLine] =
         localizations.mpCommandDescriptionEditLine;
-    _commandTypeAsString[MPCommandDescriptionType.editLineSegment] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editLineSegment] =
         localizations.mpCommandDescriptionEditLineSegment;
-    _commandTypeAsString[MPCommandDescriptionType.moveBezierLineSegment] =
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.moveBezierLineSegment] =
         localizations.mpCommandDescriptionMoveBezierLineSegment;
-    _commandTypeAsString[MPCommandDescriptionType.moveElements] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.moveElements] =
         localizations.mpCommandDescriptionMoveElements;
-    _commandTypeAsString[MPCommandDescriptionType.moveLine] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.moveLine] =
         localizations.mpCommandDescriptionMoveLine;
-    _commandTypeAsString[MPCommandDescriptionType.movePoint] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.movePoint] =
         localizations.mpCommandDescriptionMovePoint;
-    _commandTypeAsString[MPCommandDescriptionType.moveStraightLineSegment] =
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.moveStraightLineSegment] =
         localizations.mpCommandDescriptionMoveStraightLineSegment;
-    _commandTypeAsString[MPCommandDescriptionType.removeElements] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.removeElements] =
         localizations.mpCommandDescriptionRemoveElements;
-    _commandTypeAsString[MPCommandDescriptionType.removeLine] =
-        localizations.mpCommandDescriptionRemoveLineSegment;
-    _commandTypeAsString[MPCommandDescriptionType.removeLineSegment] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =
         localizations.mpCommandDescriptionRemoveLine;
-    _commandTypeAsString[MPCommandDescriptionType.removePoint] =
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.removeLineSegment] =
+        localizations.mpCommandDescriptionRemoveLineSegment;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.removeOptionFromElement] =
+        localizations.mpCommandDescriptionRemoveOptionFromElement;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.removePoint] =
         localizations.mpCommandDescriptionRemovePoint;
   }
 
   static String getCommandDescription(
       MPCommandDescriptionType commandDescriptionType) {
-    return _commandTypeAsString.containsKey(commandDescriptionType)
-        ? _commandTypeAsString[commandDescriptionType]!
+    return _commandDescriptionTypeAsString.containsKey(commandDescriptionType)
+        ? _commandDescriptionTypeAsString[commandDescriptionType]!
         : commandDescriptionType.name;
   }
 

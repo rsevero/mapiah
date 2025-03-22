@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddLineSegment => 'Add line segment';
 
   @override
+  String get mpCommandDescriptionAddOptionToElement => 'Add option';
+
+  @override
   String get mpCommandDescriptionAddPoint => 'Add point';
 
   @override
@@ -95,6 +98,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemoveLineSegment => 'Remove line segment';
+
+  @override
+  String get mpCommandDescriptionRemoveOptionFromElement => 'Remove option';
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Remove point';

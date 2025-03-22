@@ -122,6 +122,19 @@ mixin _$TH2FileEditOptionEditController
   }
 
   @override
+  void clearOpennedOptionType() {
+    final _$actionInfo =
+        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditOptionEditControllerBase.clearOpennedOptionType');
+    try {
+      return super.clearOpennedOptionType();
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void showOptionsOverlayWindow() {
     final _$actionInfo =
         _$TH2FileEditOptionEditControllerBaseActionController.startAction(

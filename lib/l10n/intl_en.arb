@@ -85,6 +85,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionAddOptionToElement": "Add option",
+  "@mpCommandDescriptionAddOptionToElement": {
+    "description": "The description for the add option command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionAddPoint": "Add point",
   "@mpCommandDescriptionAddPoint": {
     "description": "The description for the add point command",
@@ -154,6 +160,12 @@
   "mpCommandDescriptionRemoveLineSegment": "Remove line segment",
   "@mpCommandDescriptionRemoveLineSegment": {
     "description": "The description for the remove line segment command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemoveOptionFromElement": "Remove option",
+  "@mpCommandDescriptionRemoveOptionFromElement": {
+    "description": "The description for the remove option command",
     "type": "text"
   },
 

@@ -12,12 +12,14 @@ import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.d
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 
 part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
+part 'mp_add_option_to_element_command.dart';
 part 'mp_add_point_command.dart';
 part 'mp_edit_line_segment_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
@@ -28,6 +30,7 @@ part 'mp_move_straight_line_segment_command.dart';
 part 'mp_remove_elements_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
+part 'mp_remove_option_from_element_command.dart';
 part 'mp_remove_point_command.dart';
 part 'types/mp_command_type.dart';
 
@@ -108,6 +111,8 @@ abstract class MPCommand {
         return MPAddLineCommand.fromMap(map);
       case MPCommandType.addLineSegment:
         return MPAddLineSegmentCommand.fromMap(map);
+      case MPCommandType.addOptionToElement:
+        return MPAddOptionToElementCommand.fromMap(map);
       case MPCommandType.addPoint:
         return MPAddPointCommand.fromMap(map);
       case MPCommandType.editLineSegment:
@@ -128,6 +133,8 @@ abstract class MPCommand {
         return MPRemoveLineCommand.fromMap(map);
       case MPCommandType.removeLineSegment:
         return MPRemoveLineSegmentCommand.fromMap(map);
+      case MPCommandType.removeOptionFromElement:
+        return MPRemoveOptionFromElementCommand.fromMap(map);
       case MPCommandType.removePoint:
         return MPRemovePointCommand.fromMap(map);
     }

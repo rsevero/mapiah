@@ -818,6 +818,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_redrawTriggerOptionsListAtom = Atom(
+      name: 'TH2FileEditControllerBase._redrawTriggerOptionsList',
+      context: context);
+
+  int get redrawTriggerOptionsList {
+    _$_redrawTriggerOptionsListAtom.reportRead();
+    return super._redrawTriggerOptionsList;
+  }
+
+  @override
+  int get _redrawTriggerOptionsList => redrawTriggerOptionsList;
+
+  @override
+  set _redrawTriggerOptionsList(int value) {
+    _$_redrawTriggerOptionsListAtom
+        .reportWrite(value, super._redrawTriggerOptionsList, () {
+      super._redrawTriggerOptionsList = value;
+    });
+  }
+
   late final _$_mousePositionAtom =
       Atom(name: 'TH2FileEditControllerBase._mousePosition', context: context);
 
@@ -1033,6 +1053,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
             name: 'TH2FileEditControllerBase.triggerOverlayWindowsRedraw');
     try {
       return super.triggerOverlayWindowsRedraw();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerOptionsListRedraw() {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.triggerOptionsListRedraw');
+    try {
+      return super.triggerOptionsListRedraw();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
