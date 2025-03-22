@@ -6,6 +6,7 @@
 | Create area | A |
 | Create line | L |
 | Create point | P |
+| Force option setting on non-supporting types | Ctrl+click on option setting |
 | Open file | Ctrl+O |
 | Options edit | O |
 | Line node edit | N |

@@ -54,8 +54,6 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   }
 
   void _onChoiceSelected(BuildContext context, String newValue) {
-    // Handle the logic for when a choice is selected
-    print('Selected choice: $newValue');
-    // You can add additional logic here, such as updating state or calling a callback
+    th2FileEditController.optionEditController.setOptionChoice(type, newValue);
   }
 }

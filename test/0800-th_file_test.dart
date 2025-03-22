@@ -215,7 +215,7 @@ endcomment
       expect((pointGuano as THPoint).plaType, 'guano');
 
       var countDeletedElements = 1;
-      file.deleteElement(pointGuano);
+      file.removeElement(pointGuano);
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
       asFile = writer.serialize(file);
@@ -226,7 +226,7 @@ endcomment
 
       countDeletedElements +=
           (multilineComment as THMultiLineComment).childrenMPID.length + 1;
-      file.deleteElement(multilineComment);
+      file.removeElement(multilineComment);
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
       asFile = writer.serialize(file);
@@ -234,7 +234,7 @@ endcomment
 
       var scrap = file.elementByTHID('poco_surubim_SCP01');
       countDeletedElements += (scrap as THScrap).childrenMPID.length + 1;
-      file.deleteElementByTHID('poco_surubim_SCP01');
+      file.removeElementByTHID('poco_surubim_SCP01');
       expect(file.countElements(),
           (success['countElements'] as int) - countDeletedElements);
 

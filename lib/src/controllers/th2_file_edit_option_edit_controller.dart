@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -136,5 +138,38 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     updateOptionStateMap();
     _th2FileEditController.overlayWindowController
         .toggleOverlayWindow(MPOverlayWindowType.commandOptions);
+  }
+
+  @action
+  void setOptionChoice(THCommandOptionType optionType, String choice) {
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final mpSelectedElements =
+        _th2FileEditController.selectionController.selectedElements.values;
+
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      final THElement selectedElement = mpSelectedElement.originalElementClone;
+
+      if (selectedElement is! THHasOptionsMixin) {
+        continue;
+      }
+
+      if (choice == mpMultipleChoiceUnsetID) {
+        selectedElement.removeOption(optionType);
+      } else if (isCtrlPressed ||
+          MPCommandOptionAux.elementTypeSupportsOptionType(
+            selectedElement,
+            optionType,
+          )) {
+        final THCommandOption option = THCommandOption.byType(
+          optionParent: selectedElement,
+          type: optionType,
+          value: choice,
+        );
+
+        selectedElement.addUpdateOption(option);
+      }
+    }
+
+    updateOptionStateMap();
   }
 }

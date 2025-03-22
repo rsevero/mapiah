@@ -164,7 +164,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
-    _thFile.deleteElement(element);
+    _thFile.removeElement(element);
     selectionController.removeSelectableElement(element.mpID);
     selectionController.removeSelectedElement(element);
     _th2FileEditController.updateHasMultipleScraps();

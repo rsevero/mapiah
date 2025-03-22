@@ -358,17 +358,17 @@ class THFile
     }
   }
 
-  void deleteElementByTHID(String thID) {
+  void removeElementByTHID(String thID) {
     final THElement element = elementByTHID(thID);
-    deleteElement(element);
+    removeElement(element);
   }
 
-  void deleteElement(THElement element) {
+  void removeElement(THElement element) {
     if (element is THIsParentMixin) {
       final List<int> childrenMPIDsCopy =
           (element as THIsParentMixin).childrenMPID.toList();
       for (final int childMPID in childrenMPIDsCopy) {
-        deleteElement(elementByMPID(childMPID));
+        removeElement(elementByMPID(childMPID));
       }
     }
 

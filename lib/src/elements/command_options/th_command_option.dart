@@ -235,6 +235,175 @@ abstract class THCommandOption {
     }
   }
 
+  factory THCommandOption.byType({
+    required THCommandOptionType type,
+    required THHasOptionsMixin optionParent,
+    dynamic value,
+  }) {
+    switch (type) {
+      case THCommandOptionType.adjust:
+        return THAdjustCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.align:
+        return THAlignCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.altitude:
+      // return THAltitudeCommandOption(value);
+      case THCommandOptionType.altitudeValue:
+      // return THAltitudeValueCommandOption(value);
+      case THCommandOptionType.anchors:
+        return THAnchorsCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.author:
+      // return THAuthorCommandOption(value);
+      case THCommandOptionType.border:
+        return THBorderCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.clip:
+        return THClipCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.close:
+        return THCloseCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.context:
+      // return THContextCommandOption(value);
+      case THCommandOptionType.copyright:
+      // return THCopyrightCommandOption(value);
+      case THCommandOptionType.cs:
+      // return THCSCommandOption(value);
+      case THCommandOptionType.dateValue:
+      // return THDateValueCommandOption(value);
+      case THCommandOptionType.dimensionsValue:
+      // return THDimensionsValueCommandOption(value);
+      case THCommandOptionType.dist:
+      // return THDistCommandOption(value);
+      case THCommandOptionType.explored:
+      // return THExploredCommandOption(value);
+      case THCommandOptionType.extend:
+      // return THExtendCommandOption(value);
+      case THCommandOptionType.flip:
+        return THFlipCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.from:
+      // return THFromCommandOption(value);
+      case THCommandOptionType.head:
+        return THHeadCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.id:
+      // return THIDCommandOption(value);
+      case THCommandOptionType.lineDirection:
+        return THLineDirectionCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.lineGradient:
+        return THLineGradientCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.lineHeight:
+      // return THLineHeightCommandOption(value);
+      case THCommandOptionType.linePointDirection:
+        return THLinePointDirectionCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.linePointGradient:
+        return THLinePointGradientCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.lineScale:
+      // return THLineScaleCommandOption(value);
+      case THCommandOptionType.lSize:
+      // return THLSizeCommandOption(value);
+      case THCommandOptionType.mark:
+      // return THMarkCommandOption(value);
+      case THCommandOptionType.name:
+      // return THNameCommandOption(value);
+      case THCommandOptionType.orientation:
+      // return THOrientationCommandOption(value);
+      case THCommandOptionType.outline:
+        return THOutlineCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.passageHeightValue:
+      // return THPassageHeightValueCommandOption(value);
+      case THCommandOptionType.place:
+        return THPlaceCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.pointHeightValue:
+      // return THPointHeightValueCommandOption(value);
+      case THCommandOptionType.pointScale:
+      // return THPointScaleCommandOption(value);
+      case THCommandOptionType.projection:
+      // return THProjectionCommandOption(value);
+      case THCommandOptionType.rebelays:
+        return THRebelaysCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.reverse:
+        return THReverseCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.scrap:
+      // return THScrapCommandOption(value);
+      case THCommandOptionType.scrapScale:
+      // return THScrapScaleCommandOption(value);
+      case THCommandOptionType.sketch:
+      // return THSketchCommandOption(value);
+      case THCommandOptionType.smooth:
+        return THSmoothCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.stationNames:
+      // return THStationNamesCommandOption(value);
+      case THCommandOptionType.stations:
+      // return THStationsCommandOption(value);
+      case THCommandOptionType.subtype:
+      // return THSubtypeCommandOption(value);
+      case THCommandOptionType.text:
+      // return THTextCommandOption(value);
+      case THCommandOptionType.title:
+      // return THTitleCommandOption(value);
+      case THCommandOptionType.unrecognizedCommandOption:
+      // return THUnrecognizedCommandOption(value);
+      case THCommandOptionType.visibility:
+        return THVisibilityCommandOption.fromString(
+          optionParent: optionParent,
+          choice: value,
+        );
+      case THCommandOptionType.walls:
+      // return THWallsCommandOption(value);
+    }
+
+    throw THCustomException(
+      'THCommandOption.byType: Unsupported option type: $type',
+    );
+  }
+
   @override
   bool operator ==(covariant THCommandOption other) {
     if (identical(this, other)) return true;

@@ -20,12 +20,11 @@ mixin THHasOptionsMixin on THElement {
     return _optionsMap[type];
   }
 
-  bool deleteOption(THCommandOptionType type) {
+  bool removeOption(THCommandOptionType type) {
     if (!hasOption(type)) {
       return false;
     }
 
-    if (kDebugMode) assert(_optionsMap.containsKey(type));
     return (_optionsMap.remove(type) != null);
   }
 

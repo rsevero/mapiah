@@ -241,4 +241,13 @@ class MPCommandOptionAux {
                 .choice ==
             THOptionChoicesOnOffAutoType.on;
   }
+
+  static bool elementTypeSupportsOptionType(
+    THElement element,
+    THCommandOptionType optionType,
+  ) {
+    return element is THHasOptionsMixin
+        ? getSupportedOptionsForElement(element).contains(optionType)
+        : false;
+  }
 }
