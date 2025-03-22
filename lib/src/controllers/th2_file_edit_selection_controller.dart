@@ -119,7 +119,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  void deleteSelected() {
+  void removeSelected() {
     if (_selectedElements.isEmpty) {
       return;
     }
@@ -132,11 +132,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
       switch (singleSelectedElement) {
         case THPoint _:
-          mpCommand = MPDeletePointCommand(
+          mpCommand = MPRemovePointCommand(
             pointMPID: singleSelectedElement.mpID,
           );
         case THLine _:
-          mpCommand = MPDeleteLineCommand(
+          mpCommand = MPRemoveLineCommand(
             lineMPID: singleSelectedElement.mpID,
             isInteractiveLineCreation: _th2FileEditController
                     .elementEditController.lineStartScreenPosition !=
@@ -146,7 +146,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     } else {
       final List<int> selectedMPIDs = _selectedElements.keys.toList();
 
-      mpCommand = MPDeleteElementsCommand(
+      mpCommand = MPRemoveElementsCommand(
         mpIDs: selectedMPIDs,
       );
     }

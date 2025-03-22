@@ -399,8 +399,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         .onButtonPressed(MPButtonType.changeScrap);
   }
 
-  void onDeletePressed() {
-    th2FileEditController.stateController.onButtonPressed(MPButtonType.delete);
+  void onRemovePressed() {
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.remove);
   }
 
   void _onLeavePage() {
@@ -430,28 +430,28 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       builder: (_) {
         final bool hasUndo = th2FileEditController.hasUndo;
         final bool hasRedo = th2FileEditController.hasRedo;
-        final bool deleteButtonEnabled =
-            th2FileEditController.deleteButtonEnabled;
+        final bool removeButtonEnabled =
+            th2FileEditController.removeButtonEnabled;
 
         return Positioned(
           top: 16,
           right: 16,
           child: Row(
             children: [
-              if (th2FileEditController.showDeleteButton) ...[
+              if (th2FileEditController.showRemoveButton) ...[
                 FloatingActionButton(
-                  heroTag: 'delete',
+                  heroTag: 'remove',
                   mini: true,
                   tooltip:
-                      AppLocalizations.of(context).th2FileEditPageDeleteButton,
-                  backgroundColor: deleteButtonEnabled
+                      AppLocalizations.of(context).th2FileEditPageRemoveButton,
+                  backgroundColor: removeButtonEnabled
                       ? null
                       : colorScheme.surfaceContainerLowest,
-                  foregroundColor: deleteButtonEnabled
+                  foregroundColor: removeButtonEnabled
                       ? null
                       : colorScheme.surfaceContainerHighest,
-                  onPressed: deleteButtonEnabled ? onDeletePressed : null,
-                  elevation: deleteButtonEnabled ? 6.0 : 3.0,
+                  onPressed: removeButtonEnabled ? onRemovePressed : null,
+                  elevation: removeButtonEnabled ? 6.0 : 3.0,
                   child: const Icon(Icons.delete_outlined),
                 ),
               ],

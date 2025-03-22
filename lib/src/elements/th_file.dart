@@ -382,7 +382,7 @@ class THFile
       _drawableElementMPIDs.remove(element.mpID);
     }
 
-    element.parent(this).deleteElementFromParent(this, element);
+    element.parent(this).removeElementFromParent(this, element);
     _elementByMPID.remove(element.mpID);
   }
 

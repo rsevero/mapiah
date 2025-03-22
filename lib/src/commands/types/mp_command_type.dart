@@ -5,14 +5,14 @@ enum MPCommandType {
   addLine,
   addLineSegment,
   addPoint,
-  deleteElements,
-  deleteLine,
-  deleteLineSegment,
-  deletePoint,
   editLineSegment,
   moveBezierLineSegment,
   moveElements,
   moveLine,
   movePoint,
   moveStraightLineSegment,
+  removeElements,
+  removeLine,
+  removeLineSegment,
+  removePoint;
 }

@@ -72,14 +72,6 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddLineSegment;
     _commandTypeAsString[MPCommandDescriptionType.addPoint] =
         localizations.mpCommandDescriptionAddPoint;
-    _commandTypeAsString[MPCommandDescriptionType.deleteElements] =
-        localizations.mpCommandDescriptionDeleteElements;
-    _commandTypeAsString[MPCommandDescriptionType.deleteLine] =
-        localizations.mpCommandDescriptionDeleteLineSegment;
-    _commandTypeAsString[MPCommandDescriptionType.deleteLineSegment] =
-        localizations.mpCommandDescriptionDeleteLine;
-    _commandTypeAsString[MPCommandDescriptionType.deletePoint] =
-        localizations.mpCommandDescriptionDeletePoint;
     _commandTypeAsString[MPCommandDescriptionType.editBezierCurve] =
         localizations.mpCommandDescriptionEditBezierCurve;
     _commandTypeAsString[MPCommandDescriptionType.editLine] =
@@ -96,6 +88,14 @@ class MPTextToUser {
         localizations.mpCommandDescriptionMovePoint;
     _commandTypeAsString[MPCommandDescriptionType.moveStraightLineSegment] =
         localizations.mpCommandDescriptionMoveStraightLineSegment;
+    _commandTypeAsString[MPCommandDescriptionType.removeElements] =
+        localizations.mpCommandDescriptionRemoveElements;
+    _commandTypeAsString[MPCommandDescriptionType.removeLine] =
+        localizations.mpCommandDescriptionRemoveLineSegment;
+    _commandTypeAsString[MPCommandDescriptionType.removeLineSegment] =
+        localizations.mpCommandDescriptionRemoveLine;
+    _commandTypeAsString[MPCommandDescriptionType.removePoint] =
+        localizations.mpCommandDescriptionRemovePoint;
   }
 
   static String getCommandDescription(

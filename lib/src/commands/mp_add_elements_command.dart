@@ -58,8 +58,8 @@ class MPAddElementsCommand extends MPCommand {
       }
     }
 
-    final MPDeleteElementsCommand oppositeCommand =
-        MPDeleteElementsCommand(mpIDs: mpIDs);
+    final MPRemoveElementsCommand oppositeCommand =
+        MPRemoveElementsCommand(mpIDs: mpIDs);
 
     return MPUndoRedoCommand(
       commandType: oppositeCommand.type,

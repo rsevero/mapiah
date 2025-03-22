@@ -64,18 +64,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddPoint => 'Add point';
 
   @override
-  String get mpCommandDescriptionDeleteElements => 'Delete elements';
-
-  @override
-  String get mpCommandDescriptionDeleteLine => 'Delete line';
-
-  @override
-  String get mpCommandDescriptionDeleteLineSegment => 'Delete line segment';
-
-  @override
-  String get mpCommandDescriptionDeletePoint => 'Delete point';
-
-  @override
   String get mpCommandDescriptionEditBezierCurve => 'Edit Bézier curve';
 
   @override
@@ -98,6 +86,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionMoveStraightLineSegment => 'Move straight line segment';
+
+  @override
+  String get mpCommandDescriptionRemoveElements => 'Remove elements';
+
+  @override
+  String get mpCommandDescriptionRemoveLine => 'Remove line';
+
+  @override
+  String get mpCommandDescriptionRemoveLineSegment => 'Remove line segment';
+
+  @override
+  String get mpCommandDescriptionRemovePoint => 'Remove point';
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
@@ -148,9 +148,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeActiveScrapTool => 'Change active scrap (Alt+C)';
 
   @override
-  String get th2FileEditPageDeleteButton => 'Delete (Del)';
-
-  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';
 
   @override
@@ -187,6 +184,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPagePanTool => 'Pan';
+
+  @override
+  String get th2FileEditPageRemoveButton => 'Remove (Del)';
 
   @override
   String get th2FileEditPageSave => 'Save (Ctrl+S)';

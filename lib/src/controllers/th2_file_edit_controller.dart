@@ -273,7 +273,7 @@ abstract class TH2FileEditControllerBase with Store {
         ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
 
   @computed
-  bool get showDeleteButton {
+  bool get showRemoveButton {
     final MPTH2FileEditState state = stateController.state;
 
     return ((state is MPTH2FileEditStateSelectEmptySelection) ||
@@ -292,7 +292,7 @@ abstract class TH2FileEditControllerBase with Store {
       isAddElementMode || isSelectMode || isEditLineMode;
 
   @computed
-  bool get deleteButtonEnabled =>
+  bool get removeButtonEnabled =>
       selectionController.selectedElements.isNotEmpty;
 
   @readonly

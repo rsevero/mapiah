@@ -91,30 +91,6 @@
     "type": "text"
   },
 
-  "mpCommandDescriptionDeleteElements": "Delete elements",
-  "@mpCommandDescriptionDeleteElements": {
-    "description": "The description for the delete elements command",
-    "type": "text"
-  },
-
-  "mpCommandDescriptionDeleteLine": "Delete line",
-  "@mpCommandDescriptionDeleteLine": {
-    "description": "The description for the delete line command",
-    "type": "text"
-  },
-
-  "mpCommandDescriptionDeleteLineSegment": "Delete line segment",
-  "@mpCommandDescriptionDeleteLineSegment": {
-    "description": "The description for the delete line segment command",
-    "type": "text"
-  },
-
-  "mpCommandDescriptionDeletePoint": "Delete point",
-  "@mpCommandDescriptionDeletePoint": {
-    "description": "The description for the delete point command",
-    "type": "text"
-  },
-
   "mpCommandDescriptionEditBezierCurve": "Edit Bézier curve",
   "@mpCommandDescriptionEditBezierCurve": {
     "description": "The description for the edit Bézier curve command",
@@ -160,6 +136,30 @@
   "mpCommandDescriptionMoveStraightLineSegment": "Move straight line segment",
   "@mpCommandDescriptionMoveStraightLineSegment": {
     "description": "The description for the move straight line segment command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemoveElements": "Remove elements",
+  "@mpCommandDescriptionRemoveElements": {
+    "description": "The description for the remove elements command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemoveLine": "Remove line",
+  "@mpCommandDescriptionRemoveLine": {
+    "description": "The description for the remove line command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemoveLineSegment": "Remove line segment",
+  "@mpCommandDescriptionRemoveLineSegment": {
+    "description": "The description for the remove line segment command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemovePoint": "Remove point",
+  "@mpCommandDescriptionRemovePoint": {
+    "description": "The description for the remove point command",
     "type": "text"
   },
 
@@ -256,12 +256,6 @@
     "type": "text"
   },
 
-  "th2FileEditPageDeleteButton": "Delete (Del)",
-  "@th2FileEditPageDeleteButton": {
-    "description": "The label for the delete tool button",
-    "type": "text"
-  },
-
   "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
   "@th2FileEditPageEmptySelectionStatusBarMessage": {
     "description": "The status bar message for the empty selection",
@@ -332,6 +326,13 @@
   "th2FileEditPagePanTool": "Pan",
   "@th2FileEditPagePanTool": {
     "description": "The label for the pan tool button",
+    "type": "text"
+  },
+
+
+  "th2FileEditPageRemoveButton": "Remove (Del)",
+  "@th2FileEditPageRemoveButton": {
+    "description": "The label for the remove tool button",
     "type": "text"
   },
 

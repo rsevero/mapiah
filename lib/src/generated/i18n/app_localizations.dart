@@ -179,30 +179,6 @@ abstract class AppLocalizations {
   /// **'Add point'**
   String get mpCommandDescriptionAddPoint;
 
-  /// The description for the delete elements command
-  ///
-  /// In en, this message translates to:
-  /// **'Delete elements'**
-  String get mpCommandDescriptionDeleteElements;
-
-  /// The description for the delete line command
-  ///
-  /// In en, this message translates to:
-  /// **'Delete line'**
-  String get mpCommandDescriptionDeleteLine;
-
-  /// The description for the delete line segment command
-  ///
-  /// In en, this message translates to:
-  /// **'Delete line segment'**
-  String get mpCommandDescriptionDeleteLineSegment;
-
-  /// The description for the delete point command
-  ///
-  /// In en, this message translates to:
-  /// **'Delete point'**
-  String get mpCommandDescriptionDeletePoint;
-
   /// The description for the edit Bézier curve command
   ///
   /// In en, this message translates to:
@@ -250,6 +226,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Move straight line segment'**
   String get mpCommandDescriptionMoveStraightLineSegment;
+
+  /// The description for the remove elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove elements'**
+  String get mpCommandDescriptionRemoveElements;
+
+  /// The description for the remove line command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove line'**
+  String get mpCommandDescriptionRemoveLine;
+
+  /// The description for the remove line segment command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove line segment'**
+  String get mpCommandDescriptionRemoveLineSegment;
+
+  /// The description for the remove point command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove point'**
+  String get mpCommandDescriptionRemovePoint;
 
   /// The abbreviation for the centimeter length unit
   ///
@@ -335,12 +335,6 @@ abstract class AppLocalizations {
   /// **'Change active scrap (Alt+C)'**
   String get th2FileEditPageChangeActiveScrapTool;
 
-  /// The label for the delete tool button
-  ///
-  /// In en, this message translates to:
-  /// **'Delete (Del)'**
-  String get th2FileEditPageDeleteButton;
-
   /// The status bar message for the empty selection
   ///
   /// In en, this message translates to:
@@ -400,6 +394,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pan'**
   String get th2FileEditPagePanTool;
+
+  /// The label for the remove tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove (Del)'**
+  String get th2FileEditPageRemoveButton;
 
   /// The label for the save button
   ///

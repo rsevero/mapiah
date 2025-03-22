@@ -1,25 +1,25 @@
 part of "mp_command.dart";
 
-class MPDeleteLineCommand extends MPCommand {
+class MPRemoveLineCommand extends MPCommand {
   final int lineMPID;
   final bool isInteractiveLineCreation;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.deleteLine;
+      MPCommandDescriptionType.removeLine;
 
-  MPDeleteLineCommand.forCWJM({
+  MPRemoveLineCommand.forCWJM({
     required this.lineMPID,
     required this.isInteractiveLineCreation,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPDeleteLineCommand({
+  MPRemoveLineCommand({
     required this.lineMPID,
     required this.isInteractiveLineCreation,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.deleteLine;
+  MPCommandType get type => MPCommandType.removeLine;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -27,7 +27,7 @@ class MPDeleteLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.deleteLine(lineMPID);
+    th2FileEditController.elementEditController.removeLine(lineMPID);
   }
 
   @override
@@ -65,15 +65,15 @@ class MPDeleteLineCommand extends MPCommand {
     int? lineMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPDeleteLineCommand.forCWJM(
+    return MPRemoveLineCommand.forCWJM(
       lineMPID: lineMPID ?? this.lineMPID,
       isInteractiveLineCreation: isInteractiveLineCreation,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPDeleteLineCommand.fromMap(Map<String, dynamic> map) {
-    return MPDeleteLineCommand.forCWJM(
+  factory MPRemoveLineCommand.fromMap(Map<String, dynamic> map) {
+    return MPRemoveLineCommand.forCWJM(
       lineMPID: map['lineMPID'],
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
       descriptionType:
@@ -81,8 +81,8 @@ class MPDeleteLineCommand extends MPCommand {
     );
   }
 
-  factory MPDeleteLineCommand.fromJson(String source) {
-    return MPDeleteLineCommand.fromMap(jsonDecode(source));
+  factory MPRemoveLineCommand.fromJson(String source) {
+    return MPRemoveLineCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -101,7 +101,7 @@ class MPDeleteLineCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPDeleteLineCommand &&
+    return other is MPRemoveLineCommand &&
         other.lineMPID == lineMPID &&
         other.isInteractiveLineCreation == isInteractiveLineCreation &&
         other.descriptionType == descriptionType;

@@ -41,7 +41,7 @@ class MPAddLineCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPDeleteLineCommand oppositeCommand = MPDeleteLineCommand(
+    final MPRemoveLineCommand oppositeCommand = MPRemoveLineCommand(
       lineMPID: newLine.mpID,
       descriptionType: descriptionType,
       isInteractiveLineCreation: lineStartScreenPosition != null,

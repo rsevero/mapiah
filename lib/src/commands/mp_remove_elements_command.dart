@@ -1,22 +1,22 @@
 part of 'mp_command.dart';
 
-class MPDeleteElementsCommand extends MPCommand {
+class MPRemoveElementsCommand extends MPCommand {
   final List<int> mpIDs;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.deleteElements;
+      MPCommandDescriptionType.removeElements;
 
-  MPDeleteElementsCommand.forCWJM({
+  MPRemoveElementsCommand.forCWJM({
     required this.mpIDs,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPDeleteElementsCommand({
+  MPRemoveElementsCommand({
     required this.mpIDs,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.deleteElements;
+  MPCommandType get type => MPCommandType.removeElements;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -24,7 +24,7 @@ class MPDeleteElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.deleteElements(mpIDs);
+    th2FileEditController.elementEditController.removeElements(mpIDs);
   }
 
   @override
@@ -75,22 +75,22 @@ class MPDeleteElementsCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
     bool? isUndoOf,
   }) {
-    return MPDeleteElementsCommand.forCWJM(
+    return MPRemoveElementsCommand.forCWJM(
       mpIDs: mpIDs ?? this.mpIDs,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPDeleteElementsCommand.fromMap(Map<String, dynamic> map) {
-    return MPDeleteElementsCommand.forCWJM(
+  factory MPRemoveElementsCommand.fromMap(Map<String, dynamic> map) {
+    return MPRemoveElementsCommand.forCWJM(
       mpIDs: List<int>.from(map['mpIDs']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
-  factory MPDeleteElementsCommand.fromJson(String source) {
-    return MPDeleteElementsCommand.fromMap(jsonDecode(source));
+  factory MPRemoveElementsCommand.fromJson(String source) {
+    return MPRemoveElementsCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -108,7 +108,7 @@ class MPDeleteElementsCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPDeleteElementsCommand &&
+    return other is MPRemoveElementsCommand &&
         const DeepCollectionEquality().equals(other.mpIDs, mpIDs) &&
         other.descriptionType == descriptionType;
   }

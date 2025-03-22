@@ -160,7 +160,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void deleteElement(THElement element) {
+  void removeElement(THElement element) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
@@ -170,23 +170,23 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.updateHasMultipleScraps();
   }
 
-  void deleteElementByMPID(int mpID) {
+  void removeElementByMPID(int mpID) {
     final THElement element = _thFile.elementByMPID(mpID);
 
-    deleteElement(element);
+    removeElement(element);
   }
 
   @action
-  void deleteElementByTHID(String thID) {
+  void removeElementByTHID(String thID) {
     final THElement element = _thFile.elementByTHID(thID);
 
-    deleteElement(element);
+    removeElement(element);
   }
 
   @action
-  void deleteElements(List<int> mpIDs) {
+  void removeElements(List<int> mpIDs) {
     for (final int mpID in mpIDs) {
-      deleteElementByMPID(mpID);
+      removeElementByMPID(mpID);
     }
   }
 
@@ -426,11 +426,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void deleteLine(int lineMPID) {
+  void removeLine(int lineMPID) {
     if ((_newLine != null) && (_newLine!.mpID == lineMPID)) {
       clearNewLine();
     }
-    _th2FileEditController.elementEditController.deleteElementByMPID(lineMPID);
+    _th2FileEditController.elementEditController.removeElementByMPID(lineMPID);
   }
 
   @action

@@ -87,7 +87,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
       case LogicalKeyboardKey.numpadAdd:
         th2FileEditController.zoomIn(fineZoom: false);
       case LogicalKeyboardKey.delete:
-        selectionController.deleteSelected();
+        selectionController.removeSelected();
       case LogicalKeyboardKey.escape:
         selectionController.deselectAllElements();
       case LogicalKeyboardKey.minus:

@@ -176,12 +176,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void deleteElement(THElement element) {
+  void removeElement(THElement element) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.deleteElement');
+            name: 'TH2FileEditElementEditControllerBase.removeElement');
     try {
-      return super.deleteElement(element);
+      return super.removeElement(element);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -189,12 +189,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void deleteElementByTHID(String thID) {
+  void removeElementByTHID(String thID) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.deleteElementByTHID');
+            name: 'TH2FileEditElementEditControllerBase.removeElementByTHID');
     try {
-      return super.deleteElementByTHID(thID);
+      return super.removeElementByTHID(thID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -202,12 +202,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void deleteElements(List<int> mpIDs) {
+  void removeElements(List<int> mpIDs) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.deleteElements');
+            name: 'TH2FileEditElementEditControllerBase.removeElements');
     try {
-      return super.deleteElements(mpIDs);
+      return super.removeElements(mpIDs);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -365,11 +365,11 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void deleteLine(int lineMPID) {
+  void removeLine(int lineMPID) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditElementEditControllerBase.deleteLine');
+        .startAction(name: 'TH2FileEditElementEditControllerBase.removeLine');
     try {
-      return super.deleteLine(lineMPID);
+      return super.removeLine(lineMPID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

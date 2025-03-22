@@ -4,10 +4,10 @@ enum MPButtonType {
   addLine,
   addPoint,
   changeScrap,
-  delete,
   nodeEdit,
   optionsEdit,
   redo,
+  remove,
   select,
   undo,
   zoomAllFile,
@@ -16,5 +16,5 @@ enum MPButtonType {
   zoomOneToOne,
   zoomOptions,
   zoomOut,
-  zoomSelection,
+  zoomSelection;
 }

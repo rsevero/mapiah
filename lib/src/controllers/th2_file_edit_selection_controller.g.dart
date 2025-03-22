@@ -209,11 +209,11 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  void deleteSelected() {
+  void removeSelected() {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
-        .startAction(name: 'TH2FileEditSelectionControllerBase.deleteSelected');
+        .startAction(name: 'TH2FileEditSelectionControllerBase.removeSelected');
     try {
-      return super.deleteSelected();
+      return super.removeSelected();
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController
           .endAction(_$actionInfo);

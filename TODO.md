@@ -4,7 +4,7 @@
 [ ] - Deal with click on more than one object at a time
 [ ] - Config page
 [X] - Line edit
-[X] - Point and line delete
+[X] - Point and line remove
 [X] - Point and line add
 [X] - Status message totaling selected objects
 [ ] - Change cursors to show current status

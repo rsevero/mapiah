@@ -5,30 +5,30 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 import 'package:mapiah/src/commands/parameters/mp_add_element_command_params.dart';
-import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_params.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 
 part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
-part 'mp_delete_elements_command.dart';
-part 'mp_delete_line_command.dart';
-part 'mp_delete_line_segment_command.dart';
-part 'mp_delete_point_command.dart';
 part 'mp_edit_line_segment_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
 part 'mp_move_elements_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
+part 'mp_remove_elements_command.dart';
+part 'mp_remove_line_command.dart';
+part 'mp_remove_line_segment_command.dart';
+part 'mp_remove_point_command.dart';
 part 'types/mp_command_type.dart';
 
 /// Abstract class that defines the structure of a command.
@@ -110,14 +110,6 @@ abstract class MPCommand {
         return MPAddLineSegmentCommand.fromMap(map);
       case MPCommandType.addPoint:
         return MPAddPointCommand.fromMap(map);
-      case MPCommandType.deleteElements:
-        return MPDeleteElementsCommand.fromMap(map);
-      case MPCommandType.deleteLine:
-        return MPDeleteLineCommand.fromMap(map);
-      case MPCommandType.deleteLineSegment:
-        return MPDeleteLineSegmentCommand.fromMap(map);
-      case MPCommandType.deletePoint:
-        return MPDeletePointCommand.fromMap(map);
       case MPCommandType.editLineSegment:
         return MPEditLineSegmentCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
@@ -130,6 +122,14 @@ abstract class MPCommand {
         return MPMovePointCommand.fromMap(map);
       case MPCommandType.moveStraightLineSegment:
         return MPMoveStraightLineSegmentCommand.fromMap(map);
+      case MPCommandType.removeElements:
+        return MPRemoveElementsCommand.fromMap(map);
+      case MPCommandType.removeLine:
+        return MPRemoveLineCommand.fromMap(map);
+      case MPCommandType.removeLineSegment:
+        return MPRemoveLineSegmentCommand.fromMap(map);
+      case MPCommandType.removePoint:
+        return MPRemovePointCommand.fromMap(map);
     }
   }
 }

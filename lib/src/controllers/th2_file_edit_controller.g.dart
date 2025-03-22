@@ -212,12 +212,12 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.selectionHandlePaint,
               name: 'TH2FileEditControllerBase.selectionHandlePaint'))
           .value;
-  Computed<bool>? _$showDeleteButtonComputed;
+  Computed<bool>? _$showRemoveButtonComputed;
 
   @override
-  bool get showDeleteButton => (_$showDeleteButtonComputed ??= Computed<bool>(
-          () => super.showDeleteButton,
-          name: 'TH2FileEditControllerBase.showDeleteButton'))
+  bool get showRemoveButton => (_$showRemoveButtonComputed ??= Computed<bool>(
+          () => super.showRemoveButton,
+          name: 'TH2FileEditControllerBase.showRemoveButton'))
       .value;
   Computed<bool>? _$showEditLineSegmentComputed;
 
@@ -240,12 +240,12 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.showUndoRedoButtons,
               name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
       .value;
-  Computed<bool>? _$deleteButtonEnabledComputed;
+  Computed<bool>? _$removeButtonEnabledComputed;
 
   @override
-  bool get deleteButtonEnabled => (_$deleteButtonEnabledComputed ??=
-          Computed<bool>(() => super.deleteButtonEnabled,
-              name: 'TH2FileEditControllerBase.deleteButtonEnabled'))
+  bool get removeButtonEnabled => (_$removeButtonEnabledComputed ??=
+          Computed<bool>(() => super.removeButtonEnabled,
+              name: 'TH2FileEditControllerBase.removeButtonEnabled'))
       .value;
   Computed<bool>? _$showScrapScaleComputed;
 
@@ -1258,11 +1258,11 @@ selectionHandleSizeOnCanvas: ${selectionHandleSizeOnCanvas},
 selectionHandleDistanceOnCanvas: ${selectionHandleDistanceOnCanvas},
 selectionHandleLineThicknessOnCanvas: ${selectionHandleLineThicknessOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
-showDeleteButton: ${showDeleteButton},
+showRemoveButton: ${showRemoveButton},
 showEditLineSegment: ${showEditLineSegment},
 showOptionsEdit: ${showOptionsEdit},
 showUndoRedoButtons: ${showUndoRedoButtons},
-deleteButtonEnabled: ${deleteButtonEnabled},
+removeButtonEnabled: ${removeButtonEnabled},
 showScrapScale: ${showScrapScale},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},

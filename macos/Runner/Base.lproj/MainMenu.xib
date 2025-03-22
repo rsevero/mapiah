@@ -102,10 +102,10 @@
                                     <action selector="pasteAsPlainText:" target="-1" id="cEh-KX-wJQ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Delete" id="pa3-QI-u2k">
+                            <menuItem title="Remove" id="pa3-QI-u2k">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="delete:" target="-1" id="0Mk-Ml-PaM"/>
+                                    <action selector="remove:" target="-1" id="0Mk-Ml-PaM"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
@@ -202,7 +202,7 @@
                                         <menuItem title="Smart Copy/Paste" id="9yt-4B-nSM">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="toggleSmartInsertDelete:" target="-1" id="3IJ-Se-DZD"/>
+                                                <action selector="toggleSmartInsertRemove:" target="-1" id="3IJ-Se-DZD"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Smart Quotes" id="hQb-2v-fYv">

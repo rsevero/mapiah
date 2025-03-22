@@ -13,7 +13,7 @@ mixin THIsParentMixin {
     childrenMPID.add(element.mpID);
   }
 
-  void deleteElementFromParent(THFile thFile, THElement element) {
+  void removeElementFromParent(THFile thFile, THElement element) {
     if (!childrenMPID.remove(element.mpID)) {
       throw THCustomException("'$element' not found.");
     }

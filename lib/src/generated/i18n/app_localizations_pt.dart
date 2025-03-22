@@ -64,18 +64,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionAddPoint => 'Adicionar ponto';
 
   @override
-  String get mpCommandDescriptionDeleteElements => 'Apagar elementos';
-
-  @override
-  String get mpCommandDescriptionDeleteLine => 'Apagar linha';
-
-  @override
-  String get mpCommandDescriptionDeleteLineSegment => 'Apagar segmento de linha';
-
-  @override
-  String get mpCommandDescriptionDeletePoint => 'Apagar ponto';
-
-  @override
   String get mpCommandDescriptionEditBezierCurve => 'Editar curva Bézier';
 
   @override
@@ -98,6 +86,18 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionMoveStraightLineSegment => 'Mover segmento de linha reta';
+
+  @override
+  String get mpCommandDescriptionRemoveElements => 'Apagar elementos';
+
+  @override
+  String get mpCommandDescriptionRemoveLine => 'Apagar linha';
+
+  @override
+  String get mpCommandDescriptionRemoveLineSegment => 'Apagar segmento de linha';
+
+  @override
+  String get mpCommandDescriptionRemovePoint => 'Apagar ponto';
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
@@ -148,9 +148,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';
 
   @override
-  String get th2FileEditPageDeleteButton => 'Apagar (Del)';
-
-  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Nenhum elemento selecionado';
 
   @override
@@ -187,6 +184,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPagePanTool => 'Mover ponto de vista';
+
+  @override
+  String get th2FileEditPageRemoveButton => 'Apagar (Del)';
 
   @override
   String get th2FileEditPageSave => 'Salvar (Ctrl+S)';
