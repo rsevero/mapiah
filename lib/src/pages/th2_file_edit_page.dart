@@ -528,6 +528,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         height: thFloatingActionZoomIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
+                      backgroundColor: colorScheme.secondaryContainer,
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
@@ -541,6 +542,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         height: thFloatingActionZoomIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
+                      backgroundColor: colorScheme.secondaryContainer,
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
@@ -556,6 +558,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                             ? Colors.grey
                             : colorScheme.onSecondaryContainer,
                       ),
+                      backgroundColor: colorScheme.secondaryContainer,
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
@@ -568,6 +571,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         size: thFloatingActionIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
+                      backgroundColor: colorScheme.secondaryContainer,
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
@@ -585,6 +589,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                             ? colorScheme.onSecondaryContainer
                             : Colors.grey,
                       ),
+                      backgroundColor: colorScheme.secondaryContainer,
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
@@ -598,6 +603,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         height: thFloatingActionZoomIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
+                      backgroundColor: colorScheme.secondaryContainer,
                     ),
                     SizedBox(width: mpButtonSpace),
                   ],
@@ -614,6 +620,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 height: thFloatingActionZoomIconSize,
                 color: colorScheme.onSecondaryContainer,
               ),
+              backgroundColor: colorScheme.secondaryContainer,
             ),
           ],
         ),
