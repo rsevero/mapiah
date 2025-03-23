@@ -122,12 +122,12 @@ mixin _$TH2FileEditOptionEditController
   }
 
   @override
-  void clearOpennedOptionType() {
+  void clearOpenedOptionType() {
     final _$actionInfo =
         _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditOptionEditControllerBase.clearOpennedOptionType');
+            name: 'TH2FileEditOptionEditControllerBase.clearOpenedOptionType');
     try {
-      return super.clearOpennedOptionType();
+      return super.clearOpenedOptionType();
     } finally {
       _$TH2FileEditOptionEditControllerBaseActionController
           .endAction(_$actionInfo);

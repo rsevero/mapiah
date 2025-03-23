@@ -135,7 +135,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   }
 
   @action
-  void clearOpennedOptionType() {
+  void clearOpenedOptionType() {
     _openedOptionType = null;
   }
 
