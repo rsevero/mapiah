@@ -95,6 +95,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     if (_activeOverlayWindow == type) {
       _activeOverlayWindow = null;
     }
+    if (type == MPOverlayWindowType.optionChoices) {
+      _th2FileEditController.optionEditController.clearCurrentOptionType();
+    }
     _overlayWindows.remove(type);
     _th2FileEditController.triggerOverlayWindowsRedraw();
   }
@@ -114,8 +117,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
       _showOverlayWindow(type, position: position);
     } else {
+      /// Is there still an auto dismmisable overlay window open?
       bool autoDismiss = false;
-
       for (MPOverlayWindowType autoDismissType
           in autoDismissOverlayWindowTypes) {
         if (_isOverlayWindowShown[autoDismissType]!) {
@@ -123,7 +126,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           break;
         }
       }
-
       _isAutoDismissWindowOpen = autoDismiss;
 
       _hideOverlayWindow(type);
