@@ -2,7 +2,6 @@ enum MPCommandDescriptionType {
   addElements,
   addLine,
   addLineSegment,
-  addOptionToElement,
   addPoint,
   editBezierCurve,
   editLine,
@@ -16,5 +15,6 @@ enum MPCommandDescriptionType {
   removeLine,
   removeLineSegment,
   removeOptionFromElement,
-  removePoint;
+  removePoint,
+  setOptionToElement;
 }

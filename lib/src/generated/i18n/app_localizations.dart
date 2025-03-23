@@ -173,12 +173,6 @@ abstract class AppLocalizations {
   /// **'Add line segment'**
   String get mpCommandDescriptionAddLineSegment;
 
-  /// The description for the add option command
-  ///
-  /// In en, this message translates to:
-  /// **'Add option'**
-  String get mpCommandDescriptionAddOptionToElement;
-
   /// The description for the add point command
   ///
   /// In en, this message translates to:
@@ -262,6 +256,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove point'**
   String get mpCommandDescriptionRemovePoint;
+
+  /// The description for the set option command
+  ///
+  /// In en, this message translates to:
+  /// **'Set option'**
+  String get mpCommandDescriptionSetOptionToElement;
 
   /// The abbreviation for the centimeter length unit
   ///

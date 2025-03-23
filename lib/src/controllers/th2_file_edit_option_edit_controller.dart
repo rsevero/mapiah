@@ -201,7 +201,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           type: optionType,
           value: choice,
         );
-        final MPCommand addOptionCommand = MPAddOptionToElementCommand(
+        final MPCommand addOptionCommand = MPSetOptionToElementCommand(
           option: option,
           parentMPID: selectedElement.mpID,
         );

@@ -1,25 +1,25 @@
 part of 'mp_command.dart';
 
-class MPAddOptionToElementCommand extends MPCommand {
+class MPSetOptionToElementCommand extends MPCommand {
   final THCommandOption option;
   final int parentMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.addOptionToElement;
+      MPCommandDescriptionType.setOptionToElement;
 
-  MPAddOptionToElementCommand.forCWJM({
+  MPSetOptionToElementCommand.forCWJM({
     required this.option,
     required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPAddOptionToElementCommand({
+  MPSetOptionToElementCommand({
     required this.option,
     required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.addOptionToElement;
+  MPCommandType get type => MPCommandType.setOptionToElement;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -60,15 +60,15 @@ class MPAddOptionToElementCommand extends MPCommand {
     int? parentMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPAddOptionToElementCommand.forCWJM(
+    return MPSetOptionToElementCommand.forCWJM(
       option: option ?? this.option,
       parentMPID: parentMPID ?? this.parentMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPAddOptionToElementCommand.fromMap(Map<String, dynamic> map) {
-    return MPAddOptionToElementCommand.forCWJM(
+  factory MPSetOptionToElementCommand.fromMap(Map<String, dynamic> map) {
+    return MPSetOptionToElementCommand.forCWJM(
       option: THCommandOption.fromMap(map['option']),
       parentMPID: map['parentMPID'],
       descriptionType:
@@ -76,8 +76,8 @@ class MPAddOptionToElementCommand extends MPCommand {
     );
   }
 
-  factory MPAddOptionToElementCommand.fromJson(String jsonString) {
-    return MPAddOptionToElementCommand.fromMap(jsonDecode(jsonString));
+  factory MPSetOptionToElementCommand.fromJson(String jsonString) {
+    return MPSetOptionToElementCommand.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -96,7 +96,7 @@ class MPAddOptionToElementCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPAddOptionToElementCommand &&
+    return other is MPSetOptionToElementCommand &&
         other.option == option &&
         other.parentMPID == parentMPID &&
         other.descriptionType == descriptionType;

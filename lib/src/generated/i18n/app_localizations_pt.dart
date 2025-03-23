@@ -61,9 +61,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionAddLineSegment => 'Adicionar segmento de linha';
 
   @override
-  String get mpCommandDescriptionAddOptionToElement => 'Adicionar opção';
-
-  @override
   String get mpCommandDescriptionAddPoint => 'Adicionar ponto';
 
   @override
@@ -104,6 +101,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Apagar ponto';
+
+  @override
+  String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';

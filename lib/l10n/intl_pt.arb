@@ -15,7 +15,6 @@
   "mpCommandDescriptionAddElements": "Adicionar elementos",
   "mpCommandDescriptionAddLine": "Adicionar linha",
   "mpCommandDescriptionAddLineSegment": "Adicionar segmento de linha",
-  "mpCommandDescriptionAddOptionToElement": "Adicionar opção",
   "mpCommandDescriptionAddPoint": "Adicionar ponto",
   "mpCommandDescriptionEditBezierCurve": "Editar curva Bézier",
   "mpCommandDescriptionEditLine": "Editar linha",
@@ -30,6 +29,7 @@
   "mpCommandDescriptionRemoveLineSegment": "Apagar segmento de linha",
   "mpCommandDescriptionRemoveOptionFromElement": "Remover opção",
   "mpCommandDescriptionRemovePoint": "Apagar ponto",
+  "mpCommandDescriptionSetOptionToElement": "Definir opção",
 
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFootAbbreviation": "ft",

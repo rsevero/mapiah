@@ -63,8 +63,8 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
       throw StateError('Parent element does not have the option');
     }
 
-    final MPAddOptionToElementCommand oppositeCommand =
-        MPAddOptionToElementCommand(
+    final MPSetOptionToElementCommand oppositeCommand =
+        MPSetOptionToElementCommand(
       option: option,
       parentMPID: parentMPID,
       descriptionType: descriptionType,

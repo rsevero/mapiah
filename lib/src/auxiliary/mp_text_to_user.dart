@@ -71,9 +71,6 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLineSegment] =
         localizations.mpCommandDescriptionAddLineSegment;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.addOptionToElement] =
-        localizations.mpCommandDescriptionAddOptionToElement;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addPoint] =
         localizations.mpCommandDescriptionAddPoint;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editBezierCurve] =
@@ -106,6 +103,9 @@ class MPTextToUser {
         localizations.mpCommandDescriptionRemoveOptionFromElement;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removePoint] =
         localizations.mpCommandDescriptionRemovePoint;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.setOptionToElement] =
+        localizations.mpCommandDescriptionSetOptionToElement;
   }
 
   static String getCommandDescription(
