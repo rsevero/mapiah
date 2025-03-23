@@ -156,6 +156,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     );
 
     _activeOverlayWindow = overlayWindowType;
+    _isAutoDismissWindowOpen = true;
+    _isOverlayWindowShown[overlayWindowType] = true;
     _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
