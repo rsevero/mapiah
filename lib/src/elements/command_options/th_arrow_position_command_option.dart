@@ -24,9 +24,6 @@ abstract class THArrowPositionCommandOption
   })  : choice = THOptionChoicesArrowPositionType.values.byName(choice),
         super();
 
-  THOptionChoicesArrowPositionType get defaultChoice =>
-      THOptionChoicesArrowPositionType.none;
-
   @override
   String specToFile() {
     return choice.name;

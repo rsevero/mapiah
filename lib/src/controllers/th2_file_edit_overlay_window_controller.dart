@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
 import 'package:mobx/mobx.dart';
@@ -75,7 +76,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         _overlayWindows[type] = MPOverlayWindowFactory.createOptionChoices(
           th2FileEditController: _th2FileEditController,
           position: position ?? getPositionFromSelectedElements(),
-          type: _th2FileEditController.optionEditController.openedOptionType!,
+          type: _th2FileEditController.optionEditController.currentOptionType!,
         );
       } else {
         _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
@@ -127,6 +128,35 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
       _hideOverlayWindow(type);
     }
+  }
+
+  @action
+  void showOptionChoicesOverlayWindow({
+    required Offset position,
+    required THCommandOptionType optionType,
+    dynamic currentChoice,
+    dynamic selectedChoice,
+    dynamic defaultChoice,
+  }) {
+    const MPOverlayWindowType overlayWindowType =
+        MPOverlayWindowType.optionChoices;
+
+    if (_overlayWindows.containsKey(overlayWindowType)) {
+      _overlayWindows.remove(overlayWindowType);
+    }
+
+    _overlayWindows[overlayWindowType] =
+        MPOverlayWindowFactory.createOptionChoices(
+      th2FileEditController: _th2FileEditController,
+      position: position,
+      type: optionType,
+      currentChoice: currentChoice,
+      defaultChoice: defaultChoice,
+      selectedChoice: selectedChoice,
+    );
+
+    _activeOverlayWindow = overlayWindowType;
+    _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
   @action

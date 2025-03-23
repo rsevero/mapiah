@@ -107,6 +107,10 @@ abstract class THCommandOption {
 
   THCommandOptionType get type;
 
+  static dynamic get defaultChoice => null;
+
+  static String get defaultChoiceAsString => '';
+
   String typeToFile() {
     return type.name;
   }
@@ -402,6 +406,76 @@ abstract class THCommandOption {
     throw THCustomException(
       'THCommandOption.byType: Unsupported option type: $type',
     );
+  }
+
+  static dynamic getDefaultChoice(THCommandOptionType type) {
+    switch (type) {
+      case THCommandOptionType.align:
+        return THOptionChoicesAlignType.center;
+      case THCommandOptionType.close:
+        return THOptionChoicesOnOffAutoType.auto;
+      case THCommandOptionType.flip:
+        return THOptionChoicesFlipType.none;
+      case THCommandOptionType.head:
+        return THOptionChoicesArrowPositionType.end;
+      case THCommandOptionType.lineDirection:
+        return THOptionChoicesArrowPositionType.none;
+      case THCommandOptionType.lineGradient:
+        return THOptionChoicesLineGradientType.none;
+      case THCommandOptionType.linePointDirection:
+        return THOptionChoicesLinePointDirectionType.none;
+      case THCommandOptionType.linePointGradient:
+        return THOptionChoicesLinePointGradientType.none;
+      case THCommandOptionType.outline:
+        return THOptionChoicesOutlineType.none;
+      case THCommandOptionType.place:
+        return THOptionChoicesPlaceType.defaultChoice;
+      case THCommandOptionType.reverse:
+        return THOptionChoicesOnOffType.off;
+      case THCommandOptionType.smooth:
+        return THOptionChoicesOnOffAutoType.auto;
+      case THCommandOptionType.walls:
+        return THOptionChoicesOnOffAutoType.auto;
+      default:
+        return null;
+    }
+  }
+
+  static String getDefaultChoiceAsString(THCommandOptionType type) {
+    switch (type) {
+      case THCommandOptionType.align:
+        return (getDefaultChoice(type) as THOptionChoicesAlignType).name;
+      case THCommandOptionType.close:
+        return (getDefaultChoice(type) as THOptionChoicesOnOffAutoType).name;
+      case THCommandOptionType.flip:
+        return (getDefaultChoice(type) as THOptionChoicesFlipType).name;
+      case THCommandOptionType.head:
+        return (getDefaultChoice(type) as THOptionChoicesArrowPositionType)
+            .name;
+      case THCommandOptionType.lineDirection:
+        return (getDefaultChoice(type) as THOptionChoicesArrowPositionType)
+            .name;
+      case THCommandOptionType.lineGradient:
+        return (getDefaultChoice(type) as THOptionChoicesLineGradientType).name;
+      case THCommandOptionType.linePointDirection:
+        return (getDefaultChoice(type) as THOptionChoicesLinePointDirectionType)
+            .name;
+      case THCommandOptionType.linePointGradient:
+        return (getDefaultChoice(type) as THOptionChoicesLinePointGradientType)
+            .name;
+      case THCommandOptionType.outline:
+        return (getDefaultChoice(type) as THOptionChoicesOutlineType).name;
+      case THCommandOptionType.place:
+        return (getDefaultChoice(type) as THOptionChoicesPlaceType).name;
+      case THCommandOptionType.reverse:
+        return (getDefaultChoice(type) as THOptionChoicesOnOffType).name;
+      case THCommandOptionType.smooth:
+        return (getDefaultChoice(type) as THOptionChoicesOnOffAutoType).name;
+      case THCommandOptionType.walls:
+        return (getDefaultChoice(type) as THOptionChoicesOnOffAutoType).name;
+      default:
+        return '';
+    }
   }
 
   @override

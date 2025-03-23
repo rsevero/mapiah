@@ -10,6 +10,7 @@ class MPSelectedPoint extends MPSelectedElement {
   void _createClone(THPoint originalPoint) {
     final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
         LinkedHashMap<THCommandOptionType, THCommandOption>();
+
     originalPoint.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();
     });
@@ -20,6 +21,7 @@ class MPSelectedPoint extends MPSelectedElement {
   @override
   void updateClone(THFile thFile) {
     final THPoint updatedOriginalPoint = thFile.elementByMPID(mpID) as THPoint;
+
     _createClone(updatedOriginalPoint);
   }
 

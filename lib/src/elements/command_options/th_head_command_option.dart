@@ -25,10 +25,6 @@ class THHeadCommandOption extends THArrowPositionCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.head;
 
-  @override
-  THOptionChoicesArrowPositionType get defaultChoice =>
-      THOptionChoicesArrowPositionType.end;
-
   factory THHeadCommandOption.fromMap(Map<String, dynamic> map) {
     return THHeadCommandOption.forCWJM(
       parentMPID: map['parentMPID'],

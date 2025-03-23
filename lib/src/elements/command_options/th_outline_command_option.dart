@@ -29,9 +29,6 @@ class THOutlineCommandOption extends THMultipleChoiceCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.outline;
 
-  THOptionChoicesOutlineType get defaultChoice =>
-      THOptionChoicesOutlineType.none;
-
   @override
   String specToFile() {
     return (choice == THOptionChoicesOutlineType.inChoice) ? 'in' : choice.name;

@@ -199,19 +199,13 @@ class MPOverlayWindowFactory {
     required TH2FileEditController th2FileEditController,
     required Offset position,
     required THCommandOptionType type,
-    THCommandOptionType? selectedChoice,
-    THCommandOptionType? defaultChoice,
-    THCommandOption? currentOption,
+    dynamic selectedChoice,
+    dynamic defaultChoice,
+    dynamic currentChoice,
   }) {
     final int thFileMPID = th2FileEditController.thFileMPID;
     final Key key =
         ValueKey("MPMultipleChoicesWidget|$thFileMPID|${type.name}");
-    final String selectedChoiceAsString = selectedChoice == null
-        ? mpMultipleChoiceUnsetID
-        : MPTextToUser.getCommandOptionType(selectedChoice);
-    final String? defaultChoiceAsString = defaultChoice == null
-        ? null
-        : MPTextToUser.getCommandOptionType(defaultChoice);
     late Map<String, String> choices;
 
     switch (type) {
@@ -255,8 +249,8 @@ class MPOverlayWindowFactory {
       key: key,
       type: type,
       choices: getOptionChoicesWithUnset(choices),
-      selectedChoice: selectedChoiceAsString,
-      defaultChoice: defaultChoiceAsString,
+      selectedChoice: selectedChoice ?? mpMultipleChoiceUnsetID,
+      defaultChoice: defaultChoice,
       position: position,
       positionType: MPWidgetPositionType.leftCenter,
     );

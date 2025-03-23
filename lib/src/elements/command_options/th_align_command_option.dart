@@ -29,8 +29,6 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.align;
 
-  THOptionChoicesAlignType get defaultChoice => THOptionChoicesAlignType.center;
-
   @override
   String specToFile() {
     return MPTypeAux.convertCamelCaseToHyphenated(choice.name);

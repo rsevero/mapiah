@@ -28,21 +28,26 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       : _thFile = _th2FileEditController.thFile;
 
   @readonly
-  ObservableMap<THCommandOptionType, Observable<MPOptionStateType>>
-      _optionStateMap = ObservableMap();
+  ObservableMap<THCommandOptionType, Observable<MPOptionInfo>> _optionStateMap =
+      ObservableMap();
 
   @readonly
-  THCommandOptionType? _openedOptionType;
+  THCommandOptionType? _currentOptionType;
 
   @action
   void updateOptionStateMap() {
-    final Map<THCommandOptionType, MPOptionStateType> optionStateMap = {};
+    final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
 
     if (mpSelectedElements.isEmpty) {
       for (final optionType in THCommandOptionType.values) {
-        optionStateMap[optionType] = MPOptionStateType.unset;
+        optionsInfo[optionType] = MPOptionInfo(
+          type: optionType,
+          state: MPOptionStateType.unset,
+          defaultChoice: null,
+          currentChoice: null,
+        );
       }
     } else {
       final Set<THHasOptionsMixin> selectedElements = {};
@@ -84,26 +89,36 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
             break;
           }
         }
-        optionStateMap[optionType] = optionStateType;
+        optionsInfo[optionType] = MPOptionInfo(
+          type: optionType,
+          state: optionStateType,
+          defaultChoice: THCommandOption.getDefaultChoice(optionType),
+          currentChoice: optionValue,
+        );
       }
 
       /// Looking for set but unsupported options.
       for (final THHasOptionsMixin selectedElement in selectedElements) {
         for (final THCommandOptionType optionType
             in selectedElement.optionsMap.keys) {
-          if (!optionStateMap.containsKey(optionType)) {
-            optionStateMap[optionType] = MPOptionStateType.setUnsupported;
+          if (!optionsInfo.containsKey(optionType)) {
+            optionsInfo[optionType] = MPOptionInfo(
+              type: optionType,
+              state: MPOptionStateType.setUnsupported,
+              defaultChoice: THCommandOption.getDefaultChoice(optionType),
+              currentChoice: null,
+            );
           }
         }
       }
     }
 
     final List<THCommandOptionType> orderedOptionTypesList =
-        MPCommandOptionAux.getOrderedList(optionStateMap.keys);
+        MPCommandOptionAux.getOrderedList(optionsInfo.keys);
 
     _optionStateMap.clear();
     for (final optionType in orderedOptionTypesList) {
-      _optionStateMap[optionType] = Observable(optionStateMap[optionType]!);
+      _optionStateMap[optionType] = Observable(optionsInfo[optionType]!);
     }
   }
 
@@ -112,31 +127,35 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     THCommandOptionType optionType,
     Offset position,
   ) {
-    if (_openedOptionType == optionType) {
+    if (_currentOptionType == optionType) {
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
         MPOverlayWindowType.optionChoices,
         false,
       );
-      _openedOptionType = null;
+      _currentOptionType = null;
     } else {
-      if (_openedOptionType != null) {
+      if (_currentOptionType != null) {
         _th2FileEditController.overlayWindowController.setShowOverlayWindow(
           MPOverlayWindowType.optionChoices,
           false,
         );
       }
-      _openedOptionType = optionType;
-      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
-        MPOverlayWindowType.optionChoices,
-        true,
+      _currentOptionType = optionType;
+      final MPOptionInfo optionInfo = _optionStateMap[optionType]!.value;
+
+      _th2FileEditController.overlayWindowController
+          .showOptionChoicesOverlayWindow(
+        optionType: optionType,
         position: position,
+        currentChoice: optionInfo.currentChoice,
+        selectedChoice: optionInfo.currentChoice,
       );
     }
   }
 
   @action
-  void clearOpenedOptionType() {
-    _openedOptionType = null;
+  void clearCurrentOptionType() {
+    _currentOptionType = null;
   }
 
   @action
@@ -218,4 +237,18 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
     updateOptionStateMap();
   }
+}
+
+class MPOptionInfo {
+  final THCommandOptionType type;
+  final MPOptionStateType state;
+  final dynamic currentChoice;
+  final dynamic defaultChoice;
+
+  MPOptionInfo({
+    required this.type,
+    required this.state,
+    this.currentChoice,
+    this.defaultChoice,
+  });
 }

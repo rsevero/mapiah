@@ -30,9 +30,6 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.linePointDirection;
 
-  THOptionChoicesLinePointDirectionType get defaultChoice =>
-      THOptionChoicesLinePointDirectionType.none;
-
   @override
   String specToFile() {
     return choice.name;

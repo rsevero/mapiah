@@ -52,40 +52,40 @@ mixin _$TH2FileEditOptionEditController
       name: 'TH2FileEditOptionEditControllerBase._optionStateMap',
       context: context);
 
-  ObservableMap<THCommandOptionType, Observable<MPOptionStateType>>
+  ObservableMap<THCommandOptionType, Observable<MPOptionInfo>>
       get optionStateMap {
     _$_optionStateMapAtom.reportRead();
     return super._optionStateMap;
   }
 
   @override
-  ObservableMap<THCommandOptionType, Observable<MPOptionStateType>>
+  ObservableMap<THCommandOptionType, Observable<MPOptionInfo>>
       get _optionStateMap => optionStateMap;
 
   @override
   set _optionStateMap(
-      ObservableMap<THCommandOptionType, Observable<MPOptionStateType>> value) {
+      ObservableMap<THCommandOptionType, Observable<MPOptionInfo>> value) {
     _$_optionStateMapAtom.reportWrite(value, super._optionStateMap, () {
       super._optionStateMap = value;
     });
   }
 
-  late final _$_openedOptionTypeAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._openedOptionType',
+  late final _$_currentOptionTypeAtom = Atom(
+      name: 'TH2FileEditOptionEditControllerBase._currentOptionType',
       context: context);
 
-  THCommandOptionType? get openedOptionType {
-    _$_openedOptionTypeAtom.reportRead();
-    return super._openedOptionType;
+  THCommandOptionType? get currentOptionType {
+    _$_currentOptionTypeAtom.reportRead();
+    return super._currentOptionType;
   }
 
   @override
-  THCommandOptionType? get _openedOptionType => openedOptionType;
+  THCommandOptionType? get _currentOptionType => currentOptionType;
 
   @override
-  set _openedOptionType(THCommandOptionType? value) {
-    _$_openedOptionTypeAtom.reportWrite(value, super._openedOptionType, () {
-      super._openedOptionType = value;
+  set _currentOptionType(THCommandOptionType? value) {
+    _$_currentOptionTypeAtom.reportWrite(value, super._currentOptionType, () {
+      super._currentOptionType = value;
     });
   }
 
@@ -122,12 +122,12 @@ mixin _$TH2FileEditOptionEditController
   }
 
   @override
-  void clearOpenedOptionType() {
+  void clearCurrentOptionType() {
     final _$actionInfo =
         _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditOptionEditControllerBase.clearOpenedOptionType');
+            name: 'TH2FileEditOptionEditControllerBase.clearCurrentOptionType');
     try {
-      return super.clearOpenedOptionType();
+      return super.clearCurrentOptionType();
     } finally {
       _$TH2FileEditOptionEditControllerBaseActionController
           .endAction(_$actionInfo);

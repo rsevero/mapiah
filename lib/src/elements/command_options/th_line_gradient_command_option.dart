@@ -29,7 +29,7 @@ class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get type => THCommandOptionType.place;
+  THCommandOptionType get type => THCommandOptionType.lineGradient;
 
   @override
   String specToFile() {
@@ -40,9 +40,6 @@ class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
   String typeToFile() {
     return 'gradient';
   }
-
-  THOptionChoicesLineGradientType get defaultChoice =>
-      THOptionChoicesLineGradientType.none;
 
   @override
   Map<String, dynamic> toMap() {

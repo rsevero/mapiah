@@ -25,9 +25,6 @@ class THReverseCommandOption extends THOnOffCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.reverse;
 
-  @override
-  THOptionChoicesOnOffType get defaultChoice => THOptionChoicesOnOffType.off;
-
   factory THReverseCommandOption.fromMap(Map<String, dynamic> map) {
     return THReverseCommandOption.forCWJM(
       parentMPID: map['parentMPID'],

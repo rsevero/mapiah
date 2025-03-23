@@ -182,6 +182,30 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   @override
+  void showOptionChoicesOverlayWindow(
+      {required Offset position,
+      required THCommandOptionType optionType,
+      dynamic currentChoice,
+      dynamic selectedChoice,
+      dynamic defaultChoice}) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.showOptionChoicesOverlayWindow');
+    try {
+      return super.showOptionChoicesOverlayWindow(
+          position: position,
+          optionType: optionType,
+          currentChoice: currentChoice,
+          selectedChoice: selectedChoice,
+          defaultChoice: defaultChoice);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void closeAutoDismissOverlayWindows() {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(

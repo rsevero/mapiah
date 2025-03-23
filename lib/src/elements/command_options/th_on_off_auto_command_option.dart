@@ -24,12 +24,6 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
         super();
 
   @override
-  THCommandOptionType get type => THCommandOptionType.close;
-
-  THOptionChoicesOnOffAutoType get defaultChoice =>
-      THOptionChoicesOnOffAutoType.auto;
-
-  @override
   String specToFile() {
     return choice.name;
   }

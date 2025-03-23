@@ -28,9 +28,6 @@ class THPlaceCommandOption extends THMultipleChoiceCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.place;
 
-  THOptionChoicesPlaceType get defaultChoice =>
-      THOptionChoicesPlaceType.defaultChoice;
-
   @override
   String specToFile() {
     return (choice == THOptionChoicesPlaceType.defaultChoice)

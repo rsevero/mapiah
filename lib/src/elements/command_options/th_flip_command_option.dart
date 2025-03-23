@@ -28,8 +28,6 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.flip;
 
-  THOptionChoicesFlipType get defautChoice => THOptionChoicesFlipType.none;
-
   @override
   String specToFile() {
     return choice.name;
