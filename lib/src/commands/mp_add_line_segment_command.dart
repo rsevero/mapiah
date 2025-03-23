@@ -39,9 +39,8 @@ class MPAddLineSegmentCommand extends MPCommand {
     );
 
     return MPUndoRedoCommand(
-      commandType: oppositeCommand.type,
-      mapUndo: oppositeCommand.toMap(),
       mapRedo: toMap(),
+      mapUndo: oppositeCommand.toMap(),
     );
   }
 
