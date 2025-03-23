@@ -73,10 +73,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _overlayWindows[type] = overlayWindow;
     } else {
       if (type == MPOverlayWindowType.optionChoices) {
-        _overlayWindows[type] = MPOverlayWindowFactory.createOptionChoices(
-          th2FileEditController: _th2FileEditController,
-          position: position ?? getPositionFromSelectedElements(),
-          type: _th2FileEditController.optionEditController.currentOptionType!,
+        throw UnimplementedError(
+          'Call showOptionChoicesOverlayWindow() to create option choices widgets.',
         );
       } else {
         _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
@@ -138,7 +136,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     required THCommandOptionType optionType,
     dynamic currentChoice,
     dynamic selectedChoice,
-    dynamic defaultChoice,
   }) {
     const MPOverlayWindowType overlayWindowType =
         MPOverlayWindowType.optionChoices;
@@ -153,7 +150,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       position: position,
       type: optionType,
       currentChoice: currentChoice,
-      defaultChoice: defaultChoice,
+      defaultChoice: THCommandOption.isMultipleChoiceOptions(optionType)
+          ? THCommandOption.getDefaultChoiceAsString(optionType)
+          : THCommandOption.getDefaultChoice(optionType),
       selectedChoice: selectedChoice,
     );
 

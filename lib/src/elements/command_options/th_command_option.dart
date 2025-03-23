@@ -93,6 +93,28 @@ abstract class THCommandOption {
   final int parentMPID;
   final String originalLineInTH2File;
 
+  static const Set<THCommandOptionType> multipleChoiceOptions = {
+    THCommandOptionType.adjust,
+    THCommandOptionType.align,
+    THCommandOptionType.anchors,
+    THCommandOptionType.border,
+    THCommandOptionType.clip,
+    THCommandOptionType.close,
+    THCommandOptionType.flip,
+    THCommandOptionType.head,
+    THCommandOptionType.lineDirection,
+    THCommandOptionType.lineGradient,
+    THCommandOptionType.linePointDirection,
+    THCommandOptionType.linePointGradient,
+    THCommandOptionType.outline,
+    THCommandOptionType.place,
+    THCommandOptionType.rebelays,
+    THCommandOptionType.reverse,
+    THCommandOptionType.smooth,
+    THCommandOptionType.visibility,
+    THCommandOptionType.walls,
+  };
+
   THCommandOption.forCWJM({
     required this.parentMPID,
     required this.originalLineInTH2File,
@@ -476,6 +498,10 @@ abstract class THCommandOption {
       default:
         return '';
     }
+  }
+
+  static bool isMultipleChoiceOptions(THCommandOptionType type) {
+    return multipleChoiceOptions.contains(type);
   }
 
   @override

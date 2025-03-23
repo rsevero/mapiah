@@ -186,8 +186,7 @@ mixin _$TH2FileEditOverlayWindowController
       {required Offset position,
       required THCommandOptionType optionType,
       dynamic currentChoice,
-      dynamic selectedChoice,
-      dynamic defaultChoice}) {
+      dynamic selectedChoice}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
@@ -197,8 +196,7 @@ mixin _$TH2FileEditOverlayWindowController
           position: position,
           optionType: optionType,
           currentChoice: currentChoice,
-          selectedChoice: selectedChoice,
-          defaultChoice: defaultChoice);
+          selectedChoice: selectedChoice);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

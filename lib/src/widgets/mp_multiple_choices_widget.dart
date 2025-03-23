@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -39,7 +40,22 @@ class MPMultipleChoicesWidget extends StatelessWidget {
           final String label = entry.value;
 
           return RadioListTile<String>(
-            title: Text(label),
+            title: Row(
+              children: [
+                Text(label),
+                if (value == defaultChoice)
+                  Padding(
+                    padding: const EdgeInsets.only(left: mpButtonSpace),
+                    child: Text(
+                      '*',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             value: value,
             groupValue: selectedChoice,
             onChanged: (String? newValue) {
