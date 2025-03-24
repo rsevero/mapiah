@@ -66,7 +66,7 @@ class MPOptionWidget extends StatelessWidget {
     // mpLocator.mpLog.fine("MPOptionWidget.build() $tileColor");
 
     return ListTile(
-      title: Text("${MPTextToUser.getCommandOptionType(type)}: ${state.name}"),
+      title: Text(MPTextToUser.getCommandOptionType(type)),
       onTap: () => onOptionTap(context, type),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
       visualDensity: VisualDensity.compact,

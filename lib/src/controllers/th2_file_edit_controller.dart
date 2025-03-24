@@ -903,6 +903,7 @@ abstract class TH2FileEditControllerBase with Store {
   void _undoRedoDone() {
     updateUndoRedoStatus();
     selectionController.clearSelectedElementsAndSelectionHandleCenters();
+    overlayWindowController.clearOverlayWindows();
   }
 
   void undo() {

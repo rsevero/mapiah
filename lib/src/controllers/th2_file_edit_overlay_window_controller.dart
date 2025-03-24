@@ -115,16 +115,19 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
       _showOverlayWindow(type, position: position);
     } else {
-      /// Is there still an auto dismmisable overlay window open?
-      bool autoDismiss = false;
-      for (MPOverlayWindowType autoDismissType
-          in autoDismissOverlayWindowTypes) {
-        if (_isOverlayWindowShown[autoDismissType]!) {
-          autoDismiss = true;
-          break;
+      if (_isAutoDismissWindowOpen) {
+        /// Is there still an auto dismmisable overlay window open?
+        bool autoDismiss = false;
+
+        for (MPOverlayWindowType autoDismissType
+            in autoDismissOverlayWindowTypes) {
+          if (_isOverlayWindowShown[autoDismissType]!) {
+            autoDismiss = true;
+            break;
+          }
         }
+        _isAutoDismissWindowOpen = autoDismiss;
       }
-      _isAutoDismissWindowOpen = autoDismiss;
 
       _hideOverlayWindow(type);
     }
@@ -181,6 +184,13 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           .offsetCanvasToScreen(selectedElementsBoundingBox.center);
 
       return selectedElementsCenter;
+    }
+  }
+
+  @action
+  void clearOverlayWindows() {
+    for (final type in MPOverlayWindowType.values) {
+      setShowOverlayWindow(type, false);
     }
   }
 }

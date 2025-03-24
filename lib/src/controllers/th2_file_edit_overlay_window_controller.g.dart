@@ -218,6 +218,19 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   @override
+  void clearOverlayWindows() {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name: 'TH2FileEditOverlayWindowControllerBase.clearOverlayWindows');
+    try {
+      return super.clearOverlayWindows();
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow}
