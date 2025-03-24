@@ -1,23 +1,26 @@
 part of 'mp_command.dart';
 
-class MPRemoveOptionFromElementCommand extends MPCommand {
+class MPRemoveOptionFromElementCommand extends MPCommand
+    with MPGetParentElementMixin {
   final THCommandOptionType optionType;
-  final int parentMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
-  THHasOptionsMixin? _parentElement;
 
   MPRemoveOptionFromElementCommand.forCWJM({
     required this.optionType,
-    required this.parentMPID,
+    required int parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.parentMPID = parentMPID;
+  }
 
   MPRemoveOptionFromElementCommand({
     required this.optionType,
-    required this.parentMPID,
+    required int parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.parentMPID = parentMPID;
+  }
 
   @override
   MPCommandType get type => MPCommandType.removeOptionFromElement;
@@ -28,39 +31,24 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    if (_parentElement == null) {
-      final THElement parentElement =
-          th2FileEditController.thFile.elementByMPID(parentMPID);
+    final THHasOptionsMixin parentElement =
+        getParentElement(th2FileEditController);
 
-      if (parentElement is! THHasOptionsMixin) {
-        return;
-      }
-
-      _parentElement = parentElement;
-    }
-
-    _parentElement!.removeOption(optionType);
+    parentElement.removeOption(optionType);
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    if (_parentElement == null) {
-      final THElement parentElement =
-          th2FileEditController.thFile.elementByMPID(parentMPID);
+    final THHasOptionsMixin parentElement =
+        getParentElement(th2FileEditController);
 
-      if (parentElement is! THHasOptionsMixin) {
-        throw StateError('Parent element is not an option element');
-      }
-
-      _parentElement = parentElement;
-    }
-
-    final THCommandOption? option = _parentElement!.optionByType(optionType);
+    final THCommandOption? option = parentElement.optionByType(optionType);
 
     if (option == null) {
-      throw StateError('Parent element does not have the option');
+      throw StateError(
+          'Parent element does not have option of type $optionType');
     }
 
     final MPSetOptionToElementCommand oppositeCommand =

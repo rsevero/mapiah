@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 
+part 'mixins/mp_get_parent_element_mixin.dart';
 part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';

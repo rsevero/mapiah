@@ -1,22 +1,26 @@
 part of 'mp_command.dart';
 
-class MPSetOptionToElementCommand extends MPCommand {
+class MPSetOptionToElementCommand extends MPCommand
+    with MPGetParentElementMixin {
   final THCommandOption option;
-  final int parentMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
 
   MPSetOptionToElementCommand.forCWJM({
     required this.option,
-    required this.parentMPID,
+    required int parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.parentMPID = parentMPID;
+  }
 
   MPSetOptionToElementCommand({
     required this.option,
-    required this.parentMPID,
+    required int parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.parentMPID = parentMPID;
+  }
 
   @override
   MPCommandType get type => MPCommandType.setOptionToElement;
@@ -27,12 +31,8 @@ class MPSetOptionToElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THElement parentElement =
-        th2FileEditController.thFile.elementByMPID(parentMPID);
-
-    if (parentElement is! THHasOptionsMixin) {
-      return;
-    }
+    final THHasOptionsMixin parentElement =
+        getParentElement(th2FileEditController);
 
     parentElement.addUpdateOption(option);
   }
@@ -41,12 +41,26 @@ class MPSetOptionToElementCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPRemoveOptionFromElementCommand oppositeCommand =
-        MPRemoveOptionFromElementCommand(
-      optionType: option.type,
-      parentMPID: parentMPID,
-      descriptionType: descriptionType,
-    );
+    final THHasOptionsMixin parentElement =
+        getParentElement(th2FileEditController);
+    MPCommand oppositeCommand;
+
+    if (parentElement.hasOption(option.type)) {
+      final THCommandOption currentOption =
+          parentElement.optionByType(option.type)!;
+
+      oppositeCommand = MPSetOptionToElementCommand(
+        option: currentOption,
+        parentMPID: parentMPID,
+        descriptionType: descriptionType,
+      );
+    } else {
+      oppositeCommand = MPRemoveOptionFromElementCommand(
+        optionType: option.type,
+        parentMPID: parentMPID,
+        descriptionType: descriptionType,
+      );
+    }
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
