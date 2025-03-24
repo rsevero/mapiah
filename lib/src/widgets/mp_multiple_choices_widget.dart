@@ -71,7 +71,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
 
   void _onChoiceSelected(BuildContext context, String newValue) {
     th2FileEditController.userInteractionController
-        .setMultipleOptionChoiceToElement(
+        .setMultipleOptionChoiceToElementPrep(
       type,
       newValue,
     );

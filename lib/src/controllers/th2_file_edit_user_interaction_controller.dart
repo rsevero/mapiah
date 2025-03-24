@@ -27,7 +27,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       : _thFile = _th2FileEditController.thFile;
 
   @action
-  void setMultipleOptionChoiceToElement(
+  void setMultipleOptionChoiceToElementPrep(
     THCommandOptionType optionType,
     String choice,
   ) {

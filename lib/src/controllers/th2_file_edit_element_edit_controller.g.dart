@@ -391,12 +391,13 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void setOptionToElement({required THCommandOption option}) {
+  void setOptionToElementExec({required THCommandOption option}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.setOptionToElement');
+            name:
+                'TH2FileEditElementEditControllerBase.setOptionToElementExec');
     try {
-      return super.setOptionToElement(option: option);
+      return super.setOptionToElementExec(option: option);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -404,14 +405,14 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void removeOptionFromElement(
+  void removeOptionFromElementExec(
       {required THCommandOptionType optionType, required int parentMPID}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name:
-                'TH2FileEditElementEditControllerBase.removeOptionFromElement');
+                'TH2FileEditElementEditControllerBase.removeOptionFromElementExec');
     try {
-      return super.removeOptionFromElement(
+      return super.removeOptionFromElementExec(
           optionType: optionType, parentMPID: parentMPID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController

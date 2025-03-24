@@ -27,7 +27,7 @@ class MPSetOptionToElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.setOptionToElement(
+    th2FileEditController.elementEditController.setOptionToElementExec(
       option: option,
     );
   }
