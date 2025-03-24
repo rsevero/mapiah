@@ -27,7 +27,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.executeRemoveOptionFromElement(
+    th2FileEditController.elementEditController.applyRemoveOptionFromElement(
       optionType: optionType,
       parentMPID: parentMPID,
     );

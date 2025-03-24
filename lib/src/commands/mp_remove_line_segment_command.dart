@@ -25,7 +25,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController
-        .executeRemoveElementByMPID(lineSegmentMPID);
+        .applyRemoveElementByMPID(lineSegmentMPID);
   }
 
   @override

@@ -24,8 +24,7 @@ class MPAddElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController
-        .executeAddElements(createParams);
+    th2FileEditController.elementEditController.applyAddElements(createParams);
   }
 
   @override

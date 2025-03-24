@@ -25,7 +25,7 @@ class MPEditLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController
-        .executeSubstituteElement(newLineSegment);
+        .applySubstituteElement(newLineSegment);
     th2FileEditController.triggerNewLineRedraw();
   }
 

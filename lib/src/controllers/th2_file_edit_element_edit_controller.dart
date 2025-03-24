@@ -84,7 +84,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lineSegmentsMap;
   }
 
-  void executeSubstituteElement(THElement modifiedElement) {
+  void applySubstituteElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     _th2FileEditController.selectionController
         .addSelectableElement(modifiedElement);
@@ -103,7 +103,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  void executeSubstituteElementWithoutAddSelectableElement(
+  void applySubstituteElementWithoutAddSelectableElement(
       THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     mpLocator.mpLog.finer(
@@ -124,7 +124,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void executeAddElement({required THElement newElement}) {
+  void applyAddElement({required THElement newElement}) {
     _thFile.addElement(newElement);
 
     final int parentMPID = newElement.parentMPID;
@@ -173,7 +173,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.updateHasMultipleScraps();
   }
 
-  void executeRemoveElementByMPID(int mpID) {
+  void applyRemoveElementByMPID(int mpID) {
     final THElement element = _thFile.elementByMPID(mpID);
 
     removeElement(element);
@@ -187,9 +187,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void executeRemoveElements(List<int> mpIDs) {
+  void applyRemoveElements(List<int> mpIDs) {
     for (final int mpID in mpIDs) {
-      executeRemoveElementByMPID(mpID);
+      applyRemoveElementByMPID(mpID);
     }
   }
 
@@ -404,7 +404,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void executeAddLine({
+  void applyAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,
     Offset? lineStartScreenPosition,
@@ -413,10 +413,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.elementEditController;
     final THLine newLineCopy = newLine.copyWith(childrenMPID: {});
 
-    elementEditController.executeAddElement(newElement: newLineCopy);
+    elementEditController.applyAddElement(newElement: newLineCopy);
 
     for (final THElement child in lineChildren) {
-      elementEditController.executeAddElement(newElement: child);
+      elementEditController.applyAddElement(newElement: child);
     }
 
     if (lineStartScreenPosition != null) {
@@ -429,12 +429,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void executeRemoveLine(int lineMPID) {
+  void applyRemoveLine(int lineMPID) {
     if ((_newLine != null) && (_newLine!.mpID == lineMPID)) {
       clearNewLine();
     }
     _th2FileEditController.elementEditController
-        .executeRemoveElementByMPID(lineMPID);
+        .applyRemoveElementByMPID(lineMPID);
   }
 
   @action
@@ -473,13 +473,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void executeSetOptionToElement({required THCommandOption option}) {
+  void applySetOptionToElement({required THCommandOption option}) {
     option.optionParent(_thFile).addUpdateOption(option);
     updateOptionEdited();
   }
 
   @action
-  void executeRemoveOptionFromElement({
+  void applyRemoveOptionFromElement({
     required THCommandOptionType optionType,
     required int parentMPID,
   }) {
@@ -492,16 +492,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void executeAddElements(List<MPAddElementCommandParams> addElementsParams) {
+  void applyAddElements(List<MPAddElementCommandParams> addElementsParams) {
     for (final MPAddElementCommandParams params in addElementsParams) {
       switch (params) {
         case MPAddLineCommandParams _:
-          executeAddLine(
+          applyAddLine(
             newLine: params.line,
             lineChildren: params.lineChildren,
           );
         case MPAddPointCommandParams _:
-          executeAddElement(newElement: params.point);
+          applyAddElement(newElement: params.point);
       }
     }
 

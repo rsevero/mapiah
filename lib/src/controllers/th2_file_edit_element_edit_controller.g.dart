@@ -148,12 +148,12 @@ mixin _$TH2FileEditElementEditController
           name: 'TH2FileEditElementEditControllerBase', context: context);
 
   @override
-  void executeAddElement({required THElement newElement}) {
+  void applyAddElement({required THElement newElement}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.executeAddElement');
+            name: 'TH2FileEditElementEditControllerBase.applyAddElement');
     try {
-      return super.executeAddElement(newElement: newElement);
+      return super.applyAddElement(newElement: newElement);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -203,12 +203,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeRemoveElements(List<int> mpIDs) {
+  void applyRemoveElements(List<int> mpIDs) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.executeRemoveElements');
+            name: 'TH2FileEditElementEditControllerBase.applyRemoveElements');
     try {
-      return super.executeRemoveElements(mpIDs);
+      return super.applyRemoveElements(mpIDs);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -348,15 +348,14 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeAddLine(
+  void applyAddLine(
       {required THLine newLine,
       required List<THElement> lineChildren,
       Offset? lineStartScreenPosition}) {
-    final _$actionInfo =
-        _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.executeAddLine');
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.applyAddLine');
     try {
-      return super.executeAddLine(
+      return super.applyAddLine(
           newLine: newLine,
           lineChildren: lineChildren,
           lineStartScreenPosition: lineStartScreenPosition);
@@ -367,12 +366,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeRemoveLine(int lineMPID) {
+  void applyRemoveLine(int lineMPID) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.executeRemoveLine');
+            name: 'TH2FileEditElementEditControllerBase.applyRemoveLine');
     try {
-      return super.executeRemoveLine(lineMPID);
+      return super.applyRemoveLine(lineMPID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -394,13 +393,13 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeSetOptionToElement({required THCommandOption option}) {
+  void applySetOptionToElement({required THCommandOption option}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name:
-                'TH2FileEditElementEditControllerBase.executeSetOptionToElement');
+                'TH2FileEditElementEditControllerBase.applySetOptionToElement');
     try {
-      return super.executeSetOptionToElement(option: option);
+      return super.applySetOptionToElement(option: option);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -408,14 +407,14 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeRemoveOptionFromElement(
+  void applyRemoveOptionFromElement(
       {required THCommandOptionType optionType, required int parentMPID}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name:
-                'TH2FileEditElementEditControllerBase.executeRemoveOptionFromElement');
+                'TH2FileEditElementEditControllerBase.applyRemoveOptionFromElement');
     try {
-      return super.executeRemoveOptionFromElement(
+      return super.applyRemoveOptionFromElement(
           optionType: optionType, parentMPID: parentMPID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
@@ -424,12 +423,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeAddElements(List<MPAddElementCommandParams> addElementsParams) {
+  void applyAddElements(List<MPAddElementCommandParams> addElementsParams) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.executeAddElements');
+            name: 'TH2FileEditElementEditControllerBase.applyAddElements');
     try {
-      return super.executeAddElements(addElementsParams);
+      return super.applyAddElements(addElementsParams);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

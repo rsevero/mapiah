@@ -25,7 +25,7 @@ class MPAddPointCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController
-        .executeAddElement(newElement: newPoint);
+        .applyAddElement(newElement: newPoint);
   }
 
   @override

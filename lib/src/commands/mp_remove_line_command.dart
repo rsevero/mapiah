@@ -27,7 +27,7 @@ class MPRemoveLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.executeRemoveLine(lineMPID);
+    th2FileEditController.elementEditController.applyRemoveLine(lineMPID);
   }
 
   @override
