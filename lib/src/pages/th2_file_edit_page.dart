@@ -111,7 +111,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   if (mpDebugMousePosition) {
                     return MouseRegion(
                       onHover: (event) => th2FileEditController
-                          .setMousePosition(event.localPosition),
+                          .performSetMousePosition(event.localPosition),
                       child: Stack(
                         children: [
                           THFileWidget(
@@ -273,8 +273,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     return [
       SizedBox(height: mpButtonSpace),
       MouseRegion(
-        onEnter: (_) => th2FileEditController.setAddElementButtonsHovered(true),
-        onExit: (_) => th2FileEditController.setAddElementButtonsHovered(false),
+        onEnter: (_) =>
+            th2FileEditController.performSetAddElementButtonsHovered(true),
+        onExit: (_) =>
+            th2FileEditController.performSetAddElementButtonsHovered(false),
         child: Observer(
           builder: (_) {
             return Row(
@@ -500,8 +502,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     return [
       SizedBox(height: mpButtonSpace),
       MouseRegion(
-        onEnter: (_) => th2FileEditController.setZoomButtonsHovered(true),
-        onExit: (_) => th2FileEditController.setZoomButtonsHovered(false),
+        onEnter: (_) =>
+            th2FileEditController.performSetZoomButtonsHovered(true),
+        onExit: (_) =>
+            th2FileEditController.performSetZoomButtonsHovered(false),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,

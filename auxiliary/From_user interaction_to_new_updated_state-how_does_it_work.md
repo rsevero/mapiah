@@ -11,6 +11,8 @@ These are the actions that alter THFile data originated in events of general wid
 3. The created MPCommand registers the necessary undo/redo info and calls its internal execute method called _actualExecute().
 4. _actualExecute() calls one method from the appropriate controller (i.e. the *Apply* method that should be an @action) responsible for all actual changes in THFile, support data and necessary redraw triggers.
 
+General widgets can also start altering and non-altering actions by simulating button presses via onButtonPressed().
+
 ## Altering data actions generated in the MPListenerWidget
 
 These are the actions that alter THFile data originated in events from MPListenerWidget. They are processed by the appropriate state method. These actions should be registered in the undo/redo chains.

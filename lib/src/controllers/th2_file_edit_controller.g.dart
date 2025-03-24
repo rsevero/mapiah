@@ -896,23 +896,25 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       ActionController(name: 'TH2FileEditControllerBase', context: context);
 
   @override
-  void setZoomButtonsHovered(bool isHovered) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setZoomButtonsHovered');
+  void performSetZoomButtonsHovered(bool isHovered) {
+    final _$actionInfo =
+        _$TH2FileEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditControllerBase.performSetZoomButtonsHovered');
     try {
-      return super.setZoomButtonsHovered(isHovered);
+      return super.performSetZoomButtonsHovered(isHovered);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setAddElementButtonsHovered(bool isHovered) {
+  void performSetAddElementButtonsHovered(bool isHovered) {
     final _$actionInfo =
         _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.setAddElementButtonsHovered');
+            name:
+                'TH2FileEditControllerBase.performSetAddElementButtonsHovered');
     try {
-      return super.setAddElementButtonsHovered(isHovered);
+      return super.performSetAddElementButtonsHovered(isHovered);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1251,11 +1253,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setMousePosition(Offset position) {
+  void performSetMousePosition(Offset position) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setMousePosition');
+        .startAction(name: 'TH2FileEditControllerBase.performSetMousePosition');
     try {
-      return super.setMousePosition(position);
+      return super.performSetMousePosition(position);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

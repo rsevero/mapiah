@@ -473,12 +473,12 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void setZoomButtonsHovered(bool isHovered) {
+  void performSetZoomButtonsHovered(bool isHovered) {
     _isZoomButtonsHovered = isHovered;
   }
 
   @action
-  void setAddElementButtonsHovered(bool isHovered) {
+  void performSetAddElementButtonsHovered(bool isHovered) {
     _isAddElementButtonsHovered = isHovered;
   }
 
@@ -917,7 +917,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void setMousePosition(Offset position) {
+  void performSetMousePosition(Offset position) {
     _mousePosition = position;
   }
 }
