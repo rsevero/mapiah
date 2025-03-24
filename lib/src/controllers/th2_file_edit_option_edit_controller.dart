@@ -90,7 +90,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           type: optionType,
           state: optionStateType,
           defaultChoice: THCommandOption.getDefaultChoice(optionType),
-          currentChoice: optionValue,
+          currentChoice:
+              optionStateType == MPOptionStateType.set ? optionValue : null,
         );
       }
 
