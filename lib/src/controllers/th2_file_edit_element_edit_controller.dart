@@ -470,13 +470,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void setOptionToElementExec({required THCommandOption option}) {
+  void executeSetOptionToElement({required THCommandOption option}) {
     option.optionParent(_thFile).addUpdateOption(option);
     _updateOptionEdited();
   }
 
   @action
-  void removeOptionFromElementExec({
+  void executeRemoveOptionFromElement({
     required THCommandOptionType optionType,
     required int parentMPID,
   }) {

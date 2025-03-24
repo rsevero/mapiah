@@ -120,7 +120,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   }
 
   @action
-  void toggleOptionShownStatus(
+  void performToggleOptionShownStatus(
     THCommandOptionType optionType,
     Offset position,
   ) {

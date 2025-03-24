@@ -89,6 +89,6 @@ class MPOptionWidget extends StatelessWidget {
         ? th2FileEditController.screenBoundingBox.center
         : boundingBox.centerRight;
 
-    optionEditController.toggleOptionShownStatus(type, position);
+    optionEditController.performToggleOptionShownStatus(type, position);
   }
 }
