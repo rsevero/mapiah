@@ -54,14 +54,14 @@ mixin _$TH2FileEditUserInteractionController
           name: 'TH2FileEditUserInteractionControllerBase', context: context);
 
   @override
-  void prepareMultipleOptionChoiceToElement(
+  void prepareSetMultipleOptionChoiceToElement(
       THCommandOptionType optionType, String choice) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
             name:
-                'TH2FileEditUserInteractionControllerBase.prepareMultipleOptionChoiceToElement');
+                'TH2FileEditUserInteractionControllerBase.prepareSetMultipleOptionChoiceToElement');
     try {
-      return super.prepareMultipleOptionChoiceToElement(optionType, choice);
+      return super.prepareSetMultipleOptionChoiceToElement(optionType, choice);
     } finally {
       _$TH2FileEditUserInteractionControllerBaseActionController
           .endAction(_$actionInfo);

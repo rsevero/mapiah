@@ -1264,6 +1264,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void applyMPCommandList(
+      List<MPCommand> commandList, void Function() onComplete) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.applyMPCommandList');
+    try {
+      return super.applyMPCommandList(commandList, onComplete);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},

@@ -139,6 +139,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionMultipleElements": "Multiple elements edit",
+  "@mpCommandDescriptionMultipleElements": {
+    "description": "The description for the multiple elements edit command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionRemoveElements": "Remove elements",
   "@mpCommandDescriptionRemoveElements": {
     "description": "The description for the remove elements command",
@@ -163,6 +169,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionRemoveOptionFromElements": "Remove option from elements",
+  "@mpCommandDescriptionRemoveOptionFromElements": {
+    "description": "The description for the remove option from elements command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionRemovePoint": "Remove point",
   "@mpCommandDescriptionRemovePoint": {
     "description": "The description for the remove point command",
@@ -172,6 +184,12 @@
   "mpCommandDescriptionSetOptionToElement": "Set option",
   "@mpCommandDescriptionSetOptionToElement": {
     "description": "The description for the set option command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionSetOptionToElements": "Set option to elements",
+  "@mpCommandDescriptionSetOptionToElements": {
+    "description": "The description for the set option to elements command",
     "type": "text"
   },
 

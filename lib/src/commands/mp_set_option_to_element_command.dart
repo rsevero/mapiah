@@ -1,20 +1,17 @@
 part of 'mp_command.dart';
 
 class MPSetOptionToElementCommand extends MPCommand {
-  final int parentMPID;
   final THCommandOption option;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
 
   MPSetOptionToElementCommand.forCWJM({
     required this.option,
-    required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPSetOptionToElementCommand({
     required this.option,
-    required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -46,13 +43,12 @@ class MPSetOptionToElementCommand extends MPCommand {
 
       oppositeCommand = MPSetOptionToElementCommand(
         option: currentOption,
-        parentMPID: parentMPID,
         descriptionType: descriptionType,
       );
     } else {
       oppositeCommand = MPRemoveOptionFromElementCommand(
         optionType: option.type,
-        parentMPID: parentMPID,
+        parentMPID: option.parentMPID,
         descriptionType: descriptionType,
       );
     }
@@ -66,12 +62,10 @@ class MPSetOptionToElementCommand extends MPCommand {
   @override
   MPCommand copyWith({
     THCommandOption? option,
-    int? parentMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPSetOptionToElementCommand.forCWJM(
       option: option ?? this.option,
-      parentMPID: parentMPID ?? this.parentMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -79,7 +73,6 @@ class MPSetOptionToElementCommand extends MPCommand {
   factory MPSetOptionToElementCommand.fromMap(Map<String, dynamic> map) {
     return MPSetOptionToElementCommand.forCWJM(
       option: THCommandOption.fromMap(map['option']),
-      parentMPID: map['parentMPID'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -95,7 +88,6 @@ class MPSetOptionToElementCommand extends MPCommand {
 
     map.addAll({
       'option': option.toMap(),
-      'parentMPID': parentMPID,
     });
 
     return map;
@@ -107,10 +99,9 @@ class MPSetOptionToElementCommand extends MPCommand {
 
     return other is MPSetOptionToElementCommand &&
         other.option == option &&
-        other.parentMPID == parentMPID &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ Object.hash(option, parentMPID);
+  int get hashCode => super.hashCode ^ option.hashCode;
 }

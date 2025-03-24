@@ -920,6 +920,18 @@ abstract class TH2FileEditControllerBase with Store {
   void performSetMousePosition(Offset position) {
     _mousePosition = position;
   }
+
+  @action
+  void applyMPCommandList(
+    List<MPCommand> commandList,
+    void Function() onComplete,
+  ) {
+    for (final MPCommand command in commandList) {
+      command.execute(this as TH2FileEditController);
+    }
+
+    onComplete();
+  }
 }
 
 class TH2FileEditControllerCreateResult {

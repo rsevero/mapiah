@@ -11,10 +11,13 @@ enum MPCommandDescriptionType {
   moveLine,
   movePoint,
   moveStraightLineSegment,
+  multipleElements,
   removeElements,
   removeLine,
   removeLineSegment,
   removeOptionFromElement,
+  removeOptionFromElements,
   removePoint,
-  setOptionToElement;
+  setOptionToElement,
+  setOptionToElements;
 }

@@ -91,6 +91,8 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[
             MPCommandDescriptionType.moveStraightLineSegment] =
         localizations.mpCommandDescriptionMoveStraightLineSegment;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.multipleElements] =
+        localizations.mpCommandDescriptionMultipleElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeElements] =
         localizations.mpCommandDescriptionRemoveElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =
@@ -101,11 +103,17 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[
             MPCommandDescriptionType.removeOptionFromElement] =
         localizations.mpCommandDescriptionRemoveOptionFromElement;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.removeOptionFromElements] =
+        localizations.mpCommandDescriptionRemoveOptionFromElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removePoint] =
         localizations.mpCommandDescriptionRemovePoint;
     _commandDescriptionTypeAsString[
             MPCommandDescriptionType.setOptionToElement] =
         localizations.mpCommandDescriptionSetOptionToElement;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.setOptionToElements] =
+        localizations.mpCommandDescriptionSetOptionToElements;
   }
 
   static String getCommandDescription(

@@ -18,7 +18,6 @@ import 'package:mapiah/src/elements/th_file.dart';
 part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
-part 'mp_set_option_to_element_command.dart';
 part 'mp_add_point_command.dart';
 part 'mp_edit_line_segment_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
@@ -26,11 +25,13 @@ part 'mp_move_elements_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
+part 'mp_multiple_elements_command.dart';
 part 'mp_remove_elements_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
 part 'mp_remove_point_command.dart';
+part 'mp_set_option_to_element_command.dart';
 part 'types/mp_command_type.dart';
 
 /// Abstract class that defines the structure of a command.
@@ -124,6 +125,8 @@ abstract class MPCommand {
         return MPMovePointCommand.fromMap(map);
       case MPCommandType.moveStraightLineSegment:
         return MPMoveStraightLineSegmentCommand.fromMap(map);
+      case MPCommandType.multipleElements:
+        return MPMultipleElementsCommand.fromMap(map);
       case MPCommandType.removeElements:
         return MPRemoveElementsCommand.fromMap(map);
       case MPCommandType.removeLine:

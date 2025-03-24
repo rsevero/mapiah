@@ -51,7 +51,6 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     final MPSetOptionToElementCommand oppositeCommand =
         MPSetOptionToElementCommand(
       option: option,
-      parentMPID: parentMPID,
       descriptionType: descriptionType,
     );
 

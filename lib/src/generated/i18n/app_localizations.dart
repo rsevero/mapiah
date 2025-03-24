@@ -227,6 +227,12 @@ abstract class AppLocalizations {
   /// **'Move straight line segment'**
   String get mpCommandDescriptionMoveStraightLineSegment;
 
+  /// The description for the multiple elements edit command
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple elements edit'**
+  String get mpCommandDescriptionMultipleElements;
+
   /// The description for the remove elements command
   ///
   /// In en, this message translates to:
@@ -251,6 +257,12 @@ abstract class AppLocalizations {
   /// **'Remove option'**
   String get mpCommandDescriptionRemoveOptionFromElement;
 
+  /// The description for the remove option from elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove option from elements'**
+  String get mpCommandDescriptionRemoveOptionFromElements;
+
   /// The description for the remove point command
   ///
   /// In en, this message translates to:
@@ -262,6 +274,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set option'**
   String get mpCommandDescriptionSetOptionToElement;
+
+  /// The description for the set option to elements command
+  ///
+  /// In en, this message translates to:
+  /// **'Set option to elements'**
+  String get mpCommandDescriptionSetOptionToElements;
 
   /// The abbreviation for the centimeter length unit
   ///

@@ -149,7 +149,7 @@ abstract class THCommandOption {
     };
   }
 
-  THCommandOption copyWith();
+  THCommandOption copyWith({int? parentMPID, String? originalLineInTH2File});
 
   static THCommandOption fromMap(Map<String, dynamic> map) {
     final THCommandOptionType type =

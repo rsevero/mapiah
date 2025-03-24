@@ -461,7 +461,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return parentElement;
   }
 
-  void _updateOptionEdited() {
+  void updateOptionEdited() {
     _th2FileEditController.optionEditController.clearCurrentOptionType();
     _th2FileEditController.selectionController.updateSelectedElementsClones();
     _th2FileEditController.overlayWindowController.setShowOverlayWindow(
@@ -475,7 +475,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void executeSetOptionToElement({required THCommandOption option}) {
     option.optionParent(_thFile).addUpdateOption(option);
-    _updateOptionEdited();
+    updateOptionEdited();
   }
 
   @action
@@ -488,7 +488,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         .getParentElement(parentMPID);
 
     parentElement.removeOption(optionType);
-    _updateOptionEdited();
+    updateOptionEdited();
   }
 
   @action

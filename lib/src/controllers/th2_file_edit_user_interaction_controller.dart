@@ -27,7 +27,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       : _thFile = _th2FileEditController.thFile;
 
   @action
-  void prepareMultipleOptionChoiceToElement(
+  void prepareSetMultipleOptionChoiceToElement(
     THCommandOptionType optionType,
     String choice,
   ) {
@@ -67,13 +67,37 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         );
         final MPCommand addOptionCommand = MPSetOptionToElementCommand(
           option: option,
-          parentMPID: selectedElement.mpID,
         );
 
         _th2FileEditController.execute(addOptionCommand);
       }
     } else {
-      /// TODO: implement multiple element option setting.
+      if (choice == mpMultipleChoiceUnsetID) {
+        final List<int> parentMPIDs = mpSelectedElements
+            .map((element) => element.originalElementClone.mpID)
+            .toList();
+        final MPCommand removeOptionCommand =
+            MPMultipleElementsCommand.removeOption(
+          optionType: optionType,
+          parentMPIDs: parentMPIDs,
+        );
+
+        _th2FileEditController.execute(removeOptionCommand);
+      } else {
+        final List<THElement> elements = mpSelectedElements
+            .map((element) => element.originalElementClone)
+            .toList();
+        final MPCommand addOptionCommand = MPMultipleElementsCommand.setOption(
+          elements: elements,
+          option: THCommandOption.byType(
+            optionParent: elements.first as THHasOptionsMixin,
+            type: optionType,
+            value: choice,
+          ),
+        );
+
+        _th2FileEditController.execute(addOptionCommand);
+      }
     }
   }
 }

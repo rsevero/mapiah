@@ -88,6 +88,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMoveStraightLineSegment => 'Mover segmento de linha reta';
 
   @override
+  String get mpCommandDescriptionMultipleElements => 'Editar vários elementos';
+
+  @override
   String get mpCommandDescriptionRemoveElements => 'Apagar elementos';
 
   @override
@@ -100,10 +103,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionRemoveOptionFromElement => 'Remover opção';
 
   @override
+  String get mpCommandDescriptionRemoveOptionFromElements => 'Remover opção de diversos elementos';
+
+  @override
   String get mpCommandDescriptionRemovePoint => 'Apagar ponto';
 
   @override
   String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
+
+  @override
+  String get mpCommandDescriptionSetOptionToElements => 'Definir opção para diversos elementos';
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';

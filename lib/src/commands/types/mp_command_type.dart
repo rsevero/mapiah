@@ -11,6 +11,7 @@ enum MPCommandType {
   moveLine,
   movePoint,
   moveStraightLineSegment,
+  multipleElements,
   removeElements,
   removeLine,
   removeLineSegment,
