@@ -24,7 +24,8 @@ class MPRemovePointCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.removeElementByMPID(pointMPID);
+    th2FileEditController.elementEditController
+        .executeRemoveElementByMPID(pointMPID);
   }
 
   @override

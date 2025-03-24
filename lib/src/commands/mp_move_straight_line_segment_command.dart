@@ -47,7 +47,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
             .copyWith(coordinates: modifiedEndPointCoordinates));
 
     th2FileEditController.elementEditController
-        .substituteElementWithoutAddSelectableElement(newLineSegment);
+        .executeSubstituteElementWithoutAddSelectableElement(newLineSegment);
   }
 
   @override

@@ -24,23 +24,8 @@ class MPAddElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final TH2FileEditElementEditController elementEditController =
-        th2FileEditController.elementEditController;
-
-    for (final MPAddElementCommandParams params in createParams) {
-      switch (params) {
-        case MPAddLineCommandParams _:
-          elementEditController.addLine(
-            newLine: params.line,
-            lineChildren: params.lineChildren,
-          );
-        case MPAddPointCommandParams _:
-          th2FileEditController.elementEditController
-              .addElement(newElement: params.point);
-      }
-    }
-
-    th2FileEditController.triggerAllElementsRedraw();
+    th2FileEditController.elementEditController
+        .executeAddElements(createParams);
   }
 
   @override

@@ -70,7 +70,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
                 .copyWith(coordinates: modifiedControlPoint2Coordinates));
 
     th2FileEditController.elementEditController
-        .substituteElementWithoutAddSelectableElement(newLineSegment);
+        .executeSubstituteElementWithoutAddSelectableElement(newLineSegment);
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/animation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/parameters/mp_add_element_command_params.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -83,7 +84,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lineSegmentsMap;
   }
 
-  void substituteElement(THElement modifiedElement) {
+  void executeSubstituteElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     _th2FileEditController.selectionController
         .addSelectableElement(modifiedElement);
@@ -102,7 +103,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
+  void executeSubstituteElementWithoutAddSelectableElement(
+      THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     mpLocator.mpLog.finer(
         'Substituted element without add selectable element ${modifiedElement.mpID}');
@@ -122,7 +124,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void addElement({required THElement newElement}) {
+  void executeAddElement({required THElement newElement}) {
     _thFile.addElement(newElement);
 
     final int parentMPID = newElement.parentMPID;
@@ -171,7 +173,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.updateHasMultipleScraps();
   }
 
-  void removeElementByMPID(int mpID) {
+  void executeRemoveElementByMPID(int mpID) {
     final THElement element = _thFile.elementByMPID(mpID);
 
     removeElement(element);
@@ -185,9 +187,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void removeElements(List<int> mpIDs) {
+  void executeRemoveElements(List<int> mpIDs) {
     for (final int mpID in mpIDs) {
-      removeElementByMPID(mpID);
+      executeRemoveElementByMPID(mpID);
     }
   }
 
@@ -402,7 +404,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void addLine({
+  void executeAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,
     Offset? lineStartScreenPosition,
@@ -411,10 +413,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.elementEditController;
     final THLine newLineCopy = newLine.copyWith(childrenMPID: {});
 
-    elementEditController.addElement(newElement: newLineCopy);
+    elementEditController.executeAddElement(newElement: newLineCopy);
 
     for (final THElement child in lineChildren) {
-      elementEditController.addElement(newElement: child);
+      elementEditController.executeAddElement(newElement: child);
     }
 
     if (lineStartScreenPosition != null) {
@@ -427,11 +429,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void removeLine(int lineMPID) {
+  void executeRemoveLine(int lineMPID) {
     if ((_newLine != null) && (_newLine!.mpID == lineMPID)) {
       clearNewLine();
     }
-    _th2FileEditController.elementEditController.removeElementByMPID(lineMPID);
+    _th2FileEditController.elementEditController
+        .executeRemoveElementByMPID(lineMPID);
   }
 
   @action
@@ -486,5 +489,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     parentElement.removeOption(optionType);
     _updateOptionEdited();
+  }
+
+  @action
+  void executeAddElements(List<MPAddElementCommandParams> addElementsParams) {
+    for (final MPAddElementCommandParams params in addElementsParams) {
+      switch (params) {
+        case MPAddLineCommandParams _:
+          executeAddLine(
+            newLine: params.line,
+            lineChildren: params.lineChildren,
+          );
+        case MPAddPointCommandParams _:
+          executeAddElement(newElement: params.point);
+      }
+    }
+
+    _th2FileEditController.triggerAllElementsRedraw();
   }
 }

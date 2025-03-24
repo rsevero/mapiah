@@ -25,7 +25,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController
-        .addElement(newElement: newLineSegment);
+        .executeAddElement(newElement: newLineSegment);
   }
 
   @override

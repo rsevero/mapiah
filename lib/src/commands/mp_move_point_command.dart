@@ -46,7 +46,7 @@ class MPMovePointCommand extends MPCommand {
             originalPoint.position.copyWith(coordinates: modifiedCoordinates));
 
     th2FileEditController.elementEditController
-        .substituteElement(modifiedPoint);
+        .executeSubstituteElement(modifiedPoint);
   }
 
   @override

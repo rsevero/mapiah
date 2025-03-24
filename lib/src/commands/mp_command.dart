@@ -11,7 +11,6 @@ import 'package:mapiah/src/commands/parameters/mp_move_command_complete_params.d
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';

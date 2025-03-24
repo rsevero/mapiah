@@ -143,7 +143,7 @@ class MPMoveLineCommand extends MPCommand {
       }
       command._actualExecute(th2FileEditController);
     }
-    th2FileEditController.elementEditController.substituteElement(
+    th2FileEditController.elementEditController.executeSubstituteElement(
         th2FileEditController.thFile.elementByMPID(lineMPID).copyWith());
   }
 

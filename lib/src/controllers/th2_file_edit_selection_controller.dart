@@ -623,7 +623,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             coordinates: originalPoint.position.coordinates +
                 localDeltaPositionOnCanvas));
     _th2FileEditController.elementEditController
-        .substituteElementWithoutAddSelectableElement(modifiedPoint);
+        .executeSubstituteElementWithoutAddSelectableElement(modifiedPoint);
   }
 
   void _updateTHLinePosition(
