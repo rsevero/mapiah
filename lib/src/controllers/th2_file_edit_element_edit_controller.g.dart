@@ -404,6 +404,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void removeOptionFromElement(
+      {required THCommandOptionType optionType, required int parentMPID}) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.removeOptionFromElement');
+    try {
+      return super.removeOptionFromElement(
+          optionType: optionType, parentMPID: parentMPID);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

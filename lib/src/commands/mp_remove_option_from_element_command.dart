@@ -27,11 +27,10 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THHasOptionsMixin parentElement = th2FileEditController
-        .elementEditController
-        .getParentElement(parentMPID);
-
-    parentElement.removeOption(optionType);
+    th2FileEditController.elementEditController.removeOptionFromElement(
+      optionType: optionType,
+      parentMPID: parentMPID,
+    );
   }
 
   @override
