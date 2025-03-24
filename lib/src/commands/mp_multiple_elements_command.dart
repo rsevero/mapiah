@@ -26,7 +26,7 @@ class MPMultipleElementsCommand extends MPCommand {
 
       final MPSetOptionToElementCommand setOptionToElementCommand =
           MPSetOptionToElementCommand(
-        option: option.copyWith(parentMPID: element.parentMPID),
+        option: option.copyWith(parentMPID: element.mpID),
         descriptionType: descriptionType,
       );
 
