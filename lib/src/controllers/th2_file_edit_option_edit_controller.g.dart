@@ -149,19 +149,6 @@ mixin _$TH2FileEditOptionEditController
   }
 
   @override
-  void setOptionChoice(THCommandOptionType optionType, String choice) {
-    final _$actionInfo =
-        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditOptionEditControllerBase.setOptionChoice');
-    try {
-      return super.setOptionChoice(optionType, choice);
-    } finally {
-      _$TH2FileEditOptionEditControllerBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 

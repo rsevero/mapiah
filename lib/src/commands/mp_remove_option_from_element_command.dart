@@ -1,26 +1,22 @@
 part of 'mp_command.dart';
 
-class MPRemoveOptionFromElementCommand extends MPCommand
-    with MPGetParentElementMixin {
+class MPRemoveOptionFromElementCommand extends MPCommand {
+  final int parentMPID;
   final THCommandOptionType optionType;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
 
   MPRemoveOptionFromElementCommand.forCWJM({
     required this.optionType,
-    required int parentMPID,
+    required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM() {
-    this.parentMPID = parentMPID;
-  }
+  }) : super.forCWJM();
 
   MPRemoveOptionFromElementCommand({
     required this.optionType,
-    required int parentMPID,
+    required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
-    this.parentMPID = parentMPID;
-  }
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.removeOptionFromElement;
@@ -31,8 +27,9 @@ class MPRemoveOptionFromElementCommand extends MPCommand
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THHasOptionsMixin parentElement =
-        getParentElement(th2FileEditController);
+    final THHasOptionsMixin parentElement = th2FileEditController
+        .elementEditController
+        .getParentElement(parentMPID);
 
     parentElement.removeOption(optionType);
   }
@@ -41,8 +38,9 @@ class MPRemoveOptionFromElementCommand extends MPCommand
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement =
-        getParentElement(th2FileEditController);
+    final THHasOptionsMixin parentElement = th2FileEditController
+        .elementEditController
+        .getParentElement(parentMPID);
 
     final THCommandOption? option = parentElement.optionByType(optionType);
 

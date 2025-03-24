@@ -12,6 +12,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -40,6 +41,7 @@ abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditOverlayWindowController overlayWindowController;
   late final TH2FileEditSelectionController selectionController;
   late final TH2FileEditStateController stateController;
+  late final TH2FileEditUserInteractionController userInteractionController;
 
   /// 'screen' is related to actual pixels on the screen.
   /// 'canvas' is the virtual canvas used to draw.
@@ -433,6 +435,8 @@ abstract class TH2FileEditControllerBase with Store {
     stateController = TH2FileEditStateController(this as TH2FileEditController);
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
     visualController = MPVisualController(this as TH2FileEditController);
+    userInteractionController =
+        TH2FileEditUserInteractionController(this as TH2FileEditController);
     _thFileMPID = _thFile.mpID;
   }
 

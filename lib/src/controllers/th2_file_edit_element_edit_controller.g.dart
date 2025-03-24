@@ -391,6 +391,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void setOptionToElement({required THCommandOption option}) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditElementEditControllerBase.setOptionToElement');
+    try {
+      return super.setOptionToElement(option: option);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

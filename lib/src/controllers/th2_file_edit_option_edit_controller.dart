@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
-import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -163,79 +160,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     updateOptionStateMap();
     _th2FileEditController.overlayWindowController
         .toggleOverlayWindow(MPOverlayWindowType.commandOptions);
-  }
-
-  @action
-  void setOptionChoice(THCommandOptionType optionType, String choice) {
-    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
-
-    if (mpSelectedElements.isEmpty) {
-      /// TODO: set per session option default values.
-    } else if (mpSelectedElements.length == 1) {
-      final THElement selectedElement =
-          mpSelectedElements.first.originalElementClone;
-
-      if (selectedElement is! THHasOptionsMixin) {
-        return;
-      }
-
-      if (choice == mpMultipleChoiceUnsetID) {
-        if (selectedElement.hasOption(optionType)) {
-          final MPCommand removeOptionCommand =
-              MPRemoveOptionFromElementCommand(
-            optionType: optionType,
-            parentMPID: selectedElement.mpID,
-          );
-
-          _th2FileEditController.execute(removeOptionCommand);
-        }
-      } else if (isCtrlPressed ||
-          MPCommandOptionAux.elementTypeSupportsOptionType(
-            selectedElement,
-            optionType,
-          )) {
-        final THCommandOption option = THCommandOption.byType(
-          optionParent: selectedElement,
-          type: optionType,
-          value: choice,
-        );
-        final MPCommand addOptionCommand = MPSetOptionToElementCommand(
-          option: option,
-          parentMPID: selectedElement.mpID,
-        );
-
-        _th2FileEditController.execute(addOptionCommand);
-      }
-    } else {
-      for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-        final THElement selectedElement =
-            mpSelectedElement.originalElementClone;
-
-        if (selectedElement is! THHasOptionsMixin) {
-          continue;
-        }
-
-        if (choice == mpMultipleChoiceUnsetID) {
-          selectedElement.removeOption(optionType);
-        } else if (isCtrlPressed ||
-            MPCommandOptionAux.elementTypeSupportsOptionType(
-              selectedElement,
-              optionType,
-            )) {
-          final THCommandOption option = THCommandOption.byType(
-            optionParent: selectedElement,
-            type: optionType,
-            value: choice,
-          );
-
-          selectedElement.addUpdateOption(option);
-        }
-      }
-    }
-
-    updateOptionStateMap();
   }
 }
 

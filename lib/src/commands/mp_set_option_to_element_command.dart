@@ -1,26 +1,22 @@
 part of 'mp_command.dart';
 
-class MPSetOptionToElementCommand extends MPCommand
-    with MPGetParentElementMixin {
+class MPSetOptionToElementCommand extends MPCommand {
+  final int parentMPID;
   final THCommandOption option;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
 
   MPSetOptionToElementCommand.forCWJM({
     required this.option,
-    required int parentMPID,
+    required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM() {
-    this.parentMPID = parentMPID;
-  }
+  }) : super.forCWJM();
 
   MPSetOptionToElementCommand({
     required this.option,
-    required int parentMPID,
+    required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
-    this.parentMPID = parentMPID;
-  }
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.setOptionToElement;
@@ -31,10 +27,9 @@ class MPSetOptionToElementCommand extends MPCommand
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THHasOptionsMixin parentElement =
-        getParentElement(th2FileEditController);
-
-    parentElement.addUpdateOption(option);
+    th2FileEditController.elementEditController.setOptionToElement(
+      option: option,
+    );
   }
 
   @override
@@ -42,7 +37,7 @@ class MPSetOptionToElementCommand extends MPCommand
     TH2FileEditController th2FileEditController,
   ) {
     final THHasOptionsMixin parentElement =
-        getParentElement(th2FileEditController);
+        option.optionParent(th2FileEditController.thFile);
     MPCommand oppositeCommand;
 
     if (parentElement.hasOption(option.type)) {
