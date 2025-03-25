@@ -11,7 +11,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final THCommandOptionType type;
   final Map<String, String> choices;
-  final String selectedChoice;
+  final String? selectedChoice;
   final String? defaultChoice;
   final Offset position;
   final MPWidgetPositionType positionType;

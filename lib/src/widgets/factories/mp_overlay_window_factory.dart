@@ -249,7 +249,7 @@ class MPOverlayWindowFactory {
       key: key,
       type: type,
       choices: getOptionChoicesWithUnset(choices),
-      selectedChoice: selectedChoice ?? mpMultipleChoiceUnsetID,
+      selectedChoice: selectedChoice,
       defaultChoice: defaultChoice,
       position: position,
       positionType: MPWidgetPositionType.leftCenter,
