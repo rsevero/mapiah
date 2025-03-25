@@ -1,5 +1,6 @@
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
@@ -51,12 +52,13 @@ abstract class MPUndoRedoControllerBase with Store {
           mapUndo: redoOriginal.mapRedo,
           mapRedo: redoOriginal.mapUndo,
         );
-        final MPCommand undoRedoCommandOriginal =
-            oppositeRedoOriginal.undoCommand;
         final MPUndoRedoCommand redoFinal = redoOriginal.copyWith(
           mapUndo: redoCommandOriginal
               .copyWith(
-                descriptionType: undoRedoCommandOriginal.defaultDescriptionType,
+                descriptionType:
+                    MPCommandDescriptionType.getOppositeDescription(
+                  redoCommandOriginal.descriptionType,
+                ),
               )
               .toMap(),
         );
