@@ -13,7 +13,7 @@ class MPMultipleElementsCommand extends MPCommand {
   MPMultipleElementsCommand.setOption({
     required THCommandOption option,
     required List<THElement> elements,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = MPCommandDescriptionType.setOptionToElements,
   }) : super() {
     commandsList = [];
 
@@ -37,7 +37,7 @@ class MPMultipleElementsCommand extends MPCommand {
   MPMultipleElementsCommand.removeOption({
     required THCommandOptionType optionType,
     required List<int> parentMPIDs,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = MPCommandDescriptionType.removeOptionFromElements,
   }) : super() {
     commandsList = [];
 

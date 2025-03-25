@@ -260,7 +260,7 @@ abstract class AppLocalizations {
   /// The description for the remove option from elements command
   ///
   /// In en, this message translates to:
-  /// **'Remove option from elements'**
+  /// **'Remove option from multiple elements'**
   String get mpCommandDescriptionRemoveOptionFromElements;
 
   /// The description for the remove point command
@@ -278,7 +278,7 @@ abstract class AppLocalizations {
   /// The description for the set option to elements command
   ///
   /// In en, this message translates to:
-  /// **'Set option to elements'**
+  /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
 
   /// The abbreviation for the centimeter length unit

@@ -103,7 +103,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionRemoveOptionFromElement => 'Remove option';
 
   @override
-  String get mpCommandDescriptionRemoveOptionFromElements => 'Remove option from elements';
+  String get mpCommandDescriptionRemoveOptionFromElements => 'Remove option from multiple elements';
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Remove point';
@@ -112,7 +112,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElement => 'Set option';
 
   @override
-  String get mpCommandDescriptionSetOptionToElements => 'Set option to elements';
+  String get mpCommandDescriptionSetOptionToElements => 'Set option to multiple elements';
 
   @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';

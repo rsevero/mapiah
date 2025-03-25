@@ -169,7 +169,7 @@
     "type": "text"
   },
 
-  "mpCommandDescriptionRemoveOptionFromElements": "Remove option from elements",
+  "mpCommandDescriptionRemoveOptionFromElements": "Remove option from multiple elements",
   "@mpCommandDescriptionRemoveOptionFromElements": {
     "description": "The description for the remove option from elements command",
     "type": "text"
@@ -187,7 +187,7 @@
     "type": "text"
   },
 
-  "mpCommandDescriptionSetOptionToElements": "Set option to elements",
+  "mpCommandDescriptionSetOptionToElements": "Set option to multiple elements",
   "@mpCommandDescriptionSetOptionToElements": {
     "description": "The description for the set option to elements command",
     "type": "text"
