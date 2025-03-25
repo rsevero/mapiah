@@ -14,12 +14,14 @@ class MPOptionsEditWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final MPWidgetPositionType positionType;
+  final double maxHeight;
 
   const MPOptionsEditWidget({
     super.key,
     required this.th2FileEditController,
     required this.position,
     required this.positionType,
+    required this.maxHeight,
   });
 
   @override
@@ -80,6 +82,7 @@ class MPOptionsEditWidget extends StatelessWidget {
           overlayWindowType: MPOverlayWindowType.commandOptions,
           th2FileEditController: th2FileEditController,
           child: MPSingleColumnListOverlayWindowContentWidget(
+            maxHeight: maxHeight,
             children: optionWidgets,
           ),
         );

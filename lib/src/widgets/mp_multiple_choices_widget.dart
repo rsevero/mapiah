@@ -15,6 +15,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   final String? defaultChoice;
   final Offset position;
   final MPWidgetPositionType positionType;
+  final double maxHeight;
 
   MPMultipleChoicesWidget({
     super.key,
@@ -25,6 +26,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
     this.defaultChoice,
     required this.position,
     required this.positionType,
+    required this.maxHeight,
   });
 
   @override
@@ -35,6 +37,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
       overlayWindowType: MPOverlayWindowType.optionChoices,
       th2FileEditController: th2FileEditController,
       child: MPSingleColumnListOverlayWindowContentWidget(
+        maxHeight: maxHeight,
         children: choices.entries.map((entry) {
           final String value = entry.key;
           final String label = entry.value;

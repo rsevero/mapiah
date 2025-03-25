@@ -47,6 +47,9 @@ class MPOverlayWindowFactory {
           th2FileEditController: th2FileEditController,
           position: position,
           positionType: MPWidgetPositionType.center,
+          maxHeight: getMaxHeightForOverlayWindows(
+            th2FileEditController.thFileWidgetKey,
+          ),
         );
       case MPOverlayWindowType.optionChoices:
         throw UnimplementedError(
@@ -253,6 +256,20 @@ class MPOverlayWindowFactory {
       defaultChoice: defaultChoice,
       position: position,
       positionType: MPWidgetPositionType.leftCenter,
+      maxHeight: getMaxHeightForOverlayWindows(
+        th2FileEditController.thFileWidgetKey,
+      ),
     );
+  }
+
+  static double getMaxHeightForOverlayWindows(GlobalKey targetKey) {
+    final RenderBox? renderBox =
+        targetKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (renderBox == null) {
+      throw Exception('No render box found for THFileWidget.');
+    }
+
+    return renderBox.size.height;
   }
 }
