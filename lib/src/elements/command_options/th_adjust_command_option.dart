@@ -6,6 +6,7 @@ part of 'th_command_option.dart';
 /// is not allowed in the |plan| projection. Default is unset where the line
 /// point isn't automatically aligned with the previous line point.
 class THAdjustCommandOption extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesAdjustType choice;
 
   THAdjustCommandOption.forCWJM({

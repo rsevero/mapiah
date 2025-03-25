@@ -3,6 +3,7 @@ part of 'th_command_option.dart';
 /// flip none/horizontal/vertical - flips the scrap after scale transformation.
 /// Default is none.
 class THFlipCommandOption extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesFlipType choice;
 
   THFlipCommandOption.forCWJM({

@@ -1,6 +1,7 @@
 part of 'th_command_option.dart';
 
 abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesOnOffAutoType choice;
 
   THOnOffAutoCommandOption.forCWJM({

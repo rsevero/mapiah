@@ -15,6 +15,8 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   })  : parentElementType = optionParent.elementType,
         super();
 
+  Enum get choice;
+
   static String getParentTypeNameForChecking(String parentTypeName) {
     String parentTypeNameForChecking = parentTypeName;
 

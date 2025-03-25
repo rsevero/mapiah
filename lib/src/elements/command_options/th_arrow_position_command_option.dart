@@ -2,6 +2,7 @@ part of 'th_command_option.dart';
 
 abstract class THArrowPositionCommandOption
     extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesArrowPositionType choice;
 
   THArrowPositionCommandOption.forCWJM({

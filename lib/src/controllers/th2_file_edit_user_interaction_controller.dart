@@ -31,6 +31,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     THCommandOptionType optionType,
     String choice,
   ) {
+    if (!THCommandOption.isMultipleChoiceOptions(optionType)) {
+      return;
+    }
+
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
@@ -73,10 +77,20 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       }
     } else {
       if (choice == mpMultipleChoiceUnsetID) {
-        final List<int> parentMPIDs = mpSelectedElements
-            .map((element) => element.originalElementClone.mpID)
-            .toList();
-        final MPCommand removeOptionCommand =
+        final List<int> parentMPIDs = [];
+
+        for (final mpSelectedElement in mpSelectedElements) {
+          final THElement element = mpSelectedElement.originalElementClone;
+
+          if ((element is! THHasOptionsMixin) ||
+              !element.hasOption(optionType)) {
+            continue;
+          }
+
+          parentMPIDs.add(element.mpID);
+        }
+
+        final MPMultipleElementsCommand removeOptionCommand =
             MPMultipleElementsCommand.removeOption(
           optionType: optionType,
           parentMPIDs: parentMPIDs,
@@ -84,10 +98,32 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
         _th2FileEditController.execute(removeOptionCommand);
       } else {
-        final List<THElement> elements = mpSelectedElements
-            .map((element) => element.originalElementClone)
-            .toList();
-        final MPCommand addOptionCommand = MPMultipleElementsCommand.setOption(
+        final List<THElement> elements = [];
+
+        for (final mpSelectedElement in mpSelectedElements) {
+          final THElement element = mpSelectedElement.originalElementClone;
+
+          if ((element is! THHasOptionsMixin) ||
+              (element.hasOption(optionType) &&
+                  ((element.optionByType(optionType)!
+                              as THMultipleChoiceCommandOption)
+                          .choice
+                          .name ==
+                      choice))) {
+            continue;
+          }
+
+          if (isCtrlPressed ||
+              MPCommandOptionAux.elementTypeSupportsOptionType(
+                element,
+                optionType,
+              )) {
+            elements.add(element);
+          }
+        }
+
+        final MPMultipleElementsCommand addOptionCommand =
+            MPMultipleElementsCommand.setOption(
           elements: elements,
           option: THCommandOption.byType(
             optionParent: elements.first as THHasOptionsMixin,

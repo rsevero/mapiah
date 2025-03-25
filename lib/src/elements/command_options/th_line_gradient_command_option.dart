@@ -6,6 +6,7 @@ part of 'th_command_option.dart';
 /// dle in SKBB). The point option must be used inside [LINE DATA]. The others can
 /// (and should) be used as a line option. Default is none.
 class THLineGradientCommandOption extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesLineGradientType choice;
 
   THLineGradientCommandOption.forCWJM({

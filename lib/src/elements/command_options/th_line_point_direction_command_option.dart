@@ -5,6 +5,7 @@ part of 'th_command_option.dart';
 /// Default is |none|. The point option must be used inside [LINE DATA]. The
 /// others can (and should) be used as a line option.
 class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesLinePointDirectionType choice;
 
   THLinePointDirectionCommandOption.forCWJM({

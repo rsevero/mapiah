@@ -4,6 +4,7 @@ part of 'th_command_option.dart';
 /// center, c, top, t, bottom, b, left, l, right, r, top-left, tl, top-right,
 /// tr, bottom-left, bl, bottom-right, br. Default is center.
 class THAlignCommandOption extends THMultipleChoiceCommandOption {
+  @override
   final THOptionChoicesAlignType choice;
 
   THAlignCommandOption.forCWJM({
