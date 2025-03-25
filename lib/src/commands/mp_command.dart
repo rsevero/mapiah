@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
-import 'package:mapiah/src/commands/parameters/mp_add_element_command_params.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_complete_params.dart';
 import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -15,7 +14,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 
-part 'mp_add_elements_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
@@ -26,7 +24,6 @@ part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
 part 'mp_multiple_elements_command.dart';
-part 'mp_remove_elements_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
@@ -105,8 +102,6 @@ abstract class MPCommand {
 
   static MPCommand fromMap(Map<String, dynamic> map) {
     switch (MPCommandType.values.byName(map['commandType'])) {
-      case MPCommandType.addElements:
-        return MPAddElementsCommand.fromMap(map);
       case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
       case MPCommandType.addLineSegment:
@@ -127,8 +122,6 @@ abstract class MPCommand {
         return MPMoveStraightLineSegmentCommand.fromMap(map);
       case MPCommandType.multipleElements:
         return MPMultipleElementsCommand.fromMap(map);
-      case MPCommandType.removeElements:
-        return MPRemoveElementsCommand.fromMap(map);
       case MPCommandType.removeLine:
         return MPRemoveLineCommand.fromMap(map);
       case MPCommandType.removeLineSegment:

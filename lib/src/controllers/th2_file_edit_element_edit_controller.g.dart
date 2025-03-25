@@ -423,19 +423,6 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applyAddElements(List<MPAddElementCommandParams> addElementsParams) {
-    final _$actionInfo =
-        _$TH2FileEditElementEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditElementEditControllerBase.applyAddElements');
-    try {
-      return super.applyAddElements(addElementsParams);
-    } finally {
-      _$TH2FileEditElementEditControllerBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 

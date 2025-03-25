@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:flutter/animation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/commands/parameters/mp_add_element_command_params.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -489,22 +488,5 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     parentElement.removeOption(optionType);
     updateOptionEdited();
-  }
-
-  @action
-  void applyAddElements(List<MPAddElementCommandParams> addElementsParams) {
-    for (final MPAddElementCommandParams params in addElementsParams) {
-      switch (params) {
-        case MPAddLineCommandParams _:
-          applyAddLine(
-            newLine: params.line,
-            lineChildren: params.lineChildren,
-          );
-        case MPAddPointCommandParams _:
-          applyAddElement(newElement: params.point);
-      }
-    }
-
-    _th2FileEditController.triggerAllElementsRedraw();
   }
 }

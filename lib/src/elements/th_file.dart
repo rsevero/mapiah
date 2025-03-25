@@ -419,6 +419,10 @@ class THFile
     return object is THFile;
   }
 
+  THElementType getElementTypeByMPID(int mpID) {
+    return elementByMPID(mpID).elementType;
+  }
+
   @override
   int get mpID => _mpID;
 }

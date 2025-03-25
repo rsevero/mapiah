@@ -146,8 +146,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     } else {
       final List<int> selectedMPIDs = _selectedElements.keys.toList();
 
-      mpCommand = MPRemoveElementsCommand(
+      mpCommand = MPMultipleElementsCommand.removeElements(
         mpIDs: selectedMPIDs,
+        thFile: _thFile,
       );
     }
 
