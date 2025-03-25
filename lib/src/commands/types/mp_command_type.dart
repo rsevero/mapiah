@@ -6,7 +6,6 @@ enum MPCommandType {
   addPoint,
   editLineSegment,
   moveBezierLineSegment,
-  moveElements,
   moveLine,
   movePoint,
   moveStraightLineSegment,

@@ -52,6 +52,7 @@ class MPMultipleElementsCommand extends MPCommand {
       commandsList.add(removeOptionFromElementCommand);
     }
   }
+
   MPMultipleElementsCommand.removeElements({
     required List<int> mpIDs,
     required THFile thFile,
@@ -76,6 +77,43 @@ class MPMultipleElementsCommand extends MPCommand {
         default:
           throw ArgumentError(
             'Unsupported element type in MPMultipleElementsCommand.removeElements',
+          );
+      }
+    }
+  }
+
+  MPMultipleElementsCommand.moveElementsFromDelta({
+    required Offset deltaOnCanvas,
+    required Iterable<MPSelectedElement> mpSelectedElements,
+    super.descriptionType = MPCommandDescriptionType.moveElements,
+  }) : super() {
+    commandsList = [];
+
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      final THElement element = mpSelectedElement.originalElementClone;
+
+      switch (element) {
+        case THPoint _:
+          final MPMovePointCommand movePointCommand =
+              MPMovePointCommand.fromDelta(
+            pointMPID: element.mpID,
+            originalCoordinates: element.position.coordinates,
+            deltaOnCanvas: deltaOnCanvas,
+          );
+
+          commandsList.add(movePointCommand);
+        case THLine _:
+          final MPMoveLineCommand moveLineCommand = MPMoveLineCommand.fromDelta(
+            lineMPID: element.mpID,
+            originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+                .originalLineSegmentsMapClone,
+            deltaOnCanvas: deltaOnCanvas,
+          );
+
+          commandsList.add(moveLineCommand);
+        default:
+          throw ArgumentError(
+            'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',
           );
       }
     }

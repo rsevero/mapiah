@@ -108,30 +108,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           break;
       }
     } else if (selectedCount > 1) {
-      final List<MPMoveCommandOriginalParams>
-          moveCommandOriginalParametersList = selectionController
-              .selectedElements.values
-              .map<MPMoveCommandOriginalParams>((MPSelectedElement selected) {
-        final THElement selectedElement = selected.originalElementClone;
-        switch (selected) {
-          case MPSelectedPoint _:
-            return MPMoveCommandPointOriginalParams(
-              mpID: selectedElement.mpID,
-              coordinates: (selectedElement as THPoint).position.coordinates,
-            );
-          case MPSelectedLine _:
-            return MPMoveCommandLineOriginalParams(
-              mpID: selectedElement.mpID,
-              lineSegmentsMap: selected.originalLineSegmentsMapClone,
-            );
-          default:
-            throw UnimplementedError();
-        }
-      }).toList();
-
-      moveCommand = MPMoveElementsCommand.fromDelta(
-        moveCommandOriginalParametersList: moveCommandOriginalParametersList,
+      moveCommand = MPMultipleElementsCommand.moveElementsFromDelta(
         deltaOnCanvas: panDeltaOnCanvas,
+        mpSelectedElements: selectionController.selectedElements.values,
       );
     }
 

@@ -9,7 +9,6 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/commands/parameters/mp_move_command_original_params.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
