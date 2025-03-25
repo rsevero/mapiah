@@ -21,7 +21,7 @@ class MPMovePointCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
-  MPMovePointCommand.fromDelta({
+  MPMovePointCommand.fromDeltaOnCanvas({
     required this.pointMPID,
     required this.originalCoordinates,
     required Offset deltaOnCanvas,

@@ -92,7 +92,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
       switch (selected) {
         case MPSelectedPoint _:
-          moveCommand = MPMovePointCommand.fromDelta(
+          moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
             pointMPID: selectedElement.mpID,
             originalCoordinates:
                 (selectedElement as THPoint).position.coordinates,
@@ -108,7 +108,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           break;
       }
     } else if (selectedCount > 1) {
-      moveCommand = MPMultipleElementsCommand.moveElementsFromDelta(
+      moveCommand = MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas(
         deltaOnCanvas: panDeltaOnCanvas,
         mpSelectedElements: selectionController.selectedElements.values,
       );
