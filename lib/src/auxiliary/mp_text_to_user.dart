@@ -86,6 +86,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionMoveElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.moveLine] =
         localizations.mpCommandDescriptionMoveLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.moveLineSegments] =
+        localizations.mpCommandDescriptionMoveLineSegments;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.movePoint] =
         localizations.mpCommandDescriptionMovePoint;
     _commandDescriptionTypeAsString[

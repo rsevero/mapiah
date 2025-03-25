@@ -9,6 +9,7 @@ enum MPCommandDescriptionType {
   moveBezierLineSegment,
   moveElements,
   moveLine,
+  moveLineSegments,
   movePoint,
   moveStraightLineSegment,
   multipleElements,
@@ -22,7 +23,8 @@ enum MPCommandDescriptionType {
   setOptionToElements;
 
   static MPCommandDescriptionType getOppositeDescription(
-      MPCommandDescriptionType description) {
+    MPCommandDescriptionType description,
+  ) {
     switch (description) {
       case MPCommandDescriptionType.addElements:
         return MPCommandDescriptionType.removeElements;
@@ -32,24 +34,6 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeLineSegment;
       case MPCommandDescriptionType.addPoint:
         return MPCommandDescriptionType.removePoint;
-      case MPCommandDescriptionType.editBezierCurve:
-        return MPCommandDescriptionType.editBezierCurve;
-      case MPCommandDescriptionType.editLine:
-        return MPCommandDescriptionType.editLine;
-      case MPCommandDescriptionType.editLineSegment:
-        return MPCommandDescriptionType.editLineSegment;
-      case MPCommandDescriptionType.moveBezierLineSegment:
-        return MPCommandDescriptionType.moveBezierLineSegment;
-      case MPCommandDescriptionType.moveElements:
-        return MPCommandDescriptionType.moveElements;
-      case MPCommandDescriptionType.moveLine:
-        return MPCommandDescriptionType.moveLine;
-      case MPCommandDescriptionType.movePoint:
-        return MPCommandDescriptionType.movePoint;
-      case MPCommandDescriptionType.moveStraightLineSegment:
-        return MPCommandDescriptionType.moveStraightLineSegment;
-      case MPCommandDescriptionType.multipleElements:
-        return MPCommandDescriptionType.multipleElements;
       case MPCommandDescriptionType.removeElements:
         return MPCommandDescriptionType.addElements;
       case MPCommandDescriptionType.removeLine:
@@ -64,8 +48,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.addPoint;
       case MPCommandDescriptionType.setOptionToElement:
         return MPCommandDescriptionType.removeOptionFromElement;
-      case MPCommandDescriptionType.setOptionToElements:
-        return MPCommandDescriptionType.setOptionToElements;
+      default:
+        return description;
     }
   }
 }

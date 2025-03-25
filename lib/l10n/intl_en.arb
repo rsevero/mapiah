@@ -127,6 +127,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionMoveLineSegments": "Move line segments",
+  "@mpCommandDescriptionMoveLineSegments": {
+    "description": "The description for the move line segments command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionMovePoint": "Move point",
   "@mpCommandDescriptionMovePoint": {
     "description": "The description for the move point command",

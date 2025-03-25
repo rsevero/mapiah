@@ -215,6 +215,12 @@ abstract class AppLocalizations {
   /// **'Move line'**
   String get mpCommandDescriptionMoveLine;
 
+  /// The description for the move line segments command
+  ///
+  /// In en, this message translates to:
+  /// **'Move line segments'**
+  String get mpCommandDescriptionMoveLineSegments;
+
   /// The description for the move point command
   ///
   /// In en, this message translates to:

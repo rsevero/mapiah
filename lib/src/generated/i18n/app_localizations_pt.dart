@@ -82,6 +82,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMoveLine => 'Mover linha';
 
   @override
+  String get mpCommandDescriptionMoveLineSegments => 'Mover segmentos de linha';
+
+  @override
   String get mpCommandDescriptionMovePoint => 'Mover ponto';
 
   @override

@@ -22,6 +22,7 @@
   "mpCommandDescriptionMoveBezierLineSegment": "Mover segmento de linha Bézier",
   "mpCommandDescriptionMoveElements": "Mover elementos",
   "mpCommandDescriptionMoveLine": "Mover linha",
+  "mpCommandDescriptionMoveLineSegments": "Mover segmentos de linha",
   "mpCommandDescriptionMovePoint": "Mover ponto",
   "mpCommandDescriptionMultipleElements": "Editar vários elementos",
   "mpCommandDescriptionMoveStraightLineSegment": "Mover segmento de linha reta",

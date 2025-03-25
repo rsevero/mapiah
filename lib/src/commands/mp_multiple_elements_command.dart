@@ -61,24 +61,23 @@ class MPMultipleElementsCommand extends MPCommand {
     commandsList = [];
 
     for (final int mpID in mpIDs) {
+      final MPCommand removeCommand;
+
       switch (thFile.getElementTypeByMPID(mpID)) {
         case THElementType.point:
-          final MPRemovePointCommand removePointCommand =
-              MPRemovePointCommand(pointMPID: mpID);
-
-          commandsList.add(removePointCommand);
+          removeCommand = MPRemovePointCommand(pointMPID: mpID);
         case THElementType.line:
-          final MPRemoveLineCommand removeLineCommand = MPRemoveLineCommand(
+          removeCommand = MPRemoveLineCommand(
             lineMPID: mpID,
             isInteractiveLineCreation: false,
           );
-
-          commandsList.add(removeLineCommand);
         default:
           throw ArgumentError(
             'Unsupported element type in MPMultipleElementsCommand.removeElements',
           );
       }
+
+      commandsList.add(removeCommand);
     }
   }
 
@@ -91,31 +90,129 @@ class MPMultipleElementsCommand extends MPCommand {
 
     for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
       final THElement element = mpSelectedElement.originalElementClone;
+      final MPCommand moveCommand;
 
       switch (element) {
         case THPoint _:
-          final MPMovePointCommand movePointCommand =
-              MPMovePointCommand.fromDelta(
+          moveCommand = MPMovePointCommand.fromDelta(
             pointMPID: element.mpID,
             originalCoordinates: element.position.coordinates,
             deltaOnCanvas: deltaOnCanvas,
           );
-
-          commandsList.add(movePointCommand);
         case THLine _:
-          final MPMoveLineCommand moveLineCommand = MPMoveLineCommand.fromDelta(
+          moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
             lineMPID: element.mpID,
             originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
                 .originalLineSegmentsMapClone,
             deltaOnCanvas: deltaOnCanvas,
           );
-
-          commandsList.add(moveLineCommand);
         default:
           throw ArgumentError(
             'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',
           );
       }
+
+      commandsList.add(moveCommand);
+    }
+  }
+
+  MPMultipleElementsCommand.moveLineSegments({
+    required LinkedHashMap<int, THLineSegment> originalElementsMap,
+    required LinkedHashMap<int, THLineSegment> modifiedElementsMap,
+    super.descriptionType = MPCommandDescriptionType.moveLineSegments,
+  }) : super() {
+    commandsList = [];
+
+    for (final entry in originalElementsMap.entries) {
+      final int originalElementMPID = entry.key;
+      final THLineSegment originalElement = entry.value;
+      final THLineSegment modifiedElement =
+          modifiedElementsMap[originalElementMPID]!;
+      final MPCommand moveLineSegmentCommand;
+
+      switch (originalElement) {
+        case THStraightLineSegment _:
+          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand(
+            lineSegmentMPID: originalElementMPID,
+            originalEndPointCoordinates: originalElement.endPoint.coordinates,
+            modifiedEndPointCoordinates: modifiedElement.endPoint.coordinates,
+          );
+        case THBezierCurveLineSegment _:
+          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand(
+            lineSegmentMPID: originalElementMPID,
+            originalEndPointCoordinates: originalElement.endPoint.coordinates,
+            modifiedEndPointCoordinates: modifiedElement.endPoint.coordinates,
+            originalControlPoint1Coordinates:
+                originalElement.controlPoint1.coordinates,
+            modifiedControlPoint1Coordinates:
+                (modifiedElement as THBezierCurveLineSegment)
+                    .controlPoint1
+                    .coordinates,
+            originalControlPoint2Coordinates:
+                originalElement.controlPoint2.coordinates,
+            modifiedControlPoint2Coordinates:
+                modifiedElement.controlPoint2.coordinates,
+          );
+        default:
+          throw ArgumentError(
+            'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',
+          );
+      }
+
+      commandsList.add(moveLineSegmentCommand);
+    }
+  }
+
+  MPMultipleElementsCommand.moveLineSegmentsFromDeltaOnCanvas({
+    required LinkedHashMap<int, THLineSegment> originalElementsMap,
+    required Offset deltaOnCanvas,
+    super.descriptionType = MPCommandDescriptionType.moveLineSegments,
+  }) : super() {
+    commandsList = [];
+
+    for (final entry in originalElementsMap.entries) {
+      final int originalElementMPID = entry.key;
+      final THLineSegment originalElement = entry.value;
+      final MPCommand moveLineSegmentCommand;
+
+      switch (originalElement) {
+        case THStraightLineSegment _:
+          final Offset originalEndPointCoordinates =
+              originalElement.endPoint.coordinates;
+
+          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand(
+            lineSegmentMPID: originalElementMPID,
+            originalEndPointCoordinates: originalEndPointCoordinates,
+            modifiedEndPointCoordinates:
+                originalEndPointCoordinates + deltaOnCanvas,
+          );
+        case THBezierCurveLineSegment _:
+          final Offset originalEndPointCoordinates =
+              originalElement.endPoint.coordinates;
+          final Offset originalControlPoint1Coordinates =
+              originalElement.controlPoint1.coordinates;
+          final Offset originalControlPoint2Coordinates =
+              originalElement.controlPoint2.coordinates;
+
+          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand(
+            lineSegmentMPID: originalElementMPID,
+            originalEndPointCoordinates: originalEndPointCoordinates,
+            modifiedEndPointCoordinates:
+                originalEndPointCoordinates + deltaOnCanvas,
+            originalControlPoint1Coordinates: originalControlPoint1Coordinates,
+            modifiedControlPoint1Coordinates:
+                originalControlPoint1Coordinates + deltaOnCanvas,
+            originalControlPoint2Coordinates: originalControlPoint2Coordinates,
+            modifiedControlPoint2Coordinates:
+                originalControlPoint2Coordinates + deltaOnCanvas,
+          );
+        default:
+          throw ArgumentError(
+            'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',
+          );
+      }
+
+      commandsList.add(moveLineSegmentCommand);
     }
   }
 

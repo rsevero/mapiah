@@ -30,9 +30,6 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final Offset panDeltaOnCanvas =
-        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
-            selectionController.dragStartCanvasCoordinates;
     final MPSelectedLine selected =
         selectionController.selectedElements.values.first as MPSelectedLine;
     final THLine selectedLine = selected.originalElementClone as THLine;
@@ -77,7 +74,6 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
       lineMPID: selectedLine.mpID,
       originalLineSegmentsMap: originalLineSegmentsMap,
       modifiedLineSegmentsMap: modifiedLineSegmentsMap,
-      deltaOnCanvas: panDeltaOnCanvas,
       descriptionType: MPCommandDescriptionType.editBezierCurve,
     );
 

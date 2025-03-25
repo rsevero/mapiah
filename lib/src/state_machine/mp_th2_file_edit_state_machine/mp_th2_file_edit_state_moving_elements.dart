@@ -100,7 +100,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           );
           break;
         case MPSelectedLine _:
-          moveCommand = MPMoveLineCommand.fromDelta(
+          moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
             lineMPID: selectedElement.mpID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
             deltaOnCanvas: panDeltaOnCanvas,

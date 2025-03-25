@@ -82,6 +82,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionMoveLine => 'Move line';
 
   @override
+  String get mpCommandDescriptionMoveLineSegments => 'Move line segments';
+
+  @override
   String get mpCommandDescriptionMovePoint => 'Move point';
 
   @override
