@@ -183,20 +183,14 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   void showOptionChoicesOverlayWindow(
-      {required Offset position,
-      required THCommandOptionType optionType,
-      dynamic currentChoice,
-      dynamic selectedChoice}) {
+      {required Offset position, required MPOptionInfo optionInfo}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOverlayWindowControllerBase.showOptionChoicesOverlayWindow');
     try {
       return super.showOptionChoicesOverlayWindow(
-          position: position,
-          optionType: optionType,
-          currentChoice: currentChoice,
-          selectedChoice: selectedChoice);
+          position: position, optionInfo: optionInfo);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

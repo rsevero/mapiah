@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
 import 'package:mobx/mobx.dart';
@@ -136,9 +136,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void showOptionChoicesOverlayWindow({
     required Offset position,
-    required THCommandOptionType optionType,
-    dynamic currentChoice,
-    dynamic selectedChoice,
+    required MPOptionInfo optionInfo,
   }) {
     const MPOverlayWindowType overlayWindowType =
         MPOverlayWindowType.optionChoices;
@@ -151,12 +149,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         MPOverlayWindowFactory.createOptionChoices(
       th2FileEditController: _th2FileEditController,
       position: position,
-      type: optionType,
-      currentChoice: currentChoice,
-      defaultChoice: THCommandOption.isMultipleChoiceOptions(optionType)
-          ? THCommandOption.getDefaultChoiceAsString(optionType)
-          : THCommandOption.getDefaultChoice(optionType),
-      selectedChoice: selectedChoice,
+      optionInfo: optionInfo,
     );
 
     _activeOverlayWindow = overlayWindowType;

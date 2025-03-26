@@ -4,6 +4,7 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
@@ -201,65 +202,72 @@ class MPOverlayWindowFactory {
   static Widget createOptionChoices({
     required TH2FileEditController th2FileEditController,
     required Offset position,
-    required THCommandOptionType type,
-    dynamic selectedChoice,
-    dynamic defaultChoice,
-    dynamic currentChoice,
+    required MPOptionInfo optionInfo,
   }) {
-    final int thFileMPID = th2FileEditController.thFileMPID;
-    final Key key =
-        ValueKey("MPMultipleChoicesWidget|$thFileMPID|${type.name}");
-    late Map<String, String> choices;
+    final THCommandOptionType optionType = optionInfo.type;
 
-    switch (type) {
-      case THCommandOptionType.adjust:
-        choices = getAdjustOptions();
-      case THCommandOptionType.align:
-        choices = getAlignOptions();
-      case THCommandOptionType.anchors:
-      case THCommandOptionType.border:
-      case THCommandOptionType.clip:
-      case THCommandOptionType.rebelays:
-      case THCommandOptionType.reverse:
-      case THCommandOptionType.visibility:
-        choices = getOnOffOptions();
-      case THCommandOptionType.close:
-      case THCommandOptionType.smooth:
-      case THCommandOptionType.walls:
-        choices = getOnOffAutoOptions();
-      case THCommandOptionType.flip:
-        choices = getFlipOptions();
-      case THCommandOptionType.head:
-      case THCommandOptionType.lineDirection:
-        choices = getArrowPositionOptions();
-      case THCommandOptionType.lineGradient:
-        choices = getLineGradientOptions();
-      case THCommandOptionType.linePointDirection:
-        choices = getLinePointDirectionOptions();
-      case THCommandOptionType.linePointGradient:
-        choices = getLinePointGradientOptions();
-      case THCommandOptionType.outline:
-        choices = getOutlineOptions();
-      case THCommandOptionType.place:
-        choices = getPlaceOptions();
-      default:
-        return Container(child: Text('${type.name} choice'));
-      // throw Exception('Unknown option type: $type');
+    if (THCommandOption.isMultipleChoiceOptions(optionType)) {
+      final int thFileMPID = th2FileEditController.thFileMPID;
+      late Map<String, String> choices;
+
+      switch (optionType) {
+        case THCommandOptionType.adjust:
+          choices = getAdjustOptions();
+        case THCommandOptionType.align:
+          choices = getAlignOptions();
+        case THCommandOptionType.anchors:
+        case THCommandOptionType.border:
+        case THCommandOptionType.clip:
+        case THCommandOptionType.rebelays:
+        case THCommandOptionType.reverse:
+        case THCommandOptionType.visibility:
+          choices = getOnOffOptions();
+        case THCommandOptionType.close:
+        case THCommandOptionType.smooth:
+        case THCommandOptionType.walls:
+          choices = getOnOffAutoOptions();
+        case THCommandOptionType.flip:
+          choices = getFlipOptions();
+        case THCommandOptionType.head:
+        case THCommandOptionType.lineDirection:
+          choices = getArrowPositionOptions();
+        case THCommandOptionType.lineGradient:
+          choices = getLineGradientOptions();
+        case THCommandOptionType.linePointDirection:
+          choices = getLinePointDirectionOptions();
+        case THCommandOptionType.linePointGradient:
+          choices = getLinePointGradientOptions();
+        case THCommandOptionType.outline:
+          choices = getOutlineOptions();
+        case THCommandOptionType.place:
+          choices = getPlaceOptions();
+        default:
+          throw Exception('Unknown multiple choice option type: $optionType');
+      }
+
+      return MPMultipleChoicesWidget(
+        th2FileEditController: th2FileEditController,
+        key: ValueKey("MPMultipleChoicesWidget|$thFileMPID|${optionType.name}"),
+        type: optionType,
+        choices: getOptionChoicesWithUnset(choices),
+        selectedChoice: optionInfo.currentChoice,
+        defaultChoice: THCommandOption.getDefaultChoiceAsString(optionType),
+        position: position,
+        positionType: MPWidgetPositionType.leftCenter,
+        maxHeight: getMaxHeightForOverlayWindows(
+          th2FileEditController.thFileWidgetKey,
+        ),
+      );
+    } else {
+      switch (optionType) {
+        case THCommandOptionType.altitude:
+        // return MPAltitudeOptionWidget(th2FileEditController: th2FileEditController, currentOption: currentOption, position: position, positionType: positionType, maxHeight: maxHeight)
+
+        default:
+          throw Exception(
+              'Unsupported non-multiple choice option type: $optionType at MPOverlayWindowFactory.createOptionChoices');
+      }
     }
-
-    return MPMultipleChoicesWidget(
-      th2FileEditController: th2FileEditController,
-      key: key,
-      type: type,
-      choices: getOptionChoicesWithUnset(choices),
-      selectedChoice: selectedChoice,
-      defaultChoice: defaultChoice,
-      position: position,
-      positionType: MPWidgetPositionType.leftCenter,
-      maxHeight: getMaxHeightForOverlayWindows(
-        th2FileEditController.thFileWidgetKey,
-      ),
-    );
   }
 
   static double getMaxHeightForOverlayWindows(GlobalKey targetKey) {

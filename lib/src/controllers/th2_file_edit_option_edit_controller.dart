@@ -42,8 +42,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
         optionsInfo[optionType] = MPOptionInfo(
           type: optionType,
           state: MPOptionStateType.unset,
-          defaultChoice: null,
-          currentChoice: null,
         );
       }
     } else {
@@ -62,24 +60,30 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       for (final optionType in optionTypesList) {
         MPOptionStateType optionStateType = MPOptionStateType.unset;
         String? optionValue;
+        THCommandOption? option;
 
         for (final THHasOptionsMixin selectedElement in selectedElements) {
           if (selectedElement.hasOption(optionType)) {
             switch (optionStateType) {
               case MPOptionStateType.unset:
                 optionStateType = MPOptionStateType.set;
-                optionValue =
-                    selectedElement.optionByType(optionType)!.specToFile();
+                option = selectedElement.optionByType(optionType)!;
+                optionValue = option.specToFile();
               case MPOptionStateType.set:
                 final String newOptionValue =
                     selectedElement.optionByType(optionType)!.specToFile();
+
                 if (optionValue != newOptionValue) {
                   optionStateType = MPOptionStateType.setMixed;
+                  option = null;
+                  optionValue = null;
                 }
               default:
             }
           } else if (optionStateType == MPOptionStateType.set) {
             optionStateType = MPOptionStateType.setMixed;
+            option = null;
+            optionValue = null;
           }
 
           if (optionStateType == MPOptionStateType.setMixed) {
@@ -90,8 +94,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           type: optionType,
           state: optionStateType,
           defaultChoice: THCommandOption.getDefaultChoice(optionType),
-          currentChoice:
-              optionStateType == MPOptionStateType.set ? optionValue : null,
+          currentChoice: optionValue,
+          option: option,
         );
       }
 
@@ -105,6 +109,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
               state: MPOptionStateType.setUnsupported,
               defaultChoice: THCommandOption.getDefaultChoice(optionType),
               currentChoice: null,
+              option: null,
             );
           }
         }
@@ -143,10 +148,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
       _th2FileEditController.overlayWindowController
           .showOptionChoicesOverlayWindow(
-        optionType: optionType,
         position: position,
-        currentChoice: optionInfo.currentChoice,
-        selectedChoice: optionInfo.currentChoice,
+        optionInfo: optionInfo,
       );
     }
   }
@@ -167,12 +170,14 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 class MPOptionInfo {
   final THCommandOptionType type;
   final MPOptionStateType state;
+  final THCommandOption? option;
   final dynamic currentChoice;
   final dynamic defaultChoice;
 
   MPOptionInfo({
     required this.type,
     required this.state,
+    this.option,
     this.currentChoice,
     this.defaultChoice,
   });
