@@ -43,6 +43,8 @@ abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditStateController stateController;
   late final TH2FileEditUserInteractionController userInteractionController;
 
+  final List<ReactionDisposer> _disposers = [];
+
   /// 'screen' is related to actual pixels on the screen.
   /// 'canvas' is the virtual canvas used to draw.
   /// 'data' is the actual data to be drawn.
@@ -184,15 +186,8 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
-  @computed
-  int get currentDecimalPositions {
-    final double magnitude = MPNumericAux.log10(_canvasScale);
-    int newDecimalPositions = magnitude.ceil() + 1;
-
-    print("currentDecimalPositions recomputed: $newDecimalPositions");
-
-    return newDecimalPositions < 0 ? 0 : newDecimalPositions;
-  }
+  @readonly
+  int _currentDecimalPositions = thDefaultDecimalPositions;
 
   @readonly
   int _activeScrapID = 0;
@@ -462,6 +457,8 @@ abstract class TH2FileEditControllerBase with Store {
       updateHasMultipleScraps();
     }
 
+    _initializeReactions();
+
     selectionController.clearIsSelected();
 
     parsedFile.elements.forEach((key, value) {
@@ -477,6 +474,25 @@ abstract class TH2FileEditControllerBase with Store {
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+  }
+
+  void _initializeReactions() {
+    _disposers.add(autorun((_) {
+      final double magnitude = MPNumericAux.log10(_canvasScale);
+      final int newDecimalPositions = magnitude.ceil() + 1;
+
+      print("currentDecimalPositions recomputed: $newDecimalPositions");
+
+      _currentDecimalPositions =
+          newDecimalPositions < 0 ? 0 : newDecimalPositions;
+    }));
+  }
+
+  void _disposeReactions() {
+    for (final disposer in _disposers) {
+      disposer();
+    }
+    _disposers.clear();
   }
 
   @action
@@ -728,6 +744,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void close() {
+    _disposeReactions();
     mpLocator.mpGeneralController
         .removeFileController(filename: _thFile.filename);
   }
