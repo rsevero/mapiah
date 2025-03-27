@@ -17,20 +17,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.canvasScaleAsPercentageText,
               name: 'TH2FileEditControllerBase.canvasScaleAsPercentageText'))
           .value;
-  Computed<Rect>? _$canvasBoundingBoxComputed;
-
-  @override
-  Rect get canvasBoundingBox => (_$canvasBoundingBoxComputed ??= Computed<Rect>(
-          () => super.canvasBoundingBox,
-          name: 'TH2FileEditControllerBase.canvasBoundingBox'))
-      .value;
-  Computed<Rect>? _$screenBoundingBoxComputed;
-
-  @override
-  Rect get screenBoundingBox => (_$screenBoundingBoxComputed ??= Computed<Rect>(
-          () => super.screenBoundingBox,
-          name: 'TH2FileEditControllerBase.screenBoundingBox'))
-      .value;
   Computed<String>? _$filenameAndScrapComputed;
 
   @override
@@ -38,41 +24,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<String>(() => super.filenameAndScrap,
               name: 'TH2FileEditControllerBase.filenameAndScrap'))
       .value;
-  Computed<bool>? _$isAddElementModeComputed;
-
-  @override
-  bool get isAddElementMode => (_$isAddElementModeComputed ??= Computed<bool>(
-          () => super.isAddElementMode,
-          name: 'TH2FileEditControllerBase.isAddElementMode'))
-      .value;
-  Computed<bool>? _$isEditLineModeComputed;
-
-  @override
-  bool get isEditLineMode =>
-      (_$isEditLineModeComputed ??= Computed<bool>(() => super.isEditLineMode,
-              name: 'TH2FileEditControllerBase.isEditLineMode'))
-          .value;
-  Computed<bool>? _$isNodeEditButtonEnabledComputed;
-
-  @override
-  bool get isNodeEditButtonEnabled => (_$isNodeEditButtonEnabledComputed ??=
-          Computed<bool>(() => super.isNodeEditButtonEnabled,
-              name: 'TH2FileEditControllerBase.isNodeEditButtonEnabled'))
-      .value;
-  Computed<bool>? _$isOptionEditModeComputed;
-
-  @override
-  bool get isOptionEditMode => (_$isOptionEditModeComputed ??= Computed<bool>(
-          () => super.isOptionEditMode,
-          name: 'TH2FileEditControllerBase.isOptionEditMode'))
-      .value;
-  Computed<bool>? _$isSelectModeComputed;
-
-  @override
-  bool get isSelectMode =>
-      (_$isSelectModeComputed ??= Computed<bool>(() => super.isSelectMode,
-              name: 'TH2FileEditControllerBase.isSelectMode'))
-          .value;
   Computed<MPButtonType>? _$activeAddElementButtonComputed;
 
   @override
@@ -366,6 +317,42 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_canvasBoundingBoxAtom = Atom(
+      name: 'TH2FileEditControllerBase._canvasBoundingBox', context: context);
+
+  Rect get canvasBoundingBox {
+    _$_canvasBoundingBoxAtom.reportRead();
+    return super._canvasBoundingBox;
+  }
+
+  @override
+  Rect get _canvasBoundingBox => canvasBoundingBox;
+
+  @override
+  set _canvasBoundingBox(Rect value) {
+    _$_canvasBoundingBoxAtom.reportWrite(value, super._canvasBoundingBox, () {
+      super._canvasBoundingBox = value;
+    });
+  }
+
+  late final _$_screenBoundingBoxAtom = Atom(
+      name: 'TH2FileEditControllerBase._screenBoundingBox', context: context);
+
+  Rect get screenBoundingBox {
+    _$_screenBoundingBoxAtom.reportRead();
+    return super._screenBoundingBox;
+  }
+
+  @override
+  Rect get _screenBoundingBox => screenBoundingBox;
+
+  @override
+  set _screenBoundingBox(Rect value) {
+    _$_screenBoundingBoxAtom.reportWrite(value, super._screenBoundingBox, () {
+      super._screenBoundingBox = value;
+    });
+  }
+
   late final _$_isLoadingAtom =
       Atom(name: 'TH2FileEditControllerBase._isLoading', context: context);
 
@@ -497,6 +484,98 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _redoDescription(String value) {
     _$_redoDescriptionAtom.reportWrite(value, super._redoDescription, () {
       super._redoDescription = value;
+    });
+  }
+
+  late final _$_isAddElementModeAtom = Atom(
+      name: 'TH2FileEditControllerBase._isAddElementMode', context: context);
+
+  bool get isAddElementMode {
+    _$_isAddElementModeAtom.reportRead();
+    return super._isAddElementMode;
+  }
+
+  @override
+  bool get _isAddElementMode => isAddElementMode;
+
+  @override
+  set _isAddElementMode(bool value) {
+    _$_isAddElementModeAtom.reportWrite(value, super._isAddElementMode, () {
+      super._isAddElementMode = value;
+    });
+  }
+
+  late final _$_isEditLineModeAtom =
+      Atom(name: 'TH2FileEditControllerBase._isEditLineMode', context: context);
+
+  bool get isEditLineMode {
+    _$_isEditLineModeAtom.reportRead();
+    return super._isEditLineMode;
+  }
+
+  @override
+  bool get _isEditLineMode => isEditLineMode;
+
+  @override
+  set _isEditLineMode(bool value) {
+    _$_isEditLineModeAtom.reportWrite(value, super._isEditLineMode, () {
+      super._isEditLineMode = value;
+    });
+  }
+
+  late final _$_isNodeEditButtonEnabledAtom = Atom(
+      name: 'TH2FileEditControllerBase._isNodeEditButtonEnabled',
+      context: context);
+
+  bool get isNodeEditButtonEnabled {
+    _$_isNodeEditButtonEnabledAtom.reportRead();
+    return super._isNodeEditButtonEnabled;
+  }
+
+  @override
+  bool get _isNodeEditButtonEnabled => isNodeEditButtonEnabled;
+
+  @override
+  set _isNodeEditButtonEnabled(bool value) {
+    _$_isNodeEditButtonEnabledAtom
+        .reportWrite(value, super._isNodeEditButtonEnabled, () {
+      super._isNodeEditButtonEnabled = value;
+    });
+  }
+
+  late final _$_isOptionEditModeAtom = Atom(
+      name: 'TH2FileEditControllerBase._isOptionEditMode', context: context);
+
+  bool get isOptionEditMode {
+    _$_isOptionEditModeAtom.reportRead();
+    return super._isOptionEditMode;
+  }
+
+  @override
+  bool get _isOptionEditMode => isOptionEditMode;
+
+  @override
+  set _isOptionEditMode(bool value) {
+    _$_isOptionEditModeAtom.reportWrite(value, super._isOptionEditMode, () {
+      super._isOptionEditMode = value;
+    });
+  }
+
+  late final _$_isSelectModeAtom =
+      Atom(name: 'TH2FileEditControllerBase._isSelectMode', context: context);
+
+  bool get isSelectMode {
+    _$_isSelectModeAtom.reportRead();
+    return super._isSelectMode;
+  }
+
+  @override
+  bool get _isSelectMode => isSelectMode;
+
+  @override
+  set _isSelectMode(bool value) {
+    _$_isSelectModeAtom.reportWrite(value, super._isSelectMode, () {
+      super._isSelectMode = value;
     });
   }
 
@@ -1279,14 +1358,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   String toString() {
     return '''
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
-canvasBoundingBox: ${canvasBoundingBox},
-screenBoundingBox: ${screenBoundingBox},
 filenameAndScrap: ${filenameAndScrap},
-isAddElementMode: ${isAddElementMode},
-isEditLineMode: ${isEditLineMode},
-isNodeEditButtonEnabled: ${isNodeEditButtonEnabled},
-isOptionEditMode: ${isOptionEditMode},
-isSelectMode: ${isSelectMode},
 activeAddElementButton: ${activeAddElementButton},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 controlLineThicknessOnCanvas: ${controlLineThicknessOnCanvas},

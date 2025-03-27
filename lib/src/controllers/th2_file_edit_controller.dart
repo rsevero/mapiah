@@ -67,30 +67,11 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   Offset _canvasTranslation = Offset.zero;
 
-  @computed
-  Rect get canvasBoundingBox {
-    final Offset topLeft = _canvasTranslation;
-    final Offset bottomRight =
-        topLeft + Offset(_canvasSize.width, _canvasSize.height);
-    final Rect canvasBoundingBox = MPNumericAux.orderedRectFromPoints(
-      point1: topLeft,
-      point2: bottomRight,
-    );
+  @readonly
+  Rect _canvasBoundingBox = Rect.zero;
 
-    return canvasBoundingBox;
-  }
-
-  @computed
-  Rect get screenBoundingBox {
-    final Rect screenBoundingBox = MPNumericAux.orderedRectFromLTWH(
-      top: 0,
-      left: 0,
-      width: _screenSize.width,
-      height: _screenSize.height,
-    );
-
-    return screenBoundingBox;
-  }
+  @readonly
+  Rect _screenBoundingBox = Rect.zero;
 
   @readonly
   bool _isLoading = false;
@@ -128,43 +109,20 @@ abstract class TH2FileEditControllerBase with Store {
     return filename;
   }
 
-  @computed
-  bool get isAddElementMode {
-    final MPTH2FileEditState state = stateController.state;
+  @readonly
+  bool _isAddElementMode = false;
 
-    return ((state is MPTH2FileEditStateAddArea) ||
-        (state is MPTH2FileEditStateAddLine) ||
-        (state is MPTH2FileEditStateAddPoint));
-  }
+  @readonly
+  bool _isEditLineMode = false;
 
-  @computed
-  bool get isEditLineMode {
-    final MPTH2FileEditState state = stateController.state;
+  @readonly
+  bool _isNodeEditButtonEnabled = false;
 
-    return (state is MPTH2FileEditStateEditSingleLine) ||
-        (state is MPTH2FileEditStateMovingEndControlPoints) ||
-        (state is MPTH2FileEditStateMovingSingleControlPoint);
-  }
+  @readonly
+  bool _isOptionEditMode = false;
 
-  @computed
-  bool get isNodeEditButtonEnabled =>
-      (selectionController.selectedElements.length == 1) &&
-      (selectionController
-              .selectedElements[selectionController.selectedElements.keys.first]
-          is MPSelectedLine);
-
-  @computed
-  bool get isOptionEditMode =>
-      stateController.state is MPTH2FileEditStateOptionEdit;
-
-  @computed
-  bool get isSelectMode {
-    final MPTH2FileEditState state = stateController.state;
-
-    return (state is MPTH2FileEditStateSelectEmptySelection ||
-        (state is MPTH2FileEditStateSelectNonEmptySelection) ||
-        state is MPTH2FileEditStateMovingElements);
-  }
+  @readonly
+  bool _isSelectMode = false;
 
   @readonly
   bool _isZoomButtonsHovered = false;
@@ -217,10 +175,10 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showSelectedElements =>
-      selectionController.selectedElements.isNotEmpty && !isEditLineMode;
+      selectionController.selectedElements.isNotEmpty && !_isEditLineMode;
 
   @computed
-  bool get showSelectionHandles => showSelectedElements && isSelectMode;
+  bool get showSelectionHandles => showSelectedElements && _isSelectMode;
 
   @computed
   bool get showSelectionWindow =>
@@ -285,7 +243,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @computed
-  bool get showEditLineSegment => isEditLineMode;
+  bool get showEditLineSegment => _isEditLineMode;
 
   @computed
   bool get showOptionsEdit =>
@@ -293,7 +251,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showUndoRedoButtons =>
-      isAddElementMode || isSelectMode || isEditLineMode;
+      _isAddElementMode || _isSelectMode || _isEditLineMode;
 
   @computed
   bool get removeButtonEnabled =>
@@ -485,6 +443,61 @@ abstract class TH2FileEditControllerBase with Store {
 
       _currentDecimalPositions =
           newDecimalPositions < 0 ? 0 : newDecimalPositions;
+    }));
+
+    _disposers.add(autorun((_) {
+      _screenBoundingBox = MPNumericAux.orderedRectFromLTWH(
+        top: 0,
+        left: 0,
+        width: _screenSize.width,
+        height: _screenSize.height,
+      );
+    }));
+
+    _disposers.add(autorun((_) {
+      final Offset topLeft = _canvasTranslation;
+      final Offset bottomRight =
+          topLeft + Offset(_canvasSize.width, _canvasSize.height);
+
+      _canvasBoundingBox = MPNumericAux.orderedRectFromPoints(
+        point1: topLeft,
+        point2: bottomRight,
+      );
+    }));
+
+    _disposers.add(autorun((_) {
+      final MPTH2FileEditState state = stateController.state;
+
+      _isAddElementMode = ((state is MPTH2FileEditStateAddArea) ||
+          (state is MPTH2FileEditStateAddLine) ||
+          (state is MPTH2FileEditStateAddPoint));
+    }));
+
+    _disposers.add(autorun((_) {
+      final MPTH2FileEditState state = stateController.state;
+
+      _isEditLineMode = ((state is MPTH2FileEditStateEditSingleLine) ||
+          (state is MPTH2FileEditStateMovingEndControlPoints) ||
+          (state is MPTH2FileEditStateMovingSingleControlPoint));
+    }));
+
+    _disposers.add(autorun((_) {
+      _isNodeEditButtonEnabled =
+          (selectionController.selectedElements.length == 1) &&
+              (selectionController.selectedElements[selectionController
+                  .selectedElements.keys.first] is MPSelectedLine);
+    }));
+
+    _disposers.add(autorun((_) {
+      _isOptionEditMode = stateController.state is MPTH2FileEditStateOptionEdit;
+    }));
+
+    _disposers.add(autorun((_) {
+      final MPTH2FileEditState state = stateController.state;
+
+      _isSelectMode = ((state is MPTH2FileEditStateSelectEmptySelection) ||
+          (state is MPTH2FileEditStateSelectNonEmptySelection) ||
+          (state is MPTH2FileEditStateMovingElements));
     }));
   }
 
