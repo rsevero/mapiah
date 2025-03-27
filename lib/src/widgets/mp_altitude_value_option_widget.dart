@@ -141,7 +141,10 @@ class _MPAltitudeValueOptionWidgetState
                 _selectedChoice = value!;
               });
             },
+            contentPadding: EdgeInsets.zero,
           ),
+          const Divider(),
+
           RadioListTile<String>(
             title: Text(appLocalizations.mpChoiceSet),
             value: mpNonMultipleChoiceSetID,
@@ -151,6 +154,7 @@ class _MPAltitudeValueOptionWidgetState
                 _selectedChoice = value!;
               });
             },
+            contentPadding: EdgeInsets.zero,
           ),
 
           // Additional Inputs for "Set" Option
@@ -173,13 +177,16 @@ class _MPAltitudeValueOptionWidgetState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(appLocalizations.thCommandOptionAltitudeFix),
-                Switch(
-                  value: _isFixed,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isFixed = value;
-                    });
-                  },
+                Transform.scale(
+                  scale: mpSwitchScaleFactor,
+                  child: Switch(
+                    value: _isFixed,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _isFixed = value;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
@@ -206,7 +213,7 @@ class _MPAltitudeValueOptionWidgetState
             ),
           ],
 
-          const SizedBox(height: mpButtonSpace * 2),
+          const SizedBox(height: mpButtonMargin),
 
           Row(
             children: [
