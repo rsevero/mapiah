@@ -2,32 +2,35 @@ part of 'mp_command.dart';
 
 class MPMoveStraightLineSegmentCommand extends MPCommand {
   final int lineSegmentMPID;
-  final Offset originalEndPointCoordinates;
-  late final Offset modifiedEndPointCoordinates;
+  final THPositionPart originalEndPointPosition;
+  late final THPositionPart modifiedEndPointPosition;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveStraightLineSegment;
 
   MPMoveStraightLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
-    required this.originalEndPointCoordinates,
-    required this.modifiedEndPointCoordinates,
+    required this.originalEndPointPosition,
+    required this.modifiedEndPointPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveStraightLineSegmentCommand({
     required this.lineSegmentMPID,
-    required this.originalEndPointCoordinates,
-    required this.modifiedEndPointCoordinates,
+    required this.originalEndPointPosition,
+    required this.modifiedEndPointPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDelta({
     required this.lineSegmentMPID,
-    required this.originalEndPointCoordinates,
+    required this.originalEndPointPosition,
     required Offset deltaOnCanvas,
+    required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
-  })  : modifiedEndPointCoordinates =
-            originalEndPointCoordinates + deltaOnCanvas,
+  })  : modifiedEndPointPosition = originalEndPointPosition.copyWith(
+          coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
+          decimalPositions: decimalPositions,
+        ),
         super();
 
   @override
@@ -43,8 +46,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         th2FileEditController.thFile.elementByMPID(lineSegmentMPID)
             as THStraightLineSegment;
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
-        endPoint: originalLineSegment.endPoint
-            .copyWith(coordinates: modifiedEndPointCoordinates));
+      endPoint: modifiedEndPointPosition,
+    );
 
     th2FileEditController.elementEditController
         .applySubstituteElementWithoutAddSelectableElement(newLineSegment);
@@ -57,8 +60,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     final MPMoveStraightLineSegmentCommand oppositeCommand =
         MPMoveStraightLineSegmentCommand(
       lineSegmentMPID: lineSegmentMPID,
-      originalEndPointCoordinates: modifiedEndPointCoordinates,
-      modifiedEndPointCoordinates: originalEndPointCoordinates,
+      originalEndPointPosition: modifiedEndPointPosition,
+      modifiedEndPointPosition: originalEndPointPosition,
       descriptionType: descriptionType,
     );
 
@@ -74,14 +77,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
     map.addAll({
       'lineSegmentMPID': lineSegmentMPID,
-      'originalEndPointCoordinates': {
-        'dx': originalEndPointCoordinates.dx,
-        'dy': originalEndPointCoordinates.dy,
-      },
-      'modifiedEndPointCoordinates': {
-        'dx': modifiedEndPointCoordinates.dx,
-        'dy': modifiedEndPointCoordinates.dy,
-      },
+      'originalEndPointPosition': originalEndPointPosition.toMap(),
+      'modifiedEndPointPosition': modifiedEndPointPosition.toMap(),
     });
 
     return map;
@@ -90,14 +87,10 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   factory MPMoveStraightLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: map['lineSegmentMPID'],
-      originalEndPointCoordinates: Offset(
-        map['originalEndPointCoordinates']['dx'],
-        map['originalEndPointCoordinates']['dy'],
-      ),
-      modifiedEndPointCoordinates: Offset(
-        map['modifiedEndPointCoordinates']['dx'],
-        map['modifiedEndPointCoordinates']['dy'],
-      ),
+      originalEndPointPosition:
+          THPositionPart.fromMap(map['originalEndPointPosition']),
+      modifiedEndPointPosition:
+          THPositionPart.fromMap(map['modifiedEndPointPosition']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -110,16 +103,16 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   @override
   MPMoveStraightLineSegmentCommand copyWith({
     int? lineSegmentMPID,
-    Offset? originalEndPointCoordinates,
-    Offset? modifiedEndPointCoordinates,
+    THPositionPart? originalEndPointPosition,
+    THPositionPart? modifiedEndPointPosition,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
-      originalEndPointCoordinates:
-          originalEndPointCoordinates ?? this.originalEndPointCoordinates,
-      modifiedEndPointCoordinates:
-          modifiedEndPointCoordinates ?? this.modifiedEndPointCoordinates,
+      originalEndPointPosition:
+          originalEndPointPosition ?? this.originalEndPointPosition,
+      modifiedEndPointPosition:
+          modifiedEndPointPosition ?? this.modifiedEndPointPosition,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -130,8 +123,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
     return other is MPMoveStraightLineSegmentCommand &&
         other.lineSegmentMPID == lineSegmentMPID &&
-        other.originalEndPointCoordinates == originalEndPointCoordinates &&
-        other.modifiedEndPointCoordinates == modifiedEndPointCoordinates &&
+        other.originalEndPointPosition == originalEndPointPosition &&
+        other.modifiedEndPointPosition == modifiedEndPointPosition &&
         other.descriptionType == descriptionType;
   }
 
@@ -140,7 +133,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
       super.hashCode ^
       Object.hash(
         lineSegmentMPID,
-        originalEndPointCoordinates,
-        modifiedEndPointCoordinates,
+        originalEndPointPosition,
+        modifiedEndPointPosition,
       );
 }

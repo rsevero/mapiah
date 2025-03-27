@@ -104,6 +104,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             lineMPID: selectedElement.mpID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
             deltaOnCanvas: panDeltaOnCanvas,
+            decimalPositions: th2FileEditController.currentDecimalPositions,
           );
           break;
       }

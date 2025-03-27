@@ -29,12 +29,14 @@ class MPMoveLineCommand extends MPCommand {
     required this.lineMPID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required Offset deltaOnCanvas,
+    required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand =
         MPMultipleElementsCommand.moveLineSegmentsFromDeltaOnCanvas(
       originalElementsMap: originalLineSegmentsMap,
       deltaOnCanvas: deltaOnCanvas,
+      decimalPositions: decimalPositions,
       descriptionType: descriptionType,
     );
   }

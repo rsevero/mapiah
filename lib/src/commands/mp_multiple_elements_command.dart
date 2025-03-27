@@ -107,6 +107,7 @@ class MPMultipleElementsCommand extends MPCommand {
             originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
                 .originalLineSegmentsMapClone,
             deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
           );
         default:
           throw ArgumentError(
@@ -136,24 +137,19 @@ class MPMultipleElementsCommand extends MPCommand {
         case THStraightLineSegment _:
           moveLineSegmentCommand = MPMoveStraightLineSegmentCommand(
             lineSegmentMPID: originalElementMPID,
-            originalEndPointCoordinates: originalElement.endPoint.coordinates,
-            modifiedEndPointCoordinates: modifiedElement.endPoint.coordinates,
+            originalEndPointPosition: originalElement.endPoint,
+            modifiedEndPointPosition: modifiedElement.endPoint,
           );
         case THBezierCurveLineSegment _:
           moveLineSegmentCommand = MPMoveBezierLineSegmentCommand(
             lineSegmentMPID: originalElementMPID,
-            originalEndPointCoordinates: originalElement.endPoint.coordinates,
-            modifiedEndPointCoordinates: modifiedElement.endPoint.coordinates,
-            originalControlPoint1Coordinates:
-                originalElement.controlPoint1.coordinates,
-            modifiedControlPoint1Coordinates:
-                (modifiedElement as THBezierCurveLineSegment)
-                    .controlPoint1
-                    .coordinates,
-            originalControlPoint2Coordinates:
-                originalElement.controlPoint2.coordinates,
-            modifiedControlPoint2Coordinates:
-                modifiedElement.controlPoint2.coordinates,
+            originalEndPointPosition: originalElement.endPoint,
+            modifiedEndPointPosition: modifiedElement.endPoint,
+            originalControlPoint1Position: originalElement.controlPoint1,
+            modifiedControlPoint1Position:
+                (modifiedElement as THBezierCurveLineSegment).controlPoint1,
+            originalControlPoint2Position: originalElement.controlPoint2,
+            modifiedControlPoint2Position: modifiedElement.controlPoint2,
           );
         default:
           throw ArgumentError(
@@ -168,6 +164,7 @@ class MPMultipleElementsCommand extends MPCommand {
   MPMultipleElementsCommand.moveLineSegmentsFromDeltaOnCanvas({
     required LinkedHashMap<int, THLineSegment> originalElementsMap,
     required Offset deltaOnCanvas,
+    required int decimalPositions,
     super.descriptionType = MPCommandDescriptionType.moveLineSegments,
   }) : super() {
     commandsList = [];
@@ -179,34 +176,20 @@ class MPMultipleElementsCommand extends MPCommand {
 
       switch (originalElement) {
         case THStraightLineSegment _:
-          final Offset originalEndPointCoordinates =
-              originalElement.endPoint.coordinates;
-
-          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand(
+          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand.fromDelta(
             lineSegmentMPID: originalElementMPID,
-            originalEndPointCoordinates: originalEndPointCoordinates,
-            modifiedEndPointCoordinates:
-                originalEndPointCoordinates + deltaOnCanvas,
+            originalEndPointPosition: originalElement.endPoint,
+            deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
           );
         case THBezierCurveLineSegment _:
-          final Offset originalEndPointCoordinates =
-              originalElement.endPoint.coordinates;
-          final Offset originalControlPoint1Coordinates =
-              originalElement.controlPoint1.coordinates;
-          final Offset originalControlPoint2Coordinates =
-              originalElement.controlPoint2.coordinates;
-
-          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand(
+          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand.fromDelta(
             lineSegmentMPID: originalElementMPID,
-            originalEndPointCoordinates: originalEndPointCoordinates,
-            modifiedEndPointCoordinates:
-                originalEndPointCoordinates + deltaOnCanvas,
-            originalControlPoint1Coordinates: originalControlPoint1Coordinates,
-            modifiedControlPoint1Coordinates:
-                originalControlPoint1Coordinates + deltaOnCanvas,
-            originalControlPoint2Coordinates: originalControlPoint2Coordinates,
-            modifiedControlPoint2Coordinates:
-                originalControlPoint2Coordinates + deltaOnCanvas,
+            originalEndPointPosition: originalElement.endPoint,
+            originalControlPoint1Position: originalElement.controlPoint1,
+            originalControlPoint2Position: originalElement.controlPoint2,
+            deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
           );
         default:
           throw ArgumentError(
