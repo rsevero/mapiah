@@ -173,22 +173,6 @@ abstract class TH2FileEditControllerBase with Store {
       (mpLocator.mpSettingsController.selectionTolerance *
           mpLocator.mpSettingsController.selectionTolerance);
 
-  @computed
-  bool get showSelectedElements =>
-      selectionController.selectedElements.isNotEmpty && !_isEditLineMode;
-
-  @computed
-  bool get showSelectionHandles => showSelectedElements && _isSelectMode;
-
-  @computed
-  bool get showSelectionWindow =>
-      selectionController.selectionWindowCanvasCoordinates.value != Rect.zero;
-
-  @computed
-  bool get showAddLine =>
-      (elementEditController.newLine != null) ||
-      (elementEditController.lineStartScreenPosition != null);
-
   @readonly
   bool _canvasScaleTranslationUndefined = true;
 
@@ -243,16 +227,32 @@ abstract class TH2FileEditControllerBase with Store {
       _isAddElementMode || _isSelectMode || _isEditLineMode;
 
   @computed
-  bool get removeButtonEnabled =>
-      selectionController.selectedElements.isNotEmpty;
+  bool get showSelectedElements =>
+      selectionController.selectedElements.isNotEmpty && !_isEditLineMode;
 
-  @readonly
-  String _statusBarMessage = '';
+  @computed
+  bool get showSelectionHandles => showSelectedElements && _isSelectMode;
+
+  @computed
+  bool get showSelectionWindow =>
+      selectionController.selectionWindowCanvasCoordinates.value != Rect.zero;
+
+  @computed
+  bool get showAddLine =>
+      (elementEditController.newLine != null) ||
+      (elementEditController.lineStartScreenPosition != null);
 
   @computed
   bool get showScrapScale {
     return !_isLoading && scrapHasScaleOption;
   }
+
+  @computed
+  bool get removeButtonEnabled =>
+      selectionController.selectedElements.isNotEmpty;
+
+  @readonly
+  String _statusBarMessage = '';
 
   @computed
   bool get scrapHasScaleOption {

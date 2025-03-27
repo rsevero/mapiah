@@ -32,34 +32,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.activeAddElementButton,
               name: 'TH2FileEditControllerBase.activeAddElementButton'))
           .value;
-  Computed<bool>? _$showSelectedElementsComputed;
-
-  @override
-  bool get showSelectedElements => (_$showSelectedElementsComputed ??=
-          Computed<bool>(() => super.showSelectedElements,
-              name: 'TH2FileEditControllerBase.showSelectedElements'))
-      .value;
-  Computed<bool>? _$showSelectionHandlesComputed;
-
-  @override
-  bool get showSelectionHandles => (_$showSelectionHandlesComputed ??=
-          Computed<bool>(() => super.showSelectionHandles,
-              name: 'TH2FileEditControllerBase.showSelectionHandles'))
-      .value;
-  Computed<bool>? _$showSelectionWindowComputed;
-
-  @override
-  bool get showSelectionWindow => (_$showSelectionWindowComputed ??=
-          Computed<bool>(() => super.showSelectionWindow,
-              name: 'TH2FileEditControllerBase.showSelectionWindow'))
-      .value;
-  Computed<bool>? _$showAddLineComputed;
-
-  @override
-  bool get showAddLine =>
-      (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
-              name: 'TH2FileEditControllerBase.showAddLine'))
-          .value;
   Computed<Paint>? _$selectionWindowBorderPaintCompleteComputed;
 
   @override
@@ -114,13 +86,34 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.showUndoRedoButtons,
               name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
       .value;
-  Computed<bool>? _$removeButtonEnabledComputed;
+  Computed<bool>? _$showSelectedElementsComputed;
 
   @override
-  bool get removeButtonEnabled => (_$removeButtonEnabledComputed ??=
-          Computed<bool>(() => super.removeButtonEnabled,
-              name: 'TH2FileEditControllerBase.removeButtonEnabled'))
+  bool get showSelectedElements => (_$showSelectedElementsComputed ??=
+          Computed<bool>(() => super.showSelectedElements,
+              name: 'TH2FileEditControllerBase.showSelectedElements'))
       .value;
+  Computed<bool>? _$showSelectionHandlesComputed;
+
+  @override
+  bool get showSelectionHandles => (_$showSelectionHandlesComputed ??=
+          Computed<bool>(() => super.showSelectionHandles,
+              name: 'TH2FileEditControllerBase.showSelectionHandles'))
+      .value;
+  Computed<bool>? _$showSelectionWindowComputed;
+
+  @override
+  bool get showSelectionWindow => (_$showSelectionWindowComputed ??=
+          Computed<bool>(() => super.showSelectionWindow,
+              name: 'TH2FileEditControllerBase.showSelectionWindow'))
+      .value;
+  Computed<bool>? _$showAddLineComputed;
+
+  @override
+  bool get showAddLine =>
+      (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
+              name: 'TH2FileEditControllerBase.showAddLine'))
+          .value;
   Computed<bool>? _$showScrapScaleComputed;
 
   @override
@@ -128,6 +121,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       (_$showScrapScaleComputed ??= Computed<bool>(() => super.showScrapScale,
               name: 'TH2FileEditControllerBase.showScrapScale'))
           .value;
+  Computed<bool>? _$removeButtonEnabledComputed;
+
+  @override
+  bool get removeButtonEnabled => (_$removeButtonEnabledComputed ??=
+          Computed<bool>(() => super.removeButtonEnabled,
+              name: 'TH2FileEditControllerBase.removeButtonEnabled'))
+      .value;
   Computed<bool>? _$scrapHasScaleOptionComputed;
 
   @override
@@ -1444,10 +1444,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 filenameAndScrap: ${filenameAndScrap},
 activeAddElementButton: ${activeAddElementButton},
-showSelectedElements: ${showSelectedElements},
-showSelectionHandles: ${showSelectionHandles},
-showSelectionWindow: ${showSelectionWindow},
-showAddLine: ${showAddLine},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
@@ -1455,8 +1451,12 @@ showRemoveButton: ${showRemoveButton},
 showEditLineSegment: ${showEditLineSegment},
 showOptionsEdit: ${showOptionsEdit},
 showUndoRedoButtons: ${showUndoRedoButtons},
-removeButtonEnabled: ${removeButtonEnabled},
+showSelectedElements: ${showSelectedElements},
+showSelectionHandles: ${showSelectionHandles},
+showSelectionWindow: ${showSelectionWindow},
+showAddLine: ${showAddLine},
 showScrapScale: ${showScrapScale},
+removeButtonEnabled: ${removeButtonEnabled},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
