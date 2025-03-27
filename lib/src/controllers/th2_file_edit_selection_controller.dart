@@ -273,9 +273,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     final double handleSize =
-        _th2FileEditController.selectionHandleSizeOnCanvas.value;
+        _th2FileEditController.selectionHandleSizeOnCanvas;
     final double handleDistance =
-        _th2FileEditController.selectionHandleDistanceOnCanvas.value;
+        _th2FileEditController.selectionHandleDistanceOnCanvas;
     final Rect boundingBox = selectedElementsBoundingBox;
     final double halfSize = handleSize / 2.0;
 

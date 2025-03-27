@@ -189,50 +189,39 @@ abstract class TH2FileEditControllerBase with Store {
       (elementEditController.newLine != null) ||
       (elementEditController.lineStartScreenPosition != null);
 
-  @computed
-  bool get showOverlayWindows =>
-      overlayWindowController.overlayWindows.isNotEmpty;
-
   @readonly
   bool _canvasScaleTranslationUndefined = true;
 
   @readonly
-  Observable<Paint> _selectionWindowFillPaint =
-      Observable(thSelectionWindowFillPaint);
+  Paint _selectionWindowFillPaint = thSelectionWindowFillPaint;
 
   @readonly
-  Observable<Paint> _selectionWindowBorderPaint =
-      Observable(thSelectionWindowBorderPaint);
+  Paint _selectionWindowBorderPaint = thSelectionWindowBorderPaint;
 
   @computed
-  Observable<Paint> get selectionWindowBorderPaintComplete =>
-      Observable(_selectionWindowBorderPaint.value
-        ..strokeWidth = thSelectionWindowBorderPaintStrokeWidth / _canvasScale);
+  Paint get selectionWindowBorderPaintComplete => _selectionWindowBorderPaint
+    ..strokeWidth = thSelectionWindowBorderPaintStrokeWidth / _canvasScale;
 
   @readonly
-  Observable<double> _selectionWindowBorderPaintDashInterval =
-      Observable(thSelectionWindowBorderPaintDashInterval);
+  double _selectionWindowBorderPaintDashInterval =
+      thSelectionWindowBorderPaintDashInterval;
 
   @computed
-  Observable<double> get selectionWindowBorderPaintDashIntervalOnCanvas =>
-      Observable(_selectionWindowBorderPaintDashInterval.value / _canvasScale);
+  double get selectionWindowBorderPaintDashIntervalOnCanvas =>
+      _selectionWindowBorderPaintDashInterval / _canvasScale;
+
+  @readonly
+  double _selectionHandleSizeOnCanvas = thSelectionHandleSize;
+
+  @readonly
+  double _selectionHandleDistanceOnCanvas = thSelectionHandleDistance;
+
+  @readonly
+  double _selectionHandleLineThicknessOnCanvas = thSelectionHandleLineThickness;
 
   @computed
-  Observable<double> get selectionHandleSizeOnCanvas =>
-      Observable(thSelectionHandleSize / _canvasScale);
-
-  @computed
-  Observable<double> get selectionHandleDistanceOnCanvas =>
-      Observable(thSelectionHandleDistance / _canvasScale);
-
-  @computed
-  Observable<double> get selectionHandleLineThicknessOnCanvas =>
-      Observable(thSelectionHandleLineThickness / _canvasScale);
-
-  @computed
-  Observable<Paint> get selectionHandlePaint =>
-      Observable(thSelectionHandleFillPaint
-        ..strokeWidth = selectionHandleLineThicknessOnCanvas.value);
+  Paint get selectionHandlePaint => thSelectionHandleFillPaint
+    ..strokeWidth = _selectionHandleLineThicknessOnCanvas;
 
   @computed
   bool get showRemoveButton {
@@ -523,6 +512,20 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(autorun((_) {
       _selectionToleranceSquaredOnCanvas =
           (_selectionToleranceOnCanvas * _selectionToleranceOnCanvas);
+    }));
+
+    _disposers.add(autorun((_) {
+      _selectionHandleSizeOnCanvas = thSelectionHandleSize / _canvasScale;
+    }));
+
+    _disposers.add(autorun((_) {
+      _selectionHandleDistanceOnCanvas =
+          thSelectionHandleDistance / _canvasScale;
+    }));
+
+    _disposers.add(autorun((_) {
+      _selectionHandleLineThicknessOnCanvas =
+          thSelectionHandleLineThickness / _canvasScale;
     }));
   }
 

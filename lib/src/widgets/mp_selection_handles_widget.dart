@@ -26,13 +26,11 @@ class MPSelectionHandlesWidget extends StatelessWidget {
 
           final Map<MPSelectionHandleType, Offset> handleCenters =
               selectionController.getSelectionHandleCenters();
-          final Paint handlePaint =
-              th2FileEditController.selectionHandlePaint.value;
+          final Paint handlePaint = th2FileEditController.selectionHandlePaint;
 
           final Rect boundingBox =
               selectionController.selectedElementsBoundingBox;
-          double handleSize =
-              th2FileEditController.selectionHandleSizeOnCanvas.value;
+          double handleSize = th2FileEditController.selectionHandleSizeOnCanvas;
           final double handleSizeThreshold =
               handleSize * thSelectionHandleThresholdMultiplier;
           if ((boundingBox.width > handleSizeThreshold) &&
