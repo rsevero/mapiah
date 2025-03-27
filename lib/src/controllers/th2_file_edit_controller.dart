@@ -576,13 +576,17 @@ abstract class TH2FileEditControllerBase with Store {
     triggerAllElementsRedraw();
   }
 
-  List<(int, String, bool)> availableScraps() {
-    final List<(int, String, bool)> scraps = <(int, String, bool)>[];
+  Map<int, String> availableScraps() {
+    final Map<int, String> scraps = {};
 
     for (final int scrapMPID in _thFile.scrapMPIDs) {
-      final THScrap scrap = _thFile.elementByMPID(scrapMPID) as THScrap;
-      final bool isActive = scrapMPID == _activeScrapID;
-      scraps.add((scrapMPID, scrap.thID, isActive));
+      final THElement scrap = _thFile.elementByMPID(scrapMPID);
+
+      if (scrap is! THScrap) {
+        throw Exception('Element with MPID $scrapMPID is not a scrap');
+      }
+
+      scraps[scrapMPID] = scrap.thID;
     }
 
     return scraps;

@@ -61,31 +61,23 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                 .th2FileEditPageChangeActiveScrapTool,
                           )
                         ] +
-                        th2FileEditController.availableScraps().map(
-                          (scrap) {
-                            final int scrapID = scrap.$1;
-                            final String scrapName = scrap.$2;
-                            final bool isSelected = scrap.$3;
+                        th2FileEditController.availableScraps().entries.map(
+                          (entry) {
+                            final int scrapID = entry.key;
+                            final String scrapName = entry.value;
 
-                            return ListTile(
+                            return RadioListTile<int>(
                               dense: true,
                               contentPadding:
                                   EdgeInsets.symmetric(horizontal: 8.0),
-                              onTap: () => _onTapSelectScrap(scrapID),
-                              title: Row(
-                                children: [
-                                  Text(scrapName),
-                                  SizedBox(width: mpButtonSpace),
-                                  Visibility(
-                                    visible: isSelected,
-                                    maintainSize: true,
-                                    maintainAnimation: true,
-                                    maintainState: true,
-                                    child:
-                                        Icon(Icons.check, color: Colors.blue),
-                                  ),
-                                ],
-                              ),
+                              value: scrapID,
+                              groupValue: th2FileEditController.activeScrapID,
+                              onChanged: (int? value) {
+                                if (value != null) {
+                                  _onTapSelectScrap(value);
+                                }
+                              },
+                              title: Text(scrapName),
                             );
                           },
                         ).toList(),
