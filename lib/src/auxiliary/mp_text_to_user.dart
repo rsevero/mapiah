@@ -948,7 +948,7 @@ class MPTextToUser {
     Map<String, String> choices,
   ) {
     final Map<String, String> choicesWithUnset = {
-      mpUnsetOptionID: mpLocator.appLocalizations.mpMultipleChoiceUnset,
+      mpUnsetOptionID: mpLocator.appLocalizations.mpChoiceUnset,
     };
     final List<MapEntry<String, String>> orderedChoices =
         choices.entries.toList()

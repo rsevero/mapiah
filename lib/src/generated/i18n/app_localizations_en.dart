@@ -52,6 +52,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mpAltitudeValueInvalidValueErrorMessage => 'Please enter a valid numeric altitude value.';
+
+  @override
+  String get mpButtonCancel => 'Cancel';
+
+  @override
+  String get mpButtonOK => 'OK';
+
+  @override
+  String get mpChoiceSet => 'Set';
+
+  @override
+  String get mpChoiceUnset => 'Unset';
+
+  @override
   String get mpCommandDescriptionAddElements => 'Add elements';
 
   @override
@@ -796,6 +811,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thCommandOptionAltitude => 'Altitude';
 
   @override
+  String get thCommandOptionAltitudeFix => 'Fix';
+
+  @override
   String get thCommandOptionAltitudeValue => 'Altitude';
 
   @override
@@ -848,6 +866,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thCommandOptionId => 'ID';
+
+  @override
+  String get thCommandOptionLengthUnit => 'Unit';
 
   @override
   String get thCommandOptionLineDirection => 'Direction';
@@ -938,9 +959,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thCommandOptionWalls => 'Walls';
-
-  @override
-  String get mpMultipleChoiceUnset => 'Unset';
 
   @override
   String get thMultipleChoiceAdjustHorizontal => 'Horizontal';

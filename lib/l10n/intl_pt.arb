@@ -12,6 +12,14 @@
   "fileEditWindowWindowTitle": "Edição de arquivo",
   "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
 
+  "mpAltitudeValueInvalidValueErrorMessage": "Por favor informe um valor válido de altitude",
+
+  "mpButtonCancel": "Cancelar",
+  "mpButtonOK": "OK",
+
+  "mpChoiceSet": "Definir",
+  "mpChoiceUnset": "Não definido",
+
   "mpCommandDescriptionAddElements": "Adicionar elementos",
   "mpCommandDescriptionAddLine": "Adicionar linha",
   "mpCommandDescriptionAddLineSegment": "Adicionar segmento de linha",
@@ -261,6 +269,7 @@
   "thCommandOptionAdjust": "Ajustar",
   "thCommandOptionAlign": "Alinhar",
   "thCommandOptionAltitude": "Altitude",
+  "thCommandOptionAltitudeFix": "Ref. 0 (fix)",
   "thCommandOptionAltitudeValue": "Altitude",
   "thCommandOptionAnchors": "Âncoras",
   "thCommandOptionAuthor": "Autor",
@@ -279,6 +288,7 @@
   "thCommandOptionFrom": "De",
   "thCommandOptionHead": "Cabeça",
   "thCommandOptionId": "ID",
+  "thCommandOptionLengthUnit": "Unidade de comprimento",
   "thCommandOptionLineDirection": "Direção",
   "thCommandOptionLineGradient": "Gradiente",
   "thCommandOptionLineHeight": "Altura",
@@ -309,8 +319,6 @@
   "thCommandOptionUnrecognizedCommandOption": "Opção de Comando Não Reconhecida",
   "thCommandOptionVisibility": "Visibilidade",
   "thCommandOptionWalls": "Paredes",
-
-  "mpMultipleChoiceUnset": "Não definido",
 
   "thMultipleChoiceAdjustHorizontal": "Horizontal",
   "thMultipleChoiceAdjustVertical": "Vertical",

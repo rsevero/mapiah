@@ -67,6 +67,36 @@
     }
   },
 
+  "mpAltitudeValueInvalidValueErrorMessage": "Please enter a valid numeric altitude value.",
+  "@mpAltitudeValueInvalidValueErrorMessage": {
+    "description": "The error message for invalid altitude value",
+    "type": "text"
+  },
+
+  "mpButtonCancel": "Cancel",
+  "@mpButtonCancel": {
+    "description": "The label for the cancel button",
+    "type": "text"
+  },
+
+  "mpButtonOK": "OK",
+  "@mpButtonOK": {
+    "description": "The label for the OK button",
+    "type": "text"
+  },
+
+  "mpChoiceSet": "Set",
+  "@mpChoiceSet": {
+    "description": "The label for the set choice type",
+    "type": "text"
+  },
+
+  "mpChoiceUnset": "Unset",
+  "@mpChoiceUnset": {
+    "description": "The label for the unset choice type",
+    "type": "text"
+  },
+
   "mpCommandDescriptionAddElements": "Add elements",
   "@mpCommandDescriptionAddElements": {
     "description": "The description for the add elements command",
@@ -1549,6 +1579,12 @@
     "type": "text"
   },
 
+  "thCommandOptionAltitudeFix": "Fix",
+  "@thCommandOptionAltitudeFix": {
+    "description": "The label for the altitude command option fix choice",
+    "type": "text"
+  },
+
   "thCommandOptionAltitudeValue": "Altitude",
   "@thCommandOptionAltitudeValue": {
     "description": "The label for the altitude value command option type",
@@ -1654,6 +1690,12 @@
   "thCommandOptionId": "ID",
   "@thCommandOptionId": {
     "description": "The label for the ID command option type",
+    "type": "text"
+  },
+
+  "thCommandOptionLengthUnit": "Unit",
+  "@thCommandOptionLengthUnit": {
+    "description": "The label for the length unit command option type",
     "type": "text"
   },
 
@@ -1834,12 +1876,6 @@
   "thCommandOptionWalls": "Walls",
   "@thCommandOptionWalls": {
     "description": "The label for the walls command option type",
-    "type": "text"
-  },
-
-  "mpMultipleChoiceUnset": "Unset",
-  "@mpMultipleChoiceUnset": {
-    "description": "The label for the unset multiple choice type",
     "type": "text"
   },
 

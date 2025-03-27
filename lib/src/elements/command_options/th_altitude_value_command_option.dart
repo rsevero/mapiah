@@ -60,6 +60,20 @@ class THAltitudeValueCommandOption extends THCommandOption
     unitFromString('');
   }
 
+  THAltitudeValueCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String height,
+    required bool isFix,
+    bool isNan = false,
+    String? unit,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
+    length = THDoublePart.fromString(valueString: height);
+    this.isFix = isFix;
+    this.isNan = isNan;
+    unitFromString(unit);
+  }
+
   @override
   THCommandOptionType get type => THCommandOptionType.altitudeValue;
 

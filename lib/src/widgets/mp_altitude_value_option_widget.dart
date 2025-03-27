@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPAltitudeValueOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
-  final THAltitudeCommandOption? currentOption;
+  final THAltitudeValueCommandOption? currentOption;
   final Offset position;
   final MPWidgetPositionType positionType;
   final double maxHeight;
@@ -32,7 +34,7 @@ class MPAltitudeValueOptionWidget extends StatefulWidget {
 class _MPAltitudeValueOptionWidgetState
     extends State<MPAltitudeValueOptionWidget> {
   late TextEditingController _altitudeController;
-  bool _isFixed = false;
+  late bool _isFixed;
   late String _selectedUnit;
   late String _selectedChoice;
 
@@ -43,18 +45,18 @@ class _MPAltitudeValueOptionWidgetState
       _altitudeController = TextEditingController(
         text: '0',
       );
+      _isFixed = false;
       _selectedChoice = mpUnsetOptionID;
       _selectedUnit = thDefaultLengthUnitAsString;
-      _selectedChoice = mpNonMultipleChoiceSetID;
     } else {
-      final THAltitudeCommandOption currentOption = widget.currentOption!;
+      final THAltitudeValueCommandOption currentOption = widget.currentOption!;
 
       _altitudeController = TextEditingController(
         text: currentOption.length.toString(),
       );
       _isFixed = currentOption.isFix;
-      _selectedUnit = currentOption.unit.unit.name;
       _selectedChoice = mpNonMultipleChoiceSetID;
+      _selectedUnit = currentOption.unit.unit.name;
     }
   }
 
@@ -64,7 +66,7 @@ class _MPAltitudeValueOptionWidgetState
     super.dispose();
   }
 
-  void _applyOption() {
+  void _okButtonPressed() {
     switch (_selectedChoice) {
       case mpUnsetOptionID:
         widget.th2FileEditController.userInteractionController
@@ -79,8 +81,8 @@ class _MPAltitudeValueOptionWidgetState
           /// parentMPID of the option(s) to be set. THFile isn't even a
           /// THHasOptionsMixin so it can't actually be the parent of an option,
           /// i.e., is has no options at all.
-          final THAltitudeCommandOption newOption =
-              THAltitudeCommandOption.fromStringWithParentMPID(
+          final THAltitudeValueCommandOption newOption =
+              THAltitudeValueCommandOption.fromStringWithParentMPID(
             parentMPID: widget.th2FileEditController.thFileMPID,
             height: _altitudeController.text,
             isFix: _isFixed,
@@ -92,11 +94,21 @@ class _MPAltitudeValueOptionWidgetState
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text('Please enter a valid numeric altitude value.')),
+                content: Text(
+              mpLocator
+                  .appLocalizations.mpAltitudeValueInvalidValueErrorMessage,
+            )),
           );
           return;
         }
     }
+  }
+
+  void _cancelButtonPressed() {
+    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPOverlayWindowType.optionChoices,
+      false,
+    );
   }
 
   @override
@@ -104,6 +116,7 @@ class _MPAltitudeValueOptionWidgetState
     final Map<String, String> unitMap = MPTextToUser.getOptionChoicesWithUnset(
       MPTextToUser.getLengthUnitsChoices(),
     );
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return MPOverlayWindowWidget(
       position: widget.position,
@@ -114,13 +127,13 @@ class _MPAltitudeValueOptionWidgetState
         maxHeight: widget.maxHeight,
         children: [
           Text(
-            'Altitude Option',
+            appLocalizations.thCommandOptionAltitudeValue,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: mpButtonSpace),
 
           RadioListTile<String>(
-            title: Text('Unset'),
+            title: Text(appLocalizations.mpChoiceUnset),
             value: mpUnsetOptionID,
             groupValue: _selectedChoice,
             onChanged: (String? value) {
@@ -130,7 +143,7 @@ class _MPAltitudeValueOptionWidgetState
             },
           ),
           RadioListTile<String>(
-            title: Text('Set'),
+            title: Text(appLocalizations.mpChoiceSet),
             value: mpNonMultipleChoiceSetID,
             groupValue: _selectedChoice,
             onChanged: (String? value) {
@@ -142,30 +155,35 @@ class _MPAltitudeValueOptionWidgetState
 
           // Additional Inputs for "Set" Option
           if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: mpButtonSpace),
 
             // Numeric Input for Altitude
             TextField(
               controller: _altitudeController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Altitude',
+                labelText: appLocalizations.thCommandOptionAltitudeValue,
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: mpButtonSpace),
 
-            // Checkbox for "Fix" Parameter
-            CheckboxListTile(
-              title: Text('Fix Altitude'),
-              value: _isFixed,
-              onChanged: (bool? value) {
-                setState(() {
-                  _isFixed = value ?? false;
-                });
-              },
+            // Switch for "Fix" Parameter
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(appLocalizations.thCommandOptionAltitudeFix),
+                Switch(
+                  value: _isFixed,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isFixed = value;
+                    });
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: mpButtonSpace),
 
             // Dropdown for Length Unit
             DropdownButtonFormField<String>(
@@ -178,22 +196,30 @@ class _MPAltitudeValueOptionWidgetState
               }).toList(),
               onChanged: (String? value) {
                 setState(() {
-                  _selectedUnit = value ?? 'meters';
+                  _selectedUnit = value ?? thDefaultLengthUnitAsString;
                 });
               },
               decoration: InputDecoration(
-                labelText: 'Unit',
+                labelText: appLocalizations.thCommandOptionLengthUnit,
                 border: OutlineInputBorder(),
               ),
             ),
           ],
 
-          const SizedBox(height: 16),
+          const SizedBox(height: mpButtonSpace * 2),
 
-          // Apply Button
-          ElevatedButton(
-            onPressed: _applyOption,
-            child: Text('Apply'),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: _okButtonPressed,
+                child: Text(appLocalizations.mpButtonOK),
+              ),
+              const SizedBox(width: mpButtonSpace),
+              ElevatedButton(
+                onPressed: _cancelButtonPressed,
+                child: Text(appLocalizations.mpButtonCancel),
+              ),
+            ],
           ),
         ],
       ),

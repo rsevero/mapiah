@@ -123,9 +123,9 @@ class MPOverlayWindowFactory {
         case THCommandOptionType.altitudeValue:
           return MPAltitudeValueOptionWidget(
             th2FileEditController: th2FileEditController,
-            currentOption: optionInfo.option as THAltitudeCommandOption?,
+            currentOption: optionInfo.option as THAltitudeValueCommandOption?,
             position: position,
-            positionType: MPWidgetPositionType.center,
+            positionType: MPWidgetPositionType.leftCenter,
             maxHeight: getMaxHeightForOverlayWindows(
               th2FileEditController.thFileWidgetKey,
             ),

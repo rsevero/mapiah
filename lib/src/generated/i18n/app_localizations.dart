@@ -155,6 +155,36 @@ abstract class AppLocalizations {
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
+  /// The error message for invalid altitude value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid numeric altitude value.'**
+  String get mpAltitudeValueInvalidValueErrorMessage;
+
+  /// The label for the cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get mpButtonCancel;
+
+  /// The label for the OK button
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get mpButtonOK;
+
+  /// The label for the set choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get mpChoiceSet;
+
+  /// The label for the unset choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Unset'**
+  String get mpChoiceUnset;
+
   /// The description for the add elements command
   ///
   /// In en, this message translates to:
@@ -1607,6 +1637,12 @@ abstract class AppLocalizations {
   /// **'Altitude'**
   String get thCommandOptionAltitude;
 
+  /// The label for the altitude command option fix choice
+  ///
+  /// In en, this message translates to:
+  /// **'Fix'**
+  String get thCommandOptionAltitudeFix;
+
   /// The label for the altitude value command option type
   ///
   /// In en, this message translates to:
@@ -1714,6 +1750,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ID'**
   String get thCommandOptionId;
+
+  /// The label for the length unit command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get thCommandOptionLengthUnit;
 
   /// The label for the line direction command option type
   ///
@@ -1894,12 +1936,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Walls'**
   String get thCommandOptionWalls;
-
-  /// The label for the unset multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Unset'**
-  String get mpMultipleChoiceUnset;
 
   /// The label for the horizontal adjust multiple choice type
   ///
