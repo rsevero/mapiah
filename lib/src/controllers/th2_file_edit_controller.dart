@@ -153,25 +153,25 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   bool _hasMultipleScraps = false;
 
-  @computed
-  double get lineThicknessOnCanvas =>
-      mpLocator.mpSettingsController.lineThickness / _canvasScale;
+  @readonly
+  double _lineThicknessOnCanvas = mpLocator.mpSettingsController.lineThickness;
 
-  @computed
-  double get controlLineThicknessOnCanvas =>
-      lineThicknessOnCanvas * thControlLineThicknessFactor;
+  @readonly
+  double _controlLineThicknessOnCanvas =
+      mpLocator.mpSettingsController.lineThickness *
+          thControlLineThicknessFactor;
 
-  @computed
-  double get pointRadiusOnCanvas =>
-      mpLocator.mpSettingsController.pointRadius / _canvasScale;
+  @readonly
+  double _pointRadiusOnCanvas = mpLocator.mpSettingsController.pointRadius;
 
-  @computed
-  double get selectionToleranceOnCanvas =>
-      mpLocator.mpSettingsController.selectionTolerance / _canvasScale;
+  @readonly
+  double _selectionToleranceOnCanvas =
+      mpLocator.mpSettingsController.selectionTolerance;
 
-  @computed
-  double get selectionToleranceSquaredOnCanvas =>
-      (selectionToleranceOnCanvas * selectionToleranceOnCanvas);
+  @readonly
+  double _selectionToleranceSquaredOnCanvas =
+      (mpLocator.mpSettingsController.selectionTolerance *
+          mpLocator.mpSettingsController.selectionTolerance);
 
   @computed
   bool get showSelectedElements =>
@@ -499,6 +499,31 @@ abstract class TH2FileEditControllerBase with Store {
           (state is MPTH2FileEditStateSelectNonEmptySelection) ||
           (state is MPTH2FileEditStateMovingElements));
     }));
+
+    _disposers.add(autorun((_) {
+      _lineThicknessOnCanvas =
+          mpLocator.mpSettingsController.lineThickness / _canvasScale;
+    }));
+
+    _disposers.add(autorun((_) {
+      _controlLineThicknessOnCanvas =
+          _lineThicknessOnCanvas * thControlLineThicknessFactor;
+    }));
+
+    _disposers.add(autorun((_) {
+      _pointRadiusOnCanvas =
+          mpLocator.mpSettingsController.pointRadius / _canvasScale;
+    }));
+
+    _disposers.add(autorun((_) {
+      _selectionToleranceOnCanvas =
+          mpLocator.mpSettingsController.selectionTolerance / _canvasScale;
+    }));
+
+    _disposers.add(autorun((_) {
+      _selectionToleranceSquaredOnCanvas =
+          (_selectionToleranceOnCanvas * _selectionToleranceOnCanvas);
+    }));
   }
 
   void _disposeReactions() {
@@ -571,7 +596,7 @@ abstract class TH2FileEditControllerBase with Store {
     final double dx = offset1.dx - offset2.dx;
     final double dy = offset1.dy - offset2.dy;
 
-    return ((dx * dx) + (dy * dy)) < selectionToleranceSquaredOnCanvas;
+    return ((dx * dx) + (dy * dy)) < _selectionToleranceSquaredOnCanvas;
   }
 
   void updateScreenSize(Size newSize) {

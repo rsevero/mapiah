@@ -32,45 +32,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.activeAddElementButton,
               name: 'TH2FileEditControllerBase.activeAddElementButton'))
           .value;
-  Computed<double>? _$lineThicknessOnCanvasComputed;
-
-  @override
-  double get lineThicknessOnCanvas => (_$lineThicknessOnCanvasComputed ??=
-          Computed<double>(() => super.lineThicknessOnCanvas,
-              name: 'TH2FileEditControllerBase.lineThicknessOnCanvas'))
-      .value;
-  Computed<double>? _$controlLineThicknessOnCanvasComputed;
-
-  @override
-  double get controlLineThicknessOnCanvas =>
-      (_$controlLineThicknessOnCanvasComputed ??= Computed<double>(
-              () => super.controlLineThicknessOnCanvas,
-              name: 'TH2FileEditControllerBase.controlLineThicknessOnCanvas'))
-          .value;
-  Computed<double>? _$pointRadiusOnCanvasComputed;
-
-  @override
-  double get pointRadiusOnCanvas => (_$pointRadiusOnCanvasComputed ??=
-          Computed<double>(() => super.pointRadiusOnCanvas,
-              name: 'TH2FileEditControllerBase.pointRadiusOnCanvas'))
-      .value;
-  Computed<double>? _$selectionToleranceOnCanvasComputed;
-
-  @override
-  double get selectionToleranceOnCanvas =>
-      (_$selectionToleranceOnCanvasComputed ??= Computed<double>(
-              () => super.selectionToleranceOnCanvas,
-              name: 'TH2FileEditControllerBase.selectionToleranceOnCanvas'))
-          .value;
-  Computed<double>? _$selectionToleranceSquaredOnCanvasComputed;
-
-  @override
-  double get selectionToleranceSquaredOnCanvas =>
-      (_$selectionToleranceSquaredOnCanvasComputed ??= Computed<double>(
-              () => super.selectionToleranceSquaredOnCanvas,
-              name:
-                  'TH2FileEditControllerBase.selectionToleranceSquaredOnCanvas'))
-          .value;
   Computed<bool>? _$showSelectedElementsComputed;
 
   @override
@@ -672,6 +633,106 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _hasMultipleScraps(bool value) {
     _$_hasMultipleScrapsAtom.reportWrite(value, super._hasMultipleScraps, () {
       super._hasMultipleScraps = value;
+    });
+  }
+
+  late final _$_lineThicknessOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._lineThicknessOnCanvas',
+      context: context);
+
+  double get lineThicknessOnCanvas {
+    _$_lineThicknessOnCanvasAtom.reportRead();
+    return super._lineThicknessOnCanvas;
+  }
+
+  @override
+  double get _lineThicknessOnCanvas => lineThicknessOnCanvas;
+
+  @override
+  set _lineThicknessOnCanvas(double value) {
+    _$_lineThicknessOnCanvasAtom
+        .reportWrite(value, super._lineThicknessOnCanvas, () {
+      super._lineThicknessOnCanvas = value;
+    });
+  }
+
+  late final _$_controlLineThicknessOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._controlLineThicknessOnCanvas',
+      context: context);
+
+  double get controlLineThicknessOnCanvas {
+    _$_controlLineThicknessOnCanvasAtom.reportRead();
+    return super._controlLineThicknessOnCanvas;
+  }
+
+  @override
+  double get _controlLineThicknessOnCanvas => controlLineThicknessOnCanvas;
+
+  @override
+  set _controlLineThicknessOnCanvas(double value) {
+    _$_controlLineThicknessOnCanvasAtom
+        .reportWrite(value, super._controlLineThicknessOnCanvas, () {
+      super._controlLineThicknessOnCanvas = value;
+    });
+  }
+
+  late final _$_pointRadiusOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._pointRadiusOnCanvas', context: context);
+
+  double get pointRadiusOnCanvas {
+    _$_pointRadiusOnCanvasAtom.reportRead();
+    return super._pointRadiusOnCanvas;
+  }
+
+  @override
+  double get _pointRadiusOnCanvas => pointRadiusOnCanvas;
+
+  @override
+  set _pointRadiusOnCanvas(double value) {
+    _$_pointRadiusOnCanvasAtom.reportWrite(value, super._pointRadiusOnCanvas,
+        () {
+      super._pointRadiusOnCanvas = value;
+    });
+  }
+
+  late final _$_selectionToleranceOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._selectionToleranceOnCanvas',
+      context: context);
+
+  double get selectionToleranceOnCanvas {
+    _$_selectionToleranceOnCanvasAtom.reportRead();
+    return super._selectionToleranceOnCanvas;
+  }
+
+  @override
+  double get _selectionToleranceOnCanvas => selectionToleranceOnCanvas;
+
+  @override
+  set _selectionToleranceOnCanvas(double value) {
+    _$_selectionToleranceOnCanvasAtom
+        .reportWrite(value, super._selectionToleranceOnCanvas, () {
+      super._selectionToleranceOnCanvas = value;
+    });
+  }
+
+  late final _$_selectionToleranceSquaredOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._selectionToleranceSquaredOnCanvas',
+      context: context);
+
+  double get selectionToleranceSquaredOnCanvas {
+    _$_selectionToleranceSquaredOnCanvasAtom.reportRead();
+    return super._selectionToleranceSquaredOnCanvas;
+  }
+
+  @override
+  double get _selectionToleranceSquaredOnCanvas =>
+      selectionToleranceSquaredOnCanvas;
+
+  @override
+  set _selectionToleranceSquaredOnCanvas(double value) {
+    _$_selectionToleranceSquaredOnCanvasAtom
+        .reportWrite(value, super._selectionToleranceSquaredOnCanvas, () {
+      super._selectionToleranceSquaredOnCanvas = value;
     });
   }
 
@@ -1360,11 +1421,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
 filenameAndScrap: ${filenameAndScrap},
 activeAddElementButton: ${activeAddElementButton},
-lineThicknessOnCanvas: ${lineThicknessOnCanvas},
-controlLineThicknessOnCanvas: ${controlLineThicknessOnCanvas},
-pointRadiusOnCanvas: ${pointRadiusOnCanvas},
-selectionToleranceOnCanvas: ${selectionToleranceOnCanvas},
-selectionToleranceSquaredOnCanvas: ${selectionToleranceSquaredOnCanvas},
 showSelectedElements: ${showSelectedElements},
 showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
