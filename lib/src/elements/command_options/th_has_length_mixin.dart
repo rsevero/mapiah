@@ -10,7 +10,8 @@ mixin THHasLengthMixin on THCommandOption {
       this.unit = THLengthUnitPart.fromString(unitString: unit);
       unitSet = true;
     } else {
-      this.unit = THLengthUnitPart.fromString(unitString: thDefaultLengthUnit);
+      this.unit =
+          THLengthUnitPart.fromString(unitString: thDefaultLengthUnitAsString);
       unitSet = false;
     }
   }

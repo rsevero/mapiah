@@ -1780,7 +1780,7 @@ class THFileParser {
 
     final List<THDoublePart> values = [];
     THLengthUnitPart unit = THLengthUnitPart.fromString(
-      unitString: thDefaultLengthUnit,
+      unitString: thDefaultLengthUnitAsString,
     );
 
     for (final value in _currentSpec) {

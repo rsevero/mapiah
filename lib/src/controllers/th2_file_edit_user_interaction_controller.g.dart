@@ -54,14 +54,41 @@ mixin _$TH2FileEditUserInteractionController
           name: 'TH2FileEditUserInteractionControllerBase', context: context);
 
   @override
-  void prepareSetMultipleOptionChoiceToElement(
+  void prepareSetOption(THCommandOption option) {
+    final _$actionInfo =
+        _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
+            name: 'TH2FileEditUserInteractionControllerBase.prepareSetOption');
+    try {
+      return super.prepareSetOption(option);
+    } finally {
+      _$TH2FileEditUserInteractionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void prepareUnsetOption(THCommandOptionType optionType) {
+    final _$actionInfo =
+        _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditUserInteractionControllerBase.prepareUnsetOption');
+    try {
+      return super.prepareUnsetOption(optionType);
+    } finally {
+      _$TH2FileEditUserInteractionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void prepareSetMultipleOptionChoice(
       THCommandOptionType optionType, String choice) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
             name:
-                'TH2FileEditUserInteractionControllerBase.prepareSetMultipleOptionChoiceToElement');
+                'TH2FileEditUserInteractionControllerBase.prepareSetMultipleOptionChoice');
     try {
-      return super.prepareSetMultipleOptionChoiceToElement(optionType, choice);
+      return super.prepareSetMultipleOptionChoice(optionType, choice);
     } finally {
       _$TH2FileEditUserInteractionControllerBaseActionController
           .endAction(_$actionInfo);

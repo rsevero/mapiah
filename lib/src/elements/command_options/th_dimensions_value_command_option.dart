@@ -112,7 +112,8 @@ class THDimensionsValueCommandOption extends THCommandOption {
       _unit = THLengthUnitPart.fromString(unitString: unit);
       unitSet = true;
     } else {
-      _unit = THLengthUnitPart.fromString(unitString: thDefaultLengthUnit);
+      _unit =
+          THLengthUnitPart.fromString(unitString: thDefaultLengthUnitAsString);
       unitSet = false;
     }
   }

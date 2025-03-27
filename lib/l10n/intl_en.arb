@@ -199,9 +199,21 @@
     "type": "text"
   },
 
+  "mpLengthUnitCentimeter": "centimeter",
+  "@mpLengthUnitCentimeter": {
+    "description": "The description for the centimeter length unit",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "@mpLengthUnitCentimeterAbbreviation": {
     "description": "The abbreviation for the centimeter length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitFoot": "foot",
+  "@mpLengthUnitFoot": {
+    "description": "The description for the foot length unit",
     "type": "text"
   },
 
@@ -211,15 +223,33 @@
     "type": "text"
   },
 
+  "mpLengthUnitInch": "inch",
+  "@mpLengthUnitInch": {
+    "description": "The description for the inch length unit",
+    "type": "text"
+  },
+
   "mpLengthUnitInchAbbreviation": "in",
   "@mpLengthUnitInchAbbreviation": {
     "description": "The abbreviation for the inch length unit",
     "type": "text"
   },
 
+  "mpLengthUnitMeter": "meter",
+  "@mpLengthUnitMeter": {
+    "description": "The description for the meter length unit",
+    "type": "text"
+  },
+
   "mpLengthUnitMeterAbbreviation": "m",
   "@mpLengthUnitMeterAbbreviation": {
     "description": "The abbreviation for the meter length unit",
+    "type": "text"
+  },
+
+  "mpLengthUnitYard": "yard",
+  "@mpLengthUnitYard": {
+    "description": "The description for the yard length unit",
     "type": "text"
   },
 

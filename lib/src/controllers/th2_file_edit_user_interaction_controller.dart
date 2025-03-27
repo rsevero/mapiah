@@ -27,7 +27,110 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       : _thFile = _th2FileEditController.thFile;
 
   @action
-  void prepareSetMultipleOptionChoiceToElement(
+  void prepareSetOption(THCommandOption option) {
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final mpSelectedElements =
+        _th2FileEditController.selectionController.selectedElements.values;
+
+    if (mpSelectedElements.isEmpty) {
+      /// TODO: set per session option default values.
+    } else if (mpSelectedElements.length == 1) {
+      final THElement selectedElement =
+          mpSelectedElements.first.originalElementClone;
+
+      if ((selectedElement is! THHasOptionsMixin) ||
+          (!isCtrlPressed &&
+              !MPCommandOptionAux.elementTypeSupportsOptionType(
+                selectedElement,
+                option.type,
+              )) ||
+          (selectedElement.hasOption(option.type) &&
+              selectedElement.optionByType(option.type) == option)) {
+        return;
+      }
+
+      final MPCommand setOptionCommand = MPSetOptionToElementCommand(
+        option: option.copyWith(parentMPID: selectedElement.mpID),
+      );
+
+      _th2FileEditController.execute(setOptionCommand);
+    } else {
+      final List<THElement> elements = [];
+
+      for (final mpSelectedElement in mpSelectedElements) {
+        final THElement element = mpSelectedElement.originalElementClone;
+
+        if ((element is THHasOptionsMixin) &&
+            (isCtrlPressed ||
+                MPCommandOptionAux.elementTypeSupportsOptionType(
+                  element,
+                  option.type,
+                )) &&
+            (!element.hasOption(option.type) ||
+                element.optionByType(option.type) != option)) {
+          elements.add(element);
+        }
+      }
+
+      if (elements.isNotEmpty) {
+        final MPMultipleElementsCommand addOptionCommand =
+            MPMultipleElementsCommand.setOption(
+          elements: elements,
+          option: option,
+        );
+
+        _th2FileEditController.execute(addOptionCommand);
+      }
+    }
+  }
+
+  @action
+  void prepareUnsetOption(THCommandOptionType optionType) {
+    final mpSelectedElements =
+        _th2FileEditController.selectionController.selectedElements.values;
+
+    if (mpSelectedElements.isEmpty) {
+      /// TODO: set per session option default values.
+    } else if (mpSelectedElements.length == 1) {
+      final THElement selectedElement =
+          mpSelectedElements.first.originalElementClone;
+
+      if ((selectedElement is! THHasOptionsMixin) ||
+          (!selectedElement.hasOption(optionType))) {
+        return;
+      }
+
+      final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
+        optionType: optionType,
+        parentMPID: selectedElement.mpID,
+      );
+
+      _th2FileEditController.execute(removeOptionCommand);
+    } else {
+      final List<int> parentMPIDs = [];
+
+      for (final mpSelectedElement in mpSelectedElements) {
+        final THElement element = mpSelectedElement.originalElementClone;
+
+        if ((element is THHasOptionsMixin) && element.hasOption(optionType)) {
+          parentMPIDs.add(element.mpID);
+        }
+      }
+
+      if (parentMPIDs.isNotEmpty) {
+        final MPMultipleElementsCommand removeOptionCommand =
+            MPMultipleElementsCommand.removeOption(
+          optionType: optionType,
+          parentMPIDs: parentMPIDs,
+        );
+
+        _th2FileEditController.execute(removeOptionCommand);
+      }
+    }
+  }
+
+  @action
+  void prepareSetMultipleOptionChoice(
     THCommandOptionType optionType,
     String choice,
   ) {
@@ -49,7 +152,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         return;
       }
 
-      if (choice == mpMultipleChoiceUnsetID) {
+      if (choice == mpUnsetOptionID) {
         if (selectedElement.hasOption(optionType)) {
           final MPCommand removeOptionCommand =
               MPRemoveOptionFromElementCommand(
@@ -76,63 +179,61 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         _th2FileEditController.execute(addOptionCommand);
       }
     } else {
-      if (choice == mpMultipleChoiceUnsetID) {
+      if (choice == mpUnsetOptionID) {
         final List<int> parentMPIDs = [];
 
         for (final mpSelectedElement in mpSelectedElements) {
           final THElement element = mpSelectedElement.originalElementClone;
 
-          if ((element is! THHasOptionsMixin) ||
-              !element.hasOption(optionType)) {
-            continue;
+          if ((element is THHasOptionsMixin) && element.hasOption(optionType)) {
+            parentMPIDs.add(element.mpID);
           }
-
-          parentMPIDs.add(element.mpID);
         }
 
-        final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommand.removeOption(
-          optionType: optionType,
-          parentMPIDs: parentMPIDs,
-        );
+        if (parentMPIDs.isNotEmpty) {
+          final MPMultipleElementsCommand removeOptionCommand =
+              MPMultipleElementsCommand.removeOption(
+            optionType: optionType,
+            parentMPIDs: parentMPIDs,
+          );
 
-        _th2FileEditController.execute(removeOptionCommand);
+          _th2FileEditController.execute(removeOptionCommand);
+        }
       } else {
         final List<THElement> elements = [];
 
         for (final mpSelectedElement in mpSelectedElements) {
           final THElement element = mpSelectedElement.originalElementClone;
 
-          if ((element is! THHasOptionsMixin) ||
-              (element.hasOption(optionType) &&
+          if ((element is THHasOptionsMixin) &&
+              (isCtrlPressed ||
+                  MPCommandOptionAux.elementTypeSupportsOptionType(
+                    element,
+                    optionType,
+                  )) &&
+              (!element.hasOption(optionType) ||
                   ((element.optionByType(optionType)!
                               as THMultipleChoiceCommandOption)
                           .choice
-                          .name ==
+                          .name !=
                       choice))) {
-            continue;
-          }
-
-          if (isCtrlPressed ||
-              MPCommandOptionAux.elementTypeSupportsOptionType(
-                element,
-                optionType,
-              )) {
             elements.add(element);
           }
         }
 
-        final MPMultipleElementsCommand addOptionCommand =
-            MPMultipleElementsCommand.setOption(
-          elements: elements,
-          option: THCommandOption.byType(
-            optionParent: elements.first as THHasOptionsMixin,
-            type: optionType,
-            value: choice,
-          ),
-        );
+        if (elements.isNotEmpty) {
+          final MPMultipleElementsCommand addOptionCommand =
+              MPMultipleElementsCommand.setOption(
+            elements: elements,
+            option: THCommandOption.byType(
+              optionParent: elements.first as THHasOptionsMixin,
+              type: optionType,
+              value: choice,
+            ),
+          );
 
-        _th2FileEditController.execute(addOptionCommand);
+          _th2FileEditController.execute(addOptionCommand);
+        }
       }
     }
   }

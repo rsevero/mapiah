@@ -35,10 +35,15 @@
   "mpCommandDescriptionSetOptionToElement": "Definir opção",
   "mpCommandDescriptionSetOptionToElements": "Definir opção para diversos elementos",
 
+  "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
+  "mpLengthUnitFoot": "pé",
   "mpLengthUnitFootAbbreviation": "ft",
+  "mpLengthUnitInch": "polegada",
   "mpLengthUnitInchAbbreviation": "in",
+  "mpLengthUnitMeter": "metro",
   "mpLengthUnitMeterAbbreviation": "m",
+  "mpLengthUnitYard": "jarda",
   "mpLengthUnitYardAbbreviation": "yd",
 
   "parsingErrors": "Erros na interpretação do arquivo",

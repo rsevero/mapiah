@@ -118,16 +118,31 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElements => 'Definir opção para diversos elementos';
 
   @override
+  String get mpLengthUnitCentimeter => 'centímetro';
+
+  @override
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
+
+  @override
+  String get mpLengthUnitFoot => 'pé';
 
   @override
   String get mpLengthUnitFootAbbreviation => 'ft';
 
   @override
+  String get mpLengthUnitInch => 'polegada';
+
+  @override
   String get mpLengthUnitInchAbbreviation => 'in';
 
   @override
+  String get mpLengthUnitMeter => 'metro';
+
+  @override
   String get mpLengthUnitMeterAbbreviation => 'm';
+
+  @override
+  String get mpLengthUnitYard => 'jarda';
 
   @override
   String get mpLengthUnitYardAbbreviation => 'yd';

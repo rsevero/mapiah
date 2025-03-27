@@ -57,7 +57,8 @@ const double thGraphicalScalePadding = 20.0;
 const double thGraphicalScaleUptickLength = 8.0;
 const double thGraphicalScaleFontSize = 12.0;
 
-const String thDefaultLengthUnit = 'meter';
+const THLengthUnitType thDefaultLengthUnit = THLengthUnitType.meter;
+final String thDefaultLengthUnitAsString = thDefaultLengthUnit.name;
 
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
@@ -187,4 +188,5 @@ const THPointType thDefaultPointType = THPointType.station;
 const THLineType thDefaultLineType = THLineType.wall;
 const THAreaType thDefaultAreaType = THAreaType.water;
 
-const String mpMultipleChoiceUnsetID = 'UNSET';
+const String mpUnsetOptionID = 'UNSET';
+const String mpNonMultipleChoiceSetID = 'SET';

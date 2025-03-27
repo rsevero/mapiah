@@ -287,11 +287,23 @@ abstract class AppLocalizations {
   /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
 
+  /// The description for the centimeter length unit
+  ///
+  /// In en, this message translates to:
+  /// **'centimeter'**
+  String get mpLengthUnitCentimeter;
+
   /// The abbreviation for the centimeter length unit
   ///
   /// In en, this message translates to:
   /// **'cm'**
   String get mpLengthUnitCentimeterAbbreviation;
+
+  /// The description for the foot length unit
+  ///
+  /// In en, this message translates to:
+  /// **'foot'**
+  String get mpLengthUnitFoot;
 
   /// The abbreviation for the foot length unit
   ///
@@ -299,17 +311,35 @@ abstract class AppLocalizations {
   /// **'ft'**
   String get mpLengthUnitFootAbbreviation;
 
+  /// The description for the inch length unit
+  ///
+  /// In en, this message translates to:
+  /// **'inch'**
+  String get mpLengthUnitInch;
+
   /// The abbreviation for the inch length unit
   ///
   /// In en, this message translates to:
   /// **'in'**
   String get mpLengthUnitInchAbbreviation;
 
+  /// The description for the meter length unit
+  ///
+  /// In en, this message translates to:
+  /// **'meter'**
+  String get mpLengthUnitMeter;
+
   /// The abbreviation for the meter length unit
   ///
   /// In en, this message translates to:
   /// **'m'**
   String get mpLengthUnitMeterAbbreviation;
+
+  /// The description for the yard length unit
+  ///
+  /// In en, this message translates to:
+  /// **'yard'**
+  String get mpLengthUnitYard;
 
   /// The abbreviation for the yard length unit
   ///

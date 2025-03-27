@@ -49,7 +49,8 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     if ((unit != null) && (unit.isNotEmpty)) {
       this.unit = THLengthUnitPart.fromString(unitString: unit);
     } else {
-      this.unit = THLengthUnitPart.fromString(unitString: thDefaultLengthUnit);
+      this.unit =
+          THLengthUnitPart.fromString(unitString: thDefaultLengthUnitAsString);
     }
   }
 

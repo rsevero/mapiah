@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -129,15 +130,15 @@ class MPTextToUser {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
     _lengthUnitTypeAsString[THLengthUnitType.centimeter] =
-        localizations.mpLengthUnitCentimeterAbbreviation;
+        localizations.mpLengthUnitCentimeter;
     _lengthUnitTypeAsString[THLengthUnitType.feet] =
-        localizations.mpLengthUnitFootAbbreviation;
+        localizations.mpLengthUnitFoot;
     _lengthUnitTypeAsString[THLengthUnitType.inch] =
-        localizations.mpLengthUnitInchAbbreviation;
+        localizations.mpLengthUnitInch;
     _lengthUnitTypeAsString[THLengthUnitType.meter] =
-        localizations.mpLengthUnitMeterAbbreviation;
+        localizations.mpLengthUnitMeter;
     _lengthUnitTypeAsString[THLengthUnitType.yard] =
-        localizations.mpLengthUnitYardAbbreviation;
+        localizations.mpLengthUnitYard;
   }
 
   static String getLengthUnitType(THLengthUnitType lengthUnitType) {
@@ -817,5 +818,149 @@ class MPTextToUser {
       default:
         return compareStringsNoDiacritics(a, b);
     }
+  }
+
+  static Map<String, String> getLengthUnitsChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THLengthUnitType.values) {
+      choices[choiceType.name] = getLengthUnitType(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getAdjustChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesAdjustType.values) {
+      choices[choiceType.name] = getMultipleChoiceAdjustChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getAlignChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesAlignType.values) {
+      choices[choiceType.name] = getMultipleChoiceAlignChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getOnOffChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesOnOffType.values) {
+      choices[choiceType.name] = getMultipleChoiceOnOffChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getOnOffAutoChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesOnOffAutoType.values) {
+      choices[choiceType.name] = getMultipleChoiceOnOffAutoChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getFlipChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesFlipType.values) {
+      choices[choiceType.name] = getMultipleChoiceFlipChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getArrowPositionChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesArrowPositionType.values) {
+      choices[choiceType.name] =
+          getMultipleChoiceArrowPositionChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getLineGradientChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesLineGradientType.values) {
+      choices[choiceType.name] =
+          getMultipleChoiceLineGradientChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getLinePointDirectionChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesLinePointDirectionType.values) {
+      choices[choiceType.name] =
+          getMultipleChoiceLinePointDirectionChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getLinePointGradientChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesLinePointGradientType.values) {
+      choices[choiceType.name] =
+          getMultipleChoiceLinePointGradientChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getOutlineChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesOutlineType.values) {
+      choices[choiceType.name] = getMultipleChoiceOutlineChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getPlaceChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THOptionChoicesPlaceType.values) {
+      choices[choiceType.name] = getMultipleChoicePlaceChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getOptionChoicesWithUnset(
+    Map<String, String> choices,
+  ) {
+    final Map<String, String> choicesWithUnset = {
+      mpUnsetOptionID: mpLocator.appLocalizations.mpMultipleChoiceUnset,
+    };
+    final List<MapEntry<String, String>> orderedChoices =
+        choices.entries.toList()
+          ..sort(
+            (a, b) => MPTextToUser.compareStringsUsingLocale(
+              a.value,
+              b.value,
+            ),
+          );
+
+    choicesWithUnset.addAll(Map.fromEntries(orderedChoices));
+
+    return choicesWithUnset;
   }
 }
