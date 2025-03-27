@@ -43,6 +43,10 @@ class MPSelectedElementsWidget extends StatelessWidget
             th2FileEditController.visualController.getSelectedLinePaint();
         final Paint linePaint = linePaintInfo.paint;
 
+        final double canvasScale = th2FileEditController.canvasScale;
+        final Offset canvasTranslation =
+            th2FileEditController.canvasTranslation;
+
         for (final selectedElement in selectedElements) {
           final THElement element = thFile.elementByMPID(selectedElement.mpID);
 
@@ -54,8 +58,8 @@ class MPSelectedElementsWidget extends StatelessWidget
                   pointRadius: pointRadius,
                   pointPaint: pointPaint,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: th2FileEditController.canvasScale,
-                  canvasTranslation: th2FileEditController.canvasTranslation,
+                  canvasScale: canvasScale,
+                  canvasTranslation: canvasTranslation,
                 ),
               );
               break;
@@ -73,8 +77,8 @@ class MPSelectedElementsWidget extends StatelessWidget
                   lineSegmentsMap: segmentsMap,
                   linePaint: linePaint,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: th2FileEditController.canvasScale,
-                  canvasTranslation: th2FileEditController.canvasTranslation,
+                  canvasScale: canvasScale,
+                  canvasTranslation: canvasTranslation,
                 ),
               );
               break;
@@ -86,8 +90,8 @@ class MPSelectedElementsWidget extends StatelessWidget
             painter: THElementsPainter(
               painters: painters,
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             ),
             size: th2FileEditController.screenSize,
           ),

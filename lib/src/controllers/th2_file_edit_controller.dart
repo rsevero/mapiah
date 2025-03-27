@@ -184,8 +184,15 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
-  @readonly
-  int _currentDecimalPositions = thDefaultDecimalPositions;
+  @computed
+  int get currentDecimalPositions {
+    final double magnitude = MPNumericAux.log10(_canvasScale);
+    int newDecimalPositions = magnitude.ceil() + 1;
+
+    print("currentDecimalPositions recomputed: $newDecimalPositions");
+
+    return newDecimalPositions < 0 ? 0 : newDecimalPositions;
+  }
 
   @readonly
   int _activeScrapID = 0;
@@ -705,7 +712,6 @@ abstract class TH2FileEditControllerBase with Store {
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
 
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
-
     _canvasScale = MPNumericAux.roundScale(
         (widthScale < heightScale) ? widthScale : heightScale);
 

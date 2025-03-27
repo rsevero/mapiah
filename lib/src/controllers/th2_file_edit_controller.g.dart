@@ -81,6 +81,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               () => super.activeAddElementButton,
               name: 'TH2FileEditControllerBase.activeAddElementButton'))
           .value;
+  Computed<int>? _$currentDecimalPositionsComputed;
+
+  @override
+  int get currentDecimalPositions => (_$currentDecimalPositionsComputed ??=
+          Computed<int>(() => super.currentDecimalPositions,
+              name: 'TH2FileEditControllerBase.currentDecimalPositions'))
+      .value;
   Computed<double>? _$lineThicknessOnCanvasComputed;
 
   @override
@@ -537,26 +544,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     _$_isAddElementButtonsHoveredAtom
         .reportWrite(value, super._isAddElementButtonsHovered, () {
       super._isAddElementButtonsHovered = value;
-    });
-  }
-
-  late final _$_currentDecimalPositionsAtom = Atom(
-      name: 'TH2FileEditControllerBase._currentDecimalPositions',
-      context: context);
-
-  int get currentDecimalPositions {
-    _$_currentDecimalPositionsAtom.reportRead();
-    return super._currentDecimalPositions;
-  }
-
-  @override
-  int get _currentDecimalPositions => currentDecimalPositions;
-
-  @override
-  set _currentDecimalPositions(int value) {
-    _$_currentDecimalPositionsAtom
-        .reportWrite(value, super._currentDecimalPositions, () {
-      super._currentDecimalPositions = value;
     });
   }
 
@@ -1288,6 +1275,7 @@ isNodeEditButtonEnabled: ${isNodeEditButtonEnabled},
 isOptionEditMode: ${isOptionEditMode},
 isSelectMode: ${isSelectMode},
 activeAddElementButton: ${activeAddElementButton},
+currentDecimalPositions: ${currentDecimalPositions},
 lineThicknessOnCanvas: ${lineThicknessOnCanvas},
 controlLineThicknessOnCanvas: ${controlLineThicknessOnCanvas},
 pointRadiusOnCanvas: ${pointRadiusOnCanvas},

@@ -14,8 +14,27 @@ void main() {
   // mainContext.config = mainContext.config.clone(
   //   isSpyEnabled: true,
   // );
-
-  // mainContext.spy(print);
+  // mainContext.spy((spyEvent) {
+  //   switch (spyEvent.type) {
+  //     case 'action':
+  //       print('Action: ${spyEvent}');
+  //     // case 'transaction':
+  //     //   print('Transaction: ${spyEvent.name}');
+  //     case 'reaction':
+  //       print('Reaction: ${spyEvent.name}');
+  //     case 'computed':
+  //       print('Computed: ${spyEvent}');
+  //     // case 'error':
+  //     //   print('Error: ${spyEvent.name}');
+  //     default:
+  //     // print('Unknown: $spyEvent');
+  //   }
+  //   // Uncomment and modify the following lines as needed for debugging:
+  //   // print("Spy event: $spyEvent");
+  //   // if (spyEvent.type == 'compute') {
+  //   //   print('Compute: ${spyEvent.name}');
+  //   // }
+  // });
 
   // /// For layout debugging.
   // debugPaintSizeEnabled = true;

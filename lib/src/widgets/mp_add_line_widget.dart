@@ -39,6 +39,10 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             th2FileEditController.visualController.getNewLinePaint();
         final Paint linePaint = linePaintInfo.paint;
 
+        final double canvasScale = th2FileEditController.canvasScale;
+        final Offset canvasTranslation =
+            th2FileEditController.canvasTranslation;
+
         final List<CustomPainter> painters = [];
 
         if (elementEditController.newLine == null) {
@@ -53,8 +57,8 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               halfLength: pointHalfLength,
               isSmooth: false,
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             );
             painters.add(painter);
           }
@@ -74,8 +78,8 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             lineSegmentsMap: segmentsMap,
             linePaint: linePaint,
             th2FileEditController: th2FileEditController,
-            canvasScale: th2FileEditController.canvasScale,
-            canvasTranslation: th2FileEditController.canvasTranslation,
+            canvasScale: canvasScale,
+            canvasTranslation: canvasTranslation,
           );
 
           painters.add(painter);
@@ -101,8 +105,8 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               controlLinePaint: controlLinePaint.paint,
               pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             );
             painters.add(controlPoint1Painter);
 
@@ -114,8 +118,8 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               controlLinePaint: controlLinePaint.paint,
               pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             );
             painters.add(controlPoint2Painter);
           }
@@ -127,8 +131,8 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
               halfLength: pointHalfLength,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             );
             painters.add(painter);
           }
@@ -139,8 +143,8 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
             painter: THElementsPainter(
               painters: painters,
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             ),
             size: th2FileEditController.screenSize,
           ),

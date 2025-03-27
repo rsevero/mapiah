@@ -83,6 +83,7 @@ class MPMultipleElementsCommand extends MPCommand {
 
   MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas({
     required Offset deltaOnCanvas,
+    required int decimalPositions,
     required Iterable<MPSelectedElement> mpSelectedElements,
     super.descriptionType = MPCommandDescriptionType.moveElements,
   }) : super() {
@@ -96,8 +97,9 @@ class MPMultipleElementsCommand extends MPCommand {
         case THPoint _:
           moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
             pointMPID: element.mpID,
-            originalCoordinates: element.position.coordinates,
+            originalPosition: element.position,
             deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
           );
         case THLine _:
           moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(

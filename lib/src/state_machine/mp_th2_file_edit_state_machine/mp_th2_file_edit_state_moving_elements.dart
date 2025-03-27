@@ -94,9 +94,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         case MPSelectedPoint _:
           moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
             pointMPID: selectedElement.mpID,
-            originalCoordinates:
-                (selectedElement as THPoint).position.coordinates,
+            originalPosition: (selectedElement as THPoint).position,
             deltaOnCanvas: panDeltaOnCanvas,
+            decimalPositions: th2FileEditController.currentDecimalPositions,
           );
           break;
         case MPSelectedLine _:
@@ -111,6 +111,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       moveCommand = MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas(
         deltaOnCanvas: panDeltaOnCanvas,
         mpSelectedElements: selectionController.selectedElements.values,
+        decimalPositions: th2FileEditController.currentDecimalPositions,
       );
     }
 

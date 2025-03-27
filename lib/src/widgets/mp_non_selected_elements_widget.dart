@@ -38,6 +38,9 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             th2FileEditController.visualController;
         final List<CustomPainter> painters = [];
         final Set<int> drawableElementMPIDs = thFile.drawableElementMPIDs;
+        final double canvasScale = th2FileEditController.canvasScale;
+        final Offset canvasTranslation =
+            th2FileEditController.canvasTranslation;
 
         for (final int drawableElementMPID in drawableElementMPIDs) {
           if (selectionController
@@ -57,8 +60,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                   pointRadius: pointPaint.radius,
                   pointPaint: pointPaint.paint,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: th2FileEditController.canvasScale,
-                  canvasTranslation: th2FileEditController.canvasTranslation,
+                  canvasScale: canvasScale,
+                  canvasTranslation: canvasTranslation,
                 ),
               );
               break;
@@ -78,8 +81,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                   lineSegmentsMap: segmentsMap,
                   linePaint: linePaint.paint,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: th2FileEditController.canvasScale,
-                  canvasTranslation: th2FileEditController.canvasTranslation,
+                  canvasScale: canvasScale,
+                  canvasTranslation: canvasTranslation,
                 ),
               );
               break;
@@ -91,8 +94,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             painter: THElementsPainter(
               painters: painters,
               th2FileEditController: th2FileEditController,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
+              canvasScale: canvasScale,
+              canvasTranslation: canvasTranslation,
             ),
             size: th2FileEditController.screenSize,
           ),

@@ -2,32 +2,36 @@ part of 'mp_command.dart';
 
 class MPMovePointCommand extends MPCommand {
   late final int pointMPID;
-  late final Offset originalCoordinates;
-  late final Offset modifiedCoordinates;
+  late final THPositionPart originalPosition;
+  late final THPositionPart modifiedPosition;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.movePoint;
 
   MPMovePointCommand.forCWJM({
     required this.pointMPID,
-    required this.originalCoordinates,
-    required this.modifiedCoordinates,
+    required this.originalPosition,
+    required this.modifiedPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMovePointCommand({
     required this.pointMPID,
-    required this.originalCoordinates,
-    required this.modifiedCoordinates,
+    required this.originalPosition,
+    required this.modifiedPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMovePointCommand.fromDeltaOnCanvas({
     required this.pointMPID,
-    required this.originalCoordinates,
+    required this.originalPosition,
     required Offset deltaOnCanvas,
+    required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
-    modifiedCoordinates = originalCoordinates + deltaOnCanvas;
+    modifiedPosition = originalPosition.copyWith(
+      coordinates: originalPosition.coordinates + deltaOnCanvas,
+      decimalPositions: decimalPositions,
+    );
   }
 
   @override
@@ -42,8 +46,8 @@ class MPMovePointCommand extends MPCommand {
     final THPoint originalPoint =
         th2FileEditController.thFile.elementByMPID(pointMPID) as THPoint;
     final THPoint modifiedPoint = originalPoint.copyWith(
-        position:
-            originalPoint.position.copyWith(coordinates: modifiedCoordinates));
+      position: modifiedPosition,
+    );
 
     th2FileEditController.elementEditController
         .applySubstituteElement(modifiedPoint);
@@ -57,8 +61,8 @@ class MPMovePointCommand extends MPCommand {
     /// message on undo and redo are the same.
     final MPMovePointCommand oppositeCommand = MPMovePointCommand(
       pointMPID: pointMPID,
-      originalCoordinates: modifiedCoordinates,
-      modifiedCoordinates: originalCoordinates,
+      originalPosition: modifiedPosition,
+      modifiedPosition: originalPosition,
       descriptionType: descriptionType,
     );
 
@@ -74,14 +78,8 @@ class MPMovePointCommand extends MPCommand {
 
     map.addAll({
       'pointMPID': pointMPID,
-      'originalCoordinates': {
-        'dx': originalCoordinates.dx,
-        'dy': originalCoordinates.dy,
-      },
-      'modifiedCoordinates': {
-        'dx': modifiedCoordinates.dx,
-        'dy': modifiedCoordinates.dy,
-      },
+      'originalPosition': originalPosition.toMap(),
+      'modifiedPosition': modifiedPosition.toMap(),
     });
 
     return map;
@@ -90,14 +88,8 @@ class MPMovePointCommand extends MPCommand {
   factory MPMovePointCommand.fromMap(Map<String, dynamic> map) {
     return MPMovePointCommand.forCWJM(
       pointMPID: map['pointMPID'],
-      originalCoordinates: Offset(
-        map['originalCoordinates']['dx'],
-        map['originalCoordinates']['dy'],
-      ),
-      modifiedCoordinates: Offset(
-        map['modifiedCoordinates']['dx'],
-        map['modifiedCoordinates']['dy'],
-      ),
+      originalPosition: THPositionPart.fromMap(map['originalPosition']),
+      modifiedPosition: THPositionPart.fromMap(map['modifiedPosition']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -110,14 +102,14 @@ class MPMovePointCommand extends MPCommand {
   @override
   MPMovePointCommand copyWith({
     int? pointMPID,
-    Offset? originalCoordinates,
-    Offset? modifiedCoordinates,
+    THPositionPart? originalPosition,
+    THPositionPart? modifiedPosition,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
       pointMPID: pointMPID ?? this.pointMPID,
-      originalCoordinates: originalCoordinates ?? this.originalCoordinates,
-      modifiedCoordinates: modifiedCoordinates ?? this.modifiedCoordinates,
+      originalPosition: originalPosition ?? this.originalPosition,
+      modifiedPosition: modifiedPosition ?? this.modifiedPosition,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -128,8 +120,8 @@ class MPMovePointCommand extends MPCommand {
 
     return other is MPMovePointCommand &&
         other.pointMPID == pointMPID &&
-        other.originalCoordinates == originalCoordinates &&
-        other.modifiedCoordinates == modifiedCoordinates &&
+        other.originalPosition == originalPosition &&
+        other.modifiedPosition == modifiedPosition &&
         other.descriptionType == descriptionType;
   }
 
@@ -138,7 +130,7 @@ class MPMovePointCommand extends MPCommand {
       super.hashCode ^
       Object.hash(
         pointMPID,
-        originalCoordinates,
-        modifiedCoordinates,
+        originalPosition,
+        modifiedPosition,
       );
 }
