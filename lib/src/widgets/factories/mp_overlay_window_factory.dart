@@ -15,7 +15,7 @@ import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowFactory {
-  static Widget createOverlayWindow({
+  static OverlayEntry createOverlayWindow({
     required TH2FileEditController th2FileEditController,
     required Offset position,
     required MPWindowType type,
@@ -23,6 +23,7 @@ class MPOverlayWindowFactory {
     final TH2FileEditOverlayWindowController overlayWindowController =
         th2FileEditController.overlayWindowController;
     final int thFileMPID = th2FileEditController.thFileMPID;
+    Widget overlayWindowWidget;
 
     switch (type) {
       case MPWindowType.availableScraps:
@@ -37,13 +38,13 @@ class MPOverlayWindowFactory {
           position = Offset(rect.left - mpButtonSpace, rect.center.dy);
         }
 
-        return MPAvailableScrapsWidget(
+        overlayWindowWidget = MPAvailableScrapsWidget(
           key: ValueKey("MPAvailableScrapsWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           position: position,
         );
       case MPWindowType.commandOptions:
-        return MPOptionsEditWidget(
+        overlayWindowWidget = MPOptionsEditWidget(
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           position: position,
@@ -61,14 +62,17 @@ class MPOverlayWindowFactory {
           'Call MPOverlayWindowFactory.createOptionChoices() to create option choices widgets.',
         );
     }
+
+    return OverlayEntry(builder: (context) => overlayWindowWidget);
   }
 
-  static Widget createOptionChoices({
+  static OverlayEntry createOptionChoices({
     required TH2FileEditController th2FileEditController,
     required Offset position,
     required MPOptionInfo optionInfo,
   }) {
     final THCommandOptionType optionType = optionInfo.type;
+    Widget overlayWindowWidget;
 
     if (THCommandOption.isMultipleChoiceOptions(optionType)) {
       final int thFileMPID = th2FileEditController.thFileMPID;
@@ -109,7 +113,7 @@ class MPOverlayWindowFactory {
           throw Exception('Unknown multiple choice option type: $optionType');
       }
 
-      return MPMultipleChoicesWidget(
+      overlayWindowWidget = MPMultipleChoicesWidget(
         th2FileEditController: th2FileEditController,
         key: ValueKey("MPMultipleChoicesWidget|$thFileMPID|${optionType.name}"),
         type: optionType,
@@ -125,7 +129,7 @@ class MPOverlayWindowFactory {
     } else {
       switch (optionType) {
         case THCommandOptionType.altitudeValue:
-          return MPAltitudeValueOptionWidget(
+          overlayWindowWidget = MPAltitudeValueOptionWidget(
             th2FileEditController: th2FileEditController,
             currentOption: optionInfo.option as THAltitudeValueCommandOption?,
             position: position,
@@ -139,6 +143,8 @@ class MPOverlayWindowFactory {
               'Unsupported non-multiple choice option type: $optionType at MPOverlayWindowFactory.createOptionChoices');
       }
     }
+
+    return OverlayEntry(builder: (context) => overlayWindowWidget);
   }
 
   static double getMaxHeightForOverlayWindows(GlobalKey targetKey) {

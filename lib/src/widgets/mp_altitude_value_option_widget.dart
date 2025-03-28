@@ -37,6 +37,7 @@ class _MPAltitudeValueOptionWidgetState
   late bool _isFixed;
   late String _selectedUnit;
   late String _selectedChoice;
+  final FocusNode _textFieldFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -153,6 +154,7 @@ class _MPAltitudeValueOptionWidgetState
               setState(() {
                 _selectedChoice = value!;
               });
+              _textFieldFocusNode.requestFocus();
             },
             contentPadding: EdgeInsets.zero,
           ),
@@ -164,7 +166,8 @@ class _MPAltitudeValueOptionWidgetState
             // Numeric Input for Altitude
             TextField(
               controller: _altitudeController,
-              keyboardType: TextInputType.number,
+              // keyboardType: TextInputType.number,
+              focusNode: _textFieldFocusNode,
               decoration: InputDecoration(
                 labelText: appLocalizations.thCommandOptionAltitudeValue,
                 border: OutlineInputBorder(),

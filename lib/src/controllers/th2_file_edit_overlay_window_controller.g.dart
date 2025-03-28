@@ -125,16 +125,17 @@ mixin _$TH2FileEditOverlayWindowController
       name: 'TH2FileEditOverlayWindowControllerBase._overlayWindows',
       context: context);
 
-  ObservableMap<MPWindowType, Widget> get overlayWindows {
+  ObservableMap<MPWindowType, OverlayEntry> get overlayWindows {
     _$_overlayWindowsAtom.reportRead();
     return super._overlayWindows;
   }
 
   @override
-  ObservableMap<MPWindowType, Widget> get _overlayWindows => overlayWindows;
+  ObservableMap<MPWindowType, OverlayEntry> get _overlayWindows =>
+      overlayWindows;
 
   @override
-  set _overlayWindows(ObservableMap<MPWindowType, Widget> value) {
+  set _overlayWindows(ObservableMap<MPWindowType, OverlayEntry> value) {
     _$_overlayWindowsAtom.reportWrite(value, super._overlayWindows, () {
       super._overlayWindows = value;
     });

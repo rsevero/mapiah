@@ -41,9 +41,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
     overlayWindowController = th2FileEditController.overlayWindowController;
-    _focusNode = overlayWindowController.getFocusNode(
-      MPWindowType.mainTHFileEditWindow,
-    );
+    _focusNode = th2FileEditController.thFileFocusNode;
   }
 
   @override
@@ -188,6 +186,11 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         // autofocus: true,
         focusNode: _focusNode,
         onKeyEvent: (node, event) {
+          print("MPListenerWidget.onKeyEvent() entered");
+          // if (th2FileEditController.overlayWindowController.activeWindow !=
+          //     MPWindowType.mainTHFileEditWindow) {
+          //   return KeyEventResult.ignored;
+          // }
           if (event is KeyDownEvent) {
             logicalKeyPressed = event.logicalKey;
             widget.actuator.onKeyDownEvent(event);

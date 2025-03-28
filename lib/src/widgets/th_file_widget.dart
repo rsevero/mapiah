@@ -122,17 +122,6 @@ class THFileWidget extends StatelessWidget {
                     }
                   },
                 ),
-                Observer(
-                  builder: (_) {
-                    th2FileEditController.redrawTriggerOverlayWindows;
-
-                    return Stack(
-                      key: ValueKey("OverlayWindowsStack|$thFileMPID"),
-                      children: overlayWindowController.overlayWindows.values
-                          .toList(),
-                    );
-                  },
-                ),
                 if (mpDebugMousePosition)
                   Positioned(
                     bottom: 32,

@@ -323,9 +323,6 @@ abstract class TH2FileEditControllerBase with Store {
   int _redrawTriggerEditLine = 0;
 
   @readonly
-  int _redrawTriggerOverlayWindows = 0;
-
-  @readonly
   int _redrawTriggerOptionsList = 0;
 
   bool _isMouseOverChangeScrapButton = false;
@@ -342,6 +339,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
+
+  final FocusNode thFileFocusNode = FocusNode();
 
   final List<String> errorMessages = <String>[];
 
@@ -427,8 +426,6 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(autorun((_) {
       final double magnitude = MPNumericAux.log10(_canvasScale);
       final int newDecimalPositions = magnitude.ceil() + 1;
-
-      print("currentDecimalPositions recomputed: $newDecimalPositions");
 
       _currentDecimalPositions =
           newDecimalPositions < 0 ? 0 : newDecimalPositions;
@@ -704,11 +701,6 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void triggerEditLineRedraw() {
     _redrawTriggerEditLine++;
-  }
-
-  @action
-  void triggerOverlayWindowsRedraw() {
-    _redrawTriggerOverlayWindows++;
   }
 
   @action
