@@ -150,9 +150,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _hideOverlayWindow(type);
     }
 
-    // if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
-    //   _th2FileEditController.thFileFocusNode.requestFocus();
-    // }
+    if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
+      _th2FileEditController.thFileFocusNode.requestFocus();
+    }
   }
 
   @action

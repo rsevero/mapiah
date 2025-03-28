@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatefulWidget {
@@ -183,14 +182,10 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       child: Focus(
-        // autofocus: true,
+        autofocus: true,
         focusNode: _focusNode,
         onKeyEvent: (node, event) {
           print("MPListenerWidget.onKeyEvent() entered");
-          // if (th2FileEditController.overlayWindowController.activeWindow !=
-          //     MPWindowType.mainTHFileEditWindow) {
-          //   return KeyEventResult.ignored;
-          // }
           if (event is KeyDownEvent) {
             logicalKeyPressed = event.logicalKey;
             widget.actuator.onKeyDownEvent(event);
