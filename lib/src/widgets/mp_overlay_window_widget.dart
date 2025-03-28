@@ -1,16 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final Widget child;
-  final MPOverlayWindowType overlayWindowType;
+  final MPWindowType windowType;
   final MPWidgetPositionType positionType;
+  final ValueChanged<KeyDownEvent>? onKeyDownEvent;
+  final ValueChanged<KeyUpEvent>? onKeyUpEvent;
 
   const MPOverlayWindowWidget({
     super.key,
@@ -18,7 +21,9 @@ class MPOverlayWindowWidget extends StatefulWidget {
     required this.position,
     required this.child,
     required this.positionType,
-    required this.overlayWindowType,
+    required this.windowType,
+    this.onKeyDownEvent,
+    this.onKeyUpEvent,
   });
 
   @override
@@ -28,17 +33,23 @@ class MPOverlayWindowWidget extends StatefulWidget {
 class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   late final TH2FileEditController th2FileEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
+  late final FocusNode _focusNode;
   late Offset position;
   bool _initialPositionSet = false;
+  LogicalKeyboardKey? logicalKeyPressed;
 
   @override
   void initState() {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
     overlayWindowController = th2FileEditController.overlayWindowController;
+    _focusNode = overlayWindowController.getFocusNode(
+      widget.windowType,
+    );
     position = widget.position;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateCoordinates();
+      _focusNode.requestFocus();
     });
   }
 
@@ -170,7 +181,45 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
             // mpLocator.mpLog
             //     .fine("MPOverlayWindowWidget.onPointerSignal() executed");
           },
-          child: widget.child,
+          child: Focus(
+            // autofocus: true,
+            focusNode: _focusNode,
+            onKeyEvent: (node, event) {
+              print("MPOverlayWindowWidget.onKeyEvent() entered");
+              if (!_focusNode.hasFocus) {
+                print("MPOverlayWindowWidget.onKeyEvent() has no focus");
+                // Allow the event to propagate if the overlay does not have focus
+                return KeyEventResult.ignored;
+              }
+
+              print("MPOverlayWindowWidget.onKeyEvent() executed");
+
+              // Handle key events specific to the overlay
+              if (event is KeyDownEvent) {
+                widget.onKeyDownEvent?.call(event);
+              } else if (event is KeyUpEvent) {
+                widget.onKeyUpEvent?.call(event);
+              }
+
+              // Allow propagation for unhandled events
+              return KeyEventResult.handled;
+            },
+            // onKeyEvent: (node, event) {
+            //   print("MPOverlayWindowWidget.onKeyEvent() entered");
+            //   if (overlayWindowController.activeWindow != widget.windowType) {
+            //     return KeyEventResult.ignored;
+            //   }
+            //   if (event is KeyDownEvent) {
+            //     logicalKeyPressed = event.logicalKey;
+            //     widget.onKeyDownEvent?.call(event);
+            //   } else if (event is KeyUpEvent) {
+            //     widget.onKeyUpEvent?.call(event);
+            //     logicalKeyPressed = null;
+            //   }
+            //   return KeyEventResult.handled;
+            // },
+            child: widget.child,
+          ),
         ),
       ),
     );

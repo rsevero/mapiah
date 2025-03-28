@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
@@ -79,7 +79,7 @@ class MPOptionsEditWidget extends StatelessWidget {
         return MPOverlayWindowWidget(
           position: position,
           positionType: positionType,
-          overlayWindowType: MPOverlayWindowType.commandOptions,
+          windowType: MPWindowType.commandOptions,
           th2FileEditController: th2FileEditController,
           child: MPSingleColumnListOverlayWindowContentWidget(
             maxHeight: maxHeight,

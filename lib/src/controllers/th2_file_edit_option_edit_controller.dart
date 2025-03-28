@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -132,14 +132,14 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   ) {
     if (_currentOptionType == optionType) {
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
-        MPOverlayWindowType.optionChoices,
+        MPWindowType.optionChoices,
         false,
       );
       _currentOptionType = null;
     } else {
       if (_currentOptionType != null) {
         _th2FileEditController.overlayWindowController.setShowOverlayWindow(
-          MPOverlayWindowType.optionChoices,
+          MPWindowType.optionChoices,
           false,
         );
       }
@@ -163,7 +163,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   void showOptionsOverlayWindow() {
     updateOptionStateMap();
     _th2FileEditController.overlayWindowController
-        .toggleOverlayWindow(MPOverlayWindowType.commandOptions);
+        .toggleOverlayWindow(MPWindowType.commandOptions);
   }
 }
 

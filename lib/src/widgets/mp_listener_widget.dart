@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatefulWidget {
@@ -25,7 +26,7 @@ class MPListenerWidget extends StatefulWidget {
 class MPListenerWidgetState extends State<MPListenerWidget> {
   late final TH2FileEditController th2FileEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
-  final FocusNode _focusNode = FocusNode();
+  late final FocusNode _focusNode;
   int currentPressedMouseButton = 0;
   Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
   Offset secondaryButtonDragStartScreenCoordinates = Offset.zero;
@@ -40,12 +41,9 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
     overlayWindowController = th2FileEditController.overlayWindowController;
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
+    _focusNode = overlayWindowController.getFocusNode(
+      MPWindowType.mainTHFileEditWindow,
+    );
   }
 
   @override
@@ -187,14 +185,15 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       child: Focus(
-        autofocus: true,
+        // autofocus: true,
         focusNode: _focusNode,
         onKeyEvent: (node, event) {
           if (event is KeyDownEvent) {
+            logicalKeyPressed = event.logicalKey;
             widget.actuator.onKeyDownEvent(event);
           } else if (event is KeyUpEvent) {
-            widget.actuator.onKeyUpEvent(event);
             logicalKeyPressed = null;
+            widget.actuator.onKeyUpEvent(event);
           }
           return KeyEventResult.handled;
         },

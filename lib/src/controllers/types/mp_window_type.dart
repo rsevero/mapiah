@@ -1,5 +1,6 @@
-enum MPOverlayWindowType {
+enum MPWindowType {
   availableScraps,
   commandOptions,
+  mainTHFileEditWindow,
   optionChoices;
 }

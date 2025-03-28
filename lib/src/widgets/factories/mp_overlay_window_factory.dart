@@ -6,7 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/mp_altitude_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
@@ -18,14 +18,14 @@ class MPOverlayWindowFactory {
   static Widget createOverlayWindow({
     required TH2FileEditController th2FileEditController,
     required Offset position,
-    required MPOverlayWindowType type,
+    required MPWindowType type,
   }) {
     final TH2FileEditOverlayWindowController overlayWindowController =
         th2FileEditController.overlayWindowController;
     final int thFileMPID = th2FileEditController.thFileMPID;
 
     switch (type) {
-      case MPOverlayWindowType.availableScraps:
+      case MPWindowType.availableScraps:
         final GlobalKey changeScrapButtonKey = overlayWindowController
             .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
         final Rect? rect = MPInteractionAux.getWidgetRectFromGlobalKey(
@@ -42,7 +42,7 @@ class MPOverlayWindowFactory {
           th2FileEditController: th2FileEditController,
           position: position,
         );
-      case MPOverlayWindowType.commandOptions:
+      case MPWindowType.commandOptions:
         return MPOptionsEditWidget(
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
@@ -52,7 +52,11 @@ class MPOverlayWindowFactory {
             th2FileEditController.thFileWidgetKey,
           ),
         );
-      case MPOverlayWindowType.optionChoices:
+      case MPWindowType.mainTHFileEditWindow:
+        throw UnimplementedError(
+          'The main TH file edit window is automatically created when opening a TH2File.',
+        );
+      case MPWindowType.optionChoices:
         throw UnimplementedError(
           'Call MPOverlayWindowFactory.createOptionChoices() to create option choices widgets.',
         );

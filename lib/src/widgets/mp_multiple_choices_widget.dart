@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
@@ -34,7 +34,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
     return MPOverlayWindowWidget(
       position: position,
       positionType: positionType,
-      overlayWindowType: MPOverlayWindowType.optionChoices,
+      windowType: MPWindowType.optionChoices,
       th2FileEditController: th2FileEditController,
       child: MPSingleColumnListOverlayWindowContentWidget(
         maxHeight: maxHeight,

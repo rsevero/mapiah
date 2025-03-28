@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
-import 'package:mapiah/src/controllers/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
 import 'package:mobx/mobx.dart';
@@ -21,8 +21,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   TH2FileEditOverlayWindowControllerBase(this._th2FileEditController)
       : _thFile = _th2FileEditController.thFile {
-    for (MPOverlayWindowType type in MPOverlayWindowType.values) {
+    for (MPWindowType type in MPWindowType.values) {
       _isOverlayWindowShown[type] = false;
+      _focusNodes[type] = FocusNode();
     }
 
     for (MPGlobalKeyWidgetType type in MPGlobalKeyWidgetType.values) {
@@ -34,19 +35,19 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   Map<MPGlobalKeyWidgetType, GlobalKey> _globalKeyWidgetKeyByType = {};
 
   @readonly
-  ObservableMap<MPOverlayWindowType, bool> _isOverlayWindowShown =
-      ObservableMap<MPOverlayWindowType, bool>();
+  ObservableMap<MPWindowType, bool> _isOverlayWindowShown =
+      ObservableMap<MPWindowType, bool>();
 
   @readonly
-  MPOverlayWindowType? _activeOverlayWindow;
+  MPWindowType _activeWindow = MPWindowType.mainTHFileEditWindow;
 
   @readonly
-  ObservableMap<MPOverlayWindowType, Widget> _overlayWindows =
-      ObservableMap<MPOverlayWindowType, Widget>();
+  ObservableMap<MPWindowType, Widget> _overlayWindows =
+      ObservableMap<MPWindowType, Widget>();
 
   @computed
   bool get showChangeScrapOverlayWindow =>
-      _isOverlayWindowShown[MPOverlayWindowType.availableScraps]!;
+      _isOverlayWindowShown[MPWindowType.availableScraps]!;
 
   @readonly
   bool _isAutoDismissWindowOpen = false;
@@ -56,23 +57,32 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool processingPointerUpEvent = false;
   bool processingPointerSignalEvent = false;
 
+  final Map<MPWindowType, FocusNode> _focusNodes = {};
+
   final autoDismissOverlayWindowTypes = {
-    MPOverlayWindowType.commandOptions,
-    MPOverlayWindowType.optionChoices,
+    MPWindowType.commandOptions,
+    MPWindowType.optionChoices,
   };
 
-  toggleOverlayWindow(MPOverlayWindowType type) {
+  void close() {
+    for (MPWindowType type in MPWindowType.values) {
+      setShowOverlayWindow(type, false);
+      _focusNodes[type]!.dispose();
+    }
+  }
+
+  void toggleOverlayWindow(MPWindowType type) {
     setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
   }
 
-  void _showOverlayWindow(MPOverlayWindowType type, {Offset? position}) {
+  void _showOverlayWindow(MPWindowType type, {Offset? position}) {
     if (_overlayWindows.containsKey(type)) {
       final Widget overlayWindow = _overlayWindows[type]!;
 
       _overlayWindows.remove(type);
       _overlayWindows[type] = overlayWindow;
     } else {
-      if (type == MPOverlayWindowType.optionChoices) {
+      if (type == MPWindowType.optionChoices) {
         throw UnimplementedError(
           'Call showOptionChoicesOverlayWindow() to create option choices widgets.',
         );
@@ -85,24 +95,26 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       }
     }
 
-    _activeOverlayWindow = type;
+    _activeWindow = type;
     _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
-  void _hideOverlayWindow(MPOverlayWindowType type) {
-    if (_activeOverlayWindow == type) {
-      _activeOverlayWindow = null;
-    }
-    if (type == MPOverlayWindowType.optionChoices) {
+  void _hideOverlayWindow(MPWindowType type) {
+    if (type == MPWindowType.optionChoices) {
       _th2FileEditController.optionEditController.clearCurrentOptionType();
     }
     _overlayWindows.remove(type);
+    if (_activeWindow == type) {
+      _activeWindow = _overlayWindows.isEmpty
+          ? MPWindowType.mainTHFileEditWindow
+          : _overlayWindows.keys.last;
+    }
     _th2FileEditController.triggerOverlayWindowsRedraw();
   }
 
   @action
   void setShowOverlayWindow(
-    MPOverlayWindowType type,
+    MPWindowType type,
     bool show, {
     Offset? position,
   }) {
@@ -119,8 +131,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         /// Is there still an auto dismmisable overlay window open?
         bool autoDismiss = false;
 
-        for (MPOverlayWindowType autoDismissType
-            in autoDismissOverlayWindowTypes) {
+        for (MPWindowType autoDismissType in autoDismissOverlayWindowTypes) {
           if (_isOverlayWindowShown[autoDismissType]!) {
             autoDismiss = true;
             break;
@@ -131,6 +142,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
       _hideOverlayWindow(type);
     }
+
+    _focusNodes[_activeWindow]!.requestFocus();
   }
 
   @action
@@ -138,8 +151,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     required Offset position,
     required MPOptionInfo optionInfo,
   }) {
-    const MPOverlayWindowType overlayWindowType =
-        MPOverlayWindowType.optionChoices;
+    const MPWindowType overlayWindowType = MPWindowType.optionChoices;
 
     if (_overlayWindows.containsKey(overlayWindowType)) {
       _overlayWindows.remove(overlayWindowType);
@@ -152,7 +164,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       optionInfo: optionInfo,
     );
 
-    _activeOverlayWindow = overlayWindowType;
+    _activeWindow = overlayWindowType;
     _isAutoDismissWindowOpen = true;
     _isOverlayWindowShown[overlayWindowType] = true;
     _th2FileEditController.triggerOverlayWindowsRedraw();
@@ -160,7 +172,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void closeAutoDismissOverlayWindows() {
-    for (MPOverlayWindowType type in autoDismissOverlayWindowTypes) {
+    for (MPWindowType type in autoDismissOverlayWindowTypes) {
       if (_isOverlayWindowShown[type]!) {
         setShowOverlayWindow(type, false);
       }
@@ -182,8 +194,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void clearOverlayWindows() {
-    for (final type in MPOverlayWindowType.values) {
+    for (final type in MPWindowType.values) {
       setShowOverlayWindow(type, false);
     }
+  }
+
+  FocusNode getFocusNode(MPWindowType type) {
+    return _focusNodes[type]!;
   }
 }

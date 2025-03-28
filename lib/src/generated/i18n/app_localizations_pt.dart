@@ -61,7 +61,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpButtonOK => 'OK';
 
   @override
-  String get mpChoiceSet => 'Definir';
+  String get mpChoiceSet => 'Definido';
 
   @override
   String get mpChoiceUnset => 'Não definido';

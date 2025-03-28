@@ -85,40 +85,39 @@ mixin _$TH2FileEditOverlayWindowController
       name: 'TH2FileEditOverlayWindowControllerBase._isOverlayWindowShown',
       context: context);
 
-  ObservableMap<MPOverlayWindowType, bool> get isOverlayWindowShown {
+  ObservableMap<MPWindowType, bool> get isOverlayWindowShown {
     _$_isOverlayWindowShownAtom.reportRead();
     return super._isOverlayWindowShown;
   }
 
   @override
-  ObservableMap<MPOverlayWindowType, bool> get _isOverlayWindowShown =>
+  ObservableMap<MPWindowType, bool> get _isOverlayWindowShown =>
       isOverlayWindowShown;
 
   @override
-  set _isOverlayWindowShown(ObservableMap<MPOverlayWindowType, bool> value) {
+  set _isOverlayWindowShown(ObservableMap<MPWindowType, bool> value) {
     _$_isOverlayWindowShownAtom.reportWrite(value, super._isOverlayWindowShown,
         () {
       super._isOverlayWindowShown = value;
     });
   }
 
-  late final _$_activeOverlayWindowAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._activeOverlayWindow',
+  late final _$_activeWindowAtom = Atom(
+      name: 'TH2FileEditOverlayWindowControllerBase._activeWindow',
       context: context);
 
-  MPOverlayWindowType? get activeOverlayWindow {
-    _$_activeOverlayWindowAtom.reportRead();
-    return super._activeOverlayWindow;
+  MPWindowType get activeWindow {
+    _$_activeWindowAtom.reportRead();
+    return super._activeWindow;
   }
 
   @override
-  MPOverlayWindowType? get _activeOverlayWindow => activeOverlayWindow;
+  MPWindowType get _activeWindow => activeWindow;
 
   @override
-  set _activeOverlayWindow(MPOverlayWindowType? value) {
-    _$_activeOverlayWindowAtom.reportWrite(value, super._activeOverlayWindow,
-        () {
-      super._activeOverlayWindow = value;
+  set _activeWindow(MPWindowType value) {
+    _$_activeWindowAtom.reportWrite(value, super._activeWindow, () {
+      super._activeWindow = value;
     });
   }
 
@@ -126,17 +125,16 @@ mixin _$TH2FileEditOverlayWindowController
       name: 'TH2FileEditOverlayWindowControllerBase._overlayWindows',
       context: context);
 
-  ObservableMap<MPOverlayWindowType, Widget> get overlayWindows {
+  ObservableMap<MPWindowType, Widget> get overlayWindows {
     _$_overlayWindowsAtom.reportRead();
     return super._overlayWindows;
   }
 
   @override
-  ObservableMap<MPOverlayWindowType, Widget> get _overlayWindows =>
-      overlayWindows;
+  ObservableMap<MPWindowType, Widget> get _overlayWindows => overlayWindows;
 
   @override
-  set _overlayWindows(ObservableMap<MPOverlayWindowType, Widget> value) {
+  set _overlayWindows(ObservableMap<MPWindowType, Widget> value) {
     _$_overlayWindowsAtom.reportWrite(value, super._overlayWindows, () {
       super._overlayWindows = value;
     });
@@ -167,8 +165,7 @@ mixin _$TH2FileEditOverlayWindowController
           name: 'TH2FileEditOverlayWindowControllerBase', context: context);
 
   @override
-  void setShowOverlayWindow(MPOverlayWindowType type, bool show,
-      {Offset? position}) {
+  void setShowOverlayWindow(MPWindowType type, bool show, {Offset? position}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
