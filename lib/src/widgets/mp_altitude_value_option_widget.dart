@@ -213,6 +213,11 @@ class _MPAltitudeValueOptionWidgetState
             DropdownMenu(
               label: Text(appLocalizations.thCommandOptionLengthUnit),
               initialSelection: _selectedUnit,
+              menuStyle: MenuStyle(
+                  alignment: Alignment(
+                -1.0,
+                -_unitMap.entries.length.toDouble(),
+              )),
               dropdownMenuEntries: _unitMap.entries.map((entry) {
                 return DropdownMenuEntry<String>(
                   value: entry.key,
