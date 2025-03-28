@@ -868,7 +868,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionId => 'ID';
 
   @override
-  String get thCommandOptionLengthUnit => 'Unidade de comprimento';
+  String get thCommandOptionLengthUnit => 'Unidade';
 
   @override
   String get thCommandOptionLineDirection => 'Direção';

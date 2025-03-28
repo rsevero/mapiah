@@ -39,14 +39,17 @@ class _MPAltitudeValueOptionWidgetState
   late String _selectedChoice;
   final FocusNode _textFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
+  late final Map<String, String> _unitMap;
 
   @override
   void initState() {
     super.initState();
+    _unitMap = MPTextToUser.getOrderedChoices(
+      MPTextToUser.getLengthUnitsChoices(),
+    );
+
     if (widget.currentOption == null) {
-      _altitudeController = TextEditingController(
-        text: '0',
-      );
+      _altitudeController = TextEditingController(text: '0');
       _isFixed = false;
       _selectedChoice = mpUnsetOptionID;
       _selectedUnit = thDefaultLengthUnitAsString;
@@ -128,9 +131,6 @@ class _MPAltitudeValueOptionWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> unitMap = MPTextToUser.getOrderedChoices(
-      MPTextToUser.getLengthUnitsChoices(),
-    );
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return MPOverlayWindowWidget(
@@ -213,7 +213,7 @@ class _MPAltitudeValueOptionWidgetState
             DropdownMenu(
               label: Text(appLocalizations.thCommandOptionLengthUnit),
               initialSelection: _selectedUnit,
-              dropdownMenuEntries: unitMap.entries.map((entry) {
+              dropdownMenuEntries: _unitMap.entries.map((entry) {
                 return DropdownMenuEntry<String>(
                   value: entry.key,
                   label: entry.value,
@@ -224,8 +224,12 @@ class _MPAltitudeValueOptionWidgetState
                   _selectedUnit = value ?? thDefaultLengthUnitAsString;
                 });
               },
-              searchCallback: (entries, query) =>
-                  entries.indexWhere((entry) => entry.label == query),
+              searchCallback: (entries, query) {
+                final index =
+                    entries.indexWhere((entry) => entry.label == query);
+
+                return index >= 0 ? index : null;
+              },
             ),
           ],
 
