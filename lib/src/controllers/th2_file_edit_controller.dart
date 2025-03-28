@@ -934,7 +934,6 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void _setShowChangeScrapOverlayWindow(BuildContext context) {
     overlayWindowController.setShowOverlayWindow(
-      context,
       MPWindowType.availableScraps,
       (_isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow),
     );

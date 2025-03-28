@@ -58,16 +58,15 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   void close() {
     for (MPWindowType type in MPWindowType.values) {
-      hideOverlayWindow(type);
+      setShowOverlayWindow(type, false);
     }
   }
 
-  void toggleOverlayWindow(BuildContext context, MPWindowType type) {
-    setShowOverlayWindow(context, type, !_isOverlayWindowShown[type]!);
+  void toggleOverlayWindow(MPWindowType type) {
+    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
   }
 
   void _showOverlayWindow(
-    BuildContext context,
     MPWindowType type, {
     Offset? position,
   }) {
@@ -97,10 +96,18 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     _activeWindow = type;
 
+    BuildContext? context =
+        _th2FileEditController.thFileWidgetKey.currentContext;
+
+    if (context == null) {
+      throw StateError(
+          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController._showOverlayWindow().");
+    }
+
     Overlay.of(context, rootOverlay: true).insert(_overlayWindows[type]!);
   }
 
-  void hideOverlayWindow(MPWindowType type) {
+  void _hideOverlayWindow(MPWindowType type) {
     if (_isAutoDismissWindowOpen) {
       /// Is there still an auto dismmisable overlay window open?
       bool autoDismiss = false;
@@ -132,7 +139,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void setShowOverlayWindow(
-    BuildContext context,
     MPWindowType type,
     bool show, {
     Offset? position,
@@ -140,15 +146,14 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _isOverlayWindowShown[type] = show;
 
     if (show) {
-      _showOverlayWindow(context, type, position: position);
+      _showOverlayWindow(type, position: position);
     } else {
-      hideOverlayWindow(type);
+      _hideOverlayWindow(type);
     }
   }
 
   @action
   void showOptionChoicesOverlayWindow({
-    required BuildContext context,
     required Offset position,
     required MPOptionInfo optionInfo,
   }) {
@@ -169,6 +174,14 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _isAutoDismissWindowOpen = true;
     _isOverlayWindowShown[overlayWindowType] = true;
 
+    BuildContext? context =
+        _th2FileEditController.thFileWidgetKey.currentContext;
+
+    if (context == null) {
+      throw StateError(
+          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().");
+    }
+
     Overlay.of(context, rootOverlay: true)
         .insert(_overlayWindows[overlayWindowType]!);
   }
@@ -177,7 +190,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   void closeAutoDismissOverlayWindows() {
     for (MPWindowType type in autoDismissOverlayWindowTypes) {
       if (_isOverlayWindowShown[type]!) {
-        hideOverlayWindow(type);
+        setShowOverlayWindow(type, false);
       }
     }
   }
@@ -198,7 +211,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void clearOverlayWindows() {
     for (final type in MPWindowType.values) {
-      hideOverlayWindow(type);
+      setShowOverlayWindow(type, false);
     }
   }
 }

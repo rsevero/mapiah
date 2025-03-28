@@ -120,8 +120,9 @@ class _MPAltitudeValueOptionWidgetState
   }
 
   void _cancelButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.hideOverlayWindow(
+    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
+      false,
     );
   }
 
