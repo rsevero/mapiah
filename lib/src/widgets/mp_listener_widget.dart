@@ -47,15 +47,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() entered");
-
-        if (overlayWindowController.processingPointerDownEvent) {
-          overlayWindowController.processingPointerDownEvent = false;
-          return;
-        }
-
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerDown() executed");
-
         switch (event.buttons) {
           case kPrimaryButton:
             currentPressedMouseButton = kPrimaryButton;
@@ -75,15 +66,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerMove: (PointerMoveEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() entered");
-
-        if (overlayWindowController.processingPointerMoveEvent) {
-          overlayWindowController.processingPointerMoveEvent = false;
-          return;
-        }
-
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerMove() executed");
-
         switch (event.buttons) {
           case kPrimaryButton:
             if (isPrimaryButtonDragging) {
@@ -127,15 +109,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() entered");
-
-        if (overlayWindowController.processingPointerUpEvent) {
-          overlayWindowController.processingPointerUpEvent = false;
-          return;
-        }
-
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerUp() executed");
-
         if (overlayWindowController.isAutoDismissWindowOpen) {
           overlayWindowController.closeAutoDismissOverlayWindows();
         }
@@ -168,15 +141,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerSignal: (PointerSignalEvent event) {
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() entered");
-
-        if (overlayWindowController.processingPointerSignalEvent) {
-          overlayWindowController.processingPointerSignalEvent = false;
-          return;
-        }
-
-        // mpLocator.mpLog.fine("MPListenerWidget.onPointerSignal() executed");
-
         if (event is PointerScrollEvent) {
           widget.actuator.onTertiaryButtonScroll(event);
         }

@@ -120,64 +120,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
       top: position.dy,
       child: Visibility.maintain(
         visible: _initialPositionSet,
-        child: Listener(
-          onPointerDown: (PointerDownEvent event) {
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerDown() entered");
-
-            if (overlayWindowController.processingPointerDownEvent) {
-              return;
-            }
-            overlayWindowController.processingPointerDownEvent = true;
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerDown() to be executed");
-
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerDown() executed");
-          },
-          onPointerUp: (PointerUpEvent event) {
-            // mpLocator.mpLog.fine("MPOverlayWindowWidget.onPointerUp() entered");
-
-            if (overlayWindowController.processingPointerUpEvent) {
-              return;
-            }
-            overlayWindowController.processingPointerUpEvent = true;
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerUp() to be executed");
-
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerUp() executed");
-          },
-          onPointerMove: (PointerMoveEvent event) {
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerMove() entered");
-
-            if (overlayWindowController.processingPointerMoveEvent) {
-              return;
-            }
-            overlayWindowController.processingPointerMoveEvent = true;
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerMove() to be executed");
-
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerMove() executed");
-          },
-          onPointerSignal: (PointerSignalEvent event) {
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerSignal() entered");
-
-            if (overlayWindowController.processingPointerSignalEvent) {
-              return;
-            }
-            overlayWindowController.processingPointerSignalEvent = true;
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerSignal() to be executed");
-
-            // mpLocator.mpLog
-            //     .fine("MPOverlayWindowWidget.onPointerSignal() executed");
-          },
-          child: widget.child,
-        ),
+        child: widget.child,
       ),
     );
   }

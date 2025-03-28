@@ -51,11 +51,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @readonly
   bool _isAutoDismissWindowOpen = false;
 
-  bool processingPointerDownEvent = false;
-  bool processingPointerMoveEvent = false;
-  bool processingPointerUpEvent = false;
-  bool processingPointerSignalEvent = false;
-
   final autoDismissOverlayWindowTypes = {
     MPWindowType.commandOptions,
     MPWindowType.optionChoices,
