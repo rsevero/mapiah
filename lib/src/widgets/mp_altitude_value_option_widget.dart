@@ -166,7 +166,8 @@ class _MPAltitudeValueOptionWidgetState
             // Numeric Input for Altitude
             TextField(
               controller: _altitudeController,
-              // keyboardType: TextInputType.number,
+              keyboardType: TextInputType.number,
+              autofocus: true,
               focusNode: _textFieldFocusNode,
               decoration: InputDecoration(
                 labelText: appLocalizations.thCommandOptionAltitudeValue,
