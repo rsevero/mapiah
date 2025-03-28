@@ -38,6 +38,7 @@ class _MPAltitudeValueOptionWidgetState
   late String _selectedUnit;
   late String _selectedChoice;
   final FocusNode _textFieldFocusNode = FocusNode();
+  bool _hasExecutedSingleRunOfPostFrameCallback = false;
 
   @override
   void initState() {
@@ -59,12 +60,25 @@ class _MPAltitudeValueOptionWidgetState
       _selectedChoice = mpNonMultipleChoiceSetID;
       _selectedUnit = currentOption.unit.unit.name;
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_hasExecutedSingleRunOfPostFrameCallback) {
+        _hasExecutedSingleRunOfPostFrameCallback = true;
+        _executeOnceAfterBuild();
+      }
+    });
   }
 
   @override
   void dispose() {
     _altitudeController.dispose();
     super.dispose();
+  }
+
+  void _executeOnceAfterBuild() {
+    if (_selectedChoice == mpNonMultipleChoiceSetID) {
+      _textFieldFocusNode.requestFocus();
+    }
   }
 
   void _okButtonPressed() {
