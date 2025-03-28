@@ -415,6 +415,8 @@ abstract class TH2FileEditControllerBase with Store {
 
     selectionController.updateSelectableElements();
 
+    elementEditController.initializeMostUsedTypes();
+
     _isLoading = false;
 
     if (!isSuccessful) {

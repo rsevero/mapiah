@@ -30,17 +30,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditElementEditControllerBase(this._th2FileEditController)
-      : _thFile = _th2FileEditController.thFile {
+      : _thFile = _th2FileEditController.thFile;
+
+  void initializeMostUsedTypes() {
     final elements = _thFile.elements.values;
 
     for (final element in elements) {
       switch (element) {
         case THArea _:
-          _setMostUsedType(element.areaType.name);
+          _setMostUsedAreaType(element.areaType.name);
         case THLine _:
-          _setMostUsedType(element.lineType.name);
+          _setMostUsedLineType(element.lineType.name);
         case THPoint _:
-          _setMostUsedType(element.pointType.name);
+          _setMostUsedPointType(element.pointType.name);
         default:
       }
     }
@@ -116,6 +118,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _lastUsedAreaTypes.removeLast();
     }
 
+    _setMostUsedAreaType(areaType);
+  }
+
+  void _setMostUsedAreaType(String areaType) {
     if (_mostUsedAreaTypes.containsKey(areaType)) {
       _mostUsedAreaTypes[areaType]!.incrementUse();
     } else {
@@ -134,6 +140,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _lastUsedLineTypes.removeLast();
     }
 
+    _setMostUsedLineType(lineType);
+  }
+
+  void _setMostUsedLineType(String lineType) {
     if (_mostUsedLineTypes.containsKey(lineType)) {
       _mostUsedLineTypes[lineType]!.incrementUse();
     } else {
@@ -152,10 +162,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _lastUsedPointTypes.removeLast();
     }
 
-    _setMostUsedType(pointType);
+    _setMostUsedPointType(pointType);
   }
 
-  void _setMostUsedType(String pointType) {
+  void _setMostUsedPointType(String pointType) {
     if (_mostUsedPointTypes.containsKey(pointType)) {
       _mostUsedPointTypes[pointType]!.incrementUse();
     } else {

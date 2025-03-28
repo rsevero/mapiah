@@ -21,14 +21,14 @@ class MPPLATypeOptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    late final Color? iconColor;
-    late final Color? textColor;
-    late final Color? tileColor;
+    // late final Color? iconColor;
+    // late final Color? textColor;
+    // late final Color? tileColor;
 
     // if (isSelected) {
-    iconColor = null;
-    textColor = null;
-    tileColor = null;
+    // iconColor = null;
+    // textColor = null;
+    // tileColor = null;
     // } else {
     // switch (state) {
     //   case MPOptionStateType.set:
