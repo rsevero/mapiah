@@ -5,6 +5,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -18,6 +19,7 @@ class MPTextToUser {
   static final Map<THElementType, String> _elementTypeAsString = {};
   static final Map<THPointType, String> _pointTypeAsString = {};
   static final Map<THLineType, String> _lineTypeAsString = {};
+  static final Map<THAreaType, String> _areaTypeAsString = {};
   static final Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
   static final Map<THOptionChoicesAdjustType, String>
       _multipleChoiceAdjustChoiceAsString = {};
@@ -50,6 +52,7 @@ class MPTextToUser {
     _initializeElementTypeAsString();
     _initializePointTypeAsString();
     _initializeLineTypeAsString();
+    _initializeAreaTypeAsString();
     _initializeCommandOptionTypeAsString();
     _initializeMultipleChoiceAdjustChoiceAsString();
     _initializeMultipleChoiceAlignChoiceAsString();
@@ -439,6 +442,41 @@ class MPTextToUser {
     return _lineTypeAsString.containsKey(lineType)
         ? _lineTypeAsString[lineType]!
         : lineType.name;
+  }
+
+  static void _initializeAreaTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _areaTypeAsString[THAreaType.bedrock] = localizations.thAreaBedrock;
+    _areaTypeAsString[THAreaType.blocks] = localizations.thAreaBlocks;
+    _areaTypeAsString[THAreaType.clay] = localizations.thAreaClay;
+    _areaTypeAsString[THAreaType.debris] = localizations.thAreaDebris;
+    _areaTypeAsString[THAreaType.flowstone] = localizations.thAreaFlowstone;
+    _areaTypeAsString[THAreaType.ice] = localizations.thAreaIce;
+    _areaTypeAsString[THAreaType.moonmilk] = localizations.thAreaMoonmilk;
+    _areaTypeAsString[THAreaType.mudcrack] = localizations.thAreaMudcrack;
+    _areaTypeAsString[THAreaType.pebbles] = localizations.thAreaPebbles;
+    _areaTypeAsString[THAreaType.pillar] = localizations.thAreaPillar;
+    _areaTypeAsString[THAreaType.pillars] = localizations.thAreaPillars;
+    _areaTypeAsString[THAreaType.pillarsWithCurtains] =
+        localizations.thAreaPillarsWithCurtains;
+    _areaTypeAsString[THAreaType.pillarWithCurtains] =
+        localizations.thAreaPillarWithCurtains;
+    _areaTypeAsString[THAreaType.sand] = localizations.thAreaSand;
+    _areaTypeAsString[THAreaType.snow] = localizations.thAreaSnow;
+    _areaTypeAsString[THAreaType.stalactite] = localizations.thAreaStalactite;
+    _areaTypeAsString[THAreaType.stalactiteStalagmite] =
+        localizations.thAreaStalactiteStalagmite;
+    _areaTypeAsString[THAreaType.stalagmite] = localizations.thAreaStalagmite;
+    _areaTypeAsString[THAreaType.sump] = localizations.thAreaSump;
+    _areaTypeAsString[THAreaType.u] = localizations.thAreaU;
+    _areaTypeAsString[THAreaType.water] = localizations.thAreaWater;
+  }
+
+  static String getAreaType(THAreaType areaType) {
+    return _areaTypeAsString.containsKey(areaType)
+        ? _areaTypeAsString[areaType]!
+        : areaType.name;
   }
 
   static void _initializeCommandOptionTypeAsString() {
@@ -842,6 +880,36 @@ class MPTextToUser {
       default:
         return compareStringsNoDiacritics(a, b);
     }
+  }
+
+  static Map<String, String> getAreaTypeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THAreaType.values) {
+      choices[choiceType.name] = getAreaType(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getLineTypeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THLineType.values) {
+      choices[choiceType.name] = getLineType(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getPointTypeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THPointType.values) {
+      choices[choiceType.name] = getPointType(choiceType);
+    }
+
+    return choices;
   }
 
   static Map<String, String> getLengthUnitsChoices() {

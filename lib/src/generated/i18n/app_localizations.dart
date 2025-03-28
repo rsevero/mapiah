@@ -377,6 +377,48 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
+  /// The label for the all type
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get mpPLATypeAll;
+
+  /// The title for the area types
+  ///
+  /// In en, this message translates to:
+  /// **'Area types'**
+  String get mpPLATypeAreaTitle;
+
+  /// The label for the current type
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get mpPLATypeCurrent;
+
+  /// The label for the last used type
+  ///
+  /// In en, this message translates to:
+  /// **'Last used'**
+  String get mpPLATypeLastUsed;
+
+  /// The title for the line types
+  ///
+  /// In en, this message translates to:
+  /// **'Line types'**
+  String get mpPLATypeLineTitle;
+
+  /// The label for the most used type
+  ///
+  /// In en, this message translates to:
+  /// **'Most used'**
+  String get mpPLATypeMostUsed;
+
+  /// The title for the point types
+  ///
+  /// In en, this message translates to:
+  /// **'Point types'**
+  String get mpPLATypePointTitle;
+
   /// The title for the options edit dialog
   ///
   /// In en, this message translates to:
@@ -580,6 +622,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a TH2 file'**
   String get th2FilePickSelectTH2File;
+
+  /// The label for the bedrock area type
+  ///
+  /// In en, this message translates to:
+  /// **'Bedrock'**
+  String get thAreaBedrock;
+
+  /// The label for the blocks area type
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks'**
+  String get thAreaBlocks;
+
+  /// The label for the clay area type
+  ///
+  /// In en, this message translates to:
+  /// **'Clay'**
+  String get thAreaClay;
+
+  /// The label for the debris area type
+  ///
+  /// In en, this message translates to:
+  /// **'Debris'**
+  String get thAreaDebris;
+
+  /// The label for the flowstone area type
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone'**
+  String get thAreaFlowstone;
+
+  /// The label for the ice area type
+  ///
+  /// In en, this message translates to:
+  /// **'Ice'**
+  String get thAreaIce;
+
+  /// The label for the moonmilk area type
+  ///
+  /// In en, this message translates to:
+  /// **'Moonmilk'**
+  String get thAreaMoonmilk;
+
+  /// The label for the mudcrack area type
+  ///
+  /// In en, this message translates to:
+  /// **'Mudcrack'**
+  String get thAreaMudcrack;
+
+  /// The label for the pebbles area type
+  ///
+  /// In en, this message translates to:
+  /// **'Pebbles'**
+  String get thAreaPebbles;
+
+  /// The label for the pillar area type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar'**
+  String get thAreaPillar;
+
+  /// The label for the pillars area type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillars'**
+  String get thAreaPillars;
+
+  /// The label for the pillars with curtains area type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillars with Curtains'**
+  String get thAreaPillarsWithCurtains;
+
+  /// The label for the pillar with curtains area type
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar with Curtains'**
+  String get thAreaPillarWithCurtains;
+
+  /// The label for the sand area type
+  ///
+  /// In en, this message translates to:
+  /// **'Sand'**
+  String get thAreaSand;
+
+  /// The label for the snow area type
+  ///
+  /// In en, this message translates to:
+  /// **'Snow'**
+  String get thAreaSnow;
+
+  /// The label for the stalactite area type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactite'**
+  String get thAreaStalactite;
+
+  /// The label for the stalactite-stalagmite area type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactite-Stalagmite'**
+  String get thAreaStalactiteStalagmite;
+
+  /// The label for the stalagmite area type
+  ///
+  /// In en, this message translates to:
+  /// **'Stalagmite'**
+  String get thAreaStalagmite;
+
+  /// The label for the sump area type
+  ///
+  /// In en, this message translates to:
+  /// **'Sump'**
+  String get thAreaSump;
+
+  /// The label for the user defined area type
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get thAreaU;
+
+  /// The label for the water area type
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get thAreaWater;
 
   /// The label for the area element type
   ///

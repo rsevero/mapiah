@@ -166,20 +166,6 @@ mixin _$TH2FileEditOverlayWindowController
           name: 'TH2FileEditOverlayWindowControllerBase', context: context);
 
   @override
-  void setShowOverlayWindow(MPWindowType type, bool show, {Offset? position}) {
-    final _$actionInfo =
-        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
-    try {
-      return super.setShowOverlayWindow(type, show, position: position);
-    } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void showOptionChoicesOverlayWindow(
       {required Offset position, required MPOptionInfo optionInfo}) {
     final _$actionInfo =
@@ -189,6 +175,20 @@ mixin _$TH2FileEditOverlayWindowController
     try {
       return super.showOptionChoicesOverlayWindow(
           position: position, optionInfo: optionInfo);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setShowOverlayWindow(MPWindowType type, bool show, {Offset? position}) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
+    try {
+      return super.setShowOverlayWindow(type, show, position: position);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);
@@ -216,6 +216,46 @@ mixin _$TH2FileEditOverlayWindowController
             name: 'TH2FileEditOverlayWindowControllerBase.clearOverlayWindows');
     try {
       return super.clearOverlayWindows();
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void performToggleShowPLATypeOverlayWindow(
+      {required Offset position,
+      required THElementType elementType,
+      required String? selectedType}) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.performToggleShowPLATypeOverlayWindow');
+    try {
+      return super.performToggleShowPLATypeOverlayWindow(
+          position: position,
+          elementType: elementType,
+          selectedType: selectedType);
+    } finally {
+      _$TH2FileEditOverlayWindowControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void showPLATypeOverlayWindow(
+      {required Offset position,
+      required THElementType elementType,
+      required String? selectedType}) {
+    final _$actionInfo =
+        _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditOverlayWindowControllerBase.showPLATypeOverlayWindow');
+    try {
+      return super.showPLATypeOverlayWindow(
+          position: position,
+          elementType: elementType,
+          selectedType: selectedType);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

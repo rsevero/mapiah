@@ -163,6 +163,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
+  String get mpPLATypeAll => 'Todos';
+
+  @override
+  String get mpPLATypeAreaTitle => 'Tipos de área';
+
+  @override
+  String get mpPLATypeCurrent => 'Atual';
+
+  @override
+  String get mpPLATypeLastUsed => 'Últimos usados';
+
+  @override
+  String get mpPLATypeLineTitle => 'Tipos de linha';
+
+  @override
+  String get mpPLATypeMostUsed => 'Mais usados';
+
+  @override
+  String get mpPLATypePointTitle => 'Tipos de ponto';
+
+  @override
   String get mpOptionsEditTitle => 'Opções';
 
   @override
@@ -281,6 +302,69 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
+
+  @override
+  String get thAreaBedrock => 'Rocha matriz';
+
+  @override
+  String get thAreaBlocks => 'Blocos';
+
+  @override
+  String get thAreaClay => 'Argila';
+
+  @override
+  String get thAreaDebris => 'Detritos';
+
+  @override
+  String get thAreaFlowstone => 'Travertino';
+
+  @override
+  String get thAreaIce => 'Gelo';
+
+  @override
+  String get thAreaMoonmilk => 'Leite de Lua';
+
+  @override
+  String get thAreaMudcrack => 'Rachadura de Lama';
+
+  @override
+  String get thAreaPebbles => 'Seixos';
+
+  @override
+  String get thAreaPillar => 'Pilar';
+
+  @override
+  String get thAreaPillars => 'Pilares';
+
+  @override
+  String get thAreaPillarsWithCurtains => 'Pilares com Cortinas';
+
+  @override
+  String get thAreaPillarWithCurtains => 'Pilar com Cortinas';
+
+  @override
+  String get thAreaSand => 'Areia';
+
+  @override
+  String get thAreaSnow => 'Neve';
+
+  @override
+  String get thAreaStalactite => 'Estalactite';
+
+  @override
+  String get thAreaStalactiteStalagmite => 'Estalactite e Estalagmite';
+
+  @override
+  String get thAreaStalagmite => 'Estalagmite';
+
+  @override
+  String get thAreaSump => 'Sifão';
+
+  @override
+  String get thAreaU => 'Usuário';
+
+  @override
+  String get thAreaWater => 'Água';
 
   @override
   String get thElementArea => 'Área';

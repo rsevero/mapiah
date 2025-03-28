@@ -3,6 +3,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
 import 'package:mobx/mobx.dart';
@@ -54,7 +55,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   final autoDismissOverlayWindowTypes = {
     MPWindowType.commandOptions,
     MPWindowType.optionChoices,
+    MPWindowType.plaTypes,
   };
+
+  THElementType? _currentPLATypeShown;
 
   void close() {
     for (MPWindowType type in MPWindowType.values) {
@@ -107,6 +111,40 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     Overlay.of(context, rootOverlay: true).insert(_overlayWindows[type]!);
   }
 
+  @action
+  void showOptionChoicesOverlayWindow({
+    required Offset position,
+    required MPOptionInfo optionInfo,
+  }) {
+    const MPWindowType overlayWindowType = MPWindowType.optionChoices;
+
+    if (_overlayWindows.containsKey(overlayWindowType)) {
+      _overlayWindows.remove(overlayWindowType);
+    }
+
+    _overlayWindows[overlayWindowType] =
+        MPOverlayWindowFactory.createOptionChoices(
+      th2FileEditController: _th2FileEditController,
+      position: position,
+      optionInfo: optionInfo,
+    );
+
+    _activeWindow = overlayWindowType;
+    _isAutoDismissWindowOpen = true;
+    _isOverlayWindowShown[overlayWindowType] = true;
+
+    BuildContext? context =
+        _th2FileEditController.thFileWidgetKey.currentContext;
+
+    if (context == null) {
+      throw StateError(
+          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().");
+    }
+
+    Overlay.of(context, rootOverlay: true)
+        .insert(_overlayWindows[overlayWindowType]!);
+  }
+
   void _hideOverlayWindow(MPWindowType type) {
     if (_isAutoDismissWindowOpen) {
       /// Is there still an auto dismmisable overlay window open?
@@ -153,40 +191,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   @action
-  void showOptionChoicesOverlayWindow({
-    required Offset position,
-    required MPOptionInfo optionInfo,
-  }) {
-    const MPWindowType overlayWindowType = MPWindowType.optionChoices;
-
-    if (_overlayWindows.containsKey(overlayWindowType)) {
-      _overlayWindows.remove(overlayWindowType);
-    }
-
-    _overlayWindows[overlayWindowType] =
-        MPOverlayWindowFactory.createOptionChoices(
-      th2FileEditController: _th2FileEditController,
-      position: position,
-      optionInfo: optionInfo,
-    );
-
-    _activeWindow = overlayWindowType;
-    _isAutoDismissWindowOpen = true;
-    _isOverlayWindowShown[overlayWindowType] = true;
-
-    BuildContext? context =
-        _th2FileEditController.thFileWidgetKey.currentContext;
-
-    if (context == null) {
-      throw StateError(
-          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().");
-    }
-
-    Overlay.of(context, rootOverlay: true)
-        .insert(_overlayWindows[overlayWindowType]!);
-  }
-
-  @action
   void closeAutoDismissOverlayWindows() {
     for (MPWindowType type in autoDismissOverlayWindowTypes) {
       if (_isOverlayWindowShown[type]!) {
@@ -213,5 +217,60 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     for (final type in MPWindowType.values) {
       setShowOverlayWindow(type, false);
     }
+  }
+
+  @action
+  void performToggleShowPLATypeOverlayWindow({
+    required Offset position,
+    required THElementType elementType,
+    required String? selectedType,
+  }) {
+    if (elementType == _currentPLATypeShown) {
+      _currentPLATypeShown = null;
+      setShowOverlayWindow(MPWindowType.plaTypes, false);
+    } else {
+      _currentPLATypeShown = elementType;
+      showPLATypeOverlayWindow(
+        position: position,
+        elementType: elementType,
+        selectedType: selectedType,
+      );
+    }
+  }
+
+  @action
+  void showPLATypeOverlayWindow({
+    required Offset position,
+    required THElementType elementType,
+    required String? selectedType,
+  }) {
+    const MPWindowType overlayWindowType = MPWindowType.plaTypes;
+
+    if (_overlayWindows.containsKey(overlayWindowType)) {
+      _overlayWindows.remove(overlayWindowType);
+    }
+
+    _overlayWindows[overlayWindowType] =
+        MPOverlayWindowFactory.createPLATypeOptions(
+      th2FileEditController: _th2FileEditController,
+      position: position,
+      elementType: elementType,
+      selectedType: selectedType,
+    );
+
+    _activeWindow = overlayWindowType;
+    _isAutoDismissWindowOpen = true;
+    _isOverlayWindowShown[overlayWindowType] = true;
+
+    BuildContext? context =
+        _th2FileEditController.thFileWidgetKey.currentContext;
+
+    if (context == null) {
+      throw StateError(
+          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showPLATypeOverlayWindow().");
+    }
+
+    Overlay.of(context, rootOverlay: true)
+        .insert(_overlayWindows[overlayWindowType]!);
   }
 }

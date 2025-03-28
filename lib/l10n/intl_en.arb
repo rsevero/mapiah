@@ -289,6 +289,48 @@
     "type": "text"
   },
 
+  "mpPLATypeAll": "All",
+  "@mpPLATypeAll": {
+    "description": "The label for the all type",
+    "type": "text"
+  },
+
+  "mpPLATypeAreaTitle": "Area types",
+  "@mpPLATypeAreaTitle": {
+    "description": "The title for the area types",
+    "type": "text"
+  },
+
+  "mpPLATypeCurrent": "Current",
+  "@mpPLATypeCurrent": {
+    "description": "The label for the current type",
+    "type": "text"
+  },
+
+  "mpPLATypeLastUsed": "Last used",
+  "@mpPLATypeLastUsed": {
+    "description": "The label for the last used type",
+    "type": "text"
+  },
+
+  "mpPLATypeLineTitle": "Line types",
+  "@mpPLATypeLineTitle": {
+    "description": "The title for the line types",
+    "type": "text"
+  },
+
+  "mpPLATypeMostUsed": "Most used",
+  "@mpPLATypeMostUsed": {
+    "description": "The label for the most used type",
+    "type": "text"
+  },
+
+  "mpPLATypePointTitle": "Point types",
+  "@mpPLATypePointTitle": {
+    "description": "The title for the point types",
+    "type": "text"
+  },
+
   "mpOptionsEditTitle": "Options",
   "@mpOptionsEditTitle": {
     "description": "The title for the options edit dialog",
@@ -520,6 +562,132 @@
   "th2FilePickSelectTH2File": "Select a TH2 file",
   "@th2FilePickSelectTH2File": {
     "description": "The label for the TH2 file selection dialog",
+    "type": "text"
+  },
+
+  "thAreaBedrock": "Bedrock",
+  "@thAreaBedrock": {
+    "description": "The label for the bedrock area type",
+    "type": "text"
+  },
+
+  "thAreaBlocks": "Blocks",
+  "@thAreaBlocks": {
+    "description": "The label for the blocks area type",
+    "type": "text"
+  },
+
+  "thAreaClay": "Clay",
+  "@thAreaClay": {
+    "description": "The label for the clay area type",
+    "type": "text"
+  },
+
+  "thAreaDebris": "Debris",
+  "@thAreaDebris": {
+    "description": "The label for the debris area type",
+    "type": "text"
+  },
+
+  "thAreaFlowstone": "Flowstone",
+  "@thAreaFlowstone": {
+    "description": "The label for the flowstone area type",
+    "type": "text"
+  },
+
+  "thAreaIce": "Ice",
+  "@thAreaIce": {
+    "description": "The label for the ice area type",
+    "type": "text"
+  },
+
+  "thAreaMoonmilk": "Moonmilk",
+  "@thAreaMoonmilk": {
+    "description": "The label for the moonmilk area type",
+    "type": "text"
+  },
+
+  "thAreaMudcrack": "Mudcrack",
+  "@thAreaMudcrack": {
+    "description": "The label for the mudcrack area type",
+    "type": "text"
+  },
+
+  "thAreaPebbles": "Pebbles",
+  "@thAreaPebbles": {
+    "description": "The label for the pebbles area type",
+    "type": "text"
+  },
+
+  "thAreaPillar": "Pillar",
+  "@thAreaPillar": {
+    "description": "The label for the pillar area type",
+    "type": "text"
+  },
+
+  "thAreaPillars": "Pillars",
+  "@thAreaPillars": {
+    "description": "The label for the pillars area type",
+    "type": "text"
+  },
+
+  "thAreaPillarsWithCurtains": "Pillars with Curtains",
+  "@thAreaPillarsWithCurtains": {
+    "description": "The label for the pillars with curtains area type",
+    "type": "text"
+  },
+
+  "thAreaPillarWithCurtains": "Pillar with Curtains",
+  "@thAreaPillarWithCurtains": {
+    "description": "The label for the pillar with curtains area type",
+    "type": "text"
+  },
+
+  "thAreaSand": "Sand",
+  "@thAreaSand": {
+    "description": "The label for the sand area type",
+    "type": "text"
+  },
+
+  "thAreaSnow": "Snow",
+  "@thAreaSnow": {
+    "description": "The label for the snow area type",
+    "type": "text"
+  },
+
+  "thAreaStalactite": "Stalactite",
+  "@thAreaStalactite": {
+    "description": "The label for the stalactite area type",
+    "type": "text"
+  },
+
+  "thAreaStalactiteStalagmite": "Stalactite-Stalagmite",
+  "@thAreaStalactiteStalagmite": {
+    "description": "The label for the stalactite-stalagmite area type",
+    "type": "text"
+  },
+
+  "thAreaStalagmite": "Stalagmite",
+  "@thAreaStalagmite": {
+    "description": "The label for the stalagmite area type",
+    "type": "text"
+  },
+
+  "thAreaSump": "Sump",
+  "@thAreaSump": {
+    "description": "The label for the sump area type",
+    "type": "text"
+  },
+
+  "thAreaU": "User",
+  "@thAreaU": {
+    "description": "The label for the user defined area type",
+    "type": "text"
+  },
+
+  "thAreaWater": "Water",
+  "@thAreaWater": {
+    "description": "The label for the water area type",
     "type": "text"
   },
 

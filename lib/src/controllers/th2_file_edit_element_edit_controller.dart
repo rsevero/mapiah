@@ -30,16 +30,25 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditElementEditControllerBase(this._th2FileEditController)
-      : _thFile = _th2FileEditController.thFile;
+      : _thFile = _th2FileEditController.thFile {
+    final elements = _thFile.elements.values;
 
-  @readonly
-  THPointType _lastAddedPointType = thDefaultPointType;
+    for (final element in elements) {
+      switch (element) {
+        case THArea _:
+          _setMostUsedType(element.areaType.name);
+        case THLine _:
+          _setMostUsedType(element.lineType.name);
+        case THPoint _:
+          _setMostUsedType(element.pointType.name);
+        default:
+      }
+    }
 
-  @readonly
-  THLineType _lastAddedLineType = thDefaultLineType;
-
-  @readonly
-  THAreaType _lastAddedAreaType = thDefaultAreaType;
+    setUsedAreaType(thDefaultAreaType.name);
+    setUsedLineType(thDefaultLineType.name);
+    setUsedPointType(thDefaultPointType.name);
+  }
 
   @readonly
   Offset? _lineStartScreenPosition;
@@ -48,6 +57,141 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   THLine? _newLine;
 
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
+
+  final List<String> _lastUsedAreaTypes = [];
+  final List<String> _lastUsedLineTypes = [];
+  final List<String> _lastUsedPointTypes = [];
+  final Map<String, MPTypeUsed> _mostUsedAreaTypes = {};
+  final Map<String, MPTypeUsed> _mostUsedLineTypes = {};
+  final Map<String, MPTypeUsed> _mostUsedPointTypes = {};
+
+  List<String> get lastUsedAreaTypes => _lastUsedAreaTypes;
+
+  List<String> get lastUsedLineTypes => _lastUsedLineTypes;
+
+  List<String> get lastUsedPointTypes => _lastUsedPointTypes;
+
+  List<String> get mostUsedAreaTypes {
+    return _getMostUsedTypes(_mostUsedAreaTypes);
+  }
+
+  List<String> get mostUsedLineTypes {
+    return _getMostUsedTypes(_mostUsedLineTypes);
+  }
+
+  List<String> get mostUsedPointTypes {
+    return _getMostUsedTypes(_mostUsedPointTypes);
+  }
+
+  List<String> _getMostUsedTypes(Map<String, MPTypeUsed> mostUsedTypesMap) {
+    final List<String> mostUsedTypes = [];
+    final List<MapEntry<String, MPTypeUsed>> entries =
+        mostUsedTypesMap.entries.toList();
+
+    entries.sort((a, b) {
+      final int countComparison = b.value.count.compareTo(a.value.count);
+
+      if (countComparison != 0) {
+        return countComparison;
+      }
+
+      return b.value.lastUsed.compareTo(a.value.lastUsed);
+    });
+
+    for (final MapEntry<String, MPTypeUsed> entry in entries) {
+      mostUsedTypes.add(entry.key);
+    }
+
+    return mostUsedTypes;
+  }
+
+  void setUsedAreaType(String areaType) {
+    if (_lastUsedAreaTypes.contains(areaType)) {
+      _lastUsedAreaTypes.remove(areaType);
+    }
+
+    _lastUsedAreaTypes.insert(0, areaType);
+
+    if (_lastUsedAreaTypes.length > mpMaxLastUsedTypes) {
+      _lastUsedAreaTypes.removeLast();
+    }
+
+    if (_mostUsedAreaTypes.containsKey(areaType)) {
+      _mostUsedAreaTypes[areaType]!.incrementUse();
+    } else {
+      _mostUsedAreaTypes[areaType] = MPTypeUsed(areaType);
+    }
+  }
+
+  void setUsedLineType(String lineType) {
+    if (_lastUsedLineTypes.contains(lineType)) {
+      _lastUsedLineTypes.remove(lineType);
+    }
+
+    _lastUsedLineTypes.insert(0, lineType);
+
+    if (_lastUsedLineTypes.length > mpMaxLastUsedTypes) {
+      _lastUsedLineTypes.removeLast();
+    }
+
+    if (_mostUsedLineTypes.containsKey(lineType)) {
+      _mostUsedLineTypes[lineType]!.incrementUse();
+    } else {
+      _mostUsedLineTypes[lineType] = MPTypeUsed(lineType);
+    }
+  }
+
+  void setUsedPointType(String pointType) {
+    if (_lastUsedPointTypes.contains(pointType)) {
+      _lastUsedPointTypes.remove(pointType);
+    }
+
+    _lastUsedPointTypes.insert(0, pointType);
+
+    if (_lastUsedPointTypes.length > mpMaxLastUsedTypes) {
+      _lastUsedPointTypes.removeLast();
+    }
+
+    _setMostUsedType(pointType);
+  }
+
+  void _setMostUsedType(String pointType) {
+    if (_mostUsedPointTypes.containsKey(pointType)) {
+      _mostUsedPointTypes[pointType]!.incrementUse();
+    } else {
+      _mostUsedPointTypes[pointType] = MPTypeUsed(pointType);
+    }
+  }
+
+  THAreaType get lastUsedAreaType {
+    if (_lastUsedAreaTypes.isEmpty) {
+      return thDefaultAreaType;
+    }
+
+    final String lastUsedAreaType = _lastUsedAreaTypes.first;
+
+    return THAreaType.values.byName(lastUsedAreaType);
+  }
+
+  THLineType get lastUsedLineType {
+    if (_lastUsedLineTypes.isEmpty) {
+      return thDefaultLineType;
+    }
+
+    final String lastUsedLineType = _lastUsedLineTypes.first;
+
+    return THLineType.values.byName(lastUsedLineType);
+  }
+
+  THPointType get lastUsedPointType {
+    if (_lastUsedPointTypes.isEmpty) {
+      return thDefaultPointType;
+    }
+
+    final String lastUsedPointType = _lastUsedPointTypes.first;
+
+    return THPointType.values.byName(lastUsedPointType);
+  }
 
   List<THLineSegment> getLineSegmentsList({
     required THLine line,
@@ -218,7 +362,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   THLine _createNewLine() {
     final THLine newLine = THLine(
       parentMPID: _th2FileEditController.activeScrapID,
-      lineType: _lastAddedLineType,
+      lineType: lastUsedLineType,
     );
 
     _th2FileEditController.elementEditController
@@ -233,21 +377,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void setNewLine(THLine newLine) {
     _newLine = newLine;
-  }
-
-  @action
-  void setLastAddedPointType(THPointType pointType) {
-    _lastAddedPointType = pointType;
-  }
-
-  @action
-  void setLastAddedLineType(THLineType lineType) {
-    _lastAddedLineType = lineType;
-  }
-
-  @action
-  void setLastAddedAreaType(THAreaType areaType) {
-    _lastAddedAreaType = areaType;
   }
 
   @action
@@ -488,5 +617,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     parentElement.removeOption(optionType);
     updateOptionEdited();
+  }
+}
+
+class MPTypeUsed {
+  final String type;
+  int count = 1;
+  DateTime lastUsed = DateTime.now();
+
+  MPTypeUsed(this.type);
+
+  void incrementUse() {
+    count++;
+    lastUsed = DateTime.now();
   }
 }

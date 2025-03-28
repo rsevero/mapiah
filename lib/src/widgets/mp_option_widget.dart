@@ -90,9 +90,8 @@ class MPOptionWidget extends StatelessWidget {
         : boundingBox.centerRight;
 
     optionEditController.performToggleOptionShownStatus(
-      context,
-      type,
-      position,
+      optionType: type,
+      position: position,
     );
   }
 }

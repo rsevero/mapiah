@@ -192,3 +192,6 @@ const THAreaType thDefaultAreaType = THAreaType.water;
 
 const String mpUnsetOptionID = 'UNSET';
 const String mpNonMultipleChoiceSetID = 'SET';
+
+const int mpMaxLastUsedTypes = 5;
+const int mpMaxMostUsedTypes = 5;

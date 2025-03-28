@@ -8,10 +8,12 @@ import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.d
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_altitude_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
+import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowFactory {
@@ -60,6 +62,10 @@ class MPOverlayWindowFactory {
       case MPWindowType.optionChoices:
         throw UnimplementedError(
           'Call MPOverlayWindowFactory.createOptionChoices() to create option choices widgets.',
+        );
+      case MPWindowType.plaTypes:
+        throw UnimplementedError(
+          'Call MPOverlayWindowFactory.createPLATypeOptions() to create PLA type options widgets.',
         );
     }
 
@@ -145,6 +151,29 @@ class MPOverlayWindowFactory {
     }
 
     return OverlayEntry(builder: (context) => overlayWindowWidget);
+  }
+
+  static OverlayEntry createPLATypeOptions({
+    required TH2FileEditController th2FileEditController,
+    required Offset position,
+    required THElementType elementType,
+    required String? selectedType,
+  }) {
+    final int thFileMPID = th2FileEditController.thFileMPID;
+
+    return OverlayEntry(
+      builder: (context) => MPPLATypeOptionsWidget(
+        th2FileEditController: th2FileEditController,
+        key: ValueKey("MPPLATypeOptionsWidget|$thFileMPID"),
+        type: elementType,
+        selectedType: selectedType,
+        position: position,
+        positionType: MPWidgetPositionType.leftCenter,
+        maxHeight: getMaxHeightForOverlayWindows(
+          th2FileEditController.thFileWidgetKey,
+        ),
+      ),
+    );
   }
 
   static double getMaxHeightForOverlayWindows(GlobalKey targetKey) {

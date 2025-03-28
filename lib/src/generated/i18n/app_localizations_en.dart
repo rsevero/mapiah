@@ -163,6 +163,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
+  String get mpPLATypeAll => 'All';
+
+  @override
+  String get mpPLATypeAreaTitle => 'Area types';
+
+  @override
+  String get mpPLATypeCurrent => 'Current';
+
+  @override
+  String get mpPLATypeLastUsed => 'Last used';
+
+  @override
+  String get mpPLATypeLineTitle => 'Line types';
+
+  @override
+  String get mpPLATypeMostUsed => 'Most used';
+
+  @override
+  String get mpPLATypePointTitle => 'Point types';
+
+  @override
   String get mpOptionsEditTitle => 'Options';
 
   @override
@@ -281,6 +302,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FilePickSelectTH2File => 'Select a TH2 file';
+
+  @override
+  String get thAreaBedrock => 'Bedrock';
+
+  @override
+  String get thAreaBlocks => 'Blocks';
+
+  @override
+  String get thAreaClay => 'Clay';
+
+  @override
+  String get thAreaDebris => 'Debris';
+
+  @override
+  String get thAreaFlowstone => 'Flowstone';
+
+  @override
+  String get thAreaIce => 'Ice';
+
+  @override
+  String get thAreaMoonmilk => 'Moonmilk';
+
+  @override
+  String get thAreaMudcrack => 'Mudcrack';
+
+  @override
+  String get thAreaPebbles => 'Pebbles';
+
+  @override
+  String get thAreaPillar => 'Pillar';
+
+  @override
+  String get thAreaPillars => 'Pillars';
+
+  @override
+  String get thAreaPillarsWithCurtains => 'Pillars with Curtains';
+
+  @override
+  String get thAreaPillarWithCurtains => 'Pillar with Curtains';
+
+  @override
+  String get thAreaSand => 'Sand';
+
+  @override
+  String get thAreaSnow => 'Snow';
+
+  @override
+  String get thAreaStalactite => 'Stalactite';
+
+  @override
+  String get thAreaStalactiteStalagmite => 'Stalactite-Stalagmite';
+
+  @override
+  String get thAreaStalagmite => 'Stalagmite';
+
+  @override
+  String get thAreaSump => 'Sump';
+
+  @override
+  String get thAreaU => 'User';
+
+  @override
+  String get thAreaWater => 'Water';
 
   @override
   String get thElementArea => 'Area';

@@ -7,8 +7,10 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/mp_pla_type_widget.dart';
 import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -28,11 +30,13 @@ class MPOptionsEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return Observer(
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
+
+        String? selectedType;
+
+        final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
         final List<Widget> optionWidgets = [
           Text(appLocalizations.mpOptionsEditTitle),
@@ -49,13 +53,47 @@ class MPOptionsEditWidget extends StatelessWidget {
 
           switch (selectedElementType) {
             case THElementType.area:
-              optionWidgets.add(ListTile(
-                title: Text(appLocalizations.thElementArea),
-              ));
+              for (final selectedElement in mpSelectedElements) {
+                if ((selectedElement is MPSelectedArea) &&
+                    (selectedElement.originalAreaClone.areaType.name !=
+                        selectedType)) {
+                  if (selectedType == null) {
+                    selectedType =
+                        selectedElement.originalAreaClone.areaType.name;
+                  } else {
+                    selectedType = null;
+                    break;
+                  }
+                }
+              }
+
+              optionWidgets.add(
+                MPPlaTypeWidget(
+                    selectedType: selectedType,
+                    type: selectedElementType,
+                    th2FileEditController: th2FileEditController),
+              );
             case THElementType.line:
-              optionWidgets.add(ListTile(
-                title: Text(appLocalizations.thElementLine),
-              ));
+              for (final selectedElement in mpSelectedElements) {
+                if ((selectedElement is MPSelectedLine) &&
+                    (selectedElement.originalLineClone.lineType.name !=
+                        selectedType)) {
+                  if (selectedType == null) {
+                    selectedType =
+                        selectedElement.originalLineClone.lineType.name;
+                  } else {
+                    selectedType = null;
+                    break;
+                  }
+                }
+              }
+
+              optionWidgets.add(
+                MPPlaTypeWidget(
+                    selectedType: selectedType,
+                    type: selectedElementType,
+                    th2FileEditController: th2FileEditController),
+              );
             case THElementType.straightLineSegment:
               optionWidgets.add(ListTile(
                 title: Text(appLocalizations.thElementStraightLineSegment),
@@ -65,9 +103,26 @@ class MPOptionsEditWidget extends StatelessWidget {
                 title: Text(appLocalizations.thElementBezierCurveLineSegment),
               ));
             case THElementType.point:
-              optionWidgets.add(ListTile(
-                title: Text(appLocalizations.thElementPoint),
-              ));
+              for (final selectedElement in mpSelectedElements) {
+                if ((selectedElement is MPSelectedPoint) &&
+                    (selectedElement.originalPointClone.pointType.name !=
+                        selectedType)) {
+                  if (selectedType == null) {
+                    selectedType =
+                        selectedElement.originalPointClone.pointType.name;
+                  } else {
+                    selectedType = null;
+                    break;
+                  }
+                }
+              }
+
+              optionWidgets.add(
+                MPPlaTypeWidget(
+                    selectedType: selectedType,
+                    type: selectedElementType,
+                    th2FileEditController: th2FileEditController),
+              );
             case THElementType.scrap:
               optionWidgets.add(ListTile(
                 title: Text(appLocalizations.thElementScrap),
