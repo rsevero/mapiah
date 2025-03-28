@@ -30,7 +30,7 @@ class MPOptionsEditWidget extends StatelessWidget {
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        final List<Widget> optionWidgets = [const Text('Options')];
+        final List<Widget> optionWidgets = [Text('Options')];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
 

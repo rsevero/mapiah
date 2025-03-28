@@ -13,6 +13,8 @@ class MPTextToUser {
   static final Map<MPCommandDescriptionType, String>
       _commandDescriptionTypeAsString = {};
   static final Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
+  static final Map<THLengthUnitType, String>
+      _lengthUnitTypeAbbreviationAsString = {};
   static final Map<THElementType, String> _elementTypeAsString = {};
   static final Map<THPointType, String> _pointTypeAsString = {};
   static final Map<THLineType, String> _lineTypeAsString = {};
@@ -44,6 +46,7 @@ class MPTextToUser {
   static void initialize() {
     _initializeCommandTypeAsString();
     _initializeLengthUnitTypeAsString();
+    _initializeLengthUnitTypeAbbreviationAsString();
     _initializeElementTypeAsString();
     _initializePointTypeAsString();
     _initializeLineTypeAsString();
@@ -144,6 +147,27 @@ class MPTextToUser {
   static String getLengthUnitType(THLengthUnitType lengthUnitType) {
     return _lengthUnitTypeAsString.containsKey(lengthUnitType)
         ? _lengthUnitTypeAsString[lengthUnitType]!
+        : lengthUnitType.name;
+  }
+
+  static void _initializeLengthUnitTypeAbbreviationAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _lengthUnitTypeAbbreviationAsString[THLengthUnitType.centimeter] =
+        localizations.mpLengthUnitCentimeterAbbreviation;
+    _lengthUnitTypeAbbreviationAsString[THLengthUnitType.feet] =
+        localizations.mpLengthUnitFootAbbreviation;
+    _lengthUnitTypeAbbreviationAsString[THLengthUnitType.inch] =
+        localizations.mpLengthUnitInchAbbreviation;
+    _lengthUnitTypeAbbreviationAsString[THLengthUnitType.meter] =
+        localizations.mpLengthUnitMeterAbbreviation;
+    _lengthUnitTypeAbbreviationAsString[THLengthUnitType.yard] =
+        localizations.mpLengthUnitYardAbbreviation;
+  }
+
+  static String getLengthUnitTypeAbbreviation(THLengthUnitType lengthUnitType) {
+    return _lengthUnitTypeAbbreviationAsString.containsKey(lengthUnitType)
+        ? _lengthUnitTypeAbbreviationAsString[lengthUnitType]!
         : lengthUnitType.name;
   }
 
