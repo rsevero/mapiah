@@ -58,15 +58,19 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   void close() {
     for (MPWindowType type in MPWindowType.values) {
-      setShowOverlayWindow(type, false);
+      hideOverlayWindow(type);
     }
   }
 
-  void toggleOverlayWindow(MPWindowType type) {
-    setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
+  void toggleOverlayWindow(BuildContext context, MPWindowType type) {
+    setShowOverlayWindow(context, type, !_isOverlayWindowShown[type]!);
   }
 
-  void _showOverlayWindow(MPWindowType type, {Offset? position}) {
+  void _showOverlayWindow(
+    BuildContext context,
+    MPWindowType type, {
+    Offset? position,
+  }) {
     if (autoDismissOverlayWindowTypes.contains(type)) {
       _isAutoDismissWindowOpen = true;
     }
@@ -93,19 +97,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     _activeWindow = type;
 
-    BuildContext? context =
-        _th2FileEditController.thFileWidgetKey.currentContext;
-
-    if (context != null) {
-      Overlay.of(context, rootOverlay: true).insert(_overlayWindows[type]!);
-    } else {
-      throw UnimplementedError(
-        'The context for the overlay window is null. This should not happen.',
-      );
-    }
+    Overlay.of(context, rootOverlay: true).insert(_overlayWindows[type]!);
   }
 
-  void _hideOverlayWindow(MPWindowType type) {
+  void hideOverlayWindow(MPWindowType type) {
     if (_isAutoDismissWindowOpen) {
       /// Is there still an auto dismmisable overlay window open?
       bool autoDismiss = false;
@@ -129,21 +124,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           ? MPWindowType.mainTHFileEditWindow
           : _overlayWindows.keys.last;
     }
-  }
-
-  @action
-  void setShowOverlayWindow(
-    MPWindowType type,
-    bool show, {
-    Offset? position,
-  }) {
-    _isOverlayWindowShown[type] = show;
-
-    if (show) {
-      _showOverlayWindow(type, position: position);
-    } else {
-      _hideOverlayWindow(type);
-    }
 
     if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
       _th2FileEditController.thFileFocusNode.requestFocus();
@@ -151,7 +131,24 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   @action
+  void setShowOverlayWindow(
+    BuildContext context,
+    MPWindowType type,
+    bool show, {
+    Offset? position,
+  }) {
+    _isOverlayWindowShown[type] = show;
+
+    if (show) {
+      _showOverlayWindow(context, type, position: position);
+    } else {
+      hideOverlayWindow(type);
+    }
+  }
+
+  @action
   void showOptionChoicesOverlayWindow({
+    required BuildContext context,
     required Offset position,
     required MPOptionInfo optionInfo,
   }) {
@@ -172,24 +169,15 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _isAutoDismissWindowOpen = true;
     _isOverlayWindowShown[overlayWindowType] = true;
 
-    BuildContext? context =
-        _th2FileEditController.thFileWidgetKey.currentContext;
-
-    if (context != null) {
-      Overlay.of(context, rootOverlay: true)
-          .insert(_overlayWindows[overlayWindowType]!);
-    } else {
-      throw UnimplementedError(
-        'The context for the overlay window is null. This should not happen.',
-      );
-    }
+    Overlay.of(context, rootOverlay: true)
+        .insert(_overlayWindows[overlayWindowType]!);
   }
 
   @action
   void closeAutoDismissOverlayWindows() {
     for (MPWindowType type in autoDismissOverlayWindowTypes) {
       if (_isOverlayWindowShown[type]!) {
-        setShowOverlayWindow(type, false);
+        hideOverlayWindow(type);
       }
     }
   }
@@ -210,7 +198,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @action
   void clearOverlayWindows() {
     for (final type in MPWindowType.values) {
-      setShowOverlayWindow(type, false);
+      hideOverlayWindow(type);
     }
   }
 }

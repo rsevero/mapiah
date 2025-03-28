@@ -914,20 +914,27 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void setIsMouseOverChangeScrapsButton(bool isMouseOver) {
+  void setIsMouseOverChangeScrapsButton(
+    BuildContext context,
+    bool isMouseOver,
+  ) {
     _isMouseOverChangeScrapButton = isMouseOver;
-    _setShowChangeScrapOverlayWindow();
+    _setShowChangeScrapOverlayWindow(context);
   }
 
   @action
-  void setIsMouseOverChangeScrapsOverlayWindow(bool isMouseOver) {
+  void setIsMouseOverChangeScrapsOverlayWindow(
+    BuildContext context,
+    bool isMouseOver,
+  ) {
     _isMouseOverChangeScrapOverlayWindow = isMouseOver;
-    _setShowChangeScrapOverlayWindow();
+    _setShowChangeScrapOverlayWindow(context);
   }
 
   @action
-  void _setShowChangeScrapOverlayWindow() {
+  void _setShowChangeScrapOverlayWindow(BuildContext context) {
     overlayWindowController.setShowOverlayWindow(
+      context,
       MPWindowType.availableScraps,
       (_isMouseOverChangeScrapButton || _isMouseOverChangeScrapOverlayWindow),
     );

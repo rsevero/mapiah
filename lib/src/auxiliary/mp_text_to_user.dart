@@ -950,17 +950,20 @@ class MPTextToUser {
     final Map<String, String> choicesWithUnset = {
       mpUnsetOptionID: mpLocator.appLocalizations.mpChoiceUnset,
     };
+    final Map<String, String> orderedChoices = getOrderedChoices(choices);
+
+    choicesWithUnset.addAll(orderedChoices);
+
+    return choicesWithUnset;
+  }
+
+  static Map<String, String> getOrderedChoices(Map<String, String> choices) {
     final List<MapEntry<String, String>> orderedChoices =
         choices.entries.toList()
           ..sort(
-            (a, b) => MPTextToUser.compareStringsUsingLocale(
-              a.value,
-              b.value,
-            ),
+            (a, b) => MPTextToUser.compareStringsUsingLocale(a.value, b.value),
           );
 
-    choicesWithUnset.addAll(Map.fromEntries(orderedChoices));
-
-    return choicesWithUnset;
+    return Map.fromEntries(orderedChoices);
   }
 }

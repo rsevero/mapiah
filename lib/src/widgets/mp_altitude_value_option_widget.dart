@@ -120,15 +120,14 @@ class _MPAltitudeValueOptionWidgetState
   }
 
   void _cancelButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    widget.th2FileEditController.overlayWindowController.hideOverlayWindow(
       MPWindowType.optionChoices,
-      false,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> unitMap = MPTextToUser.getOptionChoicesWithUnset(
+    final Map<String, String> unitMap = MPTextToUser.getOrderedChoices(
       MPTextToUser.getLengthUnitsChoices(),
     );
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
@@ -145,8 +144,8 @@ class _MPAltitudeValueOptionWidgetState
             appLocalizations.thCommandOptionAltitudeValue,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(height: mpButtonSpace),
 
+          const SizedBox(height: mpButtonSpace),
           RadioListTile<String>(
             title: Text(appLocalizations.mpChoiceUnset),
             value: mpUnsetOptionID,
@@ -158,6 +157,7 @@ class _MPAltitudeValueOptionWidgetState
             },
             contentPadding: EdgeInsets.zero,
           ),
+
           const Divider(),
 
           RadioListTile<String>(
@@ -176,7 +176,6 @@ class _MPAltitudeValueOptionWidgetState
           // Additional Inputs for "Set" Option
           if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
             const SizedBox(height: mpButtonSpace),
-
             // Numeric Input for Altitude
             TextField(
               controller: _altitudeController,
@@ -188,8 +187,8 @@ class _MPAltitudeValueOptionWidgetState
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: mpButtonSpace),
 
+            const SizedBox(height: mpButtonSpace),
             // Switch for "Fix" Parameter
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,30 +207,28 @@ class _MPAltitudeValueOptionWidgetState
                 ),
               ],
             ),
-            const SizedBox(height: mpButtonSpace),
 
-            // Dropdown for Length Unit
-            DropdownButtonFormField<String>(
-              value: _selectedUnit,
-              items: unitMap.entries.map((entry) {
-                return DropdownMenuItem<String>(
+            const SizedBox(height: mpButtonSpace),
+            DropdownMenu(
+              label: Text(appLocalizations.thCommandOptionLengthUnit),
+              initialSelection: _selectedUnit,
+              dropdownMenuEntries: unitMap.entries.map((entry) {
+                return DropdownMenuEntry<String>(
                   value: entry.key,
-                  child: Text(entry.value),
+                  label: entry.value,
                 );
               }).toList(),
-              onChanged: (String? value) {
+              onSelected: (String? value) {
                 setState(() {
                   _selectedUnit = value ?? thDefaultLengthUnitAsString;
                 });
               },
-              decoration: InputDecoration(
-                labelText: appLocalizations.thCommandOptionLengthUnit,
-                border: OutlineInputBorder(),
-              ),
+              searchCallback: (entries, query) =>
+                  entries.indexWhere((entry) => entry.value == query),
             ),
           ],
-          const SizedBox(height: mpButtonMargin),
 
+          const SizedBox(height: mpButtonMargin),
           Row(
             children: [
               ElevatedButton(

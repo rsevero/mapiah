@@ -127,20 +127,19 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @action
   void performToggleOptionShownStatus(
+    BuildContext context,
     THCommandOptionType optionType,
     Offset position,
   ) {
     if (_currentOptionType == optionType) {
-      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      _th2FileEditController.overlayWindowController.hideOverlayWindow(
         MPWindowType.optionChoices,
-        false,
       );
       _currentOptionType = null;
     } else {
       if (_currentOptionType != null) {
-        _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        _th2FileEditController.overlayWindowController.hideOverlayWindow(
           MPWindowType.optionChoices,
-          false,
         );
       }
       _currentOptionType = optionType;
@@ -148,6 +147,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
       _th2FileEditController.overlayWindowController
           .showOptionChoicesOverlayWindow(
+        context: context,
         position: position,
         optionInfo: optionInfo,
       );
@@ -162,8 +162,18 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @action
   void showOptionsOverlayWindow() {
     updateOptionStateMap();
+    BuildContext? context =
+        _th2FileEditController.thFileWidgetKey.currentContext;
+
+    if (context == null) {
+      throw Exception(
+        'TH2FileEditOptionEditController.showOptionsOverlayWindow: '
+        'The context of the TH2FileEditController is null.',
+      );
+    }
+
     _th2FileEditController.overlayWindowController
-        .toggleOverlayWindow(MPWindowType.commandOptions);
+        .toggleOverlayWindow(context, MPWindowType.commandOptions);
   }
 }
 

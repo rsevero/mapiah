@@ -40,9 +40,12 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
       th2FileEditController: th2FileEditController,
       child: MouseRegion(
         onEnter: (_) =>
-            th2FileEditController.setIsMouseOverChangeScrapsOverlayWindow(true),
+            th2FileEditController.setIsMouseOverChangeScrapsOverlayWindow(
+          context,
+          true,
+        ),
         onExit: (_) => th2FileEditController
-            .setIsMouseOverChangeScrapsOverlayWindow(false),
+            .setIsMouseOverChangeScrapsOverlayWindow(context, false),
         child: Material(
           elevation: 4.0,
           child: IntrinsicWidth(

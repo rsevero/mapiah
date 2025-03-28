@@ -463,9 +463,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void updateOptionEdited() {
     _th2FileEditController.optionEditController.clearCurrentOptionType();
     _th2FileEditController.selectionController.updateSelectedElementsClones();
-    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    _th2FileEditController.overlayWindowController.hideOverlayWindow(
       MPWindowType.optionChoices,
-      false,
     );
     _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerOptionsListRedraw();

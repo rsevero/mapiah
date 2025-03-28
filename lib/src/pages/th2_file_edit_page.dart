@@ -314,10 +314,13 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       SizedBox(height: mpButtonSpace),
       MouseRegion(
         onEnter: (PointerEnterEvent event) {
-          th2FileEditController.setIsMouseOverChangeScrapsButton(true);
+          th2FileEditController.setIsMouseOverChangeScrapsButton(context, true);
         },
         onExit: (PointerExitEvent event) {
-          th2FileEditController.setIsMouseOverChangeScrapsButton(false);
+          th2FileEditController.setIsMouseOverChangeScrapsButton(
+            context,
+            false,
+          );
         },
         child: Observer(
           builder: (_) => Padding(

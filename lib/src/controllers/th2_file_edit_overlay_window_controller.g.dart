@@ -166,13 +166,15 @@ mixin _$TH2FileEditOverlayWindowController
           name: 'TH2FileEditOverlayWindowControllerBase', context: context);
 
   @override
-  void setShowOverlayWindow(MPWindowType type, bool show, {Offset? position}) {
+  void setShowOverlayWindow(BuildContext context, MPWindowType type, bool show,
+      {Offset? position}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
     try {
-      return super.setShowOverlayWindow(type, show, position: position);
+      return super
+          .setShowOverlayWindow(context, type, show, position: position);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);
@@ -181,14 +183,16 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   void showOptionChoicesOverlayWindow(
-      {required Offset position, required MPOptionInfo optionInfo}) {
+      {required BuildContext context,
+      required Offset position,
+      required MPOptionInfo optionInfo}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOverlayWindowControllerBase.showOptionChoicesOverlayWindow');
     try {
       return super.showOptionChoicesOverlayWindow(
-          position: position, optionInfo: optionInfo);
+          context: context, position: position, optionInfo: optionInfo);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);
