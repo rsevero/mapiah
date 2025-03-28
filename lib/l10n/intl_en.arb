@@ -289,6 +289,12 @@
     "type": "text"
   },
 
+  "mpOptionsEditTitle": "Options",
+  "@mpOptionsEditTitle": {
+    "description": "The title for the options edit dialog",
+    "type": "text"
+  },
+
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",

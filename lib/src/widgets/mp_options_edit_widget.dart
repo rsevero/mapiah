@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
@@ -26,11 +28,15 @@ class MPOptionsEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
     return Observer(
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        final List<Widget> optionWidgets = [Text('Options')];
+        final List<Widget> optionWidgets = [
+          Text(appLocalizations.mpOptionsEditTitle),
+        ];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
 
@@ -43,19 +49,29 @@ class MPOptionsEditWidget extends StatelessWidget {
 
           switch (selectedElementType) {
             case THElementType.area:
-              optionWidgets.add(const ListTile(title: Text('Area Type')));
+              optionWidgets.add(ListTile(
+                title: Text(appLocalizations.thElementArea),
+              ));
             case THElementType.line:
-              optionWidgets.add(const ListTile(title: Text('Line Type')));
+              optionWidgets.add(ListTile(
+                title: Text(appLocalizations.thElementLine),
+              ));
             case THElementType.straightLineSegment:
-              optionWidgets.add(
-                  const ListTile(title: Text('Straight Line Segment Type')));
+              optionWidgets.add(ListTile(
+                title: Text(appLocalizations.thElementStraightLineSegment),
+              ));
             case THElementType.bezierCurveLineSegment:
-              optionWidgets.add(const ListTile(
-                  title: Text('Bezier Curve Line Segment Type')));
+              optionWidgets.add(ListTile(
+                title: Text(appLocalizations.thElementBezierCurveLineSegment),
+              ));
             case THElementType.point:
-              optionWidgets.add(const ListTile(title: Text('Point Type')));
+              optionWidgets.add(ListTile(
+                title: Text(appLocalizations.thElementPoint),
+              ));
             case THElementType.scrap:
-              optionWidgets.add(const ListTile(title: Text('Scrap Type')));
+              optionWidgets.add(ListTile(
+                title: Text(appLocalizations.thElementScrap),
+              ));
             default:
               throw Exception('Unknown element type: $selectedElementType');
           }

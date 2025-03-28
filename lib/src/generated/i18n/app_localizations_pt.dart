@@ -163,6 +163,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
+  String get mpOptionsEditTitle => 'Opções';
+
+  @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override

@@ -377,6 +377,12 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
+  /// The title for the options edit dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get mpOptionsEditTitle;
+
   /// The label for the parsing errors dialog
   ///
   /// In en, this message translates to:
