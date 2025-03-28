@@ -225,7 +225,7 @@ class _MPAltitudeValueOptionWidgetState
                 });
               },
               searchCallback: (entries, query) =>
-                  entries.indexWhere((entry) => entry.value == query),
+                  entries.indexWhere((entry) => entry.label == query),
             ),
           ],
 
