@@ -114,10 +114,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _lastUsedAreaTypes.insert(0, areaType);
 
-    if (_lastUsedAreaTypes.length > mpMaxLastUsedTypes) {
-      _lastUsedAreaTypes.removeLast();
-    }
-
     _setMostUsedAreaType(areaType);
   }
 
@@ -136,10 +132,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _lastUsedLineTypes.insert(0, lineType);
 
-    if (_lastUsedLineTypes.length > mpMaxLastUsedTypes) {
-      _lastUsedLineTypes.removeLast();
-    }
-
     _setMostUsedLineType(lineType);
   }
 
@@ -157,10 +149,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _lastUsedPointTypes.insert(0, pointType);
-
-    if (_lastUsedPointTypes.length > mpMaxLastUsedTypes) {
-      _lastUsedPointTypes.removeLast();
-    }
 
     _setMostUsedPointType(pointType);
   }

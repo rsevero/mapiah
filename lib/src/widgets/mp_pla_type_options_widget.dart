@@ -33,6 +33,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     late Map<String, String> choices;
     late List<String> lastUsedChoices;
+    late List<String> lastUsedChoicesReduced = [];
     late List<String> mostUsedChoices;
     final List<String> mostUsedChoicesReduced = [];
     late String title;
@@ -66,8 +67,20 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
         return SizedBox.shrink();
     }
 
+    for (final String choice in lastUsedChoices) {
+      if (choice == selectedType) {
+        continue;
+      }
+
+      lastUsedChoicesReduced.add(choice);
+
+      if (lastUsedChoicesReduced.length >= mpMaxLastUsedTypes) {
+        break;
+      }
+    }
+
     for (final String choice in mostUsedChoices) {
-      if (lastUsedChoices.contains(choice)) {
+      if (lastUsedChoicesReduced.contains(choice) || (choice == selectedType)) {
         continue;
       }
 
@@ -98,10 +111,10 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               th2FileEditController: th2FileEditController,
             ),
           ],
-          if (lastUsedChoices.isNotEmpty) ...[
+          if (lastUsedChoicesReduced.isNotEmpty) ...[
             const Divider(),
             Text(mpLocator.appLocalizations.mpPLATypeLastUsed),
-            ...lastUsedChoices.map((String choice) {
+            ...lastUsedChoicesReduced.map((String choice) {
               return MPPLATypeOptionWidget(
                 value: choice,
                 label: choices[choice]!,
