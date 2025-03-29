@@ -30,7 +30,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       : _thFile = _th2FileEditController.thFile;
 
   @action
-  void prepareSetOption(THCommandOption option) {
+  void prepareSetOption({
+    required THCommandOption? option,
+    required THCommandOptionType optionType,
+  }) {
+    if (option == null) {
+      _prepareUnsetOption(optionType);
+    } else {
+      _prepareSetOption(option);
+    }
+  }
+
+  void _prepareSetOption(THCommandOption option) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
@@ -87,8 +98,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
   }
 
-  @action
-  void prepareUnsetOption(THCommandOptionType optionType) {
+  void _prepareUnsetOption(THCommandOptionType optionType) {
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
 

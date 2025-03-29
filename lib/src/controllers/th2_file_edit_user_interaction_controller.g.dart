@@ -54,26 +54,14 @@ mixin _$TH2FileEditUserInteractionController
           name: 'TH2FileEditUserInteractionControllerBase', context: context);
 
   @override
-  void prepareSetOption(THCommandOption option) {
+  void prepareSetOption(
+      {required THCommandOption? option,
+      required THCommandOptionType optionType}) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
             name: 'TH2FileEditUserInteractionControllerBase.prepareSetOption');
     try {
-      return super.prepareSetOption(option);
-    } finally {
-      _$TH2FileEditUserInteractionControllerBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void prepareUnsetOption(THCommandOptionType optionType) {
-    final _$actionInfo =
-        _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditUserInteractionControllerBase.prepareUnsetOption');
-    try {
-      return super.prepareUnsetOption(optionType);
+      return super.prepareSetOption(option: option, optionType: optionType);
     } finally {
       _$TH2FileEditUserInteractionControllerBaseActionController
           .endAction(_$actionInfo);

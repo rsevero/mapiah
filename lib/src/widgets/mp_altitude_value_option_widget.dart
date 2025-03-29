@@ -85,41 +85,39 @@ class _MPAltitudeValueOptionWidgetState
   }
 
   void _okButtonPressed() {
-    switch (_selectedChoice) {
-      case mpUnsetOptionID:
-        widget.th2FileEditController.userInteractionController
-            .prepareUnsetOption(
-          THCommandOptionType.altitude,
+    THAltitudeValueCommandOption? newOption;
+
+    if (_selectedChoice == mpNonMultipleChoiceSetID) {
+      final double? altitude = double.tryParse(_altitudeController.text);
+
+      if (altitude != null) {
+        /// The THFileMPID is used only as a placeholder for the actual
+        /// parentMPID of the option(s) to be set. THFile isn't even a
+        /// THHasOptionsMixin so it can't actually be the parent of an option,
+        /// i.e., is has no options at all.
+        newOption = THAltitudeValueCommandOption.fromStringWithParentMPID(
+          parentMPID: widget.th2FileEditController.thFileMPID,
+          height: _altitudeController.text,
+          isFix: _isFixed,
+          unit: _selectedUnit,
         );
-      case mpNonMultipleChoiceSetID:
-        final double? altitude = double.tryParse(_altitudeController.text);
-
-        if (altitude != null) {
-          /// The THFileMPID is used only as a placeholder for the actual
-          /// parentMPID of the option(s) to be set. THFile isn't even a
-          /// THHasOptionsMixin so it can't actually be the parent of an option,
-          /// i.e., is has no options at all.
-          final THAltitudeValueCommandOption newOption =
-              THAltitudeValueCommandOption.fromStringWithParentMPID(
-            parentMPID: widget.th2FileEditController.thFileMPID,
-            height: _altitudeController.text,
-            isFix: _isFixed,
-            unit: _selectedUnit,
-          );
-
-          widget.th2FileEditController.userInteractionController
-              .prepareSetOption(newOption);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
               mpLocator
                   .appLocalizations.mpAltitudeValueInvalidValueErrorMessage,
-            )),
-          );
-          return;
-        }
+            ),
+          ),
+        );
+        return;
+      }
     }
+
+    widget.th2FileEditController.userInteractionController.prepareSetOption(
+      option: newOption,
+      optionType: THCommandOptionType.altitude,
+    );
   }
 
   void _cancelButtonPressed() {
