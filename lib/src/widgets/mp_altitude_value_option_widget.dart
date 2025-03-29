@@ -177,19 +177,6 @@ class _MPAltitudeValueOptionWidgetState
           // Additional Inputs for "Set" Option
           if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
             const SizedBox(height: mpButtonSpace),
-            // Numeric Input for Altitude
-            TextField(
-              controller: _altitudeController,
-              keyboardType: TextInputType.number,
-              autofocus: true,
-              focusNode: _textFieldFocusNode,
-              decoration: InputDecoration(
-                labelText: appLocalizations.thCommandOptionAltitudeValue,
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: mpButtonSpace),
             // Switch for "Fix" Parameter
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,6 +194,19 @@ class _MPAltitudeValueOptionWidgetState
                   ),
                 ),
               ],
+            ),
+
+            const SizedBox(height: mpButtonSpace),
+            // Numeric Input for Altitude
+            TextField(
+              controller: _altitudeController,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              focusNode: _textFieldFocusNode,
+              decoration: InputDecoration(
+                labelText: appLocalizations.thCommandOptionAltitudeValue,
+                border: OutlineInputBorder(),
+              ),
             ),
 
             const SizedBox(height: mpButtonSpace),

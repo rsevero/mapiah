@@ -106,7 +106,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
             MPPLATypeOptionWidget(
               value: selectedType!,
               label: choices[selectedType]!,
-              groupValue: 'currentChoice',
+              groupValue: selectedType!,
               isSelected: true,
               th2FileEditController: th2FileEditController,
             ),
@@ -118,7 +118,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               return MPPLATypeOptionWidget(
                 value: choice,
                 label: choices[choice]!,
-                groupValue: 'lastUsedChoices',
+                groupValue: selectedType!,
                 isSelected: choice == selectedType,
                 th2FileEditController: th2FileEditController,
               );
@@ -131,7 +131,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               return MPPLATypeOptionWidget(
                 value: choice,
                 label: choices[choice]!,
-                groupValue: 'mostUsedChoices',
+                groupValue: selectedType!,
                 isSelected: choice == selectedType,
                 th2FileEditController: th2FileEditController,
               );
@@ -143,7 +143,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
             return MPPLATypeOptionWidget(
               value: entry.key,
               label: entry.value,
-              groupValue: 'allChoices',
+              groupValue: selectedType!,
               isSelected: entry.key == selectedType,
               th2FileEditController: th2FileEditController,
             );
