@@ -33,7 +33,7 @@ class MPEditAreaTypeCommand extends MPCommand {
             );
 
     th2FileEditController.elementEditController.substituteElement(newArea);
-    th2FileEditController.triggerOptionsListRedraw();
+    th2FileEditController.optionEditController.updateOptionStateMap();
   }
 
   @override

@@ -114,6 +114,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           }
         }
       }
+
+      _th2FileEditController.triggerOptionsListRedraw();
     }
 
     final List<THCommandOptionType> orderedOptionTypesList =

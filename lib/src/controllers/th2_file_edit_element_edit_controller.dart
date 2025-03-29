@@ -567,7 +567,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       false,
     );
     _th2FileEditController.optionEditController.updateOptionStateMap();
-    _th2FileEditController.triggerOptionsListRedraw();
   }
 
   @action

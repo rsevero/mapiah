@@ -33,7 +33,7 @@ class MPEditPointTypeCommand extends MPCommand {
             );
 
     th2FileEditController.elementEditController.substituteElement(newPoint);
-    th2FileEditController.triggerOptionsListRedraw();
+    th2FileEditController.optionEditController.updateOptionStateMap();
   }
 
   @override
