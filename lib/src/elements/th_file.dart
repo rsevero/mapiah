@@ -401,6 +401,141 @@ class THFile
     return _elementByMPID[mpID]!;
   }
 
+  THHasOptionsMixin hasOptionByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THHasOptionsMixin) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a THHasOptionsMixin in THFile.hasOptionByMPID.");
+    }
+
+    return element;
+  }
+
+  THIsParentMixin parentByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THIsParentMixin) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a parent in THFile.parentByMPID.");
+    }
+
+    return (element as THIsParentMixin);
+  }
+
+  THPoint pointByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THPoint) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a point in THFile.pointByMPID.");
+    }
+
+    return element;
+  }
+
+  THLine lineByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THLine) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a line in THFile.lineByMPID.");
+    }
+
+    return element;
+  }
+
+  THArea areaByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THArea) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not an area in THFile.areaByMPID.");
+    }
+
+    return element;
+  }
+
+  THScrap scrapByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THScrap) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a scrap in THFile.scrapByMPID.");
+    }
+
+    return element;
+  }
+
+  THLineSegment lineSegmentByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THLineSegment) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a line segment in THFile.lineSegmentByMPID.");
+    }
+
+    return element;
+  }
+
+  THBezierCurveLineSegment bezierCurveLineSegmentByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THBezierCurveLineSegment) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a bezier curve line segment in THFile.bezierCurveLineSegmentByMPID.");
+    }
+
+    return element;
+  }
+
+  THStraightLineSegment straightLineSegmentByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THStraightLineSegment) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not a straight line segment in THFile.straightLineSegmentByMPID.");
+    }
+
+    return element;
+  }
+
   THElement elementByPosition(int position) {
     return _elementByMPID.values.elementAt(position);
   }

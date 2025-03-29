@@ -33,8 +33,8 @@ class MPEditLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THLineSegment currentLineSegment = th2FileEditController.thFile
-        .elementByMPID(newLineSegment.mpID) as THLineSegment;
+    final THLineSegment currentLineSegment =
+        th2FileEditController.thFile.lineSegmentByMPID(newLineSegment.mpID);
     final MPEditLineSegmentCommand oppositeCommand = MPEditLineSegmentCommand(
       newLineSegment: currentLineSegment,
       descriptionType: descriptionType,

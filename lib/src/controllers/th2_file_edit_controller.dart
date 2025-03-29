@@ -101,7 +101,7 @@ abstract class TH2FileEditControllerBase with Store {
     String filename = p.basename(_thFile.filename);
 
     if (_hasMultipleScraps) {
-      final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
+      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
       filename += ' | ${scrap.thID}';
     }
@@ -256,7 +256,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get scrapHasScaleOption {
-    final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
+    final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
     return scrap.hasOption(THCommandOptionType.scrapScale);
   }
@@ -264,7 +264,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   THLengthUnitType get scrapLengthUnitType {
     if (scrapHasScaleOption) {
-      final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
+      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
       return (scrap.optionByType(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
@@ -278,7 +278,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   double get scrapLengthUnitsPerPoint {
     if (scrapHasScaleOption) {
-      final THScrap scrap = _thFile.elementByMPID(_activeScrapID) as THScrap;
+      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
       return (scrap.optionByType(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
@@ -579,11 +579,7 @@ abstract class TH2FileEditControllerBase with Store {
     final Map<int, String> scraps = {};
 
     for (final int scrapMPID in _thFile.scrapMPIDs) {
-      final THElement scrap = _thFile.elementByMPID(scrapMPID);
-
-      if (scrap is! THScrap) {
-        throw Exception('Element with MPID $scrapMPID is not a scrap');
-      }
+      final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
 
       scraps[scrapMPID] = scrap.thID;
     }
@@ -846,7 +842,7 @@ abstract class TH2FileEditControllerBase with Store {
       case MPZoomToFitType.file:
         return _thFile.getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.scrap:
-        return (_thFile.elementByMPID(_activeScrapID) as THScrap)
+        return (_thFile.scrapByMPID(_activeScrapID))
             .getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.selection:
         return selectionController.getSelectedElementsBoundingBox();

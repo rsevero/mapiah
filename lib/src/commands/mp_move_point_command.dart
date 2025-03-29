@@ -44,7 +44,7 @@ class MPMovePointCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     final THPoint originalPoint =
-        th2FileEditController.thFile.elementByMPID(pointMPID) as THPoint;
+        th2FileEditController.thFile.pointByMPID(pointMPID);
     final THPoint modifiedPoint = originalPoint.copyWith(
       position: modifiedPosition,
     );

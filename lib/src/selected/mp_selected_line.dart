@@ -49,7 +49,7 @@ class MPSelectedLine extends MPSelectedElement {
 
   @override
   void updateClone(THFile thFile) {
-    final THLine updatedOriginalLine = thFile.elementByMPID(mpID) as THLine;
+    final THLine updatedOriginalLine = thFile.lineByMPID(mpID);
     _createClone(updatedOriginalLine, thFile);
   }
 

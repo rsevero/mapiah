@@ -91,6 +91,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       switch (element) {
         case THPoint _:
         case THLine _:
+        case THArea _:
           boundingBox =
               (element as MPBoundingBox).getBoundingBox(_th2FileEditController);
         default:
@@ -205,7 +206,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void selectAllElements() {
     final THScrap scrap =
-        _thFile.elementByMPID(_th2FileEditController.activeScrapID) as THScrap;
+        _thFile.scrapByMPID(_th2FileEditController.activeScrapID);
     final Set<int> elementMPIDs = scrap.childrenMPID;
 
     for (final int elementMPID in elementMPIDs) {
@@ -314,7 +315,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _selectableElements.clear();
 
     final THScrap scrap =
-        _thFile.elementByMPID(_th2FileEditController.activeScrapID) as THScrap;
+        _thFile.scrapByMPID(_th2FileEditController.activeScrapID);
 
     for (final int elementMPID in scrap.childrenMPID) {
       final THElement element = _thFile.elementByMPID(elementMPID);
@@ -458,9 +459,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       return;
     }
 
-    final THLine line = _thFile.elementByMPID(
-      _selectedElements.values.first.mpID,
-    ) as THLine;
+    final THLine line = _thFile.lineByMPID(_selectedElements.values.first.mpID);
     final List<THLineSegment> lineSegments =
         _th2FileEditController.elementEditController.getLineSegmentsList(
       line: line,
@@ -556,7 +555,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   List<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
-    final THLine line = _thFile.elementByMPID(lineSegment.parentMPID) as THLine;
+    final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
     final List<THLineSegment> lineSegments =
         _th2FileEditController.elementEditController.getLineSegmentsList(
       line: line,
@@ -745,7 +744,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
       if (nextLineSegmentMPID != null) {
         final THLineSegment nextLineSegment =
-            _thFile.elementByMPID(nextLineSegmentMPID) as THLineSegment;
+            _thFile.lineSegmentByMPID(nextLineSegmentMPID);
 
         if (nextLineSegment is THBezierCurveLineSegment) {
           final THBezierCurveLineSegment originalNextLineSegment =
@@ -869,8 +868,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     List<THLineSegment>? lineSegments,
   }) {
     if (lineSegments == null) {
-      final THLine line =
-          _thFile.elementByMPID(lineSegment.parentMPID) as THLine;
+      final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
 
       lineSegments =
           _th2FileEditController.elementEditController.getLineSegmentsList(

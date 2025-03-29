@@ -37,9 +37,8 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement = th2FileEditController
-        .elementEditController
-        .getParentElement(parentMPID);
+    final THHasOptionsMixin parentElement =
+        th2FileEditController.thFile.hasOptionByMPID(parentMPID);
 
     final THCommandOption? option = parentElement.optionByType(optionType);
 

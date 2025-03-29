@@ -520,7 +520,7 @@ abstract class THCommandOption {
       );
 
   THHasOptionsMixin optionParent(THFile thFile) =>
-      thFile.elementByMPID(parentMPID) as THHasOptionsMixin;
+      thFile.hasOptionByMPID(parentMPID);
 
   String specToFile();
 }

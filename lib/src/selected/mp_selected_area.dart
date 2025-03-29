@@ -20,7 +20,7 @@ class MPSelectedArea extends MPSelectedElement {
 
   @override
   void updateClone(THFile thFile) {
-    final THArea updatedOriginalArea = thFile.elementByMPID(mpID) as THArea;
+    final THArea updatedOriginalArea = thFile.areaByMPID(mpID);
 
     _createClone(updatedOriginalArea);
   }

@@ -46,9 +46,9 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] =
-            th2FileEditController.thFile.elementByMPID(selectedLineSegmentMPID)
-                as THLineSegment;
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = th2FileEditController
+            .thFile
+            .lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
@@ -59,8 +59,8 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
       if ((nextLineSegmentMPID != null) &&
           !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
-        final THLineSegment nextLineSegment = th2FileEditController.thFile
-            .elementByMPID(nextLineSegmentMPID) as THLineSegment;
+        final THLineSegment nextLineSegment =
+            th2FileEditController.thFile.lineSegmentByMPID(nextLineSegmentMPID);
 
         if (nextLineSegment is THBezierCurveLineSegment) {
           modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;

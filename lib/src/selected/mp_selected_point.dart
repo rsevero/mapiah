@@ -20,7 +20,7 @@ class MPSelectedPoint extends MPSelectedElement {
 
   @override
   void updateClone(THFile thFile) {
-    final THPoint updatedOriginalPoint = thFile.elementByMPID(mpID) as THPoint;
+    final THPoint updatedOriginalPoint = thFile.pointByMPID(mpID);
 
     _createClone(updatedOriginalPoint);
   }

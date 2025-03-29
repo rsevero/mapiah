@@ -28,7 +28,7 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
 
     for (final THElement element in selectedWithLineSegments) {
       if (element is THLineSegment) {
-        final THLine line = thFile.elementByMPID(element.parentMPID) as THLine;
+        final THLine line = thFile.lineByMPID(element.parentMPID);
         selectedElementsWithLines.add(line);
       } else {
         selectedElementsWithLines.add(element);

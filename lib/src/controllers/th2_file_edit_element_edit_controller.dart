@@ -232,18 +232,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     mpLocator.mpLog.finer('Substituted element ${modifiedElement.mpID}');
   }
 
-  void substituteElements(List<THElement> modifiedElements) {
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-
-    for (final THElement modifiedElement in modifiedElements) {
-      _thFile.substituteElement(modifiedElement);
-      selectionController.addSelectableElement(modifiedElement);
-      mpLocator.mpLog
-          .finer('Substituted element ${modifiedElement.mpID} from list');
-    }
-  }
-
   void applySubstituteElementWithoutAddSelectableElement(
       THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
@@ -259,8 +247,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final THLine line =
-        _thFile.elementByMPID(modifiedLineSegmentsMap.values.first.parentMPID)
-            as THLine;
+        _thFile.lineByMPID(modifiedLineSegmentsMap.values.first.parentMPID);
     line.clearBoundingBox();
   }
 
@@ -273,8 +260,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (parentMPID < 0) {
       _thFile.addElementToParent(newElement);
     } else {
-      final THIsParentMixin parent =
-          _thFile.elementByMPID(parentMPID) as THIsParentMixin;
+      final THIsParentMixin parent = _thFile.parentByMPID(parentMPID);
 
       parent.addElementToParent(newElement);
     }
@@ -289,7 +275,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     addElementWithParentWithoutSelectableElement(
       newElement: newElement,
-      parent: _thFile.elementByMPID(parentMPID) as THIsParentMixin,
+      parent: _thFile.parentByMPID(parentMPID),
     );
   }
 
@@ -389,10 +375,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.currentDecimalPositions;
 
     final THLineSegment lastLineSegment =
-        _thFile.elementByMPID(_newLine!.childrenMPID.last) as THLineSegment;
-    final THLineSegment secondToLastLineSegment = _thFile.elementByMPID(
+        _thFile.lineSegmentByMPID(_newLine!.childrenMPID.last);
+    final THLineSegment secondToLastLineSegment = _thFile.lineSegmentByMPID(
       _newLine!.childrenMPID.elementAt(_newLine!.childrenMPID.length - 2),
-    ) as THLineSegment;
+    );
 
     final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
     final Offset endPoint = lastLineSegment.endPoint.coordinates;
@@ -576,17 +562,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.updateUndoRedoStatus();
   }
 
-  THHasOptionsMixin getParentElement(final int parentMPID) {
-    final THElement parentElement =
-        _th2FileEditController.thFile.elementByMPID(parentMPID);
-
-    if (parentElement is! THHasOptionsMixin) {
-      throw StateError('Parent element is not a THHasOptionsMixin');
-    }
-
-    return parentElement;
-  }
-
   void updateOptionEdited() {
     _th2FileEditController.optionEditController.clearCurrentOptionType();
     _th2FileEditController.selectionController.updateSelectedElementsClones();
@@ -609,9 +584,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THCommandOptionType optionType,
     required int parentMPID,
   }) {
-    final THHasOptionsMixin parentElement = _th2FileEditController
-        .elementEditController
-        .getParentElement(parentMPID);
+    final THHasOptionsMixin parentElement =
+        _th2FileEditController.thFile.hasOptionByMPID(parentMPID);
 
     parentElement.removeOption(optionType);
     updateOptionEdited();
