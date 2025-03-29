@@ -46,7 +46,7 @@ class MPTextToUser {
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
-    _initializeCommandTypeAsString();
+    _initializeCommandDescriptionTypeAsString();
     _initializeLengthUnitTypeAsString();
     _initializeLengthUnitTypeAbbreviationAsString();
     _initializeElementTypeAsString();
@@ -67,7 +67,7 @@ class MPTextToUser {
     _initializeMultipleChoicePlaceChoiceAsString();
   }
 
-  static void _initializeCommandTypeAsString() {
+  static void _initializeCommandDescriptionTypeAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
     _locale = mpLocator.mpSettingsController.locale;
@@ -80,12 +80,24 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addPoint] =
         localizations.mpCommandDescriptionAddPoint;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreasType] =
+        localizations.mpCommandDescriptionEditAreasType;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreaType] =
+        localizations.mpCommandDescriptionEditAreaType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editBezierCurve] =
         localizations.mpCommandDescriptionEditBezierCurve;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLine] =
         localizations.mpCommandDescriptionEditLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLineSegment] =
         localizations.mpCommandDescriptionEditLineSegment;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editLinesType] =
+        localizations.mpCommandDescriptionEditLinesType;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editLineType] =
+        localizations.mpCommandDescriptionEditLineType;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editPointsType] =
+        localizations.mpCommandDescriptionEditPointsType;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.editPointType] =
+        localizations.mpCommandDescriptionEditPointType;
     _commandDescriptionTypeAsString[
             MPCommandDescriptionType.moveBezierLineSegment] =
         localizations.mpCommandDescriptionMoveBezierLineSegment;

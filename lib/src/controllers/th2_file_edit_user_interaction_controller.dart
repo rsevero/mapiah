@@ -6,6 +6,9 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_user_interaction_controller.g.dart';
@@ -236,5 +239,98 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         }
       }
     }
+  }
+
+  @action
+  void prepareSetPLAType({
+    required THElementType plaType,
+    required String newType,
+  }) {
+    MPCommand setPLATypeCommand;
+    List<int> mpIDs = [];
+    final mpSelectedElements =
+        _th2FileEditController.selectionController.selectedElements.values;
+
+    switch (plaType) {
+      case THElementType.area:
+        for (final mpSelectedElement in mpSelectedElements) {
+          if ((mpSelectedElement.originalElementClone is! THArea) ||
+              (mpSelectedElement.originalElementClone as THArea)
+                      .areaType
+                      .name ==
+                  newType) {
+            continue;
+          }
+          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+        }
+
+        if (mpIDs.isEmpty) {
+          return;
+        } else if (mpIDs.length == 1) {
+          setPLATypeCommand = MPEditAreaTypeCommand(
+            areaMPID: mpIDs.first,
+            newAreaType: THAreaType.values.byName(newType),
+          );
+        } else {
+          setPLATypeCommand = MPMultipleElementsCommand.editAreasType(
+            newAreaType: THAreaType.values.byName(newType),
+            areaMPIDs: mpIDs,
+          );
+        }
+      case THElementType.line:
+        for (final mpSelectedElement in mpSelectedElements) {
+          if ((mpSelectedElement.originalElementClone is! THLine) ||
+              (mpSelectedElement.originalElementClone as THLine)
+                      .lineType
+                      .name ==
+                  newType) {
+            continue;
+          }
+          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+        }
+
+        if (mpIDs.isEmpty) {
+          return;
+        } else if (mpIDs.length == 1) {
+          setPLATypeCommand = MPEditLineTypeCommand(
+            lineMPID: mpIDs.first,
+            newLineType: THLineType.values.byName(newType),
+          );
+        } else {
+          setPLATypeCommand = MPMultipleElementsCommand.editLinesType(
+            newLineType: THLineType.values.byName(newType),
+            lineMPIDs: mpIDs,
+          );
+        }
+      case THElementType.point:
+        for (final mpSelectedElement in mpSelectedElements) {
+          if ((mpSelectedElement.originalElementClone is! THPoint) ||
+              (mpSelectedElement.originalElementClone as THPoint)
+                      .pointType
+                      .name ==
+                  newType) {
+            continue;
+          }
+          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+        }
+
+        if (mpIDs.isEmpty) {
+          return;
+        } else if (mpIDs.length == 1) {
+          setPLATypeCommand = MPEditPointTypeCommand(
+            pointMPID: mpIDs.first,
+            newPointType: THPointType.values.byName(newType),
+          );
+        } else {
+          setPLATypeCommand = MPMultipleElementsCommand.editPointsType(
+            newPointType: THPointType.values.byName(newType),
+            pointMPIDs: mpIDs,
+          );
+        }
+      default:
+        return;
+    }
+
+    _th2FileEditController.execute(setPLATypeCommand);
   }
 }

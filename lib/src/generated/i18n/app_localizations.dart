@@ -209,6 +209,18 @@ abstract class AppLocalizations {
   /// **'Add point'**
   String get mpCommandDescriptionAddPoint;
 
+  /// The description for the edit areas type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit multiple areas type'**
+  String get mpCommandDescriptionEditAreasType;
+
+  /// The description for the edit area type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit area type'**
+  String get mpCommandDescriptionEditAreaType;
+
   /// The description for the edit Bézier curve command
   ///
   /// In en, this message translates to:
@@ -226,6 +238,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit line segment'**
   String get mpCommandDescriptionEditLineSegment;
+
+  /// The description for the edit lines type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit multiple lines type'**
+  String get mpCommandDescriptionEditLinesType;
+
+  /// The description for the edit line type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit line type'**
+  String get mpCommandDescriptionEditLineType;
+
+  /// The description for the edit points type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit multiple points type'**
+  String get mpCommandDescriptionEditPointsType;
+
+  /// The description for the edit point type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit point type'**
+  String get mpCommandDescriptionEditPointType;
 
   /// The description for the move Bézier line segment command
   ///

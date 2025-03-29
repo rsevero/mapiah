@@ -79,6 +79,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddPoint => 'Add point';
 
   @override
+  String get mpCommandDescriptionEditAreasType => 'Edit multiple areas type';
+
+  @override
+  String get mpCommandDescriptionEditAreaType => 'Edit area type';
+
+  @override
   String get mpCommandDescriptionEditBezierCurve => 'Edit Bézier curve';
 
   @override
@@ -86,6 +92,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionEditLineSegment => 'Edit line segment';
+
+  @override
+  String get mpCommandDescriptionEditLinesType => 'Edit multiple lines type';
+
+  @override
+  String get mpCommandDescriptionEditLineType => 'Edit line type';
+
+  @override
+  String get mpCommandDescriptionEditPointsType => 'Edit multiple points type';
+
+  @override
+  String get mpCommandDescriptionEditPointType => 'Edit point type';
 
   @override
   String get mpCommandDescriptionMoveBezierLineSegment => 'Move Bézier line segment';

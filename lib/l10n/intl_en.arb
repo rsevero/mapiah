@@ -121,6 +121,18 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionEditAreasType": "Edit multiple areas type",
+  "@mpCommandDescriptionEditAreasType": {
+    "description": "The description for the edit areas type command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionEditAreaType": "Edit area type",
+  "@mpCommandDescriptionEditAreaType": {
+    "description": "The description for the edit area type command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionEditBezierCurve": "Edit Bézier curve",
   "@mpCommandDescriptionEditBezierCurve": {
     "description": "The description for the edit Bézier curve command",
@@ -136,6 +148,30 @@
   "mpCommandDescriptionEditLineSegment": "Edit line segment",
   "@mpCommandDescriptionEditLineSegment": {
     "description": "The description for the edit line segment command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionEditLinesType": "Edit multiple lines type",
+  "@mpCommandDescriptionEditLinesType": {
+    "description": "The description for the edit lines type command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionEditLineType": "Edit line type",
+  "@mpCommandDescriptionEditLineType": {
+    "description": "The description for the edit line type command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionEditPointsType": "Edit multiple points type",
+  "@mpCommandDescriptionEditPointsType": {
+    "description": "The description for the edit points type command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionEditPointType": "Edit point type",
+  "@mpCommandDescriptionEditPointType": {
+    "description": "The description for the edit point type command",
     "type": "text"
   },
 

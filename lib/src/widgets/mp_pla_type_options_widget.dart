@@ -11,7 +11,7 @@ import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPPLATypeOptionsWidget extends StatelessWidget {
-  final THElementType type;
+  final THElementType plaType;
   final TH2FileEditController th2FileEditController;
   final Offset position;
   final MPWidgetPositionType positionType;
@@ -20,7 +20,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
 
   MPPLATypeOptionsWidget({
     super.key,
-    required this.type,
+    required this.plaType,
     required this.th2FileEditController,
     required this.position,
     required this.positionType,
@@ -37,7 +37,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
     final List<String> mostUsedChoicesReduced = [];
     late String title;
 
-    switch (type) {
+    switch (plaType) {
       case THElementType.area:
         title = mpLocator.appLocalizations.mpPLATypeAreaTitle;
         choices =
@@ -107,6 +107,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               label: choices[selectedType]!,
               groupValue: selectedType!,
               isSelected: true,
+              plaType: plaType,
               th2FileEditController: th2FileEditController,
             ),
           ],
@@ -119,6 +120,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
                 label: choices[choice]!,
                 groupValue: selectedType!,
                 isSelected: choice == selectedType,
+                plaType: plaType,
                 th2FileEditController: th2FileEditController,
               );
             }),
@@ -132,6 +134,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
                 label: choices[choice]!,
                 groupValue: selectedType!,
                 isSelected: choice == selectedType,
+                plaType: plaType,
                 th2FileEditController: th2FileEditController,
               );
             }),
@@ -144,6 +147,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               label: entry.value,
               groupValue: selectedType!,
               isSelected: entry.key == selectedType,
+              plaType: plaType,
               th2FileEditController: th2FileEditController,
             );
           }),

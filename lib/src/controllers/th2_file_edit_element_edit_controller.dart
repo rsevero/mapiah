@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/animation.dart';
-import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -225,18 +224,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lineSegmentsMap;
   }
 
-  void applySubstituteElement(THElement modifiedElement) {
+  void substituteElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
     _th2FileEditController.selectionController
         .addSelectableElement(modifiedElement);
-    mpLocator.mpLog.finer('Substituted element ${modifiedElement.mpID}');
   }
 
-  void applySubstituteElementWithoutAddSelectableElement(
-      THElement modifiedElement) {
+  void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
     _thFile.substituteElement(modifiedElement);
-    mpLocator.mpLog.finer(
-        'Substituted element without add selectable element ${modifiedElement.mpID}');
   }
 
   void substituteLineSegments(

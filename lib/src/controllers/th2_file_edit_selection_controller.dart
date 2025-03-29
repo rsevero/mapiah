@@ -348,7 +348,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final int pointMPID = point.mpID;
 
     _selectableElements[pointMPID] = selectablePoint;
-    _isSelected[pointMPID] = Observable(false);
+
+    if (!_isSelected.containsKey(pointMPID)) {
+      _isSelected[pointMPID] = Observable(false);
+    }
   }
 
   void _addLineSelectableElement(THLine line) {
@@ -360,7 +363,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final int lineMPID = line.mpID;
 
     _selectableElements[lineMPID] = selectableLine;
-    _isSelected[lineMPID] = Observable(false);
+    if (!_isSelected.containsKey(lineMPID)) {
+      _isSelected[lineMPID] = Observable(false);
+    }
   }
 
   void removeSelectableElement(int mpID) {
@@ -623,7 +628,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             coordinates: originalPoint.position.coordinates +
                 localDeltaPositionOnCanvas));
     _th2FileEditController.elementEditController
-        .applySubstituteElementWithoutAddSelectableElement(modifiedPoint);
+        .substituteElementWithoutAddSelectableElement(modifiedPoint);
   }
 
   void _updateTHLinePosition(

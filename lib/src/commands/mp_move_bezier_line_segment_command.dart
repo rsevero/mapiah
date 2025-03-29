@@ -77,7 +77,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     );
 
     th2FileEditController.elementEditController
-        .applySubstituteElementWithoutAddSelectableElement(newLineSegment);
+        .substituteElementWithoutAddSelectableElement(newLineSegment);
+    th2FileEditController.triggerSelectedElementsRedraw();
+    th2FileEditController.triggerNewLineRedraw();
   }
 
   @override

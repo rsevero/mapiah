@@ -201,6 +201,60 @@ class MPMultipleElementsCommand extends MPCommand {
     }
   }
 
+  MPMultipleElementsCommand.editAreasType({
+    required List<int> areaMPIDs,
+    required THAreaType newAreaType,
+    super.descriptionType = MPCommandDescriptionType.editAreasType,
+  }) : super() {
+    commandsList = [];
+
+    for (final int areaMPID in areaMPIDs) {
+      final MPCommand editAreaTypeCommand = MPEditAreaTypeCommand(
+        areaMPID: areaMPID,
+        newAreaType: newAreaType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editAreaTypeCommand);
+    }
+  }
+
+  MPMultipleElementsCommand.editLinesType({
+    required List<int> lineMPIDs,
+    required THLineType newLineType,
+    super.descriptionType = MPCommandDescriptionType.editLinesType,
+  }) : super() {
+    commandsList = [];
+
+    for (final int lineMPID in lineMPIDs) {
+      final MPCommand editLineTypeCommand = MPEditLineTypeCommand(
+        lineMPID: lineMPID,
+        newLineType: newLineType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editLineTypeCommand);
+    }
+  }
+
+  MPMultipleElementsCommand.editPointsType({
+    required List<int> pointMPIDs,
+    required THPointType newPointType,
+    super.descriptionType = MPCommandDescriptionType.editPointsType,
+  }) : super() {
+    commandsList = [];
+
+    for (final int pointMPID in pointMPIDs) {
+      final MPCommand editPointTypeCommand = MPEditPointTypeCommand(
+        pointMPID: pointMPID,
+        newPointType: newPointType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editPointTypeCommand);
+    }
+  }
+
   @override
   MPCommandType get type => MPCommandType.multipleElements;
 

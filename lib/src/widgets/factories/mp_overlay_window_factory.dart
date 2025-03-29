@@ -165,7 +165,7 @@ class MPOverlayWindowFactory {
       builder: (context) => MPPLATypeOptionsWidget(
         th2FileEditController: th2FileEditController,
         key: ValueKey("MPPLATypeOptionsWidget|$thFileMPID"),
-        type: elementType,
+        plaType: elementType,
         selectedType: selectedType,
         position: position,
         positionType: MPWidgetPositionType.leftCenter,

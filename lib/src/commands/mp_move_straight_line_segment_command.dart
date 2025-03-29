@@ -49,7 +49,9 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     );
 
     th2FileEditController.elementEditController
-        .applySubstituteElementWithoutAddSelectableElement(newLineSegment);
+        .substituteElementWithoutAddSelectableElement(newLineSegment);
+    th2FileEditController.triggerNewLineRedraw();
+    th2FileEditController.triggerSelectedElementsRedraw();
   }
 
   @override

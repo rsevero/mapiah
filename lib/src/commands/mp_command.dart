@@ -12,12 +12,18 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
+part 'mp_edit_area_type_command.dart';
 part 'mp_edit_line_segment_command.dart';
+part 'mp_edit_line_type_command.dart';
+part 'mp_edit_point_type_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
@@ -33,7 +39,7 @@ part 'types/mp_command_type.dart';
 /// Abstract class that defines the structure of a command.
 ///
 /// It is responsible both for executing and undoing the command, therefore, all
-/// actions that should support undo must be impmentend as a command.
+/// actions that should support undo must be implemented as a command.
 abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
   MPUndoRedoCommand? _undoRedoCommand;
@@ -107,8 +113,14 @@ abstract class MPCommand {
         return MPAddLineSegmentCommand.fromMap(map);
       case MPCommandType.addPoint:
         return MPAddPointCommand.fromMap(map);
+      case MPCommandType.editAreaType:
+        return MPEditAreaTypeCommand.fromMap(map);
       case MPCommandType.editLineSegment:
         return MPEditLineSegmentCommand.fromMap(map);
+      case MPCommandType.editLineType:
+        return MPEditLineTypeCommand.fromMap(map);
+      case MPCommandType.editPointType:
+        return MPEditPointTypeCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
       case MPCommandType.moveLine:

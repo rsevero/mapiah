@@ -50,7 +50,8 @@ class MPMovePointCommand extends MPCommand {
     );
 
     th2FileEditController.elementEditController
-        .applySubstituteElement(modifiedPoint);
+        .substituteElement(modifiedPoint);
+    th2FileEditController.triggerSelectedElementsRedraw();
   }
 
   @override
