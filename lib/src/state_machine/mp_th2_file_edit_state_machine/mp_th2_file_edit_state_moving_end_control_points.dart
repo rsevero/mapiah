@@ -77,7 +77,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     );
 
     th2FileEditController.execute(lineEditCommand);
-    selectionController.updateSelectedElementsClones();
+    selectionController.updateSelectedElementClone(selectedLine.mpID);
     th2FileEditController.triggerEditLineRedraw();
     selectionController.setSelectionState();
   }

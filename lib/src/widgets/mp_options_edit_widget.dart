@@ -34,7 +34,7 @@ class MPOptionsEditWidget extends StatelessWidget {
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        String? selectedType;
+        String? selectedPLAType;
 
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
@@ -56,20 +56,20 @@ class MPOptionsEditWidget extends StatelessWidget {
               for (final selectedElement in mpSelectedElements) {
                 if ((selectedElement is MPSelectedArea) &&
                     (selectedElement.originalAreaClone.areaType.name !=
-                        selectedType)) {
-                  if (selectedType == null) {
-                    selectedType =
+                        selectedPLAType)) {
+                  if (selectedPLAType == null) {
+                    selectedPLAType =
                         selectedElement.originalAreaClone.areaType.name;
                   } else {
-                    selectedType = null;
+                    selectedPLAType = null;
                     break;
                   }
                 }
               }
 
               optionWidgets.add(
-                MPPlaTypeWidget(
-                    selectedType: selectedType,
+                MPPLATypeWidget(
+                    selectedPLAType: selectedPLAType,
                     type: selectedElementType,
                     th2FileEditController: th2FileEditController),
               );
@@ -77,20 +77,20 @@ class MPOptionsEditWidget extends StatelessWidget {
               for (final selectedElement in mpSelectedElements) {
                 if ((selectedElement is MPSelectedLine) &&
                     (selectedElement.originalLineClone.lineType.name !=
-                        selectedType)) {
-                  if (selectedType == null) {
-                    selectedType =
+                        selectedPLAType)) {
+                  if (selectedPLAType == null) {
+                    selectedPLAType =
                         selectedElement.originalLineClone.lineType.name;
                   } else {
-                    selectedType = null;
+                    selectedPLAType = null;
                     break;
                   }
                 }
               }
 
               optionWidgets.add(
-                MPPlaTypeWidget(
-                    selectedType: selectedType,
+                MPPLATypeWidget(
+                    selectedPLAType: selectedPLAType,
                     type: selectedElementType,
                     th2FileEditController: th2FileEditController),
               );
@@ -106,20 +106,20 @@ class MPOptionsEditWidget extends StatelessWidget {
               for (final selectedElement in mpSelectedElements) {
                 if ((selectedElement is MPSelectedPoint) &&
                     (selectedElement.originalPointClone.pointType.name !=
-                        selectedType)) {
-                  if (selectedType == null) {
-                    selectedType =
+                        selectedPLAType)) {
+                  if (selectedPLAType == null) {
+                    selectedPLAType =
                         selectedElement.originalPointClone.pointType.name;
                   } else {
-                    selectedType = null;
+                    selectedPLAType = null;
                     break;
                   }
                 }
               }
 
               optionWidgets.add(
-                MPPlaTypeWidget(
-                    selectedType: selectedType,
+                MPPLATypeWidget(
+                    selectedPLAType: selectedPLAType,
                     type: selectedElementType,
                     th2FileEditController: th2FileEditController),
               );

@@ -158,6 +158,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.triggerSelectedElementsRedraw();
   }
 
+  void updateSelectedElementClone(int mpID) {
+    if (_selectedElements.containsKey(mpID)) {
+      _selectedElements[mpID]!.updateClone(_thFile);
+    }
+  }
+
   void updateSelectedElementsClones() {
     for (final MPSelectedElement selectedElement in _selectedElements.values) {
       selectedElement.updateClone(_thFile);

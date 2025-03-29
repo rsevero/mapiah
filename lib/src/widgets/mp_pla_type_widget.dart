@@ -4,14 +4,14 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
-class MPPlaTypeWidget extends StatelessWidget {
-  final String? selectedType;
+class MPPLATypeWidget extends StatelessWidget {
+  final String? selectedPLAType;
   final THElementType type;
   final TH2FileEditController th2FileEditController;
 
-  MPPlaTypeWidget({
+  MPPLATypeWidget({
     super.key,
-    required this.selectedType,
+    required this.selectedPLAType,
     required this.type,
     required this.th2FileEditController,
   });
@@ -22,17 +22,17 @@ class MPPlaTypeWidget extends StatelessWidget {
 
     switch (type) {
       case THElementType.area:
-        title = selectedType == null
+        title = selectedPLAType == null
             ? mpLocator.appLocalizations.mpPLATypeAreaTitle
-            : selectedType!;
+            : selectedPLAType!;
       case THElementType.line:
-        title = selectedType == null
+        title = selectedPLAType == null
             ? mpLocator.appLocalizations.mpPLATypeLineTitle
-            : selectedType!;
+            : selectedPLAType!;
       case THElementType.point:
-        title = selectedType == null
+        title = selectedPLAType == null
             ? mpLocator.appLocalizations.mpPLATypePointTitle
-            : selectedType!;
+            : selectedPLAType!;
       default:
         return SizedBox.shrink();
     }
@@ -57,7 +57,7 @@ class MPPlaTypeWidget extends StatelessWidget {
         .performToggleShowPLATypeOverlayWindow(
       elementType: type,
       position: position,
-      selectedType: selectedType,
+      selectedType: selectedPLAType,
     );
   }
 }

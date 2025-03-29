@@ -85,7 +85,11 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             selectionController.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
-    if (selectedCount == 1) {
+    if (selectedCount == 0) {
+      th2FileEditController.stateController
+          .setState(MPTH2FileEditStateType.selectEmptySelection);
+      return;
+    } else if (selectedCount == 1) {
       final MPSelectedElement selected =
           selectionController.selectedElements.values.first;
       final THElement selectedElement = selected.originalElementClone;
@@ -98,7 +102,6 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             deltaOnCanvas: panDeltaOnCanvas,
             decimalPositions: th2FileEditController.currentDecimalPositions,
           );
-          break;
         case MPSelectedLine _:
           moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
             lineMPID: selectedElement.mpID,
@@ -106,18 +109,21 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             deltaOnCanvas: panDeltaOnCanvas,
             decimalPositions: th2FileEditController.currentDecimalPositions,
           );
-          break;
       }
+
+      th2FileEditController.execute(moveCommand);
+      selectionController.updateSelectedElementClone(selectedElement.mpID);
     } else if (selectedCount > 1) {
       moveCommand = MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas(
         deltaOnCanvas: panDeltaOnCanvas,
         mpSelectedElements: selectionController.selectedElements.values,
         decimalPositions: th2FileEditController.currentDecimalPositions,
       );
+
+      th2FileEditController.execute(moveCommand);
+      selectionController.updateSelectedElementsClones();
     }
 
-    th2FileEditController.execute(moveCommand);
-    selectionController.updateSelectedElementsClones();
     th2FileEditController.triggerSelectedElementsRedraw(setState: true);
   }
 

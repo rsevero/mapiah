@@ -228,6 +228,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _thFile.substituteElement(modifiedElement);
     _th2FileEditController.selectionController
         .addSelectableElement(modifiedElement);
+    _th2FileEditController.selectionController
+        .updateSelectedElementClone(modifiedElement.mpID);
   }
 
   void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
