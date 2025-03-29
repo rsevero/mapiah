@@ -167,14 +167,14 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   void showOptionChoicesOverlayWindow(
-      {required Offset position, required MPOptionInfo optionInfo}) {
+      {required Offset outerAnchorPosition, required MPOptionInfo optionInfo}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOverlayWindowControllerBase.showOptionChoicesOverlayWindow');
     try {
       return super.showOptionChoicesOverlayWindow(
-          position: position, optionInfo: optionInfo);
+          outerAnchorPosition: outerAnchorPosition, optionInfo: optionInfo);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

@@ -13,16 +13,16 @@ import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 class MPAltitudeValueOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final THAltitudeValueCommandOption? currentOption;
-  final Offset position;
-  final MPWidgetPositionType positionType;
+  final Offset outerAnchorPosition;
+  final MPWidgetPositionType innerAnchorType;
   final double maxHeight;
 
   const MPAltitudeValueOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.currentOption,
-    required this.position,
-    required this.positionType,
+    required this.outerAnchorPosition,
+    required this.innerAnchorType,
     required this.maxHeight,
   });
 
@@ -132,9 +132,8 @@ class _MPAltitudeValueOptionWidgetState
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return MPOverlayWindowWidget(
-      position: widget.position,
-      positionType: widget.positionType,
-      windowType: MPWindowType.optionChoices,
+      outerAnchorPosition: widget.outerAnchorPosition,
+      innerAnchorType: widget.innerAnchorType,
       th2FileEditController: widget.th2FileEditController,
       child: MPSingleColumnListOverlayWindowContentWidget(
         maxHeight: widget.maxHeight,

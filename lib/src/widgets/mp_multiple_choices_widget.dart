@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
@@ -13,8 +12,8 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   final Map<String, String> choices;
   final String? selectedChoice;
   final String? defaultChoice;
-  final Offset position;
-  final MPWidgetPositionType positionType;
+  final Offset outerAnchorPosition;
+  final MPWidgetPositionType innerAnchorType;
   final double maxHeight;
 
   MPMultipleChoicesWidget({
@@ -24,17 +23,16 @@ class MPMultipleChoicesWidget extends StatelessWidget {
     required this.choices,
     required this.selectedChoice,
     this.defaultChoice,
-    required this.position,
-    required this.positionType,
+    required this.outerAnchorPosition,
+    required this.innerAnchorType,
     required this.maxHeight,
   });
 
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      position: position,
-      positionType: positionType,
-      windowType: MPWindowType.optionChoices,
+      outerAnchorPosition: outerAnchorPosition,
+      innerAnchorType: innerAnchorType,
       th2FileEditController: th2FileEditController,
       child: MPSingleColumnListOverlayWindowContentWidget(
         maxHeight: maxHeight,

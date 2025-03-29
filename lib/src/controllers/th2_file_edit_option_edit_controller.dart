@@ -130,7 +130,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @action
   void performToggleOptionShownStatus({
     required THCommandOptionType optionType,
-    required Offset position,
+    required Offset outerAnchorPosition,
   }) {
     if (_currentOptionType == optionType) {
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
@@ -150,7 +150,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
       _th2FileEditController.overlayWindowController
           .showOptionChoicesOverlayWindow(
-        position: position,
+        outerAnchorPosition: outerAnchorPosition,
         optionInfo: optionInfo,
       );
     }

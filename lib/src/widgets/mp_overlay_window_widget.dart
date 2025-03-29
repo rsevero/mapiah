@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
-  final Offset position;
+  final Offset outerAnchorPosition;
   final Widget child;
-  final MPWindowType windowType;
-  final MPWidgetPositionType positionType;
+  final MPWidgetPositionType innerAnchorType;
   final ValueChanged<KeyDownEvent>? onKeyDownEvent;
   final ValueChanged<KeyUpEvent>? onKeyUpEvent;
 
   const MPOverlayWindowWidget({
     super.key,
     required this.th2FileEditController,
-    required this.position,
+    required this.outerAnchorPosition,
     required this.child,
-    required this.positionType,
-    required this.windowType,
+    required this.innerAnchorType,
     this.onKeyDownEvent,
     this.onKeyUpEvent,
   });
@@ -41,7 +39,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
     overlayWindowController = th2FileEditController.overlayWindowController;
-    position = widget.position;
+    position = widget.outerAnchorPosition;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateCoordinates();
     });
@@ -56,55 +54,72 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
 
         setState(
           () {
-            switch (widget.positionType) {
+            Offset newPosition = widget.outerAnchorPosition;
+
+            switch (widget.innerAnchorType) {
               case MPWidgetPositionType.bottomCenter:
-                position =
-                    widget.position - Offset(size.width / 2, size.height);
+                newPosition = widget.outerAnchorPosition -
+                    Offset(size.width / 2, size.height);
               case MPWidgetPositionType.bottomLeft:
-                position = widget.position - Offset(0, size.height);
+                newPosition =
+                    widget.outerAnchorPosition - Offset(0, size.height);
               case MPWidgetPositionType.bottomRight:
-                position = widget.position - Offset(size.width, size.height);
+                newPosition = widget.outerAnchorPosition -
+                    Offset(size.width, size.height);
               case MPWidgetPositionType.center:
-                position =
-                    widget.position - (Offset(size.width, size.height) / 2);
+                newPosition = widget.outerAnchorPosition -
+                    (Offset(size.width, size.height) / 2);
               case MPWidgetPositionType.leftCenter:
-                position = widget.position - Offset(0, size.height / 2);
+                newPosition =
+                    widget.outerAnchorPosition - Offset(0, size.height / 2);
               case MPWidgetPositionType.rightCenter:
-                position =
-                    widget.position - Offset(size.width, size.height / 2);
+                newPosition = widget.outerAnchorPosition -
+                    Offset(size.width, size.height / 2);
               case MPWidgetPositionType.topCenter:
-                position = widget.position - Offset(size.width / 2, 0);
+                newPosition =
+                    widget.outerAnchorPosition - Offset(size.width / 2, 0);
               case MPWidgetPositionType.topLeft:
-                position = widget.position;
+                newPosition = widget.outerAnchorPosition;
               case MPWidgetPositionType.topRight:
-                position = widget.position - Offset(size.width, 0);
+                newPosition =
+                    widget.outerAnchorPosition - Offset(size.width, 0);
             }
 
-            final Rect screenBoundingBox =
-                th2FileEditController.screenBoundingBox;
+            Rect? thFileBoundingBox =
+                MPInteractionAux.getWidgetRectFromGlobalKey(
+              widgetGlobalKey: th2FileEditController.thFileWidgetKey,
+            );
 
-            if (position.dy + size.height > screenBoundingBox.bottom) {
-              position = Offset(
-                position.dx,
-                screenBoundingBox.bottom - size.height,
+            thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
+
+            /// Up to here newPosition is the position inside the THFileWidget
+            /// window. Adjusting it to global coordinates as overlay windows
+            /// are positioned in global coordinates.
+            newPosition += thFileBoundingBox.topLeft;
+
+            if (thFileBoundingBox.bottom < (newPosition.dy + size.height)) {
+              newPosition = Offset(
+                newPosition.dx,
+                thFileBoundingBox.bottom - size.height,
               );
             }
 
-            if (position.dy < screenBoundingBox.top) {
-              position = Offset(position.dx, screenBoundingBox.top);
+            if (newPosition.dy < thFileBoundingBox.top) {
+              newPosition = Offset(newPosition.dx, thFileBoundingBox.top);
             }
 
-            if (position.dx + size.width > screenBoundingBox.right) {
-              position = Offset(
-                screenBoundingBox.right - size.width,
-                position.dy,
+            if (thFileBoundingBox.right < (newPosition.dx + size.width)) {
+              newPosition = Offset(
+                thFileBoundingBox.right - size.width,
+                newPosition.dy,
               );
             }
 
-            if (position.dx < screenBoundingBox.left) {
-              position = Offset(screenBoundingBox.left, position.dy);
+            if (newPosition.dx < thFileBoundingBox.left) {
+              newPosition = Offset(thFileBoundingBox.left, newPosition.dy);
             }
 
+            position = newPosition;
             _initialPositionSet = true;
           },
         );

@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
@@ -6,6 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
@@ -312,18 +312,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   List<Widget> _changeScrapButton() {
     return [
       SizedBox(height: mpButtonSpace),
-      MouseRegion(
-        onEnter: (PointerEnterEvent event) {
-          th2FileEditController.setIsMouseOverChangeScrapsButton(context, true);
-        },
-        onExit: (PointerExitEvent event) {
-          th2FileEditController.setIsMouseOverChangeScrapsButton(
-            context,
-            false,
-          );
-        },
-        child: Observer(
-          builder: (_) => Padding(
+      Observer(
+        builder: (_) {
+          final bool isChangeScrapButtonPressed = th2FileEditController
+              .overlayWindowController.showChangeScrapOverlayWindow;
+
+          return Padding(
             padding: th2FileEditController
                     .overlayWindowController.showChangeScrapOverlayWindow
                 ? const EdgeInsets.only(left: mpButtonSpace)
@@ -333,17 +327,22 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       .overlayWindowController.globalKeyWidgetKeyByType[
                   MPGlobalKeyWidgetType.changeScrapButton]!,
               heroTag: 'change_active_scrap_tool',
-              onPressed: _onChangeActiveScrapToolPressed,
+              onPressed: _onChangeScrapButtonPressed,
               child: Image.asset(
                 'assets/icons/change-scrap-tool.png',
                 width: thFloatingActionIconSize,
                 height: thFloatingActionIconSize,
-                color: colorScheme.onSecondaryContainer,
+                color: isChangeScrapButtonPressed
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSecondaryContainer,
               ),
-              backgroundColor: colorScheme.secondaryContainer,
+              backgroundColor: isChangeScrapButtonPressed
+                  ? colorScheme.primary
+                  : colorScheme.secondaryContainer,
+              elevation: isChangeScrapButtonPressed ? 0 : null,
             ),
-          ),
-        ),
+          );
+        },
       ),
     ];
   }
@@ -399,9 +398,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     th2FileEditController.stateController.onButtonPressed(type);
   }
 
-  void _onChangeActiveScrapToolPressed() {
-    th2FileEditController.stateController
-        .onButtonPressed(MPButtonType.changeScrap);
+  void _onChangeScrapButtonPressed() {
+    th2FileEditController.overlayWindowController.toggleOverlayWindow(
+      MPWindowType.availableScraps,
+    );
   }
 
   void onRemovePressed() {

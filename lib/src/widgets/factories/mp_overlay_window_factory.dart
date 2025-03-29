@@ -19,7 +19,7 @@ import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 class MPOverlayWindowFactory {
   static OverlayEntry createOverlayWindow({
     required TH2FileEditController th2FileEditController,
-    required Offset position,
+    required Offset outerAnchorPosition,
     required MPWindowType type,
   }) {
     final TH2FileEditOverlayWindowController overlayWindowController =
@@ -29,28 +29,31 @@ class MPOverlayWindowFactory {
 
     switch (type) {
       case MPWindowType.availableScraps:
-        final GlobalKey changeScrapButtonKey = overlayWindowController
+        final GlobalKey changeScrapButtonGlobalKey = overlayWindowController
             .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
-        final Rect? rect = MPInteractionAux.getWidgetRectFromGlobalKey(
-          widgetGlobalKey: changeScrapButtonKey,
+        final Rect? changeScrapButtonBoundingBox =
+            MPInteractionAux.getWidgetRectFromGlobalKey(
+          widgetGlobalKey: changeScrapButtonGlobalKey,
           ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
         );
 
-        if (rect != null) {
-          position = Offset(rect.left - mpButtonSpace, rect.center.dy);
+        if (changeScrapButtonBoundingBox != null) {
+          outerAnchorPosition = Offset(
+              changeScrapButtonBoundingBox.left - mpButtonSpace,
+              changeScrapButtonBoundingBox.center.dy);
         }
 
         overlayWindowWidget = MPAvailableScrapsWidget(
           key: ValueKey("MPAvailableScrapsWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
-          position: position,
+          outerAnchorPosition: outerAnchorPosition,
         );
       case MPWindowType.commandOptions:
         overlayWindowWidget = MPOptionsEditWidget(
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
-          position: position,
-          positionType: MPWidgetPositionType.center,
+          outerAnchorPosition: outerAnchorPosition,
+          innerAnchorType: MPWidgetPositionType.center,
           maxHeight: getMaxHeightForOverlayWindows(
             th2FileEditController.thFileWidgetKey,
           ),
@@ -74,7 +77,7 @@ class MPOverlayWindowFactory {
 
   static OverlayEntry createOptionChoices({
     required TH2FileEditController th2FileEditController,
-    required Offset position,
+    required Offset outerAnchorPosition,
     required MPOptionInfo optionInfo,
   }) {
     final THCommandOptionType optionType = optionInfo.type;
@@ -126,8 +129,8 @@ class MPOverlayWindowFactory {
         choices: MPTextToUser.getOptionChoicesWithUnset(choices),
         selectedChoice: optionInfo.currentChoice,
         defaultChoice: THCommandOption.getDefaultChoiceAsString(optionType),
-        position: position,
-        positionType: MPWidgetPositionType.leftCenter,
+        outerAnchorPosition: outerAnchorPosition,
+        innerAnchorType: MPWidgetPositionType.leftCenter,
         maxHeight: getMaxHeightForOverlayWindows(
           th2FileEditController.thFileWidgetKey,
         ),
@@ -138,8 +141,8 @@ class MPOverlayWindowFactory {
           overlayWindowWidget = MPAltitudeValueOptionWidget(
             th2FileEditController: th2FileEditController,
             currentOption: optionInfo.option as THAltitudeValueCommandOption?,
-            position: position,
-            positionType: MPWidgetPositionType.leftCenter,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
             maxHeight: getMaxHeightForOverlayWindows(
               th2FileEditController.thFileWidgetKey,
             ),
@@ -167,8 +170,8 @@ class MPOverlayWindowFactory {
         key: ValueKey("MPPLATypeOptionsWidget|$thFileMPID"),
         plaType: elementType,
         selectedType: selectedType,
-        position: position,
-        positionType: MPWidgetPositionType.leftCenter,
+        outerAnchorPosition: position,
+        innerAnchorType: MPWidgetPositionType.leftCenter,
         maxHeight: getMaxHeightForOverlayWindows(
           th2FileEditController.thFileWidgetKey,
         ),

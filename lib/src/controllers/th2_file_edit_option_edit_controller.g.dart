@@ -108,14 +108,15 @@ mixin _$TH2FileEditOptionEditController
 
   @override
   void performToggleOptionShownStatus(
-      {required THCommandOptionType optionType, required Offset position}) {
+      {required THCommandOptionType optionType,
+      required Offset outerAnchorPosition}) {
     final _$actionInfo =
         _$TH2FileEditOptionEditControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOptionEditControllerBase.performToggleOptionShownStatus');
     try {
       return super.performToggleOptionShownStatus(
-          optionType: optionType, position: position);
+          optionType: optionType, outerAnchorPosition: outerAnchorPosition);
     } finally {
       _$TH2FileEditOptionEditControllerBaseActionController
           .endAction(_$actionInfo);

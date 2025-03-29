@@ -1292,45 +1292,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setIsMouseOverChangeScrapsButton(
-      BuildContext context, bool isMouseOver) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.setIsMouseOverChangeScrapsButton');
-    try {
-      return super.setIsMouseOverChangeScrapsButton(context, isMouseOver);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setIsMouseOverChangeScrapsOverlayWindow(
-      BuildContext context, bool isMouseOver) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController.startAction(
-        name:
-            'TH2FileEditControllerBase.setIsMouseOverChangeScrapsOverlayWindow');
-    try {
-      return super
-          .setIsMouseOverChangeScrapsOverlayWindow(context, isMouseOver);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void _setShowChangeScrapOverlayWindow(BuildContext context) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase._setShowChangeScrapOverlayWindow');
-    try {
-      return super._setShowChangeScrapOverlayWindow(context);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void updateHasMultipleScraps() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.updateHasMultipleScraps');

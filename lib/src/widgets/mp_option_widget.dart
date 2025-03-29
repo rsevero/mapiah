@@ -81,17 +81,17 @@ class MPOptionWidget extends StatelessWidget {
 
   void onOptionTap(BuildContext context, THCommandOptionType type) {
     Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(
-      context: context,
+      widgetContext: context,
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
     );
 
-    final Offset position = boundingBox == null
+    final Offset anchorPosition = boundingBox == null
         ? th2FileEditController.screenBoundingBox.center
         : boundingBox.centerRight;
 
     optionEditController.performToggleOptionShownStatus(
       optionType: type,
-      position: position,
+      outerAnchorPosition: anchorPosition,
     );
   }
 }

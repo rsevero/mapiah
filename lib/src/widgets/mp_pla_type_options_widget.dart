@@ -3,7 +3,6 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_option_widget.dart';
@@ -13,8 +12,8 @@ import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 class MPPLATypeOptionsWidget extends StatelessWidget {
   final THElementType plaType;
   final TH2FileEditController th2FileEditController;
-  final Offset position;
-  final MPWidgetPositionType positionType;
+  final Offset outerAnchorPosition;
+  final MPWidgetPositionType innerAnchorType;
   final double maxHeight;
   final String? selectedType;
 
@@ -22,8 +21,8 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
     super.key,
     required this.plaType,
     required this.th2FileEditController,
-    required this.position,
-    required this.positionType,
+    required this.outerAnchorPosition,
+    required this.innerAnchorType,
     required this.maxHeight,
     required this.selectedType,
   });
@@ -91,9 +90,8 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
     }
 
     return MPOverlayWindowWidget(
-      position: position,
-      positionType: positionType,
-      windowType: MPWindowType.commandOptions,
+      outerAnchorPosition: outerAnchorPosition,
+      innerAnchorType: innerAnchorType,
       th2FileEditController: th2FileEditController,
       child: MPSingleColumnListOverlayWindowContentWidget(
         maxHeight: maxHeight,

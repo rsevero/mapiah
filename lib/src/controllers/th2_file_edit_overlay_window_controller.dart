@@ -53,6 +53,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool _isAutoDismissWindowOpen = false;
 
   final autoDismissOverlayWindowTypes = {
+    MPWindowType.availableScraps,
     MPWindowType.commandOptions,
     MPWindowType.optionChoices,
     MPWindowType.plaTypes,
@@ -92,7 +93,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       } else {
         _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
           th2FileEditController: _th2FileEditController,
-          position: getPositionFromSelectedElements(),
+          outerAnchorPosition: getPositionFromSelectedElements(),
           type: type,
         );
       }
@@ -113,7 +114,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void showOptionChoicesOverlayWindow({
-    required Offset position,
+    required Offset outerAnchorPosition,
     required MPOptionInfo optionInfo,
   }) {
     const MPWindowType overlayWindowType = MPWindowType.optionChoices;
@@ -125,7 +126,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _overlayWindows[overlayWindowType] =
         MPOverlayWindowFactory.createOptionChoices(
       th2FileEditController: _th2FileEditController,
-      position: position,
+      outerAnchorPosition: outerAnchorPosition,
       optionInfo: optionInfo,
     );
 
@@ -203,12 +204,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     if (_th2FileEditController.selectionController.selectedElements.isEmpty) {
       return _th2FileEditController.screenBoundingBox.center;
     } else {
-      final Rect selectedElementsBoundingBox = _th2FileEditController
+      final Rect selectedElementsBoundingBoxOnCanvas = _th2FileEditController
           .selectionController.selectedElementsBoundingBox;
-      final Offset selectedElementsCenter = _th2FileEditController
-          .offsetCanvasToScreen(selectedElementsBoundingBox.center);
+      final Offset selectedElementsCenterOnScreen = _th2FileEditController
+          .offsetCanvasToScreen(selectedElementsBoundingBoxOnCanvas.center);
 
-      return selectedElementsCenter;
+      return selectedElementsCenterOnScreen;
     }
   }
 
