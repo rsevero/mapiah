@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
@@ -34,102 +38,98 @@ class MPOptionsEditWidget extends StatelessWidget {
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        String? selectedPLAType;
+        final mpSelectedElements =
+            th2FileEditController.selectionController.selectedElements.values;
 
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
         final List<Widget> optionWidgets = [
           Text(appLocalizations.mpOptionsEditTitle),
         ];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
 
-        final mpSelectedElements =
-            th2FileEditController.selectionController.selectedElements.values;
+        bool hasArea = false;
+        bool hasLine = false;
+        bool hasPoint = false;
+        THAreaType? selectedAreaPLAType;
+        THLineType? selectedLinePLAType;
+        THPointType? selectedPointPLAType;
 
-        if (mpSelectedElements.length == 1) {
-          final THElementType selectedElementType =
-              mpSelectedElements.first.originalElementClone.elementType;
-
-          switch (selectedElementType) {
-            case THElementType.area:
-              for (final selectedElement in mpSelectedElements) {
-                if ((selectedElement is MPSelectedArea) &&
-                    (selectedElement.originalAreaClone.areaType.name !=
-                        selectedPLAType)) {
-                  if (selectedPLAType == null) {
-                    selectedPLAType =
-                        selectedElement.originalAreaClone.areaType.name;
-                  } else {
-                    selectedPLAType = null;
-                    break;
-                  }
+        for (final mpSelectedElement in mpSelectedElements) {
+          switch (mpSelectedElement) {
+            case MPSelectedArea _:
+              if (mpSelectedElement.originalAreaClone.areaType !=
+                  selectedAreaPLAType) {
+                if ((selectedAreaPLAType == null) && !hasArea) {
+                  selectedAreaPLAType =
+                      mpSelectedElement.originalAreaClone.areaType;
+                } else {
+                  selectedAreaPLAType = null;
                 }
               }
-
-              optionWidgets.add(
-                MPPLATypeWidget(
-                    selectedPLAType: selectedPLAType,
-                    type: selectedElementType,
-                    th2FileEditController: th2FileEditController),
-              );
-            case THElementType.line:
-              for (final selectedElement in mpSelectedElements) {
-                if ((selectedElement is MPSelectedLine) &&
-                    (selectedElement.originalLineClone.lineType.name !=
-                        selectedPLAType)) {
-                  if (selectedPLAType == null) {
-                    selectedPLAType =
-                        selectedElement.originalLineClone.lineType.name;
-                  } else {
-                    selectedPLAType = null;
-                    break;
-                  }
+              hasArea = true;
+            case MPSelectedLine _:
+              if (mpSelectedElement.originalLineClone.lineType !=
+                  selectedLinePLAType) {
+                if ((selectedLinePLAType == null) && !hasLine) {
+                  selectedLinePLAType =
+                      mpSelectedElement.originalLineClone.lineType;
+                } else {
+                  selectedLinePLAType = null;
                 }
               }
-
-              optionWidgets.add(
-                MPPLATypeWidget(
-                    selectedPLAType: selectedPLAType,
-                    type: selectedElementType,
-                    th2FileEditController: th2FileEditController),
-              );
-            case THElementType.straightLineSegment:
-              optionWidgets.add(ListTile(
-                title: Text(appLocalizations.thElementStraightLineSegment),
-              ));
-            case THElementType.bezierCurveLineSegment:
-              optionWidgets.add(ListTile(
-                title: Text(appLocalizations.thElementBezierCurveLineSegment),
-              ));
-            case THElementType.point:
-              for (final selectedElement in mpSelectedElements) {
-                if ((selectedElement is MPSelectedPoint) &&
-                    (selectedElement.originalPointClone.pointType.name !=
-                        selectedPLAType)) {
-                  if (selectedPLAType == null) {
-                    selectedPLAType =
-                        selectedElement.originalPointClone.pointType.name;
-                  } else {
-                    selectedPLAType = null;
-                    break;
-                  }
+              hasLine = true;
+            case MPSelectedPoint _:
+              if (mpSelectedElement.originalPointClone.pointType !=
+                  selectedPointPLAType) {
+                if ((selectedPointPLAType == null) && !hasPoint) {
+                  selectedPointPLAType =
+                      mpSelectedElement.originalPointClone.pointType;
+                } else {
+                  selectedPointPLAType = null;
+                  break;
                 }
               }
-
-              optionWidgets.add(
-                MPPLATypeWidget(
-                    selectedPLAType: selectedPLAType,
-                    type: selectedElementType,
-                    th2FileEditController: th2FileEditController),
-              );
-            case THElementType.scrap:
-              optionWidgets.add(ListTile(
-                title: Text(appLocalizations.thElementScrap),
-              ));
+              hasPoint = true;
             default:
-              throw Exception('Unknown element type: $selectedElementType');
+              throw Exception(
+                  'Unsupported element type: $mpSelectedElement in MPOptionsEditWidget');
           }
+        }
+
+        if (hasArea) {
+          optionWidgets.add(
+            MPPLATypeWidget(
+                selectedPLAType: selectedAreaPLAType?.name,
+                selectedPLATypeToUser: selectedAreaPLAType != null
+                    ? MPTextToUser.getAreaType(selectedAreaPLAType)
+                    : null,
+                type: THElementType.area,
+                th2FileEditController: th2FileEditController),
+          );
+        }
+
+        if (hasLine) {
+          optionWidgets.add(
+            MPPLATypeWidget(
+                selectedPLAType: selectedLinePLAType?.name,
+                selectedPLATypeToUser: selectedLinePLAType != null
+                    ? MPTextToUser.getLineType(selectedLinePLAType)
+                    : null,
+                type: THElementType.line,
+                th2FileEditController: th2FileEditController),
+          );
+        }
+        if (hasPoint) {
+          optionWidgets.add(
+            MPPLATypeWidget(
+                selectedPLAType: selectedPointPLAType?.name,
+                selectedPLATypeToUser: selectedPointPLAType != null
+                    ? MPTextToUser.getPointType(selectedPointPLAType)
+                    : null,
+                type: THElementType.point,
+                th2FileEditController: th2FileEditController),
+          );
         }
 
         final optionsStateMap = optionEditController.optionStateMap.entries;

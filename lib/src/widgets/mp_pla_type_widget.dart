@@ -6,12 +6,14 @@ import 'package:mapiah/src/elements/th_element.dart';
 
 class MPPLATypeWidget extends StatelessWidget {
   final String? selectedPLAType;
+  final String? selectedPLATypeToUser;
   final THElementType type;
   final TH2FileEditController th2FileEditController;
 
   MPPLATypeWidget({
     super.key,
     required this.selectedPLAType,
+    required this.selectedPLATypeToUser,
     required this.type,
     required this.th2FileEditController,
   });
@@ -22,17 +24,17 @@ class MPPLATypeWidget extends StatelessWidget {
 
     switch (type) {
       case THElementType.area:
-        title = selectedPLAType == null
+        title = selectedPLATypeToUser == null
             ? mpLocator.appLocalizations.mpPLATypeAreaTitle
-            : selectedPLAType!;
+            : selectedPLATypeToUser!;
       case THElementType.line:
-        title = selectedPLAType == null
+        title = selectedPLATypeToUser == null
             ? mpLocator.appLocalizations.mpPLATypeLineTitle
-            : selectedPLAType!;
+            : selectedPLATypeToUser!;
       case THElementType.point:
-        title = selectedPLAType == null
+        title = selectedPLATypeToUser == null
             ? mpLocator.appLocalizations.mpPLATypePointTitle
-            : selectedPLAType!;
+            : selectedPLATypeToUser!;
       default:
         return SizedBox.shrink();
     }

@@ -118,7 +118,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               return MPPLATypeOptionWidget(
                 value: choice,
                 label: choices[choice]!,
-                groupValue: selectedType!,
+                groupValue: selectedType == null ? '' : selectedType!,
                 isSelected: choice == selectedType,
                 plaType: plaType,
                 th2FileEditController: th2FileEditController,
@@ -132,7 +132,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
               return MPPLATypeOptionWidget(
                 value: choice,
                 label: choices[choice]!,
-                groupValue: selectedType!,
+                groupValue: selectedType == null ? '' : selectedType!,
                 isSelected: choice == selectedType,
                 plaType: plaType,
                 th2FileEditController: th2FileEditController,
@@ -145,7 +145,7 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
             return MPPLATypeOptionWidget(
               value: entry.key,
               label: entry.value,
-              groupValue: selectedType!,
+              groupValue: selectedType == null ? '' : selectedType!,
               isSelected: entry.key == selectedType,
               plaType: plaType,
               th2FileEditController: th2FileEditController,
