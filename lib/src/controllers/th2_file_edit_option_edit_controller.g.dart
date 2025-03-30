@@ -52,19 +52,16 @@ mixin _$TH2FileEditOptionEditController
       name: 'TH2FileEditOptionEditControllerBase._optionStateMap',
       context: context);
 
-  ObservableMap<THCommandOptionType, Observable<MPOptionInfo>>
-      get optionStateMap {
+  Map<THCommandOptionType, MPOptionInfo> get optionStateMap {
     _$_optionStateMapAtom.reportRead();
     return super._optionStateMap;
   }
 
   @override
-  ObservableMap<THCommandOptionType, Observable<MPOptionInfo>>
-      get _optionStateMap => optionStateMap;
+  Map<THCommandOptionType, MPOptionInfo> get _optionStateMap => optionStateMap;
 
   @override
-  set _optionStateMap(
-      ObservableMap<THCommandOptionType, Observable<MPOptionInfo>> value) {
+  set _optionStateMap(Map<THCommandOptionType, MPOptionInfo> value) {
     _$_optionStateMapAtom.reportWrite(value, super._optionStateMap, () {
       super._optionStateMap = value;
     });

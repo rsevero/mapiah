@@ -25,8 +25,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       : _thFile = _th2FileEditController.thFile;
 
   @readonly
-  ObservableMap<THCommandOptionType, Observable<MPOptionInfo>> _optionStateMap =
-      ObservableMap();
+  Map<THCommandOptionType, MPOptionInfo> _optionStateMap = {};
 
   @readonly
   THCommandOptionType? _currentOptionType;
@@ -114,8 +113,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           }
         }
       }
-
-      _th2FileEditController.triggerOptionsListRedraw();
     }
 
     final List<THCommandOptionType> orderedOptionTypesList =
@@ -123,8 +120,10 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
     _optionStateMap.clear();
     for (final optionType in orderedOptionTypesList) {
-      _optionStateMap[optionType] = Observable(optionsInfo[optionType]!);
+      _optionStateMap[optionType] = optionsInfo[optionType]!;
     }
+
+    _th2FileEditController.triggerOptionsListRedraw();
   }
 
   @action
@@ -146,7 +145,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
         );
       }
       _currentOptionType = optionType;
-      final MPOptionInfo optionInfo = _optionStateMap[optionType]!.value;
+      final MPOptionInfo optionInfo = _optionStateMap[optionType]!;
 
       _th2FileEditController.overlayWindowController
           .showOptionChoicesOverlayWindow(

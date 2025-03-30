@@ -15,6 +15,8 @@ import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -96,14 +98,14 @@ class MPOptionsEditWidget extends StatelessWidget {
         if (hasArea || hasLine || hasPoint) {
           final List<Widget> plaTypeWidgets = [];
 
-          if (hasArea) {
+          if (hasPoint) {
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                  selectedPLAType: selectedAreaPLAType?.name,
-                  selectedPLATypeToUser: selectedAreaPLAType != null
-                      ? MPTextToUser.getAreaType(selectedAreaPLAType)
+                  selectedPLAType: selectedPointPLAType?.name,
+                  selectedPLATypeToUser: selectedPointPLAType != null
+                      ? MPTextToUser.getPointType(selectedPointPLAType)
                       : null,
-                  type: THElementType.area,
+                  type: THElementType.point,
                   th2FileEditController: th2FileEditController),
             );
           }
@@ -119,39 +121,66 @@ class MPOptionsEditWidget extends StatelessWidget {
                   th2FileEditController: th2FileEditController),
             );
           }
-          if (hasPoint) {
+
+          if (hasArea) {
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                  selectedPLAType: selectedPointPLAType?.name,
-                  selectedPLATypeToUser: selectedPointPLAType != null
-                      ? MPTextToUser.getPointType(selectedPointPLAType)
+                  selectedPLAType: selectedAreaPLAType?.name,
+                  selectedPLATypeToUser: selectedAreaPLAType != null
+                      ? MPTextToUser.getAreaType(selectedAreaPLAType)
                       : null,
-                  type: THElementType.point,
+                  type: THElementType.area,
                   th2FileEditController: th2FileEditController),
             );
-
-            optionWidgets.add(
-              MPOverlayWindowBlockWidget(
-                children: plaTypeWidgets,
-              ),
-            );
           }
 
-          final optionsStateMap = optionEditController.optionStateMap.entries;
+          optionWidgets.add(
+            MPOverlayWindowBlockWidget(
+              children: plaTypeWidgets,
+              overlayWindowBlockType: MPOverlayWindowBlockType.main,
+            ),
+          );
+        }
 
-          for (final option in optionsStateMap) {
-            final THCommandOptionType optionType = option.key;
+        final optionsStateMap = optionEditController.optionStateMap.entries;
 
-            optionWidgets.add(
-              MPOptionWidget(
-                optionType: optionType,
-                optionState: option.value.value.state,
-                th2FileEditController: th2FileEditController,
-                isSelected:
-                    optionType == optionEditController.currentOptionType,
-              ),
-            );
+        MPOptionStateType? previousState;
+        List<Widget> blockWidgets = [];
+
+        for (final optionEntry in optionsStateMap) {
+          final THCommandOptionType optionType = optionEntry.key;
+          final MPOptionInfo optionInfo = optionEntry.value;
+
+          if (optionInfo.state != previousState) {
+            if (blockWidgets.isNotEmpty) {
+              optionWidgets.add(
+                MPOverlayWindowBlockWidget(
+                  children: blockWidgets,
+                  overlayWindowBlockType:
+                      getOverlayWindowBlockTypeFromOptionState(previousState),
+                ),
+              );
+              blockWidgets = [];
+            }
+            previousState = optionInfo.state;
           }
+          blockWidgets.add(
+            MPOptionWidget(
+              optionInfo: optionInfo,
+              th2FileEditController: th2FileEditController,
+              isSelected: optionType == optionEditController.currentOptionType,
+            ),
+          );
+        }
+
+        if (blockWidgets.isNotEmpty) {
+          optionWidgets.add(
+            MPOverlayWindowBlockWidget(
+              children: blockWidgets,
+              overlayWindowBlockType:
+                  getOverlayWindowBlockTypeFromOptionState(previousState),
+            ),
+          );
         }
 
         return MPOverlayWindowWidget(
@@ -164,5 +193,22 @@ class MPOptionsEditWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  MPOverlayWindowBlockType getOverlayWindowBlockTypeFromOptionState(
+      MPOptionStateType? state) {
+    switch (state) {
+      case MPOptionStateType.set:
+        return MPOverlayWindowBlockType.secondarySet;
+      case MPOptionStateType.setMixed:
+        return MPOverlayWindowBlockType.secondarySetMixed;
+      case MPOptionStateType.setUnsupported:
+        return MPOverlayWindowBlockType.secondarySetUnsupported;
+      case MPOptionStateType.unset:
+        return MPOverlayWindowBlockType.secondaryUnset;
+      default:
+        throw Exception(
+            'previous state should not be null at MPOptionsEditWidget.getOverlayWindowBlockTypeFromOptionState()');
+    }
   }
 }
