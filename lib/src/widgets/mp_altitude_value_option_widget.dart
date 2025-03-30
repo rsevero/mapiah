@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -12,14 +13,14 @@ import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPAltitudeValueOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
-  final THAltitudeValueCommandOption? currentOption;
+  final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
   const MPAltitudeValueOptionWidget({
     super.key,
     required this.th2FileEditController,
-    required this.currentOption,
+    required this.optionInfo,
     required this.outerAnchorPosition,
     required this.innerAnchorType,
   });
@@ -46,13 +47,14 @@ class _MPAltitudeValueOptionWidgetState
       MPTextToUser.getLengthUnitsChoices(),
     );
 
-    if (widget.currentOption == null) {
+    if (widget.optionInfo.option == null) {
       _altitudeController = TextEditingController(text: '0');
       _isFixed = false;
       _selectedChoice = mpUnsetOptionID;
       _selectedUnit = thDefaultLengthUnitAsString;
     } else {
-      final THAltitudeValueCommandOption currentOption = widget.currentOption!;
+      final THAltitudeValueCommandOption currentOption =
+          widget.optionInfo.option! as THAltitudeValueCommandOption;
 
       _altitudeController = TextEditingController(
         text: currentOption.length.toString(),

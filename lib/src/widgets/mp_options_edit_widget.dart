@@ -144,8 +144,8 @@ class MPOptionsEditWidget extends StatelessWidget {
 
             optionWidgets.add(
               MPOptionWidget(
-                type: optionType,
-                state: option.value.value.state,
+                optionType: optionType,
+                optionState: option.value.value.state,
                 th2FileEditController: th2FileEditController,
                 isSelected:
                     optionType == optionEditController.currentOptionType,

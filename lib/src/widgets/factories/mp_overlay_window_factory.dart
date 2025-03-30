@@ -122,10 +122,8 @@ class MPOverlayWindowFactory {
       overlayWindowWidget = MPMultipleChoicesWidget(
         th2FileEditController: th2FileEditController,
         key: ValueKey("MPMultipleChoicesWidget|$thFileMPID|${optionType.name}"),
-        optionType: optionType,
+        optionInfo: optionInfo,
         choices: MPTextToUser.getOptionChoicesWithUnset(choices),
-        selectedChoice: optionInfo.currentChoice,
-        defaultChoice: THCommandOption.getDefaultChoiceAsString(optionType),
         outerAnchorPosition: outerAnchorPosition,
         innerAnchorType: MPWidgetPositionType.leftCenter,
       );
@@ -134,7 +132,7 @@ class MPOverlayWindowFactory {
         case THCommandOptionType.altitudeValue:
           overlayWindowWidget = MPAltitudeValueOptionWidget(
             th2FileEditController: th2FileEditController,
-            currentOption: optionInfo.option as THAltitudeValueCommandOption?,
+            optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
             innerAnchorType: MPWidgetPositionType.leftCenter,
           );

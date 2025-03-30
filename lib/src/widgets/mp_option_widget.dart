@@ -7,8 +7,8 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 
 class MPOptionWidget extends StatelessWidget {
-  final THCommandOptionType type;
-  final MPOptionStateType state;
+  final THCommandOptionType optionType;
+  final MPOptionStateType optionState;
   final THCommandOption? option;
   final TH2FileEditController th2FileEditController;
   final TH2FileEditOptionEditController optionEditController;
@@ -16,8 +16,8 @@ class MPOptionWidget extends StatelessWidget {
 
   MPOptionWidget({
     super.key,
-    required this.type,
-    required this.state,
+    required this.optionType,
+    required this.optionState,
     this.option,
     required this.th2FileEditController,
     required this.isSelected,
@@ -35,7 +35,7 @@ class MPOptionWidget extends StatelessWidget {
       textColor = null;
       tileColor = null;
     } else {
-      switch (state) {
+      switch (optionState) {
         case MPOptionStateType.set:
           // mpLocator.mpLog.fine("MPOptionWidget.build() MPOptionStateType.set");
           iconColor = colorScheme.onTertiaryFixed;
@@ -66,8 +66,8 @@ class MPOptionWidget extends StatelessWidget {
     // mpLocator.mpLog.fine("MPOptionWidget.build() $tileColor");
 
     return ListTile(
-      title: Text(MPTextToUser.getCommandOptionType(type)),
-      onTap: () => onOptionTap(context, type),
+      title: Text(MPTextToUser.getCommandOptionType(optionType)),
+      onTap: () => onOptionTap(context, optionType),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
       visualDensity: VisualDensity.compact,
       dense: true,
