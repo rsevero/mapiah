@@ -59,6 +59,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
           ),
           value: value,
           groupValue: selectedChoice,
+          contentPadding: EdgeInsets.zero,
           onChanged: (String? newValue) {
             if (newValue != null) {
               _onChoiceSelected(context, newValue);

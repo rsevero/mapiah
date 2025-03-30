@@ -1,7 +1,10 @@
 enum MPOverlayWindowBlockType {
+  choices,
+  choiceSet,
+  choiceUnset,
   main,
   secondarySet,
-  secondaryUnset,
   secondarySetMixed,
-  secondarySetUnsupported;
+  secondarySetUnsupported,
+  secondaryUnset;
 }

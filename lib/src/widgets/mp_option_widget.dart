@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -10,12 +9,14 @@ class MPOptionWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditOptionEditController optionEditController;
   final bool isSelected;
+  final Function(BuildContext, THCommandOptionType) onOptionSelected;
 
   MPOptionWidget({
     super.key,
     required this.optionInfo,
     required this.th2FileEditController,
     required this.isSelected,
+    required this.onOptionSelected,
   }) : optionEditController = th2FileEditController.optionEditController;
 
   @override
@@ -37,18 +38,6 @@ class MPOptionWidget extends StatelessWidget {
   }
 
   void onOptionTap(BuildContext context, THCommandOptionType type) {
-    Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(
-      widgetContext: context,
-      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
-    );
-
-    final Offset anchorPosition = boundingBox == null
-        ? th2FileEditController.screenBoundingBox.center
-        : boundingBox.centerRight;
-
-    optionEditController.performToggleOptionShownStatus(
-      optionType: type,
-      outerAnchorPosition: anchorPosition,
-    );
+    onOptionSelected(context, type);
   }
 }

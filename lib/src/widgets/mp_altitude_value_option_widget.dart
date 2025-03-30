@@ -124,7 +124,7 @@ class _MPAltitudeValueOptionWidgetState
 
     widget.th2FileEditController.userInteractionController.prepareSetOption(
       option: newOption,
-      optionType: THCommandOptionType.altitude,
+      optionType: THCommandOptionType.altitudeValue,
     );
   }
 
@@ -146,7 +146,6 @@ class _MPAltitudeValueOptionWidgetState
       innerAnchorType: widget.innerAnchorType,
       th2FileEditController: widget.th2FileEditController,
       children: [
-        const SizedBox(height: mpButtonSpace),
         RadioListTile<String>(
           title: Text(appLocalizations.mpChoiceUnset),
           value: mpUnsetOptionID,
@@ -158,8 +157,6 @@ class _MPAltitudeValueOptionWidgetState
           },
           contentPadding: EdgeInsets.zero,
         ),
-
-        const Divider(),
         RadioListTile<String>(
           title: Text(appLocalizations.mpChoiceSet),
           value: mpNonMultipleChoiceSetID,
@@ -175,7 +172,6 @@ class _MPAltitudeValueOptionWidgetState
 
         // Additional Inputs for "Set" Option
         if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-          const SizedBox(height: mpButtonSpace),
           // Switch for "Fix" Parameter
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -235,7 +231,6 @@ class _MPAltitudeValueOptionWidgetState
             },
           ),
         ],
-
         const SizedBox(height: mpButtonMargin),
         Row(
           children: [

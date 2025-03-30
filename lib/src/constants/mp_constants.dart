@@ -86,6 +86,7 @@ const double thFloatingActionIconSize = 32;
 const double thFloatingActionZoomIconSize = 24;
 const double mpButtonSpace = 8;
 const double mpButtonMargin = mpButtonSpace * 4;
+const double mpOverlayWindowBlockPadding = 12;
 const double mpSwitchScaleFactor = 0.7;
 
 const int mpInitialZOrder = 0;

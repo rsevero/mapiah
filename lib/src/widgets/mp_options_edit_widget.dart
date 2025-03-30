@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -20,7 +22,7 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPOptionsEditWidget extends StatelessWidget {
+class MPOptionsEditWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
@@ -33,6 +35,14 @@ class MPOptionsEditWidget extends StatelessWidget {
   });
 
   @override
+  State<MPOptionsEditWidget> createState() => _MPOptionsEditWidgetState();
+}
+
+class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
+  late final TH2FileEditController th2FileEditController =
+      widget.th2FileEditController;
+
+  @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
@@ -42,7 +52,7 @@ class MPOptionsEditWidget extends StatelessWidget {
             th2FileEditController.selectionController.selectedElements.values;
 
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-        final List<Widget> optionWidgets = [];
+        final List<Widget> widgets = [];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
 
@@ -134,7 +144,8 @@ class MPOptionsEditWidget extends StatelessWidget {
             );
           }
 
-          optionWidgets.add(
+          addWithTopSpace(
+            widgets,
             MPOverlayWindowBlockWidget(
               children: plaTypeWidgets,
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -146,6 +157,7 @@ class MPOptionsEditWidget extends StatelessWidget {
 
         MPOptionStateType? previousState;
         List<Widget> blockWidgets = [];
+        final List<Widget> optionWidgets = [];
 
         for (final optionEntry in optionsStateMap) {
           final THCommandOptionType optionType = optionEntry.key;
@@ -153,7 +165,8 @@ class MPOptionsEditWidget extends StatelessWidget {
 
           if (optionInfo.state != previousState) {
             if (blockWidgets.isNotEmpty) {
-              optionWidgets.add(
+              addWithTopSpace(
+                optionWidgets,
                 MPOverlayWindowBlockWidget(
                   children: blockWidgets,
                   overlayWindowBlockType:
@@ -169,12 +182,14 @@ class MPOptionsEditWidget extends StatelessWidget {
               optionInfo: optionInfo,
               th2FileEditController: th2FileEditController,
               isSelected: optionType == optionEditController.currentOptionType,
+              onOptionSelected: onOptionSelected,
             ),
           );
         }
 
         if (blockWidgets.isNotEmpty) {
-          optionWidgets.add(
+          addWithTopSpace(
+            optionWidgets,
             MPOverlayWindowBlockWidget(
               children: blockWidgets,
               overlayWindowBlockType:
@@ -183,16 +198,42 @@ class MPOptionsEditWidget extends StatelessWidget {
           );
         }
 
+        if (optionWidgets.isNotEmpty) {
+          addWithTopSpace(
+            widgets,
+            MPOverlayWindowBlockWidget(
+              overlayWindowBlockType: MPOverlayWindowBlockType.main,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(mpOverlayWindowBlockPadding),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: optionWidgets,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
         return MPOverlayWindowWidget(
           title: appLocalizations.mpOptionsEditTitle,
           overlayWindowType: MPOverlayWindowType.primary,
-          outerAnchorPosition: outerAnchorPosition,
-          innerAnchorType: innerAnchorType,
+          outerAnchorPosition: widget.outerAnchorPosition,
+          innerAnchorType: widget.innerAnchorType,
           th2FileEditController: th2FileEditController,
-          children: optionWidgets,
+          children: widgets,
         );
       },
     );
+  }
+
+  void addWithTopSpace(List<Widget> widgetsList, Widget newWidget) {
+    // if (widgetsList.isNotEmpty) {
+    widgetsList.add(const SizedBox(height: mpButtonSpace));
+    // }
+    widgetsList.add(newWidget);
   }
 
   MPOverlayWindowBlockType getOverlayWindowBlockTypeFromOptionState(
@@ -210,5 +251,29 @@ class MPOptionsEditWidget extends StatelessWidget {
         throw Exception(
             'previous state should not be null at MPOptionsEditWidget.getOverlayWindowBlockTypeFromOptionState()');
     }
+  }
+
+  void onOptionSelected(BuildContext childContext, THCommandOptionType type) {
+    Rect? thisBoundingBox = MPInteractionAux.getWidgetRectFromContext(
+      widgetContext: context,
+      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+    );
+
+    Rect? childBoundingBox = MPInteractionAux.getWidgetRectFromContext(
+      widgetContext: childContext,
+      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+    );
+
+    /// Use the right of this widget and the vertical center of the child (taped
+    /// option) widget as the outer anchor position for the option edit window.
+    final Offset anchorPosition =
+        (thisBoundingBox == null) || (childBoundingBox == null)
+            ? th2FileEditController.screenBoundingBox.center
+            : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
+
+    th2FileEditController.optionEditController.performToggleOptionShownStatus(
+      optionType: type,
+      outerAnchorPosition: anchorPosition,
+    );
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -39,12 +42,12 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
       innerAnchorType: MPWidgetPositionType.rightCenter,
       th2FileEditController: th2FileEditController,
       children: [
+        const SizedBox(height: mpButtonSpace),
         Observer(
           builder: (_) {
             th2FileEditController.activeScrapID;
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            return MPOverlayWindowBlockWidget(
+              overlayWindowBlockType: MPOverlayWindowBlockType.main,
               children: th2FileEditController.availableScraps().entries.map(
                 (entry) {
                   final int scrapID = entry.key;

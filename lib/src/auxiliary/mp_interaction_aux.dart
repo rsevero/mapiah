@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
 class MPInteractionAux {
   static bool isShiftPressed() {
@@ -76,5 +79,19 @@ class MPInteractionAux {
     }
 
     return false;
+  }
+
+  static List<Widget> getOverlayWindowBlockWithTopSpace({
+    required BuildContext context,
+    required List<Widget> children,
+    required MPOverlayWindowBlockType overlayWindowBlockType,
+  }) {
+    return [
+      const SizedBox(height: mpButtonSpace),
+      MPOverlayWindowBlockWidget(
+        children: children,
+        overlayWindowBlockType: overlayWindowBlockType,
+      ),
+    ];
   }
 }
