@@ -33,7 +33,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      title: mpLocator.appLocalizations.th2FileEditPageChangeActiveScrapTool,
+      title: mpLocator.appLocalizations.th2FileEditPageChangeActiveScrapTitle,
       overlayWindowType: MPOverlayWindowType.primary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: MPWidgetPositionType.rightCenter,

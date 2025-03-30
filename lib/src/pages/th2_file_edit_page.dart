@@ -6,7 +6,6 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
@@ -55,7 +54,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).fileEditWindowWindowTitle),
+            title: Text(mpLocator.appLocalizations.fileEditWindowWindowTitle),
             elevation: 4,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
@@ -97,7 +96,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             ) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
-                  child: Text(AppLocalizations.of(context)
+                  child: Text(mpLocator.appLocalizations
                       .th2FileEditPageLoadingFile(widget.filename)),
                 );
               } else if (snapshot.hasError) {
@@ -230,16 +229,16 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
     switch (type) {
       case MPButtonType.addArea:
-        tooltip = AppLocalizations.of(context).th2FileEditPageAddArea;
+        tooltip = mpLocator.appLocalizations.th2FileEditPageAddArea;
         break;
       case MPButtonType.addElement:
-        tooltip = AppLocalizations.of(context).th2FileEditPageAddElementOptions;
+        tooltip = mpLocator.appLocalizations.th2FileEditPageAddElementOptions;
         break;
       case MPButtonType.addLine:
-        tooltip = AppLocalizations.of(context).th2FileEditPageAddLine;
+        tooltip = mpLocator.appLocalizations.th2FileEditPageAddLine;
         break;
       case MPButtonType.addPoint:
-        tooltip = AppLocalizations.of(context).th2FileEditPageAddPoint;
+        tooltip = mpLocator.appLocalizations.th2FileEditPageAddPoint;
         break;
       default:
         return [
@@ -328,6 +327,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   MPGlobalKeyWidgetType.changeScrapButton]!,
               heroTag: 'change_active_scrap_tool',
               onPressed: _onChangeScrapButtonPressed,
+              tooltip: mpLocator
+                  .appLocalizations.th2FileEditPageChangeActiveScrapTool,
               child: Image.asset(
                 'assets/icons/change-scrap-tool.png',
                 width: thFloatingActionIconSize,
@@ -357,7 +358,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       FloatingActionButton(
         heroTag: 'select_tool',
         onPressed: _onSelectToolPressed,
-        tooltip: AppLocalizations.of(context).th2FileEditPageSelectTool,
+        tooltip: mpLocator.appLocalizations.th2FileEditPageSelectTool,
         child: Image.asset(
           'assets/icons/select-tool.png',
           width: thFloatingActionIconSize,
@@ -374,7 +375,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       FloatingActionButton(
         heroTag: 'node_edit_tool',
         onPressed: _onNodeEditToolPressed,
-        tooltip: AppLocalizations.of(context).th2FileEditPageNodeEditTool,
+        tooltip: mpLocator.appLocalizations.th2FileEditPageNodeEditTool,
         child: Icon(
           Icons.polyline_outlined,
           size: thFloatingActionIconSize,
@@ -448,7 +449,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   heroTag: 'remove',
                   mini: true,
                   tooltip:
-                      AppLocalizations.of(context).th2FileEditPageRemoveButton,
+                      mpLocator.appLocalizations.th2FileEditPageRemoveButton,
                   backgroundColor: removeButtonEnabled
                       ? null
                       : colorScheme.surfaceContainerLowest,
@@ -467,8 +468,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   mini: true,
                   tooltip: hasUndo
                       ? th2FileEditController.undoDescription
-                      : AppLocalizations.of(context)
-                          .th2FileEditPageNoUndoAvailable,
+                      : mpLocator
+                          .appLocalizations.th2FileEditPageNoUndoAvailable,
                   backgroundColor:
                       hasUndo ? null : colorScheme.surfaceContainerLowest,
                   foregroundColor:
@@ -483,8 +484,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   mini: true,
                   tooltip: hasRedo
                       ? th2FileEditController.redoDescription
-                      : AppLocalizations.of(context)
-                          .th2FileEditPageNoRedoAvailable,
+                      : mpLocator
+                          .appLocalizations.th2FileEditPageNoRedoAvailable,
                   backgroundColor:
                       hasRedo ? null : colorScheme.surfaceContainerLowest,
                   foregroundColor:
@@ -527,8 +528,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     FloatingActionButton(
                       heroTag: 'zoom_in',
                       onPressed: zoomInPressed,
-                      tooltip:
-                          AppLocalizations.of(context).th2FileEditPageZoomIn,
+                      tooltip: mpLocator.appLocalizations.th2FileEditPageZoomIn,
                       child: Image.asset(
                         'assets/icons/zoom_plus.png',
                         width: thFloatingActionZoomIconSize,
@@ -541,8 +541,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     FloatingActionButton(
                       heroTag: 'zoom_1_1',
                       onPressed: zoomOneToOne,
-                      tooltip: AppLocalizations.of(context)
-                          .th2FileEditPageZoomOneToOne,
+                      tooltip: mpLocator
+                          .appLocalizations.th2FileEditPageZoomOneToOne,
                       child: Image.asset(
                         'assets/icons/zoom_one_to_one.png',
                         width: thFloatingActionZoomIconSize,
@@ -555,8 +555,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     FloatingActionButton(
                       heroTag: 'zoom_selection',
                       onPressed: selectedElementsEmpty ? null : zoomSelection,
-                      tooltip: AppLocalizations.of(context)
-                          .th2FileEditPageZoomToSelection,
+                      tooltip: mpLocator
+                          .appLocalizations.th2FileEditPageZoomToSelection,
                       child: Image.asset(
                         'assets/icons/zoom_selection.png',
                         width: thFloatingActionZoomIconSize,
@@ -571,8 +571,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     FloatingActionButton(
                       heroTag: 'zoom_out_file',
                       onPressed: zoomAllFilePressed,
-                      tooltip: AppLocalizations.of(context)
-                          .th2FileEditPageZoomOutFile,
+                      tooltip:
+                          mpLocator.appLocalizations.th2FileEditPageZoomOutFile,
                       child: Icon(
                         Icons.zoom_out_map,
                         size: thFloatingActionIconSize,
@@ -586,8 +586,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       onPressed: th2FileEditController.hasMultipleScraps
                           ? zoomAllScrapPressed
                           : null,
-                      tooltip: AppLocalizations.of(context)
-                          .th2FileEditPageZoomOutScrap,
+                      tooltip: mpLocator
+                          .appLocalizations.th2FileEditPageZoomOutScrap,
                       child: Image.asset(
                         'assets/icons/zoom-out-scrap.png',
                         width: thFloatingActionZoomIconSize,
@@ -603,7 +603,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       heroTag: 'zoom_out',
                       onPressed: zoomOutPressed,
                       tooltip:
-                          AppLocalizations.of(context).th2FileEditPageZoomOut,
+                          mpLocator.appLocalizations.th2FileEditPageZoomOut,
                       child: Image.asset(
                         'assets/icons/zoom_minus.png',
                         width: thFloatingActionZoomIconSize,
@@ -620,7 +620,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             FloatingActionButton(
               heroTag: 'zoom_options',
               onPressed: () {},
-              tooltip: AppLocalizations.of(context).th2FileEditPageZoomOptions,
+              tooltip: mpLocator.appLocalizations.th2FileEditPageZoomOptions,
               child: Image.asset(
                 'assets/icons/zoom_plus_minus.png',
                 width: thFloatingActionZoomIconSize,

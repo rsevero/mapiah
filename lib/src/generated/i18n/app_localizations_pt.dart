@@ -238,6 +238,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';
 
   @override
+  String get th2FileEditPageChangeActiveScrapTitle => 'Alterar croqui ativo';
+
+  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Nenhum elemento selecionado';
 
   @override

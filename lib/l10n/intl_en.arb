@@ -436,6 +436,12 @@
     "type": "text"
   },
 
+  "th2FileEditPageChangeActiveScrapTitle": "Change active scrap",
+  "@th2FileEditPageChangeActiveScrapTitle": {
+    "description": "The title for the change active scrap dialog",
+    "type": "text"
+  },
+
   "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
   "@th2FileEditPageEmptySelectionStatusBarMessage": {
     "description": "The status bar message for the empty selection",

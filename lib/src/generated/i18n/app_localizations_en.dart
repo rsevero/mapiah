@@ -238,6 +238,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeActiveScrapTool => 'Change active scrap (Alt+C)';
 
   @override
+  String get th2FileEditPageChangeActiveScrapTitle => 'Change active scrap';
+
+  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';
 
   @override

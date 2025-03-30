@@ -515,6 +515,12 @@ abstract class AppLocalizations {
   /// **'Change active scrap (Alt+C)'**
   String get th2FileEditPageChangeActiveScrapTool;
 
+  /// The title for the change active scrap dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Change active scrap'**
+  String get th2FileEditPageChangeActiveScrapTitle;
+
   /// The status bar message for the empty selection
   ///
   /// In en, this message translates to:
