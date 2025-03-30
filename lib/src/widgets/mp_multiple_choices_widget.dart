@@ -28,7 +28,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final String selectedChoice = optionInfo.state == MPOptionStateType.unset
         ? mpUnsetOptionID
-        : optionInfo.currentChoice;
+        : (optionInfo.currentChoice ?? '');
 
     return MPOverlayWindowWidget(
       title: MPTextToUser.getCommandOptionType(optionInfo.type),

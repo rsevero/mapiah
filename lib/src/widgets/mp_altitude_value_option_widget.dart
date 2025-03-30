@@ -8,6 +8,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -47,21 +48,28 @@ class _MPAltitudeValueOptionWidgetState
       MPTextToUser.getLengthUnitsChoices(),
     );
 
-    if (widget.optionInfo.option == null) {
-      _altitudeController = TextEditingController(text: '0');
-      _isFixed = false;
-      _selectedChoice = mpUnsetOptionID;
-      _selectedUnit = thDefaultLengthUnitAsString;
-    } else {
-      final THAltitudeValueCommandOption currentOption =
-          widget.optionInfo.option! as THAltitudeValueCommandOption;
+    switch (widget.optionInfo.state) {
+      case MPOptionStateType.set:
+        final THAltitudeValueCommandOption currentOption =
+            widget.optionInfo.option! as THAltitudeValueCommandOption;
 
-      _altitudeController = TextEditingController(
-        text: currentOption.length.toString(),
-      );
-      _isFixed = currentOption.isFix;
-      _selectedChoice = mpNonMultipleChoiceSetID;
-      _selectedUnit = currentOption.unit.unit.name;
+        _altitudeController = TextEditingController(
+          text: currentOption.length.toString(),
+        );
+        _isFixed = currentOption.isFix;
+        _selectedChoice = mpNonMultipleChoiceSetID;
+        _selectedUnit = currentOption.unit.unit.name;
+      case MPOptionStateType.setMixed:
+      case MPOptionStateType.setUnsupported:
+        _altitudeController = TextEditingController(text: '0');
+        _isFixed = false;
+        _selectedChoice = '';
+        _selectedUnit = '';
+      case MPOptionStateType.unset:
+        _altitudeController = TextEditingController(text: '0');
+        _isFixed = false;
+        _selectedChoice = mpUnsetOptionID;
+        _selectedUnit = thDefaultLengthUnitAsString;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
