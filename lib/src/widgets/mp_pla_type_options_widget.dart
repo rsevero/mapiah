@@ -6,7 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_option_widget.dart';
-import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPPLATypeOptionsWidget extends StatelessWidget {
@@ -14,7 +14,6 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
-  final double maxHeight;
   final String? selectedType;
 
   MPPLATypeOptionsWidget({
@@ -23,7 +22,6 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
     required this.th2FileEditController,
     required this.outerAnchorPosition,
     required this.innerAnchorType,
-    required this.maxHeight,
     required this.selectedType,
   });
 
@@ -90,67 +88,65 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
     }
 
     return MPOverlayWindowWidget(
+      title: title,
+      overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: outerAnchorPosition,
       innerAnchorType: innerAnchorType,
       th2FileEditController: th2FileEditController,
-      child: MPSingleColumnListOverlayWindowContentWidget(
-        maxHeight: maxHeight,
-        children: [
-          Text(title),
-          if (selectedType != null) ...[
-            const Divider(),
-            Text(mpLocator.appLocalizations.mpPLATypeCurrent),
-            MPPLATypeOptionWidget(
-              value: selectedType!,
-              label: choices[selectedType]!,
-              groupValue: selectedType!,
-              isSelected: true,
-              plaType: plaType,
-              th2FileEditController: th2FileEditController,
-            ),
-          ],
-          if (lastUsedChoicesReduced.isNotEmpty) ...[
-            const Divider(),
-            Text(mpLocator.appLocalizations.mpPLATypeLastUsed),
-            ...lastUsedChoicesReduced.map((String choice) {
-              return MPPLATypeOptionWidget(
-                value: choice,
-                label: choices[choice]!,
-                groupValue: selectedType == null ? '' : selectedType!,
-                isSelected: choice == selectedType,
-                plaType: plaType,
-                th2FileEditController: th2FileEditController,
-              );
-            }),
-          ],
-          if (mostUsedChoicesReduced.isNotEmpty) ...[
-            const Divider(),
-            Text(mpLocator.appLocalizations.mpPLATypeMostUsed),
-            ...mostUsedChoicesReduced.map((String choice) {
-              return MPPLATypeOptionWidget(
-                value: choice,
-                label: choices[choice]!,
-                groupValue: selectedType == null ? '' : selectedType!,
-                isSelected: choice == selectedType,
-                plaType: plaType,
-                th2FileEditController: th2FileEditController,
-              );
-            }),
-          ],
+      children: [
+        if (selectedType != null) ...[
           const Divider(),
-          Text(mpLocator.appLocalizations.mpPLATypeAll),
-          ...choices.entries.map((MapEntry<String, String> entry) {
+          Text(mpLocator.appLocalizations.mpPLATypeCurrent),
+          MPPLATypeOptionWidget(
+            value: selectedType!,
+            label: choices[selectedType]!,
+            groupValue: selectedType!,
+            isSelected: true,
+            plaType: plaType,
+            th2FileEditController: th2FileEditController,
+          ),
+        ],
+        if (lastUsedChoicesReduced.isNotEmpty) ...[
+          const Divider(),
+          Text(mpLocator.appLocalizations.mpPLATypeLastUsed),
+          ...lastUsedChoicesReduced.map((String choice) {
             return MPPLATypeOptionWidget(
-              value: entry.key,
-              label: entry.value,
+              value: choice,
+              label: choices[choice]!,
               groupValue: selectedType == null ? '' : selectedType!,
-              isSelected: entry.key == selectedType,
+              isSelected: choice == selectedType,
               plaType: plaType,
               th2FileEditController: th2FileEditController,
             );
           }),
         ],
-      ),
+        if (mostUsedChoicesReduced.isNotEmpty) ...[
+          const Divider(),
+          Text(mpLocator.appLocalizations.mpPLATypeMostUsed),
+          ...mostUsedChoicesReduced.map((String choice) {
+            return MPPLATypeOptionWidget(
+              value: choice,
+              label: choices[choice]!,
+              groupValue: selectedType == null ? '' : selectedType!,
+              isSelected: choice == selectedType,
+              plaType: plaType,
+              th2FileEditController: th2FileEditController,
+            );
+          }),
+        ],
+        const Divider(),
+        Text(mpLocator.appLocalizations.mpPLATypeAll),
+        ...choices.entries.map((MapEntry<String, String> entry) {
+          return MPPLATypeOptionWidget(
+            value: entry.key,
+            label: entry.value,
+            groupValue: selectedType == null ? '' : selectedType!,
+            isSelected: entry.key == selectedType,
+            plaType: plaType,
+            th2FileEditController: th2FileEditController,
+          );
+        }),
+      ],
     );
   }
 }

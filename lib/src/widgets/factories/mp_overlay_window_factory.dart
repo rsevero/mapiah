@@ -54,9 +54,6 @@ class MPOverlayWindowFactory {
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
           innerAnchorType: MPWidgetPositionType.center,
-          maxHeight: getMaxHeightForOverlayWindows(
-            th2FileEditController.thFileWidgetKey,
-          ),
         );
       case MPWindowType.mainTHFileEditWindow:
         throw UnimplementedError(
@@ -125,15 +122,12 @@ class MPOverlayWindowFactory {
       overlayWindowWidget = MPMultipleChoicesWidget(
         th2FileEditController: th2FileEditController,
         key: ValueKey("MPMultipleChoicesWidget|$thFileMPID|${optionType.name}"),
-        type: optionType,
+        optionType: optionType,
         choices: MPTextToUser.getOptionChoicesWithUnset(choices),
         selectedChoice: optionInfo.currentChoice,
         defaultChoice: THCommandOption.getDefaultChoiceAsString(optionType),
         outerAnchorPosition: outerAnchorPosition,
         innerAnchorType: MPWidgetPositionType.leftCenter,
-        maxHeight: getMaxHeightForOverlayWindows(
-          th2FileEditController.thFileWidgetKey,
-        ),
       );
     } else {
       switch (optionType) {
@@ -143,9 +137,6 @@ class MPOverlayWindowFactory {
             currentOption: optionInfo.option as THAltitudeValueCommandOption?,
             outerAnchorPosition: outerAnchorPosition,
             innerAnchorType: MPWidgetPositionType.leftCenter,
-            maxHeight: getMaxHeightForOverlayWindows(
-              th2FileEditController.thFileWidgetKey,
-            ),
           );
         default:
           throw Exception(
@@ -172,21 +163,7 @@ class MPOverlayWindowFactory {
         selectedType: selectedType,
         outerAnchorPosition: position,
         innerAnchorType: MPWidgetPositionType.leftCenter,
-        maxHeight: getMaxHeightForOverlayWindows(
-          th2FileEditController.thFileWidgetKey,
-        ),
       ),
     );
-  }
-
-  static double getMaxHeightForOverlayWindows(GlobalKey targetKey) {
-    final RenderBox? renderBox =
-        targetKey.currentContext?.findRenderObject() as RenderBox?;
-
-    if (renderBox == null) {
-      throw Exception('No render box found for THFileWidget.');
-    }
-
-    return renderBox.size.height;
   }
 }

@@ -7,7 +7,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
-import 'package:mapiah/src/widgets/mp_single_column_list_overlay_window_content_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPAltitudeValueOptionWidget extends StatefulWidget {
@@ -15,7 +15,6 @@ class MPAltitudeValueOptionWidget extends StatefulWidget {
   final THAltitudeValueCommandOption? currentOption;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
-  final double maxHeight;
 
   const MPAltitudeValueOptionWidget({
     super.key,
@@ -23,7 +22,6 @@ class MPAltitudeValueOptionWidget extends StatefulWidget {
     required this.currentOption,
     required this.outerAnchorPosition,
     required this.innerAnchorType,
-    required this.maxHeight,
   });
 
   @override
@@ -132,125 +130,117 @@ class _MPAltitudeValueOptionWidgetState
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return MPOverlayWindowWidget(
+      title: appLocalizations.thCommandOptionAltitudeValue,
+      overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
       th2FileEditController: widget.th2FileEditController,
-      child: MPSingleColumnListOverlayWindowContentWidget(
-        maxHeight: widget.maxHeight,
-        children: [
-          Text(
-            appLocalizations.thCommandOptionAltitudeValue,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
+      children: [
+        const SizedBox(height: mpButtonSpace),
+        RadioListTile<String>(
+          title: Text(appLocalizations.mpChoiceUnset),
+          value: mpUnsetOptionID,
+          groupValue: _selectedChoice,
+          onChanged: (String? value) {
+            setState(() {
+              _selectedChoice = value!;
+            });
+          },
+          contentPadding: EdgeInsets.zero,
+        ),
 
+        const Divider(),
+        RadioListTile<String>(
+          title: Text(appLocalizations.mpChoiceSet),
+          value: mpNonMultipleChoiceSetID,
+          groupValue: _selectedChoice,
+          onChanged: (String? value) {
+            setState(() {
+              _selectedChoice = value!;
+            });
+            _textFieldFocusNode.requestFocus();
+          },
+          contentPadding: EdgeInsets.zero,
+        ),
+
+        // Additional Inputs for "Set" Option
+        if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
           const SizedBox(height: mpButtonSpace),
-          RadioListTile<String>(
-            title: Text(appLocalizations.mpChoiceUnset),
-            value: mpUnsetOptionID,
-            groupValue: _selectedChoice,
-            onChanged: (String? value) {
-              setState(() {
-                _selectedChoice = value!;
-              });
-            },
-            contentPadding: EdgeInsets.zero,
-          ),
-
-          const Divider(),
-
-          RadioListTile<String>(
-            title: Text(appLocalizations.mpChoiceSet),
-            value: mpNonMultipleChoiceSetID,
-            groupValue: _selectedChoice,
-            onChanged: (String? value) {
-              setState(() {
-                _selectedChoice = value!;
-              });
-              _textFieldFocusNode.requestFocus();
-            },
-            contentPadding: EdgeInsets.zero,
-          ),
-
-          // Additional Inputs for "Set" Option
-          if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-            const SizedBox(height: mpButtonSpace),
-            // Switch for "Fix" Parameter
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(appLocalizations.thCommandOptionAltitudeFix),
-                Transform.scale(
-                  scale: mpSwitchScaleFactor,
-                  child: Switch(
-                    value: _isFixed,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _isFixed = value;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: mpButtonSpace),
-            // Numeric Input for Altitude
-            TextField(
-              controller: _altitudeController,
-              keyboardType: TextInputType.number,
-              autofocus: true,
-              focusNode: _textFieldFocusNode,
-              decoration: InputDecoration(
-                labelText: appLocalizations.thCommandOptionAltitudeValue,
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: mpButtonSpace),
-            DropdownMenu(
-              label: Text(appLocalizations.thCommandOptionLengthUnit),
-              initialSelection: _selectedUnit,
-              menuStyle: MenuStyle(
-                  alignment: Alignment(
-                -1.0,
-                -_unitMap.entries.length.toDouble(),
-              )),
-              dropdownMenuEntries: _unitMap.entries.map((entry) {
-                return DropdownMenuEntry<String>(
-                  value: entry.key,
-                  label: entry.value,
-                );
-              }).toList(),
-              onSelected: (String? value) {
-                setState(() {
-                  _selectedUnit = value ?? thDefaultLengthUnitAsString;
-                });
-              },
-              searchCallback: (entries, query) {
-                final index =
-                    entries.indexWhere((entry) => entry.label == query);
-
-                return index >= 0 ? index : null;
-              },
-            ),
-          ],
-
-          const SizedBox(height: mpButtonMargin),
+          // Switch for "Fix" Parameter
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
-                onPressed: _okButtonPressed,
-                child: Text(appLocalizations.mpButtonOK),
-              ),
-              const SizedBox(width: mpButtonSpace),
-              ElevatedButton(
-                onPressed: _cancelButtonPressed,
-                child: Text(appLocalizations.mpButtonCancel),
+              Text(appLocalizations.thCommandOptionAltitudeFix),
+              Transform.scale(
+                scale: mpSwitchScaleFactor,
+                child: Switch(
+                  value: _isFixed,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isFixed = value;
+                    });
+                  },
+                ),
               ),
             ],
           ),
+
+          const SizedBox(height: mpButtonSpace),
+          // Numeric Input for Altitude
+          TextField(
+            controller: _altitudeController,
+            keyboardType: TextInputType.number,
+            autofocus: true,
+            focusNode: _textFieldFocusNode,
+            decoration: InputDecoration(
+              labelText: appLocalizations.thCommandOptionAltitudeValue,
+              border: OutlineInputBorder(),
+            ),
+          ),
+
+          const SizedBox(height: mpButtonSpace),
+          DropdownMenu(
+            label: Text(appLocalizations.thCommandOptionLengthUnit),
+            initialSelection: _selectedUnit,
+            menuStyle: MenuStyle(
+                alignment: Alignment(
+              -1.0,
+              -_unitMap.entries.length.toDouble(),
+            )),
+            dropdownMenuEntries: _unitMap.entries.map((entry) {
+              return DropdownMenuEntry<String>(
+                value: entry.key,
+                label: entry.value,
+              );
+            }).toList(),
+            onSelected: (String? value) {
+              setState(() {
+                _selectedUnit = value ?? thDefaultLengthUnitAsString;
+              });
+            },
+            searchCallback: (entries, query) {
+              final index = entries.indexWhere((entry) => entry.label == query);
+
+              return index >= 0 ? index : null;
+            },
+          ),
         ],
-      ),
+
+        const SizedBox(height: mpButtonMargin),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: _okButtonPressed,
+              child: Text(appLocalizations.mpButtonOK),
+            ),
+            const SizedBox(width: mpButtonSpace),
+            ElevatedButton(
+              onPressed: _cancelButtonPressed,
+              child: Text(appLocalizations.mpButtonCancel),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

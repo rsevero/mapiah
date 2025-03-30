@@ -3,12 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
+  final String title;
+  final List<Widget> children;
+  final MPOverlayWindowType overlayWindowType;
   final Offset outerAnchorPosition;
-  final Widget child;
   final MPWidgetPositionType innerAnchorType;
   final ValueChanged<KeyDownEvent>? onKeyDownEvent;
   final ValueChanged<KeyUpEvent>? onKeyUpEvent;
@@ -16,8 +19,10 @@ class MPOverlayWindowWidget extends StatefulWidget {
   const MPOverlayWindowWidget({
     super.key,
     required this.th2FileEditController,
+    required this.title,
+    required this.overlayWindowType,
+    required this.children,
     required this.outerAnchorPosition,
-    required this.child,
     required this.innerAnchorType,
     this.onKeyDownEvent,
     this.onKeyUpEvent,
@@ -134,8 +139,43 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
       top: position.dy,
       child: Visibility.maintain(
         visible: _initialPositionSet,
-        child: widget.child,
+        child: Material(
+          color: Colors.yellowAccent,
+          borderRadius: BorderRadius.circular(18.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: getMaxHeightForOverlayWindows(
+                th2FileEditController.thFileWidgetKey,
+              ),
+            ),
+            child: IntrinsicWidth(
+                child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                      Text(widget.title),
+                    ] +
+                    widget.children,
+              )),
+            )),
+          ),
+        ),
       ),
     );
+  }
+
+  double getMaxHeightForOverlayWindows(GlobalKey targetKey) {
+    final RenderBox? renderBox =
+        targetKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (renderBox == null) {
+      throw Exception(
+          'No render box found for THFileWidget in MPOverlayWindowWidget.getMaxHeightForOverlayWindows()');
+    }
+
+    return renderBox.size.height;
   }
 }
