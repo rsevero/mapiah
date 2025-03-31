@@ -48,6 +48,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
             th2FileEditController.activeScrapID;
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
+              padding: mpOverlayWindowBlockEdgeInsets,
               children: [
                 Builder(builder: (blockContext) {
                   return Column(
@@ -59,9 +60,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
 
                         return RadioListTile<int>(
                           dense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: mpTileWidgetEdgeInset,
-                          ),
+                          contentPadding: EdgeInsets.zero,
                           value: scrapID,
                           groupValue: th2FileEditController.activeScrapID,
                           onChanged: (int? value) {
@@ -74,7 +73,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                             style: DefaultTextStyle.of(blockContext).style,
                           ),
                           activeColor: IconTheme.of(blockContext).color,
-                          visualDensity: VisualDensity.compact,
+                          visualDensity: VisualDensity.adaptivePlatformDensity,
                         );
                       },
                     ).toList(),

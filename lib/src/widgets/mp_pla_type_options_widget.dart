@@ -89,13 +89,6 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
       }
     }
 
-    final EdgeInsets edgeInsets = const EdgeInsets.only(
-      top: mpOverlayWindowBlockPadding,
-      bottom: mpOverlayWindowBlockPadding / 2,
-      left: mpOverlayWindowBlockPadding,
-      right: mpOverlayWindowBlockPadding,
-    );
-
     return MPOverlayWindowWidget(
       title: title,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -106,10 +99,10 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
         if (selectedType != null) ...[
           const SizedBox(height: mpButtonSpace),
           MPOverlayWindowBlockWidget(
+            title: mpLocator.appLocalizations.mpPLATypeCurrent,
             overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
-            padding: edgeInsets,
+            padding: mpOverlayWindowBlockEdgeInsets,
             children: [
-              Text(mpLocator.appLocalizations.mpPLATypeCurrent),
               MPPLATypeOptionWidget(
                 value: selectedType!,
                 label: choices[selectedType]!,
@@ -124,10 +117,10 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
         if (lastUsedChoicesReduced.isNotEmpty) ...[
           const SizedBox(height: mpButtonSpace),
           MPOverlayWindowBlockWidget(
+              title: mpLocator.appLocalizations.mpPLATypeLastUsed,
               overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-              padding: edgeInsets,
+              padding: mpOverlayWindowBlockEdgeInsets,
               children: [
-                Text(mpLocator.appLocalizations.mpPLATypeLastUsed),
                 ...lastUsedChoicesReduced.map(
                   (String choice) {
                     return MPPLATypeOptionWidget(
@@ -145,10 +138,10 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
         if (mostUsedChoicesReduced.isNotEmpty) ...[
           const SizedBox(height: mpButtonSpace),
           MPOverlayWindowBlockWidget(
+            title: mpLocator.appLocalizations.mpPLATypeMostUsed,
             overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-            padding: edgeInsets,
+            padding: mpOverlayWindowBlockEdgeInsets,
             children: [
-              Text(mpLocator.appLocalizations.mpPLATypeMostUsed),
               ...mostUsedChoicesReduced.map(
                 (String choice) {
                   return MPPLATypeOptionWidget(
@@ -166,10 +159,10 @@ class MPPLATypeOptionsWidget extends StatelessWidget {
         ],
         const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
+          title: mpLocator.appLocalizations.mpPLATypeAll,
           overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-          padding: edgeInsets,
+          padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            Text(mpLocator.appLocalizations.mpPLATypeAll),
             ...choices.entries.map(
               (MapEntry<String, String> entry) {
                 return MPPLATypeOptionWidget(

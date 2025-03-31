@@ -95,6 +95,12 @@ const double mpSwitchScaleFactor = 0.7;
 const int mpTileWidgetOnHoverAlpha = 50;
 const double mpTileWidgetEdgeInset = 12;
 const double mpTileWidgetEdgeInsetDense = 8;
+const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
+  top: mpOverlayWindowBlockPadding,
+  bottom: mpOverlayWindowBlockPadding / 2,
+  left: mpOverlayWindowBlockPadding,
+  right: mpOverlayWindowBlockPadding * 2,
+);
 
 const int mpInitialZOrder = 0;
 const int mpDefaultZOrderIncrement = 1000;

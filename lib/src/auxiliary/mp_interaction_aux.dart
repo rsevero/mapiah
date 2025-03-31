@@ -83,6 +83,7 @@ class MPInteractionAux {
 
   static List<Widget> getOverlayWindowBlockWithTopSpace({
     required BuildContext context,
+    String? title,
     required List<Widget> children,
     required MPOverlayWindowBlockType overlayWindowBlockType,
     EdgeInsetsGeometry? padding,
@@ -91,6 +92,7 @@ class MPInteractionAux {
       const SizedBox(height: mpButtonSpace),
       MPOverlayWindowBlockWidget(
         children: children,
+        title: title,
         overlayWindowBlockType: overlayWindowBlockType,
         padding: padding,
       ),

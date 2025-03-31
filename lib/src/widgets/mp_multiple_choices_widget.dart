@@ -39,13 +39,18 @@ class MPMultipleChoicesWidget extends StatelessWidget {
       innerAnchorType: innerAnchorType,
       th2FileEditController: th2FileEditController,
       children: [
+        const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
+          padding: mpOverlayWindowBlockEdgeInsets,
           children: choices.entries.map((entry) {
             final String value = entry.key;
             final String label = entry.value;
 
             return RadioListTile<String>(
+              value: value,
+              groupValue: selectedChoice,
+              contentPadding: EdgeInsets.zero,
               title: Row(
                 children: [
                   Text(label),
@@ -62,9 +67,6 @@ class MPMultipleChoicesWidget extends StatelessWidget {
                     ),
                 ],
               ),
-              value: value,
-              groupValue: selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   _onChoiceSelected(context, newValue);

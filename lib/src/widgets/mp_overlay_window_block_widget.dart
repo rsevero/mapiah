@@ -6,9 +6,11 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
   final List<Widget> children;
   final MPOverlayWindowBlockType overlayWindowBlockType;
   final EdgeInsetsGeometry? padding;
+  final String? title;
 
   const MPOverlayWindowBlockWidget({
     super.key,
+    this.title,
     required this.children,
     required this.overlayWindowBlockType,
     this.padding,
@@ -66,12 +68,26 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
         tileColor = colorScheme.surfaceContainer;
         elevation = mpOverlayWindowBlockElevation;
     }
-    // }
+
+    final List<Widget> content = [
+      if (title != null && title!.isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            title!,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ...children,
+    ];
 
     return Container(
       /// Including the margins below to reserve space to show the shadow
       /// resultant of using elevation > 0.
-      margin: const EdgeInsets.only(left: 2, bottom: 7, right: 6),
+      margin: const EdgeInsets.only(left: 2, top: 2, bottom: 7, right: 6),
       child: Material(
         color: tileColor,
         elevation: elevation,
@@ -92,7 +108,7 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: children,
+                children: content,
               ),
             ),
           ),

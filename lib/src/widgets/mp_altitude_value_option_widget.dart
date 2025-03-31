@@ -7,8 +7,10 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -146,92 +148,100 @@ class _MPAltitudeValueOptionWidgetState
       innerAnchorType: widget.innerAnchorType,
       th2FileEditController: widget.th2FileEditController,
       children: [
-        RadioListTile<String>(
-          title: Text(appLocalizations.mpChoiceUnset),
-          value: mpUnsetOptionID,
-          groupValue: _selectedChoice,
-          onChanged: (String? value) {
-            setState(() {
-              _selectedChoice = value!;
-            });
-          },
-          contentPadding: EdgeInsets.zero,
-        ),
-        RadioListTile<String>(
-          title: Text(appLocalizations.mpChoiceSet),
-          value: mpNonMultipleChoiceSetID,
-          groupValue: _selectedChoice,
-          onChanged: (String? value) {
-            setState(() {
-              _selectedChoice = value!;
-            });
-            _textFieldFocusNode.requestFocus();
-          },
-          contentPadding: EdgeInsets.zero,
-        ),
+        const SizedBox(height: mpButtonSpace),
+        MPOverlayWindowBlockWidget(
+          overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
+          padding: mpOverlayWindowBlockEdgeInsets,
+          children: [
+            RadioListTile<String>(
+              title: Text(appLocalizations.mpChoiceUnset),
+              value: mpUnsetOptionID,
+              groupValue: _selectedChoice,
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedChoice = value!;
+                });
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
+            RadioListTile<String>(
+              title: Text(appLocalizations.mpChoiceSet),
+              value: mpNonMultipleChoiceSetID,
+              groupValue: _selectedChoice,
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedChoice = value!;
+                });
+                _textFieldFocusNode.requestFocus();
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
 
-        // Additional Inputs for "Set" Option
-        if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-          // Switch for "Fix" Parameter
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(appLocalizations.thCommandOptionAltitudeFix),
-              Transform.scale(
-                scale: mpSwitchScaleFactor,
-                child: Switch(
-                  value: _isFixed,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isFixed = value;
-                    });
-                  },
+            // Additional Inputs for "Set" Option
+            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+              // Switch for "Fix" Parameter
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(appLocalizations.thCommandOptionAltitudeFix),
+                  Transform.scale(
+                    scale: mpSwitchScaleFactor,
+                    child: Switch(
+                      value: _isFixed,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _isFixed = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: mpButtonSpace),
+              // Numeric Input for Altitude
+              TextField(
+                controller: _altitudeController,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                focusNode: _textFieldFocusNode,
+                decoration: InputDecoration(
+                  labelText: appLocalizations.thCommandOptionAltitudeValue,
+                  border: OutlineInputBorder(),
                 ),
               ),
+
+              const SizedBox(height: mpButtonSpace),
+              DropdownMenu(
+                label: Text(appLocalizations.thCommandOptionLengthUnit),
+                initialSelection: _selectedUnit,
+                menuStyle: MenuStyle(
+                    alignment: Alignment(
+                  -1.0,
+                  -_unitMap.entries.length.toDouble(),
+                )),
+                dropdownMenuEntries: _unitMap.entries.map((entry) {
+                  return DropdownMenuEntry<String>(
+                    value: entry.key,
+                    label: entry.value,
+                  );
+                }).toList(),
+                onSelected: (String? value) {
+                  setState(() {
+                    _selectedUnit = value ?? thDefaultLengthUnitAsString;
+                  });
+                },
+                searchCallback: (entries, query) {
+                  final index =
+                      entries.indexWhere((entry) => entry.label == query);
+
+                  return index >= 0 ? index : null;
+                },
+              ),
             ],
-          ),
-
-          const SizedBox(height: mpButtonSpace),
-          // Numeric Input for Altitude
-          TextField(
-            controller: _altitudeController,
-            keyboardType: TextInputType.number,
-            autofocus: true,
-            focusNode: _textFieldFocusNode,
-            decoration: InputDecoration(
-              labelText: appLocalizations.thCommandOptionAltitudeValue,
-              border: OutlineInputBorder(),
-            ),
-          ),
-
-          const SizedBox(height: mpButtonSpace),
-          DropdownMenu(
-            label: Text(appLocalizations.thCommandOptionLengthUnit),
-            initialSelection: _selectedUnit,
-            menuStyle: MenuStyle(
-                alignment: Alignment(
-              -1.0,
-              -_unitMap.entries.length.toDouble(),
-            )),
-            dropdownMenuEntries: _unitMap.entries.map((entry) {
-              return DropdownMenuEntry<String>(
-                value: entry.key,
-                label: entry.value,
-              );
-            }).toList(),
-            onSelected: (String? value) {
-              setState(() {
-                _selectedUnit = value ?? thDefaultLengthUnitAsString;
-              });
-            },
-            searchCallback: (entries, query) {
-              final index = entries.indexWhere((entry) => entry.label == query);
-
-              return index >= 0 ? index : null;
-            },
-          ),
-        ],
-        const SizedBox(height: mpButtonMargin),
+          ],
+        ),
+        const SizedBox(height: mpButtonSpace),
         Row(
           children: [
             ElevatedButton(
