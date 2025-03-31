@@ -47,7 +47,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
           builder: (_) {
             th2FileEditController.activeScrapID;
             return MPOverlayWindowBlockWidget(
-              overlayWindowBlockType: MPOverlayWindowBlockType.main,
+              overlayWindowBlockType: MPOverlayWindowBlockType.choices,
               children: th2FileEditController.availableScraps().entries.map(
                 (entry) {
                   final int scrapID = entry.key;
@@ -55,7 +55,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
 
                   return RadioListTile<int>(
                     dense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: mpTileWidgetEdgeInset,
+                    ),
                     value: scrapID,
                     groupValue: th2FileEditController.activeScrapID,
                     onChanged: (int? value) {

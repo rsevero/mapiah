@@ -65,11 +65,13 @@ class _MPTileWidgetState extends State<MPTileWidget> {
                 ),
               if (widget.leading != null) const SizedBox(width: mpButtonSpace),
               Expanded(
-                child: Text(
-                  widget.title,
-                  style: TextStyle(
-                    color: widget.textColor ??
-                        Theme.of(context).textTheme.bodyMedium?.color,
+                child: DefaultTextStyle(
+                  style: DefaultTextStyle.of(context).style,
+                  child: Text(
+                    widget.title,
+                    style: widget.textColor != null
+                        ? TextStyle(color: widget.textColor)
+                        : null,
                   ),
                 ),
               ),
