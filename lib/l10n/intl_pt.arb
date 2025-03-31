@@ -12,7 +12,9 @@
   "fileEditWindowWindowTitle": "Edição de arquivo",
   "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
 
-  "mpAltitudeValueInvalidValueErrorMessage": "Por favor informe um valor válido de altitude",
+  "mpAltitudeInvalidValueErrorMessage": "Por favor informe um valor válido de altitude",
+
+  "mpAuthorInvalidValueErrorMessage": "Por favor informe uma data/intervalo de data e nome de autor válidos",
 
   "mpButtonCancel": "Cancelar",
   "mpButtonOK": "OK",

@@ -67,9 +67,15 @@
     }
   },
 
-  "mpAltitudeValueInvalidValueErrorMessage": "Please enter a valid numeric altitude value.",
-  "@mpAltitudeValueInvalidValueErrorMessage": {
+  "mpAltitudeInvalidValueErrorMessage": "Please enter a valid numeric altitude value.",
+  "@mpAltitudeInvalidValueErrorMessage": {
     "description": "The error message for invalid altitude value",
+    "type": "text"
+  },
+
+  "mpAuthorInvalidValueErrorMessage": "Please enter a valid date/interval and person name.",
+  "@mpAuthorInvalidValueErrorMessage": {
+    "description": "The error message for invalid author value",
     "type": "text"
   },
 

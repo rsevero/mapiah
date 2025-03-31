@@ -159,7 +159,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Please enter a valid numeric altitude value.'**
-  String get mpAltitudeValueInvalidValueErrorMessage;
+  String get mpAltitudeInvalidValueErrorMessage;
+
+  /// The error message for invalid author value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid date/interval and person name.'**
+  String get mpAuthorInvalidValueErrorMessage;
 
   /// The label for the cancel button
   ///

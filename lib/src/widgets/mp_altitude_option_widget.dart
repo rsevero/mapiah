@@ -139,8 +139,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              mpLocator
-                  .appLocalizations.mpAltitudeValueInvalidValueErrorMessage,
+              mpLocator.appLocalizations.mpAltitudeInvalidValueErrorMessage,
             ),
           ),
         );

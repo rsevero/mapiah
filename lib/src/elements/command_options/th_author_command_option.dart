@@ -1,6 +1,6 @@
 part of 'th_command_option.dart';
 
-// author <date> <person> . author of the data and its creation date
+// author <date> <person> . Data's author and creation date
 class THAuthorCommandOption extends THCommandOption {
   late final THDatetimePart datetime;
   late final THPersonPart person;
@@ -25,6 +25,16 @@ class THAuthorCommandOption extends THCommandOption {
     required String person,
     super.originalLineInTH2File = '',
   }) : super() {
+    this.datetime = THDatetimePart.fromString(datetime: datetime);
+    this.person = THPersonPart.fromString(name: person);
+  }
+
+  THAuthorCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String datetime,
+    required String person,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
     this.person = THPersonPart.fromString(name: person);
   }

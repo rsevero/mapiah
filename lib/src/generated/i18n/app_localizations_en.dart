@@ -52,7 +52,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mpAltitudeValueInvalidValueErrorMessage => 'Please enter a valid numeric altitude value.';
+  String get mpAltitudeInvalidValueErrorMessage => 'Please enter a valid numeric altitude value.';
+
+  @override
+  String get mpAuthorInvalidValueErrorMessage => 'Please enter a valid date/interval and person name.';
 
   @override
   String get mpButtonCancel => 'Cancel';

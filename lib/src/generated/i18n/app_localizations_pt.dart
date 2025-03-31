@@ -52,7 +52,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get mpAltitudeValueInvalidValueErrorMessage => 'Por favor informe um valor válido de altitude';
+  String get mpAltitudeInvalidValueErrorMessage => 'Por favor informe um valor válido de altitude';
+
+  @override
+  String get mpAuthorInvalidValueErrorMessage => 'Por favor informe uma data/intervalo de data e nome de autor válidos';
 
   @override
   String get mpButtonCancel => 'Cancelar';
