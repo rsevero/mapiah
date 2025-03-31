@@ -50,15 +50,27 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THAltitudeValueCommandOption currentOption =
-            widget.optionInfo.option! as THAltitudeValueCommandOption;
+        final THCommandOption currentOption = widget.optionInfo.option!;
 
-        _altitudeController = TextEditingController(
-          text: currentOption.length.toString(),
-        );
-        _isFixed = currentOption.isFix;
-        _selectedChoice = mpNonMultipleChoiceSetID;
-        _selectedUnit = currentOption.unit.unit.name;
+        if (currentOption is THAltitudeCommandOption) {
+          _altitudeController = TextEditingController(
+            text: currentOption.length.toString(),
+          );
+          _isFixed = currentOption.isFix;
+          _selectedChoice = mpNonMultipleChoiceSetID;
+          _selectedUnit = currentOption.unit.unit.name;
+        } else if (currentOption is THAltitudeValueCommandOption) {
+          _altitudeController = TextEditingController(
+            text: currentOption.length.toString(),
+          );
+          _isFixed = currentOption.isFix;
+          _selectedChoice = mpNonMultipleChoiceSetID;
+          _selectedUnit = currentOption.unit.unit.name;
+        } else {
+          throw Exception(
+            'Unsupported option type: ${widget.optionInfo.type} in MPAltitudeOptionWidget.initState()',
+          );
+        }
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
         _altitudeController = TextEditingController(text: '0');
