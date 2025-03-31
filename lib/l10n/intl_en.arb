@@ -271,6 +271,54 @@
     "type": "text"
   },
 
+  "mpDateIntervalEndDateHint": "YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
+  "@mpDateIntervalEndDateHint": {
+    "description": "The hint for the end date field in the date interval dialog",
+    "type": "text"
+  },
+
+  "mpDateIntervalEndDateLabel": "End date",
+  "@mpDateIntervalEndDateLabel": {
+    "description": "The label for the end date type",
+    "type": "text"
+  },
+
+  "mpDateIntervalIntervalLabel": "Interval",
+  "@mpDateIntervalIntervalLabel": {
+    "description": "The label for the interval date type",
+    "type": "text"
+  },
+
+  "mpDateIntervalInvalidEndDateFormatErrorMessage": "Invalid end date.",
+  "@mpDateIntervalInvalidEndDateFormatErrorMessage": {
+    "description": "The error message for invalid end date format",
+    "type": "text"
+  },
+
+  "mpDateIntervalInvalidStartDateFormatErrorMessage": "Invalid start date.",
+  "@mpDateIntervalInvalidStartDateFormatErrorMessage": {
+    "description": "The error message for invalid start date format",
+    "type": "text"
+  },
+
+  "mpDateIntervalSingleDateLabel": "Date",
+  "@mpDateIntervalSingleDateLabel": {
+    "description": "The label for the single date type",
+    "type": "text"
+  },
+
+  "mpDateIntervalStartDateHint": "YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or '-'",
+  "@mpDateIntervalStartDateHint": {
+    "description": "The hint for the start date field in the date interval dialog",
+    "type": "text"
+  },
+
+  "mpDateIntervalStartDateLabel": "Start date",
+  "@mpDateIntervalStartDateLabel": {
+    "description": "The label for the start date type",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",
@@ -328,6 +376,24 @@
   "mpLengthUnitYardAbbreviation": "yd",
   "@mpLengthUnitYardAbbreviation": {
     "description": "The abbreviation for the yard length unit",
+    "type": "text"
+  },
+
+  "mpPersonNameInvalidFormatErrorMessage": "Please enter a valid person name.",
+  "@mpPersonNameInvalidFormatErrorMessage": {
+    "description": "The error message for invalid person name format",
+    "type": "text"
+  },
+
+  "mpPersonNameLabel": "Name",
+  "@mpPersonNameLabel": {
+    "description": "The label for the name field in the person name dialog",
+    "type": "text"
+  },
+
+  "mpPersonNameHint": "'FirstName Surname' or 'FirstNames/Surnames'",
+  "@mpPersonNameHint": {
+    "description": "The hint for the name field in the person name dialog",
     "type": "text"
   },
 

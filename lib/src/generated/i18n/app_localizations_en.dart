@@ -154,6 +154,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElements => 'Set option to multiple elements';
 
   @override
+  String get mpDateIntervalEndDateHint => 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';
+
+  @override
+  String get mpDateIntervalEndDateLabel => 'End date';
+
+  @override
+  String get mpDateIntervalIntervalLabel => 'Interval';
+
+  @override
+  String get mpDateIntervalInvalidEndDateFormatErrorMessage => 'Invalid end date.';
+
+  @override
+  String get mpDateIntervalInvalidStartDateFormatErrorMessage => 'Invalid start date.';
+
+  @override
+  String get mpDateIntervalSingleDateLabel => 'Date';
+
+  @override
+  String get mpDateIntervalStartDateHint => 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or \'-\'';
+
+  @override
+  String get mpDateIntervalStartDateLabel => 'Start date';
+
+  @override
   String get mpLengthUnitCentimeter => 'centimeter';
 
   @override
@@ -182,6 +206,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpLengthUnitYardAbbreviation => 'yd';
+
+  @override
+  String get mpPersonNameInvalidFormatErrorMessage => 'Please enter a valid person name.';
+
+  @override
+  String get mpPersonNameLabel => 'Name';
+
+  @override
+  String get mpPersonNameHint => '\'FirstName Surname\' or \'FirstNames/Surnames\'';
 
   @override
   String get mpPLATypeAll => 'All';

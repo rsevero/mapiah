@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 
 class MPDateIntervalInputWidget extends StatefulWidget {
   final String? initialValue;
@@ -71,7 +72,8 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     if (value.isEmpty || startDatePattern.hasMatch(value)) {
       return null; // Valid input
     }
-    return 'Invalid start date format';
+    return mpLocator
+        .appLocalizations.mpDateIntervalInvalidStartDateFormatErrorMessage;
   }
 
   String? _validateEndDate(String value) {
@@ -83,7 +85,8 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     if (value.isEmpty || endDatePattern.hasMatch(value)) {
       return null; // Valid input
     }
-    return 'Invalid end date format';
+    return mpLocator
+        .appLocalizations.mpDateIntervalInvalidEndDateFormatErrorMessage;
   }
 
   void _onFieldChanged() {
@@ -109,7 +112,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Interval'),
+            Text(mpLocator.appLocalizations.mpDateIntervalIntervalLabel),
             Switch(
               value: _isInterval,
               onChanged: (value) {
@@ -127,8 +130,10 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
         TextField(
           controller: _startDateController,
           decoration: InputDecoration(
-            labelText: _isInterval ? 'Start Date' : 'Date',
-            hintText: 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or "-"',
+            labelText: _isInterval
+                ? mpLocator.appLocalizations.mpDateIntervalStartDateLabel
+                : mpLocator.appLocalizations.mpDateIntervalSingleDateLabel,
+            hintText: mpLocator.appLocalizations.mpDateIntervalStartDateHint,
             border: OutlineInputBorder(),
             errorText: _isStartDateValid
                 ? null
@@ -148,8 +153,8 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
           TextField(
             controller: _endDateController,
             decoration: InputDecoration(
-              labelText: 'End Date',
-              hintText: 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]',
+              labelText: mpLocator.appLocalizations.mpDateIntervalEndDateLabel,
+              hintText: mpLocator.appLocalizations.mpDateIntervalEndDateHint,
               border: OutlineInputBorder(),
               errorText: _isEndDateValid
                   ? null

@@ -359,6 +359,54 @@ abstract class AppLocalizations {
   /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
 
+  /// The hint for the end date field in the date interval dialog
+  ///
+  /// In en, this message translates to:
+  /// **'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]'**
+  String get mpDateIntervalEndDateHint;
+
+  /// The label for the end date type
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get mpDateIntervalEndDateLabel;
+
+  /// The label for the interval date type
+  ///
+  /// In en, this message translates to:
+  /// **'Interval'**
+  String get mpDateIntervalIntervalLabel;
+
+  /// The error message for invalid end date format
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid end date.'**
+  String get mpDateIntervalInvalidEndDateFormatErrorMessage;
+
+  /// The error message for invalid start date format
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid start date.'**
+  String get mpDateIntervalInvalidStartDateFormatErrorMessage;
+
+  /// The label for the single date type
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get mpDateIntervalSingleDateLabel;
+
+  /// The hint for the start date field in the date interval dialog
+  ///
+  /// In en, this message translates to:
+  /// **'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or \'-\''**
+  String get mpDateIntervalStartDateHint;
+
+  /// The label for the start date type
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get mpDateIntervalStartDateLabel;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:
@@ -418,6 +466,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
+
+  /// The error message for invalid person name format
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid person name.'**
+  String get mpPersonNameInvalidFormatErrorMessage;
+
+  /// The label for the name field in the person name dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get mpPersonNameLabel;
+
+  /// The hint for the name field in the person name dialog
+  ///
+  /// In en, this message translates to:
+  /// **'\'FirstName Surname\' or \'FirstNames/Surnames\''**
+  String get mpPersonNameHint;
 
   /// The label for the all type
   ///

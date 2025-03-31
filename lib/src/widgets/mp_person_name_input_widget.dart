@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 
 class MPPersonNameInputWidget extends StatefulWidget {
   final String? initialValue;
@@ -40,7 +41,7 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
     if (value.isEmpty || namePattern.hasMatch(value)) {
       return null; // Valid input
     }
-    return 'Invalid name format';
+    return mpLocator.appLocalizations.mpPersonNameInvalidFormatErrorMessage;
   }
 
   void _onNameChanged(String value) {
@@ -58,8 +59,8 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
           controller: _nameController,
           focusNode: _nameFocusNode,
           decoration: InputDecoration(
-            labelText: 'Person Name',
-            hintText: 'FirstName Surname or FirstName/Surname',
+            labelText: mpLocator.appLocalizations.mpPersonNameLabel,
+            hintText: mpLocator.appLocalizations.mpPersonNameHint,
             border: OutlineInputBorder(),
             errorText: _validateName(_nameController.text),
           ),

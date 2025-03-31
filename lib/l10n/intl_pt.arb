@@ -51,6 +51,15 @@
   "mpCommandDescriptionSetOptionToElement": "Definir opção",
   "mpCommandDescriptionSetOptionToElements": "Definir opção para diversos elementos",
 
+  "mpDateIntervalEndDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
+  "mpDateIntervalEndDateLabel": "Data de término",
+  "mpDateIntervalIntervalLabel": "Intervalo",
+  "mpDateIntervalInvalidEndDateFormatErrorMessage": "Data de término inválida",
+  "mpDateIntervalInvalidStartDateFormatErrorMessage": "Data de início inválida",
+  "mpDateIntervalSingleDateLabel": "Data",
+  "mpDateIntervalStartDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] ou '-'",
+  "mpDateIntervalStartDateLabel": "Data de início",
+
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",
@@ -61,6 +70,10 @@
   "mpLengthUnitMeterAbbreviation": "m",
   "mpLengthUnitYard": "jarda",
   "mpLengthUnitYardAbbreviation": "yd",
+
+  "mpPersonNameInvalidFormatErrorMessage": "Por favor informe um nome válido",
+  "mpPersonNameLabel": "Nome",
+  "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",
 
   "mpPLATypeAll": "Todos",
   "mpPLATypeAreaTitle": "Tipos de área",
