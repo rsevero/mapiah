@@ -47,28 +47,40 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
           builder: (_) {
             th2FileEditController.activeScrapID;
             return MPOverlayWindowBlockWidget(
-              overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-              children: th2FileEditController.availableScraps().entries.map(
-                (entry) {
-                  final int scrapID = entry.key;
-                  final String scrapName = entry.value;
+              overlayWindowBlockType: MPOverlayWindowBlockType.main,
+              children: [
+                Builder(builder: (blockContext) {
+                  return Column(
+                    children:
+                        th2FileEditController.availableScraps().entries.map(
+                      (entry) {
+                        final int scrapID = entry.key;
+                        final String scrapName = entry.value;
 
-                  return RadioListTile<int>(
-                    dense: true,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: mpTileWidgetEdgeInset,
-                    ),
-                    value: scrapID,
-                    groupValue: th2FileEditController.activeScrapID,
-                    onChanged: (int? value) {
-                      if (value != null) {
-                        _onTapSelectScrap(value);
-                      }
-                    },
-                    title: Text(scrapName),
+                        return RadioListTile<int>(
+                          dense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: mpTileWidgetEdgeInset,
+                          ),
+                          value: scrapID,
+                          groupValue: th2FileEditController.activeScrapID,
+                          onChanged: (int? value) {
+                            if (value != null) {
+                              _onTapSelectScrap(value);
+                            }
+                          },
+                          title: Text(
+                            scrapName,
+                            style: DefaultTextStyle.of(blockContext).style,
+                          ),
+                          activeColor: IconTheme.of(blockContext).color,
+                          visualDensity: VisualDensity.compact,
+                        );
+                      },
+                    ).toList(),
                   );
-                },
-              ).toList(),
+                }),
+              ],
             );
           },
         ),
