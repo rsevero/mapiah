@@ -32,9 +32,8 @@ class MPPLATypeOptionWidget extends StatelessWidget {
           _onChanged(context, newValue);
         }
       },
-      visualDensity: VisualDensity.compact,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
       dense: true,
-      // selected: value == groupValue,
       contentPadding: EdgeInsets.zero,
     );
   }

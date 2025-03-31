@@ -85,12 +85,14 @@ class MPInteractionAux {
     required BuildContext context,
     required List<Widget> children,
     required MPOverlayWindowBlockType overlayWindowBlockType,
+    EdgeInsetsGeometry? padding,
   }) {
     return [
       const SizedBox(height: mpButtonSpace),
       MPOverlayWindowBlockWidget(
         children: children,
         overlayWindowBlockType: overlayWindowBlockType,
+        padding: padding,
       ),
     ];
   }

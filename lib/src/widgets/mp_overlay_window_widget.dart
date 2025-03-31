@@ -141,7 +141,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
       child: Visibility.maintain(
         visible: _initialPositionSet,
         child: Material(
-          color: Colors.yellowAccent,
+          color: Theme.of(context).colorScheme.primaryFixed,
           borderRadius: BorderRadius.circular(mpOverlayWindowCornerRadius),
           clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(

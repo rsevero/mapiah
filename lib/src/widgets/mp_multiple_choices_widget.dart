@@ -3,8 +3,10 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
@@ -36,37 +38,42 @@ class MPMultipleChoicesWidget extends StatelessWidget {
       outerAnchorPosition: outerAnchorPosition,
       innerAnchorType: innerAnchorType,
       th2FileEditController: th2FileEditController,
-      children: choices.entries.map((entry) {
-        final String value = entry.key;
-        final String label = entry.value;
+      children: [
+        MPOverlayWindowBlockWidget(
+          overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
+          children: choices.entries.map((entry) {
+            final String value = entry.key;
+            final String label = entry.value;
 
-        return RadioListTile<String>(
-          title: Row(
-            children: [
-              Text(label),
-              if (value == optionInfo.defaultChoice)
-                Padding(
-                  padding: const EdgeInsets.only(left: mpButtonSpace),
-                  child: Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+            return RadioListTile<String>(
+              title: Row(
+                children: [
+                  Text(label),
+                  if (value == optionInfo.defaultChoice)
+                    Padding(
+                      padding: const EdgeInsets.only(left: mpButtonSpace),
+                      child: Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-            ],
-          ),
-          value: value,
-          groupValue: selectedChoice,
-          contentPadding: EdgeInsets.zero,
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              _onChoiceSelected(context, newValue);
-            }
-          },
-        );
-      }).toList(),
+                ],
+              ),
+              value: value,
+              groupValue: selectedChoice,
+              contentPadding: EdgeInsets.zero,
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  _onChoiceSelected(context, newValue);
+                }
+              },
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
