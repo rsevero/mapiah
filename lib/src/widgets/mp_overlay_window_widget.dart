@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
@@ -141,7 +142,8 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
         visible: _initialPositionSet,
         child: Material(
           color: Colors.yellowAccent,
-          borderRadius: BorderRadius.circular(18.0),
+          borderRadius: BorderRadius.circular(mpOverlayWindowCornerRadius),
+          clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: getMaxHeightForOverlayWindows(
@@ -150,7 +152,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
             ),
             child: IntrinsicWidth(
                 child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(mpOverlayWindowPadding),
               child: SingleChildScrollView(
                   child: Column(
                 mainAxisSize: MainAxisSize.min,

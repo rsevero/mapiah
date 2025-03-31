@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 
 class MPPLATypeWidget extends StatelessWidget {
   final String? selectedPLAType;
@@ -39,8 +40,8 @@ class MPPLATypeWidget extends StatelessWidget {
         return SizedBox.shrink();
     }
 
-    return ListTile(
-      title: Text(title),
+    return MPTileWidget(
+      title: title,
       onTap: () => _onPLATypeTap(context),
     );
   }

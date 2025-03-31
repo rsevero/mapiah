@@ -155,28 +155,12 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
 
         final optionsStateMap = optionEditController.optionStateMap.entries;
 
-        MPOptionStateType? previousState;
         List<Widget> blockWidgets = [];
-        final List<Widget> optionWidgets = [];
 
         for (final optionEntry in optionsStateMap) {
           final THCommandOptionType optionType = optionEntry.key;
           final MPOptionInfo optionInfo = optionEntry.value;
 
-          if (optionInfo.state != previousState) {
-            if (blockWidgets.isNotEmpty) {
-              addWithTopSpace(
-                optionWidgets,
-                MPOverlayWindowBlockWidget(
-                  children: blockWidgets,
-                  overlayWindowBlockType:
-                      getOverlayWindowBlockTypeFromOptionState(previousState),
-                ),
-              );
-              blockWidgets = [];
-            }
-            previousState = optionInfo.state;
-          }
           blockWidgets.add(
             MPOptionWidget(
               optionInfo: optionInfo,
@@ -189,30 +173,10 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
 
         if (blockWidgets.isNotEmpty) {
           addWithTopSpace(
-            optionWidgets,
-            MPOverlayWindowBlockWidget(
-              children: blockWidgets,
-              overlayWindowBlockType:
-                  getOverlayWindowBlockTypeFromOptionState(previousState),
-            ),
-          );
-        }
-
-        if (optionWidgets.isNotEmpty) {
-          addWithTopSpace(
             widgets,
             MPOverlayWindowBlockWidget(
-              overlayWindowBlockType: MPOverlayWindowBlockType.main,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(mpOverlayWindowBlockPadding),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: optionWidgets,
-                  ),
-                ),
-              ],
+              children: blockWidgets,
+              overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
             ),
           );
         }

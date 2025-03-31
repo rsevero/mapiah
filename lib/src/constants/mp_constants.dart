@@ -86,8 +86,15 @@ const double thFloatingActionIconSize = 32;
 const double thFloatingActionZoomIconSize = 24;
 const double mpButtonSpace = 8;
 const double mpButtonMargin = mpButtonSpace * 4;
+const double mpOverlayWindowPadding = 16;
+const double mpOverlayWindowCornerRadius = 18;
 const double mpOverlayWindowBlockPadding = 12;
+const double mpOverlayWindowBlockCornerRadius = 14;
+const double mpOverlayWindowBlockElevation = 4;
 const double mpSwitchScaleFactor = 0.7;
+const int mpTileWidgetOnHoverAlpha = 50;
+const double mpTileWidgetEdgeInset = 12;
+const double mpTileWidgetEdgeInsetDense = 8;
 
 const int mpInitialZOrder = 0;
 const int mpDefaultZOrderIncrement = 1000;

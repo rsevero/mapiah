@@ -3,6 +3,8 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/widgets/mp_tile_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 
 class MPOptionWidget extends StatelessWidget {
   final MPOptionInfo optionInfo;
@@ -21,19 +23,44 @@ class MPOptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // mpLocator.mpLog.fine("MPOptionWidget.build() $tileColor");
+    final MPOptionStateType optionState = optionInfo.state;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    late final Color? iconColor;
+    late final Color? textColor;
+    late final Color? backgroundColor;
 
-    return ListTile(
-      title: Text(MPTextToUser.getCommandOptionType(optionInfo.type)),
+    if (isSelected) {
+      iconColor = null;
+      textColor = null;
+      backgroundColor = null;
+    } else {
+      switch (optionState) {
+        case MPOptionStateType.set:
+          iconColor = colorScheme.onTertiaryFixed;
+          textColor = colorScheme.onTertiaryFixed;
+          backgroundColor = colorScheme.tertiaryFixed;
+        case MPOptionStateType.setMixed:
+          iconColor = colorScheme.onTertiaryContainer;
+          textColor = colorScheme.onTertiaryContainer;
+          backgroundColor = colorScheme.tertiaryContainer;
+        case MPOptionStateType.setUnsupported:
+          iconColor = colorScheme.onTertiary;
+          textColor = colorScheme.onTertiary;
+          backgroundColor = colorScheme.tertiary;
+        case MPOptionStateType.unset:
+          iconColor = colorScheme.onSurfaceVariant;
+          textColor = colorScheme.onSurfaceVariant;
+          backgroundColor = colorScheme.surfaceContainer;
+      }
+    }
+
+    return MPTileWidget(
+      title: MPTextToUser.getCommandOptionType(optionInfo.type),
       onTap: () => onOptionTap(context, optionInfo.type),
-      contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-      visualDensity: VisualDensity.compact,
       dense: true,
-      minLeadingWidth: 0,
-      // iconColor: iconColor,
-      // textColor: textColor,
-      // tileColor: tileColor,
-      selected: isSelected,
+      iconColor: iconColor,
+      textColor: textColor,
+      backgroundColor: backgroundColor,
     );
   }
 
