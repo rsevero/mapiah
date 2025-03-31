@@ -72,13 +72,13 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
     final List<Widget> content = [
       if (title != null && title!.isNotEmpty)
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.only(bottom: mpButtonSpace),
           child: Text(
             title!,
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ),
       ...children,

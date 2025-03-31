@@ -158,7 +158,17 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                      Text(widget.title),
+                      Text(
+                        widget.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                              color:
+                                  Theme.of(context).colorScheme.onPrimaryFixed,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
                     ] +
                     widget.children,
               )),
