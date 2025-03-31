@@ -1,8 +1,8 @@
 part of 'th_command_option.dart';
 
 // context <point/line/area> <symbol-type> . (to be used with symbol-hide and
-// symbol-show layout options) symbol will be hidden/shown according to rules for spec-
-// ified <symbol-type>.
+// symbol-show layout options) symbol will be hidden/shown according to rules
+// for specified <symbol-type>.
 class THContextCommandOption extends THCommandOption {
   late final String elementType;
   late final String symbolType;
@@ -22,6 +22,13 @@ class THContextCommandOption extends THCommandOption {
     required this.symbolType,
     super.originalLineInTH2File = '',
   }) : super();
+
+  THContextCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.elementType,
+    required this.symbolType,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM();
 
   @override
   THCommandOptionType get type => THCommandOptionType.context;

@@ -154,6 +154,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElements => 'Set option to multiple elements';
 
   @override
+  String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
+
+  @override
   String get mpDateIntervalEndDateHint => 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';
 
   @override
@@ -224,6 +227,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpPLATypeCurrent => 'Current';
+
+  @override
+  String get mpPLATypeDropdownSelectATypeLabel => 'Select a type';
 
   @override
   String get mpPLATypeLastUsed => 'Last used';

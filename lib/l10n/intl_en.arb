@@ -271,6 +271,12 @@
     "type": "text"
   },
 
+  "mpContextInvalidValueErrorMessage": "Both fields are mandatory",
+  "@mpContextInvalidValueErrorMessage": {
+    "description": "The error message for invalid context value",
+    "type": "text"
+  },
+
   "mpDateIntervalEndDateHint": "YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
   "@mpDateIntervalEndDateHint": {
     "description": "The hint for the end date field in the date interval dialog",
@@ -412,6 +418,12 @@
   "mpPLATypeCurrent": "Current",
   "@mpPLATypeCurrent": {
     "description": "The label for the current type",
+    "type": "text"
+  },
+
+  "mpPLATypeDropdownSelectATypeLabel": "Select a type",
+  "@mpPLATypeDropdownSelectATypeLabel": {
+    "description": "The label for the dropdown select a type",
     "type": "text"
   },
 

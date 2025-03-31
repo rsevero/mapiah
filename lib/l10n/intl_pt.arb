@@ -51,6 +51,8 @@
   "mpCommandDescriptionSetOptionToElement": "Definir opção",
   "mpCommandDescriptionSetOptionToElements": "Definir opção para diversos elementos",
 
+  "mpContextInvalidValueErrorMessage": "Ambos os campos são obrigatórios",
+
   "mpDateIntervalEndDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
   "mpDateIntervalEndDateLabel": "Data de término",
   "mpDateIntervalIntervalLabel": "Intervalo",
@@ -78,6 +80,7 @@
   "mpPLATypeAll": "Todos",
   "mpPLATypeAreaTitle": "Tipos de área",
   "mpPLATypeCurrent": "Atual",
+  "mpPLATypeDropdownSelectATypeLabel": "Selecione um tipo",
   "mpPLATypeLastUsed": "Últimos usados",
   "mpPLATypeLineTitle": "Tipos de linha",
   "mpPLATypeMostUsed": "Mais usados",

@@ -359,6 +359,12 @@ abstract class AppLocalizations {
   /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
 
+  /// The error message for invalid context value
+  ///
+  /// In en, this message translates to:
+  /// **'Both fields are mandatory'**
+  String get mpContextInvalidValueErrorMessage;
+
   /// The hint for the end date field in the date interval dialog
   ///
   /// In en, this message translates to:
@@ -502,6 +508,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Current'**
   String get mpPLATypeCurrent;
+
+  /// The label for the dropdown select a type
+  ///
+  /// In en, this message translates to:
+  /// **'Select a type'**
+  String get mpPLATypeDropdownSelectATypeLabel;
 
   /// The label for the last used type
   ///
