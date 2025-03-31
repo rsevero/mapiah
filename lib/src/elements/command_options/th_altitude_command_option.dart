@@ -1,12 +1,13 @@
 part of 'th_command_option.dart';
 
-// altitude <value> . can be specified only with the wall type. This option creates an
-// altitude label on the wall. All altitudes are exported as a difference against grid Z
-// origin (which is 0 by default). If the value is specified, it gives the altitude difference
-// of the point on the wall relative to the nearest station. The value will be set to 0 if
-// defined as ”-”, ”.”, ”nan”, ”NAN” or ”NaN”. The value can be prefixed by a keyword
-// “fix”, then no nearest station is taken into consideration; the absolute given value is
-// used instead. Units can follow the value. Examples: +4, [+4 m], [fix 1510 m].
+// altitude <value> . can be specified only with the wall type line. This option
+// creates an altitude label on the wall. All altitudes are exported as a
+// difference against grid Z origin (which is 0 by default). If the value is
+// specified, it gives the altitude difference of the point on the wall relative
+// to the nearest station. The value will be set to 0 if defined as ”-”, ”.”,
+// ”nan”, ”NAN” or ”NaN”. The value can be prefixed by a keyword “fix”, then no
+// nearest station is taken into consideration; the absolute given value is used
+// instead. Units can follow the value. Examples: +4, [+4 m], [fix 1510 m].
 class THAltitudeCommandOption extends THCommandOption
     with THHasLengthMixin, THHasAltitudeMixin {
   THAltitudeCommandOption.forCWJM({

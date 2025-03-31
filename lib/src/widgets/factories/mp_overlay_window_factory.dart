@@ -9,7 +9,7 @@ import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/widgets/mp_altitude_value_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_altitude_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
@@ -129,8 +129,9 @@ class MPOverlayWindowFactory {
       );
     } else {
       switch (optionType) {
+        case THCommandOptionType.altitude:
         case THCommandOptionType.altitudeValue:
-          overlayWindowWidget = MPAltitudeValueOptionWidget(
+          overlayWindowWidget = MPAltitudeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

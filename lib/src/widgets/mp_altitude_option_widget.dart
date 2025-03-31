@@ -14,13 +14,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPAltitudeValueOptionWidget extends StatefulWidget {
+class MPAltitudeOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPAltitudeValueOptionWidget({
+  const MPAltitudeOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -29,12 +29,10 @@ class MPAltitudeValueOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPAltitudeValueOptionWidget> createState() =>
-      _MPAltitudeValueOptionWidgetState();
+  State<MPAltitudeOptionWidget> createState() => _MPAltitudeOptionWidgetState();
 }
 
-class _MPAltitudeValueOptionWidgetState
-    extends State<MPAltitudeValueOptionWidget> {
+class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   late TextEditingController _altitudeController;
   late bool _isFixed;
   late String _selectedUnit;
@@ -95,7 +93,7 @@ class _MPAltitudeValueOptionWidgetState
   }
 
   void _okButtonPressed() {
-    THAltitudeValueCommandOption? newOption;
+    THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
       final double? altitude = double.tryParse(_altitudeController.text);
@@ -105,12 +103,26 @@ class _MPAltitudeValueOptionWidgetState
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-        newOption = THAltitudeValueCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          height: _altitudeController.text,
-          isFix: _isFixed,
-          unit: _selectedUnit,
-        );
+        switch (widget.optionInfo.type) {
+          case THCommandOptionType.altitude:
+            newOption = THAltitudeCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              height: _altitudeController.text,
+              isFix: _isFixed,
+              unit: _selectedUnit,
+            );
+          case THCommandOptionType.altitudeValue:
+            newOption = THAltitudeValueCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              height: _altitudeController.text,
+              isFix: _isFixed,
+              unit: _selectedUnit,
+            );
+          default:
+            throw Exception(
+              'Unsupported option type: ${widget.optionInfo.type} in MPAltitudeOptionWidget._okButtonPressed()',
+            );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -126,7 +138,7 @@ class _MPAltitudeValueOptionWidgetState
 
     widget.th2FileEditController.userInteractionController.prepareSetOption(
       option: newOption,
-      optionType: THCommandOptionType.altitudeValue,
+      optionType: widget.optionInfo.type,
     );
   }
 
