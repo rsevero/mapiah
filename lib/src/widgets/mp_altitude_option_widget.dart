@@ -180,24 +180,24 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               title: Text(appLocalizations.mpChoiceUnset),
               value: mpUnsetOptionID,
               groupValue: _selectedChoice,
+              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 setState(() {
                   _selectedChoice = value!;
                 });
               },
-              contentPadding: EdgeInsets.zero,
             ),
             RadioListTile<String>(
               title: Text(appLocalizations.mpChoiceSet),
               value: mpNonMultipleChoiceSetID,
               groupValue: _selectedChoice,
+              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 setState(() {
                   _selectedChoice = value!;
                 });
                 _textFieldFocusNode.requestFocus();
               },
-              contentPadding: EdgeInsets.zero,
             ),
 
             // Additional Inputs for "Set" Option

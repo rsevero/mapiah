@@ -106,28 +106,33 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.label),
-        IconButton(
-          icon: const Icon(Icons.remove),
-          onPressed: _decrement,
-        ),
-        SizedBox(
-          width: _calculateTextFieldWidth(),
-          child: TextField(
-            controller: _controller,
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            onChanged: _validateInput,
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: _increment,
+        Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.remove),
+              onPressed: _decrement,
+            ),
+            SizedBox(
+              width: _calculateTextFieldWidth(),
+              child: TextField(
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: _validateInput,
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: _increment,
+            ),
+          ],
         ),
       ],
     );

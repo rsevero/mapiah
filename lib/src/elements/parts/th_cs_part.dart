@@ -16,10 +16,10 @@ class THCSPart extends THPart {
   THPartType get type => THPartType.cs;
 
   static final HashSet<String> csList =
-      HashSet<String>.from(['lat-long', 'long-lat', 's-merc']);
+      HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
 
   static final HashSet<String> csNotForOutput =
-      HashSet<String>.from(['lat-long', 'long-lat', 'jtsk']);
+      HashSet<String>.from(['lat-long', 'long-lat', 'JTSK']);
 
   static final Map<String, RegExp> csRegexes = {
     'EPSG': RegExp(r'^(EPSG:\d+)$', caseSensitive: false),
@@ -34,11 +34,12 @@ class THCSPart extends THPart {
   static bool isCS(String cs, bool forOutput) {
     final String lowerCS = cs.toLowerCase();
 
-    if (forOutput && csNotForOutput.contains(lowerCS)) {
+    if (forOutput &&
+        csNotForOutput.any((entry) => entry.toLowerCase() == lowerCS)) {
       return false;
     }
 
-    if (csList.contains(lowerCS)) {
+    if (csList.any((entry) => entry.toLowerCase() == lowerCS)) {
       return true;
     }
 

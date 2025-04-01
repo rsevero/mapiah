@@ -35,8 +35,8 @@ class MPCSOptionWidget extends StatefulWidget {
 class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   String? _selectedChoice;
   String _currentValue = '';
-  String _osgb1 = '';
-  String _osgb2 = '';
+  String _osgbMajor = '';
+  String _osgbMinor = '';
   int _utmZone = 0;
   String _utmHemisphere = 'N';
   int _eptgESRIETRSIdentifier = 0;
@@ -56,8 +56,13 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       return mpUnsetOptionID;
     }
 
-    if (THCSPart.csList.contains(initialValue.toLowerCase())) {
-      return initialValue.toLowerCase();
+    final String matchingEntry = THCSPart.csList.firstWhere(
+      (entry) => entry.toLowerCase() == initialValue.toLowerCase(),
+      orElse: () => '',
+    );
+
+    if (matchingEntry.isNotEmpty) {
+      return matchingEntry;
     }
 
     for (final entry in THCSPart.csRegexes.entries) {
@@ -77,8 +82,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           ).firstMatch(initialValue);
 
           if (match != null) {
-            _osgb1 = match.group(1)!.toUpperCase();
-            _osgb2 = match.group(2)!.toUpperCase();
+            _osgbMajor = match.group(1)!.toUpperCase();
+            _osgbMinor = match.group(2)!.toUpperCase();
           }
         } else if (entry.key == 'UTM') {
           final match = RegExp(
@@ -104,36 +109,45 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       case mpUnsetOptionID:
         return const SizedBox.shrink();
       case mpUnrecognizedOptionID:
-        return Text(widget.optionInfo.option!.toString());
+        return Padding(
+          padding: const EdgeInsets.only(left: mpButtonSpace),
+          child: Text(widget.optionInfo.option!.toString()),
+        );
       case 'EPSG':
       case 'ESRI':
-        return MPIntRangeInputWidget(
-          label: '$option identifier (1-99999)',
-          min: 1,
-          max: 99999,
-          onChanged: (value) {
-            if (value != null) {
-              _eptgESRIETRSIdentifier = value;
-              _currentValue = "$option:$_eptgESRIETRSIdentifier";
-            }
-          },
+        return Padding(
+          padding: const EdgeInsets.only(left: mpButtonSpace),
+          child: MPIntRangeInputWidget(
+            label: '$option identifier (1-99999)',
+            min: 1,
+            max: 99999,
+            onChanged: (value) {
+              if (value != null) {
+                _eptgESRIETRSIdentifier = value;
+                _currentValue = "$option:$_eptgESRIETRSIdentifier";
+              }
+            },
+          ),
         );
       case 'ETRS':
-        return MPIntRangeInputWidget(
-          label: 'Optional ETRS identifier (28-37)',
-          min: 28,
-          max: 37,
-          initialValue: _eptgESRIETRSIdentifier,
-          allowEmpty: true,
-          onChanged: (value) {
-            if (value == null) {
-              _eptgESRIETRSIdentifier = 0;
-              _currentValue = 'ETRS';
-            } else {
-              _eptgESRIETRSIdentifier = value;
-              _currentValue = 'ETRS$_eptgESRIETRSIdentifier';
-            }
-          },
+        return Padding(
+          padding: const EdgeInsets.only(left: mpButtonSpace),
+          child: MPIntRangeInputWidget(
+            label: 'Optional ETRS identifier (28-37)',
+            min: 28,
+            max: 37,
+            initialValue: _eptgESRIETRSIdentifier,
+            allowEmpty: true,
+            onChanged: (value) {
+              if (value == null) {
+                _eptgESRIETRSIdentifier = 0;
+                _currentValue = 'ETRS';
+              } else {
+                _eptgESRIETRSIdentifier = value;
+                _currentValue = 'ETRS$_eptgESRIETRSIdentifier';
+              }
+            },
+          ),
         );
       case 'iJTSK':
       case 'iJTSK03':
@@ -141,99 +155,117 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       case 'JTSK03':
         return const SizedBox.shrink();
       case 'OSGB':
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DropdownMenu<String>(
-              initialSelection: _osgb1,
-              dropdownMenuEntries: const [
-                DropdownMenuEntry(value: 'H', label: 'H'),
-                DropdownMenuEntry(value: 'N', label: 'N'),
-                DropdownMenuEntry(value: 'O', label: 'O'),
-                DropdownMenuEntry(value: 'S', label: 'S'),
-                DropdownMenuEntry(value: 'T', label: 'T'),
-              ],
-              onSelected: (value) {
-                if (value != null && value.isNotEmpty) {
-                  _osgb1 = value;
-                  _currentValue = 'OSGB:$_osgb1$_osgb2';
-                }
-              },
-            ),
-            const SizedBox(height: mpButtonSpace),
-            DropdownMenu<String>(
-              initialSelection: _osgb2,
-              dropdownMenuEntries: List.generate(
-                26,
-                (index) {
-                  final char = String.fromCharCode(65 + index);
-                  if (char == 'I') return null; // Skip 'I'
-                  return DropdownMenuEntry(value: char, label: char);
-                },
-              ).whereType<DropdownMenuEntry<String>>().toList(),
-              onSelected: (value) {
-                if (value != null && value.isNotEmpty) {
-                  _osgb2 = value;
-                  _currentValue = 'OSGB:$_osgb1$_osgb2';
-                }
-              },
-            ),
-          ],
-        );
-      case 'UTM':
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            MPIntRangeInputWidget(
-              label: 'Zone number (1-60)',
-              min: 1,
-              max: 60,
-              initialValue: _utmZone,
-              onChanged: (value) {
-                if (value != null) {
-                  _utmZone = value;
-                  _currentValue = 'UTM$_utmZone$_utmHemisphere';
-                }
-              },
-            ),
-            const SizedBox(width: mpButtonSpace),
-            Flexible(
-              child: Column(
+        return Padding(
+          padding: const EdgeInsets.only(left: mpButtonSpace),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RadioListTile<String>(
-                    title: const Text('NORTH'),
-                    value: 'N',
-                    groupValue: _utmHemisphere,
-                    dense: true,
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _utmHemisphere = value;
-                          _currentValue = 'UTM$_utmZone$_utmHemisphere';
-                        });
-                      }
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: const Text('SOUTH'),
-                    value: 'S',
-                    groupValue: _utmHemisphere,
-                    dense: true,
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _utmHemisphere = value;
-                          _currentValue = 'UTM$_utmZone$_utmHemisphere';
-                        });
+                  const Text('OSGB major'),
+                  DropdownMenu<String>(
+                    initialSelection: _osgbMajor,
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(value: 'H', label: 'H'),
+                      DropdownMenuEntry(value: 'N', label: 'N'),
+                      DropdownMenuEntry(value: 'O', label: 'O'),
+                      DropdownMenuEntry(value: 'S', label: 'S'),
+                      DropdownMenuEntry(value: 'T', label: 'T'),
+                    ],
+                    onSelected: (value) {
+                      if (value != null && value.isNotEmpty) {
+                        _osgbMajor = value;
+                        _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
                       }
                     },
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(width: mpButtonSpace),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('OSGB minor'),
+                  DropdownMenu<String>(
+                    initialSelection: _osgbMinor,
+                    dropdownMenuEntries: List.generate(
+                      26,
+                      (index) {
+                        final char = String.fromCharCode(65 + index);
+                        if (char == 'I') return null; // Skip 'I'
+                        return DropdownMenuEntry(value: char, label: char);
+                      },
+                    ).whereType<DropdownMenuEntry<String>>().toList(),
+                    onSelected: (value) {
+                      if (value != null && value.isNotEmpty) {
+                        _osgbMinor = value;
+                        _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      case 'UTM':
+        return Padding(
+          padding: const EdgeInsets.only(left: mpButtonSpace),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              MPIntRangeInputWidget(
+                label: 'Zone number (1-60)',
+                min: 1,
+                max: 60,
+                initialValue: _utmZone,
+                onChanged: (value) {
+                  if (value != null) {
+                    _utmZone = value;
+                    _currentValue = 'UTM$_utmZone$_utmHemisphere';
+                  }
+                },
+              ),
+              const SizedBox(width: mpButtonSpace),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RadioListTile<String>(
+                      title: const Text('NORTH'),
+                      value: 'N',
+                      groupValue: _utmHemisphere,
+                      dense: true,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _utmHemisphere = value;
+                            _currentValue = 'UTM$_utmZone$_utmHemisphere';
+                          });
+                        }
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: const Text('SOUTH'),
+                      value: 'S',
+                      groupValue: _utmHemisphere,
+                      dense: true,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _utmHemisphere = value;
+                            _currentValue = 'UTM$_utmZone$_utmHemisphere';
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       default:
         return const SizedBox.shrink();
@@ -321,6 +353,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                 title: Text(option),
                 value: option,
                 groupValue: _selectedChoice,
+                contentPadding: EdgeInsets.zero,
                 onChanged: (value) {
                   setState(() {
                     _selectedChoice = value;
