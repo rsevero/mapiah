@@ -149,6 +149,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
               maxHeight: getMaxHeightForOverlayWindows(
                 th2FileEditController.thFileWidgetKey,
               ),
+              minWidth: mpOverlayWindowMinWidth,
             ),
             child: IntrinsicWidth(
                 child: Padding(

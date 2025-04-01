@@ -101,6 +101,7 @@ const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
   left: mpOverlayWindowBlockPadding,
   right: mpOverlayWindowBlockPadding,
 );
+const double mpOverlayWindowMinWidth = 180;
 
 const int mpInitialZOrder = 0;
 const int mpDefaultZOrderIncrement = 1000;
