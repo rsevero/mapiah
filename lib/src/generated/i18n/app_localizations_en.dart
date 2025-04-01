@@ -219,6 +219,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDateValueInvalidValueErrorMessage => 'Please enter a valid date/interval.';
 
   @override
+  String get mpDimensionsAboveLabel => 'Above';
+
+  @override
+  String get mpDimensionsBelowLabel => 'Below';
+
+  @override
+  String get mpDimensionsInvalidValueErrorMessage => 'Please enter valid numeric dimensions values.';
+
+  @override
   String get mpLengthUnitCentimeter => 'centimeter';
 
   @override

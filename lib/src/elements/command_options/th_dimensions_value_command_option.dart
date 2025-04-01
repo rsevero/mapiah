@@ -30,6 +30,18 @@ class THDimensionsValueCommandOption extends THCommandOption {
     unitFromString(unit);
   }
 
+  THDimensionsValueCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String above,
+    required String below,
+    String? unit,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
+    this.above = THDoublePart.fromString(valueString: above);
+    this.below = THDoublePart.fromString(valueString: below);
+    unitFromString(unit);
+  }
+
   @override
   THCommandOptionType get type => THCommandOptionType.dimensionsValue;
 

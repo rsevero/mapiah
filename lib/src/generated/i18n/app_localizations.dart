@@ -485,6 +485,24 @@ abstract class AppLocalizations {
   /// **'Please enter a valid date/interval.'**
   String get mpDateValueInvalidValueErrorMessage;
 
+  /// The label for the above dimension type
+  ///
+  /// In en, this message translates to:
+  /// **'Above'**
+  String get mpDimensionsAboveLabel;
+
+  /// The label for the below dimension type
+  ///
+  /// In en, this message translates to:
+  /// **'Below'**
+  String get mpDimensionsBelowLabel;
+
+  /// The error message for invalid dimensions value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter valid numeric dimensions values.'**
+  String get mpDimensionsInvalidValueErrorMessage;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:

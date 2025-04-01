@@ -400,6 +400,24 @@
     "type": "text"
   },
 
+  "mpDimensionsAboveLabel": "Above",
+  "@mpDimensionsAboveLabel": {
+    "description": "The label for the above dimension type",
+    "type": "text"
+  },
+
+  "mpDimensionsBelowLabel": "Below",
+  "@mpDimensionsBelowLabel": {
+    "description": "The label for the below dimension type",
+    "type": "text"
+  },
+
+  "mpDimensionsInvalidValueErrorMessage": "Please enter valid numeric dimensions values.",
+  "@mpDimensionsInvalidValueErrorMessage": {
+    "description": "The error message for invalid dimensions value",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",

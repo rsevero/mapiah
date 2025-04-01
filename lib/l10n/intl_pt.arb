@@ -77,6 +77,10 @@
 
   "mpDateValueInvalidValueErrorMessage": "Por favor informe uma data ou intervalo válidos",
 
+  "mpDimensionsAboveLabel": "Acima",
+  "mpDimensionsBelowLabel": "Abaixo",
+  "mpDimensionsInvalidValueErrorMessage": "Por favor informe valores válidos de dimensões",
+
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",
