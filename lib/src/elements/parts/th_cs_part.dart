@@ -15,32 +15,33 @@ class THCSPart extends THPart {
   @override
   THPartType get type => THPartType.cs;
 
-  static final HashSet<String> _csList =
+  static final HashSet<String> csList =
       HashSet<String>.from(['lat-long', 'long-lat', 's-merc']);
 
-  static final HashSet<String> _csNotForOutput =
+  static final HashSet<String> csNotForOutput =
       HashSet<String>.from(['lat-long', 'long-lat', 'jtsk']);
 
-  static final List<RegExp> _csRegexes = [
-    RegExp(r'^(UTM\d{1,2}(N|S)?)?', caseSensitive: false),
-    RegExp(r'^((EPSG|ESRI):\d+)$', caseSensitive: false),
-    RegExp(r'^(i?JTSK(03)?)$', caseSensitive: false),
-    RegExp(r'^(ETRS(2[89]|3[0-7])?)$', caseSensitive: false),
-    RegExp(r'^(OSGB:[HNOST][A-HJ-Z])$', caseSensitive: false),
-  ];
+  static final Map<String, RegExp> csRegexes = {
+    'EPSG': RegExp(r'^(EPSG:\d+)$', caseSensitive: false),
+    'ESRI': RegExp(r'^(ESRI:\d+)$', caseSensitive: false),
+    'ETRS': RegExp(r'^(ETRS(2[89]|3[0-7])?)$', caseSensitive: false),
+    'JTSK': RegExp(r'^(i?JTSK(03)?)$', caseSensitive: false),
+    'OSGB': RegExp(r'^(OSGB:[HNOST][A-HJ-Z])$', caseSensitive: false),
+    'UTM': RegExp(r'^(UTM\d{1,2}(N|S)?)?', caseSensitive: false),
+  };
 
   static bool isCS(String cs, bool forOutput) {
     final String lowerCS = cs.toLowerCase();
 
-    if (forOutput && _csNotForOutput.contains(lowerCS)) {
+    if (forOutput && csNotForOutput.contains(lowerCS)) {
       return false;
     }
 
-    if (_csList.contains(lowerCS)) {
+    if (csList.contains(lowerCS)) {
       return true;
     }
 
-    for (final RegExp regex in _csRegexes) {
+    for (final RegExp regex in csRegexes.values) {
       if (regex.hasMatch(cs)) {
         return true;
       }
