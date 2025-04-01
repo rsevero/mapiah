@@ -13,6 +13,7 @@ import 'package:mapiah/src/widgets/mp_altitude_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_author_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_context_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_copyright_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
@@ -148,6 +149,13 @@ class MPOverlayWindowFactory {
           );
         case THCommandOptionType.context:
           overlayWindowWidget = MPContextOptionWidget(
+            th2FileEditController: th2FileEditController,
+            optionInfo: optionInfo,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
+          );
+        case THCommandOptionType.copyright:
+          overlayWindowWidget = MPCopyrightOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

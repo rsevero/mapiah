@@ -277,6 +277,12 @@
     "type": "text"
   },
 
+  "mpCopyrightMessageLabel": "Copyright",
+  "@mpCopyrightMessageLabel": {
+    "description": "The label for the copyright message",
+    "type": "text"
+  },
+
   "mpDateIntervalEndDateHint": "YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
   "@mpDateIntervalEndDateHint": {
     "description": "The hint for the end date field in the date interval dialog",

@@ -157,6 +157,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpContextInvalidValueErrorMessage => 'Ambos os campos são obrigatórios';
 
   @override
+  String get mpCopyrightMessageLabel => 'Direitos autorais';
+
+  @override
   String get mpDateIntervalEndDateHint => 'AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';
 
   @override

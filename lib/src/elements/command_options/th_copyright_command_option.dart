@@ -31,6 +31,16 @@ class THCopyrightCommandOption extends THCommandOption {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
 
+  THCopyrightCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String datetime,
+    required String copyrightMessage,
+    super.originalLineInTH2File = '',
+  })  : copyright = THStringPart(content: copyrightMessage),
+        super.forCWJM() {
+    this.datetime = THDatetimePart.fromString(datetime: datetime);
+  }
+
   @override
   THCommandOptionType get type => THCommandOptionType.copyright;
 

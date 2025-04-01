@@ -365,6 +365,12 @@ abstract class AppLocalizations {
   /// **'Both fields are mandatory'**
   String get mpContextInvalidValueErrorMessage;
 
+  /// The label for the copyright message
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright'**
+  String get mpCopyrightMessageLabel;
+
   /// The hint for the end date field in the date interval dialog
   ///
   /// In en, this message translates to:
