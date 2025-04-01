@@ -1,8 +1,8 @@
 part of 'th_command_option.dart';
 
-// cs <coordinate system> assumes that (calibrated) local scrap coordinates are given
-// in specified coordinate system. It is useful for absolute placing of imported sketches
-// where no survey stations are specified.
+// cs <coordinate system> assumes that (calibrated) local scrap coordinates are
+//  given in specified coordinate system. It is useful for absolute placing of
+// imported sketches where no survey stations are specified.
 class THCSCommandOption extends THCommandOption {
   late final THCSPart cs;
 

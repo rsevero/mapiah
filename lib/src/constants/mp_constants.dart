@@ -205,6 +205,7 @@ const THLineType thDefaultLineType = THLineType.wall;
 const THAreaType thDefaultAreaType = THAreaType.water;
 
 const String mpUnsetOptionID = 'UNSET';
+const String mpUnrecognizedOptionID = 'UNRECOGNIZED';
 const String mpNonMultipleChoiceSetID = 'SET';
 
 const int mpMaxLastUsedTypes = 5;

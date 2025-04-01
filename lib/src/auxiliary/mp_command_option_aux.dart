@@ -33,6 +33,7 @@ class MPCommandOptionAux {
     THCommandOptionType.place,
     THCommandOptionType.reverse,
     THCommandOptionType.visibility,
+    THCommandOptionType.cs,
   ];
 
   static const Map<THLineType, List<THCommandOptionType>>

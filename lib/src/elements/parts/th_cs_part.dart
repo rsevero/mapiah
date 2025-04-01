@@ -25,7 +25,8 @@ class THCSPart extends THPart {
     'EPSG': RegExp(r'^(EPSG:\d+)$', caseSensitive: false),
     'ESRI': RegExp(r'^(ESRI:\d+)$', caseSensitive: false),
     'ETRS': RegExp(r'^(ETRS(2[89]|3[0-7])?)$', caseSensitive: false),
-    'JTSK': RegExp(r'^(i?JTSK(03)?)$', caseSensitive: false),
+    'iJTSK': RegExp(r'^(iJTSK(03)?)$', caseSensitive: false),
+    'JTSK': RegExp(r'^(JTSK(03)?)$', caseSensitive: false),
     'OSGB': RegExp(r'^(OSGB:[HNOST][A-HJ-Z])$', caseSensitive: false),
     'UTM': RegExp(r'^(UTM\d{1,2}(N|S)?)?', caseSensitive: false),
   };
