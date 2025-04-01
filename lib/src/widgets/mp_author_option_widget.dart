@@ -37,6 +37,7 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
   late String _date;
   late String _person;
   late String _selectedChoice;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
@@ -79,10 +80,7 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.mpAuthorInvalidValueErrorMessage,
-            ),
-          ),
+              content: Text(appLocalizations.mpAuthorInvalidValueErrorMessage)),
         );
         return;
       }
@@ -103,8 +101,6 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionAuthor,
       overlayWindowType: MPOverlayWindowType.secondary,

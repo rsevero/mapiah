@@ -40,6 +40,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   final FocusNode _textFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final Map<String, String> _unitMap;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
@@ -138,9 +139,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.mpAltitudeInvalidValueErrorMessage,
-            ),
+            content: Text(appLocalizations.mpAltitudeInvalidValueErrorMessage),
           ),
         );
         return;
@@ -162,8 +161,6 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionAltitudeValue,
       overlayWindowType: MPOverlayWindowType.secondary,

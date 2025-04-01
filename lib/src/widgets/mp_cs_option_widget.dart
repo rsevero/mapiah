@@ -41,6 +41,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   String _utmHemisphere = 'N';
   int _eptgESRIETRSIdentifier = 0;
   bool _forOutput = false;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
@@ -119,7 +120,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
         return Padding(
           padding: const EdgeInsets.only(left: mpButtonSpace),
           child: MPIntRangeInputWidget(
-            label: '$option identifier (1-99999)',
+            label: appLocalizations.mpCSEPSGESRILabel(option),
             min: 1,
             max: 99999,
             onChanged: (value) {
@@ -134,7 +135,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
         return Padding(
           padding: const EdgeInsets.only(left: mpButtonSpace),
           child: MPIntRangeInputWidget(
-            label: 'Optional ETRS identifier (28-37)',
+            label: appLocalizations.mpCSETRSLabel,
             min: 28,
             max: 37,
             initialValue: _eptgESRIETRSIdentifier,
@@ -159,7 +160,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('OSGB major'),
+                  Text(appLocalizations.mpCSOSGBMajorLabel),
                   DropdownMenu<String>(
                     initialSelection: _osgbMajor,
                     dropdownMenuEntries: const [
@@ -182,7 +183,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('OSGB minor'),
+                  Text(appLocalizations.mpCSOSGBMinorLabel),
                   DropdownMenu<String>(
                     initialSelection: _osgbMinor,
                     dropdownMenuEntries: List.generate(
@@ -213,7 +214,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               MPIntRangeInputWidget(
-                label: 'Zone number (1-60)',
+                label: appLocalizations.mpCSUTMZoneNumberLabel,
                 min: 1,
                 max: 60,
                 initialValue: _utmZone,
@@ -230,7 +231,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RadioListTile<String>(
-                      title: const Text('NORTH'),
+                      title: Text(appLocalizations.mpCSUTMNorthLabel),
                       value: 'N',
                       groupValue: _utmHemisphere,
                       dense: true,
@@ -246,7 +247,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                       },
                     ),
                     RadioListTile<String>(
-                      title: const Text('SOUTH'),
+                      title: Text(appLocalizations.mpCSUTMSouthLabel),
                       value: 'S',
                       groupValue: _utmHemisphere,
                       dense: true,
@@ -289,9 +290,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.mpAuthorInvalidValueErrorMessage,
-            ),
+            content: Text(appLocalizations.mpCSInvalidValueErrorMessage),
           ),
         );
         return;
@@ -335,8 +334,6 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     List<String> allOptions = [
       ...THCSPart.csList,
       'EPSG',
@@ -364,7 +361,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       optionWidgets.add(
         Row(
           children: [
-            Text('For output'),
+            Text(appLocalizations.mpCSForOutputLabel),
             const SizedBox(width: mpButtonSpace),
             Switch(
               value: _forOutput,
@@ -406,7 +403,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
     }
 
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionCopyright,
+      title: appLocalizations.thCommandOptionCS,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -418,7 +415,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
             RadioListTile<String>(
-              title: Text(mpLocator.appLocalizations.mpChoiceUnset),
+              title: Text(appLocalizations.mpChoiceUnset),
               value: mpUnsetOptionID,
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
@@ -432,7 +429,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               },
             ),
             RadioListTile<String>(
-              title: Text(mpLocator.appLocalizations.mpChoiceSet),
+              title: Text(appLocalizations.mpChoiceSet),
               value: mpNonMultipleChoiceSetID,
               groupValue: isSet ? mpNonMultipleChoiceSetID : _selectedChoice,
               contentPadding: EdgeInsets.zero,

@@ -36,6 +36,7 @@ class MPDateValueOptionWidget extends StatefulWidget {
 class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
   late String _date;
   late String _selectedChoice;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
@@ -74,9 +75,7 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.mpDateValueInvalidValueErrorMessage,
-            ),
+            content: Text(appLocalizations.mpDateValueInvalidValueErrorMessage),
           ),
         );
         return;
@@ -98,8 +97,6 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionDateValue,
       overlayWindowType: MPOverlayWindowType.secondary,

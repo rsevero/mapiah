@@ -365,11 +365,71 @@ abstract class AppLocalizations {
   /// **'Both fields are mandatory'**
   String get mpContextInvalidValueErrorMessage;
 
+  /// The error message for invalid copyright value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid copyright info.'**
+  String get mpCopyrightInvalidValueErrorMessage;
+
   /// The label for the copyright message
   ///
   /// In en, this message translates to:
   /// **'Copyright'**
   String get mpCopyrightMessageLabel;
+
+  /// The label for the CS EPSG SGRI option
+  ///
+  /// In en, this message translates to:
+  /// **'{csOption} identifier (1-99999)'**
+  String mpCSEPSGESRILabel(Object csOption);
+
+  /// The label for the CS ETRS option
+  ///
+  /// In en, this message translates to:
+  /// **'Optional ETRS identifier (28-37)'**
+  String get mpCSETRSLabel;
+
+  /// The error message for invalid CS value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid value.'**
+  String get mpCSInvalidValueErrorMessage;
+
+  /// The label for the CS for output option
+  ///
+  /// In en, this message translates to:
+  /// **'For output'**
+  String get mpCSForOutputLabel;
+
+  /// The label for the CS OSGB major option
+  ///
+  /// In en, this message translates to:
+  /// **'OSGB major'**
+  String get mpCSOSGBMajorLabel;
+
+  /// The label for the CS OSGB minor option
+  ///
+  /// In en, this message translates to:
+  /// **'OSGB minor'**
+  String get mpCSOSGBMinorLabel;
+
+  /// The label for the CS UTM zone number option
+  ///
+  /// In en, this message translates to:
+  /// **'Zone number (1-60)'**
+  String get mpCSUTMZoneNumberLabel;
+
+  /// The label for the CS UTM north option
+  ///
+  /// In en, this message translates to:
+  /// **'North'**
+  String get mpCSUTMNorthLabel;
+
+  /// The label for the CS UTM south option
+  ///
+  /// In en, this message translates to:
+  /// **'South'**
+  String get mpCSUTMSouthLabel;
 
   /// The hint for the end date field in the date interval dialog
   ///
@@ -2007,7 +2067,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'CS'**
-  String get thCommandOptionCs;
+  String get thCommandOptionCS;
 
   /// The label for the date value command option type
   ///

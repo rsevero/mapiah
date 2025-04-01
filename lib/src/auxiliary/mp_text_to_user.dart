@@ -517,7 +517,7 @@ class MPTextToUser {
     _commandOptionTypeAsString[THCommandOptionType.copyright] =
         localizations.thCommandOptionCopyright;
     _commandOptionTypeAsString[THCommandOptionType.cs] =
-        localizations.thCommandOptionCs;
+        localizations.thCommandOptionCS;
     _commandOptionTypeAsString[THCommandOptionType.dateValue] =
         localizations.thCommandOptionDateValue;
     _commandOptionTypeAsString[THCommandOptionType.dimensionsValue] =

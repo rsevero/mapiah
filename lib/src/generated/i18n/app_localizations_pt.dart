@@ -157,7 +157,39 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpContextInvalidValueErrorMessage => 'Ambos os campos são obrigatórios';
 
   @override
+  String get mpCopyrightInvalidValueErrorMessage => 'Por favor informe dados de direitos autorais vãlidos';
+
+  @override
   String get mpCopyrightMessageLabel => 'Direitos autorais';
+
+  @override
+  String mpCSEPSGESRILabel(Object csOption) {
+    return 'Identificador $csOption (1-99999)';
+  }
+
+  @override
+  String get mpCSETRSLabel => 'Identificador opcional ETRS (1-99999)';
+
+  @override
+  String get mpCSInvalidValueErrorMessage => 'Por favor informe um valor válido';
+
+  @override
+  String get mpCSForOutputLabel => 'Para saída';
+
+  @override
+  String get mpCSOSGBMajorLabel => 'OSGB principal';
+
+  @override
+  String get mpCSOSGBMinorLabel => 'OSGB menor';
+
+  @override
+  String get mpCSUTMZoneNumberLabel => 'Número da zona UTM (1-60)';
+
+  @override
+  String get mpCSUTMNorthLabel => 'Norte';
+
+  @override
+  String get mpCSUTMSouthLabel => 'Sul';
 
   @override
   String get mpDateIntervalEndDateHint => 'AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';
@@ -994,7 +1026,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionCopyright => 'Direitos Autorais';
 
   @override
-  String get thCommandOptionCs => 'CS';
+  String get thCommandOptionCS => 'CS';
 
   @override
   String get thCommandOptionDateValue => 'Data';

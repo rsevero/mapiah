@@ -37,6 +37,7 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
   late String _elementType;
   late String _plaType;
   late String _selectedChoice;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
@@ -79,9 +80,7 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.mpContextInvalidValueErrorMessage,
-            ),
+            content: Text(appLocalizations.mpContextInvalidValueErrorMessage),
           ),
         );
         return;
@@ -103,8 +102,6 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionContext,
       overlayWindowType: MPOverlayWindowType.secondary,

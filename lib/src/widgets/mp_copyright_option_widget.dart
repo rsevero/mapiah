@@ -37,6 +37,7 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
   late String _date;
   late String _message;
   late String _selectedChoice;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
@@ -79,9 +80,7 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.mpAuthorInvalidValueErrorMessage,
-            ),
+            content: Text(appLocalizations.mpCopyrightInvalidValueErrorMessage),
           ),
         );
         return;
@@ -103,8 +102,6 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionCopyright,
       overlayWindowType: MPOverlayWindowType.secondary,

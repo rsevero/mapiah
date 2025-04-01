@@ -277,9 +277,72 @@
     "type": "text"
   },
 
+  "mpCopyrightInvalidValueErrorMessage": "Please enter a valid copyright info.",
+  "@mpCopyrightInvalidValueErrorMessage": {
+    "description": "The error message for invalid copyright value",
+    "type": "text"
+  },
+
   "mpCopyrightMessageLabel": "Copyright",
   "@mpCopyrightMessageLabel": {
     "description": "The label for the copyright message",
+    "type": "text"
+  },
+
+  "mpCSEPSGESRILabel": "{csOption} identifier (1-99999)",
+  "@mpCSEPSGESRILabel": {
+    "description": "The label for the CS EPSG SGRI option",
+    "type": "text",
+    "placeholders": {
+      "csOption": {}
+    }
+  },
+
+  "mpCSETRSLabel": "Optional ETRS identifier (28-37)",
+  "@mpCSETRSLabel": {
+    "description": "The label for the CS ETRS option",
+    "type": "text"
+  },
+
+  "mpCSInvalidValueErrorMessage": "Please enter a valid value.",
+  "@mpCSInvalidValueErrorMessage": {
+    "description": "The error message for invalid CS value",
+    "type": "text"
+  },
+
+  "mpCSForOutputLabel": "For output",
+  "@mpCSForOutputLabel": {
+    "description": "The label for the CS for output option",
+    "type": "text"
+  },
+
+  "mpCSOSGBMajorLabel": "OSGB major",
+  "@mpCSOSGBMajorLabel": {
+    "description": "The label for the CS OSGB major option",
+    "type": "text"
+  },
+
+  "mpCSOSGBMinorLabel": "OSGB minor",
+  "@mpCSOSGBMinorLabel": {
+    "description": "The label for the CS OSGB minor option",
+    "type": "text"
+  },
+
+  "mpCSUTMZoneNumberLabel": "Zone number (1-60)",
+  "@mpCSUTMZoneNumberLabel": {
+    "description": "The label for the CS UTM zone number option",
+    "type": "text"
+  },
+
+  "mpCSUTMNorthLabel": "North",
+  "@mpCSUTMNorthLabel": {
+    "description": "The label for the CS UTM north option",
+    "type": "text"
+  },
+
+  "mpCSUTMSouthLabel": "South",
+  "@mpCSUTMSouthLabel": {
+    "description": "The label for the CS UTM south option",
     "type": "text"
   },
 
@@ -1945,8 +2008,8 @@
     "type": "text"
   },
 
-  "thCommandOptionCs": "CS",
-  "@thCommandOptionCs": {
+  "thCommandOptionCS": "CS",
+  "@thCommandOptionCS": {
     "description": "The label for the CS command option type",
     "type": "text"
   },
