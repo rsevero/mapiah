@@ -15,6 +15,7 @@ import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_context_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_copyright_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_cs_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_date_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
@@ -164,6 +165,13 @@ class MPOverlayWindowFactory {
           );
         case THCommandOptionType.cs:
           overlayWindowWidget = MPCSOptionWidget(
+            th2FileEditController: th2FileEditController,
+            optionInfo: optionInfo,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
+          );
+        case THCommandOptionType.dateValue:
+          overlayWindowWidget = MPDateValueOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

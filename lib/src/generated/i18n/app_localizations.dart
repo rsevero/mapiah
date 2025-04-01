@@ -419,6 +419,12 @@ abstract class AppLocalizations {
   /// **'Start date'**
   String get mpDateIntervalStartDateLabel;
 
+  /// The error message for invalid date value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid date/interval.'**
+  String get mpDateValueInvalidValueErrorMessage;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:

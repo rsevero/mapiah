@@ -64,6 +64,8 @@
   "mpDateIntervalStartDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] ou '-'",
   "mpDateIntervalStartDateLabel": "Data de início",
 
+  "mpDateValueInvalidValueErrorMessage": "Por favor informe uma data ou intervalo válidos",
+
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",

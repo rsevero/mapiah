@@ -331,6 +331,12 @@
     "type": "text"
   },
 
+  "mpDateValueInvalidValueErrorMessage": "Please enter a valid date/interval.",
+  "@mpDateValueInvalidValueErrorMessage": {
+    "description": "The error message for invalid date value",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",

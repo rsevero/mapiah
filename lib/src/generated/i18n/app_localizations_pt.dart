@@ -184,6 +184,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDateIntervalStartDateLabel => 'Data de início';
 
   @override
+  String get mpDateValueInvalidValueErrorMessage => 'Por favor informe uma data ou intervalo válidos';
+
+  @override
   String get mpLengthUnitCentimeter => 'centímetro';
 
   @override

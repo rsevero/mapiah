@@ -1619,7 +1619,7 @@ class THFileParser {
         }
         THDateValueCommandOption.fromString(
           optionParent: _currentHasOptions,
-          date: specs,
+          datetime: specs,
           originalLineInTH2File: _currentLine,
         );
       default:

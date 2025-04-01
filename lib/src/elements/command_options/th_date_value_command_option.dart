@@ -2,20 +2,28 @@ part of 'th_command_option.dart';
 
 // date: -value <date> sets the date for the date point.
 class THDateValueCommandOption extends THCommandOption {
-  late final THDatetimePart date;
+  late final THDatetimePart datetime;
 
   THDateValueCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required this.date,
+    required this.datetime,
   }) : super.forCWJM();
 
   THDateValueCommandOption.fromString({
     required super.optionParent,
-    required String date,
+    required String datetime,
     super.originalLineInTH2File = '',
   }) : super() {
-    this.date = THDatetimePart.fromString(datetime: date);
+    this.datetime = THDatetimePart.fromString(datetime: datetime);
+  }
+
+  THDateValueCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String datetime,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
+    this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
 
   @override
@@ -29,7 +37,7 @@ class THDateValueCommandOption extends THCommandOption {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'date': date.toMap(),
+      'datetime': datetime.toMap(),
     });
 
     return map;
@@ -39,7 +47,7 @@ class THDateValueCommandOption extends THCommandOption {
     return THDateValueCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      date: THDatetimePart.fromMap(map['date']),
+      datetime: THDatetimePart.fromMap(map['datetime']),
     );
   }
 
@@ -51,13 +59,13 @@ class THDateValueCommandOption extends THCommandOption {
   THDateValueCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THDatetimePart? date,
+    THDatetimePart? datetime,
   }) {
     return THDateValueCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      date: date ?? this.date,
+      datetime: datetime ?? this.datetime,
     );
   }
 
@@ -67,14 +75,14 @@ class THDateValueCommandOption extends THCommandOption {
 
     return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        other.date == date;
+        other.datetime == datetime;
   }
 
   @override
-  int get hashCode => super.hashCode ^ date.hashCode;
+  int get hashCode => super.hashCode ^ datetime.hashCode;
 
   @override
   String specToFile() {
-    return date.toString();
+    return datetime.toString();
   }
 }
