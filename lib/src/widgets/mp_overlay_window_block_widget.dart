@@ -51,13 +51,13 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
         tileColor = colorScheme.secondaryContainer;
         elevation = mpOverlayWindowBlockElevation;
       case MPOverlayWindowBlockType.secondarySet:
-        iconColor = colorScheme.onSecondaryFixed;
-        textColor = colorScheme.onSecondaryFixed;
+        iconColor = colorScheme.onSecondaryFixedVariant;
+        textColor = colorScheme.onSecondaryFixedVariant;
         tileColor = colorScheme.secondaryFixed;
       case MPOverlayWindowBlockType.secondarySetMixed:
-        iconColor = colorScheme.onSecondaryContainer;
-        textColor = colorScheme.onSecondaryContainer;
-        tileColor = colorScheme.secondaryContainer;
+        iconColor = colorScheme.onSecondaryFixed;
+        textColor = colorScheme.onSecondaryFixed;
+        tileColor = colorScheme.secondaryFixedDim;
       case MPOverlayWindowBlockType.secondarySetUnsupported:
         iconColor = colorScheme.onSecondary;
         textColor = colorScheme.onSecondary;

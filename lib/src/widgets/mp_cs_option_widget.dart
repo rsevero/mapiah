@@ -40,6 +40,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   int _utmZone = 0;
   String _utmHemisphere = 'N';
   int _eptgESRIETRSIdentifier = 0;
+  bool _forOutput = false;
 
   @override
   void initState() {
@@ -124,7 +125,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
             onChanged: (value) {
               if (value != null) {
                 _eptgESRIETRSIdentifier = value;
-                _currentValue = "$option:$_eptgESRIETRSIdentifier";
+                _updateCurrentValue();
               }
             },
           ),
@@ -139,13 +140,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
             initialValue: _eptgESRIETRSIdentifier,
             allowEmpty: true,
             onChanged: (value) {
-              if (value == null) {
-                _eptgESRIETRSIdentifier = 0;
-                _currentValue = 'ETRS';
-              } else {
-                _eptgESRIETRSIdentifier = value;
-                _currentValue = 'ETRS$_eptgESRIETRSIdentifier';
-              }
+              _eptgESRIETRSIdentifier = (value == null) ? 0 : value;
+              _updateCurrentValue();
             },
           ),
         );
@@ -176,7 +172,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                     onSelected: (value) {
                       if (value != null && value.isNotEmpty) {
                         _osgbMajor = value;
-                        _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
+                        _updateCurrentValue();
                       }
                     },
                   ),
@@ -200,7 +196,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                     onSelected: (value) {
                       if (value != null && value.isNotEmpty) {
                         _osgbMinor = value;
-                        _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
+                        _updateCurrentValue();
                       }
                     },
                   ),
@@ -224,7 +220,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                 onChanged: (value) {
                   if (value != null) {
                     _utmZone = value;
-                    _currentValue = 'UTM$_utmZone$_utmHemisphere';
+                    _updateCurrentValue();
                   }
                 },
               ),
@@ -240,10 +236,12 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                       dense: true,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(() {
-                            _utmHemisphere = value;
-                            _currentValue = 'UTM$_utmZone$_utmHemisphere';
-                          });
+                          setState(
+                            () {
+                              _utmHemisphere = value;
+                              _updateCurrentValue();
+                            },
+                          );
                         }
                       },
                     ),
@@ -254,10 +252,12 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                       dense: true,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(() {
-                            _utmHemisphere = value;
-                            _currentValue = 'UTM$_utmZone$_utmHemisphere';
-                          });
+                          setState(
+                            () {
+                              _utmHemisphere = value;
+                              _updateCurrentValue();
+                            },
+                          );
                         }
                       },
                     ),
@@ -281,11 +281,11 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-        // newOption = THCSCommandOption.fromStringWithParentMPID(
-        //   parentMPID: widget.th2FileEditController.thFileMPID,
-        //   datetime: _date,
-        //   copyrightMessage: _message,
-        // );
+        newOption = THCSCommandOption.fromStringWithParentMPID(
+          parentMPID: widget.th2FileEditController.thFileMPID,
+          csString: _currentValue,
+          forOutputOnly: _forOutput,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -311,6 +311,28 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
     );
   }
 
+  void _updateCurrentValue() {
+    switch (_selectedChoice) {
+      case 'EPSG':
+      case 'ESRI':
+        _currentValue = "$_selectedChoice:$_eptgESRIETRSIdentifier";
+      case 'ETRS':
+        _currentValue = _eptgESRIETRSIdentifier > 0
+            ? "$_selectedChoice:$_eptgESRIETRSIdentifier"
+            : 'ETRS';
+      case 'OSGB':
+        _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
+      case 'UTM':
+        _currentValue = 'UTM$_utmZone$_utmHemisphere';
+
+      /// In case of unrecognized option, we keep the current value.
+      case mpUnrecognizedOptionID:
+        break;
+      default:
+        _currentValue = _selectedChoice ?? '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
@@ -334,7 +356,54 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       allOptions.insert(0, mpUnrecognizedOptionID);
     }
 
-    allOptions.insert(0, mpUnsetOptionID);
+    final bool isSet =
+        ((_selectedChoice != null) && (_selectedChoice != mpUnsetOptionID));
+    final List<Widget> optionWidgets = [];
+
+    if (isSet) {
+      optionWidgets.add(
+        Row(
+          children: [
+            Text('For output'),
+            const SizedBox(width: mpButtonSpace),
+            Switch(
+              value: _forOutput,
+              onChanged: (value) {
+                setState(
+                  () {
+                    _forOutput = value;
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      );
+
+      for (final String option in allOptions) {
+        if (_forOutput && THCSPart.isCSNotForOutput(option)) {
+          continue;
+        }
+
+        optionWidgets.add(
+          RadioListTile<String>(
+            title: Text(option),
+            value: option,
+            groupValue: _selectedChoice,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (value) {
+              setState(() {
+                _selectedChoice = value;
+                _updateCurrentValue();
+              });
+            },
+          ),
+        );
+        if (_selectedChoice == option) {
+          optionWidgets.add(_buildFormForOption(option));
+        }
+      }
+    }
 
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionCopyright,
@@ -347,22 +416,42 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: allOptions.expand((option) {
-            return [
-              RadioListTile<String>(
-                title: Text(option),
-                value: option,
-                groupValue: _selectedChoice,
-                contentPadding: EdgeInsets.zero,
-                onChanged: (value) {
-                  setState(() {
+          children: [
+            RadioListTile<String>(
+              title: Text(mpLocator.appLocalizations.mpChoiceUnset),
+              value: mpUnsetOptionID,
+              groupValue: _selectedChoice,
+              contentPadding: EdgeInsets.zero,
+              onChanged: (value) {
+                setState(
+                  () {
                     _selectedChoice = value;
-                  });
-                },
+                    _updateCurrentValue();
+                  },
+                );
+              },
+            ),
+            RadioListTile<String>(
+              title: Text(mpLocator.appLocalizations.mpChoiceSet),
+              value: mpNonMultipleChoiceSetID,
+              groupValue: isSet ? mpNonMultipleChoiceSetID : _selectedChoice,
+              contentPadding: EdgeInsets.zero,
+              onChanged: (value) {
+                setState(
+                  () {
+                    _selectedChoice = value;
+                    _updateCurrentValue();
+                  },
+                );
+              },
+            ),
+            if (isSet)
+              MPOverlayWindowBlockWidget(
+                overlayWindowBlockType: MPOverlayWindowBlockType.secondarySet,
+                padding: mpOverlayWindowBlockEdgeInsets,
+                children: optionWidgets,
               ),
-              if (_selectedChoice == option) _buildFormForOption(option),
-            ];
-          }).toList(),
+          ],
         ),
         const SizedBox(height: mpButtonSpace),
         Row(

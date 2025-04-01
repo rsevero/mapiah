@@ -99,7 +99,7 @@ const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
   top: mpOverlayWindowBlockPadding,
   bottom: mpOverlayWindowBlockPadding / 2,
   left: mpOverlayWindowBlockPadding,
-  right: mpOverlayWindowBlockPadding * 2,
+  right: mpOverlayWindowBlockPadding,
 );
 
 const int mpInitialZOrder = 0;

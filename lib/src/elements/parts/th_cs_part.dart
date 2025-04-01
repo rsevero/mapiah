@@ -31,6 +31,16 @@ class THCSPart extends THPart {
     'UTM': RegExp(r'^(UTM\d{1,2}(N|S)?)?', caseSensitive: false),
   };
 
+  static bool isCSNotForOutput(String cs) {
+    final String lowerCS = cs.toLowerCase();
+
+    if (csNotForOutput.any((entry) => entry.toLowerCase() == lowerCS)) {
+      return true;
+    }
+
+    return false;
+  }
+
   static bool isCS(String cs, bool forOutput) {
     final String lowerCS = cs.toLowerCase();
 

@@ -22,6 +22,15 @@ class THCSCommandOption extends THCommandOption {
     cs = THCSPart(name: csString, forOutputOnly: forOutputOnly);
   }
 
+  THCSCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String csString,
+    required bool forOutputOnly,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
+    cs = THCSPart(name: csString, forOutputOnly: forOutputOnly);
+  }
+
   @override
   THCommandOptionType get type => THCommandOptionType.cs;
 
