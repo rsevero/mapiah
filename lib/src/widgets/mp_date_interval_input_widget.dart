@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 
 class MPDateIntervalInputWidget extends StatefulWidget {
   final String? initialValue;
@@ -72,6 +73,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     if (value.isEmpty || startDatePattern.hasMatch(value)) {
       return null; // Valid input
     }
+
     return mpLocator
         .appLocalizations.mpDateIntervalInvalidStartDateFormatErrorMessage;
   }
@@ -85,6 +87,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     if (value.isEmpty || endDatePattern.hasMatch(value)) {
       return null; // Valid input
     }
+
     return mpLocator
         .appLocalizations.mpDateIntervalInvalidEndDateFormatErrorMessage;
   }
@@ -105,71 +108,80 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Toggle between single date and interval
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Card(
+      elevation: mpOverlayWindowBlockElevation,
+      color: Theme.of(context).colorScheme.secondaryFixedDim,
+      child: Padding(
+        padding: const EdgeInsets.all(mpOverlayWindowBlockPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(mpLocator.appLocalizations.mpDateIntervalIntervalLabel),
-            Switch(
-              value: _isInterval,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(mpLocator.appLocalizations.mpDateIntervalIntervalLabel),
+                Switch(
+                  value: _isInterval,
+                  onChanged: (value) {
+                    setState(() {
+                      _isInterval = value;
+                      _onFieldChanged();
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: mpButtonSpace),
+
+            // Start Date Input
+            TextField(
+              controller: _startDateController,
+              decoration: InputDecoration(
+                labelText: _isInterval
+                    ? mpLocator.appLocalizations.mpDateIntervalStartDateLabel
+                    : mpLocator.appLocalizations.mpDateIntervalSingleDateLabel,
+                hintText:
+                    mpLocator.appLocalizations.mpDateIntervalStartDateHint,
+                border: const OutlineInputBorder(),
+                errorText: _isStartDateValid
+                    ? null
+                    : _validateStartDate(_startDateController.text),
+              ),
               onChanged: (value) {
                 setState(() {
-                  _isInterval = value;
-                  _onFieldChanged();
+                  _isStartDateValid = _validateStartDate(value) == null;
                 });
+                _onFieldChanged();
               },
             ),
+            const SizedBox(height: 8.0),
+
+            // End Date Input (only shown if interval is selected)
+            if (_isInterval) ...[
+              TextField(
+                controller: _endDateController,
+                decoration: InputDecoration(
+                  labelText:
+                      mpLocator.appLocalizations.mpDateIntervalEndDateLabel,
+                  hintText:
+                      mpLocator.appLocalizations.mpDateIntervalEndDateHint,
+                  border: const OutlineInputBorder(),
+                  errorText: _isEndDateValid
+                      ? null
+                      : _validateEndDate(_endDateController.text),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _isEndDateValid = _validateEndDate(value) == null;
+                  });
+                  _onFieldChanged();
+                },
+              ),
+              const SizedBox(height: 8.0),
+            ],
           ],
         ),
-        const SizedBox(height: 8.0),
-
-        // Start Date Input
-        TextField(
-          controller: _startDateController,
-          decoration: InputDecoration(
-            labelText: _isInterval
-                ? mpLocator.appLocalizations.mpDateIntervalStartDateLabel
-                : mpLocator.appLocalizations.mpDateIntervalSingleDateLabel,
-            hintText: mpLocator.appLocalizations.mpDateIntervalStartDateHint,
-            border: OutlineInputBorder(),
-            errorText: _isStartDateValid
-                ? null
-                : _validateStartDate(_startDateController.text),
-          ),
-          onChanged: (value) {
-            setState(() {
-              _isStartDateValid = _validateStartDate(value) == null;
-            });
-            _onFieldChanged();
-          },
-        ),
-        const SizedBox(height: 8.0),
-
-        // End Date Input (only shown if interval is selected)
-        if (_isInterval) ...[
-          TextField(
-            controller: _endDateController,
-            decoration: InputDecoration(
-              labelText: mpLocator.appLocalizations.mpDateIntervalEndDateLabel,
-              hintText: mpLocator.appLocalizations.mpDateIntervalEndDateHint,
-              border: OutlineInputBorder(),
-              errorText: _isEndDateValid
-                  ? null
-                  : _validateEndDate(_endDateController.text),
-            ),
-            onChanged: (value) {
-              setState(() {
-                _isEndDateValid = _validateEndDate(value) == null;
-              });
-              _onFieldChanged();
-            },
-          ),
-          const SizedBox(height: 8.0),
-        ],
-      ],
+      ),
     );
   }
 }
