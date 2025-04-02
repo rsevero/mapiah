@@ -102,6 +102,7 @@ const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
   right: mpOverlayWindowBlockPadding,
 );
 const double mpOverlayWindowMinWidth = 180;
+const int mpDefaultMaxDigitsForTextFields = 6;
 
 const int mpInitialZOrder = 0;
 const int mpDefaultZOrderIncrement = 1000;

@@ -13,7 +13,7 @@ dependencies:
   analyzer: ^6.0.0
   charset: ^2.0.0
   collection: ^1.19.0
-  file_picker: ^9.2.2
+  file_picker: ^10.0.0
   flutter:
     sdk: flutter
   flutter_gen: ^5.8.0

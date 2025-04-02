@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -186,51 +187,68 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              TextField(
-                controller: _aboveController,
-                keyboardType: TextInputType.number,
-                autofocus: true,
-                focusNode: _aboveTextFieldFocusNode,
-                decoration: InputDecoration(
-                  labelText: appLocalizations.mpDimensionsAboveLabel,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: mpButtonSpace),
-              TextField(
-                controller: _belowController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: appLocalizations.mpDimensionsBelowLabel,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: mpButtonSpace),
-              DropdownMenu(
-                label: Text(appLocalizations.thCommandOptionLengthUnit),
-                initialSelection: _selectedUnit,
-                menuStyle: MenuStyle(
-                    alignment: Alignment(
-                  -1.0,
-                  -_unitMap.entries.length.toDouble(),
-                )),
-                dropdownMenuEntries: _unitMap.entries.map((entry) {
-                  return DropdownMenuEntry<String>(
-                    value: entry.key,
-                    label: entry.value,
-                  );
-                }).toList(),
-                onSelected: (String? value) {
-                  setState(() {
-                    _selectedUnit = value ?? thDefaultLengthUnitAsString;
-                  });
-                },
-                searchCallback: (entries, query) {
-                  final index =
-                      entries.indexWhere((entry) => entry.label == query);
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MPInteractionAux.calculateTextFieldWidth(
+                      mpDefaultMaxDigitsForTextFields,
+                    ),
+                    child: TextField(
+                      controller: _aboveController,
+                      keyboardType: TextInputType.number,
+                      autofocus: true,
+                      focusNode: _aboveTextFieldFocusNode,
+                      decoration: InputDecoration(
+                        labelText: appLocalizations.mpDimensionsAboveLabel,
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: mpButtonSpace),
+                  SizedBox(
+                    width: MPInteractionAux.calculateTextFieldWidth(
+                      mpDefaultMaxDigitsForTextFields,
+                    ),
+                    child: TextField(
+                      controller: _belowController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: appLocalizations.mpDimensionsBelowLabel,
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: mpButtonSpace),
+                  DropdownMenu(
+                    label: Text(appLocalizations.thCommandOptionLengthUnit),
+                    initialSelection: _selectedUnit,
+                    menuStyle: MenuStyle(
+                        alignment: Alignment(
+                      -1.0,
+                      -_unitMap.entries.length.toDouble(),
+                    )),
+                    dropdownMenuEntries: _unitMap.entries.map((entry) {
+                      return DropdownMenuEntry<String>(
+                        value: entry.key,
+                        label: entry.value,
+                      );
+                    }).toList(),
+                    onSelected: (String? value) {
+                      setState(() {
+                        _selectedUnit = value ?? thDefaultLengthUnitAsString;
+                      });
+                    },
+                    searchCallback: (entries, query) {
+                      final index =
+                          entries.indexWhere((entry) => entry.label == query);
 
-                  return index >= 0 ? index : null;
-                },
+                      return index >= 0 ? index : null;
+                    },
+                  ),
+                ],
               ),
             ],
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 
 class MPIntRangeInputWidget extends StatefulWidget {
   final String label;
@@ -98,12 +99,6 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
     }
   }
 
-  double _calculateTextFieldWidth() {
-    final int maxDigits = widget.max.toString().length;
-
-    return maxDigits * 12.0 + 20.0;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -117,7 +112,9 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
               onPressed: _decrement,
             ),
             SizedBox(
-              width: _calculateTextFieldWidth(),
+              width: MPInteractionAux.calculateTextFieldWidth(
+                widget.max.toString().length,
+              ),
               child: TextField(
                 controller: _controller,
                 keyboardType: TextInputType.number,

@@ -98,4 +98,8 @@ class MPInteractionAux {
       ),
     ];
   }
+
+  static double calculateTextFieldWidth(int maxDigits) {
+    return maxDigits * 12.0 + 20.0;
+  }
 }
