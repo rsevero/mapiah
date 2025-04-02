@@ -1,8 +1,8 @@
 part of 'th_command_option.dart';
 
-// dist <distance> . valid for extra points, specifies the distance to the nearest station
-// (or station specified using -from option. If not specified, appropriate value from LRUD
-// data is used.
+// dist <distance> . valid for extra points, specifies the distance to the
+// nearest station (or station specified using -from option. If not specified,
+// appropriate value from LRUD data is used.
 class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   THDistCommandOption.forCWJM({
     required super.parentMPID,
@@ -22,6 +22,16 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
     String? unit,
     super.originalLineInTH2File = '',
   }) : super() {
+    length = THDoublePart.fromString(valueString: distance);
+    unitFromString(unit);
+  }
+
+  THDistCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String distance,
+    String? unit,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     length = THDoublePart.fromString(valueString: distance);
     unitFromString(unit);
   }

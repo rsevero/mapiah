@@ -418,6 +418,18 @@
     "type": "text"
   },
 
+  "mpDistInvalidValueErrorMessage": "Please enter a valid numeric distance value.",
+  "@mpDistInvalidValueErrorMessage": {
+    "description": "The error message for invalid distance value",
+    "type": "text"
+  },
+
+  "mpDistDistanceLabel": "Distance",
+  "@mpDistDistanceLabel": {
+    "description": "The label for the distance type",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",

@@ -15,13 +15,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPDimensionsOptionWidget extends StatefulWidget {
+class MPDistOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPDimensionsOptionWidget({
+  const MPDistOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -30,16 +30,14 @@ class MPDimensionsOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPDimensionsOptionWidget> createState() =>
-      _MPDimensionsOptionWidgetState();
+  State<MPDistOptionWidget> createState() => _MPDistOptionWidgetState();
 }
 
-class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
-  late TextEditingController _aboveController;
-  late TextEditingController _belowController;
+class _MPDistOptionWidgetState extends State<MPDistOptionWidget> {
+  late TextEditingController _distanceController;
   late String _selectedUnit;
   late String _selectedChoice;
-  final FocusNode _aboveTextFieldFocusNode = FocusNode();
+  final FocusNode _valueTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final Map<String, String> _unitMap;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
@@ -55,29 +53,24 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
       case MPOptionStateType.set:
         final THCommandOption currentOption = widget.optionInfo.option!;
 
-        if (currentOption is THDimensionsValueCommandOption) {
-          _aboveController = TextEditingController(
-            text: currentOption.above.toString(),
-          );
-          _belowController = TextEditingController(
-            text: currentOption.below.toString(),
+        if (currentOption is THDistCommandOption) {
+          _distanceController = TextEditingController(
+            text: currentOption.length.value.toString(),
           );
           _selectedChoice = mpNonMultipleChoiceSetID;
-          _selectedUnit = currentOption.unit;
+          _selectedUnit = currentOption.unit.unit.name;
         } else {
           throw Exception(
-            'Unsupported option type: ${widget.optionInfo.type} in _MPDimensionsOptionWidgetState.initState()',
+            'Unsupported option type: ${widget.optionInfo.type} in _MPDistOptionWidgetState.initState()',
           );
         }
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _aboveController = TextEditingController(text: '0');
-        _belowController = TextEditingController(text: '0');
+        _distanceController = TextEditingController(text: '0');
         _selectedChoice = '';
         _selectedUnit = '';
       case MPOptionStateType.unset:
-        _aboveController = TextEditingController(text: '0');
-        _belowController = TextEditingController(text: '0');
+        _distanceController = TextEditingController(text: '0');
         _selectedChoice = mpUnsetOptionID;
         _selectedUnit = thDefaultLengthUnitAsString;
     }
@@ -92,14 +85,13 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
 
   @override
   void dispose() {
-    _aboveController.dispose();
-    _belowController.dispose();
+    _distanceController.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _aboveTextFieldFocusNode.requestFocus();
+      _valueTextFieldFocusNode.requestFocus();
     }
   }
 
@@ -107,26 +99,22 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      final double? above = double.tryParse(_aboveController.text);
-      final double? below = double.tryParse(_belowController.text);
+      final double? distance = double.tryParse(_distanceController.text);
 
-      if ((above != null) && (below != null)) {
+      if (distance != null) {
         /// The THFileMPID is used only as a placeholder for the actual
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-
-        newOption = THDimensionsValueCommandOption.fromStringWithParentMPID(
+        newOption = THDistCommandOption.fromStringWithParentMPID(
           parentMPID: widget.th2FileEditController.thFileMPID,
-          above: _aboveController.text,
-          below: _belowController.text,
+          distance: distance.toString(),
           unit: _selectedUnit,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text(appLocalizations.mpDimensionsInvalidValueErrorMessage),
+            content: Text(appLocalizations.mpDistInvalidValueErrorMessage),
           ),
         );
         return;
@@ -149,7 +137,7 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionDimensionsValue,
+      title: appLocalizations.thCommandOptionDist,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -180,7 +168,7 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                 setState(() {
                   _selectedChoice = value!;
                 });
-                _aboveTextFieldFocusNode.requestFocus();
+                _valueTextFieldFocusNode.requestFocus();
               },
             ),
 
@@ -196,26 +184,12 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                       mpDefaultMaxDigitsForTextFields,
                     ),
                     child: TextField(
-                      controller: _aboveController,
+                      controller: _distanceController,
                       keyboardType: TextInputType.number,
                       autofocus: true,
-                      focusNode: _aboveTextFieldFocusNode,
+                      focusNode: _valueTextFieldFocusNode,
                       decoration: InputDecoration(
-                        labelText: appLocalizations.mpDimensionsAboveLabel,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  SizedBox(
-                    width: MPInteractionAux.calculateTextFieldWidth(
-                      mpDefaultMaxDigitsForTextFields,
-                    ),
-                    child: TextField(
-                      controller: _belowController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: appLocalizations.mpDimensionsBelowLabel,
+                        labelText: appLocalizations.mpDistDistanceLabel,
                         border: OutlineInputBorder(),
                       ),
                     ),

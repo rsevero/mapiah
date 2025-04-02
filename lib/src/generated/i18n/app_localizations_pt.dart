@@ -228,6 +228,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDimensionsInvalidValueErrorMessage => 'Por favor informe valores válidos de dimensões';
 
   @override
+  String get mpDistInvalidValueErrorMessage => 'Por favor informe um valor válido de distância';
+
+  @override
+  String get mpDistDistanceLabel => 'Distância';
+
+  @override
   String get mpLengthUnitCentimeter => 'centímetro';
 
   @override

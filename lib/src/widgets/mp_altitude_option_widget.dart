@@ -45,9 +45,8 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap = MPTextToUser.getOrderedChoices(
-      MPTextToUser.getLengthUnitsChoices(),
-    );
+    _unitMap =
+        MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:

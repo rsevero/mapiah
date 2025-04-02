@@ -503,6 +503,18 @@ abstract class AppLocalizations {
   /// **'Please enter valid numeric dimensions values.'**
   String get mpDimensionsInvalidValueErrorMessage;
 
+  /// The error message for invalid distance value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid numeric distance value.'**
+  String get mpDistInvalidValueErrorMessage;
+
+  /// The label for the distance type
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get mpDistDistanceLabel;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:

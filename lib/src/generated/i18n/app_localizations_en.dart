@@ -228,6 +228,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDimensionsInvalidValueErrorMessage => 'Please enter valid numeric dimensions values.';
 
   @override
+  String get mpDistInvalidValueErrorMessage => 'Please enter a valid numeric distance value.';
+
+  @override
+  String get mpDistDistanceLabel => 'Distance';
+
+  @override
   String get mpLengthUnitCentimeter => 'centimeter';
 
   @override

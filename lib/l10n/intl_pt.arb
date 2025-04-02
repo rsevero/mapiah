@@ -81,6 +81,9 @@
   "mpDimensionsBelowLabel": "Abaixo",
   "mpDimensionsInvalidValueErrorMessage": "Por favor informe valores válidos de dimensões",
 
+  "mpDistInvalidValueErrorMessage": "Por favor informe um valor válido de distância",
+  "mpDistDistanceLabel": "Distância",
+
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",
