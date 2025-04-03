@@ -116,4 +116,10 @@ class MPInteractionAux {
 
     return value;
   }
+
+  static bool isValidID(String id) {
+    final RegExp validIDRegex = RegExp(r'^[A-Za-z0-9_/][A-Za-z0-9_\-/]*$');
+
+    return validIDRegex.hasMatch(id);
+  }
 }

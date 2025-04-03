@@ -88,7 +88,8 @@
 
   "mpExtendStationLabel": "Base",
 
-  "mpIDInvalidValueErrorMessage": "IDs devem ser únicos.",
+  "mpIDInvalidValueErrorMessage": "ID inválido: deve ser uma sequência de caracteres A-Z, a-z, 0-9 e _-/ (não começando com ‘-’).",
+  "mpIDNonUniqueValueErrorMessage": "IDs devem ser únicos.",
   "mpIDIDLabel": "ID",
 
   "mpLengthUnitCentimeter": "centímetro",

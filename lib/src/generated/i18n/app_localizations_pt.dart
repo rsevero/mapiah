@@ -243,7 +243,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpIDIDLabel => 'ID';
 
   @override
-  String get mpIDInvalidValueErrorMessage => 'IDs devem ser únicos.';
+  String get mpIDInvalidValueErrorMessage => 'ID inválido: deve ser uma sequência de caracteres A-Z, a-z, 0-9 e _-/ (não começando com ‘-’).';
+
+  @override
+  String get mpIDNonUniqueValueErrorMessage => 'IDs devem ser únicos.';
 
   @override
   String get mpLengthUnitCentimeter => 'centímetro';

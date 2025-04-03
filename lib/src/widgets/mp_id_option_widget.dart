@@ -37,11 +37,13 @@ class MPIDOptionWidget extends StatefulWidget {
 class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
   late TextEditingController _thIDController;
   late String _selectedChoice;
-  final FocusNode _stationTextFieldFocusNode = FocusNode();
+  final FocusNode _idTextFieldFocusNode = FocusNode();
+  late final String _initialChoice;
+  late final String _initialID;
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   String _warningMessage = '';
-  bool _exists = false;
+  bool _isValid = false;
 
   @override
   void initState() {
@@ -66,6 +68,11 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         _selectedChoice = mpUnsetOptionID;
     }
 
+    _initialChoice = _selectedChoice;
+    _initialID = _thIDController.text;
+
+    _updateIsValid();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
         _hasExecutedSingleRunOfPostFrameCallback = true;
@@ -82,7 +89,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _stationTextFieldFocusNode.requestFocus();
+      _idTextFieldFocusNode.requestFocus();
     }
   }
 
@@ -124,6 +131,47 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
     );
   }
 
+  void _updateIsValid() {
+    if (_selectedChoice == mpUnsetOptionID) {
+      setState(
+        () {
+          _warningMessage = '';
+          _isValid = true;
+        },
+      );
+    } else if (MPInteractionAux.isValidID(_thIDController.text)) {
+      if (widget.th2FileEditController.thFile
+          .hasElementByTHID(_thIDController.text)) {
+        setState(
+          () {
+            _warningMessage = appLocalizations.mpIDNonUniqueValueErrorMessage;
+            _isValid = false;
+          },
+        );
+      } else {
+        setState(
+          () {
+            _warningMessage = '';
+            _isValid = true;
+          },
+        );
+      }
+    } else {
+      setState(
+        () {
+          _warningMessage = appLocalizations.mpIDInvalidValueErrorMessage;
+          _isValid = false;
+        },
+      );
+    }
+  }
+
+  bool _isChanged() {
+    return ((_selectedChoice != _initialChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            (_thIDController.text != _initialID)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
@@ -144,9 +192,8 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateIsValid();
               },
             ),
             RadioListTile<String>(
@@ -155,10 +202,9 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
-                _stationTextFieldFocusNode.requestFocus();
+                _selectedChoice = value!;
+                _updateIsValid();
+                _idTextFieldFocusNode.requestFocus();
               },
             ),
 
@@ -188,28 +234,14 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
                         controller: _thIDController,
                         keyboardType: TextInputType.text,
                         autofocus: true,
-                        focusNode: _stationTextFieldFocusNode,
+                        focusNode: _idTextFieldFocusNode,
                         decoration: InputDecoration(
                           labelText: appLocalizations.mpIDIDLabel,
                           border: OutlineInputBorder(),
                           errorText: _warningMessage,
                         ),
                         onChanged: (value) {
-                          final bool exists = widget
-                              .th2FileEditController.thFile
-                              .hasElementByTHID(value);
-
-                          if (exists != _exists) {
-                            setState(
-                              () {
-                                _warningMessage = exists
-                                    ? appLocalizations
-                                        .mpIDInvalidValueErrorMessage
-                                    : '';
-                                _exists = exists;
-                              },
-                            );
-                          }
+                          _updateIsValid();
                         },
                       ),
                     ),
@@ -223,7 +255,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: (_isValid && _isChanged()) ? _okButtonPressed : null,
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

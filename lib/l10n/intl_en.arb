@@ -448,9 +448,15 @@
     "type": "text"
   },
 
-  "mpIDInvalidValueErrorMessage": "ID must be unique.",
+  "mpIDInvalidValueErrorMessage": "Invalid ID: must be a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).",
   "@mpIDInvalidValueErrorMessage": {
     "description": "The error message for invalid ID value",
+    "type": "text"
+  },
+
+  "mpIDNonUniqueValueErrorMessage": "ID must be unique.",
+  "@mpIDNonUniqueValueErrorMessage": {
+    "description": "The error message for non-unique ID value",
     "type": "text"
   },
 

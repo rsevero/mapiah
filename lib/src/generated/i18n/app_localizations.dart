@@ -536,8 +536,14 @@ abstract class AppLocalizations {
   /// The error message for invalid ID value
   ///
   /// In en, this message translates to:
-  /// **'ID must be unique.'**
+  /// **'Invalid ID: must be a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).'**
   String get mpIDInvalidValueErrorMessage;
+
+  /// The error message for non-unique ID value
+  ///
+  /// In en, this message translates to:
+  /// **'ID must be unique.'**
+  String get mpIDNonUniqueValueErrorMessage;
 
   /// The description for the centimeter length unit
   ///
