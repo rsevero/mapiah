@@ -88,7 +88,7 @@
 
   "mpExtendStationLabel": "Base",
 
-  "mpIDInvalidValueErrorMessage": "Por favor informe um ID válido",
+  "mpIDInvalidValueErrorMessage": "IDs devem ser únicos.",
   "mpIDIDLabel": "ID",
 
   "mpLengthUnitCentimeter": "centímetro",

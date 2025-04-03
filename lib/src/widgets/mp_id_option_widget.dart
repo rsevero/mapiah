@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
@@ -38,6 +40,8 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
   final FocusNode _stationTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  String _warningMessage = '';
+  bool _exists = false;
 
   @override
   void initState() {
@@ -168,19 +172,45 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
                   SizedBox(
                     width: MPInteractionAux.calculateTextFieldWidth(
                       MPInteractionAux.insideRange(
-                        value: _thIDController.text.toString().length,
+                        value: max(
+                          _thIDController.text.toString().length,
+                          _warningMessage.length,
+                        ),
                         min: mpDefaultMinDigitsForTextFields,
                         max: mpDefaultMaxCharsForTextFields,
                       ),
                     ),
-                    child: TextField(
-                      controller: _thIDController,
-                      keyboardType: TextInputType.text,
-                      autofocus: true,
-                      focusNode: _stationTextFieldFocusNode,
-                      decoration: InputDecoration(
-                        labelText: appLocalizations.mpIDIDLabel,
-                        border: OutlineInputBorder(),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom: (_warningMessage.isEmpty) ? 0 : 16,
+                      ),
+                      child: TextField(
+                        controller: _thIDController,
+                        keyboardType: TextInputType.text,
+                        autofocus: true,
+                        focusNode: _stationTextFieldFocusNode,
+                        decoration: InputDecoration(
+                          labelText: appLocalizations.mpIDIDLabel,
+                          border: OutlineInputBorder(),
+                          errorText: _warningMessage,
+                        ),
+                        onChanged: (value) {
+                          final bool exists = widget
+                              .th2FileEditController.thFile
+                              .hasElementByTHID(value);
+
+                          if (exists != _exists) {
+                            setState(
+                              () {
+                                _warningMessage = exists
+                                    ? appLocalizations
+                                        .mpIDInvalidValueErrorMessage
+                                    : '';
+                                _exists = exists;
+                              },
+                            );
+                          }
+                        },
                       ),
                     ),
                   ),

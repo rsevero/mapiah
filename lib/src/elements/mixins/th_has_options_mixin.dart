@@ -75,7 +75,9 @@ mixin THHasOptionsMixin on THElement {
   LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
       _optionsMap;
 
-  void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
+  void addOptionsMap(
+    Map<THCommandOptionType, THCommandOption> optionsMap,
+  ) {
     for (final THCommandOptionType type in optionsMap.keys) {
       addUpdateOption(optionsMap[type]!);
     }

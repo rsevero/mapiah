@@ -570,8 +570,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applySetOptionToElement({required THCommandOption option}) {
+  void applySetOptionToElement(THCommandOption option) {
     option.optionParent(_thFile).addUpdateOption(option);
+
+    if (option is THIDCommandOption) {
+      _thFile.registerMPIDWithTHID(option.parentMPID, option.thID);
+    }
+
     updateOptionEdited();
   }
 
@@ -582,6 +587,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     final THHasOptionsMixin parentElement =
         _th2FileEditController.thFile.hasOptionByMPID(parentMPID);
+
+    if (optionType is THIDCommandOption) {
+      _thFile.unregisterElementTHIDByMPID(parentMPID);
+    }
 
     parentElement.removeOption(optionType);
     updateOptionEdited();

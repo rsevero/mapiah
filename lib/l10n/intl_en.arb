@@ -442,15 +442,15 @@
     "type": "text"
   },
 
-  "mpIDInvalidValueErrorMessage": "Please enter a valid ID value.",
-  "@mpIDInvalidValueErrorMessage": {
-    "description": "The error message for invalid ID value",
-    "type": "text"
-  },
-
   "mpIDIDLabel": "ID",
   "@mpIDIDLabel": {
     "description": "The label for the ID type",
+    "type": "text"
+  },
+
+  "mpIDInvalidValueErrorMessage": "ID must be unique.",
+  "@mpIDInvalidValueErrorMessage": {
+    "description": "The error message for invalid ID value",
     "type": "text"
   },
 

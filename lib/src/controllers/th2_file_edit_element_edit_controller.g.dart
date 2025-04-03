@@ -297,13 +297,13 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applySetOptionToElement({required THCommandOption option}) {
+  void applySetOptionToElement(THCommandOption option) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name:
                 'TH2FileEditElementEditControllerBase.applySetOptionToElement');
     try {
-      return super.applySetOptionToElement(option: option);
+      return super.applySetOptionToElement(option);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
