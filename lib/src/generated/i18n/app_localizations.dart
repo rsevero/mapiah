@@ -158,13 +158,13 @@ abstract class AppLocalizations {
   /// The error message for invalid altitude value
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid numeric altitude value.'**
+  /// **'Invalid altitude'**
   String get mpAltitudeInvalidValueErrorMessage;
 
   /// The error message for invalid author value
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid date/interval and person name.'**
+  /// **'Invalid date/interval and person name'**
   String get mpAuthorInvalidValueErrorMessage;
 
   /// The label for the cancel button
@@ -368,7 +368,7 @@ abstract class AppLocalizations {
   /// The error message for invalid copyright value
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid copyright info.'**
+  /// **'Invalid copyright info'**
   String get mpCopyrightInvalidValueErrorMessage;
 
   /// The label for the copyright message
@@ -392,7 +392,7 @@ abstract class AppLocalizations {
   /// The error message for invalid CS value
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid value.'**
+  /// **'Invalid value'**
   String get mpCSInvalidValueErrorMessage;
 
   /// The label for the CS for output option
@@ -452,13 +452,13 @@ abstract class AppLocalizations {
   /// The error message for invalid end date format
   ///
   /// In en, this message translates to:
-  /// **'Invalid end date.'**
+  /// **'Invalid end date'**
   String get mpDateIntervalInvalidEndDateFormatErrorMessage;
 
   /// The error message for invalid start date format
   ///
   /// In en, this message translates to:
-  /// **'Invalid start date.'**
+  /// **'Invalid start date'**
   String get mpDateIntervalInvalidStartDateFormatErrorMessage;
 
   /// The label for the single date type
@@ -482,7 +482,7 @@ abstract class AppLocalizations {
   /// The error message for invalid date value
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid date/interval.'**
+  /// **'Invalid date/interval'**
   String get mpDateValueInvalidValueErrorMessage;
 
   /// The label for the above dimension type
@@ -500,13 +500,13 @@ abstract class AppLocalizations {
   /// The error message for invalid dimensions value
   ///
   /// In en, this message translates to:
-  /// **'Please enter valid numeric dimensions values.'**
+  /// **'Invalid numeric dimensions values'**
   String get mpDimensionsInvalidValueErrorMessage;
 
   /// The error message for invalid distance value
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid numeric distance value.'**
+  /// **'Invalid numeric distance value'**
   String get mpDistInvalidValueErrorMessage;
 
   /// The label for the distance type
@@ -536,13 +536,13 @@ abstract class AppLocalizations {
   /// The error message for invalid ID value
   ///
   /// In en, this message translates to:
-  /// **'Invalid ID: must be a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).'**
+  /// **'Invalid ID'**
   String get mpIDInvalidValueErrorMessage;
 
   /// The error message for non-unique ID value
   ///
   /// In en, this message translates to:
-  /// **'ID must be unique.'**
+  /// **'ID must be unique'**
   String get mpIDNonUniqueValueErrorMessage;
 
   /// The description for the centimeter length unit
@@ -608,7 +608,7 @@ abstract class AppLocalizations {
   /// The error message for invalid person name format
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid person name.'**
+  /// **'Invalid person name'**
   String get mpPersonNameInvalidFormatErrorMessage;
 
   /// The label for the name field in the person name dialog

@@ -36,14 +36,15 @@ class MPIDOptionWidget extends StatefulWidget {
 
 class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
   late TextEditingController _thIDController;
-  late String _selectedChoice;
   final FocusNode _idTextFieldFocusNode = FocusNode();
-  late final String _initialChoice;
   late final String _initialID;
+  late String _selectedChoice;
+  late final String _initialSelectedChoice;
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   String _warningMessage = '';
   bool _isValid = false;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -68,7 +69,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         _selectedChoice = mpUnsetOptionID;
     }
 
-    _initialChoice = _selectedChoice;
+    _initialSelectedChoice = _selectedChoice;
     _initialID = _thIDController.text;
 
     _updateIsValid();
@@ -137,6 +138,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         () {
           _warningMessage = '';
           _isValid = true;
+          _updateOkButtonEnabled();
         },
       );
     } else if (MPInteractionAux.isValidID(_thIDController.text)) {
@@ -146,6 +148,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
           () {
             _warningMessage = appLocalizations.mpIDNonUniqueValueErrorMessage;
             _isValid = false;
+            _updateOkButtonEnabled();
           },
         );
       } else {
@@ -153,6 +156,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
           () {
             _warningMessage = '';
             _isValid = true;
+            _updateOkButtonEnabled();
           },
         );
       }
@@ -161,19 +165,35 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         () {
           _warningMessage = appLocalizations.mpIDInvalidValueErrorMessage;
           _isValid = false;
+          _updateOkButtonEnabled();
         },
       );
     }
   }
 
-  bool _isChanged() {
-    return ((_selectedChoice != _initialChoice) ||
+  void _updateOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (_thIDController.text != _initialID)));
+
+    _isOkButtonEnabled = _isValid && isChanged;
   }
 
   @override
   Widget build(BuildContext context) {
+    final double thIdFieldWidth = max(
+      MPInteractionAux.calculateTextFieldWidth(
+        MPInteractionAux.insideRange(
+          value: _thIDController.text.toString().length,
+          min: mpDefaultMinDigitsForTextFields,
+          max: mpDefaultMaxCharsForTextFields,
+        ),
+      ),
+      MPInteractionAux.calculateWarningMessageWidth(
+        _warningMessage.length,
+      ),
+    );
+
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionId,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -216,16 +236,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: MPInteractionAux.calculateTextFieldWidth(
-                      MPInteractionAux.insideRange(
-                        value: max(
-                          _thIDController.text.toString().length,
-                          _warningMessage.length,
-                        ),
-                        min: mpDefaultMinDigitsForTextFields,
-                        max: mpDefaultMaxCharsForTextFields,
-                      ),
-                    ),
+                    width: thIdFieldWidth,
                     child: Padding(
                       padding: EdgeInsets.only(
                         bottom: (_warningMessage.isEmpty) ? 0 : 16,
@@ -255,7 +266,10 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: (_isValid && _isChanged()) ? _okButtonPressed : null,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

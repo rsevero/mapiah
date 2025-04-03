@@ -52,10 +52,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get mpAltitudeInvalidValueErrorMessage => 'Por favor informe um valor válido de altitude';
+  String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
-  String get mpAuthorInvalidValueErrorMessage => 'Por favor informe uma data/intervalo de data e nome de autor válidos';
+  String get mpAuthorInvalidValueErrorMessage => 'Data/intervalo de data e nome de autor válidos';
 
   @override
   String get mpButtonCancel => 'Cancelar';
@@ -157,7 +157,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpContextInvalidValueErrorMessage => 'Ambos os campos são obrigatórios';
 
   @override
-  String get mpCopyrightInvalidValueErrorMessage => 'Por favor informe dados de direitos autorais vãlidos';
+  String get mpCopyrightInvalidValueErrorMessage => 'Dados de direitos autorais inválidos';
 
   @override
   String get mpCopyrightMessageLabel => 'Direitos autorais';
@@ -171,7 +171,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCSETRSLabel => 'Identificador opcional ETRS (1-99999)';
 
   @override
-  String get mpCSInvalidValueErrorMessage => 'Por favor informe um valor válido';
+  String get mpCSInvalidValueErrorMessage => 'Valor inválido';
 
   @override
   String get mpCSForOutputLabel => 'Para saída';
@@ -216,7 +216,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDateIntervalStartDateLabel => 'Data de início';
 
   @override
-  String get mpDateValueInvalidValueErrorMessage => 'Por favor informe uma data ou intervalo válidos';
+  String get mpDateValueInvalidValueErrorMessage => 'Data ou intervalo inválidos';
 
   @override
   String get mpDimensionsAboveLabel => 'Acima';
@@ -225,10 +225,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDimensionsBelowLabel => 'Abaixo';
 
   @override
-  String get mpDimensionsInvalidValueErrorMessage => 'Por favor informe valores válidos de dimensões';
+  String get mpDimensionsInvalidValueErrorMessage => 'Dimensões inválidas';
 
   @override
-  String get mpDistInvalidValueErrorMessage => 'Por favor informe um valor válido de distância';
+  String get mpDistInvalidValueErrorMessage => 'Distância inválida';
 
   @override
   String get mpDistDistanceLabel => 'Distância';
@@ -279,7 +279,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
-  String get mpPersonNameInvalidFormatErrorMessage => 'Por favor informe um nome válido';
+  String get mpPersonNameInvalidFormatErrorMessage => 'Nome inválido';
 
   @override
   String get mpPersonNameLabel => 'Nome';

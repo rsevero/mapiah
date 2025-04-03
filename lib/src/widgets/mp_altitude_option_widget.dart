@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -36,11 +39,18 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   late TextEditingController _altitudeController;
   late bool _isFixed;
   late String _selectedUnit;
-  late String _selectedChoice;
-  final FocusNode _textFieldFocusNode = FocusNode();
-  bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final Map<String, String> _unitMap;
+  final FocusNode _textFieldFocusNode = FocusNode();
+  late final String _initialAltitude;
+  late final bool _initialIsFixed;
+  late final String _initialSelectedUnit;
+  late String _selectedChoice;
+  late final String _initialSelectedChoice;
+  bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  String _warningMessage = '';
+  bool _isValid = false;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -83,6 +93,11 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
         _selectedChoice = mpUnsetOptionID;
         _selectedUnit = thDefaultLengthUnitAsString;
     }
+
+    _initialAltitude = _altitudeController.text;
+    _initialIsFixed = _isFixed;
+    _initialSelectedUnit = _selectedUnit;
+    _initialSelectedChoice = _selectedChoice;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
@@ -158,8 +173,64 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
     );
   }
 
+  void _updateIsValid() {
+    if (_selectedChoice == mpUnsetOptionID) {
+      setState(
+        () {
+          _warningMessage = '';
+          _isValid = true;
+          _updateOkButtonEnabled();
+        },
+      );
+    } else {
+      final double? altitude = double.tryParse(_altitudeController.text);
+
+      if (altitude == null) {
+        setState(
+          () {
+            _warningMessage =
+                appLocalizations.mpAltitudeInvalidValueErrorMessage;
+            _isValid = false;
+            _updateOkButtonEnabled();
+          },
+        );
+      } else {
+        setState(
+          () {
+            _warningMessage = '';
+            _isValid = true;
+            _updateOkButtonEnabled();
+          },
+        );
+      }
+    }
+  }
+
+  void _updateOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            ((_altitudeController.text != _initialAltitude) ||
+                (_isFixed != _initialIsFixed) ||
+                (_selectedUnit != _initialSelectedUnit))));
+
+    _isOkButtonEnabled = _isValid && isChanged;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double altitudeFieldWidth = max(
+      MPInteractionAux.calculateTextFieldWidth(
+        MPInteractionAux.insideRange(
+          value: _altitudeController.text.toString().length,
+          min: mpDefaultMinDigitsForTextFields,
+          max: mpDefaultMaxCharsForTextFields,
+        ),
+      ),
+      MPInteractionAux.calculateWarningMessageWidth(
+        _warningMessage.length,
+      ),
+    );
+
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionAltitudeValue,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -178,9 +249,8 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateIsValid();
               },
             ),
             RadioListTile<String>(
@@ -189,9 +259,8 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateIsValid();
                 _textFieldFocusNode.requestFocus();
               },
             ),
@@ -208,9 +277,8 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
                     child: Switch(
                       value: _isFixed,
                       onChanged: (bool value) {
-                        setState(() {
-                          _isFixed = value;
-                        });
+                        _isFixed = value;
+                        _updateIsValid();
                       },
                     ),
                   ),
@@ -219,14 +287,26 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
 
               const SizedBox(height: mpButtonSpace),
               // Numeric Input for Altitude
-              TextField(
-                controller: _altitudeController,
-                keyboardType: TextInputType.number,
-                autofocus: true,
-                focusNode: _textFieldFocusNode,
-                decoration: InputDecoration(
-                  labelText: appLocalizations.thCommandOptionAltitudeValue,
-                  border: OutlineInputBorder(),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: (_warningMessage.isEmpty) ? 0 : 16,
+                ),
+                child: SizedBox(
+                  width: altitudeFieldWidth,
+                  child: TextField(
+                    controller: _altitudeController,
+                    keyboardType: TextInputType.number,
+                    autofocus: true,
+                    focusNode: _textFieldFocusNode,
+                    decoration: InputDecoration(
+                      labelText: appLocalizations.thCommandOptionAltitudeValue,
+                      border: OutlineInputBorder(),
+                      errorText: _warningMessage,
+                    ),
+                    onChanged: (value) {
+                      _updateIsValid();
+                    },
+                  ),
                 ),
               ),
 
@@ -246,12 +326,11 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
                   );
                 }).toList(),
                 onSelected: (String? value) {
-                  setState(() {
-                    _selectedUnit = value ?? thDefaultLengthUnitAsString;
-                  });
+                  _selectedUnit = value ?? thDefaultLengthUnitAsString;
+                  _updateIsValid();
                 },
                 searchCallback: (entries, query) {
-                  final index =
+                  final int index =
                       entries.indexWhere((entry) => entry.label == query);
 
                   return index >= 0 ? index : null;
@@ -264,7 +343,10 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

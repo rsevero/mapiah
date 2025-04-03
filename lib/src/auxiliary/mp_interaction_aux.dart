@@ -103,6 +103,10 @@ class MPInteractionAux {
     return maxDigits * 12.0 + 16.0;
   }
 
+  static double calculateWarningMessageWidth(int messageLength) {
+    return messageLength * 6.0 + 16.0;
+  }
+
   static int insideRange({
     required int value,
     required int min,

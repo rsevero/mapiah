@@ -12,9 +12,9 @@
   "fileEditWindowWindowTitle": "Edição de arquivo",
   "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
 
-  "mpAltitudeInvalidValueErrorMessage": "Por favor informe um valor válido de altitude",
+  "mpAltitudeInvalidValueErrorMessage": "Altitude inválida",
 
-  "mpAuthorInvalidValueErrorMessage": "Por favor informe uma data/intervalo de data e nome de autor válidos",
+  "mpAuthorInvalidValueErrorMessage": "Data/intervalo de data e nome de autor válidos",
 
   "mpButtonCancel": "Cancelar",
   "mpButtonOK": "OK",
@@ -53,12 +53,12 @@
 
   "mpContextInvalidValueErrorMessage": "Ambos os campos são obrigatórios",
 
-  "mpCopyrightInvalidValueErrorMessage": "Por favor informe dados de direitos autorais vãlidos",
+  "mpCopyrightInvalidValueErrorMessage": "Dados de direitos autorais inválidos",
   "mpCopyrightMessageLabel": "Direitos autorais",
 
   "mpCSEPSGESRILabel": "Identificador {csOption} (1-99999)",
   "mpCSETRSLabel": "Identificador opcional ETRS (1-99999)",
-  "mpCSInvalidValueErrorMessage": "Por favor informe um valor válido",
+  "mpCSInvalidValueErrorMessage": "Valor inválido",
   "mpCSForOutputLabel": "Para saída",
   "mpCSOSGBMajorLabel": "OSGB principal",
   "mpCSOSGBMinorLabel": "OSGB menor",
@@ -75,13 +75,13 @@
   "mpDateIntervalStartDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] ou '-'",
   "mpDateIntervalStartDateLabel": "Data de início",
 
-  "mpDateValueInvalidValueErrorMessage": "Por favor informe uma data ou intervalo válidos",
+  "mpDateValueInvalidValueErrorMessage": "Data ou intervalo inválidos",
 
   "mpDimensionsAboveLabel": "Acima",
   "mpDimensionsBelowLabel": "Abaixo",
-  "mpDimensionsInvalidValueErrorMessage": "Por favor informe valores válidos de dimensões",
+  "mpDimensionsInvalidValueErrorMessage": "Dimensões inválidas",
 
-  "mpDistInvalidValueErrorMessage": "Por favor informe um valor válido de distância",
+  "mpDistInvalidValueErrorMessage": "Distância inválida",
   "mpDistDistanceLabel": "Distância",
 
   "mpExploredLengthLabel": "Extensão",
@@ -103,7 +103,7 @@
   "mpLengthUnitYard": "jarda",
   "mpLengthUnitYardAbbreviation": "yd",
 
-  "mpPersonNameInvalidFormatErrorMessage": "Por favor informe um nome válido",
+  "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",
 

@@ -67,13 +67,13 @@
     }
   },
 
-  "mpAltitudeInvalidValueErrorMessage": "Please enter a valid numeric altitude value.",
+  "mpAltitudeInvalidValueErrorMessage": "Invalid altitude",
   "@mpAltitudeInvalidValueErrorMessage": {
     "description": "The error message for invalid altitude value",
     "type": "text"
   },
 
-  "mpAuthorInvalidValueErrorMessage": "Please enter a valid date/interval and person name.",
+  "mpAuthorInvalidValueErrorMessage": "Invalid date/interval and person name",
   "@mpAuthorInvalidValueErrorMessage": {
     "description": "The error message for invalid author value",
     "type": "text"
@@ -277,7 +277,7 @@
     "type": "text"
   },
 
-  "mpCopyrightInvalidValueErrorMessage": "Please enter a valid copyright info.",
+  "mpCopyrightInvalidValueErrorMessage": "Invalid copyright info",
   "@mpCopyrightInvalidValueErrorMessage": {
     "description": "The error message for invalid copyright value",
     "type": "text"
@@ -304,7 +304,7 @@
     "type": "text"
   },
 
-  "mpCSInvalidValueErrorMessage": "Please enter a valid value.",
+  "mpCSInvalidValueErrorMessage": "Invalid value",
   "@mpCSInvalidValueErrorMessage": {
     "description": "The error message for invalid CS value",
     "type": "text"
@@ -364,13 +364,13 @@
     "type": "text"
   },
 
-  "mpDateIntervalInvalidEndDateFormatErrorMessage": "Invalid end date.",
+  "mpDateIntervalInvalidEndDateFormatErrorMessage": "Invalid end date",
   "@mpDateIntervalInvalidEndDateFormatErrorMessage": {
     "description": "The error message for invalid end date format",
     "type": "text"
   },
 
-  "mpDateIntervalInvalidStartDateFormatErrorMessage": "Invalid start date.",
+  "mpDateIntervalInvalidStartDateFormatErrorMessage": "Invalid start date",
   "@mpDateIntervalInvalidStartDateFormatErrorMessage": {
     "description": "The error message for invalid start date format",
     "type": "text"
@@ -394,7 +394,7 @@
     "type": "text"
   },
 
-  "mpDateValueInvalidValueErrorMessage": "Please enter a valid date/interval.",
+  "mpDateValueInvalidValueErrorMessage": "Invalid date/interval",
   "@mpDateValueInvalidValueErrorMessage": {
     "description": "The error message for invalid date value",
     "type": "text"
@@ -412,13 +412,13 @@
     "type": "text"
   },
 
-  "mpDimensionsInvalidValueErrorMessage": "Please enter valid numeric dimensions values.",
+  "mpDimensionsInvalidValueErrorMessage": "Invalid numeric dimensions values",
   "@mpDimensionsInvalidValueErrorMessage": {
     "description": "The error message for invalid dimensions value",
     "type": "text"
   },
 
-  "mpDistInvalidValueErrorMessage": "Please enter a valid numeric distance value.",
+  "mpDistInvalidValueErrorMessage": "Invalid numeric distance value",
   "@mpDistInvalidValueErrorMessage": {
     "description": "The error message for invalid distance value",
     "type": "text"
@@ -448,13 +448,13 @@
     "type": "text"
   },
 
-  "mpIDInvalidValueErrorMessage": "Invalid ID: must be a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).",
+  "mpIDInvalidValueErrorMessage": "Invalid ID",
   "@mpIDInvalidValueErrorMessage": {
     "description": "The error message for invalid ID value",
     "type": "text"
   },
 
-  "mpIDNonUniqueValueErrorMessage": "ID must be unique.",
+  "mpIDNonUniqueValueErrorMessage": "ID must be unique",
   "@mpIDNonUniqueValueErrorMessage": {
     "description": "The error message for non-unique ID value",
     "type": "text"
@@ -520,7 +520,7 @@
     "type": "text"
   },
 
-  "mpPersonNameInvalidFormatErrorMessage": "Please enter a valid person name.",
+  "mpPersonNameInvalidFormatErrorMessage": "Invalid person name",
   "@mpPersonNameInvalidFormatErrorMessage": {
     "description": "The error message for invalid person name format",
     "type": "text"

@@ -52,10 +52,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mpAltitudeInvalidValueErrorMessage => 'Please enter a valid numeric altitude value.';
+  String get mpAltitudeInvalidValueErrorMessage => 'Invalid altitude';
 
   @override
-  String get mpAuthorInvalidValueErrorMessage => 'Please enter a valid date/interval and person name.';
+  String get mpAuthorInvalidValueErrorMessage => 'Invalid date/interval and person name';
 
   @override
   String get mpButtonCancel => 'Cancel';
@@ -157,7 +157,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
 
   @override
-  String get mpCopyrightInvalidValueErrorMessage => 'Please enter a valid copyright info.';
+  String get mpCopyrightInvalidValueErrorMessage => 'Invalid copyright info';
 
   @override
   String get mpCopyrightMessageLabel => 'Copyright';
@@ -171,7 +171,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCSETRSLabel => 'Optional ETRS identifier (28-37)';
 
   @override
-  String get mpCSInvalidValueErrorMessage => 'Please enter a valid value.';
+  String get mpCSInvalidValueErrorMessage => 'Invalid value';
 
   @override
   String get mpCSForOutputLabel => 'For output';
@@ -201,10 +201,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDateIntervalIntervalLabel => 'Interval';
 
   @override
-  String get mpDateIntervalInvalidEndDateFormatErrorMessage => 'Invalid end date.';
+  String get mpDateIntervalInvalidEndDateFormatErrorMessage => 'Invalid end date';
 
   @override
-  String get mpDateIntervalInvalidStartDateFormatErrorMessage => 'Invalid start date.';
+  String get mpDateIntervalInvalidStartDateFormatErrorMessage => 'Invalid start date';
 
   @override
   String get mpDateIntervalSingleDateLabel => 'Date';
@@ -216,7 +216,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDateIntervalStartDateLabel => 'Start date';
 
   @override
-  String get mpDateValueInvalidValueErrorMessage => 'Please enter a valid date/interval.';
+  String get mpDateValueInvalidValueErrorMessage => 'Invalid date/interval';
 
   @override
   String get mpDimensionsAboveLabel => 'Above';
@@ -225,10 +225,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDimensionsBelowLabel => 'Below';
 
   @override
-  String get mpDimensionsInvalidValueErrorMessage => 'Please enter valid numeric dimensions values.';
+  String get mpDimensionsInvalidValueErrorMessage => 'Invalid numeric dimensions values';
 
   @override
-  String get mpDistInvalidValueErrorMessage => 'Please enter a valid numeric distance value.';
+  String get mpDistInvalidValueErrorMessage => 'Invalid numeric distance value';
 
   @override
   String get mpDistDistanceLabel => 'Distance';
@@ -243,10 +243,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpIDIDLabel => 'ID';
 
   @override
-  String get mpIDInvalidValueErrorMessage => 'Invalid ID: must be a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).';
+  String get mpIDInvalidValueErrorMessage => 'Invalid ID';
 
   @override
-  String get mpIDNonUniqueValueErrorMessage => 'ID must be unique.';
+  String get mpIDNonUniqueValueErrorMessage => 'ID must be unique';
 
   @override
   String get mpLengthUnitCentimeter => 'centimeter';
@@ -279,7 +279,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
-  String get mpPersonNameInvalidFormatErrorMessage => 'Please enter a valid person name.';
+  String get mpPersonNameInvalidFormatErrorMessage => 'Invalid person name';
 
   @override
   String get mpPersonNameLabel => 'Name';
