@@ -14,13 +14,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPExtendTypeOptionWidget extends StatefulWidget {
+class MPStationTypeOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPExtendTypeOptionWidget({
+  const MPStationTypeOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -29,11 +29,11 @@ class MPExtendTypeOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPExtendTypeOptionWidget> createState() =>
-      _MPExtendTypeOptionWidgetState();
+  State<MPStationTypeOptionWidget> createState() =>
+      _MPStationTypeOptionWidgetState();
 }
 
-class _MPExtendTypeOptionWidgetState extends State<MPExtendTypeOptionWidget> {
+class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
   late TextEditingController _stationController;
   late String _selectedChoice;
   final FocusNode _stationTextFieldFocusNode = FocusNode();
@@ -46,12 +46,22 @@ class _MPExtendTypeOptionWidgetState extends State<MPExtendTypeOptionWidget> {
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THExtendCommandOption currentOption =
-            widget.optionInfo.option! as THExtendCommandOption;
+        final THCommandOption currentOption = widget.optionInfo.option!;
 
-        _stationController = TextEditingController(
-          text: currentOption.station,
-        );
+        switch (currentOption) {
+          case THExtendCommandOption _:
+            _stationController = TextEditingController(
+              text: currentOption.station,
+            );
+          case THFromCommandOption _:
+            _stationController = TextEditingController(
+              text: currentOption.station,
+            );
+          default:
+            throw Exception(
+              'Unsupported option type: ${widget.optionInfo..type} in _MPStationTypeOptionWidgetState.initState()',
+            );
+        }
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
@@ -93,10 +103,22 @@ class _MPExtendTypeOptionWidgetState extends State<MPExtendTypeOptionWidget> {
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-        newOption = THExtendCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          station: station,
-        );
+        switch (widget.optionInfo.type) {
+          case THCommandOptionType.extend:
+            newOption = THExtendCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              station: station,
+            );
+          case THCommandOptionType.from:
+            newOption = THFromCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              station: station,
+            );
+          default:
+            throw Exception(
+              'Unsupported option type: ${widget.optionInfo.type} in _MPStationTypeOptionWidgetState._okButtonPressed()',
+            );
+        }
       }
     }
 
@@ -115,8 +137,24 @@ class _MPExtendTypeOptionWidgetState extends State<MPExtendTypeOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final String title;
+    final String stationLabel;
+
+    switch (widget.optionInfo.type) {
+      case THCommandOptionType.extend:
+        title = appLocalizations.thCommandOptionExtend;
+        stationLabel = appLocalizations.mpExtendStationLabel;
+      case THCommandOptionType.from:
+        title = appLocalizations.thCommandOptionFrom;
+        stationLabel = appLocalizations.mpExtendStationLabel;
+      default:
+        throw Exception(
+          'Unsupported option type: ${widget.optionInfo.type} in _MPStationTypeOptionWidgetState.build()',
+        );
+    }
+
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionExtend,
+      title: title,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -168,7 +206,7 @@ class _MPExtendTypeOptionWidgetState extends State<MPExtendTypeOptionWidget> {
                       autofocus: true,
                       focusNode: _stationTextFieldFocusNode,
                       decoration: InputDecoration(
-                        labelText: appLocalizations.mpExtendStationLabel,
+                        labelText: stationLabel,
                         border: OutlineInputBorder(),
                       ),
                     ),

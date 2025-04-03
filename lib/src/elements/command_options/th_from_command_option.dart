@@ -16,6 +16,12 @@ class THFromCommandOption extends THCommandOption {
     super.originalLineInTH2File = '',
   }) : super();
 
+  THFromCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.station,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM();
+
   @override
   THCommandOptionType get type => THCommandOptionType.from;
 
