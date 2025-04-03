@@ -17,7 +17,7 @@ import 'package:mapiah/src/widgets/mp_copyright_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_cs_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_date_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_dimensions_option_widget.dart';
-import 'package:mapiah/src/widgets/mp_dist_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_distance_type_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
@@ -187,7 +187,8 @@ class MPOverlayWindowFactory {
             innerAnchorType: MPWidgetPositionType.leftCenter,
           );
         case THCommandOptionType.dist:
-          overlayWindowWidget = MPDistOptionWidget(
+        case THCommandOptionType.explored:
+          overlayWindowWidget = MPDistanceTypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

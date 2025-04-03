@@ -515,6 +515,12 @@ abstract class AppLocalizations {
   /// **'Distance'**
   String get mpDistDistanceLabel;
 
+  /// The label for the explored length type
+  ///
+  /// In en, this message translates to:
+  /// **'Length'**
+  String get mpExploredLengthLabel;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:

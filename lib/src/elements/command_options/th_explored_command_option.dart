@@ -1,8 +1,8 @@
 part of 'th_command_option.dart';
 
-// explored <length> . if the point type is continuation, you can specify length of pas-
-// sages explored but not surveyed yet. This value is afterwards displayed in survey/cave
-// statistics.
+// explored <length> . if the point type is continuation, you can specify length
+// of passages explored but not surveyed yet. This value is afterwards displayed
+// in survey/cave statistics.
 class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   THExploredCommandOption.forCWJM({
     required super.parentMPID,
@@ -22,6 +22,16 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
     String? unit,
     super.originalLineInTH2File = '',
   }) : super() {
+    length = THDoublePart.fromString(valueString: distance);
+    unitFromString(unit);
+  }
+
+  THExploredCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String distance,
+    String? unit,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     length = THDoublePart.fromString(valueString: distance);
     unitFromString(unit);
   }

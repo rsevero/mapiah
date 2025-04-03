@@ -430,6 +430,12 @@
     "type": "text"
   },
 
+  "mpExploredLengthLabel": "Length",
+  "@mpExploredLengthLabel": {
+    "description": "The label for the explored length type",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",
