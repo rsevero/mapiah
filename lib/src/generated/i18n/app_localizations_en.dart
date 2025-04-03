@@ -237,6 +237,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpExploredLengthLabel => 'Length';
 
   @override
+  String get mpExtendStationLabel => 'Station';
+
+  @override
   String get mpLengthUnitCentimeter => 'centimeter';
 
   @override

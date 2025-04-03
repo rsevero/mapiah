@@ -86,6 +86,8 @@
 
   "mpExploredLengthLabel": "Extensão",
 
+  "mpExtendStationLabel": "Base",
+
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",

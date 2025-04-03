@@ -521,6 +521,12 @@ abstract class AppLocalizations {
   /// **'Length'**
   String get mpExploredLengthLabel;
 
+  /// The label for the extend station type
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get mpExtendStationLabel;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:

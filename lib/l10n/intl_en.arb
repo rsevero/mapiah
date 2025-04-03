@@ -436,6 +436,12 @@
     "type": "text"
   },
 
+  "mpExtendStationLabel": "Station",
+  "@mpExtendStationLabel": {
+    "description": "The label for the extend station type",
+    "type": "text"
+  },
+
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",

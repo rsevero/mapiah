@@ -1,7 +1,8 @@
 part of 'th_command_option.dart';
 
-// extend [prev[ious] <station>] . if the point type is station and scrap projection
-// is extended elevation, you can adjust the extension of the centreline using this option.
+// extend [prev[ious] <station>] . if the point type is station and scrap
+// projection is extended elevation, you can adjust the extension of the
+// centreline using this option.
 class THExtendCommandOption extends THCommandOption {
   final String station;
 
@@ -16,12 +17,12 @@ class THExtendCommandOption extends THCommandOption {
     required this.station,
     super.originalLineInTH2File = '',
   }) : super();
-  //      {
-  //   if ((optionParent is! THPoint) || (optionParent.plaType != 'station')) {
-  //     throw THCustomException(
-  //         "Option 'extend' only valid for points of type 'station'.");
-  //   }
-  // }
+
+  THExtendCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.station,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM();
 
   @override
   THCommandOptionType get type => THCommandOptionType.extend;
