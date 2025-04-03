@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -15,13 +14,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPDistanceTypeOptionWidget extends StatefulWidget {
+class MPIDOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPDistanceTypeOptionWidget({
+  const MPIDOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -30,58 +29,37 @@ class MPDistanceTypeOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPDistanceTypeOptionWidget> createState() =>
-      _MPDistanceTypeOptionWidgetState();
+  State<MPIDOptionWidget> createState() => _MPIDOptionWidgetState();
 }
 
-class _MPDistanceTypeOptionWidgetState
-    extends State<MPDistanceTypeOptionWidget> {
-  late TextEditingController _distanceController;
-  late String _selectedUnit;
+class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
+  late TextEditingController _thIDController;
   late String _selectedChoice;
-  final FocusNode _lengthTextFieldFocusNode = FocusNode();
+  final FocusNode _stationTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
-  late final Map<String, String> _unitMap;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   void initState() {
     super.initState();
-    _unitMap = MPTextToUser.getOrderedChoices(
-      MPTextToUser.getLengthUnitsChoices(),
-    );
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THCommandOption currentOption = widget.optionInfo.option!;
+        final THIDCommandOption currentOption =
+            (widget.optionInfo.option! as THIDCommandOption);
 
-        switch (currentOption) {
-          case THDistCommandOption _:
-            _distanceController = TextEditingController(
-              text: currentOption.length.value.toString(),
-            );
-            _selectedChoice = mpNonMultipleChoiceSetID;
-            _selectedUnit = currentOption.unit.unit.name;
-          case THExploredCommandOption _:
-            _distanceController = TextEditingController(
-              text: currentOption.length.value.toString(),
-            );
-            _selectedChoice = mpNonMultipleChoiceSetID;
-            _selectedUnit = currentOption.unit.unit.name;
-          default:
-            throw Exception(
-              'Unsupported option type: ${widget.optionInfo.type} in _MPDistanceTypeOptionWidgetState.initState()',
-            );
-        }
+        _thIDController = TextEditingController(
+          text: currentOption.thID,
+        );
+
+        _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _distanceController = TextEditingController(text: '0');
+        _thIDController = TextEditingController(text: '');
         _selectedChoice = '';
-        _selectedUnit = '';
       case MPOptionStateType.unset:
-        _distanceController = TextEditingController(text: '0');
+        _thIDController = TextEditingController(text: '');
         _selectedChoice = mpUnsetOptionID;
-        _selectedUnit = thDefaultLengthUnitAsString;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -94,13 +72,13 @@ class _MPDistanceTypeOptionWidgetState
 
   @override
   void dispose() {
-    _distanceController.dispose();
+    _thIDController.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _lengthTextFieldFocusNode.requestFocus();
+      _stationTextFieldFocusNode.requestFocus();
     }
   }
 
@@ -108,34 +86,24 @@ class _MPDistanceTypeOptionWidgetState
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      final double? distance = double.tryParse(_distanceController.text);
+      final String thID = _thIDController.text.trim();
 
-      if (distance != null) {
+      if (thID.isNotEmpty) {
         /// The THFileMPID is used only as a placeholder for the actual
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-        switch (widget.optionInfo.type) {
-          case THCommandOptionType.dist:
-            newOption = THDistCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
-              distance: distance.toString(),
-              unit: _selectedUnit,
-            );
-          case THCommandOptionType.explored:
-            newOption = THExploredCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
-              distance: distance.toString(),
-              unit: _selectedUnit,
-            );
-          default:
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(appLocalizations.mpDistInvalidValueErrorMessage),
-              ),
-            );
-            return;
-        }
+        newOption = THIDCommandOption.fromStringWithParentMPID(
+          parentMPID: widget.th2FileEditController.thFileMPID,
+          thID: thID,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(appLocalizations.mpIDInvalidValueErrorMessage),
+          ),
+        );
+        return;
       }
     }
 
@@ -154,24 +122,8 @@ class _MPDistanceTypeOptionWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final String title;
-    final String lengthLabel;
-
-    switch (widget.optionInfo.type) {
-      case THCommandOptionType.dist:
-        title = appLocalizations.thCommandOptionDist;
-        lengthLabel = appLocalizations.mpDistDistanceLabel;
-      case THCommandOptionType.explored:
-        title = appLocalizations.thCommandOptionExplored;
-        lengthLabel = appLocalizations.mpExploredLengthLabel;
-      default:
-        throw Exception(
-          'Unsupported option type: ${widget.optionInfo.type} in _MPDistanceTypeOptionWidgetState.build()',
-        );
-    }
-
     return MPOverlayWindowWidget(
-      title: title,
+      title: appLocalizations.thCommandOptionId,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -202,7 +154,7 @@ class _MPDistanceTypeOptionWidgetState
                 setState(() {
                   _selectedChoice = value!;
                 });
-                _lengthTextFieldFocusNode.requestFocus();
+                _stationTextFieldFocusNode.requestFocus();
               },
             ),
 
@@ -216,48 +168,21 @@ class _MPDistanceTypeOptionWidgetState
                   SizedBox(
                     width: MPInteractionAux.calculateTextFieldWidth(
                       MPInteractionAux.insideRange(
-                        value: _distanceController.text.toString().length,
+                        value: _thIDController.text.toString().length,
                         min: mpDefaultMinDigitsForTextFields,
                         max: mpDefaultMaxCharsForTextFields,
                       ),
                     ),
                     child: TextField(
-                      controller: _distanceController,
-                      keyboardType: TextInputType.number,
+                      controller: _thIDController,
+                      keyboardType: TextInputType.text,
                       autofocus: true,
-                      focusNode: _lengthTextFieldFocusNode,
+                      focusNode: _stationTextFieldFocusNode,
                       decoration: InputDecoration(
-                        labelText: lengthLabel,
+                        labelText: appLocalizations.mpIDIDLabel,
                         border: OutlineInputBorder(),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  DropdownMenu(
-                    label: Text(appLocalizations.thCommandOptionLengthUnit),
-                    initialSelection: _selectedUnit,
-                    menuStyle: MenuStyle(
-                        alignment: Alignment(
-                      -1.0,
-                      -_unitMap.entries.length.toDouble(),
-                    )),
-                    dropdownMenuEntries: _unitMap.entries.map((entry) {
-                      return DropdownMenuEntry<String>(
-                        value: entry.key,
-                        label: entry.value,
-                      );
-                    }).toList(),
-                    onSelected: (String? value) {
-                      setState(() {
-                        _selectedUnit = value ?? thDefaultLengthUnitAsString;
-                      });
-                    },
-                    searchCallback: (entries, query) {
-                      final index =
-                          entries.indexWhere((entry) => entry.label == query);
-
-                      return index >= 0 ? index : null;
-                    },
                   ),
                 ],
               ),

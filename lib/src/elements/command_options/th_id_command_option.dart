@@ -14,7 +14,13 @@ class THIDCommandOption extends THCommandOption {
     required super.optionParent,
     required this.thID,
     super.originalLineInTH2File = '',
-  }) : super(); // TODO: call thFile.addElementWithTHID for the parent of this option. Was done with: optionParent.thFile.addElementWithTHID(optionParent, thID);
+  }) : super();
+
+  THIDCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.thID,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM();
 
   @override
   THCommandOptionType get type => THCommandOptionType.id;

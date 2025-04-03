@@ -527,6 +527,18 @@ abstract class AppLocalizations {
   /// **'Station'**
   String get mpExtendStationLabel;
 
+  /// The error message for invalid ID value
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid ID value.'**
+  String get mpIDInvalidValueErrorMessage;
+
+  /// The label for the ID type
+  ///
+  /// In en, this message translates to:
+  /// **'ID'**
+  String get mpIDIDLabel;
+
   /// The description for the centimeter length unit
   ///
   /// In en, this message translates to:

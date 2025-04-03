@@ -193,7 +193,11 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                 children: [
                   SizedBox(
                     width: MPInteractionAux.calculateTextFieldWidth(
-                      mpDefaultMaxDigitsForTextFields,
+                      MPInteractionAux.insideRange(
+                        value: _aboveController.text.toString().length,
+                        min: mpDefaultMinDigitsForTextFields,
+                        max: mpDefaultMaxCharsForTextFields,
+                      ),
                     ),
                     child: TextField(
                       controller: _aboveController,
@@ -209,7 +213,11 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                   const SizedBox(width: mpButtonSpace),
                   SizedBox(
                     width: MPInteractionAux.calculateTextFieldWidth(
-                      mpDefaultMaxDigitsForTextFields,
+                      MPInteractionAux.insideRange(
+                        value: _belowController.text.toString().length,
+                        min: mpDefaultMinDigitsForTextFields,
+                        max: mpDefaultMaxCharsForTextFields,
+                      ),
                     ),
                     child: TextField(
                       controller: _belowController,

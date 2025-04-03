@@ -242,6 +242,7 @@ class THFile
     if (!_thIDByMPID.containsKey(mpID)) {
       throw THCustomException("Element '$element' had no registered thID.");
     }
+
     final String oldTHID = _thIDByMPID[mpID]!;
 
     if (_mpIDByTHID.containsKey(newTHID)) {
@@ -258,7 +259,9 @@ class THFile
     if (_mpIDByTHID.containsKey(thID)) {
       throw THCustomException("Duplicate thID: '$thID'.");
     }
+
     final int mpID = element.mpID;
+
     _mpIDByTHID[thID] = mpID;
 
     if (_thIDByMPID.containsKey(mpID)) {

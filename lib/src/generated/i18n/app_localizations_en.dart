@@ -240,6 +240,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpExtendStationLabel => 'Station';
 
   @override
+  String get mpIDInvalidValueErrorMessage => 'Please enter a valid ID value.';
+
+  @override
+  String get mpIDIDLabel => 'ID';
+
+  @override
   String get mpLengthUnitCentimeter => 'centimeter';
 
   @override

@@ -198,7 +198,11 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
                 children: [
                   SizedBox(
                     width: MPInteractionAux.calculateTextFieldWidth(
-                      mpDefaultMaxCharsForTextFields,
+                      MPInteractionAux.insideRange(
+                        value: _stationController.text.toString().length,
+                        min: mpDefaultMinDigitsForTextFields,
+                        max: mpDefaultMaxCharsForTextFields,
+                      ),
                     ),
                     child: TextField(
                       controller: _stationController,

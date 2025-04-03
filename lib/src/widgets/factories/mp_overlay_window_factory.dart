@@ -18,6 +18,7 @@ import 'package:mapiah/src/widgets/mp_cs_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_date_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_dimensions_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_distance_type_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_station_type_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
@@ -198,6 +199,13 @@ class MPOverlayWindowFactory {
         case THCommandOptionType.extend:
         case THCommandOptionType.from:
           overlayWindowWidget = MPStationTypeOptionWidget(
+            th2FileEditController: th2FileEditController,
+            optionInfo: optionInfo,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
+          );
+        case THCommandOptionType.id:
+          overlayWindowWidget = MPIDOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

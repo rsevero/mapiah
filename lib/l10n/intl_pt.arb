@@ -88,6 +88,9 @@
 
   "mpExtendStationLabel": "Base",
 
+  "mpIDInvalidValueErrorMessage": "Por favor informe um ID válido",
+  "mpIDIDLabel": "ID",
+
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",

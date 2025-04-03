@@ -100,6 +100,20 @@ class MPInteractionAux {
   }
 
   static double calculateTextFieldWidth(int maxDigits) {
-    return maxDigits * 12.0 + 20.0;
+    return maxDigits * 12.0 + 16.0;
+  }
+
+  static int insideRange({
+    required int value,
+    required int min,
+    required int max,
+  }) {
+    if (value < min) {
+      return min;
+    } else if (value > max) {
+      return max;
+    }
+
+    return value;
   }
 }
