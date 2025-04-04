@@ -1689,19 +1689,6 @@ endscrap
 ''',
       },
       {
-        'file': 'th_file_parser-03163-linepoint_with_text_scale_option.th2',
-        'length': 7,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  line label -scale my_font_size
-    1758 -1030
-    2147.74 -1120.48
-  endline
-endscrap
-''',
-      },
-      {
         'file': 'th_file_parser-03164-linepoint_with_numeric_scale_option.th2',
         'length': 7,
         'encoding': 'UTF-8',
@@ -1735,6 +1722,7 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
+      'th_file_parser-03163-linepoint_with_text_scale_option-failure.th2',
       // 'th_file_parser-03165-linepoint_with_scale_option_and_invalid_line_type-failure.th2',
     ];
 

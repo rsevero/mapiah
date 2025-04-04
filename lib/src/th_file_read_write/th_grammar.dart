@@ -913,11 +913,10 @@ class THGrammar extends GrammarDefinition {
               stringIgnoreCase('l') |
               stringIgnoreCase('huge') |
               stringIgnoreCase('xl'))
-          .skip(after: thWhitespace().plus())
+          .skip(after: thWhitespace().star())
           .trim()
           .map((value) => ['multiplechoice', value]) |
-      number().trim().map((value) => ['numeric', value]) |
-      extKeyword().map((value) => ['text', value]);
+      number().trim().map((value) => ['numeric', value]);
 
   /// linepoint l-size/size
   Parser lsizeCommandLikeOption() =>
