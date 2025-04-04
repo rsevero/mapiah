@@ -256,15 +256,11 @@ class THFile
   }
 
   void registerMPIDWithTHID(int mpID, String thID) {
-    if (_mpIDByTHID.containsKey(thID)) {
+    if (_mpIDByTHID.containsKey(thID) && (_mpIDByTHID[thID] != mpID)) {
       throw THCustomException("Duplicate thID: '$thID'.");
     }
 
     _mpIDByTHID[thID] = mpID;
-
-    if (_thIDByMPID.containsKey(mpID)) {
-      throw THCustomException("Element with MPID'$mpID' already included.");
-    }
     _thIDByMPID[mpID] = thID;
   }
 

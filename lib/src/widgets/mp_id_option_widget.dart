@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
@@ -9,6 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
@@ -42,7 +41,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
   late final String _initialSelectedChoice;
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  String _warningMessage = '';
+  String? _warningMessage;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
 
@@ -136,14 +135,18 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
     if (_selectedChoice == mpUnsetOptionID) {
       setState(
         () {
-          _warningMessage = '';
+          _warningMessage = null;
           _isValid = true;
           _updateOkButtonEnabled();
         },
       );
     } else if (MPInteractionAux.isValidID(_thIDController.text)) {
-      if (widget.th2FileEditController.thFile
-          .hasElementByTHID(_thIDController.text)) {
+      if ((widget.th2FileEditController.thFile
+              .hasElementByTHID(_thIDController.text)) &&
+          ((widget.optionInfo.option == null) ||
+              (widget.th2FileEditController.thFile
+                      .mpIDByTHID(_thIDController.text) !=
+                  widget.optionInfo.option!.parentMPID))) {
         setState(
           () {
             _warningMessage = appLocalizations.mpIDNonUniqueValueErrorMessage;
@@ -154,7 +157,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
       } else {
         setState(
           () {
-            _warningMessage = '';
+            _warningMessage = null;
             _isValid = true;
             _updateOkButtonEnabled();
           },
@@ -181,19 +184,6 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double thIdFieldWidth = max(
-      MPInteractionAux.calculateTextFieldWidth(
-        MPInteractionAux.insideRange(
-          value: _thIDController.text.toString().length,
-          min: mpDefaultMinDigitsForTextFields,
-          max: mpDefaultMaxCharsForTextFields,
-        ),
-      ),
-      MPInteractionAux.calculateWarningMessageWidth(
-        _warningMessage.length,
-      ),
-    );
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionId,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -235,27 +225,16 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: thIdFieldWidth,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        bottom: (_warningMessage.isEmpty) ? 0 : 16,
-                      ),
-                      child: TextField(
-                        controller: _thIDController,
-                        keyboardType: TextInputType.text,
-                        autofocus: true,
-                        focusNode: _idTextFieldFocusNode,
-                        decoration: InputDecoration(
-                          labelText: appLocalizations.mpIDIDLabel,
-                          border: OutlineInputBorder(),
-                          errorText: _warningMessage,
-                        ),
-                        onChanged: (value) {
-                          _updateIsValid();
-                        },
-                      ),
-                    ),
+                  MPTextFieldInputWidget(
+                    labelText: appLocalizations.mpIDIDLabel,
+                    textEditingController: _thIDController,
+                    focusNode: _idTextFieldFocusNode,
+                    autofocus: true,
+                    keyboardType: TextInputType.text,
+                    errorText: _warningMessage,
+                    onChanged: (value) {
+                      _updateIsValid();
+                    },
                   ),
                 ],
               ),
