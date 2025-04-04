@@ -84,6 +84,8 @@
   "mpDistInvalidValueErrorMessage": "Distância inválida",
   "mpDistDistanceLabel": "Distância",
 
+  "mpDoubleValueInvalidValueErrorMessage": "Valor inválido",
+
   "mpExploredLengthLabel": "Extensão",
 
   "mpExtendStationLabel": "Base",
@@ -105,6 +107,8 @@
 
   "mpLineHeightInvalidValueErrorMessage": "Altura inválida",
   "mpLineHeightHeightLabel": "Altura",
+
+  "mpLSizeLabel": "Tamanho",
 
   "mpNamedScaleTiny": "Minúsculo",
   "mpNamedScaleSmall": "Pequeno",

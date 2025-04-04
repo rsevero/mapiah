@@ -234,6 +234,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDistDistanceLabel => 'Distância';
 
   @override
+  String get mpDoubleValueInvalidValueErrorMessage => 'Valor inválido';
+
+  @override
   String get mpExploredLengthLabel => 'Extensão';
 
   @override
@@ -283,6 +286,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpLineHeightHeightLabel => 'Altura';
+
+  @override
+  String get mpLSizeLabel => 'Tamanho';
 
   @override
   String get mpNamedScaleTiny => 'Minúsculo';

@@ -515,6 +515,12 @@ abstract class AppLocalizations {
   /// **'Distance'**
   String get mpDistDistanceLabel;
 
+  /// The error message for invalid double value
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid numeric value'**
+  String get mpDoubleValueInvalidValueErrorMessage;
+
   /// The label for the explored length type
   ///
   /// In en, this message translates to:
@@ -616,6 +622,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Height'**
   String get mpLineHeightHeightLabel;
+
+  /// The label for the size type
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get mpLSizeLabel;
 
   /// The label for the tiny named scale
   ///

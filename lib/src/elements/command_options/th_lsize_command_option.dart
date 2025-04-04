@@ -1,7 +1,7 @@
 part of 'th_command_option.dart';
 
-// l-size <number> . Size of the line (to the left). Only valid on and required for slope
-// type.
+// l-size <number> . Size of the line (to the left). Only valid on and required
+// for slope type.
 //
 // size <number> . synonym of l-size
 class THLSizeCommandOption extends THCommandOption {
@@ -18,6 +18,14 @@ class THLSizeCommandOption extends THCommandOption {
     required String number,
     super.originalLineInTH2File = '',
   }) : super() {
+    this.number = THDoublePart.fromString(valueString: number);
+  }
+
+  THLSizeCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String number,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     this.number = THDoublePart.fromString(valueString: number);
   }
 

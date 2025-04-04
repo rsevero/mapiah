@@ -19,7 +19,7 @@ import 'package:mapiah/src/widgets/mp_date_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_dimensions_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_distance_type_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
-import 'package:mapiah/src/widgets/mp_line_height_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_double_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_pl_scale_option_widget.dart';
@@ -214,7 +214,8 @@ class MPOverlayWindowFactory {
             innerAnchorType: MPWidgetPositionType.leftCenter,
           );
         case THCommandOptionType.lineHeight:
-          overlayWindowWidget = MPLineHeightOptionWidget(
+        case THCommandOptionType.lSize:
+          overlayWindowWidget = MPDoubleValueOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

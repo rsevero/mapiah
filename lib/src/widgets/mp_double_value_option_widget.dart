@@ -14,13 +14,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPLineHeightOptionWidget extends StatefulWidget {
+class MPDoubleValueOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPLineHeightOptionWidget({
+  const MPDoubleValueOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -29,19 +29,19 @@ class MPLineHeightOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPLineHeightOptionWidget> createState() =>
-      _MPLineHeightOptionWidgetState();
+  State<MPDoubleValueOptionWidget> createState() =>
+      _MPDoubleValueOptionWidgetState();
 }
 
-class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
-  late TextEditingController _heightController;
+class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
+  late TextEditingController _doubleController;
   late String _selectedChoice;
-  final FocusNode _heightTextFieldFocusNode = FocusNode();
+  final FocusNode _doubleTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
-  late final String _initialHeight;
+  late final String _initialDouble;
   late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  String? _heightWarningMessage;
+  String? _doubleWarningMessage;
   bool _isOkButtonEnabled = false;
 
   @override
@@ -52,26 +52,31 @@ class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
       case MPOptionStateType.set:
         final THCommandOption currentOption = widget.optionInfo.option!;
 
-        if (currentOption is THLineHeightCommandOption) {
-          _heightController = TextEditingController(
-            text: currentOption.height.toString(),
-          );
-          _selectedChoice = mpNonMultipleChoiceSetID;
-        } else {
-          throw Exception(
-            'Unsupported option type: ${widget.optionInfo.type} in _MPDimensionsOptionWidgetState.initState()',
-          );
+        switch (currentOption) {
+          case THLineHeightCommandOption _:
+            _doubleController = TextEditingController(
+              text: currentOption.height.toString(),
+            );
+          case THLSizeCommandOption _:
+            _doubleController = TextEditingController(
+              text: currentOption.number.toString(),
+            );
+          default:
+            throw Exception(
+              'Unsupported option type: ${widget.optionInfo.type} in _MPDoubleValueOptionWidgetState.initState()',
+            );
         }
+        _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _heightController = TextEditingController(text: '0');
+        _doubleController = TextEditingController(text: '0');
         _selectedChoice = '';
       case MPOptionStateType.unset:
-        _heightController = TextEditingController(text: '0');
+        _doubleController = TextEditingController(text: '0');
         _selectedChoice = mpUnsetOptionID;
     }
 
-    _initialHeight = _heightController.text;
+    _initialDouble = _doubleController.text;
     _initialSelectedChoice = _selectedChoice;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -84,14 +89,14 @@ class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
 
   @override
   void dispose() {
-    _heightController.dispose();
-    _heightTextFieldFocusNode.dispose();
+    _doubleController.dispose();
+    _doubleTextFieldFocusNode.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _heightTextFieldFocusNode.requestFocus();
+      _doubleTextFieldFocusNode.requestFocus();
     }
   }
 
@@ -99,17 +104,29 @@ class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      final double? height = double.tryParse(_heightController.text);
+      final double? doubleValue = double.tryParse(_doubleController.text);
 
-      if (height != null) {
+      if (doubleValue != null) {
         /// The THFileMPID is used only as a placeholder for the actual
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-        newOption = THLineHeightCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          height: _heightController.text,
-        );
+        switch (widget.optionInfo.type) {
+          case THCommandOptionType.lineHeight:
+            newOption = THLineHeightCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              height: _doubleController.text,
+            );
+          case THCommandOptionType.lSize:
+            newOption = THLSizeCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              number: _doubleController.text,
+            );
+          default:
+            throw Exception(
+              'Unsupported option type: ${widget.optionInfo.type} in _MPDoubleValueOptionWidgetState._okButtonPressed()',
+            );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -135,24 +152,40 @@ class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
   }
 
   void _updateOkButtonEnabled() {
-    final String aboveText = _heightController.text.trim();
-    final bool isValidHeight = (double.tryParse(aboveText) != null);
+    final String doubleText = _doubleController.text.trim();
+    final bool isValid = (double.tryParse(doubleText) != null);
     final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            (aboveText != _initialHeight)));
+            (doubleText != _initialDouble)));
 
     setState(() {
-      _heightWarningMessage = isValidHeight
+      _doubleWarningMessage = isValid
           ? null
-          : appLocalizations.mpDimensionsInvalidValueErrorMessage;
-      _isOkButtonEnabled = isValidHeight && isChanged;
+          : appLocalizations.mpDoubleValueInvalidValueErrorMessage;
+      _isOkButtonEnabled = isValid && isChanged;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final String title;
+    final String label;
+
+    switch (widget.optionInfo.type) {
+      case THCommandOptionType.lineHeight:
+        title = appLocalizations.thCommandOptionLineHeight;
+        label = appLocalizations.mpLineHeightHeightLabel;
+      case THCommandOptionType.lSize:
+        title = appLocalizations.thCommandOptionLSize;
+        label = appLocalizations.mpLSizeLabel;
+      default:
+        throw Exception(
+          'Unsupported option type: ${widget.optionInfo.type} in _MPDoubleValueOptionWidgetState.build()',
+        );
+    }
+
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionLineHeight,
+      title: title,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -181,7 +214,7 @@ class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
               onChanged: (String? value) {
                 _selectedChoice = value!;
                 _updateOkButtonEnabled();
-                _heightTextFieldFocusNode.requestFocus();
+                _doubleTextFieldFocusNode.requestFocus();
               },
             ),
 
@@ -193,11 +226,11 @@ class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   MPTextFieldInputWidget(
-                    textEditingController: _heightController,
-                    errorText: _heightWarningMessage,
-                    labelText: appLocalizations.mpLineHeightHeightLabel,
+                    textEditingController: _doubleController,
+                    errorText: _doubleWarningMessage,
+                    labelText: label,
                     autofocus: true,
-                    focusNode: _heightTextFieldFocusNode,
+                    focusNode: _doubleTextFieldFocusNode,
                     onChanged: (value) {
                       _updateOkButtonEnabled();
                     },

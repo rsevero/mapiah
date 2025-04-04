@@ -430,6 +430,12 @@
     "type": "text"
   },
 
+  "mpDoubleValueInvalidValueErrorMessage": "Invalid numeric value",
+  "@mpDoubleValueInvalidValueErrorMessage": {
+    "description": "The error message for invalid double value",
+    "type": "text"
+  },
+
   "mpExploredLengthLabel": "Length",
   "@mpExploredLengthLabel": {
     "description": "The label for the explored length type",
@@ -529,6 +535,12 @@
   "mpLineHeightHeightLabel": "Height",
   "@mpLineHeightHeightLabel": {
     "description": "The label for the height type",
+    "type": "text"
+  },
+
+  "mpLSizeLabel": "Size",
+  "@mpLSizeLabel": {
+    "description": "The label for the size type",
     "type": "text"
   },
 
