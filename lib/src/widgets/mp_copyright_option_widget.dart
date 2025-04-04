@@ -152,9 +152,9 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
               const SizedBox(height: mpButtonSpace),
               MPDateIntervalInputWidget(
                 initialValue: _date,
-                onChanged: (value) {
-                  _date = value;
-                },
+                // onChanged: (value) {
+                //   _date = value;
+                // },
               ),
             ],
           ],

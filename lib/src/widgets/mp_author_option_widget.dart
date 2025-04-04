@@ -37,7 +37,13 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
   late String _date;
   late String _person;
   late String _selectedChoice;
+  late final String _initialDate;
+  late final String _initialPerson;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  bool _isDateValid = false;
+  bool _isPersonValid = false;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -61,6 +67,10 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
         _person = '';
         _selectedChoice = mpUnsetOptionID;
     }
+
+    _initialDate = _date;
+    _initialPerson = _person;
+    _initialSelectedChoice = _selectedChoice;
   }
 
   void _okButtonPressed() {
@@ -99,6 +109,30 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
     );
   }
 
+  void _onDateChanged(String value, bool isValid) {
+    setState(() {
+      _date = value;
+      _isDateValid = isValid;
+      _updateIsOkButtonEnabled();
+    });
+  }
+
+  void _onPersonChanged(String value, bool isValid) {
+    setState(() {
+      _person = value;
+      _isPersonValid = isValid;
+      _updateIsOkButtonEnabled();
+    });
+  }
+
+  void _updateIsOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            ((_date != _initialDate) || (_person != _initialPerson))));
+
+    _isOkButtonEnabled = _isDateValid && _isPersonValid && isChanged;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
@@ -119,9 +153,14 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                setState(
+                  () {
+                    if (value != null) {
+                      _selectedChoice = value;
+                    }
+                    _updateIsOkButtonEnabled();
+                  },
+                );
               },
             ),
             RadioListTile<String>(
@@ -130,9 +169,14 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                setState(
+                  () {
+                    if (value != null) {
+                      _selectedChoice = value;
+                    }
+                    _updateIsOkButtonEnabled();
+                  },
+                );
               },
             ),
 
@@ -140,15 +184,11 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               MPPersonNameInputWidget(
                 initialValue: _person,
-                onChanged: (value) {
-                  _person = value;
-                },
+                onChanged: _onPersonChanged,
               ),
               MPDateIntervalInputWidget(
                 initialValue: _date,
-                onChanged: (value) {
-                  _date = value;
-                },
+                onChanged: _onDateChanged,
               ),
             ],
           ],
@@ -157,7 +197,10 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

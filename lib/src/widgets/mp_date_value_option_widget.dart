@@ -136,9 +136,9 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               MPDateIntervalInputWidget(
                 initialValue: _date,
-                onChanged: (value) {
-                  _date = value;
-                },
+                // onChanged: (value) {
+                //   _date = value;
+                // },
               ),
             ],
           ],

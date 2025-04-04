@@ -104,7 +104,7 @@ class MPInteractionAux {
   }
 
   static double calculateWarningMessageWidth(int messageLength) {
-    return messageLength * 6.0 + 16.0;
+    return messageLength * 7.5;
   }
 
   static int insideRange({
