@@ -588,7 +588,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THHasOptionsMixin parentElement =
         _th2FileEditController.thFile.hasOptionByMPID(parentMPID);
 
-    if (optionType is THIDCommandOption) {
+    if (optionType == THCommandOptionType.id) {
       _thFile.unregisterElementTHIDByMPID(parentMPID);
     }
 
