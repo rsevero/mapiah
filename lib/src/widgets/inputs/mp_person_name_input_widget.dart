@@ -21,7 +21,7 @@ class MPPersonNameInputWidget extends StatefulWidget {
 class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
   late TextEditingController _nameController;
   final FocusNode _nameFocusNode = FocusNode();
-  String _warningMessage = '';
+  String? _warningMessage;
   bool _isValid = false;
 
   @override
@@ -47,7 +47,7 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
     setState(
       () {
         _warningMessage = _isValid
-            ? ''
+            ? null
             : mpLocator.appLocalizations.mpPersonNameInvalidFormatErrorMessage;
       },
     );

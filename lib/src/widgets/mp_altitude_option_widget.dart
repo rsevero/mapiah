@@ -46,7 +46,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   late final String _initialSelectedChoice;
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  String _warningMessage = '';
+  String? _warningMessage;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
 
@@ -175,7 +175,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
     if (_selectedChoice == mpUnsetOptionID) {
       setState(
         () {
-          _warningMessage = '';
+          _warningMessage = null;
           _isValid = true;
           _updateOkButtonEnabled();
         },
@@ -195,7 +195,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
       } else {
         setState(
           () {
-            _warningMessage = '';
+            _warningMessage = null;
             _isValid = true;
             _updateOkButtonEnabled();
           },

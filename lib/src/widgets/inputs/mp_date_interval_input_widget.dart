@@ -24,8 +24,8 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
   bool _isInterval = false;
   bool _isStartDateValid = false;
   bool _isEndDateValid = false;
-  String _startDateWarningMessage = '';
-  String _endDateWarningMessage = '';
+  String? _startDateWarningMessage;
+  String? _endDateWarningMessage;
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     setState(
       () {
         _startDateWarningMessage = _isStartDateValid
-            ? ''
+            ? null
             : mpLocator.appLocalizations
                 .mpDateIntervalInvalidStartDateFormatErrorMessage;
       },
@@ -89,7 +89,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     setState(
       () {
         _endDateWarningMessage = _isEndDateValid
-            ? ''
+            ? null
             : mpLocator.appLocalizations
                 .mpDateIntervalInvalidEndDateFormatErrorMessage;
       },

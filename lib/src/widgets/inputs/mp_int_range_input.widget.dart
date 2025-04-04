@@ -74,17 +74,17 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
     widget.onChanged.call(_value);
   }
 
-  bool _isValid(String? value) {
-    if (value == null || value.isEmpty) {
-      return widget.allowEmpty;
-    }
+  // bool _isValid(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return widget.allowEmpty;
+  //   }
 
-    final int? parsedValue = int.tryParse(value);
+  //   final int? parsedValue = int.tryParse(value);
 
-    return parsedValue != null &&
-        parsedValue >= widget.min &&
-        parsedValue <= widget.max;
-  }
+  //   return parsedValue != null &&
+  //       parsedValue >= widget.min &&
+  //       parsedValue <= widget.max;
+  // }
 
   void _validateInput(String value) {
     if (value.isEmpty) {
