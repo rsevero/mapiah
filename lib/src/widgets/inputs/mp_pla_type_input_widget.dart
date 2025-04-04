@@ -5,12 +5,12 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPPLATypeRadioButtonWidget extends StatefulWidget {
   final String? initialValue;
-  final ValueChanged<String>? onChanged;
+  final Function(String, bool) onChanged;
 
   const MPPLATypeRadioButtonWidget({
     super.key,
     this.initialValue,
-    this.onChanged,
+    required this.onChanged,
   }) : super();
 
   @override
@@ -32,9 +32,18 @@ class _MPPLATypeRadioButtonWidgetState
     setState(() {
       _selectedOption = value;
     });
-    if (widget.onChanged != null && value != null) {
-      widget.onChanged!(value);
-    }
+
+    widget.onChanged(value!, true);
+  }
+
+  Widget _buildRadioListTile(String title, String value) {
+    return RadioListTile<String>(
+      title: Text(title),
+      value: value,
+      groupValue: _selectedOption,
+      dense: true,
+      onChanged: _onOptionChanged,
+    );
   }
 
   @override
@@ -44,23 +53,17 @@ class _MPPLATypeRadioButtonWidgetState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RadioListTile<String>(
-          title: Text(appLocalizations.thElementPoint),
-          value: THElementType.point.name,
-          groupValue: _selectedOption,
-          onChanged: _onOptionChanged,
+        _buildRadioListTile(
+          appLocalizations.thElementPoint,
+          THElementType.point.name,
         ),
-        RadioListTile<String>(
-          title: Text(appLocalizations.thElementLine),
-          value: THElementType.line.name,
-          groupValue: _selectedOption,
-          onChanged: _onOptionChanged,
+        _buildRadioListTile(
+          appLocalizations.thElementLine,
+          THElementType.line.name,
         ),
-        RadioListTile<String>(
-          title: Text(appLocalizations.thElementArea),
-          value: THElementType.area.name,
-          groupValue: _selectedOption,
-          onChanged: _onOptionChanged,
+        _buildRadioListTile(
+          appLocalizations.thElementArea,
+          THElementType.area.name,
         ),
       ],
     );

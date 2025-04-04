@@ -88,9 +88,6 @@ class MPCommandOptionAux {
     THCommandOptionType.orientation,
     THCommandOptionType.pointScale,
     THCommandOptionType.visibility,
-    THCommandOptionType.altitudeValue,
-    THCommandOptionType.dateValue,
-    THCommandOptionType.copyright,
   ];
 
   static const Map<THPointType, List<THCommandOptionType>>

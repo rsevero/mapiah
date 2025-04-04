@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 
 class MPDateIntervalInputWidget extends StatefulWidget {
   final String? initialValue;
@@ -117,31 +115,6 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double startDateFieldWidth = max(
-      MPInteractionAux.calculateTextFieldWidth(
-        MPInteractionAux.insideRange(
-          value: _startDateController.text.toString().length,
-          min: mpDefaultMinDigitsForTextFields,
-          max: mpDefaultMaxCharsForTextFields,
-        ),
-      ),
-      MPInteractionAux.calculateWarningMessageWidth(
-        _startDateWarningMessage.length,
-      ),
-    );
-    final double endDateFieldWidth = max(
-      MPInteractionAux.calculateTextFieldWidth(
-        MPInteractionAux.insideRange(
-          value: _endDateController.text.toString().length,
-          min: mpDefaultMinDigitsForTextFields,
-          max: mpDefaultMaxCharsForTextFields,
-        ),
-      ),
-      MPInteractionAux.calculateWarningMessageWidth(
-        _endDateWarningMessage.length,
-      ),
-    );
-
     return Card(
       elevation: mpOverlayWindowBlockElevation,
       color: Theme.of(context).colorScheme.secondaryFixedDim,
@@ -170,58 +143,32 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
             const SizedBox(height: mpButtonSpace),
 
             // Start Date Input
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: (_startDateWarningMessage.isEmpty) ? 0 : 16,
-              ),
-              child: SizedBox(
-                width: startDateFieldWidth,
-                child: TextField(
-                  controller: _startDateController,
-                  decoration: InputDecoration(
-                    labelText: _isInterval
-                        ? mpLocator
-                            .appLocalizations.mpDateIntervalStartDateLabel
-                        : mpLocator
-                            .appLocalizations.mpDateIntervalSingleDateLabel,
-                    hintText:
-                        mpLocator.appLocalizations.mpDateIntervalStartDateHint,
-                    border: const OutlineInputBorder(),
-                    errorText: _startDateWarningMessage,
-                  ),
-                  onChanged: (value) {
-                    _validateStartDate();
-                    _onFieldChanged();
-                  },
-                ),
-              ),
+            MPTextFieldInputWidget(
+              textEditingController: _startDateController,
+              errorText: _startDateWarningMessage,
+              labelText: _isInterval
+                  ? mpLocator.appLocalizations.mpDateIntervalStartDateLabel
+                  : mpLocator.appLocalizations.mpDateIntervalSingleDateLabel,
+              hintText: mpLocator.appLocalizations.mpDateIntervalStartDateHint,
+              onChanged: (value) {
+                _validateStartDate();
+                _onFieldChanged();
+              },
             ),
 
             // End Date Input (only shown if interval is selected)
             if (_isInterval) ...[
               const SizedBox(height: mpButtonSpace),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: (_endDateWarningMessage.isEmpty) ? 0 : 16,
-                ),
-                child: SizedBox(
-                  width: endDateFieldWidth,
-                  child: TextField(
-                    controller: _endDateController,
-                    decoration: InputDecoration(
-                      labelText:
-                          mpLocator.appLocalizations.mpDateIntervalEndDateLabel,
-                      hintText:
-                          mpLocator.appLocalizations.mpDateIntervalEndDateHint,
-                      border: const OutlineInputBorder(),
-                      errorText: _endDateWarningMessage,
-                    ),
-                    onChanged: (value) {
-                      _validateEndDate();
-                      _onFieldChanged();
-                    },
-                  ),
-                ),
+              MPTextFieldInputWidget(
+                textEditingController: _endDateController,
+                errorText: _endDateWarningMessage,
+                labelText:
+                    mpLocator.appLocalizations.mpDateIntervalEndDateLabel,
+                hintText: mpLocator.appLocalizations.mpDateIntervalEndDateHint,
+                onChanged: (value) {
+                  _validateEndDate();
+                  _onFieldChanged();
+                },
               ),
             ],
           ],

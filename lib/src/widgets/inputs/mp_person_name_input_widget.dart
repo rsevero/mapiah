@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 
 class MPPersonNameInputWidget extends StatefulWidget {
   final String? initialValue;
@@ -64,43 +62,19 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double nameFieldWidth = max(
-      MPInteractionAux.calculateTextFieldWidth(
-        MPInteractionAux.insideRange(
-          value: _nameController.text.toString().length,
-          min: mpDefaultMinDigitsForTextFields,
-          max: mpDefaultMaxCharsForTextFields,
-        ),
-      ),
-      MPInteractionAux.calculateWarningMessageWidth(
-        _warningMessage.length,
-      ),
-    );
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: mpButtonSpace),
-        SizedBox(
-          width: nameFieldWidth,
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: (_warningMessage.isEmpty) ? 0 : 16,
-            ),
-            child: TextField(
-              controller: _nameController,
-              focusNode: _nameFocusNode,
-              decoration: InputDecoration(
-                labelText: mpLocator.appLocalizations.mpPersonNameLabel,
-                hintText: mpLocator.appLocalizations.mpPersonNameHint,
-                border: OutlineInputBorder(),
-                errorText: _warningMessage,
-              ),
-              onChanged: (value) {
-                _onNameChanged();
-              },
-            ),
-          ),
+        MPTextFieldInputWidget(
+          textEditingController: _nameController,
+          errorText: _warningMessage,
+          labelText: mpLocator.appLocalizations.mpPersonNameLabel,
+          hintText: mpLocator.appLocalizations.mpPersonNameHint,
+          focusNode: _nameFocusNode,
+          onChanged: (value) {
+            _onNameChanged();
+          },
         ),
       ],
     );

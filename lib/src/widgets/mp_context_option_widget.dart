@@ -37,7 +37,13 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
   late String _elementType;
   late String _plaType;
   late String _selectedChoice;
+  late final String _initialElementType;
+  late final String _initialPLAType;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  bool _isElementTypeValid = false;
+  bool _isPLATypeValid = false;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -61,6 +67,10 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
         _plaType = '';
         _selectedChoice = mpUnsetOptionID;
     }
+
+    _initialElementType = _elementType;
+    _initialPLAType = _plaType;
+    _initialSelectedChoice = _selectedChoice;
   }
 
   void _okButtonPressed() {
@@ -98,6 +108,45 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
       MPWindowType.optionChoices,
       false,
     );
+  }
+
+  void _onElementTypeChanged(String value, bool isValid) {
+    if ((value != _elementType) || (_isElementTypeValid != isValid)) {
+      {
+        setState(
+          () {
+            _elementType = value;
+            _isElementTypeValid = isValid;
+            _plaType = '';
+            _isPLATypeValid = false;
+            _updateIsOkButtonEnabled();
+          },
+        );
+      }
+    }
+  }
+
+  void _onPLATypeChanged(String value, bool isValid) {
+    if ((value != _plaType) || (_isPLATypeValid != isValid)) {
+      {
+        setState(
+          () {
+            _plaType = value;
+            _isPLATypeValid = isValid;
+            _updateIsOkButtonEnabled();
+          },
+        );
+      }
+    }
+  }
+
+  void _updateIsOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            ((_elementType != _initialElementType) ||
+                (_plaType != _initialPLAType))));
+
+    _isOkButtonEnabled = _isElementTypeValid && _isPLATypeValid && isChanged;
   }
 
   @override
@@ -141,20 +190,12 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               MPPLATypeRadioButtonWidget(
                 initialValue: _elementType,
-                onChanged: (value) {
-                  setState(() {
-                    _elementType = value;
-                  });
-                },
+                onChanged: _onElementTypeChanged,
               ),
               MPPLATypeDropdownWidget(
                 elementType: _elementType,
                 initialValue: _plaType,
-                onChanged: (value) {
-                  setState(() {
-                    _plaType = value;
-                  });
-                },
+                onChanged: _onPLATypeChanged,
               ),
             ],
           ],
@@ -163,7 +204,10 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

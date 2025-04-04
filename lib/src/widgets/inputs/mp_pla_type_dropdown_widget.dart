@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 
 class MPPLATypeDropdownWidget extends StatefulWidget {
   final String elementType;
-  final String? initialValue;
-  final ValueChanged<String>? onChanged;
+  final String initialValue;
+  final Function(String, bool) onChanged;
 
   const MPPLATypeDropdownWidget({
     super.key,
     required this.elementType,
-    this.initialValue,
-    this.onChanged,
+    this.initialValue = '',
+    required this.onChanged,
   });
 
   @override
@@ -20,11 +21,12 @@ class MPPLATypeDropdownWidget extends StatefulWidget {
 }
 
 class _MPPLATypeDropdownWidgetState extends State<MPPLATypeDropdownWidget> {
-  String? _selectedPLAType;
+  String _selectedPLAType = '';
 
   @override
   void initState() {
     super.initState();
+
     _selectedPLAType = widget.initialValue;
   }
 
@@ -47,19 +49,34 @@ class _MPPLATypeDropdownWidgetState extends State<MPPLATypeDropdownWidget> {
     }
   }
 
+  void _onOptionChanged(String? value) {
+    value ??= '';
+
+    setState(() {
+      _selectedPLAType = value!;
+    });
+
+    widget.onChanged(value, value.isNotEmpty);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> plaTypes = _getPLATypes();
+    Map<String, String> plaTypes = _getPLATypes();
 
     if (plaTypes.isEmpty) {
       return const SizedBox.shrink();
+    }
+    if (!plaTypes.containsKey(_selectedPLAType)) {
+      _selectedPLAType = '';
+      widget.onChanged(_selectedPLAType, _selectedPLAType.isNotEmpty);
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 8.0),
+        const SizedBox(height: mpButtonSpace),
         DropdownMenu<String>(
+          key: ValueKey(widget.elementType),
           initialSelection: _selectedPLAType,
           dropdownMenuEntries: plaTypes.entries
               .map(
@@ -69,14 +86,7 @@ class _MPPLATypeDropdownWidgetState extends State<MPPLATypeDropdownWidget> {
                 ),
               )
               .toList(),
-          onSelected: (value) {
-            setState(() {
-              _selectedPLAType = value;
-            });
-            if (widget.onChanged != null && value != null) {
-              widget.onChanged!(value);
-            }
-          },
+          onSelected: _onOptionChanged,
           label: Text(
             mpLocator.appLocalizations.mpPLATypeDropdownSelectATypeLabel,
           ),

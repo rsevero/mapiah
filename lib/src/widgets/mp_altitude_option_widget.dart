@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -10,6 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
@@ -218,19 +216,6 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double altitudeFieldWidth = max(
-      MPInteractionAux.calculateTextFieldWidth(
-        MPInteractionAux.insideRange(
-          value: _altitudeController.text.toString().length,
-          min: mpDefaultMinDigitsForTextFields,
-          max: mpDefaultMaxCharsForTextFields,
-        ),
-      ),
-      MPInteractionAux.calculateWarningMessageWidth(
-        _warningMessage.length,
-      ),
-    );
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionAltitudeValue,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -261,7 +246,6 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               onChanged: (String? value) {
                 _selectedChoice = value!;
                 _updateIsValid();
-                _textFieldFocusNode.requestFocus();
               },
             ),
 
@@ -287,27 +271,16 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
 
               const SizedBox(height: mpButtonSpace),
               // Numeric Input for Altitude
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: (_warningMessage.isEmpty) ? 0 : 16,
-                ),
-                child: SizedBox(
-                  width: altitudeFieldWidth,
-                  child: TextField(
-                    controller: _altitudeController,
-                    keyboardType: TextInputType.number,
-                    autofocus: true,
-                    focusNode: _textFieldFocusNode,
-                    decoration: InputDecoration(
-                      labelText: appLocalizations.thCommandOptionAltitudeValue,
-                      border: OutlineInputBorder(),
-                      errorText: _warningMessage,
-                    ),
-                    onChanged: (value) {
-                      _updateIsValid();
-                    },
-                  ),
-                ),
+              MPTextFieldInputWidget(
+                errorText: _warningMessage,
+                textEditingController: _altitudeController,
+                labelText: appLocalizations.thCommandOptionAltitudeValue,
+                focusNode: _textFieldFocusNode,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  _updateIsValid();
+                },
               ),
 
               const SizedBox(height: mpButtonSpace),
