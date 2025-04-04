@@ -6,7 +6,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 
 class MPTextFieldInputWidget extends StatelessWidget {
   final TextEditingController textEditingController;
-  final String errorText;
+  final String? errorText;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final bool autofocus;
@@ -16,9 +16,9 @@ class MPTextFieldInputWidget extends StatelessWidget {
 
   const MPTextFieldInputWidget({
     super.key,
-    required this.textEditingController,
-    required this.errorText,
     required this.labelText,
+    required this.textEditingController,
+    this.errorText,
     this.hintText,
     this.focusNode,
     this.keyboardType,
@@ -37,13 +37,13 @@ class MPTextFieldInputWidget extends StatelessWidget {
         ),
       ),
       MPInteractionAux.calculateWarningMessageWidth(
-        errorText.length,
+        errorText == null ? 0 : errorText!.length,
       ),
     );
 
     return Padding(
       padding: EdgeInsets.only(
-        bottom: (errorText.isEmpty) ? 0 : 16,
+        bottom: ((errorText == null) || errorText!.isEmpty) ? 0 : 16,
       ),
       child: SizedBox(
         width: altitudeFieldWidth,

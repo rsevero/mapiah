@@ -500,7 +500,7 @@ abstract class AppLocalizations {
   /// The error message for invalid dimensions value
   ///
   /// In en, this message translates to:
-  /// **'Invalid numeric dimensions values'**
+  /// **'Invalid dimension value'**
   String get mpDimensionsInvalidValueErrorMessage;
 
   /// The error message for invalid distance value

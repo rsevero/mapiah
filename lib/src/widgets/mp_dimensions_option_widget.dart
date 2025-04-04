@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -8,6 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
@@ -42,7 +42,14 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
   final FocusNode _aboveTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final Map<String, String> _unitMap;
+  late final String _initialAbove;
+  late final String _initialBelow;
+  late final String _initialUnit;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  String? _aboveWarningMessage;
+  String? _belowWarningMessage;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -81,6 +88,11 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
         _selectedChoice = mpUnsetOptionID;
         _selectedUnit = thDefaultLengthUnitAsString;
     }
+
+    _initialAbove = _aboveController.text;
+    _initialBelow = _belowController.text;
+    _initialUnit = _selectedUnit;
+    _initialSelectedChoice = _selectedChoice;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
@@ -146,6 +158,28 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
     );
   }
 
+  void _updateOkButtonEnabled() {
+    final String aboveText = _aboveController.text.trim();
+    final String belowText = _belowController.text.trim();
+    final bool isValidAbove = (double.tryParse(aboveText) != null);
+    final bool isValidBelow = (double.tryParse(belowText) != null);
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            ((aboveText != _initialAbove) ||
+                (belowText != _initialBelow) ||
+                (_selectedUnit != _initialUnit))));
+
+    setState(() {
+      _aboveWarningMessage = isValidAbove
+          ? null
+          : appLocalizations.mpDimensionsInvalidValueErrorMessage;
+      _belowWarningMessage = isValidBelow
+          ? null
+          : appLocalizations.mpDimensionsInvalidValueErrorMessage;
+      _isOkButtonEnabled = isValidAbove && isValidBelow && isChanged;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
@@ -166,9 +200,8 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateOkButtonEnabled();
               },
             ),
             RadioListTile<String>(
@@ -177,9 +210,8 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateOkButtonEnabled();
                 _aboveTextFieldFocusNode.requestFocus();
               },
             ),
@@ -187,46 +219,28 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: MPInteractionAux.calculateTextFieldWidth(
-                      MPInteractionAux.insideRange(
-                        value: _aboveController.text.toString().length,
-                        min: mpDefaultMinDigitsForTextFields,
-                        max: mpDefaultMaxCharsForTextFields,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _aboveController,
-                      keyboardType: TextInputType.number,
-                      autofocus: true,
-                      focusNode: _aboveTextFieldFocusNode,
-                      decoration: InputDecoration(
-                        labelText: appLocalizations.mpDimensionsAboveLabel,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+                  MPTextFieldInputWidget(
+                    textEditingController: _aboveController,
+                    errorText: _aboveWarningMessage,
+                    labelText: appLocalizations.mpDimensionsAboveLabel,
+                    autofocus: true,
+                    focusNode: _aboveTextFieldFocusNode,
+                    onChanged: (value) {
+                      _updateOkButtonEnabled();
+                    },
                   ),
                   const SizedBox(width: mpButtonSpace),
-                  SizedBox(
-                    width: MPInteractionAux.calculateTextFieldWidth(
-                      MPInteractionAux.insideRange(
-                        value: _belowController.text.toString().length,
-                        min: mpDefaultMinDigitsForTextFields,
-                        max: mpDefaultMaxCharsForTextFields,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _belowController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: appLocalizations.mpDimensionsBelowLabel,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+                  MPTextFieldInputWidget(
+                    textEditingController: _belowController,
+                    errorText: _belowWarningMessage,
+                    labelText: appLocalizations.mpDimensionsBelowLabel,
+                    onChanged: (value) {
+                      _updateOkButtonEnabled();
+                    },
                   ),
                   const SizedBox(width: mpButtonSpace),
                   DropdownMenu(
@@ -244,9 +258,8 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                       );
                     }).toList(),
                     onSelected: (String? value) {
-                      setState(() {
-                        _selectedUnit = value ?? thDefaultLengthUnitAsString;
-                      });
+                      _selectedUnit = value ?? thDefaultLengthUnitAsString;
+                      _updateOkButtonEnabled();
                     },
                     searchCallback: (entries, query) {
                       final index =
@@ -264,7 +277,10 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

@@ -225,7 +225,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDimensionsBelowLabel => 'Abaixo';
 
   @override
-  String get mpDimensionsInvalidValueErrorMessage => 'Dimensões inválidas';
+  String get mpDimensionsInvalidValueErrorMessage => 'Valor inválida';
 
   @override
   String get mpDistInvalidValueErrorMessage => 'Distância inválida';

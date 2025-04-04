@@ -412,7 +412,7 @@
     "type": "text"
   },
 
-  "mpDimensionsInvalidValueErrorMessage": "Invalid numeric dimensions values",
+  "mpDimensionsInvalidValueErrorMessage": "Invalid dimension value",
   "@mpDimensionsInvalidValueErrorMessage": {
     "description": "The error message for invalid dimensions value",
     "type": "text"

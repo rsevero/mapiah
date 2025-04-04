@@ -79,7 +79,7 @@
 
   "mpDimensionsAboveLabel": "Acima",
   "mpDimensionsBelowLabel": "Abaixo",
-  "mpDimensionsInvalidValueErrorMessage": "Dimensões inválidas",
+  "mpDimensionsInvalidValueErrorMessage": "Valor inválida",
 
   "mpDistInvalidValueErrorMessage": "Distância inválida",
   "mpDistDistanceLabel": "Distância",
