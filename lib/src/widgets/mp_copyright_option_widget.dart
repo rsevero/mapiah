@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -10,6 +7,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_date_interval_input_widget.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
@@ -163,19 +161,6 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double messageFieldWidth = max(
-      MPInteractionAux.calculateTextFieldWidth(
-        MPInteractionAux.insideRange(
-          value: _messageController.text.toString().length,
-          min: mpDefaultMinDigitsForTextFields,
-          max: mpDefaultMaxCharsForTextFields,
-        ),
-      ),
-      MPInteractionAux.calculateWarningMessageWidth(
-        _messageWarningMessage.length,
-      ),
-    );
-
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionCopyright,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -213,26 +198,14 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: (_messageWarningMessage.isEmpty) ? 0 : 16,
-                ),
-                child: SizedBox(
-                  width: messageFieldWidth,
-                  child: TextField(
-                    controller: _messageController,
-                    autofocus: true,
-                    focusNode: _messageFieldFocusNode,
-                    decoration: InputDecoration(
-                      labelText: appLocalizations.mpCopyrightMessageLabel,
-                      border: const OutlineInputBorder(),
-                      errorText: _messageWarningMessage,
-                    ),
-                    onChanged: (value) {
-                      _onMessageChanged();
-                    },
-                  ),
-                ),
+              MPTextFieldInputWidget(
+                textEditingController: _messageController,
+                errorText: _messageWarningMessage,
+                labelText: appLocalizations.mpCopyrightMessageLabel,
+                focusNode: _messageFieldFocusNode,
+                onChanged: (value) {
+                  _onMessageChanged();
+                },
               ),
               const SizedBox(height: mpButtonSpace),
               MPDateIntervalInputWidget(
