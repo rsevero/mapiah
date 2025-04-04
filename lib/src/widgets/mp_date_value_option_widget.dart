@@ -36,7 +36,11 @@ class MPDateValueOptionWidget extends StatefulWidget {
 class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
   late String _date;
   late String _selectedChoice;
+  late final String _initialDate;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  bool _isDateValid = false;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -44,8 +48,8 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THCopyrightCommandOption currentOption =
-            widget.optionInfo.option! as THCopyrightCommandOption;
+        final THDateValueCommandOption currentOption =
+            widget.optionInfo.option! as THDateValueCommandOption;
 
         _date = currentOption.datetime.toString();
         _selectedChoice = mpNonMultipleChoiceSetID;
@@ -57,6 +61,9 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
         _date = '';
         _selectedChoice = mpUnsetOptionID;
     }
+
+    _initialDate = _date;
+    _initialSelectedChoice = _selectedChoice;
   }
 
   void _okButtonPressed() {
@@ -93,6 +100,24 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
       MPWindowType.optionChoices,
       false,
     );
+  }
+
+  void _onDateChanged(String value, bool isValid) {
+    setState(
+      () {
+        _date = value;
+        _isDateValid = isValid;
+        _updateIsOkButtonEnabled();
+      },
+    );
+  }
+
+  void _updateIsOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            (_date != _initialDate)));
+
+    _isOkButtonEnabled = _isDateValid && isChanged;
   }
 
   @override
@@ -136,9 +161,7 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               MPDateIntervalInputWidget(
                 initialValue: _date,
-                // onChanged: (value) {
-                //   _date = value;
-                // },
+                onChanged: _onDateChanged,
               ),
             ],
           ],
@@ -147,7 +170,10 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

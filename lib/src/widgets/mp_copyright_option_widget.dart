@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -35,9 +38,18 @@ class MPCopyrightOptionWidget extends StatefulWidget {
 
 class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
   late String _date;
-  late String _message;
   late String _selectedChoice;
+  late final String _initialDate;
+  late final String _initialMessage;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  String _messageWarningMessage = '';
+  bool _isDateValid = false;
+  bool _isMessageValid = false;
+  bool _isOkButtonEnabled = false;
+  late TextEditingController _messageController;
+  final FocusNode _messageFieldFocusNode = FocusNode();
+  bool _hasExecutedSingleRunOfPostFrameCallback = false;
 
   @override
   void initState() {
@@ -49,17 +61,43 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
             widget.optionInfo.option! as THCopyrightCommandOption;
 
         _date = currentOption.datetime.toString();
-        _message = currentOption.copyright.content.toString();
+        _messageController = TextEditingController(
+            text: currentOption.copyright.content.toString());
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
         _date = '';
-        _message = '';
+        _messageController = TextEditingController(text: '');
         _selectedChoice = '';
       case MPOptionStateType.unset:
         _date = '';
-        _message = '';
+        _messageController = TextEditingController(text: '');
         _selectedChoice = mpUnsetOptionID;
+    }
+
+    _initialDate = _date;
+    _initialMessage = _messageController.text;
+    _initialSelectedChoice = _selectedChoice;
+    _onMessageChanged();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_hasExecutedSingleRunOfPostFrameCallback) {
+        _hasExecutedSingleRunOfPostFrameCallback = true;
+        _executeOnceAfterBuild();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _messageFieldFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _executeOnceAfterBuild() {
+    if (_selectedChoice == mpNonMultipleChoiceSetID) {
+      _messageFieldFocusNode.requestFocus();
     }
   }
 
@@ -67,24 +105,15 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      if (_date.isNotEmpty && _message.isNotEmpty) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
-        newOption = THCopyrightCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          datetime: _date,
-          copyrightMessage: _message,
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(appLocalizations.mpCopyrightInvalidValueErrorMessage),
-          ),
-        );
-        return;
-      }
+      /// The THFileMPID is used only as a placeholder for the actual
+      /// parentMPID of the option(s) to be set. THFile isn't even a
+      /// THHasOptionsMixin so it can't actually be the parent of an option,
+      /// i.e., is has no options at all.
+      newOption = THCopyrightCommandOption.fromStringWithParentMPID(
+        parentMPID: widget.th2FileEditController.thFileMPID,
+        datetime: _date,
+        copyrightMessage: _messageController.text.trim(),
+      );
     }
 
     widget.th2FileEditController.userInteractionController.prepareSetOption(
@@ -100,8 +129,53 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
     );
   }
 
+  void _onDateChanged(String value, bool isValid) {
+    setState(
+      () {
+        _date = value;
+        _isDateValid = isValid;
+        _updateIsOkButtonEnabled();
+      },
+    );
+  }
+
+  void _onMessageChanged() {
+    _isMessageValid = _messageController.text.trim().isNotEmpty;
+
+    setState(
+      () {
+        _messageWarningMessage = _isMessageValid
+            ? ''
+            : appLocalizations.mpCopyrightInvalidMessageErrorMessage;
+        _updateIsOkButtonEnabled();
+      },
+    );
+  }
+
+  void _updateIsOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            ((_date != _initialDate) ||
+                (_messageController.text != _initialMessage))));
+
+    _isOkButtonEnabled = _isDateValid && _isMessageValid && isChanged;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double messageFieldWidth = max(
+      MPInteractionAux.calculateTextFieldWidth(
+        MPInteractionAux.insideRange(
+          value: _messageController.text.toString().length,
+          min: mpDefaultMinDigitsForTextFields,
+          max: mpDefaultMaxCharsForTextFields,
+        ),
+      ),
+      MPInteractionAux.calculateWarningMessageWidth(
+        _messageWarningMessage.length,
+      ),
+    );
+
     return MPOverlayWindowWidget(
       title: appLocalizations.thCommandOptionCopyright,
       overlayWindowType: MPOverlayWindowType.secondary,
@@ -139,22 +213,31 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              TextField(
-                controller: TextEditingController(text: _message),
-                decoration: InputDecoration(
-                  labelText: appLocalizations.mpCopyrightMessageLabel,
-                  border: const OutlineInputBorder(),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: (_messageWarningMessage.isEmpty) ? 0 : 16,
                 ),
-                onChanged: (value) {
-                  _message = value;
-                },
+                child: SizedBox(
+                  width: messageFieldWidth,
+                  child: TextField(
+                    controller: _messageController,
+                    autofocus: true,
+                    focusNode: _messageFieldFocusNode,
+                    decoration: InputDecoration(
+                      labelText: appLocalizations.mpCopyrightMessageLabel,
+                      border: const OutlineInputBorder(),
+                      errorText: _messageWarningMessage,
+                    ),
+                    onChanged: (value) {
+                      _onMessageChanged();
+                    },
+                  ),
+                ),
               ),
               const SizedBox(height: mpButtonSpace),
               MPDateIntervalInputWidget(
                 initialValue: _date,
-                // onChanged: (value) {
-                //   _date = value;
-                // },
+                onChanged: _onDateChanged,
               ),
             ],
           ],
@@ -163,7 +246,10 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

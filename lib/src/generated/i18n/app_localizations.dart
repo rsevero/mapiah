@@ -368,8 +368,8 @@ abstract class AppLocalizations {
   /// The error message for invalid copyright value
   ///
   /// In en, this message translates to:
-  /// **'Invalid copyright info'**
-  String get mpCopyrightInvalidValueErrorMessage;
+  /// **'Invalid copyright message'**
+  String get mpCopyrightInvalidMessageErrorMessage;
 
   /// The label for the copyright message
   ///

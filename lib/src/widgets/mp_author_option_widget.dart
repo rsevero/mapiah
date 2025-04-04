@@ -84,8 +84,8 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
         /// i.e., is has no options at all.
         newOption = THAuthorCommandOption.fromStringWithParentMPID(
           parentMPID: widget.th2FileEditController.thFileMPID,
-          datetime: _date,
-          person: _person,
+          datetime: _date.trim(),
+          person: _person.trim(),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

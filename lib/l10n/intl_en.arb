@@ -277,8 +277,8 @@
     "type": "text"
   },
 
-  "mpCopyrightInvalidValueErrorMessage": "Invalid copyright info",
-  "@mpCopyrightInvalidValueErrorMessage": {
+  "mpCopyrightInvalidMessageErrorMessage": "Invalid copyright message",
+  "@mpCopyrightInvalidMessageErrorMessage": {
     "description": "The error message for invalid copyright value",
     "type": "text"
   },

@@ -157,7 +157,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpContextInvalidValueErrorMessage => 'Ambos os campos são obrigatórios';
 
   @override
-  String get mpCopyrightInvalidValueErrorMessage => 'Dados de direitos autorais inválidos';
+  String get mpCopyrightInvalidMessageErrorMessage => 'Mensagem de direitos autorais inválido';
 
   @override
   String get mpCopyrightMessageLabel => 'Direitos autorais';

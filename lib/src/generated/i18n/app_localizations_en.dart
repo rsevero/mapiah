@@ -157,7 +157,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
 
   @override
-  String get mpCopyrightInvalidValueErrorMessage => 'Invalid copyright info';
+  String get mpCopyrightInvalidMessageErrorMessage => 'Invalid copyright message';
 
   @override
   String get mpCopyrightMessageLabel => 'Copyright';
