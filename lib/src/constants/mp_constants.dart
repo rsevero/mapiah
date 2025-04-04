@@ -106,6 +106,13 @@ const int mpDefaultMinDigitsForTextFields = 6;
 const int mpDefaultMinCharsForTextFields = 10;
 const int mpDefaultMaxCharsForTextFields = 20;
 
+const int mpETRSMin = 28;
+const int mpETRSMax = 37;
+const int mpEPSGESRIMin = 1;
+const int mpEPSGESRIMax = 99999;
+const int mpUTMMin = 1;
+const int mpUTMMax = 60;
+
 const int mpInitialZOrder = 0;
 const int mpDefaultZOrderIncrement = 1000;
 

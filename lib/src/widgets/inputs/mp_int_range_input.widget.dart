@@ -37,10 +37,8 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
         widget.initialValue! >= widget.min &&
         widget.initialValue! <= widget.max) {
       _value = widget.initialValue;
-    } else if (widget.allowEmpty) {
-      _value = null;
     } else {
-      _value = widget.min;
+      _value = null;
     }
 
     _controller = TextEditingController(
@@ -55,49 +53,50 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
   }
 
   void _increment() {
-    setState(() {
-      if (_value == null && !widget.allowEmpty) {
-        _value = widget.min;
-      } else if (_value != null && _value! < widget.max) {
-        _value = _value! + 1;
-      }
-      _controller.text = _value?.toString() ?? '';
-      widget.onChanged.call(_value);
-    });
+    if ((_value == null) || (_value! < widget.min)) {
+      _value = widget.min;
+    } else if (_value! < widget.max) {
+      _value = _value! + 1;
+    }
+    _controller.text = _value?.toString() ?? '';
+
+    widget.onChanged.call(_value);
   }
 
   void _decrement() {
-    setState(() {
-      if (_value == null && !widget.allowEmpty) {
-        _value = widget.min;
-      } else if (_value != null && _value! > widget.min) {
-        _value = _value! - 1;
-      }
-      _controller.text = _value?.toString() ?? '';
-      widget.onChanged.call(_value);
-    });
+    if ((_value == null) || (_value! > widget.max)) {
+      _value = widget.max;
+    } else if (_value! > widget.min) {
+      _value = _value! - 1;
+    }
+    _controller.text = _value?.toString() ?? '';
+
+    widget.onChanged.call(_value);
+  }
+
+  bool _isValid(String? value) {
+    if (value == null || value.isEmpty) {
+      return widget.allowEmpty;
+    }
+
+    final int? parsedValue = int.tryParse(value);
+
+    return parsedValue != null &&
+        parsedValue >= widget.min &&
+        parsedValue <= widget.max;
   }
 
   void _validateInput(String value) {
-    if (widget.allowEmpty && value.isEmpty) {
-      setState(() {
-        _value = null;
-      });
+    if (value.isEmpty) {
+      _value = null;
+
       widget.onChanged.call(null);
       return;
     }
 
-    final int? parsedValue = int.tryParse(value);
-    if (parsedValue != null &&
-        parsedValue >= widget.min &&
-        parsedValue <= widget.max) {
-      setState(() {
-        _value = parsedValue;
-      });
-      widget.onChanged.call(parsedValue);
-    } else {
-      _controller.text = _value?.toString() ?? '';
-    }
+    _value = int.tryParse(value);
+
+    widget.onChanged.call(_value);
   }
 
   @override

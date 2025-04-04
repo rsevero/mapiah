@@ -33,7 +33,7 @@ class MPCSOptionWidget extends StatefulWidget {
 }
 
 class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
-  String? _selectedChoice;
+  String _selectedChoice = '';
   String _currentValue = '';
   String _osgbMajor = '';
   String _osgbMinor = '';
@@ -41,7 +41,12 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   String _utmHemisphere = 'N';
   int _eptgESRIETRSIdentifier = 0;
   bool _forOutput = false;
+  late final String _initialCurrentValue;
+  late final bool _initialForOutput;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  bool _isValid = false;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -51,6 +56,56 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           ? null
           : (widget.optionInfo.option as THCSCommandOption).cs.name,
     );
+
+    _initialCurrentValue = _currentValue;
+    _initialForOutput = _forOutput;
+    _initialSelectedChoice = _selectedChoice;
+    _updateIsValid();
+  }
+
+  void _updateIsValid() {
+    if (_forOutput && (THCSPart.isCSNotForOutput(_selectedChoice))) {
+      _isValid = false;
+    } else {
+      switch (_selectedChoice) {
+        case 'EPSG':
+        case 'ESRI':
+          _isValid = (_eptgESRIETRSIdentifier >= mpEPSGESRIMin) &&
+              (_eptgESRIETRSIdentifier <= mpEPSGESRIMax);
+        case 'ETRS':
+          _isValid = ((_eptgESRIETRSIdentifier >= mpETRSMin) &&
+                  (_eptgESRIETRSIdentifier <= mpETRSMax) ||
+              (_eptgESRIETRSIdentifier == 0));
+        case 'OSGB':
+          _isValid = _osgbMajor.isNotEmpty && _osgbMinor.isNotEmpty;
+        case 'UTM':
+          _isValid = (_utmZone >= mpUTMMin) &&
+              (_utmZone <= mpUTMMax) &&
+              ((_utmHemisphere == 'N') || (_utmHemisphere == 'S'));
+        case 'iJTSK':
+        case 'iJTSK03':
+        case 'JTSK':
+        case 'JTSK03':
+        case 'lat-long':
+        case 'long-lat':
+        case 'S-MERC':
+          _isValid = true;
+        default:
+          _isValid = false;
+      }
+    }
+    _updateCurrentValue();
+    _updateIsOkButtonEnabled();
+  }
+
+  void _onChangedEPSGESRIETRS(int? value) {
+    _eptgESRIETRSIdentifier = (value == null) ? 0 : value;
+    _updateIsValid();
+  }
+
+  void _onSelectedOSGB() {
+    _isValid = (_osgbMajor.isNotEmpty && _osgbMinor.isNotEmpty);
+    _updateIsValid();
   }
 
   String _determineInitialOption(String? initialValue) {
@@ -121,14 +176,10 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           padding: const EdgeInsets.only(left: mpButtonSpace),
           child: MPIntRangeInputWidget(
             label: appLocalizations.mpCSEPSGESRILabel(option),
-            min: 1,
-            max: 99999,
-            onChanged: (value) {
-              if (value != null) {
-                _eptgESRIETRSIdentifier = value;
-                _updateCurrentValue();
-              }
-            },
+            min: mpEPSGESRIMin,
+            max: mpEPSGESRIMax,
+            initialValue: _eptgESRIETRSIdentifier,
+            onChanged: _onChangedEPSGESRIETRS,
           ),
         );
       case 'ETRS':
@@ -136,14 +187,11 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           padding: const EdgeInsets.only(left: mpButtonSpace),
           child: MPIntRangeInputWidget(
             label: appLocalizations.mpCSETRSLabel,
-            min: 28,
-            max: 37,
+            min: mpETRSMin,
+            max: mpETRSMax,
             initialValue: _eptgESRIETRSIdentifier,
             allowEmpty: true,
-            onChanged: (value) {
-              _eptgESRIETRSIdentifier = (value == null) ? 0 : value;
-              _updateCurrentValue();
-            },
+            onChanged: _onChangedEPSGESRIETRS,
           ),
         );
       case 'iJTSK':
@@ -173,8 +221,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                     onSelected: (value) {
                       if (value != null && value.isNotEmpty) {
                         _osgbMajor = value;
-                        _updateCurrentValue();
                       }
+                      _onSelectedOSGB();
                     },
                   ),
                 ],
@@ -197,8 +245,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                     onSelected: (value) {
                       if (value != null && value.isNotEmpty) {
                         _osgbMinor = value;
-                        _updateCurrentValue();
                       }
+                      _onSelectedOSGB();
                     },
                   ),
                 ],
@@ -215,14 +263,14 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
             children: [
               MPIntRangeInputWidget(
                 label: appLocalizations.mpCSUTMZoneNumberLabel,
-                min: 1,
-                max: 60,
+                min: mpUTMMin,
+                max: mpUTMMax,
                 initialValue: _utmZone,
                 onChanged: (value) {
                   if (value != null) {
                     _utmZone = value;
-                    _updateCurrentValue();
                   }
+                  _updateIsValid();
                 },
               ),
               const SizedBox(width: mpButtonSpace),
@@ -237,13 +285,9 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                       dense: true,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(
-                            () {
-                              _utmHemisphere = value;
-                              _updateCurrentValue();
-                            },
-                          );
+                          _utmHemisphere = value;
                         }
+                        _updateIsValid();
                       },
                     ),
                     RadioListTile<String>(
@@ -253,13 +297,9 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                       dense: true,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(
-                            () {
-                              _utmHemisphere = value;
-                              _updateCurrentValue();
-                            },
-                          );
+                          _utmHemisphere = value;
                         }
+                        _updateIsValid();
                       },
                     ),
                   ],
@@ -311,25 +351,40 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   }
 
   void _updateCurrentValue() {
-    switch (_selectedChoice) {
-      case 'EPSG':
-      case 'ESRI':
-        _currentValue = "$_selectedChoice:$_eptgESRIETRSIdentifier";
-      case 'ETRS':
-        _currentValue = _eptgESRIETRSIdentifier > 0
-            ? "$_selectedChoice:$_eptgESRIETRSIdentifier"
-            : 'ETRS';
-      case 'OSGB':
-        _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
-      case 'UTM':
-        _currentValue = 'UTM$_utmZone$_utmHemisphere';
+    if (_isValid) {
+      switch (_selectedChoice) {
+        case 'EPSG':
+        case 'ESRI':
+          _currentValue = "$_selectedChoice:$_eptgESRIETRSIdentifier";
+        case 'ETRS':
+          _currentValue = _eptgESRIETRSIdentifier > 0
+              ? "$_selectedChoice$_eptgESRIETRSIdentifier"
+              : 'ETRS';
+        case 'OSGB':
+          _currentValue = 'OSGB:$_osgbMajor$_osgbMinor';
+        case 'UTM':
+          _currentValue = 'UTM$_utmZone$_utmHemisphere';
 
-      /// In case of unrecognized option, we keep the current value.
-      case mpUnrecognizedOptionID:
-        break;
-      default:
-        _currentValue = _selectedChoice ?? '';
+        /// In case of unrecognized option, we keep the current value.
+        case mpUnrecognizedOptionID:
+          break;
+        default:
+          _currentValue = _selectedChoice;
+      }
     }
+  }
+
+  void _updateIsOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice != mpUnsetOptionID) &&
+                (_initialCurrentValue != _currentValue) ||
+            (_initialForOutput != _forOutput)));
+
+    setState(
+      () {
+        _isOkButtonEnabled = _isValid && isChanged;
+      },
+    );
   }
 
   @override
@@ -347,17 +402,17 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       'UTM',
     ];
 
-    allOptions.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-
-    if (_selectedChoice == mpUnrecognizedOptionID) {
-      allOptions.insert(0, mpUnrecognizedOptionID);
-    }
-
     final bool isSet =
-        ((_selectedChoice != null) && (_selectedChoice != mpUnsetOptionID));
+        (_selectedChoice.isNotEmpty && (_selectedChoice != mpUnsetOptionID));
     final List<Widget> optionWidgets = [];
 
     if (isSet) {
+      allOptions.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+
+      if (_selectedChoice == mpUnrecognizedOptionID) {
+        allOptions.insert(0, mpUnrecognizedOptionID);
+      }
+
       optionWidgets.add(
         Row(
           children: [
@@ -366,11 +421,10 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
             Switch(
               value: _forOutput,
               onChanged: (value) {
-                setState(
-                  () {
-                    _forOutput = value;
-                  },
-                );
+                _forOutput = value;
+                if (_forOutput &&
+                    (THCSPart.isCSNotForOutput(_selectedChoice))) {}
+                _updateIsValid();
               },
             ),
           ],
@@ -389,10 +443,9 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
             groupValue: _selectedChoice,
             contentPadding: EdgeInsets.zero,
             onChanged: (value) {
-              setState(() {
-                _selectedChoice = value;
-                _updateCurrentValue();
-              });
+              _selectedChoice = value ?? '';
+              _eptgESRIETRSIdentifier = 0;
+              _updateIsValid();
             },
           ),
         );
@@ -420,12 +473,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (value) {
-                setState(
-                  () {
-                    _selectedChoice = value;
-                    _updateCurrentValue();
-                  },
-                );
+                _selectedChoice = mpUnsetOptionID;
+                _updateIsValid();
               },
             ),
             RadioListTile<String>(
@@ -434,12 +483,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               groupValue: isSet ? mpNonMultipleChoiceSetID : _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (value) {
-                setState(
-                  () {
-                    _selectedChoice = value;
-                    _updateCurrentValue();
-                  },
-                );
+                _selectedChoice = mpNonMultipleChoiceSetID;
+                _updateIsValid();
               },
             ),
             if (isSet)
@@ -454,7 +499,10 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),

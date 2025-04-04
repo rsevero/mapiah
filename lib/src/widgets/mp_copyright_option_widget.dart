@@ -37,6 +37,9 @@ class MPCopyrightOptionWidget extends StatefulWidget {
 class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
   late String _date;
   late String _selectedChoice;
+  late TextEditingController _messageController;
+  final FocusNode _messageFieldFocusNode = FocusNode();
+  bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final String _initialDate;
   late final String _initialMessage;
   late final String _initialSelectedChoice;
@@ -45,9 +48,6 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
   bool _isDateValid = false;
   bool _isMessageValid = false;
   bool _isOkButtonEnabled = false;
-  late TextEditingController _messageController;
-  final FocusNode _messageFieldFocusNode = FocusNode();
-  bool _hasExecutedSingleRunOfPostFrameCallback = false;
 
   @override
   void initState() {
