@@ -617,6 +617,36 @@ abstract class AppLocalizations {
   /// **'Height'**
   String get mpLineHeightHeightLabel;
 
+  /// The label for the tiny named scale
+  ///
+  /// In en, this message translates to:
+  /// **'Tiny'**
+  String get mpNamedScaleTiny;
+
+  /// The label for the small named scale
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get mpNamedScaleSmall;
+
+  /// The label for the normal named scale
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get mpNamedScaleNormal;
+
+  /// The label for the large named scale
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get mpNamedScaleLarge;
+
+  /// The label for the huge named scale
+  ///
+  /// In en, this message translates to:
+  /// **'Huge'**
+  String get mpNamedScaleHuge;
+
   /// The error message for invalid person name format
   ///
   /// In en, this message translates to:
@@ -682,6 +712,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Point types'**
   String get mpPLATypePointTitle;
+
+  /// The label for the named scale option
+  ///
+  /// In en, this message translates to:
+  /// **'Named'**
+  String get mpPLScaleCommandOptionNamed;
+
+  /// The label for the numeric scale option
+  ///
+  /// In en, this message translates to:
+  /// **'Numeric'**
+  String get mpPLScaleCommandOptionNumeric;
+
+  /// The label for the numeric scale type
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get mpLPScaleNumericLabel;
 
   /// The title for the options edit dialog
   ///
@@ -2231,12 +2279,6 @@ abstract class AppLocalizations {
   /// **'Gradient'**
   String get thCommandOptionLinePointGradient;
 
-  /// The label for the line scale command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Scale'**
-  String get thCommandOptionLineScale;
-
   /// The label for the L size command option type
   ///
   /// In en, this message translates to:
@@ -2285,11 +2327,11 @@ abstract class AppLocalizations {
   /// **'Height'**
   String get thCommandOptionPointHeightValue;
 
-  /// The label for the point scale command option type
+  /// The label for the point/line/line segment scale command option type
   ///
   /// In en, this message translates to:
   /// **'Scale'**
-  String get thCommandOptionPointScale;
+  String get thCommandOptionPLScale;
 
   /// The label for the projection command option type
   ///

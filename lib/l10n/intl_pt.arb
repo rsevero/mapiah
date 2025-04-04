@@ -106,6 +106,12 @@
   "mpLineHeightInvalidValueErrorMessage": "Altura inválida",
   "mpLineHeightHeightLabel": "Altura",
 
+  "mpNamedScaleTiny": "Minúsculo",
+  "mpNamedScaleSmall": "Pequeno",
+  "mpNamedScaleNormal": "Normal",
+  "mpNamedScaleLarge": "Grande",
+  "mpNamedScaleHuge": "Enorme",
+
   "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",
@@ -118,6 +124,10 @@
   "mpPLATypeLineTitle": "Tipos de linha",
   "mpPLATypeMostUsed": "Mais usados",
   "mpPLATypePointTitle": "Tipos de ponto",
+
+  "mpPLScaleCommandOptionNamed": "Pré-definidos",
+  "mpPLScaleCommandOptionNumeric": "Numérico",
+  "mpLPScaleNumericLabel": "Tamanho",
 
   "mpOptionsEditTitle": "Opções",
 
@@ -384,7 +394,6 @@
   "thCommandOptionLineHeight": "Altura",
   "thCommandOptionLinePointDirection": "Direção",
   "thCommandOptionLinePointGradient": "Gradiente",
-  "thCommandOptionLineScale": "Escala",
   "thCommandOptionLSize": "Tamanho L",
   "thCommandOptionMark": "Marca",
   "thCommandOptionName": "Nome",
@@ -393,7 +402,7 @@
   "thCommandOptionPassageHeightValue": "Altura da Passagem",
   "thCommandOptionPlace": "Lugar",
   "thCommandOptionPointHeightValue": "Altura do Ponto",
-  "thCommandOptionPointScale": "Escala",
+  "thCommandOptionPLScale": "Escala",
   "thCommandOptionProjection": "Projeção",
   "thCommandOptionRebelays": "Rebelays",
   "thCommandOptionReverse": "Reverter",

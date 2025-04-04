@@ -11,7 +11,7 @@ import 'package:mapiah/src/elements/parts/th_cs_part.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/parts/th_multiple_choice_part.dart';
+import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/th_person_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
@@ -48,7 +48,7 @@ part 'th_line_gradient_command_option.dart';
 part 'th_line_height_command_option.dart';
 part 'th_line_point_direction_command_option.dart';
 part 'th_line_point_gradient_command_option.dart';
-part 'th_line_scale_command_option.dart';
+part 'th_pl_scale_command_option.dart';
 part 'th_lsize_command_option.dart';
 part 'th_mark_command_option.dart';
 part 'th_multiple_choice_command_option.dart';
@@ -60,7 +60,6 @@ part 'th_outline_command_option.dart';
 part 'th_passage_height_value_command_option.dart';
 part 'th_place_command_option.dart';
 part 'th_point_height_value_command_option.dart';
-part 'th_point_scale_command_option.dart';
 part 'th_projection_command_option.dart';
 part 'th_rebelays_command_option.dart';
 part 'th_reverse_command_option.dart';
@@ -208,8 +207,8 @@ abstract class THCommandOption {
         return THLinePointDirectionCommandOption.fromMap(map);
       case THCommandOptionType.linePointGradient:
         return THLinePointGradientCommandOption.fromMap(map);
-      case THCommandOptionType.lineScale:
-        return THLineScaleCommandOption.fromMap(map);
+      case THCommandOptionType.plScale:
+        return THPLScaleCommandOption.fromMap(map);
       case THCommandOptionType.lSize:
         return THLSizeCommandOption.fromMap(map);
       case THCommandOptionType.mark:
@@ -226,8 +225,6 @@ abstract class THCommandOption {
         return THPlaceCommandOption.fromMap(map);
       case THCommandOptionType.pointHeightValue:
         return THPointHeightValueCommandOption.fromMap(map);
-      case THCommandOptionType.pointScale:
-        return THPointScaleCommandOption.fromMap(map);
       case THCommandOptionType.projection:
         return THProjectionCommandOption.fromMap(map);
       case THCommandOptionType.rebelays:
@@ -355,7 +352,7 @@ abstract class THCommandOption {
           optionParent: optionParent,
           choice: value,
         );
-      case THCommandOptionType.lineScale:
+      case THCommandOptionType.plScale:
       // return THLineScaleCommandOption(value);
       case THCommandOptionType.lSize:
       // return THLSizeCommandOption(value);
@@ -379,8 +376,6 @@ abstract class THCommandOption {
         );
       case THCommandOptionType.pointHeightValue:
       // return THPointHeightValueCommandOption(value);
-      case THCommandOptionType.pointScale:
-      // return THPointScaleCommandOption(value);
       case THCommandOptionType.projection:
       // return THProjectionCommandOption(value);
       case THCommandOptionType.rebelays:

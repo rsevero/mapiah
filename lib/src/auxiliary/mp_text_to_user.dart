@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
@@ -43,6 +44,9 @@ class MPTextToUser {
       _multipleChoiceOutlineChoiceAsString = {};
   static final Map<THOptionChoicesPlaceType, String>
       _multipleChoicePlaceChoiceAsString = {};
+  static final Map<THPLScaleCommandOptionType, String>
+      _plScaleCommandOptionTypeAsString = {};
+  static final Map<String, String> _namedScaleOptionsAsString = {};
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
@@ -65,6 +69,41 @@ class MPTextToUser {
     _initializeMultipleChoiceLinePointGradientChoiceAsString();
     _initializeMultipleChoiceOutlineChoiceAsString();
     _initializeMultipleChoicePlaceChoiceAsString();
+    _initializePLScaleCommandOptionTypeAsString();
+    _initializeNamedScaleOptionsAsString();
+  }
+
+  static void _initializePLScaleCommandOptionTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _plScaleCommandOptionTypeAsString[THPLScaleCommandOptionType.named] =
+        localizations.mpPLScaleCommandOptionNamed;
+    _plScaleCommandOptionTypeAsString[THPLScaleCommandOptionType.numeric] =
+        localizations.mpPLScaleCommandOptionNumeric;
+  }
+
+  static String getPLScaleCommandOptionType(
+      THPLScaleCommandOptionType plScaleCommandOptionType) {
+    return _plScaleCommandOptionTypeAsString
+            .containsKey(plScaleCommandOptionType)
+        ? _plScaleCommandOptionTypeAsString[plScaleCommandOptionType]!
+        : plScaleCommandOptionType.name;
+  }
+
+  static void _initializeNamedScaleOptionsAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _namedScaleOptionsAsString['xs'] = localizations.mpNamedScaleTiny;
+    _namedScaleOptionsAsString['s'] = localizations.mpNamedScaleSmall;
+    _namedScaleOptionsAsString['m'] = localizations.mpNamedScaleNormal;
+    _namedScaleOptionsAsString['l'] = localizations.mpNamedScaleLarge;
+    _namedScaleOptionsAsString['xl'] = localizations.mpNamedScaleHuge;
+  }
+
+  static String getNamedScaleOption(String namedScaleOption) {
+    return _namedScaleOptionsAsString.containsKey(namedScaleOption)
+        ? _namedScaleOptionsAsString[namedScaleOption]!
+        : namedScaleOption;
   }
 
   static void _initializeCommandDescriptionTypeAsString() {
@@ -546,8 +585,6 @@ class MPTextToUser {
         localizations.thCommandOptionLinePointDirection;
     _commandOptionTypeAsString[THCommandOptionType.linePointGradient] =
         localizations.thCommandOptionLinePointGradient;
-    _commandOptionTypeAsString[THCommandOptionType.lineScale] =
-        localizations.thCommandOptionLineScale;
     _commandOptionTypeAsString[THCommandOptionType.lSize] =
         localizations.thCommandOptionLSize;
     _commandOptionTypeAsString[THCommandOptionType.mark] =
@@ -562,10 +599,10 @@ class MPTextToUser {
         localizations.thCommandOptionPassageHeightValue;
     _commandOptionTypeAsString[THCommandOptionType.place] =
         localizations.thCommandOptionPlace;
+    _commandOptionTypeAsString[THCommandOptionType.plScale] =
+        localizations.thCommandOptionPLScale;
     _commandOptionTypeAsString[THCommandOptionType.pointHeightValue] =
         localizations.thCommandOptionPointHeightValue;
-    _commandOptionTypeAsString[THCommandOptionType.pointScale] =
-        localizations.thCommandOptionPointScale;
     _commandOptionTypeAsString[THCommandOptionType.projection] =
         localizations.thCommandOptionProjection;
     _commandOptionTypeAsString[THCommandOptionType.rebelays] =
@@ -892,6 +929,26 @@ class MPTextToUser {
       default:
         return compareStringsNoDiacritics(a, b);
     }
+  }
+
+  static Map<String, String> getPLScaleCommandOptionTypeOptions() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THPLScaleCommandOptionType.values) {
+      choices[choiceType.name] = getPLScaleCommandOptionType(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getNamedScaleOptions() {
+    final Map<String, String> choices = {};
+
+    for (final String choiceType in THScaleMultipleChoicePart.choices) {
+      choices[choiceType] = getNamedScaleOption(choiceType);
+    }
+
+    return choices;
   }
 
   static Map<String, String> getAreaTypeChoices() {

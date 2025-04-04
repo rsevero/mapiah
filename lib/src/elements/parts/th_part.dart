@@ -6,7 +6,7 @@ import 'package:mapiah/src/elements/parts/th_cs_part.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/parts/th_multiple_choice_part.dart';
+import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/th_person_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
@@ -18,10 +18,10 @@ enum THPartType {
   datetime,
   double,
   lengthUnit,
-  multipleChoice,
   person,
   position,
-  string,
+  scaleChoices,
+  string;
 }
 
 abstract class THPart {
@@ -51,8 +51,8 @@ abstract class THPart {
         return THDoublePart.fromMap(map);
       case THPartType.lengthUnit:
         return THLengthUnitPart.fromMap(map);
-      case THPartType.multipleChoice:
-        return THMultipleChoicePart.fromMap(map);
+      case THPartType.scaleChoices:
+        return THScaleMultipleChoicePart.fromMap(map);
       case THPartType.person:
         return THPersonPart.fromMap(map);
       case THPartType.position:

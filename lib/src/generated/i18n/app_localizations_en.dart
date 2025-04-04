@@ -285,6 +285,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLineHeightHeightLabel => 'Height';
 
   @override
+  String get mpNamedScaleTiny => 'Tiny';
+
+  @override
+  String get mpNamedScaleSmall => 'Small';
+
+  @override
+  String get mpNamedScaleNormal => 'Normal';
+
+  @override
+  String get mpNamedScaleLarge => 'Large';
+
+  @override
+  String get mpNamedScaleHuge => 'Huge';
+
+  @override
   String get mpPersonNameInvalidFormatErrorMessage => 'Invalid person name';
 
   @override
@@ -316,6 +331,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpPLATypePointTitle => 'Point types';
+
+  @override
+  String get mpPLScaleCommandOptionNamed => 'Named';
+
+  @override
+  String get mpPLScaleCommandOptionNumeric => 'Numeric';
+
+  @override
+  String get mpLPScaleNumericLabel => 'Size';
 
   @override
   String get mpOptionsEditTitle => 'Options';
@@ -1110,9 +1134,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thCommandOptionLinePointGradient => 'Gradient';
 
   @override
-  String get thCommandOptionLineScale => 'Scale';
-
-  @override
   String get thCommandOptionLSize => 'L-Size';
 
   @override
@@ -1137,7 +1158,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thCommandOptionPointHeightValue => 'Height';
 
   @override
-  String get thCommandOptionPointScale => 'Scale';
+  String get thCommandOptionPLScale => 'Scale';
 
   @override
   String get thCommandOptionProjection => 'Projection';

@@ -532,6 +532,36 @@
     "type": "text"
   },
 
+  "mpNamedScaleTiny": "Tiny",
+  "@mpNamedScaleTiny": {
+    "description": "The label for the tiny named scale",
+    "type": "text"
+  },
+
+  "mpNamedScaleSmall": "Small",
+  "@mpNamedScaleSmall": {
+    "description": "The label for the small named scale",
+    "type": "text"
+  },
+
+  "mpNamedScaleNormal": "Normal",
+  "@mpNamedScaleNormal": {
+    "description": "The label for the normal named scale",
+    "type": "text"
+  },
+
+  "mpNamedScaleLarge": "Large",
+  "@mpNamedScaleLarge": {
+    "description": "The label for the large named scale",
+    "type": "text"
+  },
+
+  "mpNamedScaleHuge": "Huge",
+  "@mpNamedScaleHuge": {
+    "description": "The label for the huge named scale",
+    "type": "text"
+  },
+
   "mpPersonNameInvalidFormatErrorMessage": "Invalid person name",
   "@mpPersonNameInvalidFormatErrorMessage": {
     "description": "The error message for invalid person name format",
@@ -595,6 +625,24 @@
   "mpPLATypePointTitle": "Point types",
   "@mpPLATypePointTitle": {
     "description": "The title for the point types",
+    "type": "text"
+  },
+
+  "mpPLScaleCommandOptionNamed": "Named",
+  "@mpPLScaleCommandOptionNamed": {
+    "description": "The label for the named scale option",
+    "type": "text"
+  },
+
+  "mpPLScaleCommandOptionNumeric": "Numeric",
+  "@mpPLScaleCommandOptionNumeric": {
+    "description": "The label for the numeric scale option",
+    "type": "text"
+  },
+
+  "mpLPScaleNumericLabel": "Size",
+  "@mpLPScaleNumericLabel": {
+    "description": "The label for the numeric scale type",
     "type": "text"
   },
 
@@ -2176,12 +2224,6 @@
     "type": "text"
   },
 
-  "thCommandOptionLineScale": "Scale",
-  "@thCommandOptionLineScale": {
-    "description": "The label for the line scale command option type",
-    "type": "text"
-  },
-
   "thCommandOptionLSize": "L-Size",
   "@thCommandOptionLSize": {
     "description": "The label for the L size command option type",
@@ -2230,9 +2272,9 @@
     "type": "text"
   },
 
-  "thCommandOptionPointScale": "Scale",
-  "@thCommandOptionPointScale": {
-    "description": "The label for the point scale command option type",
+  "thCommandOptionPLScale": "Scale",
+  "@thCommandOptionPLScale": {
+    "description": "The label for the point/line/line segment scale command option type",
     "type": "text"
   },
 

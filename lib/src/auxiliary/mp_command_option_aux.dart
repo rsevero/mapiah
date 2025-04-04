@@ -47,7 +47,7 @@ class MPCommandOptionAux {
       THCommandOptionType.lineGradient,
     ],
     THLineType.label: [
-      THCommandOptionType.lineScale,
+      THCommandOptionType.plScale,
       THCommandOptionType.text,
     ],
     THLineType.pit: [
@@ -86,9 +86,8 @@ class MPCommandOptionAux {
     THCommandOptionType.id,
     THCommandOptionType.place,
     THCommandOptionType.orientation,
-    THCommandOptionType.pointScale,
+    THCommandOptionType.plScale,
     THCommandOptionType.visibility,
-    THCommandOptionType.lineHeight,
   ];
 
   static const Map<THPointType, List<THCommandOptionType>>

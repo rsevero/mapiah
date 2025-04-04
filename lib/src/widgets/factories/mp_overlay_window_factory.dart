@@ -20,10 +20,11 @@ import 'package:mapiah/src/widgets/mp_dimensions_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_distance_type_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_line_height_option_widget.dart';
-import 'package:mapiah/src/widgets/mp_station_type_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
+import 'package:mapiah/src/widgets/mp_pl_scale_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
+import 'package:mapiah/src/widgets/mp_station_type_option_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPOverlayWindowFactory {
@@ -214,6 +215,13 @@ class MPOverlayWindowFactory {
           );
         case THCommandOptionType.lineHeight:
           overlayWindowWidget = MPLineHeightOptionWidget(
+            th2FileEditController: th2FileEditController,
+            optionInfo: optionInfo,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
+          );
+        case THCommandOptionType.plScale:
+          overlayWindowWidget = MPPLScaleOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

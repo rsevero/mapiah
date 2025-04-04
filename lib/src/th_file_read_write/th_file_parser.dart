@@ -1335,13 +1335,13 @@ class THFileParser {
 
     switch (_currentSpec[0]) {
       case 'numeric':
-        THPointScaleCommandOption.sizeAsNumberFromString(
+        THPLScaleCommandOption.sizeAsNumberFromString(
           optionParent: _currentHasOptions,
           numericScaleSize: _currentSpec[1],
           originalLineInTH2File: _currentLine,
         );
       case 'multiplechoice':
-        THPointScaleCommandOption.sizeAsMultipleChoice(
+        THPLScaleCommandOption.sizeAsNamed(
           optionParent: _currentHasOptions,
           textScaleSize: _currentSpec[1],
           originalLineInTH2File: _currentLine,
@@ -1360,21 +1360,15 @@ class THFileParser {
 
     switch (_currentSpec[0]) {
       case 'numeric':
-        THLineScaleCommandOption.sizeAsNumberFromString(
+        THPLScaleCommandOption.sizeAsNumberFromString(
           optionParent: _currentHasOptions,
           numericScaleSize: _currentSpec[1],
           originalLineInTH2File: _currentLine,
         );
       case 'multiplechoice':
-        THLineScaleCommandOption.sizeAsMultipleChoice(
+        THPLScaleCommandOption.sizeAsNamed(
           optionParent: _currentHasOptions,
           textScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
-        );
-      case 'text':
-        THLineScaleCommandOption.sizeAsText(
-          optionParent: _currentHasOptions,
-          textScale: _currentSpec[1],
           originalLineInTH2File: _currentLine,
         );
       default:

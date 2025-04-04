@@ -549,7 +549,7 @@ class THGrammar extends GrammarDefinition {
           nameOption() |
           orientationOption() |
           placeOption() |
-          pointScaleOption() |
+          plScaleOption() |
           scrapOption() |
           subtypeOption() |
           textOption() |
@@ -645,11 +645,10 @@ class THGrammar extends GrammarDefinition {
       .trim()
       .map((value) => [value]);
 
-  /// point -scale
-  Parser pointScaleOption() => stringIgnoreCase('scale') & pointScaleOptions();
-  Parser pointLineSegmentScaleOption() =>
-      stringIgnoreCase('scale') & pointScaleOptions();
-  Parser pointScaleOptions() =>
+  /// point/line -scale
+  Parser plScaleOption() => stringIgnoreCase('scale') & plScaleOptions();
+  Parser lineScaleCommandLikeOption() => plScaleOption();
+  Parser plScaleOptions() =>
       (stringIgnoreCase('tiny') |
               stringIgnoreCase('xs') |
               stringIgnoreCase('small') |
@@ -766,7 +765,7 @@ class THGrammar extends GrammarDefinition {
           placeOption() |
           rebelaysOption() |
           reverseOption() |
-          lineScaleOption() |
+          plScaleOption() |
           subtypeOption() |
           textOption() |
           visibilityOption())
@@ -898,25 +897,6 @@ class THGrammar extends GrammarDefinition {
   Parser heightOption() => stringIgnoreCase('height') & heightOptions();
   Parser heightCommandLikeOption() => heightOption();
   Parser heightOptions() => number().trim().map((value) => [value]);
-
-  /// line -scale
-  Parser lineScaleOption() => stringIgnoreCase('scale') & lineScaleOptions();
-  Parser lineScaleCommandLikeOption() => lineScaleOption();
-  Parser lineScaleOptions() =>
-      (stringIgnoreCase('tiny') |
-              stringIgnoreCase('xs') |
-              stringIgnoreCase('small') |
-              stringIgnoreCase('s') |
-              stringIgnoreCase('normal') |
-              stringIgnoreCase('m') |
-              stringIgnoreCase('large') |
-              stringIgnoreCase('l') |
-              stringIgnoreCase('huge') |
-              stringIgnoreCase('xl'))
-          .skip(after: thWhitespace().star())
-          .trim()
-          .map((value) => ['multiplechoice', value]) |
-      number().trim().map((value) => ['numeric', value]);
 
   /// linepoint l-size/size
   Parser lsizeCommandLikeOption() =>
