@@ -106,6 +106,7 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
   void dispose() {
     _aboveController.dispose();
     _belowController.dispose();
+    _aboveTextFieldFocusNode.dispose();
     super.dispose();
   }
 
@@ -127,7 +128,6 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-
         newOption = THDimensionsValueCommandOption.fromStringWithParentMPID(
           parentMPID: widget.th2FileEditController.thFileMPID,
           above: _aboveController.text,

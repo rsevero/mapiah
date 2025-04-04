@@ -6,22 +6,21 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/widgets/inputs/mp_date_interval_input_widget.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
-import 'package:mapiah/src/widgets/inputs/mp_person_name_input_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPAuthorOptionWidget extends StatefulWidget {
+class MPLineHeightOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPAuthorOptionWidget({
+  const MPLineHeightOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -30,22 +29,20 @@ class MPAuthorOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPAuthorOptionWidget> createState() => _MPAuthorOptionWidgetState();
+  State<MPLineHeightOptionWidget> createState() =>
+      _MPLineHeightOptionWidgetState();
 }
 
-class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
-  late String _date;
-  late String _person;
+class _MPLineHeightOptionWidgetState extends State<MPLineHeightOptionWidget> {
+  late TextEditingController _heightController;
   late String _selectedChoice;
-  late final String _initialDate;
-  late final String _initialPerson;
-  late final String _initialSelectedChoice;
+  final FocusNode _heightTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
+  late final String _initialHeight;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  bool _isDateValid = false;
-  bool _isPersonValid = false;
+  String? _heightWarningMessage;
   bool _isOkButtonEnabled = false;
-  final _personFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -53,25 +50,28 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THAuthorCommandOption currentOption =
-            widget.optionInfo.option! as THAuthorCommandOption;
+        final THCommandOption currentOption = widget.optionInfo.option!;
 
-        _date = currentOption.datetime.toString();
-        _person = currentOption.person.toString();
-        _selectedChoice = mpNonMultipleChoiceSetID;
+        if (currentOption is THLineHeightCommandOption) {
+          _heightController = TextEditingController(
+            text: currentOption.height.toString(),
+          );
+          _selectedChoice = mpNonMultipleChoiceSetID;
+        } else {
+          throw Exception(
+            'Unsupported option type: ${widget.optionInfo.type} in _MPDimensionsOptionWidgetState.initState()',
+          );
+        }
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _date = '';
-        _person = '';
+        _heightController = TextEditingController(text: '0');
         _selectedChoice = '';
       case MPOptionStateType.unset:
-        _date = '';
-        _person = '';
+        _heightController = TextEditingController(text: '0');
         _selectedChoice = mpUnsetOptionID;
     }
 
-    _initialDate = _date;
-    _initialPerson = _person;
+    _initialHeight = _heightController.text;
     _initialSelectedChoice = _selectedChoice;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -84,13 +84,14 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
 
   @override
   void dispose() {
-    _personFocusNode.dispose();
+    _heightController.dispose();
+    _heightTextFieldFocusNode.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _personFocusNode.requestFocus();
+      _heightTextFieldFocusNode.requestFocus();
     }
   }
 
@@ -98,20 +99,23 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      if (_date.isNotEmpty && _person.isNotEmpty) {
+      final double? height = double.tryParse(_heightController.text);
+
+      if (height != null) {
         /// The THFileMPID is used only as a placeholder for the actual
         /// parentMPID of the option(s) to be set. THFile isn't even a
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
-        newOption = THAuthorCommandOption.fromStringWithParentMPID(
+        newOption = THLineHeightCommandOption.fromStringWithParentMPID(
           parentMPID: widget.th2FileEditController.thFileMPID,
-          datetime: _date.trim(),
-          person: _person.trim(),
+          height: _heightController.text,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(appLocalizations.mpAuthorInvalidValueErrorMessage)),
+            content:
+                Text(appLocalizations.mpLineHeightInvalidValueErrorMessage),
+          ),
         );
         return;
       }
@@ -130,34 +134,25 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
     );
   }
 
-  void _onDateChanged(String value, bool isValid) {
-    setState(() {
-      _date = value;
-      _isDateValid = isValid;
-      _updateIsOkButtonEnabled();
-    });
-  }
-
-  void _onPersonChanged(String value, bool isValid) {
-    setState(() {
-      _person = value;
-      _isPersonValid = isValid;
-      _updateIsOkButtonEnabled();
-    });
-  }
-
-  void _updateIsOkButtonEnabled() {
+  void _updateOkButtonEnabled() {
+    final String aboveText = _heightController.text.trim();
+    final bool isValidHeight = (double.tryParse(aboveText) != null);
     final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            ((_date != _initialDate) || (_person != _initialPerson))));
+            (aboveText != _initialHeight)));
 
-    _isOkButtonEnabled = _isDateValid && _isPersonValid && isChanged;
+    setState(() {
+      _heightWarningMessage = isValidHeight
+          ? null
+          : appLocalizations.mpDimensionsInvalidValueErrorMessage;
+      _isOkButtonEnabled = isValidHeight && isChanged;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionAuthor,
+      title: appLocalizations.thCommandOptionLineHeight,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -174,14 +169,8 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(
-                  () {
-                    if (value != null) {
-                      _selectedChoice = value;
-                    }
-                    _updateIsOkButtonEnabled();
-                  },
-                );
+                _selectedChoice = value!;
+                _updateOkButtonEnabled();
               },
             ),
             RadioListTile<String>(
@@ -190,28 +179,30 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(
-                  () {
-                    if (value != null) {
-                      _selectedChoice = value;
-                    }
-                    _updateIsOkButtonEnabled();
-                  },
-                );
+                _selectedChoice = value!;
+                _updateOkButtonEnabled();
+                _heightTextFieldFocusNode.requestFocus();
               },
             ),
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              MPPersonNameInputWidget(
-                initialValue: _person,
-                focusNode: _personFocusNode,
-                autofocus: true,
-                onChanged: _onPersonChanged,
-              ),
-              MPDateIntervalInputWidget(
-                initialValue: _date,
-                onChanged: _onDateChanged,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  MPTextFieldInputWidget(
+                    textEditingController: _heightController,
+                    errorText: _heightWarningMessage,
+                    labelText: appLocalizations.mpLineHeightHeightLabel,
+                    autofocus: true,
+                    focusNode: _heightTextFieldFocusNode,
+                    onChanged: (value) {
+                      _updateOkButtonEnabled();
+                    },
+                  ),
+                ],
               ),
             ],
           ],

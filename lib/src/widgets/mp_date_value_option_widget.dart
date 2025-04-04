@@ -41,6 +41,7 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isDateValid = false;
   bool _isOkButtonEnabled = false;
+  final FocusNode _dateFieldFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -64,6 +65,12 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
 
     _initialDate = _date;
     _initialSelectedChoice = _selectedChoice;
+  }
+
+  @override
+  void dispose() {
+    _dateFieldFocusNode.dispose();
+    super.dispose();
   }
 
   void _okButtonPressed() {
@@ -161,6 +168,8 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               MPDateIntervalInputWidget(
                 initialValue: _date,
+                focusNode: _dateFieldFocusNode,
+                autofocus: true,
                 onChanged: _onDateChanged,
               ),
             ],

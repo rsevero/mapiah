@@ -202,6 +202,7 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
                 textEditingController: _messageController,
                 errorText: _messageWarningMessage,
                 labelText: appLocalizations.mpCopyrightMessageLabel,
+                autofocus: true,
                 focusNode: _messageFieldFocusNode,
                 onChanged: (value) {
                   _onMessageChanged();

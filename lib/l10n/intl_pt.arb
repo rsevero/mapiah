@@ -103,6 +103,9 @@
   "mpLengthUnitYard": "jarda",
   "mpLengthUnitYardAbbreviation": "yd",
 
+  "mpLineHeightInvalidValueErrorMessage": "Altura inválida",
+  "mpLineHeightHeightLabel": "Altura",
+
   "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",

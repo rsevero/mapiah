@@ -10,6 +10,8 @@ class MPIntRangeInputWidget extends StatefulWidget {
   final bool allowEmpty;
   final int? initialValue;
   final ValueChanged<int?> onChanged;
+  final bool autofocus;
+  final FocusNode? focusNode;
 
   const MPIntRangeInputWidget({
     super.key,
@@ -19,6 +21,8 @@ class MPIntRangeInputWidget extends StatefulWidget {
     this.allowEmpty = false,
     this.initialValue,
     required this.onChanged,
+    this.autofocus = false,
+    this.focusNode,
   });
 
   @override
@@ -125,8 +129,10 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                 ],
-                onChanged: _validateInput,
                 decoration: const InputDecoration(border: OutlineInputBorder()),
+                focusNode: widget.focusNode,
+                autofocus: widget.autofocus,
+                onChanged: _validateInput,
               ),
             ),
             IconButton(

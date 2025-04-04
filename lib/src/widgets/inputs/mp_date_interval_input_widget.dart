@@ -6,11 +6,15 @@ import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 class MPDateIntervalInputWidget extends StatefulWidget {
   final String? initialValue;
   final Function(String, bool)? onChanged;
+  final bool autofocus;
+  final FocusNode? focusNode;
 
   const MPDateIntervalInputWidget({
     super.key,
     this.initialValue,
     this.onChanged,
+    this.autofocus = false,
+    this.focusNode,
   });
 
   @override
@@ -31,6 +35,13 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
   void initState() {
     super.initState();
     _initializeFields(widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    _startDateController.dispose();
+    _endDateController.dispose();
+    super.dispose();
   }
 
   void _initializeFields(String? initialValue) {
@@ -150,6 +161,8 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
                   ? mpLocator.appLocalizations.mpDateIntervalStartDateLabel
                   : mpLocator.appLocalizations.mpDateIntervalSingleDateLabel,
               hintText: mpLocator.appLocalizations.mpDateIntervalStartDateHint,
+              autofocus: widget.autofocus,
+              focusNode: widget.focusNode,
               onChanged: (value) {
                 _validateStartDate();
                 _onFieldChanged();

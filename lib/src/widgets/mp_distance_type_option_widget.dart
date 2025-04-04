@@ -104,6 +104,7 @@ class _MPDistanceTypeOptionWidgetState
   @override
   void dispose() {
     _distanceController.dispose();
+    _lengthTextFieldFocusNode.dispose();
     super.dispose();
   }
 

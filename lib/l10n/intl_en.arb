@@ -520,6 +520,18 @@
     "type": "text"
   },
 
+  "mpLineHeightInvalidValueErrorMessage": "Invalid line height",
+  "@mpLineHeightInvalidValueErrorMessage": {
+    "description": "The error message for invalid line height value",
+    "type": "text"
+  },
+
+  "mpLineHeightHeightLabel": "Height",
+  "@mpLineHeightHeightLabel": {
+    "description": "The label for the height type",
+    "type": "text"
+  },
+
   "mpPersonNameInvalidFormatErrorMessage": "Invalid person name",
   "@mpPersonNameInvalidFormatErrorMessage": {
     "description": "The error message for invalid person name format",

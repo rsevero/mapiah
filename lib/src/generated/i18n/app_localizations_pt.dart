@@ -279,6 +279,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
+  String get mpLineHeightInvalidValueErrorMessage => 'Altura inválida';
+
+  @override
+  String get mpLineHeightHeightLabel => 'Altura';
+
+  @override
   String get mpPersonNameInvalidFormatErrorMessage => 'Nome inválido';
 
   @override

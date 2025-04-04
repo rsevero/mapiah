@@ -605,6 +605,18 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
+  /// The error message for invalid line height value
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid line height'**
+  String get mpLineHeightInvalidValueErrorMessage;
+
+  /// The label for the height type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get mpLineHeightHeightLabel;
+
   /// The error message for invalid person name format
   ///
   /// In en, this message translates to:

@@ -84,6 +84,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
   @override
   void dispose() {
     _thIDController.dispose();
+    _idTextFieldFocusNode.dispose();
     super.dispose();
   }
 

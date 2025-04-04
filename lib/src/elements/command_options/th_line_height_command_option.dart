@@ -19,6 +19,14 @@ class THLineHeightCommandOption extends THCommandOption {
     this.height = THDoublePart.fromString(valueString: height);
   }
 
+  THLineHeightCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String height,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
+    this.height = THDoublePart.fromString(valueString: height);
+  }
+
   @override
   THCommandOptionType get type => THCommandOptionType.lineHeight;
 

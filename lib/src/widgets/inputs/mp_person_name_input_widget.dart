@@ -6,11 +6,15 @@ import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 class MPPersonNameInputWidget extends StatefulWidget {
   final String? initialValue;
   final Function(String, bool)? onChanged;
+  final bool autofocus;
+  final FocusNode? focusNode;
 
   const MPPersonNameInputWidget({
     super.key,
     this.initialValue,
     this.onChanged,
+    this.autofocus = false,
+    this.focusNode,
   }) : super();
 
   @override
@@ -20,7 +24,6 @@ class MPPersonNameInputWidget extends StatefulWidget {
 
 class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
   late TextEditingController _nameController;
-  final FocusNode _nameFocusNode = FocusNode();
   String? _warningMessage;
   bool _isValid = false;
 
@@ -34,7 +37,6 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
   @override
   void dispose() {
     _nameController.dispose();
-    _nameFocusNode.dispose();
     super.dispose();
   }
 
@@ -71,7 +73,8 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
           errorText: _warningMessage,
           labelText: mpLocator.appLocalizations.mpPersonNameLabel,
           hintText: mpLocator.appLocalizations.mpPersonNameHint,
-          focusNode: _nameFocusNode,
+          focusNode: widget.focusNode,
+          autofocus: widget.autofocus,
           onChanged: (value) {
             _onNameChanged();
           },

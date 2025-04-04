@@ -108,6 +108,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   @override
   void dispose() {
     _altitudeController.dispose();
+    _textFieldFocusNode.dispose();
     super.dispose();
   }
 
