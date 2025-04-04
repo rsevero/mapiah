@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -8,6 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
@@ -42,7 +42,12 @@ class _MPDistanceTypeOptionWidgetState
   final FocusNode _lengthTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final Map<String, String> _unitMap;
+  late final String _initialDistance;
+  late final String _initialUnit;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  String? _distanceWarningMessage;
+  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -83,6 +88,10 @@ class _MPDistanceTypeOptionWidgetState
         _selectedChoice = mpUnsetOptionID;
         _selectedUnit = thDefaultLengthUnitAsString;
     }
+
+    _initialDistance = _distanceController.text;
+    _initialUnit = _selectedUnit;
+    _initialSelectedChoice = _selectedChoice;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
@@ -152,6 +161,23 @@ class _MPDistanceTypeOptionWidgetState
     );
   }
 
+  void _updateOkButtonEnabled() {
+    final String distanceText = _distanceController.text.trim();
+    final bool isValidDistance = (double.tryParse(distanceText) != null);
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            ((distanceText != _initialDistance) ||
+                (_selectedUnit != _initialUnit))));
+
+    setState(() {
+      _distanceWarningMessage = isValidDistance
+          ? null
+          : appLocalizations.mpDistInvalidValueErrorMessage;
+
+      _isOkButtonEnabled = isValidDistance && isChanged;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final String title;
@@ -188,9 +214,10 @@ class _MPDistanceTypeOptionWidgetState
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                if (value != null) {
+                  _selectedChoice = value;
+                }
+                _updateOkButtonEnabled();
               },
             ),
             RadioListTile<String>(
@@ -199,9 +226,10 @@ class _MPDistanceTypeOptionWidgetState
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                if (value != null) {
+                  _selectedChoice = value;
+                }
+                _updateOkButtonEnabled();
                 _lengthTextFieldFocusNode.requestFocus();
               },
             ),
@@ -209,28 +237,19 @@ class _MPDistanceTypeOptionWidgetState
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: MPInteractionAux.calculateTextFieldWidth(
-                      MPInteractionAux.insideRange(
-                        value: _distanceController.text.toString().length,
-                        min: mpDefaultMinDigitsForTextFields,
-                        max: mpDefaultMaxCharsForTextFields,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _distanceController,
-                      keyboardType: TextInputType.number,
-                      autofocus: true,
-                      focusNode: _lengthTextFieldFocusNode,
-                      decoration: InputDecoration(
-                        labelText: lengthLabel,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+                  MPTextFieldInputWidget(
+                    labelText: lengthLabel,
+                    textEditingController: _distanceController,
+                    autofocus: true,
+                    focusNode: _lengthTextFieldFocusNode,
+                    errorText: _distanceWarningMessage,
+                    onChanged: (value) {
+                      _updateOkButtonEnabled();
+                    },
                   ),
                   const SizedBox(width: mpButtonSpace),
                   DropdownMenu(
@@ -248,9 +267,8 @@ class _MPDistanceTypeOptionWidgetState
                       );
                     }).toList(),
                     onSelected: (String? value) {
-                      setState(() {
-                        _selectedUnit = value ?? thDefaultLengthUnitAsString;
-                      });
+                      _selectedUnit = value ?? thDefaultLengthUnitAsString;
+                      _updateOkButtonEnabled();
                     },
                     searchCallback: (entries, query) {
                       final index =
@@ -268,7 +286,10 @@ class _MPDistanceTypeOptionWidgetState
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),
