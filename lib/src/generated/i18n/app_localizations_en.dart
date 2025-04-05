@@ -58,6 +58,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpAuthorInvalidValueErrorMessage => 'Invalid date/interval and person name';
 
   @override
+  String get mpAzimuthAzimuthLabel => 'Azimuth';
+
+  @override
+  String get mpAzimuthInvalidErrorMessage => 'Invalid azimuth';
+
+  @override
+  String get mpAzimuthNorth => 'North';
+
+  @override
+  String get mpAzimuthSouth => 'South';
+
+  @override
+  String get mpAzimuthEast => 'East';
+
+  @override
+  String get mpAzimuthWest => 'West';
+
+  @override
+  String get mpAzimuthNorthAbbreviation => 'N';
+
+  @override
+  String get mpAzimuthSouthAbbreviation => 'S';
+
+  @override
+  String get mpAzimuthEastAbbreviation => 'E';
+
+  @override
+  String get mpAzimuthWestAbbreviation => 'W';
+
+  @override
   String get mpButtonCancel => 'Cancel';
 
   @override
@@ -184,12 +214,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCSUTMZoneNumberLabel => 'Zone number (1-60)';
-
-  @override
-  String get mpCSUTMNorthLabel => 'North';
-
-  @override
-  String get mpCSUTMSouthLabel => 'South';
 
   @override
   String get mpDateIntervalEndDateHint => 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';

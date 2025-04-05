@@ -167,6 +167,66 @@ abstract class AppLocalizations {
   /// **'Invalid date/interval and person name'**
   String get mpAuthorInvalidValueErrorMessage;
 
+  /// The label for the azimuth type
+  ///
+  /// In en, this message translates to:
+  /// **'Azimuth'**
+  String get mpAzimuthAzimuthLabel;
+
+  /// The error message for invalid azimuth value
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid azimuth'**
+  String get mpAzimuthInvalidErrorMessage;
+
+  /// The label for the north azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'North'**
+  String get mpAzimuthNorth;
+
+  /// The label for the south azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'South'**
+  String get mpAzimuthSouth;
+
+  /// The label for the east azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'East'**
+  String get mpAzimuthEast;
+
+  /// The label for the west azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'West'**
+  String get mpAzimuthWest;
+
+  /// The abbreviation for the north azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'N'**
+  String get mpAzimuthNorthAbbreviation;
+
+  /// The abbreviation for the south azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get mpAzimuthSouthAbbreviation;
+
+  /// The abbreviation for the east azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'E'**
+  String get mpAzimuthEastAbbreviation;
+
+  /// The abbreviation for the west azimuth
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get mpAzimuthWestAbbreviation;
+
   /// The label for the cancel button
   ///
   /// In en, this message translates to:
@@ -418,18 +478,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zone number (1-60)'**
   String get mpCSUTMZoneNumberLabel;
-
-  /// The label for the CS UTM north option
-  ///
-  /// In en, this message translates to:
-  /// **'North'**
-  String get mpCSUTMNorthLabel;
-
-  /// The label for the CS UTM south option
-  ///
-  /// In en, this message translates to:
-  /// **'South'**
-  String get mpCSUTMSouthLabel;
 
   /// The hint for the end date field in the date interval dialog
   ///

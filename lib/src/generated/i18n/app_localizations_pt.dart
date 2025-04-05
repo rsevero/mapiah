@@ -58,6 +58,36 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAuthorInvalidValueErrorMessage => 'Data/intervalo de data e nome de autor válidos';
 
   @override
+  String get mpAzimuthAzimuthLabel => 'Azimute';
+
+  @override
+  String get mpAzimuthInvalidErrorMessage => 'Azimute inválido';
+
+  @override
+  String get mpAzimuthNorth => 'Norte';
+
+  @override
+  String get mpAzimuthSouth => 'Sul';
+
+  @override
+  String get mpAzimuthEast => 'Leste';
+
+  @override
+  String get mpAzimuthWest => 'Oeste';
+
+  @override
+  String get mpAzimuthNorthAbbreviation => 'N';
+
+  @override
+  String get mpAzimuthSouthAbbreviation => 'S';
+
+  @override
+  String get mpAzimuthEastAbbreviation => 'L';
+
+  @override
+  String get mpAzimuthWestAbbreviation => 'O';
+
+  @override
   String get mpButtonCancel => 'Cancelar';
 
   @override
@@ -184,12 +214,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCSUTMZoneNumberLabel => 'Número da zona UTM (1-60)';
-
-  @override
-  String get mpCSUTMNorthLabel => 'Norte';
-
-  @override
-  String get mpCSUTMSouthLabel => 'Sul';
 
   @override
   String get mpDateIntervalEndDateHint => 'AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';

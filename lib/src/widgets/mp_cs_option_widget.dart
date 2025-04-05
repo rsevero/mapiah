@@ -279,7 +279,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RadioListTile<String>(
-                      title: Text(appLocalizations.mpCSUTMNorthLabel),
+                      title: Text(appLocalizations.mpAzimuthNorth),
                       value: 'N',
                       groupValue: _utmHemisphere,
                       dense: true,
@@ -291,7 +291,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                       },
                     ),
                     RadioListTile<String>(
-                      title: Text(appLocalizations.mpCSUTMSouthLabel),
+                      title: Text(appLocalizations.mpAzimuthSouth),
                       value: 'S',
                       groupValue: _utmHemisphere,
                       dense: true,

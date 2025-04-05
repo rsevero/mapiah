@@ -16,6 +16,17 @@
 
   "mpAuthorInvalidValueErrorMessage": "Data/intervalo de data e nome de autor válidos",
 
+  "mpAzimuthAzimuthLabel": "Azimute",
+  "mpAzimuthInvalidErrorMessage": "Azimute inválido",
+  "mpAzimuthNorth": "Norte",
+  "mpAzimuthSouth": "Sul",
+  "mpAzimuthEast": "Leste",
+  "mpAzimuthWest": "Oeste",
+  "mpAzimuthNorthAbbreviation": "N",
+  "mpAzimuthSouthAbbreviation": "S",
+  "mpAzimuthEastAbbreviation": "L",
+  "mpAzimuthWestAbbreviation": "O",
+
   "mpButtonCancel": "Cancelar",
   "mpButtonOK": "OK",
 
@@ -63,8 +74,6 @@
   "mpCSOSGBMajorLabel": "OSGB principal",
   "mpCSOSGBMinorLabel": "OSGB menor",
   "mpCSUTMZoneNumberLabel": "Número da zona UTM (1-60)",
-  "mpCSUTMNorthLabel": "Norte",
-  "mpCSUTMSouthLabel": "Sul",
 
   "mpDateIntervalEndDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
   "mpDateIntervalEndDateLabel": "Data de término",

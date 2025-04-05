@@ -514,4 +514,14 @@ class MPNumericAux {
 
     return componentsToDouble(sign, exponent, precision);
   }
+
+  static double normalizeAngle(double angle) {
+    angle = angle % 360;
+
+    if (angle < 0) {
+      angle += 360;
+    }
+
+    return angle;
+  }
 }

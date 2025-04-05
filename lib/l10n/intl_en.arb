@@ -79,6 +79,66 @@
     "type": "text"
   },
 
+  "mpAzimuthAzimuthLabel": "Azimuth",
+  "@mpAzimuthAzimuthLabel": {
+    "description": "The label for the azimuth type",
+    "type": "text"
+  },
+
+  "mpAzimuthInvalidErrorMessage": "Invalid azimuth",
+  "@mpAzimuthInvalidErrorMessage": {
+    "description": "The error message for invalid azimuth value",
+    "type": "text"
+  },
+
+  "mpAzimuthNorth": "North",
+  "@mpAzimuthNorth": {
+    "description": "The label for the north azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthSouth": "South",
+  "@mpAzimuthSouth": {
+    "description": "The label for the south azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthEast": "East",
+  "@mpAzimuthEast": {
+    "description": "The label for the east azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthWest": "West",
+  "@mpAzimuthWest": {
+    "description": "The label for the west azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthNorthAbbreviation": "N",
+  "@mpAzimuthNorthAbbreviation": {
+    "description": "The abbreviation for the north azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthSouthAbbreviation": "S",
+  "@mpAzimuthSouthAbbreviation": {
+    "description": "The abbreviation for the south azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthEastAbbreviation": "E",
+  "@mpAzimuthEastAbbreviation": {
+    "description": "The abbreviation for the east azimuth",
+    "type": "text"
+  },
+
+  "mpAzimuthWestAbbreviation": "W",
+  "@mpAzimuthWestAbbreviation": {
+    "description": "The abbreviation for the west azimuth",
+    "type": "text"
+  },
+
   "mpButtonCancel": "Cancel",
   "@mpButtonCancel": {
     "description": "The label for the cancel button",
@@ -331,18 +391,6 @@
   "mpCSUTMZoneNumberLabel": "Zone number (1-60)",
   "@mpCSUTMZoneNumberLabel": {
     "description": "The label for the CS UTM zone number option",
-    "type": "text"
-  },
-
-  "mpCSUTMNorthLabel": "North",
-  "@mpCSUTMNorthLabel": {
-    "description": "The label for the CS UTM north option",
-    "type": "text"
-  },
-
-  "mpCSUTMSouthLabel": "South",
-  "@mpCSUTMSouthLabel": {
-    "description": "The label for the CS UTM south option",
     "type": "text"
   },
 

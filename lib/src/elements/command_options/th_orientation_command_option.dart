@@ -1,7 +1,7 @@
 part of 'th_command_option.dart';
 
-// orientation/orient <number> . defines the orientation of the symbol. If not speci-
-// fied, it’s oriented to north. 0 ≤ number < 360.
+// orientation/orient <number> . defines the orientation of the symbol. If not
+// specified, it’s oriented to north. 0 ≤ number < 360.
 class THOrientationCommandOption extends THCommandOption {
   late THDoublePart azimuth;
 
@@ -16,6 +16,14 @@ class THOrientationCommandOption extends THCommandOption {
     required String azimuth,
     super.originalLineInTH2File = '',
   }) : super() {
+    this.azimuth = THDoublePart.fromString(valueString: azimuth);
+  }
+
+  THOrientationCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String azimuth,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     this.azimuth = THDoublePart.fromString(valueString: azimuth);
   }
 
