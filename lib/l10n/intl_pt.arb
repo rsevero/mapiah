@@ -118,6 +118,8 @@
   "mpNamedScaleLarge": "Grande",
   "mpNamedScaleHuge": "Enorme",
 
+  "mpNameStationLabel": "Base",
+
   "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",
@@ -406,7 +408,7 @@
   "thCommandOptionLinePointGradient": "Gradiente",
   "thCommandOptionLSize": "Tamanho L",
   "thCommandOptionMark": "Marca",
-  "thCommandOptionName": "Nome",
+  "thCommandOptionName": "Base",
   "thCommandOptionOutline": "Contorno",
   "thCommandOptionOrientation": "Orientação",
   "thCommandOptionPassageHeightValue": "Altura da Passagem",

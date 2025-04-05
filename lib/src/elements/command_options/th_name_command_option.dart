@@ -1,7 +1,7 @@
 part of 'th_command_option.dart';
 
-// name <reference> . if the point type is station, this option gives the reference to the
-// real survey station.
+// name <reference> . if the point type is station, this option gives the
+// reference to the real survey station.
 class THNameCommandOption extends THCommandOption {
   late final String reference;
 
@@ -16,6 +16,12 @@ class THNameCommandOption extends THCommandOption {
     required this.reference,
     super.originalLineInTH2File = '',
   }) : super();
+
+  THNameCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.reference,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM();
 
   @override
   THCommandOptionType get type => THCommandOptionType.name;

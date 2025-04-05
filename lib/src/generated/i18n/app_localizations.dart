@@ -665,6 +665,12 @@ abstract class AppLocalizations {
   /// **'Huge'**
   String get mpNamedScaleHuge;
 
+  /// The label for the name station type
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get mpNameStationLabel;
+
   /// The error message for invalid person name format
   ///
   /// In en, this message translates to:
@@ -2321,10 +2327,10 @@ abstract class AppLocalizations {
   /// **'Mark'**
   String get thCommandOptionMark;
 
-  /// The label for the name command option type
+  /// The label for the station name command option type
   ///
   /// In en, this message translates to:
-  /// **'Name'**
+  /// **'Station'**
   String get thCommandOptionName;
 
   /// The label for the outline command option type

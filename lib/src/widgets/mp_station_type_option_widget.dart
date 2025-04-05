@@ -62,6 +62,10 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
             _stationController = TextEditingController(
               text: currentOption.station,
             );
+          case THNameCommandOption _:
+            _stationController = TextEditingController(
+              text: currentOption.reference,
+            );
           default:
             throw Exception(
               'Unsupported option type: ${widget.optionInfo..type} in _MPStationTypeOptionWidgetState.initState()',
@@ -123,6 +127,11 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
               parentMPID: widget.th2FileEditController.thFileMPID,
               station: station,
             );
+          case THCommandOptionType.name:
+            newOption = THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              reference: station,
+            );
           default:
             throw Exception(
               'Unsupported option type: ${widget.optionInfo.type} in _MPStationTypeOptionWidgetState._okButtonPressed()',
@@ -182,6 +191,9 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
       case THCommandOptionType.from:
         title = appLocalizations.thCommandOptionFrom;
         stationLabel = appLocalizations.mpExtendStationLabel;
+      case THCommandOptionType.name:
+        title = appLocalizations.thCommandOptionName;
+        stationLabel = appLocalizations.mpNameStationLabel;
       default:
         throw Exception(
           'Unsupported option type: ${widget.optionInfo.type} in _MPStationTypeOptionWidgetState.build()',

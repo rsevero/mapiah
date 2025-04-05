@@ -309,6 +309,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpNamedScaleHuge => 'Huge';
 
   @override
+  String get mpNameStationLabel => 'Station';
+
+  @override
   String get mpPersonNameInvalidFormatErrorMessage => 'Invalid person name';
 
   @override
@@ -1155,7 +1158,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thCommandOptionMark => 'Mark';
 
   @override
-  String get thCommandOptionName => 'Name';
+  String get thCommandOptionName => 'Station';
 
   @override
   String get thCommandOptionOutline => 'Outline';

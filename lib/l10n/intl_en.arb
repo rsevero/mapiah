@@ -580,6 +580,12 @@
     "type": "text"
   },
 
+  "mpNameStationLabel": "Station",
+  "@mpNameStationLabel": {
+    "description": "The label for the name station type",
+    "type": "text"
+  },
+
   "mpPersonNameInvalidFormatErrorMessage": "Invalid person name",
   "@mpPersonNameInvalidFormatErrorMessage": {
     "description": "The error message for invalid person name format",
@@ -2266,9 +2272,9 @@
     "type": "text"
   },
 
-  "thCommandOptionName": "Name",
+  "thCommandOptionName": "Station",
   "@thCommandOptionName": {
-    "description": "The label for the name command option type",
+    "description": "The label for the station name command option type",
     "type": "text"
   },
 
