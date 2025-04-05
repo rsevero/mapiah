@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
@@ -38,7 +38,12 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
   late String _selectedChoice;
   final FocusNode _stationTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
+  late final String _initialStation;
+  late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  bool _isValid = false;
+  bool _isOkButtonEnabled = false;
+  String? _warningMessage;
 
   @override
   void initState() {
@@ -72,6 +77,9 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
         _selectedChoice = mpUnsetOptionID;
     }
 
+    _initialStation = _stationController.text;
+    _initialSelectedChoice = _selectedChoice;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
         _hasExecutedSingleRunOfPostFrameCallback = true;
@@ -83,6 +91,7 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
   @override
   void dispose() {
     _stationController.dispose();
+    _stationTextFieldFocusNode.dispose();
     super.dispose();
   }
 
@@ -132,6 +141,32 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
     widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
+    );
+  }
+
+  void _updateIsValid() {
+    final String station = _stationController.text.trim();
+
+    if (station.isNotEmpty) {
+      _isValid = true;
+      _warningMessage = null;
+    } else {
+      _isValid = false;
+      _warningMessage = appLocalizations.mpStationTypeOptionWarning;
+    }
+
+    _updateIsOkButtonEnabled();
+  }
+
+  void _updateIsOkButtonEnabled() {
+    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            (_stationController.text != _initialStation)));
+
+    setState(
+      () {
+        _isOkButtonEnabled = _isValid && isChanged;
+      },
     );
   }
 
@@ -196,24 +231,16 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: MPInteractionAux.calculateTextFieldWidth(
-                      MPInteractionAux.insideRange(
-                        value: _stationController.text.toString().length,
-                        min: mpDefaultMinDigitsForTextFields,
-                        max: mpDefaultMaxCharsForTextFields,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _stationController,
-                      keyboardType: TextInputType.text,
-                      autofocus: true,
-                      focusNode: _stationTextFieldFocusNode,
-                      decoration: InputDecoration(
-                        labelText: stationLabel,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+                  MPTextFieldInputWidget(
+                    labelText: stationLabel,
+                    textEditingController: _stationController,
+                    focusNode: _stationTextFieldFocusNode,
+                    autofocus: true,
+                    errorText: _warningMessage,
+                    keyboardType: TextInputType.text,
+                    onChanged: (String value) {
+                      _updateIsValid();
+                    },
                   ),
                 ],
               ),
@@ -224,7 +251,10 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _okButtonPressed,
+              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                elevation: _isOkButtonEnabled ? null : 0.0,
+              ),
               child: Text(appLocalizations.mpButtonOK),
             ),
             const SizedBox(width: mpButtonSpace),
