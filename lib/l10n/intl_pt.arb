@@ -110,6 +110,8 @@
 
   "mpLSizeLabel": "Tamanho",
 
+  "mpMarkTextLabel": "Identificador",
+
   "mpNamedScaleTiny": "Minúsculo",
   "mpNamedScaleSmall": "Pequeno",
   "mpNamedScaleNormal": "Normal",
@@ -134,6 +136,10 @@
   "mpLPScaleNumericLabel": "Tamanho",
 
   "mpOptionsEditTitle": "Opções",
+
+  "mpStationTypeOptionWarning": "Estação não definida",
+
+  "mpTextTypeOptionWarning": "Texto não definido",
 
   "parsingErrors": "Erros na interpretação do arquivo",
 

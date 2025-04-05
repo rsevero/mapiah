@@ -544,6 +544,12 @@
     "type": "text"
   },
 
+  "mpMarkTextLabel": "Mark",
+  "@mpMarkTextLabel": {
+    "description": "The label for the mark text type",
+    "type": "text"
+  },
+
   "mpNamedScaleTiny": "Tiny",
   "@mpNamedScaleTiny": {
     "description": "The label for the tiny named scale",
@@ -661,6 +667,18 @@
   "mpOptionsEditTitle": "Options",
   "@mpOptionsEditTitle": {
     "description": "The title for the options edit dialog",
+    "type": "text"
+  },
+
+  "mpStationTypeOptionWarning": "Station not set",
+  "@mpStationTypeOptionWarning": {
+    "description": "The warning message for the station type option",
+    "type": "text"
+  },
+
+  "mpTextTypeOptionWarning": "Text not set",
+  "@mpTextTypeOptionWarning": {
+    "description": "The warning message for the text type option",
     "type": "text"
   },
 

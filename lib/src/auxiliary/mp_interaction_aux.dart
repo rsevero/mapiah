@@ -100,11 +100,11 @@ class MPInteractionAux {
   }
 
   static double calculateTextFieldWidth(int maxDigits) {
-    return maxDigits * 12.0 + 16.0;
+    return (maxDigits * 10.0) + 24;
   }
 
   static double calculateWarningMessageWidth(int messageLength) {
-    return messageLength * 7.5;
+    return (messageLength * 6.5) + 24;
   }
 
   static int insideRange({

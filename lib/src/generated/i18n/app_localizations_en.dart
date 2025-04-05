@@ -291,6 +291,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLSizeLabel => 'Size';
 
   @override
+  String get mpMarkTextLabel => 'Mark';
+
+  @override
   String get mpNamedScaleTiny => 'Tiny';
 
   @override
@@ -349,6 +352,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpOptionsEditTitle => 'Options';
+
+  @override
+  String get mpStationTypeOptionWarning => 'Station not set';
+
+  @override
+  String get mpTextTypeOptionWarning => 'Text not set';
 
   @override
   String get parsingErrors => 'Parsing errors';

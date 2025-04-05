@@ -291,6 +291,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLSizeLabel => 'Tamanho';
 
   @override
+  String get mpMarkTextLabel => 'Identificador';
+
+  @override
   String get mpNamedScaleTiny => 'Minúsculo';
 
   @override
@@ -349,6 +352,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpOptionsEditTitle => 'Opções';
+
+  @override
+  String get mpStationTypeOptionWarning => 'Estação não definida';
+
+  @override
+  String get mpTextTypeOptionWarning => 'Texto não definido';
 
   @override
   String get parsingErrors => 'Erros na interpretação do arquivo';

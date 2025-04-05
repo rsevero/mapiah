@@ -16,6 +16,12 @@ class THMarkCommandOption extends THCommandOption {
     super.originalLineInTH2File = '',
   }) : super();
 
+  THMarkCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.mark,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM();
+
   @override
   THCommandOptionType get type => THCommandOptionType.mark;
 

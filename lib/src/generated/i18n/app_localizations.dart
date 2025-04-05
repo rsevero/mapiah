@@ -629,6 +629,12 @@ abstract class AppLocalizations {
   /// **'Size'**
   String get mpLSizeLabel;
 
+  /// The label for the mark text type
+  ///
+  /// In en, this message translates to:
+  /// **'Mark'**
+  String get mpMarkTextLabel;
+
   /// The label for the tiny named scale
   ///
   /// In en, this message translates to:
@@ -748,6 +754,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Options'**
   String get mpOptionsEditTitle;
+
+  /// The warning message for the station type option
+  ///
+  /// In en, this message translates to:
+  /// **'Station not set'**
+  String get mpStationTypeOptionWarning;
+
+  /// The warning message for the text type option
+  ///
+  /// In en, this message translates to:
+  /// **'Text not set'**
+  String get mpTextTypeOptionWarning;
 
   /// The label for the parsing errors dialog
   ///
