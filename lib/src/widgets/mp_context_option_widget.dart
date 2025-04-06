@@ -191,11 +191,7 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
               MPPLATypeRadioButtonWidget(
                 initialValue: _elementType,
                 onChanged: _onElementTypeChanged,
-              ),
-              MPPLATypeDropdownWidget(
-                elementType: _elementType,
-                initialValue: _plaType,
-                onChanged: _onPLATypeChanged,
+                onChangedPLAType: _onPLATypeChanged,
               ),
             ],
           ],
