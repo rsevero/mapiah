@@ -23,6 +23,7 @@ import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_double_value_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_choices_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
+import 'package:mapiah/src/widgets/mp_passage_height_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_pl_scale_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
 import 'package:mapiah/src/widgets/mp_station_type_option_widget.dart';
@@ -233,6 +234,13 @@ class MPOverlayWindowFactory {
           );
         case THCommandOptionType.orientation:
           overlayWindowWidget = MPAzimuthTypeOptionWidget(
+            th2FileEditController: th2FileEditController,
+            optionInfo: optionInfo,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
+          );
+        case THCommandOptionType.passageHeightValue:
+          overlayWindowWidget = MPPassageHeightOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

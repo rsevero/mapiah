@@ -336,6 +336,48 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpNameStationLabel => 'Base';
 
   @override
+  String get mpPassageHeightCeiling => 'Teto';
+
+  @override
+  String get mpPassageHeightCeilingLabel => 'Teto';
+
+  @override
+  String get mpPassageHeightDepth => 'Profundidade';
+
+  @override
+  String get mpPassageHeightDepthWarning => 'Profundidade inválida';
+
+  @override
+  String get mpPassageHeightDepthLabel => 'Profundidade';
+
+  @override
+  String get mpPassageHeightDistanceBetweenFloorAndCeiling => 'Do piso ao teto';
+
+  @override
+  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel => 'Piso ao teto';
+
+  @override
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor => 'Teto e piso';
+
+  @override
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel => 'Ao piso e ao teto';
+
+  @override
+  String get mpPassageHeightFloor => 'Piso';
+
+  @override
+  String get mpPassageHeightFloorLabel => 'Piso';
+
+  @override
+  String get mpPassageHeightHeight => 'Altura';
+
+  @override
+  String get mpPassageHeightHeightLabel => 'Altura';
+
+  @override
+  String get mpPassageHeightHeightWarning => 'Altura inválida';
+
+  @override
   String get mpPersonNameInvalidFormatErrorMessage => 'Nome inválido';
 
   @override

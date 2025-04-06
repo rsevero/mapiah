@@ -336,6 +336,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpNameStationLabel => 'Station';
 
   @override
+  String get mpPassageHeightCeiling => 'Ceiling';
+
+  @override
+  String get mpPassageHeightCeilingLabel => 'Ceiling';
+
+  @override
+  String get mpPassageHeightDepth => 'Depth';
+
+  @override
+  String get mpPassageHeightDepthWarning => 'Invalid depth';
+
+  @override
+  String get mpPassageHeightDepthLabel => 'Depth';
+
+  @override
+  String get mpPassageHeightDistanceBetweenFloorAndCeiling => 'Distance floor ceiling';
+
+  @override
+  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel => 'Floor to ceiling';
+
+  @override
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor => 'Distance to ceiling and to floor';
+
+  @override
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel => 'To ceiling/to floor';
+
+  @override
+  String get mpPassageHeightFloor => 'Floor';
+
+  @override
+  String get mpPassageHeightFloorLabel => 'Floor';
+
+  @override
+  String get mpPassageHeightHeight => 'Height';
+
+  @override
+  String get mpPassageHeightHeightLabel => 'Height';
+
+  @override
+  String get mpPassageHeightHeightWarning => 'Invalid height';
+
+  @override
   String get mpPersonNameInvalidFormatErrorMessage => 'Invalid person name';
 
   @override

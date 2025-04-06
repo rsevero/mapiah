@@ -46,6 +46,8 @@ class MPTextToUser {
       _multipleChoicePlaceChoiceAsString = {};
   static final Map<THPLScaleCommandOptionType, String>
       _plScaleCommandOptionTypeAsString = {};
+  static final Map<THPassageHeightModes, String>
+      _passageHeightModesChoiceAsString = {};
   static final Map<String, String> _namedScaleOptionsAsString = {};
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
@@ -70,7 +72,31 @@ class MPTextToUser {
     _initializeMultipleChoiceOutlineChoiceAsString();
     _initializeMultipleChoicePlaceChoiceAsString();
     _initializePLScaleCommandOptionTypeAsString();
+    _initializePassageHeightModesChoiceAsString();
     _initializeNamedScaleOptionsAsString();
+  }
+
+  static void _initializePassageHeightModesChoiceAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _passageHeightModesChoiceAsString[THPassageHeightModes.depth] =
+        localizations.mpPassageHeightDepth;
+    _passageHeightModesChoiceAsString[
+            THPassageHeightModes.distanceBetweenFloorAndCeiling] =
+        localizations.mpPassageHeightDistanceBetweenFloorAndCeiling;
+    _passageHeightModesChoiceAsString[
+            THPassageHeightModes.distanceToCeilingAndDistanceToFloor] =
+        localizations.mpPassageHeightDistanceToCeilingAndDistanceToFloor;
+    _passageHeightModesChoiceAsString[THPassageHeightModes.height] =
+        localizations.mpPassageHeightHeight;
+  }
+
+  static String getPassageHeightModesChoice(
+    THPassageHeightModes passageHeightModes,
+  ) {
+    return _passageHeightModesChoiceAsString.containsKey(passageHeightModes)
+        ? _passageHeightModesChoiceAsString[passageHeightModes]!
+        : passageHeightModes.name;
   }
 
   static void _initializePLScaleCommandOptionTypeAsString() {
@@ -929,6 +955,16 @@ class MPTextToUser {
       default:
         return compareStringsNoDiacritics(a, b);
     }
+  }
+
+  static Map<String, String> getPassageHeightModesChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THPassageHeightModes.values) {
+      choices[choiceType.name] = getPassageHeightModesChoice(choiceType);
+    }
+
+    return choices;
   }
 
   static Map<String, String> getPLScaleCommandOptionTypeOptions() {

@@ -719,6 +719,90 @@ abstract class AppLocalizations {
   /// **'Station'**
   String get mpNameStationLabel;
 
+  /// The label for the ceiling type
+  ///
+  /// In en, this message translates to:
+  /// **'Ceiling'**
+  String get mpPassageHeightCeiling;
+
+  /// The label for the ceiling type
+  ///
+  /// In en, this message translates to:
+  /// **'Ceiling'**
+  String get mpPassageHeightCeilingLabel;
+
+  /// The label for the depth type
+  ///
+  /// In en, this message translates to:
+  /// **'Depth'**
+  String get mpPassageHeightDepth;
+
+  /// The warning message for invalid depth
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid depth'**
+  String get mpPassageHeightDepthWarning;
+
+  /// The label for the depth type
+  ///
+  /// In en, this message translates to:
+  /// **'Depth'**
+  String get mpPassageHeightDepthLabel;
+
+  /// The label for the distance between floor and ceiling type
+  ///
+  /// In en, this message translates to:
+  /// **'Distance floor ceiling'**
+  String get mpPassageHeightDistanceBetweenFloorAndCeiling;
+
+  /// The label for the distance between floor and ceiling type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor to ceiling'**
+  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel;
+
+  /// The label for the distance to ceiling and distance to floor type
+  ///
+  /// In en, this message translates to:
+  /// **'Distance to ceiling and to floor'**
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor;
+
+  /// The label for the distance to ceiling and distance to floor type
+  ///
+  /// In en, this message translates to:
+  /// **'To ceiling/to floor'**
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel;
+
+  /// The label for the floor type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor'**
+  String get mpPassageHeightFloor;
+
+  /// The label for the floor type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor'**
+  String get mpPassageHeightFloorLabel;
+
+  /// The label for the height type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get mpPassageHeightHeight;
+
+  /// The label for the height type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get mpPassageHeightHeightLabel;
+
+  /// The warning message for invalid height
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid height'**
+  String get mpPassageHeightHeightWarning;
+
   /// The error message for invalid person name format
   ///
   /// In en, this message translates to:

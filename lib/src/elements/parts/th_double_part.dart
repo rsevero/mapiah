@@ -85,12 +85,14 @@ class THDoublePart extends THPart {
     valueString = valueString.trim();
 
     final double? doubleValue = double.tryParse(valueString);
+
     if (doubleValue == null) {
       throw THConvertFromStringException('THDoublePart', valueString);
     }
     _value = doubleValue;
 
     final int dotPosition = valueString.indexOf(thDecimalSeparator);
+
     _decimalPositions =
         (dotPosition > 0) ? valueString.length - (dotPosition + 1) : 0;
   }

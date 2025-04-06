@@ -129,6 +129,21 @@
 
   "mpNameStationLabel": "Base",
 
+  "mpPassageHeightCeiling": "Teto",
+  "mpPassageHeightCeilingLabel": "Teto",
+  "mpPassageHeightDepth": "Profundidade",
+  "mpPassageHeightDepthWarning": "Profundidade inválida",
+  "mpPassageHeightDepthLabel": "Profundidade",
+  "mpPassageHeightDistanceBetweenFloorAndCeiling": "Do piso ao teto",
+  "mpPassageHeightDistanceBetweenFloorAndCeilingLabel": "Piso ao teto",
+  "mpPassageHeightDistanceToCeilingAndDistanceToFloor": "Teto e piso",
+  "mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel": "Ao piso e ao teto",
+  "mpPassageHeightFloor": "Piso",
+  "mpPassageHeightFloorLabel": "Piso",
+  "mpPassageHeightHeight": "Altura",
+  "mpPassageHeightHeightWarning": "Altura inválida",
+  "mpPassageHeightHeightLabel": "Altura",
+
   "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",

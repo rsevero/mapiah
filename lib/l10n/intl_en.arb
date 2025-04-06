@@ -634,6 +634,90 @@
     "type": "text"
   },
 
+  "mpPassageHeightCeiling": "Ceiling",
+  "@mpPassageHeightCeiling": {
+    "description": "The label for the ceiling type",
+    "type": "text"
+  },
+
+  "mpPassageHeightCeilingLabel": "Ceiling",
+  "@mpPassageHeightCeilingLabel": {
+    "description": "The label for the ceiling type",
+    "type": "text"
+  },
+
+  "mpPassageHeightDepth": "Depth",
+  "@mpPassageHeightDepth": {
+    "description": "The label for the depth type",
+    "type": "text"
+  },
+
+  "mpPassageHeightDepthWarning": "Invalid depth",
+  "@mpPassageHeightDepthWarning": {
+    "description": "The warning message for invalid depth",
+    "type": "text"
+  },
+
+  "mpPassageHeightDepthLabel": "Depth",
+  "@mpPassageHeightDepthLabel": {
+    "description": "The label for the depth type",
+    "type": "text"
+  },
+
+  "mpPassageHeightDistanceBetweenFloorAndCeiling": "Distance floor ceiling",
+  "@mpPassageHeightDistanceBetweenFloorAndCeiling": {
+    "description": "The label for the distance between floor and ceiling type",
+    "type": "text"
+  },
+
+  "mpPassageHeightDistanceBetweenFloorAndCeilingLabel": "Floor to ceiling",
+  "@mpPassageHeightDistanceBetweenFloorAndCeilingLabel": {
+    "description": "The label for the distance between floor and ceiling type",
+    "type": "text"
+  },
+
+  "mpPassageHeightDistanceToCeilingAndDistanceToFloor": "Distance to ceiling and to floor",
+  "@mpPassageHeightDistanceToCeilingAndDistanceToFloor": {
+    "description": "The label for the distance to ceiling and distance to floor type",
+    "type": "text"
+  },
+
+  "mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel": "To ceiling/to floor",
+  "@mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel": {
+    "description": "The label for the distance to ceiling and distance to floor type",
+    "type": "text"
+  },
+
+  "mpPassageHeightFloor": "Floor",
+  "@mpPassageHeightFloor": {
+    "description": "The label for the floor type",
+    "type": "text"
+  },
+
+  "mpPassageHeightFloorLabel": "Floor",
+  "@mpPassageHeightFloorLabel": {
+    "description": "The label for the floor type",
+    "type": "text"
+  },
+
+  "mpPassageHeightHeight": "Height",
+  "@mpPassageHeightHeight": {
+    "description": "The label for the height type",
+    "type": "text"
+  },
+
+  "mpPassageHeightHeightLabel": "Height",
+  "@mpPassageHeightHeightLabel": {
+    "description": "The label for the height type",
+    "type": "text"
+  },
+
+  "mpPassageHeightHeightWarning": "Invalid height",
+  "@mpPassageHeightHeightWarning": {
+    "description": "The warning message for invalid height",
+    "type": "text"
+  },
+
   "mpPersonNameInvalidFormatErrorMessage": "Invalid person name",
   "@mpPersonNameInvalidFormatErrorMessage": {
     "description": "The error message for invalid person name format",
