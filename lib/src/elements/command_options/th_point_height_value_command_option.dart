@@ -1,18 +1,20 @@
 part of 'th_command_option.dart';
 
-// height: according to the sign of the value (positive, negative or unsigned), this type of
-// symbol represents chimney height, pit depth or step height in general. The numeric
-// value can be optionally followed by ‘?’, if the value is presumed and units can be added
-// (e.g. -value [40? ft]).
+// height: according to the sign of the value (positive, negative or unsigned),
+// this type of symbol represents chimney height, pit depth or step height in
+// general. The numeric value can be optionally followed by ‘?’, if the value is
+// presumed and units can be added (e.g. -value [40? ft]).
 class THPointHeightValueCommandOption extends THCommandOption
     with THHasLengthMixin {
   late bool isPresumed;
+  late bool hasSign;
 
   THPointHeightValueCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
     required THDoublePart length,
     required this.isPresumed,
+    required this.hasSign,
     required THLengthUnitPart unit,
     required bool unitSet,
   }) : super.forCWJM() {
@@ -28,6 +30,8 @@ class THPointHeightValueCommandOption extends THCommandOption
     String? unit,
     super.originalLineInTH2File = '',
   }) : super() {
+    height = height.trim();
+    hasSign = ((height[0] == '+') || (height[0] == '-'));
     length = THDoublePart.fromString(valueString: height);
     unitFromString(unit);
   }
@@ -45,6 +49,7 @@ class THPointHeightValueCommandOption extends THCommandOption
     map.addAll({
       'length': length.toMap(),
       'isPresumed': isPresumed,
+      'hasSign': hasSign,
       'unit': unit.toMap(),
       'unitSet': unitSet,
     });
@@ -58,6 +63,7 @@ class THPointHeightValueCommandOption extends THCommandOption
       originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
+      hasSign: map['hasSign'],
       unit: THLengthUnitPart.fromMap(map['unit']),
       unitSet: map['unitSet'],
     );
@@ -73,6 +79,7 @@ class THPointHeightValueCommandOption extends THCommandOption
     String? originalLineInTH2File,
     THDoublePart? length,
     bool? isPresumed,
+    bool? hasSign,
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
     bool? unitSet,
@@ -83,6 +90,7 @@ class THPointHeightValueCommandOption extends THCommandOption
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
       isPresumed: isPresumed ?? this.isPresumed,
+      hasSign: hasSign ?? this.hasSign,
       unit: makeUnitNull
           ? THLengthUnitPart.fromString(unitString: '')
           : unit ?? this.unit,
@@ -98,6 +106,7 @@ class THPointHeightValueCommandOption extends THCommandOption
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.isPresumed == isPresumed &&
+        other.hasSign == hasSign &&
         other.unit == unit &&
         other.unitSet == unitSet;
   }
@@ -108,25 +117,26 @@ class THPointHeightValueCommandOption extends THCommandOption
       Object.hash(
         length,
         isPresumed,
+        hasSign,
         unit,
         unitSet,
       );
 
   @override
   String specToFile() {
-    var asString = length.toString();
+    String asString = length.toString();
 
-    if (unitSet || isPresumed) {
-      if (isPresumed) {
-        asString += '?';
-      }
-
-      if (unitSet) {
-        asString += " $unit";
-      }
-      return "[ $asString ]";
+    if (hasSign && (length.value >= 0)) {
+      asString = '+$asString';
     }
 
-    return asString;
+    if (isPresumed) {
+      asString += '?';
+    }
+
+    if (unitSet) {
+      asString += " $unit";
+    }
+    return "[ $asString ]";
   }
 }

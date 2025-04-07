@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point -42 3 height -value 11?
+endscrap

@@ -1662,14 +1662,16 @@ class THFileParser {
         if ((specs[0] == null) || (specs[0] is! String)) {
           throw THCustomException("Need a string value.");
         }
-        var isPresumed = false;
+        bool isPresumed = false;
         String value = specs[0];
         if (value.contains('?')) {
           isPresumed = true;
           value = value.substring(0, value.length - 1);
         }
 
-        final unit = ((specs[1] != null) &&
+        final String unit = ((specs is List) &&
+                (specs.length > 1) &&
+                (specs[1] != null) &&
                 (specs[1] is String) &&
                 ((specs[1] as String).isNotEmpty))
             ? specs[1].toString()

@@ -1006,8 +1006,10 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+          // trace: true,
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1078,8 +1080,10 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+          // trace: true,
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1188,7 +1192,70 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -2885 604 height -value 40
+  point -2885 604 height -value [ 40 ]
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03270-point_with_height_plus_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -42 3 height -value [ +13 ]
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03271-point_with_height_minus_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -42 3 height -value [ -7.3 ]
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-03272-point_with_height_no_signal_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -42 3 height -value [ 11 in ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03273-point_with_height_no_signal_presumed_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -42 3 height -value [ 11? ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03274-point_with_height_minus_presumed_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -42 3 height -value [ -7.3? ]
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03275-point_with_height_plus_presumed_unit_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point -42 3 height -value [ +13? ft ]
 endscrap
 ''',
       },
@@ -1196,8 +1263,10 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+          // trace: true,
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));

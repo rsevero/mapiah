@@ -166,8 +166,10 @@ class THGrammar extends GrammarDefinition {
               .optional());
   Parser dateTimeRange() =>
       (singleDateTimeBase() & char('-').trim() & singleDateTimeBase());
-  Parser dateTime() =>
+  Parser dateTimeAllVariations() =>
       dateTimeRange().flatten().trim() | singleDateTime() | noDateTime();
+  Parser dateTimeNoNoDateTime() =>
+      dateTimeRange().flatten().trim() | singleDateTime();
 
   /// person
   Parser person() =>
@@ -302,12 +304,12 @@ class THGrammar extends GrammarDefinition {
 
   /// scrap -author
   Parser authorOption() => stringIgnoreCase('author') & authorOptions();
-  Parser authorOptions() => dateTime() & person();
+  Parser authorOptions() => dateTimeAllVariations() & person();
 
   /// scrap -copyright
   Parser copyrightOption() =>
       stringIgnoreCase('copyright') & copyrightOptions();
-  Parser copyrightOptions() => dateTime() & anyString();
+  Parser copyrightOptions() => dateTimeAllVariations() & anyString();
 
   /// scrap -cs
   Parser csOption() => stringIgnoreCase('cs') & csSpec();
@@ -680,8 +682,13 @@ class THGrammar extends GrammarDefinition {
 
   /// point -value
   Parser valueOption() => stringIgnoreCase('value') & valueOptions();
-  Parser valueOptions() => (char('-').trim().map((value) => ['hyphen', value]) |
-      dateTime().trim().map((value) => ['datetime', value]) |
+  Parser valueOptions() => (dateTimeNoNoDateTime()
+          .trim()
+          .map((value) => ['datetime', value]) |
+      numberWithSuffix(char('?')).trim().map((value) => [
+            'one_number_with_optional_unit',
+            [value]
+          ]) |
       number().trim().map((value) => ['single_number', value]) |
       bracketStringTemplate(
               numberWithSuffix(char('?').optional()) & lengthUnit().optional())
@@ -690,7 +697,6 @@ class THGrammar extends GrammarDefinition {
       bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
           .trim()
           .map((value) => ['plus_number_minus_number', value]) |
-      nan().trim().map((value) => ['nan', value]) |
       bracketStringTemplate(stringIgnoreCase('fix') &
               number().trim() &
               lengthUnit().optional())
@@ -699,7 +705,9 @@ class THGrammar extends GrammarDefinition {
       bracketStringTemplate(
               number().trim() & number().trim() & lengthUnit().optional())
           .trim()
-          .map((value) => ['two_numbers_with_optional_unit', value]));
+          .map((value) => ['two_numbers_with_optional_unit', value]) |
+      char('-').trim().map((value) => ['hyphen', value]) |
+      nan().trim().map((value) => ['nan', value]));
 
   /// point -visibility
   Parser visibilityOption() => stringIgnoreCase('visibility') & onOffOptions();

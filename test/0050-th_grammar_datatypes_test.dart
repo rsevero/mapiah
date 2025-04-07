@@ -232,7 +232,7 @@ void main() {
 
   group('dateTime empty', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.dateTime().end());
+    final parser = grammar.buildFrom(grammar.dateTimeAllVariations().end());
 
     const successes = {
       '-': '-',
@@ -264,7 +264,7 @@ void main() {
 
   group('dateTime with data', () {
     final grammar = THGrammar();
-    final parser = grammar.buildFrom(grammar.dateTime().end());
+    final parser = grammar.buildFrom(grammar.dateTimeAllVariations().end());
 
     const mapSuccesses = {
       '2021.12.23@08:30:01': '2021.12.23@08:30:01',
