@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 
@@ -9,6 +10,7 @@ class MPTextFieldInputWidget extends StatelessWidget {
   final String? errorText;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
   final bool autofocus;
   final String labelText;
   final String? hintText;
@@ -22,6 +24,7 @@ class MPTextFieldInputWidget extends StatelessWidget {
     this.hintText,
     this.focusNode,
     this.keyboardType,
+    this.inputFormatters,
     this.autofocus = false,
     this.onChanged,
   });
@@ -50,6 +53,7 @@ class MPTextFieldInputWidget extends StatelessWidget {
         child: TextField(
           controller: textEditingController,
           keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
           autofocus: true,
           focusNode: focusNode,
           decoration: InputDecoration(

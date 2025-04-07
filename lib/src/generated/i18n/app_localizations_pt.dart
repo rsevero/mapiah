@@ -417,7 +417,37 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPLScaleCommandOptionNumeric => 'Numérico';
 
   @override
-  String get mpLPScaleNumericLabel => 'Tamanho';
+  String get mpPLScaleNumericLabel => 'Tamanho';
+
+  @override
+  String get mpPointHeightChimney => 'Chaminé';
+
+  @override
+  String get mpPointHeightValueChimneyLabel => 'Altura';
+
+  @override
+  String get mpPointHeightLengthWarning => 'Medida inválida';
+
+  @override
+  String get mpPointHeightPit => 'Poço';
+
+  @override
+  String get mpPointHeightValuePitLabel => 'Profundidade';
+
+  @override
+  String get mpPointHeightStep => 'Degrau';
+
+  @override
+  String get mpPointHeightValueStepLabel => 'Altura';
+
+  @override
+  String get mpPointHeightValueChimneyObservation => 'Altura do teto (tratado como positivo)';
+
+  @override
+  String get mpPointHeightValuePitObservation => 'Profundidade do poço (tratado como negativo)';
+
+  @override
+  String get mpPointHeightValueStepObservation => 'Altura do degrau (tratado como positivo)';
 
   @override
   String get mpOptionsEditTitle => 'Opções';

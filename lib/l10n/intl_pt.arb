@@ -159,7 +159,18 @@
 
   "mpPLScaleCommandOptionNamed": "Pré-definidos",
   "mpPLScaleCommandOptionNumeric": "Numérico",
-  "mpLPScaleNumericLabel": "Tamanho",
+  "mpPLScaleNumericLabel": "Tamanho",
+
+  "mpPointHeightChimney": "Chaminé",
+  "mpPointHeightValueChimneyLabel": "Altura",
+  "mpPointHeightPit": "Poço",
+  "mpPointHeightValuePitLabel": "Profundidade",
+  "mpPointHeightStep": "Degrau",
+  "mpPointHeightValueStepLabel": "Altura",
+  "mpPointHeightLengthWarning": "Medida inválida",
+  "mpPointHeightValueChimneyObservation": "Altura do teto (tratado como positivo)",
+  "mpPointHeightValuePitObservation": "Profundidade do poço (tratado como negativo)",
+  "mpPointHeightValueStepObservation": "Altura do degrau (tratado como positivo)",
 
   "mpOptionsEditTitle": "Opções",
 

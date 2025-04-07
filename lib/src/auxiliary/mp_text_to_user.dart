@@ -48,6 +48,8 @@ class MPTextToUser {
       _plScaleCommandOptionTypeAsString = {};
   static final Map<THPassageHeightModes, String>
       _passageHeightModesChoiceAsString = {};
+  static final Map<THPointHeightValueMode, String>
+      _pointHeightValueModeAsString = {};
   static final Map<String, String> _namedScaleOptionsAsString = {};
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
@@ -73,7 +75,27 @@ class MPTextToUser {
     _initializeMultipleChoicePlaceChoiceAsString();
     _initializePLScaleCommandOptionTypeAsString();
     _initializePassageHeightModesChoiceAsString();
+    _initializePointHeightValueModeAsString();
     _initializeNamedScaleOptionsAsString();
+  }
+
+  static void _initializePointHeightValueModeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _pointHeightValueModeAsString[THPointHeightValueMode.chimney] =
+        localizations.mpPointHeightChimney;
+    _pointHeightValueModeAsString[THPointHeightValueMode.pit] =
+        localizations.mpPointHeightPit;
+    _pointHeightValueModeAsString[THPointHeightValueMode.step] =
+        localizations.mpPointHeightStep;
+  }
+
+  static String getPointHeightValueMode(
+    THPointHeightValueMode pointHeightValueMode,
+  ) {
+    return _pointHeightValueModeAsString.containsKey(pointHeightValueMode)
+        ? _pointHeightValueModeAsString[pointHeightValueMode]!
+        : pointHeightValueMode.name;
   }
 
   static void _initializePassageHeightModesChoiceAsString() {
@@ -955,6 +977,16 @@ class MPTextToUser {
       default:
         return compareStringsNoDiacritics(a, b);
     }
+  }
+
+  static Map<String, String> getPointHeightValueModeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THPointHeightValueMode.values) {
+      choices[choiceType.name] = getPointHeightValueMode(choiceType);
+    }
+
+    return choices;
   }
 
   static Map<String, String> getPassageHeightModesChoices() {

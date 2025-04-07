@@ -417,7 +417,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPLScaleCommandOptionNumeric => 'Numeric';
 
   @override
-  String get mpLPScaleNumericLabel => 'Size';
+  String get mpPLScaleNumericLabel => 'Size';
+
+  @override
+  String get mpPointHeightChimney => 'Chimney';
+
+  @override
+  String get mpPointHeightValueChimneyLabel => 'Height';
+
+  @override
+  String get mpPointHeightLengthWarning => 'Invalid length';
+
+  @override
+  String get mpPointHeightPit => 'Pit';
+
+  @override
+  String get mpPointHeightValuePitLabel => 'Depth';
+
+  @override
+  String get mpPointHeightStep => 'Step';
+
+  @override
+  String get mpPointHeightValueStepLabel => 'Height';
+
+  @override
+  String get mpPointHeightValueChimneyObservation => 'Chimeny height (treated as positive)';
+
+  @override
+  String get mpPointHeightValuePitObservation => 'Pit depth (treated as negative)';
+
+  @override
+  String get mpPointHeightValueStepObservation => 'Step height (treated as positive)';
 
   @override
   String get mpOptionsEditTitle => 'Options';

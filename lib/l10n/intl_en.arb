@@ -796,9 +796,69 @@
     "type": "text"
   },
 
-  "mpLPScaleNumericLabel": "Size",
-  "@mpLPScaleNumericLabel": {
+  "mpPLScaleNumericLabel": "Size",
+  "@mpPLScaleNumericLabel": {
     "description": "The label for the numeric scale type",
+    "type": "text"
+  },
+
+  "mpPointHeightChimney": "Chimney",
+  "@mpPointHeightChimney": {
+    "description": "The label for the chimney type",
+    "type": "text"
+  },
+
+  "mpPointHeightValueChimneyLabel": "Height",
+  "@mpPointHeightValueChimneyLabel": {
+    "description": "The label for the chimney height type",
+    "type": "text"
+  },
+
+  "mpPointHeightLengthWarning": "Invalid length",
+  "@mpPointHeightLengthWarning": {
+    "description": "The warning message for invalid length",
+    "type": "text"
+  },
+
+  "mpPointHeightPit": "Pit",
+  "@mpPointHeightPit": {
+    "description": "The label for the pit type",
+    "type": "text"
+  },
+
+  "mpPointHeightValuePitLabel": "Depth",
+  "@mpPointHeightValuePitLabel": {
+    "description": "The label for the pit depth type",
+    "type": "text"
+  },
+
+  "mpPointHeightStep": "Step",
+  "@mpPointHeightStep": {
+    "description": "The label for the step type",
+    "type": "text"
+  },
+
+  "mpPointHeightValueStepLabel": "Height",
+  "@mpPointHeightValueStepLabel": {
+    "description": "The label for the step height type",
+    "type": "text"
+  },
+
+  "mpPointHeightValueChimneyObservation": "Chimeny height (treated as positive)",
+  "@mpPointHeightValueChimneyObservation": {
+    "description": "The label for the height observation type",
+    "type": "text"
+  },
+
+  "mpPointHeightValuePitObservation": "Pit depth (treated as negative)",
+  "@mpPointHeightValuePitObservation": {
+    "description": "The label for the depth observation type",
+    "type": "text"
+  },
+
+  "mpPointHeightValueStepObservation": "Step height (treated as positive)",
+  "@mpPointHeightValueStepObservation": {
+    "description": "The label for the step observation type",
     "type": "text"
   },
 

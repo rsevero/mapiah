@@ -126,7 +126,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MPTextFieldInputWidget(
-                labelText: appLocalizations.mpLPScaleNumericLabel,
+                labelText: appLocalizations.mpPLScaleNumericLabel,
                 textEditingController: _numericController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 errorText: _numericWarningMessage,

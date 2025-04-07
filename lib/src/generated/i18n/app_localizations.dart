@@ -885,7 +885,67 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Size'**
-  String get mpLPScaleNumericLabel;
+  String get mpPLScaleNumericLabel;
+
+  /// The label for the chimney type
+  ///
+  /// In en, this message translates to:
+  /// **'Chimney'**
+  String get mpPointHeightChimney;
+
+  /// The label for the chimney height type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get mpPointHeightValueChimneyLabel;
+
+  /// The warning message for invalid length
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid length'**
+  String get mpPointHeightLengthWarning;
+
+  /// The label for the pit type
+  ///
+  /// In en, this message translates to:
+  /// **'Pit'**
+  String get mpPointHeightPit;
+
+  /// The label for the pit depth type
+  ///
+  /// In en, this message translates to:
+  /// **'Depth'**
+  String get mpPointHeightValuePitLabel;
+
+  /// The label for the step type
+  ///
+  /// In en, this message translates to:
+  /// **'Step'**
+  String get mpPointHeightStep;
+
+  /// The label for the step height type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get mpPointHeightValueStepLabel;
+
+  /// The label for the height observation type
+  ///
+  /// In en, this message translates to:
+  /// **'Chimeny height (treated as positive)'**
+  String get mpPointHeightValueChimneyObservation;
+
+  /// The label for the depth observation type
+  ///
+  /// In en, this message translates to:
+  /// **'Pit depth (treated as negative)'**
+  String get mpPointHeightValuePitObservation;
+
+  /// The label for the step observation type
+  ///
+  /// In en, this message translates to:
+  /// **'Step height (treated as positive)'**
+  String get mpPointHeightValueStepObservation;
 
   /// The title for the options edit dialog
   ///

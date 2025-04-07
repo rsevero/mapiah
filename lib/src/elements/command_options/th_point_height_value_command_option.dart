@@ -33,15 +33,27 @@ class THPointHeightValueCommandOption extends THCommandOption
     height = height.trim();
     switch (height[0]) {
       case '+':
-        mode = THPointHeightValueMode.height;
+        mode = THPointHeightValueMode.chimney;
         height = height.substring(1);
       case '-':
-        mode = THPointHeightValueMode.depth;
+        mode = THPointHeightValueMode.pit;
         height = height.substring(1);
       default:
         mode = THPointHeightValueMode.step;
     }
     length = THDoublePart.fromString(valueString: height);
+    unitFromString(unit);
+  }
+
+  THPointHeightValueCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.isPresumed,
+    required this.mode,
+    required String length,
+    required String unit,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
+    this.length = THDoublePart.fromString(valueString: length);
     unitFromString(unit);
   }
 
@@ -136,9 +148,9 @@ class THPointHeightValueCommandOption extends THCommandOption
     String asString = length.toString();
 
     switch (mode) {
-      case THPointHeightValueMode.depth:
+      case THPointHeightValueMode.pit:
         asString = '-$asString';
-      case THPointHeightValueMode.height:
+      case THPointHeightValueMode.chimney:
         asString = '+$asString';
       case THPointHeightValueMode.step:
         break;
@@ -157,7 +169,7 @@ class THPointHeightValueCommandOption extends THCommandOption
 }
 
 enum THPointHeightValueMode {
-  depth,
-  height,
+  chimney,
+  pit,
   step,
 }
