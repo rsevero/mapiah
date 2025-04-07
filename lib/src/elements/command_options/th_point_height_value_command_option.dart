@@ -7,14 +7,14 @@ part of 'th_command_option.dart';
 class THPointHeightValueCommandOption extends THCommandOption
     with THHasLengthMixin {
   late bool isPresumed;
-  late bool hasSign;
+  late THPointHeightValueMode mode;
 
   THPointHeightValueCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
     required THDoublePart length,
     required this.isPresumed,
-    required this.hasSign,
+    required this.mode,
     required THLengthUnitPart unit,
     required bool unitSet,
   }) : super.forCWJM() {
@@ -31,7 +31,16 @@ class THPointHeightValueCommandOption extends THCommandOption
     super.originalLineInTH2File = '',
   }) : super() {
     height = height.trim();
-    hasSign = ((height[0] == '+') || (height[0] == '-'));
+    switch (height[0]) {
+      case '+':
+        mode = THPointHeightValueMode.height;
+        height = height.substring(1);
+      case '-':
+        mode = THPointHeightValueMode.depth;
+        height = height.substring(1);
+      default:
+        mode = THPointHeightValueMode.step;
+    }
     length = THDoublePart.fromString(valueString: height);
     unitFromString(unit);
   }
@@ -49,7 +58,7 @@ class THPointHeightValueCommandOption extends THCommandOption
     map.addAll({
       'length': length.toMap(),
       'isPresumed': isPresumed,
-      'hasSign': hasSign,
+      'mode': mode.name,
       'unit': unit.toMap(),
       'unitSet': unitSet,
     });
@@ -63,7 +72,7 @@ class THPointHeightValueCommandOption extends THCommandOption
       originalLineInTH2File: map['originalLineInTH2File'],
       length: THDoublePart.fromMap(map['length']),
       isPresumed: map['isPresumed'],
-      hasSign: map['hasSign'],
+      mode: THPointHeightValueMode.values.byName(map['mode']),
       unit: THLengthUnitPart.fromMap(map['unit']),
       unitSet: map['unitSet'],
     );
@@ -79,7 +88,7 @@ class THPointHeightValueCommandOption extends THCommandOption
     String? originalLineInTH2File,
     THDoublePart? length,
     bool? isPresumed,
-    bool? hasSign,
+    THPointHeightValueMode? mode,
     THLengthUnitPart? unit,
     bool makeUnitNull = false,
     bool? unitSet,
@@ -90,7 +99,7 @@ class THPointHeightValueCommandOption extends THCommandOption
           originalLineInTH2File ?? this.originalLineInTH2File,
       length: length ?? this.length,
       isPresumed: isPresumed ?? this.isPresumed,
-      hasSign: hasSign ?? this.hasSign,
+      mode: mode ?? this.mode,
       unit: makeUnitNull
           ? THLengthUnitPart.fromString(unitString: '')
           : unit ?? this.unit,
@@ -106,7 +115,7 @@ class THPointHeightValueCommandOption extends THCommandOption
         other.originalLineInTH2File == originalLineInTH2File &&
         other.length == length &&
         other.isPresumed == isPresumed &&
-        other.hasSign == hasSign &&
+        other.mode == mode &&
         other.unit == unit &&
         other.unitSet == unitSet;
   }
@@ -117,7 +126,7 @@ class THPointHeightValueCommandOption extends THCommandOption
       Object.hash(
         length,
         isPresumed,
-        hasSign,
+        mode,
         unit,
         unitSet,
       );
@@ -126,8 +135,13 @@ class THPointHeightValueCommandOption extends THCommandOption
   String specToFile() {
     String asString = length.toString();
 
-    if (hasSign && (length.value >= 0)) {
-      asString = '+$asString';
+    switch (mode) {
+      case THPointHeightValueMode.depth:
+        asString = '-$asString';
+      case THPointHeightValueMode.height:
+        asString = '+$asString';
+      case THPointHeightValueMode.step:
+        break;
     }
 
     if (isPresumed) {
@@ -137,6 +151,13 @@ class THPointHeightValueCommandOption extends THCommandOption
     if (unitSet) {
       asString += " $unit";
     }
+
     return "[ $asString ]";
   }
+}
+
+enum THPointHeightValueMode {
+  depth,
+  height,
+  step,
 }
