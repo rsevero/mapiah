@@ -2477,10 +2477,10 @@ abstract class AppLocalizations {
   /// **'Copyright'**
   String get thCommandOptionCopyright;
 
-  /// The label for the CS command option type
+  /// The label for the Coordinate System command option type
   ///
   /// In en, this message translates to:
-  /// **'CS'**
+  /// **'Coordinate System'**
   String get thCommandOptionCS;
 
   /// The label for the date value command option type

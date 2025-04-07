@@ -196,30 +196,39 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> allOptions =
-        MPTextToUser.getPLScaleCommandOptionTypeOptions();
-
-    final bool isSet =
-        (_selectedChoice.isNotEmpty && (_selectedChoice != mpUnsetOptionID));
     final List<Widget> optionWidgets = [];
 
-    if (isSet) {
-      for (final entry in allOptions.entries) {
-        optionWidgets.add(
-          RadioListTile<String>(
-            title: Text(entry.value),
-            value: entry.key,
-            groupValue: _selectedChoice,
-            contentPadding: EdgeInsets.zero,
-            onChanged: (value) {
-              _selectedChoice = value ?? '';
-              _updateIsValid();
-            },
-          ),
-        );
-        if (_selectedChoice == entry.key) {
-          optionWidgets.add(_buildFormForOption(entry.key));
-        }
+    optionWidgets.add(
+      RadioListTile<String>(
+        title: Text(appLocalizations.mpChoiceUnset),
+        value: mpUnsetOptionID,
+        groupValue: _selectedChoice,
+        contentPadding: EdgeInsets.zero,
+        onChanged: (value) {
+          _selectedChoice = mpUnsetOptionID;
+          _updateIsValid();
+        },
+      ),
+    );
+
+    final Map<String, String> allOptions =
+        MPTextToUser.getPLScaleCommandOptionTypeOptions();
+
+    for (final entry in allOptions.entries) {
+      optionWidgets.add(
+        RadioListTile<String>(
+          title: Text(entry.value),
+          value: entry.key,
+          groupValue: _selectedChoice,
+          contentPadding: EdgeInsets.zero,
+          onChanged: (value) {
+            _selectedChoice = value ?? '';
+            _updateIsValid();
+          },
+        ),
+      );
+      if (_selectedChoice == entry.key) {
+        optionWidgets.add(_buildFormForOption(entry.key));
       }
     }
 
@@ -234,34 +243,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (value) {
-                _selectedChoice = mpUnsetOptionID;
-                _updateIsValid();
-              },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: isSet ? mpNonMultipleChoiceSetID : _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (value) {
-                _selectedChoice = mpNonMultipleChoiceSetID;
-                _updateIsValid();
-              },
-            ),
-            if (isSet)
-              MPOverlayWindowBlockWidget(
-                overlayWindowBlockType: MPOverlayWindowBlockType.secondarySet,
-                padding: mpOverlayWindowBlockEdgeInsets,
-                children: optionWidgets,
-              ),
-          ],
+          children: optionWidgets,
         ),
         const SizedBox(height: mpButtonSpace),
         Row(

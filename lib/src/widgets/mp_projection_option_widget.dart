@@ -234,6 +234,20 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> optionWidgets = [];
+
+    optionWidgets.add(
+      RadioListTile<String>(
+        title: Text(appLocalizations.mpChoiceUnset),
+        value: mpUnsetOptionID,
+        groupValue: _selectedChoice,
+        contentPadding: EdgeInsets.zero,
+        onChanged: (value) {
+          _selectedChoice = mpUnsetOptionID;
+          _updateIsValid();
+        },
+      ),
+    );
+
     final choices = MPTextToUser.getProjectionModeTypeChoices();
 
     for (final entry in choices.entries) {
@@ -268,19 +282,7 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: <Widget>[
-                RadioListTile<String>(
-                  title: Text(appLocalizations.mpChoiceUnset),
-                  value: mpUnsetOptionID,
-                  groupValue: _selectedChoice,
-                  contentPadding: EdgeInsets.zero,
-                  onChanged: (value) {
-                    _selectedChoice = mpUnsetOptionID;
-                    _updateIsValid();
-                  },
-                ),
-              ] +
-              optionWidgets,
+          children: optionWidgets,
         ),
         const SizedBox(height: mpButtonSpace),
         Row(

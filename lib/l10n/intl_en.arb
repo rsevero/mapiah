@@ -2422,9 +2422,9 @@
     "type": "text"
   },
 
-  "thCommandOptionCS": "CS",
+  "thCommandOptionCS": "Coordinate System",
   "@thCommandOptionCS": {
-    "description": "The label for the CS command option type",
+    "description": "The label for the Coordinate System command option type",
     "type": "text"
   },
 

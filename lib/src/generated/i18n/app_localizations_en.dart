@@ -1233,7 +1233,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thCommandOptionCopyright => 'Copyright';
 
   @override
-  String get thCommandOptionCS => 'CS';
+  String get thCommandOptionCS => 'Coordinate System';
 
   @override
   String get thCommandOptionDateValue => 'Date';
