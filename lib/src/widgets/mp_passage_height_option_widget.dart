@@ -143,9 +143,9 @@ class _MPPassageHeightOptionWidgetState
   void _updateOkButtonEnabled() {
     final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
         (((_selectedChoice == 'height') ||
-                ((_selectedChoice == 'distanceBetweenFloorAndCeiling') ||
-                    (_selectedUnit != _initialUnit))) &&
-            (_heightController.text != _initialHeight)) ||
+                (_selectedChoice == 'distanceBetweenFloorAndCeiling')) &&
+            ((_selectedUnit != _initialUnit) ||
+                (_heightController.text != _initialHeight))) ||
         ((_selectedChoice == 'depth') &&
             ((_depthController.text != _initialDepth) ||
                 (_selectedUnit != _initialUnit))) ||
