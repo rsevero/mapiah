@@ -486,6 +486,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpOptionsEditTitle => 'Opções';
 
   @override
+  String get mpScrapFreeText => 'Texto livre';
+
+  @override
+  String get mpScrapFromFile => 'Deste arquivo';
+
+  @override
+  String get mpScrapLabel => 'ID de croqui';
+
+  @override
+  String get mpScrapWarning => 'Croqui não definido';
+
+  @override
   String get mpStationTypeOptionWarning => 'Estação não definida';
 
   @override

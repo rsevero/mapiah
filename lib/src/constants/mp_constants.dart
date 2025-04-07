@@ -222,5 +222,8 @@ const String mpUnsetOptionID = 'UNSET';
 const String mpUnrecognizedOptionID = 'UNRECOGNIZED';
 const String mpNonMultipleChoiceSetID = 'SET';
 
+const String mpScrapFromFileTHID = 'FROM_FILE';
+const String mpScrapFreeTextTHID = 'FREE_TEXT';
+
 const int mpMaxLastUsedTypes = 5;
 const int mpMaxMostUsedTypes = 5;

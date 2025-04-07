@@ -28,6 +28,7 @@ import 'package:mapiah/src/widgets/mp_pl_scale_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
 import 'package:mapiah/src/widgets/mp_point_height_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_projection_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_scrap_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_station_type_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_text_type_option_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
@@ -264,6 +265,13 @@ class MPOverlayWindowFactory {
           );
         case THCommandOptionType.projection:
           overlayWindowWidget = MPProjectionOptionWidget(
+            th2FileEditController: th2FileEditController,
+            optionInfo: optionInfo,
+            outerAnchorPosition: outerAnchorPosition,
+            innerAnchorType: MPWidgetPositionType.leftCenter,
+          );
+        case THCommandOptionType.scrap:
+          overlayWindowWidget = MPScrapOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

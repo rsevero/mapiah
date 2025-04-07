@@ -1,7 +1,7 @@
 part of 'th_command_option.dart';
 
-// scrap <reference> . if the point type is section, this is a reference to a cross-section
-// scrap.
+// scrap <reference> . if the point type is section, this is a reference to a
+// cross-section scrap.
 class THScrapCommandOption extends THCommandOption {
   late final String reference;
 

@@ -88,6 +88,7 @@ class MPCommandOptionAux {
     THCommandOptionType.orientation,
     THCommandOptionType.plScale,
     THCommandOptionType.visibility,
+    THCommandOptionType.scrap,
   ];
 
   static const Map<THPointType, List<THCommandOptionType>>

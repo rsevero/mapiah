@@ -1019,6 +1019,30 @@ abstract class AppLocalizations {
   /// **'Options'**
   String get mpOptionsEditTitle;
 
+  /// The label for the free text scrap type
+  ///
+  /// In en, this message translates to:
+  /// **'Free text'**
+  String get mpScrapFreeText;
+
+  /// The label for the from file scrap type
+  ///
+  /// In en, this message translates to:
+  /// **'From file'**
+  String get mpScrapFromFile;
+
+  /// The label for the scrap ID type
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap ID'**
+  String get mpScrapLabel;
+
+  /// The warning message for the scrap option
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap not set'**
+  String get mpScrapWarning;
+
   /// The warning message for the station type option
   ///
   /// In en, this message translates to:

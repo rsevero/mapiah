@@ -486,6 +486,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpOptionsEditTitle => 'Options';
 
   @override
+  String get mpScrapFreeText => 'Free text';
+
+  @override
+  String get mpScrapFromFile => 'From file';
+
+  @override
+  String get mpScrapLabel => 'Scrap ID';
+
+  @override
+  String get mpScrapWarning => 'Scrap not set';
+
+  @override
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override

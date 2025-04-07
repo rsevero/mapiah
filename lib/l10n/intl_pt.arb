@@ -187,6 +187,11 @@
 
   "mpOptionsEditTitle": "Opções",
 
+  "mpScrapFreeText": "Texto livre",
+  "mpScrapFromFile": "Deste arquivo",
+  "mpScrapLabel": "ID de croqui",
+  "mpScrapWarning": "Croqui não definido",
+
   "mpStationTypeOptionWarning": "Estação não definida",
 
   "mpTextTypeOptionWarning": "Texto não definido",

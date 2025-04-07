@@ -934,6 +934,30 @@
     "type": "text"
   },
 
+  "mpScrapFreeText": "Free text",
+  "@mpScrapFreeText": {
+    "description": "The label for the free text scrap type",
+    "type": "text"
+  },
+
+  "mpScrapFromFile": "From file",
+  "@mpScrapFromFile": {
+    "description": "The label for the from file scrap type",
+    "type": "text"
+  },
+
+  "mpScrapLabel": "Scrap ID",
+  "@mpScrapLabel": {
+    "description": "The label for the scrap ID type",
+    "type": "text"
+  },
+
+  "mpScrapWarning": "Scrap not set",
+  "@mpScrapWarning": {
+    "description": "The warning message for the scrap option",
+    "type": "text"
+  },
+
   "mpStationTypeOptionWarning": "Station not set",
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",
