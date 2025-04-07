@@ -228,7 +228,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
                 children: [
                   MPTextFieldInputWidget(
                     labelText: appLocalizations.mpIDIDLabel,
-                    textEditingController: _thIDController,
+                    controller: _thIDController,
                     focusNode: _idTextFieldFocusNode,
                     autofocus: true,
                     keyboardType: TextInputType.text,

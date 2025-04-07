@@ -224,7 +224,7 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   MPTextFieldInputWidget(
-                    textEditingController: _aboveController,
+                    controller: _aboveController,
                     errorText: _aboveWarningMessage,
                     labelText: appLocalizations.mpDimensionsAboveLabel,
                     autofocus: true,
@@ -235,7 +235,7 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                   ),
                   const SizedBox(width: mpButtonSpace),
                   MPTextFieldInputWidget(
-                    textEditingController: _belowController,
+                    controller: _belowController,
                     errorText: _belowWarningMessage,
                     labelText: appLocalizations.mpDimensionsBelowLabel,
                     onChanged: (value) {

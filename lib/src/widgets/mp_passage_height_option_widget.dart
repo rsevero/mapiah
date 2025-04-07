@@ -187,7 +187,7 @@ class _MPPassageHeightOptionWidgetState
           children: [
             MPTextFieldInputWidget(
               labelText: appLocalizations.mpPassageHeightHeightLabel,
-              textEditingController: _heightController,
+              controller: _heightController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               autofocus: true,
               focusNode: _heightFocusNode,
@@ -206,7 +206,7 @@ class _MPPassageHeightOptionWidgetState
           children: [
             MPTextFieldInputWidget(
               labelText: appLocalizations.mpPassageHeightDepthLabel,
-              textEditingController: _depthController,
+              controller: _depthController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               autofocus: true,
               focusNode: _depthFocusNode,
@@ -226,7 +226,7 @@ class _MPPassageHeightOptionWidgetState
             MPTextFieldInputWidget(
               labelText: appLocalizations
                   .mpPassageHeightDistanceBetweenFloorAndCeilingLabel,
-              textEditingController: _heightController,
+              controller: _heightController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               autofocus: true,
               errorText: _heigthWarningMessage,
@@ -245,7 +245,7 @@ class _MPPassageHeightOptionWidgetState
           children: [
             MPTextFieldInputWidget(
               labelText: appLocalizations.mpPassageHeightCeilingLabel,
-              textEditingController: _heightController,
+              controller: _heightController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               autofocus: true,
               errorText: _heigthWarningMessage,
@@ -255,7 +255,7 @@ class _MPPassageHeightOptionWidgetState
             const SizedBox(width: mpButtonSpace),
             MPTextFieldInputWidget(
               labelText: appLocalizations.mpPassageHeightFloorLabel,
-              textEditingController: _depthController,
+              controller: _depthController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               errorText: _depthWarningMessage,
               focusNode: _depthFocusNode,

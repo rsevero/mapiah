@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
-enum THAngleUnit {
+enum THAngleUnitType {
   degree,
   grad,
   mil,
@@ -11,26 +11,26 @@ enum THAngleUnit {
 }
 
 class THAngleUnitPart extends THPart {
-  late THAngleUnit unit;
+  late THAngleUnitType unit;
 
   static const stringToUnit = {
-    'deg': THAngleUnit.degree,
-    'degree': THAngleUnit.degree,
-    'degrees': THAngleUnit.degree,
-    'grad': THAngleUnit.grad,
-    'grads': THAngleUnit.grad,
-    'mil': THAngleUnit.mil,
-    'mils': THAngleUnit.mil,
-    'min': THAngleUnit.minute,
-    'minute': THAngleUnit.minute,
-    'minutes': THAngleUnit.minute,
+    'deg': THAngleUnitType.degree,
+    'degree': THAngleUnitType.degree,
+    'degrees': THAngleUnitType.degree,
+    'grad': THAngleUnitType.grad,
+    'grads': THAngleUnitType.grad,
+    'mil': THAngleUnitType.mil,
+    'mils': THAngleUnitType.mil,
+    'min': THAngleUnitType.minute,
+    'minute': THAngleUnitType.minute,
+    'minutes': THAngleUnitType.minute,
   };
 
   static const unitToString = {
-    THAngleUnit.degree: 'deg',
-    THAngleUnit.grad: 'grad',
-    THAngleUnit.mil: 'mil',
-    THAngleUnit.minute: 'min',
+    THAngleUnitType.degree: 'deg',
+    THAngleUnitType.grad: 'grad',
+    THAngleUnitType.mil: 'mil',
+    THAngleUnitType.minute: 'min',
   };
 
   THAngleUnitPart({required this.unit});
@@ -62,7 +62,7 @@ class THAngleUnitPart extends THPart {
 
   @override
   THAngleUnitPart copyWith({
-    THAngleUnit? unit,
+    THAngleUnitType? unit,
   }) {
     return THAngleUnitPart(
       unit: unit ?? this.unit,

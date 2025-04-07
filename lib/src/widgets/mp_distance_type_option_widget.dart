@@ -244,7 +244,7 @@ class _MPDistanceTypeOptionWidgetState
                 children: [
                   MPTextFieldInputWidget(
                     labelText: lengthLabel,
-                    textEditingController: _distanceController,
+                    controller: _distanceController,
                     autofocus: true,
                     focusNode: _lengthTextFieldFocusNode,
                     errorText: _distanceWarningMessage,

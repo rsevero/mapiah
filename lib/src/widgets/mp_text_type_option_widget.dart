@@ -220,7 +220,7 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
                 children: [
                   MPTextFieldInputWidget(
                     labelText: textLabel,
-                    textEditingController: _textController,
+                    controller: _textController,
                     focusNode: _textTextFieldFocusNode,
                     autofocus: true,
                     errorText: _warningMessage,

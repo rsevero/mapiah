@@ -245,7 +245,7 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
                 children: [
                   MPTextFieldInputWidget(
                     labelText: stationLabel,
-                    textEditingController: _stationController,
+                    controller: _stationController,
                     focusNode: _stationTextFieldFocusNode,
                     autofocus: true,
                     errorText: _warningMessage,

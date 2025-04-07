@@ -149,7 +149,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
             ),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         // Text input field
         SizedBox(
           width: compassSize * 0.6,

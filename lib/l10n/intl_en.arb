@@ -67,6 +67,30 @@
     }
   },
 
+  "mpAngleUnitDegree": "degree",
+  "@mpAngleUnitDegree": {
+    "description": "The description for the degree angle unit",
+    "type": "text"
+  },
+
+  "mpAngleUnitGrad": "grad",
+  "@mpAngleUnitGrad": {
+    "description": "The description for the grad angle unit",
+    "type": "text"
+  },
+
+  "mpAngleUnitMil": "mil",
+  "@mpAngleUnitMil": {
+    "description": "The description for the mil angle unit",
+    "type": "text"
+  },
+
+  "mpAngleUnitMinute": "minute",
+  "@mpAngleUnitMinute": {
+    "description": "The description for the minute angle unit",
+    "type": "text"
+  },
+
   "mpAltitudeInvalidValueErrorMessage": "Invalid altitude",
   "@mpAltitudeInvalidValueErrorMessage": {
     "description": "The error message for invalid altitude value",
@@ -859,6 +883,48 @@
   "mpPointHeightValueStepObservation": "Step height (treated as positive)",
   "@mpPointHeightValueStepObservation": {
     "description": "The label for the step observation type",
+    "type": "text"
+  },
+
+  "mpProjectionAngleWarning": "Invalid angle (0 <= angle < 360)",
+  "@mpProjectionAngleWarning": {
+    "description": "The warning message for invalid angle",
+    "type": "text"
+  },
+
+  "mpProjectionElevationAzimuthLabel": "Azimuth",
+  "@mpProjectionElevationAzimuthLabel": {
+    "description": "The label for the azimuth type",
+    "type": "text"
+  },
+
+  "mpProjectionIndexLabel": "Index (optional)",
+  "@mpProjectionIndexLabel": {
+    "description": "The label for the index type",
+    "type": "text"
+  },
+
+  "mpProjectionModeElevation": "Elevation",
+  "@mpProjectionModeElevation": {
+    "description": "The label for the elevation projection mode",
+    "type": "text"
+  },
+
+  "mpProjectionModeExtended": "Extended",
+  "@mpProjectionModeExtended": {
+    "description": "The label for the extended projection mode",
+    "type": "text"
+  },
+
+  "mpProjectionModeNone": "None",
+  "@mpProjectionModeNone": {
+    "description": "The label for the none projection mode",
+    "type": "text"
+  },
+
+  "mpProjectionModePlan": "Plan",
+  "@mpProjectionModePlan": {
+    "description": "The label for the plan projection mode",
     "type": "text"
   },
 

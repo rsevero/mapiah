@@ -52,6 +52,18 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get mpAngleUnitDegree => 'grau';
+
+  @override
+  String get mpAngleUnitGrad => 'grad';
+
+  @override
+  String get mpAngleUnitMil => 'mil';
+
+  @override
+  String get mpAngleUnitMinute => 'minuto';
+
+  @override
   String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
@@ -384,7 +396,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPersonNameLabel => 'Nome';
 
   @override
-  String get mpPersonNameHint => '\'PrimeiroNome Sobrenome\' ou \'PrimeirosNomes/Sobrenomes\'';
+  String get mpPersonNameHint => '\'Nome Sobrenome\' ou \'Nomes/Sobrenomes\'';
 
   @override
   String get mpPLATypeAll => 'Todos';
@@ -448,6 +460,27 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpPointHeightValueStepObservation => 'Altura do degrau (tratado como positivo)';
+
+  @override
+  String get mpProjectionAngleWarning => 'Ângulo inválido (0 <= ângulo < 360)';
+
+  @override
+  String get mpProjectionElevationAzimuthLabel => 'Azimute';
+
+  @override
+  String get mpProjectionIndexLabel => 'Índice (opcional)';
+
+  @override
+  String get mpProjectionModeElevation => 'Projeção';
+
+  @override
+  String get mpProjectionModeExtended => 'Retificada';
+
+  @override
+  String get mpProjectionModeNone => 'Nenhuma';
+
+  @override
+  String get mpProjectionModePlan => 'Planta baixa';
 
   @override
   String get mpOptionsEditTitle => 'Opções';

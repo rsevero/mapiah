@@ -226,7 +226,7 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   MPTextFieldInputWidget(
-                    textEditingController: _doubleController,
+                    controller: _doubleController,
                     errorText: _doubleWarningMessage,
                     labelText: label,
                     autofocus: true,

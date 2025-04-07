@@ -52,6 +52,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mpAngleUnitDegree => 'degree';
+
+  @override
+  String get mpAngleUnitGrad => 'grad';
+
+  @override
+  String get mpAngleUnitMil => 'mil';
+
+  @override
+  String get mpAngleUnitMinute => 'minute';
+
+  @override
   String get mpAltitudeInvalidValueErrorMessage => 'Invalid altitude';
 
   @override
@@ -448,6 +460,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpPointHeightValueStepObservation => 'Step height (treated as positive)';
+
+  @override
+  String get mpProjectionAngleWarning => 'Invalid angle (0 <= angle < 360)';
+
+  @override
+  String get mpProjectionElevationAzimuthLabel => 'Azimuth';
+
+  @override
+  String get mpProjectionIndexLabel => 'Index (optional)';
+
+  @override
+  String get mpProjectionModeElevation => 'Elevation';
+
+  @override
+  String get mpProjectionModeExtended => 'Extended';
+
+  @override
+  String get mpProjectionModeNone => 'None';
+
+  @override
+  String get mpProjectionModePlan => 'Plan';
 
   @override
   String get mpOptionsEditTitle => 'Options';

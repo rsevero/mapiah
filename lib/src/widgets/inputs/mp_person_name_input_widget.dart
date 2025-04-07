@@ -69,7 +69,7 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
       children: [
         const SizedBox(height: mpButtonSpace),
         MPTextFieldInputWidget(
-          textEditingController: _nameController,
+          controller: _nameController,
           errorText: _warningMessage,
           labelText: mpLocator.appLocalizations.mpPersonNameLabel,
           hintText: mpLocator.appLocalizations.mpPersonNameHint,

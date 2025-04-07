@@ -12,6 +12,11 @@
   "fileEditWindowWindowTitle": "Edição de arquivo",
   "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
 
+  "mpAngleUnitDegree": "grau",
+  "mpAngleUnitGrad": "grad",
+  "mpAngleUnitMil": "mil",
+  "mpAngleUnitMinute": "minuto",
+
   "mpAltitudeInvalidValueErrorMessage": "Altitude inválida",
 
   "mpAuthorInvalidValueErrorMessage": "Data/intervalo de data e nome de autor válidos",
@@ -146,7 +151,7 @@
 
   "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
-  "mpPersonNameHint": "'PrimeiroNome Sobrenome' ou 'PrimeirosNomes/Sobrenomes'",
+  "mpPersonNameHint": "'Nome Sobrenome' ou 'Nomes/Sobrenomes'",
 
   "mpPLATypeAll": "Todos",
   "mpPLATypeAreaTitle": "Tipos de área",
@@ -171,6 +176,14 @@
   "mpPointHeightValueChimneyObservation": "Altura do teto (tratado como positivo)",
   "mpPointHeightValuePitObservation": "Profundidade do poço (tratado como negativo)",
   "mpPointHeightValueStepObservation": "Altura do degrau (tratado como positivo)",
+
+  "mpProjectionAngleWarning": "Ângulo inválido (0 <= ângulo < 360)",
+  "mpProjectionElevationAzimuthLabel": "Azimute",
+  "mpProjectionIndexLabel": "Índice (opcional)",
+  "mpProjectionModeElevation": "Projeção",
+  "mpProjectionModeExtended": "Retificada",
+  "mpProjectionModeNone": "Nenhuma",
+  "mpProjectionModePlan": "Planta baixa",
 
   "mpOptionsEditTitle": "Opções",
 

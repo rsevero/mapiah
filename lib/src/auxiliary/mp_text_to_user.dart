@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -50,6 +51,9 @@ class MPTextToUser {
       _passageHeightModesChoiceAsString = {};
   static final Map<THPointHeightValueMode, String>
       _pointHeightValueModeAsString = {};
+  static final Map<THProjectionModeType, String> _projectionModeTypeAsString =
+      {};
+  static final Map<THAngleUnitType, String> _angleUnitTypeAsString = {};
   static final Map<String, String> _namedScaleOptionsAsString = {};
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
@@ -76,7 +80,48 @@ class MPTextToUser {
     _initializePLScaleCommandOptionTypeAsString();
     _initializePassageHeightModesChoiceAsString();
     _initializePointHeightValueModeAsString();
+    _initializeProjectionModeTypeAsString();
+    _initializeAngleUnitTypeAsString();
     _initializeNamedScaleOptionsAsString();
+  }
+
+  static void _initializeProjectionModeTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _projectionModeTypeAsString[THProjectionModeType.elevation] =
+        localizations.mpProjectionModeElevation;
+    _projectionModeTypeAsString[THProjectionModeType.extended] =
+        localizations.mpProjectionModeExtended;
+    _projectionModeTypeAsString[THProjectionModeType.none] =
+        localizations.mpProjectionModeNone;
+    _projectionModeTypeAsString[THProjectionModeType.plan] =
+        localizations.mpProjectionModePlan;
+  }
+
+  static String getProjectionModeType(
+    THProjectionModeType projectionModeType,
+  ) {
+    return _projectionModeTypeAsString.containsKey(projectionModeType)
+        ? _projectionModeTypeAsString[projectionModeType]!
+        : projectionModeType.name;
+  }
+
+  static void _initializeAngleUnitTypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _angleUnitTypeAsString[THAngleUnitType.degree] =
+        localizations.mpAngleUnitDegree;
+    _angleUnitTypeAsString[THAngleUnitType.grad] =
+        localizations.mpAngleUnitGrad;
+    _angleUnitTypeAsString[THAngleUnitType.mil] = localizations.mpAngleUnitMil;
+    _angleUnitTypeAsString[THAngleUnitType.minute] =
+        localizations.mpAngleUnitMinute;
+  }
+
+  static String getAngleUnitType(THAngleUnitType angleUnitType) {
+    return _angleUnitTypeAsString.containsKey(angleUnitType)
+        ? _angleUnitTypeAsString[angleUnitType]!
+        : angleUnitType.name;
   }
 
   static void _initializePointHeightValueModeAsString() {
@@ -977,6 +1022,26 @@ class MPTextToUser {
       default:
         return compareStringsNoDiacritics(a, b);
     }
+  }
+
+  static Map<String, String> getProjectionModeTypeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THProjectionModeType.values) {
+      choices[choiceType.name] = getProjectionModeType(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getAngleUnitTypeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THAngleUnitType.values) {
+      choices[choiceType.name] = getAngleUnitType(choiceType);
+    }
+
+    return choices;
   }
 
   static Map<String, String> getPointHeightValueModeChoices() {

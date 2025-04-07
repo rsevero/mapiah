@@ -127,7 +127,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
             children: [
               MPTextFieldInputWidget(
                 labelText: appLocalizations.mpPLScaleNumericLabel,
-                textEditingController: _numericController,
+                controller: _numericController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 errorText: _numericWarningMessage,
                 autofocus: true,

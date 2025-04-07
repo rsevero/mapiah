@@ -199,7 +199,7 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               MPTextFieldInputWidget(
-                textEditingController: _messageController,
+                controller: _messageController,
                 errorText: _messageWarningMessage,
                 labelText: appLocalizations.mpCopyrightMessageLabel,
                 autofocus: true,

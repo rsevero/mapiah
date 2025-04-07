@@ -175,7 +175,7 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
           children: [
             MPTextFieldInputWidget(
               labelText: labelText,
-              textEditingController: _lengthController,
+              controller: _lengthController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^[0-9.]*$')),

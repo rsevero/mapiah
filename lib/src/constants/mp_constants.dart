@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -59,6 +60,8 @@ const double thGraphicalScaleFontSize = 12.0;
 
 const THLengthUnitType thDefaultLengthUnit = THLengthUnitType.meter;
 final String thDefaultLengthUnitAsString = thDefaultLengthUnit.name;
+const THAngleUnitType thDefaultAngleUnit = THAngleUnitType.degree;
+final String thDefaultAngleUnitAsString = thDefaultAngleUnit.name;
 
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');

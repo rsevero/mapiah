@@ -274,7 +274,7 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               // Numeric Input for Altitude
               MPTextFieldInputWidget(
                 errorText: _warningMessage,
-                textEditingController: _altitudeController,
+                controller: _altitudeController,
                 labelText: appLocalizations.thCommandOptionAltitudeValue,
                 focusNode: _textFieldFocusNode,
                 autofocus: true,

@@ -1,24 +1,26 @@
 part of 'th_command_option.dart';
 
-enum THProjectionTypes {
+enum THProjectionModeType {
   elevation,
   extended,
   none,
   plan,
 }
 
-// projection <specification> . specifies the drawing projection. Each projection is
-// identified by a type and optionally by an index in the form type[:index]. The index
-// can be any keyword. The following projection types are supported:
-// 1. none . no projection, used for cross sections or maps that are independent of survey
-// data (e.g. digitization of old maps where no centreline data are available). No index is
-// allowed for this projection.
+// projection <specification> . specifies the drawing projection. Each
+// projection is identified by a type and optionally by an index in the form
+// type[:index]. The index can be any keyword. The following projection types
+// are supported:
+// 1. none . no projection, used for cross sections or maps that are independent
+// of survey data (e.g. digitization of old maps where no centreline data are
+// available). No index is allowed for this projection.
 // 2. plan . basic plan projection (default).
-// 3. elevation . orthogonal projection (a.k.a. projected profile) which optionally takes
-// a view direction as an argument (e.g. [elevation 10] or [elevation 10 deg]).
+// 3. elevation . orthogonal projection (a.k.a. projected profile) which
+// optionally takes a view direction as an argument (e.g. [elevation 10] or
+// [elevation 10 deg]).
 // 4. extended . extended elevation (a.k.a. extended profile).
 class THProjectionCommandOption extends THCommandOption {
-  final THProjectionTypes projectionType;
+  final THProjectionModeType mode;
   final String index;
   late final THDoublePart? elevationAngle;
   late final THAngleUnitPart? elevationUnit;
@@ -26,7 +28,7 @@ class THProjectionCommandOption extends THCommandOption {
   THProjectionCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required this.projectionType,
+    required this.mode,
     required this.index,
     this.elevationAngle,
     this.elevationUnit,
@@ -39,8 +41,30 @@ class THProjectionCommandOption extends THCommandOption {
     String? elevationAngle,
     String? elevationUnit,
     super.originalLineInTH2File = '',
-  })  : projectionType = THProjectionTypes.values.byName(projectionType),
+  })  : mode = THProjectionModeType.values.byName(projectionType),
         super() {
+    if (elevationAngle == null) {
+      this.elevationAngle = null;
+    } else {
+      this.elevationAngle =
+          THDoublePart.fromString(valueString: elevationAngle);
+    }
+    if (elevationUnit == null) {
+      this.elevationUnit = null;
+    } else {
+      this.elevationUnit =
+          THAngleUnitPart.fromString(unitString: elevationUnit);
+    }
+  }
+
+  THProjectionCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required this.mode,
+    this.index = '',
+    String? elevationAngle,
+    String? elevationUnit,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     if (elevationAngle == null) {
       this.elevationAngle = null;
     } else {
@@ -63,7 +87,7 @@ class THProjectionCommandOption extends THCommandOption {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'projectionType': projectionType.name,
+      'mode': mode.name,
       'index': index,
     });
 
@@ -81,7 +105,7 @@ class THProjectionCommandOption extends THCommandOption {
     return THProjectionCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      projectionType: THProjectionTypes.values.byName(map['projectionType']),
+      mode: THProjectionModeType.values.byName(map['mode']),
       index: map['index'],
       elevationAngle: map.containsKey('elevationAngle')
           ? THDoublePart.fromMap(map['elevationAngle'])
@@ -100,7 +124,7 @@ class THProjectionCommandOption extends THCommandOption {
   THProjectionCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THProjectionTypes? projectionType,
+    THProjectionModeType? mode,
     String? index,
     THDoublePart? elevationAngle,
     makeElevationAngleNull = false,
@@ -111,7 +135,7 @@ class THProjectionCommandOption extends THCommandOption {
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      projectionType: projectionType ?? this.projectionType,
+      mode: mode ?? this.mode,
       index: index ?? this.index,
       elevationAngle: makeElevationAngleNull
           ? null
@@ -127,7 +151,7 @@ class THProjectionCommandOption extends THCommandOption {
 
     return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        other.projectionType == projectionType &&
+        other.mode == mode &&
         other.index == index &&
         other.elevationAngle == elevationAngle &&
         other.elevationUnit == elevationUnit;
@@ -137,7 +161,7 @@ class THProjectionCommandOption extends THCommandOption {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        projectionType,
+        mode,
         index,
         elevationAngle,
         elevationUnit,
@@ -147,13 +171,13 @@ class THProjectionCommandOption extends THCommandOption {
   String specToFile() {
     String asString = '';
 
-    asString += projectionType.name;
+    asString += mode.name;
 
     if (index.isNotEmpty && index.trim().isNotEmpty) {
       asString += ':${index.trim()}';
     }
 
-    if (projectionType == THProjectionTypes.elevation) {
+    if (mode == THProjectionModeType.elevation) {
       if (elevationAngle != null) {
         asString += " ${elevationAngle.toString()}";
         if (elevationUnit != null) {

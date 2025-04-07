@@ -155,7 +155,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
 
             // Start Date Input
             MPTextFieldInputWidget(
-              textEditingController: _startDateController,
+              controller: _startDateController,
               errorText: _startDateWarningMessage,
               labelText: _isInterval
                   ? mpLocator.appLocalizations.mpDateIntervalStartDateLabel
@@ -173,7 +173,7 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
             if (_isInterval) ...[
               const SizedBox(height: mpButtonSpace),
               MPTextFieldInputWidget(
-                textEditingController: _endDateController,
+                controller: _endDateController,
                 errorText: _endDateWarningMessage,
                 labelText:
                     mpLocator.appLocalizations.mpDateIntervalEndDateLabel,

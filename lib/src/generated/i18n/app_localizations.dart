@@ -155,6 +155,30 @@ abstract class AppLocalizations {
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
+  /// The description for the degree angle unit
+  ///
+  /// In en, this message translates to:
+  /// **'degree'**
+  String get mpAngleUnitDegree;
+
+  /// The description for the grad angle unit
+  ///
+  /// In en, this message translates to:
+  /// **'grad'**
+  String get mpAngleUnitGrad;
+
+  /// The description for the mil angle unit
+  ///
+  /// In en, this message translates to:
+  /// **'mil'**
+  String get mpAngleUnitMil;
+
+  /// The description for the minute angle unit
+  ///
+  /// In en, this message translates to:
+  /// **'minute'**
+  String get mpAngleUnitMinute;
+
   /// The error message for invalid altitude value
   ///
   /// In en, this message translates to:
@@ -946,6 +970,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Step height (treated as positive)'**
   String get mpPointHeightValueStepObservation;
+
+  /// The warning message for invalid angle
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid angle (0 <= angle < 360)'**
+  String get mpProjectionAngleWarning;
+
+  /// The label for the azimuth type
+  ///
+  /// In en, this message translates to:
+  /// **'Azimuth'**
+  String get mpProjectionElevationAzimuthLabel;
+
+  /// The label for the index type
+  ///
+  /// In en, this message translates to:
+  /// **'Index (optional)'**
+  String get mpProjectionIndexLabel;
+
+  /// The label for the elevation projection mode
+  ///
+  /// In en, this message translates to:
+  /// **'Elevation'**
+  String get mpProjectionModeElevation;
+
+  /// The label for the extended projection mode
+  ///
+  /// In en, this message translates to:
+  /// **'Extended'**
+  String get mpProjectionModeExtended;
+
+  /// The label for the none projection mode
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get mpProjectionModeNone;
+
+  /// The label for the plan projection mode
+  ///
+  /// In en, this message translates to:
+  /// **'Plan'**
+  String get mpProjectionModePlan;
 
   /// The title for the options edit dialog
   ///
