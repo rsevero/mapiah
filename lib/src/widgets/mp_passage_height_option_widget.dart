@@ -43,22 +43,15 @@ class _MPPassageHeightOptionWidgetState
   final FocusNode _heightFocusNode = FocusNode();
   late final String _initialDepth;
   late final String _initialHeight;
+  late final String _initialUnit;
   late final String _initialSelectedChoice;
   String? _depthWarningMessage;
   String? _heigthWarningMessage;
   bool _isOkButtonEnabled = false;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   late final Map<String, String> _unitMap;
-  String selectedUnit = thDefaultLengthUnitAsString;
+  String _selectedUnit = thDefaultLengthUnitAsString;
   bool _isValid = false;
-
-  void _onUnitChanged(String? newUnit) {
-    if (newUnit != null) {
-      setState(() {
-        selectedUnit = newUnit;
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -81,12 +74,14 @@ class _MPPassageHeightOptionWidgetState
           _depthController.text = currentOption.minusNumber.toString();
       }
       _selectedChoice = currentOption.mode.name;
+      _selectedUnit = currentOption.unit.unit.name;
     } else {
       _selectedChoice = '';
     }
 
     _initialHeight = _heightController.text;
     _initialDepth = _depthController.text;
+    _initialUnit = _selectedUnit;
     _initialSelectedChoice = _selectedChoice;
 
     _updateIsValid();
@@ -111,26 +106,27 @@ class _MPPassageHeightOptionWidgetState
       case 'height':
         final double? height = double.tryParse(_heightController.text);
 
-        _isValid = height != null;
+        _isValid = (height != null) && (_selectedUnit.isNotEmpty);
         _heigthWarningMessage =
             _isValid ? null : appLocalizations.mpPassageHeightHeightWarning;
       case 'depth':
         final double? depth = double.tryParse(_depthController.text);
 
-        _isValid = depth != null;
+        _isValid = (depth != null) && (_selectedUnit.isNotEmpty);
         _depthWarningMessage =
             _isValid ? null : appLocalizations.mpPassageHeightDepthWarning;
       case 'distanceBetweenFloorAndCeiling':
         final double? height = double.tryParse(_heightController.text);
 
-        _isValid = height != null;
+        _isValid = (height != null) && (_selectedUnit.isNotEmpty);
         _heigthWarningMessage =
             _isValid ? null : appLocalizations.mpPassageHeightHeightWarning;
       case 'distanceToCeilingAndDistanceToFloor':
         final double? height = double.tryParse(_heightController.text);
         final double? depth = double.tryParse(_depthController.text);
 
-        _isValid = (height != null) && (depth != null);
+        _isValid =
+            (height != null) && (depth != null) && (_selectedUnit.isNotEmpty);
         _heigthWarningMessage = height != null
             ? null
             : appLocalizations.mpPassageHeightHeightWarning;
@@ -147,13 +143,16 @@ class _MPPassageHeightOptionWidgetState
   void _updateOkButtonEnabled() {
     final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
         (((_selectedChoice == 'height') ||
-                (_selectedChoice == 'distanceBetweenFloorAndCeiling')) &&
+                ((_selectedChoice == 'distanceBetweenFloorAndCeiling') ||
+                    (_selectedUnit != _initialUnit))) &&
             (_heightController.text != _initialHeight)) ||
         ((_selectedChoice == 'depth') &&
-            (_depthController.text != _initialDepth)) ||
+            ((_depthController.text != _initialDepth) ||
+                (_selectedUnit != _initialUnit))) ||
         ((_selectedChoice == 'distanceToCeilingAndDistanceToFloor') &&
             ((_heightController.text != _initialHeight) ||
-                (_depthController.text != _initialDepth)));
+                (_depthController.text != _initialDepth) ||
+                (_selectedUnit != _initialUnit)));
 
     setState(() {
       _isOkButtonEnabled = _isValid && isChanged;
@@ -163,7 +162,7 @@ class _MPPassageHeightOptionWidgetState
   Widget _buildFormForOption(String option) {
     Widget buildUnitDropdown() {
       return DropdownMenu<String>(
-        initialSelection: selectedUnit,
+        initialSelection: _selectedUnit,
         dropdownMenuEntries: _unitMap.entries
             .map((unit) => DropdownMenuEntry<String>(
                   value: unit.key,
@@ -172,9 +171,8 @@ class _MPPassageHeightOptionWidgetState
             .toList(),
         onSelected: (newUnit) {
           if (newUnit != null) {
-            setState(() {
-              selectedUnit = newUnit;
-            });
+            _selectedUnit = newUnit;
+            _updateIsValid();
           }
         },
       );
@@ -281,21 +279,21 @@ class _MPPassageHeightOptionWidgetState
           parentMPID: widget.th2FileEditController.thFileMPID,
           plusNumber: _heightController.text,
           mode: THPassageHeightModes.height,
-          unit: selectedUnit,
+          unit: _selectedUnit,
         );
       case 'depth':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
           parentMPID: widget.th2FileEditController.thFileMPID,
           minusNumber: _depthController.text,
           mode: THPassageHeightModes.depth,
-          unit: selectedUnit,
+          unit: _selectedUnit,
         );
       case 'distanceBetweenFloorAndCeiling':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
           parentMPID: widget.th2FileEditController.thFileMPID,
           plusNumber: _heightController.text,
           mode: THPassageHeightModes.distanceBetweenFloorAndCeiling,
-          unit: selectedUnit,
+          unit: _selectedUnit,
         );
       case 'distanceToCeilingAndDistanceToFloor':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
@@ -303,7 +301,7 @@ class _MPPassageHeightOptionWidgetState
           plusNumber: _heightController.text,
           minusNumber: _depthController.text,
           mode: THPassageHeightModes.distanceToCeilingAndDistanceToFloor,
-          unit: selectedUnit,
+          unit: _selectedUnit,
         );
       default:
         throw Exception(
