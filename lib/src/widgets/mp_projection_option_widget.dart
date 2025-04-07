@@ -57,21 +57,28 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     _unitMap =
         MPTextToUser.getOrderedChoices(MPTextToUser.getAngleUnitTypeChoices());
 
-    if (widget.optionInfo.state == MPOptionStateType.set) {
-      final THProjectionCommandOption currentOption =
-          widget.optionInfo.option as THProjectionCommandOption;
+    switch (widget.optionInfo.state) {
+      case MPOptionStateType.set:
+        final THProjectionCommandOption currentOption =
+            widget.optionInfo.option as THProjectionCommandOption;
 
-      _indexController.text = currentOption.index;
-      _selectedChoice = currentOption.mode.name;
-      _angleController.text = currentOption.elevationAngle?.toString() ?? '';
-      _selectedUnit = currentOption.elevationUnit == null
-          ? thDefaultAngleUnitAsString
-          : currentOption.elevationUnit!.unit.name;
-    } else {
-      _selectedChoice = '';
-      _selectedUnit = thDefaultAngleUnitAsString;
-      _indexController.text = '';
-      _angleController.text = '';
+        _indexController.text = currentOption.index;
+        _selectedChoice = currentOption.mode.name;
+        _angleController.text = currentOption.elevationAngle?.toString() ?? '';
+        _selectedUnit = currentOption.elevationUnit == null
+            ? thDefaultAngleUnitAsString
+            : currentOption.elevationUnit!.unit.name;
+      case MPOptionStateType.setMixed:
+      case MPOptionStateType.setUnsupported:
+        _selectedChoice = '';
+        _selectedUnit = thDefaultAngleUnitAsString;
+        _indexController.text = '';
+        _angleController.text = '';
+      case MPOptionStateType.unset:
+        _selectedChoice = mpUnsetOptionID;
+        _selectedUnit = thDefaultAngleUnitAsString;
+        _indexController.text = '';
+        _angleController.text = '';
     }
 
     _initialIndex = _indexController.text;

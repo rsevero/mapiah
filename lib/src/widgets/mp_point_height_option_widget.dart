@@ -57,19 +57,26 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
     _unitMap =
         MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
 
-    if (widget.optionInfo.state == MPOptionStateType.set) {
-      final THPointHeightValueCommandOption currentOption =
-          widget.optionInfo.option as THPointHeightValueCommandOption;
+    switch (widget.optionInfo.state) {
+      case MPOptionStateType.set:
+        final THPointHeightValueCommandOption currentOption =
+            widget.optionInfo.option as THPointHeightValueCommandOption;
 
-      _lengthController.text = currentOption.length.toString();
-      _isPresumed = currentOption.isPresumed;
-      _selectedChoice = currentOption.mode.name;
-      _selectedUnit = currentOption.unit.unit.name;
-    } else {
-      _selectedChoice = '';
-      _isPresumed = false;
-      _selectedUnit = thDefaultLengthUnitAsString;
-      _lengthController.text = '';
+        _lengthController.text = currentOption.length.toString();
+        _isPresumed = currentOption.isPresumed;
+        _selectedChoice = currentOption.mode.name;
+        _selectedUnit = currentOption.unit.unit.name;
+      case MPOptionStateType.setMixed:
+      case MPOptionStateType.setUnsupported:
+        _selectedChoice = '';
+        _isPresumed = false;
+        _selectedUnit = thDefaultLengthUnitAsString;
+        _lengthController.text = '';
+      case MPOptionStateType.unset:
+        _selectedChoice = mpUnsetOptionID;
+        _isPresumed = false;
+        _selectedUnit = thDefaultLengthUnitAsString;
+        _lengthController.text = '';
     }
 
     _initialLength = _lengthController.text;

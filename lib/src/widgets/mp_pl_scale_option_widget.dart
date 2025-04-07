@@ -60,9 +60,12 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
         _numericController = TextEditingController(
           text: currentOption.numericSize.value.toString(),
         );
-      case MPOptionStateType.unset:
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
+        _selectedChoice = '';
+        _sizeAsNamed = '';
+        _numericController = TextEditingController(text: '');
+      case MPOptionStateType.unset:
         _selectedChoice = mpUnsetOptionID;
         _sizeAsNamed = '';
         _numericController = TextEditingController(text: '');

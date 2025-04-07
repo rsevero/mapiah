@@ -59,24 +59,31 @@ class _MPPassageHeightOptionWidgetState
     _unitMap =
         MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
 
-    if (widget.optionInfo.state == MPOptionStateType.set) {
-      final THPassageHeightValueCommandOption currentOption =
-          widget.optionInfo.option as THPassageHeightValueCommandOption;
+    switch (widget.optionInfo.state) {
+      case MPOptionStateType.set:
+        final THPassageHeightValueCommandOption currentOption =
+            widget.optionInfo.option as THPassageHeightValueCommandOption;
 
-      switch (currentOption.mode) {
-        case THPassageHeightModes.height:
-        case THPassageHeightModes.distanceBetweenFloorAndCeiling:
-          _heightController.text = currentOption.plusNumber.toString();
-        case THPassageHeightModes.depth:
-          _depthController.text = currentOption.minusNumber.toString();
-        case THPassageHeightModes.distanceToCeilingAndDistanceToFloor:
-          _heightController.text = currentOption.plusNumber.toString();
-          _depthController.text = currentOption.minusNumber.toString();
-      }
-      _selectedChoice = currentOption.mode.name;
-      _selectedUnit = currentOption.unit.unit.name;
-    } else {
-      _selectedChoice = '';
+        switch (currentOption.mode) {
+          case THPassageHeightModes.height:
+          case THPassageHeightModes.distanceBetweenFloorAndCeiling:
+            _heightController.text = currentOption.plusNumber.toString();
+          case THPassageHeightModes.depth:
+            _depthController.text = currentOption.minusNumber.toString();
+          case THPassageHeightModes.distanceToCeilingAndDistanceToFloor:
+            _heightController.text = currentOption.plusNumber.toString();
+            _depthController.text = currentOption.minusNumber.toString();
+        }
+
+        _selectedChoice = currentOption.mode.name;
+        _selectedUnit = currentOption.unit.unit.name;
+      case MPOptionStateType.setMixed:
+      case MPOptionStateType.setUnsupported:
+        _selectedChoice = '';
+        _selectedUnit = thDefaultLengthUnitAsString;
+      case MPOptionStateType.unset:
+        _selectedChoice = mpUnsetOptionID;
+        _selectedUnit = thDefaultLengthUnitAsString;
     }
 
     _initialHeight = _heightController.text;

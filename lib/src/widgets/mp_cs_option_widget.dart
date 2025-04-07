@@ -10,6 +10,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_int_range_input.widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
@@ -51,11 +52,20 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _selectedChoice = _determineInitialOption(
-      widget.optionInfo.option == null
-          ? null
-          : (widget.optionInfo.option as THCSCommandOption).cs.name,
-    );
+
+    switch (widget.optionInfo.state) {
+      case MPOptionStateType.set:
+        _selectedChoice = _determineInitialOption(
+          widget.optionInfo.option == null
+              ? null
+              : (widget.optionInfo.option as THCSCommandOption).cs.name,
+        );
+      case MPOptionStateType.unset:
+        _selectedChoice = mpUnsetOptionID;
+      case MPOptionStateType.setMixed:
+      case MPOptionStateType.setUnsupported:
+        _selectedChoice = mpUnrecognizedOptionID;
+    }
 
     _initialCurrentValue = _currentValue;
     _initialForOutput = _forOutput;
