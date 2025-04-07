@@ -552,6 +552,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpScrapWarning => 'Croqui não definido';
 
   @override
+  String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';
+
+  @override
+  String get mpSketchCoordinateInvalid => 'Coordenada inválida';
+
+  @override
+  String get mpSketchFilenameLabel => 'Arquivo';
+
+  @override
+  String get mpSketchXLabel => 'X';
+
+  @override
+  String get mpSketchYLabel => 'Y';
+
+  @override
   String get mpStationTypeOptionWarning => 'Estação não definida';
 
   @override

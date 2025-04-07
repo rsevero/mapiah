@@ -552,6 +552,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpScrapWarning => 'Scrap not set';
 
   @override
+  String get mpSketchChooseFileButtonLabel => 'Choose file';
+
+  @override
+  String get mpSketchCoordinateInvalid => 'Invalid coordinate';
+
+  @override
+  String get mpSketchFilenameLabel => 'Filename';
+
+  @override
+  String get mpSketchXLabel => 'X';
+
+  @override
+  String get mpSketchYLabel => 'Y';
+
+  @override
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override

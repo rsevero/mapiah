@@ -212,6 +212,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
       required String labelText,
       required TextEditingController controller,
       required String? errorText,
+      bool autofocus = false,
+      FocusNode? focusNode,
     }) {
       return MPTextFieldInputWidget(
         labelText: labelText,
@@ -220,8 +222,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'^[0-9.\-+]*$')),
         ],
-        autofocus: true,
-        focusNode: _lengthFocusNode,
+        autofocus: autofocus,
+        focusNode: focusNode,
         errorText: errorText,
         onChanged: (value) => _updateIsValid(),
       );
@@ -245,6 +247,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
                   labelText: appLocalizations.mpScrapScale11Label,
                   controller: _lengthControllers[0],
                   errorText: _lengthWarningMessages[0],
+                  autofocus: true,
+                  focusNode: _lengthFocusNode,
                 ),
                 const SizedBox(width: mpButtonSpace),
                 buildUnitDropdown(),
@@ -269,6 +273,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
                   labelText: appLocalizations.mpScrapScale21Label,
                   controller: _lengthControllers[0],
                   errorText: _lengthWarningMessages[0],
+                  autofocus: true,
+                  focusNode: _lengthFocusNode,
                 ),
                 const SizedBox(width: mpButtonSpace),
                 buildLengthTextField(
@@ -300,6 +306,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
                   labelText: appLocalizations.mpScrapScale81Label,
                   controller: _lengthControllers[0],
                   errorText: _lengthWarningMessages[0],
+                  autofocus: true,
+                  focusNode: _lengthFocusNode,
                 ),
                 const SizedBox(width: mpButtonSpace),
                 buildLengthTextField(

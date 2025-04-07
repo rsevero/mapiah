@@ -1,7 +1,7 @@
 part of 'th_command_option.dart';
 
-// sketch <filename> <x> <y> . underlying sketch bitmap specification (lower left cor-
-// ner coordinates).
+// sketch <filename> <x> <y> . underlying sketch bitmap specification (lower
+// left corner coordinates).
 class THSketchCommandOption extends THCommandOption {
   late final THStringPart _filename;
   late final THPositionPart point;
@@ -18,9 +18,19 @@ class THSketchCommandOption extends THCommandOption {
   THSketchCommandOption.fromString({
     required super.optionParent,
     required String filename,
-    required List<dynamic> pointList,
+    required List<String> pointList,
     super.originalLineInTH2File = '',
   }) : super() {
+    _filename = THStringPart(content: filename);
+    pointFromStringList(pointList);
+  }
+
+  THSketchCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    required String filename,
+    required List<String> pointList,
+    super.originalLineInTH2File = '',
+  }) : super.forCWJM() {
     _filename = THStringPart(content: filename);
     pointFromStringList(pointList);
   }
@@ -28,7 +38,7 @@ class THSketchCommandOption extends THCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.sketch;
 
-  void pointFromStringList(List<dynamic> list) {
+  void pointFromStringList(List<String> list) {
     point = THPositionPart.fromStringList(list: list);
   }
 

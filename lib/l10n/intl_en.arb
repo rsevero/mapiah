@@ -1066,6 +1066,36 @@
     "type": "text"
   },
 
+  "mpSketchChooseFileButtonLabel": "Choose file",
+  "@mpSketchChooseFileButtonLabel": {
+    "description": "The label for the choose file button",
+    "type": "text"
+  },
+
+  "mpSketchCoordinateInvalid": "Invalid coordinate",
+  "@mpSketchCoordinateInvalid": {
+    "description": "The error message for invalid coordinate",
+    "type": "text"
+  },
+
+  "mpSketchFilenameLabel": "Filename",
+  "@mpSketchFilenameLabel": {
+    "description": "The label for the filename type",
+    "type": "text"
+  },
+
+  "mpSketchXLabel": "X",
+  "@mpSketchXLabel": {
+    "description": "The label for the X coordinate type",
+    "type": "text"
+  },
+
+  "mpSketchYLabel": "Y",
+  "@mpSketchYLabel": {
+    "description": "The label for the Y coordinate type",
+    "type": "text"
+  },
+
   "mpStationTypeOptionWarning": "Station not set",
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",

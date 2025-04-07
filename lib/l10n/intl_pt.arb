@@ -210,6 +210,12 @@
   "mpScrapLabel": "ID de croqui",
   "mpScrapWarning": "Croqui não definido",
 
+  "mpSketchChooseFileButtonLabel": "Escolher arquivo",
+  "mpSketchCoordinateInvalid": "Coordenada inválida",
+  "mpSketchFilenameLabel": "Arquivo",
+  "mpSketchXLabel": "X",
+  "mpSketchYLabel": "Y",
+
   "mpStationTypeOptionWarning": "Estação não definida",
 
   "mpTextTypeOptionWarning": "Texto não definido",

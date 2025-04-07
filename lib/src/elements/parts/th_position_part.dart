@@ -97,6 +97,14 @@ class THPositionPart extends THPart {
     return "${MPNumericAux.doubleToString(coordinates.dx, decimalPositions)} ${MPNumericAux.doubleToString(coordinates.dy, decimalPositions)}";
   }
 
+  String xAsString() {
+    return MPNumericAux.doubleToString(coordinates.dx, decimalPositions);
+  }
+
+  String yAsString() {
+    return MPNumericAux.doubleToString(coordinates.dy, decimalPositions);
+  }
+
   double get x => coordinates.dx;
 
   double get y => coordinates.dy;

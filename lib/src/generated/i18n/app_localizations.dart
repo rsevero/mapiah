@@ -1151,6 +1151,36 @@ abstract class AppLocalizations {
   /// **'Scrap not set'**
   String get mpScrapWarning;
 
+  /// The label for the choose file button
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get mpSketchChooseFileButtonLabel;
+
+  /// The error message for invalid coordinate
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid coordinate'**
+  String get mpSketchCoordinateInvalid;
+
+  /// The label for the filename type
+  ///
+  /// In en, this message translates to:
+  /// **'Filename'**
+  String get mpSketchFilenameLabel;
+
+  /// The label for the X coordinate type
+  ///
+  /// In en, this message translates to:
+  /// **'X'**
+  String get mpSketchXLabel;
+
+  /// The label for the Y coordinate type
+  ///
+  /// In en, this message translates to:
+  /// **'Y'**
+  String get mpSketchYLabel;
+
   /// The warning message for the station type option
   ///
   /// In en, this message translates to:
