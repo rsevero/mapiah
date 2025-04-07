@@ -17,7 +17,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   late final THPassageHeightModes mode;
   late final THLengthUnitPart unit;
 
-  /// Used only by plusAndMinusNumbersFromString
+  /// Used only by plusAndMinusNumbersFromString()
   late final bool plusHasSign;
 
   THPassageHeightValueCommandOption.forCWJM({
