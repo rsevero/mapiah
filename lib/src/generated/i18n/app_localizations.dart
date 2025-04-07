@@ -638,7 +638,7 @@ abstract class AppLocalizations {
   /// The description for the foot length unit
   ///
   /// In en, this message translates to:
-  /// **'foot'**
+  /// **'feet'**
   String get mpLengthUnitFoot;
 
   /// The abbreviation for the foot length unit
@@ -1019,6 +1019,108 @@ abstract class AppLocalizations {
   /// **'Options'**
   String get mpOptionsEditTitle;
 
+  /// The label for the real to 1 point type
+  ///
+  /// In en, this message translates to:
+  /// **'Real to 1 point'**
+  String get mpScrapScale1ValueLabel;
+
+  /// The label for the real units per drawing point observation type
+  ///
+  /// In en, this message translates to:
+  /// **'Real units per drawing point'**
+  String get mpScrapScale1ValueObservation;
+
+  /// The label for the real units per drawing point type
+  ///
+  /// In en, this message translates to:
+  /// **'Real'**
+  String get mpScrapScale11Label;
+
+  /// The label for the real to points type
+  ///
+  /// In en, this message translates to:
+  /// **'Real to points'**
+  String get mpScrapScale2ValuesLabel;
+
+  /// The label for the real units per drawing points observation type
+  ///
+  /// In en, this message translates to:
+  /// **'real units per drawing points'**
+  String get mpScrapScale2ValueObservation;
+
+  /// The label for the drawing units per drawing point type
+  ///
+  /// In en, this message translates to:
+  /// **'Drawing'**
+  String get mpScrapScale21Label;
+
+  /// The label for the real units per drawing point type
+  ///
+  /// In en, this message translates to:
+  /// **'Real'**
+  String get mpScrapScale22Label;
+
+  /// The label for the real to drawing coordinates type
+  ///
+  /// In en, this message translates to:
+  /// **'Real to drawing coordinates'**
+  String get mpScrapScale8ValuesLabel;
+
+  /// The label for the real coordinates per drawing coordinates observation type
+  ///
+  /// In en, this message translates to:
+  /// **'Real coordinates per drawing coordinates'**
+  String get mpScrapScale8ValueObservation;
+
+  /// The label for the drawing X1 type
+  ///
+  /// In en, this message translates to:
+  /// **'Draw X1'**
+  String get mpScrapScale81Label;
+
+  /// The label for the drawing Y1 type
+  ///
+  /// In en, this message translates to:
+  /// **'Draw Y1'**
+  String get mpScrapScale82Label;
+
+  /// The label for the drawing X2 type
+  ///
+  /// In en, this message translates to:
+  /// **'Draw X2'**
+  String get mpScrapScale83Label;
+
+  /// The label for the drawing Y2 type
+  ///
+  /// In en, this message translates to:
+  /// **'Draw Y2'**
+  String get mpScrapScale84Label;
+
+  /// The label for the real X1 type
+  ///
+  /// In en, this message translates to:
+  /// **'Real X1'**
+  String get mpScrapScale85Label;
+
+  /// The label for the real Y1 type
+  ///
+  /// In en, this message translates to:
+  /// **'Real Y1'**
+  String get mpScrapScale86Label;
+
+  /// The label for the real X2 type
+  ///
+  /// In en, this message translates to:
+  /// **'Real X2'**
+  String get mpScrapScale87Label;
+
+  /// The label for the real Y2 type
+  ///
+  /// In en, this message translates to:
+  /// **'Real Y2'**
+  String get mpScrapScale88Label;
+
   /// The label for the free text scrap type
   ///
   /// In en, this message translates to:
@@ -1030,6 +1132,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'From file'**
   String get mpScrapFromFile;
+
+  /// The error message for invalid scale reference
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid scale ref'**
+  String get mpScrapScaleInvalidValueError;
 
   /// The label for the scrap ID type
   ///

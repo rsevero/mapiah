@@ -225,5 +225,10 @@ const String mpNonMultipleChoiceSetID = 'SET';
 const String mpScrapFromFileTHID = 'FROM_FILE';
 const String mpScrapFreeTextTHID = 'FREE_TEXT';
 
+const int mpScrapScaleMaxValues = 8;
+const String mpScrapScale1ValueID = 'ONE_VALUE';
+const String mpScrapScale2ValuesID = 'TWO_VALUES';
+const String mpScrapScale8ValuesID = 'EIGHT_VALUES';
+
 const int mpMaxLastUsedTypes = 5;
 const int mpMaxMostUsedTypes = 5;

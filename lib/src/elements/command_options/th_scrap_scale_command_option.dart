@@ -14,24 +14,29 @@ part of 'th_command_option.dart';
 // the coordinates of the ‘points in reality’. This form allows you to apply
 // both scaling and rotation to the scrap.
 class THScrapScaleCommandOption extends THCommandOption {
-  final List<THDoublePart> _numericSpecifications;
+  final List<THDoublePart> numericSpecifications;
   final THLengthUnitPart unitPart;
 
   THScrapScaleCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required List<THDoublePart> numericSpecifications,
+    required this.numericSpecifications,
     required this.unitPart,
-  })  : _numericSpecifications = numericSpecifications,
-        super.forCWJM();
+  }) : super.forCWJM();
 
   THScrapScaleCommandOption({
     required super.optionParent,
-    required List<THDoublePart> numericSpecifications,
+    required this.numericSpecifications,
     required this.unitPart,
     super.originalLineInTH2File = '',
-  })  : _numericSpecifications = numericSpecifications,
-        super();
+  }) : super();
+
+  THScrapScaleCommandOption.fromStringWithParentMPID({
+    required super.parentMPID,
+    super.originalLineInTH2File = '',
+    required this.numericSpecifications,
+    required this.unitPart,
+  }) : super.forCWJM();
 
   @override
   THCommandOptionType get type => THCommandOptionType.scrapScale;
@@ -45,7 +50,7 @@ class THScrapScaleCommandOption extends THCommandOption {
 
     map.addAll({
       'numericSpecifications':
-          _numericSpecifications.map((e) => e.toMap()).toList(),
+          numericSpecifications.map((e) => e.toMap()).toList(),
       'unit': unitPart.toMap(),
     });
 
@@ -77,7 +82,8 @@ class THScrapScaleCommandOption extends THCommandOption {
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      numericSpecifications: numericSpecifications ?? _numericSpecifications,
+      numericSpecifications:
+          numericSpecifications ?? this.numericSpecifications,
       unitPart: unit ?? this.unitPart,
     );
   }
@@ -88,7 +94,7 @@ class THScrapScaleCommandOption extends THCommandOption {
 
     return other.parentMPID == parentMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        other._numericSpecifications == _numericSpecifications &&
+        other.numericSpecifications == numericSpecifications &&
         other.unitPart == unitPart;
   }
 
@@ -96,36 +102,35 @@ class THScrapScaleCommandOption extends THCommandOption {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        _numericSpecifications,
+        numericSpecifications,
         unitPart,
       );
 
   double get lengthUnitsPerPoint {
-    switch (_numericSpecifications.length) {
+    switch (numericSpecifications.length) {
       case 1:
-        return _numericSpecifications[0].value;
+        return numericSpecifications[0].value;
       case 2:
-        return _numericSpecifications[1].value /
-            _numericSpecifications[0].value;
+        return numericSpecifications[1].value / numericSpecifications[0].value;
       case 8:
         double pointSize = MPNumericAux.pointsDistance(
           Offset(
-            _numericSpecifications[0].value,
-            _numericSpecifications[1].value,
+            numericSpecifications[0].value,
+            numericSpecifications[1].value,
           ),
           Offset(
-            _numericSpecifications[2].value,
-            _numericSpecifications[3].value,
+            numericSpecifications[2].value,
+            numericSpecifications[3].value,
           ),
         );
         double realSize = MPNumericAux.pointsDistance(
           Offset(
-            _numericSpecifications[4].value,
-            _numericSpecifications[5].value,
+            numericSpecifications[4].value,
+            numericSpecifications[5].value,
           ),
           Offset(
-            _numericSpecifications[6].value,
-            _numericSpecifications[7].value,
+            numericSpecifications[6].value,
+            numericSpecifications[7].value,
           ),
         );
         return realSize / pointSize;
@@ -139,8 +144,8 @@ class THScrapScaleCommandOption extends THCommandOption {
   String specToFile() {
     String asString = '';
 
-    for (var aValue in _numericSpecifications) {
-      asString += ' ${aValue.toString()}';
+    for (THDoublePart numericSpecification in numericSpecifications) {
+      asString += ' ${numericSpecification.toString()}';
     }
 
     asString += ' ${unitPart.toString()}';

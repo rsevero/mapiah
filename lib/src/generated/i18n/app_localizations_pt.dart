@@ -486,10 +486,64 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpOptionsEditTitle => 'Opções';
 
   @override
+  String get mpScrapScale1ValueLabel => 'Real para 1 ponto';
+
+  @override
+  String get mpScrapScale1ValueObservation => 'Medida real por ponto do desenho';
+
+  @override
+  String get mpScrapScale11Label => 'Real';
+
+  @override
+  String get mpScrapScale2ValuesLabel => 'Real para pontos';
+
+  @override
+  String get mpScrapScale2ValueObservation => 'Medida real por pontos do desenho';
+
+  @override
+  String get mpScrapScale21Label => 'Desenho';
+
+  @override
+  String get mpScrapScale22Label => 'Real';
+
+  @override
+  String get mpScrapScale8ValuesLabel => 'Coordenadas reais por coordenadas do desenho';
+
+  @override
+  String get mpScrapScale8ValueObservation => 'Coordenadas reais por coordenadas do desenho';
+
+  @override
+  String get mpScrapScale81Label => 'X1 desenho';
+
+  @override
+  String get mpScrapScale82Label => 'Y1 desenho';
+
+  @override
+  String get mpScrapScale83Label => 'X2 desenho';
+
+  @override
+  String get mpScrapScale84Label => 'Y2 desenho';
+
+  @override
+  String get mpScrapScale85Label => 'X1 real';
+
+  @override
+  String get mpScrapScale86Label => 'Y1 real';
+
+  @override
+  String get mpScrapScale87Label => 'X2 real';
+
+  @override
+  String get mpScrapScale88Label => 'Y2 real';
+
+  @override
   String get mpScrapFreeText => 'Texto livre';
 
   @override
   String get mpScrapFromFile => 'Deste arquivo';
+
+  @override
+  String get mpScrapScaleInvalidValueError => 'Referência de escala inválida';
 
   @override
   String get mpScrapLabel => 'ID de croqui';

@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLengthUnitCentimeterAbbreviation => 'cm';
 
   @override
-  String get mpLengthUnitFoot => 'foot';
+  String get mpLengthUnitFoot => 'feet';
 
   @override
   String get mpLengthUnitFootAbbreviation => 'ft';
@@ -486,10 +486,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpOptionsEditTitle => 'Options';
 
   @override
+  String get mpScrapScale1ValueLabel => 'Real to 1 point';
+
+  @override
+  String get mpScrapScale1ValueObservation => 'Real units per drawing point';
+
+  @override
+  String get mpScrapScale11Label => 'Real';
+
+  @override
+  String get mpScrapScale2ValuesLabel => 'Real to points';
+
+  @override
+  String get mpScrapScale2ValueObservation => 'real units per drawing points';
+
+  @override
+  String get mpScrapScale21Label => 'Drawing';
+
+  @override
+  String get mpScrapScale22Label => 'Real';
+
+  @override
+  String get mpScrapScale8ValuesLabel => 'Real to drawing coordinates';
+
+  @override
+  String get mpScrapScale8ValueObservation => 'Real coordinates per drawing coordinates';
+
+  @override
+  String get mpScrapScale81Label => 'Draw X1';
+
+  @override
+  String get mpScrapScale82Label => 'Draw Y1';
+
+  @override
+  String get mpScrapScale83Label => 'Draw X2';
+
+  @override
+  String get mpScrapScale84Label => 'Draw Y2';
+
+  @override
+  String get mpScrapScale85Label => 'Real X1';
+
+  @override
+  String get mpScrapScale86Label => 'Real Y1';
+
+  @override
+  String get mpScrapScale87Label => 'Real X2';
+
+  @override
+  String get mpScrapScale88Label => 'Real Y2';
+
+  @override
   String get mpScrapFreeText => 'Free text';
 
   @override
   String get mpScrapFromFile => 'From file';
+
+  @override
+  String get mpScrapScaleInvalidValueError => 'Invalid scale ref';
 
   @override
   String get mpScrapLabel => 'Scrap ID';

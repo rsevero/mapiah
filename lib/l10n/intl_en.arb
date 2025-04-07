@@ -550,7 +550,7 @@
     "type": "text"
   },
 
-  "mpLengthUnitFoot": "foot",
+  "mpLengthUnitFoot": "feet",
   "@mpLengthUnitFoot": {
     "description": "The description for the foot length unit",
     "type": "text"
@@ -934,6 +934,108 @@
     "type": "text"
   },
 
+  "mpScrapScale1ValueLabel": "Real to 1 point",
+  "@mpScrapScale1ValueLabel": {
+    "description": "The label for the real to 1 point type",
+    "type": "text"
+  },
+
+  "mpScrapScale1ValueObservation": "Real units per drawing point",
+  "@mpScrapScale1ValueObservation": {
+    "description": "The label for the real units per drawing point observation type",
+    "type": "text"
+  },
+
+  "mpScrapScale11Label": "Real",
+  "@mpScrapScale11Label": {
+    "description": "The label for the real units per drawing point type",
+    "type": "text"
+  },
+
+  "mpScrapScale2ValuesLabel": "Real to points",
+  "@mpScrapScale2ValuesLabel": {
+    "description": "The label for the real to points type",
+    "type": "text"
+  },
+
+  "mpScrapScale2ValueObservation": "real units per drawing points",
+  "@mpScrapScale2ValueObservation": {
+    "description": "The label for the real units per drawing points observation type",
+    "type": "text"
+  },
+
+  "mpScrapScale21Label": "Drawing",
+  "@mpScrapScale21Label": {
+    "description": "The label for the drawing units per drawing point type",
+    "type": "text"
+  },
+
+  "mpScrapScale22Label": "Real",
+  "@mpScrapScale22Label": {
+    "description": "The label for the real units per drawing point type",
+    "type": "text"
+  },
+
+  "mpScrapScale8ValuesLabel": "Real to drawing coordinates",
+  "@mpScrapScale8ValuesLabel": {
+    "description": "The label for the real to drawing coordinates type",
+    "type": "text"
+  },
+
+  "mpScrapScale8ValueObservation": "Real coordinates per drawing coordinates",
+  "@mpScrapScale8ValueObservation": {
+    "description": "The label for the real coordinates per drawing coordinates observation type",
+    "type": "text"
+  },
+
+  "mpScrapScale81Label": "Draw X1",
+  "@mpScrapScale81Label": {
+    "description": "The label for the drawing X1 type",
+    "type": "text"
+  },
+
+  "mpScrapScale82Label": "Draw Y1",
+  "@mpScrapScale82Label": {
+    "description": "The label for the drawing Y1 type",
+    "type": "text"
+  },
+
+  "mpScrapScale83Label": "Draw X2",
+  "@mpScrapScale83Label": {
+    "description": "The label for the drawing X2 type",
+    "type": "text"
+  },
+
+  "mpScrapScale84Label": "Draw Y2",
+  "@mpScrapScale84Label": {
+    "description": "The label for the drawing Y2 type",
+    "type": "text"
+  },
+
+  "mpScrapScale85Label": "Real X1",
+  "@mpScrapScale85Label": {
+    "description": "The label for the real X1 type",
+    "type": "text"
+  },
+
+  "mpScrapScale86Label": "Real Y1",
+  "@mpScrapScale86Label": {
+    "description": "The label for the real Y1 type",
+    "type": "text"
+  },
+
+  "mpScrapScale87Label": "Real X2",
+  "@mpScrapScale87Label": {
+    "description": "The label for the real X2 type",
+    "type": "text"
+  },
+
+  "mpScrapScale88Label": "Real Y2",
+  "@mpScrapScale88Label": {
+    "description": "The label for the real Y2 type",
+    "type": "text"
+  },
+
   "mpScrapFreeText": "Free text",
   "@mpScrapFreeText": {
     "description": "The label for the free text scrap type",
@@ -943,6 +1045,12 @@
   "mpScrapFromFile": "From file",
   "@mpScrapFromFile": {
     "description": "The label for the from file scrap type",
+    "type": "text"
+  },
+
+  "mpScrapScaleInvalidValueError": "Invalid scale ref",
+  "@mpScrapScaleInvalidValueError": {
+    "description": "The error message for invalid scale reference",
     "type": "text"
   },
 
