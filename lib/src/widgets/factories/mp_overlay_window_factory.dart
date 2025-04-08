@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -46,26 +43,14 @@ class MPOverlayWindowFactory {
     MPWidgetPositionType? innerAnchorType,
     required MPWindowType type,
   }) {
-    final TH2FileEditOverlayWindowController overlayWindowController =
-        th2FileEditController.overlayWindowController;
     final int thFileMPID = th2FileEditController.thFileMPID;
     Widget overlayWindowWidget;
 
     switch (type) {
       case MPWindowType.availableScraps:
-        final GlobalKey changeScrapButtonGlobalKey = overlayWindowController
-            .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
-        final Rect? changeScrapButtonBoundingBox =
-            MPInteractionAux.getWidgetRectFromGlobalKey(
-          widgetGlobalKey: changeScrapButtonGlobalKey,
-          ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+        outerAnchorPosition = MPInteractionAux.getScrapsButtonOuterAnchor(
+          th2FileEditController,
         );
-
-        if (changeScrapButtonBoundingBox != null) {
-          outerAnchorPosition = Offset(
-              changeScrapButtonBoundingBox.left - mpButtonSpace,
-              changeScrapButtonBoundingBox.center.dy);
-        }
 
         overlayWindowWidget = MPAvailableScrapsWidget(
           key: ValueKey("MPAvailableScrapsWidget|$thFileMPID"),

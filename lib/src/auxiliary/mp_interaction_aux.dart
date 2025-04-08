@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
@@ -131,5 +133,27 @@ class MPInteractionAux {
       List<Widget> widgetsList, Widget newWidget) {
     widgetsList.add(const SizedBox(height: mpButtonSpace));
     widgetsList.add(newWidget);
+  }
+
+  static Offset getScrapsButtonOuterAnchor(
+    TH2FileEditController th2FileEditController,
+  ) {
+    Offset outerAnchorPosition = Offset.zero;
+
+    final GlobalKey changeScrapButtonGlobalKey = th2FileEditController
+        .overlayWindowController
+        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
+    final Rect? changeScrapButtonBoundingBox =
+        MPInteractionAux.getWidgetRectFromGlobalKey(
+      widgetGlobalKey: changeScrapButtonGlobalKey,
+      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+    );
+
+    if (changeScrapButtonBoundingBox != null) {
+      outerAnchorPosition = Offset(
+          changeScrapButtonBoundingBox.left - mpButtonSpace,
+          changeScrapButtonBoundingBox.center.dy);
+    }
+    return outerAnchorPosition;
   }
 }

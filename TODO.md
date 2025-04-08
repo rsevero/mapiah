@@ -14,7 +14,7 @@ Version 0.2
 [ ] - Copy/Paste
 [ ] - Different points and line representations
 [ ] - Areas
-[ ] - Scrap options
+[X] - Scrap options
 [ ] - Line segment options
 [ ] - Show direction of lines
 [ ] - Add/delete line segments in existing lines

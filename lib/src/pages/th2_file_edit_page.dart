@@ -2,6 +2,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
@@ -196,10 +197,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
         isSelectMode = th2FileEditController.isSelectMode;
 
-        if (th2FileEditController.hasMultipleScraps) {
-          generalActionButtons.addAll(_changeScrapButton());
-        }
-
+        generalActionButtons.addAll(_changeScrapButton());
         generalActionButtons.addAll(_editElementButtons());
         generalActionButtons.addAll(_addElementButtons());
         generalActionButtons.addAll(_zoomButtonWithOptions());
@@ -400,9 +398,21 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void _onChangeScrapButtonPressed() {
-    th2FileEditController.overlayWindowController.toggleOverlayWindow(
-      MPWindowType.availableScraps,
-    );
+    if (th2FileEditController.hasMultipleScraps) {
+      th2FileEditController.overlayWindowController.toggleOverlayWindow(
+        MPWindowType.availableScraps,
+      );
+    } else {
+      final Offset anchorPosition = MPInteractionAux.getScrapsButtonOuterAnchor(
+        th2FileEditController,
+      );
+
+      th2FileEditController.overlayWindowController
+          .perfomToggleScrapOptionsOverlayWindow(
+        scrapMPID: th2FileEditController.activeScrapID,
+        outerAnchorPosition: anchorPosition,
+      );
+    }
   }
 
   void onRemovePressed() {
