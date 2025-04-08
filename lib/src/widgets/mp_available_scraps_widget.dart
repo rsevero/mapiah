@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -61,32 +62,37 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                         final int scrapID = entry.key;
                         final String scrapName = entry.value;
 
-                        return Listener(
-                          onPointerDown: (PointerDownEvent event) {
-                            if (event.kind == PointerDeviceKind.mouse &&
-                                event.buttons == kSecondaryMouseButton) {
-                              _onRightClickSelectScrap(scrapID);
-                            }
-                          },
-                          child: RadioListTile<int>(
-                            title: Text(
-                              scrapName,
-                              style: DefaultTextStyle.of(blockContext).style,
-                            ),
-                            value: scrapID,
-                            groupValue: th2FileEditController.activeScrapID,
-                            contentPadding: EdgeInsets.zero,
-                            activeColor: IconTheme.of(blockContext).color,
-                            dense: true,
-                            visualDensity:
-                                VisualDensity.adaptivePlatformDensity,
-                            onChanged: (int? value) {
-                              if (value != null) {
-                                _onTapSelectScrap(value);
+                        return Builder(builder: (listenerContext) {
+                          return Listener(
+                            onPointerDown: (PointerDownEvent event) {
+                              if (event.kind == PointerDeviceKind.mouse &&
+                                  event.buttons == kSecondaryMouseButton) {
+                                _onRightClickSelectScrap(
+                                  listenerContext,
+                                  scrapID,
+                                );
                               }
                             },
-                          ),
-                        );
+                            child: RadioListTile<int>(
+                              title: Text(
+                                scrapName,
+                                style: DefaultTextStyle.of(blockContext).style,
+                              ),
+                              value: scrapID,
+                              groupValue: th2FileEditController.activeScrapID,
+                              contentPadding: EdgeInsets.zero,
+                              activeColor: IconTheme.of(blockContext).color,
+                              dense: true,
+                              visualDensity:
+                                  VisualDensity.adaptivePlatformDensity,
+                              onChanged: (int? value) {
+                                if (value != null) {
+                                  _onTapSelectScrap(value);
+                                }
+                              },
+                            ),
+                          );
+                        });
                       },
                     ).toList(),
                   );
@@ -103,11 +109,28 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     th2FileEditController.setActiveScrap(scrapID);
   }
 
-  void _onRightClickSelectScrap(int scrapID) {
+  void _onRightClickSelectScrap(BuildContext childContext, int scrapID) {
+    Rect? thisBoundingBox = MPInteractionAux.getWidgetRectFromContext(
+      widgetContext: context,
+      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+    );
+
+    Rect? childBoundingBox = MPInteractionAux.getWidgetRectFromContext(
+      widgetContext: childContext,
+      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+    );
+
+    /// Use the left of this widget and the vertical center of the child (taped
+    /// option) widget as the outer anchor position for the option edit window.
+    final Offset anchorPosition =
+        (thisBoundingBox == null) || (childBoundingBox == null)
+            ? th2FileEditController.screenBoundingBox.center
+            : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
+
     th2FileEditController.overlayWindowController
         .perfomToggleScrapOptionsOverlayWindow(
       scrapMPID: scrapID,
-      outerAnchorPosition: widget.outerAnchorPosition,
+      outerAnchorPosition: anchorPosition,
     );
   }
 }

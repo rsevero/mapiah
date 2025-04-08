@@ -97,7 +97,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         default:
           _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
             th2FileEditController: _th2FileEditController,
-            outerAnchorPosition: getPositionFromSelectedElements(),
+            outerAnchorPosition:
+                outerAnchorPosition ?? getPositionFromSelectedElements(),
             innerAnchorType: innerAnchorType,
             type: type,
           );
