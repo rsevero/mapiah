@@ -603,6 +603,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpTextTypeOptionWarning => 'Texto não definido';
 
   @override
+  String get mpTitleTextLabel => 'Título';
+
+  @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override

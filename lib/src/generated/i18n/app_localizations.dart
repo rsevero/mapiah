@@ -1253,6 +1253,12 @@ abstract class AppLocalizations {
   /// **'Text not set'**
   String get mpTextTypeOptionWarning;
 
+  /// The label for the title type
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get mpTitleTextLabel;
+
   /// The label for the parsing errors dialog
   ///
   /// In en, this message translates to:

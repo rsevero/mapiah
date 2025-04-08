@@ -62,6 +62,10 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
             _textController = TextEditingController(
               text: currentOption.text.content.trim(),
             );
+          case THTitleCommandOption _:
+            _textController = TextEditingController(
+              text: currentOption.title.content.trim(),
+            );
           default:
             throw Exception(
               'Unsupported option type: ${widget.optionInfo..type} in _MPTextTypeOptionWidgetState.initState()',
@@ -124,6 +128,12 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
               originalLineInTH2File: '',
               text: THStringPart(content: text),
             );
+          case THCommandOptionType.title:
+            newOption = THTitleCommandOption.forCWJM(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              originalLineInTH2File: '',
+              title: THStringPart(content: text),
+            );
           default:
             throw Exception(
               'Unsupported option type: ${widget.optionInfo.type} in _MPTextTypeOptionWidgetState._okButtonPressed()',
@@ -184,6 +194,9 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
       case THCommandOptionType.text:
         title = appLocalizations.thCommandOptionText;
         textLabel = appLocalizations.mpTextTextLabel;
+      case THCommandOptionType.title:
+        title = appLocalizations.thCommandOptionTitle;
+        textLabel = appLocalizations.mpTitleTextLabel;
       default:
         throw Exception(
           'Unsupported option type: ${widget.optionInfo.type} in _MPTextTypeOptionWidgetState.build()',

@@ -1168,6 +1168,12 @@
     "type": "text"
   },
 
+  "mpTitleTextLabel": "Title",
+  "@mpTitleTextLabel": {
+    "description": "The label for the title type",
+    "type": "text"
+  },
+
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",

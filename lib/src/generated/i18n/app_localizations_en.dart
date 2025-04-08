@@ -603,6 +603,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpTextTypeOptionWarning => 'Text not set';
 
   @override
+  String get mpTitleTextLabel => 'Title';
+
+  @override
   String get parsingErrors => 'Parsing errors';
 
   @override
