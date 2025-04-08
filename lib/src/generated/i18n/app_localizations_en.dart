@@ -591,6 +591,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override
+  String get mpSubtypeEmpty => 'Subtype empty';
+
+  @override
+  String get mpSubtypeLabel => 'Subtype';
+
+  @override
   String get mpTextTypeOptionWarning => 'Text not set';
 
   @override

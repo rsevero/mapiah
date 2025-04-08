@@ -14,13 +14,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPStationNamesOptionWidget extends StatefulWidget {
+class MPSubtypeOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPStationNamesOptionWidget({
+  const MPSubtypeOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -29,23 +29,18 @@ class MPStationNamesOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPStationNamesOptionWidget> createState() =>
-      _MPStationNamesOptionWidgetState();
+  State<MPSubtypeOptionWidget> createState() => _MPSubtypeOptionWidgetState();
 }
 
-class _MPStationNamesOptionWidgetState
-    extends State<MPStationNamesOptionWidget> {
+class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
   late String _selectedChoice;
-  late TextEditingController _prefixController;
-  late TextEditingController _suffixController;
-  final FocusNode _prefixFieldFocusNode = FocusNode();
+  late TextEditingController _subtypeController;
+  final FocusNode _subtypeFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
-  late final String _initialPrefix;
-  late final String _initialSuffix;
+  late final String _initialSubtype;
   late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  String? _prefixWarningMessage;
-  String? _suffixWarningMessage;
+  String? _subtypeWarningMessage;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
 
@@ -55,29 +50,23 @@ class _MPStationNamesOptionWidgetState
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THStationNamesCommandOption currentOption =
-            widget.optionInfo.option! as THStationNamesCommandOption;
+        final THSubtypeCommandOption currentOption =
+            widget.optionInfo.option! as THSubtypeCommandOption;
 
-        _prefixController = TextEditingController(
-          text: currentOption.prefix.trim(),
-        );
-        _suffixController = TextEditingController(
-          text: currentOption.suffix.trim(),
+        _subtypeController = TextEditingController(
+          text: currentOption.subtype.trim(),
         );
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _prefixController = TextEditingController(text: '');
-        _suffixController = TextEditingController(text: '');
+        _subtypeController = TextEditingController(text: '');
         _selectedChoice = '';
       case MPOptionStateType.unset:
-        _prefixController = TextEditingController(text: '');
-        _suffixController = TextEditingController(text: '');
+        _subtypeController = TextEditingController(text: '');
         _selectedChoice = mpUnsetOptionID;
     }
 
-    _initialPrefix = _prefixController.text;
-    _initialSuffix = _suffixController.text;
+    _initialSubtype = _subtypeController.text;
     _initialSelectedChoice = _selectedChoice;
 
     _updateIsValid();
@@ -92,15 +81,14 @@ class _MPStationNamesOptionWidgetState
 
   @override
   void dispose() {
-    _prefixController.dispose();
-    _suffixController.dispose();
-    _prefixFieldFocusNode.dispose();
+    _subtypeController.dispose();
+    _subtypeFieldFocusNode.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _prefixFieldFocusNode.requestFocus();
+      _subtypeFieldFocusNode.requestFocus();
     }
   }
 
@@ -112,11 +100,10 @@ class _MPStationNamesOptionWidgetState
       /// parentMPID of the option(s) to be set. THFile isn't even a
       /// THHasOptionsMixin so it can't actually be the parent of an option,
       /// i.e., is has no options at all.
-      newOption = THStationNamesCommandOption.forCWJM(
+      newOption = THSubtypeCommandOption.forCWJM(
         parentMPID: widget.th2FileEditController.thFileMPID,
         originalLineInTH2File: '',
-        prefix: _prefixController.text.trim(),
-        suffix: _suffixController.text.trim(),
+        subtype: _subtypeController.text.trim(),
       );
     }
 
@@ -138,28 +125,20 @@ class _MPStationNamesOptionWidgetState
       case mpUnsetOptionID:
         _isValid = true;
       case mpNonMultipleChoiceSetID:
-        final bool isPrefixValid = _prefixController.text.trim().isNotEmpty;
-        final bool isSuffixValid = _suffixController.text.trim().isNotEmpty;
+        _isValid = _subtypeController.text.trim().isNotEmpty;
+        _subtypeWarningMessage =
+            _isValid ? null : appLocalizations.mpSubtypeEmpty;
 
-        _prefixWarningMessage = isPrefixValid
-            ? null
-            : appLocalizations.mpStationNamesPrefixMessageEmpty;
-        _suffixWarningMessage = isSuffixValid
-            ? null
-            : appLocalizations.mpStationNamesSuffixMessageEmpty;
-        _isValid = isPrefixValid && isSuffixValid;
       default:
         _isValid = false;
     }
-
     _updateIsOkButtonEnabled();
   }
 
   void _updateIsOkButtonEnabled() {
     final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            ((_prefixController.text != _initialPrefix) ||
-                (_suffixController.text != _initialSuffix))));
+            (_subtypeController.text != _initialSubtype)));
 
     setState(
       () {
@@ -171,7 +150,7 @@ class _MPStationNamesOptionWidgetState
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionStationNames,
+      title: appLocalizations.thCommandOptionSubtype,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -214,20 +193,11 @@ class _MPStationNamesOptionWidgetState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MPTextFieldInputWidget(
-                    controller: _prefixController,
-                    errorText: _prefixWarningMessage,
-                    labelText: appLocalizations.mpStationNamesPrefixLabel,
+                    controller: _subtypeController,
+                    errorText: _subtypeWarningMessage,
+                    labelText: appLocalizations.mpSubtypeLabel,
                     autofocus: true,
-                    focusNode: _prefixFieldFocusNode,
-                    onChanged: (value) {
-                      _updateIsValid();
-                    },
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  MPTextFieldInputWidget(
-                    labelText: appLocalizations.mpStationNamesSuffixLabel,
-                    controller: _suffixController,
-                    errorText: _suffixWarningMessage,
+                    focusNode: _subtypeFieldFocusNode,
                     onChanged: (value) {
                       _updateIsValid();
                     },

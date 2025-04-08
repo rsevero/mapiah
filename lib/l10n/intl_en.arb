@@ -1144,6 +1144,18 @@
     "type": "text"
   },
 
+  "mpSubtypeEmpty": "Subtype empty",
+  "@mpSubtypeEmpty": {
+    "description": "The error message for empty subtype",
+    "type": "text"
+  },
+
+  "mpSubtypeLabel": "Subtype",
+  "@mpSubtypeLabel": {
+    "description": "The label for the subtype type",
+    "type": "text"
+  },
+
   "mpTextTypeOptionWarning": "Text not set",
   "@mpTextTypeOptionWarning": {
     "description": "The warning message for the text type option",

@@ -591,6 +591,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpStationTypeOptionWarning => 'Base não definida';
 
   @override
+  String get mpSubtypeEmpty => 'Subtipo vazio';
+
+  @override
+  String get mpSubtypeLabel => 'Subtipo';
+
+  @override
   String get mpTextTypeOptionWarning => 'Texto não definido';
 
   @override

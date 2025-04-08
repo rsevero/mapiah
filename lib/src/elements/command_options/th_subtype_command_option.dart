@@ -1,14 +1,25 @@
 part of 'th_command_option.dart';
 
-// subtype <keyword> . determines the object’s subtype. The following subtypes for
-// given types are supported:
-// station: 21 temporary (default), painted, natural, fixed;
-// air-draught: winter, summer, undefined (default);
-// water-flow: permanent (default), intermittent, paleo.
-// The subtype may be specified also directly in <type> specification using ‘:’ as a
-// separator.22
-// Any subtype specification can be used with user defined type (u). In this case you need
-// also to define corresponding metapost symbol (see the chapter New map symbols).
+// subtype <keyword> . determines the object’s subtype. The following subtypes
+// for given types are supported:
+//
+// * points:
+// ** station: temporary (default), painted, natural, fixed;
+// ** air-draught: winter, summer, undefined (default);
+// ** water-flow: permanent (default), intermittent, paleo.
+//
+// * lines:
+// ** border: invisible, presumed, temporary, visible (default);
+// ** survey: cave (default), surface;
+// ** wall: bedrock, blocks, clay, debris, flowstone, ice, invisible, moonmilk,
+//   overlying, pebbles, pit, presumed, sand, underlying, unsurveyed;
+// ** water-flow: permanent (default), conjectural, intermittent.
+//
+// The subtype may be specified also directly in <type> specification using ‘:’
+// as a separator.
+// Any subtype specification can be used with user defined type (u). In this
+// case you need also to define corresponding metapost symbol (see the chapter
+// New map symbols).
 class THSubtypeCommandOption extends THCommandOption {
   final String subtype;
 

@@ -227,6 +227,9 @@
 
   "mpStationTypeOptionWarning": "Base não definida",
 
+  "mpSubtypeEmpty": "Subtipo vazio",
+  "mpSubtypeLabel": "Subtipo",
+
   "mpTextTypeOptionWarning": "Texto não definido",
 
   "parsingErrors": "Erros na interpretação do arquivo",

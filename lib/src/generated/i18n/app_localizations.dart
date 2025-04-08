@@ -1229,6 +1229,18 @@ abstract class AppLocalizations {
   /// **'Station not set'**
   String get mpStationTypeOptionWarning;
 
+  /// The error message for empty subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Subtype empty'**
+  String get mpSubtypeEmpty;
+
+  /// The label for the subtype type
+  ///
+  /// In en, this message translates to:
+  /// **'Subtype'**
+  String get mpSubtypeLabel;
+
   /// The warning message for the text type option
   ///
   /// In en, this message translates to:
