@@ -221,7 +221,11 @@
   "mpStationNamesSuffixLabel": "Sufixo",
   "mpStationNamesSuffixMessageEmpty": "Sufixo vazio",
 
-  "mpStationTypeOptionWarning": "Estação não definida",
+  "mpStationsAddField": "Adicionar campo",
+  "mpStationsNameEmpty": "Nome vazio",
+  "mpStationsNameLabel": "Base",
+
+  "mpStationTypeOptionWarning": "Base não definida",
 
   "mpTextTypeOptionWarning": "Texto não definido",
 
@@ -404,8 +408,8 @@
   "thPointStalactiteStalagmite": "Estalactite e estalagmite",
   "thPointStalagmite": "Estalagmite",
   "thPointStalagmites": "Estalagmites",
-  "thPointStation": "Estação",
-  "thPointStationName": "Nome da estação",
+  "thPointStation": "Base",
+  "thPointStationName": "Nome da base",
   "thPointSteps": "Degraus",
   "thPointTraverse": "Travessia",
   "thPointTreeTrunk": "Tronco de árvore",

@@ -1,8 +1,8 @@
 part of 'th_command_option.dart';
 
-// stations <list of station names> . stations you want to plot to the scrap, but
-// which are not used for scrap transformation. You don’t have to specify (draw) them
-// with the point station command.
+// stations <list of station names> . stations you want to plot to the scrap,
+// but which are not used for scrap transformation. You don’t have to specify
+// (draw) them with the point station command.
 class THStationsCommandOption extends THCommandOption {
   final List<String> stations;
 

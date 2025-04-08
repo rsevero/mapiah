@@ -579,6 +579,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpStationNamesSuffixMessageEmpty => 'Suffix empty';
 
   @override
+  String get mpStationsAddField => 'Add field';
+
+  @override
+  String get mpStationsNameEmpty => 'Station name empty';
+
+  @override
+  String get mpStationsNameLabel => 'Station';
+
+  @override
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override

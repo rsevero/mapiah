@@ -1205,6 +1205,24 @@ abstract class AppLocalizations {
   /// **'Suffix empty'**
   String get mpStationNamesSuffixMessageEmpty;
 
+  /// The label for the add field button
+  ///
+  /// In en, this message translates to:
+  /// **'Add field'**
+  String get mpStationsAddField;
+
+  /// The error message for empty station name
+  ///
+  /// In en, this message translates to:
+  /// **'Station name empty'**
+  String get mpStationsNameEmpty;
+
+  /// The label for the station name type
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get mpStationsNameLabel;
+
   /// The warning message for the station type option
   ///
   /// In en, this message translates to:

@@ -1120,6 +1120,24 @@
     "type": "text"
   },
 
+  "mpStationsAddField": "Add field",
+  "@mpStationsAddField": {
+    "description": "The label for the add field button",
+    "type": "text"
+  },
+
+  "mpStationsNameEmpty": "Station name empty",
+  "@mpStationsNameEmpty": {
+    "description": "The error message for empty station name",
+    "type": "text"
+  },
+
+  "mpStationsNameLabel": "Station",
+  "@mpStationsNameLabel": {
+    "description": "The label for the station name type",
+    "type": "text"
+  },
+
   "mpStationTypeOptionWarning": "Station not set",
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",

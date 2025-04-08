@@ -579,7 +579,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpStationNamesSuffixMessageEmpty => 'Sufixo vazio';
 
   @override
-  String get mpStationTypeOptionWarning => 'Estação não definida';
+  String get mpStationsAddField => 'Adicionar campo';
+
+  @override
+  String get mpStationsNameEmpty => 'Nome vazio';
+
+  @override
+  String get mpStationsNameLabel => 'Base';
+
+  @override
+  String get mpStationTypeOptionWarning => 'Base não definida';
 
   @override
   String get mpTextTypeOptionWarning => 'Texto não definido';
@@ -1128,10 +1137,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointStalagmites => 'Estalagmites';
 
   @override
-  String get thPointStation => 'Estação';
+  String get thPointStation => 'Base';
 
   @override
-  String get thPointStationName => 'Nome da estação';
+  String get thPointStationName => 'Nome da base';
 
   @override
   String get thPointSteps => 'Degraus';
