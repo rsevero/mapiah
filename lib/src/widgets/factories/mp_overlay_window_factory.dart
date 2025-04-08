@@ -234,6 +234,7 @@ class MPOverlayWindowFactory {
             innerAnchorType: MPWidgetPositionType.leftCenter,
           );
         case THCommandOptionType.mark:
+        case THCommandOptionType.text:
           overlayWindowWidget = MPTextTypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,

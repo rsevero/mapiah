@@ -230,6 +230,8 @@
   "mpSubtypeEmpty": "Subtipo vazio",
   "mpSubtypeLabel": "Subtipo",
 
+  "mpTextTextLabel": "Texto",
+
   "mpTextTypeOptionWarning": "Texto não definido",
 
   "parsingErrors": "Erros na interpretação do arquivo",

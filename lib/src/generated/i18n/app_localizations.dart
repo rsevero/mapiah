@@ -1241,6 +1241,12 @@ abstract class AppLocalizations {
   /// **'Subtype'**
   String get mpSubtypeLabel;
 
+  /// The label for the text type
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get mpTextTextLabel;
+
   /// The warning message for the text type option
   ///
   /// In en, this message translates to:

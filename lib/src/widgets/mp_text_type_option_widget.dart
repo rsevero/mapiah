@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_string_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -55,7 +56,11 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
         switch (currentOption) {
           case THMarkCommandOption _:
             _textController = TextEditingController(
-              text: currentOption.mark,
+              text: currentOption.mark.trim(),
+            );
+          case THTextCommandOption _:
+            _textController = TextEditingController(
+              text: currentOption.text.content.trim(),
             );
           default:
             throw Exception(
@@ -113,6 +118,12 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
               parentMPID: widget.th2FileEditController.thFileMPID,
               mark: text,
             );
+          case THCommandOptionType.text:
+            newOption = THTextCommandOption.forCWJM(
+              parentMPID: widget.th2FileEditController.thFileMPID,
+              originalLineInTH2File: '',
+              text: THStringPart(content: text),
+            );
           default:
             throw Exception(
               'Unsupported option type: ${widget.optionInfo.type} in _MPTextTypeOptionWidgetState._okButtonPressed()',
@@ -137,12 +148,13 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
   void _updateIsValid() {
     final String text = _textController.text.trim();
 
-    if (text.isNotEmpty) {
-      _isValid = true;
-      _warningMessage = null;
-    } else {
-      _isValid = false;
-      _warningMessage = appLocalizations.mpTextTypeOptionWarning;
+    switch (_selectedChoice) {
+      case mpUnsetOptionID:
+        _isValid = true;
+      case mpNonMultipleChoiceSetID:
+        _isValid = text.isNotEmpty;
+        _warningMessage =
+            _isValid ? null : appLocalizations.mpTextTypeOptionWarning;
     }
 
     _updateIsOkButtonEnabled();
@@ -169,6 +181,9 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
       case THCommandOptionType.mark:
         title = appLocalizations.thCommandOptionMark;
         textLabel = appLocalizations.mpMarkTextLabel;
+      case THCommandOptionType.text:
+        title = appLocalizations.thCommandOptionText;
+        textLabel = appLocalizations.mpTextTextLabel;
       default:
         throw Exception(
           'Unsupported option type: ${widget.optionInfo.type} in _MPTextTypeOptionWidgetState.build()',

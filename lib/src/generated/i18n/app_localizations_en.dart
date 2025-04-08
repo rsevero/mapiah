@@ -597,6 +597,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSubtypeLabel => 'Subtype';
 
   @override
+  String get mpTextTextLabel => 'Text';
+
+  @override
   String get mpTextTypeOptionWarning => 'Text not set';
 
   @override

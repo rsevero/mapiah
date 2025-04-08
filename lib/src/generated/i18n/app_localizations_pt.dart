@@ -597,6 +597,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSubtypeLabel => 'Subtipo';
 
   @override
+  String get mpTextTextLabel => 'Texto';
+
+  @override
   String get mpTextTypeOptionWarning => 'Texto não definido';
 
   @override
