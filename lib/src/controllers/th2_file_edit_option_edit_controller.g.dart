@@ -86,6 +86,25 @@ mixin _$TH2FileEditOptionEditController
     });
   }
 
+  late final _$_optionsScrapMPIDAtom = Atom(
+      name: 'TH2FileEditOptionEditControllerBase._optionsScrapMPID',
+      context: context);
+
+  int get optionsScrapMPID {
+    _$_optionsScrapMPIDAtom.reportRead();
+    return super._optionsScrapMPID;
+  }
+
+  @override
+  int get _optionsScrapMPID => optionsScrapMPID;
+
+  @override
+  set _optionsScrapMPID(int value) {
+    _$_optionsScrapMPIDAtom.reportWrite(value, super._optionsScrapMPID, () {
+      super._optionsScrapMPID = value;
+    });
+  }
+
   late final _$TH2FileEditOptionEditControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditOptionEditControllerBase', context: context);
@@ -97,6 +116,19 @@ mixin _$TH2FileEditOptionEditController
             name: 'TH2FileEditOptionEditControllerBase.updateOptionStateMap');
     try {
       return super.updateOptionStateMap();
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setOptionsScrapMPID(int mpID) {
+    final _$actionInfo =
+        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditOptionEditControllerBase.setOptionsScrapMPID');
+    try {
+      return super.setOptionsScrapMPID(mpID);
     } finally {
       _$TH2FileEditOptionEditControllerBaseActionController
           .endAction(_$actionInfo);

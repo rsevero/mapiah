@@ -29,6 +29,7 @@ import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
 import 'package:mapiah/src/widgets/mp_point_height_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_projection_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_scale_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_sketch_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_station_names_option_widget.dart';
@@ -42,6 +43,7 @@ class MPOverlayWindowFactory {
   static OverlayEntry createOverlayWindow({
     required TH2FileEditController th2FileEditController,
     required Offset outerAnchorPosition,
+    MPWidgetPositionType? innerAnchorType,
     required MPWindowType type,
   }) {
     final TH2FileEditOverlayWindowController overlayWindowController =
@@ -75,7 +77,7 @@ class MPOverlayWindowFactory {
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
-          innerAnchorType: MPWidgetPositionType.center,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.leftCenter,
         );
       case MPWindowType.mainTHFileEditWindow:
         throw UnimplementedError(
@@ -88,6 +90,12 @@ class MPOverlayWindowFactory {
       case MPWindowType.plaTypes:
         throw UnimplementedError(
           'Call MPOverlayWindowFactory.createPLATypeOptions() to create PLA type options widgets.',
+        );
+      case MPWindowType.scrapOptions:
+        overlayWindowWidget = MPScrapOptionsEditWidget(
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.rightCenter,
         );
     }
 

@@ -126,4 +126,10 @@ class MPInteractionAux {
 
     return validIDRegex.hasMatch(id);
   }
+
+  static void addWidgetWithTopSpace(
+      List<Widget> widgetsList, Widget newWidget) {
+    widgetsList.add(const SizedBox(height: mpButtonSpace));
+    widgetsList.add(newWidget);
+  }
 }

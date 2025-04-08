@@ -182,13 +182,16 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   @override
-  void setShowOverlayWindow(MPWindowType type, bool show, {Offset? position}) {
+  void setShowOverlayWindow(MPWindowType type, bool show,
+      {Offset? outerAnchorPosition, MPWidgetPositionType? innerAnchorType}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
             name:
                 'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
     try {
-      return super.setShowOverlayWindow(type, show, position: position);
+      return super.setShowOverlayWindow(type, show,
+          outerAnchorPosition: outerAnchorPosition,
+          innerAnchorType: innerAnchorType);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController
           .endAction(_$actionInfo);

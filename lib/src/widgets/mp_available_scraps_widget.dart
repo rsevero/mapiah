@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
@@ -58,22 +61,31 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                         final int scrapID = entry.key;
                         final String scrapName = entry.value;
 
-                        return RadioListTile<int>(
-                          title: Text(
-                            scrapName,
-                            style: DefaultTextStyle.of(blockContext).style,
-                          ),
-                          value: scrapID,
-                          groupValue: th2FileEditController.activeScrapID,
-                          contentPadding: EdgeInsets.zero,
-                          activeColor: IconTheme.of(blockContext).color,
-                          dense: true,
-                          visualDensity: VisualDensity.adaptivePlatformDensity,
-                          onChanged: (int? value) {
-                            if (value != null) {
-                              _onTapSelectScrap(value);
+                        return Listener(
+                          onPointerDown: (PointerDownEvent event) {
+                            if (event.kind == PointerDeviceKind.mouse &&
+                                event.buttons == kSecondaryMouseButton) {
+                              _onRightClickSelectScrap(scrapID);
                             }
                           },
+                          child: RadioListTile<int>(
+                            title: Text(
+                              scrapName,
+                              style: DefaultTextStyle.of(blockContext).style,
+                            ),
+                            value: scrapID,
+                            groupValue: th2FileEditController.activeScrapID,
+                            contentPadding: EdgeInsets.zero,
+                            activeColor: IconTheme.of(blockContext).color,
+                            dense: true,
+                            visualDensity:
+                                VisualDensity.adaptivePlatformDensity,
+                            onChanged: (int? value) {
+                              if (value != null) {
+                                _onTapSelectScrap(value);
+                              }
+                            },
+                          ),
                         );
                       },
                     ).toList(),
@@ -89,5 +101,13 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
 
   void _onTapSelectScrap(int scrapID) {
     th2FileEditController.setActiveScrap(scrapID);
+  }
+
+  void _onRightClickSelectScrap(int scrapID) {
+    th2FileEditController.overlayWindowController
+        .perfomToggleScrapOptionsOverlayWindow(
+      scrapMPID: scrapID,
+      outerAnchorPosition: widget.outerAnchorPosition,
+    );
   }
 }

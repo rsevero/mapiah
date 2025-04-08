@@ -3,5 +3,6 @@ enum MPWindowType {
   commandOptions,
   mainTHFileEditWindow,
   optionChoices,
-  plaTypes;
+  plaTypes,
+  scrapOptions;
 }

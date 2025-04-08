@@ -2,31 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
-import 'package:mapiah/src/widgets/mp_pla_type_widget.dart';
+import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPOptionsEditWidget extends StatefulWidget {
+class MPScrapOptionsEditWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPOptionsEditWidget({
+  const MPScrapOptionsEditWidget({
     super.key,
     required this.th2FileEditController,
     required this.outerAnchorPosition,
@@ -34,10 +30,11 @@ class MPOptionsEditWidget extends StatefulWidget {
   });
 
   @override
-  State<MPOptionsEditWidget> createState() => _MPOptionsEditWidgetState();
+  State<MPScrapOptionsEditWidget> createState() =>
+      _MPScrapOptionsEditWidgetState();
 }
 
-class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
+class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
   late final TH2FileEditController th2FileEditController =
       widget.th2FileEditController;
 
@@ -47,112 +44,24 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        final mpSelectedElements =
-            th2FileEditController.selectionController.selectedElements.values;
-
+        final int scrapMPID =
+            th2FileEditController.optionEditController.optionsScrapMPID;
+        final THScrap scrap =
+            th2FileEditController.thFile.scrapByMPID(scrapMPID);
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
         final List<Widget> widgets = [];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
-
-        bool hasArea = false;
-        bool hasLine = false;
-        bool hasPoint = false;
-        THAreaType? selectedAreaPLAType;
-        THLineType? selectedLinePLAType;
-        THPointType? selectedPointPLAType;
-
-        for (final mpSelectedElement in mpSelectedElements) {
-          switch (mpSelectedElement) {
-            case MPSelectedArea _:
-              if (mpSelectedElement.originalAreaClone.areaType !=
-                  selectedAreaPLAType) {
-                if ((selectedAreaPLAType == null) && !hasArea) {
-                  selectedAreaPLAType =
-                      mpSelectedElement.originalAreaClone.areaType;
-                } else {
-                  selectedAreaPLAType = null;
-                }
-              }
-              hasArea = true;
-            case MPSelectedLine _:
-              if (mpSelectedElement.originalLineClone.lineType !=
-                  selectedLinePLAType) {
-                if ((selectedLinePLAType == null) && !hasLine) {
-                  selectedLinePLAType =
-                      mpSelectedElement.originalLineClone.lineType;
-                } else {
-                  selectedLinePLAType = null;
-                }
-              }
-              hasLine = true;
-            case MPSelectedPoint _:
-              if (mpSelectedElement.originalPointClone.pointType !=
-                  selectedPointPLAType) {
-                if ((selectedPointPLAType == null) && !hasPoint) {
-                  selectedPointPLAType =
-                      mpSelectedElement.originalPointClone.pointType;
-                } else {
-                  selectedPointPLAType = null;
-                  break;
-                }
-              }
-              hasPoint = true;
-            default:
-              throw Exception(
-                  'Unsupported element type: $mpSelectedElement in MPOptionsEditWidget');
-          }
-        }
-
-        if (hasArea || hasLine || hasPoint) {
-          final List<Widget> plaTypeWidgets = [];
-
-          if (hasPoint) {
-            plaTypeWidgets.add(
-              MPPLATypeWidget(
-                  selectedPLAType: selectedPointPLAType?.name,
-                  selectedPLATypeToUser: selectedPointPLAType != null
-                      ? MPTextToUser.getPointType(selectedPointPLAType)
-                      : null,
-                  type: THElementType.point,
-                  th2FileEditController: th2FileEditController),
-            );
-          }
-
-          if (hasLine) {
-            plaTypeWidgets.add(
-              MPPLATypeWidget(
-                  selectedPLAType: selectedLinePLAType?.name,
-                  selectedPLATypeToUser: selectedLinePLAType != null
-                      ? MPTextToUser.getLineType(selectedLinePLAType)
-                      : null,
-                  type: THElementType.line,
-                  th2FileEditController: th2FileEditController),
-            );
-          }
-
-          if (hasArea) {
-            plaTypeWidgets.add(
-              MPPLATypeWidget(
-                  selectedPLAType: selectedAreaPLAType?.name,
-                  selectedPLATypeToUser: selectedAreaPLAType != null
-                      ? MPTextToUser.getAreaType(selectedAreaPLAType)
-                      : null,
-                  type: THElementType.area,
-                  th2FileEditController: th2FileEditController),
-            );
-          }
-
-          MPInteractionAux.addWidgetWithTopSpace(
-            widgets,
-            MPOverlayWindowBlockWidget(
-              children: plaTypeWidgets,
-              overlayWindowBlockType: MPOverlayWindowBlockType.main,
-            ),
-          );
-        }
-
         final optionsStateMap = optionEditController.optionStateMap.entries;
+
+        MPInteractionAux.addWidgetWithTopSpace(
+          widgets,
+          MPOverlayWindowBlockWidget(
+            title: appLocalizations.thElementScrap,
+            children: [MPTileWidget(title: scrap.thID)],
+            overlayWindowBlockType: MPOverlayWindowBlockType.main,
+          ),
+        );
 
         List<Widget> blockWidgets = [];
 
@@ -171,7 +80,7 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
         }
 
         if (blockWidgets.isNotEmpty) {
-          MPInteractionAux.addWidgetWithTopSpace(
+          addWithTopSpace(
             widgets,
             MPOverlayWindowBlockWidget(
               children: blockWidgets,
@@ -190,6 +99,11 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
         );
       },
     );
+  }
+
+  void addWithTopSpace(List<Widget> widgetsList, Widget newWidget) {
+    widgetsList.add(const SizedBox(height: mpButtonSpace));
+    widgetsList.add(newWidget);
   }
 
   MPOverlayWindowBlockType getOverlayWindowBlockTypeFromOptionState(
@@ -220,12 +134,12 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
     );
 
-    /// Use the right of this widget and the vertical center of the child (taped
+    /// Use the left of this widget and the vertical center of the child (taped
     /// option) widget as the outer anchor position for the option edit window.
     final Offset anchorPosition =
         (thisBoundingBox == null) || (childBoundingBox == null)
             ? th2FileEditController.screenBoundingBox.center
-            : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
+            : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
 
     th2FileEditController.optionEditController.performToggleOptionShownStatus(
       optionType: type,

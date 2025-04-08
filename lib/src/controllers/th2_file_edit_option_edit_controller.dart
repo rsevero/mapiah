@@ -30,13 +30,43 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @readonly
   THCommandOptionType? _currentOptionType;
 
+  @readonly
+  int _optionsScrapMPID = -1;
+
   @action
   void updateOptionStateMap() {
-    final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
     final mpSelectedElements =
         _th2FileEditController.selectionController.selectedElements.values;
+    final Set<THHasOptionsMixin> selectedElements = {};
 
-    if (mpSelectedElements.isEmpty) {
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      selectedElements
+          .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
+    }
+
+    _optionStateMap = _getOptionStateMap(selectedElements);
+    _th2FileEditController.triggerOptionsListRedraw();
+  }
+
+  void updateElementOptionMapByMPID(int mpID) {
+    final THElement element = _thFile.elementByMPID(mpID);
+
+    if (element is! THHasOptionsMixin) {
+      throw Exception(
+          'Element with MPID $mpID does not support options at TH2FileEditOptionEditController.getElementOptionMapByMPID()');
+    }
+
+    _optionStateMap = _getOptionStateMap({element});
+
+    _th2FileEditController.triggerOptionsListRedraw();
+  }
+
+  Map<THCommandOptionType, MPOptionInfo> _getOptionStateMap(
+    Set<THHasOptionsMixin> selectedElements,
+  ) {
+    final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
+
+    if (selectedElements.isEmpty) {
       for (final optionType in THCommandOptionType.values) {
         optionsInfo[optionType] = MPOptionInfo(
           type: optionType,
@@ -44,13 +74,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
         );
       }
     } else {
-      final Set<THHasOptionsMixin> selectedElements = {};
-
-      for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-        selectedElements
-            .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
-      }
-
       final List<THCommandOptionType> optionTypesList =
           MPCommandOptionAux.getSupportedOptionsForElements(
               selectedElements.toList());
@@ -117,13 +140,18 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
     final List<THCommandOptionType> orderedOptionTypesList =
         MPCommandOptionAux.getOrderedList(optionsInfo.keys);
+    final Map<THCommandOptionType, MPOptionInfo> optionStateMap = {};
 
-    _optionStateMap.clear();
     for (final optionType in orderedOptionTypesList) {
-      _optionStateMap[optionType] = optionsInfo[optionType]!;
+      optionStateMap[optionType] = optionsInfo[optionType]!;
     }
 
-    _th2FileEditController.triggerOptionsListRedraw();
+    return optionStateMap;
+  }
+
+  @action
+  void setOptionsScrapMPID(int mpID) {
+    _optionsScrapMPID = mpID;
   }
 
   @action

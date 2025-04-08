@@ -6,6 +6,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
+import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_overlay_window_controller.g.dart';
@@ -57,6 +58,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     MPWindowType.commandOptions,
     MPWindowType.optionChoices,
     MPWindowType.plaTypes,
+    MPWindowType.scrapOptions,
   };
 
   THElementType? _currentPLATypeShown;
@@ -73,7 +75,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   void _showOverlayWindow(
     MPWindowType type, {
-    Offset? position,
+    Offset? outerAnchorPosition,
+    MPWidgetPositionType? innerAnchorType,
   }) {
     if (autoDismissOverlayWindowTypes.contains(type)) {
       _isAutoDismissWindowOpen = true;
@@ -86,16 +89,18 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _overlayWindows.remove(type);
       _overlayWindows[type] = overlayWindow;
     } else {
-      if (type == MPWindowType.optionChoices) {
-        throw UnimplementedError(
-          'Call showOptionChoicesOverlayWindow() to create option choices widgets.',
-        );
-      } else {
-        _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
-          th2FileEditController: _th2FileEditController,
-          outerAnchorPosition: getPositionFromSelectedElements(),
-          type: type,
-        );
+      switch (type) {
+        case MPWindowType.optionChoices:
+          throw UnimplementedError(
+            'Call showOptionChoicesOverlayWindow() to create option choices widgets.',
+          );
+        default:
+          _overlayWindows[type] = MPOverlayWindowFactory.createOverlayWindow(
+            th2FileEditController: _th2FileEditController,
+            outerAnchorPosition: getPositionFromSelectedElements(),
+            innerAnchorType: innerAnchorType,
+            type: type,
+          );
       }
     }
 
@@ -180,12 +185,17 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   void setShowOverlayWindow(
     MPWindowType type,
     bool show, {
-    Offset? position,
+    Offset? outerAnchorPosition,
+    MPWidgetPositionType? innerAnchorType,
   }) {
     _isOverlayWindowShown[type] = show;
 
     if (show) {
-      _showOverlayWindow(type, position: position);
+      _showOverlayWindow(
+        type,
+        outerAnchorPosition: outerAnchorPosition,
+        innerAnchorType: innerAnchorType,
+      );
     } else {
       _hideOverlayWindow(type);
     }
@@ -273,5 +283,28 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     Overlay.of(context, rootOverlay: true)
         .insert(_overlayWindows[overlayWindowType]!);
+  }
+
+  void perfomToggleScrapOptionsOverlayWindow({
+    required int scrapMPID,
+    required Offset outerAnchorPosition,
+  }) {
+    final bool shouldShowScrapOptions =
+        !_isOverlayWindowShown[MPWindowType.scrapOptions]!;
+
+    if (shouldShowScrapOptions) {
+      _th2FileEditController.optionEditController
+          .setOptionsScrapMPID(scrapMPID);
+      _th2FileEditController.optionEditController.updateElementOptionMapByMPID(
+        scrapMPID,
+      );
+    }
+
+    setShowOverlayWindow(
+      MPWindowType.scrapOptions,
+      shouldShowScrapOptions,
+      outerAnchorPosition: outerAnchorPosition,
+      innerAnchorType: MPWidgetPositionType.rightCenter,
+    );
   }
 }
