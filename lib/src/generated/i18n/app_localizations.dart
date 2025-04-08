@@ -1259,6 +1259,12 @@ abstract class AppLocalizations {
   /// **'Title'**
   String get mpTitleTextLabel;
 
+  /// The label for the unrecognized command option
+  ///
+  /// In en, this message translates to:
+  /// **'Unrecognized option'**
+  String get mpUnrecognizedCommandOptionTextLabel;
+
   /// The label for the parsing errors dialog
   ///
   /// In en, this message translates to:
@@ -2931,7 +2937,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Unrecognized Command Option'**
-  String get thCommandOptionUnrecognizedCommandOption;
+  String get thCommandOptionUnrecognized;
 
   /// The label for the visibility command option type
   ///

@@ -236,6 +236,8 @@
 
   "mpTitleTextLabel": "Título",
 
+  "mpUnrecognizedCommandOptionTextLabel": "Opção não reconhecida",
+
   "parsingErrors": "Erros na interpretação do arquivo",
 
   "th2FileEditPageAddArea": "Criar área (A)",
@@ -520,7 +522,7 @@
   "thCommandOptionSubtype": "Subtipo",
   "thCommandOptionText": "Texto",
   "thCommandOptionTitle": "Título",
-  "thCommandOptionUnrecognizedCommandOption": "Opção de Comando Não Reconhecida",
+  "thCommandOptionUnrecognized": "Opção de Comando Não Reconhecida",
   "thCommandOptionVisibility": "Visibilidade",
   "thCommandOptionWalls": "Paredes",
 

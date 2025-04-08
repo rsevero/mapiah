@@ -1174,6 +1174,12 @@
     "type": "text"
   },
 
+  "mpUnrecognizedCommandOptionTextLabel": "Unrecognized option",
+  "@mpUnrecognizedCommandOptionTextLabel": {
+    "description": "The label for the unrecognized command option",
+    "type": "text"
+  },
+
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",
@@ -2872,8 +2878,8 @@
     "type": "text"
   },
 
-  "thCommandOptionUnrecognizedCommandOption": "Unrecognized Command Option",
-  "@thCommandOptionUnrecognizedCommandOption": {
+  "thCommandOptionUnrecognized": "Unrecognized Command Option",
+  "@thCommandOptionUnrecognized": {
     "description": "The label for the unrecognized command option type",
     "type": "text"
   },

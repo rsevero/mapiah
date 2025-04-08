@@ -606,6 +606,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpTitleTextLabel => 'Título';
 
   @override
+  String get mpUnrecognizedCommandOptionTextLabel => 'Opção não reconhecida';
+
+  @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
@@ -1458,7 +1461,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionTitle => 'Título';
 
   @override
-  String get thCommandOptionUnrecognizedCommandOption => 'Opção de Comando Não Reconhecida';
+  String get thCommandOptionUnrecognized => 'Opção de Comando Não Reconhecida';
 
   @override
   String get thCommandOptionVisibility => 'Visibilidade';

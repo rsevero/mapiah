@@ -236,6 +236,7 @@ class MPOverlayWindowFactory {
         case THCommandOptionType.mark:
         case THCommandOptionType.text:
         case THCommandOptionType.title:
+        case THCommandOptionType.unrecognizedCommandOption:
           overlayWindowWidget = MPTextTypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
