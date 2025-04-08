@@ -55,6 +55,7 @@ class MPTextToUser {
       {};
   static final Map<THAngleUnitType, String> _angleUnitTypeAsString = {};
   static final Map<String, String> _namedScaleOptionsAsString = {};
+  static Map<String, String> _subtypeAsString = {};
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
@@ -83,6 +84,82 @@ class MPTextToUser {
     _initializeProjectionModeTypeAsString();
     _initializeAngleUnitTypeAsString();
     _initializeNamedScaleOptionsAsString();
+    _initializeSubtypeAsString();
+  }
+
+  static void _initializeSubtypeAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _subtypeAsString['point|air-draught|winter'] =
+        localizations.mpSubtypePointAirDraughtWinter;
+    _subtypeAsString['point|air-draught|summer'] =
+        localizations.mpSubtypePointAirDraughtSummer;
+    _subtypeAsString['point|air-draught|undefined'] =
+        localizations.mpSubtypePointAirDraughtUndefined;
+    _subtypeAsString['point|station|temporary'] =
+        localizations.mpSubtypePointStationTemporary;
+    _subtypeAsString['point|station|painted'] =
+        localizations.mpSubtypePointStationPainted;
+    _subtypeAsString['point|station|natural'] =
+        localizations.mpSubtypePointStationNatural;
+    _subtypeAsString['point|station|fixed'] =
+        localizations.mpSubtypePointStationFixed;
+    _subtypeAsString['point|water-flow|permanent'] =
+        localizations.mpSubtypePointWaterFlowPermanent;
+    _subtypeAsString['point|water-flow|intermittent'] =
+        localizations.mpSubtypePointWaterFlowIntermittent;
+    _subtypeAsString['point|water-flow|paleo'] =
+        localizations.mpSubtypePointWaterFlowPaleo;
+    _subtypeAsString['line|border|invisible'] =
+        localizations.mpSubtypeLineBorderInvisible;
+    _subtypeAsString['line|border|presumed'] =
+        localizations.mpSubtypeLineBorderPresumed;
+    _subtypeAsString['line|border|temporary'] =
+        localizations.mpSubtypeLineBorderTemporary;
+    _subtypeAsString['line|border|visible'] =
+        localizations.mpSubtypeLineBorderVisible;
+    _subtypeAsString['line|survey|cave'] =
+        localizations.mpSubtypeLineSurveyCave;
+    _subtypeAsString['line|survey|surface'] =
+        localizations.mpSubtypeLineSurveySurface;
+    _subtypeAsString['line|wall|bedrock'] =
+        localizations.mpSubtypeLineWallBedrock;
+    _subtypeAsString['line|wall|blocks'] =
+        localizations.mpSubtypeLineWallBlocks;
+    _subtypeAsString['line|wall|clay'] = localizations.mpSubtypeLineWallClay;
+    _subtypeAsString['line|wall|debris'] =
+        localizations.mpSubtypeLineWallDebris;
+    _subtypeAsString['line|wall|flowstone'] =
+        localizations.mpSubtypeLineWallFlowstone;
+    _subtypeAsString['line|wall|ice'] = localizations.mpSubtypeLineWallIce;
+    _subtypeAsString['line|wall|invisible'] =
+        localizations.mpSubtypeLineWallInvisible;
+    _subtypeAsString['line|wall|moonmilk'] =
+        localizations.mpSubtypeLineWallMoonmilk;
+    _subtypeAsString['line|wall|overlying'] =
+        localizations.mpSubtypeLineWallOverlying;
+    _subtypeAsString['line|wall|pebbles'] =
+        localizations.mpSubtypeLineWallPebbles;
+    _subtypeAsString['line|wall|pit'] = localizations.mpSubtypeLineWallPit;
+    _subtypeAsString['line|wall|presumed'] =
+        localizations.mpSubtypeLineWallPresumed;
+    _subtypeAsString['line|wall|sand'] = localizations.mpSubtypeLineWallSand;
+    _subtypeAsString['line|wall|underlying'] =
+        localizations.mpSubtypeLineWallUnderlying;
+    _subtypeAsString['line|wall|unsurveyed'] =
+        localizations.mpSubtypeLineWallUnsurveyed;
+    _subtypeAsString['line|water-flow|permanent'] =
+        localizations.mpSubtypeLineWaterFlowPermanent;
+    _subtypeAsString['line|water-flow|conjectural'] =
+        localizations.mpSubtypeLineWaterFlowConjectural;
+    _subtypeAsString['line|water-flow|intermittent'] =
+        localizations.mpSubtypeLineWaterFlowIntermittent;
+  }
+
+  static String getSubtypeAsString(String subtype) {
+    return _subtypeAsString.containsKey(subtype)
+        ? _subtypeAsString[subtype]!
+        : subtype;
   }
 
   static void _initializeProjectionModeTypeAsString() {
@@ -721,7 +798,7 @@ class MPTextToUser {
     _commandOptionTypeAsString[THCommandOptionType.title] =
         localizations.thCommandOptionTitle;
     _commandOptionTypeAsString[THCommandOptionType.unrecognizedCommandOption] =
-        localizations.thCommandOptionUnrecognizedCommandOption;
+        localizations.thCommandOptionUnrecognized;
     _commandOptionTypeAsString[THCommandOptionType.visibility] =
         localizations.thCommandOptionVisibility;
     _commandOptionTypeAsString[THCommandOptionType.walls] =

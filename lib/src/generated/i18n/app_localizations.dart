@@ -1241,6 +1241,210 @@ abstract class AppLocalizations {
   /// **'Subtype'**
   String get mpSubtypeLabel;
 
+  /// The label for the winter subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Winter'**
+  String get mpSubtypePointAirDraughtWinter;
+
+  /// The label for the summer subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Summer'**
+  String get mpSubtypePointAirDraughtSummer;
+
+  /// The label for the undefined subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Undefined'**
+  String get mpSubtypePointAirDraughtUndefined;
+
+  /// The label for the temporary subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary'**
+  String get mpSubtypePointStationTemporary;
+
+  /// The label for the painted subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Painted'**
+  String get mpSubtypePointStationPainted;
+
+  /// The label for the natural subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Natural'**
+  String get mpSubtypePointStationNatural;
+
+  /// The label for the fixed subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get mpSubtypePointStationFixed;
+
+  /// The label for the permanent water flow subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get mpSubtypePointWaterFlowPermanent;
+
+  /// The label for the intermittent water flow subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Intermittent'**
+  String get mpSubtypePointWaterFlowIntermittent;
+
+  /// The label for the paleo water flow subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Paleo'**
+  String get mpSubtypePointWaterFlowPaleo;
+
+  /// The label for the invisible border subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Invisible'**
+  String get mpSubtypeLineBorderInvisible;
+
+  /// The label for the presumed border subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Presumed'**
+  String get mpSubtypeLineBorderPresumed;
+
+  /// The label for the temporary border subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary'**
+  String get mpSubtypeLineBorderTemporary;
+
+  /// The label for the visible border subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Visible'**
+  String get mpSubtypeLineBorderVisible;
+
+  /// The label for the cave survey subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Cave'**
+  String get mpSubtypeLineSurveyCave;
+
+  /// The label for the surface survey subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Surface'**
+  String get mpSubtypeLineSurveySurface;
+
+  /// The label for the bedrock wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Bedrock'**
+  String get mpSubtypeLineWallBedrock;
+
+  /// The label for the blocks wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks'**
+  String get mpSubtypeLineWallBlocks;
+
+  /// The label for the clay wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Clay'**
+  String get mpSubtypeLineWallClay;
+
+  /// The label for the debris wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Debris'**
+  String get mpSubtypeLineWallDebris;
+
+  /// The label for the flowstone wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone'**
+  String get mpSubtypeLineWallFlowstone;
+
+  /// The label for the ice wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Ice'**
+  String get mpSubtypeLineWallIce;
+
+  /// The label for the invisible wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Invisible'**
+  String get mpSubtypeLineWallInvisible;
+
+  /// The label for the moonmilk wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Moonmilk'**
+  String get mpSubtypeLineWallMoonmilk;
+
+  /// The label for the overlying wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Overlying'**
+  String get mpSubtypeLineWallOverlying;
+
+  /// The label for the pebbles wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Pebbles'**
+  String get mpSubtypeLineWallPebbles;
+
+  /// The label for the pit wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Pit'**
+  String get mpSubtypeLineWallPit;
+
+  /// The label for the presumed wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Presumed'**
+  String get mpSubtypeLineWallPresumed;
+
+  /// The label for the sand wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Sand'**
+  String get mpSubtypeLineWallSand;
+
+  /// The label for the underlying wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Underlying'**
+  String get mpSubtypeLineWallUnderlying;
+
+  /// The label for the unsurveyed wall subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Unsurveyed'**
+  String get mpSubtypeLineWallUnsurveyed;
+
+  /// The label for the permanent water flow line subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get mpSubtypeLineWaterFlowPermanent;
+
+  /// The label for the conjectural water flow line subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Conjectural'**
+  String get mpSubtypeLineWaterFlowConjectural;
+
+  /// The label for the intermittent water flow line subtype
+  ///
+  /// In en, this message translates to:
+  /// **'Intermittent'**
+  String get mpSubtypeLineWaterFlowIntermittent;
+
   /// The label for the text type
   ///
   /// In en, this message translates to:

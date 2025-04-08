@@ -59,21 +59,21 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                         final String scrapName = entry.value;
 
                         return RadioListTile<int>(
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            scrapName,
+                            style: DefaultTextStyle.of(blockContext).style,
+                          ),
                           value: scrapID,
                           groupValue: th2FileEditController.activeScrapID,
+                          contentPadding: EdgeInsets.zero,
+                          activeColor: IconTheme.of(blockContext).color,
+                          dense: true,
+                          visualDensity: VisualDensity.adaptivePlatformDensity,
                           onChanged: (int? value) {
                             if (value != null) {
                               _onTapSelectScrap(value);
                             }
                           },
-                          title: Text(
-                            scrapName,
-                            style: DefaultTextStyle.of(blockContext).style,
-                          ),
-                          activeColor: IconTheme.of(blockContext).color,
-                          visualDensity: VisualDensity.adaptivePlatformDensity,
                         );
                       },
                     ).toList(),

@@ -60,7 +60,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
                       child: Text(
                         '*',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: Colors.blueAccent,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

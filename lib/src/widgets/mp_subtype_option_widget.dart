@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -43,6 +46,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
   String? _subtypeWarningMessage;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
+  String? _defaultSubtype;
 
   @override
   void initState() {
@@ -147,6 +151,109 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
     );
   }
 
+  Widget _buildTextFieldInput() {
+    return MPTextFieldInputWidget(
+      controller: _subtypeController,
+      errorText: _subtypeWarningMessage,
+      labelText: appLocalizations.mpSubtypeLabel,
+      autofocus: true,
+      focusNode: _subtypeFieldFocusNode,
+      onChanged: (value) {
+        _updateIsValid();
+      },
+    );
+  }
+
+  Widget _buildOptionInput() {
+    final mpSelectedElements =
+        widget.th2FileEditController.selectionController.selectedElements;
+
+    if (mpSelectedElements.length == 1) {
+      final THElement selectedElement =
+          mpSelectedElements.values.first.originalElementClone;
+      late String elementTypeAsString;
+      late String plaTypeTypeAsString;
+
+      switch (selectedElement) {
+        case THPoint _:
+          elementTypeAsString = 'point';
+          plaTypeTypeAsString = selectedElement.plaType;
+        case THLine _:
+          elementTypeAsString = 'line';
+          plaTypeTypeAsString = selectedElement.plaType;
+        case THArea _:
+          elementTypeAsString = 'area';
+          plaTypeTypeAsString = selectedElement.plaType;
+        default:
+          throw Exception(
+            'Unsupported element type: ${selectedElement.runtimeType} at MPSubtypeOptionWidget._buildOptionInput()',
+          );
+      }
+
+      if (plaTypeTypeAsString == 'u') {
+        return _buildTextFieldInput();
+      } else {
+        final Map<String, Object> allowedSubtypesInfo = MPCommandOptionAux
+            .allowedSubtypes[elementTypeAsString]![plaTypeTypeAsString]!;
+        final Set<String> allowedSubtypes =
+            allowedSubtypesInfo['subtypes'] as Set<String>;
+        final Map<String, String> options = {};
+
+        _defaultSubtype = allowedSubtypesInfo['default'] as String;
+
+        for (final subtype in allowedSubtypes) {
+          options[subtype] = MPTextToUser.getSubtypeAsString(
+            '$elementTypeAsString|$plaTypeTypeAsString|${subtype}',
+          );
+        }
+
+        List<String> orderedOptions = options.keys.toList();
+        orderedOptions.sort((a, b) {
+          return MPTextToUser.compareStringsUsingLocale(
+            MPTextToUser.getSubtypeAsString(a),
+            MPTextToUser.getSubtypeAsString(b),
+          );
+        });
+
+        return DropdownMenu<String>(
+          initialSelection: _subtypeController.text,
+          dropdownMenuEntries: orderedOptions.map((value) {
+            final String label = options[value] ?? value;
+
+            return DropdownMenuEntry<String>(
+              value: value,
+              label: label,
+              labelWidget: value == _defaultSubtype
+                  ? Row(
+                      children: [
+                        Text(label),
+                        const Text(
+                          ' *',
+                          style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text(label),
+            );
+          }).toList(),
+          onSelected: (String? value) {
+            if (value != null) {
+              setState(() {
+                _subtypeController.text = value;
+                _updateIsValid();
+              });
+            }
+          },
+        );
+      }
+    } else {
+      return _buildTextFieldInput();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
@@ -188,22 +295,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MPTextFieldInputWidget(
-                    controller: _subtypeController,
-                    errorText: _subtypeWarningMessage,
-                    labelText: appLocalizations.mpSubtypeLabel,
-                    autofocus: true,
-                    focusNode: _subtypeFieldFocusNode,
-                    onChanged: (value) {
-                      _updateIsValid();
-                    },
-                  ),
-                ],
-              ),
+              _buildOptionInput(),
             ],
           ],
         ),

@@ -597,6 +597,108 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSubtypeLabel => 'Subtipo';
 
   @override
+  String get mpSubtypePointAirDraughtWinter => 'Inverno';
+
+  @override
+  String get mpSubtypePointAirDraughtSummer => 'Verão';
+
+  @override
+  String get mpSubtypePointAirDraughtUndefined => 'Indefinido';
+
+  @override
+  String get mpSubtypePointStationTemporary => 'Temporário';
+
+  @override
+  String get mpSubtypePointStationPainted => 'Pintado';
+
+  @override
+  String get mpSubtypePointStationNatural => 'Natural';
+
+  @override
+  String get mpSubtypePointStationFixed => 'Fixo';
+
+  @override
+  String get mpSubtypePointWaterFlowPermanent => 'Permanente';
+
+  @override
+  String get mpSubtypePointWaterFlowIntermittent => 'Intermitente';
+
+  @override
+  String get mpSubtypePointWaterFlowPaleo => 'Paleofluxo';
+
+  @override
+  String get mpSubtypeLineBorderInvisible => 'Invisível';
+
+  @override
+  String get mpSubtypeLineBorderPresumed => 'Presumido';
+
+  @override
+  String get mpSubtypeLineBorderTemporary => 'Temporário';
+
+  @override
+  String get mpSubtypeLineBorderVisible => 'Visível';
+
+  @override
+  String get mpSubtypeLineSurveyCave => 'Caverna';
+
+  @override
+  String get mpSubtypeLineSurveySurface => 'Superfície';
+
+  @override
+  String get mpSubtypeLineWallBedrock => 'Rocha matriz';
+
+  @override
+  String get mpSubtypeLineWallBlocks => 'Blocos';
+
+  @override
+  String get mpSubtypeLineWallClay => 'Argila';
+
+  @override
+  String get mpSubtypeLineWallDebris => 'Detritos';
+
+  @override
+  String get mpSubtypeLineWallFlowstone => 'Travertino';
+
+  @override
+  String get mpSubtypeLineWallIce => 'Gelo';
+
+  @override
+  String get mpSubtypeLineWallInvisible => 'Invisível';
+
+  @override
+  String get mpSubtypeLineWallMoonmilk => 'Leite de lua';
+
+  @override
+  String get mpSubtypeLineWallOverlying => 'Sobreposta';
+
+  @override
+  String get mpSubtypeLineWallPebbles => 'Seixos';
+
+  @override
+  String get mpSubtypeLineWallPit => 'Poço';
+
+  @override
+  String get mpSubtypeLineWallPresumed => 'Presumida';
+
+  @override
+  String get mpSubtypeLineWallSand => 'Areia';
+
+  @override
+  String get mpSubtypeLineWallUnderlying => 'Subjacente';
+
+  @override
+  String get mpSubtypeLineWallUnsurveyed => 'Não levantada';
+
+  @override
+  String get mpSubtypeLineWaterFlowPermanent => 'Permanente';
+
+  @override
+  String get mpSubtypeLineWaterFlowConjectural => 'Conjectural';
+
+  @override
+  String get mpSubtypeLineWaterFlowIntermittent => 'Intermitente';
+
+  @override
   String get mpTextTextLabel => 'Texto';
 
   @override
