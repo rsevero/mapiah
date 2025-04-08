@@ -131,19 +131,15 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
   }
 
   void _onDateChanged(String value, bool isValid) {
-    setState(() {
-      _date = value;
-      _isDateValid = isValid;
-      _updateIsOkButtonEnabled();
-    });
+    _date = value;
+    _isDateValid = isValid;
+    _updateIsOkButtonEnabled();
   }
 
   void _onPersonChanged(String value, bool isValid) {
-    setState(() {
-      _person = value;
-      _isPersonValid = isValid;
-      _updateIsOkButtonEnabled();
-    });
+    _person = value;
+    _isPersonValid = isValid;
+    _updateIsOkButtonEnabled();
   }
 
   void _updateIsOkButtonEnabled() {
@@ -151,7 +147,11 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_date != _initialDate) || (_person != _initialPerson))));
 
-    _isOkButtonEnabled = _isDateValid && _isPersonValid && isChanged;
+    setState(
+      () {
+        _isOkButtonEnabled = _isDateValid && _isPersonValid && isChanged;
+      },
+    );
   }
 
   @override

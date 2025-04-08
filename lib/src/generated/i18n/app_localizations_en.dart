@@ -567,6 +567,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSketchYLabel => 'Y';
 
   @override
+  String get mpStationNamesPrefixLabel => 'Prefix';
+
+  @override
+  String get mpStationNamesPrefixMessageEmpty => 'Prefix empty';
+
+  @override
+  String get mpStationNamesSuffixLabel => 'Suffix';
+
+  @override
+  String get mpStationNamesSuffixMessageEmpty => 'Suffix empty';
+
+  @override
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override

@@ -567,6 +567,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSketchYLabel => 'Y';
 
   @override
+  String get mpStationNamesPrefixLabel => 'Prefixo';
+
+  @override
+  String get mpStationNamesPrefixMessageEmpty => 'Prefixo vazio';
+
+  @override
+  String get mpStationNamesSuffixLabel => 'Sufixo';
+
+  @override
+  String get mpStationNamesSuffixMessageEmpty => 'Sufixo vazio';
+
+  @override
   String get mpStationTypeOptionWarning => 'Estação não definida';
 
   @override

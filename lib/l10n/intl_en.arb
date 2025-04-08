@@ -1096,6 +1096,30 @@
     "type": "text"
   },
 
+  "mpStationNamesPrefixLabel": "Prefix",
+  "@mpStationNamesPrefixLabel": {
+    "description": "The label for the station names prefix type",
+    "type": "text"
+  },
+
+  "mpStationNamesPrefixMessageEmpty": "Prefix empty",
+  "@mpStationNamesPrefixMessageEmpty": {
+    "description": "The error message for empty station names prefix",
+    "type": "text"
+  },
+
+  "mpStationNamesSuffixLabel": "Suffix",
+  "@mpStationNamesSuffixLabel": {
+    "description": "The label for the station names suffix type",
+    "type": "text"
+  },
+
+  "mpStationNamesSuffixMessageEmpty": "Suffix empty",
+  "@mpStationNamesSuffixMessageEmpty": {
+    "description": "The error message for empty station names suffix",
+    "type": "text"
+  },
+
   "mpStationTypeOptionWarning": "Station not set",
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",

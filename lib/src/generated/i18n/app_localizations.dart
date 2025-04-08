@@ -1181,6 +1181,30 @@ abstract class AppLocalizations {
   /// **'Y'**
   String get mpSketchYLabel;
 
+  /// The label for the station names prefix type
+  ///
+  /// In en, this message translates to:
+  /// **'Prefix'**
+  String get mpStationNamesPrefixLabel;
+
+  /// The error message for empty station names prefix
+  ///
+  /// In en, this message translates to:
+  /// **'Prefix empty'**
+  String get mpStationNamesPrefixMessageEmpty;
+
+  /// The label for the station names suffix type
+  ///
+  /// In en, this message translates to:
+  /// **'Suffix'**
+  String get mpStationNamesSuffixLabel;
+
+  /// The error message for empty station names suffix
+  ///
+  /// In en, this message translates to:
+  /// **'Suffix empty'**
+  String get mpStationNamesSuffixMessageEmpty;
+
   /// The warning message for the station type option
   ///
   /// In en, this message translates to:

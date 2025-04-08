@@ -6,7 +6,6 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/widgets/inputs/mp_date_interval_input_widget.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -15,13 +14,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPCopyrightOptionWidget extends StatefulWidget {
+class MPStationNamesOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPCopyrightOptionWidget({
+  const MPStationNamesOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -30,23 +29,24 @@ class MPCopyrightOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPCopyrightOptionWidget> createState() =>
-      _MPCopyrightOptionWidgetState();
+  State<MPStationNamesOptionWidget> createState() =>
+      _MPStationNamesOptionWidgetState();
 }
 
-class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
-  late String _date;
+class _MPStationNamesOptionWidgetState
+    extends State<MPStationNamesOptionWidget> {
   late String _selectedChoice;
-  late TextEditingController _messageController;
-  final FocusNode _messageFieldFocusNode = FocusNode();
+  late TextEditingController _prefixController;
+  late TextEditingController _suffixController;
+  final FocusNode _prefixFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
-  late final String _initialDate;
-  late final String _initialMessage;
+  late final String _initialPrefix;
+  late final String _initialSuffix;
   late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  String? _messageWarningMessage;
-  bool _isDateValid = false;
-  bool _isMessageValid = false;
+  String? _prefixWarningMessage;
+  String? _suffixWarningMessage;
+  bool _isValid = false;
   bool _isOkButtonEnabled = false;
 
   @override
@@ -55,28 +55,32 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
-        final THCopyrightCommandOption currentOption =
-            widget.optionInfo.option! as THCopyrightCommandOption;
+        final THStationNamesCommandOption currentOption =
+            widget.optionInfo.option! as THStationNamesCommandOption;
 
-        _date = currentOption.datetime.toString();
-        _messageController = TextEditingController(
-            text: currentOption.copyright.content.toString());
+        _prefixController = TextEditingController(
+          text: currentOption.prefix.trim(),
+        );
+        _suffixController = TextEditingController(
+          text: currentOption.suffix.trim(),
+        );
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _date = '';
-        _messageController = TextEditingController(text: '');
+        _prefixController = TextEditingController(text: '');
+
         _selectedChoice = '';
       case MPOptionStateType.unset:
-        _date = '';
-        _messageController = TextEditingController(text: '');
+        _prefixController = TextEditingController(text: '');
+        _suffixController = TextEditingController(text: '');
         _selectedChoice = mpUnsetOptionID;
     }
 
-    _initialDate = _date;
-    _initialMessage = _messageController.text;
+    _initialPrefix = _prefixController.text;
+    _initialSuffix = _suffixController.text;
     _initialSelectedChoice = _selectedChoice;
-    _onMessageChanged();
+
+    _updateIsValid();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
@@ -88,14 +92,15 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
 
   @override
   void dispose() {
-    _messageController.dispose();
-    _messageFieldFocusNode.dispose();
+    _prefixController.dispose();
+    _suffixController.dispose();
+    _prefixFieldFocusNode.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _messageFieldFocusNode.requestFocus();
+      _prefixFieldFocusNode.requestFocus();
     }
   }
 
@@ -107,10 +112,11 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
       /// parentMPID of the option(s) to be set. THFile isn't even a
       /// THHasOptionsMixin so it can't actually be the parent of an option,
       /// i.e., is has no options at all.
-      newOption = THCopyrightCommandOption.fromStringWithParentMPID(
+      newOption = THStationNamesCommandOption.forCWJM(
         parentMPID: widget.th2FileEditController.thFileMPID,
-        datetime: _date,
-        copyrightMessage: _messageController.text.trim(),
+        originalLineInTH2File: '',
+        prefix: _prefixController.text.trim(),
+        suffix: _suffixController.text.trim(),
       );
     }
 
@@ -127,42 +133,46 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
     );
   }
 
-  void _onDateChanged(String value, bool isValid) {
-    setState(
-      () {
-        _date = value;
-        _isDateValid = isValid;
-        _updateIsOkButtonEnabled();
-      },
-    );
-  }
+  void _updateIsValid() {
+    _isValid = true;
 
-  void _onMessageChanged() {
-    _isMessageValid = _messageController.text.trim().isNotEmpty;
+    if (_selectedChoice == mpNonMultipleChoiceSetID) {
+      final bool isPrefixValid = _prefixController.text.trim().isNotEmpty;
+      final bool isSuffixValid = _suffixController.text.trim().isNotEmpty;
 
-    setState(
-      () {
-        _messageWarningMessage = _isMessageValid
-            ? null
-            : appLocalizations.mpCopyrightInvalidMessageErrorMessage;
-        _updateIsOkButtonEnabled();
-      },
-    );
+      _prefixWarningMessage = isPrefixValid
+          ? null
+          : appLocalizations.mpStationNamesPrefixMessageEmpty;
+      _suffixWarningMessage = isSuffixValid
+          ? null
+          : appLocalizations.mpStationNamesSuffixMessageEmpty;
+      _isValid = isPrefixValid && isSuffixValid;
+    } else if (_selectedChoice == mpUnsetOptionID) {
+      _isValid = true;
+    } else {
+      _isValid = false;
+    }
+
+    _updateIsOkButtonEnabled();
   }
 
   void _updateIsOkButtonEnabled() {
     final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            ((_date != _initialDate) ||
-                (_messageController.text != _initialMessage))));
+            ((_prefixController.text != _initialPrefix) ||
+                (_suffixController.text != _initialSuffix))));
 
-    _isOkButtonEnabled = _isDateValid && _isMessageValid && isChanged;
+    setState(
+      () {
+        _isOkButtonEnabled = _isValid && isChanged;
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      title: appLocalizations.thCommandOptionCopyright,
+      title: appLocalizations.thCommandOptionStationNames,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
@@ -179,9 +189,10 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                if (value != null) {
+                  _selectedChoice = value;
+                  _updateIsValid();
+                }
               },
             ),
             RadioListTile<String>(
@@ -190,28 +201,39 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                if (value != null) {
+                  _selectedChoice = value;
+                  _updateIsValid();
+                }
               },
             ),
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              MPTextFieldInputWidget(
-                controller: _messageController,
-                errorText: _messageWarningMessage,
-                labelText: appLocalizations.mpCopyrightMessageLabel,
-                autofocus: true,
-                focusNode: _messageFieldFocusNode,
-                onChanged: (value) {
-                  _onMessageChanged();
-                },
-              ),
-              const SizedBox(height: mpButtonSpace),
-              MPDateIntervalInputWidget(
-                initialValue: _date,
-                onChanged: _onDateChanged,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MPTextFieldInputWidget(
+                    controller: _prefixController,
+                    errorText: _prefixWarningMessage,
+                    labelText: appLocalizations.mpStationNamesPrefixLabel,
+                    autofocus: true,
+                    focusNode: _prefixFieldFocusNode,
+                    onChanged: (value) {
+                      _updateIsValid();
+                    },
+                  ),
+                  const SizedBox(width: mpButtonSpace),
+                  MPTextFieldInputWidget(
+                    labelText: appLocalizations.mpStationNamesSuffixLabel,
+                    controller: _suffixController,
+                    errorText: _suffixWarningMessage,
+                    onChanged: (value) {
+                      _updateIsValid();
+                    },
+                  ),
+                ],
               ),
             ],
           ],

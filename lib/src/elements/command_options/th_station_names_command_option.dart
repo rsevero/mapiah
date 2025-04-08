@@ -1,7 +1,7 @@
 part of 'th_command_option.dart';
 
-// station-names <prefix> <suffix> . adds given prefix/suffix to all survey stations
-// in the current scrap. Saves some typing.
+// station-names <prefix> <suffix> . adds given prefix/suffix to all survey
+// stations in the current scrap. Saves some typing.
 class THStationNamesCommandOption extends THCommandOption {
   late final String prefix;
   late final String suffix;

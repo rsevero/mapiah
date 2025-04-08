@@ -216,6 +216,11 @@
   "mpSketchXLabel": "X",
   "mpSketchYLabel": "Y",
 
+  "mpStationNamesPrefixLabel": "Prefixo",
+  "mpStationNamesPrefixMessageEmpty": "Prefixo vazio",
+  "mpStationNamesSuffixLabel": "Sufixo",
+  "mpStationNamesSuffixMessageEmpty": "Sufixo vazio",
+
   "mpStationTypeOptionWarning": "Estação não definida",
 
   "mpTextTypeOptionWarning": "Texto não definido",
