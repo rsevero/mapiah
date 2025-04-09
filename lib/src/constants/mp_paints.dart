@@ -132,6 +132,10 @@ class THPaints {
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
 
+  static final thPaint1002 = Paint.from(thPaint2)..style = PaintingStyle.fill;
+  static final thPaint1004 = Paint.from(thPaint4)..style = PaintingStyle.fill;
+  static final thPaint1016 = Paint.from(thPaint16)..style = PaintingStyle.fill;
+
   static final thPaintWhiteBackground = Paint()
     ..color = Colors.white
     ..style = PaintingStyle.fill;

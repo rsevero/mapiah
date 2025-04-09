@@ -52,7 +52,6 @@ abstract class MPVisualControllerBase with Store {
 
     paint
       ..style = PaintingStyle.fill
-      ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas
       ..color = paint.color.withValues(alpha: 0.3);
 
     return THLinePaint(paint: paint);
@@ -60,8 +59,8 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getSelectedAreaBorderPaint(THArea area) {
     final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint2
-        : THPaints.thPaint16;
+        ? THPaints.thPaint1002
+        : THPaints.thPaint1016;
 
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 
@@ -93,14 +92,12 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THLinePaint getUnselectedAreaFillPaint(THArea area) {
-    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint4
-        : THPaints.thPaint16;
+    final bool isFromActiveScrap =
+        _th2FileEditController.isFromActiveScrap(area);
+    final Paint paint =
+        isFromActiveScrap ? THPaints.thPaint1004 : THPaints.thPaint1016;
 
-    paint
-      ..style = PaintingStyle.fill
-      ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas
-      ..color = paint.color.withValues(alpha: 0.3);
+    paint.color = paint.color.withValues(alpha: 0.3);
 
     return THLinePaint(paint: paint);
   }
@@ -119,6 +116,7 @@ abstract class MPVisualControllerBase with Store {
     final Paint paint = _th2FileEditController.isFromActiveScrap(line)
         ? THPaints.thPaint1
         : THPaints.thPaint16;
+
     return THLinePaint(
       paint: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
