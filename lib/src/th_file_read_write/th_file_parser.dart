@@ -397,16 +397,23 @@ class THFileParser {
 
   void _injectAreaBorderTHID(List<dynamic> element) {
     final int elementSize = element.length;
-    if (kDebugMode) assert(elementSize == 2);
+
+    if (kDebugMode) {
+      assert(elementSize == 2);
+    }
 
     final areaBorderID = element[1];
-    if (kDebugMode) assert(areaBorderID is String);
+
+    if (kDebugMode) {
+      assert(areaBorderID is String);
+    }
 
     final THAreaBorderTHID newElement = THAreaBorderTHID(
       parentMPID: _currentParentMPID,
       id: areaBorderID,
       originalLineInTH2File: _currentLine,
     );
+
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
         newElement: newElement, parent: _currentParent);
   }
