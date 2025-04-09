@@ -76,7 +76,7 @@ class MPAddLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
 
           CustomPainter painter = THLinePainter(
             lineSegmentsMap: segmentsMap,
-            linePaint: linePaint,
+            linePaintStroke: linePaint,
             th2FileEditController: th2FileEditController,
             canvasScale: canvasScale,
             canvasTranslation: canvasTranslation,

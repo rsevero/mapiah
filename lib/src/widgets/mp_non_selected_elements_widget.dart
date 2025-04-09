@@ -64,10 +64,24 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                   canvasTranslation: canvasTranslation,
                 ),
               );
-              break;
             case THLine _:
-              final THLinePaint linePaint =
-                  visualController.getUnselectedLinePaint(element);
+              final int? areaMPID = thFile.getAreaMPIDByLineMPID(element.mpID);
+              late final THLinePaint linePaintStroke;
+              late final THLinePaint? linePaintFill;
+
+              if (areaMPID == null) {
+                linePaintStroke =
+                    visualController.getUnselectedLinePaint(element);
+                linePaintFill = null;
+              } else {
+                final THArea area = thFile.areaByMPID(areaMPID);
+
+                linePaintStroke =
+                    visualController.getUnselectedAreaBorderPaint(area);
+                linePaintFill =
+                    visualController.getUnselectedAreaFillPaint(area);
+              }
+
               final (
                 LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                 _
@@ -76,16 +90,17 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 thFile: thFile,
                 returnLineSegments: false,
               );
+
               painters.add(
                 THLinePainter(
                   lineSegmentsMap: segmentsMap,
-                  linePaint: linePaint.paint,
+                  linePaintStroke: linePaintStroke.paint,
+                  linePaintFill: linePaintFill?.paint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,
                 ),
               );
-              break;
           }
         }
 

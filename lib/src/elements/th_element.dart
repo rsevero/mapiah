@@ -95,11 +95,9 @@ abstract class THElement {
   }) : _mpID = mpLocator.mpGeneralController.nextMPIDForElements();
 
   THIsParentMixin parent(THFile thFile) {
-    if (parentMPID < 0) {
-      return thFile;
-    }
-
-    return thFile.elementByMPID(parentMPID) as THIsParentMixin;
+    return (parentMPID < 0)
+        ? thFile
+        : thFile.elementByMPID(parentMPID) as THIsParentMixin;
   }
 
   THElementType get elementType;

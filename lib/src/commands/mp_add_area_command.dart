@@ -18,7 +18,8 @@ class MPAddAreaCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     final List<MPCommand> addLineCommands = [];
-    final Set<int> lineMPIDs = newArea.childrenMPID;
+    final THFile thFile = th2FileEditController.thFile;
+    final Set<int> lineMPIDs = newArea.getLineMPIDs(thFile);
 
     for (final int lineMPID in lineMPIDs) {
       addLineCommands.add(

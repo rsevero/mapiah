@@ -34,8 +34,6 @@ class THFile
 
   late final int _mpID;
 
-  final Set<int> _scrapMPIDs = {};
-
   final Set<int> _drawableElementMPIDs = {};
 
   /// Here are registered all items with a Therion ID (thID), the one mentioned
@@ -47,6 +45,14 @@ class THFile
   /// during a run.
   final LinkedHashMap<String, int> _mpIDByTHID = LinkedHashMap<String, int>();
   final LinkedHashMap<int, String> _thIDByMPID = LinkedHashMap<int, String>();
+
+  final Set<int> _areasMPIDs = {};
+  final Set<int> _linesMPIDs = {};
+  final Set<int> _pointsMPIDs = {};
+  final Set<int> _scrapMPIDs = {};
+
+  Map<int, int>? _areaMPIDByLineMPID;
+  Map<String, int>? _areaMPIDByLineTHID;
 
   THFile.forCWJM({
     required this.filename,
@@ -173,10 +179,6 @@ class THFile
 
   int countElements() {
     return _elementByMPID.length;
-  }
-
-  Set<int> get scrapMPIDs {
-    return _scrapMPIDs;
   }
 
   Set<int> get drawableElementMPIDs {
@@ -361,11 +363,39 @@ class THFile
       );
     }
 
-    if (element is THScrap) {
-      _scrapMPIDs.add(element.mpID);
-    } else if ((element is THPoint) || (element is THLine)) {
-      _drawableElementMPIDs.add(element.mpID);
+    switch (element) {
+      case THPoint _:
+        _pointsMPIDs.add(element.mpID);
+        _drawableElementMPIDs.add(element.mpID);
+      case THLine _:
+        _linesMPIDs.add(element.mpID);
+        _drawableElementMPIDs.add(element.mpID);
+      case THArea _:
+        _areasMPIDs.add(element.mpID);
+      case THAreaBorderTHID _:
+        _clearAreaXLineInfo(element);
+      case THScrap _:
+        _scrapMPIDs.add(element.mpID);
+      default:
     }
+  }
+
+  void _clearAreaXLineInfo(THElement element) {
+    late final THArea area;
+
+    switch (element) {
+      case THAreaBorderTHID _:
+        area = areaByMPID(element.parentMPID);
+      case THArea _:
+        area = element;
+      default:
+        throw THCustomException(
+            "Element is not a THArea or THAreaBorderTHID in THFile._clearAreaXLineInfo.");
+    }
+
+    area.clearAreaXLineInfo();
+    _areaMPIDByLineMPID = null;
+    _areaMPIDByLineTHID = null;
   }
 
   void removeElementByTHID(String thID) {
@@ -388,10 +418,21 @@ class THFile
       unregisterElementTHIDByElement(element);
     }
 
-    if (element is THScrap) {
-      _scrapMPIDs.remove(element.mpID);
-    } else if ((element is THPoint) || (element is THLine)) {
-      _drawableElementMPIDs.remove(element.mpID);
+    switch (element) {
+      case THPoint _:
+        _pointsMPIDs.remove(element.mpID);
+        _drawableElementMPIDs.remove(element.mpID);
+      case THLine _:
+        _linesMPIDs.remove(element.mpID);
+        _drawableElementMPIDs.remove(element.mpID);
+      case THArea _:
+        _clearAreaXLineInfo(element);
+        _areasMPIDs.remove(element.mpID);
+      case THAreaBorderTHID _:
+        _clearAreaXLineInfo(element);
+      case THScrap _:
+        _scrapMPIDs.remove(element.mpID);
+      default:
     }
 
     element.parent(this).removeElementFromParent(this, element);
@@ -569,6 +610,76 @@ class THFile
 
   THElementType getElementTypeByMPID(int mpID) {
     return elementByMPID(mpID).elementType;
+  }
+
+  Set<int> get scrapMPIDs {
+    return _scrapMPIDs;
+  }
+
+  Set<int> get areasMPIDs {
+    return _areasMPIDs;
+  }
+
+  Set<int> get linesMPIDs {
+    return _linesMPIDs;
+  }
+
+  Set<int> get pointsMPIDs {
+    return _pointsMPIDs;
+  }
+
+  Iterable<THScrap> getScraps() {
+    return _scrapMPIDs.map((int mpID) => scrapByMPID(mpID));
+  }
+
+  Iterable<THArea> getAreas() {
+    return _areasMPIDs.map((int mpID) => areaByMPID(mpID));
+  }
+
+  Iterable<THLine> getLines() {
+    return _linesMPIDs.map((int mpID) => lineByMPID(mpID));
+  }
+
+  Iterable<THPoint> getPoints() {
+    return _pointsMPIDs.map((int mpID) => pointByMPID(mpID));
+  }
+
+  void _updateAreaXLineInfo() {
+    _areaMPIDByLineMPID = <int, int>{};
+    _areaMPIDByLineTHID = <String, int>{};
+
+    for (final int areaMPID in _areasMPIDs) {
+      final THArea area = areaByMPID(areaMPID);
+      final Set<int> lineMPIDs = area.getLineMPIDs(this);
+      final Set<String> lineTHIDs = area.getLineTHIDs(this);
+
+      for (final int lineMPID in lineMPIDs) {
+        _areaMPIDByLineMPID![lineMPID] = areaMPID;
+      }
+      for (final String lineTHID in lineTHIDs) {
+        _areaMPIDByLineTHID![lineTHID] = areaMPID;
+      }
+    }
+  }
+
+  int? getAreaMPIDByLineMPID(int lineMPID) {
+    if (_areaMPIDByLineMPID == null) {
+      _updateAreaXLineInfo();
+    }
+
+    return _areaMPIDByLineMPID!.containsKey(lineMPID)
+        ? _areaMPIDByLineMPID![lineMPID]
+        : null;
+  }
+
+  int? getAreaMPIDByLineTHID(String lineTHID) {
+    if (_areaMPIDByLineTHID == null) {
+      _updateAreaXLineInfo();
+    }
+
+    return _areaMPIDByLineTHID!.containsKey(lineTHID)
+        ? _areaMPIDByLineTHID![lineTHID]
+        : null;
   }
 
   @override

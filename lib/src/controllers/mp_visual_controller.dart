@@ -33,16 +33,39 @@ abstract class MPVisualControllerBase with Store {
   THPointPaint getSelectedPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      paint: THPaints.thPaint1
+      paint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
 
   THLinePaint getSelectedLinePaint() {
     return THLinePaint(
-      paint: THPaints.thPaint1
+      paint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
+  }
+
+  THLinePaint getSelectedAreaFillPaint(THArea area) {
+    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
+        ? THPaints.thPaint2
+        : THPaints.thPaint16;
+
+    paint
+      ..style = PaintingStyle.fill
+      ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas
+      ..color = paint.color.withValues(alpha: 0.3);
+
+    return THLinePaint(paint: paint);
+  }
+
+  THLinePaint getSelectedAreaBorderPaint(THArea area) {
+    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
+        ? THPaints.thPaint2
+        : THPaints.thPaint16;
+
+    paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
+
+    return THLinePaint(paint: paint);
   }
 
   THLinePaint getNewLinePaint() {
@@ -69,9 +92,32 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
+  THLinePaint getUnselectedAreaFillPaint(THArea area) {
+    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
+        ? THPaints.thPaint4
+        : THPaints.thPaint16;
+
+    paint
+      ..style = PaintingStyle.fill
+      ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas
+      ..color = paint.color.withValues(alpha: 0.3);
+
+    return THLinePaint(paint: paint);
+  }
+
+  THLinePaint getUnselectedAreaBorderPaint(THArea area) {
+    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
+        ? THPaints.thPaint4
+        : THPaints.thPaint16;
+
+    paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
+
+    return THLinePaint(paint: paint);
+  }
+
   THLinePaint getUnselectedLinePaint(THLine line) {
     final Paint paint = _th2FileEditController.isFromActiveScrap(line)
-        ? THPaints.thPaint4
+        ? THPaints.thPaint1
         : THPaints.thPaint16;
     return THLinePaint(
       paint: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,

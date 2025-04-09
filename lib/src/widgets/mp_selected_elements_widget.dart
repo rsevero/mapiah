@@ -75,7 +75,7 @@ class MPSelectedElementsWidget extends StatelessWidget
               painters.add(
                 THLinePainter(
                   lineSegmentsMap: segmentsMap,
-                  linePaint: linePaint,
+                  linePaintStroke: linePaint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,

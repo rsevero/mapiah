@@ -29,6 +29,9 @@ class THArea extends THElement
     'water',
   };
 
+  Set<String>? _lineTHIDs;
+  Set<int>? _lineMPIDs;
+
   THArea.forCWJM({
     required super.mpID,
     required super.parentMPID,
@@ -141,5 +144,56 @@ class THArea extends THElement
   @override
   bool isSameClass(Object object) {
     return object is THArea;
+  }
+
+  bool isTHIDChild(String thID) {
+    return childrenMPID.contains(int.parse(thID));
+  }
+
+  void _updateAreaXLineInfo(THFile thFile) {
+    _lineTHIDs = <String>{};
+    _lineMPIDs = <int>{};
+
+    for (final int childMPID in childrenMPID) {
+      final THElement element = thFile.elementByMPID(childMPID);
+
+      if (element is! THAreaBorderTHID) {
+        continue;
+      }
+
+      final int lineMPID = thFile.mpIDByTHID(element.id);
+
+      _lineMPIDs!.add(lineMPID);
+      _lineTHIDs!.add(element.id);
+    }
+  }
+
+  Set<String> getLineTHIDs(THFile thFile) {
+    if (_lineTHIDs == null) {
+      _updateAreaXLineInfo(thFile);
+    }
+
+    return _lineTHIDs!;
+  }
+
+  Set<int> getLineMPIDs(THFile thFile) {
+    if (_lineMPIDs == null) {
+      _updateAreaXLineInfo(thFile);
+    }
+
+    return _lineMPIDs!;
+  }
+
+  bool hasLineTHID(String thID, THFile thFile) {
+    return getLineTHIDs(thFile).contains(thID);
+  }
+
+  bool hasLineMPID(int mpID, THFile thFile) {
+    return getLineMPIDs(thFile).contains(mpID);
+  }
+
+  void clearAreaXLineInfo() {
+    _lineTHIDs = null;
+    _lineMPIDs = null;
   }
 }

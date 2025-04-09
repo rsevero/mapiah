@@ -7,7 +7,8 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
-  final Paint linePaint;
+  final Paint linePaintStroke;
+  final Paint? linePaintFill;
   final TH2FileEditController th2FileEditController;
   final double canvasScale;
   final Offset canvasTranslation;
@@ -15,7 +16,8 @@ class THLinePainter extends CustomPainter {
   THLinePainter({
     super.repaint,
     required this.lineSegmentsMap,
-    required this.linePaint,
+    required this.linePaintStroke,
+    this.linePaintFill,
     required this.th2FileEditController,
     required this.canvasScale,
     required this.canvasTranslation,
@@ -45,20 +47,22 @@ class THLinePainter extends CustomPainter {
             lineSegment.x,
             lineSegment.y,
           );
-          break;
         case THLinePainterStraightLineSegment _:
           path.lineTo(lineSegment.x, lineSegment.y);
-          break;
       }
     }
-    canvas.drawPath(path, linePaint);
+    if (linePaintFill != null) {
+      canvas.drawPath(path, linePaintFill!);
+    }
+    canvas.drawPath(path, linePaintStroke);
   }
 
   @override
   bool shouldRepaint(covariant THLinePainter oldDelegate) {
     if (identical(this, oldDelegate)) return false;
 
-    return linePaint != oldDelegate.linePaint ||
+    return linePaintStroke != oldDelegate.linePaintStroke ||
+        linePaintFill != oldDelegate.linePaintFill ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation ||
         !const MapEquality<int, THLinePainterLineSegment>()
