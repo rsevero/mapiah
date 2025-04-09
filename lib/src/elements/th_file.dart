@@ -58,23 +58,26 @@ class THFile
     required this.filename,
     required this.encoding,
     required int mpID,
-    required Set<int> childrenMPID,
-    required Set<int> scrapMPIDs,
-    required Set<int> drawableElementsMPID,
-    required LinkedHashMap<String, int> mpIDByTHID,
-    required LinkedHashMap<int, String> thIDByMPID,
     required LinkedHashMap<int, THElement> elementByMPID,
   }) : _mpID = mpID {
-    this.childrenMPID.addAll(childrenMPID);
-    _scrapMPIDs.addAll(scrapMPIDs);
-    _drawableElementMPIDs.addAll(drawableElementsMPID);
-    _mpIDByTHID.addAll(mpIDByTHID);
-    _thIDByMPID.addAll(thIDByMPID);
     _elementByMPID.addAll(elementByMPID);
+    _initializeSupportMaps();
   }
 
   THFile() {
     _mpID = mpLocator.mpGeneralController.nextMPIDForTHFiles();
+  }
+
+  void _initializeSupportMaps() {
+    final elements = _elementByMPID.values;
+
+    for (final THElement element in elements) {
+      if (element.parentMPID == _mpID) {
+        childrenMPID.add(element.mpID);
+      }
+
+      _updateSupportMaps(element);
+    }
   }
 
   String toJson() {
@@ -87,10 +90,6 @@ class THFile
       'encoding': encoding,
       'mpID': _mpID,
       'childrenMPID': childrenMPID.toSet(),
-      'scrapMPIDs': _scrapMPIDs.toSet(),
-      'drawableElementMPIDs': _drawableElementMPIDs.toSet(),
-      'elementByTHID': _mpIDByTHID.map((key, value) => MapEntry(key, value)),
-      'thIDByMPID': _thIDByMPID,
       'elementByMPID':
           _elementByMPID.map((key, value) => MapEntry(key, value.toMap())),
     };
@@ -101,11 +100,6 @@ class THFile
       filename: map['filename'],
       encoding: map['encoding'],
       mpID: map['mpID'],
-      childrenMPID: Set<int>.from(map['childrenMPID']),
-      scrapMPIDs: Set<int>.from(map['scrapMPIDs']),
-      drawableElementsMPID: Set<int>.from(map['drawableElementMPIDs']),
-      mpIDByTHID: LinkedHashMap<String, int>.from(map['elementByTHID']),
-      thIDByMPID: LinkedHashMap<int, String>.from(map['thIDByMPID']),
       elementByMPID: LinkedHashMap<int, THElement>.from(
         map['elementByMPID']
             .map((key, value) => MapEntry(key, THElement.fromMap(value))),
@@ -121,11 +115,6 @@ class THFile
     String? filename,
     String? encoding,
     int? mpID,
-    Set<int>? childrenMPID,
-    Set<int>? scrapMPIDs,
-    Set<int>? drawableElementMPIDs,
-    LinkedHashMap<String, int>? mpIDByTHID,
-    LinkedHashMap<int, String>? thIDByMPID,
     LinkedHashMap<int, THElement>? elementByMPID,
     bool makeFilenameNull = false,
     bool makeEncodingNull = false,
@@ -134,11 +123,6 @@ class THFile
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mpID: mpID ?? _mpID,
-      childrenMPID: childrenMPID ?? this.childrenMPID,
-      scrapMPIDs: scrapMPIDs ?? _scrapMPIDs,
-      drawableElementsMPID: drawableElementMPIDs ?? _drawableElementMPIDs,
-      mpIDByTHID: mpIDByTHID ?? _mpIDByTHID,
-      thIDByMPID: thIDByMPID ?? _thIDByMPID,
       elementByMPID: elementByMPID ?? _elementByMPID,
     );
   }
@@ -152,11 +136,6 @@ class THFile
     return other.filename == filename &&
         other.encoding == encoding &&
         other._mpID == _mpID &&
-        deepEq(other.childrenMPID, childrenMPID) &&
-        deepEq(other._scrapMPIDs, _scrapMPIDs) &&
-        deepEq(other._drawableElementMPIDs, _drawableElementMPIDs) &&
-        deepEq(other._mpIDByTHID, _mpIDByTHID) &&
-        deepEq(other._thIDByMPID, _thIDByMPID) &&
         deepEq(other._elementByMPID, _elementByMPID);
   }
 
@@ -165,11 +144,6 @@ class THFile
         filename,
         encoding,
         _mpID,
-        childrenMPID,
-        _scrapMPIDs,
-        _drawableElementMPIDs,
-        _mpIDByTHID,
-        _thIDByMPID,
         _elementByMPID,
       );
 
@@ -352,6 +326,10 @@ class THFile
   void addElement(THElement element) {
     _elementByMPID[element.mpID] = element;
 
+    _updateSupportMaps(element);
+  }
+
+  void _updateSupportMaps(THElement element) {
     if (element is THHasTHID) {
       registerElementWithTHID(element, (element as THHasTHID).thID);
     } else if (hasOption(element, THCommandOptionType.id)) {
@@ -376,7 +354,6 @@ class THFile
         _clearAreaXLineInfo(element);
       case THScrap _:
         _scrapMPIDs.add(element.mpID);
-      default:
     }
   }
 
