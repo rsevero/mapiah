@@ -187,6 +187,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionAddArea": "Add area",
+  "@mpCommandDescriptionAddArea": {
+    "description": "The description for the add area command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionAddElements": "Add elements",
   "@mpCommandDescriptionAddElements": {
     "description": "The description for the add elements command",
@@ -304,6 +310,12 @@
   "mpCommandDescriptionMultipleElements": "Multiple elements edit",
   "@mpCommandDescriptionMultipleElements": {
     "description": "The description for the multiple elements edit command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemoveArea": "Remove area",
+  "@mpCommandDescriptionRemoveArea": {
+    "description": "The description for the remove area command",
     "type": "text"
   },
 

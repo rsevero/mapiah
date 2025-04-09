@@ -275,6 +275,12 @@ abstract class AppLocalizations {
   /// **'Unset'**
   String get mpChoiceUnset;
 
+  /// The description for the add area command
+  ///
+  /// In en, this message translates to:
+  /// **'Add area'**
+  String get mpCommandDescriptionAddArea;
+
   /// The description for the add elements command
   ///
   /// In en, this message translates to:
@@ -394,6 +400,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Multiple elements edit'**
   String get mpCommandDescriptionMultipleElements;
+
+  /// The description for the remove area command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove area'**
+  String get mpCommandDescriptionRemoveArea;
 
   /// The description for the remove elements command
   ///

@@ -281,6 +281,8 @@ class MPTextToUser {
 
     _locale = mpLocator.mpSettingsController.locale;
 
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addArea] =
+        localizations.mpCommandDescriptionAddArea;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addElements] =
         localizations.mpCommandDescriptionAddElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLine] =
@@ -323,6 +325,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionMoveStraightLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.multipleElements] =
         localizations.mpCommandDescriptionMultipleElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.removeArea] =
+        localizations.mpCommandDescriptionRemoveArea;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeElements] =
         localizations.mpCommandDescriptionRemoveElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =

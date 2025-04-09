@@ -342,11 +342,9 @@ class THFile
   }
 
   bool hasOption(THElement element, THCommandOptionType optionType) {
-    if (THElement is! THHasOptionsMixin) {
-      return false;
-    }
-
-    return (element as THHasOptionsMixin).hasOption(optionType);
+    return (element is THHasOptionsMixin)
+        ? element.hasOption(optionType)
+        : false;
   }
 
   void addElement(THElement element) {
@@ -372,6 +370,7 @@ class THFile
 
   void removeElementByTHID(String thID) {
     final THElement element = elementByTHID(thID);
+
     removeElement(element);
   }
 
@@ -379,6 +378,7 @@ class THFile
     if (element is THIsParentMixin) {
       final List<int> childrenMPIDsCopy =
           (element as THIsParentMixin).childrenMPID.toList();
+
       for (final int childMPID in childrenMPIDsCopy) {
         removeElement(elementByMPID(childMPID));
       }
@@ -402,6 +402,7 @@ class THFile
     if (mpID == 0) {
       return true;
     }
+
     return _elementByMPID.containsKey(mpID);
   }
 

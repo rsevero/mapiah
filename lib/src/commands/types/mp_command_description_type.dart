@@ -1,4 +1,5 @@
 enum MPCommandDescriptionType {
+  addArea,
   addElements,
   addLine,
   addLineSegment,
@@ -19,6 +20,7 @@ enum MPCommandDescriptionType {
   movePoint,
   moveStraightLineSegment,
   multipleElements,
+  removeArea,
   removeElements,
   removeLine,
   removeLineSegment,
@@ -32,6 +34,8 @@ enum MPCommandDescriptionType {
     MPCommandDescriptionType description,
   ) {
     switch (description) {
+      case MPCommandDescriptionType.addArea:
+        return MPCommandDescriptionType.removeArea;
       case MPCommandDescriptionType.addElements:
         return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.addLine:
@@ -40,6 +44,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeLineSegment;
       case MPCommandDescriptionType.addPoint:
         return MPCommandDescriptionType.removePoint;
+      case MPCommandDescriptionType.removeArea:
+        return MPCommandDescriptionType.addArea;
       case MPCommandDescriptionType.removeElements:
         return MPCommandDescriptionType.addElements;
       case MPCommandDescriptionType.removeLine:

@@ -538,6 +538,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void applyRemoveArea(int areaMPID) {
+    _th2FileEditController.elementEditController
+        .applyRemoveElementByMPID(areaMPID);
+  }
+
+  @action
   void applyRemoveLine(int lineMPID) {
     if ((_newLine != null) && (_newLine!.mpID == lineMPID)) {
       clearNewLine();

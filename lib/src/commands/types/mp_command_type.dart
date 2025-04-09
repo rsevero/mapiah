@@ -1,6 +1,7 @@
 part of '../mp_command.dart';
 
 enum MPCommandType {
+  addArea,
   addLine,
   addLineSegment,
   addPoint,
@@ -13,6 +14,7 @@ enum MPCommandType {
   movePoint,
   moveStraightLineSegment,
   multipleElements,
+  removeArea,
   removeLine,
   removeLineSegment,
   removeOptionFromElement,

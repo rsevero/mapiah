@@ -17,6 +17,7 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
+part 'mp_add_area_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
@@ -29,6 +30,7 @@ part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
 part 'mp_multiple_elements_command.dart';
+part 'mp_remove_area_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
@@ -107,6 +109,8 @@ abstract class MPCommand {
 
   static MPCommand fromMap(Map<String, dynamic> map) {
     switch (MPCommandType.values.byName(map['commandType'])) {
+      case MPCommandType.addArea:
+        return MPAddAreaCommand.fromMap(map);
       case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
       case MPCommandType.addLineSegment:
@@ -131,6 +135,8 @@ abstract class MPCommand {
         return MPMoveStraightLineSegmentCommand.fromMap(map);
       case MPCommandType.multipleElements:
         return MPMultipleElementsCommand.fromMap(map);
+      case MPCommandType.removeArea:
+        return MPRemoveAreaCommand.fromMap(map);
       case MPCommandType.removeLine:
         return MPRemoveLineCommand.fromMap(map);
       case MPCommandType.removeLineSegment:

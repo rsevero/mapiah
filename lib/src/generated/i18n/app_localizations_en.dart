@@ -112,6 +112,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpChoiceUnset => 'Unset';
 
   @override
+  String get mpCommandDescriptionAddArea => 'Add area';
+
+  @override
   String get mpCommandDescriptionAddElements => 'Add elements';
 
   @override
@@ -170,6 +173,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionMultipleElements => 'Multiple elements edit';
+
+  @override
+  String get mpCommandDescriptionRemoveArea => 'Remove area';
 
   @override
   String get mpCommandDescriptionRemoveElements => 'Remove elements';

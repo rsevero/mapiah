@@ -1,9 +1,9 @@
 part of 'mp_command.dart';
 
 class MPAddLineCommand extends MPCommand {
-  final THLine newLine;
-  final List<THElement> lineChildren;
-  final Offset? lineStartScreenPosition;
+  late final THLine newLine;
+  late final List<THElement> lineChildren;
+  late final Offset? lineStartScreenPosition;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLine;
 
@@ -20,6 +20,25 @@ class MPAddLineCommand extends MPCommand {
     this.lineStartScreenPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  MPAddLineCommand.fromLineMPID({
+    required int lineMPID,
+    required TH2FileEditController th2FileEditController,
+    super.descriptionType = _defaultDescriptionType,
+  }) : super() {
+    final THFile thFile = th2FileEditController.thFile;
+
+    newLine = thFile.lineByMPID(lineMPID);
+    lineChildren = [];
+
+    final childrenMPIDs = newLine.childrenMPID;
+
+    for (final childMPID in childrenMPIDs) {
+      lineChildren.add(thFile.elementByMPID(childMPID));
+    }
+
+    lineStartScreenPosition = null;
+  }
 
   @override
   MPCommandType get type => MPCommandType.addLine;

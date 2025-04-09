@@ -270,6 +270,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void applyRemoveArea(int areaMPID) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name: 'TH2FileEditElementEditControllerBase.applyRemoveArea');
+    try {
+      return super.applyRemoveArea(areaMPID);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void applyRemoveLine(int lineMPID) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
