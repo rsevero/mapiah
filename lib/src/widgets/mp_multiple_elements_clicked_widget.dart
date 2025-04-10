@@ -70,25 +70,22 @@ class _MPMultipleElementsClickedWidgetState
               : "${appLocalizations.thElementPoint} ${element.plaType} (${element.mpID})";
           options[element.mpID] = pointName;
         case THBezierCurveLineSegment _:
-          final String bezierCurveName = (element
-                  .hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementBezierCurveLineSegment} ${(element.optionByType(THCommandOptionType.mark) as THMarkCommandOption).mark} (${element.mpID})"
-              : "${appLocalizations.thElementBezierCurveLineSegment} (${element.mpID})";
-          options[element.mpID] = bezierCurveName;
-          options[element.parentMPID] = getLineName(thFile.lineByMPID(
-            element.parentMPID,
-          ));
         case THStraightLineSegment _:
-          final String straightLineName = (element
-                  .hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementStraightLineSegment} ${(element.optionByType(THCommandOptionType.mark) as THMarkCommandOption).mark} (${element.mpID})"
-              : "${appLocalizations.thElementStraightLineSegment} (${element.mpID})";
-          options[element.mpID] = straightLineName;
-          options[element.parentMPID] = getLineName(thFile.lineByMPID(
-            element.parentMPID,
-          ));
+          final int lineMPID = element.parentMPID;
+
+          if (!options.containsKey(lineMPID)) {
+            options[lineMPID] = getLineName(
+              thFile.lineByMPID(
+                lineMPID,
+              ),
+            );
+          }
         case THLine _:
-          options[element.mpID] = getLineName(element);
+          final int lineMPID = element.mpID;
+
+          if (!options.containsKey(lineMPID)) {
+            options[lineMPID] = getLineName(element);
+          }
         case THArea _:
           final String areaName = (element.hasOption(THCommandOptionType.id))
               ? "${appLocalizations.thElementArea} ${element.plaType} ${(element.optionByType(THCommandOptionType.id) as THIDCommandOption).thID} (${element.mpID})"
