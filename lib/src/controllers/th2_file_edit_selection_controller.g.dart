@@ -106,6 +106,26 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
+  late final _$_multipleElementsClickedChoiceAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._multipleElementsClickedChoice',
+      context: context);
+
+  int get multipleElementsClickedChoice {
+    _$_multipleElementsClickedChoiceAtom.reportRead();
+    return super._multipleElementsClickedChoice;
+  }
+
+  @override
+  int get _multipleElementsClickedChoice => multipleElementsClickedChoice;
+
+  @override
+  set _multipleElementsClickedChoice(int value) {
+    _$_multipleElementsClickedChoiceAtom
+        .reportWrite(value, super._multipleElementsClickedChoice, () {
+      super._multipleElementsClickedChoice = value;
+    });
+  }
+
   late final _$_selectedLineSegmentsAtom = Atom(
       name: 'TH2FileEditSelectionControllerBase._selectedLineSegments',
       context: context);

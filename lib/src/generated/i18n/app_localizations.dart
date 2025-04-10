@@ -719,6 +719,18 @@ abstract class AppLocalizations {
   /// **'Mark'**
   String get mpMarkTextLabel;
 
+  /// The label for the all choice in the multiple elements clicked dialog
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get mpMultipleElementsClickedAllChoice;
+
+  /// The title for the multiple elements clicked dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple elements clicked'**
+  String get mpMultipleElementsClickedTitle;
+
   /// The label for the tiny named scale
   ///
   /// In en, this message translates to:

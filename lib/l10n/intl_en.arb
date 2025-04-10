@@ -634,6 +634,18 @@
     "type": "text"
   },
 
+  "mpMultipleElementsClickedAllChoice": "All",
+  "@mpMultipleElementsClickedAllChoice": {
+    "description": "The label for the all choice in the multiple elements clicked dialog",
+    "type": "text"
+  },
+
+  "mpMultipleElementsClickedTitle": "Multiple elements clicked",
+  "@mpMultipleElementsClickedTitle": {
+    "description": "The title for the multiple elements clicked dialog",
+    "type": "text"
+  },
+
   "mpNamedScaleTiny": "Tiny",
   "@mpNamedScaleTiny": {
     "description": "The label for the tiny named scale",

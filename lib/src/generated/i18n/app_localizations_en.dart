@@ -336,6 +336,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpMarkTextLabel => 'Mark';
 
   @override
+  String get mpMultipleElementsClickedAllChoice => 'All';
+
+  @override
+  String get mpMultipleElementsClickedTitle => 'Multiple elements clicked';
+
+  @override
   String get mpNamedScaleTiny => 'Tiny';
 
   @override

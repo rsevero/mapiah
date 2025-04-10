@@ -56,6 +56,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   final autoDismissOverlayWindowTypes = {
     MPWindowType.availableScraps,
     MPWindowType.commandOptions,
+    MPWindowType.multipleElementsClicked,
     MPWindowType.optionChoices,
     MPWindowType.plaTypes,
     MPWindowType.scrapOptions,
@@ -221,6 +222,20 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           .offsetCanvasToScreen(selectedElementsBoundingBoxOnCanvas.center);
 
       return selectedElementsCenterOnScreen;
+    }
+  }
+
+  Offset getPositionFromClickedElements() {
+    if (_th2FileEditController.selectionController.clickedElements.isEmpty) {
+      return _th2FileEditController.screenBoundingBox.center;
+    } else {
+      final Rect clickedElementsBoundingBoxOnCanvas = _th2FileEditController
+          .selectionController
+          .getSelectedElementsBoundingBox();
+      final Offset clickedElementsCenterOnScreen = _th2FileEditController
+          .offsetCanvasToScreen(clickedElementsBoundingBoxOnCanvas.center);
+
+      return clickedElementsCenterOnScreen;
     }
   }
 

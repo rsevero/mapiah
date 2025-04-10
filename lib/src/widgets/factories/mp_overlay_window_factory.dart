@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
@@ -67,6 +68,15 @@ class MPOverlayWindowFactory {
       case MPWindowType.mainTHFileEditWindow:
         throw UnimplementedError(
           'The main TH file edit window is automatically created when opening a TH2File.',
+        );
+      case MPWindowType.multipleElementsClicked:
+        outerAnchorPosition = th2FileEditController.selectionController
+            .getClickedElementsBoundingBox()
+            .centerRight;
+
+        overlayWindowWidget = MPMultipleElementsClickedWidget(
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
         );
       case MPWindowType.optionChoices:
         throw UnimplementedError(

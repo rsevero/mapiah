@@ -3,7 +3,9 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -41,6 +43,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   MPSelectableControlPoint? _selectedControlPoint;
 
+  @readonly
+  int _multipleElementsClickedChoice = mpMultipleElementsClickedAllChoiceID;
+
+  List<THElement> clickedElements = [];
+
   Rect get selectedElementsBoundingBox {
     _selectedElementsBoundingBox ??= getSelectedElementsBoundingBox();
 
@@ -76,18 +83,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   Offset dragStartCanvasCoordinates = Offset.zero;
 
-  @action
-  Rect getSelectedElementsBoundingBox() {
+  Rect _getElementsListBoundingBox(Iterable<THElement> elements) {
     late Rect boundingBox;
-
     double minX = double.infinity;
     double minY = double.infinity;
     double maxX = double.negativeInfinity;
     double maxY = double.negativeInfinity;
-    final selectedElements = _selectedElements.values;
 
-    for (final MPSelectedElement selectedElement in selectedElements) {
-      final THElement element = _thFile.elementByMPID(selectedElement.mpID);
+    for (final THElement element in elements) {
       switch (element) {
         case THPoint _:
         case THLine _:
@@ -97,6 +100,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         default:
           continue;
       }
+
       if (boundingBox.left < minX) {
         minX = boundingBox.left;
       }
@@ -117,6 +121,20 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       right: maxX,
       bottom: maxY,
     );
+  }
+
+  @action
+  Rect getSelectedElementsBoundingBox() {
+    final Iterable<THElement> selectedElements = _selectedElements.values.map(
+      (MPSelectedElement selectedElement) =>
+          selectedElement.originalElementClone,
+    );
+
+    return _getElementsListBoundingBox(selectedElements);
+  }
+
+  Rect getClickedElementsBoundingBox() {
+    return _getElementsListBoundingBox(clickedElements);
   }
 
   @action
@@ -395,6 +413,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           }
         }
       }
+    }
+
+    if (clickedElements.length > 1) {
+      this.clickedElements = clickedElements;
+      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        MPWindowType.multipleElementsClicked,
+        true,
+      );
     }
 
     return clickedElements;
@@ -978,5 +1004,18 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.selectNonEmptySelection);
     }
+  }
+
+  void setMultipleElementsClickedChoice(int choiceID) {
+    _multipleElementsClickedChoice = choiceID;
+  }
+
+  void performMultipleElementsClickedChoosen(int choiceID) {
+    _multipleElementsClickedChoice = choiceID;
+
+    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPWindowType.multipleElementsClicked,
+      false,
+    );
   }
 }

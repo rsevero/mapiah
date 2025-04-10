@@ -230,5 +230,8 @@ const String mpScrapScale1ValueID = 'ONE_VALUE';
 const String mpScrapScale2ValuesID = 'TWO_VALUES';
 const String mpScrapScale8ValuesID = 'EIGHT_VALUES';
 
+const int mpMultipleElementsClickedAllChoiceID = 0;
+const int mpMultipleElementsClickedNoneChoiceID = -1;
+
 const int mpMaxLastUsedTypes = 5;
 const int mpMaxMostUsedTypes = 5;
