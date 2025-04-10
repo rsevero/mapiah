@@ -47,10 +47,18 @@ class _MPMultipleElementsClickedWidgetState
 
   String getLineName(THLine line) {
     final String lineName = (line.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementLine} ${line.plaType} ${(line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID} (${line.mpID})"
-        : "${appLocalizations.thElementLine} ${line.plaType} (${line.mpID})";
+        ? "${appLocalizations.thElementLine} ${line.plaType} ${(line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID}"
+        : "${appLocalizations.thElementLine} ${line.plaType}";
 
     return lineName;
+  }
+
+  String getAreaName(THArea area) {
+    final String areaName = (area.hasOption(THCommandOptionType.id))
+        ? "${appLocalizations.thElementArea} ${area.plaType} ${(area.optionByType(THCommandOptionType.id) as THIDCommandOption).thID}"
+        : "${appLocalizations.thElementArea} ${area.plaType}";
+
+    return areaName;
   }
 
   @override
@@ -66,12 +74,17 @@ class _MPMultipleElementsClickedWidgetState
       switch (element) {
         case THPoint _:
           final String pointName = (element.hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementPoint} ${element.plaType} ${(element.optionByType(THCommandOptionType.id) as THIDCommandOption).thID} (${element.mpID})"
-              : "${appLocalizations.thElementPoint} ${element.plaType} (${element.mpID})";
+              ? "${appLocalizations.thElementPoint} ${element.plaType} ${(element.optionByType(THCommandOptionType.id) as THIDCommandOption).thID}"
+              : "${appLocalizations.thElementPoint} ${element.plaType}";
           options[element.mpID] = pointName;
         case THBezierCurveLineSegment _:
         case THStraightLineSegment _:
           final int lineMPID = element.parentMPID;
+          final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
+
+          if ((areaMPID != null) && (!options.containsKey(areaMPID))) {
+            options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
+          }
 
           if (!options.containsKey(lineMPID)) {
             options[lineMPID] = getLineName(
@@ -82,15 +95,17 @@ class _MPMultipleElementsClickedWidgetState
           }
         case THLine _:
           final int lineMPID = element.mpID;
+          final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
+
+          if (areaMPID != null) {
+            options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
+          }
 
           if (!options.containsKey(lineMPID)) {
             options[lineMPID] = getLineName(element);
           }
         case THArea _:
-          final String areaName = (element.hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementArea} ${element.plaType} ${(element.optionByType(THCommandOptionType.id) as THIDCommandOption).thID} (${element.mpID})"
-              : "${appLocalizations.thElementArea} ${element.plaType} (${element.mpID})";
-          options[element.mpID] = areaName;
+          options[element.mpID] = getAreaName(element);
         default:
           continue;
       }
