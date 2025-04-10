@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -31,6 +31,7 @@ class MPMultipleElementsClickedWidget extends StatefulWidget {
 class _MPMultipleElementsClickedWidgetState
     extends State<MPMultipleElementsClickedWidget> {
   late final TH2FileEditController th2FileEditController;
+  late final TH2FileEditSelectionController selectionController;
   late final AppLocalizations appLocalizations;
   late final THFile thFile;
 
@@ -38,9 +39,10 @@ class _MPMultipleElementsClickedWidgetState
   void initState() {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
+    selectionController = th2FileEditController.selectionController;
     appLocalizations = mpLocator.appLocalizations;
     thFile = th2FileEditController.thFile;
-    th2FileEditController.selectionController.setMultipleElementsClickedChoice(
+    selectionController.setMultipleElementsClickedChoice(
       mpMultipleElementsClickedNoneChoiceID,
     );
   }
@@ -67,8 +69,7 @@ class _MPMultipleElementsClickedWidgetState
       mpMultipleElementsClickedAllChoiceID:
           appLocalizations.mpMultipleElementsClickedAllChoice,
     };
-    final clickedElements =
-        th2FileEditController.selectionController.clickedElements;
+    final clickedElements = selectionController.clickedElements;
 
     for (final THElement element in clickedElements) {
       switch (element) {
@@ -97,7 +98,7 @@ class _MPMultipleElementsClickedWidgetState
           final int lineMPID = element.mpID;
           final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
 
-          if (areaMPID != null) {
+          if ((areaMPID != null) && (!options.containsKey(areaMPID))) {
             options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
           }
 
@@ -105,7 +106,13 @@ class _MPMultipleElementsClickedWidgetState
             options[lineMPID] = getLineName(element);
           }
         case THArea _:
-          options[element.mpID] = getAreaName(element);
+          if (!options.containsKey(element.mpID)) {
+            options[element.mpID] = getAreaName(
+              thFile.areaByMPID(
+                element.mpID,
+              ),
+            );
+          }
         default:
           continue;
       }
@@ -119,53 +126,64 @@ class _MPMultipleElementsClickedWidgetState
       th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
-        Observer(
-          builder: (_) {
-            return MPOverlayWindowBlockWidget(
-              overlayWindowBlockType: MPOverlayWindowBlockType.main,
-              padding: mpOverlayWindowBlockEdgeInsets,
-              children: [
-                Builder(builder: (blockContext) {
-                  return Column(
-                    children: options.entries.map(
-                      (entry) {
-                        final int choiceID = entry.key;
-                        final String choiceName = entry.value;
+        MPOverlayWindowBlockWidget(
+          overlayWindowBlockType: MPOverlayWindowBlockType.main,
+          padding: mpOverlayWindowBlockEdgeInsets,
+          children: [
+            Builder(builder: (blockContext) {
+              return Column(
+                children: options.entries.map(
+                  (entry) {
+                    final int choiceID = entry.key;
+                    final String choiceName = entry.value;
 
-                        return RadioListTile<int>(
-                          title: Text(
-                            choiceName,
-                            style: DefaultTextStyle.of(blockContext).style,
-                          ),
-                          value: choiceID,
-                          groupValue: th2FileEditController.selectionController
-                              .multipleElementsClickedChoice,
-                          contentPadding: EdgeInsets.zero,
-                          activeColor: IconTheme.of(blockContext).color,
-                          dense: true,
-                          visualDensity: VisualDensity.adaptivePlatformDensity,
-                          onChanged: (int? value) {
-                            if (value != null) {
-                              _onTapSelectedElement(value);
-                            }
-                          },
-                        );
+                    return MouseRegion(
+                      onEnter: (_) {
+                        _onMouseEnter(choiceID);
                       },
-                    ).toList(),
-                  );
-                }),
-              ],
-            );
-          },
+                      onExit: (_) {
+                        _onMouseExit(choiceID);
+                      },
+                      child: RadioListTile<int>(
+                        title: Text(
+                          choiceName,
+                          style: DefaultTextStyle.of(blockContext).style,
+                        ),
+                        value: choiceID,
+                        groupValue:
+                            selectionController.multipleElementsClickedChoice,
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: IconTheme.of(blockContext).color,
+                        dense: true,
+                        visualDensity: VisualDensity.adaptivePlatformDensity,
+                        onChanged: (int? value) {
+                          if (value != null) {
+                            _onTapSelectedElement(value);
+                          }
+                        },
+                      ),
+                    );
+                  },
+                ).toList(),
+              );
+            }),
+          ],
         ),
       ],
     );
   }
 
   void _onTapSelectedElement(int choiceID) {
-    th2FileEditController.selectionController
-        .performMultipleElementsClickedChoosen(
+    selectionController.performMultipleElementsClickedChoosen(
       choiceID,
     );
+  }
+
+  void _onMouseEnter(int choiceID) {
+    selectionController.setMultipleElementsClickedHighlightedMPIDs(choiceID);
+  }
+
+  void _onMouseExit(int choiceID) {
+    selectionController.setMultipleElementsClickedHighlightedMPIDs(null);
   }
 }

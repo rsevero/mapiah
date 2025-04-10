@@ -247,6 +247,10 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @computed
+  bool get showMultipleElementsClickedHighlight =>
+      selectionController.multipleElementsClickedHighlightedMPID != null;
+
+  @computed
   bool get removeButtonEnabled =>
       selectionController.selectedElements.isNotEmpty;
 

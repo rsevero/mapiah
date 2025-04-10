@@ -13,7 +13,7 @@ class MPSelectionWindowWidget extends StatelessWidget {
   }) : thFileMPID = th2FileEditController.thFileMPID;
 
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
     return RepaintBoundary(
       child: Observer(
         builder: (_) => CustomPaint(

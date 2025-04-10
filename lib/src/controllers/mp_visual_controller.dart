@@ -47,20 +47,28 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getSelectedAreaFillPaint(THArea area) {
     final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint2
-        : THPaints.thPaint16;
-
-    paint
-      ..style = PaintingStyle.fill
-      ..color = paint.color.withValues(alpha: 0.3);
+        ? THPaints.thPaint1002
+        : THPaints.thPaint1016;
 
     return THLinePaint(paint: paint);
   }
 
   THLinePaint getSelectedAreaBorderPaint(THArea area) {
     final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint1002
-        : THPaints.thPaint1016;
+        ? THPaints.thPaint2
+        : THPaints.thPaint16;
+
+    paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
+
+    return THLinePaint(paint: paint);
+  }
+
+  THLinePaint getMultipleElementsClickedHighlightedFillPaint() {
+    return THLinePaint(paint: THPaints.thPaint1002);
+  }
+
+  THLinePaint getMultipleElementsClickedHighlightedBorderPaint() {
+    final Paint paint = THPaints.thPaint2;
 
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 
@@ -85,6 +93,7 @@ abstract class MPVisualControllerBase with Store {
     final Paint paint = _th2FileEditController.isFromActiveScrap(point)
         ? THPaints.thPaint5
         : THPaints.thPaint16;
+
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
       paint: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
@@ -96,8 +105,6 @@ abstract class MPVisualControllerBase with Store {
         _th2FileEditController.isFromActiveScrap(area);
     final Paint paint =
         isFromActiveScrap ? THPaints.thPaint1004 : THPaints.thPaint1016;
-
-    paint.color = paint.color.withValues(alpha: 0.3);
 
     return THLinePaint(paint: paint);
   }

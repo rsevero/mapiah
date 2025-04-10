@@ -121,6 +121,15 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       (_$showScrapScaleComputed ??= Computed<bool>(() => super.showScrapScale,
               name: 'TH2FileEditControllerBase.showScrapScale'))
           .value;
+  Computed<bool>? _$showMultipleElementsClickedHighlightComputed;
+
+  @override
+  bool get showMultipleElementsClickedHighlight =>
+      (_$showMultipleElementsClickedHighlightComputed ??= Computed<bool>(
+              () => super.showMultipleElementsClickedHighlight,
+              name:
+                  'TH2FileEditControllerBase.showMultipleElementsClickedHighlight'))
+          .value;
   Computed<bool>? _$removeButtonEnabledComputed;
 
   @override
@@ -1388,6 +1397,7 @@ showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
 showAddLine: ${showAddLine},
 showScrapScale: ${showScrapScale},
+showMultipleElementsClickedHighlight: ${showMultipleElementsClickedHighlight},
 removeButtonEnabled: ${removeButtonEnabled},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},

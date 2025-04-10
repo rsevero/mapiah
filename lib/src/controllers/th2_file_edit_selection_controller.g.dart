@@ -126,6 +126,28 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
+  late final _$_multipleElementsClickedHighlightedMPIDAtom = Atom(
+      name:
+          'TH2FileEditSelectionControllerBase._multipleElementsClickedHighlightedMPID',
+      context: context);
+
+  int? get multipleElementsClickedHighlightedMPID {
+    _$_multipleElementsClickedHighlightedMPIDAtom.reportRead();
+    return super._multipleElementsClickedHighlightedMPID;
+  }
+
+  @override
+  int? get _multipleElementsClickedHighlightedMPID =>
+      multipleElementsClickedHighlightedMPID;
+
+  @override
+  set _multipleElementsClickedHighlightedMPID(int? value) {
+    _$_multipleElementsClickedHighlightedMPIDAtom
+        .reportWrite(value, super._multipleElementsClickedHighlightedMPID, () {
+      super._multipleElementsClickedHighlightedMPID = value;
+    });
+  }
+
   late final _$_selectedLineSegmentsAtom = Atom(
       name: 'TH2FileEditSelectionControllerBase._selectedLineSegments',
       context: context);
@@ -403,6 +425,20 @@ mixin _$TH2FileEditSelectionController
             name: 'TH2FileEditSelectionControllerBase.clearSelectedElements');
     try {
       return super.clearSelectedElements();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
+    final _$actionInfo =
+        _$TH2FileEditSelectionControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditSelectionControllerBase.setMultipleElementsClickedHighlightedMPIDs');
+    try {
+      return super.setMultipleElementsClickedHighlightedMPIDs(mpID);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController
           .endAction(_$actionInfo);

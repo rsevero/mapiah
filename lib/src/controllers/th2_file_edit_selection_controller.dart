@@ -48,6 +48,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   List<THElement> clickedElements = [];
 
+  @readonly
+  int? _multipleElementsClickedHighlightedMPID;
+
   Rect get selectedElementsBoundingBox {
     _selectedElementsBoundingBox ??= getSelectedElementsBoundingBox();
 
@@ -1017,5 +1020,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       MPWindowType.multipleElementsClicked,
       false,
     );
+  }
+
+  @action
+  setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
+    _multipleElementsClickedHighlightedMPID = mpID;
   }
 }

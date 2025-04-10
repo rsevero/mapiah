@@ -62,7 +62,6 @@ class MPSelectedElementsWidget extends StatelessWidget
                   canvasTranslation: canvasTranslation,
                 ),
               );
-              break;
             case THLine _:
               final (
                 LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
@@ -72,6 +71,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                 thFile: thFile,
                 returnLineSegments: false,
               );
+
               painters.add(
                 THLinePainter(
                   lineSegmentsMap: segmentsMap,
@@ -81,7 +81,6 @@ class MPSelectedElementsWidget extends StatelessWidget
                   canvasTranslation: canvasTranslation,
                 ),
               );
-              break;
           }
         }
 
