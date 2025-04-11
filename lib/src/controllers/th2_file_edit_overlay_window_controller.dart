@@ -178,6 +178,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           : _overlayWindows.keys.last;
     }
 
+    if (type == MPWindowType.multipleElementsClicked) {
+      _th2FileEditController
+          .selectionController.multipleElementsClickedSemaphore
+          .complete();
+    }
+
     if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
       _th2FileEditController.thFileFocusNode.requestFocus();
     }

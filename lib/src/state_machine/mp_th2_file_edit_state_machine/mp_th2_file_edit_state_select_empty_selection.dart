@@ -20,12 +20,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// 1.1. If yes, select object. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
   /// 1.2. If no, do nothing.
   @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final List<THElement> clickedElements =
-        selectionController.selectableElementsClicked(event.localPosition);
+        await selectionController.selectablePLClicked(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
-      /// TODO: deal with multiple end points returned on same click.
       selectionController.setSelectedElements(
         getSelectedElementsWithLineSegmentsConvertedToLines(
           clickedElements,
@@ -33,6 +32,8 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
         setState: true,
       );
     }
+
+    return Future.value();
   }
 
   /// Marks the start point of the pan.

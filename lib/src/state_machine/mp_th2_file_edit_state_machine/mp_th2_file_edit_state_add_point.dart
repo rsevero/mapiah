@@ -12,7 +12,7 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
   }
 
   @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) {
     final THPoint newPoint = THPoint(
       parentMPID: th2FileEditController.activeScrapID,
       pointType: elementEditController.lastUsedPointType,
@@ -26,6 +26,8 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
 
     th2FileEditController.execute(command);
     th2FileEditController.triggerNonSelectedElementsRedraw();
+
+    return Future.value();
   }
 
   @override

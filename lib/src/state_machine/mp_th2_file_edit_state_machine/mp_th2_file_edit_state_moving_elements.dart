@@ -21,40 +21,47 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1.2.2. No. Clear selection. Change to
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     List<THElement> clickedElements =
-        selectionController.selectableElementsClicked(event.localPosition);
+        await selectionController.selectablePLClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
       clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
         clickedElements,
       );
-      final bool clickedElementAlreadySelected =
-          selectionController.isElementSelected(clickedElements.first);
+
+      bool clickedElementAlreadySelected = false;
+
+      for (final clickedElement in clickedElements) {
+        if (selectionController.isElementSelected(clickedElement)) {
+          clickedElementAlreadySelected = true;
+          break;
+        }
+      }
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          selectionController.removeSelectedElement(clickedElements.first);
+          selectionController.removeSelectedElements(clickedElements);
         } else {
           selectionController.setSelectionState();
         }
 
-        return;
+        return Future.value();
       } else {
         if (shiftPressed) {
-          selectionController.addSelectedElement(
-            clickedElements.first,
+          selectionController.addSelectedElements(
+            clickedElements,
             setState: true,
           );
         } else {
           selectionController.setSelectedElements(
-            [clickedElements.first],
+            clickedElements,
             setState: true,
           );
         }
 
-        return;
+        return Future.value();
       }
     } else {
       if (!shiftPressed) {
@@ -63,6 +70,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
+
+    return Future.value();
   }
 
   /// 1. Moves all selected objects by the distance indicated by [event].

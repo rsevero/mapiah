@@ -49,8 +49,10 @@ abstract class TH2FileEditStateControllerBase
   }
 
   @override
-  void onPrimaryButtonDragStart(PointerDownEvent event) {
+  Future<void> onPrimaryButtonDragStart(PointerDownEvent event) {
     _state.onPrimaryButtonDragStart(event);
+
+    return Future.value();
   }
 
   @override
@@ -94,8 +96,8 @@ abstract class TH2FileEditStateControllerBase
   }
 
   @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
-    _state.onPrimaryButtonClick(event);
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
+    await _state.onPrimaryButtonClick(event);
   }
 
   @override

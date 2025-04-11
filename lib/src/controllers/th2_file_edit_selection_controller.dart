@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -68,6 +69,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @readonly
   Observable<Rect> _selectionWindowCanvasCoordinates = Observable(Rect.zero);
+
+  Completer<void> multipleElementsClickedSemaphore = Completer<void>();
 
   List<int>? _selectedLineLineSegmentsMPIDs;
 
@@ -279,6 +282,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return setSelectionState();
   }
 
+  @action
+  void removeSelectedElements(List<THElement> elements) {
+    for (THElement element in elements) {
+      removeSelectedElement(element);
+    }
+  }
+
   void setSelectedControlPoint(MPSelectableControlPoint controlPoint) {
     _selectedControlPoint = controlPoint;
   }
@@ -400,7 +410,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _isSelected.remove(mpID);
   }
 
-  List<THElement> selectableElementsClicked(Offset screenCoordinates) {
+  Future<List<THElement>> selectablePLClicked(
+    Offset screenCoordinates,
+  ) async {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
     final List<THElement> clickedElements = [];
@@ -424,6 +436,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         MPWindowType.multipleElementsClicked,
         true,
       );
+
+      multipleElementsClickedSemaphore = Completer<void>();
+      await multipleElementsClickedSemaphore.future;
+
+      if (_multipleElementsClickedChoice !=
+          mpMultipleElementsClickedAllChoiceID) {
+        clickedElements.clear();
+        clickedElements
+            .add(_thFile.elementByMPID(_multipleElementsClickedChoice));
+      }
     }
 
     return clickedElements;

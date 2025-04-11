@@ -21,6 +21,7 @@ Version 0.2
 [ ] - Release creation Linux
 [ ] - Release creation Windows
 [ ] - Release creation MacOS
+[ ] - Release for Web
 [ ] - Help pages
 [ ] - Quick introduction guide
 
@@ -30,4 +31,3 @@ Version 0.3
 [ ] - Release automation Linux
 [ ] - Release automation Windows
 [ ] - Release automation MacOS
-

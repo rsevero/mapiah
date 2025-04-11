@@ -131,6 +131,11 @@ class THPaints {
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
+  static final thPaint22 = Paint()
+    ..color = Colors.purpleAccent
+    ..strokeWidth = 4
+    ..strokeCap = StrokeCap.round
+    ..style = PaintingStyle.stroke;
 
   static final thPaint1002 = Paint.from(thPaint2)
     ..style = PaintingStyle.fill
@@ -138,12 +143,24 @@ class THPaints {
   static final thPaint1004 = Paint.from(thPaint4)
     ..style = PaintingStyle.fill
     ..color = thPaint4.color.withValues(alpha: 0.3);
+  static final thPaint1007 = Paint.from(thPaint7)
+    ..style = PaintingStyle.fill
+    ..color = thPaint7.color.withValues(alpha: 0.3);
+  static final thPaint1010 = Paint.from(thPaint10)
+    ..style = PaintingStyle.fill
+    ..color = thPaint10.color.withValues(alpha: 0.3);
   static final thPaint1014 = Paint.from(thPaint14)
     ..style = PaintingStyle.fill
     ..color = thPaint14.color.withValues(alpha: 0.3);
   static final thPaint1016 = Paint.from(thPaint16)
     ..style = PaintingStyle.fill
     ..color = thPaint16.color.withValues(alpha: 0.3);
+  static final thPaint1018 = Paint.from(thPaint18)
+    ..style = PaintingStyle.fill
+    ..color = thPaint18.color.withValues(alpha: 0.3);
+  static final thPaint1022 = Paint.from(thPaint22)
+    ..style = PaintingStyle.fill
+    ..color = thPaint22.color.withValues(alpha: 0.3);
 
   static final thPaintWhiteBackground = Paint()
     ..color = Colors.white

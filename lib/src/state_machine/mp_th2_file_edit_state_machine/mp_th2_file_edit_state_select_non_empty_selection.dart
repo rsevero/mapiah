@@ -29,43 +29,49 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 1.2.2. No. Clear selection. Change to
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
-  void onPrimaryButtonClick(PointerUpEvent event) {
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     List<THElement> clickedElements =
-        selectionController.selectableElementsClicked(event.localPosition);
+        await selectionController.selectablePLClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
       clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
         clickedElements,
       );
+      bool clickedElementAlreadySelected = false;
 
-      /// TODO: deal with multiple end points returned on same click.
-      final bool clickedElementAlreadySelected =
-          selectionController.isElementSelected(clickedElements.first);
+      for (final clickedElement in clickedElements) {
+        if (selectionController.isElementSelected(clickedElement)) {
+          clickedElementAlreadySelected = true;
+          break;
+        }
+      }
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          selectionController.removeSelectedElement(clickedElements.first);
+          selectionController.removeSelectedElements(clickedElements);
         }
-        return;
+
+        return Future.value();
       } else {
         late bool stateChanged;
 
         if (shiftPressed) {
-          stateChanged = selectionController.addSelectedElement(
-            clickedElements.first,
+          stateChanged = selectionController.addSelectedElements(
+            clickedElements,
             setState: true,
           );
         } else {
           stateChanged = selectionController.setSelectedElements(
-            [clickedElements.first],
+            clickedElements,
             setState: true,
           );
         }
         if (!stateChanged) {
           _updateStatusBarMessage();
         }
-        return;
+
+        return Future.value();
       }
     } else {
       if (!shiftPressed) {
@@ -74,6 +80,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
             .setState(MPTH2FileEditStateType.selectEmptySelection);
       }
     }
+
+    return Future.value();
   }
 
   /// 1. Mark the start point of the pan.
@@ -86,11 +94,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// selection. Change to [MPTH2FileEditStateType.movingElements];
   /// 2.2. No. Do nothing.
   @override
-  void onPrimaryButtonDragStart(PointerDownEvent event) {
+  Future<void> onPrimaryButtonDragStart(PointerDownEvent event) async {
     selectionController.setDragStartCoordinates(event.localPosition);
-
     List<THElement> clickedElements =
-        selectionController.selectableElementsClicked(event.localPosition);
+        await selectionController.selectablePLClicked(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {

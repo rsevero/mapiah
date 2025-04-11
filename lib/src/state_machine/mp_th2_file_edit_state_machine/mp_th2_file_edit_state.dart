@@ -117,7 +117,9 @@ abstract class MPTH2FileEditState {
 
   void onTertiaryButtonDragEnd(PointerUpEvent event) {}
 
-  void onPrimaryButtonClick(PointerUpEvent event) {}
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) {
+    return Future.value();
+  }
 
   void onSecondaryButtonClick(PointerUpEvent event) {}
 

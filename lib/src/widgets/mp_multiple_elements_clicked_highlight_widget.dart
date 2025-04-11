@@ -93,6 +93,31 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     canvasTranslation: canvasTranslation,
                   ),
                 );
+              case THArea _:
+                final Set<int> areaLineMPIDs =
+                    highlightedElement.getLineMPIDs(thFile);
+
+                for (final int lineMPID in areaLineMPIDs) {
+                  final THLine highlightedElement = thFile.lineByMPID(lineMPID);
+                  final (
+                    LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
+                    _
+                  ) = getLineSegmentsAndEndpointsMaps(
+                    line: highlightedElement,
+                    thFile: thFile,
+                    returnLineSegments: false,
+                  );
+                  final THLinePainter linePainter = THLinePainter(
+                    lineSegmentsMap: segmentsMap,
+                    linePaintStroke: borderPaint,
+                    linePaintFill: fillPaint,
+                    th2FileEditController: th2FileEditController,
+                    canvasScale: canvasScale,
+                    canvasTranslation: canvasTranslation,
+                  );
+
+                  painters.add(linePainter);
+                }
             }
           }
 

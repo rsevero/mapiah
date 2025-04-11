@@ -342,6 +342,19 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void removeSelectedElements(List<THElement> elements) {
+    final _$actionInfo =
+        _$TH2FileEditSelectionControllerBaseActionController.startAction(
+            name: 'TH2FileEditSelectionControllerBase.removeSelectedElements');
+    try {
+      return super.removeSelectedElements(elements);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void moveSelectedElementsToCanvasCoordinates(
       Offset canvasCoordinatesFinalPosition) {
     final _$actionInfo =

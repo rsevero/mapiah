@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 
 abstract interface class MPActuatorInterface {
   /// These methods are used to allow the Actuator to actually actuate on the
-  /// selected events. These are the methods whee the actual desired actions
+  /// selected events. These are the methods where the actual desired actions
   /// should be performed when the events are triggered.
-  void onPrimaryButtonDragStart(PointerDownEvent event);
+  Future<void> onPrimaryButtonDragStart(PointerDownEvent event) {
+    return Future.value();
+  }
 
   void onSecondaryButtonDragStart(PointerDownEvent event);
 
@@ -23,7 +25,7 @@ abstract interface class MPActuatorInterface {
 
   void onTertiaryButtonDragEnd(PointerUpEvent event);
 
-  void onPrimaryButtonClick(PointerUpEvent event);
+  Future<void> onPrimaryButtonClick(PointerUpEvent event);
 
   void onSecondaryButtonClick(PointerUpEvent event);
 
