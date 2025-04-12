@@ -48,7 +48,7 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
         th2FileEditController.redrawTriggerOptionsList;
 
         final mpSelectedElements =
-            th2FileEditController.selectionController.selectedElements.values;
+            th2FileEditController.selectionController.mpSelectedElements.values;
 
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
         final List<Widget> widgets = [];

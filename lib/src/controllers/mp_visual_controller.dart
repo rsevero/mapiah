@@ -64,11 +64,13 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THLinePaint getMultipleElementsClickedHighlightedFillPaint() {
-    return THLinePaint(paint: THPaints.thPaint1002);
+    return THLinePaint(paint: THPaints.thPaint1016);
+    // return THLinePaint(paint: THPaints.thPaint1002);
   }
 
   THLinePaint getMultipleElementsClickedHighlightedBorderPaint() {
-    final Paint paint = THPaints.thPaint2;
+    final Paint paint = THPaints.thPaint16;
+    // final Paint paint = THPaints.thPaint2;
 
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 

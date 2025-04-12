@@ -31,10 +31,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final List<THElement> clickedElements =
-        (await selectionController.selectableElementsClicked(
+        (await selectionController.getSelectableElementsClicked(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
       canBeMultiple: true,
+      presentMultipleElementsClickedWidget: true,
     ))
             .values
             .toList();
@@ -100,28 +101,27 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   Future<void> onPrimaryButtonDragStart(PointerDownEvent event) async {
     selectionController.setDragStartCoordinates(event.localPosition);
     Map<int, THElement> clickedElements =
-        await selectionController.selectableElementsClicked(
+        await selectionController.getSelectableElementsClicked(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
       canBeMultiple: true,
+      presentMultipleElementsClickedWidget: false,
     );
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
       if (!shiftPressed) {
         bool alreadySelected = false;
-        final List<THElement> newlySelectedElements = [];
 
         for (final THElement element in clickedElements.values) {
           if (selectionController.isElementSelected(element)) {
             alreadySelected = true;
-          } else {
-            newlySelectedElements.add(element);
+            break;
           }
         }
 
         if (!alreadySelected) {
-          selectionController.setSelectedElements(newlySelectedElements);
+          selectionController.setSelectedElements(clickedElements.values);
         }
         th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.movingElements);
@@ -187,7 +187,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     int pointCount = 0;
     int lineCount = 0;
 
-    final selectedElements = selectionController.selectedElements.values;
+    final selectedElements = selectionController.mpSelectedElements.values;
 
     for (final selectedElement in selectedElements) {
       switch (selectedElement) {

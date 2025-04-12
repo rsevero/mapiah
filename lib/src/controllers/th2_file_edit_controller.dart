@@ -227,7 +227,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showSelectedElements =>
-      selectionController.selectedElements.isNotEmpty && !_isEditLineMode;
+      selectionController.mpSelectedElements.isNotEmpty && !_isEditLineMode;
 
   @computed
   bool get showSelectionHandles => showSelectedElements && _isSelectMode;
@@ -252,7 +252,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get removeButtonEnabled =>
-      selectionController.selectedElements.isNotEmpty;
+      selectionController.mpSelectedElements.isNotEmpty;
 
   @readonly
   String _statusBarMessage = '';
@@ -470,9 +470,9 @@ abstract class TH2FileEditControllerBase with Store {
 
     _disposers.add(autorun((_) {
       _isNodeEditButtonEnabled =
-          (selectionController.selectedElements.length == 1) &&
-              (selectionController.selectedElements[selectionController
-                  .selectedElements.keys.first] is MPSelectedLine);
+          (selectionController.mpSelectedElements.length == 1) &&
+              (selectionController.mpSelectedElements[selectionController
+                  .mpSelectedElements.keys.first] is MPSelectedLine);
     }));
 
     _disposers.add(autorun((_) {
@@ -664,7 +664,8 @@ abstract class TH2FileEditControllerBase with Store {
     _redrawTriggerNonSelectedElements++;
     _redrawTriggerNewLine++;
     _redrawTriggerEditLine++;
-    selectionController.clearSelectionHandleCenters();
+    selectionController
+        .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
   }
 
   @action
@@ -773,7 +774,8 @@ abstract class TH2FileEditControllerBase with Store {
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
     selectionController.warmSelectableElementsCanvasScaleChanged();
-    selectionController.clearSelectionHandleCenters();
+    selectionController
+        .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
     triggerAllElementsRedraw();
   }
 

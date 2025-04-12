@@ -23,10 +23,11 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     Map<int, THElement> clickedElements =
-        await selectionController.selectableElementsClicked(
+        await selectionController.getSelectableElementsClicked(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
       canBeMultiple: false,
+      presentMultipleElementsClickedWidget: true,
     );
     final THElement clickedElement = clickedElements.values.first;
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
@@ -80,7 +81,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 4. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final int selectedCount = selectionController.selectedElements.length;
+    final int selectedCount = selectionController.mpSelectedElements.length;
     final Offset panDeltaOnCanvas =
         th2FileEditController.offsetScreenToCanvas(event.localPosition) -
             selectionController.dragStartCanvasCoordinates;
@@ -92,7 +93,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       return;
     } else if (selectedCount == 1) {
       final MPSelectedElement selected =
-          selectionController.selectedElements.values.first;
+          selectionController.mpSelectedElements.values.first;
       final THElement selectedElement = selected.originalElementClone;
 
       switch (selected) {
@@ -117,7 +118,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     } else if (selectedCount > 1) {
       moveCommand = MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas(
         deltaOnCanvas: panDeltaOnCanvas,
-        mpSelectedElements: selectionController.selectedElements.values,
+        mpSelectedElements: selectionController.mpSelectedElements.values,
         decimalPositions: th2FileEditController.currentDecimalPositions,
       );
 

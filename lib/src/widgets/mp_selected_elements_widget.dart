@@ -31,8 +31,8 @@ class MPSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
 
         final List<CustomPainter> painters = [];
-        final selectedElements =
-            th2FileEditController.selectionController.selectedElements.values;
+        final mpSelectedElements =
+            th2FileEditController.selectionController.mpSelectedElements.values;
 
         final THPointPaint pointPaintInfo =
             th2FileEditController.visualController.getSelectedPointPaint();
@@ -47,8 +47,9 @@ class MPSelectedElementsWidget extends StatelessWidget
         final Offset canvasTranslation =
             th2FileEditController.canvasTranslation;
 
-        for (final selectedElement in selectedElements) {
-          final THElement element = thFile.elementByMPID(selectedElement.mpID);
+        for (final mpSelectedElement in mpSelectedElements) {
+          final THElement element =
+              thFile.elementByMPID(mpSelectedElement.mpID);
 
           switch (element) {
             case THPoint _:

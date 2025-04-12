@@ -166,7 +166,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
 
   Widget _buildOptionInput() {
     final mpSelectedElements =
-        widget.th2FileEditController.selectionController.selectedElements;
+        widget.th2FileEditController.selectionController.mpSelectedElements;
 
     if (mpSelectedElements.length == 1) {
       final THElement selectedElement =

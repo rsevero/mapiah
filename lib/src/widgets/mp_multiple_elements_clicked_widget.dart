@@ -45,6 +45,13 @@ class _MPMultipleElementsClickedWidgetState
     selectionController.setMultipleElementsClickedChoice(
       mpMultipleElementsClickedNoneChoiceID,
     );
+    selectionController.setMultipleElementsClickedHighlightedMPIDs(null);
+  }
+
+  @override
+  void dispose() {
+    selectionController.setMultipleElementsClickedHighlightedMPIDs(null);
+    super.dispose();
   }
 
   String getLineName(THLine line) {

@@ -36,7 +36,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @action
   void updateOptionStateMap() {
     final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
+        _th2FileEditController.selectionController.mpSelectedElements.values;
     final Set<THHasOptionsMixin> selectedElements = {};
 
     for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {

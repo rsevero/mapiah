@@ -81,10 +81,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     }
 
     final Map<int, THElement> clickedElements =
-        await selectionController.selectableElementsClicked(
+        await selectionController.getSelectableElementsClicked(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.lineSegment,
       canBeMultiple: false,
+      presentMultipleElementsClickedWidget: true,
     );
     final THLineSegment clickedLineSegment =
         clickedElements.values.first as THLineSegment;

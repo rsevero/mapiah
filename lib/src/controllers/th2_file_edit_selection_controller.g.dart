@@ -66,23 +66,23 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
-  late final _$_selectedElementsAtom = Atom(
-      name: 'TH2FileEditSelectionControllerBase._selectedElements',
+  late final _$_mpSelectedElementsAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._mpSelectedElements',
       context: context);
 
-  ObservableMap<int, MPSelectedElement> get selectedElements {
-    _$_selectedElementsAtom.reportRead();
-    return super._selectedElements;
+  ObservableMap<int, MPSelectedElement> get mpSelectedElements {
+    _$_mpSelectedElementsAtom.reportRead();
+    return super._mpSelectedElements;
   }
 
   @override
-  ObservableMap<int, MPSelectedElement> get _selectedElements =>
-      selectedElements;
+  ObservableMap<int, MPSelectedElement> get _mpSelectedElements =>
+      mpSelectedElements;
 
   @override
-  set _selectedElements(ObservableMap<int, MPSelectedElement> value) {
-    _$_selectedElementsAtom.reportWrite(value, super._selectedElements, () {
-      super._selectedElements = value;
+  set _mpSelectedElements(ObservableMap<int, MPSelectedElement> value) {
+    _$_mpSelectedElementsAtom.reportWrite(value, super._mpSelectedElements, () {
+      super._mpSelectedElements = value;
     });
   }
 

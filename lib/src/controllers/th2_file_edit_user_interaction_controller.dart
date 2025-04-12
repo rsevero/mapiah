@@ -44,7 +44,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   void _prepareSetOption(THCommandOption option) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
+        _th2FileEditController.selectionController.mpSelectedElements.values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -100,7 +100,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void _prepareUnsetOption(THCommandOptionType optionType) {
     final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
+        _th2FileEditController.selectionController.mpSelectedElements.values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -164,7 +164,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   ) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
+        _th2FileEditController.selectionController.mpSelectedElements.values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -232,7 +232,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void _prepareUnsetMultipleOptionChoice(THCommandOptionType optionType) {
     final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
+        _th2FileEditController.selectionController.mpSelectedElements.values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -283,7 +283,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     MPCommand setPLATypeCommand;
     List<int> mpIDs = [];
     final mpSelectedElements =
-        _th2FileEditController.selectionController.selectedElements.values;
+        _th2FileEditController.selectionController.mpSelectedElements.values;
 
     switch (plaType) {
       case THElementType.area:

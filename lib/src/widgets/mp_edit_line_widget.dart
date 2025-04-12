@@ -32,8 +32,8 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
       builder: (_) {
         th2FileEditController.redrawTriggerEditLine;
 
-        if ((selectionController.selectedElements.values.length != 1) ||
-            (selectionController.selectedElements.values.first
+        if ((selectionController.mpSelectedElements.values.length != 1) ||
+            (selectionController.mpSelectedElements.values.first
                 is! MPSelectedLine)) {
           return SizedBox.shrink();
         }
@@ -84,7 +84,7 @@ class MPEditLineWidget extends StatelessWidget with MPGetLineSegmentsMapMixin {
         final List<CustomPainter> painters = [];
 
         final THLine line = selectionController
-            .selectedElements.values.first.originalElementClone as THLine;
+            .mpSelectedElements.values.first.originalElementClone as THLine;
 
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
