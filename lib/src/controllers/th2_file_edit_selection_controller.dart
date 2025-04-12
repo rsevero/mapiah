@@ -449,6 +449,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     if (clickedElements.length > 1) {
       selectionCanBeMultiple = canBeMultiple;
+      setMultipleElementsClickedHighlightedMPIDs(null);
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
         MPWindowType.multipleElementsClicked,
         true,
@@ -457,12 +458,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       multipleElementsClickedSemaphore = Completer<void>();
       await multipleElementsClickedSemaphore.future;
 
+      setMultipleElementsClickedHighlightedMPIDs(null);
+
       if (_multipleElementsClickedChoice !=
           mpMultipleElementsClickedAllChoiceID) {
         clickedElements.clear();
         clickedElements[_multipleElementsClickedChoice] =
             _thFile.elementByMPID(_multipleElementsClickedChoice);
       }
+      setMultipleElementsClickedChoice(mpMultipleElementsClickedAllChoiceID);
     }
 
     return clickedElements;
