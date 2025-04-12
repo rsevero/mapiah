@@ -480,13 +480,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       multipleElementsClickedSemaphore = Completer<void>();
       await multipleElementsClickedSemaphore.future;
 
-      if (_multipleElementsClickedChoice !=
-          mpMultipleElementsClickedAllChoiceID) {
+      if (_multipleElementsClickedChoice > 0) {
         clickedElements.clear();
         clickedElements[_multipleElementsClickedChoice] =
             _thFile.elementByMPID(_multipleElementsClickedChoice);
+      } else if (_multipleElementsClickedChoice < 0) {
+        clickedElements.clear();
       }
-      // setMultipleElementsClickedChoice(mpMultipleElementsClickedNoneChoiceID);
     }
 
     return clickedElements;
