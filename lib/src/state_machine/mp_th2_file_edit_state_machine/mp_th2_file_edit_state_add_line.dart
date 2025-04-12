@@ -17,7 +17,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   }
 
   @override
-  void onPrimaryButtonDragStart(PointerDownEvent event) {
+  void onPrimaryButtonPointerDown(PointerDownEvent event) {
     elementEditController.addNewLineLineSegment(event.localPosition);
   }
 

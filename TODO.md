@@ -2,7 +2,7 @@
 
 Version 0.2
 [X] - Make output identical to original except on changed lines
-[ ] - Deal with click on more than one object at a time
+[X] - Deal with click on more than one object at a time
 [ ] - Config page
 [X] - Line edit
 [X] - Point and line remove

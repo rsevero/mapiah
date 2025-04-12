@@ -5,13 +5,13 @@ abstract interface class MPActuatorInterface {
   /// These methods are used to allow the Actuator to actually actuate on the
   /// selected events. These are the methods where the actual desired actions
   /// should be performed when the events are triggered.
-  Future<void> onPrimaryButtonDragStart(PointerDownEvent event) {
+  Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) {
     return Future.value();
   }
 
-  void onSecondaryButtonDragStart(PointerDownEvent event);
+  void onSecondaryButtonPointerDown(PointerDownEvent event);
 
-  void onTertiaryButtonDragStart(PointerDownEvent event);
+  void onTertiaryButtonPointerDown(PointerDownEvent event);
 
   void onPrimaryButtonDragUpdate(PointerMoveEvent event);
 

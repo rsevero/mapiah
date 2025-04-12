@@ -148,7 +148,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
-  void onPrimaryButtonDragStart(PointerDownEvent event) {
+  void onPrimaryButtonPointerDown(PointerDownEvent event) {
     selectionController.setDragStartCoordinates(event.localPosition);
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();

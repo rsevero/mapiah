@@ -42,6 +42,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       ObservableMap<int, MPSelectedElement>();
 
   @readonly
+  Iterable<THElement> _clickedElementsAtPointerDown = {};
+
+  @readonly
   MPSelectableControlPoint? _selectedControlPoint;
 
   @readonly
@@ -129,6 +132,23 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       right: maxX,
       bottom: maxY,
     );
+  }
+
+  void setClickedElementsAtPointerDown(Iterable<THElement> clickedElements) {
+    _clickedElementsAtPointerDown = clickedElements;
+  }
+
+  void clearClickedElementsAtPointerDown() {
+    _clickedElementsAtPointerDown = <THElement>[];
+  }
+
+  @action
+  void substituteSelectedElementsByClickedElements() {
+    _mpSelectedElements.clear();
+    for (final THElement clickedElement in _clickedElementsAtPointerDown) {
+      addSelectedElement(clickedElement);
+    }
+    clearClickedElementsAtPointerDown();
   }
 
   @action

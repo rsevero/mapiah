@@ -86,6 +86,27 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
+  late final _$_clickedElementsAtPointerDownAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._clickedElementsAtPointerDown',
+      context: context);
+
+  Iterable<THElement> get clickedElementsAtPointerDown {
+    _$_clickedElementsAtPointerDownAtom.reportRead();
+    return super._clickedElementsAtPointerDown;
+  }
+
+  @override
+  Iterable<THElement> get _clickedElementsAtPointerDown =>
+      clickedElementsAtPointerDown;
+
+  @override
+  set _clickedElementsAtPointerDown(Iterable<THElement> value) {
+    _$_clickedElementsAtPointerDownAtom
+        .reportWrite(value, super._clickedElementsAtPointerDown, () {
+      super._clickedElementsAtPointerDown = value;
+    });
+  }
+
   late final _$_selectedControlPointAtom = Atom(
       name: 'TH2FileEditSelectionControllerBase._selectedControlPoint',
       context: context);
@@ -235,6 +256,20 @@ mixin _$TH2FileEditSelectionController
   late final _$TH2FileEditSelectionControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditSelectionControllerBase', context: context);
+
+  @override
+  void substituteSelectedElementsByClickedElements() {
+    final _$actionInfo =
+        _$TH2FileEditSelectionControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditSelectionControllerBase.substituteSelectedElementsByClickedElements');
+    try {
+      return super.substituteSelectedElementsByClickedElements();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
 
   @override
   Rect getSelectedElementsBoundingBox() {

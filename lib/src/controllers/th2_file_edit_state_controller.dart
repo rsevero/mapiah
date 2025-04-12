@@ -49,20 +49,20 @@ abstract class TH2FileEditStateControllerBase
   }
 
   @override
-  Future<void> onPrimaryButtonDragStart(PointerDownEvent event) {
-    _state.onPrimaryButtonDragStart(event);
+  Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) {
+    _state.onPrimaryButtonPointerDown(event);
 
     return Future.value();
   }
 
   @override
-  void onSecondaryButtonDragStart(PointerDownEvent event) {
-    _state.onSecondaryButtonDragStart(event);
+  void onSecondaryButtonPointerDown(PointerDownEvent event) {
+    _state.onSecondaryButtonPointerDown(event);
   }
 
   @override
-  void onTertiaryButtonDragStart(PointerDownEvent event) {
-    _state.onTertiaryButtonDragStart(event);
+  void onTertiaryButtonPointerDown(PointerDownEvent event) {
+    _state.onTertiaryButtonPointerDown(event);
   }
 
   @override

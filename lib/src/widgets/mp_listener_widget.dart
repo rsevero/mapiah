@@ -52,17 +52,17 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             currentPressedMouseButton = kPrimaryButton;
             primaryButtonDragStartScreenCoordinates = event.localPosition;
             isPrimaryButtonDragging = false;
-            widget.actuator.onPrimaryButtonDragStart(event);
+            widget.actuator.onPrimaryButtonPointerDown(event);
           case kSecondaryButton:
             currentPressedMouseButton = kSecondaryButton;
             secondaryButtonDragStartScreenCoordinates = event.localPosition;
             isSecondaryButtonDragging = false;
-            widget.actuator.onSecondaryButtonDragStart(event);
+            widget.actuator.onSecondaryButtonPointerDown(event);
           case kTertiaryButton:
             currentPressedMouseButton = kTertiaryButton;
             tertiaryButtonDragStartScreenCoordinates = event.localPosition;
             isTertiaryButtonDragging = false;
-            widget.actuator.onTertiaryButtonDragStart(event);
+            widget.actuator.onTertiaryButtonPointerDown(event);
         }
       },
       onPointerMove: (PointerMoveEvent event) {

@@ -101,11 +101,11 @@ abstract class MPTH2FileEditState {
 
   void setStatusBarMessage() {}
 
-  void onPrimaryButtonDragStart(PointerDownEvent event) {}
+  void onPrimaryButtonPointerDown(PointerDownEvent event) {}
 
-  void onSecondaryButtonDragStart(PointerDownEvent event) {}
+  void onSecondaryButtonPointerDown(PointerDownEvent event) {}
 
-  void onTertiaryButtonDragStart(PointerDownEvent event) {}
+  void onTertiaryButtonPointerDown(PointerDownEvent event) {}
 
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {}
 

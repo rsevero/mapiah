@@ -29,6 +29,8 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
       presentMultipleElementsClickedWidget: true,
     );
 
+    selectionController.clearClickedElementsAtPointerDown();
+
     if (clickedElements.isNotEmpty) {
       selectionController.setSelectedElements(
         clickedElements.values,
@@ -41,7 +43,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
 
   /// Marks the start point of the pan.
   @override
-  void onPrimaryButtonDragStart(PointerDownEvent event) {
+  void onPrimaryButtonPointerDown(PointerDownEvent event) {
     selectionController.setDragStartCoordinates(event.localPosition);
   }
 

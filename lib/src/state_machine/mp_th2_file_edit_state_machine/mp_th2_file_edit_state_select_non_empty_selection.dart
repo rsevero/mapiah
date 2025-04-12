@@ -41,6 +41,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
             .toList();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
+    selectionController.clearClickedElementsAtPointerDown();
+
     if (clickedElements.isNotEmpty) {
       bool clickedElementAlreadySelected = true;
 
@@ -98,7 +100,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// selection. Change to [MPTH2FileEditStateType.movingElements];
   /// 2.2. No. Do nothing.
   @override
-  Future<void> onPrimaryButtonDragStart(PointerDownEvent event) async {
+  Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
     selectionController.setDragStartCoordinates(event.localPosition);
     Map<int, THElement> clickedElements =
         await selectionController.getSelectableElementsClicked(
@@ -120,9 +122,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           }
         }
 
-        if (!alreadySelected) {
-          selectionController.setSelectedElements(clickedElements.values);
-        }
+        selectionController.setClickedElementsAtPointerDown(
+            alreadySelected ? {} : clickedElements.values);
         th2FileEditController.stateController
             .setState(MPTH2FileEditStateType.movingElements);
       }

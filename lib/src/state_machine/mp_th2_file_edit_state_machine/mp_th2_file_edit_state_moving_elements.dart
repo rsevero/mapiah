@@ -22,34 +22,44 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    Map<int, THElement> clickedElements =
-        await selectionController.getSelectableElementsClicked(
+    final List<THElement> clickedElements =
+        (await selectionController.getSelectableElementsClicked(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
-      canBeMultiple: false,
+      canBeMultiple: true,
       presentMultipleElementsClickedWidget: true,
-    );
-    final THElement clickedElement = clickedElements.values.first;
+    ))
+            .values
+            .toList();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
+    selectionController.clearClickedElementsAtPointerDown();
+
     if (clickedElements.isNotEmpty) {
-      if (selectionController.isElementSelected(clickedElement)) {
+      bool clickedElementAlreadySelected = true;
+
+      for (final clickedElement in clickedElements) {
+        if (!selectionController.isElementSelected(clickedElement)) {
+          clickedElementAlreadySelected = false;
+          break;
+        }
+      }
+
+      if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          selectionController.removeSelectedElement(clickedElement);
-        } else {
-          selectionController.setSelectionState();
+          selectionController.removeSelectedElements(clickedElements);
         }
 
         return Future.value();
       } else {
         if (shiftPressed) {
-          selectionController.addSelectedElement(
-            clickedElement,
+          selectionController.addSelectedElements(
+            clickedElements,
             setState: true,
           );
         } else {
           selectionController.setSelectedElements(
-            [clickedElement],
+            clickedElements,
             setState: true,
           );
         }
@@ -70,6 +80,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
+    if (selectionController.clickedElementsAtPointerDown.isNotEmpty) {
+      selectionController.substituteSelectedElementsByClickedElements();
+    }
     selectionController
         .moveSelectedElementsToScreenCoordinates(event.localPosition);
   }
