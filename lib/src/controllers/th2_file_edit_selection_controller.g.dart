@@ -315,7 +315,7 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  bool setSelectedElements(List<THElement> clickedElements,
+  bool setSelectedElements(Iterable<THElement> clickedElements,
       {bool setState = false}) {
     final _$actionInfo =
         _$TH2FileEditSelectionControllerBaseActionController.startAction(

@@ -224,6 +224,45 @@ class THLine extends THElement
     );
   }
 
+  int getPreviousLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
+    int? previousLineSegmentMPID;
+
+    for (final int childMPID in childrenMPID) {
+      final THElementType childElementType = thFile.getElementTypeByMPID(
+        childMPID,
+      );
+
+      if ((childElementType != THElementType.bezierCurveLineSegment) &&
+          (childElementType != THElementType.straightLineSegment)) {
+        continue;
+      }
+      if (previousLineSegmentMPID == null) {
+        previousLineSegmentMPID = childMPID;
+        continue;
+      }
+
+      if (childMPID == lineSegmentMPID) {
+        return previousLineSegmentMPID;
+      }
+
+      previousLineSegmentMPID = childMPID;
+    }
+
+    throw Exception(
+      'THLine.getPreviousLineSegmentMPID: lineSegmentMPID not found',
+    );
+  }
+
+  THLineSegment getPreviousLineSegment(
+    THLineSegment lineSegment,
+    THFile thFile,
+  ) {
+    final int previousLineSegmentMPID =
+        getPreviousLineSegmentMPID(lineSegment.mpID, thFile);
+
+    return thFile.lineByMPID(previousLineSegmentMPID) as THLineSegment;
+  }
+
   @override
   String get plaType {
     return lineType.name;

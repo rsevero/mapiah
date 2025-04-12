@@ -41,11 +41,13 @@ abstract class MPTH2FileEditState {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditElementEditController elementEditController;
   final TH2FileEditSelectionController selectionController;
+  final THFile thFile;
   MPTH2FileEditStateType get type;
 
   MPTH2FileEditState({required this.th2FileEditController})
       : elementEditController = th2FileEditController.elementEditController,
-        selectionController = th2FileEditController.selectionController;
+        selectionController = th2FileEditController.selectionController,
+        thFile = th2FileEditController.thFile;
 
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,

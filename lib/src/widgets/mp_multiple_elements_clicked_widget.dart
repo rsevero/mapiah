@@ -65,11 +65,13 @@ class _MPMultipleElementsClickedWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final Map<int, String> options = {
-      mpMultipleElementsClickedAllChoiceID:
-          appLocalizations.mpMultipleElementsClickedAllChoice,
-    };
-    final clickedElements = selectionController.clickedElements;
+    final Map<int, String> options = {};
+    final clickedElements = selectionController.clickedElements.values;
+
+    if (selectionController.selectionCanBeMultiple) {
+      options[mpMultipleElementsClickedAllChoiceID] =
+          appLocalizations.mpMultipleElementsClickedAllChoice;
+    }
 
     for (final THElement element in clickedElements) {
       switch (element) {

@@ -47,10 +47,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   int _multipleElementsClickedChoice = mpMultipleElementsClickedAllChoiceID;
 
-  List<THElement> clickedElements = [];
+  Map<int, THElement> clickedElements = {};
 
   @readonly
   int? _multipleElementsClickedHighlightedMPID;
+
+  Completer<void> multipleElementsClickedSemaphore = Completer<void>();
+
+  bool selectionCanBeMultiple = false;
 
   Rect get selectedElementsBoundingBox {
     _selectedElementsBoundingBox ??= getSelectedElementsBoundingBox();
@@ -69,8 +73,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @readonly
   Observable<Rect> _selectionWindowCanvasCoordinates = Observable(Rect.zero);
-
-  Completer<void> multipleElementsClickedSemaphore = Completer<void>();
 
   List<int>? _selectedLineLineSegmentsMPIDs;
 
@@ -140,7 +142,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   Rect getClickedElementsBoundingBox() {
-    return _getElementsListBoundingBox(clickedElements);
+    return _getElementsListBoundingBox(clickedElements.values);
   }
 
   @action
@@ -250,7 +252,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   bool setSelectedElements(
-    List<THElement> clickedElements, {
+    Iterable<THElement> clickedElements, {
     bool setState = false,
   }) {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
@@ -410,28 +412,43 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _isSelected.remove(mpID);
   }
 
-  Future<List<THElement>> selectablePLClicked(
-    Offset screenCoordinates,
-  ) async {
+  Future<Map<int, THElement>> selectableElementsClicked({
+    required Offset screenCoordinates,
+    required THSelectionType selectionType,
+    required bool canBeMultiple,
+  }) async {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
-    final List<THElement> clickedElements = [];
     final selectableElements = _selectableElements.values;
 
-    for (final selectableElement in selectableElements) {
+    for (final MPSelectable selectableElement in selectableElements) {
       if (selectableElement.contains(canvasCoordinates)) {
         if (selectableElement is MPSelectableElement) {
-          switch (selectableElement.element) {
-            case THPoint _:
-            case THLine _:
-              clickedElements.addAll(selectableElement.selectedElements);
+          switch (selectionType) {
+            case THSelectionType.pla:
+              switch (selectableElement.element) {
+                case THPoint _:
+                case THLine _:
+                  clickedElements[selectableElement.element.mpID] =
+                      selectableElement.element;
+                case THLineSegment _:
+                  clickedElements[selectableElement.element.parentMPID] =
+                      _thFile
+                          .elementByMPID(selectableElement.element.parentMPID);
+              }
+            case THSelectionType.lineSegment:
+              if (selectableElement is! MPSelectableLineSegment) {
+                continue;
+              }
+              clickedElements[selectableElement.element.mpID] =
+                  selectableElement.element;
           }
         }
       }
     }
 
     if (clickedElements.length > 1) {
-      this.clickedElements = clickedElements;
+      selectionCanBeMultiple = canBeMultiple;
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
         MPWindowType.multipleElementsClicked,
         true,
@@ -443,8 +460,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       if (_multipleElementsClickedChoice !=
           mpMultipleElementsClickedAllChoiceID) {
         clickedElements.clear();
-        clickedElements
-            .add(_thFile.elementByMPID(_multipleElementsClickedChoice));
+        clickedElements[_multipleElementsClickedChoice] =
+            _thFile.elementByMPID(_multipleElementsClickedChoice);
       }
     }
 
@@ -1048,4 +1065,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
     _multipleElementsClickedHighlightedMPID = mpID;
   }
+}
+
+enum THSelectionType {
+  lineSegment,
+  pla;
 }

@@ -80,36 +80,23 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       return;
     }
 
-    final List<THElement> clickedElements =
-        await selectionController.selectablePLClicked(event.localPosition);
+    final Map<int, THElement> clickedElements =
+        await selectionController.selectableElementsClicked(
+      screenCoordinates: event.localPosition,
+      selectionType: THSelectionType.lineSegment,
+      canBeMultiple: false,
+    );
+    final THLineSegment clickedLineSegment =
+        clickedElements.values.first as THLineSegment;
 
     if (clickedElements.isNotEmpty) {
-      final List<THElement> clickedPointsLines =
-          getSelectedElementsWithLineSegmentsConvertedToLines(
-        clickedElements,
-      );
-      bool clickedElementAlreadySelected = true;
-
-      for (final THElement clickedPointLine in clickedPointsLines) {
-        if (!selectionController.isElementSelected(clickedPointLine)) {
-          clickedElementAlreadySelected = false;
-          break;
-        }
-      }
-
-      if (clickedElementAlreadySelected) {
-        final THLineSegment clickedLineSegment =
-            clickedElements.first as THLineSegment;
+      if (selectionController.isElementSelected(clickedLineSegment)) {
         final List<THLineSegment> lineSegments =
             selectionController.getLineSegmentAndPrevious(clickedLineSegment);
 
         if (shiftPressed) {
-          final bool firstLineSegmentSelected =
-              selectionController.isEndpointSelected(lineSegments.first);
-          final bool secondLineSegmentSelected =
-              selectionController.isEndpointSelected(lineSegments.last);
-
-          if (firstLineSegmentSelected && secondLineSegmentSelected) {
+          if (selectionController.isEndpointSelected(lineSegments.first) &&
+              selectionController.isEndpointSelected(lineSegments.last)) {
             selectionController.removeSelectedLineSegments(lineSegments);
           } else {
             selectionController.addSelectedLineSegments(lineSegments);
@@ -119,20 +106,24 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         }
         selectionController.updateSelectableEndAndControlPoints();
         th2FileEditController.triggerEditLineRedraw();
+
         return Future.value();
       } else {
         late bool stateChanged;
+        final THLine line = thFile.lineByMPID(
+          clickedLineSegment.parentMPID,
+        );
 
         selectionController.clearSelectedLineSegments();
 
         if (shiftPressed) {
-          stateChanged = selectionController.addSelectedElements(
-            clickedPointsLines,
+          stateChanged = selectionController.addSelectedElement(
+            line,
             setState: true,
           );
         } else {
           stateChanged = selectionController.setSelectedElements(
-            clickedPointsLines,
+            [line],
             setState: true,
           );
         }

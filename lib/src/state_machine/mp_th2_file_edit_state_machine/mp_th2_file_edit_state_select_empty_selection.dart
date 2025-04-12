@@ -21,14 +21,16 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// 1.2. If no, do nothing.
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    final List<THElement> clickedElements =
-        await selectionController.selectablePLClicked(event.localPosition);
+    final Map<int, THElement> clickedElements =
+        await selectionController.selectableElementsClicked(
+      screenCoordinates: event.localPosition,
+      selectionType: THSelectionType.pla,
+      canBeMultiple: true,
+    );
 
     if (clickedElements.isNotEmpty) {
       selectionController.setSelectedElements(
-        getSelectedElementsWithLineSegmentsConvertedToLines(
-          clickedElements,
-        ),
+        clickedElements.values,
         setState: true,
       );
     }

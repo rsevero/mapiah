@@ -21,7 +21,7 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
   }
 
   List<THElement> getSelectedElementsWithLineSegmentsConvertedToLines(
-    List<THElement> selectedWithLineSegments,
+    Iterable<THElement> selectedWithLineSegments,
   ) {
     final List<THElement> selectedElementsWithLines = [];
     final THFile thFile = th2FileEditController.thFile;

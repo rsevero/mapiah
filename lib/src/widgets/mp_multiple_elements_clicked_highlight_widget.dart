@@ -12,6 +12,7 @@ import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_circle_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/painters/th_line_segment_painter.dart';
 import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
 
 class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
@@ -39,7 +40,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
           }
 
           final List<THElement> highlightedElements = (highlightedMPID == 0)
-              ? selectionController.clickedElements
+              ? selectionController.clickedElements.values.toList()
               : [thFile.elementByMPID(highlightedMPID)];
 
           final List<CustomPainter> painters = [];
@@ -69,6 +70,21 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     position: highlightedElement.position.coordinates,
                     pointRadius: pointRadius,
                     pointPaint: borderPaint,
+                    th2FileEditController: th2FileEditController,
+                    canvasScale: canvasScale,
+                    canvasTranslation: canvasTranslation,
+                  ),
+                );
+              case THLineSegment _:
+                final THLineSegment previousLineSegment = thFile
+                    .lineByMPID(highlightedElement.mpID)
+                    .getPreviousLineSegment(highlightedElement, thFile);
+
+                painters.add(
+                  THLineSegmentPainter(
+                    previousLineSegment: previousLineSegment,
+                    lineSegment: highlightedElement,
+                    linePaintStroke: borderPaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,

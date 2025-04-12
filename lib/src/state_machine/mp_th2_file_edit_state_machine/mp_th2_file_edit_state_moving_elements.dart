@@ -22,27 +22,19 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    List<THElement> clickedElements =
-        await selectionController.selectablePLClicked(event.localPosition);
+    Map<int, THElement> clickedElements =
+        await selectionController.selectableElementsClicked(
+      screenCoordinates: event.localPosition,
+      selectionType: THSelectionType.pla,
+      canBeMultiple: false,
+    );
+    final THElement clickedElement = clickedElements.values.first;
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
-      clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
-        clickedElements,
-      );
-
-      bool clickedElementAlreadySelected = false;
-
-      for (final clickedElement in clickedElements) {
-        if (selectionController.isElementSelected(clickedElement)) {
-          clickedElementAlreadySelected = true;
-          break;
-        }
-      }
-
-      if (clickedElementAlreadySelected) {
+      if (selectionController.isElementSelected(clickedElement)) {
         if (shiftPressed) {
-          selectionController.removeSelectedElements(clickedElements);
+          selectionController.removeSelectedElement(clickedElement);
         } else {
           selectionController.setSelectionState();
         }
@@ -50,13 +42,13 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         return Future.value();
       } else {
         if (shiftPressed) {
-          selectionController.addSelectedElements(
-            clickedElements,
+          selectionController.addSelectedElement(
+            clickedElement,
             setState: true,
           );
         } else {
           selectionController.setSelectedElements(
-            clickedElements,
+            [clickedElement],
             setState: true,
           );
         }

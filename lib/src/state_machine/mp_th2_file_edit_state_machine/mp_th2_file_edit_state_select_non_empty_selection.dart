@@ -30,19 +30,22 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    List<THElement> clickedElements =
-        await selectionController.selectablePLClicked(event.localPosition);
+    final List<THElement> clickedElements =
+        (await selectionController.selectableElementsClicked(
+      screenCoordinates: event.localPosition,
+      selectionType: THSelectionType.pla,
+      canBeMultiple: true,
+    ))
+            .values
+            .toList();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
-      clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
-        clickedElements,
-      );
-      bool clickedElementAlreadySelected = false;
+      bool clickedElementAlreadySelected = true;
 
       for (final clickedElement in clickedElements) {
-        if (selectionController.isElementSelected(clickedElement)) {
-          clickedElementAlreadySelected = true;
+        if (!selectionController.isElementSelected(clickedElement)) {
+          clickedElementAlreadySelected = false;
           break;
         }
       }
@@ -96,8 +99,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   @override
   Future<void> onPrimaryButtonDragStart(PointerDownEvent event) async {
     selectionController.setDragStartCoordinates(event.localPosition);
-    List<THElement> clickedElements =
-        await selectionController.selectablePLClicked(event.localPosition);
+    Map<int, THElement> clickedElements =
+        await selectionController.selectableElementsClicked(
+      screenCoordinates: event.localPosition,
+      selectionType: THSelectionType.pla,
+      canBeMultiple: true,
+    );
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     if (clickedElements.isNotEmpty) {
@@ -105,11 +112,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         bool alreadySelected = false;
         final List<THElement> newlySelectedElements = [];
 
-        clickedElements = getSelectedElementsWithLineSegmentsConvertedToLines(
-          clickedElements,
-        );
-
-        for (final THElement element in clickedElements) {
+        for (final THElement element in clickedElements.values) {
           if (selectionController.isElementSelected(element)) {
             alreadySelected = true;
           } else {
