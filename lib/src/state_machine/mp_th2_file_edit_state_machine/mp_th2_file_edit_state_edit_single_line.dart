@@ -87,10 +87,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       canBeMultiple: false,
       presentMultipleElementsClickedWidget: true,
     );
-    final THLineSegment clickedLineSegment =
-        clickedElements.values.first as THLineSegment;
 
     if (clickedElements.isNotEmpty) {
+      final THLineSegment clickedLineSegment =
+          clickedElements.values.first as THLineSegment;
+
       if (selectionController.isElementSelected(clickedLineSegment)) {
         final List<THLineSegment> lineSegments =
             selectionController.getLineSegmentAndPrevious(clickedLineSegment);
