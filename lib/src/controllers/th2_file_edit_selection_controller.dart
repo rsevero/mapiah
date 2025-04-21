@@ -226,6 +226,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       case THPoint _:
         _mpSelectedElements[element.mpID] =
             MPSelectedPoint(originalPoint: element);
+      case THArea _:
+        _mpSelectedElements[element.mpID] =
+            MPSelectedArea(originalArea: element);
     }
     _isSelected[element.mpID]!.value = true;
     _th2FileEditController.triggerSelectedListChanged();
@@ -279,11 +282,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
 
     for (THElement element in clickedElements) {
-      if ((element is! THPoint) && (element is! THLine)) {
-        continue;
+      switch (element) {
+        case THPoint _:
+        case THLine _:
+        case THArea _:
+          addSelectedElement(element);
       }
-
-      addSelectedElement(element);
     }
 
     if (setState) {
@@ -380,22 +384,28 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final int elementMPID in scrap.childrenMPID) {
       final THElement element = _thFile.elementByMPID(elementMPID);
 
-      if (element is THPoint || element is THLine) {
+      if (element is THPoint || element is THLine || element is THArea) {
         addSelectableElement(element);
       }
     }
   }
 
   void addSelectableElement(THElement element) {
-    if ((element is! THPoint) && (element is! THLine)) {
-      return;
-    }
-
     switch (element) {
       case THPoint _:
         _addPointSelectableElement(element);
       case THLine _:
         _addLineSelectableElement(element);
+      case THArea _:
+        _addAreaSelectableElement(element);
+    }
+  }
+
+  void _addAreaSelectableElement(THArea area) {
+    final int areaMPID = area.mpID;
+
+    if (!_isSelected.containsKey(areaMPID)) {
+      _isSelected[areaMPID] = Observable(false);
     }
   }
 
