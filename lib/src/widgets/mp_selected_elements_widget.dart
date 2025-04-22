@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
@@ -7,45 +5,19 @@ import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_circle_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
+import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPSelectedElementsWidget extends StatelessWidget
-    with MPGetLineSegmentsMapMixin {
+    with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final THFile thFile;
-  late final double canvasScale;
-  late final Offset canvasTranslation;
 
   MPSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
   }) : thFile = th2FileEditController.thFile;
-
-  THLinePainter _getLinePainter({
-    required THLine line,
-    required Paint linePaint,
-    Paint? fillPaint,
-  }) {
-    final (LinkedHashMap<int, THLinePainterLineSegment> segmentsMap, _) =
-        getLineSegmentsAndEndpointsMaps(
-      line: line,
-      thFile: thFile,
-      returnLineSegments: false,
-    );
-
-    return THLinePainter(
-      lineSegmentsMap: segmentsMap,
-      linePaintStroke: linePaint,
-      linePaintFill: fillPaint,
-      th2FileEditController: th2FileEditController,
-      canvasScale: canvasScale,
-      canvasTranslation: canvasTranslation,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +46,9 @@ class MPSelectedElementsWidget extends StatelessWidget
             .getSelectedAreaBorderPaint()
             .paint;
 
-        canvasScale = th2FileEditController.canvasScale;
-        canvasTranslation = th2FileEditController.canvasTranslation;
+        final double canvasScale = th2FileEditController.canvasScale;
+        final Offset canvasTranslation =
+            th2FileEditController.canvasTranslation;
 
         for (final mpSelectedElement in mpSelectedElements) {
           final THElement element =
@@ -95,9 +68,12 @@ class MPSelectedElementsWidget extends StatelessWidget
               );
             case THLine _:
               painters.add(
-                _getLinePainter(
+                getLinePainter(
                   line: element,
                   linePaint: linePaint,
+                  th2FileEditController: th2FileEditController,
+                  canvasScale: canvasScale,
+                  canvasTranslation: canvasTranslation,
                 ),
               );
             case THArea _:
@@ -107,10 +83,13 @@ class MPSelectedElementsWidget extends StatelessWidget
                 final THLine line = thFile.lineByMPID(areaLineMPID);
 
                 painters.add(
-                  _getLinePainter(
+                  getLinePainter(
                     line: line,
                     linePaint: borderPaint,
                     fillPaint: fillPaint,
+                    th2FileEditController: th2FileEditController,
+                    canvasScale: canvasScale,
+                    canvasTranslation: canvasTranslation,
                   ),
                 );
               }

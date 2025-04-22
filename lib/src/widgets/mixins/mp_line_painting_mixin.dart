@@ -1,10 +1,13 @@
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
-mixin MPGetLineSegmentsMapMixin {
+mixin MPLinePaintingMixin {
   (
     LinkedHashMap<int, THLinePainterLineSegment>,
     LinkedHashMap<int, THLineSegment>
@@ -63,5 +66,30 @@ mixin MPGetLineSegmentsMapMixin {
     }
 
     return (lineSegmentsMap, lineEndpointsMap);
+  }
+
+  THLinePainter getLinePainter({
+    required THLine line,
+    required Paint linePaint,
+    Paint? fillPaint,
+    required double canvasScale,
+    required Offset canvasTranslation,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final (LinkedHashMap<int, THLinePainterLineSegment> segmentsMap, _) =
+        getLineSegmentsAndEndpointsMaps(
+      line: line,
+      thFile: th2FileEditController.thFile,
+      returnLineSegments: false,
+    );
+
+    return THLinePainter(
+      lineSegmentsMap: segmentsMap,
+      linePaintStroke: linePaint,
+      linePaintFill: fillPaint,
+      th2FileEditController: th2FileEditController,
+      canvasScale: canvasScale,
+      canvasTranslation: canvasTranslation,
+    );
   }
 }

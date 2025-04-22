@@ -13,10 +13,10 @@ import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_circle_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/painters/th_line_segment_painter.dart';
-import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
+import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
-    with MPGetLineSegmentsMapMixin {
+    with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final THFile thFile;
 

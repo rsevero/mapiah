@@ -1,22 +1,17 @@
-import 'dart:collection';
-
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
-import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_circle_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/widgets/mixins/mp_get_line_segments_map_mixin.dart';
+import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPNonSelectedElementsWidget extends StatelessWidget
-    with MPGetLineSegmentsMapMixin {
+    with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
   final THFile thFile;
@@ -43,8 +38,9 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             th2FileEditController.canvasTranslation;
 
         for (final int drawableElementMPID in drawableElementMPIDs) {
-          if (selectionController
-              .isElementSelectedByMPID(drawableElementMPID)) {
+          if (selectionController.isElementSelectedByMPID(
+            drawableElementMPID,
+          )) {
             continue;
           }
 
@@ -54,6 +50,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             case THPoint _:
               final THPointPaint pointPaint =
                   visualController.getUnselectedPointPaint(element);
+
               painters.add(
                 THCirclePointPainter(
                   position: element.position.coordinates,
@@ -66,36 +63,32 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               );
             case THLine _:
               final int? areaMPID = thFile.getAreaMPIDByLineMPID(element.mpID);
-              late final THLinePaint linePaintStroke;
-              late final THLinePaint? linePaintFill;
+              late final Paint linePaintStroke;
+              late final Paint? linePaintFill;
 
               if (areaMPID == null) {
                 linePaintStroke =
-                    visualController.getUnselectedLinePaint(element);
+                    visualController.getUnselectedLinePaint(element).paint;
                 linePaintFill = null;
               } else {
+                if (selectionController.isElementSelectedByMPID(areaMPID)) {
+                  continue;
+                }
+
                 final THArea area = thFile.areaByMPID(areaMPID);
 
                 linePaintStroke =
-                    visualController.getUnselectedAreaBorderPaint(area);
+                    visualController.getUnselectedAreaBorderPaint(area).paint;
+
                 linePaintFill =
-                    visualController.getUnselectedAreaFillPaint(area);
+                    visualController.getUnselectedAreaFillPaint(area).paint;
               }
 
-              final (
-                LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
-                _
-              ) = getLineSegmentsAndEndpointsMaps(
-                line: element,
-                thFile: thFile,
-                returnLineSegments: false,
-              );
-
               painters.add(
-                THLinePainter(
-                  lineSegmentsMap: segmentsMap,
-                  linePaintStroke: linePaintStroke.paint,
-                  linePaintFill: linePaintFill?.paint,
+                getLinePainter(
+                  line: element,
+                  linePaint: linePaintStroke,
+                  fillPaint: linePaintFill,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,
