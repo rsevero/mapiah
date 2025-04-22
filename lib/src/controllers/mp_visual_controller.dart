@@ -45,18 +45,14 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THLinePaint getSelectedAreaFillPaint(THArea area) {
-    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint1002
-        : THPaints.thPaint1016;
+  THLinePaint getSelectedAreaFillPaint() {
+    final Paint paint = THPaints.thPaint1002;
 
     return THLinePaint(paint: paint);
   }
 
-  THLinePaint getSelectedAreaBorderPaint(THArea area) {
-    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint2
-        : THPaints.thPaint16;
+  THLinePaint getSelectedAreaBorderPaint() {
+    final Paint paint = THPaints.thPaint2;
 
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 

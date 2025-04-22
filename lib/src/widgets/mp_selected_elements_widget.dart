@@ -17,11 +17,35 @@ class MPSelectedElementsWidget extends StatelessWidget
     with MPGetLineSegmentsMapMixin {
   final TH2FileEditController th2FileEditController;
   final THFile thFile;
+  late final double canvasScale;
+  late final Offset canvasTranslation;
 
   MPSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
   }) : thFile = th2FileEditController.thFile;
+
+  THLinePainter _getLinePainter({
+    required THLine line,
+    required Paint linePaint,
+    Paint? fillPaint,
+  }) {
+    final (LinkedHashMap<int, THLinePainterLineSegment> segmentsMap, _) =
+        getLineSegmentsAndEndpointsMaps(
+      line: line,
+      thFile: thFile,
+      returnLineSegments: false,
+    );
+
+    return THLinePainter(
+      lineSegmentsMap: segmentsMap,
+      linePaintStroke: linePaint,
+      linePaintFill: fillPaint,
+      th2FileEditController: th2FileEditController,
+      canvasScale: canvasScale,
+      canvasTranslation: canvasTranslation,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +67,15 @@ class MPSelectedElementsWidget extends StatelessWidget
             th2FileEditController.visualController.getSelectedLinePaint();
         final Paint linePaint = linePaintInfo.paint;
 
-        final double canvasScale = th2FileEditController.canvasScale;
-        final Offset canvasTranslation =
-            th2FileEditController.canvasTranslation;
+        final Paint fillPaint = th2FileEditController.visualController
+            .getSelectedAreaFillPaint()
+            .paint;
+        final Paint borderPaint = th2FileEditController.visualController
+            .getSelectedAreaBorderPaint()
+            .paint;
+
+        canvasScale = th2FileEditController.canvasScale;
+        canvasTranslation = th2FileEditController.canvasTranslation;
 
         for (final mpSelectedElement in mpSelectedElements) {
           final THElement element =
@@ -64,24 +94,26 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
-              final (
-                LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
-                _
-              ) = getLineSegmentsAndEndpointsMaps(
-                line: element,
-                thFile: thFile,
-                returnLineSegments: false,
-              );
-
               painters.add(
-                THLinePainter(
-                  lineSegmentsMap: segmentsMap,
-                  linePaintStroke: linePaint,
-                  th2FileEditController: th2FileEditController,
-                  canvasScale: canvasScale,
-                  canvasTranslation: canvasTranslation,
+                _getLinePainter(
+                  line: element,
+                  linePaint: linePaint,
                 ),
               );
+            case THArea _:
+              final Set<int> areaLineMPIDs = element.getLineMPIDs(thFile);
+
+              for (final int areaLineMPID in areaLineMPIDs) {
+                final THLine line = thFile.lineByMPID(areaLineMPID);
+
+                painters.add(
+                  _getLinePainter(
+                    line: line,
+                    linePaint: borderPaint,
+                    fillPaint: fillPaint,
+                  ),
+                );
+              }
           }
         }
 
