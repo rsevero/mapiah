@@ -743,6 +743,30 @@ abstract class AppLocalizations {
   /// **'Multiple elements clicked'**
   String get mpMultipleElementsClickedTitle;
 
+  /// The title for the multiple end control points clicked dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple points clicked'**
+  String get mpMultipleEndControlPointsClickedTitle;
+
+  /// The label for the control point 1 in the multiple end control points dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Control point 1'**
+  String get mpMultipleEndControlPointsControlPoint1;
+
+  /// The label for the control point 2 in the multiple end control points dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Control point 2'**
+  String get mpMultipleEndControlPointsControlPoint2;
+
+  /// The label for the end point in the multiple end control points dialog
+  ///
+  /// In en, this message translates to:
+  /// **'End point'**
+  String get mpMultipleEndControlPointsEndPoint;
+
   /// The label for the tiny named scale
   ///
   /// In en, this message translates to:

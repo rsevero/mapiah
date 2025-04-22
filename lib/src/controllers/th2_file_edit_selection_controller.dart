@@ -51,15 +51,31 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   MPSelectableControlPoint? _selectedControlPoint;
 
+  List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
+
   @readonly
-  int _multipleElementsClickedChoice = mpMultipleElementsClickedAllChoiceID;
+  MPMultipleEndControlPointsClickedChoice
+      _multipleEndControlPointsClickedChoice =
+      MPMultipleEndControlPointsClickedChoice(
+    type: MPMultipleEndControlPointsClickedType.all,
+  );
+
+  @readonly
+  MPMultipleEndControlPointsClickedChoice
+      _multipleEndControlPointsClickedHighlightedChoice =
+      MPMultipleEndControlPointsClickedChoice(
+    type: MPMultipleEndControlPointsClickedType.none,
+  );
 
   Map<int, THElement> clickedElements = {};
 
   @readonly
+  int _multipleElementsClickedChoice = mpMultipleElementsClickedAllChoiceID;
+
+  @readonly
   int? _multipleElementsClickedHighlightedMPID;
 
-  Completer<void> multipleElementsClickedSemaphore = Completer<void>();
+  Completer<void> multipleClickedSemaphore = Completer<void>();
 
   bool selectionCanBeMultiple = false;
 
@@ -504,8 +520,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         true,
       );
 
-      multipleElementsClickedSemaphore = Completer<void>();
-      await multipleElementsClickedSemaphore.future;
+      multipleClickedSemaphore = Completer<void>();
+      await multipleClickedSemaphore.future;
 
       if (_multipleElementsClickedChoice > 0) {
         clickedElements.clear();
@@ -539,15 +555,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return insideWindowElements.values.toList();
   }
 
-  List<MPSelectableEndControlPoint> selectableEndControlPointsClicked({
+  Future<List<MPSelectableEndControlPoint>> selectableEndControlPointsClicked({
     required Offset screenCoordinates,
     required bool includeControlPoints,
     required bool canBeMultiple,
-    required bool presentMultipleElementsClickedWidget,
-  }) {
+    required bool presentMultipleEndControlPointsClickedWidget,
+  }) async {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
-    final List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
+    clickedEndControlPoints.clear();
 
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
@@ -558,6 +574,29 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             (endControlPoint is MPSelectableControlPoint)) {
           clickedEndControlPoints.add(endControlPoint);
         }
+      }
+    }
+
+    if ((clickedEndControlPoints.length > 1) &&
+        presentMultipleEndControlPointsClickedWidget) {
+      selectionCanBeMultiple = canBeMultiple;
+      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        MPWindowType.multipleEndControlPointsClicked,
+        true,
+      );
+
+      multipleClickedSemaphore = Completer<void>();
+      await multipleClickedSemaphore.future;
+
+      if (_multipleEndControlPointsClickedChoice.type ==
+          MPMultipleEndControlPointsClickedType.single) {
+        clickedEndControlPoints.clear();
+        clickedEndControlPoints.add(
+          _multipleEndControlPointsClickedChoice.endControlPoint!,
+        );
+      } else if (_multipleEndControlPointsClickedChoice.type ==
+          MPMultipleEndControlPointsClickedType.none) {
+        clickedEndControlPoints.clear();
       }
     }
 
@@ -1127,9 +1166,48 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
     _multipleElementsClickedHighlightedMPID = mpID;
   }
+
+  void setMultipleEndControlPointsClickedChoice(
+    MPMultipleEndControlPointsClickedChoice choice,
+  ) {
+    _multipleEndControlPointsClickedChoice = choice;
+  }
+
+  void performMultipleEndControlPointsClickedChoosen(
+    MPMultipleEndControlPointsClickedChoice choice,
+  ) {
+    _multipleEndControlPointsClickedChoice = choice;
+
+    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPWindowType.multipleEndControlPointsClicked,
+      false,
+    );
+  }
+
+  @action
+  void setMultipleEndControlPointsClickedHighlightedChoice(
+      MPMultipleEndControlPointsClickedChoice choice) {
+    _multipleEndControlPointsClickedHighlightedChoice = choice;
+  }
 }
 
 enum THSelectionType {
   lineSegment,
   pla;
+}
+
+enum MPMultipleEndControlPointsClickedType {
+  all,
+  none,
+  single;
+}
+
+class MPMultipleEndControlPointsClickedChoice {
+  final MPSelectableEndControlPoint? endControlPoint;
+  final MPMultipleEndControlPointsClickedType type;
+
+  MPMultipleEndControlPointsClickedChoice({
+    this.endControlPoint,
+    required this.type,
+  });
 }

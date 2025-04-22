@@ -252,6 +252,12 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.multipleElementsClickedHighlightedMPID != null;
 
   @computed
+  bool get showMultipleEndControlPointsClickedHighlight =>
+      selectionController
+          .multipleEndControlPointsClickedHighlightedChoice.type !=
+      MPMultipleEndControlPointsClickedType.none;
+
+  @computed
   bool get removeButtonEnabled =>
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 

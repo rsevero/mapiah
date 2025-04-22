@@ -55,7 +55,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 THCirclePointPainter(
                   position: element.position.coordinates,
                   pointRadius: pointPaint.radius,
-                  pointPaint: pointPaint.paint,
+                  pointBorderPaint: pointPaint.paint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,

@@ -57,6 +57,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     MPWindowType.availableScraps,
     MPWindowType.commandOptions,
     MPWindowType.multipleElementsClicked,
+    MPWindowType.multipleEndControlPointsClicked,
     MPWindowType.optionChoices,
     MPWindowType.plaTypes,
     MPWindowType.scrapOptions,
@@ -178,11 +179,11 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           : _overlayWindows.keys.last;
     }
 
-    if ((type == MPWindowType.multipleElementsClicked) &&
-        (!_th2FileEditController.selectionController
-            .multipleElementsClickedSemaphore.isCompleted)) {
-      _th2FileEditController
-          .selectionController.multipleElementsClickedSemaphore
+    if (((type == MPWindowType.multipleElementsClicked) ||
+            (type == MPWindowType.multipleEndControlPointsClicked)) &&
+        (!_th2FileEditController
+            .selectionController.multipleClickedSemaphore.isCompleted)) {
+      _th2FileEditController.selectionController.multipleClickedSemaphore
           .complete();
     }
 

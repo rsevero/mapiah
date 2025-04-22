@@ -45,17 +45,16 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
-    /// TODO: deal with multiple end points returned on same click.
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =
-        selectionController.selectableEndControlPointsClicked(
+        await selectionController.selectableEndControlPointsClicked(
       screenCoordinates: event.localPosition,
-      includeControlPoints: false,
-      canBeMultiple: true,
-      presentMultipleElementsClickedWidget: true,
+      includeControlPoints: true,
+      canBeMultiple: false,
+      presentMultipleEndControlPointsClickedWidget: true,
     );
 
     _dragShouldMovePoints = false;
-
+    print('clickedEndControlPoints: $clickedEndControlPoints');
     if (clickedEndControlPoints.isNotEmpty) {
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;
@@ -151,16 +150,16 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
-  void onPrimaryButtonPointerDown(PointerDownEvent event) {
+  Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
     selectionController.setDragStartCoordinates(event.localPosition);
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =
-        selectionController.selectableEndControlPointsClicked(
+        await selectionController.selectableEndControlPointsClicked(
       screenCoordinates: event.localPosition,
       includeControlPoints: true,
-      canBeMultiple: false,
-      presentMultipleElementsClickedWidget: false,
+      canBeMultiple: true,
+      presentMultipleEndControlPointsClickedWidget: false,
     );
 
     _dragShouldMovePoints = false;
@@ -178,8 +177,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
                   endControlPoint.element as THLineSegment;
 
               if (!selectionController.isEndpointSelected(element)) {
-                /// TODO: deal with multiple end/control points returned on same
-                /// click.
                 _selectedEndControlPointsOnDragStart.add(endControlPoint);
               }
           }

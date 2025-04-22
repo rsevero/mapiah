@@ -348,6 +348,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpMultipleElementsClickedTitle => 'Vários elementos clicados';
 
   @override
+  String get mpMultipleEndControlPointsClickedTitle => 'Vários pontos clicados';
+
+  @override
+  String get mpMultipleEndControlPointsControlPoint1 => 'Ponto de controle 1';
+
+  @override
+  String get mpMultipleEndControlPointsControlPoint2 => 'Ponto de controle 2';
+
+  @override
+  String get mpMultipleEndControlPointsEndPoint => 'Ponto final';
+
+  @override
   String get mpNamedScaleTiny => 'Minúsculo';
 
   @override

@@ -658,6 +658,30 @@
     "type": "text"
   },
 
+  "mpMultipleEndControlPointsClickedTitle": "Multiple points clicked",
+  "@mpMultipleEndControlPointsClickedTitle": {
+    "description": "The title for the multiple end control points clicked dialog",
+    "type": "text"
+  },
+
+  "mpMultipleEndControlPointsControlPoint1": "Control point 1",
+  "@mpMultipleEndControlPointsControlPoint1": {
+    "description": "The label for the control point 1 in the multiple end control points dialog",
+    "type": "text"
+  },
+
+  "mpMultipleEndControlPointsControlPoint2": "Control point 2",
+  "@mpMultipleEndControlPointsControlPoint2": {
+    "description": "The label for the control point 2 in the multiple end control points dialog",
+    "type": "text"
+  },
+
+  "mpMultipleEndControlPointsEndPoint": "End point",
+  "@mpMultipleEndControlPointsEndPoint": {
+    "description": "The label for the end point in the multiple end control points dialog",
+    "type": "text"
+  },
+
   "mpNamedScaleTiny": "Tiny",
   "@mpNamedScaleTiny": {
     "description": "The label for the tiny named scale",

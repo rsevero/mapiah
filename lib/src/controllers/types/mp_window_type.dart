@@ -3,6 +3,7 @@ enum MPWindowType {
   commandOptions,
   mainTHFileEditWindow,
   multipleElementsClicked,
+  multipleEndControlPointsClicked,
   optionChoices,
   plaTypes,
   scrapOptions;

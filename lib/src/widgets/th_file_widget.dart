@@ -10,6 +10,7 @@ import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_edit_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_highlight_widget.dart';
+import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_highlight_widget.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_scale_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
@@ -130,6 +131,20 @@ class THFileWidget extends StatelessWidget {
                       return MPMultipleElementsClickedHighlightWidget(
                         key: ValueKey(
                             "MPMultipleElementsClickedHighlightWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController
+                        .showMultipleEndControlPointsClickedHighlight) {
+                      return MPMultipleEndControlPointsClickedHighlightWidget(
+                        key: ValueKey(
+                            "MPMultipleEndControlPointsClickedHighlightWidget|$thFileMPID"),
                         th2FileEditController: th2FileEditController,
                       );
                     } else {

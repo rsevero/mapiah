@@ -60,7 +60,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                 THCirclePointPainter(
                   position: element.position.coordinates,
                   pointRadius: pointRadius,
-                  pointPaint: pointPaint,
+                  pointBorderPaint: pointPaint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,

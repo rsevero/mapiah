@@ -1,0 +1,217 @@
+import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/selectable/mp_selectable.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
+import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
+
+class MPMultipleEndControlPointsClickedWidget extends StatefulWidget {
+  final TH2FileEditController th2FileEditController;
+  final Offset outerAnchorPosition;
+
+  const MPMultipleEndControlPointsClickedWidget({
+    super.key,
+    required this.th2FileEditController,
+    required this.outerAnchorPosition,
+  });
+
+  @override
+  State<MPMultipleEndControlPointsClickedWidget> createState() =>
+      _MPMultipleEndControlPointsClickedWidgetState();
+}
+
+class _MPMultipleEndControlPointsClickedWidgetState
+    extends State<MPMultipleEndControlPointsClickedWidget> {
+  late final TH2FileEditController th2FileEditController;
+  late final TH2FileEditSelectionController selectionController;
+  late final List<MPSelectableEndControlPoint> clickedEndControlPoints;
+  late final AppLocalizations appLocalizations;
+  late final THFile thFile;
+
+  @override
+  void initState() {
+    super.initState();
+    th2FileEditController = widget.th2FileEditController;
+    selectionController = th2FileEditController.selectionController;
+    clickedEndControlPoints = selectionController.clickedEndControlPoints;
+    appLocalizations = mpLocator.appLocalizations;
+    thFile = th2FileEditController.thFile;
+    selectionController.setMultipleEndControlPointsClickedChoice(
+      MPMultipleEndControlPointsClickedChoice(
+        type: MPMultipleEndControlPointsClickedType.none,
+      ),
+    );
+    selectionController.setMultipleEndControlPointsClickedHighlightedChoice(
+      MPMultipleEndControlPointsClickedChoice(
+        type: MPMultipleEndControlPointsClickedType.none,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    selectionController.setMultipleEndControlPointsClickedHighlightedChoice(
+      MPMultipleEndControlPointsClickedChoice(
+        type: MPMultipleEndControlPointsClickedType.none,
+      ),
+    );
+    super.dispose();
+  }
+
+  String getEndPointName(MPSelectableEndPoint endPoint) {
+    final THElement element = endPoint.element;
+    String pointName = '';
+
+    switch (element) {
+      case THBezierCurveLineSegment _:
+        pointName = appLocalizations.thElementBezierCurveLineSegment;
+      case THStraightLineSegment _:
+        pointName = appLocalizations.thElementStraightLineSegment;
+      default:
+        return pointName;
+    }
+
+    pointName += ' ${appLocalizations.mpMultipleEndControlPointsEndPoint}';
+
+    return pointName;
+  }
+
+  String getControlPointName(MPSelectableControlPoint controlPoint) {
+    final THElement element = controlPoint.element;
+    String pointName = '';
+    switch (element) {
+      case THBezierCurveLineSegment _:
+        pointName = appLocalizations.thElementBezierCurveLineSegment;
+      case THStraightLineSegment _:
+        pointName = appLocalizations.thElementStraightLineSegment;
+      default:
+        return pointName;
+    }
+
+    switch (controlPoint.type) {
+      case MPSelectableControlPointType.controlPoint1:
+        pointName +=
+            ' ${appLocalizations.mpMultipleEndControlPointsControlPoint1}';
+      case MPSelectableControlPointType.controlPoint2:
+        pointName +=
+            ' ${appLocalizations.mpMultipleEndControlPointsControlPoint2}';
+    }
+
+    return pointName;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<int, String> options = {};
+
+    if (selectionController.selectionCanBeMultiple) {
+      options[0] = appLocalizations.mpMultipleElementsClickedAllChoice;
+    }
+
+    int index = 1;
+    for (final clickedEndControlPoint in clickedEndControlPoints) {
+      switch (clickedEndControlPoint) {
+        case MPSelectableControlPoint _:
+          options[index] = getControlPointName(clickedEndControlPoint);
+        case MPSelectableEndPoint _:
+          options[index] = getEndPointName(clickedEndControlPoint);
+      }
+      index++;
+    }
+
+    return MPOverlayWindowWidget(
+      title: appLocalizations.mpMultipleEndControlPointsClickedTitle,
+      overlayWindowType: MPOverlayWindowType.primary,
+      outerAnchorPosition: widget.outerAnchorPosition,
+      innerAnchorType: MPWidgetPositionType.leftCenter,
+      th2FileEditController: th2FileEditController,
+      children: [
+        const SizedBox(height: mpButtonSpace),
+        MPOverlayWindowBlockWidget(
+          overlayWindowBlockType: MPOverlayWindowBlockType.main,
+          padding: mpOverlayWindowBlockEdgeInsets,
+          children: [
+            Builder(builder: (blockContext) {
+              return Column(
+                children: options.entries.map(
+                  (entry) {
+                    final int choiceID = entry.key;
+                    final String choiceName = entry.value;
+
+                    return MouseRegion(
+                      onEnter: (_) {
+                        _onMouseEnter(choiceID);
+                      },
+                      onExit: (_) {
+                        _onMouseExit(choiceID);
+                      },
+                      child: RadioListTile<int>(
+                        title: Text(
+                          choiceName,
+                          style: DefaultTextStyle.of(blockContext).style,
+                        ),
+                        value: choiceID,
+                        groupValue: mpMultipleElementsClickedNoneChoiceID,
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: IconTheme.of(blockContext).color,
+                        dense: true,
+                        visualDensity: VisualDensity.adaptivePlatformDensity,
+                        onChanged: (int? value) {
+                          if (value != null) {
+                            _onTapSelectedElement(value);
+                          }
+                        },
+                      ),
+                    );
+                  },
+                ).toList(),
+              );
+            }),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _onTapSelectedElement(int choiceID) {
+    selectionController.performMultipleEndControlPointsClickedChoosen(
+      choiceID == mpMultipleElementsClickedAllChoiceID
+          ? MPMultipleEndControlPointsClickedChoice(
+              type: MPMultipleEndControlPointsClickedType.all,
+            )
+          : MPMultipleEndControlPointsClickedChoice(
+              type: MPMultipleEndControlPointsClickedType.single,
+              endControlPoint: clickedEndControlPoints[choiceID - 1],
+            ),
+    );
+  }
+
+  void _onMouseEnter(int choiceID) {
+    selectionController.setMultipleEndControlPointsClickedHighlightedChoice(
+      choiceID == mpMultipleElementsClickedAllChoiceID
+          ? MPMultipleEndControlPointsClickedChoice(
+              type: MPMultipleEndControlPointsClickedType.all,
+            )
+          : MPMultipleEndControlPointsClickedChoice(
+              type: MPMultipleEndControlPointsClickedType.single,
+              endControlPoint: clickedEndControlPoints[choiceID - 1],
+            ),
+    );
+  }
+
+  void _onMouseExit(int choiceID) {
+    selectionController.setMultipleEndControlPointsClickedHighlightedChoice(
+      MPMultipleEndControlPointsClickedChoice(
+        type: MPMultipleEndControlPointsClickedType.none,
+      ),
+    );
+  }
+}

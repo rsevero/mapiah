@@ -9,6 +9,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_widget.dart';
+import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
@@ -77,6 +78,17 @@ class MPOverlayWindowFactory {
         );
 
         overlayWindowWidget = MPMultipleElementsClickedWidget(
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+        );
+      case MPWindowType.multipleEndControlPointsClicked:
+        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+          th2FileEditController.selectionController
+              .getClickedElementsBoundingBoxOnCanvas()
+              .centerRight,
+        );
+
+        overlayWindowWidget = MPMultipleEndControlPointsClickedWidget(
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
         );

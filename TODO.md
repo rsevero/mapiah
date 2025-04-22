@@ -13,7 +13,7 @@ Version 0.2
 [X] - All buttons (including zoom buttons) should use default button color
 [ ] - Copy/Paste
 [ ] - Different points and line representations
-[ ] - Areas
+[X] - Areas
 [X] - Scrap options
 [ ] - Line segment options
 [ ] - Show direction of lines

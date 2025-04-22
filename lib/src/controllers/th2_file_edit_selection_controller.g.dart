@@ -149,6 +149,56 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
+  late final _$_multipleEndControlPointsClickedChoiceAtom = Atom(
+      name:
+          'TH2FileEditSelectionControllerBase._multipleEndControlPointsClickedChoice',
+      context: context);
+
+  MPMultipleEndControlPointsClickedChoice
+      get multipleEndControlPointsClickedChoice {
+    _$_multipleEndControlPointsClickedChoiceAtom.reportRead();
+    return super._multipleEndControlPointsClickedChoice;
+  }
+
+  @override
+  MPMultipleEndControlPointsClickedChoice
+      get _multipleEndControlPointsClickedChoice =>
+          multipleEndControlPointsClickedChoice;
+
+  @override
+  set _multipleEndControlPointsClickedChoice(
+      MPMultipleEndControlPointsClickedChoice value) {
+    _$_multipleEndControlPointsClickedChoiceAtom
+        .reportWrite(value, super._multipleEndControlPointsClickedChoice, () {
+      super._multipleEndControlPointsClickedChoice = value;
+    });
+  }
+
+  late final _$_multipleEndControlPointsClickedHighlightedChoiceAtom = Atom(
+      name:
+          'TH2FileEditSelectionControllerBase._multipleEndControlPointsClickedHighlightedChoice',
+      context: context);
+
+  MPMultipleEndControlPointsClickedChoice
+      get multipleEndControlPointsClickedHighlightedChoice {
+    _$_multipleEndControlPointsClickedHighlightedChoiceAtom.reportRead();
+    return super._multipleEndControlPointsClickedHighlightedChoice;
+  }
+
+  @override
+  MPMultipleEndControlPointsClickedChoice
+      get _multipleEndControlPointsClickedHighlightedChoice =>
+          multipleEndControlPointsClickedHighlightedChoice;
+
+  @override
+  set _multipleEndControlPointsClickedHighlightedChoice(
+      MPMultipleEndControlPointsClickedChoice value) {
+    _$_multipleEndControlPointsClickedHighlightedChoiceAtom.reportWrite(
+        value, super._multipleEndControlPointsClickedHighlightedChoice, () {
+      super._multipleEndControlPointsClickedHighlightedChoice = value;
+    });
+  }
+
   late final _$_multipleElementsClickedChoiceAtom = Atom(
       name: 'TH2FileEditSelectionControllerBase._multipleElementsClickedChoice',
       context: context);
@@ -510,6 +560,21 @@ mixin _$TH2FileEditSelectionController
                 'TH2FileEditSelectionControllerBase.setMultipleElementsClickedHighlightedMPIDs');
     try {
       return super.setMultipleElementsClickedHighlightedMPIDs(mpID);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMultipleEndControlPointsClickedHighlightedChoice(
+      MPMultipleEndControlPointsClickedChoice choice) {
+    final _$actionInfo =
+        _$TH2FileEditSelectionControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditSelectionControllerBase.setMultipleEndControlPointsClickedHighlightedChoice');
+    try {
+      return super.setMultipleEndControlPointsClickedHighlightedChoice(choice);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController
           .endAction(_$actionInfo);

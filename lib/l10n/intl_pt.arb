@@ -133,6 +133,11 @@
   "mpMultipleElementsClickedAllChoice": "Todos",
   "mpMultipleElementsClickedTitle": "Vários elementos clicados",
 
+  "mpMultipleEndControlPointsClickedTitle": "Vários pontos clicados",
+  "mpMultipleEndControlPointsControlPoint1": "Ponto de controle 1",
+  "mpMultipleEndControlPointsControlPoint2": "Ponto de controle 2",
+  "mpMultipleEndControlPointsEndPoint": "Ponto final",
+
   "mpNamedScaleTiny": "Minúsculo",
   "mpNamedScaleSmall": "Pequeno",
   "mpNamedScaleNormal": "Normal",

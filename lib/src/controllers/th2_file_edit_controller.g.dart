@@ -130,6 +130,16 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
               name:
                   'TH2FileEditControllerBase.showMultipleElementsClickedHighlight'))
           .value;
+  Computed<bool>? _$showMultipleEndControlPointsClickedHighlightComputed;
+
+  @override
+  bool get showMultipleEndControlPointsClickedHighlight =>
+      (_$showMultipleEndControlPointsClickedHighlightComputed ??= Computed<
+                  bool>(
+              () => super.showMultipleEndControlPointsClickedHighlight,
+              name:
+                  'TH2FileEditControllerBase.showMultipleEndControlPointsClickedHighlight'))
+          .value;
   Computed<bool>? _$removeButtonEnabledComputed;
 
   @override
@@ -1398,6 +1408,7 @@ showSelectionWindow: ${showSelectionWindow},
 showAddLine: ${showAddLine},
 showScrapScale: ${showScrapScale},
 showMultipleElementsClickedHighlight: ${showMultipleElementsClickedHighlight},
+showMultipleEndControlPointsClickedHighlight: ${showMultipleEndControlPointsClickedHighlight},
 removeButtonEnabled: ${removeButtonEnabled},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},

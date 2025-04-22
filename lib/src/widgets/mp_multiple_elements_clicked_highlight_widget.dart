@@ -69,7 +69,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   THCirclePointPainter(
                     position: highlightedElement.position.coordinates,
                     pointRadius: pointRadius,
-                    pointPaint: borderPaint,
+                    pointBorderPaint: borderPaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,
