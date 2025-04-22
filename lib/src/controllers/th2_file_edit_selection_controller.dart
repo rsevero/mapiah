@@ -827,6 +827,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final mpAreaLine in mpAreaLines) {
       _updateTHLinePosition(mpAreaLine, localDeltaPositionOnCanvas);
     }
+
+    _thFile.areaByMPID(selectedArea.mpID).clearBoundingBox();
   }
 
   void moveSelectedEndControlPointsToScreenCoordinates(
