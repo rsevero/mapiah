@@ -1,7 +1,7 @@
 part of 'mp_selected_element.dart';
 
 class MPSelectedPoint extends MPSelectedElement {
-  late THPoint originalPointClone;
+  late final THPoint originalPointClone;
 
   MPSelectedPoint({required THPoint originalPoint}) {
     _createClone(originalPoint);
@@ -19,8 +19,9 @@ class MPSelectedPoint extends MPSelectedElement {
   }
 
   @override
-  void updateClone(THFile thFile) {
-    final THPoint updatedOriginalPoint = thFile.pointByMPID(mpID);
+  void updateClone(TH2FileEditController th2FileEditController) {
+    final THPoint updatedOriginalPoint =
+        th2FileEditController.thFile.pointByMPID(mpID);
 
     _createClone(updatedOriginalPoint);
   }

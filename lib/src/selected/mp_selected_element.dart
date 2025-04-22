@@ -2,9 +2,10 @@ library;
 
 import 'dart:collection';
 
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/selectable/mp_selectable.dart';
 
 part 'mp_selected_area.dart';
 part 'mp_selected_line.dart';
@@ -15,5 +16,5 @@ abstract class MPSelectedElement {
 
   THElement get originalElementClone;
 
-  void updateClone(THFile thFile);
+  void updateClone(TH2FileEditController th2FileEditController);
 }

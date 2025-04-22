@@ -38,8 +38,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
 
   @readonly
-  ObservableMap<int, MPSelectedElement> _mpSelectedElements =
+  ObservableMap<int, MPSelectedElement> _mpSelectedElementsLogical =
       ObservableMap<int, MPSelectedElement>();
+
+  @readonly
+  ObservableMap<int, THElement> _selectedElementsDrawable =
+      ObservableMap<int, THElement>();
 
   @readonly
   Iterable<THElement> _clickedElementsAtPointerDown = {};
@@ -89,7 +93,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   /// Used to search for selected elements by list of selectable coordinates.
   @readonly
-  ObservableMap<int, MPSelectable> _selectableElements =
+  ObservableMap<int, MPSelectable> _mpSelectableElements =
       ObservableMap<int, MPSelectable>();
 
   Offset dragStartCanvasCoordinates = Offset.zero;
@@ -144,7 +148,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void substituteSelectedElementsByClickedElements() {
-    _mpSelectedElements.clear();
+    _mpSelectedElementsLogical.clear();
+    _selectedElementsDrawable.clear();
     for (final THElement clickedElement in _clickedElementsAtPointerDown) {
       addSelectedElement(clickedElement);
     }
@@ -153,7 +158,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   Rect getSelectedElementsBoundingBox() {
-    final Iterable<THElement> selectedElements = _mpSelectedElements.values.map(
+    final Iterable<THElement> selectedElements =
+        _mpSelectedElementsLogical.values.map(
       (MPSelectedElement selectedElement) =>
           _thFile.elementByMPID(selectedElement.mpID),
     );
@@ -167,15 +173,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void removeSelected() {
-    if (_mpSelectedElements.isEmpty) {
+    if (_mpSelectedElementsLogical.isEmpty) {
       return;
     }
 
     late MPCommand mpCommand;
 
-    if (_mpSelectedElements.length == 1) {
+    if (_mpSelectedElementsLogical.length == 1) {
       final THElement singleSelectedElement =
-          _mpSelectedElements.values.toList().first.originalElementClone;
+          _mpSelectedElementsLogical.values.toList().first.originalElementClone;
 
       switch (singleSelectedElement) {
         case THPoint _:
@@ -191,7 +197,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           );
       }
     } else {
-      final List<int> selectedMPIDs = _mpSelectedElements.keys.toList();
+      final List<int> selectedMPIDs = _mpSelectedElementsLogical.keys.toList();
 
       mpCommand = MPMultipleElementsCommand.removeElements(
         mpIDs: selectedMPIDs,
@@ -205,30 +211,44 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void updateSelectedElementClone(int mpID) {
-    if (_mpSelectedElements.containsKey(mpID)) {
-      _mpSelectedElements[mpID]!.updateClone(_thFile);
+    if (_mpSelectedElementsLogical.containsKey(mpID)) {
+      _mpSelectedElementsLogical[mpID]!.updateClone(_th2FileEditController);
     }
   }
 
   void updateSelectedElementsClones() {
     for (final MPSelectedElement selectedElement
-        in _mpSelectedElements.values) {
-      selectedElement.updateClone(_thFile);
+        in _mpSelectedElementsLogical.values) {
+      selectedElement.updateClone(_th2FileEditController);
     }
   }
 
   @action
   bool addSelectedElement(THElement element, {bool setState = false}) {
     switch (element) {
-      case THLine _:
-        _mpSelectedElements[element.mpID] =
-            MPSelectedLine(thFile: _thFile, originalLine: element);
       case THPoint _:
-        _mpSelectedElements[element.mpID] =
+        _mpSelectedElementsLogical[element.mpID] =
             MPSelectedPoint(originalPoint: element);
+        _selectedElementsDrawable[element.mpID] = element;
+      case THLine _:
+        _mpSelectedElementsLogical[element.mpID] = MPSelectedLine(
+          originalLine: element,
+          th2FileEditController: _th2FileEditController,
+        );
+        _selectedElementsDrawable[element.mpID] = element;
       case THArea _:
-        _mpSelectedElements[element.mpID] =
-            MPSelectedArea(originalArea: element);
+        _mpSelectedElementsLogical[element.mpID] = MPSelectedArea(
+          originalArea: element,
+          th2FileEditController: _th2FileEditController,
+        );
+
+        final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
+
+        for (final int lineMPID in lineMPIDs) {
+          final THLine line = _thFile.lineByMPID(lineMPID);
+
+          _selectedElementsDrawable[lineMPID] = line;
+        }
     }
     _isSelected[element.mpID]!.value = true;
     _th2FileEditController.triggerSelectedListChanged();
@@ -299,7 +319,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   bool removeSelectedElement(THElement element) {
-    _mpSelectedElements.remove(element.mpID);
+    _mpSelectedElementsLogical.remove(element.mpID);
+    if (element is THArea) {
+      final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
+
+      for (final int lineMPID in lineMPIDs) {
+        _selectedElementsDrawable.remove(lineMPID);
+      }
+    } else {
+      _selectedElementsDrawable.remove(element.mpID);
+    }
     if (_isSelected.containsKey(element.mpID)) {
       _isSelected[element.mpID]!.value = false;
     }
@@ -333,7 +362,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Map<MPSelectionHandleType, Offset> handles =
         <MPSelectionHandleType, Offset>{};
 
-    if (_mpSelectedElements.isEmpty) {
+    if (_mpSelectedElementsLogical.isEmpty) {
       return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
     }
 
@@ -376,7 +405,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void updateSelectableElements() {
-    _selectableElements.clear();
+    _mpSelectableElements.clear();
 
     final THScrap scrap =
         _thFile.scrapByMPID(_th2FileEditController.activeScrapID);
@@ -417,7 +446,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     final int pointMPID = point.mpID;
 
-    _selectableElements[pointMPID] = selectablePoint;
+    _mpSelectableElements[pointMPID] = selectablePoint;
 
     if (!_isSelected.containsKey(pointMPID)) {
       _isSelected[pointMPID] = Observable(false);
@@ -432,14 +461,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     final int lineMPID = line.mpID;
 
-    _selectableElements[lineMPID] = selectableLine;
+    _mpSelectableElements[lineMPID] = selectableLine;
     if (!_isSelected.containsKey(lineMPID)) {
       _isSelected[lineMPID] = Observable(false);
     }
   }
 
   void removeSelectableElement(int mpID) {
-    _selectableElements.remove(mpID);
+    _mpSelectableElements.remove(mpID);
     _isSelected.remove(mpID);
   }
 
@@ -451,7 +480,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }) async {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
-    final selectableElements = _selectableElements.values;
+    final selectableElements = _mpSelectableElements.values;
 
     clickedElements.clear();
 
@@ -512,7 +541,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
 
-    for (final selectableElement in _selectableElements.values) {
+    for (final selectableElement in _mpSelectableElements.values) {
       if (selectableElement is MPSelectableElement) {
         final THElement element = selectableElement.element;
 
@@ -574,13 +603,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void updateSelectableEndAndControlPoints() {
     _selectableEndControlPoints.clear();
 
-    if ((_mpSelectedElements.length != 1) ||
-        (_mpSelectedElements.values.first is! MPSelectedLine)) {
+    if ((_mpSelectedElementsLogical.length != 1) ||
+        (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
       return;
     }
 
     final THLine line =
-        _thFile.lineByMPID(_mpSelectedElements.values.first.mpID);
+        _thFile.lineByMPID(_mpSelectedElementsLogical.values.first.mpID);
     final List<THLineSegment> lineSegments =
         _th2FileEditController.elementEditController.getLineSegmentsList(
       line: line,
@@ -670,7 +699,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void warmSelectableElementsCanvasScaleChanged() {
-    for (final selectableElement in _selectableElements.values) {
+    for (final selectableElement in _mpSelectableElements.values) {
       selectableElement.canvasScaleChanged();
     }
   }
@@ -708,26 +737,23 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void moveSelectedElementsToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
-    if ((_mpSelectedElements.isEmpty) || !_th2FileEditController.isSelectMode) {
+    if ((_mpSelectedElementsLogical.isEmpty) ||
+        !_th2FileEditController.isSelectMode) {
       return;
     }
 
     final Offset localDeltaPositionOnCanvas =
         canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
-    final selectedElements = _mpSelectedElements.values;
+    final mpSelectedElements = _mpSelectedElementsLogical.values;
 
-    for (final MPSelectedElement selectedElement in selectedElements) {
-      switch (selectedElement.originalElementClone) {
-        case THPoint _:
-          _updateTHPointPosition(
-            selectedElement as MPSelectedPoint,
-            localDeltaPositionOnCanvas,
-          );
-        case THLine _:
-          _updateTHLinePosition(
-            selectedElement as MPSelectedLine,
-            localDeltaPositionOnCanvas,
-          );
+    for (final MPSelectedElement selectedElement in mpSelectedElements) {
+      switch (selectedElement) {
+        case MPSelectedPoint _:
+          _updateTHPointPosition(selectedElement, localDeltaPositionOnCanvas);
+        case MPSelectedLine _:
+          _updateTHLinePosition(selectedElement, localDeltaPositionOnCanvas);
+        case MPSelectedArea _:
+          _updateTHAreaPosition(selectedElement, localDeltaPositionOnCanvas);
       }
     }
 
@@ -792,6 +818,17 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         .substituteLineSegments(modifiedLineSegmentsMap);
   }
 
+  void _updateTHAreaPosition(
+    MPSelectedArea selectedArea,
+    Offset localDeltaPositionOnCanvas,
+  ) {
+    final mpAreaLines = selectedArea.originalLines;
+
+    for (final mpAreaLine in mpAreaLines) {
+      _updateTHLinePosition(mpAreaLine, localDeltaPositionOnCanvas);
+    }
+  }
+
   void moveSelectedEndControlPointsToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
@@ -813,7 +850,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Offset localDeltaPositionOnCanvas =
         canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
     final LinkedHashMap<int, THLineSegment> originalLineSegments =
-        (_mpSelectedElements.values.first as MPSelectedLine)
+        (_mpSelectedElementsLogical.values.first as MPSelectedLine)
             .originalLineSegmentsMapClone;
     final List<int> lineLineSegmentsMPIDs = getSelectedLineLineSegmentsMPIDs();
     final LinkedHashMap<int, THLineSegment> modifiedLineSegments =
@@ -914,7 +951,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Offset localDeltaPositionOnCanvas =
         canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
     final LinkedHashMap<int, THLineSegment> originalLineSegments =
-        (_mpSelectedElements.values.first as MPSelectedLine)
+        (_mpSelectedElementsLogical.values.first as MPSelectedLine)
             .originalLineSegmentsMapClone;
     final THBezierCurveLineSegment controlPointLineSegment =
         _selectedControlPoint!.element as THBezierCurveLineSegment;
@@ -958,7 +995,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   List<int> getSelectedLineLineSegmentsMPIDs() {
     _selectedLineLineSegmentsMPIDs ??=
-        ((_mpSelectedElements[_mpSelectedElements.keys.first] as MPSelectedLine)
+        ((_mpSelectedElementsLogical[_mpSelectedElementsLogical.keys.first]
+                    as MPSelectedLine)
                 .originalElementClone as THLine)
             .childrenMPID
             .where((childMPID) {
@@ -1039,7 +1077,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   bool isElementSelectedByMPID(int mpID) {
-    return _mpSelectedElements.containsKey(mpID);
+    return _mpSelectedElementsLogical.containsKey(mpID);
   }
 
   bool isEndpointSelected(THLineSegment lineSegment) {
@@ -1060,7 +1098,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void _clearSelectedElementsWithoutResettingRedrawTriggers() {
-    _mpSelectedElements.clear();
+    _mpSelectedElementsLogical.clear();
+    _selectedElementsDrawable.clear();
     _isSelected.forEach((key, value) => value.value = false);
     clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
   }
@@ -1071,13 +1110,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void clearSelectedElementsAndSelectionHandleCenters() {
-    _mpSelectedElements.clear();
+    _mpSelectedElementsLogical.clear();
     _selectedElementsBoundingBox = null;
     _selectionHandleCenters = null;
   }
 
   bool setSelectionState() {
-    if (_mpSelectedElements.isEmpty) {
+    if (_mpSelectedElementsLogical.isEmpty) {
       return _th2FileEditController.stateController
           .setState(MPTH2FileEditStateType.selectEmptySelection);
     } else {

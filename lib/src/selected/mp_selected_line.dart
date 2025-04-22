@@ -1,21 +1,26 @@
 part of 'mp_selected_element.dart';
 
 class MPSelectedLine extends MPSelectedElement {
-  late THLine originalLineClone;
+  late final THLine originalLineClone;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
       LinkedHashMap<int, THLineSegment>();
 
-  MPSelectedLine({required THLine originalLine, required THFile thFile}) {
-    _createClone(originalLine, thFile);
+  MPSelectedLine({
+    required THLine originalLine,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    _createClone(originalLine, th2FileEditController);
   }
 
-  void _createClone(THLine originalLine, THFile thFile) {
+  void _createClone(
+      THLine originalLine, TH2FileEditController th2FileEditController) {
     final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPID;
 
     originalLineSegmentsMapClone.clear();
 
     for (final int mpID in lineSegmentMPIDs) {
-      final THElement element = thFile.elementByMPID(mpID);
+      final THElement element =
+          th2FileEditController.thFile.elementByMPID(mpID);
 
       if (element is! THLineSegment) {
         continue;
@@ -48,9 +53,11 @@ class MPSelectedLine extends MPSelectedElement {
   }
 
   @override
-  void updateClone(THFile thFile) {
-    final THLine updatedOriginalLine = thFile.lineByMPID(mpID);
-    _createClone(updatedOriginalLine, thFile);
+  void updateClone(TH2FileEditController th2FileEditController) {
+    final THLine updatedOriginalLine =
+        th2FileEditController.thFile.lineByMPID(mpID);
+
+    _createClone(updatedOriginalLine, th2FileEditController);
   }
 
   @override

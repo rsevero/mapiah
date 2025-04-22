@@ -219,7 +219,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   Offset getPositionFromSelectedElements() {
-    if (_th2FileEditController.selectionController.mpSelectedElements.isEmpty) {
+    if (_th2FileEditController
+        .selectionController.mpSelectedElementsLogical.isEmpty) {
       return _th2FileEditController.screenBoundingBox.center;
     } else {
       final Rect selectedElementsBoundingBoxOnCanvas = _th2FileEditController

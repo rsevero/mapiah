@@ -188,7 +188,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     int pointCount = 0;
     int lineCount = 0;
 
-    final selectedElements = selectionController.mpSelectedElements.values;
+    final selectedElements =
+        selectionController.mpSelectedElementsLogical.values;
 
     for (final selectedElement in selectedElements) {
       switch (selectedElement) {

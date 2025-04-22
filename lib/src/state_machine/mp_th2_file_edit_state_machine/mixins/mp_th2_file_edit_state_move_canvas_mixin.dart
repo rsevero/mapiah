@@ -73,7 +73,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         th2FileEditController.zoomOneToOne();
       case LogicalKeyboardKey.numpad2:
       case LogicalKeyboardKey.digit2:
-        if (selectionController.mpSelectedElements.isNotEmpty) {
+        if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
           th2FileEditController.zoomToFit(
               zoomFitToType: MPZoomToFitType.selection);
         }

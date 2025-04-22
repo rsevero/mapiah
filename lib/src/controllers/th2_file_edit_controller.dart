@@ -227,7 +227,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showSelectedElements =>
-      selectionController.mpSelectedElements.isNotEmpty && !_isEditLineMode;
+      selectionController.mpSelectedElementsLogical.isNotEmpty &&
+      !_isEditLineMode;
 
   @computed
   bool get showSelectionHandles => showSelectedElements && _isSelectMode;
@@ -252,7 +253,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get removeButtonEnabled =>
-      selectionController.mpSelectedElements.isNotEmpty;
+      selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @readonly
   String _statusBarMessage = '';
@@ -470,9 +471,9 @@ abstract class TH2FileEditControllerBase with Store {
 
     _disposers.add(autorun((_) {
       _isNodeEditButtonEnabled =
-          (selectionController.mpSelectedElements.length == 1) &&
-              (selectionController.mpSelectedElements[selectionController
-                  .mpSelectedElements.keys.first] is MPSelectedLine);
+          (selectionController.mpSelectedElementsLogical.length == 1) &&
+              (selectionController.mpSelectedElementsLogical[selectionController
+                  .mpSelectedElementsLogical.keys.first] is MPSelectedLine);
     }));
 
     _disposers.add(autorun((_) {

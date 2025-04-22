@@ -94,7 +94,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 4. Changes to [MPTH2FileEditStateType.selectNonEmptySelection].
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final int selectedCount = selectionController.mpSelectedElements.length;
+    final int selectedCount =
+        selectionController.mpSelectedElementsLogical.length;
     final Offset panDeltaOnCanvas =
         th2FileEditController.offsetScreenToCanvas(event.localPosition) -
             selectionController.dragStartCanvasCoordinates;
@@ -106,7 +107,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       return;
     } else if (selectedCount == 1) {
       final MPSelectedElement selected =
-          selectionController.mpSelectedElements.values.first;
+          selectionController.mpSelectedElementsLogical.values.first;
       final THElement selectedElement = selected.originalElementClone;
 
       switch (selected) {
@@ -131,7 +132,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     } else if (selectedCount > 1) {
       moveCommand = MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas(
         deltaOnCanvas: panDeltaOnCanvas,
-        mpSelectedElements: selectionController.mpSelectedElements.values,
+        mpSelectedElements:
+            selectionController.mpSelectedElementsLogical.values,
         decimalPositions: th2FileEditController.currentDecimalPositions,
       );
 

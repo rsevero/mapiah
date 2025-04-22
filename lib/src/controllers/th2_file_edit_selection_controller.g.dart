@@ -66,23 +66,45 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
-  late final _$_mpSelectedElementsAtom = Atom(
-      name: 'TH2FileEditSelectionControllerBase._mpSelectedElements',
+  late final _$_mpSelectedElementsLogicalAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._mpSelectedElementsLogical',
       context: context);
 
-  ObservableMap<int, MPSelectedElement> get mpSelectedElements {
-    _$_mpSelectedElementsAtom.reportRead();
-    return super._mpSelectedElements;
+  ObservableMap<int, MPSelectedElement> get mpSelectedElementsLogical {
+    _$_mpSelectedElementsLogicalAtom.reportRead();
+    return super._mpSelectedElementsLogical;
   }
 
   @override
-  ObservableMap<int, MPSelectedElement> get _mpSelectedElements =>
-      mpSelectedElements;
+  ObservableMap<int, MPSelectedElement> get _mpSelectedElementsLogical =>
+      mpSelectedElementsLogical;
 
   @override
-  set _mpSelectedElements(ObservableMap<int, MPSelectedElement> value) {
-    _$_mpSelectedElementsAtom.reportWrite(value, super._mpSelectedElements, () {
-      super._mpSelectedElements = value;
+  set _mpSelectedElementsLogical(ObservableMap<int, MPSelectedElement> value) {
+    _$_mpSelectedElementsLogicalAtom
+        .reportWrite(value, super._mpSelectedElementsLogical, () {
+      super._mpSelectedElementsLogical = value;
+    });
+  }
+
+  late final _$_selectedElementsDrawableAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._selectedElementsDrawable',
+      context: context);
+
+  ObservableMap<int, THElement> get selectedElementsDrawable {
+    _$_selectedElementsDrawableAtom.reportRead();
+    return super._selectedElementsDrawable;
+  }
+
+  @override
+  ObservableMap<int, THElement> get _selectedElementsDrawable =>
+      selectedElementsDrawable;
+
+  @override
+  set _selectedElementsDrawable(ObservableMap<int, THElement> value) {
+    _$_selectedElementsDrawableAtom
+        .reportWrite(value, super._selectedElementsDrawable, () {
+      super._selectedElementsDrawable = value;
     });
   }
 
@@ -233,23 +255,24 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
-  late final _$_selectableElementsAtom = Atom(
-      name: 'TH2FileEditSelectionControllerBase._selectableElements',
+  late final _$_mpSelectableElementsAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._mpSelectableElements',
       context: context);
 
-  ObservableMap<int, MPSelectable> get selectableElements {
-    _$_selectableElementsAtom.reportRead();
-    return super._selectableElements;
+  ObservableMap<int, MPSelectable> get mpSelectableElements {
+    _$_mpSelectableElementsAtom.reportRead();
+    return super._mpSelectableElements;
   }
 
   @override
-  ObservableMap<int, MPSelectable> get _selectableElements =>
-      selectableElements;
+  ObservableMap<int, MPSelectable> get _mpSelectableElements =>
+      mpSelectableElements;
 
   @override
-  set _selectableElements(ObservableMap<int, MPSelectable> value) {
-    _$_selectableElementsAtom.reportWrite(value, super._selectableElements, () {
-      super._selectableElements = value;
+  set _mpSelectableElements(ObservableMap<int, MPSelectable> value) {
+    _$_mpSelectableElementsAtom.reportWrite(value, super._mpSelectableElements,
+        () {
+      super._mpSelectableElements = value;
     });
   }
 

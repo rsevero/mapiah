@@ -531,7 +531,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 }
 
                 final bool selectedElementsEmpty = th2FileEditController
-                    .selectionController.mpSelectedElements.isEmpty;
+                    .selectionController.mpSelectedElementsLogical.isEmpty;
 
                 return Row(
                   children: [
