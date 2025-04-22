@@ -9,6 +9,7 @@ enum MPCommandType {
   editLineSegment,
   editLineType,
   editPointType,
+  moveArea,
   moveBezierLineSegment,
   moveLine,
   movePoint,

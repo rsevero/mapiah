@@ -125,6 +125,13 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             deltaOnCanvas: panDeltaOnCanvas,
             decimalPositions: th2FileEditController.currentDecimalPositions,
           );
+        case MPSelectedArea _:
+          moveCommand = MPMoveAreaCommand.fromDeltaOnCanvas(
+            areaMPID: selectedElement.mpID,
+            originalLines: selected.originalLines,
+            deltaOnCanvas: panDeltaOnCanvas,
+            decimalPositions: th2FileEditController.currentDecimalPositions,
+          );
       }
 
       th2FileEditController.execute(moveCommand);

@@ -359,6 +359,12 @@ abstract class AppLocalizations {
   /// **'Edit point type'**
   String get mpCommandDescriptionEditPointType;
 
+  /// The description for the move area command
+  ///
+  /// In en, this message translates to:
+  /// **'Move area'**
+  String get mpCommandDescriptionMoveArea;
+
   /// The description for the move Bézier line segment command
   ///
   /// In en, this message translates to:
@@ -376,6 +382,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Move line'**
   String get mpCommandDescriptionMoveLine;
+
+  /// The description for the move lines command
+  ///
+  /// In en, this message translates to:
+  /// **'Move lines'**
+  String get mpCommandDescriptionMoveLines;
 
   /// The description for the move line segments command
   ///

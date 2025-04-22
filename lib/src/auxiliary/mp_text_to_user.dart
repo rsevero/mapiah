@@ -55,7 +55,7 @@ class MPTextToUser {
       {};
   static final Map<THAngleUnitType, String> _angleUnitTypeAsString = {};
   static final Map<String, String> _namedScaleOptionsAsString = {};
-  static Map<String, String> _subtypeAsString = {};
+  static final Map<String, String> _subtypeAsString = {};
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
@@ -309,6 +309,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionEditPointsType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editPointType] =
         localizations.mpCommandDescriptionEditPointType;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.moveArea] =
+        localizations.mpCommandDescriptionMoveArea;
     _commandDescriptionTypeAsString[
             MPCommandDescriptionType.moveBezierLineSegment] =
         localizations.mpCommandDescriptionMoveBezierLineSegment;
@@ -316,6 +318,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionMoveElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.moveLine] =
         localizations.mpCommandDescriptionMoveLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.moveLines] =
+        localizations.mpCommandDescriptionMoveLines;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.moveLineSegments] =
         localizations.mpCommandDescriptionMoveLineSegments;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.movePoint] =

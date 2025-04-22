@@ -1,7 +1,7 @@
 part of 'mp_selected_element.dart';
 
 class MPSelectedArea extends MPSelectedElement {
-  late final THArea originalAreaClone;
+  late THArea originalAreaClone;
   final List<MPSelectedLine> originalLines = [];
 
   MPSelectedArea({

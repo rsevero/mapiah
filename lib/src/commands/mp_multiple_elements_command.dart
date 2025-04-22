@@ -201,6 +201,27 @@ class MPMultipleElementsCommand extends MPCommand {
     }
   }
 
+  MPMultipleElementsCommand.moveLinesFromDeltaOnCanvas({
+    required Iterable<MPSelectedLine> lines,
+    required Offset deltaOnCanvas,
+    required int decimalPositions,
+    super.descriptionType = MPCommandDescriptionType.moveLines,
+  }) : super() {
+    commandsList = [];
+
+    for (final MPSelectedLine line in lines) {
+      final MPCommand moveLineCommand = MPMoveLineCommand.fromDeltaOnCanvas(
+        lineMPID: line.mpID,
+        originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+        deltaOnCanvas: deltaOnCanvas,
+        decimalPositions: decimalPositions,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(moveLineCommand);
+    }
+  }
+
   MPMultipleElementsCommand.editAreasType({
     required List<int> areaMPIDs,
     required THAreaType newAreaType,

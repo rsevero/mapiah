@@ -25,6 +25,7 @@ part 'mp_edit_area_type_command.dart';
 part 'mp_edit_line_segment_command.dart';
 part 'mp_edit_line_type_command.dart';
 part 'mp_edit_point_type_command.dart';
+part 'mp_move_area_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
@@ -125,6 +126,8 @@ abstract class MPCommand {
         return MPEditLineTypeCommand.fromMap(map);
       case MPCommandType.editPointType:
         return MPEditPointTypeCommand.fromMap(map);
+      case MPCommandType.moveArea:
+        return MPMoveAreaCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
       case MPCommandType.moveLine:

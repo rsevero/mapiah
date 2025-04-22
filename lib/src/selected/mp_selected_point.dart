@@ -1,7 +1,7 @@
 part of 'mp_selected_element.dart';
 
 class MPSelectedPoint extends MPSelectedElement {
-  late final THPoint originalPointClone;
+  late THPoint originalPointClone;
 
   MPSelectedPoint({required THPoint originalPoint}) {
     _createClone(originalPoint);

@@ -1,7 +1,7 @@
 part of 'mp_selected_element.dart';
 
 class MPSelectedLine extends MPSelectedElement {
-  late final THLine originalLineClone;
+  late THLine originalLineClone;
   final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
       LinkedHashMap<int, THLineSegment>();
 

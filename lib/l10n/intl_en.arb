@@ -271,6 +271,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionMoveArea": "Move area",
+  "@mpCommandDescriptionMoveArea": {
+    "description": "The description for the move area command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionMoveBezierLineSegment": "Move Bézier line segment",
   "@mpCommandDescriptionMoveBezierLineSegment": {
     "description": "The description for the move Bézier line segment command",
@@ -286,6 +292,12 @@
   "mpCommandDescriptionMoveLine": "Move line",
   "@mpCommandDescriptionMoveLine": {
     "description": "The description for the move line command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionMoveLines": "Move lines",
+  "@mpCommandDescriptionMoveLines": {
+    "description": "The description for the move lines command",
     "type": "text"
   },
 
