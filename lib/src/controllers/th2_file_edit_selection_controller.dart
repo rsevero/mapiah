@@ -464,7 +464,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             case THSelectionType.pla:
               switch (element) {
                 case THPoint _:
+                  clickedElements[element.mpID] = element;
                 case THLine _:
+                  final int? areaMPID =
+                      _thFile.getAreaMPIDByLineMPID(element.mpID);
+
+                  if (areaMPID != null) {
+                    clickedElements[areaMPID] = _thFile.elementByMPID(areaMPID);
+                  }
                   clickedElements[element.mpID] = element;
                 case THLineSegment _:
                   clickedElements[element.parentMPID] =

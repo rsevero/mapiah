@@ -1,7 +1,7 @@
 part of 'th_element.dart';
 
 class THArea extends THElement
-    with THHasOptionsMixin, THIsParentMixin
+    with THHasOptionsMixin, THIsParentMixin, MPBoundingBox
     implements THHasPLATypeMixin {
   final THAreaType areaType;
 
@@ -195,5 +195,22 @@ class THArea extends THElement
   void clearAreaXLineInfo() {
     _lineTHIDs = null;
     _lineMPIDs = null;
+  }
+
+  @override
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final Set<int> lineMPIDs = getLineMPIDs(thFile);
+    Rect? boundingBox;
+
+    for (final lineMPID in lineMPIDs) {
+      final THLine line = thFile.lineByMPID(lineMPID);
+
+      boundingBox = boundingBox
+              ?.expandToInclude(line.getBoundingBox(th2FileEditController)) ??
+          line.getBoundingBox(th2FileEditController);
+    }
+
+    return boundingBox ?? Rect.zero;
   }
 }
