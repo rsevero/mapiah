@@ -1413,7 +1413,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thLineSurvey => 'Survey';
 
   @override
-  String get thLineU => 'Usuário';
+  String get thLineU => 'User';
 
   @override
   String get thLineViaFerrata => 'Via Ferrata';

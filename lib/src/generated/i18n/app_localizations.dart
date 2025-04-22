@@ -2840,7 +2840,7 @@ abstract class AppLocalizations {
   /// The label for the U line type
   ///
   /// In en, this message translates to:
-  /// **'Usuário'**
+  /// **'User'**
   String get thLineU;
 
   /// The label for the via ferrata line type

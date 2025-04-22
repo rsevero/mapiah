@@ -2782,7 +2782,7 @@
     "type": "text"
   },
 
-  "thLineU": "Usuário",
+  "thLineU": "User",
   "@thLineU": {
     "description": "The label for the U line type",
     "type": "text"
