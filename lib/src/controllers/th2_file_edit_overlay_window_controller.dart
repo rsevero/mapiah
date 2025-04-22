@@ -178,7 +178,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           : _overlayWindows.keys.last;
     }
 
-    if (type == MPWindowType.multipleElementsClicked) {
+    if ((type == MPWindowType.multipleElementsClicked) &&
+        (!_th2FileEditController.selectionController
+            .multipleElementsClickedSemaphore.isCompleted)) {
       _th2FileEditController
           .selectionController.multipleElementsClickedSemaphore
           .complete();
