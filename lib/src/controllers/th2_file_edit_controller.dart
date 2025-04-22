@@ -847,7 +847,7 @@ abstract class TH2FileEditControllerBase with Store {
         return (_thFile.scrapByMPID(_activeScrapID))
             .getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.selection:
-        return selectionController.getSelectedElementsBoundingBox();
+        return selectionController.getSelectedElementsBoundingBoxOnCanvas();
     }
   }
 

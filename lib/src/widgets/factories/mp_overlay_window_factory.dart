@@ -70,9 +70,11 @@ class MPOverlayWindowFactory {
           'The main TH file edit window is automatically created when opening a TH2File.',
         );
       case MPWindowType.multipleElementsClicked:
-        outerAnchorPosition = th2FileEditController.selectionController
-            .getClickedElementsBoundingBox()
-            .centerRight;
+        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+          th2FileEditController.selectionController
+              .getClickedElementsBoundingBoxOnCanvas()
+              .centerRight,
+        );
 
         overlayWindowWidget = MPMultipleElementsClickedWidget(
           th2FileEditController: th2FileEditController,

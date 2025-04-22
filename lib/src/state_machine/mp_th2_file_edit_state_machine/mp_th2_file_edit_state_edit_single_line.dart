@@ -48,8 +48,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     /// TODO: deal with multiple end points returned on same click.
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =
         selectionController.selectableEndControlPointsClicked(
-      event.localPosition,
-      false,
+      screenCoordinates: event.localPosition,
+      includeControlPoints: false,
+      canBeMultiple: true,
+      presentMultipleElementsClickedWidget: true,
     );
 
     _dragShouldMovePoints = false;
@@ -155,8 +157,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =
         selectionController.selectableEndControlPointsClicked(
-      event.localPosition,
-      true,
+      screenCoordinates: event.localPosition,
+      includeControlPoints: true,
+      canBeMultiple: false,
+      presentMultipleElementsClickedWidget: false,
     );
 
     _dragShouldMovePoints = false;

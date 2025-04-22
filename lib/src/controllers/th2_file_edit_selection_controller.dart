@@ -64,7 +64,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   bool selectionCanBeMultiple = false;
 
   Rect get selectedElementsBoundingBox {
-    _selectedElementsBoundingBox ??= getSelectedElementsBoundingBox();
+    _selectedElementsBoundingBox ??= getSelectedElementsBoundingBoxOnCanvas();
 
     return _selectedElementsBoundingBox!;
   }
@@ -98,44 +98,25 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   Offset dragStartCanvasCoordinates = Offset.zero;
 
-  Rect _getElementsListBoundingBox(Iterable<THElement> elements) {
-    late Rect boundingBox;
-    double minX = double.infinity;
-    double minY = double.infinity;
-    double maxX = double.negativeInfinity;
-    double maxY = double.negativeInfinity;
+  Rect _getElementsListBoundingBoxOnCanvas(Iterable<THElement> elements) {
+    Rect? boundingBox;
 
     for (final THElement element in elements) {
       switch (element) {
         case THPoint _:
         case THLine _:
         case THArea _:
-          boundingBox =
+          final Rect newElementBoundingBox =
               (element as MPBoundingBox).getBoundingBox(_th2FileEditController);
+
+          boundingBox = boundingBox?.expandToInclude(newElementBoundingBox) ??
+              newElementBoundingBox;
         default:
           continue;
       }
-
-      if (boundingBox.left < minX) {
-        minX = boundingBox.left;
-      }
-      if (boundingBox.top < minY) {
-        minY = boundingBox.top;
-      }
-      if (boundingBox.right > maxX) {
-        maxX = boundingBox.right;
-      }
-      if (boundingBox.bottom > maxY) {
-        maxY = boundingBox.bottom;
-      }
     }
 
-    return MPNumericAux.orderedRectFromLTRB(
-      left: minX,
-      top: minY,
-      right: maxX,
-      bottom: maxY,
-    );
+    return boundingBox ?? Rect.zero;
   }
 
   void setClickedElementsAtPointerDown(Iterable<THElement> clickedElements) {
@@ -157,18 +138,18 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  Rect getSelectedElementsBoundingBox() {
+  Rect getSelectedElementsBoundingBoxOnCanvas() {
     final Iterable<THElement> selectedElements =
         _mpSelectedElementsLogical.values.map(
       (MPSelectedElement selectedElement) =>
           _thFile.elementByMPID(selectedElement.mpID),
     );
 
-    return _getElementsListBoundingBox(selectedElements);
+    return _getElementsListBoundingBoxOnCanvas(selectedElements);
   }
 
-  Rect getClickedElementsBoundingBox() {
-    return _getElementsListBoundingBox(clickedElements.values);
+  Rect getClickedElementsBoundingBoxOnCanvas() {
+    return _getElementsListBoundingBoxOnCanvas(clickedElements.values);
   }
 
   @action
@@ -558,10 +539,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return insideWindowElements.values.toList();
   }
 
-  List<MPSelectableEndControlPoint> selectableEndControlPointsClicked(
-    Offset screenCoordinates,
-    bool includeControlPoints,
-  ) {
+  List<MPSelectableEndControlPoint> selectableEndControlPointsClicked({
+    required Offset screenCoordinates,
+    required bool includeControlPoints,
+    required bool canBeMultiple,
+    required bool presentMultipleElementsClickedWidget,
+  }) {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
     final List<MPSelectableEndControlPoint> clickedEndControlPoints = [];

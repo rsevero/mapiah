@@ -295,13 +295,13 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  Rect getSelectedElementsBoundingBox() {
+  Rect getSelectedElementsBoundingBoxOnCanvas() {
     final _$actionInfo =
         _$TH2FileEditSelectionControllerBaseActionController.startAction(
             name:
-                'TH2FileEditSelectionControllerBase.getSelectedElementsBoundingBox');
+                'TH2FileEditSelectionControllerBase.getSelectedElementsBoundingBoxOnCanvas');
     try {
-      return super.getSelectedElementsBoundingBox();
+      return super.getSelectedElementsBoundingBoxOnCanvas();
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController
           .endAction(_$actionInfo);

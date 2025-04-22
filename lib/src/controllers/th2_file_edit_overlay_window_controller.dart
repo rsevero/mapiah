@@ -240,7 +240,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     } else {
       final Rect clickedElementsBoundingBoxOnCanvas = _th2FileEditController
           .selectionController
-          .getSelectedElementsBoundingBox();
+          .getSelectedElementsBoundingBoxOnCanvas();
       final Offset clickedElementsCenterOnScreen = _th2FileEditController
           .offsetCanvasToScreen(clickedElementsBoundingBoxOnCanvas.center);
 
