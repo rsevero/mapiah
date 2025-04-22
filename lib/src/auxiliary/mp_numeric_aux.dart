@@ -220,9 +220,13 @@ class MPNumericAux {
   }
 
   static double roundScale(double scale) {
-    final double scaleMagnitude = (log10(scale) - 1).floorToDouble();
+    final double scaleMagnitude = (log10(scale) - 2).floorToDouble();
     final double scaleQuanta = math.pow(10, scaleMagnitude) as double;
-    final double rounded = floorToFives(scale / scaleQuanta) * scaleQuanta;
+    final double rounded = floorTo(
+          value: scale / scaleQuanta,
+          factor: thCanvasRoundFactor,
+        ) *
+        scaleQuanta;
 
     return rounded;
   }
@@ -279,8 +283,8 @@ class MPNumericAux {
     return (value / 5).round() * 5;
   }
 
-  static double floorToFives(double value) {
-    return (value / 5).floor() * 5;
+  static double floorTo({required double value, required double factor}) {
+    return (value / factor).floor() * factor;
   }
 
   static double calculateRoundToQuanta({

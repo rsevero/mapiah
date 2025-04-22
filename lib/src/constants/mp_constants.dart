@@ -42,6 +42,7 @@ const double thRegularZoomFactor = math.sqrt2;
 const double thRoundToFactor = thRegularZoomFactor - 1;
 const double thFineZoomFactor = thRoundToFactor / 2 + 1;
 const double thCanvasMovementFactor = 0.1;
+const double thCanvasRoundFactor = 25.0;
 
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;
