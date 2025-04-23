@@ -12,7 +12,6 @@ import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_circle_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/painters/th_line_segment_painter.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
@@ -49,14 +48,10 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
               th2FileEditController.visualController.getSelectedPointPaint();
           final double pointRadius = pointPaintInfo.radius;
 
-          final THLinePaint borderPaintInfo = th2FileEditController
-              .visualController
+          final THLinePaint linePaint = th2FileEditController.visualController
               .getMultipleElementsClickedHighlightedBorderPaint();
-          final Paint borderPaint = borderPaintInfo.paint;
-          final THLinePaint fillPaintInfo = th2FileEditController
-              .visualController
+          final THLinePaint areaPaint = th2FileEditController.visualController
               .getMultipleElementsClickedHighlightedFillPaint();
-          final Paint fillPaint = fillPaintInfo.paint;
 
           final double canvasScale = th2FileEditController.canvasScale;
           final Offset canvasTranslation =
@@ -69,27 +64,27 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   THCirclePointPainter(
                     position: highlightedElement.position.coordinates,
                     pointRadius: pointRadius,
-                    pointBorderPaint: borderPaint,
+                    pointBorderPaint: linePaint.primaryPaint!,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,
                   ),
                 );
-              case THLineSegment _:
-                final THLineSegment previousLineSegment = thFile
-                    .lineByMPID(highlightedElement.mpID)
-                    .getPreviousLineSegment(highlightedElement, thFile);
+              // case THLineSegment _:
+              //   final THLineSegment previousLineSegment = thFile
+              //       .lineByMPID(highlightedElement.mpID)
+              //       .getPreviousLineSegment(highlightedElement, thFile);
 
-                painters.add(
-                  THLineSegmentPainter(
-                    previousLineSegment: previousLineSegment,
-                    lineSegment: highlightedElement,
-                    linePaintStroke: borderPaint,
-                    th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
-                  ),
-                );
+              //   painters.add(
+              //     THLineSegmentPainter(
+              //       previousLineSegment: previousLineSegment,
+              //       lineSegment: highlightedElement,
+              //       linePaint: linePaint,
+              //       th2FileEditController: th2FileEditController,
+              //       canvasScale: canvasScale,
+              //       canvasTranslation: canvasTranslation,
+              //     ),
+              //   );
               case THLine _:
                 final (
                   LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
@@ -103,7 +98,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                 painters.add(
                   THLinePainter(
                     lineSegmentsMap: segmentsMap,
-                    linePaintStroke: borderPaint,
+                    linePaint: linePaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,
@@ -125,8 +120,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   );
                   final THLinePainter linePainter = THLinePainter(
                     lineSegmentsMap: segmentsMap,
-                    linePaintStroke: borderPaint,
-                    linePaintFill: fillPaint,
+                    linePaint: areaPaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,

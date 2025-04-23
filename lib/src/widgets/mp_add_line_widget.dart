@@ -35,9 +35,8 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
         final double pointHalfLength = pointPaintInfo.radius;
         final Paint pointPaint = pointPaintInfo.paint;
 
-        final THLinePaint linePaintInfo =
+        final THLinePaint linePaint =
             th2FileEditController.visualController.getNewLinePaint();
-        final Paint linePaint = linePaintInfo.paint;
 
         final double canvasScale = th2FileEditController.canvasScale;
         final Offset canvasTranslation =
@@ -76,7 +75,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
           CustomPainter painter = THLinePainter(
             lineSegmentsMap: segmentsMap,
-            linePaintStroke: linePaint,
+            linePaint: linePaint,
             th2FileEditController: th2FileEditController,
             canvasScale: canvasScale,
             canvasTranslation: canvasTranslation,
@@ -89,7 +88,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
           if ((lineSegments.length >= 2) &&
               (lastSegment is THBezierCurveLineSegment)) {
-            final THLinePaint controlLinePaint =
+            final Paint controlLinePaint =
                 th2FileEditController.visualController.getControlLinePaint();
             final List<int> keys = lineSegments.keys.toList();
             final Offset secondToLastSegmentPosition =
@@ -102,7 +101,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
               controlPointPosition: lastSegment.controlPoint1.coordinates,
               endPointPosition: secondToLastSegmentPosition,
               pointPaint: pointPaint,
-              controlLinePaint: controlLinePaint.paint,
+              controlLinePaint: controlLinePaint,
               pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
               canvasScale: canvasScale,
@@ -115,7 +114,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
               controlPointPosition: lastSegment.controlPoint2.coordinates,
               endPointPosition: lastSegment.endPoint.coordinates,
               pointPaint: pointPaint,
-              controlLinePaint: controlLinePaint.paint,
+              controlLinePaint: controlLinePaint,
               pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
               canvasScale: canvasScale,

@@ -1,5 +1,6 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -63,13 +64,10 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               );
             case THLine _:
               final int? areaMPID = thFile.getAreaMPIDByLineMPID(element.mpID);
-              late final Paint linePaintStroke;
-              late final Paint? linePaintFill;
+              late final THLinePaint linePaint;
 
               if (areaMPID == null) {
-                linePaintStroke =
-                    visualController.getUnselectedLinePaint(element).paint;
-                linePaintFill = null;
+                linePaint = visualController.getUnselectedLinePaint(element);
               } else {
                 if (selectionController.isElementSelectedByMPID(areaMPID)) {
                   continue;
@@ -77,18 +75,13 @@ class MPNonSelectedElementsWidget extends StatelessWidget
 
                 final THArea area = thFile.areaByMPID(areaMPID);
 
-                linePaintStroke =
-                    visualController.getUnselectedAreaBorderPaint(area).paint;
-
-                linePaintFill =
-                    visualController.getUnselectedAreaFillPaint(area).paint;
+                linePaint = visualController.getUnselectedAreaBorderPaint(area);
               }
 
               painters.add(
                 getLinePainter(
                   line: element,
-                  linePaint: linePaintStroke,
-                  fillPaint: linePaintFill,
+                  linePaint: linePaint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,

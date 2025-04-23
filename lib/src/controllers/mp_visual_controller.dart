@@ -24,11 +24,9 @@ abstract class MPVisualControllerBase with Store {
       : _th2FileEditController = th2FileEditController,
         _thFile = th2FileEditController.thFile;
 
-  THLinePaint getControlLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaintBlackBorder
-        ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
-    );
+  Paint getControlLinePaint() {
+    return THPaints.thPaintBlackBorder
+      ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
   }
 
   THPointPaint getSelectedPointPaint() {
@@ -41,7 +39,7 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getSelectedLinePaint() {
     return THLinePaint(
-      paint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -49,7 +47,7 @@ abstract class MPVisualControllerBase with Store {
   THLinePaint getSelectedAreaFillPaint() {
     final Paint paint = THPaints.thPaint1002;
 
-    return THLinePaint(paint: paint);
+    return THLinePaint(primaryPaint: paint);
   }
 
   THLinePaint getSelectedAreaBorderPaint() {
@@ -57,31 +55,30 @@ abstract class MPVisualControllerBase with Store {
 
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 
-    return THLinePaint(paint: paint);
+    return THLinePaint(primaryPaint: paint);
   }
 
   THLinePaint getMultipleElementsClickedHighlightedFillPaint() {
-    return THLinePaint(paint: THPaints.thPaint1002);
+    return THLinePaint(primaryPaint: THPaints.thPaint1002);
   }
 
   THLinePaint getMultipleElementsClickedHighlightedBorderPaint() {
-    final Paint paint = THPaints.thPaint2;
-
-    paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
-
-    return THLinePaint(paint: paint);
+    return THLinePaint(
+      primaryPaint: THPaints.thPaint2
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
   }
 
   THLinePaint getNewLinePaint() {
     return THLinePaint(
-      paint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
 
   THLinePaint getEditLinePaint() {
     return THLinePaint(
-      paint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -103,7 +100,7 @@ abstract class MPVisualControllerBase with Store {
     final Paint paint =
         isFromActiveScrap ? THPaints.thPaint1004 : THPaints.thPaint1016;
 
-    return THLinePaint(paint: paint);
+    return THLinePaint(primaryPaint: paint);
   }
 
   THLinePaint getUnselectedAreaBorderPaint(THArea area) {
@@ -113,31 +110,329 @@ abstract class MPVisualControllerBase with Store {
 
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 
-    return THLinePaint(paint: paint);
+    return THLinePaint(primaryPaint: paint);
   }
 
   THLinePaint getUnselectedLinePaint(THLine line) {
+    if (!_th2FileEditController.isFromActiveScrap(line)) {
+      return THLinePaint(
+        primaryPaint: THPaints.thPaint16
+          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      );
+    }
+
     final THLineType linetype = line.lineType;
 
-// switch(linetype){
-//   case THLineType.abyssEntrance:
-//   return THLinePaint(paint: )
-// }
-
-    final Paint paint = _th2FileEditController.isFromActiveScrap(line)
-        ? THPaints.thPaint1
-        : THPaints.thPaint16;
-
-    return THLinePaint(
-      paint: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-    );
+    switch (linetype) {
+      case THLineType.abyssEntrance:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.arrow:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint10
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.border:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint5
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.ceilingMeander:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint6
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.ceilingStep:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint6
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.chimney:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.contour:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint7
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.dripline:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint7
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.fault:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.fixedLadder:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.floorMeander:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint6
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.floorStep:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint6
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.flowstone:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.gradient:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.handrail:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.joint:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.label:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint10
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.lowCeiling:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.mapConnection:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint10
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.moonmilk:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.overhang:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint12
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.pit:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.pitch:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.pitChimney:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint14
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint12
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.rimstoneDam:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint8
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.rimstonePool:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint8
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.rockBorder:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint9
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.rockEdge:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint9
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint15
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.rope:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint11
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.ropeLadder:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint10
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.section:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint10
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.slope:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint13
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint12
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.steps:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint9
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.survey:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint12
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.u:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        );
+      case THLineType.viaFerrata:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint8
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.walkWay:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint3
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          secondaryPaint: THPaints.thPaint7
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          type: LinePaintType.dashed,
+        );
+      case THLineType.wall:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint1
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        );
+      case THLineType.waterFlow:
+        return THLinePaint(
+          primaryPaint: THPaints.thPaint4
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        );
+    }
   }
 
-  THLinePaint getControlPointLinePaint() {
-    return THLinePaint(
-      paint: THPaints.thPaintBlackBorder
-        ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
-    );
+  Paint getControlPointLinePaint() {
+    return THPaints.thPaintBlackBorder
+      ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
   }
 
   THPointPaint getNewLinePointPaint() {

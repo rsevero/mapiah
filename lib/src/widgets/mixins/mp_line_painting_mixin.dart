@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -70,7 +71,7 @@ mixin MPLinePaintingMixin {
 
   THLinePainter getLinePainter({
     required THLine line,
-    required Paint linePaint,
+    required THLinePaint linePaint,
     Paint? fillPaint,
     required double canvasScale,
     required Offset canvasTranslation,
@@ -85,8 +86,7 @@ mixin MPLinePaintingMixin {
 
     return THLinePainter(
       lineSegmentsMap: segmentsMap,
-      linePaintStroke: linePaint,
-      linePaintFill: fillPaint,
+      linePaint: linePaint,
       th2FileEditController: th2FileEditController,
       canvasScale: canvasScale,
       canvasTranslation: canvasTranslation,

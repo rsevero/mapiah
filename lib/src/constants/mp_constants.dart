@@ -140,6 +140,8 @@ final Paint thSelectionHandleFillPaint = Paint()
   ..style = PaintingStyle.stroke;
 const double thWhiteBackgroundIncrease = 1.5;
 const double mpOverlayWindowOuterAnchorMargin = 15.0;
+const double mpDashGapLength = 8.0;
+const double mpDashLength = 12.0;
 
 const String thMainConfigSection = 'Main';
 const String thMainConfigLocale = 'Locale';

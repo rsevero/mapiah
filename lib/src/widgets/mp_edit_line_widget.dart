@@ -67,13 +67,11 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         final Paint selectedControlPointPaint =
             selectedControlPointPaintInfo.paint;
 
-        final THLinePaint controlPointLinePaintInfo =
+        final Paint controlPointLinePaint =
             th2FileEditController.visualController.getControlPointLinePaint();
-        final Paint controlPointLinePaint = controlPointLinePaintInfo.paint;
 
-        final THLinePaint linePaintInfo =
+        final THLinePaint linePaint =
             th2FileEditController.visualController.getEditLinePaint();
-        final Paint linePaint = linePaintInfo.paint;
 
         final MPSelectableControlPoint? selectedControlPoint =
             selectionController.selectedControlPoint;
@@ -98,7 +96,7 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
         CustomPainter painter = THLinePainter(
           lineSegmentsMap: segmentsMap,
-          linePaintStroke: linePaint,
+          linePaint: linePaint,
           th2FileEditController: th2FileEditController,
           canvasScale: canvasScale,
           canvasTranslation: canvasTranslation,

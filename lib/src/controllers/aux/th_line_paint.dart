@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 
 class THLinePaint {
-  final Paint paint;
+  final Paint? primaryPaint;
+  final Paint? secondaryPaint;
+  final Paint? fillPaint;
+  final LinePaintType type;
 
   THLinePaint({
-    required this.paint,
+    this.primaryPaint,
+    this.secondaryPaint,
+    this.fillPaint,
+    this.type = LinePaintType.continuous,
   });
+}
+
+enum LinePaintType {
+  continuous,
+  dashed;
 }

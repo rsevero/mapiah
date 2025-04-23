@@ -35,16 +35,11 @@ class MPSelectedElementsWidget extends StatelessWidget
         final double pointRadius = pointPaintInfo.radius;
         final Paint pointPaint = pointPaintInfo.paint;
 
-        final THLinePaint linePaintInfo =
+        final THLinePaint linePaint =
             th2FileEditController.visualController.getSelectedLinePaint();
-        final Paint linePaint = linePaintInfo.paint;
 
-        final Paint fillPaint = th2FileEditController.visualController
-            .getSelectedAreaFillPaint()
-            .paint;
-        final Paint borderPaint = th2FileEditController.visualController
-            .getSelectedAreaBorderPaint()
-            .paint;
+        final THLinePaint areaPaint =
+            th2FileEditController.visualController.getSelectedAreaBorderPaint();
 
         final double canvasScale = th2FileEditController.canvasScale;
         final Offset canvasTranslation =
@@ -85,8 +80,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                 painters.add(
                   getLinePainter(
                     line: line,
-                    linePaint: borderPaint,
-                    fillPaint: fillPaint,
+                    linePaint: areaPaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,
