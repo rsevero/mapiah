@@ -46,8 +46,9 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
 
           final List<CustomPainter> painters = [];
 
-          final THPointPaint pointPaintInfo =
-              th2FileEditController.visualController.getSelectedPointPaint();
+          final THPointPaint pointPaintInfo = th2FileEditController
+              .visualController
+              .getHighligthtedEndControlPointPaint();
           final Paint pointPaint = pointPaintInfo.paint;
           final double pointRadius = pointPaintInfo.radius;
 

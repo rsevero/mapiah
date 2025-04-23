@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
@@ -72,10 +73,11 @@ class MPOverlayWindowFactory {
         );
       case MPWindowType.multipleElementsClicked:
         outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
-          th2FileEditController.selectionController
-              .getClickedElementsBoundingBoxOnCanvas()
-              .centerRight,
-        );
+              th2FileEditController.selectionController
+                  .getClickedElementsBoundingBoxOnCanvas()
+                  .centerRight,
+            ) +
+            Offset(mpOverlayWindowOuterAnchorMargin, 0);
 
         overlayWindowWidget = MPMultipleElementsClickedWidget(
           th2FileEditController: th2FileEditController,
@@ -83,10 +85,11 @@ class MPOverlayWindowFactory {
         );
       case MPWindowType.multipleEndControlPointsClicked:
         outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
-          th2FileEditController.selectionController
-              .getClickedElementsBoundingBoxOnCanvas()
-              .centerRight,
-        );
+              th2FileEditController.selectionController
+                  .getClickedElementsBoundingBoxOnCanvas()
+                  .centerRight,
+            ) +
+            Offset(mpOverlayWindowOuterAnchorMargin, 0);
 
         overlayWindowWidget = MPMultipleEndControlPointsClickedWidget(
           th2FileEditController: th2FileEditController,

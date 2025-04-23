@@ -6,6 +6,7 @@ import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mobx/mobx.dart';
 
 part 'mp_visual_controller.g.dart';
@@ -80,7 +81,7 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getEditLinePaint() {
     return THLinePaint(
-      paint: THPaints.thPaint7
+      paint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -116,6 +117,13 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THLinePaint getUnselectedLinePaint(THLine line) {
+    final THLineType linetype = line.lineType;
+
+// switch(linetype){
+//   case THLineType.abyssEntrance:
+//   return THLinePaint(paint: )
+// }
+
     final Paint paint = _th2FileEditController.isFromActiveScrap(line)
         ? THPaints.thPaint1
         : THPaints.thPaint16;
@@ -136,6 +144,14 @@ abstract class MPVisualControllerBase with Store {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
       paint: THPaints.thPaintBlackBorder
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
+  }
+
+  THPointPaint getHighligthtedEndControlPointPaint() {
+    return THPointPaint(
+      radius: _th2FileEditController.pointRadiusOnCanvas,
+      paint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -166,7 +182,7 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THPointPaint getUnselectablePointPaint() {
+  THPointPaint getUnselectedEndPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
       paint: THPaints.thPaintBlackBorder
