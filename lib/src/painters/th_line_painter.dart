@@ -7,6 +7,7 @@ import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 
 class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
@@ -31,9 +32,24 @@ class THLinePainter extends CustomPainter {
     }
   }
 
-  static final Map<LinePaintType, List<int>> linePaintTypeToDashLengths =
-      <LinePaintType, List<int>>{
-    LinePaintType.regularDashed: <int>[12, -8],
+  static final Map<MPLinePaintType, List<int>> linePaintTypeToDashLengths =
+      <MPLinePaintType, List<int>>{
+    MPLinePaintType.dot: <int>[2, -6],
+    MPLinePaintType.long: <int>[18, -6],
+    MPLinePaintType.long2Dots: <int>[18, -6, 2, -6, 2, -6],
+    MPLinePaintType.long3Dots: <int>[18, -6, 2, -6, 2, -6, 2, -6],
+    MPLinePaintType.longDot: <int>[18, -6, 2, -6],
+    MPLinePaintType.shortLongShort: <int>[6, -6, 18, -6, 6, -12],
+    MPLinePaintType.medium: <int>[12, -6],
+    MPLinePaintType.medium2Dots: <int>[12, -6, 2, -6, 2, -6],
+    MPLinePaintType.medium3Dots: <int>[12, -6, 2, -6, 2, -6, 2, -6],
+    MPLinePaintType.mediumDot: <int>[12, -6, 2, -6],
+    MPLinePaintType.mediumLongMedium: <int>[12, -6, 18, -6, 12, -12],
+    MPLinePaintType.short: <int>[6, -6],
+    MPLinePaintType.short2Dots: <int>[6, -6, 2, -6, 2, -6],
+    MPLinePaintType.short3Dots: <int>[6, -6, 2, -6, 2, -6, 2, -6],
+    MPLinePaintType.shortDot: <int>[6, -6, 2, -6],
+    MPLinePaintType.shortMediumShort: <int>[6, -6, 12, -6, 6, -12],
   };
 
   @override
@@ -69,7 +85,7 @@ class THLinePainter extends CustomPainter {
       canvas.drawPath(path, linePaint.fillPaint!);
     }
 
-    if (linePaint.type == LinePaintType.continuous) {
+    if (linePaint.type == MPLinePaintType.continuous) {
       canvas.drawPath(path, linePaint.primaryPaint!);
     } else {
       _drawDashedPath(canvas, path);

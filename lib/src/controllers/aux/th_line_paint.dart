@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 
 class THLinePaint {
   final Paint? primaryPaint;
   final Paint? secondaryPaint;
   final Paint? fillPaint;
-  final LinePaintType type;
+  final MPLinePaintType type;
 
   THLinePaint({
     this.primaryPaint,
     this.secondaryPaint,
     this.fillPaint,
-    this.type = LinePaintType.continuous,
+    this.type = MPLinePaintType.continuous,
   });
-}
-
-enum LinePaintType {
-  continuous,
-  regularDashed;
 }
