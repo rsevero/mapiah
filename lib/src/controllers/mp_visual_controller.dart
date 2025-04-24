@@ -130,7 +130,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.arrow:
         return THLinePaint(
@@ -138,7 +138,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.border:
         return THLinePaint(
@@ -146,7 +146,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.ceilingMeander:
         return THLinePaint(
@@ -154,7 +154,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.ceilingStep:
         return THLinePaint(
@@ -162,7 +162,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.chimney:
         return THLinePaint(
@@ -170,7 +170,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.contour:
         return THLinePaint(
@@ -178,7 +178,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.dripline:
         return THLinePaint(
@@ -186,7 +186,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.fault:
         return THLinePaint(
@@ -194,7 +194,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.fixedLadder:
         return THLinePaint(
@@ -202,7 +202,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.floorMeander:
         return THLinePaint(
@@ -210,7 +210,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint14
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.floorStep:
         return THLinePaint(
@@ -218,7 +218,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint13
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.flowstone:
         return THLinePaint(
@@ -226,7 +226,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.gradient:
         return THLinePaint(
@@ -234,7 +234,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.handrail:
         return THLinePaint(
@@ -242,7 +242,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint14
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.joint:
         return THLinePaint(
@@ -250,7 +250,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint14
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.label:
         return THLinePaint(
@@ -258,7 +258,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.lowCeiling:
         return THLinePaint(
@@ -266,7 +266,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint14
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.mapConnection:
         return THLinePaint(
@@ -274,7 +274,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint14
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.moonmilk:
         return THLinePaint(
@@ -282,7 +282,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint13
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.overhang:
         return THLinePaint(
@@ -290,7 +290,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint12
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.pit:
         return THLinePaint(
@@ -298,7 +298,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint13
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.pitch:
         return THLinePaint(
@@ -306,7 +306,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint13
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.pitChimney:
         return THLinePaint(
@@ -314,7 +314,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint12
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.rimstoneDam:
         return THLinePaint(
@@ -322,7 +322,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.rimstonePool:
         return THLinePaint(
@@ -330,7 +330,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.rockBorder:
         return THLinePaint(
@@ -338,7 +338,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.rockEdge:
         return THLinePaint(
@@ -346,7 +346,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.rope:
         return THLinePaint(
@@ -354,7 +354,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint11
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.ropeLadder:
         return THLinePaint(
@@ -362,7 +362,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint10
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.section:
         return THLinePaint(
@@ -370,7 +370,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint13
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.slope:
         return THLinePaint(
@@ -378,7 +378,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint12
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.steps:
         return THLinePaint(
@@ -386,7 +386,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint9
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.survey:
         return THLinePaint(
@@ -394,7 +394,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint16
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.u:
         return THLinePaint(
@@ -407,7 +407,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint8
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.walkWay:
         return THLinePaint(
@@ -415,7 +415,7 @@ abstract class MPVisualControllerBase with Store {
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           secondaryPaint: THPaints.thPaint7
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: LinePaintType.dashed,
+          type: LinePaintType.regularDashed,
         );
       case THLineType.wall:
         return THLinePaint(

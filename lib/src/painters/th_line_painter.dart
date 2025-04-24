@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
@@ -31,6 +30,11 @@ class THLinePainter extends CustomPainter {
           'Linepaint needs at least one paint property not null in THLinePainter.');
     }
   }
+
+  static final Map<LinePaintType, List<int>> linePaintTypeToDashLengths =
+      <LinePaintType, List<int>>{
+    LinePaintType.regularDashed: <int>[12, -8],
+  };
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -61,14 +65,14 @@ class THLinePainter extends CustomPainter {
       }
     }
 
-    switch (linePaint.type) {
-      case LinePaintType.continuous:
-        if (linePaint.fillPaint != null) {
-          canvas.drawPath(path, linePaint.fillPaint!);
-        }
-        canvas.drawPath(path, linePaint.primaryPaint!);
-      case LinePaintType.dashed:
-        _drawDashedPath(canvas, path);
+    if (linePaint.fillPaint != null) {
+      canvas.drawPath(path, linePaint.fillPaint!);
+    }
+
+    if (linePaint.type == LinePaintType.continuous) {
+      canvas.drawPath(path, linePaint.primaryPaint!);
+    } else {
+      _drawDashedPath(canvas, path);
     }
   }
 
@@ -83,25 +87,27 @@ class THLinePainter extends CustomPainter {
             .equals(lineSegmentsMap, oldDelegate.lineSegmentsMap);
   }
 
-  /// Dash code inspired on https://stackoverflow.com/a/71099304/11754455
+  /// Dash code inspired by https://stackoverflow.com/a/71099304/11754455
   void _drawDashedPath(Canvas canvas, Path path) {
-    final double canvasDashLength =
-        th2FileEditController.scaleScreenToCanvas(mpDashLength);
-    final double canvasDashGapLength =
-        th2FileEditController.scaleScreenToCanvas(mpDashGapLength);
+    final List<int> dashLengths = linePaintTypeToDashLengths[linePaint.type]!;
+    final List<double> dashLengthsOnCanvas = [];
+
+    for (final int length in dashLengths) {
+      dashLengthsOnCanvas.add(
+        th2FileEditController.scaleScreenToCanvas(
+          length.toDouble(),
+        ),
+      );
+    }
 
     if (linePaint.secondaryPaint != null) {
       final MPDashedPathProperties dashedPathProperties =
           MPDashedPathProperties(
-        path: Path(),
-        dashLength: canvasDashLength,
-        dashGapLength: canvasDashGapLength,
+        dashLengths: dashLengthsOnCanvas,
         invert: true,
       );
       final Path dashedPath = _getDashedPath(
         path,
-        canvasDashLength,
-        canvasDashGapLength,
         dashedPathProperties,
       );
 
@@ -111,14 +117,10 @@ class THLinePainter extends CustomPainter {
     if (linePaint.primaryPaint != null) {
       final MPDashedPathProperties dashedPathProperties =
           MPDashedPathProperties(
-        path: Path(),
-        dashLength: canvasDashLength,
-        dashGapLength: canvasDashGapLength,
+        dashLengths: dashLengthsOnCanvas,
       );
       final Path dashedPath = _getDashedPath(
         path,
-        canvasDashLength,
-        canvasDashGapLength,
         dashedPathProperties,
       );
 
@@ -128,8 +130,6 @@ class THLinePainter extends CustomPainter {
 
   Path _getDashedPath(
     Path originalPath,
-    double dashLength,
-    double dashGapLength,
     MPDashedPathProperties dashedPathProperties,
   ) {
     final Iterator<PathMetric> metricsIterator =
@@ -140,11 +140,7 @@ class THLinePainter extends CustomPainter {
 
       dashedPathProperties.extractedPathLength = 0.0;
       while (dashedPathProperties.extractedPathLength < metric.length) {
-        if (dashedPathProperties.addDashNext) {
-          dashedPathProperties.addDash(metric, dashLength);
-        } else {
-          dashedPathProperties.addDashGap(metric, dashGapLength);
-        }
+        dashedPathProperties.addNext(metric);
       }
     }
 

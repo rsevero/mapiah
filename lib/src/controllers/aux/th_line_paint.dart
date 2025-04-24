@@ -16,5 +16,5 @@ class THLinePaint {
 
 enum LinePaintType {
   continuous,
-  dashed;
+  regularDashed;
 }
