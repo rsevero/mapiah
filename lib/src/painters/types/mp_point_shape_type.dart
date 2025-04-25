@@ -1,7 +1,6 @@
 enum MPPointShapeType {
   asterisk,
   circle,
-  cross,
   horizontalDiamond,
   invertedT,
   invertedTriangle,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
@@ -21,21 +22,11 @@ class THCirclePointPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (pointPaint.fill != null) {
-      canvas.drawCircle(
-        position,
-        pointPaint.radius,
-        pointPaint.fill!,
-      );
-    }
-
-    if (pointPaint.border != null) {
-      canvas.drawCircle(
-        position,
-        pointPaint.radius,
-        pointPaint.border!,
-      );
-    }
+    MPInteractionAux.drawPoint(
+      canvas: canvas,
+      position: position,
+      pointPaint: pointPaint,
+    );
   }
 
   @override
