@@ -9,7 +9,6 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_circle_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
-import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPNonSelectedElementsWidget extends StatelessWidget
@@ -39,8 +38,6 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         final Offset canvasTranslation =
             th2FileEditController.canvasTranslation;
 
-        int pointShapeIndex = 0;
-
         for (final int drawableElementMPID in drawableElementMPIDs) {
           if (selectionController.isElementSelectedByMPID(
             drawableElementMPID,
@@ -55,14 +52,10 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               final THPointPaint pointPaint =
                   visualController.getUnselectedPointPaint(element);
 
-              final MPPointShapeType pointShapeType = MPPointShapeType
-                  .values[pointShapeIndex % MPPointShapeType.values.length];
-              pointShapeIndex++;
-
               painters.add(
                 THCirclePointPainter(
                   position: element.position.coordinates,
-                  pointPaint: pointPaint.copyWith(type: pointShapeType),
+                  pointPaint: pointPaint,
                   th2FileEditController: th2FileEditController,
                 ),
               );

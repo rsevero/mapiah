@@ -10,6 +10,22 @@ import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
 class MPInteractionAux {
+  static const Map<MPPointShapeType,
+      void Function(Canvas, Offset, double, Paint)> _pointShapeDrawMethods = {
+    MPPointShapeType.asterisk: _drawAsteriskPoint,
+    MPPointShapeType.circle: _drawCirclePoint,
+    MPPointShapeType.horizontalDiamond: _drawHorizontalDiamondPoint,
+    MPPointShapeType.invertedT: _drawInvertedTPoint,
+    MPPointShapeType.invertedTriangle: _drawInvertedTrianglePoint,
+    MPPointShapeType.plus: _drawPlusPoint,
+    MPPointShapeType.square: _drawSquarePoint,
+    MPPointShapeType.star: _drawStarPoint,
+    MPPointShapeType.t: _drawTPoint,
+    MPPointShapeType.triangle: _drawTrianglePoint,
+    MPPointShapeType.verticalDiamond: _drawVerticalDiamondPoint,
+    MPPointShapeType.x: _drawXPoint,
+  };
+
   static bool isShiftPressed() {
     return HardwareKeyboard.instance.logicalKeysPressed
             .contains(LogicalKeyboardKey.shiftLeft) ||
@@ -164,71 +180,17 @@ class MPInteractionAux {
     required Offset position,
     required THPointPaint pointPaint,
   }) {
-    switch (pointPaint.type) {
-      case MPPointShapeType.asterisk:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawAsteriskPoint,
-        );
-      case MPPointShapeType.circle:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawCirclePoint,
-        );
-      case MPPointShapeType.horizontalDiamond:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawHorizontalDiamondPoint,
-        );
-      case MPPointShapeType.invertedT:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawInvertedTPoint,
-        );
-      case MPPointShapeType.invertedTriangle:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawInvertedTrianglePoint,
-        );
-      case MPPointShapeType.plus:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawPlusPoint,
-        );
-      case MPPointShapeType.square:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawSquarePoint,
-        );
-      case MPPointShapeType.star:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawStarPoint,
-        );
-      default:
-        _drawPoint(
-          canvas: canvas,
-          position: position,
-          pointPaint: pointPaint,
-          customDrawMethod: _drawCirclePoint,
-        );
-    }
+    final void Function(Canvas, Offset, double, Paint) customDrawMethod =
+        _pointShapeDrawMethods.containsKey(pointPaint.type)
+            ? _pointShapeDrawMethods[pointPaint.type]!
+            : _drawCirclePoint;
+
+    _drawPoint(
+      canvas: canvas,
+      position: position,
+      pointPaint: pointPaint,
+      customDrawMethod: customDrawMethod,
+    );
   }
 
   static void _drawStarPoint(
@@ -237,19 +199,104 @@ class MPInteractionAux {
     double radius,
     Paint paint,
   ) {
-    final Path starPath = Path()
-      ..moveTo(position.dx, position.dy + radius) // Bottom point
-      ..lineTo(position.dx - radius * th45Degrees,
-          position.dy - radius * 0.9) // Left point
-      ..lineTo(position.dx + radius,
-          position.dy + radius * th45Degrees * 0.5) // Right point
-      ..lineTo(position.dx - radius,
-          position.dy + radius * th45Degrees * 0.5) // Left point
-      ..lineTo(position.dx + radius * th45Degrees,
-          position.dy - radius * 0.9) // Top point
+    final double enlargedRadius = radius * 1.5;
+    final double halfEnlargedRadius = enlargedRadius * 0.5;
+    final double horizontalDistance = enlargedRadius * mpSqrt3Over2;
+
+    // Vertices of the first triangle (upward)
+    final Offset t1_1 = Offset(position.dx, position.dy - enlargedRadius);
+    final Offset t1_2 = Offset(
+      position.dx + horizontalDistance,
+      position.dy + halfEnlargedRadius,
+    );
+    final Offset t1_3 = Offset(
+      position.dx - horizontalDistance,
+      position.dy + halfEnlargedRadius,
+    );
+
+    // Vertices of the second triangle (downward)
+    final Offset t2_1 = Offset(position.dx, position.dy + enlargedRadius);
+    final Offset t2_2 = Offset(
+      position.dx + horizontalDistance,
+      position.dy - halfEnlargedRadius,
+    );
+    final Offset t2_3 = Offset(
+      position.dx - horizontalDistance,
+      position.dy - halfEnlargedRadius,
+    );
+
+    final List<Offset> intersectionPoints = [];
+    final List<List<Offset>> segmentsForIntersections = [
+      [t1_1, t1_2, t2_2, t2_3],
+      [t2_2, t2_1, t1_1, t1_2],
+      [t1_2, t1_3, t2_1, t2_2],
+      [t2_1, t2_3, t1_2, t1_3],
+      [t1_3, t1_1, t2_3, t2_1],
+      [t2_3, t2_2, t1_3, t1_1],
+    ];
+
+    // Find intersection points between pairs of sides
+    for (final segments in segmentsForIntersections) {
+      Offset? intersection = getLineSegmentIntersection(
+        lineSegment1Point1: segments[0],
+        lineSegment1Point2: segments[1],
+        lineSegment2Point1: segments[2],
+        lineSegment2Point2: segments[3],
+      );
+      if (intersection != null) {
+        intersectionPoints.add(intersection);
+      }
+    }
+
+    Path trianglePath = Path()
+      ..moveTo(t1_1.dx, t1_1.dy)
+      ..lineTo(intersectionPoints[0].dx, intersectionPoints[0].dy)
+      ..lineTo(t2_2.dx, t2_2.dy)
+      ..lineTo(intersectionPoints[1].dx, intersectionPoints[1].dy)
+      ..lineTo(t1_2.dx, t1_2.dy)
+      ..lineTo(intersectionPoints[2].dx, intersectionPoints[2].dy)
+      ..lineTo(t2_1.dx, t2_1.dy)
+      ..lineTo(intersectionPoints[3].dx, intersectionPoints[3].dy)
+      ..lineTo(t1_3.dx, t1_3.dy)
+      ..lineTo(intersectionPoints[4].dx, intersectionPoints[4].dy)
+      ..lineTo(t2_3.dx, t2_3.dy)
+      ..lineTo(intersectionPoints[5].dx, intersectionPoints[5].dy)
       ..close();
 
-    canvas.drawPath(starPath, paint);
+    canvas.drawPath(trianglePath, paint);
+  }
+
+  static Offset? getLineSegmentIntersection({
+    required Offset lineSegment1Point1,
+    required Offset lineSegment1Point2,
+    required Offset lineSegment2Point1,
+    required Offset lineSegment2Point2,
+  }) {
+    final double x1 = lineSegment1Point1.dx;
+    final double y1 = lineSegment1Point1.dy;
+    final double x2 = lineSegment1Point2.dx;
+    final double y2 = lineSegment1Point2.dy;
+    final double x3 = lineSegment2Point1.dx;
+    final double y3 = lineSegment2Point1.dy;
+    final double x4 = lineSegment2Point2.dx;
+    final double y4 = lineSegment2Point2.dy;
+
+    final double denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    if (denominator == 0) {
+      return null; // Lines are parallel or collinear
+    }
+
+    final double tNumerator = (x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4);
+    final double uNumerator = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3));
+
+    final double t = tNumerator / denominator;
+    final double u = uNumerator / denominator;
+
+    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+      return Offset(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
+    }
+
+    return null; // No intersection within the line segments
   }
 
   static void _drawSquarePoint(
@@ -273,10 +320,31 @@ class MPInteractionAux {
     double radius,
     Paint paint,
   ) {
+    final double halfRadius = radius * 0.5;
+    final double horizontalDistance = radius * mpSqrt3Over2;
+
     final Path trianglePath = Path()
-      ..moveTo(position.dx, position.dy - radius) // Bottom point
-      ..lineTo(position.dx - radius, position.dy + radius) // Left point
-      ..lineTo(position.dx + radius, position.dy + radius) // Right point
+      ..moveTo(position.dx, position.dy - radius)
+      ..lineTo(position.dx + horizontalDistance, position.dy + halfRadius)
+      ..lineTo(position.dx - horizontalDistance, position.dy + halfRadius)
+      ..close();
+
+    canvas.drawPath(trianglePath, paint);
+  }
+
+  static void _drawTrianglePoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    final double halfRadius = radius * 0.5;
+    final double horizontalDistance = radius * mpSqrt3Over2;
+
+    final Path trianglePath = Path()
+      ..moveTo(position.dx, position.dy + radius)
+      ..lineTo(position.dx + horizontalDistance, position.dy - halfRadius)
+      ..lineTo(position.dx - horizontalDistance, position.dy - halfRadius)
       ..close();
 
     canvas.drawPath(trianglePath, paint);
@@ -316,6 +384,24 @@ class MPInteractionAux {
     }
   }
 
+  static void _drawTPoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    canvas.drawLine(
+      Offset(position.dx - radius, position.dy + radius),
+      Offset(position.dx + radius, position.dy + radius),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(position.dx, position.dy - radius),
+      Offset(position.dx, position.dy + radius),
+      paint,
+    );
+  }
+
   static void _drawInvertedTPoint(
     Canvas canvas,
     Offset position,
@@ -323,15 +409,32 @@ class MPInteractionAux {
     Paint paint,
   ) {
     canvas.drawLine(
-      Offset(position.dx - radius, position.dy),
-      Offset(position.dx + radius, position.dy),
+      Offset(position.dx - radius, position.dy - radius),
+      Offset(position.dx + radius, position.dy - radius),
       paint,
     );
     canvas.drawLine(
-      Offset(position.dx, position.dy),
-      Offset(position.dx, position.dy + (2 * radius)),
+      Offset(position.dx, position.dy - radius),
+      Offset(position.dx, position.dy + radius),
       paint,
     );
+  }
+
+  static void _drawVerticalDiamondPoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    final double verticalRadius = radius * mpDiamondLongerDiagonalRatio;
+    final Path diamondPath = Path()
+      ..moveTo(position.dx, position.dy - verticalRadius) // Top point
+      ..lineTo(position.dx + radius, position.dy) // Right point
+      ..lineTo(position.dx, position.dy + verticalRadius) // Bottom point
+      ..lineTo(position.dx - radius, position.dy) // Left point
+      ..close();
+
+    canvas.drawPath(diamondPath, paint);
   }
 
   static void _drawHorizontalDiamondPoint(
@@ -369,6 +472,26 @@ class MPInteractionAux {
     );
   }
 
+  static void _drawXPoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    final double radius45Degrees = radius * th45Degrees;
+
+    canvas.drawLine(
+      Offset(position.dx - radius45Degrees, position.dy - radius45Degrees),
+      Offset(position.dx + radius45Degrees, position.dy + radius45Degrees),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(position.dx - radius45Degrees, position.dy + radius45Degrees),
+      Offset(position.dx + radius45Degrees, position.dy - radius45Degrees),
+      paint,
+    );
+  }
+
   static void _drawAsteriskPoint(
     Canvas canvas,
     Offset position,
@@ -376,28 +499,6 @@ class MPInteractionAux {
     Paint paint,
   ) {
     _drawPlusPoint(canvas, position, radius, paint);
-
-    canvas.drawLine(
-      Offset(
-        position.dx - radius * th45Degrees,
-        position.dy - radius * th45Degrees,
-      ),
-      Offset(
-        position.dx + radius * th45Degrees,
-        position.dy + radius * th45Degrees,
-      ),
-      paint,
-    );
-    canvas.drawLine(
-      Offset(
-        position.dx - radius * th45Degrees,
-        position.dy + radius * th45Degrees,
-      ),
-      Offset(
-        position.dx + radius * th45Degrees,
-        position.dy - radius * th45Degrees,
-      ),
-      paint,
-    );
+    _drawXPoint(canvas, position, radius, paint);
   }
 }
