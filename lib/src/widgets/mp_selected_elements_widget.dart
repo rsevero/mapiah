@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
@@ -13,11 +14,13 @@ class MPSelectedElementsWidget extends StatelessWidget
     with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final THFile thFile;
+  final MPVisualController visualController;
 
   MPSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
-  }) : thFile = th2FileEditController.thFile;
+  })  : thFile = th2FileEditController.thFile,
+        visualController = th2FileEditController.visualController;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +34,12 @@ class MPSelectedElementsWidget extends StatelessWidget
             .selectionController.mpSelectedElementsLogical.values;
 
         final THPointPaint pointPaintInfo =
-            th2FileEditController.visualController.getSelectedPointPaint();
+            visualController.getSelectedPointPaint();
         final double pointRadius = pointPaintInfo.radius;
         final Paint pointPaint = pointPaintInfo.paint;
 
-        final THLinePaint linePaint =
-            th2FileEditController.visualController.getSelectedLinePaint();
-
         final THLinePaint areaPaint =
-            th2FileEditController.visualController.getSelectedAreaBorderPaint();
+            visualController.getSelectedAreaBorderPaint();
 
         final double canvasScale = th2FileEditController.canvasScale;
         final Offset canvasTranslation =
@@ -62,6 +62,9 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
+              final THLinePaint linePaint =
+                  visualController.getSelectedLinePaint(element);
+
               painters.add(
                 getLinePainter(
                   line: element,

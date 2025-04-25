@@ -26,6 +26,273 @@ abstract class MPVisualControllerBase with Store {
       : _th2FileEditController = th2FileEditController,
         _thFile = th2FileEditController.thFile;
 
+  static final Map<THLineType, THLinePaint> lineTypePaints = {
+    THLineType.abyssEntrance: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      type: MPLinePaintType.longDot,
+    ),
+    THLineType.arrow: THLinePaint(
+      primaryPaint: THPaints.thPaint10,
+      type: MPLinePaintType.dot,
+    ),
+    THLineType.ceilingMeander: THLinePaint(
+      primaryPaint: THPaints.thPaint6,
+      type: MPLinePaintType.shortMediumShort,
+    ),
+    THLineType.ceilingStep: THLinePaint(
+      primaryPaint: THPaints.thPaint6,
+      type: MPLinePaintType.shortDot,
+    ),
+    THLineType.chimney: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    THLineType.contour: THLinePaint(
+      primaryPaint: THPaints.thPaint7,
+      type: MPLinePaintType.dot,
+    ),
+    THLineType.dripline: THLinePaint(
+      primaryPaint: THPaints.thPaint7,
+      type: MPLinePaintType.mediumDot,
+    ),
+    THLineType.fault: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      type: MPLinePaintType.dot,
+    ),
+    THLineType.fixedLadder: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.dot,
+    ),
+    THLineType.floorMeander: THLinePaint(
+      primaryPaint: THPaints.thPaint6,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    THLineType.floorStep: THLinePaint(
+      primaryPaint: THPaints.thPaint6,
+      type: MPLinePaintType.long3Dots,
+    ),
+    THLineType.flowstone: THLinePaint(
+      primaryPaint: THPaints.thPaint11,
+      type: MPLinePaintType.shortMediumShort,
+    ),
+    THLineType.gradient: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      type: MPLinePaintType.long,
+    ),
+    THLineType.handrail: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.long,
+    ),
+    THLineType.joint: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      type: MPLinePaintType.mediumDot,
+    ),
+    THLineType.label: THLinePaint(
+      primaryPaint: THPaints.thPaint10,
+      type: MPLinePaintType.long,
+    ),
+    THLineType.lowCeiling: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      type: MPLinePaintType.short3Dots,
+    ),
+    THLineType.mapConnection: THLinePaint(
+      primaryPaint: THPaints.thPaint10,
+      type: MPLinePaintType.short2Dots,
+    ),
+    THLineType.moonmilk: THLinePaint(
+      primaryPaint: THPaints.thPaint11,
+      type: MPLinePaintType.long3Dots,
+    ),
+    THLineType.overhang: THLinePaint(
+      primaryPaint: THPaints.thPaint11,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    THLineType.pit: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      type: MPLinePaintType.shortLongShort,
+    ),
+    THLineType.pitch: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      type: MPLinePaintType.short2Dots,
+    ),
+    THLineType.pitChimney: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      type: MPLinePaintType.medium,
+    ),
+    THLineType.rimstoneDam: THLinePaint(
+      primaryPaint: THPaints.thPaint8,
+      type: MPLinePaintType.long,
+    ),
+    THLineType.rimstonePool: THLinePaint(
+      primaryPaint: THPaints.thPaint8,
+      type: MPLinePaintType.short3Dots,
+    ),
+    THLineType.rockBorder: THLinePaint(
+      primaryPaint: THPaints.thPaint9,
+      type: MPLinePaintType.continuous,
+    ),
+    THLineType.rockEdge: THLinePaint(
+      primaryPaint: THPaints.thPaint9,
+      type: MPLinePaintType.medium,
+    ),
+    THLineType.rope: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.continuous,
+    ),
+    THLineType.ropeLadder: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.short,
+    ),
+    THLineType.section: THLinePaint(
+      primaryPaint: THPaints.thPaint10,
+      type: MPLinePaintType.mediumDot,
+    ),
+    THLineType.slope: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      type: MPLinePaintType.continuous,
+    ),
+    THLineType.steps: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.long3Dots,
+    ),
+    THLineType.u: THLinePaint(
+      primaryPaint: THPaints.thPaint16,
+      type: MPLinePaintType.continuous,
+    ),
+    THLineType.viaFerrata: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    THLineType.walkWay: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      type: MPLinePaintType.medium,
+    ),
+  };
+
+  static final Map<String, THLinePaint> borderSubtypesPaints = {
+    mpNoSubtypeID: THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      type: MPLinePaintType.continuous,
+    ),
+    'invisible': THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      type: MPLinePaintType.dot,
+    ),
+    'presumed': THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      type: MPLinePaintType.long,
+    ),
+    'temporary': THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    'visible': THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      type: MPLinePaintType.continuous,
+    ),
+  };
+
+  static final Map<String, THLinePaint> surveySubtypesPaints = {
+    mpNoSubtypeID: THLinePaint(
+      primaryPaint: THPaints.thPaint15,
+      type: MPLinePaintType.continuous,
+    ),
+    'cave': THLinePaint(
+      primaryPaint: THPaints.thPaint15,
+      type: MPLinePaintType.continuous,
+    ),
+    'surface': THLinePaint(
+      primaryPaint: THPaints.thPaint15,
+      type: MPLinePaintType.dot,
+    ),
+  };
+
+  static final Map<String, THLinePaint> wallSubtypesPaints = {
+    mpNoSubtypeID: THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.continuous,
+    ),
+    'bedrock': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.continuous,
+    ),
+    'blocks': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.dot,
+    ),
+    'clay': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.long,
+    ),
+    'debris': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.long2Dots,
+    ),
+    'flowstone': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.long3Dots,
+    ),
+    'ice': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.longDot,
+    ),
+    'invisible': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.mediumLongMedium,
+    ),
+    'moonmilk': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.shortLongShort,
+    ),
+    'overlying': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.medium,
+    ),
+    'pebbles': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    'pit': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.medium3Dots,
+    ),
+    'presumed': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.mediumDot,
+    ),
+    'sand': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.shortDot,
+    ),
+    'underlying': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.short,
+    ),
+    'unsurveyed': THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      type: MPLinePaintType.short2Dots,
+    ),
+  };
+
+  static final Map<String, THLinePaint> waterFlowSubtypesPaints = {
+    mpNoSubtypeID: THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      type: MPLinePaintType.continuous,
+    ),
+    'conjectural': THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      type: MPLinePaintType.longDot,
+    ),
+    'intermittent': THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      type: MPLinePaintType.medium2Dots,
+    ),
+    'permanent': THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      type: MPLinePaintType.continuous,
+    ),
+  };
+
   Paint getControlLinePaint() {
     return THPaints.thPaintBlackBorder
       ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
@@ -39,10 +306,13 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THLinePaint getSelectedLinePaint() {
-    return THLinePaint(
+  THLinePaint getSelectedLinePaint(THLine line) {
+    final THLinePaint linePaint = getDefaultLinePaint(line);
+
+    return linePaint.copyWith(
       primaryPaint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      makeSecondaryPaintNull: true,
     );
   }
 
@@ -115,432 +385,64 @@ abstract class MPVisualControllerBase with Store {
     return THLinePaint(primaryPaint: paint);
   }
 
-  THLinePaint getUnselectedLinePaint(THLine line) {
-    if (!_th2FileEditController.isFromActiveScrap(line)) {
-      return THLinePaint(
-        primaryPaint: THPaints.thPaint16
-          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-      );
+  THLinePaint getDefaultLinePaint(THLine line) {
+    final THLineType lineType = line.lineType;
+    final THLinePaint linePaint;
+
+    if (lineTypePaints.containsKey(lineType)) {
+      linePaint = lineTypePaints[lineType]!;
+    } else {
+      final String lineSubtype = line.hasOption(THCommandOptionType.subtype)
+          ? (line.optionByType(THCommandOptionType.subtype)
+                  as THSubtypeCommandOption)
+              .subtype
+          : mpNoSubtypeID;
+
+      switch (lineType) {
+        case THLineType.border:
+          linePaint = borderSubtypesPaints[lineSubtype] ??
+              borderSubtypesPaints[mpNoSubtypeID]!;
+        case THLineType.survey:
+          linePaint = surveySubtypesPaints[lineSubtype] ??
+              surveySubtypesPaints[mpNoSubtypeID]!;
+        case THLineType.wall:
+          linePaint = wallSubtypesPaints[lineSubtype] ??
+              wallSubtypesPaints[mpNoSubtypeID]!;
+        case THLineType.waterFlow:
+          linePaint = waterFlowSubtypesPaints[lineSubtype] ??
+              waterFlowSubtypesPaints[mpNoSubtypeID]!;
+        default:
+          throw Exception(
+              'Line type $lineType not found in lineTypePaints map.');
+      }
     }
 
-    final THLineType linetype = line.lineType;
+    return linePaint.copyWith(
+      primaryPaint: linePaint.primaryPaint!
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
+  }
 
-    switch (linetype) {
-      case THLineType.abyssEntrance:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint14
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.longDot,
-        );
-      case THLineType.arrow:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint10
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.dot,
-        );
-      case THLineType.border:
-        if (line.hasOption(THCommandOptionType.subtype)) {
-          final String subtype = (line.optionByType(THCommandOptionType.subtype)
-                  as THSubtypeCommandOption)
-              .subtype;
+  THLinePaint getUnselectedLinePaint(THLine line) {
+    final THLinePaint linePaint = getDefaultLinePaint(line);
 
-          switch (subtype) {
-            case 'invisible':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint5
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.dot,
-              );
-            case 'presumed':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint5
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.long,
-              );
-            case 'temporary':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint5
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.medium2Dots,
-              );
-            case 'visible':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint5
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-              );
-            default:
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint5
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.shortMediumShort,
-              );
-          }
-        } else {
-          return THLinePaint(
-            primaryPaint: THPaints.thPaint5
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-            type: MPLinePaintType.continuous,
-          );
-        }
-      case THLineType.ceilingMeander:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint6
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.shortMediumShort,
-        );
-      case THLineType.ceilingStep:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint6
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.shortDot,
-        );
-      case THLineType.chimney:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint14
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium2Dots,
-        );
-      case THLineType.contour:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint7
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.dot,
-        );
-      case THLineType.dripline:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint7
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.mediumDot,
-        );
-      case THLineType.fault:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint13
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.dot,
-        );
-      case THLineType.fixedLadder:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.dot,
-        );
-      case THLineType.floorMeander:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint6
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium2Dots,
-        );
-      case THLineType.floorStep:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint6
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long3Dots,
-        );
-      case THLineType.flowstone:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint11
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.shortMediumShort,
-        );
-      case THLineType.gradient:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint13
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long,
-        );
-      case THLineType.handrail:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long,
-        );
-      case THLineType.joint:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint13
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.mediumDot,
-        );
-      case THLineType.label:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint10
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long,
-        );
-      case THLineType.lowCeiling:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint14
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.short3Dots,
-        );
-      case THLineType.mapConnection:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint10
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.short2Dots,
-        );
-      case THLineType.moonmilk:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint11
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long3Dots,
-        );
-      case THLineType.overhang:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint11
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium2Dots,
-        );
-      case THLineType.pit:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint14
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.shortLongShort,
-        );
-      case THLineType.pitch:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint13
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.short2Dots,
-        );
-      case THLineType.pitChimney:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint14
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          secondaryPaint: THPaints.thPaint12
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium,
-        );
-      case THLineType.rimstoneDam:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint8
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long,
-        );
-      case THLineType.rimstonePool:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint8
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.short3Dots,
-        );
-      case THLineType.rockBorder:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint9
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        );
-      case THLineType.rockEdge:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint9
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium,
-        );
-      case THLineType.rope:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        );
-      case THLineType.ropeLadder:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.short,
-        );
-      case THLineType.section:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint10
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.mediumDot,
-        );
-      case THLineType.slope:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint13
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        );
-      case THLineType.steps:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.long3Dots,
-        );
-      case THLineType.survey:
-        if (line.hasOption(THCommandOptionType.subtype)) {
-          final String subtype = (line.optionByType(THCommandOptionType.subtype)
-                  as THSubtypeCommandOption)
-              .subtype;
-
-          switch (subtype) {
-            case 'cave':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint15
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-              );
-            case 'surface':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint15
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.dot,
-              );
-            default:
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint15
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.shortMediumShort,
-              );
-          }
-        } else {
-          return THLinePaint(
-            primaryPaint: THPaints.thPaint15
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          );
-        }
-
-      case THLineType.u:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint16
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        );
-      case THLineType.viaFerrata:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium2Dots,
-        );
-      case THLineType.walkWay:
-        return THLinePaint(
-          primaryPaint: THPaints.thPaint3
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          type: MPLinePaintType.medium,
-        );
-      case THLineType.wall:
-        final Paint primaryPaint = THPaints.thPaint1
-          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
-
-        if (line.hasOption(THCommandOptionType.subtype)) {
-          final String subtype = (line.optionByType(THCommandOptionType.subtype)
-                  as THSubtypeCommandOption)
-              .subtype;
-
-          switch (subtype) {
-            case 'bedrock':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-              );
-            case 'blocks':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.dot,
-              );
-            case 'clay':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.long,
-              );
-            case 'debris':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.long2Dots,
-              );
-            case 'flowstone':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.long3Dots,
-              );
-            case 'ice':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.longDot,
-              );
-            case 'invisible':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.mediumLongMedium,
-              );
-            case 'moonmilk':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.shortLongShort,
-              );
-            case 'overlying':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.medium,
-              );
-            case 'pebbles':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.medium2Dots,
-              );
-            case 'pit':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.medium3Dots,
-              );
-            case 'presumed':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.mediumDot,
-              );
-            case 'sand':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.shortDot,
-              );
-            case 'underlying':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.short,
-              );
-            case 'unsurveyed':
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.short2Dots,
-              );
-            default:
-              return THLinePaint(
-                primaryPaint: primaryPaint,
-                type: MPLinePaintType.shortMediumShort,
-              );
-          }
-        } else {
-          return THLinePaint(
-            primaryPaint: primaryPaint,
-          );
-        }
-      case THLineType.waterFlow:
-        if (line.hasOption(THCommandOptionType.subtype)) {
-          final String subtype = (line.optionByType(THCommandOptionType.subtype)
-                  as THSubtypeCommandOption)
-              .subtype;
-          switch (subtype) {
-            case 'conjectural':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint4
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.longDot,
-              );
-            case 'intermittent':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint4
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.medium2Dots,
-              );
-            case 'permanent':
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint4
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-              );
-            default:
-              return THLinePaint(
-                primaryPaint: THPaints.thPaint4
-                  ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-                type: MPLinePaintType.shortMediumShort,
-              );
-          }
-        } else {
-          return THLinePaint(
-            primaryPaint: THPaints.thPaint4
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-          );
-        }
+    if (_th2FileEditController.isFromActiveScrap(line)) {
+      return linePaint.copyWith(
+        primaryPaint: linePaint.primaryPaint == null
+            ? null
+            : (linePaint.primaryPaint!
+              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
+        secondaryPaint: linePaint.secondaryPaint == null
+            ? null
+            : (linePaint.secondaryPaint!
+              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
+      );
+    } else {
+      return linePaint.copyWith(
+        primaryPaint: THPaints.thPaint16
+          ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
+        makeSecondaryPaintNull: true,
+      );
     }
   }
 
