@@ -5,7 +5,6 @@ enum MPLinePaintType {
   long2Dots,
   long3Dots,
   longDot,
-  shortLongShort,
   medium,
   medium2Dots,
   medium3Dots,
@@ -15,5 +14,6 @@ enum MPLinePaintType {
   short2Dots,
   short3Dots,
   shortDot,
-  shortMediumShort,
+  shortLongShort,
+  shortMediumShort;
 }

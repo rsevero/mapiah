@@ -44,7 +44,9 @@ class THFileWidget extends StatelessWidget {
           actuator: th2FileEditController.stateController,
           th2FileEditController: th2FileEditController,
           child: Container(
-            color: Theme.of(context).colorScheme.surfaceBright,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.black
+                : Colors.white,
             child: Stack(
               key: ValueKey("THFileWidgetStack|$thFileMPID"),
               children: [

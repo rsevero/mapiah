@@ -13,7 +13,7 @@ class THPaints {
     Color(0xff469990),
     Color(0xffdcbeff),
     Color(0xff9A6324),
-    Color(0xfffffac8),
+    Color.fromARGB(255, 255, 248, 174),
     Color(0xff800000),
     Color(0xffaaffc3),
     Color(0xff000075),
