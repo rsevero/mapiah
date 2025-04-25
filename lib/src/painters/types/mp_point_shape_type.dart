@@ -9,6 +9,7 @@ enum MPPointShapeType {
   star,
   t,
   triangle,
+  triangleWithCenterCircle,
   verticalDiamond,
   x;
 }

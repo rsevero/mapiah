@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
@@ -22,6 +23,8 @@ class MPInteractionAux {
     MPPointShapeType.star: _drawStarPoint,
     MPPointShapeType.t: _drawTPoint,
     MPPointShapeType.triangle: _drawTrianglePoint,
+    MPPointShapeType.triangleWithCenterCircle:
+        _drawTriangleWithCenterCirclePoint,
     MPPointShapeType.verticalDiamond: _drawVerticalDiamondPoint,
     MPPointShapeType.x: _drawXPoint,
   };
@@ -330,6 +333,22 @@ class MPInteractionAux {
       ..close();
 
     canvas.drawPath(trianglePath, paint);
+  }
+
+  static void _drawTriangleWithCenterCirclePoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    _drawTrianglePoint(canvas, position, radius, paint);
+
+    _drawCirclePoint(
+      canvas,
+      position,
+      radius * 0.2,
+      THPaints.thPaintBlackBackground,
+    );
   }
 
   static void _drawTrianglePoint(
