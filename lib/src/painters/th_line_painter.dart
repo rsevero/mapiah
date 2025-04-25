@@ -13,16 +13,12 @@ class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final THLinePaint linePaint;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THLinePainter({
     super.repaint,
     required this.lineSegmentsMap,
     required this.linePaint,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   }) {
     if ((linePaint.primaryPaint == null) &&
         (linePaint.secondaryPaint == null) &&
@@ -97,8 +93,6 @@ class THLinePainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return linePaint != oldDelegate.linePaint ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation ||
         !const MapEquality<int, THLinePainterLineSegment>()
             .equals(lineSegmentsMap, oldDelegate.lineSegmentsMap);
   }

@@ -5,14 +5,10 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 class THElementsPainter extends CustomPainter {
   final List<CustomPainter> painters;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THElementsPainter({
     required this.painters,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   });
 
   @override
@@ -29,8 +25,6 @@ class THElementsPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return painters.length != oldDelegate.painters.length ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation ||
         !const ListEquality<CustomPainter>()
             .equals(painters, oldDelegate.painters);
   }

@@ -45,8 +45,6 @@ class MPSelectionHandlesWidget extends StatelessWidget {
               handleCenters: handleCenters,
               handleSize: handleSize,
               handlePaint: handlePaint,
-              canvasScale: th2FileEditController.canvasScale,
-              canvasTranslation: th2FileEditController.canvasTranslation,
             ),
           );
         },

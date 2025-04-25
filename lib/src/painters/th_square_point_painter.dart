@@ -9,8 +9,6 @@ class THSquarePointPainter extends CustomPainter {
   final THPointPaint pointPaint;
   final bool rotate;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THSquarePointPainter({
     super.repaint,
@@ -18,8 +16,6 @@ class THSquarePointPainter extends CustomPainter {
     required this.pointPaint,
     this.rotate = false,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   });
 
   @override
@@ -62,8 +58,6 @@ class THSquarePointPainter extends CustomPainter {
 
     return position != oldDelegate.position ||
         pointPaint != oldDelegate.pointPaint ||
-        rotate != oldDelegate.rotate ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation;
+        rotate != oldDelegate.rotate;
   }
 }

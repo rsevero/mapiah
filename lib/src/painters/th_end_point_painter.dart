@@ -10,8 +10,6 @@ class THEndPointPainter extends CustomPainter {
   final THPointPaint pointPaint;
   final bool isSmooth;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THEndPointPainter({
     super.repaint,
@@ -19,8 +17,6 @@ class THEndPointPainter extends CustomPainter {
     required this.pointPaint,
     required this.isSmooth,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   });
 
   @override
@@ -62,8 +58,6 @@ class THEndPointPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return position != oldDelegate.position ||
-        pointPaint != oldDelegate.pointPaint ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation;
+        pointPaint != oldDelegate.pointPaint;
   }
 }

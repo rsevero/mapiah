@@ -1,13 +1,15 @@
 enum MPPointShapeType {
   asterisk,
+  circle,
   cross,
-  downsideFilledTriangle,
-  downsideUnfilledTriangle,
-  filledCircle,
-  filledSquare,
-  unfilledCircle,
-  unfilledSquare,
-  upsideFilledTriangle,
-  upsideUnfilledTriangle,
+  horizontalDiamond,
+  invertedT,
+  invertedTriangle,
+  plus,
+  square,
+  star,
+  t,
+  triangle,
+  verticalDiamond,
   x;
 }

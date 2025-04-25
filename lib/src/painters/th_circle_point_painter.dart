@@ -6,20 +6,16 @@ class THCirclePointPainter extends CustomPainter {
   final Offset position;
   final THPointPaint pointPaint;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THCirclePointPainter({
     super.repaint,
     required this.position,
     required this.pointPaint,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   }) {
     if ((pointPaint.border == null) && (pointPaint.fill == null)) {
       throw ArgumentError(
-          "Both pointBorderPaint and pointFillPaint cannot be null at THCirclePointPainter");
+          "Both pointPaint.border and pointPaint.fill cannot be null at THCirclePointPainter");
     }
   }
 
@@ -47,8 +43,6 @@ class THCirclePointPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return position != oldDelegate.position ||
-        pointPaint != oldDelegate.pointPaint ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation;
+        pointPaint != oldDelegate.pointPaint;
   }
 }

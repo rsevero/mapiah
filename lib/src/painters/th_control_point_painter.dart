@@ -9,8 +9,6 @@ class THControlPointPainter extends CustomPainter {
   final THPointPaint pointPaint;
   final Paint controlLinePaint;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THControlPointPainter({
     super.repaint,
@@ -19,8 +17,6 @@ class THControlPointPainter extends CustomPainter {
     required this.pointPaint,
     required this.controlLinePaint,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   });
 
   @override
@@ -55,8 +51,6 @@ class THControlPointPainter extends CustomPainter {
         pointPaint != oldDelegate.pointPaint ||
         endPointPosition != oldDelegate.endPointPosition ||
         controlLinePaint != oldDelegate.controlLinePaint ||
-        th2FileEditController != oldDelegate.th2FileEditController ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation;
+        th2FileEditController != oldDelegate.th2FileEditController;
   }
 }

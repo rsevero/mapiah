@@ -49,10 +49,6 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
           final THPointPaint pointPaint = th2FileEditController.visualController
               .getHighligthtedEndControlPointPaint();
 
-          final double canvasScale = th2FileEditController.canvasScale;
-          final Offset canvasTranslation =
-              th2FileEditController.canvasTranslation;
-
           for (final MPSelectableEndControlPoint highlightedPoint
               in highlightedPoints) {
             switch (highlightedPoint) {
@@ -62,8 +58,6 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
                     position: highlightedPoint.position,
                     pointPaint: pointPaint,
                     th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
                   ),
                 );
               case MPSelectableEndPoint _:
@@ -74,8 +68,6 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
                     rotate: !MPCommandOptionAux.isSmooth(
                         highlightedPoint.element as THHasOptionsMixin),
                     th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
                   ),
                 );
             }
@@ -86,8 +78,6 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
               painter: THElementsPainter(
                 painters: painters,
                 th2FileEditController: th2FileEditController,
-                canvasScale: canvasScale,
-                canvasTranslation: canvasTranslation,
               ),
               size: th2FileEditController.screenSize,
             ),

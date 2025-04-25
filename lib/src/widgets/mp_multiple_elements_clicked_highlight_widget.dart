@@ -50,10 +50,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
           final THLinePaint areaPaint =
               visualController.getMultipleElementsClickedHighlightedFillPaint();
 
-          final double canvasScale = th2FileEditController.canvasScale;
-          final Offset canvasTranslation =
-              th2FileEditController.canvasTranslation;
-
           for (final highlightedElement in highlightedElements) {
             switch (highlightedElement) {
               case THPoint _:
@@ -65,8 +61,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     position: highlightedElement.position.coordinates,
                     pointPaint: pointPaint,
                     th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
                   ),
                 );
               // case THLineSegment _:
@@ -102,8 +96,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     lineSegmentsMap: segmentsMap,
                     linePaint: linePaint,
                     th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
                   ),
                 );
               case THArea _:
@@ -124,8 +116,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     lineSegmentsMap: segmentsMap,
                     linePaint: areaPaint,
                     th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
                   );
 
                   painters.add(linePainter);
@@ -138,8 +128,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
               painter: THElementsPainter(
                 painters: painters,
                 th2FileEditController: th2FileEditController,
-                canvasScale: canvasScale,
-                canvasTranslation: canvasTranslation,
               ),
               size: th2FileEditController.screenSize,
             ),

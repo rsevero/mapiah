@@ -88,8 +88,6 @@ mixin MPLinePaintingMixin {
       lineSegmentsMap: segmentsMap,
       linePaint: linePaint,
       th2FileEditController: th2FileEditController,
-      canvasScale: canvasScale,
-      canvasTranslation: canvasTranslation,
     );
   }
 }

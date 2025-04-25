@@ -8,16 +8,12 @@ class MPSelectionHandlesPainter extends CustomPainter {
   final double handleSize;
   final TH2FileEditController th2FileEditController;
   final Paint handlePaint;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   MPSelectionHandlesPainter({
     required this.th2FileEditController,
     required this.handleCenters,
     required this.handleSize,
     required this.handlePaint,
-    required this.canvasScale,
-    required this.canvasTranslation,
   });
 
   @override
@@ -85,8 +81,6 @@ class MPSelectionHandlesPainter extends CustomPainter {
 
     return handleSize != oldDelegate.handleSize ||
         handlePaint != oldDelegate.handlePaint ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation ||
         !const DeepCollectionEquality()
             .equals(handleCenters, oldDelegate.handleCenters) ||
         th2FileEditController != oldDelegate.th2FileEditController;

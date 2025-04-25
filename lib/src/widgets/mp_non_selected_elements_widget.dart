@@ -57,8 +57,6 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                   position: element.position.coordinates,
                   pointPaint: pointPaint,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: canvasScale,
-                  canvasTranslation: canvasTranslation,
                 ),
               );
             case THLine _:
@@ -94,8 +92,6 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             painter: THElementsPainter(
               painters: painters,
               th2FileEditController: th2FileEditController,
-              canvasScale: canvasScale,
-              canvasTranslation: canvasTranslation,
             ),
             size: th2FileEditController.screenSize,
           ),

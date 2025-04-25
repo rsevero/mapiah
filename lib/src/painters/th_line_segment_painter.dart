@@ -9,8 +9,6 @@ class THLineSegmentPainter extends CustomPainter {
   final THLineSegment lineSegment;
   final THLinePaint linePaint;
   final TH2FileEditController th2FileEditController;
-  final double canvasScale;
-  final Offset canvasTranslation;
 
   THLineSegmentPainter({
     super.repaint,
@@ -18,8 +16,6 @@ class THLineSegmentPainter extends CustomPainter {
     required this.lineSegment,
     required this.linePaint,
     required this.th2FileEditController,
-    required this.canvasScale,
-    required this.canvasTranslation,
   });
 
   @override
@@ -58,8 +54,6 @@ class THLineSegmentPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return linePaint != oldDelegate.linePaint ||
-        canvasScale != oldDelegate.canvasScale ||
-        canvasTranslation != oldDelegate.canvasTranslation ||
         lineSegment != oldDelegate.lineSegment ||
         previousLineSegment != oldDelegate.previousLineSegment;
   }
