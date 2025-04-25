@@ -1,15 +1,16 @@
 enum MPPointShapeType {
+  arrow, // Can be filled
   asterisk,
-  circle,
-  horizontalDiamond,
+  circle, // Can be filled
+  horizontalDiamond, // Can be filled
   invertedT,
-  invertedTriangle,
+  invertedTriangle, // Can be filled
   plus,
-  square,
-  star,
+  square, // Can be filled
+  star, // Can be filled
   t,
-  triangle,
+  triangle, // Can be filled
   triangleWithCenterCircle,
-  verticalDiamond,
+  verticalDiamond, // Can be filled
   x;
 }

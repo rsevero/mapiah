@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 
 class THPointPaint {
@@ -8,7 +9,7 @@ class THPointPaint {
   final Paint? fill;
 
   THPointPaint({
-    required this.radius,
+    this.radius = thDefaultPointRadius,
     this.type = MPPointShapeType.circle,
     this.border,
     this.fill,

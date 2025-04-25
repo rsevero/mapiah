@@ -13,6 +13,7 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 class MPInteractionAux {
   static const Map<MPPointShapeType,
       void Function(Canvas, Offset, double, Paint)> _pointShapeDrawMethods = {
+    MPPointShapeType.arrow: _drawArrowPoint,
     MPPointShapeType.asterisk: _drawAsteriskPoint,
     MPPointShapeType.circle: _drawCirclePoint,
     MPPointShapeType.horizontalDiamond: _drawHorizontalDiamondPoint,
@@ -349,6 +350,24 @@ class MPInteractionAux {
       radius * 0.2,
       THPaints.thPaintBlackBackground,
     );
+  }
+
+  static void _drawArrowPoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    final double halfRadius = radius * 0.5;
+
+    final Path arrowPath = Path()
+      ..moveTo(position.dx, position.dy + radius)
+      ..lineTo(position.dx + radius, position.dy - halfRadius)
+      ..lineTo(position.dx, position.dy)
+      ..lineTo(position.dx - radius, position.dy - halfRadius)
+      ..close();
+
+    canvas.drawPath(arrowPath, paint);
   }
 
   static void _drawTrianglePoint(

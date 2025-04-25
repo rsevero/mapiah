@@ -8,7 +8,9 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
+import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mobx/mobx.dart';
 
 part 'mp_visual_controller.g.dart';
@@ -25,6 +27,488 @@ abstract class MPVisualControllerBase with Store {
   MPVisualControllerBase(TH2FileEditController th2FileEditController)
       : _th2FileEditController = th2FileEditController,
         _thFile = th2FileEditController.thFile;
+
+  static final Map<THPointType, THPointPaint> pointTypePaints = {
+    THPointType.altar: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.altitude: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint8,
+    ),
+    THPointType.anastomosis: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.anchor: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.aragonite: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.archeoExcavation: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint17,
+    ),
+    THPointType.archeoMaterial: THPointPaint(
+      type: MPPointShapeType.circle,
+      border: THPaints.thPaint17,
+    ),
+    THPointType.audio: THPointPaint(
+      type: MPPointShapeType.circle,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.bat: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.bedrock: THPointPaint(
+      type: MPPointShapeType.circle,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.blocks: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.bones: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.breakdownChoke: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.bridge: THPointPaint(
+      type: MPPointShapeType.circle,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.camp: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.cavePearl: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.clay: THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.clayChoke: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.clayTree: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.continuation: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.crystal: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.curtain: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.curtains: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.danger: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.date: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint8,
+    ),
+    THPointType.debris: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.dig: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint17,
+    ),
+    THPointType.dimensions: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint8,
+    ),
+    THPointType.discPillar: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint12,
+    ),
+    THPointType.discPillars: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint12,
+    ),
+    THPointType.discStalactite: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.discStalagmite: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.disk: THPointPaint(
+      type: MPPointShapeType.circle,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.electricLight: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.entrance: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint3,
+    ),
+    THPointType.extra: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.exVoto: THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.fixedLadder: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.flowstone: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.flute: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.gate: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.gradient: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.guano: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.gypsum: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.gypsumFlower: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.handrail: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.height: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint8,
+    ),
+    THPointType.helictite: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.humanBones: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.ice: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint7,
+    ),
+    THPointType.icePillar: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint7,
+    ),
+    THPointType.iceStalactite: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint7,
+    ),
+    THPointType.iceStalagmite: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint7,
+    ),
+    THPointType.karren: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.label: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.mapConnection: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.masonry: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.moonmilk: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.mud: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.mudcrack: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.namePlate: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.noEquipment: THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.noWheelchair: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.paleoMaterial: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint17,
+    ),
+    THPointType.passageHeight: THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      border: THPaints.thPaint8,
+    ),
+    THPointType.pebbles: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.pendant: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.photo: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.pillar: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint12,
+    ),
+    THPointType.pillarsWithCurtains: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint12,
+    ),
+    THPointType.popcorn: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.raft: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.raftCone: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.remark: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.rimstoneDam: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.root: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.rope: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.ropeLadder: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint11,
+    ),
+    THPointType.sand: THPointPaint(
+      type: MPPointShapeType.triangle,
+      fill: THPaints.thPaint2002,
+    ),
+    THPointType.scallop: THPointPaint(
+      type: MPPointShapeType.star,
+      fill: THPaints.thPaint2002,
+    ),
+    THPointType.section: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.seedGermination: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.sink: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint4,
+    ),
+    THPointType.snow: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint7,
+    ),
+    THPointType.sodaStraw: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.spring: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint4,
+    ),
+    THPointType.stalactite: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.stalactites: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.stalactiteStalagmite: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.stalagmite: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.stalagmites: THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      border: THPaints.thPaint14,
+    ),
+    THPointType.stationName: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint1,
+    ),
+    THPointType.steps: THPointPaint(
+      type: MPPointShapeType.arrow,
+      fill: THPaints.thPaint2011,
+    ),
+    THPointType.traverse: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint2,
+    ),
+    THPointType.treeTrunk: THPointPaint(
+      type: MPPointShapeType.plus,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.u: THPointPaint(
+      type: MPPointShapeType.x,
+      border: THPaints.thPaint16,
+    ),
+    THPointType.vegetableDebris: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaints.thPaint9,
+    ),
+    THPointType.viaFerrata: THPointPaint(
+      type: MPPointShapeType.circle,
+      fill: THPaints.thPaint2011,
+    ),
+    THPointType.volcano: THPointPaint(
+      type: MPPointShapeType.asterisk,
+      border: THPaints.thPaint6,
+    ),
+    THPointType.walkway: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      fill: THPaints.thPaint2011,
+    ),
+    THPointType.wallCalcite: THPointPaint(
+      type: MPPointShapeType.t,
+      border: THPaints.thPaint13,
+    ),
+    THPointType.water: THPointPaint(
+      type: MPPointShapeType.star,
+      border: THPaints.thPaint4,
+    ),
+    THPointType.waterDrip: THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint4,
+    ),
+    THPointType.wheelchair: THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      fill: THPaints.thPaint2001,
+    ),
+  };
+
+  static final Map<String, THPointPaint> waterFlowPointSubtypesPaints = {
+    mpNoSubtypeID: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint15,
+    ),
+    'intermittent': THPointPaint(
+      type: MPPointShapeType.invertedT,
+      border: THPaints.thPaint15,
+    ),
+    'paleo': THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint15,
+    ),
+    'permanent': THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint15,
+    ),
+  };
+
+  static final Map<String, THPointPaint> stationSubtypesPaints = {
+    mpNoSubtypeID: THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint5,
+    ),
+    'fixed': THPointPaint(
+      type: MPPointShapeType.triangleWithCenterCircle,
+      border: THPaints.thPaint5,
+    ),
+    'natural': THPointPaint(
+      type: MPPointShapeType.invertedTriangle,
+      border: THPaints.thPaint5,
+    ),
+    'painted': THPointPaint(
+      type: MPPointShapeType.triangle,
+      fill: THPaints.thPaint5,
+    ),
+    'temporary': THPointPaint(
+      type: MPPointShapeType.triangle,
+      border: THPaints.thPaint5,
+    ),
+  };
+
+  static final Map<String, THPointPaint> airDraughtSubtypesPaints = {
+    mpNoSubtypeID: THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint10,
+    ),
+    'summer': THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint10,
+      fill: THPaints.thPaint2,
+    ),
+    'undefined': THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint10,
+    ),
+    'winter': THPointPaint(
+      type: MPPointShapeType.arrow,
+      border: THPaints.thPaint10,
+      fill: THPaints.thPaint6,
+    ),
+  };
 
   static final Map<THLineType, THLinePaint> lineTypePaints = {
     THLineType.abyssEntrance: THLinePaint(
@@ -274,7 +758,7 @@ abstract class MPVisualControllerBase with Store {
     ),
   };
 
-  static final Map<String, THLinePaint> waterFlowSubtypesPaints = {
+  static final Map<String, THLinePaint> waterFlowLineSubtypesPaints = {
     mpNoSubtypeID: THLinePaint(
       primaryPaint: THPaints.thPaint4,
       type: MPLinePaintType.continuous,
@@ -299,7 +783,7 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THPointPaint getSelectedPointPaint(THPoint point) {
-    return THPointPaint(
+    return getDefaultPointPaint(point).copyWith(
       radius: _th2FileEditController.pointRadiusOnCanvas,
       border: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
@@ -359,14 +843,26 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THPointPaint getUnselectedPointPaint(THPoint point) {
-    final Paint paint = _th2FileEditController.isFromActiveScrap(point)
-        ? THPaints.thPaint5
-        : THPaints.thPaint16;
-
-    return THPointPaint(
+    THPointPaint pointPaint = getDefaultPointPaint(point).copyWith(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      border: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
+
+    if (!_th2FileEditController.isFromActiveScrap(point)) {
+      if (pointPaint.border != null) {
+        pointPaint = pointPaint.copyWith(
+          border: THPaints.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        );
+      }
+
+      if (pointPaint.fill != null) {
+        pointPaint = pointPaint.copyWith(
+          fill: THPaints.thPaint1016,
+        );
+      }
+    }
+
+    return pointPaint;
   }
 
   THLinePaint getUnselectedAreaFillPaint(THArea area) {
@@ -386,6 +882,46 @@ abstract class MPVisualControllerBase with Store {
     paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
 
     return THLinePaint(primaryPaint: paint);
+  }
+
+  THPointPaint getDefaultPointPaint(THPoint point) {
+    final THPointType pointType = point.pointType;
+
+    THPointPaint pointPaint;
+
+    if (pointTypePaints.containsKey(pointType)) {
+      pointPaint = pointTypePaints[pointType]!;
+    } else {
+      final String pointSubtype = point.hasOption(THCommandOptionType.subtype)
+          ? (point.optionByType(THCommandOptionType.subtype)
+                  as THSubtypeCommandOption)
+              .subtype
+          : mpNoSubtypeID;
+
+      switch (pointType) {
+        case THPointType.airDraught:
+          pointPaint = airDraughtSubtypesPaints[pointSubtype] ??
+              airDraughtSubtypesPaints[mpNoSubtypeID]!;
+        case THPointType.station:
+          pointPaint = stationSubtypesPaints[pointSubtype] ??
+              stationSubtypesPaints[mpNoSubtypeID]!;
+        case THPointType.waterFlow:
+          pointPaint = waterFlowPointSubtypesPaints[pointSubtype] ??
+              waterFlowPointSubtypesPaints[mpNoSubtypeID]!;
+        default:
+          throw Exception(
+              'Point type $pointType not found in pointTypePaints map.');
+      }
+    }
+
+    if (pointPaint.border != null) {
+      pointPaint = pointPaint.copyWith(
+        border: pointPaint.border!
+          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      );
+    }
+
+    return pointPaint;
   }
 
   THLinePaint getDefaultLinePaint(THLine line) {
@@ -412,8 +948,8 @@ abstract class MPVisualControllerBase with Store {
           linePaint = wallSubtypesPaints[lineSubtype] ??
               wallSubtypesPaints[mpNoSubtypeID]!;
         case THLineType.waterFlow:
-          linePaint = waterFlowSubtypesPaints[lineSubtype] ??
-              waterFlowSubtypesPaints[mpNoSubtypeID]!;
+          linePaint = waterFlowLineSubtypesPaints[lineSubtype] ??
+              waterFlowLineSubtypesPaints[mpNoSubtypeID]!;
         default:
           throw Exception(
               'Line type $lineType not found in lineTypePaints map.');
