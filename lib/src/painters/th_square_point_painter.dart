@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class THSquarePointPainter extends CustomPainter {
   final Offset position;
-  final double halfLength;
-  final Paint? pointBorderPaint;
-  final Paint? pointFillPaint;
+  final THPointPaint pointPaint;
   final bool rotate;
   final TH2FileEditController th2FileEditController;
   final double canvasScale;
@@ -16,26 +15,19 @@ class THSquarePointPainter extends CustomPainter {
   THSquarePointPainter({
     super.repaint,
     required this.position,
-    required this.halfLength,
-    this.pointBorderPaint,
-    this.pointFillPaint,
+    required this.pointPaint,
     this.rotate = false,
     required this.th2FileEditController,
     required this.canvasScale,
     required this.canvasTranslation,
-  }) {
-    if ((pointBorderPaint == null) && (pointFillPaint == null)) {
-      throw ArgumentError(
-          "Both pointBorderPaint and pointFillPaint cannot be null at THSquarePointPainter");
-    }
-  }
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final Rect squareRect = MPNumericAux.orderedRectFromCenterHalfLength(
       center: position,
-      halfHeight: halfLength,
-      halfWidth: halfLength,
+      halfHeight: pointPaint.radius,
+      halfWidth: pointPaint.radius,
     );
 
     if (rotate) {
@@ -45,17 +37,17 @@ class THSquarePointPainter extends CustomPainter {
       canvas.translate(-position.dx, -position.dy);
     }
 
-    if (pointFillPaint != null) {
+    if (pointPaint.fill != null) {
       canvas.drawRect(
         squareRect,
-        pointFillPaint!,
+        pointPaint.fill!,
       );
     }
 
-    if (pointBorderPaint != null) {
+    if (pointPaint.border != null) {
       canvas.drawRect(
         squareRect,
-        pointBorderPaint!,
+        pointPaint.border!,
       );
     }
 
@@ -69,9 +61,8 @@ class THSquarePointPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return position != oldDelegate.position ||
-        halfLength != oldDelegate.halfLength ||
-        pointBorderPaint != oldDelegate.pointBorderPaint ||
-        pointFillPaint != oldDelegate.pointFillPaint ||
+        pointPaint != oldDelegate.pointPaint ||
+        rotate != oldDelegate.rotate ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;
   }

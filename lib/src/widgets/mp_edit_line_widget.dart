@@ -39,33 +39,19 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
           return SizedBox.shrink();
         }
 
-        final THPointPaint selectedEndPointPaintInfo =
+        final THPointPaint selectedEndPointPaint =
             th2FileEditController.visualController.getSelectedEndPointPaint();
-        final double selectedEndPointHalfSize =
-            selectedEndPointPaintInfo.radius;
-        final Paint selectedEndPointPaint = selectedEndPointPaintInfo.paint;
 
-        final THPointPaint unselectedEndPointPaintInfo =
+        final THPointPaint unselectedEndPointPaint =
             th2FileEditController.visualController.getUnselectedEndPointPaint();
-        final double unselectedEndPointHalfSize =
-            unselectedEndPointPaintInfo.radius;
-        final Paint unselectedEndPointPaint = unselectedEndPointPaintInfo.paint;
 
-        final THPointPaint unselectedControlPointPaintInfo =
-            th2FileEditController.visualController
-                .getUnselectedControlPointPaint();
-        final double unselectedControlPointRadius =
-            unselectedControlPointPaintInfo.radius;
-        final Paint unselectedControlPointPaint =
-            unselectedControlPointPaintInfo.paint;
+        final THPointPaint unselectedControlPointPaint = th2FileEditController
+            .visualController
+            .getUnselectedControlPointPaint();
 
-        final THPointPaint selectedControlPointPaintInfo = th2FileEditController
+        final THPointPaint selectedControlPointPaint = th2FileEditController
             .visualController
             .getSelectedControlPointPaint();
-        final double selectedControlPointRadius =
-            selectedControlPointPaintInfo.radius;
-        final Paint selectedControlPointPaint =
-            selectedControlPointPaintInfo.paint;
 
         final Paint controlPointLinePaint =
             th2FileEditController.visualController.getControlPointLinePaint();
@@ -113,21 +99,13 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
           switch (point) {
             case MPSelectableEndPoint _:
               final THLineSegment lineSegment = point.element as THLineSegment;
-              late Paint pointPaint;
-              late double pointHalfLength;
-
-              if (selectionController.getIsLineSegmentSelected(lineSegment)) {
-                pointPaint = selectedEndPointPaint;
-                pointHalfLength = selectedEndPointHalfSize;
-              } else {
-                pointPaint = unselectedEndPointPaint;
-                pointHalfLength = unselectedEndPointHalfSize;
-              }
-
+              final THPointPaint pointPaint =
+                  selectionController.getIsLineSegmentSelected(lineSegment)
+                      ? selectedEndPointPaint
+                      : unselectedEndPointPaint;
               final THEndPointPainter endPointPainter = THEndPointPainter(
                 position: point.position,
                 pointPaint: pointPaint,
-                halfLength: pointHalfLength,
                 isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
                 th2FileEditController: th2FileEditController,
                 canvasScale: canvasScale,
@@ -147,9 +125,6 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
                 pointPaint: isSelected
                     ? selectedControlPointPaint
                     : unselectedControlPointPaint,
-                pointRadius: isSelected
-                    ? selectedControlPointRadius
-                    : unselectedControlPointRadius,
                 controlLinePaint: controlPointLinePaint,
                 th2FileEditController: th2FileEditController,
                 canvasScale: canvasScale,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
+import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class THControlPointPainter extends CustomPainter {
   final Offset controlPointPosition;
   final Offset endPointPosition;
-  final double pointRadius;
-  final Paint pointPaint;
+  final THPointPaint pointPaint;
   final Paint controlLinePaint;
   final TH2FileEditController th2FileEditController;
   final double canvasScale;
@@ -16,7 +16,6 @@ class THControlPointPainter extends CustomPainter {
     super.repaint,
     required this.controlPointPosition,
     required this.endPointPosition,
-    required this.pointRadius,
     required this.pointPaint,
     required this.controlLinePaint,
     required this.th2FileEditController,
@@ -28,17 +27,24 @@ class THControlPointPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.drawLine(controlPointPosition, endPointPosition, controlLinePaint);
 
-    canvas.drawCircle(
-      controlPointPosition,
-      pointRadius,
-      THPaints.thPaintWhiteBackground,
-    );
+    if (pointPaint.fill == null) {
+      canvas.drawCircle(
+        controlPointPosition,
+        pointPaint.radius,
+        THPaints.thPaintWhiteBackground,
+      );
+    } else {
+      canvas.drawCircle(
+        controlPointPosition,
+        pointPaint.radius,
+        pointPaint.fill!,
+      );
+    }
 
-    canvas.drawCircle(
-      controlPointPosition,
-      pointRadius,
-      pointPaint,
-    );
+    if (pointPaint.border != null) {
+      canvas.drawCircle(
+          controlPointPosition, pointPaint.radius, pointPaint.border!);
+    }
   }
 
   @override
@@ -46,8 +52,10 @@ class THControlPointPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return controlPointPosition != oldDelegate.controlPointPosition ||
-        pointRadius != oldDelegate.pointRadius ||
         pointPaint != oldDelegate.pointPaint ||
+        endPointPosition != oldDelegate.endPointPosition ||
+        controlLinePaint != oldDelegate.controlLinePaint ||
+        th2FileEditController != oldDelegate.th2FileEditController ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;
   }

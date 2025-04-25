@@ -30,10 +30,8 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
       builder: (_) {
         th2FileEditController.redrawTriggerNewLine;
 
-        final THPointPaint pointPaintInfo =
+        final THPointPaint pointPaint =
             th2FileEditController.visualController.getNewLinePointPaint();
-        final double pointHalfLength = pointPaintInfo.radius;
-        final Paint pointPaint = pointPaintInfo.paint;
 
         final THLinePaint linePaint =
             th2FileEditController.visualController.getNewLinePaint();
@@ -53,7 +51,6 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             final painter = THEndPointPainter(
               position: startPoint,
               pointPaint: pointPaint,
-              halfLength: pointHalfLength,
               isSmooth: false,
               th2FileEditController: th2FileEditController,
               canvasScale: canvasScale,
@@ -102,7 +99,6 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
               endPointPosition: secondToLastSegmentPosition,
               pointPaint: pointPaint,
               controlLinePaint: controlLinePaint,
-              pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
               canvasScale: canvasScale,
               canvasTranslation: canvasTranslation,
@@ -115,7 +111,6 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
               endPointPosition: lastSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               controlLinePaint: controlLinePaint,
-              pointRadius: pointHalfLength,
               th2FileEditController: th2FileEditController,
               canvasScale: canvasScale,
               canvasTranslation: canvasTranslation,
@@ -127,7 +122,6 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             painter = THEndPointPainter(
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
-              halfLength: pointHalfLength,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
               canvasScale: canvasScale,

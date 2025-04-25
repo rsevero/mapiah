@@ -298,10 +298,10 @@ abstract class MPVisualControllerBase with Store {
       ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
   }
 
-  THPointPaint getSelectedPointPaint() {
+  THPointPaint getSelectedPointPaint(THPoint point) {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      paint: THPaints.thPaint2
+      border: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -334,10 +334,13 @@ abstract class MPVisualControllerBase with Store {
     return THLinePaint(primaryPaint: THPaints.thPaint1002);
   }
 
-  THLinePaint getMultipleElementsClickedHighlightedBorderPaint() {
-    return THLinePaint(
+  THLinePaint getMultipleElementsClickedHighlightedBorderPaint(THLine line) {
+    final THLinePaint linePaint = getDefaultLinePaint(line);
+
+    return linePaint.copyWith(
       primaryPaint: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      makeSecondaryPaintNull: true,
     );
   }
 
@@ -362,7 +365,7 @@ abstract class MPVisualControllerBase with Store {
 
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      paint: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      border: paint..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
 
@@ -454,7 +457,7 @@ abstract class MPVisualControllerBase with Store {
   THPointPaint getNewLinePointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      paint: THPaints.thPaintBlackBorder
+      border: THPaints.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -462,7 +465,7 @@ abstract class MPVisualControllerBase with Store {
   THPointPaint getHighligthtedEndControlPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      paint: THPaints.thPaint2
+      border: THPaints.thPaint2
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -472,7 +475,7 @@ abstract class MPVisualControllerBase with Store {
       radius: _th2FileEditController.pointRadiusOnCanvas *
           thControlPointRadiusFactor *
           thSelectedEndControlPointFactor,
-      paint: THPaints.thPaintBlackBackground,
+      border: THPaints.thPaintBlackBackground,
     );
   }
 
@@ -480,7 +483,7 @@ abstract class MPVisualControllerBase with Store {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas *
           thControlPointRadiusFactor,
-      paint: THPaints.thPaintBlackBorder
+      border: THPaints.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
     );
   }
@@ -489,14 +492,14 @@ abstract class MPVisualControllerBase with Store {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas *
           thSelectedEndControlPointFactor,
-      paint: THPaints.thPaintBlackBackground,
+      border: THPaints.thPaintBlackBackground,
     );
   }
 
   THPointPaint getUnselectedEndPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      paint: THPaints.thPaintBlackBorder
+      border: THPaints.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }

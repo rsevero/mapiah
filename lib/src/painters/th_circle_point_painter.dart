@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 class THCirclePointPainter extends CustomPainter {
   final Offset position;
-  final double pointRadius;
-  final Paint? pointBorderPaint;
-  final Paint? pointFillPaint;
+  final THPointPaint pointPaint;
   final TH2FileEditController th2FileEditController;
   final double canvasScale;
   final Offset canvasTranslation;
@@ -13,14 +12,12 @@ class THCirclePointPainter extends CustomPainter {
   THCirclePointPainter({
     super.repaint,
     required this.position,
-    required this.pointRadius,
-    this.pointBorderPaint,
-    this.pointFillPaint,
+    required this.pointPaint,
     required this.th2FileEditController,
     required this.canvasScale,
     required this.canvasTranslation,
   }) {
-    if ((pointBorderPaint == null) && (pointFillPaint == null)) {
+    if ((pointPaint.border == null) && (pointPaint.fill == null)) {
       throw ArgumentError(
           "Both pointBorderPaint and pointFillPaint cannot be null at THCirclePointPainter");
     }
@@ -28,19 +25,19 @@ class THCirclePointPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (pointFillPaint != null) {
+    if (pointPaint.fill != null) {
       canvas.drawCircle(
         position,
-        pointRadius,
-        pointFillPaint!,
+        pointPaint.radius,
+        pointPaint.fill!,
       );
     }
 
-    if (pointBorderPaint != null) {
+    if (pointPaint.border != null) {
       canvas.drawCircle(
         position,
-        pointRadius,
-        pointBorderPaint!,
+        pointPaint.radius,
+        pointPaint.border!,
       );
     }
   }
@@ -50,9 +47,7 @@ class THCirclePointPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return position != oldDelegate.position ||
-        pointRadius != oldDelegate.pointRadius ||
-        pointBorderPaint != oldDelegate.pointBorderPaint ||
-        pointFillPaint != oldDelegate.pointFillPaint ||
+        pointPaint != oldDelegate.pointPaint ||
         canvasScale != oldDelegate.canvasScale ||
         canvasTranslation != oldDelegate.canvasTranslation;
   }

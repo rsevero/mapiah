@@ -33,11 +33,6 @@ class MPSelectedElementsWidget extends StatelessWidget
         final mpSelectedElements = th2FileEditController
             .selectionController.mpSelectedElementsLogical.values;
 
-        final THPointPaint pointPaintInfo =
-            visualController.getSelectedPointPaint();
-        final double pointRadius = pointPaintInfo.radius;
-        final Paint pointPaint = pointPaintInfo.paint;
-
         final THLinePaint areaPaint =
             visualController.getSelectedAreaBorderPaint();
 
@@ -51,11 +46,13 @@ class MPSelectedElementsWidget extends StatelessWidget
 
           switch (element) {
             case THPoint _:
+              final THPointPaint pointPaint =
+                  visualController.getSelectedPointPaint(element);
+
               painters.add(
                 THCirclePointPainter(
                   position: element.position.coordinates,
-                  pointRadius: pointRadius,
-                  pointBorderPaint: pointPaint,
+                  pointPaint: pointPaint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,

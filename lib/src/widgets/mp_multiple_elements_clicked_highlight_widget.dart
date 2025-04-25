@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -18,11 +19,13 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
     with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final THFile thFile;
+  final MPVisualController visualController;
 
   MPMultipleElementsClickedHighlightWidget({
     required super.key,
     required this.th2FileEditController,
-  }) : thFile = th2FileEditController.thFile;
+  })  : thFile = th2FileEditController.thFile,
+        visualController = th2FileEditController.visualController;
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +47,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
 
           final List<CustomPainter> painters = [];
 
-          final THPointPaint pointPaintInfo =
-              th2FileEditController.visualController.getSelectedPointPaint();
-          final double pointRadius = pointPaintInfo.radius;
-
-          final THLinePaint linePaint = th2FileEditController.visualController
-              .getMultipleElementsClickedHighlightedBorderPaint();
-          final THLinePaint areaPaint = th2FileEditController.visualController
-              .getMultipleElementsClickedHighlightedFillPaint();
+          final THLinePaint areaPaint =
+              visualController.getMultipleElementsClickedHighlightedFillPaint();
 
           final double canvasScale = th2FileEditController.canvasScale;
           final Offset canvasTranslation =
@@ -60,11 +57,13 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
           for (final highlightedElement in highlightedElements) {
             switch (highlightedElement) {
               case THPoint _:
+                final THPointPaint pointPaint =
+                    visualController.getSelectedPointPaint(highlightedElement);
+
                 painters.add(
                   THCirclePointPainter(
                     position: highlightedElement.position.coordinates,
-                    pointRadius: pointRadius,
-                    pointBorderPaint: linePaint.primaryPaint!,
+                    pointPaint: pointPaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,
@@ -94,6 +93,9 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   thFile: thFile,
                   returnLineSegments: false,
                 );
+                final THLinePaint linePaint = visualController
+                    .getMultipleElementsClickedHighlightedBorderPaint(
+                        highlightedElement);
 
                 painters.add(
                   THLinePainter(

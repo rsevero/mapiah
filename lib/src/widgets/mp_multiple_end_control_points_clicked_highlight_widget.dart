@@ -46,11 +46,8 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
 
           final List<CustomPainter> painters = [];
 
-          final THPointPaint pointPaintInfo = th2FileEditController
-              .visualController
+          final THPointPaint pointPaint = th2FileEditController.visualController
               .getHighligthtedEndControlPointPaint();
-          final Paint pointPaint = pointPaintInfo.paint;
-          final double pointRadius = pointPaintInfo.radius;
 
           final double canvasScale = th2FileEditController.canvasScale;
           final Offset canvasTranslation =
@@ -63,8 +60,7 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
                 painters.add(
                   THCirclePointPainter(
                     position: highlightedPoint.position,
-                    pointRadius: pointRadius,
-                    pointBorderPaint: pointPaint,
+                    pointPaint: pointPaint,
                     th2FileEditController: th2FileEditController,
                     canvasScale: canvasScale,
                     canvasTranslation: canvasTranslation,
@@ -74,8 +70,7 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
                 painters.add(
                   THSquarePointPainter(
                     position: highlightedPoint.position,
-                    halfLength: pointRadius,
-                    pointBorderPaint: pointPaint,
+                    pointPaint: pointPaint,
                     rotate: !MPCommandOptionAux.isSmooth(
                         highlightedPoint.element as THHasOptionsMixin),
                     th2FileEditController: th2FileEditController,
