@@ -3,12 +3,12 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
-class THCirclePointPainter extends CustomPainter {
+class THPointPainter extends CustomPainter {
   final Offset position;
   final THPointPaint pointPaint;
   final TH2FileEditController th2FileEditController;
 
-  THCirclePointPainter({
+  THPointPainter({
     super.repaint,
     required this.position,
     required this.pointPaint,
@@ -30,7 +30,7 @@ class THCirclePointPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant THCirclePointPainter oldDelegate) {
+  bool shouldRepaint(covariant THPointPainter oldDelegate) {
     if (identical(this, oldDelegate)) return false;
 
     return position != oldDelegate.position ||

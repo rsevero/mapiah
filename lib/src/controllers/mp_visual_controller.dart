@@ -32,856 +32,859 @@ abstract class MPVisualControllerBase with Store {
   static final Map<THPointType, THPointPaint> pointTypePaints = {
     THPointType.altar: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.altitude: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint8,
+      border: THPaints.thPaint7,
     ),
     THPointType.anastomosis: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.anchor: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.aragonite: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.archeoExcavation: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint17,
+      border: THPaints.thPaint16,
     ),
     THPointType.archeoMaterial: THPointPaint(
       type: MPPointShapeType.circle,
-      border: THPaints.thPaint17,
+      border: THPaints.thPaint16,
     ),
     THPointType.audio: THPointPaint(
       type: MPPointShapeType.circle,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.bat: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.bedrock: THPointPaint(
       type: MPPointShapeType.circle,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.blocks: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.bones: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.breakdownChoke: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.bridge: THPointPaint(
       type: MPPointShapeType.circle,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.camp: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.cavePearl: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.clay: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.clayChoke: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.clayTree: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.continuation: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.crystal: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.curtain: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.curtains: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.danger: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.date: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint8,
+      border: THPaints.thPaint7,
     ),
     THPointType.debris: THPointPaint(
       type: MPPointShapeType.square,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.dig: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint17,
+      border: THPaints.thPaint16,
     ),
     THPointType.dimensions: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint8,
+      border: THPaints.thPaint7,
     ),
     THPointType.discPillar: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint12,
+      border: THPaints.thPaint11,
     ),
     THPointType.discPillars: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint12,
+      border: THPaints.thPaint11,
     ),
     THPointType.discStalactite: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.discStalagmite: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.disk: THPointPaint(
       type: MPPointShapeType.circle,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.electricLight: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.entrance: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint3,
+      border: THPaints.thPaint2,
+      fill: THPaints.thPaint2002,
     ),
     THPointType.extra: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.exVoto: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.fixedLadder: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.flowstone: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.flute: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.gate: THPointPaint(
       type: MPPointShapeType.square,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.gradient: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.guano: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.gypsum: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.gypsumFlower: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.handrail: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.height: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint8,
+      border: THPaints.thPaint7,
     ),
     THPointType.helictite: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.humanBones: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.ice: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint7,
+      border: THPaints.thPaint6,
     ),
     THPointType.icePillar: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint7,
+      border: THPaints.thPaint6,
     ),
     THPointType.iceStalactite: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint7,
+      border: THPaints.thPaint6,
     ),
     THPointType.iceStalagmite: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint7,
+      border: THPaints.thPaint6,
     ),
     THPointType.karren: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.label: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.mapConnection: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.masonry: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.moonmilk: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.mud: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.mudcrack: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.namePlate: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.noEquipment: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.noWheelchair: THPointPaint(
       type: MPPointShapeType.square,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.paleoMaterial: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint17,
+      border: THPaints.thPaint16,
     ),
     THPointType.passageHeight: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      border: THPaints.thPaint8,
+      border: THPaints.thPaint7,
     ),
     THPointType.pebbles: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.pendant: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.photo: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.pillar: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint12,
+      border: THPaints.thPaint11,
+      fill: THPaints.thPaint2011,
     ),
     THPointType.pillarsWithCurtains: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint12,
+      border: THPaints.thPaint11,
+      fill: THPaints.thPaint2011,
     ),
     THPointType.popcorn: THPointPaint(
       type: MPPointShapeType.square,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.raft: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.raftCone: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.remark: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.rimstoneDam: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.root: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.rope: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.ropeLadder: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint11,
+      border: THPaints.thPaint10,
     ),
     THPointType.sand: THPointPaint(
       type: MPPointShapeType.triangle,
-      fill: THPaints.thPaint2002,
+      fill: THPaints.thPaint2001,
     ),
     THPointType.scallop: THPointPaint(
       type: MPPointShapeType.star,
-      fill: THPaints.thPaint2002,
+      fill: THPaints.thPaint2001,
     ),
     THPointType.section: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.seedGermination: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.sink: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint4,
+      border: THPaints.thPaint3,
     ),
     THPointType.snow: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint7,
+      border: THPaints.thPaint6,
     ),
     THPointType.sodaStraw: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.spring: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint4,
+      border: THPaints.thPaint3,
     ),
     THPointType.stalactite: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.stalactites: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.stalactiteStalagmite: THPointPaint(
       type: MPPointShapeType.square,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.stalagmite: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.stalagmites: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      border: THPaints.thPaint14,
+      border: THPaints.thPaint13,
     ),
     THPointType.stationName: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint1,
+      border: THPaints.thPaint0,
     ),
     THPointType.steps: THPointPaint(
       type: MPPointShapeType.arrow,
-      fill: THPaints.thPaint2011,
+      fill: THPaints.thPaint2010,
     ),
     THPointType.traverse: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint2,
+      border: THPaints.thPaint1,
     ),
     THPointType.treeTrunk: THPointPaint(
       type: MPPointShapeType.plus,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.u: THPointPaint(
       type: MPPointShapeType.x,
-      border: THPaints.thPaint16,
+      border: THPaints.thPaint15,
     ),
     THPointType.vegetableDebris: THPointPaint(
       type: MPPointShapeType.square,
-      border: THPaints.thPaint9,
+      border: THPaints.thPaint8,
     ),
     THPointType.viaFerrata: THPointPaint(
       type: MPPointShapeType.circle,
-      fill: THPaints.thPaint2011,
+      fill: THPaints.thPaint2010,
     ),
     THPointType.volcano: THPointPaint(
       type: MPPointShapeType.asterisk,
-      border: THPaints.thPaint6,
+      border: THPaints.thPaint5,
     ),
     THPointType.walkway: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
-      fill: THPaints.thPaint2011,
+      fill: THPaints.thPaint2010,
     ),
     THPointType.wallCalcite: THPointPaint(
       type: MPPointShapeType.t,
-      border: THPaints.thPaint13,
+      border: THPaints.thPaint12,
     ),
     THPointType.water: THPointPaint(
       type: MPPointShapeType.star,
-      border: THPaints.thPaint4,
+      border: THPaints.thPaint3,
     ),
     THPointType.waterDrip: THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint4,
+      border: THPaints.thPaint3,
     ),
     THPointType.wheelchair: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      fill: THPaints.thPaint2001,
+      fill: THPaints.thPaint2000,
     ),
   };
 
   static final Map<String, THPointPaint> waterFlowPointSubtypesPaints = {
     mpNoSubtypeID: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint15,
+      border: THPaints.thPaint14,
     ),
     'intermittent': THPointPaint(
       type: MPPointShapeType.invertedT,
-      border: THPaints.thPaint15,
+      border: THPaints.thPaint14,
     ),
     'paleo': THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint15,
+      border: THPaints.thPaint14,
     ),
     'permanent': THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint15,
+      border: THPaints.thPaint14,
     ),
   };
 
   static final Map<String, THPointPaint> stationSubtypesPaints = {
     mpNoSubtypeID: THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint5,
+      border: THPaints.thPaint4,
     ),
     'fixed': THPointPaint(
       type: MPPointShapeType.triangleWithCenterCircle,
-      border: THPaints.thPaint5,
+      border: THPaints.thPaint4,
     ),
     'natural': THPointPaint(
       type: MPPointShapeType.invertedTriangle,
-      border: THPaints.thPaint5,
+      border: THPaints.thPaint4,
     ),
     'painted': THPointPaint(
       type: MPPointShapeType.triangle,
-      fill: THPaints.thPaint5,
+      fill: THPaints.thPaint4,
     ),
     'temporary': THPointPaint(
       type: MPPointShapeType.triangle,
-      border: THPaints.thPaint5,
+      border: THPaints.thPaint4,
     ),
   };
 
   static final Map<String, THPointPaint> airDraughtSubtypesPaints = {
     mpNoSubtypeID: THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint10,
+      border: THPaints.thPaint9,
     ),
     'summer': THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint10,
-      fill: THPaints.thPaint2,
+      border: THPaints.thPaint9,
+      fill: THPaints.thPaint1,
     ),
     'undefined': THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint10,
+      border: THPaints.thPaint9,
     ),
     'winter': THPointPaint(
       type: MPPointShapeType.arrow,
-      border: THPaints.thPaint10,
-      fill: THPaints.thPaint6,
+      border: THPaints.thPaint9,
+      fill: THPaints.thPaint5,
     ),
   };
 
   static final Map<THLineType, THLinePaint> lineTypePaints = {
     THLineType.abyssEntrance: THLinePaint(
-      primaryPaint: THPaints.thPaint14,
+      primaryPaint: THPaints.thPaint13,
       type: MPLinePaintType.longDot,
     ),
     THLineType.arrow: THLinePaint(
-      primaryPaint: THPaints.thPaint10,
+      primaryPaint: THPaints.thPaint9,
       type: MPLinePaintType.dot,
     ),
     THLineType.ceilingMeander: THLinePaint(
-      primaryPaint: THPaints.thPaint6,
+      primaryPaint: THPaints.thPaint5,
       type: MPLinePaintType.shortMediumShort,
     ),
     THLineType.ceilingStep: THLinePaint(
-      primaryPaint: THPaints.thPaint6,
+      primaryPaint: THPaints.thPaint5,
       type: MPLinePaintType.shortDot,
     ),
     THLineType.chimney: THLinePaint(
-      primaryPaint: THPaints.thPaint14,
+      primaryPaint: THPaints.thPaint13,
       type: MPLinePaintType.medium2Dots,
     ),
     THLineType.contour: THLinePaint(
-      primaryPaint: THPaints.thPaint7,
+      primaryPaint: THPaints.thPaint6,
       type: MPLinePaintType.dot,
     ),
     THLineType.dripline: THLinePaint(
-      primaryPaint: THPaints.thPaint7,
+      primaryPaint: THPaints.thPaint6,
       type: MPLinePaintType.mediumDot,
     ),
     THLineType.fault: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
+      primaryPaint: THPaints.thPaint12,
       type: MPLinePaintType.dot,
     ),
     THLineType.fixedLadder: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.dot,
     ),
     THLineType.floorMeander: THLinePaint(
-      primaryPaint: THPaints.thPaint6,
+      primaryPaint: THPaints.thPaint5,
       type: MPLinePaintType.medium2Dots,
     ),
     THLineType.floorStep: THLinePaint(
-      primaryPaint: THPaints.thPaint6,
+      primaryPaint: THPaints.thPaint5,
       type: MPLinePaintType.long3Dots,
     ),
     THLineType.flowstone: THLinePaint(
-      primaryPaint: THPaints.thPaint11,
+      primaryPaint: THPaints.thPaint10,
       type: MPLinePaintType.shortMediumShort,
     ),
     THLineType.gradient: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
+      primaryPaint: THPaints.thPaint12,
       type: MPLinePaintType.long,
     ),
     THLineType.handrail: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.long,
     ),
     THLineType.joint: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
+      primaryPaint: THPaints.thPaint12,
       type: MPLinePaintType.mediumDot,
     ),
     THLineType.label: THLinePaint(
-      primaryPaint: THPaints.thPaint10,
+      primaryPaint: THPaints.thPaint9,
       type: MPLinePaintType.long,
     ),
     THLineType.lowCeiling: THLinePaint(
-      primaryPaint: THPaints.thPaint14,
+      primaryPaint: THPaints.thPaint13,
       type: MPLinePaintType.short3Dots,
     ),
     THLineType.mapConnection: THLinePaint(
-      primaryPaint: THPaints.thPaint10,
+      primaryPaint: THPaints.thPaint9,
       type: MPLinePaintType.short2Dots,
     ),
     THLineType.moonmilk: THLinePaint(
-      primaryPaint: THPaints.thPaint11,
+      primaryPaint: THPaints.thPaint10,
       type: MPLinePaintType.long3Dots,
     ),
     THLineType.overhang: THLinePaint(
-      primaryPaint: THPaints.thPaint11,
+      primaryPaint: THPaints.thPaint10,
       type: MPLinePaintType.medium2Dots,
     ),
     THLineType.pit: THLinePaint(
-      primaryPaint: THPaints.thPaint14,
+      primaryPaint: THPaints.thPaint13,
       type: MPLinePaintType.shortLongShort,
     ),
     THLineType.pitch: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
+      primaryPaint: THPaints.thPaint12,
       type: MPLinePaintType.short2Dots,
     ),
     THLineType.pitChimney: THLinePaint(
-      primaryPaint: THPaints.thPaint14,
+      primaryPaint: THPaints.thPaint13,
       type: MPLinePaintType.medium,
     ),
     THLineType.rimstoneDam: THLinePaint(
-      primaryPaint: THPaints.thPaint8,
+      primaryPaint: THPaints.thPaint7,
       type: MPLinePaintType.long,
     ),
     THLineType.rimstonePool: THLinePaint(
-      primaryPaint: THPaints.thPaint8,
+      primaryPaint: THPaints.thPaint7,
       type: MPLinePaintType.short3Dots,
     ),
     THLineType.rockBorder: THLinePaint(
-      primaryPaint: THPaints.thPaint9,
+      primaryPaint: THPaints.thPaint8,
       type: MPLinePaintType.continuous,
     ),
     THLineType.rockEdge: THLinePaint(
-      primaryPaint: THPaints.thPaint9,
+      primaryPaint: THPaints.thPaint8,
       type: MPLinePaintType.medium,
     ),
     THLineType.rope: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.continuous,
     ),
     THLineType.ropeLadder: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.short,
     ),
     THLineType.section: THLinePaint(
-      primaryPaint: THPaints.thPaint10,
+      primaryPaint: THPaints.thPaint9,
       type: MPLinePaintType.mediumDot,
     ),
     THLineType.slope: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
+      primaryPaint: THPaints.thPaint12,
       type: MPLinePaintType.continuous,
     ),
     THLineType.steps: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.long3Dots,
     ),
     THLineType.u: THLinePaint(
-      primaryPaint: THPaints.thPaint16,
+      primaryPaint: THPaints.thPaint15,
       type: MPLinePaintType.continuous,
     ),
     THLineType.viaFerrata: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.medium2Dots,
     ),
     THLineType.walkWay: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
+      primaryPaint: THPaints.thPaint2,
       type: MPLinePaintType.medium,
     ),
   };
 
   static final Map<String, THLinePaint> borderSubtypesPaints = {
     mpNoSubtypeID: THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+      primaryPaint: THPaints.thPaint4,
       type: MPLinePaintType.continuous,
     ),
     'invisible': THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+      primaryPaint: THPaints.thPaint4,
       type: MPLinePaintType.dot,
     ),
     'presumed': THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+      primaryPaint: THPaints.thPaint4,
       type: MPLinePaintType.long,
     ),
     'temporary': THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+      primaryPaint: THPaints.thPaint4,
       type: MPLinePaintType.medium2Dots,
     ),
     'visible': THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+      primaryPaint: THPaints.thPaint4,
       type: MPLinePaintType.continuous,
     ),
   };
 
   static final Map<String, THLinePaint> surveySubtypesPaints = {
     mpNoSubtypeID: THLinePaint(
-      primaryPaint: THPaints.thPaint15,
+      primaryPaint: THPaints.thPaint14,
       type: MPLinePaintType.continuous,
     ),
     'cave': THLinePaint(
-      primaryPaint: THPaints.thPaint15,
+      primaryPaint: THPaints.thPaint14,
       type: MPLinePaintType.continuous,
     ),
     'surface': THLinePaint(
-      primaryPaint: THPaints.thPaint15,
+      primaryPaint: THPaints.thPaint14,
       type: MPLinePaintType.dot,
     ),
   };
 
   static final Map<String, THLinePaint> wallSubtypesPaints = {
     mpNoSubtypeID: THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.continuous,
     ),
     'bedrock': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.continuous,
     ),
     'blocks': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.dot,
     ),
     'clay': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.long,
     ),
     'debris': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.long2Dots,
     ),
     'flowstone': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.long3Dots,
     ),
     'ice': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.longDot,
     ),
     'invisible': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.mediumLongMedium,
     ),
     'moonmilk': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.shortLongShort,
     ),
     'overlying': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.medium,
     ),
     'pebbles': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.medium2Dots,
     ),
     'pit': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.medium3Dots,
     ),
     'presumed': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.mediumDot,
     ),
     'sand': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.shortDot,
     ),
     'underlying': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.short,
     ),
     'unsurveyed': THLinePaint(
-      primaryPaint: THPaints.thPaint1,
+      primaryPaint: THPaints.thPaint0,
       type: MPLinePaintType.short2Dots,
     ),
   };
 
   static final Map<String, THLinePaint> waterFlowLineSubtypesPaints = {
     mpNoSubtypeID: THLinePaint(
-      primaryPaint: THPaints.thPaint4,
+      primaryPaint: THPaints.thPaint3,
       type: MPLinePaintType.continuous,
     ),
     'conjectural': THLinePaint(
-      primaryPaint: THPaints.thPaint4,
+      primaryPaint: THPaints.thPaint3,
       type: MPLinePaintType.longDot,
     ),
     'intermittent': THLinePaint(
-      primaryPaint: THPaints.thPaint4,
+      primaryPaint: THPaints.thPaint3,
       type: MPLinePaintType.medium2Dots,
     ),
     'permanent': THLinePaint(
-      primaryPaint: THPaints.thPaint4,
+      primaryPaint: THPaints.thPaint3,
       type: MPLinePaintType.continuous,
     ),
   };
 
   static final Map<THAreaType, THLinePaint> areaTypePaints = {
     THAreaType.bedrock: THLinePaint(
-      primaryPaint: THPaints.thPaint1,
-      fillPaint: THPaints.thPaint1001,
+      primaryPaint: THPaints.thPaint0,
+      fillPaint: THPaints.thPaint1000,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.blocks: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
-      fillPaint: THPaints.thPaint1013,
+      primaryPaint: THPaints.thPaint12,
+      fillPaint: THPaints.thPaint1012,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.clay: THLinePaint(
-      primaryPaint: THPaints.thPaint11,
-      fillPaint: THPaints.thPaint1011,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.debris: THLinePaint(
-      primaryPaint: THPaints.thPaint13,
-      fillPaint: THPaints.thPaint1011,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.flowstone: THLinePaint(
-      primaryPaint: THPaints.thPaint7,
-      fillPaint: THPaints.thPaint1007,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.ice: THLinePaint(
       primaryPaint: THPaints.thPaint10,
       fillPaint: THPaints.thPaint1010,
       type: MPLinePaintType.continuous,
     ),
-    THAreaType.moonmilk: THLinePaint(
-      primaryPaint: THPaints.thPaint7,
-      fillPaint: THPaints.thPaint1006,
+    THAreaType.debris: THLinePaint(
+      primaryPaint: THPaints.thPaint12,
+      fillPaint: THPaints.thPaint1010,
       type: MPLinePaintType.continuous,
     ),
-    THAreaType.mudcrack: THLinePaint(
-      primaryPaint: THPaints.thPaint11,
-      fillPaint: THPaints.thPaint1003,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.pebbles: THLinePaint(
+    THAreaType.flowstone: THLinePaint(
       primaryPaint: THPaints.thPaint6,
       fillPaint: THPaints.thPaint1006,
       type: MPLinePaintType.continuous,
     ),
-    THAreaType.pillar: THLinePaint(
-      primaryPaint: THPaints.thPaint2,
-      fillPaint: THPaints.thPaint1002,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.pillarWithCurtains: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
-      fillPaint: THPaints.thPaint1003,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.pillars: THLinePaint(
-      primaryPaint: THPaints.thPaint2,
-      fillPaint: THPaints.thPaint1003,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.pillarsWithCurtains: THLinePaint(
-      primaryPaint: THPaints.thPaint3,
-      fillPaint: THPaints.thPaint1002,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.sand: THLinePaint(
-      primaryPaint: THPaints.thPaint14,
-      fillPaint: THPaints.thPaint1014,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.snow: THLinePaint(
-      primaryPaint: THPaints.thPaint8,
-      fillPaint: THPaints.thPaint1008,
-      type: MPLinePaintType.continuous,
-    ),
-    THAreaType.stalactite: THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+    THAreaType.ice: THLinePaint(
+      primaryPaint: THPaints.thPaint9,
       fillPaint: THPaints.thPaint1009,
       type: MPLinePaintType.continuous,
     ),
-    THAreaType.stalactiteStalagmite: THLinePaint(
+    THAreaType.moonmilk: THLinePaint(
+      primaryPaint: THPaints.thPaint6,
+      fillPaint: THPaints.thPaint1005,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.mudcrack: THLinePaint(
+      primaryPaint: THPaints.thPaint10,
+      fillPaint: THPaints.thPaint1002,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pebbles: THLinePaint(
       primaryPaint: THPaints.thPaint5,
       fillPaint: THPaints.thPaint1005,
       type: MPLinePaintType.continuous,
     ),
-    THAreaType.stalagmite: THLinePaint(
-      primaryPaint: THPaints.thPaint5,
+    THAreaType.pillar: THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      fillPaint: THPaints.thPaint1001,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillarWithCurtains: THLinePaint(
+      primaryPaint: THPaints.thPaint2,
+      fillPaint: THPaints.thPaint1002,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillars: THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      fillPaint: THPaints.thPaint1002,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillarsWithCurtains: THLinePaint(
+      primaryPaint: THPaints.thPaint2,
+      fillPaint: THPaints.thPaint1001,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.sand: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      fillPaint: THPaints.thPaint1013,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.snow: THLinePaint(
+      primaryPaint: THPaints.thPaint7,
+      fillPaint: THPaints.thPaint1007,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.stalactite: THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      fillPaint: THPaints.thPaint1008,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.stalactiteStalagmite: THLinePaint(
+      primaryPaint: THPaints.thPaint4,
       fillPaint: THPaints.thPaint1004,
       type: MPLinePaintType.continuous,
     ),
+    THAreaType.stalagmite: THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      fillPaint: THPaints.thPaint1003,
+      type: MPLinePaintType.continuous,
+    ),
     THAreaType.sump: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      fillPaint: THPaints.thPaint1014,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.u: THLinePaint(
       primaryPaint: THPaints.thPaint15,
       fillPaint: THPaints.thPaint1015,
       type: MPLinePaintType.continuous,
     ),
-    THAreaType.u: THLinePaint(
-      primaryPaint: THPaints.thPaint16,
-      fillPaint: THPaints.thPaint1016,
-      type: MPLinePaintType.continuous,
-    ),
     THAreaType.water: THLinePaint(
-      primaryPaint: THPaints.thPaint4,
-      fillPaint: THPaints.thPaint1004,
+      primaryPaint: THPaints.thPaint3,
+      fillPaint: THPaints.thPaint1003,
       type: MPLinePaintType.continuous,
     ),
   };
@@ -892,18 +895,29 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THPointPaint getSelectedPointPaint(THPoint point) {
-    return getDefaultPointPaint(point).copyWith(
+    THPointPaint pointPaint = getDefaultPointPaint(point).copyWith(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      border: THPaints.thPaint2
-        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
+
+    if (pointPaint.border != null) {
+      pointPaint = pointPaint.copyWith(
+        border: THPaints.thPaint1
+          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      );
+    }
+    if (pointPaint.fill != null) {
+      pointPaint = pointPaint.copyWith(
+        fill: THPaints.thPaint2001,
+      );
+    }
+    return pointPaint;
   }
 
   THLinePaint getSelectedLinePaint(THLine line) {
     final THLinePaint linePaint = getDefaultLinePaint(line);
 
     return linePaint.copyWith(
-      primaryPaint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
       makeSecondaryPaintNull: true,
     );
@@ -911,23 +925,23 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getSelectedAreaPaint(THArea area) {
     final THLinePaint areaPaint = getDefaultAreaPaint(area).copyWith(
-      primaryPaint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-      fillPaint: THPaints.thPaint1002,
+      fillPaint: THPaints.thPaint1001,
     );
 
     return areaPaint;
   }
 
   THLinePaint getMultipleElementsClickedHighlightedFillPaint() {
-    return THLinePaint(primaryPaint: THPaints.thPaint1002);
+    return THLinePaint(primaryPaint: THPaints.thPaint1001);
   }
 
   THLinePaint getMultipleElementsClickedHighlightedBorderPaint(THLine line) {
     final THLinePaint linePaint = getDefaultLinePaint(line);
 
     return linePaint.copyWith(
-      primaryPaint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
       makeSecondaryPaintNull: true,
     );
@@ -935,14 +949,14 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getNewLinePaint() {
     return THLinePaint(
-      primaryPaint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
 
   THLinePaint getEditLinePaint() {
     return THLinePaint(
-      primaryPaint: THPaints.thPaint2
+      primaryPaint: THPaints.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
@@ -955,14 +969,14 @@ abstract class MPVisualControllerBase with Store {
     if (!_th2FileEditController.isFromActiveScrap(point)) {
       if (pointPaint.border != null) {
         pointPaint = pointPaint.copyWith(
-          border: THPaints.thPaint16
+          border: THPaints.thPaint15
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
         );
       }
 
       if (pointPaint.fill != null) {
         pointPaint = pointPaint.copyWith(
-          fill: THPaints.thPaint1016,
+          fill: THPaints.thPaint1015,
         );
       }
     }
@@ -973,8 +987,8 @@ abstract class MPVisualControllerBase with Store {
   THLinePaint getDefaultAreaPaint(THArea area) {
     return areaTypePaints[area.areaType] ??
         THLinePaint(
-          primaryPaint: THPaints.thPaint1,
-          fillPaint: THPaints.thPaint1002,
+          primaryPaint: THPaints.thPaint0,
+          fillPaint: THPaints.thPaint1001,
           type: MPLinePaintType.medium,
         );
   }
@@ -989,9 +1003,9 @@ abstract class MPVisualControllerBase with Store {
       );
     } else {
       areaPaint = areaPaint.copyWith(
-        primaryPaint: THPaints.thPaint16
+        primaryPaint: THPaints.thPaint15
           ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        fillPaint: THPaints.thPaint1016,
+        fillPaint: THPaints.thPaint1015,
       );
     }
 
@@ -1092,7 +1106,7 @@ abstract class MPVisualControllerBase with Store {
       );
     } else {
       return linePaint.copyWith(
-        primaryPaint: THPaints.thPaint16
+        primaryPaint: THPaints.thPaint15
           ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
         makeSecondaryPaintNull: true,
       );
@@ -1115,7 +1129,7 @@ abstract class MPVisualControllerBase with Store {
   THPointPaint getHighligthtedEndControlPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
-      border: THPaints.thPaint2
+      border: THPaints.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }

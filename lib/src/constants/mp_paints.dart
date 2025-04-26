@@ -2,136 +2,137 @@ import 'package:flutter/material.dart';
 
 class THPaints {
   static final thColors = [
-    Color(0xffe6194B), // 1
-    Color(0xff3cb44b), // 2
-    Color(0xffffe119), // 3
-    Color(0xff4363d8), // 4
-    Color(0xfff58231), // 5
-    Color(0xff42d4f4), // 6
-    Color(0xfff032e6), // 7
-    Color(0xfffabed4), // 8
-    Color(0xff469990), // 9
-    Color(0xffdcbeff), // 10
-    Color(0xff9A6324), // 11
-    Color.fromARGB(255, 255, 248, 174), // 12
-    Color(0xff800000), // 13
-    Color(0xffaaffc3), // 14
-    Color(0xff000075), // 15
-    Color(0xffa9a9a9), // 16
+    Color(0xffe6194B), // 0
+    Color(0xff3cb44b), // 1
+    Color(0xffffe119), // 2
+    Color(0xff4363d8), // 3
+    Color(0xfff58231), // 4
+    Color(0xff42d4f4), // 5
+    Color(0xfff032e6), // 6
+    Color(0xfffabed4), // 7
+    Color(0xff469990), // 8
+    Color(0xffdcbeff), // 9
+    Color(0xff9A6324), // 10
+    Color.fromARGB(255, 212, 164, 18), // 11
+    Color(0xff800000), // 12
+    Color(0xffaaffc3), // 13
+    Color(0xff000075), // 14
+    Color(0xffa9a9a9), // 15
 
     /// The following colors might be problematic for the most common kind of
     /// color blindness.
-    Color(0xff911eb4), // 17
-    Color(0xffbfef45), // 18
-    Color(0xff808000), // 19
-    Color(0xffffd8b1), // 20
+    Color(0xff911eb4), // 16
+    Color(0xffbfef45), // 17
+    Color(0xff808000), // 18
+    Color(0xffffd8b1), // 19
   ];
-  static final thPaint1 = Paint()
+  static final thPaint0 = Paint()
     ..color = thColors[0]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint2 = Paint()
+  static final thPaint1 = Paint()
     ..color = thColors[1]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint3 = Paint()
+  static final thPaint2 = Paint()
     ..color = thColors[2]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint4 = Paint()
+  static final thPaint3 = Paint()
     ..color = thColors[3]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint5 = Paint()
+  static final thPaint4 = Paint()
     ..color = thColors[4]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint6 = Paint()
+  static final thPaint5 = Paint()
     ..color = thColors[5]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint7 = Paint()
+  static final thPaint6 = Paint()
     ..color = thColors[6]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint8 = Paint()
+  static final thPaint7 = Paint()
     ..color = thColors[7]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint9 = Paint()
+  static final thPaint8 = Paint()
     ..color = thColors[8]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint10 = Paint()
+  static final thPaint9 = Paint()
     ..color = thColors[9]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint11 = Paint()
+  static final thPaint10 = Paint()
     ..color = thColors[10]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint12 = Paint()
+  static final thPaint11 = Paint()
     ..color = thColors[11]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint13 = Paint()
+  static final thPaint12 = Paint()
     ..color = thColors[12]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint14 = Paint()
+  static final thPaint13 = Paint()
     ..color = thColors[13]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint15 = Paint()
+  static final thPaint14 = Paint()
     ..color = thColors[14]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint16 = Paint()
+  static final thPaint15 = Paint()
     ..color = thColors[15]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint17 = Paint()
+  static final thPaint16 = Paint()
     ..color = thColors[16]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint18 = Paint()
+  static final thPaint17 = Paint()
     ..color = thColors[17]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint19 = Paint()
+  static final thPaint18 = Paint()
     ..color = thColors[18]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint20 = Paint()
+  static final thPaint19 = Paint()
     ..color = thColors[19]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
-  static final thPaint21 = Paint()
+  static final thPaint20 = Paint()
     ..color = thColors[20]
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
 
+  static final thPaint2000 = Paint.from(thPaint0)..style = PaintingStyle.fill;
   static final thPaint2001 = Paint.from(thPaint1)..style = PaintingStyle.fill;
   static final thPaint2002 = Paint.from(thPaint2)..style = PaintingStyle.fill;
   static final thPaint2003 = Paint.from(thPaint3)..style = PaintingStyle.fill;
@@ -152,8 +153,9 @@ class THPaints {
   static final thPaint2018 = Paint.from(thPaint18)..style = PaintingStyle.fill;
   static final thPaint2019 = Paint.from(thPaint19)..style = PaintingStyle.fill;
   static final thPaint2020 = Paint.from(thPaint20)..style = PaintingStyle.fill;
-  static final thPaint2021 = Paint.from(thPaint21)..style = PaintingStyle.fill;
 
+  static final thPaint1000 = Paint.from(thPaint2000)
+    ..color = thPaint2000.color.withAlpha(77);
   static final thPaint1001 = Paint.from(thPaint2001)
     ..color = thPaint2001.color.withAlpha(77);
   static final thPaint1002 = Paint.from(thPaint2002)
@@ -194,8 +196,6 @@ class THPaints {
     ..color = thPaint2019.color.withAlpha(77);
   static final thPaint1020 = Paint.from(thPaint2020)
     ..color = thPaint2020.color.withAlpha(77);
-  static final thPaint1021 = Paint.from(thPaint2021)
-    ..color = thPaint2021.color.withAlpha(77);
 
   static final thPaintWhiteBackground = Paint()
     ..color = Colors.white
