@@ -82,7 +82,11 @@ class THLinePainter extends CustomPainter {
     }
 
     if (linePaint.type == MPLinePaintType.continuous) {
-      canvas.drawPath(path, linePaint.primaryPaint!);
+      if (linePaint.primaryPaint != null) {
+        canvas.drawPath(path, linePaint.primaryPaint!);
+      } else if (linePaint.secondaryPaint != null) {
+        canvas.drawPath(path, linePaint.secondaryPaint!);
+      }
     } else {
       _drawDashedPath(canvas, path);
     }

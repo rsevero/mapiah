@@ -72,7 +72,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
 
                 final THArea area = thFile.areaByMPID(areaMPID);
 
-                linePaint = visualController.getUnselectedAreaBorderPaint(area);
+                linePaint = visualController.getUnselectedAreaPaint(area);
               }
 
               painters.add(

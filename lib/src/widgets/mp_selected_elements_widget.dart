@@ -33,9 +33,6 @@ class MPSelectedElementsWidget extends StatelessWidget
         final mpSelectedElements = th2FileEditController
             .selectionController.mpSelectedElementsLogical.values;
 
-        final THLinePaint areaPaint =
-            visualController.getSelectedAreaBorderPaint();
-
         final double canvasScale = th2FileEditController.canvasScale;
         final Offset canvasTranslation =
             th2FileEditController.canvasTranslation;
@@ -71,6 +68,8 @@ class MPSelectedElementsWidget extends StatelessWidget
               );
             case THArea _:
               final Set<int> areaLineMPIDs = element.getLineMPIDs(thFile);
+              final THLinePaint areaPaint =
+                  visualController.getSelectedAreaPaint(element);
 
               for (final int areaLineMPID in areaLineMPIDs) {
                 final THLine line = thFile.lineByMPID(areaLineMPID);

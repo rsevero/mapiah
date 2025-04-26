@@ -7,6 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
@@ -777,6 +778,114 @@ abstract class MPVisualControllerBase with Store {
     ),
   };
 
+  static final Map<THAreaType, THLinePaint> areaTypePaints = {
+    THAreaType.bedrock: THLinePaint(
+      primaryPaint: THPaints.thPaint1,
+      fillPaint: THPaints.thPaint1001,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.blocks: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      fillPaint: THPaints.thPaint1013,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.clay: THLinePaint(
+      primaryPaint: THPaints.thPaint11,
+      fillPaint: THPaints.thPaint1011,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.debris: THLinePaint(
+      primaryPaint: THPaints.thPaint13,
+      fillPaint: THPaints.thPaint1011,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.flowstone: THLinePaint(
+      primaryPaint: THPaints.thPaint7,
+      fillPaint: THPaints.thPaint1007,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.ice: THLinePaint(
+      primaryPaint: THPaints.thPaint10,
+      fillPaint: THPaints.thPaint1010,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.moonmilk: THLinePaint(
+      primaryPaint: THPaints.thPaint7,
+      fillPaint: THPaints.thPaint1006,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.mudcrack: THLinePaint(
+      primaryPaint: THPaints.thPaint11,
+      fillPaint: THPaints.thPaint1003,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pebbles: THLinePaint(
+      primaryPaint: THPaints.thPaint6,
+      fillPaint: THPaints.thPaint1006,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillar: THLinePaint(
+      primaryPaint: THPaints.thPaint2,
+      fillPaint: THPaints.thPaint1002,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillarWithCurtains: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      fillPaint: THPaints.thPaint1003,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillars: THLinePaint(
+      primaryPaint: THPaints.thPaint2,
+      fillPaint: THPaints.thPaint1003,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.pillarsWithCurtains: THLinePaint(
+      primaryPaint: THPaints.thPaint3,
+      fillPaint: THPaints.thPaint1002,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.sand: THLinePaint(
+      primaryPaint: THPaints.thPaint14,
+      fillPaint: THPaints.thPaint1014,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.snow: THLinePaint(
+      primaryPaint: THPaints.thPaint8,
+      fillPaint: THPaints.thPaint1008,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.stalactite: THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      fillPaint: THPaints.thPaint1009,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.stalactiteStalagmite: THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      fillPaint: THPaints.thPaint1005,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.stalagmite: THLinePaint(
+      primaryPaint: THPaints.thPaint5,
+      fillPaint: THPaints.thPaint1004,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.sump: THLinePaint(
+      primaryPaint: THPaints.thPaint15,
+      fillPaint: THPaints.thPaint1015,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.u: THLinePaint(
+      primaryPaint: THPaints.thPaint16,
+      fillPaint: THPaints.thPaint1016,
+      type: MPLinePaintType.continuous,
+    ),
+    THAreaType.water: THLinePaint(
+      primaryPaint: THPaints.thPaint4,
+      fillPaint: THPaints.thPaint1004,
+      type: MPLinePaintType.continuous,
+    ),
+  };
+
   Paint getControlLinePaint() {
     return THPaints.thPaintBlackBorder
       ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
@@ -800,18 +909,14 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THLinePaint getSelectedAreaFillPaint() {
-    final Paint paint = THPaints.thPaint1002;
+  THLinePaint getSelectedAreaPaint(THArea area) {
+    final THLinePaint areaPaint = getDefaultAreaPaint(area).copyWith(
+      primaryPaint: THPaints.thPaint2
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      fillPaint: THPaints.thPaint1002,
+    );
 
-    return THLinePaint(primaryPaint: paint);
-  }
-
-  THLinePaint getSelectedAreaBorderPaint() {
-    final Paint paint = THPaints.thPaint2;
-
-    paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
-
-    return THLinePaint(primaryPaint: paint);
+    return areaPaint;
   }
 
   THLinePaint getMultipleElementsClickedHighlightedFillPaint() {
@@ -865,23 +970,32 @@ abstract class MPVisualControllerBase with Store {
     return pointPaint;
   }
 
-  THLinePaint getUnselectedAreaFillPaint(THArea area) {
-    final bool isFromActiveScrap =
-        _th2FileEditController.isFromActiveScrap(area);
-    final Paint paint =
-        isFromActiveScrap ? THPaints.thPaint1004 : THPaints.thPaint1016;
-
-    return THLinePaint(primaryPaint: paint);
+  THLinePaint getDefaultAreaPaint(THArea area) {
+    return areaTypePaints[area.areaType] ??
+        THLinePaint(
+          primaryPaint: THPaints.thPaint1,
+          fillPaint: THPaints.thPaint1002,
+          type: MPLinePaintType.medium,
+        );
   }
 
-  THLinePaint getUnselectedAreaBorderPaint(THArea area) {
-    final Paint paint = _th2FileEditController.isFromActiveScrap(area)
-        ? THPaints.thPaint4
-        : THPaints.thPaint16;
+  THLinePaint getUnselectedAreaPaint(THArea area) {
+    THLinePaint areaPaint = getDefaultAreaPaint(area);
 
-    paint.strokeWidth = _th2FileEditController.lineThicknessOnCanvas;
+    if (_th2FileEditController.isFromActiveScrap(area)) {
+      areaPaint = areaPaint.copyWith(
+        primaryPaint: areaPaint.primaryPaint!
+          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      );
+    } else {
+      areaPaint = areaPaint.copyWith(
+        primaryPaint: THPaints.thPaint16
+          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        fillPaint: THPaints.thPaint1016,
+      );
+    }
 
-    return THLinePaint(primaryPaint: paint);
+    return areaPaint;
   }
 
   THPointPaint getDefaultPointPaint(THPoint point) {
