@@ -359,12 +359,13 @@ class MPInteractionAux {
     Paint paint,
   ) {
     final double halfRadius = radius * 0.5;
+    final double oneAndAHalfRadius = radius + halfRadius;
 
     final Path arrowPath = Path()
-      ..moveTo(position.dx, position.dy + radius)
-      ..lineTo(position.dx + radius, position.dy - halfRadius)
+      ..moveTo(position.dx, position.dy + oneAndAHalfRadius)
+      ..lineTo(position.dx + radius, position.dy - oneAndAHalfRadius)
       ..lineTo(position.dx, position.dy)
-      ..lineTo(position.dx - radius, position.dy - halfRadius)
+      ..lineTo(position.dx - radius, position.dy - oneAndAHalfRadius)
       ..close();
 
     canvas.drawPath(arrowPath, paint);

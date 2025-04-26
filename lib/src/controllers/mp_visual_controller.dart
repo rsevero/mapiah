@@ -340,6 +340,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.rope: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaints.thPaint10,
+      fill: THPaints.thPaint2010,
     ),
     THPointType.ropeLadder: THPointPaint(
       type: MPPointShapeType.x,

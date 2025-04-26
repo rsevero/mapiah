@@ -24,6 +24,9 @@ Version 0.2
 [ ] - Release for Web
 [ ] - Help pages
 [ ] - Quick introduction guide
+[ ] - Point arrow should be filled
+[ ] - Last used point type not updating
+[ ] - SaveAs didn't save the changes
 
 Version 0.3
 [ ] - Search/select elements by characteristics
