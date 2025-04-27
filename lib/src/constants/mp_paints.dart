@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class THPaints {
+class THPaint {
   static final thColors = [
     Color(0xffe6194B), // 0
     Color(0xff3cb44b), // 1

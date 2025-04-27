@@ -3,7 +3,6 @@
 Version 0.2
 [X] - Make output identical to original except on changed lines
 [X] - Deal with click on more than one object at a time
-[ ] - Config page
 [X] - Line edit
 [X] - Point and line remove
 [X] - Point and line add
@@ -34,3 +33,4 @@ Version 0.3
 [ ] - Release automation Linux
 [ ] - Release automation Windows
 [ ] - Release automation MacOS
+[ ] - Config page

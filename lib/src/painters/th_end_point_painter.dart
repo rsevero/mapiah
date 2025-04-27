@@ -40,7 +40,7 @@ class THEndPointPainter extends CustomPainter {
     }
 
     if (pointPaint.fill == null) {
-      canvas.drawRect(whiteRect, THPaints.thPaintWhiteBackground);
+      canvas.drawRect(whiteRect, THPaint.thPaintWhiteBackground);
     } else {
       canvas.drawRect(squareRect, pointPaint.fill!);
     }

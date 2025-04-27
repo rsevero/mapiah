@@ -348,7 +348,7 @@ class MPInteractionAux {
       canvas,
       position,
       radius * 0.2,
-      THPaints.thPaintBlackBackground,
+      THPaint.thPaintBlackBackground,
     );
   }
 

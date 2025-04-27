@@ -27,7 +27,7 @@ class THControlPointPainter extends CustomPainter {
       canvas.drawCircle(
         controlPointPosition,
         pointPaint.radius,
-        THPaints.thPaintWhiteBackground,
+        THPaint.thPaintWhiteBackground,
       );
     } else {
       canvas.drawCircle(
