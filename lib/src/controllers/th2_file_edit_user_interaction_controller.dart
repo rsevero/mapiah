@@ -379,5 +379,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     _th2FileEditController.execute(setPLATypeCommand);
+    _th2FileEditController.triggerSelectedElementsRedraw();
   }
 }
