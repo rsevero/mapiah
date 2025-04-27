@@ -33,7 +33,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.altar: THPointPaint(
       type: MPPointShapeType.arrow,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.altitude: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -50,7 +50,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.aragonite: THPointPaint(
       type: MPPointShapeType.arrow,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.archeoExcavation: THPointPaint(
       type: MPPointShapeType.asterisk,
@@ -59,12 +59,12 @@ abstract class MPVisualControllerBase with Store {
     THPointType.archeoMaterial: THPointPaint(
       type: MPPointShapeType.circle,
       border: THPaint.thPaint16,
-      fill: THPaint.thPaint2016,
+      fill: THPaint.thPaint1016,
     ),
     THPointType.audio: THPointPaint(
       type: MPPointShapeType.circle,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.bat: THPointPaint(
       type: MPPointShapeType.x,
@@ -73,17 +73,17 @@ abstract class MPVisualControllerBase with Store {
     THPointType.bedrock: THPointPaint(
       type: MPPointShapeType.circle,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.blocks: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.bones: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint8,
-      fill: THPaint.thPaint2008,
+      fill: THPaint.thPaint1008,
     ),
     THPointType.breakdownChoke: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -92,12 +92,12 @@ abstract class MPVisualControllerBase with Store {
     THPointType.bridge: THPointPaint(
       type: MPPointShapeType.circle,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.camp: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.cavePearl: THPointPaint(
       type: MPPointShapeType.plus,
@@ -106,7 +106,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.clay: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.clayChoke: THPointPaint(
       type: MPPointShapeType.plus,
@@ -119,22 +119,22 @@ abstract class MPVisualControllerBase with Store {
     THPointType.continuation: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.crystal: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.curtain: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint5,
-      fill: THPaint.thPaint2005,
+      fill: THPaint.thPaint1005,
     ),
     THPointType.curtains: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint5,
-      fill: THPaint.thPaint2005,
+      fill: THPaint.thPaint1005,
     ),
     THPointType.danger: THPointPaint(
       type: MPPointShapeType.x,
@@ -147,7 +147,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.debris: THPointPaint(
       type: MPPointShapeType.square,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.dig: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -156,7 +156,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.dimensions: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint7,
-      fill: THPaint.thPaint2007,
+      fill: THPaint.thPaint1007,
     ),
     THPointType.discPillar: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -169,17 +169,17 @@ abstract class MPVisualControllerBase with Store {
     THPointType.discStalactite: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint13,
-      fill: THPaint.thPaint2013,
+      fill: THPaint.thPaint1013,
     ),
     THPointType.discStalagmite: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint13,
-      fill: THPaint.thPaint2013,
+      fill: THPaint.thPaint1013,
     ),
     THPointType.disk: THPointPaint(
       type: MPPointShapeType.circle,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.electricLight: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -188,7 +188,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.entrance: THPointPaint(
       type: MPPointShapeType.arrow,
       border: THPaint.thPaint2,
-      fill: THPaint.thPaint2002,
+      fill: THPaint.thPaint1002,
     ),
     THPointType.extra: THPointPaint(
       type: MPPointShapeType.plus,
@@ -197,7 +197,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.exVoto: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.fixedLadder: THPointPaint(
       type: MPPointShapeType.plus,
@@ -206,7 +206,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.flowstone: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.flute: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -215,17 +215,17 @@ abstract class MPVisualControllerBase with Store {
     THPointType.gate: THPointPaint(
       type: MPPointShapeType.square,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.gradient: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.guano: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint8,
-      fill: THPaint.thPaint2008,
+      fill: THPaint.thPaint1008,
     ),
     THPointType.gypsum: THPointPaint(
       type: MPPointShapeType.x,
@@ -238,7 +238,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.handrail: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.height: THPointPaint(
       type: MPPointShapeType.t,
@@ -247,22 +247,22 @@ abstract class MPVisualControllerBase with Store {
     THPointType.helictite: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint5,
-      fill: THPaint.thPaint2005,
+      fill: THPaint.thPaint1005,
     ),
     THPointType.humanBones: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint8,
-      fill: THPaint.thPaint2008,
+      fill: THPaint.thPaint1008,
     ),
     THPointType.ice: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint6,
-      fill: THPaint.thPaint2006,
+      fill: THPaint.thPaint1006,
     ),
     THPointType.icePillar: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint6,
-      fill: THPaint.thPaint2006,
+      fill: THPaint.thPaint1006,
     ),
     THPointType.iceStalactite: THPointPaint(
       type: MPPointShapeType.t,
@@ -279,7 +279,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.label: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.mapConnection: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -292,42 +292,42 @@ abstract class MPVisualControllerBase with Store {
     THPointType.moonmilk: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.mud: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.mudcrack: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.namePlate: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.noEquipment: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.noWheelchair: THPointPaint(
       type: MPPointShapeType.square,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.paleoMaterial: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint16,
-      fill: THPaint.thPaint2016,
+      fill: THPaint.thPaint1016,
     ),
     THPointType.passageHeight: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
       border: THPaint.thPaint7,
-      fill: THPaint.thPaint2007,
+      fill: THPaint.thPaint1007,
     ),
     THPointType.pebbles: THPointPaint(
       type: MPPointShapeType.x,
@@ -336,17 +336,17 @@ abstract class MPVisualControllerBase with Store {
     THPointType.pendant: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.photo: THPointPaint(
       type: MPPointShapeType.arrow,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.pillar: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint11,
-      fill: THPaint.thPaint2011,
+      fill: THPaint.thPaint1011,
     ),
     THPointType.pillarWithCurtains: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
@@ -355,12 +355,12 @@ abstract class MPVisualControllerBase with Store {
     THPointType.pillarsWithCurtains: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint11,
-      fill: THPaint.thPaint2011,
+      fill: THPaint.thPaint1011,
     ),
     THPointType.popcorn: THPointPaint(
       type: MPPointShapeType.square,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.raft: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -377,7 +377,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.rimstoneDam: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint12,
-      fill: THPaint.thPaint2012,
+      fill: THPaint.thPaint1012,
     ),
     THPointType.root: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -386,7 +386,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.rope: THPointPaint(
       type: MPPointShapeType.verticalDiamond,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.ropeLadder: THPointPaint(
       type: MPPointShapeType.x,
@@ -395,17 +395,17 @@ abstract class MPVisualControllerBase with Store {
     THPointType.sand: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.scallop: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.section: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.seedGermination: THPointPaint(
       type: MPPointShapeType.t,
@@ -434,12 +434,12 @@ abstract class MPVisualControllerBase with Store {
     THPointType.stalactites: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint13,
-      fill: THPaint.thPaint2013,
+      fill: THPaint.thPaint1013,
     ),
     THPointType.stalactiteStalagmite: THPointPaint(
       type: MPPointShapeType.square,
       border: THPaint.thPaint13,
-      fill: THPaint.thPaint2013,
+      fill: THPaint.thPaint1013,
     ),
     THPointType.stalagmite: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -448,22 +448,22 @@ abstract class MPVisualControllerBase with Store {
     THPointType.stalagmites: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
       border: THPaint.thPaint13,
-      fill: THPaint.thPaint2013,
+      fill: THPaint.thPaint1013,
     ),
     THPointType.stationName: THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
     THPointType.steps: THPointPaint(
       type: MPPointShapeType.arrow,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.traverse: THPointPaint(
       type: MPPointShapeType.arrow,
       border: THPaint.thPaint1,
-      fill: THPaint.thPaint2001,
+      fill: THPaint.thPaint1001,
     ),
     THPointType.treeTrunk: THPointPaint(
       type: MPPointShapeType.plus,
@@ -476,12 +476,12 @@ abstract class MPVisualControllerBase with Store {
     THPointType.vegetableDebris: THPointPaint(
       type: MPPointShapeType.square,
       border: THPaint.thPaint8,
-      fill: THPaint.thPaint2008,
+      fill: THPaint.thPaint1008,
     ),
     THPointType.viaFerrata: THPointPaint(
       type: MPPointShapeType.circle,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.volcano: THPointPaint(
       type: MPPointShapeType.asterisk,
@@ -490,7 +490,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.walkway: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint10,
-      fill: THPaint.thPaint2010,
+      fill: THPaint.thPaint1010,
     ),
     THPointType.wallCalcite: THPointPaint(
       type: MPPointShapeType.t,
@@ -499,7 +499,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.water: THPointPaint(
       type: MPPointShapeType.star,
       border: THPaint.thPaint3,
-      fill: THPaint.thPaint2003,
+      fill: THPaint.thPaint1003,
     ),
     THPointType.waterDrip: THPointPaint(
       type: MPPointShapeType.invertedT,
@@ -508,7 +508,7 @@ abstract class MPVisualControllerBase with Store {
     THPointType.wheelchair: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
       border: THPaint.thPaint0,
-      fill: THPaint.thPaint2000,
+      fill: THPaint.thPaint1000,
     ),
   };
 
@@ -845,107 +845,107 @@ abstract class MPVisualControllerBase with Store {
   static final Map<THAreaType, THLinePaint> areaTypePaints = {
     THAreaType.bedrock: THLinePaint(
       primaryPaint: THPaint.thPaint0,
-      fillPaint: THPaint.thPaint1000,
+      fillPaint: THPaint.thPaint3000,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.blocks: THLinePaint(
       primaryPaint: THPaint.thPaint12,
-      fillPaint: THPaint.thPaint1012,
+      fillPaint: THPaint.thPaint3012,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.clay: THLinePaint(
       primaryPaint: THPaint.thPaint10,
-      fillPaint: THPaint.thPaint1010,
+      fillPaint: THPaint.thPaint3010,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.debris: THLinePaint(
       primaryPaint: THPaint.thPaint12,
-      fillPaint: THPaint.thPaint1010,
+      fillPaint: THPaint.thPaint3010,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.flowstone: THLinePaint(
       primaryPaint: THPaint.thPaint6,
-      fillPaint: THPaint.thPaint1006,
+      fillPaint: THPaint.thPaint3006,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.ice: THLinePaint(
       primaryPaint: THPaint.thPaint9,
-      fillPaint: THPaint.thPaint1009,
+      fillPaint: THPaint.thPaint3009,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.moonmilk: THLinePaint(
       primaryPaint: THPaint.thPaint6,
-      fillPaint: THPaint.thPaint1005,
+      fillPaint: THPaint.thPaint3005,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.mudcrack: THLinePaint(
       primaryPaint: THPaint.thPaint10,
-      fillPaint: THPaint.thPaint1002,
+      fillPaint: THPaint.thPaint3002,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.pebbles: THLinePaint(
       primaryPaint: THPaint.thPaint5,
-      fillPaint: THPaint.thPaint1005,
+      fillPaint: THPaint.thPaint3005,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.pillar: THLinePaint(
       primaryPaint: THPaint.thPaint1,
-      fillPaint: THPaint.thPaint1001,
+      fillPaint: THPaint.thPaint3001,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.pillarWithCurtains: THLinePaint(
       primaryPaint: THPaint.thPaint2,
-      fillPaint: THPaint.thPaint1002,
+      fillPaint: THPaint.thPaint3002,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.pillars: THLinePaint(
       primaryPaint: THPaint.thPaint1,
-      fillPaint: THPaint.thPaint1002,
+      fillPaint: THPaint.thPaint3002,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.pillarsWithCurtains: THLinePaint(
       primaryPaint: THPaint.thPaint2,
-      fillPaint: THPaint.thPaint1001,
+      fillPaint: THPaint.thPaint3001,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.sand: THLinePaint(
       primaryPaint: THPaint.thPaint13,
-      fillPaint: THPaint.thPaint1013,
+      fillPaint: THPaint.thPaint3013,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.snow: THLinePaint(
       primaryPaint: THPaint.thPaint7,
-      fillPaint: THPaint.thPaint1007,
+      fillPaint: THPaint.thPaint3007,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.stalactite: THLinePaint(
       primaryPaint: THPaint.thPaint4,
-      fillPaint: THPaint.thPaint1008,
+      fillPaint: THPaint.thPaint3008,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.stalactiteStalagmite: THLinePaint(
       primaryPaint: THPaint.thPaint4,
-      fillPaint: THPaint.thPaint1004,
+      fillPaint: THPaint.thPaint3004,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.stalagmite: THLinePaint(
       primaryPaint: THPaint.thPaint4,
-      fillPaint: THPaint.thPaint1003,
+      fillPaint: THPaint.thPaint3003,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.sump: THLinePaint(
       primaryPaint: THPaint.thPaint14,
-      fillPaint: THPaint.thPaint1014,
+      fillPaint: THPaint.thPaint3014,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.u: THLinePaint(
       primaryPaint: THPaint.thPaint15,
-      fillPaint: THPaint.thPaint1015,
+      fillPaint: THPaint.thPaint3015,
       type: MPLinePaintType.continuous,
     ),
     THAreaType.water: THLinePaint(
       primaryPaint: THPaint.thPaint3,
-      fillPaint: THPaint.thPaint1003,
+      fillPaint: THPaint.thPaint3003,
       type: MPLinePaintType.continuous,
     ),
   };
@@ -968,7 +968,7 @@ abstract class MPVisualControllerBase with Store {
     }
     if (pointPaint.fill != null) {
       pointPaint = pointPaint.copyWith(
-        fill: THPaint.thPaint2001,
+        fill: THPaint.thPaint1001,
       );
     }
     return pointPaint;
@@ -988,14 +988,14 @@ abstract class MPVisualControllerBase with Store {
     final THLinePaint areaPaint = getDefaultAreaPaint(area).copyWith(
       primaryPaint: THPaint.thPaint1
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-      fillPaint: THPaint.thPaint1001,
+      fillPaint: THPaint.thPaint3001,
     );
 
     return areaPaint;
   }
 
   THLinePaint getMultipleElementsClickedHighlightedFillPaint() {
-    return THLinePaint(primaryPaint: THPaint.thPaint1001);
+    return THLinePaint(primaryPaint: THPaint.thPaint3001);
   }
 
   THLinePaint getMultipleElementsClickedHighlightedBorderPaint(THLine line) {
@@ -1037,7 +1037,7 @@ abstract class MPVisualControllerBase with Store {
 
       if (pointPaint.fill != null) {
         pointPaint = pointPaint.copyWith(
-          fill: THPaint.thPaint2015,
+          fill: THPaint.thPaint1015,
         );
       }
     }
@@ -1049,7 +1049,7 @@ abstract class MPVisualControllerBase with Store {
     return areaTypePaints[area.areaType] ??
         THLinePaint(
           primaryPaint: THPaint.thPaint0,
-          fillPaint: THPaint.thPaint1001,
+          fillPaint: THPaint.thPaint3001,
           type: MPLinePaintType.medium,
         );
   }
@@ -1066,7 +1066,7 @@ abstract class MPVisualControllerBase with Store {
       areaPaint = areaPaint.copyWith(
         primaryPaint: THPaint.thPaint15
           ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        fillPaint: THPaint.thPaint1015,
+        fillPaint: THPaint.thPaint3015,
       );
     }
 

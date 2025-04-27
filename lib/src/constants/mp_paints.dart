@@ -133,70 +133,70 @@ class THPaint {
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
 
-  static final thPaint2000 = Paint.from(thPaint0)..style = PaintingStyle.fill;
-  static final thPaint2001 = Paint.from(thPaint1)..style = PaintingStyle.fill;
-  static final thPaint2002 = Paint.from(thPaint2)..style = PaintingStyle.fill;
-  static final thPaint2003 = Paint.from(thPaint3)..style = PaintingStyle.fill;
-  static final thPaint2004 = Paint.from(thPaint4)..style = PaintingStyle.fill;
-  static final thPaint2005 = Paint.from(thPaint5)..style = PaintingStyle.fill;
-  static final thPaint2006 = Paint.from(thPaint6)..style = PaintingStyle.fill;
-  static final thPaint2007 = Paint.from(thPaint7)..style = PaintingStyle.fill;
-  static final thPaint2008 = Paint.from(thPaint8)..style = PaintingStyle.fill;
-  static final thPaint2009 = Paint.from(thPaint9)..style = PaintingStyle.fill;
-  static final thPaint2010 = Paint.from(thPaint10)..style = PaintingStyle.fill;
-  static final thPaint2011 = Paint.from(thPaint11)..style = PaintingStyle.fill;
-  static final thPaint2012 = Paint.from(thPaint12)..style = PaintingStyle.fill;
-  static final thPaint2013 = Paint.from(thPaint13)..style = PaintingStyle.fill;
-  static final thPaint2014 = Paint.from(thPaint14)..style = PaintingStyle.fill;
-  static final thPaint2015 = Paint.from(thPaint15)..style = PaintingStyle.fill;
-  static final thPaint2016 = Paint.from(thPaint16)..style = PaintingStyle.fill;
-  static final thPaint2017 = Paint.from(thPaint17)..style = PaintingStyle.fill;
-  static final thPaint2018 = Paint.from(thPaint18)..style = PaintingStyle.fill;
-  static final thPaint2019 = Paint.from(thPaint19)..style = PaintingStyle.fill;
-  static final thPaint2020 = Paint.from(thPaint20)..style = PaintingStyle.fill;
+  static final thPaint1000 = Paint.from(thPaint0)..style = PaintingStyle.fill;
+  static final thPaint1001 = Paint.from(thPaint1)..style = PaintingStyle.fill;
+  static final thPaint1002 = Paint.from(thPaint2)..style = PaintingStyle.fill;
+  static final thPaint1003 = Paint.from(thPaint3)..style = PaintingStyle.fill;
+  static final thPaint1004 = Paint.from(thPaint4)..style = PaintingStyle.fill;
+  static final thPaint1005 = Paint.from(thPaint5)..style = PaintingStyle.fill;
+  static final thPaint1006 = Paint.from(thPaint6)..style = PaintingStyle.fill;
+  static final thPaint1007 = Paint.from(thPaint7)..style = PaintingStyle.fill;
+  static final thPaint1008 = Paint.from(thPaint8)..style = PaintingStyle.fill;
+  static final thPaint1009 = Paint.from(thPaint9)..style = PaintingStyle.fill;
+  static final thPaint1010 = Paint.from(thPaint10)..style = PaintingStyle.fill;
+  static final thPaint1011 = Paint.from(thPaint11)..style = PaintingStyle.fill;
+  static final thPaint1012 = Paint.from(thPaint12)..style = PaintingStyle.fill;
+  static final thPaint1013 = Paint.from(thPaint13)..style = PaintingStyle.fill;
+  static final thPaint1014 = Paint.from(thPaint14)..style = PaintingStyle.fill;
+  static final thPaint1015 = Paint.from(thPaint15)..style = PaintingStyle.fill;
+  static final thPaint1016 = Paint.from(thPaint16)..style = PaintingStyle.fill;
+  static final thPaint1017 = Paint.from(thPaint17)..style = PaintingStyle.fill;
+  static final thPaint1018 = Paint.from(thPaint18)..style = PaintingStyle.fill;
+  static final thPaint1019 = Paint.from(thPaint19)..style = PaintingStyle.fill;
+  static final thPaint1020 = Paint.from(thPaint20)..style = PaintingStyle.fill;
 
-  static final thPaint1000 = Paint.from(thPaint2000)
-    ..color = thPaint2000.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1001 = Paint.from(thPaint2001)
-    ..color = thPaint2001.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1002 = Paint.from(thPaint2002)
-    ..color = thPaint2002.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1003 = Paint.from(thPaint2003)
-    ..color = thPaint2003.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1004 = Paint.from(thPaint2004)
-    ..color = thPaint2004.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1005 = Paint.from(thPaint2005)
-    ..color = thPaint2005.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1006 = Paint.from(thPaint2006)
-    ..color = thPaint2006.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1007 = Paint.from(thPaint2007)
-    ..color = thPaint2007.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1008 = Paint.from(thPaint2008)
-    ..color = thPaint2008.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1009 = Paint.from(thPaint2009)
-    ..color = thPaint2009.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1010 = Paint.from(thPaint2010)
-    ..color = thPaint2010.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1011 = Paint.from(thPaint2011)
-    ..color = thPaint2011.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1012 = Paint.from(thPaint2012)
-    ..color = thPaint2012.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1013 = Paint.from(thPaint2013)
-    ..color = thPaint2013.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1014 = Paint.from(thPaint2014)
-    ..color = thPaint2014.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1015 = Paint.from(thPaint2015)
-    ..color = thPaint2015.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1016 = Paint.from(thPaint2016)
-    ..color = thPaint2016.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1017 = Paint.from(thPaint2017)
-    ..color = thPaint2017.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1018 = Paint.from(thPaint2018)
-    ..color = thPaint2018.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1019 = Paint.from(thPaint2019)
-    ..color = thPaint2019.color.withAlpha(mpAreaFillTransparency);
-  static final thPaint1020 = Paint.from(thPaint2020)
-    ..color = thPaint2020.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3000 = Paint.from(thPaint1000)
+    ..color = thPaint1000.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3001 = Paint.from(thPaint1001)
+    ..color = thPaint1001.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3002 = Paint.from(thPaint1002)
+    ..color = thPaint1002.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3003 = Paint.from(thPaint1003)
+    ..color = thPaint1003.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3004 = Paint.from(thPaint1004)
+    ..color = thPaint1004.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3005 = Paint.from(thPaint1005)
+    ..color = thPaint1005.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3006 = Paint.from(thPaint1006)
+    ..color = thPaint1006.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3007 = Paint.from(thPaint1007)
+    ..color = thPaint1007.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3008 = Paint.from(thPaint1008)
+    ..color = thPaint1008.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3009 = Paint.from(thPaint1009)
+    ..color = thPaint1009.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3010 = Paint.from(thPaint1010)
+    ..color = thPaint1010.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3011 = Paint.from(thPaint1011)
+    ..color = thPaint1011.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3012 = Paint.from(thPaint1012)
+    ..color = thPaint1012.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3013 = Paint.from(thPaint1013)
+    ..color = thPaint1013.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3014 = Paint.from(thPaint1014)
+    ..color = thPaint1014.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3015 = Paint.from(thPaint1015)
+    ..color = thPaint1015.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3016 = Paint.from(thPaint1016)
+    ..color = thPaint1016.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3017 = Paint.from(thPaint1017)
+    ..color = thPaint1017.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3018 = Paint.from(thPaint1018)
+    ..color = thPaint1018.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3019 = Paint.from(thPaint1019)
+    ..color = thPaint1019.color.withAlpha(mpAreaFillTransparency);
+  static final thPaint3020 = Paint.from(thPaint1020)
+    ..color = thPaint1020.color.withAlpha(mpAreaFillTransparency);
 
   static final thPaintWhiteBackground = Paint()
     ..color = Colors.white
