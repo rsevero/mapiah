@@ -3,6 +3,7 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -280,10 +281,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     required THElementType plaType,
     required String newType,
   }) {
-    MPCommand setPLATypeCommand;
-    List<int> mpIDs = [];
     final mpSelectedElements = _th2FileEditController
         .selectionController.mpSelectedElementsLogical.values;
+    final TH2FileEditElementEditController elementEditController =
+        _th2FileEditController.elementEditController;
+
+    MPCommand setPLATypeCommand;
+    List<int> mpIDs = [];
 
     switch (plaType) {
       case THElementType.area:
@@ -296,11 +300,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             continue;
           }
           mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          elementEditController.setUsedAreaType(newType);
         }
 
         if (mpIDs.isEmpty) {
           return;
-        } else if (mpIDs.length == 1) {
+        }
+
+        if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditAreaTypeCommand(
             areaMPID: mpIDs.first,
             newAreaType: THAreaType.values.byName(newType),
@@ -321,11 +328,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             continue;
           }
           mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          elementEditController.setUsedLineType(newType);
         }
 
         if (mpIDs.isEmpty) {
           return;
-        } else if (mpIDs.length == 1) {
+        }
+
+        if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditLineTypeCommand(
             lineMPID: mpIDs.first,
             newLineType: THLineType.values.byName(newType),
@@ -346,11 +356,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             continue;
           }
           mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          elementEditController.setUsedPointType(newType);
         }
 
         if (mpIDs.isEmpty) {
           return;
-        } else if (mpIDs.length == 1) {
+        }
+
+        if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditPointTypeCommand(
             pointMPID: mpIDs.first,
             newPointType: THPointType.values.byName(newType),
