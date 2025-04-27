@@ -101,10 +101,22 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
 
+  Rect? _selectionHandlesBoundingBox;
+
   Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
-    _selectionHandleCenters ??= _calculateSelectionHandleCenters();
+    if (_selectionHandleCenters == null) {
+      _calculateSelectionHandleCentersAndBoundingBox();
+    }
 
     return _selectionHandleCenters!;
+  }
+
+  Rect getSelectionHandlesBoundingBox() {
+    if (_selectionHandlesBoundingBox == null) {
+      _calculateSelectionHandleCentersAndBoundingBox();
+    }
+
+    return _selectionHandlesBoundingBox!;
   }
 
   /// Used to search for selected elements by list of selectable coordinates.
@@ -355,12 +367,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
   }
 
-  Map<MPSelectionHandleType, Offset> _calculateSelectionHandleCenters() {
+  void _calculateSelectionHandleCentersAndBoundingBox() {
     final Map<MPSelectionHandleType, Offset> handles =
         <MPSelectionHandleType, Offset>{};
 
     if (_mpSelectedElementsLogical.isEmpty) {
-      return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
+      _selectionHandleCenters =
+          ObservableMap<MPSelectionHandleType, Offset>.of(handles);
+      _selectionHandlesBoundingBox = Rect.zero;
+
+      return;
     }
 
     final double handleSize =
@@ -374,6 +390,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final double right = boundingBox.right + halfSize + handleDistance;
     final double top = boundingBox.top - halfSize - handleDistance;
     final double bottom = boundingBox.bottom + halfSize + handleDistance;
+
+    _selectionHandlesBoundingBox = MPNumericAux.orderedRectFromLTRB(
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom,
+    );
 
     final double centerX = (boundingBox.left + boundingBox.right) / 2.0;
     final double centerY = (boundingBox.top + boundingBox.bottom) / 2.0;
@@ -398,7 +421,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       MPSelectionHandleType.rightCenter: rightCenter,
     });
 
-    return ObservableMap<MPSelectionHandleType, Offset>.of(handles);
+    _selectionHandleCenters = handles;
   }
 
   void updateSelectableElements() {
@@ -1131,12 +1154,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void clearSelectedElementsBoundingBoxAndSelectionHandleCenters() {
     _selectedElementsBoundingBox = null;
     _selectionHandleCenters = null;
+    _selectionHandlesBoundingBox = null;
   }
 
   void clearSelectedElementsAndSelectionHandleCenters() {
     _mpSelectedElementsLogical.clear();
     _selectedElementsBoundingBox = null;
     _selectionHandleCenters = null;
+    _selectionHandlesBoundingBox = null;
   }
 
   bool setSelectionState() {

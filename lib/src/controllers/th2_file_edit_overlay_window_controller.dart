@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
@@ -227,9 +228,13 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       return _th2FileEditController.screenBoundingBox.center;
     } else {
       final Rect selectedElementsBoundingBoxOnCanvas = _th2FileEditController
-          .selectionController.selectedElementsBoundingBox;
-      final Offset selectedElementsCenterOnScreen = _th2FileEditController
-          .offsetCanvasToScreen(selectedElementsBoundingBoxOnCanvas.center);
+          .selectionController
+          .getSelectionHandlesBoundingBox();
+      final Offset selectedElementsCenterOnScreen =
+          _th2FileEditController.offsetCanvasToScreen(
+                selectedElementsBoundingBoxOnCanvas.centerRight,
+              ) +
+              Offset(mpOverlayWindowOuterAnchorMargin, 0);
 
       return selectedElementsCenterOnScreen;
     }
