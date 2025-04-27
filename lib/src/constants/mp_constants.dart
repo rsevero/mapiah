@@ -141,6 +141,8 @@ final Paint thSelectionHandleFillPaint = Paint()
 const double thWhiteBackgroundIncrease = 1.5;
 const double mpOverlayWindowOuterAnchorMargin = 15.0;
 const double mpDiamondLongerDiagonalRatio = math.sqrt2;
+const int mpAreaFillTransparency = 30;
+
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;
 

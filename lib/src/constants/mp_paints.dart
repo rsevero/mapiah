@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 
 class THPaint {
   static final thColors = [
@@ -155,47 +156,47 @@ class THPaint {
   static final thPaint2020 = Paint.from(thPaint20)..style = PaintingStyle.fill;
 
   static final thPaint1000 = Paint.from(thPaint2000)
-    ..color = thPaint2000.color.withAlpha(77);
+    ..color = thPaint2000.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1001 = Paint.from(thPaint2001)
-    ..color = thPaint2001.color.withAlpha(77);
+    ..color = thPaint2001.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1002 = Paint.from(thPaint2002)
-    ..color = thPaint2002.color.withAlpha(77);
+    ..color = thPaint2002.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1003 = Paint.from(thPaint2003)
-    ..color = thPaint2003.color.withAlpha(77);
+    ..color = thPaint2003.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1004 = Paint.from(thPaint2004)
-    ..color = thPaint2004.color.withAlpha(77);
+    ..color = thPaint2004.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1005 = Paint.from(thPaint2005)
-    ..color = thPaint2005.color.withAlpha(77);
+    ..color = thPaint2005.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1006 = Paint.from(thPaint2006)
-    ..color = thPaint2006.color.withAlpha(77);
+    ..color = thPaint2006.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1007 = Paint.from(thPaint2007)
-    ..color = thPaint2007.color.withAlpha(77);
+    ..color = thPaint2007.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1008 = Paint.from(thPaint2008)
-    ..color = thPaint2008.color.withAlpha(77);
+    ..color = thPaint2008.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1009 = Paint.from(thPaint2009)
-    ..color = thPaint2009.color.withAlpha(77);
+    ..color = thPaint2009.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1010 = Paint.from(thPaint2010)
-    ..color = thPaint2010.color.withAlpha(77);
+    ..color = thPaint2010.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1011 = Paint.from(thPaint2011)
-    ..color = thPaint2011.color.withAlpha(77);
+    ..color = thPaint2011.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1012 = Paint.from(thPaint2012)
-    ..color = thPaint2012.color.withAlpha(77);
+    ..color = thPaint2012.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1013 = Paint.from(thPaint2013)
-    ..color = thPaint2013.color.withAlpha(77);
+    ..color = thPaint2013.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1014 = Paint.from(thPaint2014)
-    ..color = thPaint2014.color.withAlpha(77);
+    ..color = thPaint2014.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1015 = Paint.from(thPaint2015)
-    ..color = thPaint2015.color.withAlpha(77);
+    ..color = thPaint2015.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1016 = Paint.from(thPaint2016)
-    ..color = thPaint2016.color.withAlpha(77);
+    ..color = thPaint2016.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1017 = Paint.from(thPaint2017)
-    ..color = thPaint2017.color.withAlpha(77);
+    ..color = thPaint2017.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1018 = Paint.from(thPaint2018)
-    ..color = thPaint2018.color.withAlpha(77);
+    ..color = thPaint2018.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1019 = Paint.from(thPaint2019)
-    ..color = thPaint2019.color.withAlpha(77);
+    ..color = thPaint2019.color.withAlpha(mpAreaFillTransparency);
   static final thPaint1020 = Paint.from(thPaint2020)
-    ..color = thPaint2020.color.withAlpha(77);
+    ..color = thPaint2020.color.withAlpha(mpAreaFillTransparency);
 
   static final thPaintWhiteBackground = Paint()
     ..color = Colors.white
