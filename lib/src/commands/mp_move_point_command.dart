@@ -11,7 +11,6 @@ class MPMovePointCommand extends MPCommand {
     required this.pointMPID,
     required this.originalPosition,
     required this.modifiedPosition,
-    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -43,12 +42,15 @@ class MPMovePointCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(TH2FileEditController th2FileEditController) {
+  void _actualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  }) {
     final THPoint originalPoint =
         th2FileEditController.thFile.pointByMPID(pointMPID);
     final THPoint modifiedPoint = originalPoint.copyWith(
       position: modifiedPosition,
-      originalLineInTH2File: keepOriginalLine ? null : '',
+      originalLineInTH2File: keepOriginalLineTH2File ? null : '',
     );
 
     th2FileEditController.elementEditController

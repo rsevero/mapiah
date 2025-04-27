@@ -19,7 +19,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.modifiedControlPoint1Position,
     required this.originalControlPoint2Position,
     required this.modifiedControlPoint2Position,
-    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -66,7 +65,10 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(TH2FileEditController th2FileEditController) {
+  void _actualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  }) {
     final THBezierCurveLineSegment originalLineSegment = th2FileEditController
         .thFile
         .bezierCurveLineSegmentByMPID(lineSegmentMPID);
@@ -75,7 +77,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
       endPoint: modifiedEndPointPosition,
       controlPoint1: modifiedControlPoint1Position,
       controlPoint2: modifiedControlPoint2Position,
-      originalLineInTH2File: keepOriginalLine ? null : '',
+      originalLineInTH2File: keepOriginalLineTH2File ? null : '',
     );
 
     th2FileEditController.elementEditController

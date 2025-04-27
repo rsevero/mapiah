@@ -48,7 +48,10 @@ class MPAddLineCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(TH2FileEditController th2FileEditController) {
+  void _actualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  }) {
     th2FileEditController.elementEditController.applyAddLine(
       newLine: newLine,
       lineChildren: lineChildren,

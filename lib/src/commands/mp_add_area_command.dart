@@ -44,7 +44,10 @@ class MPAddAreaCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(TH2FileEditController th2FileEditController) {
+  void _actualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  }) {
     addLinesCommand.execute(th2FileEditController);
     th2FileEditController.elementEditController.applyAddElement(
       newElement: newArea,

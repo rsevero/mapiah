@@ -9,7 +9,6 @@ class MPMoveLineCommand extends MPCommand {
   MPMoveLineCommand.forCWJM({
     required this.lineMPID,
     required this.lineSegmentsMoveCommand,
-    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -50,11 +49,17 @@ class MPMoveLineCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(TH2FileEditController th2FileEditController) {
-    lineSegmentsMoveCommand.execute(th2FileEditController);
+  void _actualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  }) {
+    lineSegmentsMoveCommand.execute(
+      th2FileEditController,
+      keepOriginalLineTH2File: keepOriginalLineTH2File,
+    );
     th2FileEditController.elementEditController.substituteElement(
       th2FileEditController.thFile.elementByMPID(lineMPID).copyWith(
-            originalLineInTH2File: keepOriginalLine ? null : '',
+            originalLineInTH2File: keepOriginalLineTH2File ? null : '',
           ),
     );
     th2FileEditController.triggerNewLineRedraw();

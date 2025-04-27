@@ -45,15 +45,13 @@ part 'types/mp_command_type.dart';
 /// actions that should support undo must be implemented as a command.
 abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
-  final bool keepOriginalLine;
   MPUndoRedoCommand? _undoRedoCommand;
 
   MPCommand.forCWJM({
     required this.descriptionType,
-    this.keepOriginalLine = false,
   });
 
-  MPCommand({required this.descriptionType, this.keepOriginalLine = false});
+  MPCommand({required this.descriptionType});
 
   MPCommandType get type;
 
@@ -74,12 +72,19 @@ abstract class MPCommand {
     TH2FileEditController th2FileEditController,
   );
 
-  void execute(TH2FileEditController th2FileEditController) {
+  void execute(
+    TH2FileEditController th2FileEditController, {
+    bool keepOriginalLineTH2File = false,
+  }) {
     _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
-    _actualExecute(th2FileEditController);
+    _actualExecute(th2FileEditController,
+        keepOriginalLineTH2File: keepOriginalLineTH2File);
   }
 
-  void _actualExecute(TH2FileEditController th2FileEditController);
+  void _actualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  });
 
   MPCommand copyWith({
     MPCommandDescriptionType? descriptionType,

@@ -108,7 +108,7 @@ abstract class MPUndoRedoControllerBase with Store {
       mapRedo: lastUndo.mapUndo,
     );
 
-    command.execute(_th2FileEditController);
+    command.execute(_th2FileEditController, keepOriginalLineTH2File: true);
 
     _redo.add(redo);
     _th2FileEditController.triggerAllElementsRedraw();
@@ -126,7 +126,7 @@ abstract class MPUndoRedoControllerBase with Store {
       mapRedo: lastRedo.mapUndo,
     );
 
-    command.execute(_th2FileEditController);
+    command.execute(_th2FileEditController, keepOriginalLineTH2File: true);
 
     _th2FileEditController.triggerAllElementsRedraw();
     _undo.add(undo);
