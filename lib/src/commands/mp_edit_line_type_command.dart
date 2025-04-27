@@ -9,6 +9,7 @@ class MPEditLineTypeCommand extends MPCommand {
   MPEditLineTypeCommand.forCWJM({
     required this.lineMPID,
     required this.newLineType,
+    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -30,6 +31,7 @@ class MPEditLineTypeCommand extends MPCommand {
     final THLine newLine =
         th2FileEditController.thFile.lineByMPID(lineMPID).copyWith(
               lineType: newLineType,
+              originalLineInTH2File: keepOriginalLine ? null : '',
             );
 
     th2FileEditController.elementEditController.substituteElement(newLine);

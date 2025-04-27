@@ -45,13 +45,15 @@ part 'types/mp_command_type.dart';
 /// actions that should support undo must be implemented as a command.
 abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
+  final bool keepOriginalLine;
   MPUndoRedoCommand? _undoRedoCommand;
 
   MPCommand.forCWJM({
     required this.descriptionType,
+    this.keepOriginalLine = false,
   });
 
-  MPCommand({required this.descriptionType});
+  MPCommand({required this.descriptionType, this.keepOriginalLine = false});
 
   MPCommandType get type;
 

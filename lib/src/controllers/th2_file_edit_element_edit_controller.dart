@@ -435,6 +435,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           coordinates: controlPoint2,
           decimalPositions: currentDecimalPositions,
         ),
+        originalLineInTH2File: '',
       );
       final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
         newLineSegment: bezierCurveLineSegment,

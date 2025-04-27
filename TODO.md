@@ -25,7 +25,13 @@ Version 0.2
 [ ] - Quick introduction guide
 [X] - Point arrow should be filled
 [X] - Last used point type not updating
-[ ] - SaveAs didn't save the changes
+[ ] - SaveAs didn't save the changes :
+
+Corrigindo set/unset de originalLineInTH@File:
+
+MPSetOptionToElementCommand
+
+Distinguir execute command normal dos gerados por undos: os dos undos devem manter originalLineInTH2File, os normais não.
 
 Version 0.3
 [ ] - Search/select elements by characteristics

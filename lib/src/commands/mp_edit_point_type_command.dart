@@ -9,6 +9,7 @@ class MPEditPointTypeCommand extends MPCommand {
   MPEditPointTypeCommand.forCWJM({
     required this.pointMPID,
     required this.newPointType,
+    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -30,6 +31,7 @@ class MPEditPointTypeCommand extends MPCommand {
     final THPoint newPoint =
         th2FileEditController.thFile.pointByMPID(pointMPID).copyWith(
               pointType: newPointType,
+              originalLineInTH2File: keepOriginalLine ? null : '',
             );
 
     th2FileEditController.elementEditController.substituteElement(newPoint);

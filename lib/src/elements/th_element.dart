@@ -134,7 +134,12 @@ abstract class THElement {
         originalLineInTH2File,
       );
 
-  THElement copyWith();
+  THElement copyWith(
+      {int? mpID,
+      int? parentMPID,
+      String? sameLineComment,
+      bool makeSameLineCommentNull = false,
+      String? originalLineInTH2File});
 
   static THElement fromMap(Map<String, dynamic> map) {
     final THElementType type = THElementType.values.byName(map['elementType']);

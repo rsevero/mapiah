@@ -9,6 +9,7 @@ class MPEditAreaTypeCommand extends MPCommand {
   MPEditAreaTypeCommand.forCWJM({
     required this.areaMPID,
     required this.newAreaType,
+    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -30,6 +31,7 @@ class MPEditAreaTypeCommand extends MPCommand {
     final THArea newArea =
         th2FileEditController.thFile.areaByMPID(areaMPID).copyWith(
               areaType: newAreaType,
+              originalLineInTH2File: keepOriginalLine ? null : '',
             );
 
     th2FileEditController.elementEditController.substituteElement(newArea);

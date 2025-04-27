@@ -11,6 +11,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required this.modifiedEndPointPosition,
+    super.keepOriginalLine = false,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -46,6 +47,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         th2FileEditController.thFile.straightLineSegmentByMPID(lineSegmentMPID);
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
       endPoint: modifiedEndPointPosition,
+      originalLineInTH2File: keepOriginalLine ? null : '',
     );
 
     th2FileEditController.elementEditController
