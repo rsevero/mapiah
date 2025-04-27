@@ -903,6 +903,7 @@ abstract class TH2FileEditControllerBase with Store {
     );
 
     if (filePath != null) {
+      _thFile.filename = filePath;
       String directoryPath = p.dirname(filePath);
       mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
       final File file = File(filePath);
