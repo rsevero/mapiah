@@ -4,6 +4,7 @@ class MPMovePointCommand extends MPCommand {
   late final int pointMPID;
   late final THPositionPart originalPosition;
   late final THPositionPart modifiedPosition;
+  final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.movePoint;
 
@@ -11,6 +12,7 @@ class MPMovePointCommand extends MPCommand {
     required this.pointMPID,
     required this.originalPosition,
     required this.modifiedPosition,
+    required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -19,7 +21,8 @@ class MPMovePointCommand extends MPCommand {
     required this.originalPosition,
     required this.modifiedPosition,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  })  : originalLineInTH2File = '',
+        super();
 
   MPMovePointCommand.fromDeltaOnCanvas({
     required this.pointMPID,
@@ -27,7 +30,8 @@ class MPMovePointCommand extends MPCommand {
     required Offset deltaOnCanvas,
     required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
+  })  : originalLineInTH2File = '',
+        super() {
     modifiedPosition = originalPosition.copyWith(
       coordinates: originalPosition.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,
@@ -64,10 +68,13 @@ class MPMovePointCommand extends MPCommand {
   ) {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
-    final MPMovePointCommand oppositeCommand = MPMovePointCommand(
+    final MPMovePointCommand oppositeCommand = MPMovePointCommand.forCWJM(
       pointMPID: pointMPID,
       originalPosition: modifiedPosition,
       modifiedPosition: originalPosition,
+      originalLineInTH2File: th2FileEditController.thFile
+          .elementByMPID(pointMPID)
+          .originalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -85,6 +92,7 @@ class MPMovePointCommand extends MPCommand {
       'pointMPID': pointMPID,
       'originalPosition': originalPosition.toMap(),
       'modifiedPosition': modifiedPosition.toMap(),
+      'originalLineInTH2File': originalLineInTH2File,
     });
 
     return map;
@@ -95,6 +103,7 @@ class MPMovePointCommand extends MPCommand {
       pointMPID: map['pointMPID'],
       originalPosition: THPositionPart.fromMap(map['originalPosition']),
       modifiedPosition: THPositionPart.fromMap(map['modifiedPosition']),
+      originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -109,12 +118,15 @@ class MPMovePointCommand extends MPCommand {
     int? pointMPID,
     THPositionPart? originalPosition,
     THPositionPart? modifiedPosition,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
       pointMPID: pointMPID ?? this.pointMPID,
       originalPosition: originalPosition ?? this.originalPosition,
       modifiedPosition: modifiedPosition ?? this.modifiedPosition,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -127,6 +139,7 @@ class MPMovePointCommand extends MPCommand {
         other.pointMPID == pointMPID &&
         other.originalPosition == originalPosition &&
         other.modifiedPosition == modifiedPosition &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.descriptionType == descriptionType;
   }
 
@@ -137,5 +150,6 @@ class MPMovePointCommand extends MPCommand {
         pointMPID,
         originalPosition,
         modifiedPosition,
+        originalLineInTH2File,
       );
 }

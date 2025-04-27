@@ -2,18 +2,21 @@ part of 'mp_command.dart';
 
 class MPEditLineSegmentCommand extends MPCommand {
   final THLineSegment newLineSegment;
+  final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editLineSegment;
 
   MPEditLineSegmentCommand.forCWJM({
     required this.newLineSegment,
+    required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPEditLineSegmentCommand({
     required this.newLineSegment,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  })  : originalLineInTH2File = '',
+        super();
 
   @override
   MPCommandType get type => MPCommandType.editLineSegment;
@@ -38,8 +41,10 @@ class MPEditLineSegmentCommand extends MPCommand {
   ) {
     final THLineSegment currentLineSegment =
         th2FileEditController.thFile.lineSegmentByMPID(newLineSegment.mpID);
-    final MPEditLineSegmentCommand oppositeCommand = MPEditLineSegmentCommand(
+    final MPEditLineSegmentCommand oppositeCommand =
+        MPEditLineSegmentCommand.forCWJM(
       newLineSegment: currentLineSegment,
+      originalLineInTH2File: currentLineSegment.originalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -53,10 +58,13 @@ class MPEditLineSegmentCommand extends MPCommand {
   MPCommand copyWith({
     THLineSegment? currentLineSegment,
     THLineSegment? newLineSegment,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -64,6 +72,7 @@ class MPEditLineSegmentCommand extends MPCommand {
   factory MPEditLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPEditLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
+      originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -79,6 +88,7 @@ class MPEditLineSegmentCommand extends MPCommand {
 
     map.addAll({
       'newLineSegment': newLineSegment.toMap(),
+      'originalLineInTH2File': originalLineInTH2File,
     });
 
     return map;
@@ -90,9 +100,15 @@ class MPEditLineSegmentCommand extends MPCommand {
 
     return other is MPEditLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ newLineSegment.hashCode;
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
+        newLineSegment,
+        originalLineInTH2File,
+      );
 }

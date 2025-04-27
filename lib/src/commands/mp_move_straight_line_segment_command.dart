@@ -4,6 +4,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   final int lineSegmentMPID;
   final THPositionPart originalEndPointPosition;
   late final THPositionPart modifiedEndPointPosition;
+  final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveStraightLineSegment;
 
@@ -11,6 +12,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required this.modifiedEndPointPosition,
+    required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -19,7 +21,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.originalEndPointPosition,
     required this.modifiedEndPointPosition,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  })  : originalLineInTH2File = '',
+        super();
 
   MPMoveStraightLineSegmentCommand.fromDelta({
     required this.lineSegmentMPID,
@@ -31,6 +34,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
           coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
           decimalPositions: decimalPositions,
         ),
+        originalLineInTH2File = '',
         super();
 
   @override
@@ -63,10 +67,13 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPMoveStraightLineSegmentCommand oppositeCommand =
-        MPMoveStraightLineSegmentCommand(
+        MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID,
       originalEndPointPosition: modifiedEndPointPosition,
       modifiedEndPointPosition: originalEndPointPosition,
+      originalLineInTH2File: th2FileEditController.thFile
+          .elementByMPID(lineSegmentMPID)
+          .originalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -84,6 +91,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
       'lineSegmentMPID': lineSegmentMPID,
       'originalEndPointPosition': originalEndPointPosition.toMap(),
       'modifiedEndPointPosition': modifiedEndPointPosition.toMap(),
+      'originalLineInTH2File': originalLineInTH2File,
     });
 
     return map;
@@ -96,6 +104,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
           THPositionPart.fromMap(map['originalEndPointPosition']),
       modifiedEndPointPosition:
           THPositionPart.fromMap(map['modifiedEndPointPosition']),
+      originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -110,6 +119,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     int? lineSegmentMPID,
     THPositionPart? originalEndPointPosition,
     THPositionPart? modifiedEndPointPosition,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
@@ -118,6 +128,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
           originalEndPointPosition ?? this.originalEndPointPosition,
       modifiedEndPointPosition:
           modifiedEndPointPosition ?? this.modifiedEndPointPosition,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -130,6 +142,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         other.lineSegmentMPID == lineSegmentMPID &&
         other.originalEndPointPosition == originalEndPointPosition &&
         other.modifiedEndPointPosition == modifiedEndPointPosition &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.descriptionType == descriptionType;
   }
 
@@ -140,5 +153,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         lineSegmentMPID,
         originalEndPointPosition,
         modifiedEndPointPosition,
+        originalLineInTH2File,
       );
 }

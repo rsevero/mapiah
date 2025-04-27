@@ -3,12 +3,14 @@ part of 'mp_command.dart';
 class MPEditLineTypeCommand extends MPCommand {
   final int lineMPID;
   final THLineType newLineType;
+  final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editLineType;
 
   MPEditLineTypeCommand.forCWJM({
     required this.lineMPID,
     required this.newLineType,
+    required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -16,7 +18,8 @@ class MPEditLineTypeCommand extends MPCommand {
     required this.lineMPID,
     required this.newLineType,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  })  : originalLineInTH2File = '',
+        super();
 
   @override
   MPCommandType get type => MPCommandType.editLineType;
@@ -44,9 +47,13 @@ class MPEditLineTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPEditLineTypeCommand oppositeCommand = MPEditLineTypeCommand(
+    final THLine originalLine =
+        th2FileEditController.thFile.lineByMPID(lineMPID);
+
+    final MPEditLineTypeCommand oppositeCommand = MPEditLineTypeCommand.forCWJM(
       lineMPID: lineMPID,
-      newLineType: th2FileEditController.thFile.lineByMPID(lineMPID).lineType,
+      newLineType: originalLine.lineType,
+      originalLineInTH2File: originalLine.originalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -60,11 +67,14 @@ class MPEditLineTypeCommand extends MPCommand {
   MPCommand copyWith({
     int? lineMPID,
     THLineType? newLineType,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditLineTypeCommand.forCWJM(
       lineMPID: lineMPID ?? this.lineMPID,
       newLineType: newLineType ?? this.newLineType,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -73,6 +83,7 @@ class MPEditLineTypeCommand extends MPCommand {
     return MPEditLineTypeCommand.forCWJM(
       lineMPID: map['lineMPID'] as int,
       newLineType: THLineType.values.byName(map['newLineType']),
+      originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -89,6 +100,7 @@ class MPEditLineTypeCommand extends MPCommand {
     map.addAll({
       'lineMPID': lineMPID,
       'newLineType': newLineType.name,
+      'originalLineInTH2File': originalLineInTH2File,
     });
 
     return map;
@@ -101,9 +113,16 @@ class MPEditLineTypeCommand extends MPCommand {
     return other is MPEditLineTypeCommand &&
         other.lineMPID == lineMPID &&
         other.newLineType == newLineType &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ Object.hash(lineMPID, newLineType);
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
+        lineMPID,
+        newLineType,
+        originalLineInTH2File,
+      );
 }

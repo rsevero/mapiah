@@ -77,8 +77,10 @@ abstract class MPCommand {
     bool keepOriginalLineTH2File = false,
   }) {
     _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
-    _actualExecute(th2FileEditController,
-        keepOriginalLineTH2File: keepOriginalLineTH2File);
+    _actualExecute(
+      th2FileEditController,
+      keepOriginalLineTH2File: keepOriginalLineTH2File,
+    );
   }
 
   void _actualExecute(
