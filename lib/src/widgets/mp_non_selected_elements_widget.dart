@@ -49,10 +49,6 @@ class MPNonSelectedElementsWidget extends StatelessWidget
 
           switch (element) {
             case THPoint _:
-              if (element.plaType == 'pillar') {
-                print('Pillar: ${element.mpID}');
-              }
-
               final THPointPaint pointPaint =
                   visualController.getUnselectedPointPaint(element);
 

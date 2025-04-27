@@ -25,7 +25,6 @@ Version 0.2
 [ ] - Quick introduction guide
 [X] - Point arrow should be filled
 [X] - Last used point type not updating
-[ ] - most used point types not ordered
 [ ] - SaveAs didn't save the changes
 
 Version 0.3
