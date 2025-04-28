@@ -242,6 +242,14 @@ class MPCommandOptionAux {
             THOptionChoicesOnOffAutoType.on;
   }
 
+  static bool isReverse(THHasOptionsMixin element) {
+    return element.hasOption(THCommandOptionType.reverse) &&
+        (element.optionByType(THCommandOptionType.reverse)
+                    as THReverseCommandOption)
+                .choice ==
+            THOptionChoicesOnOffType.on;
+  }
+
   static bool elementTypeSupportsOptionType(
     THElement element,
     THCommandOptionType optionType,

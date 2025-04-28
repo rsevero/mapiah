@@ -143,6 +143,10 @@ const double mpOverlayWindowOuterAnchorMargin = 15.0;
 const double mpDiamondLongerDiagonalRatio = math.sqrt2;
 const int mpAreaFillTransparency = 30;
 
+const double mpLineDirectionTickLength = 10.0;
+const double mpAverageTangentDelta = 0.1;
+const int mpLineSegmentsPerDirectionTick = 5;
+
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;
 

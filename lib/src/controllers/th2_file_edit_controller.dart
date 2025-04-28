@@ -161,6 +161,9 @@ abstract class TH2FileEditControllerBase with Store {
           thControlLineThicknessFactor;
 
   @readonly
+  double _lineDirectionTickLengthOnCanvas = mpLineDirectionTickLength;
+
+  @readonly
   double _pointRadiusOnCanvas = mpLocator.mpSettingsController.pointRadius;
 
   @readonly
@@ -497,6 +500,8 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(autorun((_) {
       _lineThicknessOnCanvas =
           mpLocator.mpSettingsController.lineThickness / _canvasScale;
+      _lineDirectionTickLengthOnCanvas =
+          mpLineDirectionTickLength / _canvasScale;
     }));
 
     _disposers.add(autorun((_) {

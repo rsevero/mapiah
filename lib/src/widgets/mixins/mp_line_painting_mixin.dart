@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -87,6 +88,7 @@ mixin MPLinePaintingMixin {
     return THLinePainter(
       lineSegmentsMap: segmentsMap,
       linePaint: linePaint,
+      reverse: MPCommandOptionAux.isReverse(line),
       th2FileEditController: th2FileEditController,
     );
   }

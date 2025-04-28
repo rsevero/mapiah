@@ -657,6 +657,27 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_lineDirectionTickLengthOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._lineDirectionTickLengthOnCanvas',
+      context: context);
+
+  double get lineDirectionTickLengthOnCanvas {
+    _$_lineDirectionTickLengthOnCanvasAtom.reportRead();
+    return super._lineDirectionTickLengthOnCanvas;
+  }
+
+  @override
+  double get _lineDirectionTickLengthOnCanvas =>
+      lineDirectionTickLengthOnCanvas;
+
+  @override
+  set _lineDirectionTickLengthOnCanvas(double value) {
+    _$_lineDirectionTickLengthOnCanvasAtom
+        .reportWrite(value, super._lineDirectionTickLengthOnCanvas, () {
+      super._lineDirectionTickLengthOnCanvas = value;
+    });
+  }
+
   late final _$_pointRadiusOnCanvasAtom = Atom(
       name: 'TH2FileEditControllerBase._pointRadiusOnCanvas', context: context);
 

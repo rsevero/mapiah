@@ -79,6 +79,7 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         CustomPainter painter = THLinePainter(
           lineSegmentsMap: segmentsMap,
           linePaint: linePaint,
+          reverse: MPCommandOptionAux.isReverse(line),
           th2FileEditController: th2FileEditController,
         );
 

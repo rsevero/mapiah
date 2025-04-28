@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
@@ -12,12 +13,14 @@ import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final THLinePaint linePaint;
+  final bool reverse;
   final TH2FileEditController th2FileEditController;
 
   THLinePainter({
     super.repaint,
     required this.lineSegmentsMap,
     required this.linePaint,
+    required this.reverse,
     required this.th2FileEditController,
   }) {
     if ((linePaint.primaryPaint == null) &&
@@ -49,16 +52,33 @@ class THLinePainter extends CustomPainter {
   };
 
   @override
+  @override
   void paint(Canvas canvas, Size size) {
     final Iterable<THLinePainterLineSegment> lineSegments =
         lineSegmentsMap.values;
     bool isFirst = true;
     final Path path = Path();
+    final Path lineDirectionTicksPath = Path();
+    final List<Offset> points = [];
+    final List<double> distances = [];
+    final int lineSegmentsCount = lineSegments.length;
+
+    if (lineSegmentsCount < 2) {
+      return;
+    }
+
+    final bool addIntermediateLineDirectionTicks =
+        lineSegmentsCount > mpLineSegmentsPerDirectionTick * 2;
+    int i = 0;
 
     for (THLinePainterLineSegment lineSegment in lineSegments) {
+      i++;
+
       if (isFirst) {
         path.moveTo(lineSegment.x, lineSegment.y);
         isFirst = false;
+        points.add(Offset(lineSegment.x, lineSegment.y));
+        distances.add(0.0);
         continue;
       }
 
@@ -75,6 +95,87 @@ class THLinePainter extends CustomPainter {
         case THLinePainterStraightLineSegment _:
           path.lineTo(lineSegment.x, lineSegment.y);
       }
+
+      if ((addIntermediateLineDirectionTicks &&
+              (i % mpLineSegmentsPerDirectionTick == 0)) ||
+          (i == lineSegmentsCount)) {
+        points.add(Offset(lineSegment.x, lineSegment.y));
+        distances.add(path.computeMetrics().first.length);
+      }
+    }
+
+    final List<PathMetric> metrics = path.computeMetrics().toList();
+
+    if (metrics.isNotEmpty) {
+      final PathMetric metric = metrics.first;
+      final double metricLength = metric.length;
+      final double lineDirectionTicksLengthOnCanvas =
+          th2FileEditController.lineDirectionTickLengthOnCanvas;
+
+      for (int i = 0; i < points.length; i++) {
+        final Offset point = points[i];
+        final double distance = distances[i];
+        final double distanceBefore = distance - mpAverageTangentDelta;
+        final double distanceAfter = distance + mpAverageTangentDelta;
+        Offset tangentAtPoint;
+
+        if ((distanceBefore < 0) || (distanceAfter > metricLength)) {
+          final Offset? tangentAt = _getTangentAtDistance(metric, distance);
+
+          if (tangentAt == null) {
+            continue;
+          }
+
+          tangentAtPoint = tangentAt;
+        } else {
+          final Tangent? tangentBefore =
+              metric.getTangentForOffset(distance - mpAverageTangentDelta);
+          final Tangent? tangentAfter =
+              metric.getTangentForOffset(distance + mpAverageTangentDelta);
+
+          if ((tangentBefore != null) && (tangentAfter != null)) {
+            // Calculate the average tangent direction
+            final Offset v1 = tangentBefore.vector;
+            final Offset v2 = tangentAfter.vector;
+            final double v1Len = v1.distance;
+            final double v2Len = v2.distance;
+
+            if ((v1Len > 0) && (v2Len > 0)) {
+              final Offset n1 = v1 / v1Len;
+              final Offset n2 = v2 / v2Len;
+              final Offset avg = (n1 + n2) / 2.0;
+              final double avgLen = avg.distance;
+
+              if (avgLen > 0) {
+                tangentAtPoint = avg / avgLen;
+                // avgNorm is the average tangent direction between tangentBefore and tangentAfter
+              } else {
+                continue;
+              }
+            } else {
+              continue;
+            }
+          } else {
+            final Offset? tangentAtDistance =
+                _getTangentAtDistance(metric, distance);
+
+            if (tangentAtDistance == null) {
+              continue;
+            }
+
+            tangentAtPoint = tangentAtDistance;
+          }
+        }
+
+        // Draw the tick
+        final Offset normal = Offset(-tangentAtPoint.dy, tangentAtPoint.dx);
+        final Offset tickEnd = reverse
+            ? point - (normal * lineDirectionTicksLengthOnCanvas)
+            : point + (normal * lineDirectionTicksLengthOnCanvas);
+
+        lineDirectionTicksPath.moveTo(point.dx, point.dy);
+        lineDirectionTicksPath.lineTo(tickEnd.dx, tickEnd.dy);
+      }
     }
 
     if (linePaint.fillPaint != null) {
@@ -90,6 +191,13 @@ class THLinePainter extends CustomPainter {
     } else {
       _drawDashedPath(canvas, path);
     }
+
+    // Draw the ticks in black for visibility
+    final Paint tickPaint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(lineDirectionTicksPath, tickPaint);
   }
 
   @override
@@ -159,5 +267,17 @@ class THLinePainter extends CustomPainter {
     }
 
     return dashedPathProperties.path;
+  }
+
+  Offset? _getTangentAtDistance(PathMetric metric, double distance) {
+    final Tangent? tangentAtDistance = metric.getTangentForOffset(distance);
+
+    if (tangentAtDistance == null) {
+      return null;
+    }
+
+    final Offset direction = tangentAtDistance.vector;
+
+    return direction / direction.distance;
   }
 }

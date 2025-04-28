@@ -67,6 +67,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           CustomPainter painter = THLinePainter(
             lineSegmentsMap: segmentsMap,
             linePaint: linePaint,
+            reverse: false,
             th2FileEditController: th2FileEditController,
           );
 
