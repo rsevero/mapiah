@@ -67,12 +67,6 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         final THLine line = selectionController.mpSelectedElementsLogical.values
             .first.originalElementClone as THLine;
 
-        final bool reverse = MPCommandOptionAux.isReverse(line);
-
-        final THLinePaint lineDirectionTicksPaint = th2FileEditController
-            .visualController
-            .getLineDirectionTickPaint(line, reverse);
-
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           _,
@@ -83,10 +77,10 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         );
 
         CustomPainter painter = THLinePainter(
+          line: line,
           lineSegmentsMap: segmentsMap,
           linePaint: linePaint,
-          reverse: reverse,
-          lineDirectionTicksPaint: lineDirectionTicksPaint,
+          showLineDirectionTicks: true,
           th2FileEditController: th2FileEditController,
         );
 

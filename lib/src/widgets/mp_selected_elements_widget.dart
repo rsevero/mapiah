@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
@@ -34,10 +33,6 @@ class MPSelectedElementsWidget extends StatelessWidget
         final mpSelectedElements = th2FileEditController
             .selectionController.mpSelectedElementsLogical.values;
 
-        final double canvasScale = th2FileEditController.canvasScale;
-        final Offset canvasTranslation =
-            th2FileEditController.canvasTranslation;
-
         for (final mpSelectedElement in mpSelectedElements) {
           final THElement element =
               thFile.elementByMPID(mpSelectedElement.mpID);
@@ -57,19 +52,13 @@ class MPSelectedElementsWidget extends StatelessWidget
             case THLine _:
               final THLinePaint linePaint =
                   visualController.getSelectedLinePaint(element);
-              final bool reverse = MPCommandOptionAux.isReverse(element);
-              final THLinePaint lineDirectionTicksPaint =
-                  visualController.getLineDirectionTickPaint(element, reverse);
 
               painters.add(
                 getLinePainter(
                   line: element,
                   linePaint: linePaint,
-                  reverse: reverse,
-                  lineDirectionTicksPaint: lineDirectionTicksPaint,
+                  showLineDirectionTicks: true,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: canvasScale,
-                  canvasTranslation: canvasTranslation,
                 ),
               );
             case THArea _:
@@ -84,9 +73,8 @@ class MPSelectedElementsWidget extends StatelessWidget
                   getLinePainter(
                     line: line,
                     linePaint: areaPaint,
+                    showLineDirectionTicks: false,
                     th2FileEditController: th2FileEditController,
-                    canvasScale: canvasScale,
-                    canvasTranslation: canvasTranslation,
                   ),
                 );
               }

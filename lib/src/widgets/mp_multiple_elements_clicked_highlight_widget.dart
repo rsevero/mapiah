@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
@@ -80,13 +79,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
               //     ),
               //   );
               case THLine _:
-                final bool reverse =
-                    MPCommandOptionAux.isReverse(highlightedElement);
-                final THLinePaint lineDirectionTicksPaint =
-                    visualController.getLineDirectionTickPaint(
-                  highlightedElement,
-                  reverse,
-                );
                 final (
                   LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                   _
@@ -101,10 +93,10 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
 
                 painters.add(
                   THLinePainter(
+                    line: highlightedElement,
                     lineSegmentsMap: segmentsMap,
                     linePaint: linePaint,
-                    reverse: reverse,
-                    lineDirectionTicksPaint: lineDirectionTicksPaint,
+                    showLineDirectionTicks: true,
                     th2FileEditController: th2FileEditController,
                   ),
                 );
@@ -114,13 +106,6 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
 
                 for (final int lineMPID in areaLineMPIDs) {
                   final THLine highlightedElement = thFile.lineByMPID(lineMPID);
-                  final bool reverse =
-                      MPCommandOptionAux.isReverse(highlightedElement);
-                  final THLinePaint lineDirectionTicksPaint =
-                      visualController.getLineDirectionTickPaint(
-                    highlightedElement,
-                    reverse,
-                  );
                   final (
                     LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                     _
@@ -130,10 +115,10 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     returnLineSegments: false,
                   );
                   final THLinePainter linePainter = THLinePainter(
+                    line: highlightedElement,
                     lineSegmentsMap: segmentsMap,
                     linePaint: areaPaint,
-                    reverse: reverse,
-                    lineDirectionTicksPaint: lineDirectionTicksPaint,
+                    showLineDirectionTicks: false,
                     th2FileEditController: th2FileEditController,
                   );
 

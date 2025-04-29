@@ -1,6 +1,5 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -35,9 +34,6 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             th2FileEditController.visualController;
         final List<CustomPainter> painters = [];
         final Set<int> drawableElementMPIDs = thFile.drawableElementMPIDs;
-        final double canvasScale = th2FileEditController.canvasScale;
-        final Offset canvasTranslation =
-            th2FileEditController.canvasTranslation;
 
         for (final int drawableElementMPID in drawableElementMPIDs) {
           if (selectionController.isElementSelectedByMPID(
@@ -63,15 +59,9 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             case THLine _:
               final int? areaMPID = thFile.getAreaMPIDByLineMPID(element.mpID);
               late final THLinePaint linePaint;
-              bool? reverse;
-              THLinePaint? lineDirectionTicksPaint;
+              final bool isArea = areaMPID != null;
 
-              if (areaMPID == null) {
-                linePaint = visualController.getUnselectedLinePaint(element);
-                reverse = MPCommandOptionAux.isReverse(element);
-                lineDirectionTicksPaint = visualController
-                    .getLineDirectionTickPaint(element, reverse);
-              } else {
+              if (isArea) {
                 if (selectionController.isElementSelectedByMPID(areaMPID)) {
                   continue;
                 }
@@ -79,17 +69,16 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 final THArea area = thFile.areaByMPID(areaMPID);
 
                 linePaint = visualController.getUnselectedAreaPaint(area);
+              } else {
+                linePaint = visualController.getUnselectedLinePaint(element);
               }
 
               painters.add(
                 getLinePainter(
                   line: element,
                   linePaint: linePaint,
-                  reverse: reverse,
-                  lineDirectionTicksPaint: lineDirectionTicksPaint,
+                  showLineDirectionTicks: !isArea,
                   th2FileEditController: th2FileEditController,
-                  canvasScale: canvasScale,
-                  canvasTranslation: canvasTranslation,
                 ),
               );
           }
