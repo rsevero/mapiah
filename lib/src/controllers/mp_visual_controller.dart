@@ -848,7 +848,7 @@ abstract class MPVisualControllerBase with Store {
       type: MPLinePaintType.continuous,
     ),
     false: THLinePaint(
-      primaryPaint: THPaint.thPaint2,
+      primaryPaint: THPaint.thPaint4,
       type: MPLinePaintType.continuous,
     ),
   };

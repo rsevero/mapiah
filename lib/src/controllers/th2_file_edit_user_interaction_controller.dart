@@ -157,6 +157,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       _prepareSetMultipleOptionChoice(optionType, choice);
     }
+
+    if (optionType == THCommandOptionType.reverse) {
+      _th2FileEditController.triggerSelectedElementsRedraw();
+    }
   }
 
   void _prepareSetMultipleOptionChoice(
