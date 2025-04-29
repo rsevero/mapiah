@@ -38,7 +38,16 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
               .setState(MPTH2FileEditStateType.addLine);
         }
       case LogicalKeyboardKey.keyN:
-        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isShiftPressed &&
+            (th2FileEditController
+                    .selectionController.mpSelectedElementsLogical.length ==
+                1) &&
+            (th2FileEditController
+                .selectionController.mpSelectedElementsLogical.values
+                .toList()
+                .first is MPSelectedLine)) {
           th2FileEditController.stateController
               .setState(MPTH2FileEditStateType.editSingleLine);
         }

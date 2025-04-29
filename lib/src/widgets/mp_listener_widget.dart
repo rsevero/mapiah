@@ -149,7 +149,6 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         autofocus: true,
         focusNode: _focusNode,
         onKeyEvent: (node, event) {
-          print("MPListenerWidget.onKeyEvent() entered");
           if (event is KeyDownEvent) {
             logicalKeyPressed = event.logicalKey;
             widget.actuator.onKeyDownEvent(event);
