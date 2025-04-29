@@ -842,6 +842,17 @@ abstract class MPVisualControllerBase with Store {
     ),
   };
 
+  static final Map<bool, THLinePaint> lineDirectionTickPaints = {
+    true: THLinePaint(
+      primaryPaint: THPaint.thPaint16,
+      type: MPLinePaintType.continuous,
+    ),
+    false: THLinePaint(
+      primaryPaint: THPaint.thPaint2,
+      type: MPLinePaintType.continuous,
+    ),
+  };
+
   static final Map<THAreaType, THLinePaint> areaTypePaints = {
     THAreaType.bedrock: THLinePaint(
       primaryPaint: THPaint.thPaint0,
@@ -1148,6 +1159,18 @@ abstract class MPVisualControllerBase with Store {
     return linePaint.copyWith(
       primaryPaint: linePaint.primaryPaint!
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
+  }
+
+  THLinePaint getLineDirectionTickPaint(THLine line, bool reverse) {
+    final THLinePaint linePaint = lineDirectionTickPaints[reverse]!;
+
+    return linePaint.copyWith(
+      primaryPaint: (_th2FileEditController.isFromActiveScrap(line)
+          ? linePaint.primaryPaint!
+          : THPaint.thPaint15)
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      makeSecondaryPaintNull: true,
     );
   }
 

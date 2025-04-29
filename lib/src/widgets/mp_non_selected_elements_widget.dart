@@ -1,5 +1,6 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -62,9 +63,14 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             case THLine _:
               final int? areaMPID = thFile.getAreaMPIDByLineMPID(element.mpID);
               late final THLinePaint linePaint;
+              bool? reverse;
+              THLinePaint? lineDirectionTicksPaint;
 
               if (areaMPID == null) {
                 linePaint = visualController.getUnselectedLinePaint(element);
+                reverse = MPCommandOptionAux.isReverse(element);
+                lineDirectionTicksPaint = visualController
+                    .getLineDirectionTickPaint(element, reverse);
               } else {
                 if (selectionController.isElementSelectedByMPID(areaMPID)) {
                   continue;
@@ -79,6 +85,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 getLinePainter(
                   line: element,
                   linePaint: linePaint,
+                  reverse: reverse,
+                  lineDirectionTicksPaint: lineDirectionTicksPaint,
                   th2FileEditController: th2FileEditController,
                   canvasScale: canvasScale,
                   canvasTranslation: canvasTranslation,

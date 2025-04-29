@@ -80,6 +80,13 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
               //     ),
               //   );
               case THLine _:
+                final bool reverse =
+                    MPCommandOptionAux.isReverse(highlightedElement);
+                final THLinePaint lineDirectionTicksPaint =
+                    visualController.getLineDirectionTickPaint(
+                  highlightedElement,
+                  reverse,
+                );
                 final (
                   LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                   _
@@ -96,7 +103,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   THLinePainter(
                     lineSegmentsMap: segmentsMap,
                     linePaint: linePaint,
-                    reverse: MPCommandOptionAux.isReverse(highlightedElement),
+                    reverse: reverse,
+                    lineDirectionTicksPaint: lineDirectionTicksPaint,
                     th2FileEditController: th2FileEditController,
                   ),
                 );
@@ -106,6 +114,13 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
 
                 for (final int lineMPID in areaLineMPIDs) {
                   final THLine highlightedElement = thFile.lineByMPID(lineMPID);
+                  final bool reverse =
+                      MPCommandOptionAux.isReverse(highlightedElement);
+                  final THLinePaint lineDirectionTicksPaint =
+                      visualController.getLineDirectionTickPaint(
+                    highlightedElement,
+                    reverse,
+                  );
                   final (
                     LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                     _
@@ -117,7 +132,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   final THLinePainter linePainter = THLinePainter(
                     lineSegmentsMap: segmentsMap,
                     linePaint: areaPaint,
-                    reverse: MPCommandOptionAux.isReverse(highlightedElement),
+                    reverse: reverse,
+                    lineDirectionTicksPaint: lineDirectionTicksPaint,
                     th2FileEditController: th2FileEditController,
                   );
 

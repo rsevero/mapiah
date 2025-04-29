@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -73,11 +72,21 @@ mixin MPLinePaintingMixin {
   THLinePainter getLinePainter({
     required THLine line,
     required THLinePaint linePaint,
+    THLinePaint? lineDirectionTicksPaint,
+    bool? reverse,
     Paint? fillPaint,
     required double canvasScale,
     required Offset canvasTranslation,
     required TH2FileEditController th2FileEditController,
   }) {
+    if ((reverse != null) &&
+        ((lineDirectionTicksPaint == null) ||
+            (lineDirectionTicksPaint.primaryPaint == null))) {
+      throw ArgumentError(
+        'lineDirectionTicksPaint is null or primaryPaint is null with reverse is not null',
+      );
+    }
+
     final (LinkedHashMap<int, THLinePainterLineSegment> segmentsMap, _) =
         getLineSegmentsAndEndpointsMaps(
       line: line,
@@ -88,7 +97,8 @@ mixin MPLinePaintingMixin {
     return THLinePainter(
       lineSegmentsMap: segmentsMap,
       linePaint: linePaint,
-      reverse: MPCommandOptionAux.isReverse(line),
+      reverse: reverse,
+      lineDirectionTicksPaint: lineDirectionTicksPaint,
       th2FileEditController: th2FileEditController,
     );
   }

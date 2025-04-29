@@ -14,6 +14,7 @@ class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final THLinePaint linePaint;
   final bool? reverse;
+  final THLinePaint? lineDirectionTicksPaint;
   final TH2FileEditController th2FileEditController;
 
   THLinePainter({
@@ -21,6 +22,7 @@ class THLinePainter extends CustomPainter {
     required this.lineSegmentsMap,
     required this.linePaint,
     this.reverse,
+    this.lineDirectionTicksPaint,
     required this.th2FileEditController,
   }) {
     if ((linePaint.primaryPaint == null) &&
@@ -28,6 +30,13 @@ class THLinePainter extends CustomPainter {
         (linePaint.fillPaint == null)) {
       throw Exception(
           'Linepaint needs at least one paint property not null in THLinePainter.');
+    }
+
+    if ((reverse != null) &&
+        ((lineDirectionTicksPaint == null) ||
+            (lineDirectionTicksPaint!.primaryPaint == null))) {
+      throw Exception(
+          'Line direction ticks paint is required when reverse is set.');
     }
   }
 
@@ -54,20 +63,20 @@ class THLinePainter extends CustomPainter {
   @override
   @override
   void paint(Canvas canvas, Size size) {
-    final bool addLineDirectionTicks = reverse != null;
     final Iterable<THLinePainterLineSegment> lineSegments =
         lineSegmentsMap.values;
-    bool isFirst = true;
-    final Path path = Path();
-    final Path lineDirectionTicksPath = Path();
-    final List<Offset> points = [];
-    final List<double> distances = [];
     final int lineSegmentsCount = lineSegments.length;
 
     if (lineSegmentsCount < 2) {
       return;
     }
 
+    final bool addLineDirectionTicks = reverse != null;
+    bool isFirst = true;
+    final Path path = Path();
+    final Path lineDirectionTicksPath = Path();
+    final List<Offset> points = [];
+    final List<double> distances = [];
     final bool addIntermediateLineDirectionTicks =
         lineSegmentsCount > mpLineSegmentsPerDirectionTick * 2;
     int i = 0;
@@ -199,12 +208,10 @@ class THLinePainter extends CustomPainter {
     }
 
     if (addLineDirectionTicks) {
-      // Draw the ticks in black for visibility
-      final Paint tickPaint = Paint()
-        ..color = Colors.black
-        ..strokeWidth = 1.5
-        ..style = PaintingStyle.stroke;
-      canvas.drawPath(lineDirectionTicksPath, tickPaint);
+      canvas.drawPath(
+        lineDirectionTicksPath,
+        lineDirectionTicksPaint!.primaryPaint!,
+      );
     }
   }
 
