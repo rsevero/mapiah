@@ -4,7 +4,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin {
+        MPTH2FileEditStateClearSelectionOnExitMixin,
+        MPTH2FileEditStateLineSegmentOptionsEditMixin {
   bool _dragShouldMovePoints = false;
   final List<MPSelectableEndControlPoint> _selectedEndControlPointsOnDragStart =
       [];

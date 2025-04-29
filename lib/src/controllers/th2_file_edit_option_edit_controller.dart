@@ -56,13 +56,22 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           'Element with MPID $mpID does not support options at TH2FileEditOptionEditController.getElementOptionMapByMPID()');
     }
 
-    _optionStateMap = _getOptionStateMap({element});
+    _optionStateMap = _getOptionStateMap([element]);
+
+    _th2FileEditController.triggerOptionsListRedraw();
+  }
+
+  void updateElementOptionMapForLineSegments() {
+    final lineSegments =
+        _th2FileEditController.selectionController.selectedLineSegments.values;
+
+    _optionStateMap = _getOptionStateMap(lineSegments);
 
     _th2FileEditController.triggerOptionsListRedraw();
   }
 
   Map<THCommandOptionType, MPOptionInfo> _getOptionStateMap(
-    Set<THHasOptionsMixin> selectedElements,
+    Iterable<THHasOptionsMixin> selectedElements,
   ) {
     final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
 
@@ -74,9 +83,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
         );
       }
     } else {
-      final List<THCommandOptionType> optionTypesList =
-          MPCommandOptionAux.getSupportedOptionsForElements(
-              selectedElements.toList());
+      final Iterable<THCommandOptionType> optionTypesList =
+          MPCommandOptionAux.getSupportedOptionsForElements(selectedElements);
 
       /// Defining the state of each shared option.
       for (final optionType in optionTypesList) {

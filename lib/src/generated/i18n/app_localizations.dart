@@ -803,6 +803,12 @@ abstract class AppLocalizations {
   /// **'Station'**
   String get mpNameStationLabel;
 
+  /// The label for the line segment types in the options edit dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Line segments types'**
+  String get mpOptionsEditLineSegmentTypes;
+
   /// The label for the ceiling type
   ///
   /// In en, this message translates to:

@@ -718,6 +718,12 @@
     "type": "text"
   },
 
+  "mpOptionsEditLineSegmentTypes": "Line segments types",
+  "@mpOptionsEditLineSegmentTypes": {
+    "description": "The label for the line segment types in the options edit dialog",
+    "type": "text"
+  },
+
   "mpPassageHeightCeiling": "Ceiling",
   "@mpPassageHeightCeiling": {
     "description": "The label for the ceiling type",

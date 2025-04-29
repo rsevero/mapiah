@@ -227,7 +227,7 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   void performToggleShowPLATypeOverlayWindow(
-      {required Offset position,
+      {required Offset outerAnchorPosition,
       required THElementType elementType,
       required String? selectedType}) {
     final _$actionInfo =
@@ -236,7 +236,7 @@ mixin _$TH2FileEditOverlayWindowController
                 'TH2FileEditOverlayWindowControllerBase.performToggleShowPLATypeOverlayWindow');
     try {
       return super.performToggleShowPLATypeOverlayWindow(
-          position: position,
+          outerAnchorPosition: outerAnchorPosition,
           elementType: elementType,
           selectedType: selectedType);
     } finally {
@@ -247,7 +247,7 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   void showPLATypeOverlayWindow(
-      {required Offset position,
+      {required Offset outerAnchorPosition,
       required THElementType elementType,
       required String? selectedType}) {
     final _$actionInfo =
@@ -256,7 +256,7 @@ mixin _$TH2FileEditOverlayWindowController
                 'TH2FileEditOverlayWindowControllerBase.showPLATypeOverlayWindow');
     try {
       return super.showPLATypeOverlayWindow(
-          position: position,
+          outerAnchorPosition: outerAnchorPosition,
           elementType: elementType,
           selectedType: selectedType);
     } finally {

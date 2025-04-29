@@ -378,6 +378,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpNameStationLabel => 'Station';
 
   @override
+  String get mpOptionsEditLineSegmentTypes => 'Line segments types';
+
+  @override
   String get mpPassageHeightCeiling => 'Ceiling';
 
   @override

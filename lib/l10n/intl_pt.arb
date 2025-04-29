@@ -146,6 +146,8 @@
 
   "mpNameStationLabel": "Base",
 
+  "mpOptionsEditLineSegmentTypes": "Tipos de segmentos de linha",
+  
   "mpPassageHeightCeiling": "Teto",
   "mpPassageHeightCeilingLabel": "Teto",
   "mpPassageHeightDepth": "Profundidade",

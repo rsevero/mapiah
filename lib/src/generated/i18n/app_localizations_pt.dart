@@ -378,6 +378,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpNameStationLabel => 'Base';
 
   @override
+  String get mpOptionsEditLineSegmentTypes => 'Tipos de segmentos de linha';
+
+  @override
   String get mpPassageHeightCeiling => 'Teto';
 
   @override

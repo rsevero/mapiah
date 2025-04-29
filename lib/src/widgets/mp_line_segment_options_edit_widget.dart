@@ -5,23 +5,24 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/mp_line_segment_type_widget.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
-import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPScrapOptionsEditWidget extends StatefulWidget {
+class MPLineSegmentOptionsEditWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPScrapOptionsEditWidget({
+  const MPLineSegmentOptionsEditWidget({
     super.key,
     required this.th2FileEditController,
     required this.outerAnchorPosition,
@@ -29,11 +30,12 @@ class MPScrapOptionsEditWidget extends StatefulWidget {
   });
 
   @override
-  State<MPScrapOptionsEditWidget> createState() =>
-      _MPScrapOptionsEditWidgetState();
+  State<MPLineSegmentOptionsEditWidget> createState() =>
+      _MPLineSegmentOptionsEditWidgetState();
 }
 
-class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
+class _MPLineSegmentOptionsEditWidgetState
+    extends State<MPLineSegmentOptionsEditWidget> {
   late final TH2FileEditController th2FileEditController =
       widget.th2FileEditController;
 
@@ -43,22 +45,24 @@ class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        final int scrapMPID =
-            th2FileEditController.optionEditController.optionsScrapMPID;
-        final THScrap scrap =
-            th2FileEditController.thFile.scrapByMPID(scrapMPID);
-        final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-        final List<Widget> widgets = [];
+        final TH2FileEditSelectionController selectionController =
+            th2FileEditController.selectionController;
+        final Iterable<THLineSegment> lineSegments =
+            selectionController.selectedLineSegments.values;
+
+        if (lineSegments.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
+        final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+        final List<Widget> widgets = [];
         final optionsStateMap = optionEditController.optionStateMap.entries;
 
-        MPInteractionAux.addWidgetWithTopSpace(
-          widgets,
-          MPOverlayWindowBlockWidget(
-            title: appLocalizations.thElementScrap,
-            children: [MPTileWidget(title: scrap.thID)],
-            overlayWindowBlockType: MPOverlayWindowBlockType.main,
+        widgets.add(
+          MPLineSegmentTypeWidget(
+            th2FileEditController: th2FileEditController,
           ),
         );
 

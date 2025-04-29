@@ -9,6 +9,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
+import 'package:mapiah/src/widgets/mp_line_segment_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
@@ -63,6 +64,20 @@ class MPOverlayWindowFactory {
       case MPWindowType.commandOptions:
         overlayWindowWidget = MPOptionsEditWidget(
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.leftCenter,
+        );
+      case MPWindowType.lineSegmentOptions:
+        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+              th2FileEditController.selectionController
+                  .getClickedEndControlPointsBoundingBoxOnCanvas()
+                  .centerRight,
+            ) +
+            Offset(mpOverlayWindowOuterAnchorMargin, 0);
+
+        overlayWindowWidget = MPLineSegmentOptionsEditWidget(
+          key: ValueKey("MPLineSegmentOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
           innerAnchorType: innerAnchorType ?? MPWidgetPositionType.leftCenter,
@@ -351,7 +366,7 @@ class MPOverlayWindowFactory {
 
   static OverlayEntry createPLATypeOptions({
     required TH2FileEditController th2FileEditController,
-    required Offset position,
+    required Offset outerAnchorPosition,
     required THElementType elementType,
     required String? selectedType,
   }) {
@@ -363,7 +378,7 @@ class MPOverlayWindowFactory {
         key: ValueKey("MPPLATypeOptionsWidget|$thFileMPID"),
         plaType: elementType,
         selectedType: selectedType,
-        outerAnchorPosition: position,
+        outerAnchorPosition: outerAnchorPosition,
         innerAnchorType: MPWidgetPositionType.leftCenter,
       ),
     );

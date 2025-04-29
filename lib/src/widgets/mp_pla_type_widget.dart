@@ -52,14 +52,14 @@ class MPPLATypeWidget extends StatelessWidget {
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
     );
 
-    final Offset position = boundingBox == null
+    final Offset outerAnchorPosition = boundingBox == null
         ? th2FileEditController.screenBoundingBox.center
         : boundingBox.centerRight;
 
     th2FileEditController.overlayWindowController
         .performToggleShowPLATypeOverlayWindow(
       elementType: type,
-      position: position,
+      outerAnchorPosition: outerAnchorPosition,
       selectedType: selectedPLAType,
     );
   }

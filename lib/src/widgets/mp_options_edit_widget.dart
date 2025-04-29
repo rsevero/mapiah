@@ -16,7 +16,6 @@ import 'package:mapiah/src/widgets/mp_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_widget.dart';
-import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
@@ -190,23 +189,6 @@ class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
         );
       },
     );
-  }
-
-  MPOverlayWindowBlockType getOverlayWindowBlockTypeFromOptionState(
-      MPOptionStateType? state) {
-    switch (state) {
-      case MPOptionStateType.set:
-        return MPOverlayWindowBlockType.secondarySet;
-      case MPOptionStateType.setMixed:
-        return MPOverlayWindowBlockType.secondarySetMixed;
-      case MPOptionStateType.setUnsupported:
-        return MPOverlayWindowBlockType.secondarySetUnsupported;
-      case MPOptionStateType.unset:
-        return MPOverlayWindowBlockType.secondaryUnset;
-      default:
-        throw Exception(
-            'previous state should not be null at MPOptionsEditWidget.getOverlayWindowBlockTypeFromOptionState()');
-    }
   }
 
   void onOptionSelected(BuildContext childContext, THCommandOptionType type) {

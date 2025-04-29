@@ -599,6 +599,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     for (final selectableElement in _mpSelectableElements.values) {
       if (selectableElement is MPSelectableElement) {
+        if ((selectableElement is! MPSelectablePoint) &&
+            (selectableElement is! MPSelectableLine)) {
+          continue;
+        }
+
         final THElement element = selectableElement.element;
 
         if (MPNumericAux.isRect1InsideRect2(
@@ -806,6 +811,37 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         lineSegments[lineSegmentIndex - 1],
         lineSegment,
       ];
+    }
+  }
+
+  MPSelectedLineSegmentType getSelectedLineSegmentsType() {
+    final Iterable<THLineSegment> lineSegments = _selectedLineSegments.values;
+
+    if (lineSegments.isEmpty) {
+      return MPSelectedLineSegmentType.none;
+    }
+
+    if (lineSegments.length == 1) {
+      return lineSegments.first.elementType == THElementType.straightLineSegment
+          ? MPSelectedLineSegmentType.straightLineSegment
+          : MPSelectedLineSegmentType.bezierCurve;
+    }
+
+    THElementType? elementType = lineSegments.first.elementType;
+
+    for (final THLineSegment lineSegment in lineSegments.skip(1)) {
+      if (lineSegment.elementType != elementType) {
+        elementType = null;
+        break;
+      }
+    }
+
+    if (elementType == null) {
+      return MPSelectedLineSegmentType.mixed;
+    } else {
+      return lineSegments.first.elementType == THElementType.straightLineSegment
+          ? MPSelectedLineSegmentType.straightLineSegment
+          : MPSelectedLineSegmentType.bezierCurve;
     }
   }
 
@@ -1283,6 +1319,13 @@ enum MPMultipleEndControlPointsClickedType {
   all,
   none,
   single;
+}
+
+enum MPSelectedLineSegmentType {
+  bezierCurve,
+  mixed,
+  none,
+  straightLineSegment;
 }
 
 class MPMultipleEndControlPointsClickedChoice {

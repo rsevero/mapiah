@@ -201,8 +201,8 @@ class MPCommandOptionAux {
     return [];
   }
 
-  static List<THCommandOptionType> getSupportedOptionsForElements(
-    List<THHasOptionsMixin> elements,
+  static Iterable<THCommandOptionType> getSupportedOptionsForElements(
+    Iterable<THHasOptionsMixin> elements,
   ) {
     if (elements.isEmpty) {
       return [];
@@ -216,7 +216,7 @@ class MPCommandOptionAux {
           .intersection(getSupportedOptionsForElement(element).toSet());
     }
 
-    return commonOptions.toList();
+    return commonOptions;
   }
 
   static List<THCommandOptionType> getOrderedList(

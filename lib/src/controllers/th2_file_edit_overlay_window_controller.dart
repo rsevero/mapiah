@@ -57,6 +57,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   final autoDismissOverlayWindowTypes = {
     MPWindowType.availableScraps,
     MPWindowType.commandOptions,
+    MPWindowType.lineSegmentOptions,
     MPWindowType.multipleElementsClicked,
     MPWindowType.multipleEndControlPointsClicked,
     MPWindowType.optionChoices,
@@ -263,7 +264,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void performToggleShowPLATypeOverlayWindow({
-    required Offset position,
+    required Offset outerAnchorPosition,
     required THElementType elementType,
     required String? selectedType,
   }) {
@@ -273,7 +274,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     } else {
       _currentPLATypeShown = elementType;
       showPLATypeOverlayWindow(
-        position: position,
+        outerAnchorPosition: outerAnchorPosition,
         elementType: elementType,
         selectedType: selectedType,
       );
@@ -282,7 +283,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   @action
   void showPLATypeOverlayWindow({
-    required Offset position,
+    required Offset outerAnchorPosition,
     required THElementType elementType,
     required String? selectedType,
   }) {
@@ -295,7 +296,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _overlayWindows[overlayWindowType] =
         MPOverlayWindowFactory.createPLATypeOptions(
       th2FileEditController: _th2FileEditController,
-      position: position,
+      outerAnchorPosition: outerAnchorPosition,
       elementType: elementType,
       selectedType: selectedType,
     );
@@ -336,6 +337,21 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       shouldShowScrapOptions,
       outerAnchorPosition: outerAnchorPosition,
       innerAnchorType: MPWidgetPositionType.rightCenter,
+    );
+  }
+
+  void perfomToggleLineSegmentOptionsOverlayWindow() {
+    final bool shouldShowLineSegmentOptions =
+        !_isOverlayWindowShown[MPWindowType.lineSegmentOptions]!;
+
+    if (shouldShowLineSegmentOptions) {
+      _th2FileEditController.optionEditController
+          .updateElementOptionMapForLineSegments();
+    }
+
+    setShowOverlayWindow(
+      MPWindowType.lineSegmentOptions,
+      shouldShowLineSegmentOptions,
     );
   }
 }
