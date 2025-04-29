@@ -10,8 +10,7 @@ Version 0.2
 [X] - Rename Stores to Controllers
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
 [X] - All buttons (including zoom buttons) should use default button color
-[ ] - Copy/Paste
-[ ] - Different points and line representations
+[X] - Different points and line representations
 [X] - Areas
 [X] - Scrap options
 [ ] - Line segment options
@@ -36,3 +35,5 @@ Version 0.3
 [ ] - Release automation Windows
 [ ] - Release automation MacOS
 [ ] - Config page
+[ ] - Drag overlay windows
+[ ] - Copy/Paste
