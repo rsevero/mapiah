@@ -28,7 +28,7 @@ Version 0.2
 [X] - Corrigindo set/unset de originalLineInTH@File: MPSetOptionToElementCommand
 [X] - Distinguir execute command normal dos gerados por undos: os dos undos devem manter originalLineInTH2File, os normais não.
 [X] - BUG: 'N' not starting line edit mode
-[ ] - BUG: Clicking on line segment is not selecting nodes in line edit
+[X] - BUG: Clicking on line segment is not selecting nodes in line edit
 
 Version 0.3
 [ ] - Search/select elements by characteristics

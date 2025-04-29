@@ -485,6 +485,42 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if (!_isSelected.containsKey(lineMPID)) {
       _isSelected[lineMPID] = Observable(false);
     }
+
+    /// Adding line segments as selectable elements so on 'single line edit
+    /// mode' its possible to select end point clicking on line segments.
+    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+    Offset? startPoint;
+
+    for (final THLineSegment lineSegment in lineSegments) {
+      if (startPoint == null) {
+        startPoint = lineSegment.endPoint.coordinates;
+        continue;
+      }
+
+      final MPSelectableLineSegment selectableLineSegment;
+
+      switch (lineSegment) {
+        case THStraightLineSegment _:
+          selectableLineSegment = MPSelectableStraightLineSegment(
+            straightLineSegment: lineSegment,
+            startPoint: startPoint,
+            th2fileEditController: _th2FileEditController,
+          );
+        case THBezierCurveLineSegment _:
+          selectableLineSegment = MPSelectableBezierCurveLineSegment(
+            bezierCurveLineSegment: lineSegment,
+            startPoint: startPoint,
+            th2fileEditController: _th2FileEditController,
+          );
+        default:
+          throw Exception(
+            'THLineSegment type not supported: ${lineSegment.elementType}',
+          );
+      }
+
+      _mpSelectableElements[lineSegment.mpID] = selectableLineSegment;
+      startPoint = lineSegment.endPoint.coordinates;
+    }
   }
 
   void removeSelectableElement(int mpID) {
@@ -725,6 +761,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void clearSelectedLineSegments() {
     _selectedLineSegments.clear();
+  }
+
+  void addSelectedLineSegment(THLineSegment lineSegment) {
+    _selectedLineSegments[lineSegment.mpID] = lineSegment;
   }
 
   void addSelectedLineSegments(List<THLineSegment> lineSegments) {

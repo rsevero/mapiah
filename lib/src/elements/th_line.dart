@@ -9,6 +9,7 @@ class THLine extends THElement
     with THHasOptionsMixin, THIsParentMixin, MPBoundingBox
     implements THHasPLATypeMixin {
   final THLineType lineType;
+  final Set<int> _lineSegmentMPIDs = {};
 
   static final _lineTypes = <String>{
     'abyss-entrance',
@@ -260,11 +261,52 @@ class THLine extends THElement
     final int previousLineSegmentMPID =
         getPreviousLineSegmentMPID(lineSegment.mpID, thFile);
 
-    return thFile.lineByMPID(previousLineSegmentMPID) as THLineSegment;
+    return thFile.elementByMPID(previousLineSegmentMPID) as THLineSegment;
   }
 
   @override
   String get plaType {
     return lineType.name;
+  }
+
+  void addLineSegmentMPID(int lineSegmentMPID) {
+    _lineSegmentMPIDs.add(lineSegmentMPID);
+  }
+
+  void removeLineSegmentMPID(int lineSegmentMPID) {
+    _lineSegmentMPIDs.remove(lineSegmentMPID);
+  }
+
+  Set<int> get lineSegmentMPIDs => _lineSegmentMPIDs;
+
+  List<THLineSegment> getLineSegments(THFile thFile) {
+    final List<THLineSegment> lineSegments = [];
+
+    for (final int lineSegmentMPID in _lineSegmentMPIDs) {
+      final THLineSegment lineSegment =
+          thFile.elementByMPID(lineSegmentMPID) as THLineSegment;
+
+      lineSegments.add(lineSegment);
+    }
+
+    return lineSegments;
+  }
+
+  @override
+  void addElementToParent(THElement element) {
+    super.addElementToParent(element);
+
+    if (element is THLineSegment) {
+      addLineSegmentMPID(element.mpID);
+    }
+  }
+
+  @override
+  void removeElementFromParent(THFile thFile, THElement element) {
+    super.removeElementFromParent(thFile, element);
+
+    if (element is THLineSegment) {
+      removeLineSegmentMPID(element.mpID);
+    }
   }
 }
