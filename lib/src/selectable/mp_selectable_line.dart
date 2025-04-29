@@ -47,7 +47,7 @@ class MPSelectableLine extends MPSelectableElement {
     final Rect lineBoundingBox =
         (element as THLine).getBoundingBox(th2fileEditController);
 
-    return MPNumericAux.orderedRectExpanded(
+    return MPNumericAux.orderedRectExpandedByDelta(
       rect: lineBoundingBox,
       delta: th2fileEditController.selectionToleranceOnCanvas,
     );

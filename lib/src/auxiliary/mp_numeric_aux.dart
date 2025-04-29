@@ -202,7 +202,7 @@ class MPNumericAux {
     );
   }
 
-  static Rect orderedRectExpanded({
+  static Rect orderedRectExpandedByDelta({
     required Rect rect,
     required double delta,
   }) {
@@ -211,6 +211,18 @@ class MPNumericAux {
       top: rect.top - delta,
       right: rect.right + delta,
       bottom: rect.bottom + delta,
+    );
+  }
+
+  static Rect orderedRectExpandedToIncludeOffset({
+    required Rect rect,
+    required Offset offset,
+  }) {
+    return MPNumericAux.orderedRectFromLTRB(
+      left: math.min(rect.left, offset.dx),
+      top: math.min(rect.top, offset.dy),
+      right: math.max(rect.right, offset.dx),
+      bottom: math.max(rect.bottom, offset.dy),
     );
   }
 

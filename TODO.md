@@ -29,6 +29,7 @@ Version 0.2
 [X] - Distinguir execute command normal dos gerados por undos: os dos undos devem manter originalLineInTH2File, os normais não.
 [X] - BUG: 'N' not starting line edit mode
 [X] - BUG: Clicking on line segment is not selecting nodes in line edit
+[X] - BUG: multiple control points overlay window opening far away from clicked points
 
 Version 0.3
 [ ] - Search/select elements by characteristics

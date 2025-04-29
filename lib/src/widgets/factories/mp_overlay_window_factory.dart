@@ -86,7 +86,7 @@ class MPOverlayWindowFactory {
       case MPWindowType.multipleEndControlPointsClicked:
         outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
               th2FileEditController.selectionController
-                  .getClickedElementsBoundingBoxOnCanvas()
+                  .getClickedEndControlPointsBoundingBoxOnCanvas()
                   .centerRight,
             ) +
             Offset(mpOverlayWindowOuterAnchorMargin, 0);

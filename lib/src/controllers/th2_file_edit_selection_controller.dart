@@ -1254,6 +1254,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       MPMultipleEndControlPointsClickedChoice choice) {
     _multipleEndControlPointsClickedHighlightedChoice = choice;
   }
+
+  Rect getClickedEndControlPointsBoundingBoxOnCanvas() {
+    if (clickedEndControlPoints.isEmpty) {
+      return Rect.zero;
+    }
+
+    Rect boundingBox = clickedEndControlPoints.first.boundingBox;
+
+    for (final MPSelectableEndControlPoint point
+        in clickedEndControlPoints.skip(1)) {
+      boundingBox = MPNumericAux.orderedRectExpandedToIncludeOffset(
+        rect: boundingBox,
+        offset: point.position,
+      );
+    }
+
+    return boundingBox;
+  }
 }
 
 enum THSelectionType {
