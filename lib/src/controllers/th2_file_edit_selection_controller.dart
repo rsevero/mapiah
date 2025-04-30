@@ -1292,17 +1292,21 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   Rect getClickedEndControlPointsBoundingBoxOnCanvas() {
-    if (clickedEndControlPoints.isEmpty) {
+    if (_selectedLineSegments.isEmpty) {
       return Rect.zero;
     }
 
-    Rect boundingBox = clickedEndControlPoints.first.boundingBox;
+    final Iterable<THLineSegment> selectedLineSegments =
+        _selectedLineSegments.values;
 
-    for (final MPSelectableEndControlPoint point
-        in clickedEndControlPoints.skip(1)) {
+    Rect boundingBox = MPNumericAux.orderedRectSmallestAroundPoint(
+      center: selectedLineSegments.first.endPoint.coordinates,
+    );
+
+    for (final THLineSegment point in selectedLineSegments.skip(1)) {
       boundingBox = MPNumericAux.orderedRectExpandedToIncludeOffset(
         rect: boundingBox,
-        offset: point.position,
+        offset: point.endPoint.coordinates,
       );
     }
 
