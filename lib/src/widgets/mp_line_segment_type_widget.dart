@@ -27,7 +27,7 @@ class MPLineSegmentTypeWidget extends StatelessWidget {
         th2FileEditController.selectionController.getSelectedLineSegmentsType();
 
     switch (lineSegmentsType) {
-      case MPSelectedLineSegmentType.bezierCurve:
+      case MPSelectedLineSegmentType.bezierCurveLineSegment:
         title = appLocalizations.thElementBezierCurveLineSegment;
       case MPSelectedLineSegmentType.mixed:
         title = appLocalizations.mpOptionsEditLineSegmentTypes;

@@ -824,7 +824,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if (lineSegments.length == 1) {
       return lineSegments.first.elementType == THElementType.straightLineSegment
           ? MPSelectedLineSegmentType.straightLineSegment
-          : MPSelectedLineSegmentType.bezierCurve;
+          : MPSelectedLineSegmentType.bezierCurveLineSegment;
     }
 
     THElementType? elementType = lineSegments.first.elementType;
@@ -841,7 +841,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     } else {
       return lineSegments.first.elementType == THElementType.straightLineSegment
           ? MPSelectedLineSegmentType.straightLineSegment
-          : MPSelectedLineSegmentType.bezierCurve;
+          : MPSelectedLineSegmentType.bezierCurveLineSegment;
     }
   }
 
@@ -1326,7 +1326,7 @@ enum MPMultipleEndControlPointsClickedType {
 }
 
 enum MPSelectedLineSegmentType {
-  bezierCurve,
+  bezierCurveLineSegment,
   mixed,
   none,
   straightLineSegment;
