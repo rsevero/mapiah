@@ -3,6 +3,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
+/// Single PLA type option used inside MPPLATypeOptionsOverlayWidget.
 class MPPLATypeOptionWidget extends StatelessWidget {
   final String value;
   final String label;

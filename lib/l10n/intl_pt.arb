@@ -126,6 +126,8 @@
   "mpLineHeightInvalidValueErrorMessage": "Altura inválida",
   "mpLineHeightHeightLabel": "Altura",
 
+  "mpLineSegmentTypeTypesTitle": "Tipo de segmento de linha",
+
   "mpLSizeLabel": "Tamanho",
 
   "mpMarkTextLabel": "Identificador",

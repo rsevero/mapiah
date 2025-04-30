@@ -719,6 +719,12 @@ abstract class AppLocalizations {
   /// **'Height'**
   String get mpLineHeightHeightLabel;
 
+  /// The title for the line segment type
+  ///
+  /// In en, this message translates to:
+  /// **'Line segment type'**
+  String get mpLineSegmentTypeTypesTitle;
+
   /// The label for the size type
   ///
   /// In en, this message translates to:

@@ -9,11 +9,12 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
-import 'package:mapiah/src/widgets/mp_line_segment_options_edit_widget.dart';
+import 'package:mapiah/src/widgets/mp_line_segment_options_edit_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/mp_line_segment_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_widget.dart';
-import 'package:mapiah/src/widgets/mp_options_edit_widget.dart';
-import 'package:mapiah/src/widgets/mp_pla_type_options_widget.dart';
+import 'package:mapiah/src/widgets/mp_options_edit_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/mp_pla_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_altitude_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_author_option_widget.dart';
@@ -62,7 +63,7 @@ class MPOverlayWindowFactory {
           outerAnchorPosition: outerAnchorPosition,
         );
       case MPWindowType.commandOptions:
-        overlayWindowWidget = MPOptionsEditWidget(
+        overlayWindowWidget = MPOptionsEditOverlayWindowWidget(
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
@@ -76,8 +77,20 @@ class MPOverlayWindowFactory {
             ) +
             Offset(mpOverlayWindowOuterAnchorMargin, 0);
 
-        overlayWindowWidget = MPLineSegmentOptionsEditWidget(
+        overlayWindowWidget = MPLineSegmentOptionsEditOverlayWindowWidget(
           key: ValueKey("MPLineSegmentOptionsEditWidget|$thFileMPID"),
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
+        );
+      case MPWindowType.lineSegmentTypes:
+        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+              th2FileEditController.selectionController
+                  .getClickedEndControlPointsBoundingBoxOnCanvas()
+                  .centerRight,
+            ) +
+            Offset(mpOverlayWindowOuterAnchorMargin, 0);
+        overlayWindowWidget = MPLineSegmentTypeOptionsOverlayWindowWidget(
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
           innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
@@ -373,7 +386,7 @@ class MPOverlayWindowFactory {
     final int thFileMPID = th2FileEditController.thFileMPID;
 
     return OverlayEntry(
-      builder: (context) => MPPLATypeOptionsWidget(
+      builder: (context) => MPPLATypeOptionsOverlayWindowWidget(
         th2FileEditController: th2FileEditController,
         key: ValueKey("MPPLATypeOptionsWidget|$thFileMPID"),
         plaType: elementType,

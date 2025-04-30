@@ -11,14 +11,14 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPPLATypeOptionsWidget extends StatelessWidget {
+class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
   final THElementType plaType;
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
   final String? selectedType;
 
-  MPPLATypeOptionsWidget({
+  MPPLATypeOptionsOverlayWindowWidget({
     super.key,
     required this.plaType,
     required this.th2FileEditController,

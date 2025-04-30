@@ -20,12 +20,12 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPOptionsEditWidget extends StatefulWidget {
+class MPOptionsEditOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPOptionsEditWidget({
+  const MPOptionsEditOverlayWindowWidget({
     super.key,
     required this.th2FileEditController,
     required this.outerAnchorPosition,
@@ -33,10 +33,12 @@ class MPOptionsEditWidget extends StatefulWidget {
   });
 
   @override
-  State<MPOptionsEditWidget> createState() => _MPOptionsEditWidgetState();
+  State<MPOptionsEditOverlayWindowWidget> createState() =>
+      _MPOptionsEditOverlayWindowWidgetState();
 }
 
-class _MPOptionsEditWidgetState extends State<MPOptionsEditWidget> {
+class _MPOptionsEditOverlayWindowWidgetState
+    extends State<MPOptionsEditOverlayWindowWidget> {
   late final TH2FileEditController th2FileEditController =
       widget.th2FileEditController;
 

@@ -7,6 +7,8 @@ import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
+/// Used in MPLineSegmentTypeOptionsOverlayWindowWidget to present the current
+/// line segment type.
 class MPLineSegmentTypeWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 

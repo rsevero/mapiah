@@ -85,6 +85,20 @@ mixin _$TH2FileEditUserInteractionController
   }
 
   @override
+  void prepareSetLineSegmentType({required String type}) {
+    final _$actionInfo =
+        _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditUserInteractionControllerBase.prepareSetLineSegmentType');
+    try {
+      return super.prepareSetLineSegmentType(type: type);
+    } finally {
+      _$TH2FileEditUserInteractionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void prepareSetPLAType(
       {required THElementType plaType, required String newType}) {
     final _$actionInfo =

@@ -634,6 +634,12 @@
     "type": "text"
   },
 
+  "mpLineSegmentTypeTypesTitle": "Line segment type",
+  "@mpLineSegmentTypeTypesTitle": {
+    "description": "The title for the line segment type",
+    "type": "text"
+  },
+
   "mpLSizeLabel": "Size",
   "@mpLSizeLabel": {
     "description": "The label for the size type",

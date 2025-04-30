@@ -336,6 +336,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpLineHeightHeightLabel => 'Height';
 
   @override
+  String get mpLineSegmentTypeTypesTitle => 'Line segment type';
+
+  @override
   String get mpLSizeLabel => 'Size';
 
   @override

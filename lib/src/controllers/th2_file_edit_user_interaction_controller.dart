@@ -4,6 +4,7 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -278,6 +279,47 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         _th2FileEditController.execute(removeOptionCommand);
       }
     }
+  }
+
+  @action
+  void prepareSetLineSegmentType({required String type}) {
+    // final Iterable<THLineSegment> selectedLineSegments =
+    //     _th2FileEditController.selectionController.selectedLineSegments.values;
+    // final TH2FileEditElementEditController elementEditController =
+    //     _th2FileEditController.elementEditController;
+
+    // MPCommand setLineSegmentTypeCommand;
+    // List<int> mpIDs = [];
+
+    // for (final mpSelectedElement in mpSelectedElements) {
+    //   if ((mpSelectedElement.originalElementClone is! THLine) ||
+    //       (mpSelectedElement.originalElementClone as THLine).lineSegmentType ==
+    //           type) {
+    //     continue;
+    //   }
+    //   mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+    //   elementEditController.setUsedLineSegmentType(type);
+    // }
+
+    // if (mpIDs.isEmpty) {
+    //   return;
+    // }
+
+    // if (mpIDs.length == 1) {
+    //   setLineSegmentTypeCommand = MPEditLineSegmentTypeCommand(
+    //     lineMPID: mpIDs.first,
+    //     newLineSegmentType: type,
+    //   );
+    // } else {
+    //   setLineSegmentTypeCommand =
+    //       MPMultipleElementsCommand.editLinesSegmentType(
+    //     newLineSegmentType: type,
+    //     lineMPIDs: mpIDs,
+    //   );
+    // }
+
+    // _th2FileEditController.execute(setLineSegmentTypeCommand);
+    // _th2FileEditController.triggerSelectedElementsRedraw();
   }
 
   @action

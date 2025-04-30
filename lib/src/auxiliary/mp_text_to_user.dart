@@ -1189,6 +1189,17 @@ class MPTextToUser {
     return choices;
   }
 
+  static Map<String, String> getLineSegmentTypeChoices() {
+    final Map<String, String> choices = {
+      THElementType.bezierCurveLineSegment.name:
+          mpLocator.appLocalizations.thElementBezierCurveLineSegment,
+      THElementType.straightLineSegment.name:
+          mpLocator.appLocalizations.thElementStraightLineSegment,
+    };
+
+    return choices;
+  }
+
   static Map<String, String> getPointTypeChoices() {
     final Map<String, String> choices = {};
 
