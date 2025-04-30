@@ -66,7 +66,7 @@ class MPOverlayWindowFactory {
           key: ValueKey("MPOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
-          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.leftCenter,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
         );
       case MPWindowType.lineSegmentOptions:
         outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
@@ -80,7 +80,7 @@ class MPOverlayWindowFactory {
           key: ValueKey("MPLineSegmentOptionsEditWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
-          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.leftCenter,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
         );
       case MPWindowType.mainTHFileEditWindow:
         throw UnimplementedError(
@@ -122,7 +122,7 @@ class MPOverlayWindowFactory {
         overlayWindowWidget = MPScrapOptionsEditWidget(
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
-          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.rightCenter,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerRight,
         );
     }
 
@@ -182,7 +182,7 @@ class MPOverlayWindowFactory {
         optionInfo: optionInfo,
         choices: MPTextToUser.getOptionChoicesWithUnset(choices),
         outerAnchorPosition: outerAnchorPosition,
-        innerAnchorType: MPWidgetPositionType.leftCenter,
+        innerAnchorType: MPWidgetPositionType.centerLeft,
       );
     } else {
       switch (optionType) {
@@ -192,49 +192,49 @@ class MPOverlayWindowFactory {
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.author:
           overlayWindowWidget = MPAuthorOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.context:
           overlayWindowWidget = MPContextOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.copyright:
           overlayWindowWidget = MPCopyrightOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.cs:
           overlayWindowWidget = MPCSOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.dateValue:
           overlayWindowWidget = MPDateValueOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.dimensionsValue:
           overlayWindowWidget = MPDimensionsOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.dist:
         case THCommandOptionType.explored:
@@ -242,7 +242,7 @@ class MPOverlayWindowFactory {
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.extend:
         case THCommandOptionType.from:
@@ -251,14 +251,14 @@ class MPOverlayWindowFactory {
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.id:
           overlayWindowWidget = MPIDOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.lineHeight:
         case THCommandOptionType.lSize:
@@ -266,7 +266,7 @@ class MPOverlayWindowFactory {
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.mark:
         case THCommandOptionType.text:
@@ -276,84 +276,84 @@ class MPOverlayWindowFactory {
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.orientation:
           overlayWindowWidget = MPAzimuthTypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.passageHeightValue:
           overlayWindowWidget = MPPassageHeightOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.plScale:
           overlayWindowWidget = MPPLScaleOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.pointHeightValue:
           overlayWindowWidget = MPPointHeightOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.projection:
           overlayWindowWidget = MPProjectionOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.scrap:
           overlayWindowWidget = MPScrapOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.scrapScale:
           overlayWindowWidget = MPScrapScaleOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.sketch:
           overlayWindowWidget = MPSketchOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.stationNames:
           overlayWindowWidget = MPStationNamesOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.stations:
           overlayWindowWidget = MPStationsOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.subtype:
           overlayWindowWidget = MPSubtypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
-            innerAnchorType: MPWidgetPositionType.leftCenter,
+            innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         default:
           throw Exception(
@@ -379,7 +379,7 @@ class MPOverlayWindowFactory {
         plaType: elementType,
         selectedType: selectedType,
         outerAnchorPosition: outerAnchorPosition,
-        innerAnchorType: MPWidgetPositionType.leftCenter,
+        innerAnchorType: MPWidgetPositionType.centerLeft,
       ),
     );
   }

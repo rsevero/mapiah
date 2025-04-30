@@ -131,7 +131,7 @@ class _MPMultipleEndControlPointsClickedWidgetState
       title: appLocalizations.mpMultipleEndControlPointsClickedTitle,
       overlayWindowType: MPOverlayWindowType.primary,
       outerAnchorPosition: widget.outerAnchorPosition,
-      innerAnchorType: MPWidgetPositionType.leftCenter,
+      innerAnchorType: MPWidgetPositionType.centerLeft,
       th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),

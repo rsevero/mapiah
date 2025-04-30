@@ -3,8 +3,8 @@ enum MPWidgetPositionType {
   bottomLeft,
   bottomRight,
   center,
-  leftCenter,
-  rightCenter,
+  centerLeft,
+  centerRight,
   topCenter,
   topLeft,
   topRight;

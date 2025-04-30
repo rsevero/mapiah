@@ -43,7 +43,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
       title: mpLocator.appLocalizations.th2FileEditPageChangeActiveScrapTitle,
       overlayWindowType: MPOverlayWindowType.primary,
       outerAnchorPosition: widget.outerAnchorPosition,
-      innerAnchorType: MPWidgetPositionType.rightCenter,
+      innerAnchorType: MPWidgetPositionType.centerRight,
       th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),

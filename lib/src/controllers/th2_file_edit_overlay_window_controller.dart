@@ -336,7 +336,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       MPWindowType.scrapOptions,
       shouldShowScrapOptions,
       outerAnchorPosition: outerAnchorPosition,
-      innerAnchorType: MPWidgetPositionType.rightCenter,
+      innerAnchorType: MPWidgetPositionType.centerRight,
     );
   }
 

@@ -75,10 +75,10 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
               case MPWidgetPositionType.center:
                 newPosition = widget.outerAnchorPosition -
                     (Offset(size.width, size.height) / 2);
-              case MPWidgetPositionType.leftCenter:
+              case MPWidgetPositionType.centerLeft:
                 newPosition =
                     widget.outerAnchorPosition - Offset(0, size.height / 2);
-              case MPWidgetPositionType.rightCenter:
+              case MPWidgetPositionType.centerRight:
                 newPosition = widget.outerAnchorPosition -
                     Offset(size.width, size.height / 2);
               case MPWidgetPositionType.topCenter:
