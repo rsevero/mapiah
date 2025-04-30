@@ -60,6 +60,8 @@ class _MPLineSegmentOptionsEditOverlayWindowWidgetState
         final List<Widget> widgets = [];
         final optionsStateMap = optionEditController.optionStateMap.entries;
 
+        optionEditController.optionsEditForLineSegments = true;
+
         widgets.add(
           MPLineSegmentTypeWidget(
             th2FileEditController: th2FileEditController,

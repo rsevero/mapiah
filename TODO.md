@@ -13,7 +13,7 @@ Version 0.2
 [X] - Different points and line representations
 [X] - Areas
 [X] - Scrap options
-[ ] - Line segment options
+[X] - Line segment options
 [X] - Show direction of lines
 [ ] - Add/delete line segments in existing lines
 [ ] - Release creation Linux

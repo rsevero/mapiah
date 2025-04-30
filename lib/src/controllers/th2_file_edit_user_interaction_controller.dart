@@ -48,14 +48,29 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void _prepareSetOption(THCommandOption option) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final mpSelectedElements = _th2FileEditController
-        .selectionController.mpSelectedElementsLogical.values;
+    final List<THElement> candidateElementsForNewOption;
 
-    if (mpSelectedElements.isEmpty) {
+    if (_th2FileEditController
+        .optionEditController.optionsEditForLineSegments) {
+      candidateElementsForNewOption = _th2FileEditController
+          .selectionController.selectedLineSegments.values
+          .toList();
+    } else {
+      final mpSelectedElements = _th2FileEditController
+          .selectionController.mpSelectedElementsLogical.values;
+
+      candidateElementsForNewOption = [];
+
+      for (final mpSelectedElement in mpSelectedElements) {
+        candidateElementsForNewOption
+            .add(mpSelectedElement.originalElementClone);
+      }
+    }
+
+    if (candidateElementsForNewOption.isEmpty) {
       /// TODO: set per session option default values.
-    } else if (mpSelectedElements.length == 1) {
-      final THElement selectedElement =
-          mpSelectedElements.first.originalElementClone;
+    } else if (candidateElementsForNewOption.length == 1) {
+      final THElement selectedElement = candidateElementsForNewOption.first;
 
       if ((selectedElement is! THHasOptionsMixin) ||
           (!isCtrlPressed &&
@@ -74,11 +89,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       _th2FileEditController.execute(setOptionCommand);
     } else {
-      final List<THElement> elements = [];
+      final List<THElement> actualElementsForNewOption = [];
 
-      for (final mpSelectedElement in mpSelectedElements) {
-        final THElement element = mpSelectedElement.originalElementClone;
-
+      for (final THElement element in candidateElementsForNewOption) {
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
                 MPCommandOptionAux.elementTypeSupportsOptionType(
@@ -87,14 +100,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
                 )) &&
             (!element.hasOption(option.type) ||
                 element.optionByType(option.type) != option)) {
-          elements.add(element);
+          actualElementsForNewOption.add(element);
         }
       }
 
-      if (elements.isNotEmpty) {
+      if (actualElementsForNewOption.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
             MPMultipleElementsCommand.setOption(
-          elements: elements,
+          elements: actualElementsForNewOption,
           option: option,
         );
 
@@ -104,14 +117,29 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   void _prepareUnsetOption(THCommandOptionType optionType) {
-    final mpSelectedElements = _th2FileEditController
-        .selectionController.mpSelectedElementsLogical.values;
+    final List<THElement> candidateElementsForNewOption;
 
-    if (mpSelectedElements.isEmpty) {
+    if (_th2FileEditController
+        .optionEditController.optionsEditForLineSegments) {
+      candidateElementsForNewOption = _th2FileEditController
+          .selectionController.selectedLineSegments.values
+          .toList();
+    } else {
+      final mpSelectedElements = _th2FileEditController
+          .selectionController.mpSelectedElementsLogical.values;
+
+      candidateElementsForNewOption = [];
+
+      for (final mpSelectedElement in mpSelectedElements) {
+        candidateElementsForNewOption
+            .add(mpSelectedElement.originalElementClone);
+      }
+    }
+
+    if (candidateElementsForNewOption.isEmpty) {
       /// TODO: set per session option default values.
-    } else if (mpSelectedElements.length == 1) {
-      final THElement selectedElement =
-          mpSelectedElements.first.originalElementClone;
+    } else if (candidateElementsForNewOption.length == 1) {
+      final THElement selectedElement = candidateElementsForNewOption.first;
 
       if ((selectedElement is! THHasOptionsMixin) ||
           (!selectedElement.hasOption(optionType))) {
@@ -127,9 +155,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       final List<int> parentMPIDs = [];
 
-      for (final mpSelectedElement in mpSelectedElements) {
-        final THElement element = mpSelectedElement.originalElementClone;
-
+      for (final element in candidateElementsForNewOption) {
         if ((element is THHasOptionsMixin) && element.hasOption(optionType)) {
           parentMPIDs.add(element.mpID);
         }

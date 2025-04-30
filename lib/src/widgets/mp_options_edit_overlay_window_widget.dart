@@ -56,6 +56,8 @@ class _MPOptionsEditOverlayWindowWidgetState
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
 
+        optionEditController.optionsEditForLineSegments = false;
+
         bool hasArea = false;
         bool hasLine = false;
         bool hasPoint = false;

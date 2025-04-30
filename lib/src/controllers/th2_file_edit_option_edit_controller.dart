@@ -33,6 +33,11 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @readonly
   int _optionsScrapMPID = -1;
 
+  /// Used to let TH2FileEditUserInteractionController.prepareSetOption() and
+  /// prepareUnsetOption() know if it should change selected elements options or
+  /// selected line segments options.
+  bool optionsEditForLineSegments = false;
+
   @action
   void updateOptionStateMap() {
     final mpSelectedElements = _th2FileEditController
