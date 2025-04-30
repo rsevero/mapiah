@@ -397,6 +397,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     _th2FileEditController.execute(setLineSegmentTypeCommand);
+    _th2FileEditController.selectionController
+        .setSelectedLineSegments(newLineSegments);
+    _th2FileEditController.selectionController
+        .updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
     _th2FileEditController.triggerOptionsListRedraw();
   }
