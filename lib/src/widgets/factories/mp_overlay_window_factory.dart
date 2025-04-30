@@ -84,12 +84,7 @@ class MPOverlayWindowFactory {
           innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
         );
       case MPWindowType.lineSegmentTypes:
-        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
-              th2FileEditController.selectionController
-                  .getClickedEndControlPointsBoundingBoxOnCanvas()
-                  .centerRight,
-            ) +
-            Offset(mpOverlayWindowOuterAnchorMargin, 0);
+        outerAnchorPosition += Offset(mpOverlayWindowOuterAnchorMargin, 0);
         overlayWindowWidget = MPLineSegmentTypeOptionsOverlayWindowWidget(
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,

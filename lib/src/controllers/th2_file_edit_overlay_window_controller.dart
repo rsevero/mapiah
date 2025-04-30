@@ -58,6 +58,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     MPWindowType.availableScraps,
     MPWindowType.commandOptions,
     MPWindowType.lineSegmentOptions,
+    MPWindowType.lineSegmentTypes,
     MPWindowType.multipleElementsClicked,
     MPWindowType.multipleEndControlPointsClicked,
     MPWindowType.optionChoices,
@@ -352,6 +353,16 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     setShowOverlayWindow(
       MPWindowType.lineSegmentOptions,
       shouldShowLineSegmentOptions,
+    );
+  }
+
+  void perfomToggleLineSegmentTypeOptionsOverlayWindow({
+    required Offset outerAnchorPosition,
+  }) {
+    setShowOverlayWindow(
+      MPWindowType.lineSegmentTypes,
+      !_isOverlayWindowShown[MPWindowType.lineSegmentTypes]!,
+      outerAnchorPosition: outerAnchorPosition,
     );
   }
 }

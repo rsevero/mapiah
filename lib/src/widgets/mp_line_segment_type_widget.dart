@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -50,7 +51,18 @@ class MPLineSegmentTypeWidget extends StatelessWidget {
   }
 
   void _onLineSegmentTypeTap(BuildContext context) {
+    Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(
+      widgetContext: context,
+      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+    );
+
+    final Offset outerAnchorPosition = boundingBox == null
+        ? th2FileEditController.screenBoundingBox.center
+        : boundingBox.centerRight;
+
     th2FileEditController.overlayWindowController
-        .perfomToggleLineSegmentOptionsOverlayWindow();
+        .perfomToggleLineSegmentTypeOptionsOverlayWindow(
+      outerAnchorPosition: outerAnchorPosition,
+    );
   }
 }
