@@ -120,16 +120,16 @@ class _MPLineSegmentOptionsEditOverlayWindowWidgetState
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
     );
 
-    /// Use the left of this widget and the vertical center of the child (taped
+    /// Use the right of this widget and the vertical center of the child (taped
     /// option) widget as the outer anchor position for the option edit window.
-    final Offset anchorPosition =
+    final Offset outerAnchorPosition =
         (thisBoundingBox == null) || (childBoundingBox == null)
             ? th2FileEditController.screenBoundingBox.center
-            : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
+            : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
 
     th2FileEditController.optionEditController.performToggleOptionShownStatus(
       optionType: type,
-      outerAnchorPosition: anchorPosition,
+      outerAnchorPosition: outerAnchorPosition,
     );
   }
 }
