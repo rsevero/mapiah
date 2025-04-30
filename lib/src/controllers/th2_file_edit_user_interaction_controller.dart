@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -8,7 +8,6 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
@@ -354,35 +353,11 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             currentLineSegment,
             thFile,
           );
-
-          final Offset start = previousLineSegment.endPoint.coordinates;
-          final Offset end = currentLineSegment.endPoint.coordinates;
-          final double dxThird = (end.dx - start.dx) / 3;
-          final double dyThird = (end.dy - start.dy) / 3;
-          final Offset controlPoint1 = Offset(
-            start.dx + dxThird,
-            start.dy + dyThird,
-          );
-          final Offset controlPoint2 = Offset(
-            start.dx + 2 * dxThird,
-            start.dy + 2 * dyThird,
-          );
-
           final THBezierCurveLineSegment newLineSegment =
-              THBezierCurveLineSegment.forCWJM(
-            mpID: currentLineSegment.mpID,
-            parentMPID: currentLineSegment.parentMPID,
-            endPoint: currentLineSegment.endPoint,
-            controlPoint1: THPositionPart(
-              coordinates: controlPoint1,
-              decimalPositions: decimalPositions,
-            ),
-            controlPoint2: THPositionPart(
-              coordinates: controlPoint2,
-              decimalPositions: decimalPositions,
-            ),
-            optionsMap: currentLineSegment.optionsMap,
-            originalLineInTH2File: '',
+              MPEditElement.getBezierCurveLineSegmentFromStraightLineSegment(
+            start: previousLineSegment.endPoint.coordinates,
+            straightLineSegment: (currentLineSegment as THStraightLineSegment),
+            decimalPositions: decimalPositions,
           );
 
           newLineSegments.add(newLineSegment);

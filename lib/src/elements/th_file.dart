@@ -396,17 +396,17 @@ class THFile
     }
 
     switch (element) {
-      case THPoint _:
-        _pointsMPIDs.remove(element.mpID);
-        _drawableElementMPIDs.remove(element.mpID);
-      case THLine _:
-        _linesMPIDs.remove(element.mpID);
-        _drawableElementMPIDs.remove(element.mpID);
       case THArea _:
         _clearAreaXLineInfo(element);
         _areasMPIDs.remove(element.mpID);
       case THAreaBorderTHID _:
         _clearAreaXLineInfo(element);
+      case THLine _:
+        _linesMPIDs.remove(element.mpID);
+        _drawableElementMPIDs.remove(element.mpID);
+      case THPoint _:
+        _pointsMPIDs.remove(element.mpID);
+        _drawableElementMPIDs.remove(element.mpID);
       case THScrap _:
         _scrapMPIDs.remove(element.mpID);
       default:

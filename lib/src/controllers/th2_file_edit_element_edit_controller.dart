@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -601,6 +603,68 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     parentElement.removeOption(optionType);
     updateOptionEdited();
+  }
+
+  void _removeLineSegmentFromLine(
+    int lineSegmentMPID,
+  ) {
+    final THLineSegment lineSegment =
+        _thFile.lineSegmentByMPID(lineSegmentMPID);
+    final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
+    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+    final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
+
+    if ((lineSegmentIndex == 0) ||
+        (lineSegmentIndex == lineSegments.length - 1)) {
+      _thFile.removeElement(lineSegment);
+    } else {
+      final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
+      final bool deletedLineSegmentIsStraight =
+          lineSegment is THStraightLineSegment;
+      final bool nextLineSegmentIsStraight =
+          nextLineSegment is THStraightLineSegment;
+
+      if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
+        _thFile.removeElement(lineSegment);
+      } else {
+        final THBezierCurveLineSegment deletedLineSegmentBezier =
+            deletedLineSegmentIsStraight
+                ? MPEditElement
+                    .getBezierCurveLineSegmentFromStraightLineSegment(
+                    start: line
+                        .getPreviousLineSegment(lineSegment, _thFile)
+                        .endPoint
+                        .coordinates,
+                    straightLineSegment: lineSegment,
+                    decimalPositions:
+                        _th2FileEditController.currentDecimalPositions,
+                  )
+                : lineSegment as THBezierCurveLineSegment;
+        final THBezierCurveLineSegment nextLineSegmentBezier =
+            nextLineSegmentIsStraight
+                ? MPEditElement
+                    .getBezierCurveLineSegmentFromStraightLineSegment(
+                    start: lineSegment.endPoint.coordinates,
+                    straightLineSegment: nextLineSegment,
+                    decimalPositions:
+                        _th2FileEditController.currentDecimalPositions,
+                  )
+                : nextLineSegment as THBezierCurveLineSegment;
+        final THBezierCurveLineSegment newLineSegment =
+            THBezierCurveLineSegment.forCWJM(
+          mpID: nextLineSegmentBezier.mpID,
+          parentMPID: nextLineSegmentBezier.parentMPID,
+          controlPoint1: deletedLineSegmentBezier.controlPoint1,
+          controlPoint2: nextLineSegmentBezier.controlPoint2,
+          endPoint: nextLineSegmentBezier.endPoint,
+          optionsMap: nextLineSegmentBezier.optionsMap,
+          originalLineInTH2File: '',
+        );
+
+        _thFile.removeElement(lineSegment);
+        _thFile.substituteElement(newLineSegment);
+      }
+    }
   }
 }
 
