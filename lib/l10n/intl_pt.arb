@@ -48,6 +48,8 @@
   "mpCommandDescriptionEditBezierCurve": "Editar curva Bézier",
   "mpCommandDescriptionEditLine": "Editar linha",
   "mpCommandDescriptionEditLineSegment": "Editar segmento de linha",
+  "mpCommandDescriptionEditLineSegmentsType": "Editar tipo de segmentos de linha",
+  "mpCommandDescriptionEditLineSegmentType": "Editar tipo de segmento de linha",
   "mpCommandDescriptionEditLinesType": "Editar tipo de linhas",
   "mpCommandDescriptionEditLineType": "Editar tipo de linha",
   "mpCommandDescriptionEditPointsType": "Editar tipo de pontos",

@@ -53,7 +53,10 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
                   groupValue: groupValue,
                   onChanged: (String? newValue) {
                     if (newValue != null) {
-                      _onChanged(context, newValue);
+                      _onChanged(
+                        context,
+                        MPSelectedLineSegmentType.values.byName(newValue),
+                      );
                     }
                   },
                   visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -68,12 +71,12 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
     );
   }
 
-  void _onChanged(BuildContext context, String newValue) {
+  void _onChanged(BuildContext context, MPSelectedLineSegmentType newValue) {
     th2FileEditController.userInteractionController.prepareSetLineSegmentType(
-      type: newValue,
+      selectedLineSegmentType: newValue,
     );
     th2FileEditController.overlayWindowController.setShowOverlayWindow(
-      MPWindowType.lineSegmentOptions,
+      MPWindowType.lineSegmentTypes,
       false,
     );
   }

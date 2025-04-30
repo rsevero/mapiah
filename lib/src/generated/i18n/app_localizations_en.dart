@@ -142,6 +142,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionEditLineSegment => 'Edit line segment';
 
   @override
+  String get mpCommandDescriptionEditLineSegmentsType => 'Edit multiple line segments type';
+
+  @override
+  String get mpCommandDescriptionEditLineSegmentType => 'Edit line segment type';
+
+  @override
   String get mpCommandDescriptionEditLinesType => 'Edit multiple lines type';
 
   @override

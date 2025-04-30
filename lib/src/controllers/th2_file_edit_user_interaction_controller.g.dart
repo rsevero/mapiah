@@ -85,13 +85,15 @@ mixin _$TH2FileEditUserInteractionController
   }
 
   @override
-  void prepareSetLineSegmentType({required String type}) {
+  void prepareSetLineSegmentType(
+      {required MPSelectedLineSegmentType selectedLineSegmentType}) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
             name:
                 'TH2FileEditUserInteractionControllerBase.prepareSetLineSegmentType');
     try {
-      return super.prepareSetLineSegmentType(type: type);
+      return super.prepareSetLineSegmentType(
+          selectedLineSegmentType: selectedLineSegmentType);
     } finally {
       _$TH2FileEditUserInteractionControllerBaseActionController
           .endAction(_$actionInfo);

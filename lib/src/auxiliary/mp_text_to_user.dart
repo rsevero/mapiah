@@ -301,6 +301,12 @@ class MPTextToUser {
         localizations.mpCommandDescriptionEditLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLineSegment] =
         localizations.mpCommandDescriptionEditLineSegment;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.editLineSegmentsType] =
+        localizations.mpCommandDescriptionEditLineSegmentsType;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.editLineSegmentType] =
+        localizations.mpCommandDescriptionEditLineSegmentType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLinesType] =
         localizations.mpCommandDescriptionEditLinesType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLineType] =

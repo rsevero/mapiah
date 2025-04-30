@@ -335,6 +335,18 @@ abstract class AppLocalizations {
   /// **'Edit line segment'**
   String get mpCommandDescriptionEditLineSegment;
 
+  /// The description for the edit line segments type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit multiple line segments type'**
+  String get mpCommandDescriptionEditLineSegmentsType;
+
+  /// The description for the edit line segment type command
+  ///
+  /// In en, this message translates to:
+  /// **'Edit line segment type'**
+  String get mpCommandDescriptionEditLineSegmentType;
+
   /// The description for the edit lines type command
   ///
   /// In en, this message translates to:

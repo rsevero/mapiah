@@ -9,6 +9,8 @@ enum MPCommandDescriptionType {
   editBezierCurve,
   editLine,
   editLineSegment,
+  editLineSegmentsType,
+  editLineSegmentType,
   editLinesType,
   editLineType,
   editPointsType,

@@ -247,6 +247,18 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionEditLineSegmentsType": "Edit multiple line segments type",
+  "@mpCommandDescriptionEditLineSegmentsType": {
+    "description": "The description for the edit line segments type command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionEditLineSegmentType": "Edit line segment type",
+  "@mpCommandDescriptionEditLineSegmentType": {
+    "description": "The description for the edit line segment type command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionEditLinesType": "Edit multiple lines type",
   "@mpCommandDescriptionEditLinesType": {
     "description": "The description for the edit lines type command",

@@ -142,6 +142,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionEditLineSegment => 'Editar segmento de linha';
 
   @override
+  String get mpCommandDescriptionEditLineSegmentsType => 'Editar tipo de segmentos de linha';
+
+  @override
+  String get mpCommandDescriptionEditLineSegmentType => 'Editar tipo de segmento de linha';
+
+  @override
   String get mpCommandDescriptionEditLinesType => 'Editar tipo de linhas';
 
   @override

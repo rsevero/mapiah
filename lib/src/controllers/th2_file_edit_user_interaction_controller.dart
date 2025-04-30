@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
@@ -282,44 +285,120 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   @action
-  void prepareSetLineSegmentType({required String type}) {
-    // final Iterable<THLineSegment> selectedLineSegments =
-    //     _th2FileEditController.selectionController.selectedLineSegments.values;
-    // final TH2FileEditElementEditController elementEditController =
-    //     _th2FileEditController.elementEditController;
+  void prepareSetLineSegmentType({
+    required MPSelectedLineSegmentType selectedLineSegmentType,
+  }) {
+    if ((selectedLineSegmentType == MPSelectedLineSegmentType.mixed) ||
+        (selectedLineSegmentType == MPSelectedLineSegmentType.none)) {
+      return;
+    }
 
-    // MPCommand setLineSegmentTypeCommand;
-    // List<int> mpIDs = [];
+    final Iterable<THLineSegment> selectedLineSegments =
+        _th2FileEditController.selectionController.selectedLineSegments.values;
+    final Set<THLineSegment> willChangeLineSegments = {};
+    final THElementType elementType = selectedLineSegmentType ==
+            MPSelectedLineSegmentType.bezierCurveLineSegment
+        ? THElementType.bezierCurveLineSegment
+        : THElementType.straightLineSegment;
 
-    // for (final mpSelectedElement in mpSelectedElements) {
-    //   if ((mpSelectedElement.originalElementClone is! THLine) ||
-    //       (mpSelectedElement.originalElementClone as THLine).lineSegmentType ==
-    //           type) {
-    //     continue;
-    //   }
-    //   mpIDs.add(mpSelectedElement.originalElementClone.mpID);
-    //   elementEditController.setUsedLineSegmentType(type);
-    // }
+    for (final THLineSegment lineSegment in selectedLineSegments) {
+      if (lineSegment.elementType == elementType) {
+        continue;
+      }
+      willChangeLineSegments.add(lineSegment);
+    }
 
-    // if (mpIDs.isEmpty) {
-    //   return;
-    // }
+    if (willChangeLineSegments.isEmpty) {
+      return;
+    }
 
-    // if (mpIDs.length == 1) {
-    //   setLineSegmentTypeCommand = MPEditLineSegmentTypeCommand(
-    //     lineMPID: mpIDs.first,
-    //     newLineSegmentType: type,
-    //   );
-    // } else {
-    //   setLineSegmentTypeCommand =
-    //       MPMultipleElementsCommand.editLinesSegmentType(
-    //     newLineSegmentType: type,
-    //     lineMPIDs: mpIDs,
-    //   );
-    // }
+    final List<THLineSegment> newLineSegments = [];
 
-    // _th2FileEditController.execute(setLineSegmentTypeCommand);
-    // _th2FileEditController.triggerSelectedElementsRedraw();
+    switch (selectedLineSegmentType) {
+      case MPSelectedLineSegmentType.bezierCurveLineSegment:
+        final THFile thFile = _th2FileEditController.thFile;
+        final THLine line = thFile.lineByMPID(
+          willChangeLineSegments.first.parentMPID,
+        );
+        final int decimalPositions =
+            _th2FileEditController.currentDecimalPositions;
+
+        for (final THLineSegment currentLineSegment in willChangeLineSegments) {
+          final THLineSegment previousLineSegment = line.getPreviousLineSegment(
+            currentLineSegment,
+            thFile,
+          );
+
+          final Offset start = previousLineSegment.endPoint.coordinates;
+          final Offset end = currentLineSegment.endPoint.coordinates;
+          final double dxThird = (end.dx - start.dx) / 3;
+          final double dyThird = (end.dy - start.dy) / 3;
+          final Offset controlPoint1 = Offset(
+            start.dx + dxThird,
+            start.dy + dyThird,
+          );
+          final Offset controlPoint2 = Offset(
+            start.dx + 2 * dxThird,
+            start.dy + 2 * dyThird,
+          );
+
+          final THBezierCurveLineSegment newLineSegment =
+              THBezierCurveLineSegment.forCWJM(
+            mpID: currentLineSegment.mpID,
+            parentMPID: currentLineSegment.parentMPID,
+            endPoint: currentLineSegment.endPoint,
+            controlPoint1: THPositionPart(
+              coordinates: controlPoint1,
+              decimalPositions: decimalPositions,
+            ),
+            controlPoint2: THPositionPart(
+              coordinates: controlPoint2,
+              decimalPositions: decimalPositions,
+            ),
+            optionsMap: currentLineSegment.optionsMap,
+            originalLineInTH2File: '',
+          );
+
+          newLineSegments.add(newLineSegment);
+        }
+      case MPSelectedLineSegmentType.straightLineSegment:
+        for (final THLineSegment currentLineSegment in willChangeLineSegments) {
+          final THStraightLineSegment newLineSegment =
+              THStraightLineSegment.forCWJM(
+            mpID: currentLineSegment.mpID,
+            parentMPID: currentLineSegment.parentMPID,
+            endPoint: currentLineSegment.endPoint,
+            optionsMap: currentLineSegment.optionsMap,
+            originalLineInTH2File: '',
+          );
+
+          newLineSegments.add(newLineSegment);
+        }
+      default:
+        return;
+    }
+
+    final MPCommand setLineSegmentTypeCommand;
+
+    if (newLineSegments.length == 1) {
+      final THLineSegment newLineSegment = newLineSegments.first;
+
+      setLineSegmentTypeCommand = MPEditLineSegmentCommand(
+        newLineSegment: newLineSegment,
+        descriptionType: MPCommandDescriptionType.editLineSegmentType,
+      );
+    } else {
+      setLineSegmentTypeCommand =
+          MPMultipleElementsCommand.editLinesSegmentType(
+        newLineSegments: newLineSegments,
+      );
+
+      _th2FileEditController.execute(setLineSegmentTypeCommand);
+    }
+
+    _th2FileEditController.execute(setLineSegmentTypeCommand);
+    _th2FileEditController.triggerEditLineRedraw();
+    _th2FileEditController.triggerOptionsListRedraw();
   }
 
   @action

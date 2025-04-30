@@ -201,6 +201,22 @@ class MPMultipleElementsCommand extends MPCommand {
     }
   }
 
+  MPMultipleElementsCommand.editLinesSegmentType({
+    required List<THLineSegment> newLineSegments,
+    super.descriptionType = MPCommandDescriptionType.editLineSegmentsType,
+  }) {
+    commandsList = [];
+
+    for (final THLineSegment newLineSegment in newLineSegments) {
+      final MPCommand setLineSegmentTypeCommand = MPEditLineSegmentCommand(
+        newLineSegment: newLineSegment,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(setLineSegmentTypeCommand);
+    }
+  }
+
   MPMultipleElementsCommand.moveLinesFromDeltaOnCanvas({
     required Iterable<MPSelectedLine> lines,
     required Offset deltaOnCanvas,
