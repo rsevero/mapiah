@@ -99,6 +99,7 @@ class THLine extends THElement
     map.addAll({
       'lineType': lineType.name,
       'childrenMPID': childrenMPID.toList(),
+      'lineSegmentMPIDs': _lineSegmentMPIDs,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
     });
 
@@ -113,7 +114,7 @@ class THLine extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       lineType: THLineType.values.byName(map['lineType']),
       childrenMPID: Set<int>.from(map['childrenMPID']),
-      lineSegmentMPIDs: List<int>.from(map['childrenMPID']),
+      lineSegmentMPIDs: List<int>.from(map['lineSegmentMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
