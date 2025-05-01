@@ -601,7 +601,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       MPWindowType.optionChoices,
       false,
     );
-    _th2FileEditController.optionEditController.updateOptionStateMap();
+
+    if (_th2FileEditController
+        .optionEditController.optionsEditForLineSegments) {
+      _th2FileEditController.optionEditController
+          .updateElementOptionMapForLineSegments();
+    } else {
+      _th2FileEditController.optionEditController.updateOptionStateMap();
+    }
   }
 
   @action
