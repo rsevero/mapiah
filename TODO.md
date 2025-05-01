@@ -44,3 +44,5 @@ Version 0.3
 [ ] - Drag overlay windows
 [ ] - Copy/Paste
 [ ] - Show status message listing whats selected in 'single line edit' mode
+[ ] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
+
