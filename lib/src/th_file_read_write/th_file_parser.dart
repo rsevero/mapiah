@@ -1236,7 +1236,7 @@ class THFileParser {
 
     _checkParsedListAsPoint(_currentSpec[1]);
 
-    final filename = _parseTHString(_currentSpec[0]);
+    final String filename = _parseTHString(_currentSpec[0]);
 
     THSketchCommandOption.fromString(
       optionParent: _currentHasOptions,

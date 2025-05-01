@@ -18,7 +18,7 @@ class THSketchCommandOption extends THCommandOption {
   THSketchCommandOption.fromString({
     required super.optionParent,
     required String filename,
-    required List<String> pointList,
+    required List<dynamic> pointList,
     super.originalLineInTH2File = '',
   }) : super() {
     _filename = THStringPart(content: filename);
@@ -38,7 +38,7 @@ class THSketchCommandOption extends THCommandOption {
   @override
   THCommandOptionType get type => THCommandOptionType.sketch;
 
-  void pointFromStringList(List<String> list) {
+  void pointFromStringList(List<dynamic> list) {
     point = THPositionPart.fromStringList(list: list);
   }
 
