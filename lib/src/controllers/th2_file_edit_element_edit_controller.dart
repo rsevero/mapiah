@@ -803,8 +803,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           );
           addLineSegmentsCommands.add(
             MPEditLineSegmentCommand(
-              newLineSegment: newLineSegments[1].copyWith(
-                mpID: lineSegment.mpID,
+              newLineSegment: lineSegment.copyWith(
+                controlPoint1: newLineSegments[1].controlPoint1,
+                controlPoint2: newLineSegments[1].controlPoint2,
               ),
             ),
           );
