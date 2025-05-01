@@ -128,8 +128,9 @@ class THFile
   }
 
   @override
-  bool operator ==(covariant THFile other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THFile) return false;
 
     final Function deepEq = const DeepCollectionEquality().equals;
 

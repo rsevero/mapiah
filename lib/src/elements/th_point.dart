@@ -241,14 +241,12 @@ class THPoint extends THElement
   }
 
   @override
-  bool operator ==(covariant THPoint other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THPoint) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.position == position &&
+    return other.position == position &&
         other.pointType == pointType &&
         const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
   }

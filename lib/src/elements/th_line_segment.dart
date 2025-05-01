@@ -84,13 +84,9 @@ abstract class THLineSegment extends THElement
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   });
 
-  @protected
-  bool equalsBase(THLineSegment other) {
-    return mpID == other.mpID &&
-        parentMPID == other.parentMPID &&
-        sameLineComment == other.sameLineComment &&
-        originalLineInTH2File == other.originalLineInTH2File &&
-        endPoint == other.endPoint &&
+  @override
+  bool equalsBase(Object other) {
+    return endPoint == (other as THLineSegment).endPoint &&
         mapEquals(optionsMap, other.optionsMap);
   }
 
@@ -98,6 +94,7 @@ abstract class THLineSegment extends THElement
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! THLineSegment) return false;
+    if (!super.equalsBase(other)) return false;
 
     return equalsBase(other);
   }

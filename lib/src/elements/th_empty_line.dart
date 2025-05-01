@@ -49,6 +49,15 @@ class THEmptyLine extends THElement {
   }
 
   @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THEmptyLine) return false;
+
+    return equalsBase(other);
+  }
+
+  @override
   bool isSameClass(Object object) {
     return object is THEmptyLine;
   }

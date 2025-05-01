@@ -116,14 +116,20 @@ abstract class THElement {
     };
   }
 
-  @override
-  bool operator ==(covariant THElement other) {
-    if (identical(this, other)) return true;
-
-    return other.mpID == mpID &&
+  @protected
+  bool equalsBase(Object other) {
+    return (other as THElement).mpID == mpID &&
         other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THElement) return false;
+
+    return equalsBase(other);
   }
 
   @override

@@ -1,24 +1,21 @@
 part of 'th_element.dart';
 
 class THUnrecognizedCommand extends THElement {
-  late final List<dynamic> _value;
+  final List<dynamic> value;
 
   THUnrecognizedCommand.forCWJM({
     required super.mpID,
     required super.parentMPID,
     super.sameLineComment,
-    required List<dynamic> value,
+    required this.value,
     required super.originalLineInTH2File,
-  }) : super.forCWJM() {
-    _value = value;
-  }
+  }) : super.forCWJM();
 
   THUnrecognizedCommand({
     required super.parentMPID,
-    required List<dynamic> value,
+    required this.value,
     super.originalLineInTH2File = '',
-  })  : _value = value,
-        super.addToParent();
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.unrecognizedCommand;
@@ -28,7 +25,7 @@ class THUnrecognizedCommand extends THElement {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'value': _value,
+      'value': value,
     });
 
     return map;
@@ -65,30 +62,24 @@ class THUnrecognizedCommand extends THElement {
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      value: value ?? _value,
+      value: value ?? this.value,
     );
   }
 
   @override
-  bool operator ==(covariant THUnrecognizedCommand other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THUnrecognizedCommand) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other._value == _value;
+    return other.value == value;
   }
 
   @override
-  int get hashCode => super.hashCode ^ _value.hashCode;
+  int get hashCode => super.hashCode ^ value.hashCode;
 
   @override
   bool isSameClass(Object object) {
     return object is THUnrecognizedCommand;
-  }
-
-  get value {
-    return _value;
   }
 }

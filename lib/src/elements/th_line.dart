@@ -151,16 +151,14 @@ class THLine extends THElement
   }
 
   @override
-  bool operator ==(covariant THLine other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THLine) return false;
+    if (!super.equalsBase(other)) return false;
 
     final Function deepEq = const DeepCollectionEquality().equals;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.lineType == lineType &&
+    return other.lineType == lineType &&
         deepEq(other.childrenMPID, childrenMPID) &&
         deepEq(other.lineSegmentMPIDs, _lineSegmentMPIDs) &&
         deepEq(other.optionsMap, optionsMap);

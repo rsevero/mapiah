@@ -109,16 +109,14 @@ class THArea extends THElement
   }
 
   @override
-  bool operator ==(covariant THArea other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THArea) return false;
+    if (!super.equalsBase(other)) return false;
 
     final Function deepEq = const DeepCollectionEquality().equals;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.areaType == areaType &&
+    return other.areaType == areaType &&
         deepEq(other.childrenMPID, childrenMPID) &&
         deepEq(other.optionsMap, optionsMap);
   }

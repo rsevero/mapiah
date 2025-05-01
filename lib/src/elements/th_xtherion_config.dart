@@ -74,15 +74,12 @@ class THXTherionConfig extends THElement {
   }
 
   @override
-  bool operator ==(covariant THXTherionConfig other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THXTherionConfig) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.name == name &&
-        other.value == value;
+    return other.name == name && other.value == value;
   }
 
   @override

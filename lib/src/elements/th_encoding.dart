@@ -67,14 +67,12 @@ class THEncoding extends THElement {
   }
 
   @override
-  bool operator ==(covariant THEncoding other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THEncoding) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.encoding == encoding;
+    return other.encoding == encoding;
   }
 
   @override

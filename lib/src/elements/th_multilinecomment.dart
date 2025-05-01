@@ -66,14 +66,13 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   }
 
   @override
-  bool operator ==(covariant THMultiLineComment other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THMultiLineComment) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        const DeepCollectionEquality().equals(other.childrenMPID, childrenMPID);
+    return const DeepCollectionEquality()
+        .equals(other.childrenMPID, childrenMPID);
   }
 
   @override

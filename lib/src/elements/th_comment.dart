@@ -67,14 +67,12 @@ class THComment extends THElement {
   }
 
   @override
-  bool operator ==(covariant THComment other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THComment) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.content == content;
+    return other.content == content;
   }
 
   @override
