@@ -666,7 +666,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if ((lineSegmentIndex == 0) ||
         (lineSegmentIndex == lineSegments.length - 1)) {
-      return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentIndex);
+      return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentMPID);
     } else {
       final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
       final bool deletedLineSegmentIsStraight =
@@ -675,7 +675,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           nextLineSegment is THStraightLineSegment;
 
       if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
-        return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentIndex);
+        return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentMPID);
       } else {
         final THBezierCurveLineSegment deletedLineSegmentBezier =
             deletedLineSegmentIsStraight
