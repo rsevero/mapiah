@@ -9,7 +9,6 @@ void main() {
   group('line json', () {
     mpLocator.mpGeneralController.reset();
     final parser = THFileParser();
-    // final writer = THFileWriter();
 
     const successes = [
       {
@@ -18,12 +17,12 @@ void main() {
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line wall
-  endline
+line wall
+endline
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall","lineType":"wall","childrenMPID":[4],"optionsMap":{}}''',
+            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall","lineType":"wall","childrenMPID":[4],"lineSegmentMPIDs":[],"optionsMap":{}}''',
       },
     ];
 
