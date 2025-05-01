@@ -67,6 +67,7 @@
   "mpCommandDescriptionRemoveElements": "Apagar elementos",
   "mpCommandDescriptionRemoveLine": "Apagar linha",
   "mpCommandDescriptionRemoveLineSegment": "Apagar segmento de linha",
+  "mpCommandDescriptionRemoveLineSegments": "Apagar segmentos de linha",
   "mpCommandDescriptionRemoveOptionFromElement": "Remover opção",
   "mpCommandDescriptionRemoveOptionFromElements": "Remover opção de diversos elementos",
   "mpCommandDescriptionRemovePoint": "Apagar ponto",

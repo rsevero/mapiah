@@ -225,6 +225,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
+  void updateSelectedLineSegment(THLineSegment lineSegment) {
+    if (_selectedLineSegments.containsKey(lineSegment.mpID)) {
+      _selectedLineSegments[lineSegment.mpID] = lineSegment;
+    }
+  }
+
   void updateSelectedElementsClones() {
     for (final MPSelectedElement selectedElement
         in _mpSelectedElementsLogical.values) {
@@ -776,6 +782,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final THLineSegment lineSegment in lineSegments) {
       _selectedLineSegments[lineSegment.mpID] = lineSegment;
     }
+  }
+
+  void removeSelectedLineSegment(THLineSegment lineSegment) {
+    _selectedLineSegments.remove(lineSegment.mpID);
   }
 
   void removeSelectedLineSegments(List<THLineSegment> lineSegments) {

@@ -199,6 +199,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionRemoveLineSegment => 'Remove line segment';
 
   @override
+  String get mpCommandDescriptionRemoveLineSegments => 'Remove line segments';
+
+  @override
   String get mpCommandDescriptionRemoveOptionFromElement => 'Remove option';
 
   @override

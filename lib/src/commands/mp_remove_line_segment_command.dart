@@ -39,6 +39,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
         th2FileEditController.thFile.lineSegmentByMPID(lineSegmentMPID);
     final MPAddLineSegmentCommand oppositeCommand = MPAddLineSegmentCommand(
       newLineSegment: newLineSegment,
+      line: th2FileEditController.thFile.lineByMPID(newLineSegment.parentMPID),
       descriptionType: descriptionType,
     );
 

@@ -9,7 +9,7 @@ class THLine extends THElement
     with THHasOptionsMixin, THIsParentMixin, MPBoundingBox
     implements THHasPLATypeMixin {
   final THLineType lineType;
-  final Set<int> _lineSegmentMPIDs = {};
+  final List<int> _lineSegmentMPIDs;
 
   static final _lineTypes = <String>{
     'abyss-entrance',
@@ -59,9 +59,11 @@ class THLine extends THElement
     required super.sameLineComment,
     required this.lineType,
     required Set<int> childrenMPID,
+    required List<int> lineSegmentMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
-  }) : super.forCWJM() {
+  })  : _lineSegmentMPIDs = lineSegmentMPIDs,
+        super.forCWJM() {
     this.childrenMPID.addAll(childrenMPID);
     addOptionsMap(optionsMap);
   }
@@ -72,6 +74,7 @@ class THLine extends THElement
     super.sameLineComment,
     super.originalLineInTH2File = '',
   })  : lineType = THLineType.fromFileString(lineTypeString),
+        _lineSegmentMPIDs = [],
         super.addToParent();
 
   THLine({
@@ -79,7 +82,8 @@ class THLine extends THElement
     required this.lineType,
     super.sameLineComment,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  })  : _lineSegmentMPIDs = [],
+        super.addToParent();
 
   static bool hasLineType(String aLineType) {
     return _lineTypes.contains(aLineType);
@@ -109,6 +113,7 @@ class THLine extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       lineType: THLineType.values.byName(map['lineType']),
       childrenMPID: Set<int>.from(map['childrenMPID']),
+      lineSegmentMPIDs: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
@@ -126,6 +131,7 @@ class THLine extends THElement
     String? originalLineInTH2File,
     THLineType? lineType,
     Set<int>? childrenMPID,
+    List<int>? lineSegmentMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THLine.forCWJM(
@@ -138,6 +144,7 @@ class THLine extends THElement
           originalLineInTH2File ?? this.originalLineInTH2File,
       lineType: lineType ?? this.lineType,
       childrenMPID: childrenMPID ?? this.childrenMPID,
+      lineSegmentMPIDs: lineSegmentMPIDs ?? _lineSegmentMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
     );
   }
@@ -154,6 +161,7 @@ class THLine extends THElement
         other.originalLineInTH2File == originalLineInTH2File &&
         other.lineType == lineType &&
         deepEq(other.childrenMPID, childrenMPID) &&
+        deepEq(other.lineSegmentMPIDs, _lineSegmentMPIDs) &&
         deepEq(other.optionsMap, optionsMap);
   }
 
@@ -163,6 +171,7 @@ class THLine extends THElement
       Object.hash(
         lineType,
         childrenMPID,
+        _lineSegmentMPIDs,
         optionsMap,
       );
 
@@ -273,11 +282,22 @@ class THLine extends THElement
     _lineSegmentMPIDs.add(lineSegmentMPID);
   }
 
+  void insertLineSegmentMPID(
+    int lineSegmentMPID,
+    int index,
+  ) {
+    _lineSegmentMPIDs.insert(index, lineSegmentMPID);
+  }
+
+  int getLineSegmentIndexByMPID(int lineSegmentMPID) {
+    return _lineSegmentMPIDs.indexOf(lineSegmentMPID);
+  }
+
   void removeLineSegmentMPID(int lineSegmentMPID) {
     _lineSegmentMPIDs.remove(lineSegmentMPID);
   }
 
-  Set<int> get lineSegmentMPIDs => _lineSegmentMPIDs;
+  List<int> get lineSegmentMPIDs => _lineSegmentMPIDs;
 
   List<THLineSegment> getLineSegments(THFile thFile) {
     final List<THLineSegment> lineSegments = [];

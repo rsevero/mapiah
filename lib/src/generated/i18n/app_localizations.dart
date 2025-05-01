@@ -449,6 +449,12 @@ abstract class AppLocalizations {
   /// **'Remove line segment'**
   String get mpCommandDescriptionRemoveLineSegment;
 
+  /// The description for the remove line segments command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove line segments'**
+  String get mpCommandDescriptionRemoveLineSegments;
+
   /// The description for the remove option command
   ///
   /// In en, this message translates to:

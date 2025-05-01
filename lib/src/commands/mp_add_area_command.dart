@@ -32,6 +32,8 @@ class MPAddAreaCommand extends MPCommand {
 
     addLinesCommand = MPMultipleElementsCommand.forCWJM(
       commandsList: addLineCommands,
+      completionType:
+          MPMultipleElementsCommandCompletionType.elementsListChanged,
       descriptionType: descriptionType,
     );
   }

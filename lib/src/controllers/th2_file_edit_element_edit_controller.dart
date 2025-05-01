@@ -232,6 +232,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         .addSelectableElement(modifiedElement);
     _th2FileEditController.selectionController
         .updateSelectedElementClone(modifiedElement.mpID);
+    if (modifiedElement is THLineSegment) {
+      _th2FileEditController.selectionController
+          .updateSelectedLineSegment(modifiedElement);
+    }
   }
 
   void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
@@ -248,6 +252,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THLine line =
         _thFile.lineByMPID(modifiedLineSegmentsMap.values.first.parentMPID);
     line.clearBoundingBox();
+  }
+
+  @action
+  void applyInsertLineSegment({
+    required THLineSegment newLineSegment,
+    required THLine line,
+  }) {
+    _thFile.addElement(newLineSegment);
+    _thFile.substituteElement(line);
+    _th2FileEditController.selectionController
+        .addSelectableElement(newLineSegment);
+    _th2FileEditController.selectionController.updateSelectableElements();
+    _th2FileEditController.updateHasMultipleScraps();
+    _th2FileEditController.updateHasMultipleScraps();
   }
 
   @action
@@ -296,6 +314,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _thFile.removeElement(element);
     selectionController.removeSelectableElement(element.mpID);
     selectionController.removeSelectedElement(element);
+    if (element is THLineSegment) {
+      selectionController.removeSelectedLineSegment(element);
+    }
     _th2FileEditController.updateHasMultipleScraps();
   }
 
@@ -605,7 +626,36 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     updateOptionEdited();
   }
 
-  void _removeLineSegmentFromLine(
+  @action
+  void applyRemoveSelectedLineSegments() {
+    final Iterable<int> selectedLineSegmentMPIDs =
+        _th2FileEditController.selectionController.selectedLineSegments.keys;
+    final MPCommand removeCommand;
+
+    if (selectedLineSegmentMPIDs.isEmpty) {
+      return;
+    } else if (selectedLineSegmentMPIDs.length == 1) {
+      removeCommand =
+          getRemoveLineSegmentCommand(selectedLineSegmentMPIDs.first);
+    } else {
+      final List<MPCommand> removeLineSegmentCommands = [];
+
+      for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
+        removeLineSegmentCommands
+            .add(getRemoveLineSegmentCommand(lineSegmentMPID));
+      }
+
+      removeCommand = MPMultipleElementsCommand.removeLineSegments(
+        lineSegmentMPIDs: selectedLineSegmentMPIDs,
+        th2FileEditController: _th2FileEditController,
+      );
+    }
+
+    _th2FileEditController.execute(removeCommand);
+    _th2FileEditController.updateUndoRedoStatus();
+  }
+
+  MPCommand getRemoveLineSegmentCommand(
     int lineSegmentMPID,
   ) {
     final THLineSegment lineSegment =
@@ -616,7 +666,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if ((lineSegmentIndex == 0) ||
         (lineSegmentIndex == lineSegments.length - 1)) {
-      _thFile.removeElement(lineSegment);
+      return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentIndex);
     } else {
       final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
       final bool deletedLineSegmentIsStraight =
@@ -625,7 +675,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           nextLineSegment is THStraightLineSegment;
 
       if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
-        _thFile.removeElement(lineSegment);
+        return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentIndex);
       } else {
         final THBezierCurveLineSegment deletedLineSegmentBezier =
             deletedLineSegmentIsStraight
@@ -650,7 +700,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                         _th2FileEditController.currentDecimalPositions,
                   )
                 : nextLineSegment as THBezierCurveLineSegment;
-        final THBezierCurveLineSegment newLineSegment =
+        final THBezierCurveLineSegment lineSegmentSubstitution =
             THBezierCurveLineSegment.forCWJM(
           mpID: nextLineSegmentBezier.mpID,
           parentMPID: nextLineSegmentBezier.parentMPID,
@@ -661,8 +711,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           originalLineInTH2File: '',
         );
 
-        _thFile.removeElement(lineSegment);
-        _thFile.substituteElement(newLineSegment);
+        return MPMultipleElementsCommand.removeLineSegmentWithSubstitution(
+          lineSegmentMPID: lineSegment.mpID,
+          lineSegmentSubstitution: lineSegmentSubstitution,
+        );
       }
     }
   }

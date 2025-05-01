@@ -91,6 +91,22 @@ mixin _$TH2FileEditElementEditController
           name: 'TH2FileEditElementEditControllerBase', context: context);
 
   @override
+  void applyInsertLineSegment(
+      {required THLineSegment newLineSegment, required THLine line}) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.applyInsertLineSegment');
+    try {
+      return super
+          .applyInsertLineSegment(newLineSegment: newLineSegment, line: line);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void applyAddElement({required THElement newElement}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
@@ -333,6 +349,20 @@ mixin _$TH2FileEditElementEditController
     try {
       return super.applyRemoveOptionFromElement(
           optionType: optionType, parentMPID: parentMPID);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void applyRemoveSelectedLineSegments() {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.applyRemoveSelectedLineSegments');
+    try {
+      return super.applyRemoveSelectedLineSegments();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

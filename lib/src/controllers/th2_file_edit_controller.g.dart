@@ -1399,12 +1399,12 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void applyMPCommandList(
-      List<MPCommand> commandList, void Function() onComplete) {
+  void applyMPCommandList(List<MPCommand> commandList,
+      MPMultipleElementsCommandCompletionType completionType) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.applyMPCommandList');
     try {
-      return super.applyMPCommandList(commandList, onComplete);
+      return super.applyMPCommandList(commandList, completionType);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

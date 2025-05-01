@@ -361,6 +361,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionRemoveLineSegments": "Remove line segments",
+  "@mpCommandDescriptionRemoveLineSegments": {
+    "description": "The description for the remove line segments command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionRemoveOptionFromElement": "Remove option",
   "@mpCommandDescriptionRemoveOptionFromElement": {
     "description": "The description for the remove option command",

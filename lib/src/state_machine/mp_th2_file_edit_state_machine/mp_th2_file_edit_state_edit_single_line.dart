@@ -43,6 +43,24 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.backspace:
+      case LogicalKeyboardKey.delete:
+        if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
+          elementEditController.applyRemoveSelectedLineSegments();
+          return;
+        }
+    }
+
+    _onKeyDownEvent(event);
+  }
+
+  @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =

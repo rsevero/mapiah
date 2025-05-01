@@ -31,6 +31,7 @@ Version 0.2
 [X] - BUG: clicking on line segment is not selecting nodes in line edit
 [X] - BUG: multiple control points overlay window opening far away from clicked points
 [ ] - BUG: opening a new PLA type/option window does not close other PLA type/option window already opened
+[ ] - Enhancement: when start draging in edit single line mode, prefer endpoints to control points if no 'multiple points clicked'
 
 Version 0.3
 [ ] - Search/select elements by characteristics

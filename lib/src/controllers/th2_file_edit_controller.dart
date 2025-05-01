@@ -977,13 +977,19 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void applyMPCommandList(
     List<MPCommand> commandList,
-    void Function() onComplete,
+    MPMultipleElementsCommandCompletionType completionType,
   ) {
     for (final MPCommand command in commandList) {
       command.execute(this as TH2FileEditController);
     }
 
-    onComplete();
+    switch (completionType) {
+      case MPMultipleElementsCommandCompletionType.elementsEdited:
+      case MPMultipleElementsCommandCompletionType.elementsListChanged:
+      case MPMultipleElementsCommandCompletionType.lineSegmentsRemoved:
+      case MPMultipleElementsCommandCompletionType.optionsEdited:
+        elementEditController.updateOptionEdited();
+    }
   }
 }
 

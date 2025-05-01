@@ -28,6 +28,7 @@ enum MPCommandDescriptionType {
   removeElements,
   removeLine,
   removeLineSegment,
+  removeLineSegments,
   removeOptionFromElement,
   removeOptionFromElements,
   removePoint,

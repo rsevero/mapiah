@@ -345,6 +345,9 @@ class MPTextToUser {
             MPCommandDescriptionType.removeLineSegment] =
         localizations.mpCommandDescriptionRemoveLineSegment;
     _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.removeLineSegments] =
+        localizations.mpCommandDescriptionRemoveLineSegments;
+    _commandDescriptionTypeAsString[
             MPCommandDescriptionType.removeOptionFromElement] =
         localizations.mpCommandDescriptionRemoveOptionFromElement;
     _commandDescriptionTypeAsString[

@@ -2,16 +2,19 @@ part of 'mp_command.dart';
 
 class MPAddLineSegmentCommand extends MPCommand {
   final THLineSegment newLineSegment;
+  final THLine? line;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLineSegment;
 
   MPAddLineSegmentCommand.forCWJM({
     required this.newLineSegment,
+    this.line,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddLineSegmentCommand({
     required this.newLineSegment,
+    this.line,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -27,8 +30,16 @@ class MPAddLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .applyAddElement(newElement: newLineSegment);
+    if (line == null) {
+      th2FileEditController.elementEditController.applyAddElement(
+        newElement: newLineSegment,
+      );
+    } else {
+      th2FileEditController.elementEditController.applyInsertLineSegment(
+        newLineSegment: newLineSegment,
+        line: line!,
+      );
+    }
   }
 
   @override
@@ -50,10 +61,13 @@ class MPAddLineSegmentCommand extends MPCommand {
   @override
   MPCommand copyWith({
     THLineSegment? newLineSegment,
+    THLine? line,
+    bool makeLineNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
+      line: makeLineNull ? null : (line ?? this.line),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -61,6 +75,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   factory MPAddLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
+      line: map['newLine'] != null ? THLine.fromMap(map['newLine']) : null,
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -76,6 +91,7 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     map.addAll({
       'newLineSegment': newLineSegment.toMap(),
+      'newLine': line?.toMap(),
     });
 
     return map;
@@ -87,9 +103,15 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     return other is MPAddLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
+        other.line == line &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ newLineSegment.hashCode;
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
+        newLineSegment,
+        line,
+      );
 }
