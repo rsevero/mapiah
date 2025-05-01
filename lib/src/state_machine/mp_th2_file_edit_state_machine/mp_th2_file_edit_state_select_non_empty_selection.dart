@@ -124,8 +124,6 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
         selectionController.setClickedElementsAtPointerDown(
             alreadySelected ? {} : clickedElements.values);
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.movingElements);
       }
     }
   }
@@ -135,6 +133,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     selectionController
         .setSelectionWindowScreenEndCoordinates(event.localPosition);
+    if (selectionController.clickedElementsAtPointerDown.isNotEmpty) {
+      selectionController.substituteSelectedElementsByClickedElements();
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.movingElements,
+      );
+    }
   }
 
   /// 1. Create a list of objects inside the selection window.

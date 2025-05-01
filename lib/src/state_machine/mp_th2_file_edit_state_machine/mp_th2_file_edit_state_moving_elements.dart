@@ -80,9 +80,6 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    if (selectionController.clickedElementsAtPointerDown.isNotEmpty) {
-      selectionController.substituteSelectedElementsByClickedElements();
-    }
     selectionController
         .moveSelectedElementsToScreenCoordinates(event.localPosition);
   }
