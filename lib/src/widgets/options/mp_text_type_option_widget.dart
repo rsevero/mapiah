@@ -234,9 +234,8 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateIsValid();
               },
             ),
             RadioListTile<String>(
@@ -245,9 +244,8 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateIsValid();
                 _textTextFieldFocusNode.requestFocus();
               },
             ),
