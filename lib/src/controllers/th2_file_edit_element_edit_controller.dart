@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -197,7 +198,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required bool clone,
   }) {
     final List<THLineSegment> lineSegments = <THLineSegment>[];
-    final Set<int> lineSegmentMPIDs = line.childrenMPID;
+    final List<int> lineSegmentMPIDs = line.childrenMPID;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
       final THElement lineSegment = _thFile.elementByMPID(lineSegmentMPID);
@@ -213,7 +214,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   LinkedHashMap<int, THLineSegment> getLineSegmentsMap(THLine line) {
     final LinkedHashMap<int, THLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
-    final Set<int> lineSegmentMPIDs = line.childrenMPID;
+    final List<int> lineSegmentMPIDs = line.childrenMPID;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
       final THElement lineSegment = _thFile.elementByMPID(lineSegmentMPID);
@@ -257,8 +258,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void applyInsertLineSegment({
     required THLineSegment newLineSegment,
-    required THLine line,
+    required int beforeLineSegmentMPID,
   }) {
+    final THLine line = _thFile.lineByMPID(newLineSegment.parentMPID);
+
+    line.insertLineSegmentBefore(newLineSegment, beforeLineSegmentMPID);
     _thFile.addElement(newLineSegment);
     _thFile.substituteElement(line);
     _th2FileEditController.selectionController
@@ -544,7 +548,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
-    final THLine newLineCopy = newLine.copyWith(childrenMPID: {});
+    final THLine newLineCopy = newLine.copyWith(childrenMPID: []);
 
     elementEditController.applyAddElement(newElement: newLineCopy);
 
@@ -716,6 +720,75 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           lineSegmentSubstitution: lineSegmentSubstitution,
         );
       }
+    }
+  }
+
+  @action
+  void applyAddLineSegmentsBetweenSelectedLineSegments() {
+    final selectedLineSegments =
+        _th2FileEditController.selectionController.selectedLineSegments;
+
+    if (selectedLineSegments.length < 2) {
+      return;
+    }
+
+    final Map<int, THLineSegment> selectedLineSegmentsPosMap = {};
+    final THLine line =
+        _thFile.lineByMPID(selectedLineSegments.values.first.parentMPID);
+    final List<int> lineSegmentMPIDs = line.lineSegmentMPIDs;
+
+    for (final THLineSegment lineSegment in selectedLineSegments.values) {
+      selectedLineSegmentsPosMap[lineSegmentMPIDs.indexOf(lineSegment.mpID)] =
+          lineSegment;
+    }
+
+    final List<int> orderedSelectedLineSegmentMPIDs =
+        selectedLineSegmentsPosMap.keys.toList()
+          ..sort((a, b) => a.compareTo(b));
+    final int decimalPositions = _th2FileEditController.currentDecimalPositions;
+    final List<MPCommand> addLineSegmentsCommands = [];
+
+    int? previousLineSegmentPos;
+
+    for (final int lineSegmentPos in orderedSelectedLineSegmentMPIDs) {
+      if (previousLineSegmentPos == null) {
+        previousLineSegmentPos = lineSegmentPos;
+        continue;
+      }
+
+      if (lineSegmentPos == previousLineSegmentPos + 1) {
+        final THLineSegment lineSegment =
+            selectedLineSegmentsPosMap[lineSegmentPos]!;
+        final THLineSegment previousLineSegment =
+            selectedLineSegmentsPosMap[previousLineSegmentPos]!;
+
+        if (lineSegment is THStraightLineSegment) {
+          final Offset newLineSegmentendPoint =
+              (previousLineSegment.endPoint.coordinates +
+                      lineSegment.endPoint.coordinates) /
+                  2;
+          final THStraightLineSegment newLineSegment = THStraightLineSegment(
+            parentMPID: lineSegment.parentMPID,
+            endPoint: THPositionPart(
+              coordinates: newLineSegmentendPoint,
+              decimalPositions: decimalPositions,
+            ),
+          );
+
+          addLineSegmentsCommands.add(
+            MPAddLineSegmentCommand(newLineSegment: newLineSegment),
+          );
+        } else {
+          final newLineSegments = MPNumericAux.splitBezierCurve(
+            startPoint: previousLineSegment.endPoint.coordinates,
+            lineSegment: lineSegment as THBezierCurveLineSegment,
+            t: mpNewEndPointT,
+            decimalPositions: decimalPositions,
+          );
+        }
+      }
+
+      previousLineSegmentPos = lineSegmentPos;
     }
   }
 }

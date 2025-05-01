@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
 class MPNumericAux {
@@ -539,5 +541,63 @@ class MPNumericAux {
     }
 
     return angle;
+  }
+
+  static List<THBezierCurveLineSegment> splitBezierCurve({
+    required Offset startPoint,
+    required THBezierCurveLineSegment lineSegment,
+    required double t,
+    required int decimalPositions,
+  }) {
+    if (t <= 0 || t >= 1) {
+      return [lineSegment];
+    }
+
+    final Offset p0 = startPoint;
+    final Offset p1 = lineSegment.controlPoint1.coordinates;
+    final Offset p2 = lineSegment.controlPoint2.coordinates;
+    final Offset p3 = lineSegment.endPoint.coordinates;
+
+    final double t1 = 1 - t;
+
+    final Offset q1 = p0 * t1 + p1 * t;
+    final Offset q2 = q1 * t1 + (p1 * t1 + p2 * t) * t;
+    final Offset q3 =
+        q2 * t1 + (((p1 * t1 + p2 * t) * t1 + (p2 * t + p3 * t1) * t) * t);
+
+    final Offset r1 = (p1 * t1 + p2 * t) * t1 + (p2 * t1 + p3 * t) * t;
+    final Offset r2 = (p2 * t1 + p3 * t) * t1 + p3 * t;
+
+    final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
+      parentMPID: lineSegment.parentMPID,
+      sameLineComment: lineSegment.sameLineComment,
+      controlPoint1: THPositionPart(
+        coordinates: q1,
+        decimalPositions: decimalPositions,
+      ),
+      controlPoint2: THPositionPart(
+        coordinates: q2,
+        decimalPositions: decimalPositions,
+      ),
+      endPoint: THPositionPart(
+        coordinates: q3,
+        decimalPositions: decimalPositions,
+      ),
+    );
+    final THBezierCurveLineSegment secondSegment = THBezierCurveLineSegment(
+      parentMPID: lineSegment.parentMPID,
+      sameLineComment: lineSegment.sameLineComment,
+      controlPoint1: THPositionPart(
+        coordinates: r1,
+        decimalPositions: decimalPositions,
+      ),
+      controlPoint2: THPositionPart(
+        coordinates: r2,
+        decimalPositions: decimalPositions,
+      ),
+      endPoint: lineSegment.endPoint,
+    );
+
+    return [firstSegment, secondSegment];
   }
 }

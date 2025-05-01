@@ -298,7 +298,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void selectAllElements() {
     final THScrap scrap =
         _thFile.scrapByMPID(_th2FileEditController.activeScrapID);
-    final Set<int> elementMPIDs = scrap.childrenMPID;
+    final List<int> elementMPIDs = scrap.childrenMPID;
 
     for (final int elementMPID in elementMPIDs) {
       final THElement element = _thFile.elementByMPID(elementMPID);

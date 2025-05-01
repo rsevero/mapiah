@@ -248,3 +248,5 @@ const int mpMaxLastUsedTypes = 5;
 const int mpMaxMostUsedTypes = 5;
 
 const String mpNoSubtypeID = 'NO_SUBTYPE';
+
+const double mpNewEndPointT = 0.5;

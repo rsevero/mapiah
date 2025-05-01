@@ -40,7 +40,7 @@ class MPRemoveLineCommand extends MPCommand {
     final THFile thFile = th2FileEditController.thFile;
     final THLine originalLine = thFile.lineByMPID(lineMPID);
     final List<THElement> lineChildren = [];
-    final Set<int> lineChildrenMPIDs = originalLine.childrenMPID;
+    final List<int> lineChildrenMPIDs = originalLine.childrenMPID;
 
     for (final int childMPID in lineChildrenMPIDs) {
       final THElement childElement = thFile.elementByMPID(childMPID);

@@ -38,7 +38,7 @@ class MPSelectedLine extends MPSelectedElement {
       );
     }
 
-    final Set<int> childrenMPIDsClone = originalLine.childrenMPID.toSet();
+    final List<int> childrenMPIDsClone = originalLine.childrenMPID.toList();
 
     final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
         LinkedHashMap<THCommandOptionType, THCommandOption>();

@@ -92,14 +92,16 @@ mixin _$TH2FileEditElementEditController
 
   @override
   void applyInsertLineSegment(
-      {required THLineSegment newLineSegment, required THLine line}) {
+      {required THLineSegment newLineSegment,
+      required int beforeLineSegmentMPID}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name:
                 'TH2FileEditElementEditControllerBase.applyInsertLineSegment');
     try {
-      return super
-          .applyInsertLineSegment(newLineSegment: newLineSegment, line: line);
+      return super.applyInsertLineSegment(
+          newLineSegment: newLineSegment,
+          beforeLineSegmentMPID: beforeLineSegmentMPID);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
@@ -363,6 +365,20 @@ mixin _$TH2FileEditElementEditController
                 'TH2FileEditElementEditControllerBase.applyRemoveSelectedLineSegments');
     try {
       return super.applyRemoveSelectedLineSegments();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void applyAddLineSegmentsBetweenSelectedLineSegments() {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.applyAddLineSegmentsBetweenSelectedLineSegments');
+    try {
+      return super.applyAddLineSegmentsBetweenSelectedLineSegments();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

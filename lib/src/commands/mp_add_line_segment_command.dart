@@ -2,19 +2,19 @@ part of 'mp_command.dart';
 
 class MPAddLineSegmentCommand extends MPCommand {
   final THLineSegment newLineSegment;
-  final THLine? line;
+  final int? beforeLineSegmentMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLineSegment;
 
   MPAddLineSegmentCommand.forCWJM({
     required this.newLineSegment,
-    this.line,
+    this.beforeLineSegmentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddLineSegmentCommand({
     required this.newLineSegment,
-    this.line,
+    this.beforeLineSegmentMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -30,14 +30,14 @@ class MPAddLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    if (line == null) {
+    if (beforeLineSegmentMPID == null) {
       th2FileEditController.elementEditController.applyAddElement(
         newElement: newLineSegment,
       );
     } else {
       th2FileEditController.elementEditController.applyInsertLineSegment(
         newLineSegment: newLineSegment,
-        line: line!,
+        beforeLineSegmentMPID: beforeLineSegmentMPID!,
       );
     }
   }
@@ -61,13 +61,15 @@ class MPAddLineSegmentCommand extends MPCommand {
   @override
   MPCommand copyWith({
     THLineSegment? newLineSegment,
-    THLine? line,
-    bool makeLineNull = false,
+    int? beforeLineSegmentMPID,
+    bool makeBeforeLineSegmentMPIDNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
-      line: makeLineNull ? null : (line ?? this.line),
+      beforeLineSegmentMPID: makeBeforeLineSegmentMPIDNull
+          ? null
+          : (beforeLineSegmentMPID ?? this.beforeLineSegmentMPID),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -75,7 +77,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   factory MPAddLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
-      line: map['newLine'] != null ? THLine.fromMap(map['newLine']) : null,
+      beforeLineSegmentMPID: map['beforeLineSegmentMPID'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -91,7 +93,7 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     map.addAll({
       'newLineSegment': newLineSegment.toMap(),
-      'newLine': line?.toMap(),
+      'beforeLineSegmentMPID': beforeLineSegmentMPID,
     });
 
     return map;
@@ -103,7 +105,7 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     return other is MPAddLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
-        other.line == line &&
+        other.beforeLineSegmentMPID == beforeLineSegmentMPID &&
         other.descriptionType == descriptionType;
   }
 
@@ -112,6 +114,6 @@ class MPAddLineSegmentCommand extends MPCommand {
       super.hashCode ^
       Object.hash(
         newLineSegment,
-        line,
+        beforeLineSegmentMPID,
       );
 }

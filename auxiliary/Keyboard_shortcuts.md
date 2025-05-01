@@ -2,10 +2,12 @@
 
 | Function | Shortcut |
 | ----------- | ----------- |
+| Add line segment between selected line segments | / |
 | Change active scrap | Alt+C |
 | Create area | A |
 | Create line | L |
 | Create point | P |
+| Delete point, line, area or line segment | Del or Backspace |
 | Force option setting on non-supporting types | Ctrl+click on option setting |
 | Open file | Ctrl+O |
 | Options edit | O |

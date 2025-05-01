@@ -58,7 +58,7 @@ class THLine extends THElement
     required super.parentMPID,
     required super.sameLineComment,
     required this.lineType,
-    required Set<int> childrenMPID,
+    required List<int> childrenMPID,
     required List<int> lineSegmentMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
@@ -113,7 +113,7 @@ class THLine extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       lineType: THLineType.values.byName(map['lineType']),
-      childrenMPID: Set<int>.from(map['childrenMPID']),
+      childrenMPID: List<int>.from(map['childrenMPID']),
       lineSegmentMPIDs: List<int>.from(map['lineSegmentMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
@@ -131,7 +131,7 @@ class THLine extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THLineType? lineType,
-    Set<int>? childrenMPID,
+    List<int>? childrenMPID,
     List<int>? lineSegmentMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
@@ -233,6 +233,22 @@ class THLine extends THElement
     );
   }
 
+  int? getNextLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
+    final int indexLineSegmentMPID = getLineSegmentIndexByMPID(lineSegmentMPID);
+
+    if (indexLineSegmentMPID == -1) {
+      throw Exception(
+        'THLine.getNextLineSegmentMPID: lineSegmentMPID not found',
+      );
+    }
+
+    if (indexLineSegmentMPID == _lineSegmentMPIDs.length - 1) {
+      return null;
+    }
+
+    return _lineSegmentMPIDs[indexLineSegmentMPID + 1];
+  }
+
   int getPreviousLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
     int? previousLineSegmentMPID;
 
@@ -281,13 +297,6 @@ class THLine extends THElement
     _lineSegmentMPIDs.add(lineSegmentMPID);
   }
 
-  void insertLineSegmentMPID(
-    int lineSegmentMPID,
-    int index,
-  ) {
-    _lineSegmentMPIDs.insert(index, lineSegmentMPID);
-  }
-
   int getLineSegmentIndexByMPID(int lineSegmentMPID) {
     return _lineSegmentMPIDs.indexOf(lineSegmentMPID);
   }
@@ -327,5 +336,32 @@ class THLine extends THElement
     if (element is THLineSegment) {
       removeLineSegmentMPID(element.mpID);
     }
+  }
+
+  void insertLineSegmentBefore(
+    THLineSegment lineSegment,
+    int beforeLineSegmentMPID,
+  ) {
+    final int childrenMPIDIndex =
+        getLineSegmentIndexByMPID(beforeLineSegmentMPID);
+
+    if (childrenMPIDIndex == -1) {
+      throw Exception(
+        'THLine.insertLineSegmentBefore: line segment not found in childrenMPID',
+      );
+    }
+
+    childrenMPID.insert(childrenMPIDIndex, lineSegment.mpID);
+
+    final int lineSegmentsMPIDsIndex =
+        getLineSegmentIndexByMPID(beforeLineSegmentMPID);
+
+    if (lineSegmentsMPIDsIndex == -1) {
+      throw Exception(
+        'THLine.insertLineSegmentBefore: line segment not found in lineSegmentsMPIDs',
+      );
+    }
+
+    _lineSegmentMPIDs.insert(lineSegmentsMPIDsIndex, lineSegment.mpID);
   }
 }

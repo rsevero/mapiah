@@ -37,7 +37,7 @@ class THArea extends THElement
     required super.parentMPID,
     required super.sameLineComment,
     required this.areaType,
-    required Set<int> childrenMPID,
+    required List<int> childrenMPID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
@@ -74,7 +74,7 @@ class THArea extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       areaType: THAreaType.values.byName(map['areaType']),
-      childrenMPID: Set<int>.from(map['childrenMPID']),
+      childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
@@ -91,7 +91,7 @@ class THArea extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THAreaType? areaType,
-    Set<int>? childrenMPID,
+    List<int>? childrenMPID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THArea.forCWJM(

@@ -33,7 +33,7 @@ class THScrap extends THElement
     required super.parentMPID,
     super.sameLineComment,
     required String thID,
-    required Set<int> childrenMPID,
+    required List<int> childrenMPID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
@@ -73,7 +73,7 @@ class THScrap extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       thID: map['thID'],
-      childrenMPID: Set<int>.from(map['childrenMPID']),
+      childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
     );
   }
@@ -90,7 +90,7 @@ class THScrap extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     String? thID,
-    Set<int>? childrenMPID,
+    List<int>? childrenMPID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
   }) {
     return THScrap.forCWJM(

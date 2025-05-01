@@ -25,8 +25,8 @@ Version 0.2
 [X] - BUG: point arrow should be filled
 [X] - BUG: last used point type not updating
 [X] - BUG: aveAs didn't save the changes
-[X] - BUG: corrigindo** set/unset de originalLineInTH@File: MPSetOptionToElementCommand
-[X] - BUG: distinguir** execute command normal dos gerados por undos: os dos undos devem manter originalLineInTH2File, os normais não.
+[X] - BUG: corrigindo set/unset de originalLineInTH@File: MPSetOptionToElementCommand
+[X] - BUG: distinguir execute command normal dos gerados por undos: os dos undos devem manter originalLineInTH2File, os normais não.
 [X] - BUG: 'N' not starting line edit mode
 [X] - BUG: clicking on line segment is not selecting nodes in line edit
 [X] - BUG: multiple control points overlay window opening far away from clicked points

@@ -55,6 +55,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           elementEditController.applyRemoveSelectedLineSegments();
           return;
         }
+      case LogicalKeyboardKey.slash:
+        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
+          elementEditController
+              .applyAddLineSegmentsBetweenSelectedLineSegments();
+          return;
+        }
     }
 
     _onKeyDownEvent(event);

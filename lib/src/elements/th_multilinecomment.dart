@@ -4,7 +4,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment.forCWJM({
     required super.mpID,
     required super.parentMPID,
-    required Set<int> childrenMPID,
+    required List<int> childrenMPID,
     super.sameLineComment,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
@@ -34,7 +34,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     return THMultiLineComment.forCWJM(
       mpID: map['mpID'],
       parentMPID: map['parentMPID'],
-      childrenMPID: Set<int>.from(map['childrenMPID']),
+      childrenMPID: List<int>.from(map['childrenMPID']),
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
     );
@@ -48,7 +48,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment copyWith({
     int? mpID,
     int? parentMPID,
-    Set<int>? childrenMPID,
+    List<int>? childrenMPID,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
