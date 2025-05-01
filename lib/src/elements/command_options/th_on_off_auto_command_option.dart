@@ -41,13 +41,18 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
   }
 
   @override
-  bool operator ==(covariant THOnOffAutoCommandOption other) {
-    if (identical(this, other)) return true;
+  bool equalsBase(Object other) {
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.parentElementType == parentElementType &&
-        other.choice == choice;
+    return (other as THOnOffAutoCommandOption).choice == choice;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THOnOffAutoCommandOption) return false;
+
+    return equalsBase(other);
   }
 
   @override

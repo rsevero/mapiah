@@ -71,12 +71,12 @@ class THLineHeightCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THLineHeightCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THLineHeightCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.height == height;
+    return other.height == height;
   }
 
   @override

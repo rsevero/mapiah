@@ -59,12 +59,12 @@ class THStationsCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THStationsCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THStationsCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.stations == stations;
+    return other.stations == stations;
   }
 
   @override

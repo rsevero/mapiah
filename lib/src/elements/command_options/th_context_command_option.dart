@@ -75,13 +75,12 @@ class THContextCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THContextCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THContextCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.elementType == elementType &&
-        other.symbolType == symbolType;
+    return other.elementType == elementType && other.symbolType == symbolType;
   }
 
   @override

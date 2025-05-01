@@ -89,13 +89,12 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
   }
 
   @override
-  bool operator ==(covariant THAdjustCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THAdjustCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.parentElementType == parentElementType &&
-        other.choice == choice;
+    return other.choice == choice;
   }
 
   @override

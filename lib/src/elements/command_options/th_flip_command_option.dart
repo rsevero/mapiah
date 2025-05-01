@@ -86,13 +86,12 @@ class THFlipCommandOption extends THMultipleChoiceCommandOption {
   }
 
   @override
-  bool operator ==(covariant THFlipCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THFlipCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.parentElementType == parentElementType &&
-        other.choice == choice;
+    return other.choice == choice;
   }
 
   @override

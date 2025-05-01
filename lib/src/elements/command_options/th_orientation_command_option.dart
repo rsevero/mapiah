@@ -68,12 +68,12 @@ class THOrientationCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THOrientationCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THOrientationCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.azimuth == azimuth;
+    return other.azimuth == azimuth;
   }
 
   @override

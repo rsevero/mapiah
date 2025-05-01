@@ -58,12 +58,12 @@ class THTitleCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THTitleCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THTitleCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.title == title;
+    return other.title == title;
   }
 
   @override

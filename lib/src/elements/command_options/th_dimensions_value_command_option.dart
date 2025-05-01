@@ -98,12 +98,12 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THDimensionsValueCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THDimensionsValueCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.above == above &&
+    return other.above == above &&
         other.below == below &&
         other.unit == unit &&
         other.unitSet == unitSet;

@@ -84,13 +84,12 @@ class THSketchCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THSketchCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THSketchCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other._filename == _filename &&
-        other.point == point;
+    return other._filename == _filename && other.point == point;
   }
 
   @override

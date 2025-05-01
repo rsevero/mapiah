@@ -76,12 +76,12 @@ class THSubtypeCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THSubtypeCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THSubtypeCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.subtype == subtype;
+    return other.subtype == subtype;
   }
 
   @override

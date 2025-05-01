@@ -135,12 +135,12 @@ class THPLScaleCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THPLScaleCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THPLScaleCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.namedSize == namedSize &&
+    return other.namedSize == namedSize &&
         other.numericSize == numericSize &&
         other.scaleType == scaleType;
   }

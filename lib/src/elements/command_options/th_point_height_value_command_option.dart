@@ -120,12 +120,12 @@ class THPointHeightValueCommandOption extends THCommandOption
   }
 
   @override
-  bool operator ==(covariant THPointHeightValueCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THPointHeightValueCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.length == length &&
+    return other.length == length &&
         other.isPresumed == isPresumed &&
         other.mode == mode &&
         other.unit == unit &&

@@ -130,12 +130,12 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THPassageHeightValueCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THPassageHeightValueCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.plusNumber == plusNumber &&
+    return other.plusNumber == plusNumber &&
         other.minusNumber == minusNumber &&
         other.unit == unit &&
         other.mode == mode;

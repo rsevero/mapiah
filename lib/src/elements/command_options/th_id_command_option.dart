@@ -63,12 +63,12 @@ class THIDCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THIDCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THIDCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.thID == thID;
+    return other.thID == thID;
   }
 
   @override

@@ -73,12 +73,12 @@ class THLSizeCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THLSizeCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THLSizeCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.number == number;
+    return other.number == number;
   }
 
   @override

@@ -68,13 +68,12 @@ class THStationNamesCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THStationNamesCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THStationNamesCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.prefix == prefix &&
-        other.suffix == suffix;
+    return other.prefix == prefix && other.suffix == suffix;
   }
 
   @override

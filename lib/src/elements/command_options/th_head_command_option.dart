@@ -53,4 +53,13 @@ class THHeadCommandOption extends THArrowPositionCommandOption {
       choice: choice ?? this.choice,
     );
   }
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THHeadCommandOption) return false;
+
+    return super.equalsBase(other);
+  }
 }

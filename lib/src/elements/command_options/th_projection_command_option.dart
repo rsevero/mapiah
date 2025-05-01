@@ -146,12 +146,12 @@ class THProjectionCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THProjectionCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THProjectionCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.mode == mode &&
+    return other.mode == mode &&
         other.index == index &&
         other.elevationAngle == elevationAngle &&
         other.elevationUnit == elevationUnit;

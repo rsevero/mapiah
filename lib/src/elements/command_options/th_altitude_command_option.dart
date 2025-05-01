@@ -138,12 +138,12 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   @override
-  bool operator ==(covariant THAltitudeCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THAltitudeCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.length == length &&
+    return other.length == length &&
         other.isFix == isFix &&
         other.isNan == isNan &&
         other.unit == unit &&

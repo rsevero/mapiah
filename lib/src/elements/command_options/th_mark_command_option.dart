@@ -63,12 +63,12 @@ class THMarkCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THMarkCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THMarkCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.mark == mark;
+    return other.mark == mark;
   }
 
   @override

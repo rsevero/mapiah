@@ -88,12 +88,12 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   }
 
   @override
-  bool operator ==(covariant THExploredCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THExploredCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.length == length &&
+    return other.length == length &&
         other.unit == unit &&
         other.unitSet == unitSet;
   }

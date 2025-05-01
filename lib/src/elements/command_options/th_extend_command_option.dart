@@ -65,12 +65,12 @@ class THExtendCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THExtendCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THExtendCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.station == station;
+    return other.station == station;
   }
 
   @override

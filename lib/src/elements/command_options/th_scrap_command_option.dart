@@ -58,12 +58,12 @@ class THScrapCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THScrapCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THScrapCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.reference == reference;
+    return other.reference == reference;
   }
 
   @override

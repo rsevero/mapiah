@@ -86,13 +86,12 @@ class THCopyrightCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THCopyrightCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THCopyrightCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.datetime == datetime &&
-        other.copyright == copyright;
+    return other.datetime == datetime && other.copyright == copyright;
   }
 
   @override

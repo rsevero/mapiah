@@ -499,12 +499,19 @@ abstract class THCommandOption {
     return multipleChoiceOptions.contains(type);
   }
 
-  @override
-  bool operator ==(covariant THCommandOption other) {
-    if (identical(this, other)) return true;
-
-    return other.parentMPID == parentMPID &&
+  @protected
+  bool equalsBase(Object other) {
+    return (other as THCommandOption).parentMPID == parentMPID &&
+        other.type == type &&
         other.originalLineInTH2File == originalLineInTH2File;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THCommandOption) return false;
+
+    return equalsBase(other);
   }
 
   @override

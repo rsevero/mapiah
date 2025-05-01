@@ -82,15 +82,11 @@ class THOutlineCommandOption extends THMultipleChoiceCommandOption {
   }
 
   @override
-  bool operator ==(covariant THOutlineCommandOption other) {
+  // ignore: hash_and_equals
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THOutlineCommandOption) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.parentElementType == parentElementType &&
-        other.choice == choice;
+    return super.equalsBase(other);
   }
-
-  @override
-  int get hashCode => super.hashCode ^ choice.hashCode;
 }

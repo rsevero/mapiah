@@ -46,12 +46,19 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THMultipleChoiceCommandOption other) {
-    if (identical(this, other)) return true;
+  bool equalsBase(Object other) {
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.parentElementType == parentElementType;
+    return (other as THMultipleChoiceCommandOption).parentElementType ==
+        parentElementType;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THMultipleChoiceCommandOption) return false;
+
+    return equalsBase(other);
   }
 
   @override

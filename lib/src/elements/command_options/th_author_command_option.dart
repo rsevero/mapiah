@@ -84,13 +84,12 @@ class THAuthorCommandOption extends THCommandOption {
   }
 
   @override
-  bool operator ==(covariant THAuthorCommandOption other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THAuthorCommandOption) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other.parentMPID == parentMPID &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.datetime == datetime &&
-        other.person == person;
+    return other.datetime == datetime && other.person == person;
   }
 
   @override
