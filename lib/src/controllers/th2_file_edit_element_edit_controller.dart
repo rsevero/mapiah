@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -776,20 +777,53 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           );
 
           addLineSegmentsCommands.add(
-            MPAddLineSegmentCommand(newLineSegment: newLineSegment),
+            MPAddLineSegmentCommand(
+              newLineSegment: newLineSegment,
+              beforeLineSegmentMPID: lineSegment.mpID,
+            ),
           );
         } else {
-          final newLineSegments = MPNumericAux.splitBezierCurve(
+          final newLineSegments = MPNumericAux.splitBezierCurveAtHalfLength(
             startPoint: previousLineSegment.endPoint.coordinates,
             lineSegment: lineSegment as THBezierCurveLineSegment,
-            t: mpNewEndPointT,
             decimalPositions: decimalPositions,
+          );
+
+          if (newLineSegments.length != 2) {
+            throw Exception(
+              'Error: newLineSegments.length != 2 at TH2FileEditElementEditController.applyAddLineSegmentsBetweenSelectedLineSegments(). Length: ${newLineSegments.length}',
+            );
+          }
+
+          addLineSegmentsCommands.add(
+            MPAddLineSegmentCommand(
+              newLineSegment: newLineSegments[0],
+              beforeLineSegmentMPID: lineSegment.mpID,
+            ),
+          );
+          addLineSegmentsCommands.add(
+            MPEditLineSegmentCommand(
+              newLineSegment: newLineSegments[1].copyWith(
+                mpID: lineSegment.mpID,
+              ),
+            ),
           );
         }
       }
 
       previousLineSegmentPos = lineSegmentPos;
     }
+
+    final MPCommand addLineSegmentsCommand = MPMultipleElementsCommand.forCWJM(
+      commandsList: addLineSegmentsCommands,
+      completionType: MPMultipleElementsCommandCompletionType.lineSegmentsAdded,
+      descriptionType: MPCommandDescriptionType.addLineSegment,
+    );
+
+    _th2FileEditController.execute(addLineSegmentsCommand);
+    _th2FileEditController.selectionController
+        .updateSelectableEndAndControlPoints();
+    _th2FileEditController.triggerEditLineRedraw();
   }
 }
 

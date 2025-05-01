@@ -15,7 +15,7 @@ Version 0.2
 [X] - Scrap options
 [X] - Line segment options
 [X] - Show direction of lines
-[ ] - Add/delete line segments in existing lines
+[X] - Add/delete line segments in existing lines
 [ ] - Release creation Linux
 [ ] - Release creation Windows
 [ ] - Release creation MacOS

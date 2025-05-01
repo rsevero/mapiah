@@ -543,44 +543,94 @@ class MPNumericAux {
     return angle;
   }
 
+  static double bezierArcLength(
+    List<Offset> controlPoints,
+    double t, {
+    int steps = 5,
+  }) {
+    double length = 0.0;
+    Offset prev = controlPoints.first;
+    for (int i = 1; i <= steps; i++) {
+      double ti = t * i / steps;
+      Offset pt = deCasteljau(controlPoints, ti);
+      length += (pt - prev).distance;
+      prev = pt;
+    }
+    return length;
+  }
+
+  static List<THBezierCurveLineSegment> splitBezierCurveAtHalfLength({
+    required Offset startPoint,
+    required THBezierCurveLineSegment lineSegment,
+    required int decimalPositions,
+  }) {
+    final List<Offset> controlPoints = [
+      startPoint,
+      lineSegment.controlPoint1.coordinates,
+      lineSegment.controlPoint2.coordinates,
+      lineSegment.endPoint.coordinates,
+    ];
+
+    // Estimate total length
+    final double totalLength = bezierArcLength(controlPoints, 1.0);
+
+    // Binary search for t where arc length is half
+    double tLow = 0.0;
+    double tHigh = 1.0;
+    double tMid = 0.5;
+    for (int i = 0; i < 5; i++) {
+      tMid = (tLow + tHigh) / 2;
+      double len = bezierArcLength(controlPoints, tMid);
+      if (len < totalLength / 2) {
+        tLow = tMid;
+      } else {
+        tHigh = tMid;
+      }
+    }
+
+    // Now split at tMid
+    return splitBezierCurve(
+      startPoint: startPoint,
+      lineSegment: lineSegment,
+      t: tMid,
+      decimalPositions: decimalPositions,
+    );
+  }
+
   static List<THBezierCurveLineSegment> splitBezierCurve({
     required Offset startPoint,
     required THBezierCurveLineSegment lineSegment,
     required double t,
     required int decimalPositions,
   }) {
-    if (t <= 0 || t >= 1) {
-      return [lineSegment];
-    }
-
     final Offset p0 = startPoint;
     final Offset p1 = lineSegment.controlPoint1.coordinates;
     final Offset p2 = lineSegment.controlPoint2.coordinates;
     final Offset p3 = lineSegment.endPoint.coordinates;
 
-    final double t1 = 1 - t;
+    // De Casteljau's algorithm
+    final Offset q0 = Offset.lerp(p0, p1, t)!;
+    final Offset q1 = Offset.lerp(p1, p2, t)!;
+    final Offset q2 = Offset.lerp(p2, p3, t)!;
 
-    final Offset q1 = p0 * t1 + p1 * t;
-    final Offset q2 = q1 * t1 + (p1 * t1 + p2 * t) * t;
-    final Offset q3 =
-        q2 * t1 + (((p1 * t1 + p2 * t) * t1 + (p2 * t + p3 * t1) * t) * t);
+    final Offset r0 = Offset.lerp(q0, q1, t)!;
+    final Offset r1 = Offset.lerp(q1, q2, t)!;
 
-    final Offset r1 = (p1 * t1 + p2 * t) * t1 + (p2 * t1 + p3 * t) * t;
-    final Offset r2 = (p2 * t1 + p3 * t) * t1 + p3 * t;
+    final Offset s = Offset.lerp(r0, r1, t)!;
 
     final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
       parentMPID: lineSegment.parentMPID,
       sameLineComment: lineSegment.sameLineComment,
       controlPoint1: THPositionPart(
-        coordinates: q1,
+        coordinates: q0,
         decimalPositions: decimalPositions,
       ),
       controlPoint2: THPositionPart(
-        coordinates: q2,
+        coordinates: r0,
         decimalPositions: decimalPositions,
       ),
       endPoint: THPositionPart(
-        coordinates: q3,
+        coordinates: s,
         decimalPositions: decimalPositions,
       ),
     );
@@ -592,7 +642,7 @@ class MPNumericAux {
         decimalPositions: decimalPositions,
       ),
       controlPoint2: THPositionPart(
-        coordinates: r2,
+        coordinates: q2,
         decimalPositions: decimalPositions,
       ),
       endPoint: lineSegment.endPoint,

@@ -56,7 +56,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           return;
         }
       case LogicalKeyboardKey.slash:
-        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
           elementEditController
               .applyAddLineSegmentsBetweenSelectedLineSegments();
           return;
