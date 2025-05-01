@@ -69,6 +69,22 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! THStraightLineSegment) return false;
+
+    return equalsBase(other);
+  }
+
+  @override
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
+        endPoint,
+        optionsMap,
+      );
+
+  @override
   bool isSameClass(Object object) {
     return object is THStraightLineSegment;
   }

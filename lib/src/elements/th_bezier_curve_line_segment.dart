@@ -100,17 +100,13 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   }
 
   @override
-  bool operator ==(covariant THBezierCurveLineSegment other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THBezierCurveLineSegment) return false;
+    if (!equalsBase(other)) return false;
 
-    return other.mpID == mpID &&
-        other.parentMPID == parentMPID &&
-        other.sameLineComment == sameLineComment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.controlPoint1 == controlPoint1 &&
-        other.controlPoint2 == controlPoint2 &&
-        other.endPoint == endPoint &&
-        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
+    return other.controlPoint1 == controlPoint1 &&
+        other.controlPoint2 == controlPoint2;
   }
 
   @override
