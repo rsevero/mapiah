@@ -4,6 +4,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 class MPTileWidget extends StatefulWidget {
   final Widget? leading;
   final String title;
+  final String? subtitle;
   final Widget? trailing;
   final VoidCallback? onTap;
   final Color? textColor;
@@ -16,6 +17,7 @@ class MPTileWidget extends StatefulWidget {
     super.key,
     this.leading,
     required this.title,
+    this.subtitle,
     this.trailing,
     this.onTap,
     this.textColor,
@@ -53,33 +55,50 @@ class _MPTileWidgetState extends State<MPTileWidget> {
           duration: const Duration(milliseconds: 200),
           color: isHovered ? hoverColor : widget.backgroundColor,
           padding: widget.contentPadding,
-          child: Row(
-            crossAxisAlignment: widget.dense
-                ? CrossAxisAlignment.center
-                : CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (widget.leading != null)
-                IconTheme(
-                  data: IconThemeData(color: widget.iconColor),
-                  child: widget.leading!,
-                ),
-              if (widget.leading != null) const SizedBox(width: mpButtonSpace),
-              Expanded(
-                child: DefaultTextStyle(
+              Row(
+                crossAxisAlignment: widget.dense
+                    ? CrossAxisAlignment.center
+                    : CrossAxisAlignment.start,
+                children: [
+                  if (widget.leading != null)
+                    IconTheme(
+                      data: IconThemeData(color: widget.iconColor),
+                      child: widget.leading!,
+                    ),
+                  if (widget.leading != null)
+                    const SizedBox(width: mpButtonSpace),
+                  DefaultTextStyle(
+                    style: DefaultTextStyle.of(context).style,
+                    child: Text(
+                      widget.title,
+                      style: widget.textColor != null
+                          ? TextStyle(color: widget.textColor)
+                          : null,
+                    ),
+                  ),
+                  if (widget.trailing != null)
+                    IconTheme(
+                      data: IconThemeData(color: widget.iconColor),
+                      child: widget.trailing!,
+                    ),
+                ],
+              ),
+              if (widget.subtitle != null) ...[
+                const SizedBox(height: mpButtonSpace),
+                DefaultTextStyle(
                   style: DefaultTextStyle.of(context).style,
                   child: Text(
-                    widget.title,
+                    widget.subtitle!,
                     style: widget.textColor != null
                         ? TextStyle(color: widget.textColor)
                         : null,
                   ),
                 ),
-              ),
-              if (widget.trailing != null)
-                IconTheme(
-                  data: IconThemeData(color: widget.iconColor),
-                  child: widget.trailing!,
-                ),
+              ]
             ],
           ),
         ),

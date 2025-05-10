@@ -250,6 +250,14 @@ class MPCommandOptionAux {
             THOptionChoicesOnOffType.on;
   }
 
+  static String? getSubtype(THHasOptionsMixin element) {
+    return element.hasOption(THCommandOptionType.subtype)
+        ? (element.optionByType(THCommandOptionType.subtype)
+                as THSubtypeCommandOption)
+            .subtype
+        : null;
+  }
+
   static bool elementTypeSupportsOptionType(
     THElement element,
     THCommandOptionType optionType,

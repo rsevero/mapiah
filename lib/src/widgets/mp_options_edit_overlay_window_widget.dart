@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -64,6 +65,12 @@ class _MPOptionsEditOverlayWindowWidgetState
         THAreaType? selectedAreaPLAType;
         THLineType? selectedLinePLAType;
         THPointType? selectedPointPLAType;
+        String? selectedAreaSubtype;
+        String? selectedLineSubtype;
+        String? selectedPointSubtype;
+        bool firstArea = true;
+        bool firstLine = true;
+        bool firstPoint = true;
 
         for (final mpSelectedElement in mpSelectedElements) {
           switch (mpSelectedElement) {
@@ -77,6 +84,18 @@ class _MPOptionsEditOverlayWindowWidgetState
                   selectedAreaPLAType = null;
                 }
               }
+
+              final String? areaSubtype = MPCommandOptionAux.getSubtype(
+                mpSelectedElement.originalAreaClone,
+              );
+
+              if (firstArea) {
+                firstArea = false;
+                selectedAreaSubtype = areaSubtype;
+              } else if (selectedAreaSubtype != areaSubtype) {
+                selectedAreaSubtype = null;
+              }
+
               hasArea = true;
             case MPSelectedLine _:
               if (mpSelectedElement.originalLineClone.lineType !=
@@ -88,6 +107,18 @@ class _MPOptionsEditOverlayWindowWidgetState
                   selectedLinePLAType = null;
                 }
               }
+
+              final String? lineSubtype = MPCommandOptionAux.getSubtype(
+                mpSelectedElement.originalLineClone,
+              );
+
+              if (firstLine) {
+                firstLine = false;
+                selectedLineSubtype = lineSubtype;
+              } else if (selectedLineSubtype != lineSubtype) {
+                selectedLineSubtype = null;
+              }
+
               hasLine = true;
             case MPSelectedPoint _:
               if (mpSelectedElement.originalPointClone.pointType !=
@@ -100,6 +131,18 @@ class _MPOptionsEditOverlayWindowWidgetState
                   break;
                 }
               }
+
+              final String? pointSubtype = MPCommandOptionAux.getSubtype(
+                mpSelectedElement.originalPointClone,
+              );
+
+              if (firstPoint) {
+                firstPoint = false;
+                selectedPointSubtype = pointSubtype;
+              } else if (selectedPointSubtype != pointSubtype) {
+                selectedPointSubtype = null;
+              }
+
               hasPoint = true;
             default:
               throw Exception(
@@ -111,36 +154,69 @@ class _MPOptionsEditOverlayWindowWidgetState
           final List<Widget> plaTypeWidgets = [];
 
           if (hasPoint) {
+            String? pointType;
+
+            if (selectedPointPLAType == null) {
+              pointType = null;
+            } else {
+              pointType = MPTextToUser.getPointType(selectedPointPLAType);
+
+              if (selectedPointSubtype != null) {
+                pointType =
+                    '$pointType:${MPTextToUser.getSubtypeAsString(selectedPointSubtype)}';
+              }
+            }
+
             plaTypeWidgets.add(
               MPPLATypeWidget(
                   selectedPLAType: selectedPointPLAType?.name,
-                  selectedPLATypeToUser: selectedPointPLAType != null
-                      ? MPTextToUser.getPointType(selectedPointPLAType)
-                      : null,
+                  selectedPLATypeToUser: pointType,
                   type: THElementType.point,
                   th2FileEditController: th2FileEditController),
             );
           }
 
           if (hasLine) {
+            String? lineType;
+
+            if (selectedLinePLAType == null) {
+              lineType = null;
+            } else {
+              lineType = MPTextToUser.getLineType(selectedLinePLAType);
+
+              if (selectedLineSubtype != null) {
+                lineType =
+                    '$lineType:${MPTextToUser.getSubtypeAsString(selectedLineSubtype)}';
+              }
+            }
+
             plaTypeWidgets.add(
               MPPLATypeWidget(
                   selectedPLAType: selectedLinePLAType?.name,
-                  selectedPLATypeToUser: selectedLinePLAType != null
-                      ? MPTextToUser.getLineType(selectedLinePLAType)
-                      : null,
+                  selectedPLATypeToUser: lineType,
                   type: THElementType.line,
                   th2FileEditController: th2FileEditController),
             );
           }
 
           if (hasArea) {
+            String? areaType;
+
+            if (selectedAreaPLAType == null) {
+              areaType = null;
+            } else {
+              areaType = MPTextToUser.getAreaType(selectedAreaPLAType);
+
+              if (selectedAreaSubtype != null) {
+                areaType =
+                    '$areaType:${MPTextToUser.getSubtypeAsString(selectedAreaSubtype)}';
+              }
+            }
+
             plaTypeWidgets.add(
               MPPLATypeWidget(
                   selectedPLAType: selectedAreaPLAType?.name,
-                  selectedPLATypeToUser: selectedAreaPLAType != null
-                      ? MPTextToUser.getAreaType(selectedAreaPLAType)
-                      : null,
+                  selectedPLATypeToUser: areaType,
                   type: THElementType.area,
                   th2FileEditController: th2FileEditController),
             );
