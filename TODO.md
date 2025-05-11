@@ -48,3 +48,5 @@ Version 0.3
 [ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points
 [ ] - Show (and edit) orientation and lsize on the line points during edit
 [ ] - Snap points
+[ ] - Hide elements by type
+[ ] - Highlight slope lines without at least one line point with orientation
