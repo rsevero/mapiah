@@ -800,7 +800,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void warmSelectableElementsCanvasScaleChanged() {
     for (final selectableElement in _mpSelectableElements.values) {
-      selectableElement.canvasScaleChanged();
+      selectableElement.canvasTransformChanged();
     }
   }
 

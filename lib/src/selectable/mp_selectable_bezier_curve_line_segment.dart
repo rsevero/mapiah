@@ -59,8 +59,8 @@ class MPSelectableBezierCurveLineSegment extends MPSelectableLineSegment {
   }
 
   @override
-  void canvasScaleChanged() {
-    super.canvasScaleChanged();
+  void canvasTransformChanged() {
+    super.canvasTransformChanged();
     _numOfSegmentsToCalculate = null;
   }
 

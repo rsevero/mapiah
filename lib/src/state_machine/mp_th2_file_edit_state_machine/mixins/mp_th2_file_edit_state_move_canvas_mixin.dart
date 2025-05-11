@@ -5,7 +5,6 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
   @override
   void onSecondaryButtonDragUpdate(PointerMoveEvent event) {
     th2FileEditController.onPointerMoveUpdateMoveCanvasMode(event);
-    th2FileEditController.triggerAllElementsRedraw();
   }
 
   @override

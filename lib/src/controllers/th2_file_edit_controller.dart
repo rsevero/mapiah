@@ -668,16 +668,17 @@ abstract class TH2FileEditControllerBase with Store {
   void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
     _canvasTranslation += (event.delta / _canvasScale);
     _setCanvasCenterFromCurrent();
+    _changedCanvasTransform();
   }
 
   @action
   triggerAllElementsRedraw() {
+    selectionController
+        .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
     _redrawTriggerSelectedElements++;
     _redrawTriggerNonSelectedElements++;
     _redrawTriggerNewLine++;
     _redrawTriggerEditLine++;
-    selectionController
-        .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
   }
 
   @action
@@ -741,7 +742,7 @@ abstract class TH2FileEditControllerBase with Store {
       isIncrease: true,
     );
 
-    _changedCanvasScale();
+    _changedCanvasTransform();
   }
 
   @action
@@ -752,14 +753,14 @@ abstract class TH2FileEditControllerBase with Store {
       isIncrease: false,
     );
 
-    _changedCanvasScale();
+    _changedCanvasTransform();
   }
 
   @action
   void zoomOneToOne() {
     _canvasScale = 1;
 
-    _changedCanvasScale();
+    _changedCanvasTransform();
   }
 
   @action
@@ -778,10 +779,10 @@ abstract class TH2FileEditControllerBase with Store {
     _canvasScale = MPNumericAux.roundScale(
         (widthScale < heightScale) ? widthScale : heightScale);
 
-    _changedCanvasScale();
+    _changedCanvasTransform();
   }
 
-  void _changedCanvasScale() {
+  void _changedCanvasTransform() {
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
@@ -814,7 +815,7 @@ abstract class TH2FileEditControllerBase with Store {
     }
     _canvasCenterY += delta;
     _calculateCanvasOffset();
-    triggerAllElementsRedraw();
+    _changedCanvasTransform();
   }
 
   @action
@@ -825,7 +826,7 @@ abstract class TH2FileEditControllerBase with Store {
     }
     _canvasCenterX += delta;
     _calculateCanvasOffset();
-    triggerAllElementsRedraw();
+    _changedCanvasTransform();
   }
 
   void updateDataWidth(double newWidth) {

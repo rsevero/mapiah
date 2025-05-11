@@ -37,7 +37,7 @@ sealed class MPSelectable {
 
   Rect _calculateBoundingBox();
 
-  void canvasScaleChanged() {
+  void canvasTransformChanged() {
     _boundingBox = null;
   }
 }
