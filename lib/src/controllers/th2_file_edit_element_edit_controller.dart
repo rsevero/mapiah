@@ -447,6 +447,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       bezierCurveLineSegment.addUpdateOption(smoothOn);
 
       final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+        originalLineSegment: lastLineSegment,
         newLineSegment: bezierCurveLineSegment,
       );
 
@@ -466,6 +467,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         originalLineInTH2File: '',
       );
       final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+        originalLineSegment: lastLineSegment,
         newLineSegment: bezierCurveLineSegment,
       );
 
@@ -640,30 +642,38 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void applyRemoveSelectedLineSegments() {
-    final Iterable<int> selectedLineSegmentMPIDs =
-        _th2FileEditController.selectionController.selectedLineSegments.keys;
-    final MPCommand removeCommand;
+    final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController
+        .selectionController.selectedLineSegments.keys
+        .toList();
 
     if (selectedLineSegmentMPIDs.isEmpty) {
       return;
     } else if (selectedLineSegmentMPIDs.length == 1) {
-      removeCommand =
+      final MPCommand removeCommand =
           getRemoveLineSegmentCommand(selectedLineSegmentMPIDs.first);
+      _th2FileEditController.execute(removeCommand);
     } else {
       final List<MPCommand> removeLineSegmentCommands = [];
 
       for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
-        removeLineSegmentCommands
-            .add(getRemoveLineSegmentCommand(lineSegmentMPID));
+        final MPCommand removeLineSegmentCommand = getRemoveLineSegmentCommand(
+          lineSegmentMPID,
+        );
+
+        removeLineSegmentCommand.execute(_th2FileEditController);
+        removeLineSegmentCommands.add(removeLineSegmentCommand);
       }
 
-      removeCommand = MPMultipleElementsCommand.removeLineSegments(
-        lineSegmentMPIDs: selectedLineSegmentMPIDs,
-        th2FileEditController: _th2FileEditController,
+      final MPCommand removeCommand = MPMultipleElementsCommand.forCWJM(
+        commandsList: removeLineSegmentCommands,
+        completionType:
+            MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+        descriptionType: MPCommandDescriptionType.removeLineSegment,
       );
+
+      _th2FileEditController.undoRedoController.add(removeCommand);
     }
 
-    _th2FileEditController.execute(removeCommand);
     _th2FileEditController.updateUndoRedoStatus();
   }
 
@@ -678,7 +688,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if ((lineSegmentIndex == 0) ||
         (lineSegmentIndex == lineSegments.length - 1)) {
-      return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentMPID);
+      return MPRemoveLineSegmentCommand(lineSegment: lineSegment);
     } else {
       final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
       final bool deletedLineSegmentIsStraight =
@@ -687,7 +697,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           nextLineSegment is THStraightLineSegment;
 
       if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
-        return MPRemoveLineSegmentCommand(lineSegmentMPID: lineSegmentMPID);
+        return MPRemoveLineSegmentCommand(lineSegment: lineSegment);
       } else {
         final THBezierCurveLineSegment deletedLineSegmentBezier =
             deletedLineSegmentIsStraight
@@ -724,8 +734,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
         return MPMultipleElementsCommand.removeLineSegmentWithSubstitution(
-          lineSegmentMPID: lineSegment.mpID,
+          lineSegmentMPID: lineSegmentMPID,
           lineSegmentSubstitution: lineSegmentSubstitution,
+          thFile: _th2FileEditController.thFile,
         );
       }
     }
@@ -810,6 +821,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           );
           addLineSegmentsCommands.add(
             MPEditLineSegmentCommand(
+              originalLineSegment: lineSegment,
               newLineSegment: lineSegment.copyWith(
                 controlPoint1: newLineSegments[1].controlPoint1,
                 controlPoint2: newLineSegments[1].controlPoint2,

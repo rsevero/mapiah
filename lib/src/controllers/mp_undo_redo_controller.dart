@@ -26,10 +26,13 @@ abstract class MPUndoRedoControllerBase with Store {
   final List<MPUndoRedoCommand> _redo = [];
 
   void execute(MPCommand command) {
+    command.execute(_th2FileEditController);
+    add(command);
+  }
+
+  void add(MPCommand command) {
     final MPUndoRedoCommand undo =
         command.getUndoRedoCommand(_th2FileEditController);
-
-    command.execute(_th2FileEditController);
 
     if (_redo.isNotEmpty) {
       final int redoLastIndex = _redo.length - 1;

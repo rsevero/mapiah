@@ -1,17 +1,17 @@
 part of 'mp_command.dart';
 
 class MPRemoveLineSegmentCommand extends MPCommand {
-  final int lineSegmentMPID;
+  final THLineSegment lineSegment;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeLineSegment;
 
   MPRemoveLineSegmentCommand.forCWJM({
-    required this.lineSegmentMPID,
+    required this.lineSegment,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPRemoveLineSegmentCommand({
-    required this.lineSegmentMPID,
+    required this.lineSegment,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -28,7 +28,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     required bool keepOriginalLineTH2File,
   }) {
     th2FileEditController.elementEditController
-        .applyRemoveElementByMPID(lineSegmentMPID);
+        .applyRemoveElementByMPID(lineSegment.mpID);
   }
 
   @override
@@ -36,13 +36,11 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final THLineSegment newLineSegment =
-        thFile.lineSegmentByMPID(lineSegmentMPID);
-    final THLine line = thFile.lineByMPID(newLineSegment.parentMPID);
+    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
     final MPAddLineSegmentCommand oppositeCommand = MPAddLineSegmentCommand(
-      newLineSegment: newLineSegment,
+      newLineSegment: lineSegment,
       beforeLineSegmentMPID: line.getNextLineSegmentMPID(
-        lineSegmentMPID,
+        lineSegment.mpID,
         thFile,
       ),
       descriptionType: descriptionType,
@@ -56,18 +54,18 @@ class MPRemoveLineSegmentCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    int? lineSegmentMPID,
+    THLineSegment? lineSegment,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveLineSegmentCommand.forCWJM(
-      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
+      lineSegment: lineSegment ?? this.lineSegment,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   factory MPRemoveLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveLineSegmentCommand.forCWJM(
-      lineSegmentMPID: map['lineSegmentMPID'],
+      lineSegment: THLineSegment.fromMap(map['lineSegment']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -82,7 +80,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineSegmentMPID': lineSegmentMPID,
+      'lineSegment': lineSegment.toMap(),
     });
 
     return map;
@@ -93,10 +91,10 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     if (identical(this, other)) return true;
 
     return other is MPRemoveLineSegmentCommand &&
-        other.lineSegmentMPID == lineSegmentMPID &&
+        other.lineSegment == lineSegment &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ lineSegmentMPID.hashCode;
+  int get hashCode => super.hashCode ^ lineSegment.hashCode;
 }

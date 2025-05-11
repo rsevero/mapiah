@@ -90,6 +90,7 @@ class MPMultipleElementsCommand extends MPCommand {
   MPMultipleElementsCommand.removeLineSegmentWithSubstitution({
     required int lineSegmentMPID,
     required THLineSegment lineSegmentSubstitution,
+    required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.removeLineSegment,
   })  : completionType =
             MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
@@ -97,10 +98,12 @@ class MPMultipleElementsCommand extends MPCommand {
     commandsList = [];
 
     final MPCommand removeLineSegmentCommand = MPRemoveLineSegmentCommand(
-      lineSegmentMPID: lineSegmentMPID,
+      lineSegment: thFile.lineSegmentByMPID(lineSegmentMPID),
     );
-
     final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
+      originalLineSegment: thFile.lineSegmentByMPID(
+        lineSegmentSubstitution.mpID,
+      ),
       newLineSegment: lineSegmentSubstitution,
     );
 
@@ -254,6 +257,7 @@ class MPMultipleElementsCommand extends MPCommand {
 
   MPMultipleElementsCommand.editLinesSegmentType({
     required List<THLineSegment> newLineSegments,
+    required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.editLineSegmentsType,
   })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
         super() {
@@ -261,6 +265,7 @@ class MPMultipleElementsCommand extends MPCommand {
 
     for (final THLineSegment newLineSegment in newLineSegments) {
       final MPCommand setLineSegmentTypeCommand = MPEditLineSegmentCommand(
+        originalLineSegment: thFile.lineSegmentByMPID(newLineSegment.mpID),
         newLineSegment: newLineSegment,
         descriptionType: descriptionType,
       );
@@ -367,14 +372,18 @@ class MPMultipleElementsCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final List<MPUndoRedoCommand> undoRedoCommandList = commandsList
-        .map((command) => command.getUndoRedoCommand(th2FileEditController))
-        .toList();
-    final List<MPCommand> undoCommandList = undoRedoCommandList
-        .map((undoRedoCommand) => undoRedoCommand.undoCommand)
-        .toList();
+    final List<MPCommand> undoCommandList = [];
+
+    for (final MPCommand command in commandsList) {
+      final MPUndoRedoCommand undoRedoCommand = command.getUndoRedoCommand(
+        th2FileEditController,
+      );
+
+      undoCommandList.add(undoRedoCommand.undoCommand);
+    }
+
     final MPCommand multipleUndoCommand = MPMultipleElementsCommand.forCWJM(
-      commandsList: undoCommandList,
+      commandsList: undoCommandList.reversed.toList(),
       completionType: completionType,
       descriptionType: descriptionType,
     );

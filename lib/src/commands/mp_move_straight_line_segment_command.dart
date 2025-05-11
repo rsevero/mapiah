@@ -116,14 +116,14 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
   @override
   MPMoveStraightLineSegmentCommand copyWith({
-    int? lineSegmentMPID,
+    int? lineSegment,
     THPositionPart? originalEndPointPosition,
     THPositionPart? modifiedEndPointPosition,
     String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
-      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
+      lineSegmentMPID: lineSegment ?? this.lineSegmentMPID,
       originalEndPointPosition:
           originalEndPointPosition ?? this.originalEndPointPosition,
       modifiedEndPointPosition:

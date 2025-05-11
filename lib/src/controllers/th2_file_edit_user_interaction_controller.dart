@@ -330,6 +330,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (lineSegment.elementType == elementType) {
         continue;
       }
+
       willChangeLineSegments.add(lineSegment);
     }
 
@@ -385,12 +386,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       final THLineSegment newLineSegment = newLineSegments.first;
 
       setLineSegmentTypeCommand = MPEditLineSegmentCommand(
+        originalLineSegment: _th2FileEditController.thFile.lineSegmentByMPID(
+          newLineSegment.mpID,
+        ),
         newLineSegment: newLineSegment,
         descriptionType: MPCommandDescriptionType.editLineSegmentType,
       );
     } else {
       setLineSegmentTypeCommand =
           MPMultipleElementsCommand.editLinesSegmentType(
+        thFile: _th2FileEditController.thFile,
         newLineSegments: newLineSegments,
       );
 

@@ -166,7 +166,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   MPMoveBezierLineSegmentCommand copyWith({
-    int? lineSegmentMPID,
+    int? lineSegment,
     THPositionPart? originalEndPointPosition,
     THPositionPart? modifiedEndPointPosition,
     THPositionPart? originalControlPoint1Position,
@@ -177,7 +177,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
-      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
+      lineSegmentMPID: lineSegment ?? this.lineSegmentMPID,
       originalEndPointPosition:
           originalEndPointPosition ?? this.originalEndPointPosition,
       modifiedEndPointPosition:
