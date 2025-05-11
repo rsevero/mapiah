@@ -33,6 +33,8 @@ Version 0.2
 [ ] - BUG: opening a new PLA type/option window does not close other PLA type/option window already opened
 [ ] - Enhancement: when start draging in edit single line mode, prefer endpoints to control points if no 'multiple points clicked'
 [X] - BUG: fix == opeartor signature
+[ ] - BUG: deleted line points not available at undo/redo
+[ ] - BUG: clicking on another element when on 'single line edit mode' does not selects the new element
 
 Version 0.3
 [ ] - Search/select elements by characteristics
@@ -50,3 +52,4 @@ Version 0.3
 [ ] - Snap points
 [ ] - Hide elements by type
 [ ] - Highlight slope lines without at least one line point with orientation
+[ ] - Create shortcut to reverse line

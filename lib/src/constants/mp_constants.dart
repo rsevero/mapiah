@@ -30,6 +30,7 @@ const int thMaxEncodingLength = 20;
 const int thMaxFileLineLength = 80;
 const int thMaxDecimalPositions = 6;
 const int thDefaultDecimalPositions = 4;
+const int mpDefaultDecimalPositionsAzimuth = 1;
 
 const String thDefaultEncoding = 'UTF-8';
 
@@ -248,5 +249,3 @@ const int mpMaxLastUsedTypes = 5;
 const int mpMaxMostUsedTypes = 5;
 
 const String mpNoSubtypeID = 'NO_SUBTYPE';
-
-const double mpNewMiddlePointDesiredPosition = 0.5;

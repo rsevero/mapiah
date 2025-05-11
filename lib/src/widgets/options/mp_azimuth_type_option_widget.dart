@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_azimuth_picker_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -107,9 +108,13 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
         /// i.e., is has no options at all.
         switch (widget.optionInfo.type) {
           case THCommandOptionType.orientation:
-            newOption = THOrientationCommandOption.fromStringWithParentMPID(
+            newOption = THOrientationCommandOption.forCWJM(
               parentMPID: widget.th2FileEditController.thFileMPID,
-              azimuth: _currentAzimuth.toString(),
+              originalLineInTH2File: '',
+              azimuth: THDoublePart(
+                value: _currentAzimuth!,
+                decimalPositions: mpDefaultDecimalPositionsAzimuth,
+              ),
             );
           default:
             ScaffoldMessenger.of(context).showSnackBar(
