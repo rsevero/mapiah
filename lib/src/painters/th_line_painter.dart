@@ -114,14 +114,16 @@ class THLinePainter extends CustomPainter {
       if (metrics.isNotEmpty) {
         final PathMetric metric = metrics.first;
         final double metricLength = metric.length;
-        final double lineDirectionTicksLengthOnCanvas =
-            th2FileEditController.lineDirectionTickLengthOnCanvas;
+        final double tickLength = th2FileEditController
+                .selectionController.isSelected[line.mpID]!.value
+            ? th2FileEditController.lineDirectionTickLengthOnCanvas * 1.5
+            : th2FileEditController.lineDirectionTickLengthOnCanvas;
 
         reverse = MPCommandOptionAux.isReverse(line);
         lineDirectionTicksPaint =
             th2FileEditController.visualController.getLineDirectionTickPaint(
-          line,
-          reverse,
+          line: line,
+          reverse: reverse,
         );
 
         for (int i = 0; i < points.length; i++) {
@@ -182,8 +184,8 @@ class THLinePainter extends CustomPainter {
           // Draw the tick
           final Offset normal = Offset(-tangentAtPoint.dy, tangentAtPoint.dx);
           final Offset tickEnd = reverse
-              ? point - (normal * lineDirectionTicksLengthOnCanvas)
-              : point + (normal * lineDirectionTicksLengthOnCanvas);
+              ? point - (normal * tickLength)
+              : point + (normal * tickLength);
 
           lineDirectionTicksPath.moveTo(point.dx, point.dy);
           lineDirectionTicksPath.lineTo(tickEnd.dx, tickEnd.dy);

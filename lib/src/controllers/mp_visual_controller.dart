@@ -1162,14 +1162,21 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THLinePaint getLineDirectionTickPaint(THLine line, bool reverse) {
+  THLinePaint getLineDirectionTickPaint({
+    required THLine line,
+    required bool reverse,
+  }) {
     final THLinePaint linePaint = lineDirectionTickPaints[reverse]!;
+    final double lineThickness =
+        _th2FileEditController.selectionController.isSelected[line.mpID]!.value
+            ? _th2FileEditController.lineThicknessOnCanvas * 2
+            : _th2FileEditController.lineThicknessOnCanvas;
 
     return linePaint.copyWith(
       primaryPaint: (_th2FileEditController.isFromActiveScrap(line)
           ? linePaint.primaryPaint!
           : THPaint.thPaint15)
-        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        ..strokeWidth = lineThickness,
       makeSecondaryPaintNull: true,
     );
   }
