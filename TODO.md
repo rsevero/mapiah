@@ -33,8 +33,9 @@ Version 0.2
 [ ] - BUG: opening a new PLA type/option window does not close other PLA type/option window already opened
 [ ] - Enhancement: when start draging in edit single line mode, prefer endpoints to control points if no 'multiple points clicked'
 [X] - BUG: fix == operator signature
-[ ] - BUG: deleted line points not available at undo/redo
+[X] - BUG: deleted line points not available at undo/redo
 [ ] - BUG: clicking on another element when on 'single line edit mode' does not selects the new element
+[ ] - BUG: Save button should be disabled when there is no change to saves
 
 Version 0.3
 [ ] - Search/select elements by characteristics

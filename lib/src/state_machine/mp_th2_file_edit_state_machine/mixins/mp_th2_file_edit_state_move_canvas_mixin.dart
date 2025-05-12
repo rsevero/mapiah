@@ -76,31 +76,28 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
           th2FileEditController.undo();
         }
-      case LogicalKeyboardKey.numpad1:
-      case LogicalKeyboardKey.digit1:
-        th2FileEditController.zoomOneToOne();
-      case LogicalKeyboardKey.numpad2:
-      case LogicalKeyboardKey.digit2:
-        if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
-          th2FileEditController.zoomToFit(
-              zoomFitToType: MPZoomToFitType.selection);
-        }
-      case LogicalKeyboardKey.numpad3:
-      case LogicalKeyboardKey.digit3:
-        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
-      case LogicalKeyboardKey.numpad4:
-      case LogicalKeyboardKey.digit4:
-        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
-      case LogicalKeyboardKey.add:
-      case LogicalKeyboardKey.numpadAdd:
-        th2FileEditController.zoomIn(fineZoom: false);
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
         selectionController.removeSelected();
       case LogicalKeyboardKey.escape:
         selectionController.deselectAllElements();
-      case LogicalKeyboardKey.minus:
-      case LogicalKeyboardKey.numpadSubtract:
+    }
+
+    switch (event.character) {
+      case '1':
+        th2FileEditController.zoomOneToOne();
+      case '2':
+        if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+          th2FileEditController.zoomToFit(
+              zoomFitToType: MPZoomToFitType.selection);
+        }
+      case '3':
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+      case '4':
+        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+      case '+':
+        th2FileEditController.zoomIn(fineZoom: false);
+      case '-':
         th2FileEditController.zoomOut(fineZoom: false);
     }
   }

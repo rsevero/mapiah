@@ -55,7 +55,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           elementEditController.applyRemoveSelectedLineSegments();
           return;
         }
-      case LogicalKeyboardKey.slash:
+    }
+
+    /// The slash character can be produced with keyboard combinations
+    /// (AltRght + Q) on one of my keyboards.
+    switch (event.character) {
+      case '/':
         if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
           elementEditController
               .applyAddLineSegmentsBetweenSelectedLineSegments();
