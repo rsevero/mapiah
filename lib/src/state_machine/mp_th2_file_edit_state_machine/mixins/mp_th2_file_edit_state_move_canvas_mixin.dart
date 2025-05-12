@@ -81,6 +81,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         selectionController.removeSelected();
       case LogicalKeyboardKey.escape:
         selectionController.deselectAllElements();
+        th2FileEditController.stateController
+            .setState(MPTH2FileEditStateType.selectEmptySelection);
     }
 
     switch (event.character) {
