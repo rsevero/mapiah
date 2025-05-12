@@ -100,16 +100,16 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// selection. Change to [MPTH2FileEditStateType.movingElements];
   /// 2.2. No. Do nothing.
   @override
-  Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
-    selectionController.setDragStartCoordinates(event.localPosition);
+  void onPrimaryButtonPointerDown(PointerDownEvent event) {
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+
     Map<int, THElement> clickedElements =
-        await selectionController.getSelectableElementsClickedWithDialog(
+        selectionController.getSelectableElementsClickedWithoutDialog(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
-      canBeMultiple: true,
-      presentMultipleElementsClickedWidget: false,
     );
-    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+
+    selectionController.setDragStartCoordinates(event.localPosition);
 
     if (clickedElements.isNotEmpty) {
       if (!shiftPressed) {
