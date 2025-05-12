@@ -541,17 +541,29 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _isSelected.remove(mpID);
   }
 
-  Future<Map<int, THElement>> getSelectableElementsClicked({
+  Map<int, THElement> getSelectableElementsClickedWithoutDialog({
     required Offset screenCoordinates,
     required THSelectionType selectionType,
-    required bool canBeMultiple,
-    required bool presentMultipleElementsClickedWidget,
-  }) async {
+  }) {
+    final Map<int, THElement> clicked = _getSelectableElementsClicked(
+      screenCoordinates: screenCoordinates,
+      selectionType: selectionType,
+    );
+
+    clickedElements.clear();
+    clickedElements.addAll(clicked);
+
+    return clickedElements;
+  }
+
+  Map<int, THElement> _getSelectableElementsClicked({
+    required Offset screenCoordinates,
+    required THSelectionType selectionType,
+  }) {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
     final selectableElements = _mpSelectableElements.values;
-
-    clickedElements.clear();
+    final clickedElementsMap = <int, THElement>{};
 
     for (final MPSelectable selectableElement in selectableElements) {
       if (selectableElement.contains(canvasCoordinates)) {
@@ -562,30 +574,48 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             case THSelectionType.pla:
               switch (element) {
                 case THPoint _:
-                  clickedElements[element.mpID] = element;
+                  clickedElementsMap[element.mpID] = element;
                 case THLine _:
                   final int? areaMPID =
                       _thFile.getAreaMPIDByLineMPID(element.mpID);
 
                   if (areaMPID != null) {
-                    clickedElements[areaMPID] = _thFile.elementByMPID(areaMPID);
+                    clickedElementsMap[areaMPID] =
+                        _thFile.elementByMPID(areaMPID);
                   }
-                  clickedElements[element.mpID] = element;
+                  clickedElementsMap[element.mpID] = element;
                 case THLineSegment _:
-                  clickedElements[element.parentMPID] =
+                  clickedElementsMap[element.parentMPID] =
                       _thFile.elementByMPID(element.parentMPID);
               }
             case THSelectionType.lineSegment:
               if (selectableElement is! MPSelectableLineSegment) {
                 continue;
               }
-              clickedElements[element.mpID] = element;
+              clickedElementsMap[element.mpID] = element;
           }
         }
       }
     }
 
-    if ((clickedElements.length > 1) && presentMultipleElementsClickedWidget) {
+    return clickedElementsMap;
+  }
+
+  Future<Map<int, THElement>> getSelectableElementsClickedWithDialog({
+    required Offset screenCoordinates,
+    required THSelectionType selectionType,
+    required bool canBeMultiple,
+    required bool presentMultipleElementsClickedWidget,
+  }) async {
+    final Map<int, THElement> clicked = _getSelectableElementsClicked(
+      screenCoordinates: screenCoordinates,
+      selectionType: selectionType,
+    );
+
+    clickedElements.clear();
+    clickedElements.addAll(clicked);
+
+    if (presentMultipleElementsClickedWidget && (clickedElements.length > 1)) {
       selectionCanBeMultiple = canBeMultiple;
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
         MPWindowType.multipleElementsClicked,

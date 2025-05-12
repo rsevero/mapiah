@@ -23,7 +23,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final List<THElement> clickedElements =
-        (await selectionController.getSelectableElementsClicked(
+        (await selectionController.getSelectableElementsClickedWithDialog(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
       canBeMultiple: true,

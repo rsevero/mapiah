@@ -31,7 +31,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final List<THElement> clickedElements =
-        (await selectionController.getSelectableElementsClicked(
+        (await selectionController.getSelectableElementsClickedWithDialog(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
       canBeMultiple: true,
@@ -103,7 +103,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
     selectionController.setDragStartCoordinates(event.localPosition);
     Map<int, THElement> clickedElements =
-        await selectionController.getSelectableElementsClicked(
+        await selectionController.getSelectableElementsClickedWithDialog(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.pla,
       canBeMultiple: true,
@@ -133,11 +133,37 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     selectionController
         .setSelectionWindowScreenEndCoordinates(event.localPosition);
+
     if (selectionController.clickedElementsAtPointerDown.isNotEmpty) {
       selectionController.substituteSelectedElementsByClickedElements();
       th2FileEditController.stateController.setState(
         MPTH2FileEditStateType.movingElements,
       );
+    } else {
+      final bool shiftPressed = MPInteractionAux.isShiftPressed();
+
+      if (!shiftPressed) {
+        final List<THElement> clickedElements =
+            (selectionController.getSelectableElementsClickedWithoutDialog(
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.pla,
+        )).values.toList();
+
+        bool clickedOnSelectedElement = false;
+
+        for (final THElement clickedElement in clickedElements) {
+          if (selectionController.isElementSelected(clickedElement)) {
+            clickedOnSelectedElement = true;
+            break;
+          }
+        }
+
+        if (clickedOnSelectedElement) {
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.movingElements,
+          );
+        }
+      }
     }
   }
 
