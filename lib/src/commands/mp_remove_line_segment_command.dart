@@ -27,8 +27,10 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .applyRemoveElementByMPID(lineSegment.mpID);
+    th2FileEditController.elementEditController.applyRemoveElementByMPID(
+      lineSegment.mpID,
+      setState: false,
+    );
   }
 
   @override

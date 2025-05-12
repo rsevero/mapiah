@@ -312,23 +312,29 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void removeElement(THElement element) {
+  void removeElement(
+    THElement element, {
+    bool setState = false,
+  }) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
     _thFile.removeElement(element);
     selectionController.removeSelectableElement(element.mpID);
-    selectionController.removeSelectedElement(element);
+    selectionController.removeSelectedElement(element, setState: setState);
     if (element is THLineSegment) {
       selectionController.removeSelectedLineSegment(element);
     }
     _th2FileEditController.updateHasMultipleScraps();
   }
 
-  void applyRemoveElementByMPID(int mpID) {
+  void applyRemoveElementByMPID(
+    int mpID, {
+    bool setState = false,
+  }) {
     final THElement element = _thFile.elementByMPID(mpID);
 
-    removeElement(element);
+    removeElement(element, setState: setState);
   }
 
   @action
@@ -651,6 +657,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     } else if (selectedLineSegmentMPIDs.length == 1) {
       final MPCommand removeCommand =
           getRemoveLineSegmentCommand(selectedLineSegmentMPIDs.first);
+
       _th2FileEditController.execute(removeCommand);
     } else {
       final List<MPCommand> removeLineSegmentCommands = [];
@@ -675,6 +682,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.updateUndoRedoStatus();
+    _th2FileEditController.selectionController
+        .updateSelectableEndAndControlPoints();
+    _th2FileEditController.triggerEditLineRedraw();
   }
 
   MPCommand getRemoveLineSegmentCommand(

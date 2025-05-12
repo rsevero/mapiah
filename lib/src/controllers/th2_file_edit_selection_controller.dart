@@ -333,7 +333,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  bool removeSelectedElement(THElement element) {
+  bool removeSelectedElement(
+    THElement element, {
+    bool setState = false,
+  }) {
     _mpSelectedElementsLogical.remove(element.mpID);
     if (element is THArea) {
       final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
@@ -350,7 +353,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     _th2FileEditController.triggerSelectedListChanged();
 
-    return setSelectionState();
+    if (setState) {
+      return setSelectionState();
+    }
+
+    return false;
   }
 
   @action

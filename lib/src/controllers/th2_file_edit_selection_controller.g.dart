@@ -437,12 +437,12 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  bool removeSelectedElement(THElement element) {
+  bool removeSelectedElement(THElement element, {bool setState = false}) {
     final _$actionInfo =
         _$TH2FileEditSelectionControllerBaseActionController.startAction(
             name: 'TH2FileEditSelectionControllerBase.removeSelectedElement');
     try {
-      return super.removeSelectedElement(element);
+      return super.removeSelectedElement(element, setState: setState);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController
           .endAction(_$actionInfo);

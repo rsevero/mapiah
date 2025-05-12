@@ -138,12 +138,12 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void removeElement(THElement element) {
+  void removeElement(THElement element, {bool setState = false}) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
             name: 'TH2FileEditElementEditControllerBase.removeElement');
     try {
-      return super.removeElement(element);
+      return super.removeElement(element, setState: setState);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);
