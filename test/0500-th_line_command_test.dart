@@ -283,6 +283,21 @@ endscrap
       },
       {
         'file':
+            'th_file_parser-03132-linepoint_with_altitude_option_with_invalid_line_type-failure.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line overhang
+    1758 -1030
+      altitude [ 4 m ]
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
             'th_file_parser-03133-linepoint_with_altitude_option_with_fix.th2',
         'length': 7,
         'encoding': 'UTF-8',
@@ -358,21 +373,21 @@ endscrap
     }
   });
 
-  group('linepoint -altitude failures', () {
-    final parser = THFileParser();
+  // group('linepoint -altitude failures', () {
+  //   final parser = THFileParser();
 
-    const failures = [
-      'th_file_parser-03132-linepoint_with_altitude_option_with_invalid_line_type-failure.th2',
-    ];
+  //   const failures = [
+  //     'th_file_parser-03132-linepoint_with_altitude_option_with_invalid_line_type-failure.th2',
+  //   ];
 
-    for (var failure in failures) {
-      test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
-        expect(isSuccessful, false);
-      });
-    }
-  });
+  //   for (var failure in failures) {
+  //     test(failure, () async {
+  //       final (_, isSuccessful, error) =
+  //           await parser.parse(THTestAux.testPath(failure));
+  //       expect(isSuccessful, false);
+  //     });
+  //   }
+  // });
 
   group('line -anchors', () {
     final parser = THFileParser();

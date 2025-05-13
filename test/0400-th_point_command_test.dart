@@ -1355,14 +1355,25 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file':
+            'th_file_parser-02313-passage_height_point_with_bracket_value_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap U20-U23 -projection plan
+  point 223.3 -2142.9 passage-height -value [ 6 ft ]
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
-        // final (file, isSuccessful, errors) = await parser.parse((success['file'] as String),
-        //     startParser: grammar.start());
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+          // trace: true,
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));

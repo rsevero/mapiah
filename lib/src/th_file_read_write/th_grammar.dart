@@ -682,32 +682,31 @@ class THGrammar extends GrammarDefinition {
 
   /// point -value
   Parser valueOption() => stringIgnoreCase('value') & valueOptions();
-  Parser valueOptions() => (dateTimeNoNoDateTime()
-          .trim()
-          .map((value) => ['datetime', value]) |
-      numberWithSuffix(char('?')).trim().map((value) => [
-            'one_number_with_optional_unit',
-            [value]
-          ]) |
-      number().trim().map((value) => ['single_number', value]) |
-      bracketStringTemplate(
-              numberWithSuffix(char('?').optional()) & lengthUnit().optional())
-          .trim()
-          .map((value) => ['one_number_with_optional_unit', value]) |
-      bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
-          .trim()
-          .map((value) => ['plus_number_minus_number', value]) |
-      bracketStringTemplate(stringIgnoreCase('fix') &
-              number().trim() &
-              lengthUnit().optional())
-          .trim()
-          .map((value) => ['fix_number', value]) |
-      bracketStringTemplate(
-              number().trim() & number().trim() & lengthUnit().optional())
-          .trim()
-          .map((value) => ['two_numbers_with_optional_unit', value]) |
-      char('-').trim().map((value) => ['hyphen', value]) |
-      nan().trim().map((value) => ['nan', value]));
+  Parser valueOptions() =>
+      (dateTimeNoNoDateTime().trim().map((value) => ['datetime', value]) |
+          numberWithSuffix(char('?')).trim().map((value) => [
+                'one_number_with_optional_unit',
+                [value]
+              ]) |
+          number().trim().map((value) => ['single_number', value]) |
+          bracketStringTemplate(numberWithSuffix(char('?').optional()).trim() &
+                  lengthUnit().optional().trim())
+              .trim()
+              .map((value) => ['one_number_with_optional_unit', value]) |
+          bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
+              .trim()
+              .map((value) => ['plus_number_minus_number', value]) |
+          bracketStringTemplate(stringIgnoreCase('fix') &
+                  number().trim() &
+                  lengthUnit().optional())
+              .trim()
+              .map((value) => ['fix_number', value]) |
+          bracketStringTemplate(
+                  number().trim() & number().trim() & lengthUnit().optional())
+              .trim()
+              .map((value) => ['two_numbers_with_optional_unit', value]) |
+          char('-').trim().map((value) => ['hyphen', value]) |
+          nan().trim().map((value) => ['nan', value]));
 
   /// point -visibility
   Parser visibilityOption() => stringIgnoreCase('visibility') & onOffOptions();
