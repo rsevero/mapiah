@@ -307,7 +307,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THIsParentMixin parent,
   }) {
     _thFile.addElement(newElement);
-    parent.addElementToParent(newElement);
+    parent.addElementToParent(newElement, positionInsideParent: false);
     _th2FileEditController.updateHasMultipleScraps();
   }
 

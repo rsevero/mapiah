@@ -24,7 +24,7 @@ Version 0.2
 [ ] - Quick introduction guide
 [X] - BUG: point arrow should be filled
 [X] - BUG: last used point type not updating
-[X] - BUG: aveAs didn't save the changes
+[X] - BUG: saveAs didn't save the changes
 [X] - BUG: corrigindo set/unset de originalLineInTH@File: MPSetOptionToElementCommand
 [X] - BUG: distinguir execute command normal dos gerados por undos: os dos undos devem manter originalLineInTH2File, os normais não.
 [X] - BUG: 'N' not starting line edit mode
@@ -37,6 +37,7 @@ Version 0.2
 [X] - BUG: clicking on another element when on 'single line edit mode' does not selects the new element
 [X] - BUG: Save button should be disabled when there is no change to save
 [X] - BUG: when trying to move objects, a new selection window is being drawn
+[X] - BUG: added elements get inserted at the end of the file, after the endscrap element
 
 Version 0.3
 [ ] - Search/select elements by characteristics

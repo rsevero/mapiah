@@ -321,8 +321,14 @@ class THLine extends THElement
   }
 
   @override
-  void addElementToParent(THElement element) {
-    super.addElementToParent(element);
+  void addElementToParent(
+    THElement element, {
+    bool positionInsideParent = true,
+  }) {
+    super.addElementToParent(
+      element,
+      positionInsideParent: positionInsideParent,
+    );
 
     if (element is THLineSegment) {
       addLineSegmentMPID(element.mpID);

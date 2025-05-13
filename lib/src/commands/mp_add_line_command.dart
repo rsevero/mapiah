@@ -31,9 +31,9 @@ class MPAddLineCommand extends MPCommand {
     newLine = thFile.lineByMPID(lineMPID);
     lineChildren = [];
 
-    final childrenMPIDs = newLine.childrenMPID;
+    final List<int> childrenMPIDs = newLine.childrenMPID;
 
-    for (final childMPID in childrenMPIDs) {
+    for (final int childMPID in childrenMPIDs) {
       lineChildren.add(thFile.elementByMPID(childMPID));
     }
 

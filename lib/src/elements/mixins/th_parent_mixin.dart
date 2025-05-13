@@ -9,8 +9,15 @@ mixin THIsParentMixin {
   // Here are registered all children mapiah IDs.
   final List<int> childrenMPID = [];
 
-  void addElementToParent(THElement element) {
-    childrenMPID.add(element.mpID);
+  void addElementToParent(
+    THElement element, {
+    bool positionInsideParent = true,
+  }) {
+    if (positionInsideParent && (element.parentMPID > 0)) {
+      childrenMPID.insert(childrenMPID.length - 1, element.mpID);
+    } else {
+      childrenMPID.add(element.mpID);
+    }
   }
 
   void removeElementFromParent(THFile thFile, THElement element) {
