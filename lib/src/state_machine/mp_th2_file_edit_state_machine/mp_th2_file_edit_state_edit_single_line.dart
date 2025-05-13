@@ -109,7 +109,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       return;
     }
 
-    final Map<int, THElement> clickedElements =
+    Map<int, THElement> clickedElements =
         await selectionController.getSelectableElementsClickedWithDialog(
       screenCoordinates: event.localPosition,
       selectionType: THSelectionType.lineSegment,
@@ -120,53 +120,70 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (clickedElements.isNotEmpty) {
       final THLineSegment clickedLineSegment =
           clickedElements.values.first as THLineSegment;
-      final THLine line = thFile.lineByMPID(clickedLineSegment.parentMPID);
-      final THLineSegment previousLineSegment = line.getPreviousLineSegment(
-        clickedLineSegment,
-        thFile,
+
+      if (selectionController
+          .isSelected[clickedLineSegment.parentMPID]!.value) {
+        final THLine line = thFile.lineByMPID(clickedLineSegment.parentMPID);
+        final THLineSegment previousLineSegment = line.getPreviousLineSegment(
+          clickedLineSegment,
+          thFile,
+        );
+        final bool isPreviousLineSegmentSelected =
+            selectionController.isElementSelected(previousLineSegment);
+        final bool isLineSegmentSelected =
+            selectionController.isElementSelected(clickedLineSegment);
+
+        if (!isLineSegmentSelected || !isPreviousLineSegmentSelected) {
+          if (shiftPressed) {
+            if (!isLineSegmentSelected) {
+              selectionController.addSelectedLineSegment(clickedLineSegment);
+            }
+
+            if (!isPreviousLineSegmentSelected) {
+              selectionController.addSelectedLineSegment(previousLineSegment);
+            }
+          } else {
+            selectionController.setSelectedLineSegments(
+              [previousLineSegment, clickedLineSegment],
+            );
+          }
+
+          selectionController.updateSelectableEndAndControlPoints();
+          th2FileEditController.triggerEditLineRedraw();
+        } else {
+          if (shiftPressed) {
+            selectionController.removeSelectedLineSegments(
+              [previousLineSegment, clickedLineSegment],
+            );
+          } else {
+            selectionController.setSelectedLineSegments(
+              [previousLineSegment, clickedLineSegment],
+            );
+          }
+
+          selectionController.updateSelectableEndAndControlPoints();
+          th2FileEditController.triggerEditLineRedraw();
+        }
+
+        return;
+      }
+    }
+
+    clickedElements =
+        await selectionController.getSelectableElementsClickedWithDialog(
+      screenCoordinates: event.localPosition,
+      selectionType: THSelectionType.pla,
+      canBeMultiple: true,
+      presentMultipleElementsClickedWidget: true,
+    );
+
+    selectionController.clearClickedElementsAtPointerDown();
+
+    if (clickedElements.isNotEmpty) {
+      selectionController.setSelectedElements(
+        clickedElements.values,
+        setState: true,
       );
-      final bool isPreviousLineSegmentSelected =
-          selectionController.isElementSelected(previousLineSegment);
-      final bool isLineSegmentSelected =
-          selectionController.isElementSelected(clickedLineSegment);
-
-      if (!isLineSegmentSelected || !isPreviousLineSegmentSelected) {
-        if (shiftPressed) {
-          if (!isLineSegmentSelected) {
-            selectionController.addSelectedLineSegment(clickedLineSegment);
-          }
-
-          if (!isPreviousLineSegmentSelected) {
-            selectionController.addSelectedLineSegment(previousLineSegment);
-          }
-        } else {
-          selectionController.setSelectedLineSegments(
-            [previousLineSegment, clickedLineSegment],
-          );
-        }
-
-        selectionController.updateSelectableEndAndControlPoints();
-        th2FileEditController.triggerEditLineRedraw();
-      } else {
-        if (shiftPressed) {
-          selectionController.removeSelectedLineSegments(
-            [previousLineSegment, clickedLineSegment],
-          );
-        } else {
-          selectionController.setSelectedLineSegments(
-            [previousLineSegment, clickedLineSegment],
-          );
-        }
-
-        selectionController.updateSelectableEndAndControlPoints();
-        th2FileEditController.triggerEditLineRedraw();
-      }
-    } else {
-      if (!shiftPressed) {
-        selectionController.clearSelectedElements();
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.selectEmptySelection);
-      }
     }
 
     return;

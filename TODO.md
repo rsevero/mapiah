@@ -34,7 +34,7 @@ Version 0.2
 [ ] - Enhancement: when start draging in edit single line mode, prefer endpoints to control points if no 'multiple points clicked'
 [X] - BUG: fix == operator signature
 [X] - BUG: deleted line points not available at undo/redo
-[ ] - BUG: clicking on another element when on 'single line edit mode' does not selects the new element
+[X] - BUG: clicking on another element when on 'single line edit mode' does not selects the new element
 [X] - BUG: Save button should be disabled when there is no change to save
 [X] - BUG: when trying to move objects, a new selection window is being drawn
 
