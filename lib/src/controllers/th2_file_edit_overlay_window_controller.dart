@@ -208,6 +208,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           .complete();
     }
 
+    if (type == MPWindowType.plaTypes) {
+      _currentPLATypeShown = null;
+    }
+
     if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
       _th2FileEditController.thFileFocusNode.requestFocus();
     }
