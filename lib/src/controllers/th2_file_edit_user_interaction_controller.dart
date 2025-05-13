@@ -84,6 +84,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       final MPCommand setOptionCommand = MPSetOptionToElementCommand(
         option: option.copyWith(parentMPID: selectedElement.mpID),
+        currentOriginalLineInTH2File: selectedElement.originalLineInTH2File,
       );
 
       _th2FileEditController.execute(setOptionCommand);
@@ -108,6 +109,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             MPMultipleElementsCommand.setOption(
           elements: actualElementsForNewOption,
           option: option,
+          thFile: _th2FileEditController.thFile,
         );
 
         _th2FileEditController.execute(addOptionCommand);
@@ -148,6 +150,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
         optionType: optionType,
         parentMPID: selectedElement.mpID,
+        currentOriginalLineInTH2File:
+            _thFile.elementByMPID(selectedElement.mpID).originalLineInTH2File,
       );
 
       _th2FileEditController.execute(removeOptionCommand);
@@ -165,6 +169,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             MPMultipleElementsCommand.removeOption(
           optionType: optionType,
           parentMPIDs: parentMPIDs,
+          thFile: _th2FileEditController.thFile,
         );
 
         _th2FileEditController.execute(removeOptionCommand);
@@ -222,6 +227,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         );
         final MPCommand addOptionCommand = MPSetOptionToElementCommand(
           option: option,
+          currentOriginalLineInTH2File: selectedElement.originalLineInTH2File,
         );
 
         _th2FileEditController.execute(addOptionCommand);
@@ -257,6 +263,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             type: optionType,
             value: choice,
           ),
+          thFile: _th2FileEditController.thFile,
         );
 
         _th2FileEditController.execute(addOptionCommand);
@@ -282,6 +289,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
           optionType: optionType,
           parentMPID: selectedElement.mpID,
+          currentOriginalLineInTH2File:
+              _thFile.elementByMPID(selectedElement.mpID).originalLineInTH2File,
         );
 
         _th2FileEditController.execute(removeOptionCommand);
@@ -302,6 +311,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             MPMultipleElementsCommand.removeOption(
           optionType: optionType,
           parentMPIDs: parentMPIDs,
+          thFile: _th2FileEditController.thFile,
         );
 
         _th2FileEditController.execute(removeOptionCommand);

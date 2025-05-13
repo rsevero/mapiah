@@ -15,6 +15,7 @@ class MPMultipleElementsCommand extends MPCommand {
   MPMultipleElementsCommand.setOption({
     required THCommandOption option,
     required List<THElement> elements,
+    required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.setOptionToElements,
   })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
         super() {
@@ -31,6 +32,8 @@ class MPMultipleElementsCommand extends MPCommand {
           MPSetOptionToElementCommand(
         option: option.copyWith(parentMPID: element.mpID),
         descriptionType: descriptionType,
+        currentOriginalLineInTH2File:
+            thFile.elementByMPID(element.mpID).originalLineInTH2File,
       );
 
       commandsList.add(setOptionToElementCommand);
@@ -40,6 +43,7 @@ class MPMultipleElementsCommand extends MPCommand {
   MPMultipleElementsCommand.removeOption({
     required THCommandOptionType optionType,
     required List<int> parentMPIDs,
+    required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.removeOptionFromElements,
   })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
         super() {
@@ -50,6 +54,8 @@ class MPMultipleElementsCommand extends MPCommand {
           MPRemoveOptionFromElementCommand(
         optionType: optionType,
         parentMPID: parentMPID,
+        currentOriginalLineInTH2File:
+            thFile.elementByMPID(parentMPID).originalLineInTH2File,
         descriptionType: descriptionType,
       );
 

@@ -2,21 +2,24 @@ part of 'mp_command.dart';
 
 class MPSetOptionToElementCommand extends MPCommand {
   final THCommandOption option;
-  final String originalLineInTH2File;
+  final String newOriginalLineInTH2File;
+  final String currentOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
 
   MPSetOptionToElementCommand.forCWJM({
     required this.option,
-    required this.originalLineInTH2File,
+    required this.newOriginalLineInTH2File,
+    required this.currentOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPSetOptionToElementCommand({
     required this.option,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+    this.newOriginalLineInTH2File = '',
+    this.currentOriginalLineInTH2File = '',
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.setOptionToElement;
@@ -49,15 +52,16 @@ class MPSetOptionToElementCommand extends MPCommand {
 
       oppositeCommand = MPSetOptionToElementCommand.forCWJM(
         option: currentOption,
-        originalLineInTH2File: th2FileEditController.thFile
-            .elementByMPID(currentOption.parentMPID)
-            .originalLineInTH2File,
+        newOriginalLineInTH2File: currentOriginalLineInTH2File,
+        currentOriginalLineInTH2File: newOriginalLineInTH2File,
         descriptionType: descriptionType,
       );
     } else {
       oppositeCommand = MPRemoveOptionFromElementCommand(
         optionType: option.type,
         parentMPID: option.parentMPID,
+        newOriginalLineInTH2File: currentOriginalLineInTH2File,
+        currentOriginalLineInTH2File: newOriginalLineInTH2File,
         descriptionType: descriptionType,
       );
     }
@@ -69,15 +73,18 @@ class MPSetOptionToElementCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPSetOptionToElementCommand copyWith({
     THCommandOption? option,
-    String? originalLineInTH2File,
+    String? newOriginalLineInTH2File,
+    String? currentOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPSetOptionToElementCommand.forCWJM(
       option: option ?? this.option,
-      originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
+      newOriginalLineInTH2File:
+          newOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
+      currentOriginalLineInTH2File:
+          currentOriginalLineInTH2File ?? this.currentOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -85,7 +92,8 @@ class MPSetOptionToElementCommand extends MPCommand {
   factory MPSetOptionToElementCommand.fromMap(Map<String, dynamic> map) {
     return MPSetOptionToElementCommand.forCWJM(
       option: THCommandOption.fromMap(map['option']),
-      originalLineInTH2File: map['originalLineInTH2File'],
+      newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
+      currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -101,7 +109,8 @@ class MPSetOptionToElementCommand extends MPCommand {
 
     map.addAll({
       'option': option.toMap(),
-      'originalLineInTH2File': originalLineInTH2File,
+      'newOriginalLineInTH2File': newOriginalLineInTH2File,
+      'currentOriginalLineInTH2File': currentOriginalLineInTH2File,
     });
 
     return map;
@@ -113,7 +122,8 @@ class MPSetOptionToElementCommand extends MPCommand {
 
     return other is MPSetOptionToElementCommand &&
         other.option == option &&
-        other.originalLineInTH2File == originalLineInTH2File &&
+        other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
+        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File &&
         other.descriptionType == descriptionType;
   }
 
@@ -122,6 +132,7 @@ class MPSetOptionToElementCommand extends MPCommand {
       super.hashCode ^
       Object.hash(
         option,
-        originalLineInTH2File,
+        newOriginalLineInTH2File,
+        currentOriginalLineInTH2File,
       );
 }

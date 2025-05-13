@@ -627,6 +627,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _thFile.registerMPIDWithTHID(option.parentMPID, option.thID);
     }
 
+    if (option.parentMPID >= 0) {
+      final THElement parentElement = _thFile.elementByMPID(option.parentMPID);
+
+      _thFile.substituteElement(parentElement.copyWith(
+        originalLineInTH2File: '',
+      ));
+    }
+
     updateOptionEdited();
   }
 
@@ -634,6 +642,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void applyRemoveOptionFromElement({
     required THCommandOptionType optionType,
     required int parentMPID,
+    required String newOriginalLineInTH2File,
   }) {
     final THHasOptionsMixin parentElement =
         _th2FileEditController.thFile.hasOptionByMPID(parentMPID);
@@ -643,6 +652,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     parentElement.removeOption(optionType);
+    _thFile.substituteElement(parentElement.copyWith(
+      originalLineInTH2File: newOriginalLineInTH2File,
+    ));
     updateOptionEdited();
   }
 
