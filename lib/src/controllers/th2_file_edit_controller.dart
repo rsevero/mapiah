@@ -115,7 +115,7 @@ abstract class TH2FileEditControllerBase with Store {
   bool _isEditLineMode = false;
 
   @readonly
-  bool _isNodeEditButtonEnabled = false;
+  bool _enableNodeEditButton = false;
 
   @readonly
   bool _isOptionEditMode = false;
@@ -210,6 +210,28 @@ abstract class TH2FileEditControllerBase with Store {
     ..strokeWidth = _selectionHandleLineThicknessOnCanvas;
 
   @computed
+  bool get showAddLine =>
+      (elementEditController.newLine != null) ||
+      (elementEditController.lineStartScreenPosition != null);
+
+  @computed
+  bool get showEditLineSegment => _isEditLineMode;
+
+  @computed
+  bool get showMultipleElementsClickedHighlight =>
+      selectionController.multipleElementsClickedHighlightedMPID != null;
+
+  @computed
+  bool get showMultipleEndControlPointsClickedHighlight =>
+      selectionController
+          .multipleEndControlPointsClickedHighlightedChoice.type !=
+      MPMultipleEndControlPointsClickedType.none;
+
+  @computed
+  bool get showOptionsEdit =>
+      stateController.state is MPTH2FileEditStateOptionEdit;
+
+  @computed
   bool get showRemoveButton {
     final MPTH2FileEditState state = stateController.state;
 
@@ -218,15 +240,9 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @computed
-  bool get showEditLineSegment => _isEditLineMode;
-
-  @computed
-  bool get showOptionsEdit =>
-      stateController.state is MPTH2FileEditStateOptionEdit;
-
-  @computed
-  bool get showUndoRedoButtons =>
-      _isAddElementMode || _isSelectMode || _isEditLineMode;
+  bool get showScrapScale {
+    return !_isLoading && scrapHasScaleOption;
+  }
 
   @computed
   bool get showSelectedElements =>
@@ -241,27 +257,11 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.selectionWindowCanvasCoordinates.value != Rect.zero;
 
   @computed
-  bool get showAddLine =>
-      (elementEditController.newLine != null) ||
-      (elementEditController.lineStartScreenPosition != null);
+  bool get showUndoRedoButtons =>
+      _isAddElementMode || _isSelectMode || _isEditLineMode;
 
   @computed
-  bool get showScrapScale {
-    return !_isLoading && scrapHasScaleOption;
-  }
-
-  @computed
-  bool get showMultipleElementsClickedHighlight =>
-      selectionController.multipleElementsClickedHighlightedMPID != null;
-
-  @computed
-  bool get showMultipleEndControlPointsClickedHighlight =>
-      selectionController
-          .multipleEndControlPointsClickedHighlightedChoice.type !=
-      MPMultipleEndControlPointsClickedType.none;
-
-  @computed
-  bool get removeButtonEnabled =>
+  bool get enableRemoveButton =>
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @readonly
@@ -479,7 +479,7 @@ abstract class TH2FileEditControllerBase with Store {
     }));
 
     _disposers.add(autorun((_) {
-      _isNodeEditButtonEnabled =
+      _enableNodeEditButton =
           (selectionController.mpSelectedElementsLogical.length == 1) &&
               (selectionController.mpSelectedElementsLogical[selectionController
                   .mpSelectedElementsLogical.keys.first] is MPSelectedLine);

@@ -58,13 +58,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<Paint>(() => super.selectionHandlePaint,
               name: 'TH2FileEditControllerBase.selectionHandlePaint'))
       .value;
-  Computed<bool>? _$showRemoveButtonComputed;
+  Computed<bool>? _$showAddLineComputed;
 
   @override
-  bool get showRemoveButton => (_$showRemoveButtonComputed ??= Computed<bool>(
-          () => super.showRemoveButton,
-          name: 'TH2FileEditControllerBase.showRemoveButton'))
-      .value;
+  bool get showAddLine =>
+      (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
+              name: 'TH2FileEditControllerBase.showAddLine'))
+          .value;
   Computed<bool>? _$showEditLineSegmentComputed;
 
   @override
@@ -72,6 +72,25 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.showEditLineSegment,
               name: 'TH2FileEditControllerBase.showEditLineSegment'))
       .value;
+  Computed<bool>? _$showMultipleElementsClickedHighlightComputed;
+
+  @override
+  bool get showMultipleElementsClickedHighlight =>
+      (_$showMultipleElementsClickedHighlightComputed ??= Computed<bool>(
+              () => super.showMultipleElementsClickedHighlight,
+              name:
+                  'TH2FileEditControllerBase.showMultipleElementsClickedHighlight'))
+          .value;
+  Computed<bool>? _$showMultipleEndControlPointsClickedHighlightComputed;
+
+  @override
+  bool get showMultipleEndControlPointsClickedHighlight =>
+      (_$showMultipleEndControlPointsClickedHighlightComputed ??= Computed<
+                  bool>(
+              () => super.showMultipleEndControlPointsClickedHighlight,
+              name:
+                  'TH2FileEditControllerBase.showMultipleEndControlPointsClickedHighlight'))
+          .value;
   Computed<bool>? _$showOptionsEditComputed;
 
   @override
@@ -79,13 +98,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       (_$showOptionsEditComputed ??= Computed<bool>(() => super.showOptionsEdit,
               name: 'TH2FileEditControllerBase.showOptionsEdit'))
           .value;
-  Computed<bool>? _$showUndoRedoButtonsComputed;
+  Computed<bool>? _$showRemoveButtonComputed;
 
   @override
-  bool get showUndoRedoButtons => (_$showUndoRedoButtonsComputed ??=
-          Computed<bool>(() => super.showUndoRedoButtons,
-              name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
+  bool get showRemoveButton => (_$showRemoveButtonComputed ??= Computed<bool>(
+          () => super.showRemoveButton,
+          name: 'TH2FileEditControllerBase.showRemoveButton'))
       .value;
+  Computed<bool>? _$showScrapScaleComputed;
+
+  @override
+  bool get showScrapScale =>
+      (_$showScrapScaleComputed ??= Computed<bool>(() => super.showScrapScale,
+              name: 'TH2FileEditControllerBase.showScrapScale'))
+          .value;
   Computed<bool>? _$showSelectedElementsComputed;
 
   @override
@@ -107,45 +133,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.showSelectionWindow,
               name: 'TH2FileEditControllerBase.showSelectionWindow'))
       .value;
-  Computed<bool>? _$showAddLineComputed;
+  Computed<bool>? _$showUndoRedoButtonsComputed;
 
   @override
-  bool get showAddLine =>
-      (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
-              name: 'TH2FileEditControllerBase.showAddLine'))
-          .value;
-  Computed<bool>? _$showScrapScaleComputed;
+  bool get showUndoRedoButtons => (_$showUndoRedoButtonsComputed ??=
+          Computed<bool>(() => super.showUndoRedoButtons,
+              name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
+      .value;
+  Computed<bool>? _$enableRemoveButtonComputed;
 
   @override
-  bool get showScrapScale =>
-      (_$showScrapScaleComputed ??= Computed<bool>(() => super.showScrapScale,
-              name: 'TH2FileEditControllerBase.showScrapScale'))
-          .value;
-  Computed<bool>? _$showMultipleElementsClickedHighlightComputed;
-
-  @override
-  bool get showMultipleElementsClickedHighlight =>
-      (_$showMultipleElementsClickedHighlightComputed ??= Computed<bool>(
-              () => super.showMultipleElementsClickedHighlight,
-              name:
-                  'TH2FileEditControllerBase.showMultipleElementsClickedHighlight'))
-          .value;
-  Computed<bool>? _$showMultipleEndControlPointsClickedHighlightComputed;
-
-  @override
-  bool get showMultipleEndControlPointsClickedHighlight =>
-      (_$showMultipleEndControlPointsClickedHighlightComputed ??= Computed<
-                  bool>(
-              () => super.showMultipleEndControlPointsClickedHighlight,
-              name:
-                  'TH2FileEditControllerBase.showMultipleEndControlPointsClickedHighlight'))
-          .value;
-  Computed<bool>? _$removeButtonEnabledComputed;
-
-  @override
-  bool get removeButtonEnabled => (_$removeButtonEnabledComputed ??=
-          Computed<bool>(() => super.removeButtonEnabled,
-              name: 'TH2FileEditControllerBase.removeButtonEnabled'))
+  bool get enableRemoveButton => (_$enableRemoveButtonComputed ??=
+          Computed<bool>(() => super.enableRemoveButton,
+              name: 'TH2FileEditControllerBase.enableRemoveButton'))
       .value;
   Computed<bool>? _$scrapHasScaleOptionComputed;
 
@@ -465,23 +465,23 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isNodeEditButtonEnabledAtom = Atom(
-      name: 'TH2FileEditControllerBase._isNodeEditButtonEnabled',
+  late final _$_enableNodeEditButtonAtom = Atom(
+      name: 'TH2FileEditControllerBase._enableNodeEditButton',
       context: context);
 
-  bool get isNodeEditButtonEnabled {
-    _$_isNodeEditButtonEnabledAtom.reportRead();
-    return super._isNodeEditButtonEnabled;
+  bool get enableNodeEditButton {
+    _$_enableNodeEditButtonAtom.reportRead();
+    return super._enableNodeEditButton;
   }
 
   @override
-  bool get _isNodeEditButtonEnabled => isNodeEditButtonEnabled;
+  bool get _enableNodeEditButton => enableNodeEditButton;
 
   @override
-  set _isNodeEditButtonEnabled(bool value) {
-    _$_isNodeEditButtonEnabledAtom
-        .reportWrite(value, super._isNodeEditButtonEnabled, () {
-      super._isNodeEditButtonEnabled = value;
+  set _enableNodeEditButton(bool value) {
+    _$_enableNodeEditButtonAtom.reportWrite(value, super._enableNodeEditButton,
+        () {
+      super._enableNodeEditButton = value;
     });
   }
 
@@ -1419,18 +1419,18 @@ activeAddElementButton: ${activeAddElementButton},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
-showRemoveButton: ${showRemoveButton},
+showAddLine: ${showAddLine},
 showEditLineSegment: ${showEditLineSegment},
+showMultipleElementsClickedHighlight: ${showMultipleElementsClickedHighlight},
+showMultipleEndControlPointsClickedHighlight: ${showMultipleEndControlPointsClickedHighlight},
 showOptionsEdit: ${showOptionsEdit},
-showUndoRedoButtons: ${showUndoRedoButtons},
+showRemoveButton: ${showRemoveButton},
+showScrapScale: ${showScrapScale},
 showSelectedElements: ${showSelectedElements},
 showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
-showAddLine: ${showAddLine},
-showScrapScale: ${showScrapScale},
-showMultipleElementsClickedHighlight: ${showMultipleElementsClickedHighlight},
-showMultipleEndControlPointsClickedHighlight: ${showMultipleEndControlPointsClickedHighlight},
-removeButtonEnabled: ${removeButtonEnabled},
+showUndoRedoButtons: ${showUndoRedoButtons},
+enableRemoveButton: ${enableRemoveButton},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},

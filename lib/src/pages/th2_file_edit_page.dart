@@ -348,8 +348,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   List<Widget> _editElementButtons() {
     final bool isEditLineMode = th2FileEditController.isEditLineMode;
-    final bool isNodeEditButtonEnabled =
-        th2FileEditController.isNodeEditButtonEnabled;
+    final bool enableNodeEditButton =
+        th2FileEditController.enableNodeEditButton;
 
     return [
       SizedBox(height: mpButtonSpace),
@@ -377,13 +377,13 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         child: Icon(
           Icons.polyline_outlined,
           size: thFloatingActionIconSize,
-          color: isNodeEditButtonEnabled
+          color: enableNodeEditButton
               ? (isEditLineMode
                   ? colorScheme.onPrimary
                   : colorScheme.onSecondaryContainer)
               : colorScheme.surfaceContainerHighest,
         ),
-        backgroundColor: isNodeEditButtonEnabled
+        backgroundColor: enableNodeEditButton
             ? (isEditLineMode
                 ? colorScheme.primary
                 : colorScheme.secondaryContainer)
@@ -447,7 +447,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         final bool hasUndo = th2FileEditController.hasUndo;
         final bool hasRedo = th2FileEditController.hasRedo;
         final bool removeButtonEnabled =
-            th2FileEditController.removeButtonEnabled;
+            th2FileEditController.enableRemoveButton;
 
         return Positioned(
           top: 16,
