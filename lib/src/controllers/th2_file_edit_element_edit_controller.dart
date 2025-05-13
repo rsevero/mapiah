@@ -269,8 +269,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.selectionController
         .addSelectableElement(newLineSegment);
     _th2FileEditController.selectionController.updateSelectableElements();
-    _th2FileEditController.updateHasMultipleScraps();
-    _th2FileEditController.updateHasMultipleScraps();
   }
 
   @action
@@ -288,7 +286,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.selectionController.addSelectableElement(newElement);
-    _th2FileEditController.updateHasMultipleScraps();
+
+    if (newElement is THScrap) {
+      _th2FileEditController.updateHasMultipleScraps();
+    }
   }
 
   void addElementWithParentMPIDWithoutSelectableElement({
@@ -308,7 +309,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     _thFile.addElement(newElement);
     parent.addElementToParent(newElement, positionInsideParent: false);
-    _th2FileEditController.updateHasMultipleScraps();
+
+    if (newElement is THScrap) {
+      _th2FileEditController.updateHasMultipleScraps();
+    }
   }
 
   @action
@@ -322,10 +326,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _thFile.removeElement(element);
     selectionController.removeSelectableElement(element.mpID);
     selectionController.removeSelectedElement(element, setState: setState);
+
     if (element is THLineSegment) {
       selectionController.removeSelectedLineSegment(element);
     }
-    _th2FileEditController.updateHasMultipleScraps();
+
+    if (element is THScrap) {
+      _th2FileEditController.updateHasMultipleScraps();
+    }
   }
 
   void applyRemoveElementByMPID(
@@ -379,12 +387,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       parentMPID: _th2FileEditController.activeScrapID,
       lineType: lastUsedLineType,
     );
+    final THEndline endline = THEndline(parentMPID: newLine.mpID);
 
-    _th2FileEditController.elementEditController
-        .addElementWithParentMPIDWithoutSelectableElement(
-      newElement: newLine,
-      parentMPID: _th2FileEditController.activeScrapID,
-    );
+    _thFile.addElement(endline);
+    newLine.addElementToParent(endline, positionInsideParent: false);
 
     return newLine;
   }
@@ -406,9 +412,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.currentDecimalPositions;
 
     final THLineSegment lastLineSegment =
-        _thFile.lineSegmentByMPID(_newLine!.childrenMPID.last);
+        _thFile.lineSegmentByMPID(_newLine!.lineSegmentMPIDs.last);
     final THLineSegment secondToLastLineSegment = _thFile.lineSegmentByMPID(
-      _newLine!.childrenMPID.elementAt(_newLine!.childrenMPID.length - 2),
+      _newLine!.lineSegmentMPIDs.elementAt(
+        _newLine!.lineSegmentMPIDs.length - 2,
+      ),
     );
 
     final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
@@ -557,21 +565,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
-    final THLine newLineCopy = newLine.copyWith(childrenMPID: []);
 
-    elementEditController.applyAddElement(newElement: newLineCopy);
+    elementEditController.applyAddElement(newElement: newLine);
 
     for (final THElement child in lineChildren) {
       elementEditController.applyAddElement(newElement: child);
     }
 
     if (lineStartScreenPosition != null) {
-      setNewLine(newLineCopy);
+      setNewLine(newLine);
       setNewLineStartScreenPosition(lineStartScreenPosition);
     }
 
-    _th2FileEditController.selectionController
-        .addSelectableElement(newLineCopy);
+    _th2FileEditController.selectionController.addSelectableElement(newLine);
   }
 
   @action

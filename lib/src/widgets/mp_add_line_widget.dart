@@ -75,7 +75,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           painters.add(painter);
 
           final THLineSegment lastSegment = th2FileEditController.thFile
-              .lineSegmentByMPID(newLine.childrenMPID.last);
+              .lineSegmentByMPID(lineSegments.keys.last);
 
           if ((lineSegments.length >= 2) &&
               (lastSegment is THBezierCurveLineSegment)) {

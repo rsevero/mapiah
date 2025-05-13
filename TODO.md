@@ -38,6 +38,7 @@ Version 0.2
 [X] - BUG: Save button should be disabled when there is no change to save
 [X] - BUG: when trying to move objects, a new selection window is being drawn
 [X] - BUG: added elements get inserted at the end of the file, after the endscrap element
+[X] - BUG: new lines are created without its correspondent endline element
 
 Version 0.3
 [ ] - Search/select elements by characteristics

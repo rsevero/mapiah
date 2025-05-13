@@ -29,11 +29,13 @@ class THFileWriter {
     _thFile = thFile;
     _includeEmptyLines = includeEmptyLines;
     _useOriginalRepresentation = useOriginalRepresentation;
+
     String asString = '';
 
     _prefix = '';
     if (thFile.elementByMPID(thFile.childrenMPID.first) is! THEncoding) {
       final String newLine = 'encoding ${thFile.encoding}\n';
+
       asString += newLine;
     }
     asString += _childrenAsString(thFile);
