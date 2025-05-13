@@ -141,6 +141,28 @@ mixin _$TH2FileEditOverlayWindowController
     });
   }
 
+  late final _$_secondLevelOptionOpenedOverlayWindowAtom = Atom(
+      name:
+          'TH2FileEditOverlayWindowControllerBase._secondLevelOptionOpenedOverlayWindow',
+      context: context);
+
+  MPWindowType? get secondLevelOptionOpenedOverlayWindow {
+    _$_secondLevelOptionOpenedOverlayWindowAtom.reportRead();
+    return super._secondLevelOptionOpenedOverlayWindow;
+  }
+
+  @override
+  MPWindowType? get _secondLevelOptionOpenedOverlayWindow =>
+      secondLevelOptionOpenedOverlayWindow;
+
+  @override
+  set _secondLevelOptionOpenedOverlayWindow(MPWindowType? value) {
+    _$_secondLevelOptionOpenedOverlayWindowAtom
+        .reportWrite(value, super._secondLevelOptionOpenedOverlayWindow, () {
+      super._secondLevelOptionOpenedOverlayWindow = value;
+    });
+  }
+
   late final _$_isAutoDismissWindowOpenAtom = Atom(
       name: 'TH2FileEditOverlayWindowControllerBase._isAutoDismissWindowOpen',
       context: context);

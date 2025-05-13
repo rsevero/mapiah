@@ -47,6 +47,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   ObservableMap<MPWindowType, OverlayEntry> _overlayWindows =
       ObservableMap<MPWindowType, OverlayEntry>();
 
+  @readonly
+  MPWindowType? _secondLevelOptionOpenedOverlayWindow;
+
   @computed
   bool get showChangeScrapOverlayWindow =>
       _isOverlayWindowShown[MPWindowType.availableScraps]!;
@@ -67,6 +70,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   };
 
   THElementType? _currentPLATypeShown;
+
+  void setSecondLevelOptionOpenedOverlayWindow(
+      MPWindowType? secondLevelOptionOpenedOverlayWindow) {
+    _secondLevelOptionOpenedOverlayWindow =
+        secondLevelOptionOpenedOverlayWindow;
+  }
 
   void close() {
     for (MPWindowType type in MPWindowType.values) {
@@ -130,6 +139,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }) {
     const MPWindowType overlayWindowType = MPWindowType.optionChoices;
 
+    if (_secondLevelOptionOpenedOverlayWindow != null) {
+      setShowOverlayWindow(_secondLevelOptionOpenedOverlayWindow!, false);
+    }
+
     if (_overlayWindows.containsKey(overlayWindowType)) {
       _overlayWindows.remove(overlayWindowType);
     }
@@ -144,6 +157,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _activeWindow = overlayWindowType;
     _isAutoDismissWindowOpen = true;
     _isOverlayWindowShown[overlayWindowType] = true;
+    _secondLevelOptionOpenedOverlayWindow = overlayWindowType;
 
     BuildContext? context =
         _th2FileEditController.thFileWidgetKey.currentContext;
@@ -169,6 +183,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         }
       }
       _isAutoDismissWindowOpen = autoDismiss;
+    }
+
+    if (_secondLevelOptionOpenedOverlayWindow == type) {
+      _secondLevelOptionOpenedOverlayWindow = null;
     }
 
     _overlayWindows[type]?.remove();
