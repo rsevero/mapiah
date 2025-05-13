@@ -39,6 +39,7 @@ Version 0.2
 [X] - BUG: when trying to move objects, a new selection window is being drawn
 [X] - BUG: added elements get inserted at the end of the file, after the endscrap element
 [X] - BUG: new lines are created without its correspondent endline element
+[ ] - BUG: add area not working
 
 Version 0.3
 [ ] - Search/select elements by characteristics

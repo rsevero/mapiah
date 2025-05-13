@@ -234,16 +234,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     switch (type) {
       case MPButtonType.addArea:
         tooltip = mpLocator.appLocalizations.th2FileEditPageAddArea;
-        break;
       case MPButtonType.addElement:
         tooltip = mpLocator.appLocalizations.th2FileEditPageAddElementOptions;
-        break;
       case MPButtonType.addLine:
         tooltip = mpLocator.appLocalizations.th2FileEditPageAddLine;
-        break;
       case MPButtonType.addPoint:
         tooltip = mpLocator.appLocalizations.th2FileEditPageAddPoint;
-        break;
       default:
         return [
           SizedBox.shrink(),
