@@ -202,6 +202,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       presentMultipleEndControlPointsClickedWidget: false,
     );
 
+    bool clearSelectedEndControlPointsOnDragStart = false;
+
     _dragShouldMovePoints = false;
 
     if (clickedEndControlPoints.isNotEmpty) {
@@ -216,11 +218,17 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
               final THLineSegment element =
                   endControlPoint.element as THLineSegment;
 
-              if (!selectionController.isEndpointSelected(element)) {
+              if (selectionController.isEndpointSelected(element)) {
+                clearSelectedEndControlPointsOnDragStart = true;
+              } else {
                 _selectedEndControlPointsOnDragStart.add(endControlPoint);
               }
           }
           _dragShouldMovePoints = true;
+        }
+
+        if (clearSelectedEndControlPointsOnDragStart) {
+          _selectedEndControlPointsOnDragStart.clear();
         }
       }
     }

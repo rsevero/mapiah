@@ -671,6 +671,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
     clickedEndControlPoints.clear();
+    final List<MPSelectableControlPoint> clickedControlPoints = [];
 
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
@@ -679,9 +680,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           clickedEndControlPoints.add(endControlPoint);
         } else if (includeControlPoints &&
             (endControlPoint is MPSelectableControlPoint)) {
-          clickedEndControlPoints.add(endControlPoint);
+          clickedControlPoints.add(endControlPoint);
         }
       }
+    }
+
+    if (clickedControlPoints.isNotEmpty) {
+      clickedEndControlPoints.addAll(clickedControlPoints);
     }
 
     if ((clickedEndControlPoints.length > 1) &&
