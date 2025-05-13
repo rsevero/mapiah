@@ -63,13 +63,19 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             ),
             actions: <Widget>[
               if (fileReady) ...[
-                IconButton(
-                  icon: Icon(
-                    Icons.save_outlined,
-                    color: colorScheme.onSecondaryContainer,
+                Observer(
+                  builder: (context) => IconButton(
+                    icon: Icon(
+                      Icons.save_outlined,
+                      color: th2FileEditController.enableSaveButton
+                          ? colorScheme.onSecondaryContainer
+                          : colorScheme.onSecondaryContainer.withAlpha(100),
+                    ),
+                    onPressed: th2FileEditController.enableSaveButton
+                        ? () => th2FileEditController.saveTH2File()
+                        : null,
+                    tooltip: mpLocator.appLocalizations.th2FileEditPageSave,
                   ),
-                  onPressed: () => th2FileEditController.saveTH2File(),
-                  tooltip: mpLocator.appLocalizations.th2FileEditPageSave,
                 ),
                 IconButton(
                   icon: Icon(
@@ -446,7 +452,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       builder: (_) {
         final bool hasUndo = th2FileEditController.hasUndo;
         final bool hasRedo = th2FileEditController.hasRedo;
-        final bool removeButtonEnabled =
+        final bool enableRemoveButton =
             th2FileEditController.enableRemoveButton;
 
         return Positioned(
@@ -460,14 +466,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   mini: true,
                   tooltip:
                       mpLocator.appLocalizations.th2FileEditPageRemoveButton,
-                  backgroundColor: removeButtonEnabled
+                  backgroundColor: enableRemoveButton
                       ? null
                       : colorScheme.surfaceContainerLowest,
-                  foregroundColor: removeButtonEnabled
+                  foregroundColor: enableRemoveButton
                       ? null
                       : colorScheme.surfaceContainerHighest,
-                  onPressed: removeButtonEnabled ? onRemovePressed : null,
-                  elevation: removeButtonEnabled ? 6.0 : 3.0,
+                  onPressed: enableRemoveButton ? onRemovePressed : null,
+                  elevation: enableRemoveButton ? 6.0 : 3.0,
                   child: const Icon(Icons.delete_outlined),
                 ),
               ],

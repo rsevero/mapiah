@@ -264,6 +264,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool get enableRemoveButton =>
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
+  @computed
+  bool get enableSaveButton => _hasUndo;
+
   @readonly
   String _statusBarMessage = '';
 
@@ -877,25 +880,30 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void transformCanvas(Canvas canvas) {
-    // Transformations are applied on the order they are defined.
+    /// Transformations are applied on the order they are defined.
     canvas.scale(_canvasScale);
     canvas.translate(_canvasTranslation.dx, _canvasTranslation.dy);
     canvas.scale(1, -1);
   }
 
-  Future<File?> saveTH2File() async {
-    final File file = await _localFile();
-    final List<int> encodedContent = await _encodedFileContents();
-    return await file.writeAsBytes(encodedContent, flush: true);
-  }
-
   Future<List<int>> _encodedFileContents() async {
     final THFileWriter thFileWriter = THFileWriter();
+
     return await thFileWriter.toBytes(
       _thFile,
       includeEmptyLines: true,
       useOriginalRepresentation: true,
     );
+  }
+
+  Future<File?> saveTH2File() async {
+    final File file = await _localFile();
+    final List<int> encodedContent = await _encodedFileContents();
+
+    undoRedoController.clearUndoRedoStack();
+    updateUndoRedoStatus();
+
+    return await file.writeAsBytes(encodedContent, flush: true);
   }
 
   Future<File?> saveAsTH2File() async {
@@ -910,10 +918,17 @@ abstract class TH2FileEditControllerBase with Store {
 
     if (filePath != null) {
       _thFile.filename = filePath;
+
       String directoryPath = p.dirname(filePath);
+
       mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
+
       final File file = File(filePath);
       final List<int> encodedContent = await _encodedFileContents();
+
+      undoRedoController.clearUndoRedoStack();
+      updateUndoRedoStatus();
+
       return await file.writeAsBytes(encodedContent, flush: true);
     }
 

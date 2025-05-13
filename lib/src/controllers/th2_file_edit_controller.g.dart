@@ -147,6 +147,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
           Computed<bool>(() => super.enableRemoveButton,
               name: 'TH2FileEditControllerBase.enableRemoveButton'))
       .value;
+  Computed<bool>? _$enableSaveButtonComputed;
+
+  @override
+  bool get enableSaveButton => (_$enableSaveButtonComputed ??= Computed<bool>(
+          () => super.enableSaveButton,
+          name: 'TH2FileEditControllerBase.enableSaveButton'))
+      .value;
   Computed<bool>? _$scrapHasScaleOptionComputed;
 
   @override
@@ -1431,6 +1438,7 @@ showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
 showUndoRedoButtons: ${showUndoRedoButtons},
 enableRemoveButton: ${enableRemoveButton},
+enableSaveButton: ${enableSaveButton},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},

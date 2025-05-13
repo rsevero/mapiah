@@ -22,20 +22,18 @@ abstract class MPUndoRedoControllerBase with Store {
       : _th2FileEditController = th2FileEditController,
         _thFile = th2FileEditController.thFile;
 
-  final List<MPUndoRedoCommand> _undo = [];
-  final List<MPUndoRedoCommand> _redo = [];
+  final List<MPUndoRedoCommand> _undos = [];
+  final List<MPUndoRedoCommand> _redos = [];
 
-  void execute(MPCommand command) {
-    command.execute(_th2FileEditController);
-    add(command);
-  }
+  bool get hasUndo => _undos.isNotEmpty;
+  bool get hasRedo => _redos.isNotEmpty;
 
   void add(MPCommand command) {
     final MPUndoRedoCommand undo =
         command.getUndoRedoCommand(_th2FileEditController);
 
-    if (_redo.isNotEmpty) {
-      final int redoLastIndex = _redo.length - 1;
+    if (_redos.isNotEmpty) {
+      final int redoLastIndex = _redos.length - 1;
       final List<MPUndoRedoCommand> undoFromRedoCommands = [];
       final List<MPUndoRedoCommand> redoFromRedoCommands = [];
 
@@ -49,7 +47,7 @@ abstract class MPUndoRedoControllerBase with Store {
       ///    redo command.
       /// 4. Create lists with the new undo and redo commands.
       for (int i = redoLastIndex; i >= 0; i--) {
-        final MPUndoRedoCommand redoOriginal = _redo[i];
+        final MPUndoRedoCommand redoOriginal = _redos[i];
         final MPCommand redoCommandOriginal = redoOriginal.undoCommand;
         final MPUndoRedoCommand oppositeRedoOriginal = redoOriginal.copyWith(
           mapUndo: redoOriginal.mapRedo,
@@ -71,22 +69,27 @@ abstract class MPUndoRedoControllerBase with Store {
       }
 
       /// 5. Add the new undo commands to the undo list.
-      _undo.addAll(undoFromRedoCommands);
+      _undos.addAll(undoFromRedoCommands);
 
       /// 6. Add the new redo commands in reverse order to the undo list.
       for (int i = redoLastIndex; i >= 0; i--) {
-        _undo.add(redoFromRedoCommands[i]);
+        _undos.add(redoFromRedoCommands[i]);
       }
 
       /// 7. Clear the redo list.
-      _redo.clear();
+      _redos.clear();
     }
 
-    _undo.add(undo);
+    _undos.add(undo);
+  }
+
+  void execute(MPCommand command) {
+    command.execute(_th2FileEditController);
+    add(command);
   }
 
   void executeAndSubstituteLastUndo(MPCommand command) {
-    if (_undo.isEmpty) {
+    if (_undos.isEmpty) {
       return;
     }
 
@@ -95,16 +98,21 @@ abstract class MPUndoRedoControllerBase with Store {
 
     command.execute(_th2FileEditController);
 
-    _undo.removeLast();
-    _undo.add(undo);
+    _undos.removeLast();
+    _undos.add(undo);
+  }
+
+  void clearUndoRedoStack() {
+    _undos.clear();
+    _redos.clear();
   }
 
   void undo() {
-    if (_undo.isEmpty) {
+    if (_undos.isEmpty) {
       return;
     }
 
-    final MPUndoRedoCommand lastUndo = _undo.removeLast();
+    final MPUndoRedoCommand lastUndo = _undos.removeLast();
     final MPCommand command = lastUndo.undoCommand;
     final MPUndoRedoCommand redo = lastUndo.copyWith(
       mapUndo: lastUndo.mapRedo,
@@ -113,16 +121,16 @@ abstract class MPUndoRedoControllerBase with Store {
 
     command.execute(_th2FileEditController, keepOriginalLineTH2File: true);
 
-    _redo.add(redo);
+    _redos.add(redo);
     _th2FileEditController.triggerAllElementsRedraw();
   }
 
   void redo() {
-    if (_redo.isEmpty) {
+    if (_redos.isEmpty) {
       return;
     }
 
-    final MPUndoRedoCommand lastRedo = _redo.removeLast();
+    final MPUndoRedoCommand lastRedo = _redos.removeLast();
     final MPCommand command = lastRedo.undoCommand;
     final MPUndoRedoCommand undo = lastRedo.copyWith(
       mapUndo: lastRedo.mapRedo,
@@ -132,12 +140,8 @@ abstract class MPUndoRedoControllerBase with Store {
     command.execute(_th2FileEditController, keepOriginalLineTH2File: true);
 
     _th2FileEditController.triggerAllElementsRedraw();
-    _undo.add(undo);
+    _undos.add(undo);
   }
-
-  bool get hasUndo => _undo.isNotEmpty;
-
-  bool get hasRedo => _redo.isNotEmpty;
 
   String _undoRedoDescription(MPUndoRedoCommand undoRedoCommand) {
     return MPTextToUser.getCommandDescription(
@@ -146,18 +150,18 @@ abstract class MPUndoRedoControllerBase with Store {
   }
 
   String get undoDescription {
-    if (_undo.isEmpty) {
+    if (_undos.isEmpty) {
       return '';
     }
 
-    return _undoRedoDescription(_undo.last);
+    return _undoRedoDescription(_undos.last);
   }
 
   String get redoDescription {
-    if (_redo.isEmpty) {
+    if (_redos.isEmpty) {
       return '';
     }
 
-    return _undoRedoDescription(_redo.last);
+    return _undoRedoDescription(_redos.last);
   }
 }
