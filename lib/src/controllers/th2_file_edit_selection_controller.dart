@@ -571,6 +571,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           final THElement element = selectableElement.element;
 
           switch (selectionType) {
+            case THSelectionType.line:
+              if (selectableElement is! MPSelectableLine) {
+                continue;
+              }
+              clickedElementsMap[element.mpID] = element;
+            case THSelectionType.lineSegment:
+              if (selectableElement is! MPSelectableLineSegment) {
+                continue;
+              }
+              clickedElementsMap[element.mpID] = element;
             case THSelectionType.pla:
               switch (element) {
                 case THPoint _:
@@ -588,11 +598,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                   clickedElementsMap[element.parentMPID] =
                       _thFile.elementByMPID(element.parentMPID);
               }
-            case THSelectionType.lineSegment:
-              if (selectableElement is! MPSelectableLineSegment) {
-                continue;
-              }
-              clickedElementsMap[element.mpID] = element;
           }
         }
       }
@@ -1367,6 +1372,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 }
 
 enum THSelectionType {
+  line,
   lineSegment,
   pla;
 }

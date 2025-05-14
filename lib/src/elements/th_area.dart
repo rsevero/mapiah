@@ -46,6 +46,12 @@ class THArea extends THElement
 
   THArea({
     required super.parentMPID,
+    required this.areaType,
+    super.originalLineInTH2File = '',
+  }) : super.addToParent();
+
+  THArea.fromString({
+    required super.parentMPID,
     required String areaTypeString,
     super.originalLineInTH2File = '',
   })  : areaType = THAreaType.fromFileString(areaTypeString),

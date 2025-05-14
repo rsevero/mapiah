@@ -61,6 +61,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   THLine? _newLine;
 
+  @readonly
+  THArea? _newArea;
+
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
   final List<String> _lastUsedAreaTypes = [];
@@ -372,6 +375,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  THArea getNewArea() {
+    _newArea ??= _createNewArea();
+
+    return _newArea!;
+  }
+
+  @action
   void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
     _lineStartScreenPosition = lineStartScreenPosition;
   }
@@ -380,6 +390,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void clearNewLine() {
     _newLine = null;
     _lineStartScreenPosition = null;
+  }
+
+  @action
+  void clearNewArea() {
+    _newArea = null;
   }
 
   THLine _createNewLine() {
@@ -393,6 +408,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     newLine.addElementToParent(endline, positionInsideParent: false);
 
     return newLine;
+  }
+
+  THArea _createNewArea() {
+    final THArea newArea = THArea(
+      parentMPID: _th2FileEditController.activeScrapID,
+      areaType: lastUsedAreaType,
+    );
+    final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
+
+    _thFile.addElement(endarea);
+    newArea.addElementToParent(endarea, positionInsideParent: false);
+
+    return newArea;
   }
 
   @action

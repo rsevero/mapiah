@@ -50,7 +50,7 @@ Version 0.3
 [ ] - Config page
 [ ] - Drag overlay windows
 [ ] - Copy/Paste
-[ ] - Show status message listing whats selected in 'single line edit' mode
+[ ] - Show status message listing what's selected in 'single line edit' mode
 [ ] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
 [ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points
 [ ] - Show (and edit) orientation and lsize on the line points during edit

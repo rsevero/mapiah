@@ -660,6 +660,22 @@ class THFile
         : null;
   }
 
+  String getNewTHID({required THElement element, String prefix = ''}) {
+    if (prefix == '') {
+      prefix = element.elementType.name;
+    }
+
+    int counter = 1;
+    String newTHID = '$prefix$counter';
+
+    while (_mpIDByTHID.containsKey(newTHID)) {
+      counter++;
+      newTHID = '$prefix$counter';
+    }
+
+    return newTHID;
+  }
+
   @override
   int get mpID => _mpID;
 }

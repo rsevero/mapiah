@@ -86,6 +86,24 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
+  late final _$_newAreaAtom = Atom(
+      name: 'TH2FileEditElementEditControllerBase._newArea', context: context);
+
+  THArea? get newArea {
+    _$_newAreaAtom.reportRead();
+    return super._newArea;
+  }
+
+  @override
+  THArea? get _newArea => newArea;
+
+  @override
+  set _newArea(THArea? value) {
+    _$_newAreaAtom.reportWrite(value, super._newArea, () {
+      super._newArea = value;
+    });
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditElementEditControllerBase', context: context);
@@ -203,6 +221,18 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  THArea getNewArea() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.getNewArea');
+    try {
+      return super.getNewArea();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(
@@ -222,6 +252,18 @@ mixin _$TH2FileEditElementEditController
         .startAction(name: 'TH2FileEditElementEditControllerBase.clearNewLine');
     try {
       return super.clearNewLine();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearNewArea() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.clearNewArea');
+    try {
+      return super.clearNewArea();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController
           .endAction(_$actionInfo);

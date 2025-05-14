@@ -549,7 +549,7 @@ class THFileParser {
       assert(element[1][0] is String);
     }
 
-    final THArea newArea = THArea(
+    final THArea newArea = THArea.fromString(
       parentMPID: _currentParentMPID,
       areaTypeString: element[1][0],
       originalLineInTH2File: _currentLine,
