@@ -39,6 +39,7 @@
   "mpChoiceUnset": "Não definido",
 
   "mpCommandDescriptionAddArea": "Adicionar área",
+  "mpCommandDescriptionAddAreaBorderTHID": "Adicionar borda de área",
   "mpCommandDescriptionAddElements": "Adicionar elementos",
   "mpCommandDescriptionAddLine": "Adicionar linha",
   "mpCommandDescriptionAddLineSegment": "Adicionar segmento de linha",
@@ -63,6 +64,7 @@
   "mpCommandDescriptionMovePoint": "Mover ponto",
   "mpCommandDescriptionMultipleElements": "Editar vários elementos",
   "mpCommandDescriptionRemoveArea": "Apagar área",
+  "mpCommandDescriptionRemoveAreaBorderTHID": "Apagar borda de área",
   "mpCommandDescriptionMoveStraightLineSegment": "Mover segmento de linha reta",
   "mpCommandDescriptionRemoveElements": "Apagar elementos",
   "mpCommandDescriptionRemoveLine": "Apagar linha",

@@ -281,6 +281,12 @@ abstract class AppLocalizations {
   /// **'Add area'**
   String get mpCommandDescriptionAddArea;
 
+  /// The description for the add area border line command
+  ///
+  /// In en, this message translates to:
+  /// **'Add area border line'**
+  String get mpCommandDescriptionAddAreaBorderTHID;
+
   /// The description for the add elements command
   ///
   /// In en, this message translates to:
@@ -430,6 +436,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove area'**
   String get mpCommandDescriptionRemoveArea;
+
+  /// The description for the remove area border line command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove area border line'**
+  String get mpCommandDescriptionRemoveAreaBorderTHID;
 
   /// The description for the remove elements command
   ///

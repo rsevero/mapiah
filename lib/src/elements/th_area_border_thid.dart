@@ -1,19 +1,19 @@
 part of 'th_element.dart';
 
 class THAreaBorderTHID extends THElement {
-  late final String id;
+  late final String thID;
 
   THAreaBorderTHID.forCWJM({
     required super.mpID,
     required super.parentMPID,
     required super.sameLineComment,
-    required this.id,
+    required this.thID,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
   THAreaBorderTHID({
     required super.parentMPID,
-    required this.id,
+    required this.thID,
     super.originalLineInTH2File = '',
   }) : super.addToParent();
   //  {
@@ -31,7 +31,7 @@ class THAreaBorderTHID extends THElement {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'id': id,
+      'thID': thID,
     });
 
     return map;
@@ -43,7 +43,7 @@ class THAreaBorderTHID extends THElement {
       parentMPID: map['parentMPID'],
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      id: map['id'],
+      thID: map['thID'],
     );
   }
 
@@ -58,7 +58,7 @@ class THAreaBorderTHID extends THElement {
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
-    String? id,
+    String? thID,
   }) {
     return THAreaBorderTHID.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -68,7 +68,7 @@ class THAreaBorderTHID extends THElement {
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      id: id ?? this.id,
+      thID: thID ?? this.thID,
     );
   }
 
@@ -78,11 +78,11 @@ class THAreaBorderTHID extends THElement {
     if (other is! THAreaBorderTHID) return false;
     if (!super.equalsBase(other)) return false;
 
-    return other.id == id;
+    return other.thID == thID;
   }
 
   @override
-  int get hashCode => super.hashCode ^ id.hashCode;
+  int get hashCode => super.hashCode ^ thID.hashCode;
 
   @override
   bool isSameClass(Object object) {

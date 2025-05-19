@@ -193,6 +193,12 @@
     "type": "text"
   },
 
+  "mpCommandDescriptionAddAreaBorderTHID": "Add area border line",
+  "@mpCommandDescriptionAddAreaBorderTHID": {
+    "description": "The description for the add area border line command",
+    "type": "text"
+  },
+
   "mpCommandDescriptionAddElements": "Add elements",
   "@mpCommandDescriptionAddElements": {
     "description": "The description for the add elements command",
@@ -340,6 +346,12 @@
   "mpCommandDescriptionRemoveArea": "Remove area",
   "@mpCommandDescriptionRemoveArea": {
     "description": "The description for the remove area command",
+    "type": "text"
+  },
+
+  "mpCommandDescriptionRemoveAreaBorderTHID": "Remove area border line",
+  "@mpCommandDescriptionRemoveAreaBorderTHID": {
+    "description": "The description for the remove area border line command",
     "type": "text"
   },
 

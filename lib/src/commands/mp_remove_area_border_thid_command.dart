@@ -1,22 +1,23 @@
-part of 'mp_command.dart';
+part of "mp_command.dart";
 
-class MPRemoveLineSegmentCommand extends MPCommand {
-  final THLineSegment lineSegment;
+class MPRemoveAreaBorderTHIDCommand extends MPCommand {
+  final int areaBorderTHIDMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.removeLineSegment;
+      MPCommandDescriptionType.removeAreaBorderTHID;
 
-  MPRemoveLineSegmentCommand.forCWJM({
-    required this.lineSegment,
+  MPRemoveAreaBorderTHIDCommand.forCWJM({
+    required this.areaBorderTHIDMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPRemoveLineSegmentCommand({
-    required this.lineSegment,
+  MPRemoveAreaBorderTHIDCommand({
+    required this.areaBorderTHIDMPID,
+    required TH2FileEditController th2FileEditController,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.removeLineSegment;
+  MPCommandType get type => MPCommandType.removeAreaBorderTHID;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -28,8 +29,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     required bool keepOriginalLineTH2File,
   }) {
     th2FileEditController.elementEditController.applyRemoveElementByMPID(
-      lineSegment.mpID,
-      setState: false,
+      areaBorderTHIDMPID,
     );
   }
 
@@ -38,13 +38,11 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
-    final MPCommand oppositeCommand = MPAddLineSegmentCommand(
-      newLineSegment: lineSegment,
-      beforeLineSegmentMPID: line.getNextLineSegmentMPID(
-        lineSegment.mpID,
-        thFile,
-      ),
+    final THAreaBorderTHID originalAreaBorderTHID = thFile.areaBorderTHIDByMPID(
+      areaBorderTHIDMPID,
+    );
+    final MPCommand oppositeCommand = MPAddAreaBorderTHIDCommand(
+      newAreaBorderTHID: originalAreaBorderTHID,
       descriptionType: descriptionType,
     );
 
@@ -56,25 +54,25 @@ class MPRemoveLineSegmentCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    THLineSegment? lineSegment,
+    int? areaBorderTHIDMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPRemoveLineSegmentCommand.forCWJM(
-      lineSegment: lineSegment ?? this.lineSegment,
+    return MPRemoveAreaBorderTHIDCommand.forCWJM(
+      areaBorderTHIDMPID: areaBorderTHIDMPID ?? this.areaBorderTHIDMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPRemoveLineSegmentCommand.fromMap(Map<String, dynamic> map) {
-    return MPRemoveLineSegmentCommand.forCWJM(
-      lineSegment: THLineSegment.fromMap(map['lineSegment']),
+  factory MPRemoveAreaBorderTHIDCommand.fromMap(Map<String, dynamic> map) {
+    return MPRemoveAreaBorderTHIDCommand.forCWJM(
+      areaBorderTHIDMPID: map['areaBorderTHIDMPID'],
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
-  factory MPRemoveLineSegmentCommand.fromJson(String source) {
-    return MPRemoveLineSegmentCommand.fromMap(jsonDecode(source));
+  factory MPRemoveAreaBorderTHIDCommand.fromJson(String source) {
+    return MPRemoveAreaBorderTHIDCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -82,7 +80,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'lineSegment': lineSegment.toMap(),
+      'areaBorderTHIDMPID': areaBorderTHIDMPID,
     });
 
     return map;
@@ -92,11 +90,11 @@ class MPRemoveLineSegmentCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPRemoveLineSegmentCommand &&
-        other.lineSegment == lineSegment &&
+    return other is MPRemoveAreaBorderTHIDCommand &&
+        other.areaBorderTHIDMPID == areaBorderTHIDMPID &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ lineSegment.hashCode;
+  int get hashCode => super.hashCode ^ areaBorderTHIDMPID.hashCode;
 }

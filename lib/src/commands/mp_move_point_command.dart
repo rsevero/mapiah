@@ -68,7 +68,7 @@ class MPMovePointCommand extends MPCommand {
   ) {
     /// The original description is kept for the undo/redo command so the
     /// message on undo and redo are the same.
-    final MPMovePointCommand oppositeCommand = MPMovePointCommand.forCWJM(
+    final MPCommand oppositeCommand = MPMovePointCommand.forCWJM(
       pointMPID: pointMPID,
       originalPosition: modifiedPosition,
       modifiedPosition: originalPosition,

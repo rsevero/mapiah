@@ -57,8 +57,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
           'Parent element does not have option of type $optionType');
     }
 
-    final MPSetOptionToElementCommand oppositeCommand =
-        MPSetOptionToElementCommand.forCWJM(
+    final MPCommand oppositeCommand = MPSetOptionToElementCommand.forCWJM(
       option: option,
       newOriginalLineInTH2File: currentOriginalLineInTH2File,
       currentOriginalLineInTH2File: newOriginalLineInTH2File,

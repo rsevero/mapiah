@@ -94,8 +94,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPMoveBezierLineSegmentCommand oppositeCommand =
-        MPMoveBezierLineSegmentCommand.forCWJM(
+    final MPCommand oppositeCommand = MPMoveBezierLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID,
       originalEndPointPosition: modifiedEndPointPosition,
       modifiedEndPointPosition: originalEndPointPosition,

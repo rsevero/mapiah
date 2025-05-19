@@ -1,5 +1,6 @@
 enum MPCommandDescriptionType {
   addArea,
+  addAreaBorderTHID,
   addElements,
   addLine,
   addLineSegment,
@@ -25,6 +26,7 @@ enum MPCommandDescriptionType {
   moveStraightLineSegment,
   multipleElements,
   removeArea,
+  removeAreaBorderTHID,
   removeElements,
   removeLine,
   removeLineSegment,

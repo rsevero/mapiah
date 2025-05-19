@@ -417,10 +417,23 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
+    _thFile.addElement(newArea);
+    _thFile.addElementToParent(newArea);
+    addAutomaticTHIDOption(parent: newArea, prefix: mpAreaTHIDPrefix);
     _thFile.addElement(endarea);
     newArea.addElementToParent(endarea, positionInsideParent: false);
 
     return newArea;
+  }
+
+  void addAutomaticTHIDOption({
+    required THHasOptionsMixin parent,
+    String prefix = '',
+  }) {
+    final String newTHID = _thFile.getNewTHID(element: parent, prefix: prefix);
+
+    THIDCommandOption(optionParent: parent, thID: newTHID);
+    registerElementWithTHID(parent, newTHID);
   }
 
   @action
@@ -631,6 +644,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     clearNewLine();
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+    _th2FileEditController.triggerNewLineRedraw();
+    _th2FileEditController.updateUndoRedoStatus();
+  }
+
+  @action
+  void finalizeNewAreaCreation() {
+    if (_newArea != null) {
+      _th2FileEditController.selectionController
+          .addSelectableElement(_newArea!);
+    }
+
+    clearNewArea();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
     _th2FileEditController.triggerNewLineRedraw();
     _th2FileEditController.updateUndoRedoStatus();

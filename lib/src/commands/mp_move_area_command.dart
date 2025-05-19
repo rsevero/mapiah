@@ -54,7 +54,7 @@ class MPMoveAreaCommand extends MPCommand {
   ) {
     final MPCommand oppositeLinesMoveCommand =
         linesMoveCommand.getUndoRedoCommand(th2FileEditController).undoCommand;
-    final MPMoveAreaCommand oppositeCommand = MPMoveAreaCommand.forCWJM(
+    final MPCommand oppositeCommand = MPMoveAreaCommand.forCWJM(
       areaMPID: areaMPID,
       linesMoveCommand: oppositeLinesMoveCommand,
       descriptionType: descriptionType,
@@ -95,12 +95,12 @@ class MPMoveAreaCommand extends MPCommand {
 
   @override
   MPMoveAreaCommand copyWith({
-    int? areaMPID,
+    int? areaBorderTHIDMPID,
     MPMultipleElementsCommand? linesMoveCommand,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveAreaCommand.forCWJM(
-      areaMPID: areaMPID ?? this.areaMPID,
+      areaMPID: areaBorderTHIDMPID ?? this.areaMPID,
       linesMoveCommand: linesMoveCommand ?? this.linesMoveCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );

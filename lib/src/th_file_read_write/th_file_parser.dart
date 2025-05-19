@@ -410,12 +410,14 @@ class THFileParser {
 
     final THAreaBorderTHID newElement = THAreaBorderTHID(
       parentMPID: _currentParentMPID,
-      id: areaBorderID,
+      thID: areaBorderID,
       originalLineInTH2File: _currentLine,
     );
 
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
-        newElement: newElement, parent: _currentParent);
+      newElement: newElement,
+      parent: _currentParent,
+    );
   }
 
   void _injectStraightLineSegment(List<dynamic> element) {

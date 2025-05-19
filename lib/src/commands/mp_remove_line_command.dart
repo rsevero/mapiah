@@ -48,7 +48,7 @@ class MPRemoveLineCommand extends MPCommand {
       lineChildren.add(childElement);
     }
 
-    final MPAddLineCommand oppositeCommand = MPAddLineCommand(
+    final MPCommand oppositeCommand = MPAddLineCommand(
       newLine: originalLine,
       lineChildren: lineChildren,
       lineStartScreenPosition:

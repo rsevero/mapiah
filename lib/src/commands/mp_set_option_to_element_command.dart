@@ -44,6 +44,7 @@ class MPSetOptionToElementCommand extends MPCommand {
   ) {
     final THHasOptionsMixin parentElement =
         option.optionParent(th2FileEditController.thFile);
+
     MPCommand oppositeCommand;
 
     if (parentElement.hasOption(option.type)) {

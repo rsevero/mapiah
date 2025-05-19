@@ -370,6 +370,20 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void finalizeNewAreaCreation() {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.finalizeNewAreaCreation');
+    try {
+      return super.finalizeNewAreaCreation();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void applySetOptionToElement(THCommandOption option) {
     final _$actionInfo =
         _$TH2FileEditElementEditControllerBaseActionController.startAction(

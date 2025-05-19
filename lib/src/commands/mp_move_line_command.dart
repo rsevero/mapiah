@@ -77,7 +77,7 @@ class MPMoveLineCommand extends MPCommand {
     final MPCommand oppositeLineSegmentsMoveCommand = lineSegmentsMoveCommand
         .getUndoRedoCommand(th2FileEditController)
         .undoCommand;
-    final MPMoveLineCommand oppositeCommand = MPMoveLineCommand.forCWJM(
+    final MPCommand oppositeCommand = MPMoveLineCommand.forCWJM(
       lineMPID: lineMPID,
       lineSegmentsMoveCommand: oppositeLineSegmentsMoveCommand,
       descriptionType: descriptionType,

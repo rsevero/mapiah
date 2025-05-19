@@ -39,7 +39,7 @@ Version 0.2
 [X] - BUG: when trying to move objects, a new selection window is being drawn
 [X] - BUG: added elements get inserted at the end of the file, after the endscrap element
 [X] - BUG: new lines are created without its correspondent endline element
-[ ] - BUG: add area not working
+[X] - BUG: add area not working
 
 Version 0.3
 [ ] - Search/select elements by characteristics
@@ -58,3 +58,6 @@ Version 0.3
 [ ] - Hide elements by type
 [ ] - Highlight slope lines without at least one line point with orientation
 [ ] - Create shortcut to reverse line
+[ ] - Migrate away from Github
+[ ] - Include options and point/line count in multiple elements clicked dialog box
+[ ] - Add/remove lines from areas

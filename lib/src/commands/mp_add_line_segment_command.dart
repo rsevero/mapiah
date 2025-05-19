@@ -46,8 +46,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPRemoveLineSegmentCommand oppositeCommand =
-        MPRemoveLineSegmentCommand(
+    final MPCommand oppositeCommand = MPRemoveLineSegmentCommand(
       lineSegment: newLineSegment,
       descriptionType: descriptionType,
     );

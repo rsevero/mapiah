@@ -35,7 +35,7 @@ class MPAddPointCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPRemovePointCommand oppositeCommand = MPRemovePointCommand(
+    final MPCommand oppositeCommand = MPRemovePointCommand(
       pointMPID: newPoint.mpID,
       descriptionType: descriptionType,
     );

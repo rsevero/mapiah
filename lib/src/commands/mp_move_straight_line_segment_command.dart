@@ -66,8 +66,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPMoveStraightLineSegmentCommand oppositeCommand =
-        MPMoveStraightLineSegmentCommand.forCWJM(
+    final MPCommand oppositeCommand = MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID,
       originalEndPointPosition: modifiedEndPointPosition,
       modifiedEndPointPosition: originalEndPointPosition,

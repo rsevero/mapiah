@@ -2,13 +2,13 @@ part of 'mp_command.dart';
 
 class MPAddAreaCommand extends MPCommand {
   final THArea newArea;
-  late final MPCommand addLinesCommand;
+  late final MPCommand addAreaTHIDsCommand;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addArea;
 
   MPAddAreaCommand.forCWJM({
     required this.newArea,
-    required this.addLinesCommand,
+    required this.addAreaTHIDsCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -17,12 +17,12 @@ class MPAddAreaCommand extends MPCommand {
     required TH2FileEditController th2FileEditController,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
-    final List<MPCommand> addLineCommands = [];
+    final List<MPCommand> addAreaTHIDCommands = [];
     final THFile thFile = th2FileEditController.thFile;
     final Set<int> lineMPIDs = newArea.getLineMPIDs(thFile);
 
     for (final int lineMPID in lineMPIDs) {
-      addLineCommands.add(
+      addAreaTHIDCommands.add(
         MPAddLineCommand.fromLineMPID(
           lineMPID: lineMPID,
           th2FileEditController: th2FileEditController,
@@ -30,8 +30,8 @@ class MPAddAreaCommand extends MPCommand {
       );
     }
 
-    addLinesCommand = MPMultipleElementsCommand.forCWJM(
-      commandsList: addLineCommands,
+    addAreaTHIDsCommand = MPMultipleElementsCommand.forCWJM(
+      commandsList: addAreaTHIDCommands,
       completionType:
           MPMultipleElementsCommandCompletionType.elementsListChanged,
       descriptionType: descriptionType,
@@ -50,7 +50,7 @@ class MPAddAreaCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    addLinesCommand.execute(th2FileEditController);
+    addAreaTHIDsCommand.execute(th2FileEditController);
     th2FileEditController.elementEditController.applyAddElement(
       newElement: newArea,
     );
@@ -60,7 +60,7 @@ class MPAddAreaCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPRemoveAreaCommand oppositeCommand = MPRemoveAreaCommand(
+    final MPCommand oppositeCommand = MPRemoveAreaCommand(
       areaMPID: newArea.mpID,
       descriptionType: descriptionType,
     );
@@ -74,12 +74,12 @@ class MPAddAreaCommand extends MPCommand {
   @override
   MPCommand copyWith({
     THArea? newArea,
-    MPCommand? addLinesCommand,
+    MPCommand? addAreaTHIDsCommand,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddAreaCommand.forCWJM(
       newArea: newArea ?? this.newArea,
-      addLinesCommand: addLinesCommand ?? this.addLinesCommand,
+      addAreaTHIDsCommand: addAreaTHIDsCommand ?? this.addAreaTHIDsCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -87,7 +87,7 @@ class MPAddAreaCommand extends MPCommand {
   factory MPAddAreaCommand.fromMap(Map<String, dynamic> map) {
     return MPAddAreaCommand.forCWJM(
       newArea: THArea.fromMap(map['newArea']),
-      addLinesCommand: MPCommand.fromMap(map['addLinesCommand']),
+      addAreaTHIDsCommand: MPCommand.fromMap(map['addAreaTHIDsCommand']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
@@ -103,7 +103,7 @@ class MPAddAreaCommand extends MPCommand {
 
     map.addAll({
       'newArea': newArea.toMap(),
-      'addLinesCommand': addLinesCommand.toMap(),
+      'addAreaTHIDsCommand': addAreaTHIDsCommand.toMap(),
     });
 
     return map;
@@ -115,7 +115,7 @@ class MPAddAreaCommand extends MPCommand {
 
     return other is MPAddAreaCommand &&
         other.newArea == newArea &&
-        other.addLinesCommand == addLinesCommand &&
+        other.addAreaTHIDsCommand == addAreaTHIDsCommand &&
         other.descriptionType == descriptionType;
   }
 
@@ -124,6 +124,6 @@ class MPAddAreaCommand extends MPCommand {
       super.hashCode ^
       Object.hash(
         newArea,
-        addLinesCommand,
+        addAreaTHIDsCommand,
       );
 }

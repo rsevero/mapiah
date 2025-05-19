@@ -38,7 +38,7 @@ class MPRemovePointCommand extends MPCommand {
     final THPoint originalPoint =
         th2FileEditController.thFile.pointByMPID(pointMPID);
 
-    final MPAddPointCommand oppositeCommand = MPAddPointCommand(
+    final MPCommand oppositeCommand = MPAddPointCommand(
       newPoint: originalPoint,
       descriptionType: descriptionType,
     );

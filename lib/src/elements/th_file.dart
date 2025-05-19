@@ -508,6 +508,21 @@ class THFile
     return element;
   }
 
+  THAreaBorderTHID areaBorderTHIDByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THAreaBorderTHID) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not an area border in THFile.areaBorderByMPID.");
+    }
+
+    return element;
+  }
+
   THScrap scrapByMPID(int mpID) {
     if (!_elementByMPID.containsKey(mpID)) {
       throw THNoElementByMPIDException(filename, mpID);

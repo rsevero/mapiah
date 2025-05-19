@@ -34,6 +34,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.enter:
+      case LogicalKeyboardKey.numpadEnter:
         if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
           elementEditController.finalizeNewLineCreation();
           return;

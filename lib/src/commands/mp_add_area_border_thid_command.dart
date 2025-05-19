@@ -1,22 +1,22 @@
-part of "mp_command.dart";
+part of 'mp_command.dart';
 
-class MPRemoveAreaCommand extends MPCommand {
-  final int areaMPID;
+class MPAddAreaBorderTHIDCommand extends MPCommand {
+  final THAreaBorderTHID newAreaBorderTHID;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.removeArea;
+      MPCommandDescriptionType.addAreaBorderTHID;
 
-  MPRemoveAreaCommand.forCWJM({
-    required this.areaMPID,
+  MPAddAreaBorderTHIDCommand.forCWJM({
+    required this.newAreaBorderTHID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPRemoveAreaCommand({
-    required this.areaMPID,
+  MPAddAreaBorderTHIDCommand({
+    required this.newAreaBorderTHID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.removeArea;
+  MPCommandType get type => MPCommandType.addAreaBorderTHID;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -27,20 +27,18 @@ class MPRemoveAreaCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applyRemoveArea(areaMPID);
+    th2FileEditController.elementEditController.applyAddElement(
+      newElement: newAreaBorderTHID,
+    );
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THArea originalArea = thFile.areaByMPID(areaMPID);
-
-    final MPCommand oppositeCommand = MPAddAreaCommand(
-      newArea: originalArea,
+    final MPCommand oppositeCommand = MPRemoveAreaBorderTHIDCommand(
+      areaBorderTHIDMPID: newAreaBorderTHID.mpID,
       th2FileEditController: th2FileEditController,
-      descriptionType: descriptionType,
     );
 
     return MPUndoRedoCommand(
@@ -51,25 +49,25 @@ class MPRemoveAreaCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    int? areaMPID,
+    THAreaBorderTHID? newAreaBorderTHID,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPRemoveAreaCommand.forCWJM(
-      areaMPID: areaMPID ?? this.areaMPID,
+    return MPAddAreaBorderTHIDCommand.forCWJM(
+      newAreaBorderTHID: newAreaBorderTHID ?? this.newAreaBorderTHID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPRemoveAreaCommand.fromMap(Map<String, dynamic> map) {
-    return MPRemoveAreaCommand.forCWJM(
-      areaMPID: map['areaMPID'],
+  factory MPAddAreaBorderTHIDCommand.fromMap(Map<String, dynamic> map) {
+    return MPAddAreaBorderTHIDCommand.forCWJM(
+      newAreaBorderTHID: THAreaBorderTHID.fromMap(map['newAreaBorderTHID']),
       descriptionType:
           MPCommandDescriptionType.values.byName(map['descriptionType']),
     );
   }
 
-  factory MPRemoveAreaCommand.fromJson(String source) {
-    return MPRemoveAreaCommand.fromMap(jsonDecode(source));
+  factory MPAddAreaBorderTHIDCommand.fromJson(String source) {
+    return MPAddAreaBorderTHIDCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -77,7 +75,7 @@ class MPRemoveAreaCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'areaMPID': areaMPID,
+      'newAreaBorderTHID': newAreaBorderTHID.toMap(),
     });
 
     return map;
@@ -87,11 +85,11 @@ class MPRemoveAreaCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPRemoveAreaCommand &&
-        other.areaMPID == areaMPID &&
+    return other is MPAddAreaCommand &&
+        other.newArea == newAreaBorderTHID &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ areaMPID.hashCode;
+  int get hashCode => super.hashCode ^ newAreaBorderTHID.hashCode;
 }

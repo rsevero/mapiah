@@ -50,7 +50,7 @@ class MPEditLineTypeCommand extends MPCommand {
     final THLine originalLine =
         th2FileEditController.thFile.lineByMPID(lineMPID);
 
-    final MPEditLineTypeCommand oppositeCommand = MPEditLineTypeCommand.forCWJM(
+    final MPCommand oppositeCommand = MPEditLineTypeCommand.forCWJM(
       lineMPID: lineMPID,
       newLineType: originalLine.lineType,
       originalLineInTH2File: originalLine.originalLineInTH2File,

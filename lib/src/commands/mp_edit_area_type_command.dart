@@ -50,7 +50,7 @@ class MPEditAreaTypeCommand extends MPCommand {
     final THArea originalArea =
         th2FileEditController.thFile.areaByMPID(areaMPID);
 
-    final MPEditAreaTypeCommand oppositeCommand = MPEditAreaTypeCommand.forCWJM(
+    final MPCommand oppositeCommand = MPEditAreaTypeCommand.forCWJM(
       areaMPID: areaMPID,
       newAreaType: originalArea.areaType,
       originalLineInTH2File: originalArea.originalLineInTH2File,
@@ -65,13 +65,13 @@ class MPEditAreaTypeCommand extends MPCommand {
 
   @override
   MPCommand copyWith({
-    int? areaMPID,
+    int? areaBorderTHIDMPID,
     THAreaType? newAreaType,
     String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditAreaTypeCommand.forCWJM(
-      areaMPID: areaMPID ?? this.areaMPID,
+      areaMPID: areaBorderTHIDMPID ?? this.areaMPID,
       newAreaType: newAreaType ?? this.newAreaType,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,

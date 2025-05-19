@@ -165,10 +165,10 @@ class THArea extends THElement
         continue;
       }
 
-      final int lineMPID = thFile.mpIDByTHID(element.id);
+      final int lineMPID = thFile.mpIDByTHID(element.thID);
 
       _lineMPIDs!.add(lineMPID);
-      _lineTHIDs!.add(element.id);
+      _lineTHIDs!.add(element.thID);
     }
   }
 

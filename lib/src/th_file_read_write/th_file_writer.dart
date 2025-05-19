@@ -109,7 +109,7 @@ class THFileWriter {
       case THElementType.area:
         asString += _serializeArea(thElement);
       case THElementType.areaBorderTHID:
-        final String newLine = (thElement as THAreaBorderTHID).id;
+        final String newLine = (thElement as THAreaBorderTHID).thID;
         asString += _prepareLineWithOriginalRepresentation(
           newLine,
           thElement,

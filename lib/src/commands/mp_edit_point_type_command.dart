@@ -51,8 +51,7 @@ class MPEditPointTypeCommand extends MPCommand {
     final THPoint originalPoint =
         th2FileEditController.thFile.pointByMPID(pointMPID);
 
-    final MPEditPointTypeCommand oppositeCommand =
-        MPEditPointTypeCommand.forCWJM(
+    final MPCommand oppositeCommand = MPEditPointTypeCommand.forCWJM(
       pointMPID: pointMPID,
       newPointType: originalPoint.pointType,
       originalLineInTH2File: originalPoint.originalLineInTH2File,
