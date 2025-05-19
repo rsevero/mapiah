@@ -271,7 +271,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _thFile.substituteElement(line);
     _th2FileEditController.selectionController
         .addSelectableElement(newLineSegment);
-    _th2FileEditController.selectionController.updateSelectableElements();
+    _th2FileEditController.selectionController
+        .updateSelectedElementClone(newLineSegment.mpID);
+    _th2FileEditController.selectionController
+        .updateSelectedElementClone(newLineSegment.parentMPID);
+    _th2FileEditController.selectionController.resetSelectableElements();
   }
 
   @action
@@ -289,6 +293,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.selectionController.addSelectableElement(newElement);
+    _th2FileEditController.selectionController
+        .updateSelectedElementClone(newElement.parentMPID);
+    _th2FileEditController.selectionController.resetSelectableElements();
 
     if (newElement is THScrap) {
       _th2FileEditController.updateHasMultipleScraps();
@@ -332,6 +339,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (element is THLineSegment) {
       selectionController.removeSelectedLineSegment(element);
+      selectionController.resetSelectableElements();
     }
 
     if (element is THScrap) {

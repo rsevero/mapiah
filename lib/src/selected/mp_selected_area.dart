@@ -25,7 +25,7 @@ class MPSelectedArea extends MPSelectedElement {
     final Set<int> lineMPIDs =
         originalArea.getLineMPIDs(th2FileEditController.thFile);
     final mpSelectableElements =
-        th2FileEditController.selectionController.mpSelectableElements;
+        th2FileEditController.selectionController.getMPSelectableElements();
 
     for (final int lineMPID in lineMPIDs) {
       originalLines.add(

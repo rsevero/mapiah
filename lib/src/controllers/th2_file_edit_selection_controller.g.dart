@@ -305,27 +305,6 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
-  late final _$_mpSelectableElementsAtom = Atom(
-      name: 'TH2FileEditSelectionControllerBase._mpSelectableElements',
-      context: context);
-
-  ObservableMap<int, MPSelectable> get mpSelectableElements {
-    _$_mpSelectableElementsAtom.reportRead();
-    return super._mpSelectableElements;
-  }
-
-  @override
-  ObservableMap<int, MPSelectable> get _mpSelectableElements =>
-      mpSelectableElements;
-
-  @override
-  set _mpSelectableElements(ObservableMap<int, MPSelectable> value) {
-    _$_mpSelectableElementsAtom.reportWrite(value, super._mpSelectableElements,
-        () {
-      super._mpSelectableElements = value;
-    });
-  }
-
   late final _$TH2FileEditSelectionControllerBaseActionController =
       ActionController(
           name: 'TH2FileEditSelectionControllerBase', context: context);

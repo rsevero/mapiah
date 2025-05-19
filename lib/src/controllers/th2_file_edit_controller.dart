@@ -425,7 +425,7 @@ abstract class TH2FileEditControllerBase with Store {
       }
     });
 
-    selectionController.updateSelectableElements();
+    selectionController.resetSelectableElements();
 
     elementEditController.initializeMostUsedTypes();
 
@@ -585,7 +585,7 @@ abstract class TH2FileEditControllerBase with Store {
   void setActiveScrap(int scrapMPID) {
     _activeScrapID = scrapMPID;
     selectionController.clearSelectedElements();
-    selectionController.updateSelectableElements();
+    selectionController.resetSelectableElements();
     triggerAllElementsRedraw();
   }
 

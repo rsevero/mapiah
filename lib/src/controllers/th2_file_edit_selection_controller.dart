@@ -120,11 +120,31 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   /// Used to search for selected elements by list of selectable coordinates.
-  @readonly
-  ObservableMap<int, MPSelectable> _mpSelectableElements =
-      ObservableMap<int, MPSelectable>();
+  Map<int, MPSelectable>? _mpSelectableElements;
 
   Offset dragStartCanvasCoordinates = Offset.zero;
+
+  Map<int, MPSelectable> getMPSelectableElements() {
+    if (_mpSelectableElements == null) {
+      _updateMPSelectableElements();
+    }
+
+    return _mpSelectableElements!;
+  }
+
+  void _updateMPSelectableElements() {
+    final THScrap scrap = _thFile.scrapByMPID(
+      _th2FileEditController.activeScrapID,
+    );
+
+    _mpSelectableElements = {};
+
+    for (final int elementMPID in scrap.childrenMPID) {
+      final THElement element = _thFile.elementByMPID(elementMPID);
+
+      addSelectableElement(element);
+    }
+  }
 
   Rect _getElementsListBoundingBoxOnCanvas(Iterable<THElement> elements) {
     Rect? boundingBox;
@@ -437,19 +457,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _selectionHandleCenters = handles;
   }
 
-  void updateSelectableElements() {
-    _mpSelectableElements.clear();
-
-    final THScrap scrap =
-        _thFile.scrapByMPID(_th2FileEditController.activeScrapID);
-
-    for (final int elementMPID in scrap.childrenMPID) {
-      final THElement element = _thFile.elementByMPID(elementMPID);
-
-      if (element is THPoint || element is THLine || element is THArea) {
-        addSelectableElement(element);
-      }
-    }
+  void resetSelectableElements() {
+    _mpSelectableElements = null;
   }
 
   void addSelectableElement(THElement element) {
@@ -478,8 +487,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
 
     final int pointMPID = point.mpID;
+    final Map<int, MPSelectable> selectableElements = getMPSelectableElements();
 
-    _mpSelectableElements[pointMPID] = selectablePoint;
+    selectableElements[pointMPID] = selectablePoint;
 
     if (!_isSelected.containsKey(pointMPID)) {
       _isSelected[pointMPID] = Observable(false);
@@ -493,8 +503,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
 
     final int lineMPID = line.mpID;
+    final Map<int, MPSelectable> selectableElements = getMPSelectableElements();
 
-    _mpSelectableElements[lineMPID] = selectableLine;
+    selectableElements[lineMPID] = selectableLine;
     if (!_isSelected.containsKey(lineMPID)) {
       _isSelected[lineMPID] = Observable(false);
     }
@@ -531,13 +542,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           );
       }
 
-      _mpSelectableElements[lineSegment.mpID] = selectableLineSegment;
+      selectableElements[lineSegment.mpID] = selectableLineSegment;
       startPoint = lineSegment.endPoint.coordinates;
     }
   }
 
   void removeSelectableElement(int mpID) {
-    _mpSelectableElements.remove(mpID);
+    _mpSelectableElements?.remove(mpID);
     _isSelected.remove(mpID);
   }
 
@@ -562,8 +573,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }) {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
-    final selectableElements = _mpSelectableElements.values;
-    final clickedElementsMap = <int, THElement>{};
+    final Iterable<MPSelectable> selectableElements =
+        getMPSelectableElements().values;
+    final Map<int, THElement> clickedElementsMap = {};
 
     for (final MPSelectable selectableElement in selectableElements) {
       if (selectableElement.contains(canvasCoordinates)) {
@@ -644,8 +656,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   List<THElement> selectableElementsInsideWindow(Rect canvasSelectionWindow) {
     final Map<int, THElement> insideWindowElements = <int, THElement>{};
+    final Iterable<MPSelectable> selectableElements =
+        getMPSelectableElements().values;
 
-    for (final selectableElement in _mpSelectableElements.values) {
+    for (final MPSelectable selectableElement in selectableElements) {
       if (selectableElement is MPSelectableElement) {
         if ((selectableElement is! MPSelectablePoint) &&
             (selectableElement is! MPSelectableLine)) {
@@ -833,6 +847,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void removeSelectedLineSegment(THLineSegment lineSegment) {
     _selectedLineSegments.remove(lineSegment.mpID);
+    updateSelectedElementClone(lineSegment.parentMPID);
   }
 
   void removeSelectedLineSegments(List<THLineSegment> lineSegments) {
@@ -846,7 +861,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void warmSelectableElementsCanvasScaleChanged() {
-    for (final selectableElement in _mpSelectableElements.values) {
+    final Iterable<MPSelectable> selectableElements =
+        getMPSelectableElements().values;
+
+    for (final MPSelectable selectableElement in selectableElements) {
       selectableElement.canvasTransformChanged();
     }
   }

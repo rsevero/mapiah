@@ -13,7 +13,9 @@ class MPSelectedLine extends MPSelectedElement {
   }
 
   void _createClone(
-      THLine originalLine, TH2FileEditController th2FileEditController) {
+    THLine originalLine,
+    TH2FileEditController th2FileEditController,
+  ) {
     final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPID;
 
     originalLineSegmentsMapClone.clear();

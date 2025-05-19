@@ -295,6 +295,7 @@ class THLine extends THElement
 
   void addLineSegmentMPID(int lineSegmentMPID) {
     _lineSegmentMPIDs.add(lineSegmentMPID);
+    clearBoundingBox();
   }
 
   int getLineSegmentIndexByMPID(int lineSegmentMPID) {
@@ -303,6 +304,7 @@ class THLine extends THElement
 
   void removeLineSegmentMPID(int lineSegmentMPID) {
     _lineSegmentMPIDs.remove(lineSegmentMPID);
+    clearBoundingBox();
   }
 
   List<int> get lineSegmentMPIDs => _lineSegmentMPIDs;
@@ -369,5 +371,6 @@ class THLine extends THElement
     }
 
     _lineSegmentMPIDs.insert(lineSegmentsMPIDsIndex, lineSegment.mpID);
+    clearBoundingBox();
   }
 }
