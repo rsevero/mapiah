@@ -40,6 +40,7 @@ Version 0.2
 [X] - BUG: added elements get inserted at the end of the file, after the endscrap element
 [X] - BUG: new lines are created without its correspondent endline element
 [X] - BUG: add area not working
+[ ] - BUG: clicking on selected control point over end point not moving the control point
 
 Version 0.3
 [ ] - Search/select elements by characteristics
