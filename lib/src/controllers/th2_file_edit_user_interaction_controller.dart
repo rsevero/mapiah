@@ -1,5 +1,5 @@
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -365,7 +365,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             thFile,
           );
           final THBezierCurveLineSegment newLineSegment =
-              MPEditElement.getBezierCurveLineSegmentFromStraightLineSegment(
+              MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
             start: previousLineSegment.endPoint.coordinates,
             straightLineSegment: (currentLineSegment as THStraightLineSegment),
             decimalPositions: decimalPositions,
@@ -414,7 +414,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     _th2FileEditController.execute(setLineSegmentTypeCommand);
     _th2FileEditController.selectionController
-        .setSelectedLineSegments(newLineSegments);
+        .setSelectedEndPoints(newLineSegments);
     _th2FileEditController.selectionController
         .updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();

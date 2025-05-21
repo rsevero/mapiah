@@ -7,8 +7,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateLineSegmentOptionsEditMixin {
   bool _dragShouldMovePoints = false;
-  final List<MPSelectableEndControlPoint> _selectedEndControlPointsOnDragStart =
-      [];
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
     MPTH2FileEditStateType.editSingleLine,
@@ -97,11 +95,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
               .removeSelectedLineSegments([clickedEndControlPointLineSegment]);
         } else {
           selectionController
-              .addSelectedLineSegments([clickedEndControlPointLineSegment]);
+              .addSelectedEndPoints([clickedEndControlPointLineSegment]);
         }
       } else {
         selectionController
-            .setSelectedLineSegments([clickedEndControlPointLineSegment]);
+            .setSelectedEndPoints([clickedEndControlPointLineSegment]);
       }
 
       selectionController.updateSelectableEndAndControlPoints();
@@ -136,14 +134,14 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         if (!isLineSegmentSelected || !isPreviousLineSegmentSelected) {
           if (shiftPressed) {
             if (!isLineSegmentSelected) {
-              selectionController.addSelectedLineSegment(clickedLineSegment);
+              selectionController.addSelectedEndPoint(clickedLineSegment);
             }
 
             if (!isPreviousLineSegmentSelected) {
-              selectionController.addSelectedLineSegment(previousLineSegment);
+              selectionController.addSelectedEndPoint(previousLineSegment);
             }
           } else {
-            selectionController.setSelectedLineSegments(
+            selectionController.setSelectedEndPoints(
               [previousLineSegment, clickedLineSegment],
             );
           }
@@ -156,7 +154,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
               [previousLineSegment, clickedLineSegment],
             );
           } else {
-            selectionController.setSelectedLineSegments(
+            selectionController.setSelectedEndPoints(
               [previousLineSegment, clickedLineSegment],
             );
           }
@@ -202,34 +200,17 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       presentMultipleEndControlPointsClickedWidget: false,
     );
 
-    bool clearSelectedEndControlPointsOnDragStart = false;
-
     _dragShouldMovePoints = false;
 
     if (clickedEndControlPoints.isNotEmpty) {
       if (!shiftPressed) {
-        _selectedEndControlPointsOnDragStart.clear();
         for (final MPSelectableEndControlPoint endControlPoint
             in clickedEndControlPoints) {
-          switch (endControlPoint) {
-            case MPSelectableControlPoint _:
-              _selectedEndControlPointsOnDragStart.add(endControlPoint);
-            case MPSelectableEndPoint _:
-              final THLineSegment element =
-                  endControlPoint.element as THLineSegment;
+            selectionController.isEndpointSelected(element)  
 
-              if (selectionController.isEndpointSelected(element)) {
-                clearSelectedEndControlPointsOnDragStart = true;
-              } else {
-                _selectedEndControlPointsOnDragStart.add(endControlPoint);
-              }
-          }
           _dragShouldMovePoints = true;
         }
 
-        if (clearSelectedEndControlPointsOnDragStart) {
-          _selectedEndControlPointsOnDragStart.clear();
-        }
       }
     }
   }
@@ -256,7 +237,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
               MPTH2FileEditStateType.movingSingleControlPoint,
             );
           case MPSelectableEndPoint _:
-            selectionController.setSelectedLineSegments(
+            selectionController.setSelectedEndPoints(
               [clickedEndControlPoint.element as THLineSegment],
             );
             th2FileEditController.stateController.setState(
@@ -282,7 +263,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
     if (shiftPressed) {
       if (endpointsInsideSelectionWindow.isNotEmpty) {
-        selectionController.addSelectedLineSegments(
+        selectionController.addSelectedEndPoints(
           endpointsInsideSelectionWindow,
         );
       }
@@ -290,7 +271,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       if (endpointsInsideSelectionWindow.isEmpty) {
         selectionController.clearSelectedLineSegments();
       } else {
-        selectionController.setSelectedLineSegments(
+        selectionController.setSelectedEndPoints(
           endpointsInsideSelectionWindow,
         );
       }

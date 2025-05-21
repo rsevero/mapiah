@@ -3,11 +3,12 @@ import 'dart:collection';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/aux/th_line_paint.dart';
 import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
@@ -59,9 +60,23 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         final THLinePaint linePaint =
             th2FileEditController.visualController.getEditLinePaint();
 
-        final MPSelectableControlPoint? selectedControlPoint =
-            selectionController.selectedControlPoint;
+        final MPSelectedEndControlPoint? selectedControlPoint;
 
+        if (selectionController.selectedEndControlPoints.length == 1) {
+          final MPSelectedEndControlPoint selectEndControlPoint =
+              selectionController.selectedEndControlPoints.values.first;
+          final MPEndControlPointType selectEndControlPointType =
+              selectEndControlPoint.type;
+
+          selectedControlPoint = ((selectEndControlPointType ==
+                      MPEndControlPointType.controlPoint1) ||
+                  (selectEndControlPointType ==
+                      MPEndControlPointType.controlPoint2))
+              ? selectEndControlPoint
+              : null;
+        } else {
+          selectedControlPoint = null;
+        }
         final List<CustomPainter> painters = [];
 
         final THLine line = selectionController.mpSelectedElementsLogical.values
@@ -92,8 +107,9 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         late MPSelectableEndControlPoint lastEndpoint;
 
         for (final MPSelectableEndControlPoint point in endControlPoints) {
-          switch (point) {
-            case MPSelectableEndPoint _:
+          switch (point.type) {
+            case MPEndControlPointType.endPointBezierCurve:
+            case MPEndControlPointType.endPointStraight:
               final THLineSegment lineSegment = point.element as THLineSegment;
               final THPointPaint pointPaint =
                   selectionController.getIsLineSegmentSelected(lineSegment)
@@ -108,9 +124,11 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
               endPointPainters.add(endPointPainter);
               lastEndpoint = point;
-            case MPSelectableControlPoint _:
+            case MPEndControlPointType.controlPoint1:
+            case MPEndControlPointType.controlPoint2:
               final bool isSelected = (selectedControlPoint != null) &&
-                  (point.element.mpID == selectedControlPoint.element.mpID) &&
+                  (point.element.mpID ==
+                      selectedControlPoint.originalElementClone.mpID) &&
                   (point.type == selectedControlPoint.type);
               final THControlPointPainter controlPointPainter =
                   THControlPointPainter(
@@ -124,8 +142,6 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
               );
 
               painters.add(controlPointPainter);
-            default:
-              throw UnimplementedError('Unknown MPSelectableEndControlPoint');
           }
         }
 

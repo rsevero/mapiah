@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
-class MPEditElement {
+class MPEditElementAux {
   static THBezierCurveLineSegment
       getBezierCurveLineSegmentFromStraightLineSegment({
     required Offset start,
@@ -33,5 +34,15 @@ class MPEditElement {
       optionsMap: straightLineSegment.optionsMap,
       originalLineInTH2File: '',
     );
+  }
+
+  static bool isEndPoint(MPEndControlPointType type) {
+    return ((type == MPEndControlPointType.endPointStraight) ||
+        (type == MPEndControlPointType.endPointBezierCurve));
+  }
+
+  static bool isControlPoint(MPEndControlPointType type) {
+    return ((type == MPEndControlPointType.controlPoint1) ||
+        (type == MPEndControlPointType.controlPoint2));
   }
 }

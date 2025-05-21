@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -11,6 +12,7 @@ import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
@@ -48,9 +50,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   Iterable<THElement> _clickedElementsAtPointerDown = {};
 
-  @readonly
-  MPSelectableControlPoint? _selectedControlPoint;
-
   List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
 
   @readonly
@@ -75,6 +74,20 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   int? _multipleElementsClickedHighlightedMPID;
 
+  MPSelectedEndControlPointPointType
+      getCurrentSelectedEndControlPointPointType() {
+    if (_selectedEndControlPoints.length > 1) {
+      return MPSelectedEndControlPointPointType.endPoint;
+    } else if (_selectedEndControlPoints.length == 1) {
+      return MPEditElementAux.isEndPoint(
+              _selectedEndControlPoints.values.first.type)
+          ? MPSelectedEndControlPointPointType.endPoint
+          : MPSelectedEndControlPointPointType.controlPoint;
+    } else {
+      return MPSelectedEndControlPointPointType.none;
+    }
+  }
+
   Completer<void> multipleClickedSemaphore = Completer<void>();
 
   bool selectionCanBeMultiple = false;
@@ -88,8 +101,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   Rect? _selectedElementsBoundingBox;
 
   @readonly
-  LinkedHashMap<int, THLineSegment> _selectedLineSegments =
-      LinkedHashMap<int, THLineSegment>();
+  Map<int, MPSelectedEndControlPoint> _selectedEndControlPoints = {};
 
   @readonly
   Set<MPSelectableEndControlPoint> _selectableEndControlPoints = {};
@@ -246,8 +258,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void updateSelectedLineSegment(THLineSegment lineSegment) {
-    if (_selectedLineSegments.containsKey(lineSegment.mpID)) {
-      _selectedLineSegments[lineSegment.mpID] = lineSegment;
+    if (_selectedEndControlPoints.containsKey(lineSegment.mpID)) {
+      _selectedEndControlPoints[lineSegment.mpID] = MPSelectedEndControlPoint(
+        originalLineSegment: lineSegment,
+        type: (lineSegment is THStraightLineSegment)
+            ? MPEndControlPointType.endPointStraight
+            : MPEndControlPointType.endPointBezierCurve,
+      );
     }
   }
 
@@ -387,12 +404,23 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void setSelectedControlPoint(MPSelectableControlPoint controlPoint) {
-    _selectedControlPoint = controlPoint;
+  void setSelectedControlPoint(MPSelectableEndControlPoint endControlPoint) {
+    if (MPEditElementAux.isEndPoint(endControlPoint.type)) {
+      throw Exception(
+        'End control point type not supported in TH2FileEditSelectionController.setSelectedControlPoint(): ${endControlPoint.type}',
+      );
+    }
+
+    _selectedEndControlPoints.clear;
+    _selectedEndControlPoints[endControlPoint.element.mpID] =
+        MPSelectedEndControlPoint(
+      originalLineSegment: endControlPoint.lineSegment,
+      type: endControlPoint.type,
+    );
   }
 
-  void clearSelectedControlPoint() {
-    _selectedControlPoint = null;
+  void clearSelectedEndControlPoints() {
+    _selectedEndControlPoints.clear;
   }
 
   void setDragStartCoordinates(Offset screenCoordinates) {
@@ -690,15 +718,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Offset canvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(screenCoordinates);
     clickedEndControlPoints.clear();
-    final List<MPSelectableControlPoint> clickedControlPoints = [];
+    final List<MPSelectableEndControlPoint> clickedControlPoints = [];
 
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
       if (endControlPoint.contains(canvasCoordinates)) {
-        if (endControlPoint is MPSelectableEndPoint) {
+        if (MPEditElementAux.isEndPoint(endControlPoint.type)) {
           clickedEndControlPoints.add(endControlPoint);
         } else if (includeControlPoints &&
-            (endControlPoint is MPSelectableControlPoint)) {
+            MPEditElementAux.isControlPoint(endControlPoint.type)) {
           clickedControlPoints.add(endControlPoint);
         }
       }
@@ -739,8 +767,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   ) {
     final Map<int, THLineSegment> insideWindowElements = <int, THLineSegment>{};
 
-    for (final selectableEndControlPoint in _selectableEndControlPoints) {
-      if (selectableEndControlPoint is MPSelectableEndPoint) {
+    for (final MPSelectableEndControlPoint selectableEndControlPoint
+        in _selectableEndControlPoints) {
+      if (MPEditElementAux.isEndPoint(selectableEndControlPoint.type)) {
         final THLineSegment element =
             selectableEndControlPoint.element as THLineSegment;
 
@@ -774,50 +803,56 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final THLineSegment lineSegment in lineSegments) {
       if (isFirst) {
         _selectableEndControlPoints.add(
-          MPSelectableEndPoint(
+          MPSelectableEndControlPoint(
             lineSegment: lineSegment,
             position: lineSegment.endPoint.coordinates,
             th2fileEditController: _th2FileEditController,
+            type: (lineSegment is THStraightLineSegment)
+                ? MPEndControlPointType.endPointStraight
+                : MPEndControlPointType.endPointBezierCurve,
           ),
         );
         isFirst = false;
         previousLineSegmentSelected =
-            _selectedLineSegments.containsKey(lineSegment.mpID);
+            _selectedEndControlPoints.containsKey(lineSegment.mpID);
         continue;
       }
 
       final int lineSegmentMPID = lineSegment.mpID;
       final bool currentLineSegmentSelected =
-          _selectedLineSegments.containsKey(lineSegmentMPID);
+          _selectedEndControlPoints.containsKey(lineSegmentMPID);
       final bool addControlPoints =
           (previousLineSegmentSelected || currentLineSegmentSelected) &&
               (lineSegment is THBezierCurveLineSegment);
 
       if (addControlPoints) {
         _selectableEndControlPoints.add(
-          MPSelectableControlPoint(
+          MPSelectableEndControlPoint(
             lineSegment: lineSegment,
             position: lineSegment.controlPoint1.coordinates,
-            type: MPSelectableControlPointType.controlPoint1,
+            type: MPEndControlPointType.controlPoint1,
             th2fileEditController: _th2FileEditController,
           ),
         );
       }
 
       _selectableEndControlPoints.add(
-        MPSelectableEndPoint(
+        MPSelectableEndControlPoint(
           lineSegment: lineSegment,
           position: lineSegment.endPoint.coordinates,
           th2fileEditController: _th2FileEditController,
+          type: (lineSegment is THStraightLineSegment)
+              ? MPEndControlPointType.endPointStraight
+              : MPEndControlPointType.endPointBezierCurve,
         ),
       );
 
       if (addControlPoints) {
         _selectableEndControlPoints.add(
-          MPSelectableControlPoint(
+          MPSelectableEndControlPoint(
             lineSegment: lineSegment,
             position: lineSegment.controlPoint2.coordinates,
-            type: MPSelectableControlPointType.controlPoint2,
+            type: MPEndControlPointType.controlPoint2,
             th2fileEditController: _th2FileEditController,
           ),
         );
@@ -826,38 +861,55 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void setSelectedLineSegments(List<THLineSegment> lineSegments) {
-    _selectedLineSegments.clear();
-    addSelectedLineSegments(lineSegments);
+  void setSelectedEndPoints(List<THLineSegment> lineSegments) {
+    _selectedEndControlPoints.clear();
+    addSelectedEndPoints(lineSegments);
   }
 
   void clearSelectedLineSegments() {
-    _selectedLineSegments.clear();
+    _selectedEndControlPoints.clear();
   }
 
-  void addSelectedLineSegment(THLineSegment lineSegment) {
-    _selectedLineSegments[lineSegment.mpID] = lineSegment;
+  void addSelectedEndPoint(THLineSegment lineSegment) {
+    _selectedEndControlPoints[lineSegment.mpID] =
+        getNewMPSelectedEndControlPoint(
+      lineSegment,
+    );
   }
 
-  void addSelectedLineSegments(List<THLineSegment> lineSegments) {
+  MPSelectedEndControlPoint getNewMPSelectedEndControlPoint(
+    THLineSegment lineSegment,
+  ) {
+    return MPSelectedEndControlPoint(
+      originalLineSegment: lineSegment,
+      type: lineSegment is THStraightLineSegment
+          ? MPEndControlPointType.endPointStraight
+          : MPEndControlPointType.endPointBezierCurve,
+    );
+  }
+
+  void addSelectedEndPoints(List<THLineSegment> lineSegments) {
     for (final THLineSegment lineSegment in lineSegments) {
-      _selectedLineSegments[lineSegment.mpID] = lineSegment;
+      _selectedEndControlPoints[lineSegment.mpID] =
+          getNewMPSelectedEndControlPoint(
+        lineSegment,
+      );
     }
   }
 
   void removeSelectedLineSegment(THLineSegment lineSegment) {
-    _selectedLineSegments.remove(lineSegment.mpID);
+    _selectedEndControlPoints.remove(lineSegment.mpID);
     updateSelectedElementClone(lineSegment.parentMPID);
   }
 
   void removeSelectedLineSegments(List<THLineSegment> lineSegments) {
     for (final THLineSegment lineSegment in lineSegments) {
-      _selectedLineSegments.remove(lineSegment.mpID);
+      _selectedEndControlPoints.remove(lineSegment.mpID);
     }
   }
 
   bool getIsLineSegmentSelected(THLineSegment lineSegment) {
-    return _selectedLineSegments.containsKey(lineSegment.mpID);
+    return _selectedEndControlPoints.containsKey(lineSegment.mpID);
   }
 
   void warmSelectableElementsCanvasScaleChanged() {
@@ -890,22 +942,34 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   MPSelectedLineSegmentType getSelectedLineSegmentsType() {
-    final Iterable<THLineSegment> lineSegments = _selectedLineSegments.values;
+    if (getCurrentSelectedEndControlPointPointType() ==
+        MPSelectedEndControlPointPointType.controlPoint) {
+      throw Exception(
+        'TH2FileEditSelectionController.getSelectedLineSegmentsType() called when control control point is selected',
+      );
+    }
 
-    if (lineSegments.isEmpty) {
+    final Iterable<MPSelectedEndControlPoint> endPoints =
+        _selectedEndControlPoints.values;
+
+    if (endPoints.isEmpty) {
       return MPSelectedLineSegmentType.none;
     }
 
-    if (lineSegments.length == 1) {
-      return lineSegments.first.elementType == THElementType.straightLineSegment
+    THElementType? elementType =
+        endPoints.first.originalLineSegmentClone.elementType;
+
+    if (endPoints.length == 1) {
+      return elementType == THElementType.straightLineSegment
           ? MPSelectedLineSegmentType.straightLineSegment
           : MPSelectedLineSegmentType.bezierCurveLineSegment;
     }
 
-    THElementType? elementType = lineSegments.first.elementType;
+    final Iterable<MPSelectedEndControlPoint> otherEndPoints =
+        endPoints.skip(1);
 
-    for (final THLineSegment lineSegment in lineSegments.skip(1)) {
-      if (lineSegment.elementType != elementType) {
+    for (final MPSelectedEndControlPoint endPoint in otherEndPoints) {
+      if (endPoint.originalLineSegmentClone.elementType != elementType) {
         elementType = null;
         break;
       }
@@ -914,7 +978,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if (elementType == null) {
       return MPSelectedLineSegmentType.mixed;
     } else {
-      return lineSegments.first.elementType == THElementType.straightLineSegment
+      return elementType == THElementType.straightLineSegment
           ? MPSelectedLineSegmentType.straightLineSegment
           : MPSelectedLineSegmentType.bezierCurveLineSegment;
     }
@@ -1041,7 +1105,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void moveSelectedEndControlPointsToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
-    if (_selectedLineSegments.isEmpty) {
+    if (getCurrentSelectedEndControlPointPointType() !=
+        MPSelectedEndControlPointPointType.endPoint) {
       return;
     }
 
@@ -1053,12 +1118,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final List<int> lineLineSegmentsMPIDs = getSelectedLineLineSegmentsMPIDs();
     final LinkedHashMap<int, THLineSegment> modifiedLineSegments =
         LinkedHashMap<int, THLineSegment>();
-    final Iterable<THLineSegment> selectedLineSegments =
-        _selectedLineSegments.values;
     final int currentDecimalPositions =
         _th2FileEditController.currentDecimalPositions;
+    final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
+        _selectedEndControlPoints.values;
 
-    for (final THLineSegment selectedLineSegment in selectedLineSegments) {
+    for (final MPSelectedEndControlPoint selectedEndControlPoint
+        in selectedEndControlPoints) {
+      final THLineSegment selectedLineSegment =
+          selectedEndControlPoint.originalLineSegmentClone;
       final int selectedLineSegmentMPID = selectedLineSegment.mpID;
       final THLineSegment originalLineSegment =
           originalLineSegments[selectedLineSegmentMPID]!;
@@ -1142,7 +1210,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void moveSelectedControlPointToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
-    if (_selectedControlPoint == null) {
+    if (getCurrentSelectedEndControlPointPointType() !=
+        MPSelectedEndControlPointPointType.controlPoint) {
       return;
     }
 
@@ -1151,8 +1220,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final LinkedHashMap<int, THLineSegment> originalLineSegments =
         (_mpSelectedElementsLogical.values.first as MPSelectedLine)
             .originalLineSegmentsMapClone;
+    final MPSelectedEndControlPoint selectedControlPoint =
+        _selectedEndControlPoints.values.first;
     final THBezierCurveLineSegment controlPointLineSegment =
-        _selectedControlPoint!.element as THBezierCurveLineSegment;
+        selectedControlPoint.originalElementClone as THBezierCurveLineSegment;
     final int controlPointLineSegmentMPID = controlPointLineSegment.mpID;
     final THBezierCurveLineSegment originalControlPointLineSegment =
         originalLineSegments[controlPointLineSegmentMPID]
@@ -1162,8 +1233,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final int currentDecimalPositions =
         _th2FileEditController.currentDecimalPositions;
 
-    switch (_selectedControlPoint!.type) {
-      case MPSelectableControlPointType.controlPoint1:
+    switch (selectedControlPoint.type) {
+      case MPEndControlPointType.controlPoint1:
         modifiedLineSegments[controlPointLineSegmentMPID] =
             originalControlPointLineSegment.copyWith(
           controlPoint1: THPositionPart(
@@ -1173,7 +1244,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             decimalPositions: currentDecimalPositions,
           ),
         );
-      case MPSelectableControlPointType.controlPoint2:
+      case MPEndControlPointType.controlPoint2:
         modifiedLineSegments[controlPointLineSegmentMPID] =
             originalControlPointLineSegment.copyWith(
           controlPoint2: THPositionPart(
@@ -1182,6 +1253,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                     localDeltaPositionOnCanvas,
             decimalPositions: currentDecimalPositions,
           ),
+        );
+      default:
+        throw Exception(
+          'TH2FileEditSelectionController.moveSelectedControlPointToCanvasCoordinates() called with invalid end/control point type: ${selectedControlPoint.type}',
         );
     }
 
@@ -1279,7 +1354,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   bool isEndpointSelected(THLineSegment lineSegment) {
-    return _selectedLineSegments.containsKey(lineSegment.mpID);
+    return _selectedEndControlPoints.containsKey(lineSegment.mpID);
   }
 
   @action
@@ -1367,21 +1442,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   Rect getClickedEndControlPointsBoundingBoxOnCanvas() {
-    if (_selectedLineSegments.isEmpty) {
+    if (_selectedEndControlPoints.isEmpty) {
       return Rect.zero;
     }
 
-    final Iterable<THLineSegment> selectedLineSegments =
-        _selectedLineSegments.values;
+    final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
+        _selectedEndControlPoints.values;
 
     Rect boundingBox = MPNumericAux.orderedRectSmallestAroundPoint(
-      center: selectedLineSegments.first.endPoint.coordinates,
+      center: selectedEndControlPoints
+          .first.originalLineSegmentClone.endPoint.coordinates,
     );
 
-    for (final THLineSegment point in selectedLineSegments.skip(1)) {
+    for (final MPSelectedEndControlPoint selectedLineSegment
+        in selectedEndControlPoints.skip(1)) {
       boundingBox = MPNumericAux.orderedRectExpandedToIncludeOffset(
         rect: boundingBox,
-        offset: point.endPoint.coordinates,
+        offset:
+            selectedLineSegment.originalLineSegmentClone.endPoint.coordinates,
       );
     }
 
@@ -1406,6 +1484,14 @@ enum MPSelectedLineSegmentType {
   mixed,
   none,
   straightLineSegment;
+}
+
+/// Informs if currently dealing with a control point or with 1 or more
+/// endpoints.
+enum MPSelectedEndControlPointPointType {
+  none,
+  controlPoint,
+  endPoint;
 }
 
 class MPMultipleEndControlPointsClickedChoice {

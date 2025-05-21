@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -791,7 +791,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       } else {
         final THBezierCurveLineSegment deletedLineSegmentBezier =
             deletedLineSegmentIsStraight
-                ? MPEditElement
+                ? MPEditElementAux
                     .getBezierCurveLineSegmentFromStraightLineSegment(
                     start: line
                         .getPreviousLineSegment(lineSegment, _thFile)
@@ -804,7 +804,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 : lineSegment as THBezierCurveLineSegment;
         final THBezierCurveLineSegment nextLineSegmentBezier =
             nextLineSegmentIsStraight
-                ? MPEditElement
+                ? MPEditElementAux
                     .getBezierCurveLineSegmentFromStraightLineSegment(
                     start: lineSegment.endPoint.coordinates,
                     straightLineSegment: nextLineSegment,

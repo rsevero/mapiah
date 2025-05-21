@@ -21,7 +21,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     } else {
       clearAllSelections();
     }
-    selectionController.clearSelectedControlPoint();
+    selectionController.clearSelectedEndControlPoints();
   }
 
   @override

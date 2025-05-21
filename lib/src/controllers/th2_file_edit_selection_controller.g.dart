@@ -129,26 +129,6 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
-  late final _$_selectedControlPointAtom = Atom(
-      name: 'TH2FileEditSelectionControllerBase._selectedControlPoint',
-      context: context);
-
-  MPSelectableControlPoint? get selectedControlPoint {
-    _$_selectedControlPointAtom.reportRead();
-    return super._selectedControlPoint;
-  }
-
-  @override
-  MPSelectableControlPoint? get _selectedControlPoint => selectedControlPoint;
-
-  @override
-  set _selectedControlPoint(MPSelectableControlPoint? value) {
-    _$_selectedControlPointAtom.reportWrite(value, super._selectedControlPoint,
-        () {
-      super._selectedControlPoint = value;
-    });
-  }
-
   late final _$_multipleEndControlPointsClickedChoiceAtom = Atom(
       name:
           'TH2FileEditSelectionControllerBase._multipleEndControlPointsClickedChoice',
@@ -241,24 +221,24 @@ mixin _$TH2FileEditSelectionController
     });
   }
 
-  late final _$_selectedLineSegmentsAtom = Atom(
-      name: 'TH2FileEditSelectionControllerBase._selectedLineSegments',
+  late final _$_selectedEndControlPointsAtom = Atom(
+      name: 'TH2FileEditSelectionControllerBase._selectedEndControlPoints',
       context: context);
 
-  LinkedHashMap<int, THLineSegment> get selectedLineSegments {
-    _$_selectedLineSegmentsAtom.reportRead();
-    return super._selectedLineSegments;
+  Map<int, MPSelectedEndControlPoint> get selectedEndControlPoints {
+    _$_selectedEndControlPointsAtom.reportRead();
+    return super._selectedEndControlPoints;
   }
 
   @override
-  LinkedHashMap<int, THLineSegment> get _selectedLineSegments =>
-      selectedLineSegments;
+  Map<int, MPSelectedEndControlPoint> get _selectedEndControlPoints =>
+      selectedEndControlPoints;
 
   @override
-  set _selectedLineSegments(LinkedHashMap<int, THLineSegment> value) {
-    _$_selectedLineSegmentsAtom.reportWrite(value, super._selectedLineSegments,
-        () {
-      super._selectedLineSegments = value;
+  set _selectedEndControlPoints(Map<int, MPSelectedEndControlPoint> value) {
+    _$_selectedEndControlPointsAtom
+        .reportWrite(value, super._selectedEndControlPoints, () {
+      super._selectedEndControlPoints = value;
     });
   }
 
