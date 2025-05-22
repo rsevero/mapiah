@@ -404,14 +404,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void setSelectedControlPoint(MPSelectableEndControlPoint endControlPoint) {
-    if (MPEditElementAux.isEndPoint(endControlPoint.type)) {
-      throw Exception(
-        'End control point type not supported in TH2FileEditSelectionController.setSelectedControlPoint(): ${endControlPoint.type}',
-      );
-    }
-
-    _selectedEndControlPoints.clear;
+  void setSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
+    _selectedEndControlPoints.clear();
     _selectedEndControlPoints[endControlPoint.element.mpID] =
         MPSelectedEndControlPoint(
       originalLineSegment: endControlPoint.lineSegment,
@@ -902,7 +896,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     updateSelectedElementClone(lineSegment.parentMPID);
   }
 
-  void removeSelectedLineSegments(List<THLineSegment> lineSegments) {
+  void removeSelectedEndControlPoints(List<THLineSegment> lineSegments) {
     for (final THLineSegment lineSegment in lineSegments) {
       _selectedEndControlPoints.remove(lineSegment.mpID);
     }
