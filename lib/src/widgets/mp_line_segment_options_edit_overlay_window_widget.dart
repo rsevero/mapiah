@@ -7,7 +7,6 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_line_segment_type_widget.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
@@ -47,10 +46,8 @@ class _MPLineSegmentOptionsEditOverlayWindowWidgetState
 
         final TH2FileEditSelectionController selectionController =
             th2FileEditController.selectionController;
-        final Iterable<THLineSegment> lineSegments =
-            selectionController.selectedLineSegments.values;
 
-        if (lineSegments.isEmpty) {
+        if (selectionController.selectedEndControlPoints.isEmpty) {
           return const SizedBox.shrink();
         }
 

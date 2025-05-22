@@ -1353,8 +1353,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return _mpSelectedElementsLogical.containsKey(mpID);
   }
 
-  bool isEndpointSelected(THLineSegment lineSegment) {
-    return _selectedEndControlPoints.containsKey(lineSegment.mpID);
+  bool isEndControlPointSelected(int mpID) {
+    return _selectedEndControlPoints.containsKey(mpID);
   }
 
   @action

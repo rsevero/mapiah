@@ -18,6 +18,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_element_edit_controller.g.dart';
@@ -729,7 +730,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void applyRemoveSelectedLineSegments() {
     final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController
-        .selectionController.selectedLineSegments.keys
+        .selectionController.selectedEndControlPoints.keys
         .toList();
 
     if (selectedLineSegmentMPIDs.isEmpty) {
@@ -834,21 +835,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void applyAddLineSegmentsBetweenSelectedLineSegments() {
-    final selectedLineSegments =
-        _th2FileEditController.selectionController.selectedLineSegments;
+    final Map<int, MPSelectedEndControlPoint> selectedEndControlPoints =
+        _th2FileEditController.selectionController.selectedEndControlPoints;
 
-    if (selectedLineSegments.length < 2) {
+    if (selectedEndControlPoints.length < 2) {
       return;
     }
 
     final Map<int, THLineSegment> selectedLineSegmentsPosMap = {};
-    final THLine line =
-        _thFile.lineByMPID(selectedLineSegments.values.first.parentMPID);
+    final THLine line = _thFile.lineByMPID(
+      selectedEndControlPoints.values.first.originalLineSegmentClone.parentMPID,
+    );
     final List<int> lineSegmentMPIDs = line.lineSegmentMPIDs;
 
-    for (final THLineSegment lineSegment in selectedLineSegments.values) {
-      selectedLineSegmentsPosMap[lineSegmentMPIDs.indexOf(lineSegment.mpID)] =
-          lineSegment;
+    for (final MPSelectedEndControlPoint endControlPoint
+        in selectedEndControlPoints.values) {
+      final THLineSegment lineSegment =
+          endControlPoint.originalLineSegmentClone;
+
+      selectedLineSegmentsPosMap[
+          lineSegmentMPIDs.indexOf(endControlPoint.mpID)] = lineSegment;
     }
 
     final List<int> orderedSelectedLineSegmentMPIDs =

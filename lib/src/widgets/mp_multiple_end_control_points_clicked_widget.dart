@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -66,8 +67,8 @@ class _MPMultipleEndControlPointsClickedWidgetState
     super.dispose();
   }
 
-  String getEndPointName(MPSelectableEndPoint endPoint) {
-    final THElement element = endPoint.element;
+  String getEndControlPointName(MPSelectableEndControlPoint endControlPoint) {
+    final THElement element = endControlPoint.element;
     String pointName = '';
 
     switch (element) {
@@ -79,30 +80,16 @@ class _MPMultipleEndControlPointsClickedWidgetState
         return pointName;
     }
 
-    pointName += ' ${appLocalizations.mpMultipleEndControlPointsEndPoint}';
-
-    return pointName;
-  }
-
-  String getControlPointName(MPSelectableControlPoint controlPoint) {
-    final THElement element = controlPoint.element;
-    String pointName = '';
-    switch (element) {
-      case THBezierCurveLineSegment _:
-        pointName = appLocalizations.thElementBezierCurveLineSegment;
-      case THStraightLineSegment _:
-        pointName = appLocalizations.thElementStraightLineSegment;
-      default:
-        return pointName;
-    }
-
-    switch (controlPoint.type) {
-      case MPSelectableControlPointType.controlPoint1:
+    switch (endControlPoint.type) {
+      case MPEndControlPointType.controlPoint1:
         pointName +=
             ' ${appLocalizations.mpMultipleEndControlPointsControlPoint1}';
-      case MPSelectableControlPointType.controlPoint2:
+      case MPEndControlPointType.controlPoint2:
         pointName +=
             ' ${appLocalizations.mpMultipleEndControlPointsControlPoint2}';
+      case MPEndControlPointType.endPointBezierCurve:
+      case MPEndControlPointType.endPointStraight:
+        pointName += ' ${appLocalizations.mpMultipleEndControlPointsEndPoint}';
     }
 
     return pointName;
@@ -117,12 +104,15 @@ class _MPMultipleEndControlPointsClickedWidgetState
     }
 
     int index = 1;
-    for (final clickedEndControlPoint in clickedEndControlPoints) {
-      switch (clickedEndControlPoint) {
-        case MPSelectableControlPoint _:
-          options[index] = getControlPointName(clickedEndControlPoint);
-        case MPSelectableEndPoint _:
-          options[index] = getEndPointName(clickedEndControlPoint);
+    for (final MPSelectableEndControlPoint clickedEndControlPoint
+        in clickedEndControlPoints) {
+      switch (clickedEndControlPoint.type) {
+        case MPEndControlPointType.controlPoint1:
+        case MPEndControlPointType.controlPoint2:
+          options[index] = getEndControlPointName(clickedEndControlPoint);
+        case MPEndControlPointType.endPointBezierCurve:
+        case MPEndControlPointType.endPointStraight:
+          options[index] = getEndControlPointName(clickedEndControlPoint);
       }
       index++;
     }

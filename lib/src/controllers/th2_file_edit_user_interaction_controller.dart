@@ -13,6 +13,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_user_interaction_controller.g.dart';
@@ -47,23 +48,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void _prepareSetOption(THCommandOption option) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final List<THElement> candidateElementsForNewOption;
+    final List<THElement> candidateElementsForNewOption = [];
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<MPSelectedElement> selectedElements =
+        _th2FileEditController.optionEditController.optionsEditForLineSegments
+            ? selectionController.selectedEndControlPoints.values
+            : selectionController.mpSelectedElementsLogical.values;
 
-    if (_th2FileEditController
-        .optionEditController.optionsEditForLineSegments) {
-      candidateElementsForNewOption = _th2FileEditController
-          .selectionController.selectedLineSegments.values
-          .toList();
-    } else {
-      final mpSelectedElements = _th2FileEditController
-          .selectionController.mpSelectedElementsLogical.values;
-
-      candidateElementsForNewOption = [];
-
-      for (final mpSelectedElement in mpSelectedElements) {
-        candidateElementsForNewOption
-            .add(mpSelectedElement.originalElementClone);
-      }
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      candidateElementsForNewOption.add(selectedElement.originalElementClone);
     }
 
     if (candidateElementsForNewOption.isEmpty) {
@@ -118,23 +112,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   void _prepareUnsetOption(THCommandOptionType optionType) {
-    final List<THElement> candidateElementsForNewOption;
+    final List<THElement> candidateElementsForNewOption = [];
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<MPSelectedElement> selectedElements =
+        _th2FileEditController.optionEditController.optionsEditForLineSegments
+            ? selectionController.selectedEndControlPoints.values
+            : selectionController.mpSelectedElementsLogical.values;
 
-    if (_th2FileEditController
-        .optionEditController.optionsEditForLineSegments) {
-      candidateElementsForNewOption = _th2FileEditController
-          .selectionController.selectedLineSegments.values
-          .toList();
-    } else {
-      final mpSelectedElements = _th2FileEditController
-          .selectionController.mpSelectedElementsLogical.values;
-
-      candidateElementsForNewOption = [];
-
-      for (final mpSelectedElement in mpSelectedElements) {
-        candidateElementsForNewOption
-            .add(mpSelectedElement.originalElementClone);
-      }
+    for (final selectedElement in selectedElements) {
+      candidateElementsForNewOption.add(selectedElement.originalElementClone);
     }
 
     if (candidateElementsForNewOption.isEmpty) {
@@ -328,20 +315,25 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       return;
     }
 
-    final Iterable<THLineSegment> selectedLineSegments =
-        _th2FileEditController.selectionController.selectedLineSegments.values;
+    final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
+        _th2FileEditController
+            .selectionController.selectedEndControlPoints.values;
     final Set<THLineSegment> willChangeLineSegments = {};
     final THElementType elementType = selectedLineSegmentType ==
             MPSelectedLineSegmentType.bezierCurveLineSegment
         ? THElementType.bezierCurveLineSegment
         : THElementType.straightLineSegment;
 
-    for (final THLineSegment lineSegment in selectedLineSegments) {
-      if (lineSegment.elementType == elementType) {
-        continue;
-      }
+    for (final MPSelectedEndControlPoint selectedEndControlPoint
+        in selectedEndControlPoints) {
+      final THLineSegment lineSegment =
+          _th2FileEditController.thFile.lineSegmentByMPID(
+        selectedEndControlPoint.mpID,
+      );
 
-      willChangeLineSegments.add(lineSegment);
+      if (lineSegment.elementType != elementType) {
+        willChangeLineSegments.add(lineSegment);
+      }
     }
 
     if (willChangeLineSegments.isEmpty) {

@@ -37,7 +37,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     final List<int> lineLineSegmentsMPIDs =
         selectionController.getSelectedLineLineSegmentsMPIDs();
     final List<int> selectedLineSegmentMPIDs =
-        selectionController.selectedLineSegments.keys.toList();
+        selectionController.selectedEndControlPoints.keys.toList();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
         selected.originalLineSegmentsMapClone;
     final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =

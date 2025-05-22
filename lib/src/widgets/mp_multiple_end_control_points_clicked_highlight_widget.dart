@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/aux/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -51,8 +52,9 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
 
           for (final MPSelectableEndControlPoint highlightedPoint
               in highlightedPoints) {
-            switch (highlightedPoint) {
-              case MPSelectableControlPoint _:
+            switch (highlightedPoint.type) {
+              case MPEndControlPointType.controlPoint1:
+              case MPEndControlPointType.controlPoint2:
                 painters.add(
                   THPointPainter(
                     position: highlightedPoint.position,
@@ -60,7 +62,8 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
                     th2FileEditController: th2FileEditController,
                   ),
                 );
-              case MPSelectableEndPoint _:
+              case MPEndControlPointType.endPointBezierCurve:
+              case MPEndControlPointType.endPointStraight:
                 painters.add(
                   THSquarePointPainter(
                     position: highlightedPoint.position,

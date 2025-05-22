@@ -67,10 +67,20 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   }
 
   void updateElementOptionMapForLineSegments() {
-    final lineSegments =
-        _th2FileEditController.selectionController.selectedLineSegments.values;
+    final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
+        _th2FileEditController
+            .selectionController.selectedEndControlPoints.values;
+    final List<THLineSegment> selectedLineSegments = [];
 
-    _optionStateMap = _getOptionStateMap(lineSegments);
+    for (final MPSelectedEndControlPoint selectedEndControlPoint
+        in selectedEndControlPoints) {
+      final THLineSegment lineSegment =
+          _thFile.lineSegmentByMPID(selectedEndControlPoint.mpID);
+
+      selectedLineSegments.add(lineSegment);
+    }
+
+    _optionStateMap = _getOptionStateMap(selectedLineSegments);
 
     _th2FileEditController.triggerOptionsListRedraw();
   }
