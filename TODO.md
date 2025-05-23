@@ -62,3 +62,4 @@ Version 0.3
 [ ] - Migrate away from Github
 [ ] - Include options and point/line count in multiple elements clicked dialog box
 [ ] - Add/remove lines from areas
+[ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html

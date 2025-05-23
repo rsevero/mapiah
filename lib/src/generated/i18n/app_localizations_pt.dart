@@ -32,7 +32,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get initialPageOpenFile => 'Abrir arquivo (Ctrl+O)';
 
   @override
-  String get initialPagePresentation => 'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
+  String get initialPagePresentation =>
+      'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
 
   @override
   String get fileEditWindowWindowTitle => 'Edição de arquivo';
@@ -67,7 +68,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
-  String get mpAuthorInvalidValueErrorMessage => 'Data/intervalo de data e nome de autor válidos';
+  String get mpAuthorInvalidValueErrorMessage =>
+      'Data/intervalo de data e nome de autor válidos';
 
   @override
   String get mpAzimuthAzimuthLabel => 'Azimute';
@@ -124,7 +126,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionAddLine => 'Adicionar linha';
 
   @override
-  String get mpCommandDescriptionAddLineSegment => 'Adicionar segmento de linha';
+  String get mpCommandDescriptionAddLineSegment =>
+      'Adicionar segmento de linha';
 
   @override
   String get mpCommandDescriptionAddPoint => 'Adicionar ponto';
@@ -145,10 +148,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionEditLineSegment => 'Editar segmento de linha';
 
   @override
-  String get mpCommandDescriptionEditLineSegmentsType => 'Editar tipo de segmentos de linha';
+  String get mpCommandDescriptionEditLineSegmentsType =>
+      'Editar tipo de segmentos de linha';
 
   @override
-  String get mpCommandDescriptionEditLineSegmentType => 'Editar tipo de segmento de linha';
+  String get mpCommandDescriptionEditLineSegmentType =>
+      'Editar tipo de segmento de linha';
 
   @override
   String get mpCommandDescriptionEditLinesType => 'Editar tipo de linhas';
@@ -166,7 +171,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMoveArea => 'Mover área';
 
   @override
-  String get mpCommandDescriptionMoveBezierLineSegment => 'Mover segmento de linha Bézier';
+  String get mpCommandDescriptionMoveBezierLineSegment =>
+      'Mover segmento de linha Bézier';
 
   @override
   String get mpCommandDescriptionMoveElements => 'Mover elementos';
@@ -184,7 +190,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMovePoint => 'Mover ponto';
 
   @override
-  String get mpCommandDescriptionMoveStraightLineSegment => 'Mover segmento de linha reta';
+  String get mpCommandDescriptionMoveStraightLineSegment =>
+      'Mover segmento de linha reta';
 
   @override
   String get mpCommandDescriptionMultipleElements => 'Editar vários elementos';
@@ -202,16 +209,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionRemoveLine => 'Apagar linha';
 
   @override
-  String get mpCommandDescriptionRemoveLineSegment => 'Apagar segmento de linha';
+  String get mpCommandDescriptionRemoveLineSegment =>
+      'Apagar segmento de linha';
 
   @override
-  String get mpCommandDescriptionRemoveLineSegments => 'Apagar segmentos de linha';
+  String get mpCommandDescriptionRemoveLineSegments =>
+      'Apagar segmentos de linha';
 
   @override
   String get mpCommandDescriptionRemoveOptionFromElement => 'Remover opção';
 
   @override
-  String get mpCommandDescriptionRemoveOptionFromElements => 'Remover opção de diversos elementos';
+  String get mpCommandDescriptionRemoveOptionFromElements =>
+      'Remover opção de diversos elementos';
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Apagar ponto';
@@ -220,13 +230,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
 
   @override
-  String get mpCommandDescriptionSetOptionToElements => 'Definir opção para diversos elementos';
+  String get mpCommandDescriptionSetOptionToElements =>
+      'Definir opção para diversos elementos';
 
   @override
-  String get mpContextInvalidValueErrorMessage => 'Ambos os campos são obrigatórios';
+  String get mpContextInvalidValueErrorMessage =>
+      'Ambos os campos são obrigatórios';
 
   @override
-  String get mpCopyrightInvalidMessageErrorMessage => 'Mensagem de direitos autorais inválido';
+  String get mpCopyrightInvalidMessageErrorMessage =>
+      'Mensagem de direitos autorais inválido';
 
   @override
   String get mpCopyrightMessageLabel => 'Direitos autorais';
@@ -264,22 +277,26 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDateIntervalIntervalLabel => 'Intervalo';
 
   @override
-  String get mpDateIntervalInvalidEndDateFormatErrorMessage => 'Data de término inválida';
+  String get mpDateIntervalInvalidEndDateFormatErrorMessage =>
+      'Data de término inválida';
 
   @override
-  String get mpDateIntervalInvalidStartDateFormatErrorMessage => 'Data de início inválida';
+  String get mpDateIntervalInvalidStartDateFormatErrorMessage =>
+      'Data de início inválida';
 
   @override
   String get mpDateIntervalSingleDateLabel => 'Data';
 
   @override
-  String get mpDateIntervalStartDateHint => 'AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] ou \'-\'';
+  String get mpDateIntervalStartDateHint =>
+      'AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] ou \'-\'';
 
   @override
   String get mpDateIntervalStartDateLabel => 'Data de início';
 
   @override
-  String get mpDateValueInvalidValueErrorMessage => 'Data ou intervalo inválidos';
+  String get mpDateValueInvalidValueErrorMessage =>
+      'Data ou intervalo inválidos';
 
   @override
   String get mpDimensionsAboveLabel => 'Acima';
@@ -309,7 +326,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpIDIDLabel => 'ID';
 
   @override
-  String get mpIDInvalidValueErrorMessage => 'ID inválido: deve ser uma sequência de caracteres A-Z, a-z, 0-9 e _-/ (não começando com ‘-’).';
+  String get mpIDInvalidValueErrorMessage =>
+      'ID inválido: deve ser uma sequência de caracteres A-Z, a-z, 0-9 e _-/ (não começando com ‘-’).';
 
   @override
   String get mpIDNonUniqueValueErrorMessage => 'IDs devem ser únicos.';
@@ -417,13 +435,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPassageHeightDistanceBetweenFloorAndCeiling => 'Do piso ao teto';
 
   @override
-  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel => 'Piso ao teto';
+  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel =>
+      'Piso ao teto';
 
   @override
-  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor => 'Teto e piso';
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor =>
+      'Teto e piso';
 
   @override
-  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel => 'Ao piso e ao teto';
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel =>
+      'Ao piso e ao teto';
 
   @override
   String get mpPassageHeightFloor => 'Piso';
@@ -504,13 +525,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPointHeightValueStepLabel => 'Altura';
 
   @override
-  String get mpPointHeightValueChimneyObservation => 'Altura do teto (tratado como positivo)';
+  String get mpPointHeightValueChimneyObservation =>
+      'Altura do teto (tratado como positivo)';
 
   @override
-  String get mpPointHeightValuePitObservation => 'Profundidade do poço (tratado como negativo)';
+  String get mpPointHeightValuePitObservation =>
+      'Profundidade do poço (tratado como negativo)';
 
   @override
-  String get mpPointHeightValueStepObservation => 'Altura do degrau (tratado como positivo)';
+  String get mpPointHeightValueStepObservation =>
+      'Altura do degrau (tratado como positivo)';
 
   @override
   String get mpProjectionAngleWarning => 'Ângulo inválido (0 <= ângulo < 360)';
@@ -540,7 +564,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpScrapScale1ValueLabel => 'Real para 1 ponto';
 
   @override
-  String get mpScrapScale1ValueObservation => 'Medida real por ponto do desenho';
+  String get mpScrapScale1ValueObservation =>
+      'Medida real por ponto do desenho';
 
   @override
   String get mpScrapScale11Label => 'Real';
@@ -549,7 +574,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpScrapScale2ValuesLabel => 'Real para pontos';
 
   @override
-  String get mpScrapScale2ValueObservation => 'Medida real por pontos do desenho';
+  String get mpScrapScale2ValueObservation =>
+      'Medida real por pontos do desenho';
 
   @override
   String get mpScrapScale21Label => 'Desenho';
@@ -558,10 +584,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpScrapScale22Label => 'Real';
 
   @override
-  String get mpScrapScale8ValuesLabel => 'Coordenadas reais por coordenadas do desenho';
+  String get mpScrapScale8ValuesLabel =>
+      'Coordenadas reais por coordenadas do desenho';
 
   @override
-  String get mpScrapScale8ValueObservation => 'Coordenadas reais por coordenadas do desenho';
+  String get mpScrapScale8ValueObservation =>
+      'Coordenadas reais por coordenadas do desenho';
 
   @override
   String get mpScrapScale81Label => 'X1 desenho';
@@ -792,13 +820,15 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get th2FileEditPageChangeActiveScrapTool => 'Alterar croqui ativo (Alt+C)';
+  String get th2FileEditPageChangeActiveScrapTool =>
+      'Alterar croqui ativo (Alt+C)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTitle => 'Alterar croqui ativo';
 
   @override
-  String get th2FileEditPageEmptySelectionStatusBarMessage => 'Nenhum elemento selecionado';
+  String get th2FileEditPageEmptySelectionStatusBarMessage =>
+      'Nenhum elemento selecionado';
 
   @override
   String th2FileEditPageLoadingFile(Object filename) {
@@ -809,17 +839,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageNodeEditTool => 'Editar nós (N)';
 
   @override
-  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(Object amount) {
+  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
+      Object amount) {
     return '$amount linha(s) selecionadas';
   }
 
   @override
-  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(Object amount) {
+  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
+      Object amount) {
     return '$amount pontos(s) selecionados';
   }
 
   @override
-  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(Object pointsAmount, Object linesAmount) {
+  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
+      Object pointsAmount, Object linesAmount) {
     return '$pointsAmount pontos(s) e $linesAmount linhas(s) selecionados';
   }
 
@@ -981,7 +1014,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thElementLineSegment => 'Segmento de linha';
 
   @override
-  String get thElementMultilineCommentContent => 'Conteúdo de comentário multilinha';
+  String get thElementMultilineCommentContent =>
+      'Conteúdo de comentário multilinha';
 
   @override
   String get thElementMultilineComment => 'Comentário multilinha';

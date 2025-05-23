@@ -44,6 +44,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/icons/add_element-addArea.png
     - assets/icons/add_element-addElement.png

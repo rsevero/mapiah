@@ -32,7 +32,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get initialPageOpenFile => 'Open file (Ctrl+O)';
 
   @override
-  String get initialPagePresentation => 'Mapiah: an user-friendly graphical interface for cave mapping with Therion';
+  String get initialPagePresentation =>
+      'Mapiah: an user-friendly graphical interface for cave mapping with Therion';
 
   @override
   String get fileEditWindowWindowTitle => 'File edit';
@@ -67,7 +68,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpAltitudeInvalidValueErrorMessage => 'Invalid altitude';
 
   @override
-  String get mpAuthorInvalidValueErrorMessage => 'Invalid date/interval and person name';
+  String get mpAuthorInvalidValueErrorMessage =>
+      'Invalid date/interval and person name';
 
   @override
   String get mpAzimuthAzimuthLabel => 'Azimuth';
@@ -145,10 +147,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionEditLineSegment => 'Edit line segment';
 
   @override
-  String get mpCommandDescriptionEditLineSegmentsType => 'Edit multiple line segments type';
+  String get mpCommandDescriptionEditLineSegmentsType =>
+      'Edit multiple line segments type';
 
   @override
-  String get mpCommandDescriptionEditLineSegmentType => 'Edit line segment type';
+  String get mpCommandDescriptionEditLineSegmentType =>
+      'Edit line segment type';
 
   @override
   String get mpCommandDescriptionEditLinesType => 'Edit multiple lines type';
@@ -166,7 +170,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionMoveArea => 'Move area';
 
   @override
-  String get mpCommandDescriptionMoveBezierLineSegment => 'Move Bézier line segment';
+  String get mpCommandDescriptionMoveBezierLineSegment =>
+      'Move Bézier line segment';
 
   @override
   String get mpCommandDescriptionMoveElements => 'Move elements';
@@ -184,7 +189,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionMovePoint => 'Move point';
 
   @override
-  String get mpCommandDescriptionMoveStraightLineSegment => 'Move straight line segment';
+  String get mpCommandDescriptionMoveStraightLineSegment =>
+      'Move straight line segment';
 
   @override
   String get mpCommandDescriptionMultipleElements => 'Multiple elements edit';
@@ -193,7 +199,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionRemoveArea => 'Remove area';
 
   @override
-  String get mpCommandDescriptionRemoveAreaBorderTHID => 'Remove area border line';
+  String get mpCommandDescriptionRemoveAreaBorderTHID =>
+      'Remove area border line';
 
   @override
   String get mpCommandDescriptionRemoveElements => 'Remove elements';
@@ -211,7 +218,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionRemoveOptionFromElement => 'Remove option';
 
   @override
-  String get mpCommandDescriptionRemoveOptionFromElements => 'Remove option from multiple elements';
+  String get mpCommandDescriptionRemoveOptionFromElements =>
+      'Remove option from multiple elements';
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Remove point';
@@ -220,13 +228,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElement => 'Set option';
 
   @override
-  String get mpCommandDescriptionSetOptionToElements => 'Set option to multiple elements';
+  String get mpCommandDescriptionSetOptionToElements =>
+      'Set option to multiple elements';
 
   @override
   String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
 
   @override
-  String get mpCopyrightInvalidMessageErrorMessage => 'Invalid copyright message';
+  String get mpCopyrightInvalidMessageErrorMessage =>
+      'Invalid copyright message';
 
   @override
   String get mpCopyrightMessageLabel => 'Copyright';
@@ -264,16 +274,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDateIntervalIntervalLabel => 'Interval';
 
   @override
-  String get mpDateIntervalInvalidEndDateFormatErrorMessage => 'Invalid end date';
+  String get mpDateIntervalInvalidEndDateFormatErrorMessage =>
+      'Invalid end date';
 
   @override
-  String get mpDateIntervalInvalidStartDateFormatErrorMessage => 'Invalid start date';
+  String get mpDateIntervalInvalidStartDateFormatErrorMessage =>
+      'Invalid start date';
 
   @override
   String get mpDateIntervalSingleDateLabel => 'Date';
 
   @override
-  String get mpDateIntervalStartDateHint => 'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or \'-\'';
+  String get mpDateIntervalStartDateHint =>
+      'YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or \'-\'';
 
   @override
   String get mpDateIntervalStartDateLabel => 'Start date';
@@ -366,7 +379,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpMultipleElementsClickedTitle => 'Multiple elements clicked';
 
   @override
-  String get mpMultipleEndControlPointsClickedTitle => 'Multiple points clicked';
+  String get mpMultipleEndControlPointsClickedTitle =>
+      'Multiple points clicked';
 
   @override
   String get mpMultipleEndControlPointsControlPoint1 => 'Control point 1';
@@ -414,16 +428,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPassageHeightDepthLabel => 'Depth';
 
   @override
-  String get mpPassageHeightDistanceBetweenFloorAndCeiling => 'Distance floor ceiling';
+  String get mpPassageHeightDistanceBetweenFloorAndCeiling =>
+      'Distance floor ceiling';
 
   @override
-  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel => 'Floor to ceiling';
+  String get mpPassageHeightDistanceBetweenFloorAndCeilingLabel =>
+      'Floor to ceiling';
 
   @override
-  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor => 'Distance to ceiling and to floor';
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloor =>
+      'Distance to ceiling and to floor';
 
   @override
-  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel => 'To ceiling/to floor';
+  String get mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel =>
+      'To ceiling/to floor';
 
   @override
   String get mpPassageHeightFloor => 'Floor';
@@ -447,7 +465,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPersonNameLabel => 'Name';
 
   @override
-  String get mpPersonNameHint => '\'FirstName Surname\' or \'FirstNames/Surnames\'';
+  String get mpPersonNameHint =>
+      '\'FirstName Surname\' or \'FirstNames/Surnames\'';
 
   @override
   String get mpPLATypeAll => 'All';
@@ -504,13 +523,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPointHeightValueStepLabel => 'Height';
 
   @override
-  String get mpPointHeightValueChimneyObservation => 'Chimeny height (treated as positive)';
+  String get mpPointHeightValueChimneyObservation =>
+      'Chimeny height (treated as positive)';
 
   @override
-  String get mpPointHeightValuePitObservation => 'Pit depth (treated as negative)';
+  String get mpPointHeightValuePitObservation =>
+      'Pit depth (treated as negative)';
 
   @override
-  String get mpPointHeightValueStepObservation => 'Step height (treated as positive)';
+  String get mpPointHeightValueStepObservation =>
+      'Step height (treated as positive)';
 
   @override
   String get mpProjectionAngleWarning => 'Invalid angle (0 <= angle < 360)';
@@ -561,7 +583,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpScrapScale8ValuesLabel => 'Real to drawing coordinates';
 
   @override
-  String get mpScrapScale8ValueObservation => 'Real coordinates per drawing coordinates';
+  String get mpScrapScale8ValueObservation =>
+      'Real coordinates per drawing coordinates';
 
   @override
   String get mpScrapScale81Label => 'Draw X1';
@@ -792,7 +815,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get th2FileEditPageChangeActiveScrapTool => 'Change active scrap (Alt+C)';
+  String get th2FileEditPageChangeActiveScrapTool =>
+      'Change active scrap (Alt+C)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTitle => 'Change active scrap';
@@ -809,17 +833,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageNodeEditTool => 'Node edit (N)';
 
   @override
-  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(Object amount) {
+  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
+      Object amount) {
     return '$amount line(s) selected';
   }
 
   @override
-  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(Object amount) {
+  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
+      Object amount) {
     return '$amount point(s) selected';
   }
 
   @override
-  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(Object pointsAmount, Object linesAmount) {
+  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
+      Object pointsAmount, Object linesAmount) {
     return '$pointsAmount point(s) and $linesAmount line(s) selected';
   }
 
