@@ -1020,9 +1020,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   ) {
     final THPoint originalPoint = selectedPoint.originalPointClone;
     final THPoint modifiedPoint = originalPoint.copyWith(
-        position: originalPoint.position.copyWith(
-            coordinates: originalPoint.position.coordinates +
-                localDeltaPositionOnCanvas));
+      position: originalPoint.position.copyWith(
+        coordinates:
+            originalPoint.position.coordinates + localDeltaPositionOnCanvas,
+      ),
+      originalLineInTH2File: '',
+      makeSameLineCommentNull: true,
+    );
     _th2FileEditController.elementEditController
         .substituteElementWithoutAddSelectableElement(modifiedPoint);
   }
@@ -1047,20 +1051,30 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       switch (lineChild) {
         case THStraightLineSegment _:
           modifiedLineSegment = lineChild.copyWith(
-              endPoint: lineChild.endPoint.copyWith(
-                  coordinates: lineChild.endPoint.coordinates +
-                      localDeltaPositionOnCanvas));
+            endPoint: lineChild.endPoint.copyWith(
+              coordinates:
+                  lineChild.endPoint.coordinates + localDeltaPositionOnCanvas,
+            ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
+          );
         case THBezierCurveLineSegment _:
           modifiedLineSegment = lineChild.copyWith(
-              endPoint: lineChild.endPoint.copyWith(
-                  coordinates: lineChild.endPoint.coordinates +
-                      localDeltaPositionOnCanvas),
-              controlPoint1: lineChild.controlPoint1.copyWith(
-                  coordinates: lineChild.controlPoint1.coordinates +
-                      localDeltaPositionOnCanvas),
-              controlPoint2: lineChild.controlPoint2.copyWith(
-                  coordinates: lineChild.controlPoint2.coordinates +
-                      localDeltaPositionOnCanvas));
+            endPoint: lineChild.endPoint.copyWith(
+              coordinates:
+                  lineChild.endPoint.coordinates + localDeltaPositionOnCanvas,
+            ),
+            controlPoint1: lineChild.controlPoint1.copyWith(
+              coordinates: lineChild.controlPoint1.coordinates +
+                  localDeltaPositionOnCanvas,
+            ),
+            controlPoint2: lineChild.controlPoint2.copyWith(
+              coordinates: lineChild.controlPoint2.coordinates +
+                  localDeltaPositionOnCanvas,
+            ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
+          );
         default:
           throw Exception('Unknown line segment type');
       }
@@ -1134,6 +1148,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                   localDeltaPositionOnCanvas,
               decimalPositions: currentDecimalPositions,
             ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
           );
         case THBezierCurveLineSegment _:
           final THBezierCurveLineSegment referenceLineSegment =
@@ -1154,6 +1170,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                   localDeltaPositionOnCanvas,
               decimalPositions: currentDecimalPositions,
             ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
           );
       }
 
@@ -1180,6 +1198,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                   localDeltaPositionOnCanvas,
               decimalPositions: currentDecimalPositions,
             ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
           );
         }
       }
@@ -1237,6 +1257,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                     localDeltaPositionOnCanvas,
             decimalPositions: currentDecimalPositions,
           ),
+          originalLineInTH2File: '',
+          makeSameLineCommentNull: true,
         );
       case MPEndControlPointType.controlPoint2:
         modifiedLineSegments[controlPointLineSegmentMPID] =
@@ -1247,6 +1269,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                     localDeltaPositionOnCanvas,
             decimalPositions: currentDecimalPositions,
           ),
+          originalLineInTH2File: '',
+          makeSameLineCommentNull: true,
         );
       default:
         throw Exception(
