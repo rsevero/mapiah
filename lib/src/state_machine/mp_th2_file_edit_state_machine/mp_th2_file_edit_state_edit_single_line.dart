@@ -18,10 +18,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
+    selectionController.resetSelectedLineLineSegmentsMPIDs();
     selectionController.updateSelectableEndAndControlPoints();
     th2FileEditController.triggerEditLineRedraw();
     th2FileEditController.setStatusBarMessage('');
-    selectionController.resetSelectedLineLineSegmentsMPIDs();
   }
 
   @override
@@ -176,7 +176,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
     selectionController.clearClickedElementsAtPointerDown();
 
-    if (clickedElements.isNotEmpty) {
+    if (clickedElements.isEmpty) {
+      selectionController.clearSelectedElements();
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectEmptySelection,
+      );
+    } else {
       selectionController.setSelectedElements(
         clickedElements.values,
         setState: true,

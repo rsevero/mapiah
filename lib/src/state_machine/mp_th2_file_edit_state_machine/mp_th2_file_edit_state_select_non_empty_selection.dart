@@ -11,6 +11,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
+    selectionController.clearSelectedEndControlPoints();
+    selectionController.clearSelectedLineSegments();
     _updateStatusBarMessage();
   }
 
