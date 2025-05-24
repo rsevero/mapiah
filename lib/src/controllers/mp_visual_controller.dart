@@ -281,6 +281,11 @@ abstract class MPVisualControllerBase with Store {
       border: THPaint.thPaint0,
       fill: THPaint.thPaint1000,
     ),
+    THPointType.lowEnd: THPointPaint(
+      type: MPPointShapeType.horizontalDiamond,
+      border: THPaint.thPaint2,
+      fill: THPaint.thPaint1002,
+    ),
     THPointType.mapConnection: THPointPaint(
       type: MPPointShapeType.invertedT,
       border: THPaint.thPaint0,
@@ -308,6 +313,11 @@ abstract class MPVisualControllerBase with Store {
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint10,
       fill: THPaint.thPaint1010,
+    ),
+    THPointType.narrowEnd: THPointPaint(
+      type: MPPointShapeType.verticalDiamond,
+      border: THPaint.thPaint2,
+      fill: THPaint.thPaint1002,
     ),
     THPointType.noEquipment: THPointPaint(
       type: MPPointShapeType.invertedTriangle,
@@ -1109,8 +1119,11 @@ abstract class MPVisualControllerBase with Store {
           pointPaint = waterFlowPointSubtypesPaints[pointSubtype] ??
               waterFlowPointSubtypesPaints[mpNoSubtypeID]!;
         default:
-          throw Exception(
-              'Point type $pointType not found in pointTypePaints map.');
+          pointPaint = THPointPaint(
+            type: MPPointShapeType.exclamation,
+            border: THPaint.thPaint0,
+            fill: THPaint.thPaint1000,
+          );
       }
     }
 

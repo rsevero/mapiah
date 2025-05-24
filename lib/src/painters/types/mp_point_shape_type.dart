@@ -2,6 +2,7 @@ enum MPPointShapeType {
   arrow, // Can be filled
   asterisk,
   circle, // Can be filled
+  exclamation, // Used to indicate missing THPointPaint definition
   horizontalDiamond, // Can be filled
   invertedT,
   invertedTriangle, // Can be filled

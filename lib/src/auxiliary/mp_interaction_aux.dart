@@ -16,6 +16,7 @@ class MPInteractionAux {
     MPPointShapeType.arrow: _drawArrowPoint,
     MPPointShapeType.asterisk: _drawAsteriskPoint,
     MPPointShapeType.circle: _drawCirclePoint,
+    MPPointShapeType.exclamation: _drawExclamationPoint,
     MPPointShapeType.horizontalDiamond: _drawHorizontalDiamondPoint,
     MPPointShapeType.invertedT: _drawInvertedTPoint,
     MPPointShapeType.invertedTriangle: _drawInvertedTrianglePoint,
@@ -491,6 +492,23 @@ class MPInteractionAux {
       ..close();
 
     canvas.drawPath(diamondPath, paint);
+  }
+
+  static void _drawExclamationPoint(
+    Canvas canvas,
+    Offset position,
+    double radius,
+    Paint paint,
+  ) {
+    // radius *= 2;
+    final Path exclamationPath = Path()
+      ..moveTo(position.dx, position.dy + radius) // Top point
+      ..lineTo(position.dx, position.dy - radius * 0.1) // Low end bar
+      ..moveTo(position.dx, position.dy - radius * 0.6) // Top point point
+      ..lineTo(position.dx, position.dy - radius) // Low end point
+      ..close();
+
+    canvas.drawPath(exclamationPath, paint);
   }
 
   static void _drawPlusPoint(

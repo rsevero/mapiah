@@ -37,8 +37,10 @@ class MPGeneralController {
     _t2hFileEditControllers.clear();
   }
 
-  TH2FileEditController getTH2FileEditController(
-      {required String filename, bool forceNewController = false}) {
+  TH2FileEditController getTH2FileEditController({
+    required String filename,
+    bool forceNewController = false,
+  }) {
     if (_t2hFileEditControllers.containsKey(filename)) {
       if (forceNewController) {
         _t2hFileEditControllers.remove(filename);

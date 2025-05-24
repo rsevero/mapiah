@@ -555,6 +555,39 @@ endscrap
     }
   });
 
+  group('point -narrow-end', () {
+    final parser = THFileParser();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': '2025-05-24-point_narrow-end.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap 37_Anos_1R1-2p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
+  point 78.15 -318.44 narrow-end
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
   group('point -orientation', () {
     final parser = THFileParser();
     final writer = THFileWriter();

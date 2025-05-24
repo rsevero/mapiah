@@ -1,0 +1,4 @@
+encoding utf-8
+scrap 37_Anos_1R1-2p -projection plan -scale [0 0 39.3701 0 0 0 1 0 m]
+point 78.15 -318.44 narrow-end
+endscrap

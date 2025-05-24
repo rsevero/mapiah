@@ -317,15 +317,6 @@ class THFileParser {
       parent: _currentParent,
     );
 
-    try {
-      // Including subtype defined with type (type:subtype).
-      if (element[2][1] != null) {
-        THSubtypeCommandOption(optionParent: newPoint, subtype: element[1][1]);
-      }
-    } catch (e, s) {
-      _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[1][1].toString());
-    }
-
     _currentElement = newPoint;
     // _parsedOptions.clear();
 
@@ -336,8 +327,7 @@ class THFileParser {
         // _parsedOptions.add('subtype');
       }
     } catch (e, s) {
-      _addError("$e\n\nTrace:\n\n$s", '_pointOptionFromElement',
-          element[2][1].toString());
+      _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[2][1].toString());
     }
 
     _optionFromElement(element[3], _pointRegularOptions);
