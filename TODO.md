@@ -63,3 +63,10 @@ Version 0.3
 [ ] - Include options and point/line count in multiple elements clicked dialog box
 [ ] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
+[ ] - When deleting line points, adjust control points so curve is changed as little as possible
+[ ] - When clicking and dragging in non-selected control point, drag the control point
+
+Version 0.4
+[ ] - Open multiple files simultaneously
+[ ] - Allow copy/paste between scraps
+[ ] - Allow copy/paste between files

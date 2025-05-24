@@ -93,7 +93,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           selectionController.removeSelectedEndControlPoints(
               [clickedEndControlPointLineSegment]);
         } else {
-          selectionController.setSelectedEndControlPoint(
+          selectionController.addSelectedEndControlPoint(
             clickedEndControlPoint,
           );
         }

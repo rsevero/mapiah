@@ -871,6 +871,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
   }
 
+  void addSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
+    _selectedEndControlPoints[endControlPoint.element.mpID] =
+        MPSelectedEndControlPoint(
+      originalLineSegment: endControlPoint.lineSegment,
+      type: endControlPoint.type,
+    );
+  }
+
   MPSelectedEndControlPoint getNewMPSelectedEndControlPoint(
     THLineSegment lineSegment,
   ) {
