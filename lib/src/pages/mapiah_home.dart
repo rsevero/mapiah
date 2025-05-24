@@ -1,13 +1,9 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart' as p;
 import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatefulWidget {
@@ -18,34 +14,37 @@ class MapiahHome extends StatefulWidget {
 }
 
 class _MapiahHomeState extends State<MapiahHome> {
-  bool _isFilePickerOpen = false;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
   @override
   Widget build(BuildContext context) {
-    setWindowTitle(AppLocalizations.of(context).appTitle);
+    setWindowTitle(mpLocator.appLocalizations.appTitle);
 
     initializeMPCommandLocalizations(context);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 4,
-        title: Text(AppLocalizations.of(context).appTitle),
+        title: Text(appLocalizations.appTitle),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.file_open_outlined),
-            onPressed: () => pickTh2File(context),
-            tooltip: mpLocator.appLocalizations.initialPageOpenFile,
+            onPressed: () => MPDialogAux.pickTh2File(context),
+            tooltip: appLocalizations.initialPageOpenFile,
           ),
           IconButton(
             icon: Icon(Icons.info_outline),
             onPressed: () => showAboutDialog(context),
-            tooltip: mpLocator.appLocalizations.initialPageAboutMapiahDialog,
+            tooltip: appLocalizations.initialPageAboutMapiahDialog,
           ),
           buildLanguageDropdown(context),
         ],
       ),
       body: Center(
-          child: Text(AppLocalizations.of(context).initialPagePresentation)),
+        child: Text(
+          appLocalizations.initialPagePresentation,
+        ),
+      ),
     );
   }
 
@@ -76,7 +75,7 @@ class _MapiahHomeState extends State<MapiahHome> {
                         const SizedBox(width: 8),
                       ] else
                         const SizedBox(width: 32),
-                      Text(AppLocalizations.of(context).languageName(localeID)),
+                      Text(appLocalizations.languageName(localeID)),
                     ],
                   ),
                 ),
@@ -101,53 +100,6 @@ class _MapiahHomeState extends State<MapiahHome> {
     MPTextToUser.initialize();
   }
 
-  void pickTh2File(BuildContext context) async {
-    if (_isFilePickerOpen) {
-      return;
-    }
-
-    _isFilePickerOpen = true;
-
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        dialogTitle: AppLocalizations.of(context).th2FilePickSelectTH2File,
-        type: FileType.custom,
-        allowedExtensions: ['th2'],
-        initialDirectory:
-            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-                ? (kDebugMode ? thDebugPath : './')
-                : mpLocator.mpGeneralController.lastAccessedDirectory,
-      );
-
-      if (result != null) {
-        String? pickedFilePath = result.files.single.path;
-
-        if (pickedFilePath == null) {
-          return;
-        }
-
-        String directoryPath = p.dirname(pickedFilePath);
-        mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TH2FileEditPage(
-              key: ValueKey("TH2FileEditPage|$pickedFilePath"),
-              filename: pickedFilePath,
-            ),
-          ),
-        );
-      } else {
-        mpLocator.mpLog.i('No file selected.');
-      }
-    } catch (e) {
-      mpLocator.mpLog.e('Error picking file', error: e);
-    } finally {
-      _isFilePickerOpen = false;
-    }
-  }
-
   void showAboutDialog(BuildContext context) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
@@ -157,20 +109,18 @@ class _MapiahHomeState extends State<MapiahHome> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:
-              Text(AppLocalizations.of(context).aboutMapiahDialogWindowTitle),
+          title: Text(appLocalizations.aboutMapiahDialogWindowTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(AppLocalizations.of(context)
-                    .aboutMapiahDialogMapiahVersion(version)),
+                Text(appLocalizations.aboutMapiahDialogMapiahVersion(version)),
                 SizedBox(height: 16),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(AppLocalizations.of(context).close),
+              child: Text(appLocalizations.close),
               onPressed: () {
                 Navigator.of(context).pop();
               },

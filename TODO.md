@@ -8,7 +8,6 @@ Version 0.2
 [X] - Point and line add
 [X] - Status message totaling selected objects
 [X] - Rename Stores to Controllers
-[ ] - Implement Ctrl+O (open file) keyboard shortcut
 [X] - All buttons (including zoom buttons) should use default button color
 [X] - Different points and line representations
 [X] - Areas
@@ -43,7 +42,6 @@ Version 0.2
 [X] - BUG: clicking on selected control point over end point not moving the control point
 
 Version 0.3
-[ ] - Search/select elements by characteristics
 [ ] - Change cursors to show current status
 [ ] - Release automation Linux
 [ ] - Release automation Windows
@@ -65,8 +63,10 @@ Version 0.3
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [ ] - When clicking and dragging in non-selected control point, drag the control point
+[ ] - Implement Ctrl+O (open file) keyboard shortcut
 
 Version 0.4
 [ ] - Open multiple files simultaneously
 [ ] - Allow copy/paste between scraps
 [ ] - Allow copy/paste between files
+[ ] - Search/select elements by characteristics
