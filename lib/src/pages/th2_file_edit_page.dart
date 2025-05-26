@@ -7,6 +7,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
@@ -37,6 +38,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
     colorScheme = Theme.of(context).colorScheme;
     return FutureBuilder<TH2FileEditControllerCreateResult>(
       future: th2FileEditControllerCreateResult,
@@ -55,7 +58,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(mpLocator.appLocalizations.fileEditWindowWindowTitle),
+            title: Text(appLocalizations.fileEditWindowWindowTitle),
             elevation: 4,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
@@ -74,7 +77,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     onPressed: th2FileEditController.enableSaveButton
                         ? () => th2FileEditController.saveTH2File()
                         : null,
-                    tooltip: mpLocator.appLocalizations.th2FileEditPageSave,
+                    tooltip: appLocalizations.th2FileEditPageSave,
                   ),
                 ),
                 IconButton(
@@ -83,7 +86,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     color: colorScheme.onSecondaryContainer,
                   ),
                   onPressed: () => th2FileEditController.saveAsTH2File(),
-                  tooltip: mpLocator.appLocalizations.th2FileEditPageSaveAs,
+                  tooltip: appLocalizations.th2FileEditPageSaveAs,
                 ),
               ],
               IconButton(
@@ -103,7 +106,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             ) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
-                  child: Text(mpLocator.appLocalizations
+                  child: Text(appLocalizations
                       .th2FileEditPageLoadingFile(widget.filename)),
                 );
               } else if (snapshot.hasError) {

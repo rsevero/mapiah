@@ -14,12 +14,11 @@ class MapiahHome extends StatefulWidget {
 }
 
 class _MapiahHomeState extends State<MapiahHome> {
-  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
   @override
   Widget build(BuildContext context) {
-    setWindowTitle(mpLocator.appLocalizations.appTitle);
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
+    setWindowTitle(appLocalizations.appTitle);
     initializeMPCommandLocalizations(context);
 
     return Scaffold(
@@ -75,7 +74,7 @@ class _MapiahHomeState extends State<MapiahHome> {
                         const SizedBox(width: 8),
                       ] else
                         const SizedBox(width: 32),
-                      Text(appLocalizations.languageName(localeID)),
+                      Text(AppLocalizations.of(context).languageName(localeID)),
                     ],
                   ),
                 ),
@@ -101,6 +100,8 @@ class _MapiahHomeState extends State<MapiahHome> {
   }
 
   void showAboutDialog(BuildContext context) async {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     final version = packageInfo.version;
