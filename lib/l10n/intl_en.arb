@@ -22,8 +22,8 @@
     "type": "text"
   },
 
-  "close": "Close",
-  "@close": {
+  "buttonClose": "Close",
+  "@buttonClose": {
     "description": "The label for the close button",
     "type": "text"
   },
@@ -65,6 +65,24 @@
     "placeholders": {
       "language": {}
     }
+  },
+
+  "helpDialogFailureToLoad": "Failed to load help content",
+  "@helpDialogFailureToLoad": {
+    "description": "The message displayed when the help content fails to load",
+    "type": "text"
+  },
+
+  "helpDialogTooltip": "Help",
+  "@helpDialogTooltip": {
+    "description": "The tooltip for the help dialog button",
+    "type": "text"
+  },
+
+  "mapiahHomeHelpDialogTitle": "Main Page",
+  "@mapiahHomeHelpDialogTitle": {
+    "description": "The title for the main page of the help dialog",
+    "type": "text"
   },
 
   "mpAngleUnitDegree": "degree",

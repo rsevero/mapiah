@@ -11,6 +11,8 @@ const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
 const bool mpDebugMousePosition = false;
 
+const String helpPagePath = 'assets/help';
+
 const String thCommentChar = '#';
 const String thDecimalSeparator = '.';
 const String thBackslash = '\\';

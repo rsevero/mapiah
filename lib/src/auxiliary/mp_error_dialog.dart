@@ -18,7 +18,7 @@ class MPErrorDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text(AppLocalizations.of(context).close),
+          child: Text(AppLocalizations.of(context).buttonClose),
           onPressed: () {
             Navigator.of(context).pop();
           },

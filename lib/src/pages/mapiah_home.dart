@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
@@ -37,6 +38,11 @@ class _MapiahHomeState extends State<MapiahHome> {
             tooltip: appLocalizations.initialPageAboutMapiahDialog,
           ),
           buildLanguageDropdown(context),
+          MPHelpButtonWidget(
+            context,
+            'mapiah_home_help',
+            appLocalizations.mapiahHomeHelpDialogTitle,
+          ),
         ],
       ),
       body: Center(
@@ -121,7 +127,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(appLocalizations.close),
+              child: Text(appLocalizations.buttonClose),
               onPressed: () {
                 Navigator.of(context).pop();
               },

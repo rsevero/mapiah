@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:path/path.dart' as p;
 
 class MPDialogAux {
@@ -54,5 +55,25 @@ class MPDialogAux {
     } finally {
       _isFilePickerOpen = false;
     }
+  }
+
+  static void showHelpDialog(
+    BuildContext context,
+    String helpPage,
+    String title,
+  ) {
+    final String localeID = mpLocator.mpSettingsController.localeID == 'sys'
+        ? View.of(context).platformDispatcher.locale.languageCode
+        : mpLocator.mpSettingsController.localeID;
+
+    final helpPageAssetPath = "$helpPagePath/$localeID/$helpPage.md";
+
+    showDialog(
+      context: context,
+      builder: (context) => MPHelpDialogWidget(
+        markdownAssetPath: helpPageAssetPath,
+        title: title,
+      ),
+    );
   }
 }

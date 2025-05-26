@@ -20,7 +20,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Mapiah';
 
   @override
-  String get close => 'Close';
+  String get buttonClose => 'Close';
 
   @override
   String get initialPageAboutMapiahDialog => 'About Mapiah';
@@ -51,6 +51,15 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get helpDialogFailureToLoad => 'Failed to load help content';
+
+  @override
+  String get helpDialogTooltip => 'Help';
+
+  @override
+  String get mapiahHomeHelpDialogTitle => 'Main Page';
 
   @override
   String get mpAngleUnitDegree => 'degree';

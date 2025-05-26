@@ -120,7 +120,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Close'**
-  String get close;
+  String get buttonClose;
 
   /// The label for the about Mapiah dialog
   ///
@@ -157,6 +157,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
+
+  /// The message displayed when the help content fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load help content'**
+  String get helpDialogFailureToLoad;
+
+  /// The tooltip for the help dialog button
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get helpDialogTooltip;
+
+  /// The title for the main page of the help dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Main Page'**
+  String get mapiahHomeHelpDialogTitle;
 
   /// The description for the degree angle unit
   ///
