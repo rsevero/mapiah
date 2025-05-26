@@ -79,7 +79,7 @@
     "type": "text"
   },
 
-  "mapiahHomeHelpDialogTitle": "Main Page",
+  "mapiahHomeHelpDialogTitle": "Main page",
   "@mapiahHomeHelpDialogTitle": {
     "description": "The title for the main page of the help dialog",
     "type": "text"

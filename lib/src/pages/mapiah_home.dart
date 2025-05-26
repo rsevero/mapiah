@@ -32,16 +32,16 @@ class _MapiahHomeState extends State<MapiahHome> {
             onPressed: () => MPDialogAux.pickTh2File(context),
             tooltip: appLocalizations.initialPageOpenFile,
           ),
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () => showAboutDialog(context),
-            tooltip: appLocalizations.initialPageAboutMapiahDialog,
-          ),
           buildLanguageDropdown(context),
           MPHelpButtonWidget(
             context,
             'mapiah_home_help',
             appLocalizations.mapiahHomeHelpDialogTitle,
+          ),
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () => showAboutDialog(context),
+            tooltip: appLocalizations.initialPageAboutMapiahDialog,
           ),
         ],
       ),

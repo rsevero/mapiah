@@ -173,7 +173,7 @@ abstract class AppLocalizations {
   /// The title for the main page of the help dialog
   ///
   /// In en, this message translates to:
-  /// **'Main Page'**
+  /// **'Main page'**
   String get mapiahHomeHelpDialogTitle;
 
   /// The description for the degree angle unit

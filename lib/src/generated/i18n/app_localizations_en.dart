@@ -59,7 +59,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpDialogTooltip => 'Help';
 
   @override
-  String get mapiahHomeHelpDialogTitle => 'Main Page';
+  String get mapiahHomeHelpDialogTitle => 'Main page';
 
   @override
   String get mpAngleUnitDegree => 'degree';
