@@ -29,6 +29,7 @@ class _MapiahHomeState extends State<MapiahHome> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.file_open_outlined),
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.pickTh2File(context),
             tooltip: appLocalizations.initialPageOpenFile,
           ),
@@ -40,6 +41,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
           IconButton(
             icon: Icon(Icons.info_outline),
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             onPressed: () => showAboutDialog(context),
             tooltip: appLocalizations.initialPageAboutMapiahDialog,
           ),
@@ -61,6 +63,8 @@ class _MapiahHomeState extends State<MapiahHome> {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
         return PopupMenuButton<String>(
           onSelected: (String newValue) {
             mpLocator.mpSettingsController.setLocaleID(newValue);
@@ -75,8 +79,10 @@ class _MapiahHomeState extends State<MapiahHome> {
                     children: [
                       if (localeID ==
                           mpLocator.mpSettingsController.localeID) ...[
-                        Icon(Icons.check,
-                            color: Theme.of(context).colorScheme.primary),
+                        Icon(
+                          Icons.check,
+                          color: colorScheme.primary,
+                        ),
                         const SizedBox(width: 8),
                       ] else
                         const SizedBox(width: 32),
@@ -89,9 +95,15 @@ class _MapiahHomeState extends State<MapiahHome> {
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              Icon(Icons.language),
-              Icon(Icons.arrow_drop_down),
+            children: [
+              Icon(
+                Icons.language,
+                color: colorScheme.onSecondaryContainer,
+              ),
+              Icon(
+                Icons.arrow_drop_down,
+                color: colorScheme.onSecondaryContainer,
+              ),
             ],
           ),
         );

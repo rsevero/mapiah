@@ -62,7 +62,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             title: Text(appLocalizations.fileEditWindowWindowTitle),
             elevation: 4,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(
+                Icons.arrow_back,
+                color: colorScheme.onSecondaryContainer,
+              ),
               onPressed: _onLeavePage,
             ),
             actions: <Widget>[

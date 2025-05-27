@@ -60,8 +60,13 @@ flutter:
     - assets/icons/zoom_selection.png
     - assets/icons/zoom-out-scrap.png
     - assets/help/images/iconAbout.png
+    - assets/help/images/iconBack.png
+    - assets/help/images/iconClose.png
+    - assets/help/images/iconAbout.png
     - assets/help/images/iconHelp.png
     - assets/help/images/iconLanguage.png
     - assets/help/images/iconOpenFile.png
+    - assets/help/images/iconSave.png
+    - assets/help/images/iconSaveAs.png
     - assets/help/en/mapiah_home_help.md
     - assets/help/en/th2_file_edit_page_help.md

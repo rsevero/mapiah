@@ -17,6 +17,7 @@ class MPHelpButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.help_outline),
+      color: Theme.of(context).colorScheme.onSecondaryContainer,
       onPressed: () => MPDialogAux.showHelpDialog(
         context,
         helpPage,
