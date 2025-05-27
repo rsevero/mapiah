@@ -64,6 +64,7 @@ Version 0.3
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [ ] - When clicking and dragging in non-selected control point, drag the control point
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
+[ ] - Implement F1 shortcut to help page
 
 Version 0.4
 [ ] - Open multiple files simultaneously

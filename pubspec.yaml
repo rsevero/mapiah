@@ -59,6 +59,23 @@ flutter:
     - assets/icons/zoom_plus.png
     - assets/icons/zoom_selection.png
     - assets/icons/zoom-out-scrap.png
+    - assets/help/images/buttonAddArea.png
+    - assets/help/images/buttonAddElement.png
+    - assets/help/images/buttonAddLine.png
+    - assets/help/images/buttonAddPoint.png
+    - assets/help/images/buttonDelete.png
+    - assets/help/images/buttonLineEdit.png
+    - assets/help/images/buttonRedo.png
+    - assets/help/images/buttonScraps.png
+    - assets/help/images/buttonSelectElement.png
+    - assets/help/images/buttonUndo.png
+    - assets/help/images/buttonZoomFile.png
+    - assets/help/images/buttonZoomIn.png
+    - assets/help/images/buttonZoomOneToOne.png
+    - assets/help/images/buttonZoomOptions.png
+    - assets/help/images/buttonZoomOut.png
+    - assets/help/images/buttonZoomScrap.png
+    - assets/help/images/buttonZoomSelection.png
     - assets/help/images/iconAbout.png
     - assets/help/images/iconBack.png
     - assets/help/images/iconClose.png

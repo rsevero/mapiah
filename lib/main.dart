@@ -55,6 +55,13 @@ class MapiahApp extends StatelessWidget {
             seedColor: Color.fromARGB(255, 0xe2, 0x5b, 0x30),
             dynamicSchemeVariant: DynamicSchemeVariant.content,
           ),
+          iconButtonTheme: IconButtonThemeData(
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all<EdgeInsets>(
+                EdgeInsets.symmetric(horizontal: 0),
+              ),
+            ),
+          ),
         ),
         // darkTheme: ThemeData(
         //   useMaterial3: true,

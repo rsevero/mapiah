@@ -93,18 +93,21 @@ class _MapiahHomeState extends State<MapiahHome> {
               );
             }).toList();
           },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.language,
-                color: colorScheme.onSecondaryContainer,
-              ),
-              Icon(
-                Icons.arrow_drop_down,
-                color: colorScheme.onSecondaryContainer,
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.language,
+                  color: colorScheme.onSecondaryContainer,
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  color: colorScheme.onSecondaryContainer,
+                ),
+              ],
+            ),
           ),
         );
       },
