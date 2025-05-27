@@ -11,15 +11,15 @@ As an intended side effect, it aims to completely replace xTherion, the venerabl
 Create a thriving community of users and developers to make it as powerful and user friendly as such community needs and creates.
 
 ## Interesting characteristics
-
-* Unlimited undo/redo.
-* Redos available after some undos and new actions merged in the undo queue.
-* On save, original file lines are only changed if an actual edit modified them, which facilitates version control management.
 * Visually distinguish all point, line, and area types supported by Therion.
 * Graphical interface for editing all supported options of points, lines, and areas supported by Therion.
+* Multiple mouse and keyboard pan and zoom options.
+* On save, original file lines are only changed if an actual edit modified them, which facilitates version control management.
 * Uses Therion as the source of truth regarding supported features; i.e., if Therion supports it, Mapiah should support it as well.
   * As a secondary effect, tries to update and detail the Therion Book so it better reflects Therion features.
 * Equivalent versions for Linux, Windows, MacOS, and web.
+* Unlimited undo/redo.
+* Redos available after some undos and new actions merged in the undo queue.
 
 <!-- ![](header.png)
 
