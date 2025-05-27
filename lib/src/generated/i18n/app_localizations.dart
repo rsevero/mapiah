@@ -1598,6 +1598,12 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// The title for the TH2 File Edit help dialog
+  ///
+  /// In en, this message translates to:
+  /// **'TH2 File Edit Help'**
+  String get th2FileEditPageHelpDialogTitle;
+
   /// The label for the add area button
   ///
   /// In en, this message translates to:

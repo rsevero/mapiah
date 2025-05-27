@@ -1510,6 +1510,12 @@
     "type": "text"
   },
 
+  "th2FileEditPageHelpDialogTitle": "TH2 File Edit Help",
+  "@th2FileEditPageHelpDialogTitle": {
+    "description": "The title for the TH2 File Edit help dialog",
+    "type": "text"
+  },
+
   "th2FileEditPageAddArea": "Add area (A)",
   "@th2FileEditPageAddArea": {
     "description": "The label for the add area button",

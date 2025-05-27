@@ -797,6 +797,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parsingErrors => 'Parsing errors';
 
   @override
+  String get th2FileEditPageHelpDialogTitle => 'TH2 File Edit Help';
+
+  @override
   String get th2FileEditPageAddArea => 'Add area (A)';
 
   @override

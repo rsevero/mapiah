@@ -19,11 +19,11 @@ dependencies:
   flutter_gen: ^5.8.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.7+1
   flutter_mobx: ^2.0.0
   intl: any
   intl_utils: ^2.8.7
   logger: ^2.5.0
+  markdown_widget: ^2.3.2+8
   meta: ^1.0.0
   mobx: ^2.0.0
   open_file: ^3.0.0
@@ -59,4 +59,9 @@ flutter:
     - assets/icons/zoom_plus.png
     - assets/icons/zoom_selection.png
     - assets/icons/zoom-out-scrap.png
+    - assets/help/images/iconAbout.png
+    - assets/help/images/iconHelp.png
+    - assets/help/images/iconLanguage.png
+    - assets/help/images/iconOpenFile.png
     - assets/help/en/mapiah_home_help.md
+    - assets/help/en/th2_file_edit_page_help.md

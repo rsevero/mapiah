@@ -159,7 +159,7 @@
   "mpNameStationLabel": "Base",
 
   "mpOptionsEditLineSegmentTypes": "Tipos de segmentos de linha",
-  
+
   "mpPassageHeightCeiling": "Teto",
   "mpPassageHeightCeilingLabel": "Teto",
   "mpPassageHeightDepth": "Profundidade",
@@ -300,6 +300,7 @@
 
   "parsingErrors": "Erros na interpretação do arquivo",
 
+  "th2FileEditPageHelpDialogTitle": "Ajuda para edição de arquivo TH2",
   "th2FileEditPageAddArea": "Criar área (A)",
   "th2FileEditPageAddAreaStatusBarMessage": "Clique para criar uma área do tipo {type}",
   "th2FileEditPageAddElementOptions": "Criar elemento",

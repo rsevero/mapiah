@@ -9,6 +9,7 @@ import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
+import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
 class TH2FileEditPage extends StatefulWidget {
@@ -89,6 +90,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   tooltip: appLocalizations.th2FileEditPageSaveAs,
                 ),
               ],
+              MPHelpButtonWidget(
+                context,
+                'th2_file_edit_page_help',
+                appLocalizations.th2FileEditPageHelpDialogTitle,
+              ),
               IconButton(
                 icon: Icon(
                   Icons.close,

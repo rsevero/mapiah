@@ -802,6 +802,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
+  String get th2FileEditPageHelpDialogTitle =>
+      'Ajuda para edição de arquivo TH2';
+
+  @override
   String get th2FileEditPageAddArea => 'Criar área (A)';
 
   @override

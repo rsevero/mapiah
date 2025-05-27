@@ -1,7 +1,7 @@
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapiah/main.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 
 class MPHelpDialogWidget extends StatelessWidget {
   final String markdownAssetPath;
@@ -39,12 +39,10 @@ class MPHelpDialogWidget extends StatelessWidget {
         }
         return AlertDialog(
           title: Text(title),
-          content: SizedBox(
-            width: 500,
-            height: 400,
-            child: Markdown(
+          content: SingleChildScrollView(
+            child: MarkdownBlock(
               data: snapshot.data ?? '',
-              selectable: true,
+              selectable: false,
             ),
           ),
           actions: [
