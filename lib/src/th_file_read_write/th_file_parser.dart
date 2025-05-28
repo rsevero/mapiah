@@ -39,7 +39,7 @@ class THFileParser {
   late Parser _rootParser;
   late Parser _currentParser;
 
-  late List<String> _splittedContents;
+  final List<String> _splittedContents = [];
   late String _currentLine;
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
@@ -1981,7 +1981,7 @@ class THFileParser {
   }
 
   void _splitContents(String contents) {
-    _splittedContents = [];
+    _splittedContents.clear();
     String lastLine = '';
     while (contents.isNotEmpty) {
       var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
