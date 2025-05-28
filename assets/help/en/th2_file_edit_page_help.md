@@ -33,3 +33,8 @@ In case there are available redoes when a new edit operation is performed, the r
   * ![Zoom to file button](assets/help/images/buttonZoomFile.png "Zoom to file")  _Zoom to file_: zooms the TH2 file view to show all elements in the file. (3)
   * ![Zoom to scrap button](assets/help/images/buttonZoomScrap.png "Zoom to scrap")  _Zoom to scrap_: zooms the TH2 file view to show the currently selected scrap. (4)
   * ![Zoom out button](assets/help/images/buttonZoomOut.png "Zoom out")  _Zoom out_: zooms out the TH2 file view. (-)
+
+## Zoom and panning
+The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.
+The view can also be panned by right clicking and dragging the mouse.
+_Ctrl+mouse wheel_ pans vertically, _Shift+mouse wheel_ pans horizontally.
