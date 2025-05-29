@@ -6,10 +6,13 @@
 ```
 cd ~/devel/mapiah/packaging/linux/flutter-build/20.04; docker build -t mapiah-flutter-build:20.04 .
 ```
+
 2. Update flatpak build image:
 ```
+
 cd ~/devel/mapiah/packaging/linux/flatpak-build; docker build -t mapiah-flatpak-build:20.04 .
 ```
+
 3. Run the flatpak build image:
 ```
 docker run -it --entrypoint /bin/bash rsevero847/mapiah-flatpak-build
@@ -20,4 +23,9 @@ docker run -it --entrypoint /bin/bash rsevero847/mapiah-flatpak-build
 4. Clone Mapiah source code inside /opt/devel:
 ```
 cd /opt/devel; git clone --depth 1 -b main https://github.com/rsevero/mapiah.git
+```
+
+5. Build the flatpak:
+```
+cd /opt/devel/mapiah; ./packaging/linux/build-flutter-app.sh
 ```

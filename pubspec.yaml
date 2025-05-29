@@ -52,6 +52,7 @@ flutter:
     - assets/icons/add_element-addLine.png
     - assets/icons/add_element-addPoint.png
     - assets/icons/change-scrap-tool.png
+    - assets/icons/org.mapiah.Mapiah.png
     - assets/icons/select-tool.png
     - assets/icons/zoom_minus.png
     - assets/icons/zoom_one_to_one.png

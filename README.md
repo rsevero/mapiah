@@ -4,13 +4,14 @@
 
 ## Main objectives
 
-Its intended main function is to provide a more user-friendly interface to the powerful Therion mapping software.
+User-friendly interface to the powerful Therion mapping software.
 
 As an intended side effect, it aims to completely replace xTherion, the venerable but ostensibly ancient Therion graphical interface.
 
-Create a thriving community of users and developers to make it as powerful and user friendly as such community needs and creates.
+Also create a thriving community of users and developers to make it as powerful and user friendly as such community needs and creates.
 
 ## Interesting characteristics
+
 * Visually distinguish all point, line, and area types supported by Therion.
 * Graphical interface for editing all supported options of points, lines, and areas supported by Therion.
 * Multiple mouse and keyboard pan and zoom options.
