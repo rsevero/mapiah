@@ -25,7 +25,16 @@ docker run -it --entrypoint /bin/bash rsevero847/mapiah-flatpak-build
 cd /opt/devel; git clone --depth 1 -b main https://github.com/rsevero/mapiah.git
 ```
 
-5. Build the flatpak:
+5. Update version info at:
+   1. pubspec.yaml
+   2. packaging/linux/org.mapiah.Mapiah.desktop
+   3. packaging/linux/org.mapiah.Mapiah.metainfo.xml
+
+6. Build the app:
 ```
 cd /opt/devel/mapiah; ./packaging/linux/build-flutter-app.sh
+```
+7. Update sha256 checksum for built app at /opt/devel/mapiah/packaging/linux/flatpak-build/org.mapiah.Mapiah.yml:
+```
+sha256sum /opt/devel/mapiah/Mapiah-Linux-Portable.tar.gz
 ```

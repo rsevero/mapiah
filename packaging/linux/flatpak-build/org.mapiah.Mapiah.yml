@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
+
+---
+app-id: org.mapiah.Mapiah
+runtime: org.freedesktop.Platform
+runtime-version: "24.08"
+sdk: org.freedesktop.Sdk
+command: mapiah
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+modules:
+  - name: Mapiah
+    buildsystem: simple
+    only-arches:
+      - x86_64
+    build-commands:
+      - "./build-flatpak.sh"
+    sources:
+      - type: file
+        url: file://opt/devel/mapiah/Mapiah-Linux-Portable.tar.gz
+        sha256: c1d0b8f7c070be428eb12f54caaea3d0822317efb8ac0cd1390a6aa4ad852077
+      - type: dir
+        path: ../mapiah
+      # - type: git
+      #   url: https://github.com/Merrit/flutter_flatpak_example.git
+      #   branch: main
+      - type: file
+        path: build-flatpak.sh
