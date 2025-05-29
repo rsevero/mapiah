@@ -1,0 +1,7 @@
+# To run a docker image and open it with a bash shell:
+docker run -it --entrypoint /bin/bash IMAGE_ID
+
+# To copy files into docker image:
+docker cp foo.txt container_id:/foo.txt
+# or
+docker cp container_id:/foo.txt foo.txt

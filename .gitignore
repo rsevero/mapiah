@@ -14,6 +14,7 @@ auxiliary/line_options_testing/line_options_testing.pdf
 # Generated files
 .flutter-plugins
 .flutter-plugins-dependencies
+**-Linux-Portable.tar.gz
 
 build/**
 

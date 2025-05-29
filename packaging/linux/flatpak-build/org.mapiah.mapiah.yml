@@ -1,0 +1,15 @@
+id: org.mapiah.mapiah
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: mapiah
+modules:
+  - name: mapiah
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 hello.sh /app/bin/hello
+    sources:
+      - type: script
+        dest-filename: hello.sh
+        commands:
+          - echo "Hello world, from a sandbox"
