@@ -23,3 +23,4 @@ flutter build linux
 cd build/linux/x64/release/bundle || exit
 tar -czaf $archiveName ./*
 mv $archiveName "$baseDir"/
+sha256sum $archiveName

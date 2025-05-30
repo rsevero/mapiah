@@ -20,7 +20,7 @@ RUN set -o xtrace \
     && apt-get upgrade -y \
     && apt-get install -y locales \
     && update-locale LANG=en_US.UTF-8 \
-    && apt-get install -y curl git unzip xz-utils zip libglu1-mesa \
+    && apt-get install -y curl git unzip xz-utils zip libglu1-mesa vim \
     && apt-get install -y clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-10-dev \
     && rm -rf /var/lib/apt/lists/* \
     && curl -s -o flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz \
