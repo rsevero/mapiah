@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.rsevero.Mapiah</id>
+  <id>io.github.rsevero.mapiah</id>
 
   <name>Mapiah</name>
   <summary>User friendly multiplatform Therion map editor</summary>
 
-  <developer id="org.mapiah">
+  <developer id="io.github.rsevero">
     <name>Mapiah developers</name>
   </developer>
   <url type="homepage">https://github.com/rsevero/mapiah</url>
@@ -27,7 +27,7 @@
     </p>
   </description>
 
-  <launchable type="desktop-id">io.github.rsevero.Mapiah.desktop</launchable>
+  <launchable type="desktop-id">io.github.rsevero.mapiah.desktop</launchable>
   <screenshots>
     <screenshot type="default">
       <image>https://github.com/rsevero/mapiah/blob/main/auxiliary/screenshots/mapiah-initial.png</image>
