@@ -38,28 +38,15 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.15
   flutter_lints: ^6.0.0
-  flutter_test:
-    sdk: flutter
+  #flutter_test:
+  #  sdk: flutter
   mobx_codegen: ^2.0.0
-  test: ^1.0.0
+  #test: ^1.0.0
 
 flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/icons/add_element-addArea.png
-    - assets/icons/add_element-addElement.png
-    - assets/icons/add_element-addLine.png
-    - assets/icons/add_element-addPoint.png
-    - assets/icons/change-scrap-tool.png
-    - assets/icons/org.mapiah.Mapiah.png
-    - assets/icons/select-tool.png
-    - assets/icons/zoom_minus.png
-    - assets/icons/zoom_one_to_one.png
-    - assets/icons/zoom_plus_minus.png
-    - assets/icons/zoom_plus.png
-    - assets/icons/zoom_selection.png
-    - assets/icons/zoom-out-scrap.png
     - assets/help/images/buttonAddArea.png
     - assets/help/images/buttonAddElement.png
     - assets/help/images/buttonAddLine.png
@@ -79,6 +66,19 @@ flutter:
     - assets/help/images/buttonZoomSelection.png
     - assets/help/images/iconAbout.png
     - assets/help/images/iconBack.png
+    - assets/icons/add_element-addArea.png
+    - assets/icons/add_element-addElement.png
+    - assets/icons/add_element-addLine.png
+    - assets/icons/add_element-addPoint.png
+    - assets/icons/change-scrap-tool.png
+    - assets/icons/io.github.rsevero.mapiah.png
+    - assets/icons/select-tool.png
+    - assets/icons/zoom_minus.png
+    - assets/icons/zoom_one_to_one.png
+    - assets/icons/zoom_plus_minus.png
+    - assets/icons/zoom_plus.png
+    - assets/icons/zoom_selection.png
+    - assets/icons/zoom-out-scrap.png
     - assets/help/images/iconClose.png
     - assets/help/images/iconAbout.png
     - assets/help/images/iconHelp.png
