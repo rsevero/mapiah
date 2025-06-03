@@ -16,7 +16,6 @@ dependencies:
   file_picker: ^10.0.0
   flutter:
     sdk: flutter
-  flutter_gen: ^5.8.0
   flutter_localizations:
     sdk: flutter
   flutter_mobx: ^2.0.0
@@ -38,10 +37,8 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.15
   flutter_lints: ^6.0.0
-  #flutter_test:
-  #  sdk: flutter
   mobx_codegen: ^2.0.0
-  #test: ^1.0.0
+  test: ^1.26.2
 
 flutter:
   uses-material-design: true
