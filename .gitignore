@@ -7,6 +7,10 @@ therion.log
 auxiliary/line_options_testing/.xtherion.dat
 auxiliary/line_options_testing/line_options_testing.pdf
 
+# AppImage auxiliary build dir
+AppDir
+AppDir/***
+
 # Generated files
 .flutter-plugins
 .flutter-plugins-dependencies
