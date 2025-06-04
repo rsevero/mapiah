@@ -31,12 +31,15 @@
   <screenshots>
     <screenshot type="default">
       <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-initial.png</image>
+      <caption>Initial window</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-single_scrap.png</image>
+      <caption>Editing a single scrap TH2 file</caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-options.png</image>
+      <caption>Options dialog</caption>
     </screenshot>
   </screenshots>
     <releases>
