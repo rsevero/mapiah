@@ -27,6 +27,11 @@
     </p>
   </description>
 
+  <branding>
+    <color type="primary" scheme_preference="light">#f9f871</color>
+    <color type="primary" scheme_preference="dark">#4c8077</color>
+  </branding>
+
   <launchable type="desktop-id">io.github.rsevero.mapiah.desktop</launchable>
   <screenshots>
     <screenshot type="default">
