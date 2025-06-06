@@ -10,7 +10,7 @@
 git log --pretty=format:"%H | %s | %ad | %an" --date=iso
 ```
 
-3. Clone the mapiah-flatpak-build repository:
+3. Clone the mapiah-flatpak repository:
 ```
 git clone --depth 1 -b main https://github.com/rsevero/mapiah-flatpak-build.git
 ```
@@ -38,4 +38,7 @@ flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.githu
 ```
 ```
 flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
+```
+
+9. Copy newly created build manifest and support info to ~/devel/mapiah-flatpak:
 ```
