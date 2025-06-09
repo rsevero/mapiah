@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
@@ -39,6 +40,7 @@ class MPGeneralController {
 
   TH2FileEditController getTH2FileEditController({
     required String filename,
+    final Uint8List? fileBytes,
     bool forceNewController = false,
   }) {
     if (_t2hFileEditControllers.containsKey(filename)) {
@@ -50,7 +52,10 @@ class MPGeneralController {
     }
 
     final TH2FileEditController createdController =
-        TH2FileEditControllerBase.create(filename);
+        TH2FileEditControllerBase.create(
+      filename,
+      fileBytes: fileBytes,
+    );
 
     _t2hFileEditControllers[filename] = createdController;
 

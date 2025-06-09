@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
@@ -14,8 +15,10 @@ import 'package:mapiah/src/widgets/th_file_widget.dart';
 
 class TH2FileEditPage extends StatefulWidget {
   final String filename;
+  final Uint8List? fileBytes;
 
-  TH2FileEditPage({required this.filename, super.key});
+  TH2FileEditPage({required this.filename, super.key, this.fileBytes})
+      : assert(filename.isNotEmpty, 'Filename cannot be empty');
 
   @override
   State<TH2FileEditPage> createState() => _TH2FileEditPageState();
@@ -32,8 +35,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   @override
   void initState() {
     super.initState();
-    th2FileEditController = mpLocator.mpGeneralController
-        .getTH2FileEditController(filename: widget.filename);
+    th2FileEditController =
+        mpLocator.mpGeneralController.getTH2FileEditController(
+      filename: widget.filename,
+      fileBytes: widget.fileBytes,
+    );
     th2FileEditControllerCreateResult = th2FileEditController.load();
   }
 

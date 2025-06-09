@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -29,6 +30,7 @@ class THFile
   final LinkedHashMap<int, THElement> _elementByMPID =
       LinkedHashMap<int, THElement>();
   String filename = '';
+  Uint8List? fileBytes;
 
   String encoding = thDefaultEncoding;
 

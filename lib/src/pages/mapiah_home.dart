@@ -33,7 +33,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           IconButton(
             icon: Icon(Icons.file_open_outlined),
             color: Theme.of(context).colorScheme.onSecondaryContainer,
-            onPressed: () => MPDialogAux.pickTh2File(context),
+            onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.initialPageOpenFile,
           ),
           buildLanguageDropdown(context),

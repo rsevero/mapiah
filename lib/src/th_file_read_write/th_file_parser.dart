@@ -1838,6 +1838,7 @@ class THFileParser {
       value: element,
       originalLineInTH2File: _currentLine,
     );
+
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newElement,
       parent: _currentParent,
@@ -1845,10 +1846,7 @@ class THFileParser {
   }
 
   @useResult
-  Future<String> _decodeFile(RandomAccessFile raf, String encoding) async {
-    await raf.setPosition(0);
-    final int fileSize = await raf.length();
-    final Uint8List fileContentRaw = await raf.read(fileSize);
+  String _decodeFile(Uint8List fileContentRaw, String encoding) {
     String fileContentDecoded = '';
 
     switch (encoding) {
@@ -1862,10 +1860,13 @@ class THFileParser {
         // Therion ISO charset names don´t have a hyphen after ISO but
         // charset.dart expects one.
         final isoResult = _isoRegex.firstMatch(encoding);
+
         if (isoResult != null) {
           encoding = 'ISO-${isoResult[1]}';
         }
+
         final encoder = Charset.getByName(encoding);
+
         if (encoder == null) {
           fileContentDecoded = utf8.decode(fileContentRaw);
         } else {
@@ -1877,17 +1878,23 @@ class THFileParser {
   }
 
   @useResult
-  Future<String> _encodingNameFromFile(RandomAccessFile raf) async {
+  String _encodingNameFromFile(Uint8List fileContentRaw) {
     String line = '';
     int byte;
     String priorChar = '';
     int charsRead = 0;
 
-    await raf.setPosition(0);
-    while ((charsRead < thMaxEncodingLength) &
-        ((byte = await raf.readByte()) != -1)) {
+    for (int i = 0;
+        ((i < fileContentRaw.length) && (charsRead < thMaxEncodingLength));
+        i++) {
+      byte = fileContentRaw[i];
+
+      if (byte == -1) {
+        break;
+      }
+
       charsRead++;
-      mpLocator.mpLog.finest("Byte: '$byte'");
+
       final String char = utf8.decode([byte]);
 
       if (_isEncodingDelimiter(priorChar, char)) {
@@ -1900,7 +1907,9 @@ class THFileParser {
     mpLocator.mpLog.finer("Line read: '$line'");
 
     final RegExpMatch? encoding = _encodingRegex.firstMatch(line);
+
     mpLocator.mpLog.finer("Encoding object: '$encoding");
+
     if (encoding == null) {
       return thDefaultEncoding;
     } else {
@@ -1920,7 +1929,7 @@ class THFileParser {
 
   @useResult
   Future<(THFile, bool, List<String>)> parse(
-    String filePath, {
+    THFile thFile, {
     Parser? alternateStartParser,
     bool trace = false,
     bool forceNewController = false,
@@ -1935,9 +1944,11 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _th2FileEditController = mpLocator.mpGeneralController
-        .getTH2FileEditController(
-            filename: filePath, forceNewController: forceNewController);
+    _th2FileEditController =
+        mpLocator.mpGeneralController.getTH2FileEditController(
+      filename: thFile.filename,
+      forceNewController: forceNewController,
+    );
     _th2FileElementEditController =
         _th2FileEditController.elementEditController;
     _parsedTHFile = _th2FileEditController.thFile;
@@ -1945,16 +1956,19 @@ class THFileParser {
     _parseErrors.clear();
 
     try {
-      final File file = File(filePath);
-      final RandomAccessFile raf = await file.open();
+      if (thFile.fileBytes == null) {
+        final File file = File(thFile.filename);
 
-      _parsedTHFile.encoding = await _encodingNameFromFile(raf);
+        thFile.fileBytes = await file.readAsBytes();
+      }
 
-      String contents = await _decodeFile(raf, _parsedTHFile.encoding);
+      final Uint8List fileContentRaw = thFile.fileBytes!;
+
+      _parsedTHFile.encoding = _encodingNameFromFile(fileContentRaw);
+
+      String contents = _decodeFile(fileContentRaw, _parsedTHFile.encoding);
 
       _splitContents(contents);
-
-      await raf.close();
     } catch (e) {
       mpLocator.mpLog.e('Failed to read file', error: e);
     }

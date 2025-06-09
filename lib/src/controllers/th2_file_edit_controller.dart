@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -356,27 +357,20 @@ abstract class TH2FileEditControllerBase with Store {
 
   final List<String> errorMessages = <String>[];
 
-  Future<TH2FileEditControllerCreateResult> load() async {
-    _preParseInitialize();
-
-    final THFileParser parser = THFileParser();
-
-    final (parsedFile, isSuccessful, errors) =
-        await parser.parse(_thFile.filename);
-
-    _postParseInitialize(parsedFile, isSuccessful, errors);
-
-    return TH2FileEditControllerCreateResult(isSuccessful, errors);
-  }
-
   /// This is a factory constructor that creates a new instance of
   /// TH2FileEditController with an empty THFile.
-  static TH2FileEditController create(String filename) {
+  static TH2FileEditController create(
+    String filename, {
+    Uint8List? fileBytes,
+  }) {
     final TH2FileEditController th2FileEditController =
         TH2FileEditController._create();
     final THFile thFile = THFile();
+
     thFile.filename = filename;
+    thFile.fileBytes = fileBytes;
     th2FileEditController._basicInitialization(thFile);
+
     return th2FileEditController;
   }
 
@@ -403,6 +397,17 @@ abstract class TH2FileEditControllerBase with Store {
   void _preParseInitialize() {
     _isLoading = true;
     errorMessages.clear();
+  }
+
+  Future<TH2FileEditControllerCreateResult> load() async {
+    _preParseInitialize();
+
+    final THFileParser parser = THFileParser();
+    final (parsedFile, isSuccessful, errors) = await parser.parse(_thFile);
+
+    _postParseInitialize(parsedFile, isSuccessful, errors);
+
+    return TH2FileEditControllerCreateResult(isSuccessful, errors);
   }
 
   void _postParseInitialize(
