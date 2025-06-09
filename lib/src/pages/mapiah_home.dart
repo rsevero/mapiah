@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
@@ -19,7 +20,9 @@ class _MapiahHomeState extends State<MapiahHome> {
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
-    setWindowTitle(appLocalizations.appTitle);
+    if (!kIsWeb) {
+      setWindowTitle(appLocalizations.appTitle);
+    }
     initializeMPCommandLocalizations(context);
 
     return Scaffold(
