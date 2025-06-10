@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -24,7 +24,6 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_f
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
-import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -891,27 +890,23 @@ abstract class TH2FileEditControllerBase with Store {
     canvas.scale(1, -1);
   }
 
-  Future<List<int>> _encodedFileContents() async {
+  Uint8List _encodedFileContents() {
     final THFileWriter thFileWriter = THFileWriter();
 
-    return await thFileWriter.toBytes(
+    return thFileWriter.toBytes(
       _thFile,
       includeEmptyLines: true,
       useOriginalRepresentation: true,
     );
   }
 
-  Future<File?> saveTH2File() async {
-    final File file = await _localFile();
-    final List<int> encodedContent = await _encodedFileContents();
+  void saveTH2File() {
+    final File file = _localFile();
 
-    undoRedoController.clearUndoRedoStack();
-    updateUndoRedoStatus();
-
-    return await file.writeAsBytes(encodedContent, flush: true);
+    _actualSave(file);
   }
 
-  Future<File?> saveAsTH2File() async {
+  Future<void> saveAsTH2File() async {
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Please select an output file:',
       fileName: _thFile.filename,
@@ -929,18 +924,21 @@ abstract class TH2FileEditControllerBase with Store {
       mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
 
       final File file = File(filePath);
-      final List<int> encodedContent = await _encodedFileContents();
 
-      undoRedoController.clearUndoRedoStack();
-      updateUndoRedoStatus();
-
-      return await file.writeAsBytes(encodedContent, flush: true);
+      _actualSave(file);
     }
-
-    return null;
   }
 
-  Future<File> _localFile() async {
+  void _actualSave(File file) {
+    final Uint8List encodedContent = _encodedFileContents();
+
+    undoRedoController.clearUndoRedoStack();
+    updateUndoRedoStatus();
+
+    file.writeAsBytesSync(encodedContent, flush: true);
+  }
+
+  File _localFile() {
     final String filename = _thFile.filename;
 
     return File(filename);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:charset/charset.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -421,19 +422,21 @@ class THFileWriter {
     return asString;
   }
 
-  Future<List<int>> toBytes(
+  Uint8List toBytes(
     THFile thFile, {
     bool includeEmptyLines = false,
     bool useOriginalRepresentation = false,
-  }) async {
+  }) {
     _thFile = thFile;
+
     String encoding = thFile.encoding;
-    late List<int> fileContentEncoded;
+    late Uint8List fileContentEncoded;
     String fileContent = serialize(
       thFile,
       includeEmptyLines: includeEmptyLines,
       useOriginalRepresentation: useOriginalRepresentation,
     );
+
     switch (encoding) {
       case 'UTF-8':
         fileContentEncoded = utf8.encode(fileContent);
@@ -442,11 +445,12 @@ class THFileWriter {
       case 'ISO8859-1':
         fileContentEncoded = latin1.encode(fileContent);
       default:
-        final encoder = Charset.getByName(encoding);
+        final Encoding? encoder = Charset.getByName(encoding);
+
         if (encoder == null) {
           fileContentEncoded = utf8.encode(fileContent);
         } else {
-          fileContentEncoded = encoder.encode(fileContent);
+          fileContentEncoded = Uint8List.fromList(encoder.encode(fileContent));
         }
     }
     return fileContentEncoded;

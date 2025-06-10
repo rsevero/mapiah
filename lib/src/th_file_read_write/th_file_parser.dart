@@ -1962,11 +1962,11 @@ class THFileParser {
         thFile.fileBytes = await file.readAsBytes();
       }
 
-      final Uint8List fileContentRaw = thFile.fileBytes!;
+      _parsedTHFile.encoding = _encodingNameFromFile(thFile.fileBytes!);
 
-      _parsedTHFile.encoding = _encodingNameFromFile(fileContentRaw);
+      String contents = _decodeFile(thFile.fileBytes!, _parsedTHFile.encoding);
 
-      String contents = _decodeFile(fileContentRaw, _parsedTHFile.encoding);
+      thFile.fileBytes = null;
 
       _splitContents(contents);
     } catch (e) {
@@ -1995,21 +1995,26 @@ class THFileParser {
   }
 
   void _splitContents(String contents) {
-    _splittedContents.clear();
     String lastLine = '';
+
+    _splittedContents.clear();
     while (contents.isNotEmpty) {
       var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
+
       if (lineBreakIndex == -1) {
         lastLine += contents;
         break;
       }
+
       String newLine = contents.substring(0, lineBreakIndex);
+
       contents = contents.substring(lineBreakIndex + lineBreakLength);
       if (newLine.isEmpty) {
         _splittedContents.add("$lastLine$newLine");
         lastLine = '';
         continue;
       }
+
       int quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
 
       // Joining lines that end with a line break inside a quoted string, i.e.,
@@ -2027,6 +2032,7 @@ class THFileParser {
 
       // Joining next line if this line ends with a backslash.
       final String lastChar = newLine.substring(newLine.length - 1);
+
       if (lastChar == thBackslash) {
         lastLine = newLine.substring(0, newLine.length - 1);
       } else {
