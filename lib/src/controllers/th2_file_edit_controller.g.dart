@@ -1169,7 +1169,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  dynamic triggerAllElementsRedraw() {
+  void triggerAllElementsRedraw() {
     final _$actionInfo =
         _$TH2FileEditControllerBaseActionController.startAction(
             name: 'TH2FileEditControllerBase.triggerAllElementsRedraw');
@@ -1181,7 +1181,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  dynamic triggerSelectedElementsRedraw({bool setState = false}) {
+  void triggerSelectedElementsRedraw({bool setState = false}) {
     final _$actionInfo =
         _$TH2FileEditControllerBaseActionController.startAction(
             name: 'TH2FileEditControllerBase.triggerSelectedElementsRedraw');
@@ -1193,7 +1193,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  dynamic triggerNonSelectedElementsRedraw() {
+  void triggerNonSelectedElementsRedraw() {
     final _$actionInfo =
         _$TH2FileEditControllerBaseActionController.startAction(
             name: 'TH2FileEditControllerBase.triggerNonSelectedElementsRedraw');
@@ -1205,7 +1205,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  dynamic triggerSelectedListChanged() {
+  void triggerSelectedListChanged() {
     final _$actionInfo =
         _$TH2FileEditControllerBaseActionController.startAction(
             name: 'TH2FileEditControllerBase.triggerSelectedListChanged');
