@@ -679,7 +679,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  triggerAllElementsRedraw() {
+  void triggerAllElementsRedraw() {
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
     _redrawTriggerSelectedElements++;
@@ -689,7 +689,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  triggerSelectedElementsRedraw({bool setState = false}) {
+  void triggerSelectedElementsRedraw({bool setState = false}) {
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
     _redrawTriggerSelectedElements++;
@@ -700,12 +700,12 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  triggerNonSelectedElementsRedraw() {
+  void triggerNonSelectedElementsRedraw() {
     _redrawTriggerNonSelectedElements++;
   }
 
   @action
-  triggerSelectedListChanged() {
+  void triggerSelectedListChanged() {
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
     _redrawTriggerSelectedElementsListChanged++;
