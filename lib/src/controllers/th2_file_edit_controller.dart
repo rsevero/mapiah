@@ -27,6 +27,9 @@ import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
+import 'package:mapiah/src/auxiliary/mp_web_file_saver_stub.dart'
+    if (dart.library.js_interop) 'package:mapiah/src/auxiliary/mp_web_file_saver_web.dart';
+
 part 'th2_file_edit_controller.g.dart';
 
 class TH2FileEditController = TH2FileEditControllerBase
@@ -265,7 +268,7 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @computed
-  bool get enableSaveButton => _hasUndo;
+  bool get enableSaveButton => _hasUndo || !kIsWeb;
 
   @readonly
   String _statusBarMessage = '';
@@ -901,9 +904,13 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void saveTH2File() {
-    final File file = _localFile();
+    if (kIsWeb) {
+      saveFileWeb(_encodedFileContents(), _thFile.filename);
+    } else {
+      final File file = _localFile();
 
-    _actualSave(file);
+      _actualSave(file);
+    }
   }
 
   Future<void> saveAsTH2File() async {
