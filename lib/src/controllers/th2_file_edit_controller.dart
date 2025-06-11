@@ -405,9 +405,9 @@ abstract class TH2FileEditControllerBase with Store {
     _preParseInitialize();
 
     final THFileParser parser = THFileParser();
-    final (parsedFile, isSuccessful, errors) = await parser.parse(_thFile);
+    final (isSuccessful, errors) = await parser.parse(_thFile);
 
-    _postParseInitialize(parsedFile, isSuccessful, errors);
+    _postParseInitialize(_thFile, isSuccessful, errors);
 
     return TH2FileEditControllerCreateResult(isSuccessful, errors);
   }

@@ -1928,7 +1928,29 @@ class THFileParser {
   }
 
   @useResult
-  Future<(THFile, bool, List<String>)> parse(
+  Future<(THFile, bool, List<String>)> parseByFilename(
+    String filename, {
+    Parser? alternateStartParser,
+    bool trace = false,
+    bool forceNewController = false,
+  }) async {
+    final TH2FileEditController th2FileEditcontroller =
+        mpLocator.mpGeneralController.getTH2FileEditController(
+      filename: filename,
+      forceNewController: forceNewController,
+    );
+    final (bool success, List<String> errors) = await parse(
+      th2FileEditcontroller.thFile,
+      alternateStartParser: alternateStartParser,
+      trace: trace,
+      forceNewController: forceNewController,
+    );
+
+    return (th2FileEditcontroller.thFile, success, errors);
+  }
+
+  @useResult
+  Future<(bool, List<String>)> parse(
     THFile thFile, {
     Parser? alternateStartParser,
     bool trace = false,
@@ -1981,7 +2003,7 @@ class THFileParser {
           'Unclosed multiline command: "${_currentParent.toString()}"');
     }
 
-    return (_parsedTHFile, _parseErrors.isEmpty, _parseErrors);
+    return (_parseErrors.isEmpty, _parseErrors);
   }
 
   (int index, int length) _findLineBreak(String content) {
