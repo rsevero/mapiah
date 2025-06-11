@@ -18,22 +18,22 @@ git log --pretty=format:"%H | %s | %ad | %an" --date=iso
 cp -vr ~/devel/mapiah/packaging/linux/flatpak/io.github.rsevero.mapiah ~/devel/flatpak-flutter/io.github.rsevero.mapiah
 ```
 
-5. Update the flatpak offline manifest:
+6. Update the flatpak offline manifest:
 ```
 cd ~/devel/flatpak-flutter/io.github.rsevero.mapiah; ../flatpak-flutter.py flatpak-flutter.yml
 ```
 
-1. Build the flatpak app:
+7. Build the flatpak app:
 ```
 flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache --mirror-screenshots-url=https://dl.flathub.org/media/ --repo=repo builddir io.github.rsevero.mapiah.yml
 ```
 
-1. Test the flatpak app:
+8. Test the flatpak app:
 ```
 flatpak run io.github.rsevero.mapiah
 ```
 
-1. Run the linters (one at a time) and solve any issues they report:
+9. Run the linters (one at a time) and solve any issues they report:
 ```
 flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.github.rsevero.mapiah.yml
 ```
@@ -41,5 +41,7 @@ flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.githu
 flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
 ```
 
-1. Copy newly created build manifest and support info to ~/devel/flathub:
+10. Copy newly created build manifest and support info to ~/devel/io.github.rsevero.mapiah:
+```
+cd ~/devel/flatpak-flutter/io.github.rsevero.mapiah; cp -v flutter-sdk-*.json flutter-shared.sh.patch io.github.rsevero.mapiah.yml package_config.json pubspec-sources.json ~/devel/io.github.rsevero.mapiah
 ```
