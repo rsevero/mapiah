@@ -60,8 +60,8 @@ endscrap
 
     for (var success in successes) {
       test(success['file'], () async {
-        final (file, isSuccessful, errors) = await parser
-            .parseByFilename(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, errors) =
+            await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
@@ -105,8 +105,8 @@ endscrap
 
     for (var success in successes) {
       test(success['file'], () async {
-        final (file, isSuccessful, errors) = await parser
-            .parseByFilename(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, errors) =
+            await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
@@ -190,8 +190,8 @@ endcomment
 
     test("${success['file']} in parts", () async {
       mpLocator.mpGeneralController.reset();
-      final (file, isSuccessful, errors) = await parser
-          .parseByFilename(THTestAux.testPath(success['file'] as String));
+      final (file, isSuccessful, errors) =
+          await parser.parse(THTestAux.testPath(success['file'] as String));
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
@@ -243,7 +243,7 @@ endcomment
     });
 
     test("${success['file']} as once", () async {
-      final (file, isSuccessful, errors) = await parser.parseByFilename(
+      final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
         forceNewController: true,
       );
@@ -296,7 +296,7 @@ endscrap
     };
 
     test("${success['file']} as once", () async {
-      final (file, isSuccessful, errors) = await parser.parseByFilename(
+      final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
         forceNewController: true,
       );
