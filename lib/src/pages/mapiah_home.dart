@@ -119,16 +119,14 @@ class _MapiahHomeState extends State<MapiahHome> {
 
   void initializeMPCommandLocalizations(BuildContext context) {
     mpLocator.resetAppLocalizations(context);
-
     MPTextToUser.initialize();
   }
 
   void showAboutDialog(BuildContext context) async {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context);
-
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    final version = packageInfo.version;
+    final String version = packageInfo.version;
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
     showDialog(
       context: context,
