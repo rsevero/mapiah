@@ -22,37 +22,19 @@ Also create a thriving community of users and developers to make it as powerful 
 * Unlimited undo/redo.
 * Redos available after some undos and new actions merged in the undo queue.
 
-<!-- ![](header.png)
-
 ## Installation
 
-OS X & Linux:
-
+### Linux
 ```sh
-npm install my-crazy-module --save
+flatpak install io.github.rsevero.mapiah
+flatpak run io.github.rsevero.mapiah
 ```
 
-Windows:
+### Web
+The web version is available at [https://mapiah.org/webapp](https://mapiah.org/webapp).
 
-```sh
-edit autoexec.bat
-```
-
-## Usage example
-
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
-
-_For more examples and usage, please refer to the [Wiki][wiki]._
-
-## Development setup
-
-Describe how to install all development dependencies and how to run an automated test suite of some kind. Potentially do this for multiple platforms.
-
-```sh
-make install
-npm test
-```
--->
+### MacOS and Windows
+Waiting for someone interested in helping creating the MacOS and Windows releases. Please contact me at rsev AT pm.me.
 
 ## Reporting bugs
 
@@ -74,7 +56,7 @@ If you have some free time and want to see the above recommendations more extens
 
 ## Release History
 
-* 0.2
+* 0.2.0
   * Make output identical to original except on changed lines
   * Deal with clicking on more than one object at a time
   * Line edit
