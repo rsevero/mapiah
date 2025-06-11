@@ -25,10 +25,14 @@ Also create a thriving community of users and developers to make it as powerful 
 ## Installation
 
 ### Linux
+There is a flatpak version:
+
 ```sh
 flatpak install io.github.rsevero.mapiah
 flatpak run io.github.rsevero.mapiah
 ```
+
+If someone is interested in creating an appimage, arch, deb, rpm, snap or other package and is interested in my can help, please contact me at rsev AT pm.me.
 
 ### Web
 The web version is available at [https://mapiah.org/webapp](https://mapiah.org/webapp).
