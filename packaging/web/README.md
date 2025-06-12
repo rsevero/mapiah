@@ -4,7 +4,7 @@
 
 1. Build an updated javascript release:
 ```
-flutter build web --release --base-href "/webappjs/"
+cd ~/devel/mapiah; rm -rf ~/devel/mapiah/build/web; flutter build web --release --base-href "/webappjs/"
 ```
 
 2. Create a compressed file with the new release:
@@ -18,7 +18,7 @@ cd ~/devel/mapiah/build/web; tar -cjvf ../mapiah-web-release-javascript.tar.bz2 
 
 1. Build an updated WASM release:
 ```
-flutter build web --release --base-href "/webappwasm/" --wasm
+cd ~/devel/mapiah; rm -rf ~/devel/mapiah/build/web; flutter build web --release --base-href "/webappwasm/" --wasm
 ```
 
 2. Create a compressed file with the new release:
