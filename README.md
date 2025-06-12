@@ -35,7 +35,9 @@ flatpak run io.github.rsevero.mapiah
 If someone is interested in creating an appimage, arch, deb, rpm, snap or other package and is interested in my can help, please contact me at rsev AT pm.me.
 
 ### Web
-The web version is available at [https://mapiah.org/webapp](https://mapiah.org/webapp).
+There are 2 web versions is available:
+* Javascript at [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
+* WASM at [https://mapiah.org/webappwasm](https://mapiah.org/webappwasm).
 
 ### MacOS and Windows
 Waiting for someone interested in helping creating the MacOS and Windows releases. Please contact me at rsev AT pm.me.

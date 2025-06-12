@@ -3,7 +3,8 @@
 - Fixing href on index.html for web release
 - Flutter: upgrading to 3.32.3
 - Show english help page if there is no translated help page
-- 
+- New WASM web release.
+
 ## 0.2.0
 - Make output identical to original except on changed lines
 - Deal with click on more than one object at a time
