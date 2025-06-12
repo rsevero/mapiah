@@ -2,7 +2,7 @@
 
 1. Build an updated web version:
 ```
-flutter build web --release
+flutter build web --release --base-href "/webapp/"
 ```
 
 2. Create a compressed file with the new release:
