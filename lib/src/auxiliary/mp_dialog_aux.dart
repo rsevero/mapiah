@@ -96,16 +96,10 @@ class MPDialogAux {
     String helpPage,
     String title,
   ) {
-    final String localeID = mpLocator.mpSettingsController.localeID == 'sys'
-        ? View.of(context).platformDispatcher.locale.languageCode
-        : mpLocator.mpSettingsController.localeID;
-
-    final helpPageAssetPath = "$helpPagePath/$localeID/$helpPage.md";
-
     showDialog(
       context: context,
       builder: (context) => MPHelpDialogWidget(
-        markdownAssetPath: helpPageAssetPath,
+        helpPage: helpPage,
         title: title,
       ),
     );

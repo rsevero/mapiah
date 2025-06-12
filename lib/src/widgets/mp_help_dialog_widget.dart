@@ -1,26 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 class MPHelpDialogWidget extends StatelessWidget {
-  final String markdownAssetPath;
+  final String helpPage;
   final String title;
 
   const MPHelpDialogWidget({
     super.key,
-    required this.markdownAssetPath,
+    required this.helpPage,
     required this.title,
   });
 
-  Future<String> _loadMarkdown() async {
-    return await rootBundle.loadString(markdownAssetPath);
+  Future<String> _loadMarkdown(BuildContext context) async {
+    final String localeID = mpLocator.mpSettingsController.localeID == 'sys'
+        ? View.of(context).platformDispatcher.locale.languageCode
+        : mpLocator.mpSettingsController.localeID;
+    final String helpPageAssetPath = "$mpHelpPagePath/$localeID/$helpPage.md";
+
+    try {
+      return await rootBundle.loadString(helpPageAssetPath);
+    } catch (_) {
+      final String fallbackPath = '$mpHelpPagePath/en/$helpPage.md';
+
+      return await rootBundle.loadString(fallbackPath);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: _loadMarkdown(),
+      future: _loadMarkdown(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());
