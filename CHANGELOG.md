@@ -1,3 +1,8 @@
+## 0.2.2
+- file_picker update: might fix 'file picker not showing files on debian'
+- Updating index.html
+- Creating WASM web release
+
 ## 0.2.1
 - Fixing tests after parse() signature change
 - Fixing href on index.html for web release
