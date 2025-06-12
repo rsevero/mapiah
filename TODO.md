@@ -15,7 +15,7 @@ Version 0.2
 [X] - Line segment options
 [X] - Show direction of lines
 [X] - Add/delete line segments in existing lines
-[ ] - Release creation Linux
+[X] - Release creation Linux
 [X] - Help pages
 [X] - Quick introduction guide
 [X] - BUG: point arrow should be filled
