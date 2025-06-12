@@ -15,7 +15,7 @@ git log --pretty=format:"%H | %s | %ad | %an" --date=iso
 
 5. Copy the Mapiah info to the flatpak-flutter repository:
 ```
-cp -vr ~/devel/mapiah/packaging/linux/flatpak/io.github.rsevero.mapiah ~/devel/flatpak-flutter/io.github.rsevero.mapiah
+cp -vr ~/devel/mapiah/packaging/linux/flatpak/io.github.rsevero.mapiah/* ~/devel/flatpak-flutter/io.github.rsevero.mapiah
 ```
 
 6. Update the flatpak offline manifest:
