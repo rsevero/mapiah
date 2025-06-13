@@ -39,8 +39,11 @@ There are 2 web versions is available:
 * Javascript at [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
 * WASM at [https://mapiah.org/webappwasm](https://mapiah.org/webappwasm).
 
-### MacOS and Windows
-Waiting for someone interested in helping creating the MacOS and Windows releases. Please contact me at rsev AT pm.me.
+### Windows
+There is a Windows version available at [https://mapiah.org/downloads](https://mapiah.org/downloads).
+
+### MacOS
+Waiting for someone interested in helping creating the MacOS releases. Please contact me at rsev AT pm.me.
 
 ## Reporting bugs
 
