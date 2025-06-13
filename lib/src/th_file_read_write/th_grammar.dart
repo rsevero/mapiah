@@ -667,7 +667,9 @@ class THGrammar extends GrammarDefinition {
 
   /// point -scrap
   Parser scrapOption() => stringIgnoreCase('scrap') & scrapOptionOptions();
-  Parser scrapOptionOptions() => reference().map((value) => [value]);
+  Parser scrapOptionOptions() =>
+      (quotedString().trim() | unquotedString().flatten().trim())
+          .map((value) => [value]);
 
   /// point/line -subtype
   Parser subtypeOption() => stringIgnoreCase('subtype') & subtypeOptions();

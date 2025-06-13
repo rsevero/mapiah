@@ -1,0 +1,4 @@
+encoding  utf-8
+scrap undeclaredroadSP1 -projection plan -scale [0 0 393.7 393.7 0.0 0.0 10 10 m]
+	point 501.75 54.75 section -scrap "urSX19"
+endscrap

@@ -769,6 +769,16 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': '2025-06-13-point-section-test-1.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap undeclaredroadSP1 -projection plan -scale [ 0 0 393.7 393.7 0 0 10 10 m ]
+  point 501.75 54.75 section -scrap urSX19
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
