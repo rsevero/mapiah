@@ -1,6 +1,7 @@
 {
-  "@@locale" : "pt",
-
+  "@@locale": "pt",
+  "aboutMapiahDialogChangelog": "Alterações",
+  "aboutMapiahDialogLicense": "Licença",
   "aboutMapiahDialogMapiahVersion": "Versão {version}",
   "aboutMapiahDialogWindowTitle": "Sobre o Mapiah",
   "appTitle": "Mapiah",
@@ -11,21 +12,15 @@
   "initialPagePresentation": "Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion",
   "fileEditWindowWindowTitle": "Edição de arquivo",
   "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
-
   "helpDialogFailureToLoad": "Falha ao carregar o conteúdo de ajuda",
   "helpDialogTooltip": "Ajuda",
-
   "mapiahHomeHelpDialogTitle": "Tela inicial",
-
   "mpAngleUnitDegree": "grau",
   "mpAngleUnitGrad": "grad",
   "mpAngleUnitMil": "mil",
   "mpAngleUnitMinute": "minuto",
-
   "mpAltitudeInvalidValueErrorMessage": "Altitude inválida",
-
   "mpAuthorInvalidValueErrorMessage": "Data/intervalo de data e nome de autor válidos",
-
   "mpAzimuthAzimuthLabel": "Azimute",
   "mpAzimuthInvalidErrorMessage": "Azimute inválido",
   "mpAzimuthNorth": "Norte",
@@ -36,13 +31,10 @@
   "mpAzimuthSouthAbbreviation": "S",
   "mpAzimuthEastAbbreviation": "L",
   "mpAzimuthWestAbbreviation": "O",
-
   "mpButtonCancel": "Cancelar",
   "mpButtonOK": "OK",
-
   "mpChoiceSet": "Definido",
   "mpChoiceUnset": "Não definido",
-
   "mpCommandDescriptionAddArea": "Adicionar área",
   "mpCommandDescriptionAddAreaBorderTHID": "Adicionar borda de área",
   "mpCommandDescriptionAddElements": "Adicionar elementos",
@@ -80,12 +72,9 @@
   "mpCommandDescriptionRemovePoint": "Apagar ponto",
   "mpCommandDescriptionSetOptionToElement": "Definir opção",
   "mpCommandDescriptionSetOptionToElements": "Definir opção para diversos elementos",
-
   "mpContextInvalidValueErrorMessage": "Ambos os campos são obrigatórios",
-
   "mpCopyrightInvalidMessageErrorMessage": "Mensagem de direitos autorais inválido",
   "mpCopyrightMessageLabel": "Direitos autorais",
-
   "mpCSEPSGESRILabel": "Identificador {csOption} (1-99999)",
   "mpCSETRSLabel": "Identificador opcional ETRS (1-99999)",
   "mpCSInvalidValueErrorMessage": "Valor inválido",
@@ -93,7 +82,6 @@
   "mpCSOSGBMajorLabel": "OSGB principal",
   "mpCSOSGBMinorLabel": "OSGB menor",
   "mpCSUTMZoneNumberLabel": "Número da zona UTM (1-60)",
-
   "mpDateIntervalEndDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
   "mpDateIntervalEndDateLabel": "Data de término",
   "mpDateIntervalIntervalLabel": "Intervalo",
@@ -102,26 +90,18 @@
   "mpDateIntervalSingleDateLabel": "Data",
   "mpDateIntervalStartDateHint": "AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] ou '-'",
   "mpDateIntervalStartDateLabel": "Data de início",
-
   "mpDateValueInvalidValueErrorMessage": "Data ou intervalo inválidos",
-
   "mpDimensionsAboveLabel": "Acima",
   "mpDimensionsBelowLabel": "Abaixo",
   "mpDimensionsInvalidValueErrorMessage": "Valor inválida",
-
   "mpDistInvalidValueErrorMessage": "Distância inválida",
   "mpDistDistanceLabel": "Distância",
-
   "mpDoubleValueInvalidValueErrorMessage": "Valor inválido",
-
   "mpExploredLengthLabel": "Extensão",
-
   "mpExtendStationLabel": "Base",
-
   "mpIDInvalidValueErrorMessage": "ID inválido: deve ser uma sequência de caracteres A-Z, a-z, 0-9 e _-/ (não começando com ‘-’).",
   "mpIDNonUniqueValueErrorMessage": "IDs devem ser únicos.",
   "mpIDIDLabel": "ID",
-
   "mpLengthUnitCentimeter": "centímetro",
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "mpLengthUnitFoot": "pé",
@@ -132,34 +112,24 @@
   "mpLengthUnitMeterAbbreviation": "m",
   "mpLengthUnitYard": "jarda",
   "mpLengthUnitYardAbbreviation": "yd",
-
   "mpLineHeightInvalidValueErrorMessage": "Altura inválida",
   "mpLineHeightHeightLabel": "Altura",
-
   "mpLineSegmentTypeTypesTitle": "Tipo de segmento de linha",
-
   "mpLSizeLabel": "Tamanho",
-
   "mpMarkTextLabel": "Identificador",
-
   "mpMultipleElementsClickedAllChoice": "Todos",
   "mpMultipleElementsClickedTitle": "Vários elementos clicados",
-
   "mpMultipleEndControlPointsClickedTitle": "Vários pontos clicados",
   "mpMultipleEndControlPointsControlPoint1": "Ponto de controle 1",
   "mpMultipleEndControlPointsControlPoint2": "Ponto de controle 2",
   "mpMultipleEndControlPointsEndPoint": "Ponto final",
-
   "mpNamedScaleTiny": "Minúsculo",
   "mpNamedScaleSmall": "Pequeno",
   "mpNamedScaleNormal": "Normal",
   "mpNamedScaleLarge": "Grande",
   "mpNamedScaleHuge": "Enorme",
-
   "mpNameStationLabel": "Base",
-
   "mpOptionsEditLineSegmentTypes": "Tipos de segmentos de linha",
-
   "mpPassageHeightCeiling": "Teto",
   "mpPassageHeightCeilingLabel": "Teto",
   "mpPassageHeightDepth": "Profundidade",
@@ -174,11 +144,9 @@
   "mpPassageHeightHeight": "Altura",
   "mpPassageHeightHeightWarning": "Altura inválida",
   "mpPassageHeightHeightLabel": "Altura",
-
   "mpPersonNameInvalidFormatErrorMessage": "Nome inválido",
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'Nome Sobrenome' ou 'Nomes/Sobrenomes'",
-
   "mpPLATypeAll": "Todos",
   "mpPLATypeAreaTitle": "Tipos de área",
   "mpPLATypeCurrent": "Atual",
@@ -187,11 +155,9 @@
   "mpPLATypeLineTitle": "Tipos de linha",
   "mpPLATypeMostUsed": "Mais usados",
   "mpPLATypePointTitle": "Tipos de ponto",
-
   "mpPLScaleCommandOptionNamed": "Pré-definidos",
   "mpPLScaleCommandOptionNumeric": "Numérico",
   "mpPLScaleNumericLabel": "Tamanho",
-
   "mpPointHeightChimney": "Chaminé",
   "mpPointHeightValueChimneyLabel": "Altura",
   "mpPointHeightPit": "Poço",
@@ -202,7 +168,6 @@
   "mpPointHeightValueChimneyObservation": "Altura do teto (tratado como positivo)",
   "mpPointHeightValuePitObservation": "Profundidade do poço (tratado como negativo)",
   "mpPointHeightValueStepObservation": "Altura do degrau (tratado como positivo)",
-
   "mpProjectionAngleWarning": "Ângulo inválido (0 <= ângulo < 360)",
   "mpProjectionElevationAzimuthLabel": "Azimute",
   "mpProjectionIndexLabel": "Índice (opcional)",
@@ -210,9 +175,7 @@
   "mpProjectionModeExtended": "Retificada",
   "mpProjectionModeNone": "Nenhuma",
   "mpProjectionModePlan": "Planta baixa",
-
   "mpOptionsEditTitle": "Opções",
-
   "mpScrapScale1ValueLabel": "Real para 1 ponto",
   "mpScrapScale1ValueObservation": "Medida real por ponto do desenho",
   "mpScrapScale11Label": "Real",
@@ -235,24 +198,19 @@
   "mpScrapScaleInvalidValueError": "Referência de escala inválida",
   "mpScrapLabel": "ID de croqui",
   "mpScrapWarning": "Croqui não definido",
-
   "mpSketchChooseFileButtonLabel": "Escolher arquivo",
   "mpSketchCoordinateInvalid": "Coordenada inválida",
   "mpSketchFilenameLabel": "Arquivo",
   "mpSketchXLabel": "X",
   "mpSketchYLabel": "Y",
-
   "mpStationNamesPrefixLabel": "Prefixo",
   "mpStationNamesPrefixMessageEmpty": "Prefixo vazio",
   "mpStationNamesSuffixLabel": "Sufixo",
   "mpStationNamesSuffixMessageEmpty": "Sufixo vazio",
-
   "mpStationsAddField": "Adicionar campo",
   "mpStationsNameEmpty": "Nome vazio",
   "mpStationsNameLabel": "Base",
-
   "mpStationTypeOptionWarning": "Base não definida",
-
   "mpSubtypeEmpty": "Subtipo vazio",
   "mpSubtypeLabel": "Subtipo",
   "mpSubtypePointAirDraughtWinter": "Inverno",
@@ -289,17 +247,11 @@
   "mpSubtypeLineWaterFlowPermanent": "Permanente",
   "mpSubtypeLineWaterFlowConjectural": "Conjectural",
   "mpSubtypeLineWaterFlowIntermittent": "Intermitente",
-
   "mpTextTextLabel": "Texto",
-
   "mpTextTypeOptionWarning": "Texto não definido",
-
   "mpTitleTextLabel": "Título",
-
   "mpUnrecognizedCommandOptionTextLabel": "Opção não reconhecida",
-
   "parsingErrors": "Erros na interpretação do arquivo",
-
   "th2FileEditPageHelpDialogTitle": "Ajuda para edição de arquivo TH2",
   "th2FileEditPageAddArea": "Criar área (A)",
   "th2FileEditPageAddAreaStatusBarMessage": "Clique para criar uma área do tipo {type}",
@@ -334,7 +286,6 @@
   "th2FileEditPageZoomOutScrap": "Mostrar croqui (4)",
   "th2FileEditPageZoomToSelection": "Mostrar seleção (2)",
   "th2FilePickSelectTH2File": "Selecione um arquivo TH2",
-
   "thAreaBedrock": "Rocha matriz",
   "thAreaBlocks": "Blocos",
   "thAreaClay": "Argila",
@@ -356,7 +307,6 @@
   "thAreaSump": "Sifão",
   "thAreaU": "Usuário",
   "thAreaWater": "Água",
-
   "thElementArea": "Área",
   "thElementAreaBorderTHID": "ID de borda de área",
   "thElementBezierCurveLineSegment": "Segmento de linha Bézier",
@@ -376,7 +326,6 @@
   "thElementStraightLineSegment": "Segmento de linha reta",
   "thElementUnrecognized": "Elemento não reconhecido",
   "thElementXTherionConfig": "Configuração XTherion",
-
   "thPointAirDraught": "Corrente de ar",
   "thPointAltar": "Altar",
   "thPointAltitude": "Altitude",
@@ -493,7 +442,6 @@
   "thPointWaterDrip": "Gotejamento de água",
   "thPointWaterFlow": "Fluxo de água",
   "thPointWheelchair": "Cadeira de rodas",
-
   "thLineAbyssEntrance": "Entrada do Abismo",
   "thLineArrow": "Seta",
   "thLineBorder": "Borda",
@@ -533,7 +481,6 @@
   "thLineWalkWay": "Passarela",
   "thLineWall": "Parede",
   "thLineWaterFlow": "Fluxo de Água",
-
   "thCommandOptionAdjust": "Ajustar",
   "thCommandOptionAlign": "Alinhar",
   "thCommandOptionAltitude": "Altitude",
@@ -586,10 +533,8 @@
   "thCommandOptionUnrecognized": "Opção de Comando Não Reconhecida",
   "thCommandOptionVisibility": "Visibilidade",
   "thCommandOptionWalls": "Paredes",
-
   "thMultipleChoiceAdjustHorizontal": "Horizontal",
   "thMultipleChoiceAdjustVertical": "Vertical",
-
   "thMultipleChoiceAlignBottom": "Inferior",
   "thMultipleChoiceAlignBottomLeft": "Inferior Esquerdo",
   "thMultipleChoiceAlignBottomRight": "Inferior Direito",
@@ -599,22 +544,15 @@
   "thMultipleChoiceAlignTop": "Superior",
   "thMultipleChoiceAlignTopLeft": "Superior Esquerdo",
   "thMultipleChoiceAlignTopRight": "Superior Direito",
-
   "thMultipleChoiceOnOffOff": "Desligado",
   "thMultipleChoiceOnOffOn": "Ligado",
-
   "thMultipleChoiceOnOffAutoAuto": "Automático",
-
   "thMultipleChoiceFlipNone": "Nenhum",
-
   "thMultipleChoiceArrowPositionBegin": "Início",
   "thMultipleChoiceArrowPositionBoth": "Ambos",
   "thMultipleChoiceArrowPositionEnd": "Fim",
-
   "thMultipleChoiceLinePointGradientPoint": "Ponto",
-
   "thMultipleChoiceOutlineIn": "Dentro",
   "thMultipleChoiceOutlineOut": "Fora",
-
   "thMultipleChoicePlaceDefault": "Padrão"
 }

@@ -1,6 +1,15 @@
 {
-  "@@locale" : "en",
-
+  "@@locale": "en",
+  "aboutMapiahDialogChangelog": "Changelog",
+  "@aboutMapiahDialogChangelog": {
+    "description": "The label for the changelog section in the About dialog",
+    "type": "text"
+  },
+  "aboutMapiahDialogLicense": "License",
+  "@aboutMapiahDialogLicense": {
+    "description": "The label for the license section in the About dialog",
+    "type": "text"
+  },
   "aboutMapiahDialogMapiahVersion": "Version {version}",
   "@aboutMapiahDialogMapiahVersion": {
     "description": "The version of Mapiah for the About dialog",
@@ -9,55 +18,46 @@
       "version": {}
     }
   },
-
   "aboutMapiahDialogWindowTitle": "About Mapiah",
   "@aboutMapiahDialogWindowTitle": {
     "description": "The title for the About dialog",
     "type": "text"
   },
-
   "appTitle": "Mapiah",
   "@appTitle": {
     "description": "The title of the application",
     "type": "text"
   },
-
   "buttonClose": "Close",
   "@buttonClose": {
     "description": "The label for the close button",
     "type": "text"
   },
-
   "initialPageAboutMapiahDialog": "About Mapiah",
   "@initialPageAboutMapiahDialog": {
     "description": "The label for the about Mapiah dialog",
     "type": "text"
   },
-
   "initialPageLanguage": "Language",
   "@initialPageLanguage": {
     "description": "The label for the language selection",
     "type": "text"
   },
-
   "initialPageOpenFile": "Open file (Ctrl+O)",
   "@initialPageOpenFile": {
     "description": "The label for the open file button",
     "type": "text"
   },
-
   "initialPagePresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
   "@initialPagePresentation": {
     "description": "The initial page presentation of the application",
     "type": "text"
   },
-
   "fileEditWindowWindowTitle": "File edit",
   "@fileEditWindowWindowTitle": {
     "description": "The title for the file edit window",
     "type": "text"
   },
-
   "languageName": "{language, select, sys {System} en {English} pt {Português} other {Unknown}}",
   "@languageName": {
     "description": "The name of the language based on the language code. Translate only 'System' and your language name. Leave the other values as they are.",
@@ -66,385 +66,321 @@
       "language": {}
     }
   },
-
   "helpDialogFailureToLoad": "Failed to load help content",
   "@helpDialogFailureToLoad": {
     "description": "The message displayed when the help content fails to load",
     "type": "text"
   },
-
   "helpDialogTooltip": "Help",
   "@helpDialogTooltip": {
     "description": "The tooltip for the help dialog button",
     "type": "text"
   },
-
   "mapiahHomeHelpDialogTitle": "Main page",
   "@mapiahHomeHelpDialogTitle": {
     "description": "The title for the main page of the help dialog",
     "type": "text"
   },
-
   "mpAngleUnitDegree": "degree",
   "@mpAngleUnitDegree": {
     "description": "The description for the degree angle unit",
     "type": "text"
   },
-
   "mpAngleUnitGrad": "grad",
   "@mpAngleUnitGrad": {
     "description": "The description for the grad angle unit",
     "type": "text"
   },
-
   "mpAngleUnitMil": "mil",
   "@mpAngleUnitMil": {
     "description": "The description for the mil angle unit",
     "type": "text"
   },
-
   "mpAngleUnitMinute": "minute",
   "@mpAngleUnitMinute": {
     "description": "The description for the minute angle unit",
     "type": "text"
   },
-
   "mpAltitudeInvalidValueErrorMessage": "Invalid altitude",
   "@mpAltitudeInvalidValueErrorMessage": {
     "description": "The error message for invalid altitude value",
     "type": "text"
   },
-
   "mpAuthorInvalidValueErrorMessage": "Invalid date/interval and person name",
   "@mpAuthorInvalidValueErrorMessage": {
     "description": "The error message for invalid author value",
     "type": "text"
   },
-
   "mpAzimuthAzimuthLabel": "Azimuth",
   "@mpAzimuthAzimuthLabel": {
     "description": "The label for the azimuth type",
     "type": "text"
   },
-
   "mpAzimuthInvalidErrorMessage": "Invalid azimuth",
   "@mpAzimuthInvalidErrorMessage": {
     "description": "The error message for invalid azimuth value",
     "type": "text"
   },
-
   "mpAzimuthNorth": "North",
   "@mpAzimuthNorth": {
     "description": "The label for the north azimuth",
     "type": "text"
   },
-
   "mpAzimuthSouth": "South",
   "@mpAzimuthSouth": {
     "description": "The label for the south azimuth",
     "type": "text"
   },
-
   "mpAzimuthEast": "East",
   "@mpAzimuthEast": {
     "description": "The label for the east azimuth",
     "type": "text"
   },
-
   "mpAzimuthWest": "West",
   "@mpAzimuthWest": {
     "description": "The label for the west azimuth",
     "type": "text"
   },
-
   "mpAzimuthNorthAbbreviation": "N",
   "@mpAzimuthNorthAbbreviation": {
     "description": "The abbreviation for the north azimuth",
     "type": "text"
   },
-
   "mpAzimuthSouthAbbreviation": "S",
   "@mpAzimuthSouthAbbreviation": {
     "description": "The abbreviation for the south azimuth",
     "type": "text"
   },
-
   "mpAzimuthEastAbbreviation": "E",
   "@mpAzimuthEastAbbreviation": {
     "description": "The abbreviation for the east azimuth",
     "type": "text"
   },
-
   "mpAzimuthWestAbbreviation": "W",
   "@mpAzimuthWestAbbreviation": {
     "description": "The abbreviation for the west azimuth",
     "type": "text"
   },
-
   "mpButtonCancel": "Cancel",
   "@mpButtonCancel": {
     "description": "The label for the cancel button",
     "type": "text"
   },
-
   "mpButtonOK": "OK",
   "@mpButtonOK": {
     "description": "The label for the OK button",
     "type": "text"
   },
-
   "mpChoiceSet": "Set",
   "@mpChoiceSet": {
     "description": "The label for the set choice type",
     "type": "text"
   },
-
   "mpChoiceUnset": "Unset",
   "@mpChoiceUnset": {
     "description": "The label for the unset choice type",
     "type": "text"
   },
-
   "mpCommandDescriptionAddArea": "Add area",
   "@mpCommandDescriptionAddArea": {
     "description": "The description for the add area command",
     "type": "text"
   },
-
   "mpCommandDescriptionAddAreaBorderTHID": "Add area border line",
   "@mpCommandDescriptionAddAreaBorderTHID": {
     "description": "The description for the add area border line command",
     "type": "text"
   },
-
   "mpCommandDescriptionAddElements": "Add elements",
   "@mpCommandDescriptionAddElements": {
     "description": "The description for the add elements command",
     "type": "text"
   },
-
   "mpCommandDescriptionAddLine": "Add line",
   "@mpCommandDescriptionAddLine": {
     "description": "The description for the add line command",
     "type": "text"
   },
-
   "mpCommandDescriptionAddLineSegment": "Add line segment",
   "@mpCommandDescriptionAddLineSegment": {
     "description": "The description for the add line segment command",
     "type": "text"
   },
-
   "mpCommandDescriptionAddPoint": "Add point",
   "@mpCommandDescriptionAddPoint": {
     "description": "The description for the add point command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditAreasType": "Edit multiple areas type",
   "@mpCommandDescriptionEditAreasType": {
     "description": "The description for the edit areas type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditAreaType": "Edit area type",
   "@mpCommandDescriptionEditAreaType": {
     "description": "The description for the edit area type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditBezierCurve": "Edit Bézier curve",
   "@mpCommandDescriptionEditBezierCurve": {
     "description": "The description for the edit Bézier curve command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditLine": "Edit line",
   "@mpCommandDescriptionEditLine": {
     "description": "The description for the edit line command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditLineSegment": "Edit line segment",
   "@mpCommandDescriptionEditLineSegment": {
     "description": "The description for the edit line segment command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditLineSegmentsType": "Edit multiple line segments type",
   "@mpCommandDescriptionEditLineSegmentsType": {
     "description": "The description for the edit line segments type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditLineSegmentType": "Edit line segment type",
   "@mpCommandDescriptionEditLineSegmentType": {
     "description": "The description for the edit line segment type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditLinesType": "Edit multiple lines type",
   "@mpCommandDescriptionEditLinesType": {
     "description": "The description for the edit lines type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditLineType": "Edit line type",
   "@mpCommandDescriptionEditLineType": {
     "description": "The description for the edit line type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditPointsType": "Edit multiple points type",
   "@mpCommandDescriptionEditPointsType": {
     "description": "The description for the edit points type command",
     "type": "text"
   },
-
   "mpCommandDescriptionEditPointType": "Edit point type",
   "@mpCommandDescriptionEditPointType": {
     "description": "The description for the edit point type command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveArea": "Move area",
   "@mpCommandDescriptionMoveArea": {
     "description": "The description for the move area command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveBezierLineSegment": "Move Bézier line segment",
   "@mpCommandDescriptionMoveBezierLineSegment": {
     "description": "The description for the move Bézier line segment command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveElements": "Move elements",
   "@mpCommandDescriptionMoveElements": {
     "description": "The description for the move elements command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveLine": "Move line",
   "@mpCommandDescriptionMoveLine": {
     "description": "The description for the move line command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveLines": "Move lines",
   "@mpCommandDescriptionMoveLines": {
     "description": "The description for the move lines command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveLineSegments": "Move line segments",
   "@mpCommandDescriptionMoveLineSegments": {
     "description": "The description for the move line segments command",
     "type": "text"
   },
-
   "mpCommandDescriptionMovePoint": "Move point",
   "@mpCommandDescriptionMovePoint": {
     "description": "The description for the move point command",
     "type": "text"
   },
-
   "mpCommandDescriptionMoveStraightLineSegment": "Move straight line segment",
   "@mpCommandDescriptionMoveStraightLineSegment": {
     "description": "The description for the move straight line segment command",
     "type": "text"
   },
-
   "mpCommandDescriptionMultipleElements": "Multiple elements edit",
   "@mpCommandDescriptionMultipleElements": {
     "description": "The description for the multiple elements edit command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveArea": "Remove area",
   "@mpCommandDescriptionRemoveArea": {
     "description": "The description for the remove area command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveAreaBorderTHID": "Remove area border line",
   "@mpCommandDescriptionRemoveAreaBorderTHID": {
     "description": "The description for the remove area border line command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveElements": "Remove elements",
   "@mpCommandDescriptionRemoveElements": {
     "description": "The description for the remove elements command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveLine": "Remove line",
   "@mpCommandDescriptionRemoveLine": {
     "description": "The description for the remove line command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveLineSegment": "Remove line segment",
   "@mpCommandDescriptionRemoveLineSegment": {
     "description": "The description for the remove line segment command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveLineSegments": "Remove line segments",
   "@mpCommandDescriptionRemoveLineSegments": {
     "description": "The description for the remove line segments command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveOptionFromElement": "Remove option",
   "@mpCommandDescriptionRemoveOptionFromElement": {
     "description": "The description for the remove option command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemoveOptionFromElements": "Remove option from multiple elements",
   "@mpCommandDescriptionRemoveOptionFromElements": {
     "description": "The description for the remove option from elements command",
     "type": "text"
   },
-
   "mpCommandDescriptionRemovePoint": "Remove point",
   "@mpCommandDescriptionRemovePoint": {
     "description": "The description for the remove point command",
     "type": "text"
   },
-
   "mpCommandDescriptionSetOptionToElement": "Set option",
   "@mpCommandDescriptionSetOptionToElement": {
     "description": "The description for the set option command",
     "type": "text"
   },
-
   "mpCommandDescriptionSetOptionToElements": "Set option to multiple elements",
   "@mpCommandDescriptionSetOptionToElements": {
     "description": "The description for the set option to elements command",
     "type": "text"
   },
-
   "mpContextInvalidValueErrorMessage": "Both fields are mandatory",
   "@mpContextInvalidValueErrorMessage": {
     "description": "The error message for invalid context value",
     "type": "text"
   },
-
   "mpCopyrightInvalidMessageErrorMessage": "Invalid copyright message",
   "@mpCopyrightInvalidMessageErrorMessage": {
     "description": "The error message for invalid copyright value",
     "type": "text"
   },
-
   "mpCopyrightMessageLabel": "Copyright",
   "@mpCopyrightMessageLabel": {
     "description": "The label for the copyright message",
     "type": "text"
   },
-
   "mpCSEPSGESRILabel": "{csOption} identifier (1-99999)",
   "@mpCSEPSGESRILabel": {
     "description": "The label for the CS EPSG SGRI option",
@@ -453,1075 +389,896 @@
       "csOption": {}
     }
   },
-
   "mpCSETRSLabel": "Optional ETRS identifier (28-37)",
   "@mpCSETRSLabel": {
     "description": "The label for the CS ETRS option",
     "type": "text"
   },
-
   "mpCSInvalidValueErrorMessage": "Invalid value",
   "@mpCSInvalidValueErrorMessage": {
     "description": "The error message for invalid CS value",
     "type": "text"
   },
-
   "mpCSForOutputLabel": "For output",
   "@mpCSForOutputLabel": {
     "description": "The label for the CS for output option",
     "type": "text"
   },
-
   "mpCSOSGBMajorLabel": "OSGB major",
   "@mpCSOSGBMajorLabel": {
     "description": "The label for the CS OSGB major option",
     "type": "text"
   },
-
   "mpCSOSGBMinorLabel": "OSGB minor",
   "@mpCSOSGBMinorLabel": {
     "description": "The label for the CS OSGB minor option",
     "type": "text"
   },
-
   "mpCSUTMZoneNumberLabel": "Zone number (1-60)",
   "@mpCSUTMZoneNumberLabel": {
     "description": "The label for the CS UTM zone number option",
     "type": "text"
   },
-
   "mpDateIntervalEndDateHint": "YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]",
   "@mpDateIntervalEndDateHint": {
     "description": "The hint for the end date field in the date interval dialog",
     "type": "text"
   },
-
   "mpDateIntervalEndDateLabel": "End date",
   "@mpDateIntervalEndDateLabel": {
     "description": "The label for the end date type",
     "type": "text"
   },
-
   "mpDateIntervalIntervalLabel": "Interval",
   "@mpDateIntervalIntervalLabel": {
     "description": "The label for the interval date type",
     "type": "text"
   },
-
   "mpDateIntervalInvalidEndDateFormatErrorMessage": "Invalid end date",
   "@mpDateIntervalInvalidEndDateFormatErrorMessage": {
     "description": "The error message for invalid end date format",
     "type": "text"
   },
-
   "mpDateIntervalInvalidStartDateFormatErrorMessage": "Invalid start date",
   "@mpDateIntervalInvalidStartDateFormatErrorMessage": {
     "description": "The error message for invalid start date format",
     "type": "text"
   },
-
   "mpDateIntervalSingleDateLabel": "Date",
   "@mpDateIntervalSingleDateLabel": {
     "description": "The label for the single date type",
     "type": "text"
   },
-
   "mpDateIntervalStartDateHint": "YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] or '-'",
   "@mpDateIntervalStartDateHint": {
     "description": "The hint for the start date field in the date interval dialog",
     "type": "text"
   },
-
   "mpDateIntervalStartDateLabel": "Start date",
   "@mpDateIntervalStartDateLabel": {
     "description": "The label for the start date type",
     "type": "text"
   },
-
   "mpDateValueInvalidValueErrorMessage": "Invalid date/interval",
   "@mpDateValueInvalidValueErrorMessage": {
     "description": "The error message for invalid date value",
     "type": "text"
   },
-
   "mpDimensionsAboveLabel": "Above",
   "@mpDimensionsAboveLabel": {
     "description": "The label for the above dimension type",
     "type": "text"
   },
-
   "mpDimensionsBelowLabel": "Below",
   "@mpDimensionsBelowLabel": {
     "description": "The label for the below dimension type",
     "type": "text"
   },
-
   "mpDimensionsInvalidValueErrorMessage": "Invalid dimension value",
   "@mpDimensionsInvalidValueErrorMessage": {
     "description": "The error message for invalid dimensions value",
     "type": "text"
   },
-
   "mpDistInvalidValueErrorMessage": "Invalid numeric distance value",
   "@mpDistInvalidValueErrorMessage": {
     "description": "The error message for invalid distance value",
     "type": "text"
   },
-
   "mpDistDistanceLabel": "Distance",
   "@mpDistDistanceLabel": {
     "description": "The label for the distance type",
     "type": "text"
   },
-
   "mpDoubleValueInvalidValueErrorMessage": "Invalid numeric value",
   "@mpDoubleValueInvalidValueErrorMessage": {
     "description": "The error message for invalid double value",
     "type": "text"
   },
-
   "mpExploredLengthLabel": "Length",
   "@mpExploredLengthLabel": {
     "description": "The label for the explored length type",
     "type": "text"
   },
-
   "mpExtendStationLabel": "Station",
   "@mpExtendStationLabel": {
     "description": "The label for the extend station type",
     "type": "text"
   },
-
   "mpIDIDLabel": "ID",
   "@mpIDIDLabel": {
     "description": "The label for the ID type",
     "type": "text"
   },
-
   "mpIDInvalidValueErrorMessage": "Invalid ID",
   "@mpIDInvalidValueErrorMessage": {
     "description": "The error message for invalid ID value",
     "type": "text"
   },
-
   "mpIDNonUniqueValueErrorMessage": "ID must be unique",
   "@mpIDNonUniqueValueErrorMessage": {
     "description": "The error message for non-unique ID value",
     "type": "text"
   },
-
   "mpLengthUnitCentimeter": "centimeter",
   "@mpLengthUnitCentimeter": {
     "description": "The description for the centimeter length unit",
     "type": "text"
   },
-
   "mpLengthUnitCentimeterAbbreviation": "cm",
   "@mpLengthUnitCentimeterAbbreviation": {
     "description": "The abbreviation for the centimeter length unit",
     "type": "text"
   },
-
   "mpLengthUnitFoot": "feet",
   "@mpLengthUnitFoot": {
     "description": "The description for the foot length unit",
     "type": "text"
   },
-
   "mpLengthUnitFootAbbreviation": "ft",
   "@mpLengthUnitFootAbbreviation": {
     "description": "The abbreviation for the foot length unit",
     "type": "text"
   },
-
   "mpLengthUnitInch": "inch",
   "@mpLengthUnitInch": {
     "description": "The description for the inch length unit",
     "type": "text"
   },
-
   "mpLengthUnitInchAbbreviation": "in",
   "@mpLengthUnitInchAbbreviation": {
     "description": "The abbreviation for the inch length unit",
     "type": "text"
   },
-
   "mpLengthUnitMeter": "meter",
   "@mpLengthUnitMeter": {
     "description": "The description for the meter length unit",
     "type": "text"
   },
-
   "mpLengthUnitMeterAbbreviation": "m",
   "@mpLengthUnitMeterAbbreviation": {
     "description": "The abbreviation for the meter length unit",
     "type": "text"
   },
-
   "mpLengthUnitYard": "yard",
   "@mpLengthUnitYard": {
     "description": "The description for the yard length unit",
     "type": "text"
   },
-
   "mpLengthUnitYardAbbreviation": "yd",
   "@mpLengthUnitYardAbbreviation": {
     "description": "The abbreviation for the yard length unit",
     "type": "text"
   },
-
   "mpLineHeightInvalidValueErrorMessage": "Invalid line height",
   "@mpLineHeightInvalidValueErrorMessage": {
     "description": "The error message for invalid line height value",
     "type": "text"
   },
-
   "mpLineHeightHeightLabel": "Height",
   "@mpLineHeightHeightLabel": {
     "description": "The label for the height type",
     "type": "text"
   },
-
   "mpLineSegmentTypeTypesTitle": "Line segment type",
   "@mpLineSegmentTypeTypesTitle": {
     "description": "The title for the line segment type",
     "type": "text"
   },
-
   "mpLSizeLabel": "Size",
   "@mpLSizeLabel": {
     "description": "The label for the size type",
     "type": "text"
   },
-
   "mpMarkTextLabel": "Mark",
   "@mpMarkTextLabel": {
     "description": "The label for the mark text type",
     "type": "text"
   },
-
   "mpMultipleElementsClickedAllChoice": "All",
   "@mpMultipleElementsClickedAllChoice": {
     "description": "The label for the all choice in the multiple elements clicked dialog",
     "type": "text"
   },
-
   "mpMultipleElementsClickedTitle": "Multiple elements clicked",
   "@mpMultipleElementsClickedTitle": {
     "description": "The title for the multiple elements clicked dialog",
     "type": "text"
   },
-
   "mpMultipleEndControlPointsClickedTitle": "Multiple points clicked",
   "@mpMultipleEndControlPointsClickedTitle": {
     "description": "The title for the multiple end control points clicked dialog",
     "type": "text"
   },
-
   "mpMultipleEndControlPointsControlPoint1": "Control point 1",
   "@mpMultipleEndControlPointsControlPoint1": {
     "description": "The label for the control point 1 in the multiple end control points dialog",
     "type": "text"
   },
-
   "mpMultipleEndControlPointsControlPoint2": "Control point 2",
   "@mpMultipleEndControlPointsControlPoint2": {
     "description": "The label for the control point 2 in the multiple end control points dialog",
     "type": "text"
   },
-
   "mpMultipleEndControlPointsEndPoint": "End point",
   "@mpMultipleEndControlPointsEndPoint": {
     "description": "The label for the end point in the multiple end control points dialog",
     "type": "text"
   },
-
   "mpNamedScaleTiny": "Tiny",
   "@mpNamedScaleTiny": {
     "description": "The label for the tiny named scale",
     "type": "text"
   },
-
   "mpNamedScaleSmall": "Small",
   "@mpNamedScaleSmall": {
     "description": "The label for the small named scale",
     "type": "text"
   },
-
   "mpNamedScaleNormal": "Normal",
   "@mpNamedScaleNormal": {
     "description": "The label for the normal named scale",
     "type": "text"
   },
-
   "mpNamedScaleLarge": "Large",
   "@mpNamedScaleLarge": {
     "description": "The label for the large named scale",
     "type": "text"
   },
-
   "mpNamedScaleHuge": "Huge",
   "@mpNamedScaleHuge": {
     "description": "The label for the huge named scale",
     "type": "text"
   },
-
   "mpNameStationLabel": "Station",
   "@mpNameStationLabel": {
     "description": "The label for the name station type",
     "type": "text"
   },
-
   "mpOptionsEditLineSegmentTypes": "Line segments types",
   "@mpOptionsEditLineSegmentTypes": {
     "description": "The label for the line segment types in the options edit dialog",
     "type": "text"
   },
-
   "mpPassageHeightCeiling": "Ceiling",
   "@mpPassageHeightCeiling": {
     "description": "The label for the ceiling type",
     "type": "text"
   },
-
   "mpPassageHeightCeilingLabel": "Ceiling",
   "@mpPassageHeightCeilingLabel": {
     "description": "The label for the ceiling type",
     "type": "text"
   },
-
   "mpPassageHeightDepth": "Depth",
   "@mpPassageHeightDepth": {
     "description": "The label for the depth type",
     "type": "text"
   },
-
   "mpPassageHeightDepthWarning": "Invalid depth",
   "@mpPassageHeightDepthWarning": {
     "description": "The warning message for invalid depth",
     "type": "text"
   },
-
   "mpPassageHeightDepthLabel": "Depth",
   "@mpPassageHeightDepthLabel": {
     "description": "The label for the depth type",
     "type": "text"
   },
-
   "mpPassageHeightDistanceBetweenFloorAndCeiling": "Distance floor ceiling",
   "@mpPassageHeightDistanceBetweenFloorAndCeiling": {
     "description": "The label for the distance between floor and ceiling type",
     "type": "text"
   },
-
   "mpPassageHeightDistanceBetweenFloorAndCeilingLabel": "Floor to ceiling",
   "@mpPassageHeightDistanceBetweenFloorAndCeilingLabel": {
     "description": "The label for the distance between floor and ceiling type",
     "type": "text"
   },
-
   "mpPassageHeightDistanceToCeilingAndDistanceToFloor": "Distance to ceiling and to floor",
   "@mpPassageHeightDistanceToCeilingAndDistanceToFloor": {
     "description": "The label for the distance to ceiling and distance to floor type",
     "type": "text"
   },
-
   "mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel": "To ceiling/to floor",
   "@mpPassageHeightDistanceToCeilingAndDistanceToFloorLabel": {
     "description": "The label for the distance to ceiling and distance to floor type",
     "type": "text"
   },
-
   "mpPassageHeightFloor": "Floor",
   "@mpPassageHeightFloor": {
     "description": "The label for the floor type",
     "type": "text"
   },
-
   "mpPassageHeightFloorLabel": "Floor",
   "@mpPassageHeightFloorLabel": {
     "description": "The label for the floor type",
     "type": "text"
   },
-
   "mpPassageHeightHeight": "Height",
   "@mpPassageHeightHeight": {
     "description": "The label for the height type",
     "type": "text"
   },
-
   "mpPassageHeightHeightLabel": "Height",
   "@mpPassageHeightHeightLabel": {
     "description": "The label for the height type",
     "type": "text"
   },
-
   "mpPassageHeightHeightWarning": "Invalid height",
   "@mpPassageHeightHeightWarning": {
     "description": "The warning message for invalid height",
     "type": "text"
   },
-
   "mpPersonNameInvalidFormatErrorMessage": "Invalid person name",
   "@mpPersonNameInvalidFormatErrorMessage": {
     "description": "The error message for invalid person name format",
     "type": "text"
   },
-
   "mpPersonNameLabel": "Name",
   "@mpPersonNameLabel": {
     "description": "The label for the name field in the person name dialog",
     "type": "text"
   },
-
   "mpPersonNameHint": "'FirstName Surname' or 'FirstNames/Surnames'",
   "@mpPersonNameHint": {
     "description": "The hint for the name field in the person name dialog",
     "type": "text"
   },
-
   "mpPLATypeAll": "All",
   "@mpPLATypeAll": {
     "description": "The label for the all type",
     "type": "text"
   },
-
   "mpPLATypeAreaTitle": "Area types",
   "@mpPLATypeAreaTitle": {
     "description": "The title for the area types",
     "type": "text"
   },
-
   "mpPLATypeCurrent": "Current",
   "@mpPLATypeCurrent": {
     "description": "The label for the current type",
     "type": "text"
   },
-
   "mpPLATypeDropdownSelectATypeLabel": "Select a type",
   "@mpPLATypeDropdownSelectATypeLabel": {
     "description": "The label for the dropdown select a type",
     "type": "text"
   },
-
   "mpPLATypeLastUsed": "Last used",
   "@mpPLATypeLastUsed": {
     "description": "The label for the last used type",
     "type": "text"
   },
-
   "mpPLATypeLineTitle": "Line types",
   "@mpPLATypeLineTitle": {
     "description": "The title for the line types",
     "type": "text"
   },
-
   "mpPLATypeMostUsed": "Most used",
   "@mpPLATypeMostUsed": {
     "description": "The label for the most used type",
     "type": "text"
   },
-
   "mpPLATypePointTitle": "Point types",
   "@mpPLATypePointTitle": {
     "description": "The title for the point types",
     "type": "text"
   },
-
   "mpPLScaleCommandOptionNamed": "Named",
   "@mpPLScaleCommandOptionNamed": {
     "description": "The label for the named scale option",
     "type": "text"
   },
-
   "mpPLScaleCommandOptionNumeric": "Numeric",
   "@mpPLScaleCommandOptionNumeric": {
     "description": "The label for the numeric scale option",
     "type": "text"
   },
-
   "mpPLScaleNumericLabel": "Size",
   "@mpPLScaleNumericLabel": {
     "description": "The label for the numeric scale type",
     "type": "text"
   },
-
   "mpPointHeightChimney": "Chimney",
   "@mpPointHeightChimney": {
     "description": "The label for the chimney type",
     "type": "text"
   },
-
   "mpPointHeightValueChimneyLabel": "Height",
   "@mpPointHeightValueChimneyLabel": {
     "description": "The label for the chimney height type",
     "type": "text"
   },
-
   "mpPointHeightLengthWarning": "Invalid length",
   "@mpPointHeightLengthWarning": {
     "description": "The warning message for invalid length",
     "type": "text"
   },
-
   "mpPointHeightPit": "Pit",
   "@mpPointHeightPit": {
     "description": "The label for the pit type",
     "type": "text"
   },
-
   "mpPointHeightValuePitLabel": "Depth",
   "@mpPointHeightValuePitLabel": {
     "description": "The label for the pit depth type",
     "type": "text"
   },
-
   "mpPointHeightStep": "Step",
   "@mpPointHeightStep": {
     "description": "The label for the step type",
     "type": "text"
   },
-
   "mpPointHeightValueStepLabel": "Height",
   "@mpPointHeightValueStepLabel": {
     "description": "The label for the step height type",
     "type": "text"
   },
-
   "mpPointHeightValueChimneyObservation": "Chimeny height (treated as positive)",
   "@mpPointHeightValueChimneyObservation": {
     "description": "The label for the height observation type",
     "type": "text"
   },
-
   "mpPointHeightValuePitObservation": "Pit depth (treated as negative)",
   "@mpPointHeightValuePitObservation": {
     "description": "The label for the depth observation type",
     "type": "text"
   },
-
   "mpPointHeightValueStepObservation": "Step height (treated as positive)",
   "@mpPointHeightValueStepObservation": {
     "description": "The label for the step observation type",
     "type": "text"
   },
-
   "mpProjectionAngleWarning": "Invalid angle (0 <= angle < 360)",
   "@mpProjectionAngleWarning": {
     "description": "The warning message for invalid angle",
     "type": "text"
   },
-
   "mpProjectionElevationAzimuthLabel": "Azimuth",
   "@mpProjectionElevationAzimuthLabel": {
     "description": "The label for the azimuth type",
     "type": "text"
   },
-
   "mpProjectionIndexLabel": "Index (optional)",
   "@mpProjectionIndexLabel": {
     "description": "The label for the index type",
     "type": "text"
   },
-
   "mpProjectionModeElevation": "Elevation",
   "@mpProjectionModeElevation": {
     "description": "The label for the elevation projection mode",
     "type": "text"
   },
-
   "mpProjectionModeExtended": "Extended",
   "@mpProjectionModeExtended": {
     "description": "The label for the extended projection mode",
     "type": "text"
   },
-
   "mpProjectionModeNone": "None",
   "@mpProjectionModeNone": {
     "description": "The label for the none projection mode",
     "type": "text"
   },
-
   "mpProjectionModePlan": "Plan",
   "@mpProjectionModePlan": {
     "description": "The label for the plan projection mode",
     "type": "text"
   },
-
   "mpOptionsEditTitle": "Options",
   "@mpOptionsEditTitle": {
     "description": "The title for the options edit dialog",
     "type": "text"
   },
-
   "mpScrapScale1ValueLabel": "Real to 1 point",
   "@mpScrapScale1ValueLabel": {
     "description": "The label for the real to 1 point type",
     "type": "text"
   },
-
   "mpScrapScale1ValueObservation": "Real units per drawing point",
   "@mpScrapScale1ValueObservation": {
     "description": "The label for the real units per drawing point observation type",
     "type": "text"
   },
-
   "mpScrapScale11Label": "Real",
   "@mpScrapScale11Label": {
     "description": "The label for the real units per drawing point type",
     "type": "text"
   },
-
   "mpScrapScale2ValuesLabel": "Real to points",
   "@mpScrapScale2ValuesLabel": {
     "description": "The label for the real to points type",
     "type": "text"
   },
-
   "mpScrapScale2ValueObservation": "real units per drawing points",
   "@mpScrapScale2ValueObservation": {
     "description": "The label for the real units per drawing points observation type",
     "type": "text"
   },
-
   "mpScrapScale21Label": "Drawing",
   "@mpScrapScale21Label": {
     "description": "The label for the drawing units per drawing point type",
     "type": "text"
   },
-
   "mpScrapScale22Label": "Real",
   "@mpScrapScale22Label": {
     "description": "The label for the real units per drawing point type",
     "type": "text"
   },
-
   "mpScrapScale8ValuesLabel": "Real to drawing coordinates",
   "@mpScrapScale8ValuesLabel": {
     "description": "The label for the real to drawing coordinates type",
     "type": "text"
   },
-
   "mpScrapScale8ValueObservation": "Real coordinates per drawing coordinates",
   "@mpScrapScale8ValueObservation": {
     "description": "The label for the real coordinates per drawing coordinates observation type",
     "type": "text"
   },
-
   "mpScrapScale81Label": "Draw X1",
   "@mpScrapScale81Label": {
     "description": "The label for the drawing X1 type",
     "type": "text"
   },
-
   "mpScrapScale82Label": "Draw Y1",
   "@mpScrapScale82Label": {
     "description": "The label for the drawing Y1 type",
     "type": "text"
   },
-
   "mpScrapScale83Label": "Draw X2",
   "@mpScrapScale83Label": {
     "description": "The label for the drawing X2 type",
     "type": "text"
   },
-
   "mpScrapScale84Label": "Draw Y2",
   "@mpScrapScale84Label": {
     "description": "The label for the drawing Y2 type",
     "type": "text"
   },
-
   "mpScrapScale85Label": "Real X1",
   "@mpScrapScale85Label": {
     "description": "The label for the real X1 type",
     "type": "text"
   },
-
   "mpScrapScale86Label": "Real Y1",
   "@mpScrapScale86Label": {
     "description": "The label for the real Y1 type",
     "type": "text"
   },
-
   "mpScrapScale87Label": "Real X2",
   "@mpScrapScale87Label": {
     "description": "The label for the real X2 type",
     "type": "text"
   },
-
   "mpScrapScale88Label": "Real Y2",
   "@mpScrapScale88Label": {
     "description": "The label for the real Y2 type",
     "type": "text"
   },
-
   "mpScrapFreeText": "Free text",
   "@mpScrapFreeText": {
     "description": "The label for the free text scrap type",
     "type": "text"
   },
-
   "mpScrapFromFile": "From file",
   "@mpScrapFromFile": {
     "description": "The label for the from file scrap type",
     "type": "text"
   },
-
   "mpScrapScaleInvalidValueError": "Invalid scale ref",
   "@mpScrapScaleInvalidValueError": {
     "description": "The error message for invalid scale reference",
     "type": "text"
   },
-
   "mpScrapLabel": "Scrap ID",
   "@mpScrapLabel": {
     "description": "The label for the scrap ID type",
     "type": "text"
   },
-
   "mpScrapWarning": "Scrap not set",
   "@mpScrapWarning": {
     "description": "The warning message for the scrap option",
     "type": "text"
   },
-
   "mpSketchChooseFileButtonLabel": "Choose file",
   "@mpSketchChooseFileButtonLabel": {
     "description": "The label for the choose file button",
     "type": "text"
   },
-
   "mpSketchCoordinateInvalid": "Invalid coordinate",
   "@mpSketchCoordinateInvalid": {
     "description": "The error message for invalid coordinate",
     "type": "text"
   },
-
   "mpSketchFilenameLabel": "Filename",
   "@mpSketchFilenameLabel": {
     "description": "The label for the filename type",
     "type": "text"
   },
-
   "mpSketchXLabel": "X",
   "@mpSketchXLabel": {
     "description": "The label for the X coordinate type",
     "type": "text"
   },
-
   "mpSketchYLabel": "Y",
   "@mpSketchYLabel": {
     "description": "The label for the Y coordinate type",
     "type": "text"
   },
-
   "mpStationNamesPrefixLabel": "Prefix",
   "@mpStationNamesPrefixLabel": {
     "description": "The label for the station names prefix type",
     "type": "text"
   },
-
   "mpStationNamesPrefixMessageEmpty": "Prefix empty",
   "@mpStationNamesPrefixMessageEmpty": {
     "description": "The error message for empty station names prefix",
     "type": "text"
   },
-
   "mpStationNamesSuffixLabel": "Suffix",
   "@mpStationNamesSuffixLabel": {
     "description": "The label for the station names suffix type",
     "type": "text"
   },
-
   "mpStationNamesSuffixMessageEmpty": "Suffix empty",
   "@mpStationNamesSuffixMessageEmpty": {
     "description": "The error message for empty station names suffix",
     "type": "text"
   },
-
   "mpStationsAddField": "Add field",
   "@mpStationsAddField": {
     "description": "The label for the add field button",
     "type": "text"
   },
-
   "mpStationsNameEmpty": "Station name empty",
   "@mpStationsNameEmpty": {
     "description": "The error message for empty station name",
     "type": "text"
   },
-
   "mpStationsNameLabel": "Station",
   "@mpStationsNameLabel": {
     "description": "The label for the station name type",
     "type": "text"
   },
-
   "mpStationTypeOptionWarning": "Station not set",
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",
     "type": "text"
   },
-
   "mpSubtypeEmpty": "Subtype empty",
   "@mpSubtypeEmpty": {
     "description": "The error message for empty subtype",
     "type": "text"
   },
-
   "mpSubtypeLabel": "Subtype",
   "@mpSubtypeLabel": {
     "description": "The label for the subtype type",
     "type": "text"
   },
-
   "mpSubtypePointAirDraughtWinter": "Winter",
   "@mpSubtypePointAirDraughtWinter": {
     "description": "The label for the winter subtype",
     "type": "text"
   },
-
   "mpSubtypePointAirDraughtSummer": "Summer",
   "@mpSubtypePointAirDraughtSummer": {
     "description": "The label for the summer subtype",
     "type": "text"
   },
-
   "mpSubtypePointAirDraughtUndefined": "Undefined",
   "@mpSubtypePointAirDraughtUndefined": {
     "description": "The label for the undefined subtype",
     "type": "text"
   },
-
   "mpSubtypePointStationTemporary": "Temporary",
   "@mpSubtypePointStationTemporary": {
     "description": "The label for the temporary subtype",
     "type": "text"
   },
-
   "mpSubtypePointStationPainted": "Painted",
   "@mpSubtypePointStationPainted": {
     "description": "The label for the painted subtype",
     "type": "text"
   },
-
   "mpSubtypePointStationNatural": "Natural",
   "@mpSubtypePointStationNatural": {
     "description": "The label for the natural subtype",
     "type": "text"
   },
-
   "mpSubtypePointStationFixed": "Fixed",
   "@mpSubtypePointStationFixed": {
     "description": "The label for the fixed subtype",
     "type": "text"
   },
-
   "mpSubtypePointWaterFlowPermanent": "Permanent",
   "@mpSubtypePointWaterFlowPermanent": {
     "description": "The label for the permanent water flow subtype",
     "type": "text"
   },
-
   "mpSubtypePointWaterFlowIntermittent": "Intermittent",
   "@mpSubtypePointWaterFlowIntermittent": {
     "description": "The label for the intermittent water flow subtype",
     "type": "text"
   },
-
   "mpSubtypePointWaterFlowPaleo": "Paleo",
   "@mpSubtypePointWaterFlowPaleo": {
     "description": "The label for the paleo water flow subtype",
     "type": "text"
   },
-
   "mpSubtypeLineBorderInvisible": "Invisible",
   "@mpSubtypeLineBorderInvisible": {
     "description": "The label for the invisible border subtype",
     "type": "text"
   },
-
   "mpSubtypeLineBorderPresumed": "Presumed",
   "@mpSubtypeLineBorderPresumed": {
     "description": "The label for the presumed border subtype",
     "type": "text"
   },
-
   "mpSubtypeLineBorderTemporary": "Temporary",
   "@mpSubtypeLineBorderTemporary": {
     "description": "The label for the temporary border subtype",
     "type": "text"
   },
-
   "mpSubtypeLineBorderVisible": "Visible",
   "@mpSubtypeLineBorderVisible": {
     "description": "The label for the visible border subtype",
     "type": "text"
   },
-
   "mpSubtypeLineSurveyCave": "Cave",
   "@mpSubtypeLineSurveyCave": {
     "description": "The label for the cave survey subtype",
     "type": "text"
   },
-
   "mpSubtypeLineSurveySurface": "Surface",
   "@mpSubtypeLineSurveySurface": {
     "description": "The label for the surface survey subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallBedrock": "Bedrock",
   "@mpSubtypeLineWallBedrock": {
     "description": "The label for the bedrock wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallBlocks": "Blocks",
   "@mpSubtypeLineWallBlocks": {
     "description": "The label for the blocks wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallClay": "Clay",
   "@mpSubtypeLineWallClay": {
     "description": "The label for the clay wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallDebris": "Debris",
   "@mpSubtypeLineWallDebris": {
     "description": "The label for the debris wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallFlowstone": "Flowstone",
   "@mpSubtypeLineWallFlowstone": {
     "description": "The label for the flowstone wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallIce": "Ice",
   "@mpSubtypeLineWallIce": {
     "description": "The label for the ice wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallInvisible": "Invisible",
   "@mpSubtypeLineWallInvisible": {
     "description": "The label for the invisible wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallMoonmilk": "Moonmilk",
   "@mpSubtypeLineWallMoonmilk": {
     "description": "The label for the moonmilk wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallOverlying": "Overlying",
   "@mpSubtypeLineWallOverlying": {
     "description": "The label for the overlying wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallPebbles": "Pebbles",
   "@mpSubtypeLineWallPebbles": {
     "description": "The label for the pebbles wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallPit": "Pit",
   "@mpSubtypeLineWallPit": {
     "description": "The label for the pit wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallPresumed": "Presumed",
   "@mpSubtypeLineWallPresumed": {
     "description": "The label for the presumed wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallSand": "Sand",
   "@mpSubtypeLineWallSand": {
     "description": "The label for the sand wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallUnderlying": "Underlying",
   "@mpSubtypeLineWallUnderlying": {
     "description": "The label for the underlying wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWallUnsurveyed": "Unsurveyed",
   "@mpSubtypeLineWallUnsurveyed": {
     "description": "The label for the unsurveyed wall subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWaterFlowPermanent": "Permanent",
   "@mpSubtypeLineWaterFlowPermanent": {
     "description": "The label for the permanent water flow line subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWaterFlowConjectural": "Conjectural",
   "@mpSubtypeLineWaterFlowConjectural": {
     "description": "The label for the conjectural water flow line subtype",
     "type": "text"
   },
-
   "mpSubtypeLineWaterFlowIntermittent": "Intermittent",
   "@mpSubtypeLineWaterFlowIntermittent": {
     "description": "The label for the intermittent water flow line subtype",
     "type": "text"
   },
-
   "mpTextTextLabel": "Text",
   "@mpTextTextLabel": {
     "description": "The label for the text type",
     "type": "text"
   },
-
   "mpTextTypeOptionWarning": "Text not set",
   "@mpTextTypeOptionWarning": {
     "description": "The warning message for the text type option",
     "type": "text"
   },
-
   "mpTitleTextLabel": "Title",
   "@mpTitleTextLabel": {
     "description": "The label for the title type",
     "type": "text"
   },
-
   "mpUnrecognizedCommandOptionTextLabel": "Unrecognized option",
   "@mpUnrecognizedCommandOptionTextLabel": {
     "description": "The label for the unrecognized command option",
     "type": "text"
   },
-
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog",
     "type": "text"
   },
-
   "th2FileEditPageHelpDialogTitle": "TH2 File Edit Help",
   "@th2FileEditPageHelpDialogTitle": {
     "description": "The title for the TH2 File Edit help dialog",
     "type": "text"
   },
-
   "th2FileEditPageAddArea": "Add area (A)",
   "@th2FileEditPageAddArea": {
     "description": "The label for the add area button",
     "type": "text"
   },
-
   "th2FileEditPageAddAreaStatusBarMessage": "Click to add a {type} area",
   "@th2FileEditPageAddAreaStatusBarMessage": {
     "description": "The status bar message for the add area tool",
@@ -1530,19 +1287,16 @@
       "type": {}
     }
   },
-
   "th2FileEditPageAddElementOptions": "Add element",
   "@th2FileEditPageAddElementOptions": {
     "description": "The label for the add element options button",
     "type": "text"
   },
-
   "th2FileEditPageAddLine": "Add line (L)",
   "@th2FileEditPageAddLine": {
     "description": "The label for the add line button",
     "type": "text"
   },
-
   "th2FileEditPageAddLineStatusBarMessage": "Click to add a {type} line",
   "@th2FileEditPageAddLineStatusBarMessage": {
     "description": "The status bar message for the add line tool",
@@ -1551,13 +1305,11 @@
       "type": {}
     }
   },
-
   "th2FileEditPageAddPoint": "Add point (P)",
   "@th2FileEditPageAddPoint": {
     "description": "The label for the add point button",
     "type": "text"
   },
-
   "th2FileEditPageAddPointStatusBarMessage": "Click to add a {type} point",
   "@th2FileEditPageAddPointStatusBarMessage": {
     "description": "The status bar message for the add point tool",
@@ -1566,25 +1318,21 @@
       "type": {}
     }
   },
-
   "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+C)",
   "@th2FileEditPageChangeActiveScrapTool": {
     "description": "The label for the change active scrap tool button",
     "type": "text"
   },
-
   "th2FileEditPageChangeActiveScrapTitle": "Change active scrap",
   "@th2FileEditPageChangeActiveScrapTitle": {
     "description": "The title for the change active scrap dialog",
     "type": "text"
   },
-
   "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
   "@th2FileEditPageEmptySelectionStatusBarMessage": {
     "description": "The status bar message for the empty selection",
     "type": "text"
   },
-
   "th2FileEditPageLoadingFile": "Loading file {filename} ...",
   "@th2FileEditPageLoadingFile": {
     "description": "The label for the loading file message",
@@ -1593,13 +1341,11 @@
       "filename": {}
     }
   },
-
   "th2FileEditPageNodeEditTool": "Node edit (N)",
   "@th2FileEditPageNodeEditTool": {
     "description": "The label for the node edit tool button",
     "type": "text"
   },
-
   "th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": "{amount} line(s) selected",
   "@th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": {
     "description": "The label for only lines selected status bar messagee",
@@ -1608,7 +1354,6 @@
       "amount": {}
     }
   },
-
   "th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage": "{amount} point(s) selected",
   "@th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage": {
     "description": "The label for only points selected status bar messagee",
@@ -1617,7 +1362,6 @@
       "amount": {}
     }
   },
-
   "th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage": "{pointsAmount} point(s) and {linesAmount} line(s) selected",
   "@th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage": {
     "description": "The label for points and lines selected status bar messagee",
@@ -1627,50 +1371,41 @@
       "linesAmount": {}
     }
   },
-
   "th2FileEditPageNoUndoAvailable": "No undo available",
   "@th2FileEditPageNoUndoAvailable": {
     "description": "The label for the no undo available message",
     "type": "text"
   },
-
   "th2FileEditPageNoRedoAvailable": "No redo available",
   "@th2FileEditPageNoRedoAvailable": {
     "description": "The label for the no redo available message",
     "type": "text"
   },
-
   "th2FileEditPageOptionTool": "Option edit (O)",
   "@th2FileEditPageOptionTool": {
     "description": "The label for the option tool button",
     "type": "text"
   },
-
   "th2FileEditPagePanTool": "Pan",
   "@th2FileEditPagePanTool": {
     "description": "The label for the pan tool button",
     "type": "text"
   },
-
-
   "th2FileEditPageRemoveButton": "Remove (Del)",
   "@th2FileEditPageRemoveButton": {
     "description": "The label for the remove tool button",
     "type": "text"
   },
-
   "th2FileEditPageSave": "Save (Ctrl+S)",
   "@th2FileEditPageSave": {
     "description": "The label for the save button",
     "type": "text"
   },
-
   "th2FileEditPageSaveAs": "Save as (Shift+Ctrl+S)",
   "@th2FileEditPageSaveAs": {
     "description": "The label for the save as button",
     "type": "text"
   },
-
   "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Y)",
   "@th2FileEditPageRedo": {
     "description": "The label for the redo shortcut",
@@ -1679,14 +1414,11 @@
       "redoDescription": {}
     }
   },
-
   "th2FileEditPageSelectTool": "Select (C)",
   "@th2FileEditPageSelectTool": {
     "description": "The label for the select tool button",
     "type": "text"
   },
-
-
   "th2FileEditPageUndo": "Undo '{undoDescription}' (Ctrl+Z)",
   "@th2FileEditPageUndo": {
     "description": "The label for the undo shortcut",
@@ -1695,1663 +1427,1386 @@
       "undoDescription": {}
     }
   },
-
   "th2FileEditPageZoomIn": "Zoom In (+)",
   "@th2FileEditPageZoomIn": {
     "description": "The label for the zoom in button",
     "type": "text"
   },
-
   "th2FileEditPageZoomOneToOne": "Zoom 1:1 (1)",
   "@th2FileEditPageZoomOneToOne": {
     "description": "The label for the zoom 1:1 button",
     "type": "text"
   },
-
   "th2FileEditPageZoomOptions": "Zoom Options",
   "@th2FileEditPageZoomOptions": {
     "description": "The label for the zoom options button",
     "type": "text"
   },
-
   "th2FileEditPageZoomOut": "Zoom Out (-)",
   "@th2FileEditPageZoomOut": {
     "description": "The label for the zoom out button",
     "type": "text"
   },
-
   "th2FileEditPageZoomOutFile": "Show file (3)",
   "@th2FileEditPageZoomOutFile": {
     "description": "The label for the show file zoom button",
     "type": "text"
   },
-
   "th2FileEditPageZoomOutScrap": "Show scrap (4)",
   "@th2FileEditPageZoomOutScrap": {
     "description": "The label for the show scrap zoom button",
     "type": "text"
   },
-
   "th2FileEditPageZoomToSelection": "Zoom to selection (2)",
   "@th2FileEditPageZoomToSelection": {
     "description": "The label for the zoom to selection button",
     "type": "text"
   },
-
   "th2FilePickSelectTH2File": "Select a TH2 file",
   "@th2FilePickSelectTH2File": {
     "description": "The label for the TH2 file selection dialog",
     "type": "text"
   },
-
   "thAreaBedrock": "Bedrock",
   "@thAreaBedrock": {
     "description": "The label for the bedrock area type",
     "type": "text"
   },
-
   "thAreaBlocks": "Blocks",
   "@thAreaBlocks": {
     "description": "The label for the blocks area type",
     "type": "text"
   },
-
   "thAreaClay": "Clay",
   "@thAreaClay": {
     "description": "The label for the clay area type",
     "type": "text"
   },
-
   "thAreaDebris": "Debris",
   "@thAreaDebris": {
     "description": "The label for the debris area type",
     "type": "text"
   },
-
   "thAreaFlowstone": "Flowstone",
   "@thAreaFlowstone": {
     "description": "The label for the flowstone area type",
     "type": "text"
   },
-
   "thAreaIce": "Ice",
   "@thAreaIce": {
     "description": "The label for the ice area type",
     "type": "text"
   },
-
   "thAreaMoonmilk": "Moonmilk",
   "@thAreaMoonmilk": {
     "description": "The label for the moonmilk area type",
     "type": "text"
   },
-
   "thAreaMudcrack": "Mudcrack",
   "@thAreaMudcrack": {
     "description": "The label for the mudcrack area type",
     "type": "text"
   },
-
   "thAreaPebbles": "Pebbles",
   "@thAreaPebbles": {
     "description": "The label for the pebbles area type",
     "type": "text"
   },
-
   "thAreaPillar": "Pillar",
   "@thAreaPillar": {
     "description": "The label for the pillar area type",
     "type": "text"
   },
-
   "thAreaPillars": "Pillars",
   "@thAreaPillars": {
     "description": "The label for the pillars area type",
     "type": "text"
   },
-
   "thAreaPillarsWithCurtains": "Pillars with Curtains",
   "@thAreaPillarsWithCurtains": {
     "description": "The label for the pillars with curtains area type",
     "type": "text"
   },
-
   "thAreaPillarWithCurtains": "Pillar with Curtains",
   "@thAreaPillarWithCurtains": {
     "description": "The label for the pillar with curtains area type",
     "type": "text"
   },
-
   "thAreaSand": "Sand",
   "@thAreaSand": {
     "description": "The label for the sand area type",
     "type": "text"
   },
-
   "thAreaSnow": "Snow",
   "@thAreaSnow": {
     "description": "The label for the snow area type",
     "type": "text"
   },
-
   "thAreaStalactite": "Stalactite",
   "@thAreaStalactite": {
     "description": "The label for the stalactite area type",
     "type": "text"
   },
-
   "thAreaStalactiteStalagmite": "Stalactite-Stalagmite",
   "@thAreaStalactiteStalagmite": {
     "description": "The label for the stalactite-stalagmite area type",
     "type": "text"
   },
-
   "thAreaStalagmite": "Stalagmite",
   "@thAreaStalagmite": {
     "description": "The label for the stalagmite area type",
     "type": "text"
   },
-
   "thAreaSump": "Sump",
   "@thAreaSump": {
     "description": "The label for the sump area type",
     "type": "text"
   },
-
   "thAreaU": "User",
   "@thAreaU": {
     "description": "The label for the user defined area type",
     "type": "text"
   },
-
   "thAreaWater": "Water",
   "@thAreaWater": {
     "description": "The label for the water area type",
     "type": "text"
   },
-
   "thElementArea": "Area",
   "@thElementArea": {
     "description": "The label for the area element type",
     "type": "text"
   },
-
   "thElementAreaBorderTHID": "Area border ID",
   "@thElementAreaBorderTHID": {
     "description": "The label for the area border ID element type",
     "type": "text"
   },
-
   "thElementBezierCurveLineSegment": "Bézier curve line segment",
   "@thElementBezierCurveLineSegment": {
     "description": "The label for the Bézier curve line segment element type",
     "type": "text"
   },
-
   "thElementComment": "Comment",
   "@thElementComment": {
     "description": "The label for the comment element type",
     "type": "text"
   },
-
   "thElementEmptyLine": "Empty line",
   "@thElementEmptyLine": {
     "description": "The label for the empty line element type",
     "type": "text"
   },
-
   "thElementEncoding": "Encoding",
   "@thElementEncoding": {
     "description": "The label for the encoding element type",
     "type": "text"
   },
-
   "thElementEndArea": "End area",
   "@thElementEndArea": {
     "description": "The label for the end area element type",
     "type": "text"
   },
-
   "thElementEndComment": "End comment",
   "@thElementEndComment": {
     "description": "The label for the end comment element type",
     "type": "text"
   },
-
   "thElementEndLine": "End line",
   "@thElementEndLine": {
     "description": "The label for the end line element type",
     "type": "text"
   },
-
   "thElementEndScrap": "End scrap",
   "@thElementEndScrap": {
     "description": "The label for the end scrap element type",
     "type": "text"
   },
-
   "thElementLine": "Line",
   "@thElementLine": {
     "description": "The label for the line element type",
     "type": "text"
   },
-
   "thElementLineSegment": "Line segment",
   "@thElementLineSegment": {
     "description": "The label for the line segment element type",
     "type": "text"
   },
-
   "thElementMultilineCommentContent": "Multiline comment content",
   "@thElementMultilineCommentContent": {
     "description": "The label for the multiline comment content element type",
     "type": "text"
   },
-
   "thElementMultilineComment": "Multiline comment",
   "@thElementMultilineComment": {
     "description": "The label for the multiline comment element type",
     "type": "text"
   },
-
   "thElementPoint": "Point",
   "@thElementPoint": {
     "description": "The label for the point element type",
     "type": "text"
   },
-
   "thElementScrap": "Scrap",
   "@thElementScrap": {
     "description": "The label for the scrap element type",
     "type": "text"
   },
-
   "thElementStraightLineSegment": "Straight line segment",
   "@thElementStraightLineSegment": {
     "description": "The label for the straight line segment element type",
     "type": "text"
   },
-
   "thElementUnrecognized": "Unrecognized ",
   "@thElementUnrecognized": {
     "description": "The label for the unrecognized element type",
     "type": "text"
   },
-
   "thElementXTherionConfig": "XTherion config",
   "@thElementXTherionConfig": {
     "description": "The label for the XTherion config element type",
     "type": "text"
   },
-
   "thPointAirDraught": "Air draught",
   "@thPointAirDraught": {
     "description": "The label for the air draught point type",
     "type": "text"
   },
-
   "thPointAltar": "Altar",
   "@thPointAltar": {
     "description": "The label for the altar point type",
     "type": "text"
   },
-
   "thPointAltitude": "Altitude",
   "@thPointAltitude": {
     "description": "The label for the altitude point type",
     "type": "text"
   },
-
   "thPointAnastomosis": "Anastomosis",
   "@thPointAnastomosis": {
     "description": "The label for the anastomosis point type",
     "type": "text"
   },
-
   "thPointAnchor": "Anchor",
   "@thPointAnchor": {
     "description": "The label for the anchor point type",
     "type": "text"
   },
-
   "thPointAragonite": "Aragonite",
   "@thPointAragonite": {
     "description": "The label for the aragonite point type",
     "type": "text"
   },
-
   "thPointArcheoExcavation": "Archeo Excavation",
   "@thPointArcheoExcavation": {
     "description": "The label for the archeo excavation point type",
     "type": "text"
   },
-
   "thPointArcheoMaterial": "Archeo Material",
   "@thPointArcheoMaterial": {
     "description": "The label for the archeo material point type",
     "type": "text"
   },
-
   "thPointAudio": "Audio",
   "@thPointAudio": {
     "description": "The label for the audio point type",
     "type": "text"
   },
-
   "thPointBat": "Bat",
   "@thPointBat": {
     "description": "The label for the bat point type",
     "type": "text"
   },
-
   "thPointBedrock": "Bedrock",
   "@thPointBedrock": {
     "description": "The label for the bedrock point type",
     "type": "text"
   },
-
   "thPointBlocks": "Blocks",
   "@thPointBlocks": {
     "description": "The label for the blocks point type",
     "type": "text"
   },
-
   "thPointBones": "Bones",
   "@thPointBones": {
     "description": "The label for the bones point type",
     "type": "text"
   },
-
   "thPointBreakdownChoke": "Breakdown Choke",
   "@thPointBreakdownChoke": {
     "description": "The label for the breakdown choke point type",
     "type": "text"
   },
-
   "thPointBridge": "Bridge",
   "@thPointBridge": {
     "description": "The label for the bridge point type",
     "type": "text"
   },
-
   "thPointCamp": "Camp",
   "@thPointCamp": {
     "description": "The label for the camp point type",
     "type": "text"
   },
-
   "thPointCavePearl": "Cave Pearl",
   "@thPointCavePearl": {
     "description": "The label for the cave pearl point type",
     "type": "text"
   },
-
   "thPointClay": "Clay",
   "@thPointClay": {
     "description": "The label for the clay point type",
     "type": "text"
   },
-
   "thPointClayChoke": "Clay Choke",
   "@thPointClayChoke": {
     "description": "The label for the clay choke point type",
     "type": "text"
   },
-
   "thPointClayTree": "Clay Tree",
   "@thPointClayTree": {
     "description": "The label for the clay tree point type",
     "type": "text"
   },
-
   "thPointContinuation": "Continuation",
   "@thPointContinuation": {
     "description": "The label for the continuation point type",
     "type": "text"
   },
-
   "thPointCrystal": "Crystal",
   "@thPointCrystal": {
     "description": "The label for the crystal point type",
     "type": "text"
   },
-
   "thPointCurtain": "Curtain",
   "@thPointCurtain": {
     "description": "The label for the curtain point type",
     "type": "text"
   },
-
   "thPointCurtains": "Curtains",
   "@thPointCurtains": {
     "description": "The label for the curtains point type",
     "type": "text"
   },
-
   "thPointDanger": "Danger",
   "@thPointDanger": {
     "description": "The label for the danger point type",
     "type": "text"
   },
-
   "thPointDate": "Date",
   "@thPointDate": {
     "description": "The label for the date point type",
     "type": "text"
   },
-
   "thPointDebris": "Debris",
   "@thPointDebris": {
     "description": "The label for the debris point type",
     "type": "text"
   },
-
   "thPointDig": "Dig",
   "@thPointDig": {
     "description": "The label for the dig point type",
     "type": "text"
   },
-
   "thPointDimensions": "Dimensions",
   "@thPointDimensions": {
     "description": "The label for the dimensions point type",
     "type": "text"
   },
-
   "thPointDiscPillar": "Disc Pillar",
   "@thPointDiscPillar": {
     "description": "The label for the disc pillar point type",
     "type": "text"
   },
-
   "thPointDiscPillars": "Disc Pillars",
   "@thPointDiscPillars": {
     "description": "The label for the disc pillars point type",
     "type": "text"
   },
-
   "thPointDiscStalactite": "Disc Stalactite",
   "@thPointDiscStalactite": {
     "description": "The label for the disc stalactite point type",
     "type": "text"
   },
-
   "thPointDiscStalactites": "Disc Stalactites",
   "@thPointDiscStalactites": {
     "description": "The label for the disc stalactites point type",
     "type": "text"
   },
-
   "thPointDiscStalagmite": "Disc Stalagmite",
   "@thPointDiscStalagmite": {
     "description": "The label for the disc stalagmite point type",
     "type": "text"
   },
-
   "thPointDiscStalagmites": "Disc Stalagmites",
   "@thPointDiscStalagmites": {
     "description": "The label for the disc stalagmites point type",
     "type": "text"
   },
-
   "thPointDisk": "Disk",
   "@thPointDisk": {
     "description": "The label for the disk point type",
     "type": "text"
   },
-
   "thPointElectricLight": "Electric Light",
   "@thPointElectricLight": {
     "description": "The label for the electric light point type",
     "type": "text"
   },
-
   "thPointEntrance": "Entrance",
   "@thPointEntrance": {
     "description": "The label for the entrance point type",
     "type": "text"
   },
-
   "thPointExtra": "Extra",
   "@thPointExtra": {
     "description": "The label for the extra point type",
     "type": "text"
   },
-
   "thPointExVoto": "Ex Voto",
   "@thPointExVoto": {
     "description": "The label for the ex voto point type",
     "type": "text"
   },
-
   "thPointFixedLadder": "Fixed Ladder",
   "@thPointFixedLadder": {
     "description": "The label for the fixed ladder point type",
     "type": "text"
   },
-
   "thPointFlowstone": "Flowstone",
   "@thPointFlowstone": {
     "description": "The label for the flowstone point type",
     "type": "text"
   },
-
   "thPointFlowstoneChoke": "Flowstone Choke",
   "@thPointFlowstoneChoke": {
     "description": "The label for the flowstone choke point type",
     "type": "text"
   },
-
   "thPointFlute": "Flute",
   "@thPointFlute": {
     "description": "The label for the flute point type",
     "type": "text"
   },
-
   "thPointGate": "Gate",
   "@thPointGate": {
     "description": "The label for the gate point type",
     "type": "text"
   },
-
   "thPointGradient": "Gradient",
   "@thPointGradient": {
     "description": "The label for the gradient point type",
     "type": "text"
   },
-
   "thPointGuano": "Guano",
   "@thPointGuano": {
     "description": "The label for the guano point type",
     "type": "text"
   },
-
   "thPointGypsum": "Gypsum",
   "@thPointGypsum": {
     "description": "The label for the gypsum point type",
     "type": "text"
   },
-
   "thPointGypsumFlower": "Gypsum Flower",
   "@thPointGypsumFlower": {
     "description": "The label for the gypsum flower point type",
     "type": "text"
   },
-
   "thPointHandrail": "Handrail",
   "@thPointHandrail": {
     "description": "The label for the handrail point type",
     "type": "text"
   },
-
   "thPointHeight": "Height",
   "@thPointHeight": {
     "description": "The label for the height point type",
     "type": "text"
   },
-
   "thPointHelictite": "Helictite",
   "@thPointHelictite": {
     "description": "The label for the helictite point type",
     "type": "text"
   },
-
   "thPointHelictites": "Helictites",
   "@thPointHelictites": {
     "description": "The label for the helictites point type",
     "type": "text"
   },
-
   "thPointHumanBones": "Human Bones",
   "@thPointHumanBones": {
     "description": "The label for the human bones point type",
     "type": "text"
   },
-
   "thPointIce": "Ice",
   "@thPointIce": {
     "description": "The label for the ice point type",
     "type": "text"
   },
-
   "thPointIcePillar": "Ice Pillar",
   "@thPointIcePillar": {
     "description": "The label for the ice pillar point type",
     "type": "text"
   },
-
   "thPointIceStalactite": "Ice Stalactite",
   "@thPointIceStalactite": {
     "description": "The label for the ice stalactite point type",
     "type": "text"
   },
-
   "thPointIceStalagmite": "Ice Stalagmite",
   "@thPointIceStalagmite": {
     "description": "The label for the ice stalagmite point type",
     "type": "text"
   },
-
   "thPointKarren": "Karren",
   "@thPointKarren": {
     "description": "The label for the karren point type",
     "type": "text"
   },
-
   "thPointLabel": "Label",
   "@thPointLabel": {
     "description": "The label for the label point type",
     "type": "text"
   },
-
   "thPointLowEnd": "Low End",
   "@thPointLowEnd": {
     "description": "The label for the low end point type",
     "type": "text"
   },
-
   "thPointMapConnection": "Map Connection",
   "@thPointMapConnection": {
     "description": "The label for the map connection point type",
     "type": "text"
   },
-
   "thPointMasonry": "Masonry",
   "@thPointMasonry": {
     "description": "The label for the masonry point type",
     "type": "text"
   },
-
   "thPointMoonmilk": "Moonmilk",
   "@thPointMoonmilk": {
     "description": "The label for the moonmilk point type",
     "type": "text"
   },
-
   "thPointMud": "Mud",
   "@thPointMud": {
     "description": "The label for the mud point type",
     "type": "text"
   },
-
   "thPointMudcrack": "Mudcrack",
   "@thPointMudcrack": {
     "description": "The label for the mudcrack point type",
     "type": "text"
   },
-
   "thPointNamePlate": "Name Plate",
   "@thPointNamePlate": {
     "description": "The label for the name plate point type",
     "type": "text"
   },
-
   "thPointNarrowEnd": "Narrow End",
   "@thPointNarrowEnd": {
     "description": "The label for the narrow end point type",
     "type": "text"
   },
-
   "thPointNoEquipment": "No Equipment",
   "@thPointNoEquipment": {
     "description": "The label for the no equipment point type",
     "type": "text"
   },
-
   "thPointNoWheelchair": "No Wheelchair",
   "@thPointNoWheelchair": {
     "description": "The label for the no wheelchair point type",
     "type": "text"
   },
-
   "thPointPaleoMaterial": "Paleo Material",
   "@thPointPaleoMaterial": {
     "description": "The label for the paleo material point type",
     "type": "text"
   },
-
   "thPointPassageHeight": "Passage Height",
   "@thPointPassageHeight": {
     "description": "The label for the passage height point type",
     "type": "text"
   },
-
   "thPointPebbles": "Pebbles",
   "@thPointPebbles": {
     "description": "The label for the pebbles point type",
     "type": "text"
   },
-
   "thPointPendant": "Pendant",
   "@thPointPendant": {
     "description": "The label for the pendant point type",
     "type": "text"
   },
-
   "thPointPhoto": "Photo",
   "@thPointPhoto": {
     "description": "The label for the photo point type",
     "type": "text"
   },
-
   "thPointPillar": "Pillar",
   "@thPointPillar": {
     "description": "The label for the pillar point type",
     "type": "text"
   },
-
   "thPointPillarsWithCurtains": "Pillars With Curtains",
   "@thPointPillarsWithCurtains": {
     "description": "The label for the pillars with curtains point type",
     "type": "text"
   },
-
   "thPointPillarWithCurtains": "Pillar With Curtains",
   "@thPointPillarWithCurtains": {
     "description": "The label for the pillar with curtains point type",
     "type": "text"
   },
-
   "thPointPopcorn": "Popcorn",
   "@thPointPopcorn": {
     "description": "The label for the popcorn point type",
     "type": "text"
   },
-
   "thPointRaft": "Raft",
   "@thPointRaft": {
     "description": "The label for the raft point type",
     "type": "text"
   },
-
   "thPointRaftCone": "Raft Cone",
   "@thPointRaftCone": {
     "description": "The label for the raft cone point type",
     "type": "text"
   },
-
   "thPointRemark": "Remark",
   "@thPointRemark": {
     "description": "The label for the remark point type",
     "type": "text"
   },
-
   "thPointRimstoneDam": "Rimstone Dam",
   "@thPointRimstoneDam": {
     "description": "The label for the rimstone dam point type",
     "type": "text"
   },
-
   "thPointRimstonePool": "Rimstone Pool",
   "@thPointRimstonePool": {
     "description": "The label for the rimstone pool point type",
     "type": "text"
   },
-
   "thPointRoot": "Root",
   "@thPointRoot": {
     "description": "The label for the root point type",
     "type": "text"
   },
-
   "thPointRope": "Rope",
   "@thPointRope": {
     "description": "The label for the rope point type",
     "type": "text"
   },
-
   "thPointRopeLadder": "Rope Ladder",
   "@thPointRopeLadder": {
     "description": "The label for the rope ladder point type",
     "type": "text"
   },
-
   "thPointSand": "Sand",
   "@thPointSand": {
     "description": "The label for the sand point type",
     "type": "text"
   },
-
   "thPointScallop": "Scallop",
   "@thPointScallop": {
     "description": "The label for the scallop point type",
     "type": "text"
   },
-
   "thPointSection": "Section",
   "@thPointSection": {
     "description": "The label for the section point type",
     "type": "text"
   },
-
   "thPointSeedGermination": "Seed Germination",
   "@thPointSeedGermination": {
     "description": "The label for the seed germination point type",
     "type": "text"
   },
-
   "thPointSink": "Sink",
   "@thPointSink": {
     "description": "The label for the sink point type",
     "type": "text"
   },
-
   "thPointSnow": "Snow",
   "@thPointSnow": {
     "description": "The label for the snow point type",
     "type": "text"
   },
-
   "thPointSodaStraw": "Soda Straw",
   "@thPointSodaStraw": {
     "description": "The label for the soda straw point type",
     "type": "text"
   },
-
   "thPointSpring": "Spring",
   "@thPointSpring": {
     "description": "The label for the spring point type",
     "type": "text"
   },
-
   "thPointStalactite": "Stalactite",
   "@thPointStalactite": {
     "description": "The label for the stalactite point type",
     "type": "text"
   },
-
   "thPointStalactites": "Stalactites",
   "@thPointStalactites": {
     "description": "The label for the stalactites point type",
     "type": "text"
   },
-
   "thPointStalactitesStalagmites": "Stalactites Stalagmites",
   "@thPointStalactitesStalagmites": {
     "description": "The label for the stalactites stalagmites point type",
     "type": "text"
   },
-
   "thPointStalactiteStalagmite": "Stalactite Stalagmite",
   "@thPointStalactiteStalagmite": {
     "description": "The label for the stalactite stalagmite point type",
     "type": "text"
   },
-
   "thPointStalagmite": "Stalagmite",
   "@thPointStalagmite": {
     "description": "The label for the stalagmite point type",
     "type": "text"
   },
-
   "thPointStalagmites": "Stalagmites",
   "@thPointStalagmites": {
     "description": "The label for the stalagmites point type",
     "type": "text"
   },
-
   "thPointStation": "Station",
   "@thPointStation": {
     "description": "The label for the station point type",
     "type": "text"
   },
-
   "thPointStationName": "Station Name",
   "@thPointStationName": {
     "description": "The label for the station name point type",
     "type": "text"
   },
-
   "thPointSteps": "Steps",
   "@thPointSteps": {
     "description": "The label for the steps point type",
     "type": "text"
   },
-
   "thPointTraverse": "Traverse",
   "@thPointTraverse": {
     "description": "The label for the traverse point type",
     "type": "text"
   },
-
   "thPointTreeTrunk": "Tree Trunk",
   "@thPointTreeTrunk": {
     "description": "The label for the tree trunk point type",
     "type": "text"
   },
-
   "thPointU": "user defined",
   "@thPointU": {
     "description": "The label for the user defined point type",
     "type": "text"
   },
-
   "thPointVegetableDebris": "Vegetable Debris",
   "@thPointVegetableDebris": {
     "description": "The label for the vegetable debris point type",
     "type": "text"
   },
-
   "thPointViaFerrata": "Via Ferrata",
   "@thPointViaFerrata": {
     "description": "The label for the via ferrata point type",
     "type": "text"
   },
-
   "thPointVolcano": "Volcano",
   "@thPointVolcano": {
     "description": "The label for the volcano point type",
     "type": "text"
   },
-
   "thPointWalkway": "Walkway",
   "@thPointWalkway": {
     "description": "The label for the walkway point type",
     "type": "text"
   },
-
   "thPointWallCalcite": "Wall Calcite",
   "@thPointWallCalcite": {
     "description": "The label for the wall calcite point type",
     "type": "text"
   },
-
   "thPointWater": "Water",
   "@thPointWater": {
     "description": "The label for the water point type",
     "type": "text"
   },
-
   "thPointWaterDrip": "Water Drip",
   "@thPointWaterDrip": {
     "description": "The label for the water drip point type",
     "type": "text"
   },
-
   "thPointWaterFlow": "Water Flow",
   "@thPointWaterFlow": {
     "description": "The label for the water flow point type",
     "type": "text"
   },
-
   "thPointWheelchair": "Wheelchair",
   "@thPointWheelchair": {
     "description": "The label for the wheelchair point type",
     "type": "text"
   },
-
   "thLineAbyssEntrance": "Abyss Entrance",
   "@thLineAbyssEntrance": {
     "description": "The label for the abyss entrance line type",
     "type": "text"
   },
-
   "thLineArrow": "Arrow",
   "@thLineArrow": {
     "description": "The label for the arrow line type",
     "type": "text"
   },
-
   "thLineBorder": "Border",
   "@thLineBorder": {
     "description": "The label for the border line type",
     "type": "text"
   },
-
   "thLineCeilingMeander": "Ceiling Meander",
   "@thLineCeilingMeander": {
     "description": "The label for the ceiling meander line type",
     "type": "text"
   },
-
   "thLineCeilingStep": "Ceiling Step",
   "@thLineCeilingStep": {
     "description": "The label for the ceiling step line type",
     "type": "text"
   },
-
   "thLineChimney": "Chimney",
   "@thLineChimney": {
     "description": "The label for the chimney line type",
     "type": "text"
   },
-
   "thLineContour": "Contour",
   "@thLineContour": {
     "description": "The label for the contour line type",
     "type": "text"
   },
-
   "thLineDripline": "Dripline",
   "@thLineDripline": {
     "description": "The label for the dripline line type",
     "type": "text"
   },
-
   "thLineFault": "Fault",
   "@thLineFault": {
     "description": "The label for the fault line type",
     "type": "text"
   },
-
   "thLineFixedLadder": "Fixed Ladder",
   "@thLineFixedLadder": {
     "description": "The label for the fixed ladder line type",
     "type": "text"
   },
-
   "thLineFloorMeander": "Floor Meander",
   "@thLineFloorMeander": {
     "description": "The label for the floor meander line type",
     "type": "text"
   },
-
   "thLineFloorStep": "Floor Step",
   "@thLineFloorStep": {
     "description": "The label for the floor step line type",
     "type": "text"
   },
-
   "thLineFlowstone": "Flowstone",
   "@thLineFlowstone": {
     "description": "The label for the flowstone line type",
     "type": "text"
   },
-
   "thLineGradient": "Gradient",
   "@thLineGradient": {
     "description": "The label for the gradient line type",
     "type": "text"
   },
-
   "thLineHandrail": "Handrail",
   "@thLineHandrail": {
     "description": "The label for the handrail line type",
     "type": "text"
   },
-
   "thLineJoint": "Joint",
   "@thLineJoint": {
     "description": "The label for the joint line type",
     "type": "text"
   },
-
   "thLineLabel": "Label",
   "@thLineLabel": {
     "description": "The label for the label line type",
     "type": "text"
   },
-
   "thLineLowCeiling": "Low Ceiling",
   "@thLineLowCeiling": {
     "description": "The label for the low ceiling line type",
     "type": "text"
   },
-
   "thLineMapConnection": "Map Connection",
   "@thLineMapConnection": {
     "description": "The label for the map connection line type",
     "type": "text"
   },
-
   "thLineMoonmilk": "Moonmilk",
   "@thLineMoonmilk": {
     "description": "The label for the moonmilk line type",
     "type": "text"
   },
-
   "thLineOverhang": "Overhang",
   "@thLineOverhang": {
     "description": "The label for the overhang line type",
     "type": "text"
   },
-
   "thLinePit": "Pit",
   "@thLinePit": {
     "description": "The label for the pit line type",
     "type": "text"
   },
-
   "thLinePitch": "Pitch",
   "@thLinePitch": {
     "description": "The label for the pitch line type",
     "type": "text"
   },
-
   "thLinePitChimney": "Pit Chimney",
   "@thLinePitChimney": {
     "description": "The label for the pit chimney line type",
     "type": "text"
   },
-
   "thLineRimstoneDam": "Rimstone Dam",
   "@thLineRimstoneDam": {
     "description": "The label for the rimstone dam line type",
     "type": "text"
   },
-
   "thLineRimstonePool": "Rimstone Pool",
   "@thLineRimstonePool": {
     "description": "The label for the rimstone pool line type",
     "type": "text"
   },
-
   "thLineRockBorder": "Rock Border",
   "@thLineRockBorder": {
     "description": "The label for the rock border line type",
     "type": "text"
   },
-
   "thLineRockEdge": "Rock Edge",
   "@thLineRockEdge": {
     "description": "The label for the rock edge line type",
     "type": "text"
   },
-
   "thLineRope": "Rope",
   "@thLineRope": {
     "description": "The label for the rope line type",
     "type": "text"
   },
-
   "thLineRopeLadder": "Rope Ladder",
   "@thLineRopeLadder": {
     "description": "The label for the rope ladder line type",
     "type": "text"
   },
-
   "thLineSection": "Section",
   "@thLineSection": {
     "description": "The label for the section line type",
     "type": "text"
   },
-
   "thLineSlope": "Slope",
   "@thLineSlope": {
     "description": "The label for the slope line type",
     "type": "text"
   },
-
   "thLineSteps": "Steps",
   "@thLineSteps": {
     "description": "The label for the steps line type",
     "type": "text"
   },
-
   "thLineSurvey": "Survey",
   "@thLineSurvey": {
     "description": "The label for the survey line type",
     "type": "text"
   },
-
   "thLineU": "User",
   "@thLineU": {
     "description": "The label for the U line type",
     "type": "text"
   },
-
   "thLineViaFerrata": "Via Ferrata",
   "@thLineViaFerrata": {
     "description": "The label for the via ferrata line type",
     "type": "text"
   },
-
   "thLineWalkWay": "Walkway",
   "@thLineWalkWay": {
     "description": "The label for the walkway line type",
     "type": "text"
   },
-
   "thLineWall": "Wall",
   "@thLineWall": {
     "description": "The label for the wall line type",
     "type": "text"
   },
-
   "thLineWaterFlow": "Water Flow",
   "@thLineWaterFlow": {
     "description": "The label for the water flow line type",
     "type": "text"
   },
-
   "thCommandOptionAdjust": "Adjust",
   "@thCommandOptionAdjust": {
     "description": "The label for the adjust command option type",
     "type": "text"
   },
-
   "thCommandOptionAlign": "Align",
   "@thCommandOptionAlign": {
     "description": "The label for the align command option type",
     "type": "text"
   },
-
   "thCommandOptionAltitude": "Altitude",
   "@thCommandOptionAltitude": {
     "description": "The label for the altitude command option type",
     "type": "text"
   },
-
   "thCommandOptionAltitudeFix": "Fix",
   "@thCommandOptionAltitudeFix": {
     "description": "The label for the altitude command option fix choice",
     "type": "text"
   },
-
   "thCommandOptionAltitudeValue": "Altitude",
   "@thCommandOptionAltitudeValue": {
     "description": "The label for the altitude value command option type",
     "type": "text"
   },
-
   "thCommandOptionAnchors": "Anchors",
   "@thCommandOptionAnchors": {
     "description": "The label for the anchors command option type",
     "type": "text"
   },
-
   "thCommandOptionAuthor": "Author",
   "@thCommandOptionAuthor": {
     "description": "The label for the author command option type",
     "type": "text"
   },
-
   "thCommandOptionBorder": "Border",
   "@thCommandOptionBorder": {
     "description": "The label for the border command option type",
     "type": "text"
   },
-
   "thCommandOptionClip": "Clip",
   "@thCommandOptionClip": {
     "description": "The label for the clip command option type",
     "type": "text"
   },
-
   "thCommandOptionClose": "Close",
   "@thCommandOptionClose": {
     "description": "The label for the close command option type",
     "type": "text"
   },
-
   "thCommandOptionContext": "Context",
   "@thCommandOptionContext": {
     "description": "The label for the context command option type",
     "type": "text"
   },
-
   "thCommandOptionCopyright": "Copyright",
   "@thCommandOptionCopyright": {
     "description": "The label for the copyright command option type",
     "type": "text"
   },
-
   "thCommandOptionCS": "Coordinate System",
   "@thCommandOptionCS": {
     "description": "The label for the Coordinate System command option type",
     "type": "text"
   },
-
   "thCommandOptionDateValue": "Date",
   "@thCommandOptionDateValue": {
     "description": "The label for the date value command option type",
     "type": "text"
   },
-
   "thCommandOptionDimensionsValue": "Dimensions",
   "@thCommandOptionDimensionsValue": {
     "description": "The label for the dimensions value command option type",
     "type": "text"
   },
-
   "thCommandOptionDist": "Distance",
   "@thCommandOptionDist": {
     "description": "The label for the dist command option type",
     "type": "text"
   },
-
   "thCommandOptionExplored": "Explored",
   "@thCommandOptionExplored": {
     "description": "The label for the explored command option type",
     "type": "text"
   },
-
   "thCommandOptionExtend": "Extend",
   "@thCommandOptionExtend": {
     "description": "The label for the extend command option type",
     "type": "text"
   },
-
   "thCommandOptionFlip": "Flip",
   "@thCommandOptionFlip": {
     "description": "The label for the flip command option type",
     "type": "text"
   },
-
   "thCommandOptionFrom": "From",
   "@thCommandOptionFrom": {
     "description": "The label for the from command option type",
     "type": "text"
   },
-
   "thCommandOptionHead": "Head",
   "@thCommandOptionHead": {
     "description": "The label for the head command option type",
     "type": "text"
   },
-
   "thCommandOptionId": "ID",
   "@thCommandOptionId": {
     "description": "The label for the ID command option type",
     "type": "text"
   },
-
   "thCommandOptionLengthUnit": "Unit",
   "@thCommandOptionLengthUnit": {
     "description": "The label for the length unit command option type",
     "type": "text"
   },
-
   "thCommandOptionLineDirection": "Direction",
   "@thCommandOptionLineDirection": {
     "description": "The label for the line direction command option type",
     "type": "text"
   },
-
   "thCommandOptionLineGradient": "Gradient",
   "@thCommandOptionLineGradient": {
     "description": "The label for the line gradient command option type",
     "type": "text"
   },
-
   "thCommandOptionLineHeight": "Height",
   "@thCommandOptionLineHeight": {
     "description": "The label for the line height command option type",
     "type": "text"
   },
-
   "thCommandOptionLinePointDirection": "Direction",
   "@thCommandOptionLinePointDirection": {
     "description": "The label for the line point direction command option type",
     "type": "text"
   },
-
   "thCommandOptionLinePointGradient": "Gradient",
   "@thCommandOptionLinePointGradient": {
     "description": "The label for the line point gradient command option type",
     "type": "text"
   },
-
   "thCommandOptionLSize": "L-Size",
   "@thCommandOptionLSize": {
     "description": "The label for the L size command option type",
     "type": "text"
   },
-
   "thCommandOptionMark": "Mark",
   "@thCommandOptionMark": {
     "description": "The label for the mark command option type",
     "type": "text"
   },
-
   "thCommandOptionName": "Station",
   "@thCommandOptionName": {
     "description": "The label for the station name command option type",
     "type": "text"
   },
-
   "thCommandOptionOutline": "Outline",
   "@thCommandOptionOutline": {
     "description": "The label for the outline command option type",
     "type": "text"
   },
-
   "thCommandOptionOrientation": "Orientation",
   "@thCommandOptionOrientation": {
     "description": "The label for the orientation command option type",
     "type": "text"
   },
-
   "thCommandOptionPassageHeightValue": "Passage Height",
   "@thCommandOptionPassageHeightValue": {
     "description": "The label for the passage height value command option type",
     "type": "text"
   },
-
   "thCommandOptionPlace": "Place",
   "@thCommandOptionPlace": {
     "description": "The label for the place command option type",
     "type": "text"
   },
-
   "thCommandOptionPointHeightValue": "Height",
   "@thCommandOptionPointHeightValue": {
     "description": "The label for the point height value command option type",
     "type": "text"
   },
-
   "thCommandOptionPLScale": "Scale",
   "@thCommandOptionPLScale": {
     "description": "The label for the point/line/line segment scale command option type",
     "type": "text"
   },
-
   "thCommandOptionProjection": "Projection",
   "@thCommandOptionProjection": {
     "description": "The label for the projection command option type",
     "type": "text"
   },
-
   "thCommandOptionRebelays": "Rebelays",
   "@thCommandOptionRebelays": {
     "description": "The label for the rebelays command option type",
     "type": "text"
   },
-
   "thCommandOptionReverse": "Reverse",
   "@thCommandOptionReverse": {
     "description": "The label for the reverse command option type",
     "type": "text"
   },
-
   "thCommandOptionScrap": "Scrap",
   "@thCommandOptionScrap": {
     "description": "The label for the scrap command option type",
     "type": "text"
   },
-
   "thCommandOptionScrapScale": "Scale",
   "@thCommandOptionScrapScale": {
     "description": "The label for the scrap scale command option type",
     "type": "text"
   },
-
   "thCommandOptionSketch": "Sketch",
   "@thCommandOptionSketch": {
     "description": "The label for the sketch command option type",
     "type": "text"
   },
-
   "thCommandOptionSmooth": "Smooth",
   "@thCommandOptionSmooth": {
     "description": "The label for the smooth command option type",
     "type": "text"
   },
-
   "thCommandOptionStationNames": "Station Names",
   "@thCommandOptionStationNames": {
     "description": "The label for the station names command option type",
     "type": "text"
   },
-
   "thCommandOptionStations": "Stations",
   "@thCommandOptionStations": {
     "description": "The label for the stations command option type",
     "type": "text"
   },
-
   "thCommandOptionSubtype": "Subtype",
   "@thCommandOptionSubtype": {
     "description": "The label for the subtype command option type",
     "type": "text"
   },
-
   "thCommandOptionText": "Text",
   "@thCommandOptionText": {
     "description": "The label for the text command option type",
     "type": "text"
   },
-
   "thCommandOptionTitle": "Title",
   "@thCommandOptionTitle": {
     "description": "The label for the title command option type",
     "type": "text"
   },
-
   "thCommandOptionUnrecognized": "Unrecognized Command Option",
   "@thCommandOptionUnrecognized": {
     "description": "The label for the unrecognized command option type",
     "type": "text"
   },
-
   "thCommandOptionVisibility": "Visibility",
   "@thCommandOptionVisibility": {
     "description": "The label for the visibility command option type",
     "type": "text"
   },
-
   "thCommandOptionWalls": "Walls",
   "@thCommandOptionWalls": {
     "description": "The label for the walls command option type",
     "type": "text"
   },
-
   "thMultipleChoiceAdjustHorizontal": "Horizontal",
   "@thMultipleChoiceAdjustHorizontal": {
     "description": "The label for the horizontal adjust multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAdjustVertical": "Vertical",
   "@thMultipleChoiceAdjustVertical": {
     "description": "The label for the vertical adjust multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignBottom": "Bottom",
   "@thMultipleChoiceAlignBottom": {
     "description": "The label for the bottom align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignBottomLeft": "Bottom Left",
   "@thMultipleChoiceAlignBottomLeft": {
     "description": "The label for the bottom left align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignBottomRight": "Bottom Right",
   "@thMultipleChoiceAlignBottomRight": {
     "description": "The label for the bottom right align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignCenter": "Center",
   "@thMultipleChoiceAlignCenter": {
     "description": "The label for the center align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignLeft": "Left",
   "@thMultipleChoiceAlignLeft": {
     "description": "The label for the left align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignRight": "Right",
   "@thMultipleChoiceAlignRight": {
     "description": "The label for the right align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignTop": "Top",
   "@thMultipleChoiceAlignTop": {
     "description": "The label for the top align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignTopLeft": "Top Left",
   "@thMultipleChoiceAlignTopLeft": {
     "description": "The label for the top left align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceAlignTopRight": "Top Right",
   "@thMultipleChoiceAlignTopRight": {
     "description": "The label for the top right align multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceOnOffOff": "Off",
   "@thMultipleChoiceOnOffOff": {
     "description": "The label for the off on/off multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceOnOffOn": "On",
   "@thMultipleChoiceOnOffOn": {
     "description": "The label for the on on/off multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceOnOffAutoAuto": "Auto",
   "@thMultipleChoiceOnOffAutoAuto": {
     "description": "The label for the auto auto/on/off multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceFlipNone": "None",
   "@thMultipleChoiceFlipNone": {
     "description": "The label for the none flip multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceArrowPositionBegin": "Begin",
   "@thMultipleChoiceArrowPositionBegin": {
     "description": "The label for the begin arrow position multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceArrowPositionBoth": "Both",
   "@thMultipleChoiceArrowPositionBoth": {
     "description": "The label for the both arrow position multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceArrowPositionEnd": "End",
   "@thMultipleChoiceArrowPositionEnd": {
     "description": "The label for the end arrow position multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceLinePointGradientPoint": "Point",
   "@thMultipleChoiceLinePointGradientPoint": {
     "description": "The label for the point line point gradient multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceOutlineIn": "In",
   "@thMultipleChoiceOutlineIn": {
     "description": "The label for the in outline multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoiceOutlineOut": "Out",
   "@thMultipleChoiceOutlineOut": {
     "description": "The label for the out outline multiple choice type",
     "type": "text"
   },
-
   "thMultipleChoicePlaceDefault": "Default",
   "@thMultipleChoicePlaceDefault": {
     "description": "The label for the default place multiple choice type",

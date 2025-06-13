@@ -98,6 +98,18 @@ abstract class AppLocalizations {
     Locale('pt')
   ];
 
+  /// The label for the changelog section in the About dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Changelog'**
+  String get aboutMapiahDialogChangelog;
+
+  /// The label for the license section in the About dialog
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get aboutMapiahDialogLicense;
+
   /// The version of Mapiah for the About dialog
   ///
   /// In en, this message translates to:

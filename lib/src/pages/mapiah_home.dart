@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
+import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
@@ -137,7 +139,16 @@ class _MapiahHomeState extends State<MapiahHome> {
             child: ListBody(
               children: <Widget>[
                 Text(appLocalizations.aboutMapiahDialogMapiahVersion(version)),
-                SizedBox(height: 16),
+                SizedBox(height: mpButtonSpace),
+                MPURLTextWidget(
+                  url: mpChangelogURL,
+                  label: appLocalizations.aboutMapiahDialogChangelog,
+                ),
+                SizedBox(height: mpButtonSpace),
+                MPURLTextWidget(
+                  url: mpLicenseURL,
+                  label: appLocalizations.aboutMapiahDialogLicense,
+                ),
               ],
             ),
           ),

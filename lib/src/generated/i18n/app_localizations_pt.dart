@@ -9,6 +9,12 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get aboutMapiahDialogChangelog => 'Alterações';
+
+  @override
+  String get aboutMapiahDialogLicense => 'Licença';
+
+  @override
   String aboutMapiahDialogMapiahVersion(Object version) {
     return 'Versão $version';
   }

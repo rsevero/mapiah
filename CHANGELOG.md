@@ -1,23 +1,27 @@
 # Changelog
 
-## 0.2.3
+## 0.2.4 - not yet released
+- Included links to CHANGELOG and LICENSE in _About_ dialog
+- Included release date in CHANGELOG
+
+## 0.2.3 - 2025-06-13
 - Flutter upgraded to 3.32.4; pub upgrade
 - Windows release creation
 - Fixing 'Failure to parse -scrap option with quoted value' (reported by Wookey)
 
-## 0.2.2
+## 0.2.2 - 2025-06-12
 - file_picker update: might fix 'file picker not showing files on debian'
 - Updating index.html
 - Creating WASM web release
 
-## 0.2.1
+## 0.2.1 - not released
 - Fixing tests after parse() signature change
 - Fixing href on index.html for web release
 - Flutter: upgrading to 3.32.3
 - Show english help page if there is no translated help page
 - New WASM web release.
 
-## 0.2.0
+## 0.2.0 - 2025-06-10
 - Make output identical to original except on changed lines
 - Deal with click on more than one object at a time
 - Line edit
