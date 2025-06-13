@@ -1,3 +1,10 @@
+# Changelog
+
+## 0.2.3
+- Flutter upgraded to 3.32.4; pub upgrade
+- Windows release creation
+- Fixing 'Failure to parse -scrap option with quoted value' (reported by Wookey)
+
 ## 0.2.2
 - file_picker update: might fix 'file picker not showing files on debian'
 - Updating index.html
