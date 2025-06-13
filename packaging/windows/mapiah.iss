@@ -1,10 +1,12 @@
+   #define AppVersion GetStringFileInfo("C:\mapiah\build\windows\x64\runner\Release\mapiah.exe", "ProductVersion")
+   
    [Setup]
    AppName=Mapiah
-   AppVersion=0.2.3
+   AppVersion={#AppVersion}
    DefaultDirName={commonpf}\Mapiah
    DefaultGroupName=Mapiah
    OutputDir=C:\mapiah\build\windows-installer
-   OutputBaseFilename=MapiahSetup
+   OutputBaseFilename=MapiahSetup_{#AppVersion}
    Compression=lzma
    SolidCompression=yes
 
