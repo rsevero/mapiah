@@ -42,6 +42,10 @@ There are 2 web versions is available:
 ### Windows
 There is a Windows version available at [https://mapiah.org/downloads](https://mapiah.org/downloads).
 
+Apparently Microsoft Defender is keen on flagging unknown executables as having some kind of malware. Sometimes as [Bearfoos.A!ml](https://answers.microsoft.com/en-us/windows/forum/all/bearfoosaml-false-alarm/37707c6a-8222-44ad-a604-d75918dfb519), sometimes as [Trojan:Win32/Wacatac.B!ml](https://github.com/flutter/flutter/issues/118430). Maybe others.
+
+If you want to be extra sure, you can check Mapiah's setup exe file with some online virus scanner service before installing it.
+
 ### MacOS
 Waiting for someone interested in helping creating the MacOS releases. Please contact me at rsev AT pm.me.
 
