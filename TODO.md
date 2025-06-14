@@ -65,6 +65,7 @@ Version 0.3
 [ ] - When clicking and dragging in non-selected control point, drag the control point
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
 [ ] - Implement F1 shortcut to help page
+[ ] - Implement default option values
 
 Version 0.4
 [ ] - Open multiple files simultaneously
