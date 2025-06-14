@@ -66,6 +66,7 @@ Version 0.3
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
 [ ] - Implement F1 shortcut to help page
 [ ] - Implement default option values
+[ ] - Support XVI images
 
 Version 0.4
 [ ] - Open multiple files simultaneously
