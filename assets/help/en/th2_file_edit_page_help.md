@@ -1,5 +1,14 @@
 This is where all TH2 file editing is done.
 
+## Index
+- [Index](#index)
+- [Top bar](#top-bar)
+- [Edit window](#edit-window)
+  - [Top right corner](#top-right-corner)
+  - [Bottom right corner](#bottom-right-corner)
+- [Zoom and panning](#zoom-and-panning)
+- [Element options](#element-options)
+
 ## Top bar
 * On the left:
     * ![Back icon](assets/help/images/iconBack.png "Back")  _Back_: returns to the main window without saving contents.
@@ -38,3 +47,11 @@ In case there are available redoes when a new edit operation is performed, the r
 The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.
 The view can also be panned by right clicking and dragging the mouse.
 _Ctrl+mouse wheel_ pans vertically, _Shift+mouse wheel_ pans horizontally.
+
+## Element options
+Right clicking on a selected element presents an overlay window with the options available for the currently selected elements.
+The options available depend on the type of element selected.
+
+To edit scrap options, right click on:
+* the scrap select button on the right bottom corner in case there is only one scrap in the file, or
+* the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.

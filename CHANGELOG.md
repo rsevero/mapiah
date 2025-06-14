@@ -3,6 +3,8 @@
 ## 0.2.4 - not yet released
 - Included links to CHANGELOG and LICENSE in _About_ dialog
 - Included release date in CHANGELOG
+- Fixing 'right clicking without any objects selected presents ineffective options overlay window' (reported by Bruce Mutton)
+- Explaining how to edit element options in the help page
 
 ## 0.2.3 - 2025-06-13
 - Flutter upgraded to 3.32.4; pub upgrade
