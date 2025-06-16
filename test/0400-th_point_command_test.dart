@@ -97,6 +97,40 @@ endscrap
     }
   });
 
+  group('point -attr', () {
+    final parser = THFileParser();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': '2025-06-16-002-point_with_attr_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap 343-plan1.1
+  point 1327.1991 139.7524 u:mappe -attr text [ 35 ]
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+          trace: true,
+        );
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
   group('point -clip', () {
     final parser = THFileParser();
     final writer = THFileWriter();
