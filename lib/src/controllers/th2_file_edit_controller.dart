@@ -312,11 +312,9 @@ abstract class TH2FileEditControllerBase with Store {
     double scrapLengthUnitsOnScreen = scrapLengthUnitsPerPointOnScreen *
         thDesiredGraphicalScaleScreenPointLength;
 
-    scrapLengthUnitsOnScreen =
-        MPNumericAux.roundNumber(scrapLengthUnitsOnScreen);
-    if (scrapLengthUnitsOnScreen < 1) {
-      scrapLengthUnitsOnScreen = 1;
-    }
+    scrapLengthUnitsOnScreen = MPNumericAux.roundNumber(
+      scrapLengthUnitsOnScreen,
+    );
 
     return scrapLengthUnitsOnScreen;
   }
@@ -882,11 +880,12 @@ abstract class TH2FileEditControllerBase with Store {
       zoomFitToType: zoomToFitType,
     );
 
-    mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
+    // mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
     _canvasCenterX = (dataBoundingBox.left + dataBoundingBox.right) / 2.0;
     _canvasCenterY = (dataBoundingBox.top + dataBoundingBox.bottom) / 2.0;
-    mpLocator.mpLog.finer(
-        "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY");
+    // mpLocator.mpLog.finer(
+    //   "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY",
+    // );
   }
 
   void transformCanvas(Canvas canvas) {

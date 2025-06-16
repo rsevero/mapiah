@@ -269,6 +269,7 @@ class MPNumericAux {
     final int fractionalDigits =
         (valueMagnitude >= 0) ? 0 : valueMagnitude.abs().floor();
     String asString = rounded.toStringAsFixed(fractionalDigits);
+
     if (fractionalDigits > 0) {
       while (asString.endsWith('0')) {
         asString = asString.substring(0, asString.length - 1);
