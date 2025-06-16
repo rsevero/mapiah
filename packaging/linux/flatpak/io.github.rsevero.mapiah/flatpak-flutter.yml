@@ -39,7 +39,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/rsevero/mapiah.git
-        commit: a839c35f77bb2ed8a831e10cb4fc11f11b9c9c2f
+        commit: 409ad998e29f96c5a50d758c2905a79d62704e04
       - type: git
         url: https://github.com/flutter/flutter.git
         tag: 3.32.4
