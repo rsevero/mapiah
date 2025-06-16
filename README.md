@@ -39,6 +39,8 @@ There are 2 web versions is available:
 * Javascript at [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
 * WASM at [https://mapiah.org/webappwasm](https://mapiah.org/webappwasm).
 
+[Officially supported browsers](https://mapiah.org/webappjs) for Flutter web apps.
+
 ### Windows
 There is a Windows version available at [https://mapiah.org/downloads](https://mapiah.org/downloads).
 
