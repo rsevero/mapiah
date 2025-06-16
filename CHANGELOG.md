@@ -2,9 +2,16 @@
 
 ## 0.2.4 - not yet released
 - Included links to CHANGELOG and LICENSE in _About_ dialog
-- Included release date in CHANGELOG
-- Fixing 'right clicking without any objects selected presents ineffective options overlay window' (reported by Bruce Mutton)
-- Explaining how to edit element options in the help page
+* Included release date in CHANGELOG
+* Fixing 'right clicking without any objects selected presents ineffective options overlay window' (reported by Bruce Mutton)
+* Explaining how to edit element options in the help page
+* Fixing 'divide by zero on empty file zoom calculation'
+* TH2FileEditPageHelp: explaining behaviour during Bézier Curve line segment creation
+* README.md: Microsfot Defender false flagging Mapiah Setup exe file as having trojan horses
+* Explaining how to edit element options in the help page
+* Fixing 'scrap scale length too big for small files' (reported by Bruce Mutton)
+* TH2FileEditPageHelp: explaining save on web releases
+* Including link for officially supported browser for Flutter web apps
 
 ## 0.2.3 - 2025-06-13
 - Flutter upgraded to 3.32.4; pub upgrade
