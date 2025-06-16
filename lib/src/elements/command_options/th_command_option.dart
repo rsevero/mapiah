@@ -23,6 +23,7 @@ part 'th_adjust_command_option.dart';
 part 'th_align_command_option.dart';
 part 'th_altitude_command_option.dart';
 part 'th_altitude_value_command_option.dart';
+part 'th_attr_command_option.dart';
 part 'th_anchors_command_option.dart';
 part 'th_arrow_position_command_option.dart';
 part 'th_author_command_option.dart';
@@ -165,6 +166,8 @@ abstract class THCommandOption {
         return THAltitudeValueCommandOption.fromMap(map);
       case THCommandOptionType.anchors:
         return THAnchorsCommandOption.fromMap(map);
+      case THCommandOptionType.attr:
+        return THAttrCommandOption.fromMap(map);
       case THCommandOptionType.author:
         return THAuthorCommandOption.fromMap(map);
       case THCommandOptionType.border:
@@ -283,6 +286,8 @@ abstract class THCommandOption {
           optionParent: optionParent,
           choice: value,
         );
+      case THCommandOptionType.attr:
+      // return THAttrCommandOption(value);
       case THCommandOptionType.author:
       // return THAuthorCommandOption(value);
       case THCommandOptionType.border:

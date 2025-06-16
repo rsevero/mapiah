@@ -65,6 +65,9 @@ class THGrammar extends GrammarDefinition {
   /// Unquoted string
   Parser unquotedString() => noneOf('$thWhitespaceChars$thDoubleQuote').plus();
 
+  /// Alphanumeric chars
+  Parser alphanumericChars() => pattern('A-Za-z0-9').plus();
+
   /// Any string
   Parser anyString() =>
       quotedString().trim() |
@@ -288,7 +291,8 @@ class THGrammar extends GrammarDefinition {
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() => stringIgnoreCase('scrap') & extKeyword();
-  Parser scrapOptions() => (authorOption() |
+  Parser scrapOptions() => (attrOption() |
+          authorOption() |
           copyrightOption() |
           csOption() |
           flipOption() |
@@ -541,6 +545,7 @@ class THGrammar extends GrammarDefinition {
           .trim() &
       (char(':') & keyword().trim()).pick(1).optional();
   Parser pointOptions() => (alignOption() |
+          attrOption() |
           clipOption() |
           contextOption() |
           distOption() |
@@ -582,6 +587,11 @@ class THGrammar extends GrammarDefinition {
           stringIgnoreCase('t'))
       .trim()
       .map((value) => [value]);
+
+  /// point, line, area, scrap -attr
+  Parser attrOption() => stringIgnoreCase('attr') & attrOptions();
+  Parser attrOptions() =>
+      alphanumericChars().flatten().trim() & anyString().trim();
 
   /// point -clip
   Parser clipOption() => stringIgnoreCase('clip') & onOffOptions();
@@ -761,6 +771,7 @@ class THGrammar extends GrammarDefinition {
           .trim() &
       (char(':') & keyword().trim()).pick(1).optional();
   Parser lineOptions() => (anchorsOption() |
+          attrOption() |
           borderOption() |
           clipOption() |
           closeOption() |
@@ -967,7 +978,8 @@ class THGrammar extends GrammarDefinition {
               stringIgnoreCase('water'))
           .trim() &
       (char(':') & keyword().trim()).pick(1).optional();
-  Parser areaOptions() => (clipOption() |
+  Parser areaOptions() => (attrOption() |
+          clipOption() |
           contextOption() |
           idOption() |
           placeOption() |

@@ -108,7 +108,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap 343-plan1.1
-  point 1327.1991 139.7524 u:mappe -attr text [ 35 ]
+  point 1327.1991 139.7524 u:mappe -attr text 35
 endscrap
 ''',
       },
@@ -118,7 +118,7 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          trace: true,
+          // trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());

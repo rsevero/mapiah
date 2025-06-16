@@ -759,6 +759,8 @@ class THFileParser {
       case 'place':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
+      case 'attr':
+        _injectAttrCommandOption();
       case 'context':
         _injectContextCommandOption();
       case 'endarea':
@@ -789,6 +791,8 @@ class THFileParser {
       case 'reverse':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
+      case 'attr':
+        _injectAttrCommandOption();
       case 'context':
         _injectContextCommandOption();
       case 'height':
@@ -850,6 +854,8 @@ class THFileParser {
       case 'place':
       case 'visibility':
         _injectMultipleChoiceCommandOption(optionType);
+      case 'attr':
+        _injectAttrCommandOption();
       case 'context':
         _injectContextCommandOption();
       case 'dist':
@@ -890,6 +896,8 @@ class THFileParser {
       case 'flip':
       case 'walls':
         _injectMultipleChoiceCommandOption(optionType);
+      case 'attr':
+        _injectAttrCommandOption();
       case 'author':
         _injectAuthorCommandOption();
       case 'copyright':
@@ -1427,6 +1435,23 @@ class THFileParser {
       optionParent: _currentHasOptions,
       csString: _currentSpec[0],
       forOutputOnly: false,
+      originalLineInTH2File: _currentLine,
+    );
+  }
+
+  void _injectAttrCommandOption() {
+    if (_currentSpec.length != 2) {
+      throw THCreateObjectFromListWithWrongLengthException(
+          '== 2', _currentSpec);
+    }
+
+    final String name = _parseTHString(_currentSpec[0]);
+    final String value = _parseTHString(_currentSpec[1]);
+
+    THAttrCommandOption(
+      optionParent: _currentHasOptions,
+      nameText: name,
+      valueText: value,
       originalLineInTH2File: _currentLine,
     );
   }
