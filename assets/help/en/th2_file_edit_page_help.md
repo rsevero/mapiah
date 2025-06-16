@@ -8,6 +8,7 @@ This is where all TH2 file editing is done.
   - [Bottom right corner](#bottom-right-corner)
 - [Zoom and panning](#zoom-and-panning)
 - [Element options](#element-options)
+- [Drawing lines](#drawing-lines)
 
 ## Top bar
 * On the left:
@@ -55,3 +56,10 @@ The options available depend on the type of element selected.
 To edit scrap options, right click on:
 * the scrap select button on the right bottom corner in case there is only one scrap in the file, or
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
+
+## Drawing lines
+
+When drawing lines, each new segment is initially created as a straight line segment. To convert it to a Bézier Curve line segment, do not release the mouse button and drag. The mouse position will be treated a the position of the single control point of a quadratic Bézier Curve.
+
+Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment. Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.
+  
