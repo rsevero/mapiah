@@ -25,7 +25,7 @@ rm -rf ~/devel/flatpak-flutter/io.github.rsevero.mapiah; mkdir -p ~/devel/flatpa
 cd ~/devel/flatpak-flutter/io.github.rsevero.mapiah; ../flatpak-flutter.py flatpak-flutter.yml
 ```
 
-1. Build the flatpak app:
+1. Build the Mapiah flatpak release:
 ```
 flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache --mirror-screenshots-url=https://dl.flathub.org/media/ --repo=repo builddir io.github.rsevero.mapiah.yml
 ```
