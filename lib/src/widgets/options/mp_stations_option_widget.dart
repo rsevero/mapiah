@@ -63,16 +63,13 @@ class _MPStationsOptionWidgetState extends State<MPStationsOptionWidget> {
           ),
         );
         _selectedChoice = mpNonMultipleChoiceSetID;
-        break;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
         _stationNameControllers = [];
         _selectedChoice = '';
-        break;
       case MPOptionStateType.unset:
         _stationNameControllers = [];
         _selectedChoice = mpUnsetOptionID;
-        break;
     }
 
     _initialStationNames = _stationNameControllers.map((c) => c.text).toList();
