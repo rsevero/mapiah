@@ -1904,17 +1904,13 @@ class THFileParser {
       line += char;
       priorChar = char;
     }
-    mpLocator.mpLog.finer("Line read: '$line'");
+    // mpLocator.mpLog.finer("Line read: '$line'");
 
     final RegExpMatch? encoding = _encodingRegex.firstMatch(line);
 
-    mpLocator.mpLog.finer("Encoding object: '$encoding");
+    // mpLocator.mpLog.finer("Encoding object: '$encoding");
 
-    if (encoding == null) {
-      return thDefaultEncoding;
-    } else {
-      return encoding[1]!.toUpperCase();
-    }
+    return (encoding == null) ? thDefaultEncoding : encoding[1]!.toUpperCase();
   }
 
   @useResult

@@ -287,7 +287,7 @@ class THGrammar extends GrammarDefinition {
   /// scrap
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
-  Parser scrapRequired() => stringIgnoreCase('scrap') & keyword();
+  Parser scrapRequired() => stringIgnoreCase('scrap') & extKeyword();
   Parser scrapOptions() => (authorOption() |
           copyrightOption() |
           csOption() |

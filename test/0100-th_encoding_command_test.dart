@@ -56,12 +56,24 @@ void main() {
         'asFile': '''encoding UTF-8
 ''',
       },
+      {
+        'file': '2025-06-16-001-scrap_ids_as_extented_keywords.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': '''encoding UTF-8
+scrap 343-plan1.1
+  point 980.2776 513.1133 station -name 1.6
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+          // trace: true,
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
