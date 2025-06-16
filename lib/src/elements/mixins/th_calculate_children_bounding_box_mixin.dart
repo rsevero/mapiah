@@ -46,6 +46,13 @@ mixin THCalculateChildrenBoundingBoxMixin {
       }
     }
 
+    if (minX == double.infinity ||
+        minY == double.infinity ||
+        maxX == double.negativeInfinity ||
+        maxY == double.negativeInfinity) {
+      return MPNumericAux.orderedRectSmallestAroundPoint(center: Offset.zero);
+    }
+
     return MPNumericAux.orderedRectFromLTRB(
       left: minX,
       top: minY,
