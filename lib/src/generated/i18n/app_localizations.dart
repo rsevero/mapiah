@@ -218,6 +218,36 @@ abstract class AppLocalizations {
   /// **'Invalid altitude'**
   String get mpAltitudeInvalidValueErrorMessage;
 
+  /// The error message for an empty attribute name
+  ///
+  /// In en, this message translates to:
+  /// **'Empty attribute name'**
+  String get mpAttrNameEmpty;
+
+  /// The error message for invalid characters in attribute name
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid chars in attribute name'**
+  String get mpAttrNameInvalid;
+
+  /// The label for the attribute name
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get mpAttrNameLabel;
+
+  /// The error message for an empty attribute value
+  ///
+  /// In en, this message translates to:
+  /// **'Empty attribute value'**
+  String get mpAttrValueEmpty;
+
+  /// The label for the attribute value
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get mpAttrValueLabel;
+
   /// The error message for invalid author value
   ///
   /// In en, this message translates to:
@@ -3022,6 +3052,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Anchors'**
   String get thCommandOptionAnchors;
+
+  /// The label for the custom attribute command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Attribute (custom)'**
+  String get thCommandOptionAttr;
 
   /// The label for the author command option type
   ///

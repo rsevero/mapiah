@@ -83,6 +83,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
+  String get mpAttrNameEmpty => 'Nome do atributo vazio';
+
+  @override
+  String get mpAttrNameInvalid => 'Nome de atributo com characteres inválidos';
+
+  @override
+  String get mpAttrNameLabel => 'Nome';
+
+  @override
+  String get mpAttrValueEmpty => 'Valor do atributo vazio';
+
+  @override
+  String get mpAttrValueLabel => 'Valor';
+
+  @override
   String get mpAuthorInvalidValueErrorMessage =>
       'Data/intervalo de data e nome de autor válidos';
 
@@ -1536,6 +1551,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thCommandOptionAnchors => 'Âncoras';
+
+  @override
+  String get thCommandOptionAttr => 'Atributo do usuário';
 
   @override
   String get thCommandOptionAuthor => 'Autor';

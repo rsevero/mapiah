@@ -83,6 +83,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpAltitudeInvalidValueErrorMessage => 'Invalid altitude';
 
   @override
+  String get mpAttrNameEmpty => 'Empty attribute name';
+
+  @override
+  String get mpAttrNameInvalid => 'Invalid chars in attribute name';
+
+  @override
+  String get mpAttrNameLabel => 'Name';
+
+  @override
+  String get mpAttrValueEmpty => 'Empty attribute value';
+
+  @override
+  String get mpAttrValueLabel => 'Value';
+
+  @override
   String get mpAuthorInvalidValueErrorMessage =>
       'Invalid date/interval and person name';
 
@@ -1528,6 +1543,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thCommandOptionAnchors => 'Anchors';
+
+  @override
+  String get thCommandOptionAttr => 'Attribute (custom)';
 
   @override
   String get thCommandOptionAuthor => 'Author';

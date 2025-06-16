@@ -736,6 +736,8 @@ class MPTextToUser {
         localizations.thCommandOptionAltitudeValue;
     _commandOptionTypeAsString[THCommandOptionType.anchors] =
         localizations.thCommandOptionAnchors;
+    _commandOptionTypeAsString[THCommandOptionType.attr] =
+        localizations.thCommandOptionAttr;
     _commandOptionTypeAsString[THCommandOptionType.author] =
         localizations.thCommandOptionAuthor;
     _commandOptionTypeAsString[THCommandOptionType.border] =

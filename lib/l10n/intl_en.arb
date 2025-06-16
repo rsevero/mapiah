@@ -106,6 +106,31 @@
     "description": "The error message for invalid altitude value",
     "type": "text"
   },
+  "mpAttrNameEmpty": "Empty attribute name",
+  "@mpAttrNameEmpty": {
+    "description": "The error message for an empty attribute name",
+    "type": "text"
+  },
+  "mpAttrNameInvalid": "Invalid chars in attribute name",
+  "@mpAttrNameInvalid": {
+    "description": "The error message for invalid characters in attribute name",
+    "type": "text"
+  },
+  "mpAttrNameLabel": "Name",
+  "@mpAttrNameLabel": {
+    "description": "The label for the attribute name",
+    "type": "text"
+  },
+  "mpAttrValueEmpty": "Empty attribute value",
+  "@mpAttrValueEmpty": {
+    "description": "The error message for an empty attribute value",
+    "type": "text"
+  },
+  "mpAttrValueLabel": "Value",
+  "@mpAttrValueLabel": {
+    "description": "The label for the attribute value",
+    "type": "text"
+  },
   "mpAuthorInvalidValueErrorMessage": "Invalid date/interval and person name",
   "@mpAuthorInvalidValueErrorMessage": {
     "description": "The error message for invalid author value",
@@ -2470,6 +2495,11 @@
   "thCommandOptionAnchors": "Anchors",
   "@thCommandOptionAnchors": {
     "description": "The label for the anchors command option type",
+    "type": "text"
+  },
+  "thCommandOptionAttr": "Attribute (custom)",
+  "@thCommandOptionAttr": {
+    "description": "The label for the custom attribute command option type",
     "type": "text"
   },
   "thCommandOptionAuthor": "Author",

@@ -6,6 +6,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 class MPCommandOptionAux {
   static const List<THCommandOptionType> _supportAreaOptionsForAll = [
+    THCommandOptionType.attr,
     THCommandOptionType.clip,
     THCommandOptionType.context,
     THCommandOptionType.id,
@@ -25,6 +26,7 @@ class MPCommandOptionAux {
   ];
 
   static const List<THCommandOptionType> _supportLineOptionsForAll = [
+    THCommandOptionType.attr,
     THCommandOptionType.clip,
     THCommandOptionType.close,
     THCommandOptionType.context,
@@ -81,6 +83,7 @@ class MPCommandOptionAux {
 
   static const List<THCommandOptionType> _supportPointOptionsForAll = [
     THCommandOptionType.align,
+    THCommandOptionType.attr,
     THCommandOptionType.clip,
     THCommandOptionType.context,
     THCommandOptionType.id,
@@ -141,6 +144,7 @@ class MPCommandOptionAux {
   };
 
   static const List<THCommandOptionType> _supportScrapOptionsForAll = [
+    THCommandOptionType.attr,
     THCommandOptionType.author,
     THCommandOptionType.copyright,
     THCommandOptionType.cs,
