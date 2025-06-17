@@ -13,11 +13,10 @@ workflows:
     triggering:
       events:
         - tag
-      # tag_patterns:
-      #   - 'v*.*.*'
-      tags:
-        only:
-          - 'v*.*.*' 
+      tag_patterns:
+        - include: true
+        - pattern:
+            'v[0-9]+.[0-9]+.[0-9]+'
 
     scripts:
       - name: Get dependencies
