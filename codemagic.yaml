@@ -1,0 +1,57 @@
+workflows:
+  build-macos:
+    name: Build macOS Universal
+    environment:
+      flutter: 3.32.4
+      xcode: latest
+      cocoapods: default
+      # vars:
+      #   GITHUB_TOKEN: Encrypted(...) # Você criará esse secret no painel do Codemagic
+      groups:
+        - github
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - 'v*.*.*'
+
+    scripts:
+      - name: Get dependencies
+        script: flutter pub get
+
+      - name: Enable universal macOS build
+        script: |
+          flutter config --enable-macos-desktop
+          defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
+
+      - name: Build macOS
+        script: flutter build macos --release
+
+      - name: Create DMG
+        script: |
+          brew install create-dmg
+          create-dmg \
+            --volname "Mapiah" \
+            --volicon "macos/Runner/Assets.xcassets/AppIcon.appiconset/icon_512x512.png" \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 500 185 \
+            --icon "Mapiah.app" 100 185 \
+            build/macos/Build/Products/Release/Mapiah.app \
+            build/macos/Mapiah.dmg
+
+    artifacts:
+      - build/macos/Mapiah.dmg
+
+    publishing:
+      scripts:
+        - name: Upload to GitHub Release
+          script: |
+            curl -sL https://git.io/create-release.sh | bash -s \
+              "$GITHUB_TOKEN" \
+              "$CM_REPO_SLUG" \
+              "$CM_TAG" \
+              "Mapiah macOS release" \
+              build/macos/Mapiah.dmg
+
