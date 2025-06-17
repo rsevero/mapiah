@@ -35,7 +35,7 @@ workflows:
           brew install create-dmg
           create-dmg \
             --volname "Mapiah" \
-            --volicon "macos/Runner/Assets.xcassets/AppIcon.appiconset/icon_512x512.png" \
+            --volicon "macos/Runner/Assets.xcassets/AppIcon.appiconset/m-512x512.png" \
             --window-size 600 400 \
             --icon-size 100 \
             --app-drop-link 500 185 \
