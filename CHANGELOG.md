@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.2.4 - 2025-06-16
-- Included links to CHANGELOG and LICENSE in _About_ dialog
+* Included links to CHANGELOG and LICENSE in _About_ dialog
 * Included release date in CHANGELOG
 * Fixing 'right clicking without any objects selected presents ineffective options overlay window' (reported by Bruce Mutton)
 * Explaining how to edit element options in the help page
@@ -14,7 +14,6 @@
 * Including link for officially supported browser for Flutter web apps
 * Fixing 'scrap IDs are extended keywords' [reported by Axel Hack]
 * -attr command option support
-* First MacOS release
 
 ## 0.2.3 - 2025-06-13
 - Flutter upgraded to 3.32.4; pub upgrade

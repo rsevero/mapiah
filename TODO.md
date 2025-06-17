@@ -67,6 +67,7 @@ Version 0.3
 [ ] - Implement F1 shortcut to help page
 [ ] - Implement default option values
 [ ] - Support XVI images
+[ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style
 
 Version 0.4
 [ ] - Open multiple files simultaneously
