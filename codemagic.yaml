@@ -32,15 +32,9 @@ workflows:
 
       - name: Create DMG
         script: |
-          brew install create-dmg
-          create-dmg \
-            --volname "Mapiah" \
-            --window-size 600 400 \
-            --icon-size 100 \
-            --app-drop-link 500 185 \
-            --icon "Mapiah.app" 100 185 \
-            build/macos/Mapiah.dmg \
-            build/macos/Build/Products/Release/mapiah.app
+          brew install node
+          npm install -g appdmg
+          appdmg appdmg.json build/macos/Mapiah.dmg
 
     artifacts:
       - build/macos/Mapiah.dmg

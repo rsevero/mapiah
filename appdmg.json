@@ -1,0 +1,8 @@
+{
+  "title": "Mapiah",
+  "icon": "macos/Runner/Assets.xcassets/AppIcon.appiconset/m-512x512.png",
+  "contents": [
+    { "x": 130, "y": 220, "type": "file", "path": "build/macos/Build/Products/Release/mapiah.app" },
+    { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+  ]
+}
