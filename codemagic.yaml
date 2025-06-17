@@ -40,8 +40,8 @@ workflows:
             --icon-size 100 \
             --app-drop-link 500 185 \
             --icon "Mapiah.app" 100 185 \
-            build/macos/Build/Products/Release/Mapiah.app \
-            build/macos/Mapiah.dmg
+            build/macos/Mapiah.dmg \
+            build/macos/Build/Products/Release/mapiah.app
 
     artifacts:
       - build/macos/Mapiah.dmg
