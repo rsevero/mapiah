@@ -13,8 +13,11 @@ workflows:
     triggering:
       events:
         - tag
-      tag_patterns:
-        - 'v*.*.*'
+      # tag_patterns:
+      #   - 'v*.*.*'
+      tags:
+        only:
+          - 'v*.*.*' 
 
     scripts:
       - name: Get dependencies
