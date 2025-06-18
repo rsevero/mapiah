@@ -34,6 +34,9 @@ flatpak run io.github.rsevero.mapiah
 
 If someone is interested in creating an appimage, arch, deb, rpm, snap or other package and is interested in my can help, please contact me at rsev AT pm.me.
 
+### MacOS
+Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
+
 ### Web
 There are 2 web versions is available:
 * Javascript at [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
@@ -47,9 +50,6 @@ There is a Windows version available at [https://mapiah.org/downloads](https://m
 Apparently Microsoft Defender is keen on flagging unknown executables as having some kind of malware. Sometimes as [Bearfoos.A!ml](https://answers.microsoft.com/en-us/windows/forum/all/bearfoosaml-false-alarm/37707c6a-8222-44ad-a604-d75918dfb519), sometimes as [Trojan:Win32/Wacatac.B!ml](https://github.com/flutter/flutter/issues/118430). Maybe others.
 
 If you want to be extra sure, you can check Mapiah's setup exe file with some online virus scanner service before installing it.
-
-### MacOS
-Waiting for someone interested in helping creating the MacOS releases. Please contact me at rsev AT pm.me.
 
 ## Reporting bugs
 

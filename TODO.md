@@ -40,12 +40,13 @@ Version 0.2
 
 Version 0.3
 [ ] - Change cursors to show current status
-[ ] - Release creation Windows
-[ ] - Release creation MacOS
-[ ] - Release for Web
+[X] - Release creation Windows
+[X] - Release creation MacOS
+[X] - Release for Web
 [ ] - Release automation Linux
 [ ] - Release automation Windows
-[ ] - Release automation MacOS
+[X] - Release automation MacOS
+[ ] - Release automation for Web
 [ ] - Config page
 [ ] - Drag overlay windows
 [ ] - Copy/Paste
