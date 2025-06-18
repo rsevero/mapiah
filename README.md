@@ -55,7 +55,7 @@ If you want to be extra sure, you can check Mapiah's setup exe file with some on
 
 ## Reporting bugs
 
-As is probably the case in all Free Software projects, the developers of Mapiah also aim to produce completely bug-free software. And as happens in all software, they also fail.
+As is probably the case in all Free Software projects, the developers of Mapiah aim to produce completely bug-free software. And as happens in all software, they fail.
 
 Please register bugs and enhancement suggestions as a [Mapiah Issue](https://github.com/rsevero/mapiah/issues).
 
