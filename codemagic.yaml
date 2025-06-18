@@ -52,7 +52,7 @@ workflows:
           unset GITHUB_TOKEN
           
           # Authenticate using the stored token
-          gh auth login --with-token <<< "$GH_TOKEN" --verbose
+          gh auth login --with-token <<< "$GH_TOKEN"
 
           # Optionally, generate or copy your changelog
           # For example, if you have a changelog.md already:
@@ -62,4 +62,4 @@ workflows:
           gh release create "$FCI_TAG" \
             --title "Mapiah $FCI_TAG" \
             --notes "Release $FCI_TAG" \
-            build/macos/Mapiah.dmg --verbose
+            build/macos/Mapiah.dmg
