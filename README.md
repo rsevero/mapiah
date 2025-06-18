@@ -37,6 +37,8 @@ If someone is interested in creating an appimage, arch, deb, rpm, snap or other 
 ### MacOS
 Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
+As Mapiah has no Apple compatible signing yet its necessary to allow special permission to run Mapiah in MacOS: [Open Any Way](https://support.apple.com/en-us/102445#openanyway)
+
 ### Web
 There are 2 web versions is available:
 * Javascript at [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
