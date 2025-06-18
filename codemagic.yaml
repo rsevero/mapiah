@@ -51,7 +51,7 @@ workflows:
           # cp path/to/your/changelog.md changelog.md
 
           # Create the release
-          gh release create "$CM_TAG" \
-            --title "Mapiah $CM_TAG" \
+          gh release create "$FCI_TAG" \
+            --title "Mapiah $FCI_TAG" \
             build/macos/Mapiah.dmg
 
