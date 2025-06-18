@@ -30,17 +30,14 @@ workflows:
       - name: Build MacOS release
         script: |
           set -e
-          # flutter build macos --release
-          touch build
+          flutter build macos --release
 
       - name: Create DMG
         script: |
           set -e
-          # brew install node
-          # npm install -g appdmg
-          # appdmg appdmg.json build/macos/Mapiah.dmg
-          mkdir -p build/macos
-          touch build/macos/Mapiah.dmg
+          brew install node
+          npm install -g appdmg
+          appdmg appdmg.json build/macos/Mapiah.dmg
 
     artifacts:
       - build/macos/Mapiah.dmg
@@ -61,7 +58,7 @@ workflows:
           # For example, if you have a changelog.md already:
           # cp path/to/your/changelog.md changelog.md
 
-          CM_TAG=v0.2.3.1
+          CM_TAG=v0.2.4-test
 
           # Create the release
           gh release create "${CM_TAG}" \
