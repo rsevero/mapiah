@@ -28,14 +28,18 @@ workflows:
           defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
 
       - name: Build MacOS release
-        script: flutter build macos --release
+        script: |
+          set -e
+          # flutter build macos --release
+          touch build
 
       - name: Create DMG
         script: |
           set -e
-          brew install node
-          npm install -g appdmg
-          appdmg appdmg.json build/macos/Mapiah.dmg
+          # brew install node
+          # npm install -g appdmg
+          # appdmg appdmg.json build/macos/Mapiah.dmg
+          touch build/macos/Mapiah.dmg
 
     artifacts:
       - build/macos/Mapiah.dmg
@@ -56,7 +60,7 @@ workflows:
           # For example, if you have a changelog.md already:
           # cp path/to/your/changelog.md changelog.md
 
-          CM_TAG=v0.2.4
+          CM_TAG=v0.2.3.1
 
           # Create the release
           gh release create "${CM_TAG}" \
