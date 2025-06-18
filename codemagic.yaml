@@ -39,6 +39,7 @@ workflows:
           # brew install node
           # npm install -g appdmg
           # appdmg appdmg.json build/macos/Mapiah.dmg
+          mkdir -p build/macos
           touch build/macos/Mapiah.dmg
 
     artifacts:
