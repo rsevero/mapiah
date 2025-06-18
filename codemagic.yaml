@@ -19,7 +19,7 @@ workflows:
       - name: Get ´flutter pub´ dependencies
         script: |
           set -e
-          flutter pub get
+          # flutter pub get
 
       - name: Enable MacOS build
         script: |
