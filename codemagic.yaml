@@ -5,8 +5,6 @@ workflows:
       flutter: 3.32.4
       xcode: latest
       cocoapods: default
-      # vars:
-      #   GITHUB_TOKEN: Encrypted(...) # Você criará esse secret no painel do Codemagic
       groups:
         - mapiah_github_token
 
@@ -58,8 +56,10 @@ workflows:
           # For example, if you have a changelog.md already:
           # cp path/to/your/changelog.md changelog.md
 
+          CM_TAG=v0.2.4
+
           # Create the release
-          gh release create "$FCI_TAG" \
-            --title "Mapiah $FCI_TAG" \
-            --notes "Release $FCI_TAG" \
+          gh release create "${CM_TAG}" \
+            --title "Mapiah ${CM_TAG}" \
+            --notes "Release ${CM_TAG}" \
             build/macos/Mapiah.dmg
