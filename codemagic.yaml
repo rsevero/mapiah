@@ -41,12 +41,17 @@ workflows:
 
     publishing:
       scripts:
-        - name: Upload to GitHub Release
-          script: |
-            curl -sL https://git.io/create-release.sh | bash -s \
-              "$GITHUB_TOKEN" \
-              "$CM_REPO_SLUG" \
-              "$CM_TAG" \
-              "Mapiah macOS release" \
-              build/macos/Mapiah.dmg
+      - name: Create GitHub Release with GH CLI
+        script: |
+          # Set up GitHub CLI authentication
+          echo "$GITHUB_TOKEN" | gh auth login --with-token
+
+          # Optionally, generate or copy your changelog
+          # For example, if you have a changelog.md already:
+          # cp path/to/your/changelog.md changelog.md
+
+          # Create the release
+          gh release create "$CM_TAG" \
+            --title "Mapiah $CM_TAG" \
+            build/macos/Mapiah.dmg
 
