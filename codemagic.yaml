@@ -60,7 +60,7 @@ workflows:
 
           # Manually setting CM_TAG for debugging purposes
           # This should be set to the tag that triggered the workflow
-          CM_TAG=v0.2.4
+          # CM_TAG=v0.2.4
 
           # Create the release
           gh release create "${CM_TAG}" \
