@@ -14,16 +14,18 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - include: true
-        - pattern:
-            'v[0-9]+.[0-9]+.[0-9]+'
+      - pattern: 'v[0-9]+.[0-9]+.[0-9]+'
+        include: true
 
     scripts:
       - name: Get dependencies
-        script: flutter pub get
+        script: |
+          set -e
+          flutter pub get
 
       - name: Enable universal macOS build
         script: |
+          set -e
           flutter config --enable-macos-desktop
           defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
 
@@ -32,6 +34,7 @@ workflows:
 
       - name: Create DMG
         script: |
+          set -e
           brew install node
           npm install -g appdmg
           appdmg appdmg.json build/macos/Mapiah.dmg
@@ -43,8 +46,9 @@ workflows:
       scripts:
       - name: Create GitHub Release with GH CLI
         script: |
-          # Set up GitHub CLI authentication
-          echo "$GITHUB_TOKEN" | gh auth login --with-token
+          set -e
+          # Authenticate with GitHub CLI using the token from groups
+          gh auth login --with-token <<< "$GITHUB_TOKEN"
 
           # Optionally, generate or copy your changelog
           # For example, if you have a changelog.md already:
