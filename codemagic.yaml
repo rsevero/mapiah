@@ -44,7 +44,7 @@ workflows:
       - name: Create GitHub Release with GH CLI
         script: |
           # Set up GitHub CLI authentication
-          gh auth login --with-token
+          gh auth setup-git
 
           # Optionally, generate or copy your changelog
           # For example, if you have a changelog.md already:
