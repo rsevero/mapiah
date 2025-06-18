@@ -19,7 +19,7 @@ workflows:
       - name: Get ´flutter pub´ dependencies
         script: |
           set -e
-          # flutter pub get
+          flutter pub get
 
       - name: Enable MacOS build
         script: |
@@ -30,14 +30,16 @@ workflows:
       - name: Build MacOS release
         script: |
           set -e
-          flutter build macos --release
+          # flutter build macos --release
+          touch build
 
       - name: Create DMG
         script: |
           set -e
-          brew install node
-          npm install -g appdmg
-          appdmg appdmg.json build/macos/Mapiah.dmg
+          # brew install node
+          # npm install -g appdmg
+          # appdmg appdmg.json build/macos/Mapiah.dmg
+          touch Mapiah.dmg
 
     artifacts:
       - build/macos/Mapiah.dmg
@@ -58,10 +60,10 @@ workflows:
           # For example, if you have a changelog.md already:
           # cp path/to/your/changelog.md changelog.md
 
-          CM_TAG=v0.2.4-test
+          CM_TAG=v0.2.4-test1
 
           # Create the release
           gh release create "${CM_TAG}" \
             --title "Mapiah ${CM_TAG}" \
             --notes "Release ${CM_TAG}" \
-            build/macos/Mapiah.dmg
+            Mapiah.dmg
