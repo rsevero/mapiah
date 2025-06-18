@@ -1,6 +1,6 @@
 workflows:
   build-macos:
-    name: Build macOS Universal
+    name: Build MacOS
     environment:
       flutter: 3.32.4
       xcode: latest
@@ -18,18 +18,18 @@ workflows:
         include: true
 
     scripts:
-      - name: Get dependencies
+      - name: Get ´flutter pub´ dependencies
         script: |
           set -e
           flutter pub get
 
-      - name: Enable universal macOS build
+      - name: Enable MacOS build
         script: |
           set -e
           flutter config --enable-macos-desktop
           defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
 
-      - name: Build macOS
+      - name: Build MacOS release
         script: flutter build macos --release
 
       - name: Create DMG
@@ -47,8 +47,12 @@ workflows:
       - name: Create GitHub Release with GH CLI
         script: |
           set -e
-          # Authenticate with GitHub CLI using the token from groups
-          gh auth login --with-token <<< "$GITHUB_TOKEN"
+          # Store token in a different variable and unset GITHUB_TOKEN
+          GH_TOKEN=$GITHUB_TOKEN
+          unset GITHUB_TOKEN
+          
+          # Authenticate using the stored token
+          gh auth login --with-token <<< "$GH_TOKEN" --verbose
 
           # Optionally, generate or copy your changelog
           # For example, if you have a changelog.md already:
@@ -57,5 +61,5 @@ workflows:
           # Create the release
           gh release create "$FCI_TAG" \
             --title "Mapiah $FCI_TAG" \
-            build/macos/Mapiah.dmg
-
+            --notes "Release $FCI_TAG" \
+            build/macos/Mapiah.dmg --verbose
