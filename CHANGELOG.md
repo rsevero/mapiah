@@ -13,7 +13,7 @@
 * TH2FileEditPageHelp: explaining save on web releases
 * Including link for officially supported browser for Flutter web apps
 * Fixing 'scrap IDs are extended keywords' [reported by Axel Hack]
-* -attr command option support
+* Fixing lack of -attr command option support [reported by Axel Hack]
 * First MacOS release (already automated) thanks to Christian de Jongh
 * Automated Window releases
 
