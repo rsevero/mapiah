@@ -97,7 +97,7 @@ jobs:
         run: |
           TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
           TITLE="Mapiah $TAG"
-          INSTALLER="build/windows-installer/Mapiah-$TAG-windows-*.exe"
+          INSTALLER="build/windows-installer/Mapiah-$TAG-windows-x64.exe"
 
           # Store token in a different variable and unset GITHUB_TOKEN
           GH_TOKEN=$GITHUB_TOKEN
