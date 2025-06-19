@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: Validate tag format
         id: validate-tag
+        shell: bash
         run: |
           TAG=${GITHUB_REF#refs/tags/}
           if [ -z "$TAG" ]; then
