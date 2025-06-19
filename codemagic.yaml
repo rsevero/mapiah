@@ -27,7 +27,7 @@ workflows:
           if [ -n "$FCI_TAG" ]; then
             export MAPIAH_TAG="$FCI_TAG"
           else
-            export MAPIAH_TAG="$FCI_TAG_PARAM"
+            export MAPIAH_TAG="$MAPIAH_TAG_PARAM"
           fi
           echo "MAPIAH_TAG=$MAPIAH_TAG" >> $CM_ENV
           echo "MAPIAH_TAG is: $MAPIAH_TAG"
