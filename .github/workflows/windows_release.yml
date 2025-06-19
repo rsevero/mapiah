@@ -88,15 +88,13 @@ jobs:
           "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%OUTPUT_DIR%\mapiah.iss"
 
       - name: Publish Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
           TITLE="Mapiah $TAG"
           INSTALLER="build/windows-installer/MapiahSetup_*.exe"
-
-          # Store token in a different variable and unset GITHUB_TOKEN
-          GH_TOKEN=$GITHUB_TOKEN
-          unset GITHUB_TOKEN
           
           # Authenticate using the stored token
           gh auth login --with-token <<< "$GH_TOKEN"
