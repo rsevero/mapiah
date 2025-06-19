@@ -26,6 +26,13 @@ jobs:
           fi
           echo "Validated tag: $TAG"
 
+      # Smart checkout - uses tag only for automatic runs
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'push' && github.ref || '' }}
+          fetch-depth: 0
+
       - name: Debug checkout information
         shell: bash
         run: |
@@ -37,16 +44,32 @@ jobs:
             echo "Using latest commit"
           fi
 
-      # Smart checkout - uses tag only for automatic runs
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event_name == 'push' && github.ref || '' }}
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.32.4
 
-      - run: flutter --version
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Build Windows release
+        run: flutter build windows --release
+
+      - name: Create ZIP artifact
+        shell: bash
+        run: |
+          cd build/windows/runner/Release
+          7z a -r Mapiah-Windows-${{ github.event_name == 'push' && github.ref_name || 'latest' }}.zip ./*
+          
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Mapiah-Windows-${{ github.event_name == 'push' && github.ref_name || 'latest' }}
+      #     path: build/windows/runner/Release/Mapiah-Windows-*.zip
