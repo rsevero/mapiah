@@ -17,6 +17,7 @@ jobs:
       # Only validate tag format for automatic runs
       - name: Validate tag (automatic runs only)
         if: github.event_name == 'push'
+        shell: bash
         run: |
           TAG=${GITHUB_REF#refs/tags/}
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -24,9 +25,9 @@ jobs:
             exit 1
           fi
           echo "Validated tag: $TAG"
-        shell: bash
 
       - name: Debug checkout information
+        shell: bash
         run: |
           echo "Trigger type: ${{ github.event_name }}"
           echo "Checked out SHA: ${{ github.sha }}"
