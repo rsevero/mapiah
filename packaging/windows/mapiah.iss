@@ -11,11 +11,11 @@
    SolidCompression=yes
 
    [Files]
-   Source: "C:\mapiah\build\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+   Source: "C:\mapiah\build\windows\x64\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
    [Icons]
-   Name: "{group}\Mapiah"; Filename: "{app}\x64\runner\Release\mapiah.exe"
+   Name: "{group}\Mapiah"; Filename: "{app}\mapiah.exe"
    Name: "{group}\Uninstall Mapiah"; Filename: "{uninstallexe}"
 
    [Run]
-   Filename: "{app}\x64\runner\Release\mapiah.exe"; Description: "Launch Mapiah"; Flags: nowait postinstall skipifsilent
+   Filename: "{app}\mapiah.exe"; Description: "Launch Mapiah"; Flags: nowait postinstall skipifsilent

@@ -67,3 +67,17 @@ workflows:
             --title "Mapiah ${CM_TAG}" \
             --notes "Release ${CM_TAG}" \
             build/macos/Mapiah.dmg
+
+          # Check if release exists and create if needed
+          if ! gh release view "$CM_TAG" 2>/dev/null; then
+            echo "Creating new release..."
+            gh release create "$CM_TAG" \
+              --title "$TITLE" \
+              --notes "Release $CM_TAG" \
+              "$INSTALLER"
+          else
+            echo "Release exists - uploading assets..."
+            gh release upload "$CM_TAG" \
+              --clobber \
+              "$INSTALLER"
+          fi
