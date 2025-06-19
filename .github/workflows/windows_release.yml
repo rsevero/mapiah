@@ -94,6 +94,13 @@ jobs:
           TITLE="Mapiah $TAG"
           INSTALLER="build/windows-installer/MapiahSetup_*.exe"
 
+          Store token in a different variable and unset GITHUB_TOKEN
+          GH_TOKEN=$GITHUB_TOKEN
+          unset GITHUB_TOKEN
+          
+          # Authenticate using the stored token
+          gh auth login --with-token <<< "$GH_TOKEN"
+
           # Check if release exists and create if needed
           if ! gh release view "$TAG" 2>/dev/null; then
             echo "Creating new release..."
