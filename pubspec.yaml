@@ -46,6 +46,8 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/help/en/mapiah_home_help.md
+    - assets/help/en/th2_file_edit_page_help.md
     - assets/help/images/buttonAddArea.png
     - assets/help/images/buttonAddElement.png
     - assets/help/images/buttonAddLine.png
@@ -64,13 +66,20 @@ flutter:
     - assets/help/images/buttonZoomScrap.png
     - assets/help/images/buttonZoomSelection.png
     - assets/help/images/iconAbout.png
+    - assets/help/images/iconAbout.png
     - assets/help/images/iconBack.png
+    - assets/help/images/iconClose.png
+    - assets/help/images/iconHelp.png
+    - assets/help/images/iconLanguage.png
+    - assets/help/images/iconOpenFile.png
+    - assets/help/images/iconSave.png
+    - assets/help/images/iconSaveAs.png
     - assets/icons/add_element-addArea.png
     - assets/icons/add_element-addElement.png
     - assets/icons/add_element-addLine.png
     - assets/icons/add_element-addPoint.png
     - assets/icons/change-scrap-tool.png
-    - assets/icons/io.github.rsevero.mapiah.png
+    - assets/icons/org.mapiah.Mapiah.png
     - assets/icons/select-tool.png
     - assets/icons/zoom_minus.png
     - assets/icons/zoom_one_to_one.png
@@ -78,12 +87,3 @@ flutter:
     - assets/icons/zoom_plus.png
     - assets/icons/zoom_selection.png
     - assets/icons/zoom-out-scrap.png
-    - assets/help/images/iconClose.png
-    - assets/help/images/iconAbout.png
-    - assets/help/images/iconHelp.png
-    - assets/help/images/iconLanguage.png
-    - assets/help/images/iconOpenFile.png
-    - assets/help/images/iconSave.png
-    - assets/help/images/iconSaveAs.png
-    - assets/help/en/mapiah_home_help.md
-    - assets/help/en/th2_file_edit_page_help.md
