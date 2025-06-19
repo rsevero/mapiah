@@ -62,14 +62,33 @@ jobs:
       - name: Build Windows release
         run: flutter build windows --release
 
-      - name: Create ZIP artifact
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Prepare build directory
         shell: bash
         run: |
-          cd build/windows/x64/runner/Release
-          7z a -r Mapiah-Windows-${{ github.event_name == 'push' && github.ref_name || 'latest' }}.zip ./*
+          mkdir -p build/windows-installer
+          # Copy the ISS file to build directory for modification
+          cp packaging/windows/mapiah.iss build/windows-installer/
 
-      - name: Upload artifact
+      - name: Create Inno Setup installer
+        shell: cmd
+        run: |
+          set BUILD_DIR=%GITHUB_WORKSPACE%\build\windows\x64\runner\Release
+          set OUTPUT_DIR=%GITHUB_WORKSPACE%\build\windows-installer
+
+          # Get the version from the built executable
+          for /f "tokens=*" %%i in ('powershell -command "(Get-Item '%BUILD_DIR%\mapiah.exe').VersionInfo.ProductVersion"') do set APP_VERSION=%%i
+
+          # Update paths in the ISS file
+          powershell -Command "(Get-Content '%OUTPUT_DIR%\mapiah.iss') -replace 'C:\\mapiah\\build\\windows', '%GITHUB_WORKSPACE%\\build\\windows' | Set-Content '%OUTPUT_DIR%\mapiah.iss'"
+
+          # Compile the installer
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%OUTPUT_DIR%\mapiah.iss"
+
+      - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Mapiah-Windows-${{ github.event_name == 'push' && github.ref_name || 'latest' }}
-          path: build/windows/x64/runner\Release/Mapiah-Windows-*.zip
+          name: Mapiah-Installer-${{ github.event_name == 'push' && github.ref_name || 'latest' }}
+          path: build/windows-installer/MapiahSetup_*.exe
