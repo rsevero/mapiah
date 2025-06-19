@@ -40,7 +40,6 @@ workflows:
       - name: Get ´flutter pub´ dependencies
         script: |
           set -e
-          echo "Installer: '$INSTALLER'"
           flutter pub get
 
       - name: Enable MacOS build
