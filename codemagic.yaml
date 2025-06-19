@@ -76,10 +76,6 @@ workflows:
           # Authenticate using the stored token
           gh auth login --with-token <<< "$GH_TOKEN"
 
-          # Optionally, generate or copy your changelog
-          # For example, if you have a changelog.md already:
-          # cp path/to/your/changelog.md changelog.md
-
           # Check if release exists and create if needed
           if ! gh release view "$MAPIAH_TAG" 2>/dev/null; then
             echo "Creating new release..."
