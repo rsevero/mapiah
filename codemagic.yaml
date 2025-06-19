@@ -8,7 +8,7 @@ workflows:
       groups:
         - mapiah_github_token
       vars:
-        INSTALLER: "build/macos/Mapiah-${CM_TAG}-macOS-universal.dmg"
+        INSTALLER: "build/macos/Mapiah-${FCI_TAG}-macOS-universal.dmg"
 
     triggering:
       events:
