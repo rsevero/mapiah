@@ -87,8 +87,23 @@ jobs:
           # Compile the installer
           "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%OUTPUT_DIR%\mapiah.iss"
 
-      - name: Upload installer artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Mapiah-Installer-${{ github.event_name == 'push' && github.ref_name || 'latest' }}
-          path: build/windows-installer/MapiahSetup_*.exe
+      - name: Publish Release
+        shell: bash
+        run: |
+          TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+          TITLE="Mapiah $TAG"
+          INSTALLER="build/windows-installer/MapiahSetup_*.exe"
+
+          # Check if release exists and create if needed
+          if ! gh release view "$TAG" 2>/dev/null; then
+            echo "Creating new release..."
+            gh release create "$TAG" \
+              --title "$TITLE" \
+              --notes "Automatic build" \
+              "$INSTALLER"
+          else
+            echo "Release exists - uploading assets..."
+            gh release upload "$TAG" \
+              --clobber \
+              "$INSTALLER"
+          fi
