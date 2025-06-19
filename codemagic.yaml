@@ -20,6 +20,7 @@ workflows:
     scripts:
       - name: Set MAPIAH_TAG variable
         script: |
+          set -e
           if [ -n "$CM_TAG" ]; then
             export MAPIAH_TAG="$CM_TAG"
           else
@@ -40,7 +41,6 @@ workflows:
         script: |
           set -e
           echo "Installer: '$INSTALLER'"
-          exit 1
           flutter pub get
 
       - name: Enable MacOS build
