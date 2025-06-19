@@ -1,9 +1,3 @@
-parameters:
-  MAPIAH_TAG_PARAM:
-    type: string
-    description: "Tag to use for manual builds"
-    default: "v0.2.4"
-
 workflows:
   build-macos:
     name: Build MacOS
@@ -13,6 +7,8 @@ workflows:
       cocoapods: default
       groups:
         - mapiah_github_token
+      vars:
+        MAPIAH_TAG_PARAM: "v0.2.4"
 
     triggering:
       events:
@@ -24,8 +20,8 @@ workflows:
     scripts:
       - name: Set MAPIAH_TAG variable
         script: |
-          if [ -n "$FCI_TAG" ]; then
-            export MAPIAH_TAG="$FCI_TAG"
+          if [ -n "$CM_TAG" ]; then
+            export MAPIAH_TAG="$CM_TAG"
           else
             export MAPIAH_TAG="$MAPIAH_TAG_PARAM"
           fi
@@ -44,6 +40,7 @@ workflows:
         script: |
           set -e
           echo "Installer: '$INSTALLER'"
+          exit 1
           flutter pub get
 
       - name: Enable MacOS build
