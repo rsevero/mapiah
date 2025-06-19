@@ -10,6 +10,9 @@ on:
         required: false
         default: 'v1.0.0-test'
 
+permissions:
+  contents: write
+
 jobs:
   main:
     runs-on: windows-latest
@@ -108,7 +111,7 @@ jobs:
             echo "Creating new release..."
             gh release create "$TAG" \
               --title "$TITLE" \
-              --notes "Automatic build" \
+              --notes "Release $TAG" \
               "$INSTALLER"
           else
             echo "Release exists - uploading assets..."
