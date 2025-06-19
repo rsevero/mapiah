@@ -13,8 +13,6 @@ workflows:
       cocoapods: default
       groups:
         - mapiah_github_token
-      vars:
-        MAPIAH_TAG: ${FCI_TAG:-$MAPIAH_TAG_PARAM}
 
     triggering:
       events:
@@ -24,6 +22,16 @@ workflows:
         include: true
 
     scripts:
+      - name: Set MAPIAH_TAG variable
+        script: |
+          if [ -n "$FCI_TAG" ]; then
+            export MAPIAH_TAG="$FCI_TAG"
+          else
+            export MAPIAH_TAG="$FCI_TAG_PARAM"
+          fi
+          echo "MAPIAH_TAG=$MAPIAH_TAG" >> $CM_ENV
+          echo "MAPIAH_TAG is: $MAPIAH_TAG"
+
       - name: Set INSTALLER path
         script: |
           set -e
