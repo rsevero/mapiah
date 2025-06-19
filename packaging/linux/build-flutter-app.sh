@@ -25,4 +25,3 @@ rm -f "$archiveName"
 tar -czaf "$archiveName" ./*
 mv "$archiveName" "$baseDir"/
 cd "$baseDir"
-sha256sum "$archiveName"

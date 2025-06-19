@@ -24,6 +24,15 @@ git clone https://github.com/rsevero/mapiah.git; git clone https://github.com/rs
 
 6. Build portable Linux release:
 ```
-cd /devel/mapiah/packaging/linux; ./build-flutter-app.sh
+cd /devel/mapiah/; ./packaging/linux/build-flutter-app.sh
 ```
 
+7. Update Mapiah-Linux-Portable.tar.gz sha256sum in /devel/mapiah_flathub_repo/build-flatpak.sh:
+```
+sed -i "s/sha256: .*/sha256: $(sha256sum Mapiah-Linux-Portable.tar.gz | awk '{print $1}')/" ../mapiah_flathub_repo/org.mapiah.Mapiah.yml
+```
+
+8. Buld the flatpak
+```
+flatpak-builder --force-clean build-dir org.mapiah.Mapiah.yml --repo=repo
+```
