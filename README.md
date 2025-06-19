@@ -47,7 +47,7 @@ There are 2 web versions is available:
 [Officially supported browsers](https://docs.flutter.dev/platform-integration/web/faq#which-web-browsers-are-supported-by-flutter) for Flutter web apps.
 
 ### Windows
-There is a Windows version available at [https://mapiah.org/downloads](https://mapiah.org/downloads).
+Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
 Apparently Microsoft Defender is keen on flagging unknown executables as having some kind of malware. Sometimes as [Bearfoos.A!ml](https://answers.microsoft.com/en-us/windows/forum/all/bearfoosaml-false-alarm/37707c6a-8222-44ad-a604-d75918dfb519), sometimes as [Trojan:Win32/Wacatac.B!ml](https://github.com/flutter/flutter/issues/118430). Maybe others.
 
