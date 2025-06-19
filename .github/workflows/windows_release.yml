@@ -94,7 +94,7 @@ jobs:
           TITLE="Mapiah $TAG"
           INSTALLER="build/windows-installer/MapiahSetup_*.exe"
 
-          Store token in a different variable and unset GITHUB_TOKEN
+          # Store token in a different variable and unset GITHUB_TOKEN
           GH_TOKEN=$GITHUB_TOKEN
           unset GITHUB_TOKEN
           
