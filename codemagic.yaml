@@ -1,3 +1,9 @@
+parameters:
+  MAPIAH_TAG_PARAM:
+    type: string
+    description: "Tag to use for manual builds"
+    default: "v0.2.4"
+
 workflows:
   build-macos:
     name: Build MacOS
@@ -7,6 +13,8 @@ workflows:
       cocoapods: default
       groups:
         - mapiah_github_token
+      vars:
+        MAPIAH_TAG: ${FCI_TAG:-$MAPIAH_TAG_PARAM}
 
     triggering:
       events:
@@ -19,7 +27,7 @@ workflows:
       - name: Set INSTALLER path
         script: |
           set -e
-          export INSTALLER="build/macos/Mapiah-${FCI_TAG}-macOS-universal.dmg"
+          export INSTALLER="build/macos/Mapiah-${MAPIAH_TAG}-macOS-universal.dmg"
           echo "INSTALLER=$INSTALLER" >> $CM_ENV
           echo "Defined INSTALLER as: $INSTALLER"
 
@@ -66,20 +74,16 @@ workflows:
           # For example, if you have a changelog.md already:
           # cp path/to/your/changelog.md changelog.md
 
-          # Manually setting CM_TAG for debugging purposes
-          # This should be set to the tag that triggered the workflow
-          FCI_TAG=v0.2.4
-
           # Check if release exists and create if needed
-          if ! gh release view "$FCI_TAG" 2>/dev/null; then
+          if ! gh release view "$MAPIAH_TAG" 2>/dev/null; then
             echo "Creating new release..."
-            gh release create "$FCI_TAG" \
+            gh release create "$MAPIAH_TAG" \
               --title "$TITLE" \
-              --notes "Release $FCI_TAG" \
+              --notes "Release $MAPIAH_TAG" \
               "$INSTALLER"
           else
             echo "Release exists - uploading assets..."
-            gh release upload "$FCI_TAG" \
+            gh release upload "$MAPIAH_TAG" \
               --clobber \
               "$INSTALLER"
           fi
