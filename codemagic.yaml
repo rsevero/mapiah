@@ -19,7 +19,7 @@ workflows:
       - name: Set INSTALLER path
         script: |
           set -e
-          INSTALLER="build/macos/Mapiah-${CM_TAG}-macOS-universal.dmg"
+          export INSTALLER="build/macos/Mapiah-${FCI_TAG}-macOS-universal.dmg"
           echo "INSTALLER=$INSTALLER" >> $CM_ENV
           echo "Defined INSTALLER as: $INSTALLER"
 
@@ -68,18 +68,18 @@ workflows:
 
           # Manually setting CM_TAG for debugging purposes
           # This should be set to the tag that triggered the workflow
-          CM_TAG=v0.2.4
+          FCI_TAG=v0.2.4
 
           # Check if release exists and create if needed
-          if ! gh release view "$CM_TAG" 2>/dev/null; then
+          if ! gh release view "$FCI_TAG" 2>/dev/null; then
             echo "Creating new release..."
-            gh release create "$CM_TAG" \
+            gh release create "$FCI_TAG" \
               --title "$TITLE" \
-              --notes "Release $CM_TAG" \
+              --notes "Release $FCI_TAG" \
               "$INSTALLER"
           else
             echo "Release exists - uploading assets..."
-            gh release upload "$CM_TAG" \
+            gh release upload "$FCI_TAG" \
               --clobber \
               "$INSTALLER"
           fi
