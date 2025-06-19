@@ -18,7 +18,7 @@ baseDir=$(pwd)
 
 
 flutter pub get
-flutter build linux
+flutter build linux --release
 
 cd build/linux/x64/release/bundle || exit
 tar -czaf $archiveName ./*
