@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.mapiah.Mapiah</id>
+
+  <name>Mapiah</name>
+  <summary>User friendly multiplatform Therion map editor</summary>
+
+  <developer id="org.mapiah">
+    <name>Mapiah developers</name>
+  </developer>
+  <url type="homepage">https://github.com/rsevero/mapiah</url>
+
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <content_rating type="oars-1.0" />
+
+  <description>
+    <p>
+      User-friendly multiplatform interface to the powerful Therion mapping software.
+    </p>
+    <p>
+      As an intended side effect, it aims to completely replace xTherion, the venerable but ostensibly ancient Therion graphical interface.
+    </p>
+    <p>
+      Also create a thriving community of users and developers to make it as powerful and user friendly as such community needs and creates.
+    </p>
+  </description>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#f9f871</color>
+    <color type="primary" scheme_preference="dark">#4c8077</color>
+  </branding>
+
+  <launchable type="desktop-id">org.mapiah.Mapiah.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-initial.png</image>
+      <caption>Initial window</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-single_scrap.png</image>
+      <caption>Editing a single scrap TH2 file</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-options.png</image>
+      <caption>Options dialog</caption>
+    </screenshot>
+  </screenshots>
+    <releases>
+    <release version="0.2.4" date="2025-06-16" />
+  </releases>
+</component>
