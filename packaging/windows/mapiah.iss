@@ -6,7 +6,7 @@
    DefaultDirName={commonpf}\Mapiah
    DefaultGroupName=Mapiah
    OutputDir=C:\mapiah\build\windows-installer
-   OutputBaseFilename=MapiahSetup_{#AppVersion}
+   OutputBaseFilename=Mapiah-{#AppVersion}-windows-x64
    Compression=lzma
    SolidCompression=yes
 
