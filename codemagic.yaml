@@ -7,8 +7,6 @@ workflows:
       cocoapods: default
       groups:
         - mapiah_github_token
-      vars:
-        INSTALLER: "build/macos/Mapiah-${FCI_TAG}-macOS-universal.dmg"
 
     triggering:
       events:
@@ -18,6 +16,13 @@ workflows:
         include: true
 
     scripts:
+      - name: Set INSTALLER path
+        script: |
+          set -e
+          INSTALLER="build/macos/Mapiah-${CM_TAG}-macOS-universal.dmg"
+          echo "INSTALLER=$INSTALLER" >> $CM_ENV
+          echo "Defined INSTALLER as: $INSTALLER"
+
       - name: Get ´flutter pub´ dependencies
         script: |
           set -e
