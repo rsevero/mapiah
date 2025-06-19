@@ -14,33 +14,33 @@ jobs:
   main:
     runs-on: windows-latest
     steps:
-      - name: Determine tag
-        id: determine-tag
-        shell: bash
+      # Only validate tag format for automatic runs
+      - name: Validate tag (automatic runs only)
+        if: github.event_name == 'push'
         run: |
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            # Only validate format for automatic tag pushes
-            TAG=${GITHUB_REF#refs/tags/}
-            if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
-              exit 1
-            fi
-          else
-            # For workflow_dispatch, use input directly
-            TAG="${{ github.event.inputs.test_tag }}"
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
+            exit 1
           fi
-          echo "TAG_NAME=$TAG" >> $GITHUB_OUTPUT
-          echo "Using tag: $TAG"
+          echo "Validated tag: $TAG"
+        shell: bash
 
-      - name: Debug output
+      - name: Debug checkout information
         run: |
-          echo "Triggered by: ${{ github.event_name }}"
-          echo "Using tag: ${{ steps.determine-tag.outputs.TAG_NAME }}"
+          echo "Trigger type: ${{ github.event_name }}"
+          echo "Checked out SHA: ${{ github.sha }}"
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "Using tag: ${GITHUB_REF#refs/tags/}"
+          else
+            echo "Using latest commit"
+          fi
 
-      - name: Clone repository
+      # Smart checkout - uses tag only for automatic runs
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.determine-tag.outputs.TAG_NAME }}
+          ref: ${{ github.event_name == 'push' && github.ref || '' }}
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
