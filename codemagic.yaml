@@ -7,6 +7,8 @@ workflows:
       cocoapods: default
       groups:
         - mapiah_github_token
+      vars:
+        INSTALLER: "build/macos/Mapiah-$TAG-macOS-universal.dmg"
 
     triggering:
       events:
@@ -19,6 +21,7 @@ workflows:
       - name: Get ´flutter pub´ dependencies
         script: |
           set -e
+          echo "Installer: '$INSTALLER'"
           flutter pub get
 
       - name: Enable MacOS build
@@ -37,10 +40,10 @@ workflows:
           set -e
           brew install node
           npm install -g appdmg
-          appdmg appdmg.json build/macos/Mapiah.dmg
+          appdmg appdmg.json "$INSTALLER"
 
-    artifacts:
-      - build/macos/Mapiah.dmg
+    # artifacts:
+    #   - build/macos/Mapiah.dmg
 
     publishing:
       scripts:
@@ -60,13 +63,7 @@ workflows:
 
           # Manually setting CM_TAG for debugging purposes
           # This should be set to the tag that triggered the workflow
-          # CM_TAG=v0.2.4
-
-          # Create the release
-          gh release create "${CM_TAG}" \
-            --title "Mapiah ${CM_TAG}" \
-            --notes "Release ${CM_TAG}" \
-            build/macos/Mapiah.dmg
+          CM_TAG=v0.2.4
 
           # Check if release exists and create if needed
           if ! gh release view "$CM_TAG" 2>/dev/null; then
