@@ -694,7 +694,11 @@ class THGrammar extends GrammarDefinition {
 
   /// point -value
   Parser valueOption() => stringIgnoreCase('value') & valueOptions();
-  Parser valueOptions() =>
+  Parser valueOptions() => (quotedString().trim() |
+          bracketStringGeneral().trim() |
+          unquotedString().flatten().trim())
+      .map((value) => [value]);
+  Parser valueOptions2() =>
       (dateTimeNoNoDateTime().trim().map((value) => ['datetime', value]) |
           numberWithSuffix(char('?')).trim().map((value) => [
                 'one_number_with_optional_unit',

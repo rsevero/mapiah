@@ -1,0 +1,4 @@
+encoding  utf-8
+scrap 141c-TradeElevEXT-s1
+point 16235.0 903.25 date -value "2024.06.08" -scale xs -align br
+endscrap
