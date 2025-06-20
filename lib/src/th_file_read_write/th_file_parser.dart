@@ -85,6 +85,14 @@ class THFileParser {
     r'^([+-]?)(\d+(?:\.\d+)?)(\?)?(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
     caseSensitive: false,
   );
+  final RegExp signedNumberWithOptionalUnitRegex = RegExp(
+    r'^([+-]?)(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
+    caseSensitive: false,
+  );
+  final RegExp plusMinusNumbersWithOptionalUnitRegex = RegExp(
+    r'^(\+\d+(?:\.\d+)?)\s+(-\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
+    caseSensitive: false,
+  );
 
   THFileParser() {
     _areaContentParser = _grammar.buildFrom(_grammar.areaStart());
@@ -1592,7 +1600,7 @@ class THFileParser {
   }
 
   void _injectAltitudeValueCommandOption() {
-    String specs = _currentSpec[0].toString();
+    String specs = _currentSpec[0].toString().trim();
 
     if (hyphenPointRegex.hasMatch(specs) || nanRegex.hasMatch(specs)) {
       THAltitudeValueCommandOption.fromNan(
@@ -1653,7 +1661,7 @@ class THFileParser {
       singleDateTimeRegex,
       dateTimeRangeRegex,
     ];
-    final specs = _currentSpec[0];
+    final String specs = _currentSpec[0].toString().trim();
 
     for (final RegExp regex in dateValueRegexes) {
       if (regex.hasMatch(specs)) {
@@ -1671,7 +1679,7 @@ class THFileParser {
   }
 
   void _injectDimensionsValueCommandOption() {
-    final String specs = _currentSpec[0].toString();
+    final String specs = _currentSpec[0].toString().trim();
 
     if (twoNumbersWithOptionalUnitRegex.hasMatch(specs)) {
       final RegExpMatch match =
@@ -1691,7 +1699,7 @@ class THFileParser {
   }
 
   void _injectHeightValueCommandOption() {
-    final String specs = _currentSpec[0].toString();
+    final String specs = _currentSpec[0].toString().trim();
 
     if (signedNumberPresumedUnitRegex.hasMatch(specs)) {
       final RegExpMatch match =
@@ -1712,55 +1720,33 @@ class THFileParser {
   }
 
   void _injectPassageHeightValueCommandOption() {
-    final String parseType = _currentSpec[0].toString();
-    final specs = _currentSpec[1];
+    final String specs = _currentSpec[0].toString().trim();
 
-    switch (parseType) {
-      case 'single_number':
-        THPassageHeightValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          plusNumber: specs,
-          minusNumber: '',
-          originalLineInTH2File: _currentLine,
-        );
-      case 'plus_number_minus_number':
-        THPassageHeightValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          plusNumber: specs[0],
-          minusNumber: specs[1],
-          originalLineInTH2File: _currentLine,
-        );
-      case 'one_number_with_optional_unit':
-        final String unit = ((specs[1] != null) &&
-                (specs[1] is String) &&
-                ((specs[1] as String).isNotEmpty))
-            ? specs[1].toString()
-            : '';
-        THPassageHeightValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          plusNumber: specs[0],
-          minusNumber: '',
-          unit: unit,
-          originalLineInTH2File: _currentLine,
-        );
-        break;
-      case 'two_numbers_with_optional_unit':
-        final String unit = ((specs[2] != null) &&
-                (specs[2] is String) &&
-                ((specs[2] as String).isNotEmpty))
-            ? specs[2].toString()
-            : '';
-        THPassageHeightValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          plusNumber: specs[0],
-          minusNumber: specs[1],
-          unit: unit,
-          originalLineInTH2File: _currentLine,
-        );
-        break;
-      default:
-        throw THCustomException(
-            "Unsuported parse type '$parseType' in '_injectPassageHeightValueCommandOption'.");
+    if (signedNumberWithOptionalUnitRegex.hasMatch(specs)) {
+      final RegExpMatch match =
+          signedNumberWithOptionalUnitRegex.firstMatch(specs)!;
+      final String number = "${match.group(1)!}${match.group(2)!}";
+
+      THPassageHeightValueCommandOption.fromString(
+        optionParent: _currentHasOptions,
+        plusNumber: number,
+        minusNumber: '',
+        unit: match.group(3),
+        originalLineInTH2File: _currentLine,
+      );
+    } else if (plusMinusNumbersWithOptionalUnitRegex.hasMatch(specs)) {
+      final RegExpMatch match =
+          plusMinusNumbersWithOptionalUnitRegex.firstMatch(specs)!;
+      THPassageHeightValueCommandOption.fromString(
+        optionParent: _currentHasOptions,
+        plusNumber: match.group(1)!,
+        minusNumber: match.group(2)!,
+        unit: match.group(3),
+        originalLineInTH2File: _currentLine,
+      );
+    } else {
+      throw THCustomException(
+          "Unsupported parse specs '$specs' in '_injectPassageHeightValueCommandOption'.");
     }
   }
 
