@@ -1,38 +1,36 @@
 # Flatpak built locally instructions
 
 1. Update Flutter version in _~/devel/mapiah/packaging/linux/flutter-build-docker-images/22.04/Dockerfile_
-   
+
 2. Update _flutter-build:22.04_ docker image:
 ```
 cd ~/devel/mapiah/packaging/linux/flutter-build-docker-images/22.04; docker build -t rsev/flutter-build:22.04 .
 ```
-
-3. Run flutter-build docker image:
+3. Update _flatpak-build:22.04_ docker image:
 ```
-docker run -i -t rsev/flutter-build:22.04 bash
+cd ~/devel/mapiah/packaging/linux/flatpak-build-docker-images/22.04; docker build -t rsev/flatpak-build:22.04 .
 ```
-
-4. Create dirs:
+4. Run flutter-build docker image:
+```
+docker run -i -t rsev/flatpak-build:22.04 bash
+```
+5. Create dirs:
 ```
 sudo mkdir -p /app; sudo chown builder /app; sudo mkdir -p /devel/; sudo chown builder /devel; cd /devel;
 ```
-
-5. Inside the running image, clone repos:
+6. Inside the running image, clone repos:
 ```
-git clone https://github.com/rsevero/mapiah.git; git clone https://github.com/rsevero/mapiah_flathub_repo.git;
+git clone --depth 1 https://github.com/rsevero/mapiah.git; git clone --depth 1 https://github.com/rsevero/mapiah_flathub_repo.git;
 ```
-
-6. Build portable Linux release:
+7. Build portable Linux release:
 ```
 cd /devel/mapiah/; ./packaging/linux/build-flutter-app.sh
 ```
-
-7. Update Mapiah-Linux-Portable.tar.gz sha256sum in /devel/mapiah_flathub_repo/build-flatpak.sh:
+8. Update Mapiah-Linux-Portable.tar.gz sha256sum in /devel/mapiah_flathub_repo/build-flatpak.sh:
 ```
 sed -i "s/sha256: .*/sha256: $(sha256sum Mapiah-Linux-Portable.tar.gz | awk '{print $1}')/" ../mapiah_flathub_repo/org.mapiah.Mapiah.yml
 ```
-
-8. Buld the flatpak
+9. Build the flatpak
 ```
-flatpak-builder --force-clean build-dir org.mapiah.Mapiah.yml --repo=repo
+flatpak run org.flatpak.Builder --force-clean build-dir org.mapiah.Mapiah.yml --repo=repo
 ```
