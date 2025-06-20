@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
 
 ---
-app-id: org.mapiah.Mapiah
+app-id: org.mapiah.mapiah
 runtime: org.freedesktop.Platform
 runtime-version: "24.08"
 sdk: org.freedesktop.Sdk
@@ -20,9 +20,6 @@ modules:
     build-commands:
       - "./build-flatpak.sh"
     sources:
-      # - type: file
-      #   url: https://github.com/Merrit/flutter_flatpak_example/releases/download/v1.0.0/FlutterApp-Linux-Portable.tar.gz
-      #   sha256: 5dc57e4f5b84e6527098cb1e011ef50413c660147f5da7dfbfb507527e44eb83
       - type: dir
         path: ../
       - type: git

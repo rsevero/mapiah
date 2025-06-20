@@ -15,6 +15,7 @@ AppDir/***
 .flutter-plugins
 .flutter-plugins-dependencies
 **-Linux-Portable.tar.gz
+.flatpak-builder
 
 build/**
 

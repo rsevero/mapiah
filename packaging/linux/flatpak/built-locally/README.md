@@ -12,7 +12,7 @@ cd ~/devel/mapiah/packaging/linux/flatpak-build-docker-images/22.04; docker buil
 ```
 4. Run flutter-build docker image:
 ```
-docker run -i -t rsev/flatpak-build:22.04 bash
+docker run -i --privileged -t rsev/flatpak-build:22.04 bash
 ```
 5. Create dirs:
 ```
@@ -26,11 +26,11 @@ git clone --depth 1 https://github.com/rsevero/mapiah.git; git clone --depth 1 h
 ```
 cd /devel/mapiah/; ./packaging/linux/build-flutter-app.sh
 ```
-8. Update Mapiah-Linux-Portable.tar.gz sha256sum in /devel/mapiah_flathub_repo/build-flatpak.sh:
+8. Update mapiah-Linux-Portable.tar.gz sha256sum in /devel/mapiah_flathub_repo/build-flatpak.sh:
 ```
-sed -i "s/sha256: .*/sha256: $(sha256sum Mapiah-Linux-Portable.tar.gz | awk '{print $1}')/" ../mapiah_flathub_repo/org.mapiah.Mapiah.yml
+sed -i "s/sha256: .*/sha256: $(sha256sum mapiah-Linux-Portable.tar.gz | awk '{print $1}')/" ../mapiah_flathub_repo/org.mapiah.mapiah.yml
 ```
 9. Build the flatpak
 ```
-flatpak run org.flatpak.Builder --force-clean build-dir org.mapiah.Mapiah.yml --repo=repo
+sudo service dbus start; cd ../mapiah_flathub_repo; flatpak run org.flatpak.Builder --force-clean build-dir org.mapiah.mapiah.yml --repo=repo
 ```

@@ -8,7 +8,7 @@ set -e
 set -x
 
 
-projectName=Mapiah
+projectName=mapiah
 
 archiveName=${projectName}-Linux-Portable.tar.gz
 baseDir=$(pwd)
