@@ -1,8 +1,16 @@
+name: Build Linux flatpak release of Mapiah
+
 on:
   push:
-    branches: [main]
-  pull_request:
-name: CI
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      test_tag:
+        description: 'Simulated tag for testing'
+        required: false
+        default: 'v1.0.0-test'
+
 jobs:
   flatpak:
     name: "Flatpak"

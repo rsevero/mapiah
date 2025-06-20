@@ -1,4 +1,5 @@
 name: Build Windows release of Mapiah
+
 on:
   push:
     tags:
