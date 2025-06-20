@@ -77,6 +77,10 @@ class THFileParser {
   );
   final RegExp nanRegex = RegExp(r'^nan$', caseSensitive: false);
   final RegExp hyphenPointRegex = RegExp(r'^\s*[-.]\s*$');
+  final RegExp twoNumbersWithOptionalUnitRegex = RegExp(
+    r'^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
+    caseSensitive: false,
+  );
 
   THFileParser() {
     _areaContentParser = _grammar.buildFrom(_grammar.areaStart());
@@ -1598,12 +1602,7 @@ class THFileParser {
         specs = specs.trim().substring(3).trim();
       }
 
-      final RegExpMatch? match = fixNumberLengthUnitRegex.firstMatch(specs);
-
-      if (match == null) {
-        throw THCustomException(
-            "Failed to parse altitude value from '$specs'.");
-      }
+      final RegExpMatch match = fixNumberLengthUnitRegex.firstMatch(specs)!;
 
       THAltitudeValueCommandOption.fromString(
         optionParent: _currentHasOptions,
@@ -1668,33 +1667,22 @@ class THFileParser {
   }
 
   void _injectDimensionsValueCommandOption() {
-    final String parseType = _currentSpec[0].toString();
-    final specs = _currentSpec[1];
+    final String specs = _currentSpec[0].toString();
 
-    switch (parseType) {
-      case 'two_numbers_with_optional_unit':
-        if ((specs[0] == null) ||
-            (specs[0] is! String) ||
-            (specs[1] == null) ||
-            (specs[1] is! String)) {
-          throw THCustomException("Need 2 string values.");
-        }
+    if (twoNumbersWithOptionalUnitRegex.hasMatch(specs)) {
+      final RegExpMatch match =
+          twoNumbersWithOptionalUnitRegex.firstMatch(specs)!;
 
-        final unit = ((specs[2] != null) &&
-                (specs[2] is String) &&
-                ((specs[2] as String).isNotEmpty))
-            ? specs[2].toString()
-            : '';
-        THDimensionsValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          above: specs[0],
-          below: specs[1],
-          unit: unit,
-          originalLineInTH2File: _currentLine,
-        );
-      default:
-        throw THCustomException(
-            "Unsuported parse type '$parseType' in '_injectDimensionsValueCommandOption'.");
+      THDimensionsValueCommandOption.fromString(
+        optionParent: _currentHasOptions,
+        above: match.group(1)!,
+        below: match.group(2)!,
+        unit: match.group(3),
+        originalLineInTH2File: _currentLine,
+      );
+    } else {
+      throw THCustomException(
+          "Unsuported parse specs '$specs' in '_injectDimensionsValueCommandOption'.");
     }
   }
 
