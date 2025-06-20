@@ -81,6 +81,10 @@ class THFileParser {
     r'^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
     caseSensitive: false,
   );
+  final RegExp signedNumberPresumedUnitRegex = RegExp(
+    r'^([+-]?)(\d+(?:\.\d+)?)(\?)?(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
+    caseSensitive: false,
+  );
 
   THFileParser() {
     _areaContentParser = _grammar.buildFrom(_grammar.areaStart());
@@ -1687,45 +1691,23 @@ class THFileParser {
   }
 
   void _injectHeightValueCommandOption() {
-    final String parseType = _currentSpec[0].toString();
-    final specs = _currentSpec[1];
+    final String specs = _currentSpec[0].toString();
 
-    switch (parseType) {
-      case 'one_number_with_optional_unit':
-        if ((specs[0] == null) || (specs[0] is! String)) {
-          throw THCustomException("Need a string value.");
-        }
-        bool isPresumed = false;
-        String value = specs[0];
-        if (value.contains('?')) {
-          isPresumed = true;
-          value = value.substring(0, value.length - 1);
-        }
+    if (signedNumberPresumedUnitRegex.hasMatch(specs)) {
+      final RegExpMatch match =
+          signedNumberPresumedUnitRegex.firstMatch(specs)!;
+      final String number = "${match.group(1)!}${match.group(2)!}";
 
-        final String unit = ((specs is List) &&
-                (specs.length > 1) &&
-                (specs[1] != null) &&
-                (specs[1] is String) &&
-                ((specs[1] as String).isNotEmpty))
-            ? specs[1].toString()
-            : '';
-        THPointHeightValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          height: value,
-          isPresumed: isPresumed,
-          unit: unit,
-          originalLineInTH2File: _currentLine,
-        );
-      case 'single_number':
-        THPointHeightValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          height: specs,
-          isPresumed: false,
-          originalLineInTH2File: _currentLine,
-        );
-      default:
-        throw THCustomException(
-            "Unsuported parse type '$parseType' in '_injectHeightValueCommandOption'.");
+      THPointHeightValueCommandOption.fromString(
+        optionParent: _currentHasOptions,
+        height: number,
+        isPresumed: match.group(3) != null,
+        unit: match.group(4),
+        originalLineInTH2File: _currentLine,
+      );
+    } else {
+      throw THCustomException(
+          "Unsuported parse specs '$specs' in '_injectHeightValueCommandOption'.");
     }
   }
 
