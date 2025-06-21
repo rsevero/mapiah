@@ -14,7 +14,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-      - pattern: 'v[0-9]+.[0-9]+.[0-9]+'
+      - pattern: 'v+([0-9]).+([0-9]).+([0-9])'
         include: true
 
     scripts:
