@@ -44,7 +44,7 @@ Version 0.3
 [X] - Release creation MacOS
 [X] - Release for Web
 [ ] - Release automation Linux
-[ ] - Release automation Windows
+[X] - Release automation Windows
 [X] - Release automation MacOS
 [ ] - Release automation for Web
 [ ] - Config page
@@ -69,6 +69,7 @@ Version 0.3
 [ ] - Implement default option values
 [ ] - Support XVI images
 [ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style
+[ ] - Properly present lines with partial subtypes
 
 Version 0.4
 [ ] - Open multiple files simultaneously

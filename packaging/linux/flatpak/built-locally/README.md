@@ -34,3 +34,21 @@ sed -i "s/sha256: .*/sha256: $(sha256sum mapiah-Linux-Portable.tar.gz | awk '{pr
 ```
 sudo service dbus start; cd ../mapiah_flathub_repo; flatpak run org.flatpak.Builder --force-clean build-dir org.mapiah.mapiah.yml --repo=repo
 ```
+
+The following steps are optional. Execute them to test locally the new package.
+10. Create flatpak local package:
+```
+flatpak build-bundle repo org.mapiah.mapiah.flatpak org.mapiah.mapiah
+```
+11. Install local file
+```
+flatpak install --user  org.mapiah.mapiah.flatpak
+```
+12. Run local file
+```
+flatpak run com.example.FlutterApp
+```
+13. Remove test local file
+```
+flatpak remove com.example.FlutterApp
+```
