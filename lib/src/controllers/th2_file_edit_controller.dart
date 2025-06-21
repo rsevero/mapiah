@@ -268,7 +268,7 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @computed
-  bool get enableSaveButton => _hasUndo || !kIsWeb;
+  bool get enableSaveButton => _hasUndo || kIsWeb;
 
   @readonly
   String _statusBarMessage = '';
