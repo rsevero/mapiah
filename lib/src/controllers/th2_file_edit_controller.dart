@@ -916,13 +916,16 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   Future<void> saveAsTH2File() async {
+    final String filename = _thFile.filename;
+    final String? initialDirectory =
+        mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (filename.isEmpty ? null : p.dirname(_thFile.filename))
+            : mpLocator.mpGeneralController.lastAccessedDirectory;
+
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Please select an output file:',
       fileName: _thFile.filename,
-      initialDirectory:
-          mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-              ? null
-              : mpLocator.mpGeneralController.lastAccessedDirectory,
+      initialDirectory: initialDirectory,
     );
 
     if (filePath != null) {

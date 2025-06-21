@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5 - not yet released
+* 'point -value' and 'line -altitude' options: quoted and bracket string support
+* Preserving original line endings in save
+* Fixed for Windows [Neither Windows App or Web App js are saving correctly, Windows App opens wrong file](https://github.com/rsevero/mapiah/issues/6) (reported by CaverBruce)
+
 ## 0.2.4 - 2025-06-16
 * Included links to CHANGELOG and LICENSE in _About_ dialog
 * Included release date in CHANGELOG

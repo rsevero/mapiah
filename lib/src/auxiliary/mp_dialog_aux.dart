@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 class MPDialogAux {
@@ -23,7 +21,7 @@ class MPDialogAux {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
-        allowedExtensions: ['th2'],
+        allowedExtensions: ['th2', 'TH2'],
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
                 ? (kDebugMode ? thDebugPath : './')
@@ -42,7 +40,6 @@ class MPDialogAux {
             return;
           }
 
-          // Pass bytes and filename to the editor page
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -57,26 +54,16 @@ class MPDialogAux {
           if (pickedFilePath == null) {
             return;
           }
-          // Move file to app storage if needed
-          final Directory appDocDir = await getApplicationDocumentsDirectory();
-          final String fileName = p.basename(pickedFilePath);
-          final String newFilePath = p.join(appDocDir.path, fileName);
-          final File newFile = File(newFilePath);
 
-          if (!await newFile.exists()) {
-            await File(pickedFilePath).copy(newFilePath);
-          }
-
-          final String directoryPath = p.dirname(newFilePath);
-
-          mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
+          mpLocator.mpGeneralController.lastAccessedDirectory =
+              p.dirname(pickedFilePath);
 
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => TH2FileEditPage(
-                key: ValueKey("TH2FileEditPage|$newFilePath"),
-                filename: newFilePath,
+                key: ValueKey("TH2FileEditPage|$pickedFilePath"),
+                filename: pickedFilePath,
               ),
             ),
           );
