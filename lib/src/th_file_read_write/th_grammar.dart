@@ -698,31 +698,6 @@ class THGrammar extends GrammarDefinition {
           bracketStringGeneral().trim() |
           unquotedString().flatten().trim())
       .map((value) => [value]);
-  Parser valueOptions2() =>
-      (dateTimeNoNoDateTime().trim().map((value) => ['datetime', value]) |
-          numberWithSuffix(char('?')).trim().map((value) => [
-                'one_number_with_optional_unit',
-                [value]
-              ]) |
-          number().trim().map((value) => ['single_number', value]) |
-          bracketStringTemplate(numberWithSuffix(char('?').optional()).trim() &
-                  lengthUnit().optional().trim())
-              .trim()
-              .map((value) => ['one_number_with_optional_unit', value]) |
-          bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
-              .trim()
-              .map((value) => ['plus_number_minus_number', value]) |
-          bracketStringTemplate(stringIgnoreCase('fix') &
-                  number().trim() &
-                  lengthUnit().optional())
-              .trim()
-              .map((value) => ['fix_number', value]) |
-          bracketStringTemplate(
-                  number().trim() & number().trim() & lengthUnit().optional())
-              .trim()
-              .map((value) => ['two_numbers_with_optional_unit', value]) |
-          char('-').trim().map((value) => ['hyphen', value]) |
-          nan().trim().map((value) => ['nan', value]));
 
   /// point -visibility
   Parser visibilityOption() => stringIgnoreCase('visibility') & onOffOptions();
@@ -862,17 +837,10 @@ class THGrammar extends GrammarDefinition {
   /// line -altitude
   Parser altitudeCommandLikeOption() =>
       stringIgnoreCase('altitude') & valueOptions();
-  Parser altitudeOptions() =>
-      (char('-').trim().map((value) => ['hyphen', value]) |
-          number().trim().map((value) => ['single_number', value]) |
-          nan().trim().map((value) => ['nan', value]) |
-          bracketStringTemplate(
-                  stringIgnoreCase('fix') & number() & lengthUnit().optional())
-              .trim()
-              .map((value) => ['fix_number', value]) |
-          bracketStringTemplate(number() & number() & lengthUnit().optional())
-              .trim()
-              .map((value) => ['two_numbers_with_optional_unit', value]));
+  Parser altitudeOptions() => (quotedString().trim() |
+          bracketStringGeneral().trim() |
+          unquotedString().flatten().trim())
+      .map((value) => [value]);
 
   /// line -anchors
   Parser anchorsOption() => stringIgnoreCase('anchors') & onOffOptions();

@@ -72,7 +72,7 @@ class THFileParser {
     caseSensitive: false,
   );
   final RegExp fixNumberLengthUnitRegex = RegExp(
-    r'^(?:fix\s*)?(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
+    r'^(?:fix\s*)?([+-]?)(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
     caseSensitive: false,
   );
   final RegExp nanRegex = RegExp(r'^nan$', caseSensitive: false);
@@ -1543,59 +1543,31 @@ class THFileParser {
   }
 
   void _injectAltitudeCommandOption() {
-    final String parseType = _currentSpec[0].toString();
-    final specs = _currentSpec[1];
+    String specs = _currentSpec[0].toString().trim();
 
     _optionParentAsTHLineSegment();
-    switch (parseType) {
-      case 'fix_number':
-        if ((specs[1] == null) || (specs[1] is! String)) {
-          throw THCustomException("Need a string value.");
-        }
-        final String unit = ((specs[2] != null) &&
-                (specs[2] is String) &&
-                ((specs[2] as String).isNotEmpty))
-            ? specs[2].toString()
-            : '';
-        THAltitudeCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          height: specs[1],
-          isFix: true,
-          unit: unit,
-          originalLineInTH2File: _currentLine,
-        );
-      case 'hyphen':
-      case 'nan':
-        THAltitudeCommandOption.fromNan(
-          optionParent: _currentHasOptions,
-          originalLineInTH2File: _currentLine,
-        );
-      case 'one_number_with_optional_unit':
-        if ((specs[0] == null) || (specs[0] is! String)) {
-          throw THCustomException("Need a string value.");
-        }
-        final unit = ((specs[1] != null) &&
-                (specs[1] is String) &&
-                ((specs[1] as String).isNotEmpty))
-            ? specs[1].toString()
-            : '';
-        THAltitudeCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          height: specs[0],
-          isFix: false,
-          unit: unit,
-          originalLineInTH2File: _currentLine,
-        );
-      case 'single_number':
-        THAltitudeCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          height: specs,
-          isFix: false,
-          originalLineInTH2File: _currentLine,
-        );
-      default:
-        throw THCustomException(
-            "Unsuported parse type '$parseType' in '_injectAltitudeCommandOption'.");
+    if (hyphenPointRegex.hasMatch(specs) || nanRegex.hasMatch(specs)) {
+      THAltitudeCommandOption.fromNan(
+        optionParent: _currentHasOptions,
+        originalLineInTH2File: _currentLine,
+      );
+    } else if (fixNumberLengthUnitRegex.hasMatch(specs)) {
+      final bool isFix = specs.trim().toLowerCase().startsWith('fix');
+
+      if (isFix) {
+        specs = specs.substring(3).trim();
+      }
+
+      final RegExpMatch match = fixNumberLengthUnitRegex.firstMatch(specs)!;
+      final String number = "${match.group(1)!}${match.group(2)!}";
+
+      THAltitudeCommandOption.fromString(
+        optionParent: _currentHasOptions,
+        height: number,
+        isFix: isFix,
+        unit: match.group(3),
+        originalLineInTH2File: _currentLine,
+      );
     }
   }
 
@@ -1611,16 +1583,17 @@ class THFileParser {
       final bool isFix = specs.trim().toLowerCase().startsWith('fix');
 
       if (isFix) {
-        specs = specs.trim().substring(3).trim();
+        specs = specs.substring(3).trim();
       }
 
       final RegExpMatch match = fixNumberLengthUnitRegex.firstMatch(specs)!;
+      final String height = "${match.group(1)!}${match.group(2)!}";
 
       THAltitudeValueCommandOption.fromString(
         optionParent: _currentHasOptions,
-        height: match.group(1)!,
+        height: height,
         isFix: isFix,
-        unit: match.group(2),
+        unit: match.group(3),
         originalLineInTH2File: _currentLine,
       );
     } else {
@@ -1628,32 +1601,6 @@ class THFileParser {
           "Unsuported parse specs '$specs' in '_injectAltitudeValueCommandOption'.");
     }
   }
-
-  // Parser valueOptions() =>
-  //     (dateTimeNoNoDateTime().trim().map((value) => ['datetime', value]) |
-  //         numberWithSuffix(char('?')).trim().map((value) => [
-  //               'one_number_with_optional_unit',
-  //               [value]
-  //             ]) |
-  //         number().trim().map((value) => ['single_number', value]) |
-  //         bracketStringTemplate(numberWithSuffix(char('?').optional()).trim() &
-  //                 lengthUnit().optional().trim())
-  //             .trim()
-  //             .map((value) => ['one_number_with_optional_unit', value]) |
-  //         bracketStringTemplate(plusNumber().trim() & minusNumber().trim())
-  //             .trim()
-  //             .map((value) => ['plus_number_minus_number', value]) |
-  //         bracketStringTemplate(stringIgnoreCase('fix') &
-  //                 number().trim() &
-  //                 lengthUnit().optional())
-  //             .trim()
-  //             .map((value) => ['fix_number', value]) |
-  //         bracketStringTemplate(
-  //                 number().trim() & number().trim() & lengthUnit().optional())
-  //             .trim()
-  //             .map((value) => ['two_numbers_with_optional_unit', value]) |
-  //         char('-').trim().map((value) => ['hyphen', value]) |
-  //         nan().trim().map((value) => ['nan', value]));
 
   void _injectDateValueCommandOption() {
     final List<RegExp> dateValueRegexes = [
