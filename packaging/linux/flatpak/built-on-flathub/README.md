@@ -44,7 +44,15 @@ flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.githu
 flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
 ```
 
-1.    Copy newly created build manifest and support info to ~/devel/io.github.rsevero.mapiah:
+1. Created branch for new release at ~/devel/io.github.rsevero.mapiah:
 ```
-cd ~/devel/flatpak-flutter/io.github.rsevero.mapiah; cp -v flutter-sdk-*.json flutter-shared.sh.patch io.github.rsevero.mapiah.yml package_config.json pubspec-sources.json ~/devel/io.github.rsevero.mapiah
+NEW_RELEASE_TAG=v0.2.5; cd ~/devel/io.github.rsevero.mapiah; git co master; git pull; git br "$NEW_RELEASE_TAG"; git br "$NEW_RELEASE_TAG"
 ```
+
+1. Copy newly created build manifest and support info to ~/devel/io.github.rsevero.mapiah:
+```
+cd ~/devel/flatpak-flutter/io.github.rsevero.mapiah; cp -v flutter-sdk-*.json flutter-shared.sh.patch io.github.rsevero.mapiah.yml package_config.json pubspec-sources.json ~/devel/io.github.rsevero.mapiah; cd ~/devel/io.github.rsevero.mapiah
+```
+
+1. Commit and push changed files.
+ 
