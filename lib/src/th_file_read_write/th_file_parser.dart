@@ -1863,13 +1863,22 @@ class THFileParser {
   }
 
   @useResult
-  bool _isEncodingDelimiter(String priorChar, String char,
-      [String lineDelimiter = '\n']) {
-    if (lineDelimiter.length == 1) {
-      return ((char == lineDelimiter) | (char == thCommentChar));
-    } else {
-      return (((priorChar + char) == lineDelimiter) | (char == thCommentChar));
+  bool _isEncodingDelimiter(String priorChar, String char) {
+    if (char == thCommentChar) {
+      return true;
     }
+
+    if ((priorChar + char) == thWindowsLineBreak) {
+      _parsedTHFile.lineEnding = thWindowsLineBreak;
+      return true;
+    }
+
+    if (char == thUnixLineBreak) {
+      _parsedTHFile.lineEnding = thUnixLineBreak;
+      return true;
+    }
+
+    return false;
   }
 
   @useResult

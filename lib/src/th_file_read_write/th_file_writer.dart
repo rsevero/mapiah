@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:charset/charset.dart';
+import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
@@ -18,6 +19,7 @@ class THFileWriter {
 
   late bool _includeEmptyLines;
   late bool _useOriginalRepresentation;
+  String _lineEnding = MPDirectoryAux.getDefaultLineEnding();
   bool _insideMultiLineComment = false;
 
   late THFile _thFile;
@@ -30,12 +32,13 @@ class THFileWriter {
     _thFile = thFile;
     _includeEmptyLines = includeEmptyLines;
     _useOriginalRepresentation = useOriginalRepresentation;
+    _lineEnding = _thFile.lineEnding;
 
     String asString = '';
 
     _prefix = '';
     if (thFile.elementByMPID(thFile.childrenMPID.first) is! THEncoding) {
-      final String newLine = 'encoding ${thFile.encoding}\n';
+      final String newLine = 'encoding ${thFile.encoding}$_lineEnding';
 
       asString += newLine;
     }
@@ -53,7 +56,7 @@ class THFileWriter {
     if (newLine.isEmpty) {
       newLine = _prepareLine(newText, thElement);
     } else {
-      newLine += '\n';
+      newLine += _lineEnding;
     }
 
     return newLine;
@@ -66,12 +69,12 @@ class THFileWriter {
   }
 
   String _serializeEmptyLine(THElement thElement) {
-    return (_includeEmptyLines || _insideMultiLineComment) ? '\n' : '';
+    return (_includeEmptyLines || _insideMultiLineComment) ? _lineEnding : '';
   }
 
   String _serializeMultiLineCommmentContent(THElement thElement) {
     final String newLine =
-        '${(thElement as THMultilineCommentContent).content}\n';
+        '${(thElement as THMultilineCommentContent).content}$_lineEnding';
     return newLine;
   }
 
@@ -85,7 +88,7 @@ class THFileWriter {
       final String newLine = "scrap ${thScrap.thID} $scrapOptions".trim();
       asString = _prepareLine(newLine, thScrap);
     } else {
-      asString += '\n';
+      asString += _lineEnding;
     }
 
     _increasePrefix();
@@ -98,7 +101,7 @@ class THFileWriter {
   String _serializeXTherionConfig(THElement thElement) {
     final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
     final String newLine =
-        "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}\n";
+        "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}$_lineEnding";
     return newLine;
   }
 
@@ -199,7 +202,7 @@ class THFileWriter {
       newLine = newLine.trim();
       asString = _prepareLine(newLine, thArea);
     } else {
-      asString += '\n';
+      asString += _lineEnding;
     }
     _increasePrefix();
 
@@ -223,7 +226,7 @@ class THFileWriter {
       newLine = newLine.trim();
       asString = _prepareLine(newLine, thLine);
     } else {
-      asString += '\n';
+      asString += _lineEnding;
     }
     _increasePrefix();
 
@@ -248,7 +251,7 @@ class THFileWriter {
       newLine = newLine.trim();
       asString = _prepareLine(newLine, thPoint);
     } else {
-      asString += '\n';
+      asString += _lineEnding;
     }
 
     return asString;
@@ -278,7 +281,7 @@ class THFileWriter {
           throw THCustomException("Unrecognized line segment type: '$thType'.");
       }
     } else {
-      asString += '\n';
+      asString += _lineEnding;
       asString += _linePointOptionsAsString(thElement as THLineSegment);
     }
 
@@ -369,7 +372,7 @@ class THFileWriter {
 
         splitLine += part;
         if (line.isNotEmpty) {
-          splitLine += '\\\n';
+          splitLine += '\\$_lineEnding';
         }
       }
 
@@ -386,7 +389,7 @@ class THFileWriter {
       newLine += " # ${thElement.sameLineComment}";
     }
 
-    newLine += '\n';
+    newLine += _lineEnding;
     newLine = _decodeDoubleQuotes(newLine);
 
     return newLine;
@@ -411,9 +414,9 @@ class THFileWriter {
       if (newLine.isEmpty) {
         newLine = "${option.typeToFile()} ";
         newLine += option.specToFile().trim();
-        asString += "$_prefix${newLine.trim()}\n";
+        asString += "$_prefix${newLine.trim()}$_lineEnding";
       } else {
-        asString += "$newLine\n";
+        asString += "$newLine$_lineEnding";
       }
     }
 

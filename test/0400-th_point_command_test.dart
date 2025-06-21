@@ -1157,11 +1157,8 @@ endscrap
         'file': '2025-06-20-point_date_quoted_value.th2',
         'length': 4,
         'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap 141c-TradeElevEXT-s1
-  point 16235 903.25 date -value 2024.06.08 -scale xs -align bottom-right
-endscrap
-''',
+        'asFile':
+            'encoding UTF-8\r\nscrap 141c-TradeElevEXT-s1\r\n  point 16235 903.25 date -value 2024.06.08 -scale xs -align bottom-right\r\nendscrap\r\n',
       },
     ];
 
