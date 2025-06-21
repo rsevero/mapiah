@@ -1761,22 +1761,9 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line water-flow:conjectural
+  line water-flow
     1758 -1030
-    2147.74 -1120.48
-  endline
-endscrap
-''',
-      },
-      {
-        'file':
-            'th_file_parser-03104-linepoint_with_subtype_option_as_first_line_data.th2',
-        'length': 7,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  line water-flow:conjectural
-    1758 -1030
+      subtype conjectural
     2147.74 -1120.48
   endline
 endscrap
@@ -1808,6 +1795,41 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': '2025-06-21-line_point_subtype.th2',
+        'length': 25,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap 141c-TradePlan-s1 -projection plan
+  line wall
+    5903 1247
+    5898.5 1232 5895.5 1221.5 5894.5 1206.5
+    5893.5 1191.5 5894.5 1188 5890 1179
+    5885.5 1170 5881.5 1169 5883 1161
+    5884.5 1153 5885.5 1149 5892 1137
+    5898.5 1125 5905.5 1131.5 5903.5 1117
+    5901.5 1102.5 5895.5 1094 5900.5 1081.5
+    5905.5 1069 5908.5 1058.5 5907 1052
+    5905.5 1045.5 5905.5 1049.5 5904.5 1035
+    5903.5 1020.5 5906 1017 5905.5 1008.5
+      subtype unsurveyed
+    5904.41 990.02 5893.5 964.5 5912.5 962
+    5931.5 959.5 5928 959.5 5933 969.5
+    5938 979.5 5939.5 994 5938 1007
+      subtype bedrock
+    5936.5 1020 5934.5 1030 5935.5 1045.5
+      altitude NaN
+    5936.5 1061 5936.5 1063.5 5938 1078.5
+    5939.5 1093.5 5941 1108 5937 1119
+    5933 1130 5928.5 1129.5 5924.5 1140.5
+    5920.5 1151.5 5909 1155 5917.5 1165
+    5926 1175 5921.5 1171.5 5931 1182.5
+    5940.5 1193.5 5951.5 1211 5953 1213.5
+      smooth off
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -1831,6 +1853,7 @@ endscrap
     const failures = [
       // 'th_file_parser-03102-linepoint_with_subtype_option_for_unsupported_type-failure.th2',
       // 'th_file_parser-03101-line_with_subtype_option_unsupported_type-failure.th2',
+      'th_file_parser-03104-linepoint_with_subtype_option_as_first_line_data.th2',
       // 'th_file_parser-03103-line_with_subtype_option_unsupported_type-failure.th2',
     ];
 

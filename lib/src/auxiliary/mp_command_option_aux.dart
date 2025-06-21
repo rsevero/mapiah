@@ -1,6 +1,7 @@
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 
@@ -13,6 +14,13 @@ class MPCommandOptionAux {
     THCommandOptionType.place,
     THCommandOptionType.visibility,
   ];
+
+  static const Map<THAreaType, List<THCommandOptionType>>
+      _supportedAreaOptions = {
+    THAreaType.u: [
+      THCommandOptionType.subtype,
+    ],
+  };
 
   static const List<THCommandOptionType> _supportLineSegmentsOptionsForAll = [
     THCommandOptionType.adjust,
@@ -158,8 +166,12 @@ class MPCommandOptionAux {
     THCommandOptionType.walls,
   ];
 
-  static List<THCommandOptionType> getSupportedOptionsForArea() {
-    return _supportAreaOptionsForAll;
+  static List<THCommandOptionType> getSupportedOptionsForArea(
+    THAreaType areaType,
+  ) {
+    return _supportedAreaOptions.containsKey(areaType)
+        ? _supportAreaOptionsForAll + _supportedAreaOptions[areaType]!
+        : _supportAreaOptionsForAll;
   }
 
   static List<THCommandOptionType> getSupportedOptionsForLineType(
@@ -191,7 +203,7 @@ class MPCommandOptionAux {
   ) {
     switch (element) {
       case THArea _:
-        return getSupportedOptionsForArea();
+        return getSupportedOptionsForArea(element.areaType);
       case THLine _:
         return getSupportedOptionsForLineType(element.lineType);
       case THLineSegment _:

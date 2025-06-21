@@ -863,6 +863,9 @@ class THFileParser {
       case 'orientation':
         _optionParentAsTHLineSegment();
         _injectOrientationCommandOption();
+      case 'subtype':
+        _optionParentAsTHLineSegment();
+        _injectSubtypeCommandOption();
       default:
         optionIdentified = false;
     }
