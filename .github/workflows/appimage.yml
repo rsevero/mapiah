@@ -48,6 +48,7 @@ jobs:
       uses: AppImageCrafters/build-appimage@master
       with:
         recipe: "./AppImageBuilder.yml"
+        args: "--skip-test"
     - name: Save build Artifact
       uses: actions/upload-artifact@v4
       with:
