@@ -5,7 +5,7 @@ script: |
   set -x
   echo "Cloning Mapiah..."
   cd $HOME
-  git clone --depth 1 --branch appimage https://github.com/rsevero/mapiah.git
+  git clone --depth 1 --branch main https://github.com/rsevero/mapiah.git
   cd mapiah
   echo "Building Mapiah..."
   flutter config --enable-linux-desktop
