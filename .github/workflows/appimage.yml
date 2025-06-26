@@ -45,10 +45,14 @@ jobs:
         TAG_NUMBER="${TAG#v}"
         sed -i "s/^\\( *version: *\\).*/\\1$TAG_NUMBER/" AppImageBuilder.yml
     - name: Build AppImage using appimage-builder
-      uses: docker://rsev/flutter-build:3.32.4
-      with:
-        entrypoint: appimage-builder
-        args: --recipe ./AppImageBuilder.yml --skip-test
+      run: |
+        docker run --rm \
+          --device /dev/fuse \
+          --cap-add SYS_ADMIN \
+          -v ${{ github.workspace }}:/workspace \
+          -w /workspace \
+          rsev/flutter-build:3.32.4 \
+          appimage-builder --recipe ./AppImageBuilder.yml --skip-test
     - name: Save build Artifact
       uses: actions/upload-artifact@v4
       with:
