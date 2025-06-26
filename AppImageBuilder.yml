@@ -3,9 +3,9 @@ version: 1
 script: |
   set -e
   set -x
-  echo "Cloning Mapiah..."
-  cd $HOME
-  git clone --depth 1 --branch main https://github.com/rsevero/mapiah.git
+  # echo "Cloning Mapiah..."
+  # cd $HOME
+  # git clone --depth 1 --branch main https://github.com/rsevero/mapiah.git
   cd mapiah
   echo "Building Mapiah..."
   flutter config --enable-linux-desktop
