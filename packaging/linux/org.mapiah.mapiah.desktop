@@ -6,6 +6,6 @@ Comment=User friendly Therion map editor
 Categories=Graphics;
 
 Icon=org.mapiah.mapiah
-Exec=mapiah
+Exec=AppRun
 Terminal=false
 StartupWMClass=Mapiah

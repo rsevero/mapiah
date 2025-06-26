@@ -10,6 +10,8 @@ auxiliary/line_options_testing/line_options_testing.pdf
 # AppImage auxiliary build dir
 AppDir
 AppDir/***
+appimage-build
+appimage-build/***
 
 # Generated files
 .flutter-plugins
