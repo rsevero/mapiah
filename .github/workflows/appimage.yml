@@ -11,6 +11,9 @@ on:
         required: false
         default: 'v1.0.0-test'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build
