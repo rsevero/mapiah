@@ -80,7 +80,7 @@ RUN cd "$HOME" \
     && sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
 
 RUN sudo apt-get update \
-    && sudo apt-get install -y appstream appstream-util libappstream-glib8 fuse libfuse2 \
+    && sudo apt-get install -y appstream appstream-util libappstream-glib8 fuse libfuse2 gpg \
     && sudo rm -rf /var/lib/apt/lists/* \
     && sudo addgroup fuse \
     && sudo adduser flutter fuse
