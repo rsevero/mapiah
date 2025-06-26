@@ -17,8 +17,8 @@ RUN set -o xtrace \
     && apt-get update \
     && apt-get install -y locales \
     && update-locale LANG=en_US.UTF-8 \
-    && apt-get install -y curl git unzip xz-utils zip libglu1-mesa vim sudo \
     && apt-get install -y clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev \
+    && apt-get install -y curl git unzip xz-utils zip libglu1-mesa vim sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # The Github runner clones the repository with uid 1001 and gid 1001. This uid 1001 needs to be the set to the container user to give ownership to the repository folder.
