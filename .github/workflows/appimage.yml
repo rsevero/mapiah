@@ -43,7 +43,7 @@ jobs:
       run: |
         TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
         TAG_NUMBER="${TAG#v}"
-        sed -i "s/^\\( *version: *\\).*/\\1$TAG_NUMBER/" AppImageBuilder.yml
+        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
     - name: Build AppImage using appimage-builder
       uses: AppImageCrafters/build-appimage@master
       with:
