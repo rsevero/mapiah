@@ -1,5 +1,23 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
+script: |
+  set -e
+  set -x
+  echo "Cloning Mapiah..."
+  cd $HOME
+  git clone --depth 1 --branch appimage https://github.com/rsevero/mapiah.git
+  cd mapiah
+  echo "Building Mapiah..."
+  flutter config --enable-linux-desktop
+  flutter build linux --release
+  echo "Copying Mapiah to AppDir..."
+  rm -rf ../AppDir || true
+  cp -r build/linux/x64/release/bundle ../AppDir
+  mkdir -p ../AppDir/usr/share/icons/hicolor/512x512/apps
+  cp assets/icons/m-512x512.png ../AppDir/usr/share/icons/hicolor/512x512/apps/application-vnd.appimage.png
+  mkdir -p ../AppDir/usr/share/applications
+  cp packaging/linux/org.mapiah.mapiah.desktop ../AppDir/usr/share/applications
+  ln -sf usr/share/icons/hicolor/512x512/apps/application-vnd.appimage.png ../AppDir/.DirIcon
 AppDir:
   path: ./AppDir
   app_info:
