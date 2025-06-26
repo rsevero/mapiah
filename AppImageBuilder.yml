@@ -6,7 +6,7 @@ script: |
   # echo "Cloning Mapiah..."
   # cd $HOME
   # git clone --depth 1 --branch main https://github.com/rsevero/mapiah.git
-  cd mapiah
+  # cd mapiah
   echo "Building Mapiah..."
   flutter config --enable-linux-desktop
   flutter build linux --release
