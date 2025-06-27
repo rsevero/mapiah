@@ -104,7 +104,7 @@ jobs:
         mkdir -p "$metadataDir"
         cp -r packaging/linux/$projectId.metainfo.xml "$metadataDir/"
 
-        cp "packaging/linux/flatpak/build-locally/$projectId.yml" .
+        cp "packaging/linux/flatpak/built-locally/$projectId.yml" .
 
         SHA=$(sha256sum mapiah.flatpak.tar.gz | awk '{print $1}')
         sed -i "/url:.*mapiah\.flatpak\.tar\.gz/,/sha256:/s/\\(sha256: *\\).*/\\1$SHA/" org.mapiah.mapiah.yml
