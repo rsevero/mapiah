@@ -28,8 +28,7 @@ jobs:
       run: |
         set -e
         set -x
-        export TAG=${GITHUB_REF#refs/tags/}
-        export TAG_NUMBER="${TAG#v}"
+        TAG=${GITHUB_REF#refs/tags/}
         if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
           exit 1
@@ -98,7 +97,9 @@ jobs:
       run: |
         set -e
         set -x
-        export INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
+        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+        TAG_NUMBER="${TAG#v}"
+        INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
         flatpak-builder --force-clean --repo=repo build-dir "$PWD/org.mapiah.mapiah.yml"
         flatpak build-bundle repo "$INSTALLER" org.mapiah.mapiah
 
@@ -109,6 +110,9 @@ jobs:
       run: |
         set -e
         set -x
+        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+        TAG_NUMBER="${TAG#v}"
+        INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
         TITLE="Mapiah $TAG"
 
         # Store token in a different variable and unset GITHUB_TOKEN
