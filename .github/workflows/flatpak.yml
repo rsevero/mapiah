@@ -76,7 +76,7 @@ jobs:
 
         desktopFileDir="$APP_DIR/share/applications"
         mkdir -p "$desktopFileDir"
-        cp -r packaging/linux/$projectId.desktop "$desktopFileDir/"
+        cp -r packaging/linux/flatpak/$projectId.desktop "$desktopFileDir/"
 
         metadataDir="$APP_DIR/share/metainfo"
         mkdir -p "$metadataDir"

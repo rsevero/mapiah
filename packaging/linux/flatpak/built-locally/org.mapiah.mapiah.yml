@@ -4,6 +4,7 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
+appstream-compose: false
 command: mapiah
 finish-args:
   - --share=ipc
