@@ -53,8 +53,8 @@ jobs:
         set -e
         set -x
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        flatpak install --user flathub org.flatpak.Builder
         flatpak install --user -y org.freedesktop.Sdk/x86_64/24.08
+        flatpak install --user flathub org.flatpak.Builder
 
     - name: Build flutter app
       run: |
