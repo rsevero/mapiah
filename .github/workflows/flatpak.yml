@@ -48,14 +48,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y appstream appstream-util flatpak libappstream-glib8 clang cmake ninja-build fuse pkg-config libgtk-3-dev libglu1-mesa
 
-    - name: Install Flatpak Builder
-      run: |
-        set -e
-        set -x
-        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        flatpak install --user --noninteractive org.freedesktop.Sdk/x86_64/24.08
-        flatpak install --user --noninteractive flathub org.flatpak.Builder
-
     - name: Build flutter app
       run: |
         set -e
@@ -63,6 +55,14 @@ jobs:
         flutter --version
         flutter config --enable-linux-desktop
         flutter build linux --release
+
+    - name: Install Flatpak Builder
+      run: |
+        set -e
+        set -x
+        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        flatpak install --user --noninteractive org.freedesktop.Sdk/x86_64/24.08
+        flatpak install --user --noninteractive flathub org.flatpak.Builder
 
     - name: Create flatpak tar.gz
       run: |
@@ -90,7 +90,7 @@ jobs:
         tar -xf "$ARCHIVE_NAME" -C "$APP_DIR/$projectName"
         chmod +x "$APP_DIR/$projectName/$executableName"
         mkdir -p "$APP_DIR/bin"
-        ln -s "/$APP_DIR/$projectName/$executableName" "/$APP_DIR/bin/$executableName"
+        ln -s "$APP_DIR/$projectName/$executableName" "$APP_DIR/bin/$executableName"
 
         iconDir="$APP_DIR/share/icons/hicolor/scalable/apps"
         mkdir -p "$iconDir"
