@@ -22,12 +22,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup upterm session
-      if: github.event_name != 'push'
-      uses: lhotari/action-upterm@v1
-      with:
-        limit-access-to-actor: true
-
     - name: Validate tag (automatic runs only)
       if: github.event_name == 'push'
       shell: bash
@@ -114,6 +108,11 @@ jobs:
 
         SHA=$(sha256sum mapiah.flatpak.tar.gz | awk '{print $1}')
         sed -i "/url:.*mapiah\.flatpak\.tar\.gz/,/sha256:/s/\\(sha256: *\\).*/\\1$SHA/" org.mapiah.mapiah.yml
+
+    # - name: Setup upterm session
+    #   uses: lhotari/action-upterm@v1
+    #   with:
+    #     limit-access-to-actor: true
 
     - name: Build Flatpak package
       run: |
