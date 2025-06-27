@@ -36,6 +36,5 @@ modules:
       - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/org.mapiah.mapiah.png
       - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/org.mapiah.mapiah.png
     sources:
-      - type: file
-        url: file:///mapiah.flatpak.tar.gz
-        sha256: 5dc57e4f5b84e6527098cb1e011ef50413c660147f5da7dfbfb507527e44eb83
+      - type: dir
+        path: .
