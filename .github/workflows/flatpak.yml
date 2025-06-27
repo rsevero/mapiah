@@ -56,14 +56,6 @@ jobs:
         flutter config --enable-linux-desktop
         flutter build linux --release
 
-    - name: Install Flatpak Builder
-      run: |
-        set -e
-        set -x
-        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        flatpak install --user --noninteractive org.freedesktop.Sdk/x86_64/24.08
-        flatpak install --user --noninteractive flathub org.flatpak.Builder
-
     - name: Create flatpak tar.gz
       run: |
         set -e
@@ -109,10 +101,18 @@ jobs:
         SHA=$(sha256sum mapiah.flatpak.tar.gz | awk '{print $1}')
         sed -i "/url:.*mapiah\.flatpak\.tar\.gz/,/sha256:/s/\\(sha256: *\\).*/\\1$SHA/" org.mapiah.mapiah.yml
 
-    # - name: Setup upterm session
-    #   uses: lhotari/action-upterm@v1
-    #   with:
-    #     limit-access-to-actor: true
+    - name: Install Flatpak Builder
+      run: |
+        set -e
+        set -x
+        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        flatpak install --user --noninteractive org.freedesktop.Sdk/x86_64/24.08
+        flatpak install --user --noninteractive flathub org.flatpak.Builder
+
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
+      with:
+        limit-access-to-actor: true
 
     - name: Build Flatpak package
       run: |
