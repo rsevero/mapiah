@@ -25,6 +25,8 @@ jobs:
     - name: Setup upterm session
       if: github.event_name != 'push'
       uses: lhotari/action-upterm@v1
+      with:
+        limit-access-to-actor: true
 
     - name: Validate tag (automatic runs only)
       if: github.event_name == 'push'
