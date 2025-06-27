@@ -22,6 +22,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup upterm session
+      if: github.event_name != 'push'
+      uses: lhotari/action-upterm@v1
+
     - name: Validate tag (automatic runs only)
       if: github.event_name == 'push'
       shell: bash
@@ -113,7 +117,7 @@ jobs:
       run: |
         set -e
         set -x
-        flatpak-builder --force-clean --repo=repo --install-deps-from=flathub --install-deps-from=remote org.mapiah.mapiah.yml build-dir
+        flatpak run org.flatpak.Builder --force-clean --repo=repo --install-deps-from=flathub --install-deps-from=remote org.mapiah.mapiah.yml build-dir
 
     - name: Update Mapiah version in flatpak manifest
       uses: actions/checkout@v4
