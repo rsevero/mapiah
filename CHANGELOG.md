@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.6 - not released yet
+* Linux release in appimage format (automated)
+
 ## 0.2.5 - 2025-06-21
 * 'point -value' and 'line -altitude' options: quoted and bracket string support
 * Preserving original line endings in save

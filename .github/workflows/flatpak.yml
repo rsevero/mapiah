@@ -1,4 +1,4 @@
-name: Build Linux flatpak release of Mapiah
+name: Mapiah Flatpak Release
 
 on:
   push:
@@ -11,17 +11,107 @@ on:
         required: false
         default: 'v1.0.0-test'
 
+permissions:
+  contents: write
+
 jobs:
-  flatpak:
-    name: "Flatpak"
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
-      options: --privileged
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Validate tag (automatic runs only)
+      if: github.event_name == 'push'
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TAG=${GITHUB_REF#refs/tags/}
+        if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
+          exit 1
+        fi
+        echo "Validated tag: $TAG"
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
       with:
-        bundle: palette.flatpak
-        manifest-path: org.mapiah.mapiahapp.yml
-        cache-key: flatpak-builder-${{ github.sha }}
+        channel: stable
+        flutter-version: 3.32.4
+
+    - name: Install dependencies
+      run: |
+        set -e
+        set -x
+        sudo apt-get update
+        sudo apt-get install -y appstream appstream-util flatpak libappstream-glib8 clang cmake ninja-build fuse pkg-config libgtk-3-dev libglu1-mesa
+
+    - name: Install Flatpak Builder
+      run: |
+        set -e
+        set -x
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        flatpak install flathub org.flatpak.Builder
+        flatpak install -y org.freedesktop.Sdk/x86_64/24.08
+
+    - name: Build flutter app
+      run: |
+        set -e
+        set -x
+        flutter --version
+        flutter config --enable-linux-desktop
+        flutter build linux --release
+
+    - name: Create flatpak tar.gz
+      run: |
+        set -e
+        set -x
+        BASEDIR=$(pwd)
+        ARCHIVE_NAME="mapiah.flatpak.tar.gz"
+        cd build/linux/x64/release/bundle
+        rm -f "$ARCHIVE_NAME"
+        tar -czaf "$ARCHIVE_NAME" ./*
+        mv "$ARCHIVE_NAME" "$BASEDIR"/
+        cd "$BASEDIR"
+
+    - name: Build Flatpak package
+      run: |
+        set -e
+        set -x
+        projectName=Mapiah
+        projectId=org.mapiah.mapiah
+        executableName=mapiah
+        ARCHIVE_NAME="mapiah.flatpak.tar.gz"
+        APP_DIR="app"
+
+        mkdir -p "$APP_DIR/$projectName"
+        tar -xf "$ARCHIVE_NAME" -C "$APP_DIR/$projectName"
+        chmod +x "$APP_DIR/$projectName/$executableName"
+        mkdir -p "$APP_DIR/bin"
+        ln -s "/$APP_DIR/$projectName/$executableName" "/$APP_DIR/bin/$executableName"
+
+        iconDir="$APP_DIR/share/icons/hicolor/scalable/apps"
+        mkdir -p "$iconDir"
+        cp -r assets/icons/m-*.png "$iconDir/"
+
+        desktopFileDir="$APP_DIR/share/applications"
+        mkdir -p "$desktopFileDir"
+        cp -r packaging/linux/$projectId.desktop "$desktopFileDir/"
+
+        metadataDir="$APP_DIR/share/metainfo"
+        mkdir -p "$metadataDir"
+        cp -r packaging/linux/$projectId.metainfo.xml "$metadataDir/"
+
+        flatpak-builder --force-clean --repo=repo --install-deps-from=flathub --install-deps-from=remote org.mapiah.mapiahapp.yml build-dir
+
+    - name: Update Mapiah version in flatpak manifest
+      uses: actions/checkout@v4
+
+    - name: Build Mapiah flatpak
+      uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      with:
+          bundle: palette.flatpak
+          manifest-path: org.mapiah.mapiahapp.yml
+          cache-key: flatpak-builder-${{ github.sha }}
