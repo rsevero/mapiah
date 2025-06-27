@@ -76,7 +76,7 @@ jobs:
         mv "$ARCHIVE_NAME" "$BASEDIR"/
         cd "$BASEDIR"
 
-    - name: Build Flatpak package
+    - name: Prepare Flatpak package
       run: |
         set -e
         set -x
@@ -104,7 +104,16 @@ jobs:
         mkdir -p "$metadataDir"
         cp -r packaging/linux/$projectId.metainfo.xml "$metadataDir/"
 
-        flatpak-builder --force-clean --repo=repo --install-deps-from=flathub --install-deps-from=remote org.mapiah.mapiahapp.yml build-dir
+        cp "packaging/linux/flatpak/build-locally/$projectId.yml" .
+
+        SHA=$(sha256sum mapiah.flatpak.tar.gz | awk '{print $1}')
+        sed -i "/url:.*mapiah\.flatpak\.tar\.gz/,/sha256:/s/\\(sha256: *\\).*/\\1$SHA/" org.mapiah.mapiah.yml
+
+    - name: Build Flatpak package
+      run: |
+        set -e
+        set -x
+        flatpak-builder --force-clean --repo=repo --install-deps-from=flathub --install-deps-from=remote org.mapiah.mapiah.yml build-dir
 
     - name: Update Mapiah version in flatpak manifest
       uses: actions/checkout@v4

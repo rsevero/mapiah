@@ -1,29 +1,41 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
-
----
-app-id: org.mapiah.mapiah
+id: org.mapiah.mapiah
 runtime: org.freedesktop.Platform
-runtime-version: "24.08"
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm19
 command: mapiah
-separate-locales: false
 finish-args:
   - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland
   - --device=dri
 modules:
-  - name: Mapiah
+  - name: mapiah
     buildsystem: simple
-    only-arches:
-      - x86_64
+    build-options:
+      arch:
+        x86_64:
+          env:
+            BUNDLE_PATH: build/linux/x64/release/bundle
+        aarch64:
+          env:
+            BUNDLE_PATH: build/linux/arm64/release/bundle
+      append-path: /usr/lib/sdk/llvm19/bin:/run/build/mapiah/flutter/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
+      env:
+        PUB_CACHE: /run/build/mapiah/.pub-cache
     build-commands:
-      - "./build-flatpak.sh"
+      - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
+      - cp -r $BUNDLE_PATH/lib /app/bin/lib
+      - cp -r $BUNDLE_PATH/data /app/bin/data
+      - install -Dm644 packaging/linux/org.mapiah.mapiah.metainfo.xml -t /app/share/metainfo
+      - install -Dm644 packaging/linux/org.mapiah.mapiah.desktop -t /app/share/applications
+      - install -Dm644 assets/icons/m-64x64.png /app/share/icons/hicolor/64x64/apps/org.mapiah.mapiah.png
+      - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/org.mapiah.mapiah.png
+      - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/org.mapiah.mapiah.png
+      - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/org.mapiah.mapiah.png
     sources:
-      - type: dir
-        path: ../
-      - type: git
-        url: https://github.com/rsevero/mapiah.git
-        branch: main
       - type: file
-        path: build-flatpak.sh
+        url: file:///mapiah.flatpak.tar.gz
+        sha256: 5dc57e4f5b84e6527098cb1e011ef50413c660147f5da7dfbfb507527e44eb83
