@@ -63,11 +63,10 @@ jobs:
         projectName=Mapiah
         projectId=org.mapiah.mapiah
         executableName=mapiah
-        ARCHIVE_NAME="mapiah.flatpak.tar.gz"
         APP_DIR="app"
 
         mkdir -p "$APP_DIR/$projectName"
-        tar -xf "$ARCHIVE_NAME" -C "$APP_DIR/$projectName"
+        cp -r build/linux/x64/release/bundle/* "$APP_DIR/$projectName/"
         chmod +x "$APP_DIR/$projectName/$executableName"
         mkdir -p "$APP_DIR/bin"
         ln -s "$APP_DIR/$projectName/$executableName" "$APP_DIR/bin/$executableName"
