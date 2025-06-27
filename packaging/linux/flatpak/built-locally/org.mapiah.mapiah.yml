@@ -26,6 +26,30 @@ modules:
       env:
         PUB_CACHE: /run/build/mapiah/.pub-cache
     build-commands:
+      - set -e
+      - set -x
+      - flutter --version
+      - flutter config --enable-linux-desktop
+      - flutter build linux --release
+      - projectName=Mapiah
+      - projectId=org.mapiah.mapiah
+      - executableName=mapiah
+      - APP_DIR="app"
+      - mkdir -p "$APP_DIR/$projectName"
+      - cp -r build/linux/x64/release/bundle/* "$APP_DIR/$projectName/"
+      - chmod +x "$APP_DIR/$projectName/$executableName"
+      - mkdir -p "$APP_DIR/bin"
+      - ln -s "$APP_DIR/$projectName/$executableName" "$APP_DIR/bin/$executableName"
+      - iconDir="$APP_DIR/share/icons/hicolor/scalable/apps"
+      - mkdir -p "$iconDir"
+      - cp -r assets/icons/m-*.png "$iconDir/"
+      - desktopFileDir="$APP_DIR/share/applications"
+      - mkdir -p "$desktopFileDir"
+      - cp -r packaging/linux/$projectId.desktop "$desktopFileDir/"
+      - metadataDir="$APP_DIR/share/metainfo"
+      - mkdir -p "$metadataDir"
+      - cp -r packaging/linux/$projectId.metainfo.xml "$metadataDir/"
+      - cp "packaging/linux/flatpak/built-locally/$projectId.yml" .
       - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
