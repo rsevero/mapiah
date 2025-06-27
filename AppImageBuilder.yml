@@ -18,7 +18,7 @@ script: |
   cp assets/icons/m-32x32.png AppDir/usr/share/icons/hicolor/32x32/apps/application-vnd.appimage.png
   cp assets/icons/m-16x16.png AppDir/usr/share/icons/hicolor/16x16/apps/application-vnd.appimage.png
   mkdir -p AppDir/usr/share/applications
-  cp packaging/linux/org.mapiah.mapiah.desktop AppDir/usr/share/applications
+  cp packaging/linux/appimage/org.mapiah.mapiah.desktop AppDir/usr/share/applications
   ln -sf usr/share/icons/hicolor/512x512/apps/application-vnd.appimage.png AppDir/.DirIcon
 AppDir:
   path: ./AppDir
