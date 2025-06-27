@@ -28,7 +28,8 @@ jobs:
       run: |
         set -e
         set -x
-        TAG=${GITHUB_REF#refs/tags/}
+        export TAG=${GITHUB_REF#refs/tags/}
+        export TAG_NUMBER="${TAG#v}"
         if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
           exit 1
@@ -97,9 +98,41 @@ jobs:
       run: |
         set -e
         set -x
+        export INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
         flatpak-builder --force-clean --repo=repo build-dir "$PWD/org.mapiah.mapiah.yml"
+        flatpak build-bundle repo "$INSTALLER" org.mapiah.mapiah
 
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
-      with:
-        limit-access-to-actor: true
+    - name: Publish Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TITLE="Mapiah $TAG"
+
+        # Store token in a different variable and unset GITHUB_TOKEN
+        GH_TOKEN=$GITHUB_TOKEN
+        unset GITHUB_TOKEN
+
+        # Authenticate using the stored token
+        gh auth login --with-token <<< "$GH_TOKEN"
+
+        # Check if release exists and create if needed
+        if ! gh release view "$TAG" 2>/dev/null; then
+          echo "Creating new release..."
+          gh release create "$TAG" \
+            --title "$TITLE" \
+            --notes "Release $TAG" \
+            "$INSTALLER"
+        else
+          echo "Release exists - uploading assets..."
+          gh release upload "$TAG" \
+            --clobber \
+            "$INSTALLER"
+        fi
+
+    # - name: Setup upterm session
+    #   uses: lhotari/action-upterm@v1
+    #   with:
+    #     limit-access-to-actor: true
