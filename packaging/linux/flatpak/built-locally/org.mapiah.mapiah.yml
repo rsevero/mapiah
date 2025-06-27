@@ -32,6 +32,8 @@ modules:
       - cp -r $BUNDLE_PATH/data /app/bin/data
       - install -Dm644 packaging/linux/org.mapiah.mapiah.metainfo.xml -t /app/share/metainfo
       - install -Dm644 packaging/linux/org.mapiah.mapiah.desktop -t /app/share/applications
+      - install -Dm644 assets/icons/m-16x16.png /app/share/icons/hicolor/16x16/apps/org.mapiah.mapiah.png
+      - install -Dm644 assets/icons/m-32x32.png /app/share/icons/hicolor/32x32/apps/org.mapiah.mapiah.png
       - install -Dm644 assets/icons/m-64x64.png /app/share/icons/hicolor/64x64/apps/org.mapiah.mapiah.png
       - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/org.mapiah.mapiah.png
       - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/org.mapiah.mapiah.png

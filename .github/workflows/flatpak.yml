@@ -93,13 +93,13 @@ jobs:
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Platform/x86_64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19
 
-    # - name: Setup upterm session
-    #   uses: lhotari/action-upterm@v1
-    #   with:
-    #     limit-access-to-actor: true
-
     - name: Build Mapiah flatpak
       run: |
         set -e
         set -x
         flatpak-builder --force-clean --repo=repo build-dir "$PWD/org.mapiah.mapiah.yml"
+
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
+      with:
+        limit-access-to-actor: true
