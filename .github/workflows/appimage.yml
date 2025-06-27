@@ -35,15 +35,6 @@ jobs:
         fi
         echo "Validated tag: $TAG"
 
-    - name: Update Mapiah version in AppImageBuilder.yml
-      shell: bash
-      run: |
-        set -e
-        set -x
-        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
-        TAG_NUMBER="${TAG#v}"
-        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
-
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -64,6 +55,15 @@ jobs:
         flutter --version
         flutter config --enable-linux-desktop
         flutter build linux --release
+
+    - name: Update Mapiah version in AppImageBuilder.yml
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+        TAG_NUMBER="${TAG#v}"
+        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
 
     - name: Set up appimage
       run: |
