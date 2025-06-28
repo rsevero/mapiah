@@ -1,5 +1,7 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_context_menu_suppression.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
@@ -38,6 +40,9 @@ void main() {
 
   // /// For layout debugging.
   // debugPaintSizeEnabled = true;
+  if (kIsWeb) {
+    suppressContextMenu();
+  }
   runApp(MapiahApp());
 }
 

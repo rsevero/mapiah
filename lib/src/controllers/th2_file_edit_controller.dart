@@ -874,8 +874,9 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
-  void _setCanvasCenterToDrawingCenter(
-      {required MPZoomToFitType zoomToFitType}) {
+  void _setCanvasCenterToDrawingCenter({
+    required MPZoomToFitType zoomToFitType,
+  }) {
     final Rect dataBoundingBox = _getZoomToFitBoundingBox(
       zoomFitToType: zoomToFitType,
     );
