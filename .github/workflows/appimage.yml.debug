@@ -79,6 +79,10 @@ jobs:
         set -e
         set -x
         appimage-builder --recipe AppImageBuilder.yml --skip-test
+        ORIGINAL_APPIMAGE="Mapiah-$TAG_NUMBER-x86_64.AppImage"
+        INSTALLER_APPIMAGE="Mapiah-$TAG_NUMBER-linux-x86_64.AppImage"
+        echo "INSTALLER_APPIMAGE=$INSTALLER_APPIMAGE" >> $GITHUB_ENV
+        mv "$ORIGINAL_APPIMAGE" "$INSTALLER_APPIMAGE"
 
     - name: Publish Release
       env:
@@ -88,10 +92,6 @@ jobs:
         set -e
         set -x
         TITLE="Mapiah $TAG"
-        ORIGINAL_APPIMAGE="Mapiah-$TAG_NUMBER-x86_64.AppImage"
-        INSTALLER="Mapiah-$TAG_NUMBER-linux-x86_64.AppImage"
-
-        mv "$ORIGINAL_APPIMAGE" "$INSTALLER"
 
         # Store token in a different variable and unset GITHUB_TOKEN
         GH_TOKEN=$GITHUB_TOKEN
@@ -106,10 +106,10 @@ jobs:
           gh release create "$TAG" \
             --title "$TITLE" \
             --notes "Release $TAG" \
-            "$INSTALLER"
+            "$INSTALLER_APPIMAGE"
         else
           echo "Release exists - uploading assets..."
           gh release upload "$TAG" \
             --clobber \
-            "$INSTALLER"
+            "$INSTALLER_APPIMAGE"
         fi
