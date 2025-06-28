@@ -1,4 +1,4 @@
-name: Mapiah Flatpak Release
+name: Mapiah Flatpak Release (just for separate flatpak debug)
 
 on:
   push:
@@ -115,6 +115,9 @@ jobs:
         TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
         TAG_NUMBER="${TAG#v}"
         INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
+        echo "INSTALLER=$INSTALLER" >> $GITHUB_ENV
         flatpak-builder --force-clean --repo=repo build-dir org.mapiah.mapiah.yml
         flatpak build-bundle repo "$INSTALLER" org.mapiah.mapiah
 
@@ -125,9 +128,6 @@ jobs:
       run: |
         set -e
         set -x
-        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
-        TAG_NUMBER="${TAG#v}"
-        INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
         TITLE="Mapiah $TAG"
 
         # Store token in a different variable and unset GITHUB_TOKEN
