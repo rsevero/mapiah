@@ -1,4 +1,4 @@
-name: Build Windows release of Mapiah
+name: Mapiah Windows release
 
 on:
   push:
@@ -103,7 +103,7 @@ jobs:
           # Store token in a different variable and unset GITHUB_TOKEN
           GH_TOKEN=$GITHUB_TOKEN
           unset GITHUB_TOKEN
-          
+
           # Authenticate using the stored token
           gh auth login --with-token <<< "$GH_TOKEN"
 
