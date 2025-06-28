@@ -93,10 +93,10 @@ jobs:
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Platform/x86_64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19
 
-    # - name: Setup upterm session
-    #   uses: lhotari/action-upterm@v1
-    #   with:
-    #     limit-access-to-actor: true
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
+      with:
+        limit-access-to-actor: true
 
     - name: Build Mapiah flatpak
       run: |
@@ -105,7 +105,7 @@ jobs:
         TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
         TAG_NUMBER="${TAG#v}"
         INSTALLER="Mapiah-${TAG_NUMBER}-linux-x86_64.flatpak"
-        flatpak-builder --force-clean --repo=repo build-dir "$PWD/org.mapiah.mapiah.yml"
+        flatpak-builder --force-clean --repo=repo build-dir org.mapiah.mapiah.yml
         flatpak build-bundle repo "$INSTALLER" org.mapiah.mapiah
 
     - name: Publish Release
