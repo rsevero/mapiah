@@ -91,6 +91,8 @@ jobs:
         sudo add-apt-repository -y ppa:flatpak/stable
         sudo apt-get update
         sudo apt-get install -y flatpak flatpak-builder
+        flatpak --version
+        flatpak-builder --version
 
     - name: Install Flatpak Builder dependencies
       run: |
