@@ -30,6 +30,9 @@ class THFileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mpLocator.mpLog.finer("THFileWidget.build()");
+    th2FileEditController.devicePixelRatio =
+        MediaQuery.of(context).devicePixelRatio;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         th2FileEditController.updateScreenSize(

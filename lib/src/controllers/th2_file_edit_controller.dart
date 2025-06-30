@@ -62,6 +62,8 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   double _canvasScale = 1.0;
 
+  double devicePixelRatio = 1.0;
+
   @computed
   String get canvasScaleAsPercentageText =>
       MPNumericAux.roundScaleAsTextPercentage(_canvasScale);
@@ -509,8 +511,8 @@ abstract class TH2FileEditControllerBase with Store {
     }));
 
     _disposers.add(autorun((_) {
-      _lineThicknessOnCanvas =
-          mpLocator.mpSettingsController.lineThickness / _canvasScale;
+      _lineThicknessOnCanvas = mpLocator.mpSettingsController.lineThickness /
+          (_canvasScale * devicePixelRatio);
       _lineDirectionTickLengthOnCanvas =
           mpLineDirectionTickLength / _canvasScale;
     }));
@@ -740,36 +742,41 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
+  void setCanvasScale(double newScale) {
+    _canvasScale = newScale;
+  }
+
+  @action
   void updateCanvasScale(double newScale) {
-    _canvasScale = MPNumericAux.roundScale(newScale);
+    setCanvasScale(MPNumericAux.roundScale(newScale));
     _canvasSize = _screenSize / _canvasScale;
   }
 
   @action
   void zoomIn({bool fineZoom = false}) {
-    _canvasScale = MPNumericAux.calculateNextZoomLevel(
+    setCanvasScale(MPNumericAux.calculateNextZoomLevel(
       scale: _canvasScale,
       factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
       isIncrease: true,
-    );
+    ));
 
     _changedCanvasTransform();
   }
 
   @action
   void zoomOut({bool fineZoom = false}) {
-    _canvasScale = MPNumericAux.calculateNextZoomLevel(
+    setCanvasScale(MPNumericAux.calculateNextZoomLevel(
       scale: _canvasScale,
       factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
       isIncrease: false,
-    );
+    ));
 
     _changedCanvasTransform();
   }
 
   @action
   void zoomOneToOne() {
-    _canvasScale = 1;
+    setCanvasScale(1);
 
     _changedCanvasTransform();
   }
@@ -787,8 +794,9 @@ abstract class TH2FileEditControllerBase with Store {
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
 
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
-    _canvasScale = MPNumericAux.roundScale(
-        (widthScale < heightScale) ? widthScale : heightScale);
+    setCanvasScale(MPNumericAux.roundScale(
+      (widthScale < heightScale) ? widthScale : heightScale,
+    ));
 
     _changedCanvasTransform();
   }
