@@ -43,7 +43,7 @@ Version 0.3
 [X] - Release creation Windows
 [X] - Release creation MacOS
 [X] - Release for Web
-[ ] - Release automation Linux
+[X] - Release automation Linux
 [X] - Release automation Windows
 [X] - Release automation MacOS
 [ ] - Release automation for Web

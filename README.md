@@ -43,7 +43,7 @@ Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 As Mapiah has no Apple compatible signing yet its necessary to allow special permission to run Mapiah in MacOS: [Open Any Way](https://support.apple.com/en-us/102445#openanyway)
 
 ### Web
-There is a web version available at  [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
+There is a web version available at  [https://mapiah.org/webapp](https://mapiah.org/webapp).
 
 [Officially supported browsers](https://docs.flutter.dev/platform-integration/web/faq#which-web-browsers-are-supported-by-flutter) for Flutter web apps.
 
