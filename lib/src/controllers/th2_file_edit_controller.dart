@@ -909,9 +909,12 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void saveTH2File() {
+    print('DEBUG (Mapiah): Saving TH2 file: ${_thFile.filename}');
     if (kIsWeb) {
+      print("DEBUG (Mapiah): kIsWeb is true, saving file using web method.");
       saveFileWeb(_encodedFileContents(), _thFile.filename);
     } else {
+      print("DEBUG (Mapiah): kIsWeb is false, saving file using local method.");
       final File file = _localFile();
 
       _actualSave(file);
