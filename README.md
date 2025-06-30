@@ -25,14 +25,17 @@ Also create a thriving community of users and developers to make it as powerful 
 ## Installation
 
 ### Linux
-There is a flatpak version:
 
-```sh
-flatpak install io.github.rsevero.mapiah
-flatpak run io.github.rsevero.mapiah
-```
+#### AppImage
+Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
-If someone is interested in creating an appimage, arch, deb, rpm, snap or other package and is interested in my can help, please contact me at rsev AT pm.me.
+#### Flatpak
+Mapiah Flatpak version moved from Flathub to direct download from [Mapiah releases](https://github.com/rsevero/mapiah/releases).
+
+This changed was necessary to automate the release process, which I still didn´t managed to do with Flathub.
+
+#### Other formats
+If someone is interested in creating Linux packages in other formats like arch, deb, rpm, snap or other package and is interested in my help, please contact me at rsev AT pm.me.
 
 ### MacOS
 Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
@@ -40,9 +43,7 @@ Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 As Mapiah has no Apple compatible signing yet its necessary to allow special permission to run Mapiah in MacOS: [Open Any Way](https://support.apple.com/en-us/102445#openanyway)
 
 ### Web
-There are 2 web versions is available:
-* Javascript at [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
-* WASM at [https://mapiah.org/webappwasm](https://mapiah.org/webappwasm).
+There is a web version available at  [https://mapiah.org/webappjs](https://mapiah.org/webappjs).
 
 [Officially supported browsers](https://docs.flutter.dev/platform-integration/web/faq#which-web-browsers-are-supported-by-flutter) for Flutter web apps.
 

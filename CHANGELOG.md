@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.2.6 - not released yet
+## 0.2.6 - 2025-06-30
 * Linux release in appimage format (automated)
 * Remove context menu from right clicks on web release
+* Fixed nextUp() and nextDown() in web release: was messing with bounding box calculations
 
 ## 0.2.5 - 2025-06-21
 * 'point -value' and 'line -altitude' options: quoted and bracket string support
