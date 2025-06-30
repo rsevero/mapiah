@@ -127,7 +127,7 @@ const double thClickDragThreshold = 2.0;
 const double thClickDragThresholdSquared =
     thClickDragThreshold * thClickDragThreshold;
 const double thDefaultSelectionTolerance = 6.0;
-const double thDefaultPointRadius = 5.0;
+const double thDefaultPointRadius = 8.0;
 const double thDefaultLineThickness = 2.0;
 const double thControlLineThicknessFactor = 0.5;
 const double thControlPointRadiusFactor = 1.5;

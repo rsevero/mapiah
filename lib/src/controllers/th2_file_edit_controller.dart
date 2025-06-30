@@ -514,7 +514,7 @@ abstract class TH2FileEditControllerBase with Store {
       _lineThicknessOnCanvas = mpLocator.mpSettingsController.lineThickness /
           (_canvasScale * devicePixelRatio);
       _lineDirectionTickLengthOnCanvas =
-          mpLineDirectionTickLength / _canvasScale;
+          mpLineDirectionTickLength / (_canvasScale * devicePixelRatio);
     }));
 
     _disposers.add(autorun((_) {
@@ -523,13 +523,14 @@ abstract class TH2FileEditControllerBase with Store {
     }));
 
     _disposers.add(autorun((_) {
-      _pointRadiusOnCanvas =
-          mpLocator.mpSettingsController.pointRadius / _canvasScale;
+      _pointRadiusOnCanvas = mpLocator.mpSettingsController.pointRadius /
+          (_canvasScale * devicePixelRatio);
     }));
 
     _disposers.add(autorun((_) {
       _selectionToleranceOnCanvas =
-          mpLocator.mpSettingsController.selectionTolerance / _canvasScale;
+          mpLocator.mpSettingsController.selectionTolerance /
+              (_canvasScale * devicePixelRatio);
     }));
 
     _disposers.add(autorun((_) {
@@ -538,17 +539,18 @@ abstract class TH2FileEditControllerBase with Store {
     }));
 
     _disposers.add(autorun((_) {
-      _selectionHandleSizeOnCanvas = thSelectionHandleSize / _canvasScale;
+      _selectionHandleSizeOnCanvas =
+          thSelectionHandleSize / (_canvasScale * devicePixelRatio);
     }));
 
     _disposers.add(autorun((_) {
       _selectionHandleDistanceOnCanvas =
-          thSelectionHandleDistance / _canvasScale;
+          thSelectionHandleDistance / (_canvasScale * devicePixelRatio);
     }));
 
     _disposers.add(autorun((_) {
       _selectionHandleLineThicknessOnCanvas =
-          thSelectionHandleLineThickness / _canvasScale;
+          thSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
     }));
   }
 

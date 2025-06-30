@@ -228,11 +228,12 @@ class THLinePainter extends CustomPainter {
   void _drawDashedPath(Canvas canvas, Path path) {
     final List<int> dashLengths = linePaintTypeToDashLengths[linePaint.type]!;
     final List<double> dashLengthsOnCanvas = [];
+    final double devicePixelRatio = th2FileEditController.devicePixelRatio;
 
     for (final int length in dashLengths) {
       dashLengthsOnCanvas.add(
         th2FileEditController.scaleScreenToCanvas(
-          length.toDouble(),
+          length.toDouble() / devicePixelRatio,
         ),
       );
     }
