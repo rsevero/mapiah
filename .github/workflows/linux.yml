@@ -55,35 +55,6 @@ jobs:
         flutter config --enable-linux-desktop
         flutter build linux --release
 
-    - name: Update Mapiah version in AppImageBuilder.yml
-      shell: bash
-      run: |
-        set -e
-        set -x
-        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
-        TAG_NUMBER="${TAG#v}"
-        echo "TAG=$TAG" >> $GITHUB_ENV
-        echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
-        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
-
-    - name: Set up appimage
-      run: |
-        set -e
-        set -x
-        curl -L -o appimage-builder-x86_64.AppImage https://github.com/AppImageCrafters/appimage-builder/releases/download/v1.1.0/appimage-builder-1.1.0-x86_64.AppImage
-        chmod +x appimage-builder-x86_64.AppImage
-        sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
-
-    - name: Build appimage
-      run: |
-        set -e
-        set -x
-        appimage-builder --recipe AppImageBuilder.yml --skip-test
-        ORIGINAL_APPIMAGE="Mapiah-$TAG_NUMBER-x86_64.AppImage"
-        INSTALLER_APPIMAGE="Mapiah-$TAG_NUMBER-linux-x86_64.AppImage"
-        echo "INSTALLER_APPIMAGE=$INSTALLER_APPIMAGE" >> $GITHUB_ENV
-        mv "$ORIGINAL_APPIMAGE" "$INSTALLER_APPIMAGE"
-
     - name: Prepare Flatpak package
       run: |
         set -e
@@ -149,6 +120,41 @@ jobs:
         echo "FLATPAK_INSTALLER=$FLATPAK_INSTALLER" >> $GITHUB_ENV
         flatpak-builder --force-clean --repo=repo build-dir org.mapiah.mapiah.yml
         flatpak build-bundle repo "$FLATPAK_INSTALLER" org.mapiah.mapiah
+
+    - name: Install appimage dependencies (incompatible with Flatpak)
+      run: |
+        set -e
+        set -x
+        sudo apt-get install -y fuse
+
+    - name: Update Mapiah version in AppImageBuilder.yml
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+        TAG_NUMBER="${TAG#v}"
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
+        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
+
+    - name: Set up appimage
+      run: |
+        set -e
+        set -x
+        curl -L -o appimage-builder-x86_64.AppImage https://github.com/AppImageCrafters/appimage-builder/releases/download/v1.1.0/appimage-builder-1.1.0-x86_64.AppImage
+        chmod +x appimage-builder-x86_64.AppImage
+        sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
+
+    - name: Build appimage
+      run: |
+        set -e
+        set -x
+        appimage-builder --recipe AppImageBuilder.yml --skip-test
+        ORIGINAL_APPIMAGE="Mapiah-$TAG_NUMBER-x86_64.AppImage"
+        INSTALLER_APPIMAGE="Mapiah-$TAG_NUMBER-linux-x86_64.AppImage"
+        echo "INSTALLER_APPIMAGE=$INSTALLER_APPIMAGE" >> $GITHUB_ENV
+        mv "$ORIGINAL_APPIMAGE" "$INSTALLER_APPIMAGE"
 
     - name: Publish Release
       env:
