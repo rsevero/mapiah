@@ -2,6 +2,7 @@
 
 ## 0.2.6 - not released yet
 * Linux release in appimage format (automated)
+* Remove context menu from right clicks on web release
 
 ## 0.2.5 - 2025-06-21
 * 'point -value' and 'line -altitude' options: quoted and bracket string support
