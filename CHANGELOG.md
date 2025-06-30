@@ -1,9 +1,12 @@
 # Changelog
 
+### 0.2.7 - not yet released
+
 ## 0.2.6 - 2025-06-30
 * Linux release in appimage format (automated)
-* Remove context menu from right clicks on web release
-* Fixed nextUp() and nextDown() in web release: was messing with bounding box calculations
+* Web release: remove context menu from right clicks
+* Web release: fixed nextUp() and nextDown() that were messing with bounding box calculations
+* Flutter upgraded to 3.32.5; pub upgrade
 
 ## 0.2.5 - 2025-06-21
 * 'point -value' and 'line -altitude' options: quoted and bracket string support
