@@ -200,19 +200,22 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     // Function to solve quadratic equation for t values
     List<double> solveQuadratic(double a, double b, double c) {
       double discriminant = b * b - 4 * a * c;
+
       if (discriminant < 0) return [];
       if (discriminant == 0) return [-b / (2 * a)];
+
       double sqrtDiscriminant = sqrt(discriminant);
+
       return [
         (-b + sqrtDiscriminant) / (2 * a),
-        (-b - sqrtDiscriminant) / (2 * a)
+        (-b - sqrtDiscriminant) / (2 * a),
       ];
     }
 
     final List<Offset> endPoints = [points.first, points.last];
 
     // Add start and end control points to the bounding box
-    for (final p in endPoints) {
+    for (final Offset p in endPoints) {
       if (p.dx < minX) {
         minX = p.dx;
       }

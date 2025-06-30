@@ -790,14 +790,14 @@ abstract class TH2FileEditControllerBase with Store {
 
     _getFileDrawingSize(zoomToFitType: zoomFitToType);
 
-    final double widthScale =
+    final double scaleWidth =
         (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
-    final double heightScale =
+    final double scaleHeight =
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
 
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
     setCanvasScale(MPNumericAux.roundScale(
-      (widthScale < heightScale) ? widthScale : heightScale,
+      (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
     ));
 
     _changedCanvasTransform();
@@ -848,14 +848,6 @@ abstract class TH2FileEditControllerBase with Store {
     _canvasCenterX += delta;
     _calculateCanvasOffset();
     _changedCanvasTransform();
-  }
-
-  void updateDataWidth(double newWidth) {
-    _dataWidth = newWidth;
-  }
-
-  void updateDataHeight(double newHeight) {
-    _dataHeight = newHeight;
   }
 
   void _getFileDrawingSize({required MPZoomToFitType zoomToFitType}) {

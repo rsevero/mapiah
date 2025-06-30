@@ -205,6 +205,7 @@ class THLine extends THElement
       if (isFirst) {
         startPoint = child.endPoint.coordinates;
         isFirst = false;
+        continue;
       }
 
       final Rect childBoundingBox = child.getBoundingBox(startPoint);

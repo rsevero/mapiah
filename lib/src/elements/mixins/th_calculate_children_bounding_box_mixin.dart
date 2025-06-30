@@ -16,7 +16,7 @@ mixin THCalculateChildrenBoundingBoxMixin {
     double minY = double.infinity;
     double maxX = double.negativeInfinity;
     double maxY = double.negativeInfinity;
-    late Rect childBoundingBox;
+    Rect childBoundingBox = Rect.zero;
 
     for (final int mpID in childrenMPIDs) {
       final THElement child = thFile.elementByMPID(mpID);
@@ -27,7 +27,6 @@ mixin THCalculateChildrenBoundingBoxMixin {
         case THScrap _:
           childBoundingBox =
               (child as MPBoundingBox).getBoundingBox(th2FileEditController);
-          break;
         default:
           continue;
       }
