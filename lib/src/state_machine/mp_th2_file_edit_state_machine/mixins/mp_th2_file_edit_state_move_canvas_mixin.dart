@@ -61,19 +61,33 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
               .setState(MPTH2FileEditStateType.addPoint);
         }
       case LogicalKeyboardKey.keyS:
-        if (isCtrlPressed && !isAltPressed) {
-          if (isShiftPressed) {
+        print(
+          'DEBUG (Mapiah): S pressed.',
+        );
+        if (isCtrlPressed &&
+            !isAltPressed &&
+            th2FileEditController.enableSaveButton) {
+          print(
+            'DEBUG (Mapiah): Ctrl-S pressed. Saving TH2 file: ${thFile.filename}',
+          );
+          if (isShiftPressed && !kIsWeb) {
             th2FileEditController.saveAsTH2File();
           } else {
             th2FileEditController.saveTH2File();
           }
         }
       case LogicalKeyboardKey.keyY:
-        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if (isCtrlPressed &&
+            !isAltPressed &&
+            !isShiftPressed &&
+            th2FileEditController.hasRedo) {
           th2FileEditController.redo();
         }
       case LogicalKeyboardKey.keyZ:
-        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if (isCtrlPressed &&
+            !isAltPressed &&
+            !isShiftPressed &&
+            th2FileEditController.hasUndo) {
           th2FileEditController.undo();
         }
       case LogicalKeyboardKey.backspace:
