@@ -47,6 +47,10 @@ const double thFineZoomFactor = thRoundToFactor / 2 + 1;
 const double thCanvasMovementFactor = 0.1;
 const double thCanvasRoundFactor = 25.0;
 
+const double mpEpsilon = 2.220446049250313e-16;
+const double mpPositiveEpsilonFactor = 1.0 + mpEpsilon;
+const double mpNegativeEpsilonFactor = 1.0 - mpEpsilon;
+
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;
 

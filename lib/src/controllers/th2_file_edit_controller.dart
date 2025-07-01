@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_web_file_saver.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
@@ -26,9 +27,6 @@ import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
-
-import 'package:mapiah/src/auxiliary/mp_web_file_saver_stub.dart'
-    if (dart.library.js_interop) 'package:mapiah/src/auxiliary/mp_web_file_saver_web.dart';
 
 part 'th2_file_edit_controller.g.dart';
 
