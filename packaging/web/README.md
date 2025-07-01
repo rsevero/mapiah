@@ -9,7 +9,7 @@ cd ~/devel/mapiah; rm -rf ~/devel/mapiah/build/web; flutter build web --release 
 
 2. Create a compressed file with the new release:
 ```
-cd ~/devel/mapiah/build/web; rm -f ../mapiah-web-release-javascript.tar.bz2; tar -cjvf ../mapiah-web-release-javascript.tar.bz2 *
+cd ~/devel/mapiah/build/web; rm -f ../mapiah-web-release-javascript.tar.bz2; tar -cjvf ../mapiah-web-release-javascript.tar.bz2 *; cd ~/devel/mapiah
 ```
 
 3. Copy the compressed file to the hosting server (Hostinger) _webapp_ directory.

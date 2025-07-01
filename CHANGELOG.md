@@ -3,6 +3,7 @@
 ### 0.2.7 - 2025-07-01
 * Keyboard shortcuts should respect the same enabling conditions as buttons
 * Web release: debugging save
+* Web release: fixed 'save not working' [reported by CaverBruce]
 
 ## 0.2.6 - 2025-06-30
 * Linux release in appimage format (automated)
@@ -13,30 +14,30 @@
 ## 0.2.5 - 2025-06-21
 * 'point -value' and 'line -altitude' options: quoted and bracket string support
 * Preserving original line endings in save
-* Fixed for Windows [Neither Windows App or Web App js are saving correctly, Windows App opens wrong file](https://github.com/rsevero/mapiah/issues/6) (reported by CaverBruce)
-* Fixed [line wall subtypes deleted on save](https://github.com/rsevero/mapiah/issues/7) (reported by CaverBruce)
+* Fixed for Windows [Neither Windows App or Web App js are saving correctly, Windows App opens wrong file](https://github.com/rsevero/mapiah/issues/6) [reported by CaverBruce]
+* Fixed [line wall subtypes deleted on save](https://github.com/rsevero/mapiah/issues/7) [reported by CaverBruce]
 
 ## 0.2.4 - 2025-06-16
 * Included links to CHANGELOG and LICENSE in _About_ dialog
 * Included release date in CHANGELOG
-* Fixing 'right clicking without any objects selected presents ineffective options overlay window' (reported by Bruce Mutton)
+* Fixing 'right clicking without any objects selected presents ineffective options overlay window' [reported by Bruce Mutton]
 * Explaining how to edit element options in the help page
 * Fixing 'divide by zero on empty file zoom calculation'
 * TH2FileEditPageHelp: explaining behaviour during Bézier Curve line segment creation
 * README.md: Microsfot Defender false flagging Mapiah Setup exe file as having trojan horses
 * Explaining how to edit element options in the help page
-* Fixing 'scrap scale length too big for small files' (reported by Bruce Mutton)
+* Fixing 'scrap scale length too big for small files' [reported by Bruce Mutton]
 * TH2FileEditPageHelp: explaining save on web releases
 * Including link for officially supported browser for Flutter web apps
 * Fixing 'scrap IDs are extended keywords' [reported by Axel Hack]
 * Fixing lack of -attr command option support [reported by Axel Hack]
-* First MacOS release (already automated) thanks to Christian de Jongh
+* First MacOS release (already automated) [thanks to Christian de Jongh]
 * Automated Window releases
 
 ## 0.2.3 - 2025-06-13
 - Flutter upgraded to 3.32.4; pub upgrade
 - Windows release creation
-- Fixing 'Failure to parse -scrap option with quoted value' (reported by Wookey)
+- Fixing 'Failure to parse -scrap option with quoted value' [reported by Wookey]
 
 ## 0.2.2 - 2025-06-12
 - file_picker update: might fix 'file picker not showing files on debian'

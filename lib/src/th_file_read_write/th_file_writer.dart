@@ -42,6 +42,7 @@ class THFileWriter {
 
       asString += newLine;
     }
+
     asString += _childrenAsString(thFile);
 
     return asString;
@@ -213,11 +214,11 @@ class THFileWriter {
 
   String _serializeLine(THElement thElement) {
     final THLine thLine = thElement as THLine;
-
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
       String newLine = "line ${thLine.lineType.toFileString()}";
+
       if (thLine.optionIsSet(THCommandOptionType.subtype)) {
         newLine +=
             ":${thLine.optionByType(THCommandOptionType.subtype)!.specToFile()}";
@@ -258,27 +259,30 @@ class THFileWriter {
   }
 
   String _serializeLineSegment(THElement thElement) {
-    final String thType = thElement.runtimeType.toString();
-
+    final THElementType type = thElement.elementType;
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      switch (thType) {
-        case 'THBezierCurveLineSegment':
+      switch (type) {
+        case THElementType.bezierCurveLineSegment:
           final THBezierCurveLineSegment thBezierCurveLineSegment =
               thElement as THBezierCurveLineSegment;
           final String newLine =
               "${thBezierCurveLineSegment.controlPoint1} ${thBezierCurveLineSegment.controlPoint2} ${thBezierCurveLineSegment.endPoint}";
+
           asString += _prepareLine(newLine, thBezierCurveLineSegment);
           asString += _linePointOptionsAsString(thBezierCurveLineSegment);
-        case 'THStraightLineSegment':
+        case THElementType.straightLineSegment:
           final THStraightLineSegment thStraightLineSegment =
               thElement as THStraightLineSegment;
           final String newLine = thStraightLineSegment.endPoint.toString();
+
           asString += _prepareLine(newLine, thStraightLineSegment);
           asString += _linePointOptionsAsString(thStraightLineSegment);
         default:
-          throw THCustomException("Unrecognized line segment type: '$thType'.");
+          throw THCustomException(
+            "Unrecognized line segment type: '${type.name}'.",
+          );
       }
     } else {
       asString += _lineEnding;
@@ -433,8 +437,8 @@ class THFileWriter {
     _thFile = thFile;
 
     String encoding = thFile.encoding;
-    late Uint8List fileContentEncoded;
-    String fileContent = serialize(
+    Uint8List fileContentEncoded = Uint8List(0);
+    final String fileContent = serialize(
       thFile,
       includeEmptyLines: includeEmptyLines,
       useOriginalRepresentation: useOriginalRepresentation,
@@ -456,6 +460,7 @@ class THFileWriter {
           fileContentEncoded = Uint8List.fromList(encoder.encode(fileContent));
         }
     }
+
     return fileContentEncoded;
   }
 }
