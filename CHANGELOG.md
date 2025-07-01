@@ -1,9 +1,11 @@
 # Changelog
 
-### 0.2.7 - 2025-07-01
+## 0.2.8 - 2025-07-01
+* web release: fixed 'save not working' [reported by CaverBruce]
+
+## 0.2.7 - 2025-07-01
 * Keyboard shortcuts should respect the same enabling conditions as buttons
 * Web release: debugging save
-* Web release: fixed 'save not working' [reported by CaverBruce]
 
 ## 0.2.6 - 2025-06-30
 * Linux release in appimage format (automated)
