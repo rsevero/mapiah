@@ -1,6 +1,8 @@
 # Changelog
 
-### 0.2.7 - not yet released
+### 0.2.7 - 2025-07-01
+* Keyboard shortcuts should respect the same enabling conditions as buttons
+* Web release: debugging save
 
 ## 0.2.6 - 2025-06-30
 * Linux release in appimage format (automated)
