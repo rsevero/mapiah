@@ -52,7 +52,7 @@ jobs:
         set -e
         set -x
         flutter --version
-        flutter config --enable-web-desktop
+        flutter config --enable-web
         flutter build web --release
 
     - name: Setup upterm session
