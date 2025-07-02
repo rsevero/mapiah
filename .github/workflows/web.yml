@@ -1,4 +1,4 @@
-name: Mapiah Linux Release (appimage and flatpak)
+name: Mapiah Web Release
 
 on:
   push:
