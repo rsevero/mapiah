@@ -55,10 +55,10 @@ jobs:
         flutter config --enable-web-desktop
         flutter build web --release
 
-    # - name: Setup upterm session
-    #   uses: lhotari/action-upterm@v1
-    #   with:
-    #     limit-access-to-actor: true
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
+      with:
+        limit-access-to-actor: true
 
     - name: Publish Release
       env:
