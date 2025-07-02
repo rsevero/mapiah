@@ -73,9 +73,9 @@ jobs:
       run: |
         set -e
         set -x
-        BUILD_ROOT="~/work/mapiah/mapiah"
-        echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
-        cd "$BUILD_ROOT"
+        # BUILD_ROOT="~/work/mapiah/mapiah"
+        # echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
+        # cd "$BUILD_ROOT"
         echo $SSH_KEY | base64 -d > ssh-key
         chmod 0400 ssh-key
         cd build
