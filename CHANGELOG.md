@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.2.8 - 2025-07-01
-* web release: fixed 'save not working' [reported by CaverBruce]
+* Web release: fixed 'save not working' [reported by CaverBruce]
 
 ## 0.2.7 - 2025-07-01
 * Keyboard shortcuts should respect the same enabling conditions as buttons
