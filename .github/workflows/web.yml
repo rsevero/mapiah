@@ -61,9 +61,11 @@ jobs:
       run: |
         set -e
         set -x
+        BUILD_ROOT="$HOME/work/mapiah/mapiah"
         WEB_PACKAGE="mapiah-web-release.tar.bz2"
+        echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
         echo "WEB_PACKAGE=$WEB_PACKAGE" >> $GITHUB_ENV
-        cd ~/work/mapiah/mapiah/build/web/
+        cd "$BUILD_ROOT/build/web/"
         tar -cjf "../$WEB_PACKAGE" *
 
 
@@ -73,50 +75,18 @@ jobs:
       run: |
         set -e
         set -x
-        # BUILD_ROOT="~/work/mapiah/mapiah"
-        # echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
-        # cd "$BUILD_ROOT"
+        cd "$BUILD_ROOT"
         echo $SSH_KEY | base64 -d > ssh-key
         chmod 0400 ssh-key
-        cd build
+        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "rm -rf mapiah_release_temp"
+        sftp -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -o Port=65002 nupp7462@mapiah.org <<EOF
+        rm mapiah-web-release.tar.bz2
+        mkdir mapiah_release_temp
+        put build/mapiah-web-release.tar.bz2 mapiah-web-release.tar.bz2
+        EOF
+        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "tar xf mapiah-web-release.tar.bz2 -C mapiah_release_temp; rm -f mapiah-web-release.tar.bz2; rm -rf mapiah.org/webapp; mv mapiah_release_temp mapiah.org/webapp"
 
-
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
-      with:
-        limit-access-to-actor: true
-
-    - name: Publish Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      shell: bash
-      run: |
-        set -e
-        set -x
-        TITLE="Mapiah $TAG"
-
-        # Store token in a different variable and unset GITHUB_TOKEN
-        GH_TOKEN=$GITHUB_TOKEN
-        unset GITHUB_TOKEN
-
-        # Authenticate using the stored token
-        gh auth login --with-token <<< "$GH_TOKEN"
-
-        # Check if release exists and create if needed
-        if ! gh release view "$TAG" 2>/dev/null; then
-          echo "Creating new release with flatpak..."
-          gh release create "$TAG" \
-            --title "$TITLE" \
-            --notes "Release $TAG" \
-            "$FLATPAK_INSTALLER"
-        else
-          echo "Release exists - uploading flatpak..."
-          gh release upload "$TAG" \
-            --clobber \
-            "$FLATPAK_INSTALLER"
-        fi
-
-        echo "Uploading AppImage..."
-        gh release upload "$TAG" \
-            --clobber \
-            "$INSTALLER_APPIMAGE"
+    # - name: Setup upterm session
+    #   uses: lhotari/action-upterm@v1
+    #   with:
+    #     limit-access-to-actor: true
