@@ -47,7 +47,7 @@ jobs:
         packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
         version: 1.0
 
-    - name: Build flutter app
+    - name: Build Flutter Linux app
       run: |
         set -e
         set -x

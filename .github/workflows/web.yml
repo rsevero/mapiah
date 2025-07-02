@@ -47,7 +47,7 @@ jobs:
         packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
         version: 1.0
 
-    - name: Build flutter app
+    - name: Build Flutter web app
       run: |
         set -e
         set -x
@@ -61,7 +61,7 @@ jobs:
       run: |
         set -e
         set -x
-        echo $SSH_KEY | base64 -d > ssh-key
+        echo $SSH_KEY > ssh-key
 
     - name: Setup upterm session
       uses: lhotari/action-upterm@v1
