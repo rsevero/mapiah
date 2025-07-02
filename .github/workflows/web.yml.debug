@@ -1,4 +1,4 @@
-name: Mapiah Web Release
+name: Mapiah Web Release (just for separate web debug)
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Mapiah Linux Release (appimage and flatpak)
+name: Mapiah Linux and Web Release (appimage, flatpak and web)
 
 on:
   push:
@@ -190,3 +190,42 @@ jobs:
         gh release upload "$TAG" \
             --clobber \
             "$INSTALLER_APPIMAGE"
+
+    - name: Build Flutter web app
+      run: |
+        set -e
+        set -x
+        WEB_ROOT="webapp"
+        echo "WEB_ROOT=$WEB_ROOT" >> $GITHUB_ENV
+        flutter --version
+        flutter config --enable-web
+        flutter build web --release  --base-href "/$WEB_ROOT/"
+
+    - name: Prepare web package
+      run: |
+        set -e
+        set -x
+        BUILD_ROOT="$HOME/work/mapiah/mapiah"
+        WEB_PACKAGE="mapiah-web-release.tar.bz2"
+        echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
+        echo "WEB_PACKAGE=$WEB_PACKAGE" >> $GITHUB_ENV
+        cd "$BUILD_ROOT/build/web/"
+        tar -cjf "../$WEB_PACKAGE" *
+
+
+    - name: Deploy web code to Server
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_ACTION }}
+      run: |
+        set -e
+        set -x
+        cd "$BUILD_ROOT"
+        echo $SSH_KEY | base64 -d > ssh-key
+        chmod 0400 ssh-key
+        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "rm -rf mapiah_release_temp"
+        sftp -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -o Port=65002 nupp7462@mapiah.org <<EOF
+        rm mapiah-web-release.tar.bz2
+        mkdir mapiah_release_temp
+        put build/mapiah-web-release.tar.bz2 mapiah-web-release.tar.bz2
+        EOF
+        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "tar xf mapiah-web-release.tar.bz2 -C mapiah_release_temp; rm -f mapiah-web-release.tar.bz2; rm -rf mapiah.org/webapp; mv mapiah_release_temp mapiah.org/webapp"
