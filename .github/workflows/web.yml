@@ -51,9 +51,21 @@ jobs:
       run: |
         set -e
         set -x
+        WEB_ROOT="webapp"
+        echo "WEB_ROOT=$WEB_ROOT" >> $GITHUB_ENV
         flutter --version
         flutter config --enable-web
-        flutter build web --release
+        flutter build web --release  --base-href "/$WEB_ROOT/"
+
+    - name: Prepare web package
+      run: |
+        set -e
+        set -x
+        WEB_PACKAGE="mapiah-web-release.tar.bz2"
+        echo "WEB_PACKAGE=$WEB_PACKAGE" >> $GITHUB_ENV
+        cd ~/work/mapiah/mapiah/build/web/
+        tar -cjf "../$WEB_PACKAGE" *
+
 
     - name: Deploy web code to Server
       env:
@@ -61,7 +73,13 @@ jobs:
       run: |
         set -e
         set -x
-        echo $SSH_KEY > ssh-key
+        BUILD_ROOT="~/work/mapiah/mapiah"
+        echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
+        cd "$BUILD_ROOT"
+        echo $SSH_KEY | base64 -d > ssh-key
+        chmod 0400 ssh-key
+        cd build
+
 
     - name: Setup upterm session
       uses: lhotari/action-upterm@v1
