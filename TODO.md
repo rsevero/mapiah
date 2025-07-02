@@ -46,7 +46,7 @@ Version 0.3
 [X] - Release automation Linux
 [X] - Release automation Windows
 [X] - Release automation MacOS
-[ ] - Release automation for Web
+[X] - Release automation for Web
 [ ] - Config page
 [ ] - Drag overlay windows
 [ ] - Copy/Paste

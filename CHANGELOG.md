@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.9 - not yet released
+* Web release: automated
+
 ## 0.2.8 - 2025-07-01
 * Web release: fixed 'save not working' [reported by CaverBruce]
 
