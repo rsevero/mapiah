@@ -55,6 +55,14 @@ jobs:
         flutter config --enable-web
         flutter build web --release
 
+    - name: Deploy web code to Server
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_ACTION }}
+      run: |
+        set -e
+        set -x
+        echo $SSH_KEY | base64 -d > ssh-key
+
     - name: Setup upterm session
       uses: lhotari/action-upterm@v1
       with:
