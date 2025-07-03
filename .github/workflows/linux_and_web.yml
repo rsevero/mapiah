@@ -222,10 +222,8 @@ jobs:
         cd "$BUILD_ROOT"
         echo $SSH_KEY | base64 -d > ssh-key
         chmod 0400 ssh-key
-        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "rm -rf mapiah_release_temp"
         sftp -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -o Port=65002 nupp7462@mapiah.org <<EOF
         rm mapiah-web-release.tar.bz2
-        mkdir mapiah_release_temp
         put build/mapiah-web-release.tar.bz2 mapiah-web-release.tar.bz2
         EOF
-        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "tar xf mapiah-web-release.tar.bz2 -C mapiah_release_temp; rm -f mapiah-web-release.tar.bz2; rm -rf mapiah.org/webapp; mv mapiah_release_temp mapiah.org/webapp"
+        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "rm -rf mapiah_release_temp; mkdir mapiah_release_temp; tar xf mapiah-web-release.tar.bz2 -C mapiah_release_temp; mv mapiah.org/webapp mapiah.org/webapp.temp; mv mapiah_release_temp mapiah.org/webapp; rm -f mapiah-web-release.tar.bz2; rm -rf mapiah.org/webapp.temp"
