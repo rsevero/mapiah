@@ -1,7 +1,7 @@
 import 'package:petitparser/petitparser.dart';
 import 'package:test/test.dart';
 
-import 'package:mapiah/src/th_file_read_write/th_grammar.dart';
+import 'package:mapiah/src/mp_file_read_write/th_grammar.dart';
 
 void main() {
   group('comment', () {

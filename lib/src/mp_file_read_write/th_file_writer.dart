@@ -9,7 +9,7 @@ import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/th_file_read_write/th_file_aux.dart';
+import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 
 class THFileWriter {
   String _prefix = '';

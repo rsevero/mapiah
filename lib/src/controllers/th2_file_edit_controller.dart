@@ -23,8 +23,8 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
-import 'package:mapiah/src/th_file_read_write/th_file_parser.dart';
-import 'package:mapiah/src/th_file_read_write/th_file_writer.dart';
+import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
