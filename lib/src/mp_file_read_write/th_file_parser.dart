@@ -1,6 +1,5 @@
-import 'dart:io';
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:charset/charset.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
@@ -137,7 +136,7 @@ class THFileParser {
       }
 
       _parsedContents = _currentParser.parse(_currentLine);
-      // trace(_currentParser).parse(line);
+
       if (isFirst) {
         isFirst = false;
         _resetParsersLineage();
