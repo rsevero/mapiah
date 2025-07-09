@@ -1,7 +1,9 @@
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
+import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 import 'package:test/test.dart';
 
@@ -68,6 +70,56 @@ void main() {
         expect(file, isA<XVIFile>());
         expect(file.gridSizeLength, gridSizeLength);
         expect(file.gridSizeUnit, gridSizeUnit);
+      });
+    }
+  });
+
+  group('XVIstations', () {
+    final XVIFileParser parser = XVIFileParser();
+    final XVIStation stationA1 = XVIStation(
+      position: THPositionPart.fromStrings(
+        xAsString: '-505.14',
+        yAsString: '-1814.83',
+      ),
+      name: 'A1',
+    );
+    final XVIStation station5_22 = XVIStation(
+      position: THPositionPart.fromStrings(
+        xAsString: '231.4',
+        yAsString: '237.33',
+      ),
+      name: '5.22',
+    );
+    final List<Map> testFiles = [
+      {
+        'file': '2025-07-09-002-xvi-xvistations',
+        'stations': [stationA1]
+      },
+      {
+        'file': '2025-07-09-004-xvi-xvistations',
+        'stations': [stationA1]
+      },
+      {
+        'file': '2025-07-09-005-xvi-xvistations',
+        'stations': [stationA1]
+      },
+      {
+        'file': '2025-07-09-006-xvi-xvistations',
+        'stations': [stationA1, station5_22],
+      },
+    ];
+
+    for (final testFile in testFiles) {
+      test('XVIGrammar parses ${testFile['file']}', () {
+        final (file, isSuccessful, _) = parser.parse(
+          _getFilePath(testFile['file']),
+          // runTraceParser: true,
+        );
+
+        expect(isSuccessful, true);
+        expect(file, isA<XVIFile>());
+        expect(file.stations.length, testFile['stations'].length);
+        expect(file.stations, testFile['stations']);
       });
     }
   });

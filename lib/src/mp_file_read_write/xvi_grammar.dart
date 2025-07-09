@@ -68,11 +68,24 @@ class XVIGrammar extends GrammarDefinition {
   Parser xviStations() => (whitespace().star() &
           stringIgnoreCase('set').trim() &
           stringIgnoreCase('XVIstations').trim() &
-          char('{').trim() &
-          xviNumber().trim() &
-          lengthUnit().trim() &
-          char('}').trim())
-      .map((value) => {
-            'XVIStations': [value[4], value[5]]
+          xviStationsBlock().trim())
+      .map((values) => {
+            'XVIStations': values[3] as List<dynamic>,
           });
+
+  Parser xviStationsBlock() =>
+      (char('{').trim() & (xviStationBlock().plus()).trim() & char('}').trim())
+          .map((values) => values[1]);
+
+  Parser xviStationBlock() =>
+      (char('{').trim() & xviStationFields().trim() & char('}').trim())
+          .map((values) => values[1]);
+
+  Parser xviStationFields() =>
+      xviNumber().trim() & xviNumber().trim() & xviStationName().trim();
+
+  Parser xviStationName() => ((letter() | digit()) &
+          ((letter() | digit()) | (char('.') & char('.').not())).star())
+      .trim()
+      .flatten();
 }

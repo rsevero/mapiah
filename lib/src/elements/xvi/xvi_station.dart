@@ -8,4 +8,12 @@ class XVIStation {
     required this.position,
     required this.name,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is XVIStation && position == other.position && name == other.name;
+
+  @override
+  int get hashCode => Object.hash(position, name);
 }

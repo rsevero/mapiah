@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
+import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_grammar.dart';
 import 'package:petitparser/debug.dart';
 import 'package:petitparser/petitparser.dart';
@@ -76,6 +78,8 @@ class XVIFileParser {
           _injectXVIGrid(contentValue);
         case 'XVIGridSize':
           _injectXVIGridSize(contentValue);
+        case 'XVIStations':
+          _injectStations(contentValue);
         default:
           _addError(
             'Unknown content type "$contentType"',
@@ -84,6 +88,32 @@ class XVIFileParser {
           );
       }
     }
+  }
+
+  void _injectStations(dynamic contentValue) {
+    final List<dynamic> stationsData = contentValue as List<dynamic>;
+    final List<XVIStation> stations = [];
+
+    for (final List<dynamic> stationData in stationsData) {
+      if (stationData.length != 3) {
+        _addError(
+          'Invalid station data format',
+          '_injectStations()',
+          'Expected a list with 3 elements, got ${stationData.length}',
+        );
+        continue;
+      }
+
+      final String name = (stationData[2] as String).trim();
+      final THPositionPart position = THPositionPart.fromStrings(
+        xAsString: stationData[0].toString(),
+        yAsString: stationData[1].toString(),
+      );
+
+      stations.add(XVIStation(position: position, name: name));
+    }
+
+    _xviFile.stations = stations;
   }
 
   void _injectXVIGridSize(dynamic contentValue) {
