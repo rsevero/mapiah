@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_grammar.dart';
@@ -87,8 +88,10 @@ class XVIFileParser {
           (_parsedContents.value[0] as Map<String, List<dynamic>>)[contentType];
 
       switch (contentType) {
-        case 'XVIgrid':
+        case 'XVIGrid':
           _injectXVIGrid(contentValue);
+        case 'XVIGridSize':
+          _injectXVIGridSize(contentValue);
         default:
           _addError(
             'Unknown content type "$contentType"',
@@ -97,6 +100,27 @@ class XVIFileParser {
           );
       }
     }
+  }
+
+  void _injectXVIGridSize(dynamic contentValue) {
+    final List<String> gridSizeValues =
+        (contentValue as List<dynamic>).cast<String>();
+    if (gridSizeValues.length != 2) {
+      _addError(
+        'Invalid grid size format',
+        '_injectXVIGridSize()',
+        'Expected 2 values, got ${gridSizeValues.length}',
+      );
+      return;
+    }
+
+    final double gridSizeLength = double.tryParse(gridSizeValues[0]) ?? 0.0;
+    final String gridSizeUnit = gridSizeValues[1].trim();
+
+    _xviFile.gridSizeLength = gridSizeLength;
+    _xviFile.gridSizeUnit = THLengthUnitPart.fromString(
+      unitString: gridSizeUnit,
+    );
   }
 
   void _injectXVIGrid(dynamic contentValue) {
