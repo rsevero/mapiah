@@ -1,4 +1,5 @@
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
@@ -15,11 +16,15 @@ class XVIFile {
 
   XVIFile({
     this.filename = '',
-    required this.gridSizeLength,
-    required this.gridSizeUnit,
-    required this.stations,
-    required this.shots,
-    required this.sketchLines,
-    required this.grid,
-  });
+    this.gridSizeLength = 0.0,
+    THLengthUnitPart? gridSizeUnit,
+    this.stations = const [],
+    this.shots = const [],
+    this.sketchLines = const [],
+    XVIGrid? grid,
+  })  : gridSizeUnit = gridSizeUnit ??
+            THLengthUnitPart(
+              unit: THLengthUnitType.meter,
+            ),
+        grid = grid ?? XVIGrid();
 }

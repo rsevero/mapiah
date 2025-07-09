@@ -24,7 +24,7 @@ import 'package:petitparser/debug.dart';
 import 'package:petitparser/petitparser.dart';
 
 class THFileParser {
-  final _grammar = THGrammar();
+  final THGrammar _grammar = THGrammar();
 
   late final Parser _areaContentParser;
   late final Parser _lineContentParser;
@@ -142,7 +142,6 @@ class THFileParser {
         _resetParsersLineage();
       }
       if (_parsedContents is Failure) {
-        // trace(_currentParser).parse(line);
         _addError('petitparser returned a "Failure"', '_injectContents()',
             'Line being parsed: "$_currentLine"');
         continue;
@@ -1716,6 +1715,7 @@ class THFileParser {
   void _addError(String errorMessage, String location, String localInfo) {
     final String completeErrorMessage =
         "'$errorMessage' at '$location' with '$localInfo' local info.";
+
     _parseErrors.add(completeErrorMessage);
   }
 
