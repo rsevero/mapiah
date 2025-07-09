@@ -7,7 +7,7 @@ class XVIGrammar extends GrammarDefinition {
   Parser xviFileStart() => (emptyLine() | xviFileContent()).star();
   Parser xviFileContent() =>
       xviGridSize() |
-      // xviStations().optional() &
+      xviStations() |
       // xviShots().optional() &
       // xviSketchLines().optional() &
       xviGrid();
@@ -63,5 +63,16 @@ class XVIGrammar extends GrammarDefinition {
           char('}').trim())
       .map((value) => {
             'XVIGridSize': [value[4], value[5]]
+          });
+
+  Parser xviStations() => (whitespace().star() &
+          stringIgnoreCase('set').trim() &
+          stringIgnoreCase('XVIstations').trim() &
+          char('{').trim() &
+          xviNumber().trim() &
+          lengthUnit().trim() &
+          char('}').trim())
+      .map((value) => {
+            'XVIStations': [value[4], value[5]]
           });
 }

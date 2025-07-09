@@ -71,4 +71,38 @@ void main() {
       });
     }
   });
+
+  group('XVIGridSize and XVIGrid', () {
+    final XVIFileParser parser = XVIFileParser();
+    final String fileName = '2025-07-09-003-xvi-xvigridsize_and_xvigrid';
+
+    final double gridSizeLength = 1.0;
+    final THLengthUnitPart gridSizeUnit = THLengthUnitPart(
+      unit: THLengthUnitType.meter,
+    );
+
+    final XVIGrid xviGridResult = XVIGrid.fromList([
+      -5043.25302884,
+      -6120.73899649,
+      78.7401574803,
+      0.0,
+      0.0,
+      78.7401574803,
+      85.0,
+      88.0,
+    ]);
+
+    test('XVIGrammar parses $fileName', () {
+      final (file, isSuccessful, _) = parser.parse(
+        _getFilePath(fileName),
+        // runTraceParser: true,
+      );
+
+      expect(isSuccessful, true);
+      expect(file, isA<XVIFile>());
+      expect(file.gridSizeLength, gridSizeLength);
+      expect(file.gridSizeUnit, gridSizeUnit);
+      expect(file.grid, xviGridResult);
+    });
+  });
 }

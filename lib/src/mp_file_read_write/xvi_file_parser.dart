@@ -12,12 +12,10 @@ class XVIFileParser {
   final XVIGrammar _grammar = XVIGrammar();
 
   late Parser _xviFileParser;
-  final List<Parser> _parentParsers = [];
   late Parser _currentParser;
 
   final List<String> _errors = [];
   Uint8List _fileBytes = Uint8List(0);
-  List<String> _splittedContents = [];
   XVIFile _xviFile = XVIFile();
 
   bool _runTraceParser = false;
@@ -50,42 +48,28 @@ class XVIFileParser {
     _xviFile = XVIFile(
       filename: file.path,
     );
-    _splitContentsIntoLines();
 
-    _currentParser = _xviFileParser;
-    _injectContents();
+    final String contents = utf8.decode(_fileBytes);
+
+    if (_runTraceParser) {
+      trace(_currentParser).parse(contents);
+    }
+
+    final Result<dynamic> result = _xviFileParser.parse(contents);
+
+    if (result is Success) {
+      _injectContents(result.value);
+    } else {
+      _errors.add('Error parsing file: ${result.message}');
+    }
 
     return (_xviFile, _errors.isEmpty, _errors);
   }
 
-  void _splitContentsIntoLines() {
-    final String contents = utf8.decode(_fileBytes);
-
-    _splittedContents = contents.split(RegExp(r'\r?\n'));
-  }
-
-  void _injectContents() {
-    for (final String currentLine in _splittedContents) {
-      if (currentLine.trim().isEmpty) {
-        continue;
-      }
-
-      if (_runTraceParser) {
-        trace(_currentParser).parse(currentLine);
-      }
-
-      _parsedContents = _currentParser.parse(currentLine);
-
-      if (_parsedContents is Failure) {
-        _addError('petitparser returned a "Failure"', '_injectContents()',
-            'Line being parsed: "$currentLine"');
-        continue;
-      }
-
-      final String contentType =
-          (_parsedContents.value[0] as Map<String, List<dynamic>>).keys.first;
-      final dynamic contentValue =
-          (_parsedContents.value[0] as Map<String, List<dynamic>>)[contentType];
+  void _injectContents(dynamic contents) {
+    for (final Map<String, List<dynamic>> content in contents) {
+      final String contentType = content.keys.first;
+      final dynamic contentValue = content[contentType];
 
       switch (contentType) {
         case 'XVIGrid':
@@ -96,7 +80,7 @@ class XVIFileParser {
           _addError(
             'Unknown content type "$contentType"',
             '_injectContents()',
-            'Line being parsed: "$currentLine"',
+            'Content being injected: "$content"',
           );
       }
     }
