@@ -73,13 +73,14 @@ class XVIGrammar extends GrammarDefinition {
             'XVIStations': values[3] as List<dynamic>,
           });
 
-  Parser xviStationsBlock() =>
-      (char('{').trim() & (xviStationBlock().plus()).trim() & char('}').trim())
+  Parser xviCurlyBracketsContent(Parser contentParser) =>
+      (char('{').trim() & contentParser.trim() & char('}').trim())
           .map((values) => values[1]);
 
-  Parser xviStationBlock() =>
-      (char('{').trim() & xviStationFields().trim() & char('}').trim())
-          .map((values) => values[1]);
+  Parser xviStationsBlock() =>
+      xviCurlyBracketsContent(xviStationBlock().plus());
+
+  Parser xviStationBlock() => xviCurlyBracketsContent(xviStationFields());
 
   Parser xviStationFields() =>
       xviNumber().trim() & xviNumber().trim() & xviStationName().trim();

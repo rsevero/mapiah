@@ -21,7 +21,6 @@ class XVIFileParser {
   XVIFile _xviFile = XVIFile();
 
   bool _runTraceParser = false;
-  late Result<dynamic> _parsedContents;
 
   XVIFileParser() {
     _xviFileParser = _grammar.buildFrom(_grammar.xviFileStart());
