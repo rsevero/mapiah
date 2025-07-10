@@ -8,7 +8,7 @@ class XVIGrammar extends GrammarDefinition {
   Parser xviFileContent() =>
       xviGridSize() |
       xviStations() |
-      // xviShots().optional() &
+      xviShots() |
       // xviSketchLines().optional() &
       xviGrid();
 
@@ -80,4 +80,13 @@ class XVIGrammar extends GrammarDefinition {
           ((letter() | digit()) | (char('.') & char('.').not())).star())
       .trim()
       .flatten();
+
+  Parser xviShots() =>
+      xviSet('XVIshots', xviShotBlock().plus()).map((values) => {
+            'XVIShots': values[3] as List<dynamic>,
+          });
+
+  Parser xviShotBlock() => xviCurlyBracketsContent(xviNumber()
+      .timesSeparated((whitespace() | newline()).plus(), 4)
+      .map((list) => list.elements));
 }

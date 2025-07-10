@@ -3,6 +3,7 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
+import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 import 'package:test/test.dart';
@@ -120,6 +121,54 @@ void main() {
         expect(file, isA<XVIFile>());
         expect(file.stations.length, testFile['stations'].length);
         expect(file.stations, testFile['stations']);
+      });
+    }
+  });
+
+  group('XVIShots', () {
+    final XVIFileParser parser = XVIFileParser();
+    final XVIShot shot1 = XVIShot(
+      start: THPositionPart.fromStrings(
+        xAsString: '-3536.69',
+        yAsString: '-2929.39',
+      ),
+      end: THPositionPart.fromStrings(
+        xAsString: '-4181.13',
+        yAsString: '-2579.54',
+      ),
+    );
+    final XVIShot shot2 = XVIShot(
+      start: THPositionPart.fromStrings(
+        xAsString: '-2492.51',
+        yAsString: '-3346.85',
+      ),
+      end: THPositionPart.fromStrings(
+        xAsString: '-3536.69',
+        yAsString: '-2929.39',
+      ),
+    );
+    final List<Map<String, dynamic>> testFiles = [
+      {
+        'file': '2025-07-10-001-xvi-xvishots',
+        'shots': [shot1]
+      },
+      {
+        'file': '2025-07-10-002-xvi-xvishots',
+        'shots': [shot1, shot2]
+      },
+    ];
+
+    for (final testFile in testFiles) {
+      test('XVIGrammar parses ${testFile['file']}', () {
+        final (file, isSuccessful, _) = parser.parse(
+          _getFilePath(testFile['file']),
+          // runTraceParser: true,
+        );
+
+        expect(isSuccessful, true);
+        expect(file, isA<XVIFile>());
+        expect(file.shots.length, (testFile['shots'] as List).length);
+        expect(file.shots, testFile['shots']);
       });
     }
   });

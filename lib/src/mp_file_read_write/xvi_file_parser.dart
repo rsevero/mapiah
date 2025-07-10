@@ -5,6 +5,7 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
+import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_grammar.dart';
 import 'package:petitparser/debug.dart';
@@ -14,7 +15,6 @@ class XVIFileParser {
   final XVIGrammar _grammar = XVIGrammar();
 
   late Parser _xviFileParser;
-  late Parser _currentParser;
 
   final List<String> _errors = [];
   Uint8List _fileBytes = Uint8List(0);
@@ -53,7 +53,7 @@ class XVIFileParser {
     final String contents = utf8.decode(_fileBytes);
 
     if (_runTraceParser) {
-      trace(_currentParser).parse(contents);
+      trace(_xviFileParser).parse(contents);
     }
 
     final Result<dynamic> result = _xviFileParser.parse(contents);
@@ -77,6 +77,8 @@ class XVIFileParser {
           _injectXVIGrid(contentValue);
         case 'XVIGridSize':
           _injectXVIGridSize(contentValue);
+        case 'XVIShots':
+          _injectShots(contentValue);
         case 'XVIStations':
           _injectStations(contentValue);
         default:
@@ -87,6 +89,35 @@ class XVIFileParser {
           );
       }
     }
+  }
+
+  void _injectShots(dynamic contentValue) {
+    final List<dynamic> shotsData = contentValue as List<dynamic>;
+    final List<XVIShot> shots = [];
+
+    for (final List<dynamic> shotData in shotsData) {
+      if (shotData.length != 4) {
+        _addError(
+          'Invalid shot data format',
+          '_injectShots()',
+          'Expected a list with 4 elements, got ${shotData.length}',
+        );
+        continue;
+      }
+
+      final THPositionPart startPosition = THPositionPart.fromStrings(
+        xAsString: shotData[0],
+        yAsString: shotData[1],
+      );
+      final THPositionPart endPosition = THPositionPart.fromStrings(
+        xAsString: shotData[2],
+        yAsString: shotData[3],
+      );
+
+      shots.add(XVIShot(start: startPosition, end: endPosition));
+    }
+
+    _xviFile.shots = shots;
   }
 
   void _injectStations(dynamic contentValue) {
