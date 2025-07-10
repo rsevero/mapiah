@@ -44,41 +44,32 @@ class XVIGrammar extends GrammarDefinition {
       .flatten()
       .trim();
 
-  Parser xviGrid() => (whitespace().star() &
-          stringIgnoreCase('set').trim() &
-          stringIgnoreCase('XVIgrid').trim() &
-          char('{').trim() &
-          xviNumber()
-              .timesSeparated((whitespace() | newline()).plus(), 8)
-              .map((list) => {'XVIGrid': list.elements}) &
-          char('}').trim())
-      .map((value) => value[4]);
+  // Generic parser for 'set <name> { ... }' blocks
+  Parser xviSet(String name, Parser contentParser) => (whitespace().star() &
+      stringIgnoreCase('set').trim() &
+      stringIgnoreCase(name).trim() &
+      xviCurlyBracketsContent(contentParser).trim());
 
-  Parser xviGridSize() => (whitespace().star() &
-          stringIgnoreCase('set').trim() &
-          stringIgnoreCase('XVIgrids').trim() &
-          char('{').trim() &
-          xviNumber().trim() &
-          lengthUnit().trim() &
-          char('}').trim())
-      .map((value) => {
-            'XVIGridSize': [value[4], value[5]]
-          });
+  Parser xviGrid() => xviSet(
+      'XVIgrid',
+      xviNumber()
+          .timesSeparated((whitespace() | newline()).plus(), 8)
+          .map((list) => {'XVIGrid': list.elements})).map((value) => value[3]);
 
-  Parser xviStations() => (whitespace().star() &
-          stringIgnoreCase('set').trim() &
-          stringIgnoreCase('XVIstations').trim() &
-          xviStationsBlock().trim())
-      .map((values) => {
+  Parser xviGridSize() =>
+      xviSet('XVIgrids', xviNumber().trim() & lengthUnit().trim())
+          .map((value) => {
+                'XVIGridSize': [value[3][0], value[3][1]]
+              });
+
+  Parser xviStations() =>
+      xviSet('XVIstations', xviStationBlock().plus()).map((values) => {
             'XVIStations': values[3] as List<dynamic>,
           });
 
   Parser xviCurlyBracketsContent(Parser contentParser) =>
       (char('{').trim() & contentParser.trim() & char('}').trim())
           .map((values) => values[1]);
-
-  Parser xviStationsBlock() =>
-      xviCurlyBracketsContent(xviStationBlock().plus());
 
   Parser xviStationBlock() => xviCurlyBracketsContent(xviStationFields());
 
