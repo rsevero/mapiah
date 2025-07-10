@@ -7,7 +7,7 @@ Create the following methods for the current class:
 * hashCode and
 * overriden == operator.
 
-Don´t use super as base for any methods.
+Use super as base for any methods where possible.
 
 Include all parameters of the original class forCWJM constructor and use this same constructor in the fromMap and copyWith methods.
 
@@ -16,8 +16,6 @@ In case there are any optional parameters, include an extra makePARAMETER_NAMENu
 toMap, toJson, copyWith, hashCode should include @override annotations.
 
 Use jsonDecode(), not json.decode().
-
-In the toMap() method start the map with a "'TYPE_STRING_ID': type.name". Check on the fromMap() method of the parent class for the exact TYPE_STRING_ID that should be used.
 
 In the fromMap() method use 'Type.values.byName(map[TYPE_STRING_ID])' to get the type back from the map.
 

@@ -14,6 +14,7 @@ import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/interfaces/th_point_interface.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
@@ -44,6 +45,7 @@ part 'th_scrap.dart';
 part 'th_straight_line_segment.dart';
 part 'th_unrecognized_command.dart';
 part 'th_xtherion_config.dart';
+part 'th_xtherion_image_insert_config.dart';
 
 enum THElementType {
   areaBorderTHID,
@@ -65,6 +67,7 @@ enum THElementType {
   straightLineSegment,
   unrecognizedCommand,
   xTherionConfig,
+  xTherionImageInsertConfig;
 }
 
 /// Base class for all elements that form a THFile, including THFile itself.
@@ -190,6 +193,8 @@ abstract class THElement {
         return THUnrecognizedCommand.fromMap(map);
       case THElementType.xTherionConfig:
         return THXTherionConfig.fromMap(map);
+      case THElementType.xTherionImageInsertConfig:
+        return THXTherionImageInsertConfig.fromMap(map);
     }
   }
 
