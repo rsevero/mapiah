@@ -100,10 +100,33 @@ class THFileWriter {
   }
 
   String _serializeXTherionConfig(THElement thElement) {
-    final THXTherionConfig xtherionconfig = thElement as THXTherionConfig;
-    final String newLine =
-        "##XTHERION## ${xtherionconfig.name.trim()} ${xtherionconfig.value.trim()}$_lineEnding";
-    return newLine;
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      final THXTherionConfig xTC = thElement as THXTherionConfig;
+
+      asString =
+          "##XTHERION## ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
+    }
+
+    return asString;
+  }
+
+  String _serializeXTherionImageInsertConfig(THElement thElement) {
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      final THXTherionImageInsertConfig xTIIC =
+          thElement as THXTherionImageInsertConfig;
+      final String xx = "${xTIIC.xx} ${xTIIC.vsb} ${xTIIC.igamma}";
+      final String yy = "${xTIIC.yy} ${xTIIC.xviRoot}";
+      final String imgx = "${xTIIC.imgx} ${xTIIC.xData}";
+
+      asString =
+          """##XTHERION $xTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
+    }
+
+    return asString;
   }
 
   String serializeElement(THElement thElement) {
@@ -176,6 +199,8 @@ class THFileWriter {
         asString += _serializeScrap(thElement);
       case THElementType.xTherionConfig:
         asString += _serializeXTherionConfig(thElement);
+      case THElementType.xTherionImageInsertConfig:
+        asString += _serializeXTherionImageInsertConfig(thElement);
       case THElementType.unrecognizedCommand:
         final String newLine = "Unrecognized element: '$thElement'";
         asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
