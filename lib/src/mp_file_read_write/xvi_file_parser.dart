@@ -128,7 +128,7 @@ class XVIFileParser {
         points.add(positionFromList(coordinates));
       }
 
-      sketchlines.add(XVISketchLine.colorFromString(
+      sketchlines.add(XVISketchLine(
         color: color,
         start: start,
         points: points,
