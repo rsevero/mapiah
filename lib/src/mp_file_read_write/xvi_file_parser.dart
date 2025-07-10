@@ -6,6 +6,7 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
+import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_grammar.dart';
 import 'package:petitparser/debug.dart';
@@ -79,6 +80,8 @@ class XVIFileParser {
           _injectXVIGridSize(contentValue);
         case 'XVIShots':
           _injectShots(contentValue);
+        case 'XVISketchLines':
+          _injectSketchlines(contentValue);
         case 'XVIStations':
           _injectStations(contentValue);
         default:
@@ -89,6 +92,50 @@ class XVIFileParser {
           );
       }
     }
+  }
+
+  void _injectSketchlines(dynamic contentValue) {
+    final List<dynamic> sketchlinesData = contentValue as List<dynamic>;
+    final List<XVISketchLine> sketchlines = [];
+
+    for (final Map<String, dynamic> sketchlineData in sketchlinesData) {
+      if (sketchlineData.isEmpty) {
+        _addError(
+          'Invalid sketchline data format',
+          '_injectSketchlines()',
+          'Expected a non-empty list, got an empty list',
+        );
+        continue;
+      }
+
+      final String color = sketchlineData['color'] as String;
+      final List<String> coordinates =
+          (sketchlineData['coordinates'] as List<dynamic>).cast<String>();
+      final THPositionPart start = positionFromList(coordinates);
+
+      if (coordinates.length < 2) {
+        _addError(
+          'Invalid sketchline coordinates',
+          '_injectSketchlines()',
+          'Expected at least 2 coordinates, got ${coordinates.length}',
+        );
+        continue;
+      }
+
+      final List<THPositionPart> points = [];
+
+      while (coordinates.length >= 2) {
+        points.add(positionFromList(coordinates));
+      }
+
+      sketchlines.add(XVISketchLine(
+        color: color,
+        start: start,
+        points: points,
+      ));
+    }
+
+    _xviFile.sketchLines = sketchlines;
   }
 
   void _injectShots(dynamic contentValue) {
@@ -181,5 +228,17 @@ class XVIFileParser {
         "'$errorMessage' at '$location' with '$localInfo' local info.";
 
     _errors.add(completeErrorMessage);
+  }
+
+  /// Removes the first two values from [list] and returns a THPositionPart from them.
+  THPositionPart positionFromList(List<String> list) {
+    if (list.length < 2) {
+      throw ArgumentError('List must have at least 2 elements');
+    }
+
+    final String x = list.removeAt(0);
+    final String y = list.removeAt(0);
+
+    return THPositionPart.fromStrings(xAsString: x, yAsString: y);
   }
 }

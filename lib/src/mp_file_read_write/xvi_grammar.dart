@@ -6,11 +6,7 @@ class XVIGrammar extends GrammarDefinition {
   Parser start() => xviFileStart();
   Parser xviFileStart() => (emptyLine() | xviFileContent()).star();
   Parser xviFileContent() =>
-      xviGridSize() |
-      xviStations() |
-      xviShots() |
-      // xviSketchLines().optional() &
-      xviGrid();
+      xviGridSize() | xviStations() | xviShots() | xviSketchlines() | xviGrid();
 
   Parser emptyLine() => (whitespace().star() & newline()).map((_) => null);
 
@@ -89,4 +85,28 @@ class XVIGrammar extends GrammarDefinition {
   Parser xviShotBlock() => xviCurlyBracketsContent(xviNumber()
       .timesSeparated((whitespace() | newline()).plus(), 4)
       .map((list) => list.elements));
+
+  Parser xviSketchlines() =>
+      xviSet('XVIsketchlines', xviSketchLineBlock().plus()).map((values) => {
+            'XVISketchLines': values[3] as List<dynamic>,
+          });
+
+  Parser xviSketchLineBlock() => xviCurlyBracketsContent(xviSketchLineFields());
+
+  Parser xviSketchLineFields() =>
+      (xviSketchLineColor().trim() & xviNumber().trim().plus()).map((values) {
+        final color = values[0];
+        final coordinates = values[1] as List<dynamic>;
+        if (coordinates.length < 4 || coordinates.length % 2 != 0) {
+          throw ArgumentError(
+            'Sketchline must have an even number of coordinates (minimum 4), got \\${coordinates.length}',
+          );
+        }
+        return {
+          'color': color,
+          'coordinates': coordinates,
+        };
+      });
+
+  Parser xviSketchLineColor() => (letter().plus().flatten());
 }
