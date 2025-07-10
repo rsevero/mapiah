@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/tk_color_map.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 
 class XVISketchLine {
-  String color;
+  Color color;
   THPositionPart start;
   List<THPositionPart> points;
 
@@ -11,6 +13,12 @@ class XVISketchLine {
     required this.start,
     required this.points,
   });
+
+  XVISketchLine.colorFromString({
+    required String color,
+    required this.start,
+    required this.points,
+  }) : color = TKColorMap.getColor(color) ?? TKColorMap.getColor('gray')!;
 
   @override
   bool operator ==(Object other) {
