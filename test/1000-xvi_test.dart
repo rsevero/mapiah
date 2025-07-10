@@ -415,4 +415,152 @@ void main() {
       expect(file.grid, xviGridResult);
     });
   });
+
+  group('Complete XVI File', () {
+    final XVIFileParser parser = XVIFileParser();
+    final String fileName = '2025-07-10-005-xvi-complete_file';
+
+    final double gridSizeLength = 1.0;
+    final THLengthUnitPart gridSizeUnit = THLengthUnitPart(
+      unit: THLengthUnitType.meter,
+    );
+
+    final XVIGrid xviGridResult = XVIGrid.fromList([
+      -5043.25302884,
+      -6120.73899649,
+      78.7401574803,
+      0.0,
+      0.0,
+      78.7401574803,
+      85.0,
+      88.0,
+    ]);
+
+    final List<XVIStation> expectedStations = [
+      XVIStation(
+        position: THPositionPart.fromStrings(
+          xAsString: '-505.14',
+          yAsString: '-1814.83',
+        ),
+        name: '5.22',
+      ),
+      XVIStation(
+        position: THPositionPart.fromStrings(
+          xAsString: '-1363.36',
+          yAsString: '-1501.71',
+        ),
+        name: '5.21',
+      ),
+    ];
+
+    final List<XVIShot> expectedShots = [
+      XVIShot(
+        start: THPositionPart.fromStrings(
+          xAsString: '0.0',
+          yAsString: '0.0',
+        ),
+        end: THPositionPart.fromStrings(
+          xAsString: '0.0',
+          yAsString: '0.0',
+        ),
+      ),
+      XVIShot(
+        start: THPositionPart.fromStrings(
+          xAsString: '0.0',
+          yAsString: '0.0',
+        ),
+        end: THPositionPart.fromStrings(
+          xAsString: '-80.25',
+          yAsString: '-448.11',
+        ),
+      ),
+      XVIShot(
+        start: THPositionPart.fromStrings(
+          xAsString: '-80.25',
+          yAsString: '-448.11',
+        ),
+        end: THPositionPart.fromStrings(
+          xAsString: '43.22',
+          yAsString: '-769.44',
+        ),
+      ),
+      XVIShot(
+        start: THPositionPart.fromStrings(
+          xAsString: '43.22',
+          yAsString: '-769.44',
+        ),
+        end: THPositionPart.fromStrings(
+          xAsString: '94.9',
+          yAsString: '-1270.43',
+        ),
+      ),
+      XVIShot(
+        start: THPositionPart.fromStrings(
+          xAsString: '94.9',
+          yAsString: '-1270.43',
+        ),
+        end: THPositionPart.fromStrings(
+          xAsString: '-228.63',
+          yAsString: '-1224.58',
+        ),
+      ),
+    ];
+
+    test('XVIGrammar parses complete file $fileName', () {
+      final (file, isSuccessful, _) = parser.parse(
+        _getFilePath(fileName),
+        // runTraceParser: true,
+      );
+
+      expect(isSuccessful, true);
+      expect(file, isA<XVIFile>());
+
+      // Test grid size
+      expect(file.gridSizeLength, gridSizeLength);
+      expect(file.gridSizeUnit, gridSizeUnit);
+
+      // Test grid
+      expect(file.grid, xviGridResult);
+
+      // Test stations
+      expect(file.stations.length, 2);
+      expect(file.stations, expectedStations);
+
+      // Test shots
+      expect(file.shots.length, 5);
+      expect(file.shots, expectedShots);
+
+      // Test sketch lines - there should be 10 sketch lines (including connect lines)
+      expect(file.sketchLines.length, 10);
+
+      // Test specific sketch lines from the file
+      // First line: {gray -1097.48 -1886.46 -1091.57 -1898.27 -1079.76 -1898.27 -1067.95 -1904.17 -1050.24 -1904.17}
+      final firstSketchLine = file.sketchLines[0];
+      expect(firstSketchLine.start.x, -1097.48);
+      expect(firstSketchLine.start.y, -1886.46);
+      expect(firstSketchLine.points.length, 4);
+      expect(firstSketchLine.points[0].x, -1091.57);
+      expect(firstSketchLine.points[0].y, -1898.27);
+      expect(firstSketchLine.points[3].x, -1050.24);
+      expect(firstSketchLine.points[3].y, -1904.17);
+
+      // Second line: {green -1386.85 -941.57 -1351.42 -971.1 -1345.51 -982.91}
+      final secondSketchLine = file.sketchLines[1];
+      expect(secondSketchLine.start.x, -1386.85);
+      expect(secondSketchLine.start.y, -941.57);
+      expect(secondSketchLine.points.length, 2);
+      expect(secondSketchLine.points[0].x, -1351.42);
+      expect(secondSketchLine.points[0].y, -971.1);
+      expect(secondSketchLine.points[1].x, -1345.51);
+      expect(secondSketchLine.points[1].y, -982.91);
+
+      // Last line should be a connect line: {connect 175.75 -524.25 43.22 -769.44}
+      final lastSketchLine = file.sketchLines[9];
+      expect(lastSketchLine.start.x, 175.75);
+      expect(lastSketchLine.start.y, -524.25);
+      expect(lastSketchLine.points.length, 1);
+      expect(lastSketchLine.points[0].x, 43.22);
+      expect(lastSketchLine.points[0].y, -769.44);
+    });
+  });
 }

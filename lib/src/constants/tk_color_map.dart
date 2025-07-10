@@ -576,6 +576,16 @@ class TKColorMap {
   /// The color object is created on demand and cached for subsequent requests.
   /// Returns null if the color name is not found.
   static Color? getColor(String colorName) {
+    // Special Color Handling
+    // There's one special case color transformation:
+    //
+    // "connect" → gray (dashed): When the color is specified as "connect", it
+    // gets converted to:
+    // Color: gray
+    // Line style: Dashed (dash pattern: .)
+    if (colorName == 'connect') {
+      colorName = 'gray';
+    }
     if (!_colorCache.containsKey(colorName)) {
       final int? hexValue = _colorHexValues[colorName];
 
