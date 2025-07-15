@@ -303,14 +303,184 @@ class THFileParser {
       assert(element[1].length == 2);
     }
 
+    final String xTherionConfigID = element[1][0].toLowerCase();
+
+    if (xTherionConfigID == xTherionImageInsertConfigID) {
+      return _injectXTherionImageInsertConfig(element);
+    }
+
     final THXTherionConfig newElement = THXTherionConfig(
       parentMPID: _currentParentMPID,
-      name: element[1][0],
+      name: xTherionConfigID,
       value: element[1][1],
       originalLineInTH2File: _currentLine,
     );
+
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newElement,
+      parent: _currentParent,
+    );
+  }
+
+  String _getEnclosedContent(
+    String content,
+    String openDelimiter,
+    String closeDelimiter,
+  ) {
+    if (content.startsWith(openDelimiter)) {
+      final int closingIndex = content.indexOf(closeDelimiter, 1);
+
+      if (closingIndex != -1) {
+        final String enclosedContent = content.substring(1, closingIndex);
+
+        content = content.substring(closingIndex + 1);
+
+        return enclosedContent;
+      }
+    }
+
+    return '';
+  }
+
+  String _getFirstElement(String content, String delimiter) {
+    final List<String> parts = content.split(delimiter);
+
+    if (parts.isEmpty) {
+      return '';
+    }
+
+    final String firstElement = parts[0].trim();
+
+    content = content.substring(firstElement.length + 1).trim();
+
+    return firstElement;
+  }
+
+  void _injectXTherionImageInsertConfig(List<dynamic> element) {
+    final int elementSize = element.length;
+
+    if (kDebugMode) {
+      assert(elementSize == 2);
+      assert(element[1] is List);
+      assert(element[1].length == 2);
+    }
+
+    String content = element[1][0].toString().trim();
+
+    if (content.isEmpty) {
+      _addError('Content is empty', '_injectXTherionImageInsertConfig',
+          'Line being parsed: "$_currentLine"');
+      return;
+    }
+
+    String xxContent = _getEnclosedContent(content, '{', '}');
+
+    if (xxContent.isEmpty) {
+      xxContent = _getEnclosedContent(content, '[', ']');
+      if (xxContent.isEmpty) {
+        xxContent = _getFirstElement(content, '\\s+');
+        if (xxContent.isEmpty) {
+          _addError('xxContent is empty', '_injectXTherionImageInsertConfig',
+              'Line being parsed: "$_currentLine"');
+          return;
+        }
+      }
+    }
+
+    String yyContent = _getEnclosedContent(content, '{', '}');
+
+    if (yyContent.isEmpty) {
+      yyContent = _getEnclosedContent(content, '[', ']');
+      if (yyContent.isEmpty) {
+        yyContent = _getFirstElement(content, '\\s+');
+        if (yyContent.isEmpty) {
+          _addError('yyContent is empty', '_injectXTherionImageInsertConfig',
+              'Line being parsed: "$_currentLine"');
+          return;
+        }
+      }
+    }
+
+    String filename = _getEnclosedContent(content, '"', '"');
+
+    if (filename.isEmpty) {
+      filename = _getFirstElement(content, '\\s+');
+      if (filename.isEmpty) {
+        _addError('filename is empty', '_injectXTherionImageInsertConfig',
+            'Line being parsed: "$_currentLine"');
+        return;
+      }
+    }
+
+    final int iidx = int.tryParse(_getFirstElement(content, '\\s+')) ?? 0;
+
+    String imgxContent = _getEnclosedContent(content, '{', '}');
+
+    if (imgxContent.isEmpty) {
+      imgxContent = _getEnclosedContent(content, '[', ']');
+      if (imgxContent.isEmpty) {
+        imgxContent = _getFirstElement(content, '\\s+');
+        if (imgxContent.isEmpty) {
+          _addError('imgx is empty', '_injectXTherionImageInsertConfig',
+              'Line being parsed: "$_currentLine"');
+          return;
+        }
+      }
+    }
+
+    List<String> splitData = xxContent.split(RegExp(r'\s+'));
+
+    String vsb = '1';
+    String igamma = '1.0';
+    String xx = xxContent;
+
+    if (splitData.length > 1) {
+      xx = splitData[0];
+      vsb = splitData[1];
+      if (splitData.length > 2) {
+        igamma = splitData[2];
+      }
+    }
+
+    splitData = yyContent.split(RegExp(r'\s+'));
+
+    String xviRoot = '';
+    String yy = yyContent;
+
+    if (splitData.length > 1) {
+      yy = splitData[0];
+      xviRoot = splitData[1];
+    }
+
+    splitData = imgxContent.split(RegExp(r'\s+'));
+
+    String imgx = imgxContent;
+    String xData = '';
+    bool xImage = false;
+
+    if (splitData.length > 1) {
+      imgxContent = splitData[0];
+      xImage = true;
+      xData = splitData[1];
+    }
+
+    _currentElement = THXTherionImageInsertConfig(
+      parentMPID: _currentParentMPID,
+      filename: filename,
+      xx: xx,
+      vsb: vsb,
+      igamma: igamma,
+      yy: yy,
+      xviRoot: xviRoot,
+      iidx: iidx,
+      imgx: imgx,
+      xData: xData,
+      xImage: xImage,
+      originalLineInTH2File: _currentLine,
+    );
+
+    _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
+      newElement: _currentElement,
       parent: _currentParent,
     );
   }
