@@ -332,31 +332,55 @@ class THFileParser {
       return '';
     }
 
-    int openCount = 0;
     int closingIndex = -1;
 
-    for (int i = 0; i < _xTherionContent.length; i++) {
-      if (_xTherionContent[i] == openDelimiter) {
-        openCount++;
-      } else if (_xTherionContent[i] == closeDelimiter) {
-        openCount--;
-        if (openCount == 0) {
+    // If delimiters are the same (e.g., quotes)
+    if (openDelimiter == closeDelimiter) {
+      // Find the next occurrence of the delimiter
+      for (int i = 1; i < _xTherionContent.length; i++) {
+        if (_xTherionContent[i] == openDelimiter) {
           closingIndex = i;
           break;
         }
       }
+
+      if (closingIndex != -1) {
+        final String enclosedContent =
+            _xTherionContent.substring(1, closingIndex);
+
+        _xTherionContent = _xTherionContent.substring(closingIndex + 1).trim();
+
+        return enclosedContent;
+      }
+
+      return '';
+    } else {
+      // Standard nested delimiter handling
+      int openCount = 0;
+
+      for (int i = 0; i < _xTherionContent.length; i++) {
+        if (_xTherionContent[i] == openDelimiter) {
+          openCount++;
+        } else if (_xTherionContent[i] == closeDelimiter) {
+          openCount--;
+          if (openCount == 0) {
+            closingIndex = i;
+            break;
+          }
+        }
+      }
+
+      if (closingIndex != -1) {
+        final String enclosedContent =
+            _xTherionContent.substring(1, closingIndex);
+
+        _xTherionContent = _xTherionContent.substring(closingIndex + 1).trim();
+
+        return enclosedContent;
+      }
+
+      return '';
     }
-
-    if (closingIndex != -1) {
-      final String enclosedContent =
-          _xTherionContent.substring(1, closingIndex);
-
-      _xTherionContent = _xTherionContent.substring(closingIndex + 1).trim();
-
-      return enclosedContent;
-    }
-
-    return '';
   }
 
   String _getFirstElement(String delimiterRegexPattern) {
