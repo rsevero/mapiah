@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
+import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
+import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/painters/xvi_line_painter.dart';
 
 class MPImagesWidget extends StatelessWidget {
@@ -86,6 +89,32 @@ class MPImagesWidget extends StatelessWidget {
 
     painters.addAll(getXVIGridPainters(xviFile: xviFile, x: x, y: y));
     painters.addAll(getXVIShotsPainters(xviFile: xviFile, x: x, y: y));
+    painters.addAll(getXVIStationsPainters(xviFile: xviFile, x: x, y: y));
+
+    return painters;
+  }
+
+  List<CustomPainter> getXVIStationsPainters({
+    required XVIFile xviFile,
+    required double x,
+    required double y,
+  }) {
+    final List<CustomPainter> painters = [];
+    final THPointPaint xviStationPaint =
+        th2FileEditController.visualController.getXVIStationPointPaint();
+    final Offset gridOffset = Offset(x, y);
+
+    for (final XVIStation station in xviFile.stations) {
+      final Offset stationPosition = station.position.coordinates + gridOffset;
+
+      painters.add(
+        THPointPainter(
+          position: stationPosition,
+          pointPaint: xviStationPaint,
+          th2FileEditController: th2FileEditController,
+        ),
+      );
+    }
 
     return painters;
   }

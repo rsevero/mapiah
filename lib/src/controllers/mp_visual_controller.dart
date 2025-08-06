@@ -1285,4 +1285,12 @@ abstract class MPVisualControllerBase with Store {
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
   }
+
+  THPointPaint getXVIStationPointPaint() {
+    return THPointPaint(
+      radius:
+          _th2FileEditController.pointRadiusOnCanvas * xviStationPointFactor,
+      border: THPaint.thPaintBlackBackground,
+    );
+  }
 }

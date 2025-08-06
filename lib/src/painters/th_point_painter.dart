@@ -16,7 +16,8 @@ class THPointPainter extends CustomPainter {
   }) {
     if ((pointPaint.border == null) && (pointPaint.fill == null)) {
       throw ArgumentError(
-          "Both pointPaint.border and pointPaint.fill cannot be null at THCirclePointPainter");
+        "Both pointPaint.border and pointPaint.fill cannot be null at THCirclePointPainter",
+      );
     }
   }
 

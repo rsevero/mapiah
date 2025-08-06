@@ -136,6 +136,7 @@ const double thDefaultLineThickness = 2.0;
 const double thControlLineThicknessFactor = 0.5;
 const double thControlPointRadiusFactor = 1.5;
 const double thSelectedEndControlPointFactor = 1.25;
+const double xviStationPointFactor = 0.5;
 const double thSelectionWindowBorderPaintDashInterval = 5.0;
 const double thSelectionHandleSize = 7.0;
 const double thSelectionHandleThresholdMultiplier = 10.0;

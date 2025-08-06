@@ -228,6 +228,7 @@ class THXTherionImageInsertConfig extends THElement {
     return _xviFile;
   }
 
+  /// Implementation of xth_me_imgs_set_root from me_imgs.tcl xTherion.
   void _fixXVIRoot() {
     if (!isXVI || xviRoot.isEmpty) {
       return;

@@ -6,8 +6,11 @@ class XVILinePainter extends CustomPainter {
   final Offset end;
   final THLinePaint linePaint;
 
-  XVILinePainter(
-      {required this.start, required this.end, required this.linePaint});
+  XVILinePainter({
+    required this.start,
+    required this.end,
+    required this.linePaint,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -28,6 +31,8 @@ class XVILinePainter extends CustomPainter {
   bool shouldRepaint(covariant XVILinePainter oldDelegate) {
     if (identical(this, oldDelegate)) return false;
 
-    return start != oldDelegate.start || end != oldDelegate.end;
+    return start != oldDelegate.start ||
+        end != oldDelegate.end ||
+        linePaint != oldDelegate.linePaint;
   }
 }
