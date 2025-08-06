@@ -45,13 +45,11 @@ class MPImagesWidget extends StatelessWidget {
               final double imageGridYOfsset =
                   image.yy.value - xviFile.grid.gy.value;
 
-              painters.addAll(
-                getXVIImagePainters(
-                  xviFile: xviFile,
-                  x: imageGridXOfsset,
-                  y: imageGridYOfsset,
-                  th2FileEditController: th2FileEditController,
-                ),
+              setXVIImagePainters(
+                xviFile: xviFile,
+                x: imageGridXOfsset,
+                y: imageGridYOfsset,
+                painters: painters,
               );
             }
           } else {
@@ -79,27 +77,23 @@ class MPImagesWidget extends StatelessWidget {
     );
   }
 
-  List<CustomPainter> getXVIImagePainters({
+  void setXVIImagePainters({
     required XVIFile xviFile,
     required double x,
     required double y,
-    required TH2FileEditController th2FileEditController,
+    required List<CustomPainter> painters,
   }) {
-    final List<CustomPainter> painters = [];
-
-    painters.addAll(getXVIGridPainters(xviFile: xviFile, x: x, y: y));
-    painters.addAll(getXVIShotsPainters(xviFile: xviFile, x: x, y: y));
-    painters.addAll(getXVIStationsPainters(xviFile: xviFile, x: x, y: y));
-
-    return painters;
+    setXVIGridPainters(xviFile: xviFile, x: x, y: y, painters: painters);
+    setXVIShotsPainters(xviFile: xviFile, x: x, y: y, painters: painters);
+    setXVIStationsPainters(xviFile: xviFile, x: x, y: y, painters: painters);
   }
 
-  List<CustomPainter> getXVIStationsPainters({
+  void setXVIStationsPainters({
     required XVIFile xviFile,
     required double x,
     required double y,
+    required List<CustomPainter> painters,
   }) {
-    final List<CustomPainter> painters = [];
     final THPointPaint xviStationPaint =
         th2FileEditController.visualController.getXVIStationPointPaint();
     final Offset gridOffset = Offset(x, y);
@@ -115,16 +109,14 @@ class MPImagesWidget extends StatelessWidget {
         ),
       );
     }
-
-    return painters;
   }
 
-  List<CustomPainter> getXVIShotsPainters({
+  void setXVIShotsPainters({
     required XVIFile xviFile,
     required double x,
     required double y,
+    required List<CustomPainter> painters,
   }) {
-    final List<CustomPainter> painters = [];
     final THLinePaint xviShotPaint =
         th2FileEditController.visualController.getXVIShotLinePaint();
     final Offset gridOffset = Offset(x, y);
@@ -141,16 +133,14 @@ class MPImagesWidget extends StatelessWidget {
         ),
       );
     }
-
-    return painters;
   }
 
-  List<CustomPainter> getXVIGridPainters({
+  void setXVIGridPainters({
     required XVIFile xviFile,
     required double x,
     required double y,
+    required List<CustomPainter> painters,
   }) {
-    final List<CustomPainter> painters = [];
     final XVIGrid grid = xviFile.grid;
     final Offset gridOffset = Offset(
       x + xviFile.grid.gx.value,
@@ -218,7 +208,5 @@ class MPImagesWidget extends StatelessWidget {
         ),
       );
     }
-
-    return painters;
   }
 }
