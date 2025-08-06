@@ -664,23 +664,23 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_xviGridLineThichnessOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._xviGridLineThichnessOnCanvas',
+  late final _$_xviLineThicknessOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._xviLineThicknessOnCanvas',
       context: context);
 
-  double get xviGridLineThichnessOnCanvas {
-    _$_xviGridLineThichnessOnCanvasAtom.reportRead();
-    return super._xviGridLineThichnessOnCanvas;
+  double get xviLineThicknessOnCanvas {
+    _$_xviLineThicknessOnCanvasAtom.reportRead();
+    return super._xviLineThicknessOnCanvas;
   }
 
   @override
-  double get _xviGridLineThichnessOnCanvas => xviGridLineThichnessOnCanvas;
+  double get _xviLineThicknessOnCanvas => xviLineThicknessOnCanvas;
 
   @override
-  set _xviGridLineThichnessOnCanvas(double value) {
-    _$_xviGridLineThichnessOnCanvasAtom
-        .reportWrite(value, super._xviGridLineThichnessOnCanvas, () {
-      super._xviGridLineThichnessOnCanvas = value;
+  set _xviLineThicknessOnCanvas(double value) {
+    _$_xviLineThicknessOnCanvasAtom
+        .reportWrite(value, super._xviLineThicknessOnCanvas, () {
+      super._xviLineThicknessOnCanvas = value;
     });
   }
 

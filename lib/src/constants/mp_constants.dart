@@ -136,7 +136,7 @@ const double thDefaultLineThickness = 2.0;
 const double thControlLineThicknessFactor = 0.5;
 const double thControlPointRadiusFactor = 1.5;
 const double thSelectedEndControlPointFactor = 1.25;
-const double xviStationPointFactor = 0.5;
+const double xviPointFactor = 0.5;
 const double thSelectionWindowBorderPaintDashInterval = 5.0;
 const double thSelectionHandleSize = 7.0;
 const double thSelectionHandleThresholdMultiplier = 10.0;
@@ -154,7 +154,7 @@ const int mpAreaFillTransparency = 30;
 const double mpLineDirectionTickLength = 10.0;
 const double mpAverageTangentDelta = 0.1;
 const int mpLineSegmentsPerDirectionTick = 5;
-const double mpXVIGridLineThickness = 1.0;
+const double mpXVILineThickness = 1.0;
 
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;

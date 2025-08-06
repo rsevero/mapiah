@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
+import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/painters/xvi_line_painter.dart';
+import 'package:mapiah/src/painters/xvi_sketchline_painter.dart';
 
 class MPImagesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
@@ -40,15 +44,29 @@ class MPImagesWidget extends StatelessWidget {
               // Understaing xTherion variables:
               // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
               // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
-              final double imageGridXOfsset =
-                  image.xx.value - xviFile.grid.gx.value;
-              final double imageGridYOfsset =
-                  image.yy.value - xviFile.grid.gy.value;
+              final Offset imageGridOffset = Offset(
+                image.xx.value - xviFile.grid.gx.value,
+                image.yy.value - xviFile.grid.gy.value,
+              );
 
-              setXVIImagePainters(
+              setXVIGridPainters(
                 xviFile: xviFile,
-                x: imageGridXOfsset,
-                y: imageGridYOfsset,
+                imageGridOffset: imageGridOffset,
+                painters: painters,
+              );
+              setXVIShotsPainters(
+                xviFile: xviFile,
+                imageGridOffset: imageGridOffset,
+                painters: painters,
+              );
+              setXVIStationsPainters(
+                xviFile: xviFile,
+                imageGridOffset: imageGridOffset,
+                painters: painters,
+              );
+              setXVISketchLinesPainters(
+                xviFile: xviFile,
+                imageGridOffset: imageGridOffset,
                 painters: painters,
               );
             }
@@ -77,29 +95,63 @@ class MPImagesWidget extends StatelessWidget {
     );
   }
 
-  void setXVIImagePainters({
+  void setXVISketchLinesPainters({
     required XVIFile xviFile,
-    required double x,
-    required double y,
+    required Offset imageGridOffset,
     required List<CustomPainter> painters,
   }) {
-    setXVIGridPainters(xviFile: xviFile, x: x, y: y, painters: painters);
-    setXVIShotsPainters(xviFile: xviFile, x: x, y: y, painters: painters);
-    setXVIStationsPainters(xviFile: xviFile, x: x, y: y, painters: painters);
+    final Map<String, THLinePaint> xviSketchLinesPaints = {};
+    final Map<String, THPointPaint> xviSketchPointsPaints = {};
+    final MPVisualController visualController =
+        th2FileEditController.visualController;
+
+    for (final XVISketchLine sketchLine in xviFile.sketchLines) {
+      final List<Offset> coordinates = [
+        sketchLine.start.coordinates + imageGridOffset
+      ];
+      THLinePaint sketchLinePaint;
+      THPointPaint pointPaint;
+
+      for (final THPositionPart point in sketchLine.points) {
+        coordinates.add(point.coordinates + imageGridOffset);
+      }
+
+      if (xviSketchLinesPaints.containsKey(sketchLine.color)) {
+        sketchLinePaint = xviSketchLinesPaints[sketchLine.color]!;
+      } else {
+        sketchLinePaint =
+            visualController.getXVISketchLinePaint(sketchLine.color);
+        xviSketchLinesPaints[sketchLine.color] = sketchLinePaint;
+      }
+
+      if (xviSketchPointsPaints.containsKey(sketchLine.color)) {
+        pointPaint = xviSketchPointsPaints[sketchLine.color]!;
+      } else {
+        pointPaint = visualController.getXVISketchPointPaint(sketchLine.color);
+        xviSketchPointsPaints[sketchLine.color] = pointPaint;
+      }
+
+      painters.add(
+        XVISketchLinePainter(
+          coordinates: coordinates,
+          linePaint: sketchLinePaint,
+          pointPaint: pointPaint,
+        ),
+      );
+    }
   }
 
   void setXVIStationsPainters({
     required XVIFile xviFile,
-    required double x,
-    required double y,
+    required Offset imageGridOffset,
     required List<CustomPainter> painters,
   }) {
     final THPointPaint xviStationPaint =
         th2FileEditController.visualController.getXVIStationPointPaint();
-    final Offset gridOffset = Offset(x, y);
 
     for (final XVIStation station in xviFile.stations) {
-      final Offset stationPosition = station.position.coordinates + gridOffset;
+      final Offset stationPosition =
+          station.position.coordinates + imageGridOffset;
 
       painters.add(
         THPointPainter(
@@ -113,17 +165,15 @@ class MPImagesWidget extends StatelessWidget {
 
   void setXVIShotsPainters({
     required XVIFile xviFile,
-    required double x,
-    required double y,
+    required Offset imageGridOffset,
     required List<CustomPainter> painters,
   }) {
     final THLinePaint xviShotPaint =
         th2FileEditController.visualController.getXVIShotLinePaint();
-    final Offset gridOffset = Offset(x, y);
 
     for (final XVIShot shot in xviFile.shots) {
-      final Offset start = shot.start.coordinates + gridOffset;
-      final Offset end = shot.end.coordinates + gridOffset;
+      final Offset start = shot.start.coordinates + imageGridOffset;
+      final Offset end = shot.end.coordinates + imageGridOffset;
 
       painters.add(
         XVILinePainter(
@@ -137,15 +187,15 @@ class MPImagesWidget extends StatelessWidget {
 
   void setXVIGridPainters({
     required XVIFile xviFile,
-    required double x,
-    required double y,
+    required Offset imageGridOffset,
     required List<CustomPainter> painters,
   }) {
     final XVIGrid grid = xviFile.grid;
-    final Offset gridOffset = Offset(
-      x + xviFile.grid.gx.value,
-      y + xviFile.grid.gy.value,
-    );
+    final Offset gridOffset = imageGridOffset +
+        Offset(
+          xviFile.grid.gx.value,
+          xviFile.grid.gy.value,
+        );
     final double gridX = gridOffset.dx;
     final double gridY = gridOffset.dy;
     final double xIncForXRepetition = grid.gxx.value;

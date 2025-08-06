@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
+import 'package:mapiah/src/constants/tk_color_map.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -1275,7 +1276,7 @@ abstract class MPVisualControllerBase with Store {
   THLinePaint getXVIGridLinePaint() {
     return THLinePaint(
       primaryPaint: THPaint.thPaintXVIGridLine
-        ..strokeWidth = _th2FileEditController.xviGridLineThichnessOnCanvas,
+        ..strokeWidth = _th2FileEditController.xviLineThicknessOnCanvas,
     );
   }
 
@@ -1288,9 +1289,29 @@ abstract class MPVisualControllerBase with Store {
 
   THPointPaint getXVIStationPointPaint() {
     return THPointPaint(
-      radius:
-          _th2FileEditController.pointRadiusOnCanvas * xviStationPointFactor,
+      radius: _th2FileEditController.pointRadiusOnCanvas * xviPointFactor,
       border: THPaint.thPaintBlackBackground,
+    );
+  }
+
+  THLinePaint getXVISketchLinePaint(String tkColorName) {
+    return THLinePaint(
+      primaryPaint: Paint()
+        ..color = TKColorMap.getColor(tkColorName)
+        ..strokeWidth = _th2FileEditController.xviLineThicknessOnCanvas
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke,
+    );
+  }
+
+  THPointPaint getXVISketchPointPaint(String tkColorName) {
+    return THPointPaint(
+      radius: _th2FileEditController.pointRadiusOnCanvas * xviPointFactor,
+      border: Paint()
+        ..color = TKColorMap.getColor(tkColorName)
+        ..strokeWidth = _th2FileEditController.xviLineThicknessOnCanvas
+        ..style = PaintingStyle.stroke,
+      type: MPPointShapeType.square,
     );
   }
 }

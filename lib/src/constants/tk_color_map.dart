@@ -575,7 +575,7 @@ class TKColorMap {
   /// Retrieves a Color object by its name.
   /// The color object is created on demand and cached for subsequent requests.
   /// Returns null if the color name is not found.
-  static Color? getColor(String colorName) {
+  static Color getColor(String tkColorName) {
     // Special Color Handling
     // There's one special case color transformation:
     //
@@ -583,21 +583,17 @@ class TKColorMap {
     // gets converted to:
     // Color: gray
     // Line style: Dashed (dash pattern: .)
-    if (colorName == 'connect') {
-      colorName = 'gray';
+    if (tkColorName == 'connect') {
+      tkColorName = 'gray';
     }
-    if (!_colorCache.containsKey(colorName)) {
-      final int? hexValue = _colorHexValues[colorName];
-
-      if (hexValue == null) {
-        return null;
-      }
-
+    if (!_colorCache.containsKey(tkColorName)) {
+      final int hexValue =
+          _colorHexValues[tkColorName] ?? _colorHexValues['gray']!;
       final Color color = Color(hexValue);
 
-      _colorCache[colorName] = color;
+      _colorCache[tkColorName] = color;
     }
 
-    return _colorCache[colorName];
+    return _colorCache[tkColorName]!;
   }
 }
