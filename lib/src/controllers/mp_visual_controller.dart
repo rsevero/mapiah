@@ -1278,4 +1278,11 @@ abstract class MPVisualControllerBase with Store {
         ..strokeWidth = _th2FileEditController.xviGridLineThichnessOnCanvas,
     );
   }
+
+  THLinePaint getXVIShotLinePaint() {
+    return THLinePaint(
+      primaryPaint: THPaint.thPaintXVIShotLine
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
+  }
 }

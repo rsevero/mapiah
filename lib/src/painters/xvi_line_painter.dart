@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 
-class XVIGridLinePainter extends CustomPainter {
+class XVILinePainter extends CustomPainter {
   final Offset start;
   final Offset end;
   final THLinePaint linePaint;
 
-  XVIGridLinePainter(
+  XVILinePainter(
       {required this.start, required this.end, required this.linePaint});
 
   @override
@@ -25,7 +25,7 @@ class XVIGridLinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant XVIGridLinePainter oldDelegate) {
+  bool shouldRepaint(covariant XVILinePainter oldDelegate) {
     if (identical(this, oldDelegate)) return false;
 
     return start != oldDelegate.start || end != oldDelegate.end;

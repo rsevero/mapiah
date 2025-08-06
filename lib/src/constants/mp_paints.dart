@@ -215,4 +215,9 @@ class THPaint {
     ..strokeWidth = 1
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
+  static final thPaintXVIShotLine = Paint()
+    ..color = Colors.grey
+    ..strokeWidth = 4
+    ..strokeCap = StrokeCap.round
+    ..style = PaintingStyle.stroke;
 }
