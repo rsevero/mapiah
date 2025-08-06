@@ -153,6 +153,7 @@ const int mpAreaFillTransparency = 30;
 const double mpLineDirectionTickLength = 10.0;
 const double mpAverageTangentDelta = 0.1;
 const int mpLineSegmentsPerDirectionTick = 5;
+const double mpXVIGridLineThickness = 1.0;
 
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;

@@ -212,9 +212,41 @@ class THXTherionImageInsertConfig extends THElement {
 
       (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
 
-      _xviFile = isSuccessful ? xviFile : null;
+      if (isSuccessful) {
+        _xviFile = xviFile;
+        if (_xviFile != null) {
+          _fixXVIRoot();
+        }
+      } else {
+        _xviFile = null;
+
+        // TODO: present XVI parse errors to the user
+        print(errors.join('\n'));
+      }
     }
 
     return _xviFile;
+  }
+
+  void _fixXVIRoot() {
+    if (!isXVI || xviRoot.isEmpty) {
+      return;
+    }
+
+    for (final XVIStation station in _xviFile!.stations) {
+      if (station.name == xviRoot) {
+        final THPositionPart stationPosition = station.position;
+        final double newXX =
+            xx.value + _xviFile!.grid.gx.value - stationPosition.x;
+        final double newYY =
+            yy.value + _xviFile!.grid.gy.value - stationPosition.y;
+
+        xx = xx.copyWith(value: newXX);
+        yy = yy.copyWith(value: newYY);
+        xviRoot = '';
+
+        break;
+      }
+    }
   }
 }

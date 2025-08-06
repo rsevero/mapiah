@@ -164,6 +164,9 @@ abstract class TH2FileEditControllerBase with Store {
           thControlLineThicknessFactor;
 
   @readonly
+  double _xviGridLineThichnessOnCanvas = mpXVIGridLineThickness;
+
+  @readonly
   double _lineDirectionTickLengthOnCanvas = mpLineDirectionTickLength;
 
   @readonly
@@ -519,6 +522,8 @@ abstract class TH2FileEditControllerBase with Store {
           (_canvasScale * devicePixelRatio);
       _lineDirectionTickLengthOnCanvas =
           mpLineDirectionTickLength / (_canvasScale * devicePixelRatio);
+      _xviGridLineThichnessOnCanvas =
+          mpXVIGridLineThickness / (_canvasScale * devicePixelRatio);
     }));
 
     _disposers.add(autorun((_) {

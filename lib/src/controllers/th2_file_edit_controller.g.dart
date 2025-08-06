@@ -664,6 +664,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_xviGridLineThichnessOnCanvasAtom = Atom(
+      name: 'TH2FileEditControllerBase._xviGridLineThichnessOnCanvas',
+      context: context);
+
+  double get xviGridLineThichnessOnCanvas {
+    _$_xviGridLineThichnessOnCanvasAtom.reportRead();
+    return super._xviGridLineThichnessOnCanvas;
+  }
+
+  @override
+  double get _xviGridLineThichnessOnCanvas => xviGridLineThichnessOnCanvas;
+
+  @override
+  set _xviGridLineThichnessOnCanvas(double value) {
+    _$_xviGridLineThichnessOnCanvasAtom
+        .reportWrite(value, super._xviGridLineThichnessOnCanvas, () {
+      super._xviGridLineThichnessOnCanvas = value;
+    });
+  }
+
   late final _$_lineDirectionTickLengthOnCanvasAtom = Atom(
       name: 'TH2FileEditControllerBase._lineDirectionTickLengthOnCanvas',
       context: context);

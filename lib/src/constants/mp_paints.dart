@@ -210,7 +210,7 @@ class THPaint {
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
 
-  static final thPaintXVIGrid = Paint()
+  static final thPaintXVIGridLine = Paint()
     ..color = Color(0xff00d0d0)
     ..strokeWidth = 1
     ..strokeCap = StrokeCap.round
