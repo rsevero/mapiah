@@ -41,17 +41,20 @@ class MPImagesWidget extends StatelessWidget {
             final XVIFile? xviFile = image.getXVIFile(th2FileEditController);
 
             if (xviFile != null) {
+              final Offset imageOffset = Offset(image.xx.value, image.yy.value);
               // Understaing xTherion variables:
               // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
               // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
-              final Offset imageGridOffset = Offset(
-                image.xx.value - xviFile.grid.gx.value,
-                image.yy.value - xviFile.grid.gy.value,
-              );
+              // These original xTherion variables are used to calculate imageGridOffset.
+              final Offset imageGridOffset = imageOffset -
+                  Offset(
+                    xviFile.grid.gx.value,
+                    xviFile.grid.gy.value,
+                  );
 
               setXVIGridPainters(
                 xviFile: xviFile,
-                imageGridOffset: imageGridOffset,
+                imageOffset: imageOffset,
                 painters: painters,
               );
               setXVIShotsPainters(
@@ -187,17 +190,12 @@ class MPImagesWidget extends StatelessWidget {
 
   void setXVIGridPainters({
     required XVIFile xviFile,
-    required Offset imageGridOffset,
+    required Offset imageOffset,
     required List<CustomPainter> painters,
   }) {
     final XVIGrid grid = xviFile.grid;
-    final Offset gridOffset = imageGridOffset +
-        Offset(
-          xviFile.grid.gx.value,
-          xviFile.grid.gy.value,
-        );
-    final double gridX = gridOffset.dx;
-    final double gridY = gridOffset.dy;
+    final double gridX = imageOffset.dx;
+    final double gridY = imageOffset.dy;
     final double xIncForXRepetition = grid.gxx.value;
     final double yIncForXRepetition = grid.gxy.value;
     final double xIncForYRepetition = grid.gyx.value;
