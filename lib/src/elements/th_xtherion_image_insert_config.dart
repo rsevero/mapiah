@@ -27,6 +27,9 @@ class THXTherionImageInsertConfig extends THElement {
   /// Non-mapped support fileds
   XVIFile? _xviFile;
 
+  double _xviRootedXX = 0.0;
+  double _xviRootedYY = 0.0;
+
   THXTherionImageInsertConfig.forCWJM({
     required super.mpID,
     required super.parentMPID,
@@ -214,9 +217,8 @@ class THXTherionImageInsertConfig extends THElement {
 
       if (isSuccessful) {
         _xviFile = xviFile;
-        if (_xviFile != null) {
-          _fixXVIRoot();
-        }
+
+        _fixXVIRoot();
       } else {
         _xviFile = null;
 
@@ -234,20 +236,26 @@ class THXTherionImageInsertConfig extends THElement {
       return;
     }
 
+    _xviRootedXX = xx.value;
+    _xviRootedYY = yy.value;
+
+    if (_xviFile == null) {
+      return;
+    }
+
     for (final XVIStation station in _xviFile!.stations) {
       if (station.name == xviRoot) {
         final THPositionPart stationPosition = station.position;
-        final double newXX =
-            xx.value + _xviFile!.grid.gx.value - stationPosition.x;
-        final double newYY =
-            yy.value + _xviFile!.grid.gy.value - stationPosition.y;
 
-        xx = xx.copyWith(value: newXX);
-        yy = yy.copyWith(value: newYY);
-        xviRoot = '';
+        _xviRootedXX += _xviFile!.grid.gx.value - stationPosition.x;
+        _xviRootedYY += _xviFile!.grid.gy.value - stationPosition.y;
 
         break;
       }
     }
   }
+
+  double get xviRootedXX => _xviRootedXX;
+
+  double get xviRootedYY => _xviRootedYY;
 }

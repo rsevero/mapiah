@@ -222,6 +222,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
         isSelectMode = th2FileEditController.isSelectMode;
 
+        // generalActionButtons.addAll(_changeImageButton());
         generalActionButtons.addAll(_changeScrapButton());
         generalActionButtons.addAll(_editElementButtons());
         generalActionButtons.addAll(_addElementButtons());

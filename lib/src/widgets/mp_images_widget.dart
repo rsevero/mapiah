@@ -38,41 +38,7 @@ class MPImagesWidget extends StatelessWidget {
           if (!image.isVisible) continue;
 
           if (image.isXVI) {
-            final XVIFile? xviFile = image.getXVIFile(th2FileEditController);
-
-            if (xviFile != null) {
-              final Offset imageOffset = Offset(image.xx.value, image.yy.value);
-              // Understaing xTherion variables:
-              // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
-              // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
-              // These original xTherion variables are used to calculate imageGridOffset.
-              final Offset imageGridOffset = imageOffset -
-                  Offset(
-                    xviFile.grid.gx.value,
-                    xviFile.grid.gy.value,
-                  );
-
-              setXVIGridPainters(
-                xviFile: xviFile,
-                imageOffset: imageOffset,
-                painters: painters,
-              );
-              setXVIShotsPainters(
-                xviFile: xviFile,
-                imageGridOffset: imageGridOffset,
-                painters: painters,
-              );
-              setXVIStationsPainters(
-                xviFile: xviFile,
-                imageGridOffset: imageGridOffset,
-                painters: painters,
-              );
-              setXVISketchLinesPainters(
-                xviFile: xviFile,
-                imageGridOffset: imageGridOffset,
-                painters: painters,
-              );
-            }
+            _drawXVIFile(image, painters);
           } else {
             // Handle regular images
             // painters.add(
@@ -95,6 +61,52 @@ class MPImagesWidget extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _drawXVIFile(
+    THXTherionImageInsertConfig image,
+    List<CustomPainter> painters,
+  ) {
+    final XVIFile? xviFile = image.getXVIFile(th2FileEditController);
+
+    if (xviFile == null) {
+      return;
+    }
+
+    double xx = image.xviRootedXX;
+    double yy = image.xviRootedYY;
+
+    final Offset imageOffset = Offset(xx, yy);
+    // Understaing xTherion variables:
+    // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
+    // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
+    // These original xTherion variables are used to calculate imageGridOffset.
+    final Offset imageGridOffset = imageOffset -
+        Offset(
+          xviFile.grid.gx.value,
+          xviFile.grid.gy.value,
+        );
+
+    setXVIGridPainters(
+      xviFile: xviFile,
+      imageOffset: imageOffset,
+      painters: painters,
+    );
+    setXVIShotsPainters(
+      xviFile: xviFile,
+      imageGridOffset: imageGridOffset,
+      painters: painters,
+    );
+    setXVIStationsPainters(
+      xviFile: xviFile,
+      imageGridOffset: imageGridOffset,
+      painters: painters,
+    );
+    setXVISketchLinesPainters(
+      xviFile: xviFile,
+      imageGridOffset: imageGridOffset,
+      painters: painters,
     );
   }
 
