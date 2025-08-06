@@ -113,15 +113,6 @@ class XVIFileParser {
           (sketchlineData['coordinates'] as List<dynamic>).cast<String>();
       final THPositionPart start = positionFromList(coordinates);
 
-      if (coordinates.length < 2) {
-        _addError(
-          'Invalid sketchline coordinates',
-          '_injectSketchlines()',
-          'Expected at least 2 coordinates, got ${coordinates.length}',
-        );
-        continue;
-      }
-
       final List<THPositionPart> points = [];
 
       while (coordinates.length >= 2) {
@@ -217,10 +208,8 @@ class XVIFileParser {
   void _injectXVIGrid(dynamic contentValue) {
     final List<String> gridValues =
         (contentValue as List<dynamic>).cast<String>();
-    final List<double> gridValuesAsDoubles =
-        gridValues.map((value) => double.tryParse(value) ?? 0.0).toList();
 
-    _xviFile.grid = XVIGrid.fromList(gridValuesAsDoubles);
+    _xviFile.grid = XVIGrid.fromStringList(gridValues);
   }
 
   void _addError(String errorMessage, String location, String localInfo) {

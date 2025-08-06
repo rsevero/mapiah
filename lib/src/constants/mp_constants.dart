@@ -265,3 +265,4 @@ const String mpLicenseURL =
     'https://github.com/rsevero/mapiah/blob/main/LICENSE.md';
 
 const String xTherionImageInsertConfigID = 'xth_me_image_insert';
+const String mpXVIExtension = '.xvi';

@@ -8,6 +8,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_edit_line_widget.dart';
+import 'package:mapiah/src/widgets/mp_images_widget.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_highlight_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_highlight_widget.dart';
@@ -53,6 +54,18 @@ class THFileWidget extends StatelessWidget {
             child: Stack(
               key: ValueKey("THFileWidgetStack|$thFileMPID"),
               children: [
+                Observer(
+                  builder: (_) {
+                    if (th2FileEditController.showImages) {
+                      return MPImagesWidget(
+                        key: ValueKey("MPImagesWidget|$thFileMPID"),
+                        th2FileEditController: th2FileEditController,
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
                 MPNonSelectedElementsWidget(
                   key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
                   th2FileEditController: th2FileEditController,

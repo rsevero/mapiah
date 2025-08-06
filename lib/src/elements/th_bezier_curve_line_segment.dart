@@ -103,7 +103,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! THBezierCurveLineSegment) return false;
-    if (!equalsBase(other)) return false;
+    if (!super.equalsBase(other)) return false;
 
     return other.controlPoint1 == controlPoint1 &&
         other.controlPoint2 == controlPoint2;

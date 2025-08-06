@@ -888,6 +888,42 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_shouldShowImagesAtom = Atom(
+      name: 'TH2FileEditControllerBase._shouldShowImages', context: context);
+
+  bool get shouldShowImages {
+    _$_shouldShowImagesAtom.reportRead();
+    return super._shouldShowImages;
+  }
+
+  @override
+  bool get _shouldShowImages => shouldShowImages;
+
+  @override
+  set _shouldShowImages(bool value) {
+    _$_shouldShowImagesAtom.reportWrite(value, super._shouldShowImages, () {
+      super._shouldShowImages = value;
+    });
+  }
+
+  late final _$_showImagesAtom =
+      Atom(name: 'TH2FileEditControllerBase._showImages', context: context);
+
+  bool get showImages {
+    _$_showImagesAtom.reportRead();
+    return super._showImages;
+  }
+
+  @override
+  bool get _showImages => showImages;
+
+  @override
+  set _showImages(bool value) {
+    _$_showImagesAtom.reportWrite(value, super._showImages, () {
+      super._showImages = value;
+    });
+  }
+
   late final _$_statusBarMessageAtom = Atom(
       name: 'TH2FileEditControllerBase._statusBarMessage', context: context);
 
@@ -1084,6 +1120,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   late final _$TH2FileEditControllerBaseActionController =
       ActionController(name: 'TH2FileEditControllerBase', context: context);
+
+  @override
+  void updateShowImages() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.updateShowImages');
+    try {
+      return super.updateShowImages();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void performSetZoomButtonsHovered(bool isHovered) {

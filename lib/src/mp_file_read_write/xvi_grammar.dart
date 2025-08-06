@@ -97,9 +97,9 @@ class XVIGrammar extends GrammarDefinition {
       (xviSketchLineColor().trim() & xviNumber().trim().plus()).map((values) {
         final color = values[0];
         final coordinates = values[1] as List<dynamic>;
-        if (coordinates.length < 4 || coordinates.length % 2 != 0) {
+        if (coordinates.length < 2 || coordinates.length % 2 != 0) {
           throw ArgumentError(
-            'Sketchline must have an even number of coordinates (minimum 4), got \\${coordinates.length}',
+            'Sketchline must have an even number of coordinates (minimum 2), got \\${coordinates.length}',
           );
         }
         return {

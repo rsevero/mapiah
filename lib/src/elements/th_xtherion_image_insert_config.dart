@@ -1,5 +1,11 @@
 part of 'th_element.dart';
 
+/// Should support the following image file formats:
+/// * PNG
+/// * JPEG/JPG
+/// * GIF
+/// * PNM/PPM
+/// * XVI
 class THXTherionImageInsertConfig extends THElement {
   String filename;
 
@@ -13,6 +19,13 @@ class THXTherionImageInsertConfig extends THElement {
   String imgx;
   String xData;
   bool xImage;
+  bool isXVI;
+
+  /// Mapped support fields
+  bool isVisible;
+
+  /// Non-mapped support fileds
+  XVIFile? _xviFile;
 
   THXTherionImageInsertConfig.forCWJM({
     required super.mpID,
@@ -28,6 +41,8 @@ class THXTherionImageInsertConfig extends THElement {
     required this.imgx,
     required this.xData,
     required this.xImage,
+    required this.isXVI,
+    required this.isVisible,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
@@ -43,11 +58,13 @@ class THXTherionImageInsertConfig extends THElement {
     required this.imgx,
     required this.xData,
     required this.xImage,
+    this.isVisible = true,
     super.originalLineInTH2File = '',
   })  : xx = THDoublePart.fromString(valueString: xx),
         vsb = THDoublePart.fromString(valueString: vsb),
         igamma = THDoublePart.fromString(valueString: igamma),
         yy = THDoublePart.fromString(valueString: yy),
+        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
         super.addToParent();
 
   @override
@@ -67,6 +84,8 @@ class THXTherionImageInsertConfig extends THElement {
       'imgx': imgx,
       'xData': xData,
       'xImage': xImage,
+      'isXVI': isXVI,
+      'isVisible': isVisible,
     };
   }
 
@@ -85,6 +104,8 @@ class THXTherionImageInsertConfig extends THElement {
       imgx: map['imgx'],
       xData: map['xData'],
       xImage: map['xImage'],
+      isXVI: map['isXVI'],
+      isVisible: map['isVisible'],
       originalLineInTH2File: map['originalLineInTH2File'],
     );
   }
@@ -108,6 +129,8 @@ class THXTherionImageInsertConfig extends THElement {
     String? imgx,
     String? xData,
     bool? xImage,
+    bool? isXVI,
+    bool? isVisible,
     String? originalLineInTH2File,
   }) {
     return THXTherionImageInsertConfig.forCWJM(
@@ -126,6 +149,8 @@ class THXTherionImageInsertConfig extends THElement {
       imgx: imgx ?? this.imgx,
       xData: xData ?? this.xData,
       xImage: xImage ?? this.xImage,
+      isXVI: isXVI ?? this.isXVI,
+      isVisible: isVisible ?? this.isVisible,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
     );
@@ -134,10 +159,10 @@ class THXTherionImageInsertConfig extends THElement {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (other is! THXTherionImageInsertConfig) return false;
+    if (!super.equalsBase(other)) return false;
 
-    return other is THXTherionImageInsertConfig &&
-        super == other &&
-        filename == other.filename &&
+    return filename == other.filename &&
         xx == other.xx &&
         vsb == other.vsb &&
         igamma == other.igamma &&
@@ -146,12 +171,15 @@ class THXTherionImageInsertConfig extends THElement {
         iidx == other.iidx &&
         imgx == other.imgx &&
         xData == other.xData &&
-        xImage == other.xImage;
+        xImage == other.xImage &&
+        isXVI == other.isXVI &&
+        isVisible == other.isVisible;
   }
 
   @override
-  int get hashCode => Object.hash(
-        super.hashCode,
+  int get hashCode =>
+      super.hashCode ^
+      Object.hash(
         filename,
         xx,
         vsb,
@@ -162,10 +190,31 @@ class THXTherionImageInsertConfig extends THElement {
         imgx,
         xData,
         xImage,
+        isXVI,
+        isVisible,
       );
 
   @override
   bool isSameClass(Object object) {
     return object is THXTherionImageInsertConfig;
+  }
+
+  XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
+    if (_xviFile == null && isXVI) {
+      final XVIFileParser parser = XVIFileParser();
+      final XVIFile xviFile;
+      final bool isSuccessful;
+      final List<String> errors;
+      final String referenceFilename = th2FileEditController.thFile.filename;
+      final String resolvedPath = p.normalize(p.isAbsolute(filename)
+          ? filename
+          : p.join(p.dirname(referenceFilename), filename));
+
+      (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
+
+      _xviFile = isSuccessful ? xviFile : null;
+    }
+
+    return _xviFile;
   }
 }

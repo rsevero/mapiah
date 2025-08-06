@@ -1,61 +1,85 @@
 import 'dart:convert';
 
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
+
+/// The only really obscure data is XVIgrid. XVIgrid has 8 Values, e.g.
+///
+/// set XVIgrid {738.97637795 -109.842519685 39.3700787401 0.0 0.0 39.3700787401 84 93}
+///
+/// This seems to be:
+/// * gx: minx (origin / bottom left x)
+/// * gy: miny (origin / bottom left y)
+/// * gxx: X increment for moving one step along the grid's X direction
+/// * gxy: Y increment for moving one step along the grid's X direction (usually
+///   0.0). It screws the grid in the vertical direction if not 0.0
+/// * gyx: X increment for moving one step along the grid's Y direction (usually
+///   0.0). It screws the grid in the horizontal direction if not 0.0.
+/// * gyy: Y increment for moving one step along the grid's Y direction
+/// * ngx: number of grid elements in x direction
+/// * ngy: number of grid elements in y direction
 class XVIGrid {
-  double gx;
-  double gy;
-  double gxx;
-  double gxy;
-  double gyx;
-  double gyy;
-  double ngx;
-  double ngy;
+  THDoublePart gx;
+  THDoublePart gy;
+  THDoublePart gxx;
+  THDoublePart gxy;
+  THDoublePart gyx;
+  THDoublePart gyy;
+  THDoublePart ngx;
+  THDoublePart ngy;
 
   XVIGrid({
-    this.gx = 0.0,
-    this.gy = 0.0,
-    this.gxx = 0.0,
-    this.gxy = 0.0,
-    this.gyx = 0.0,
-    this.gyy = 0.0,
-    this.ngx = 0.0,
-    this.ngy = 0.0,
-  });
+    THDoublePart? gx,
+    THDoublePart? gy,
+    THDoublePart? gxx,
+    THDoublePart? gxy,
+    THDoublePart? gyx,
+    THDoublePart? gyy,
+    THDoublePart? ngx,
+    THDoublePart? ngy,
+  })  : gx = gx ?? THDoublePart.fromString(valueString: '0.0'),
+        gy = gy ?? THDoublePart.fromString(valueString: '0.0'),
+        gxx = gxx ?? THDoublePart.fromString(valueString: '0.0'),
+        gxy = gxy ?? THDoublePart.fromString(valueString: '0.0'),
+        gyx = gyx ?? THDoublePart.fromString(valueString: '0.0'),
+        gyy = gyy ?? THDoublePart.fromString(valueString: '0.0'),
+        ngx = ngx ?? THDoublePart.fromString(valueString: '0.0'),
+        ngy = ngy ?? THDoublePart.fromString(valueString: '0.0');
 
-  XVIGrid.fromList(List<double> values)
-      : gx = values[0],
-        gy = values[1],
-        gxx = values[2],
-        gxy = values[3],
-        gyx = values[4],
-        gyy = values[5],
-        ngx = values[6],
-        ngy = values[7];
+  XVIGrid.fromStringList(List<String> values)
+      : gx = THDoublePart.fromString(valueString: values[0]),
+        gy = THDoublePart.fromString(valueString: values[1]),
+        gxx = THDoublePart.fromString(valueString: values[2]),
+        gxy = THDoublePart.fromString(valueString: values[3]),
+        gyx = THDoublePart.fromString(valueString: values[4]),
+        gyy = THDoublePart.fromString(valueString: values[5]),
+        ngx = THDoublePart.fromString(valueString: values[6]),
+        ngy = THDoublePart.fromString(valueString: values[7]);
 
   /// Returns a map representation of this XVIGrid instance
   Map<String, dynamic> toMap() {
     return {
-      'gx': gx,
-      'gy': gy,
-      'gxx': gxx,
-      'gxy': gxy,
-      'gyx': gyx,
-      'gyy': gyy,
-      'ngx': ngx,
-      'ngy': ngy,
+      'gx': gx.toMap(),
+      'gy': gy.toMap(),
+      'gxx': gxx.toMap(),
+      'gxy': gxy.toMap(),
+      'gyx': gyx.toMap(),
+      'gyy': gyy.toMap(),
+      'ngx': ngx.toMap(),
+      'ngy': ngy.toMap(),
     };
   }
 
   /// Creates an XVIGrid instance from a map
   static XVIGrid fromMap(Map<String, dynamic> map) {
     return XVIGrid(
-      gx: map['gx']?.toDouble() ?? 0.0,
-      gy: map['gy']?.toDouble() ?? 0.0,
-      gxx: map['gxx']?.toDouble() ?? 0.0,
-      gxy: map['gxy']?.toDouble() ?? 0.0,
-      gyx: map['gyx']?.toDouble() ?? 0.0,
-      gyy: map['gyy']?.toDouble() ?? 0.0,
-      ngx: map['ngx']?.toDouble() ?? 0.0,
-      ngy: map['ngy']?.toDouble() ?? 0.0,
+      gx: THDoublePart.fromMap(map['gx']),
+      gy: THDoublePart.fromMap(map['gy']),
+      gxx: THDoublePart.fromMap(map['gxx']),
+      gxy: THDoublePart.fromMap(map['gxy']),
+      gyx: THDoublePart.fromMap(map['gyx']),
+      gyy: THDoublePart.fromMap(map['gyy']),
+      ngx: THDoublePart.fromMap(map['ngx']),
+      ngy: THDoublePart.fromMap(map['ngy']),
     );
   }
 
@@ -67,14 +91,14 @@ class XVIGrid {
 
   /// Creates a copy of this XVIGrid with the given fields replaced with new values
   XVIGrid copyWith({
-    double? gx,
-    double? gy,
-    double? gxx,
-    double? gxy,
-    double? gyx,
-    double? gyy,
-    double? ngx,
-    double? ngy,
+    THDoublePart? gx,
+    THDoublePart? gy,
+    THDoublePart? gxx,
+    THDoublePart? gxy,
+    THDoublePart? gyx,
+    THDoublePart? gyy,
+    THDoublePart? ngx,
+    THDoublePart? ngy,
   }) {
     return XVIGrid(
       gx: gx ?? this.gx,

@@ -54,6 +54,7 @@ class THFile
   final Set<int> _linesMPIDs = {};
   final Set<int> _pointsMPIDs = {};
   final Set<int> _scrapMPIDs = {};
+  final Set<int> _imageMPIDs = {};
 
   Map<int, int>? _areaMPIDByLineMPID;
   Map<String, int>? _areaMPIDByLineTHID;
@@ -359,6 +360,13 @@ class THFile
         _clearAreaXLineInfo(element);
       case THScrap _:
         _scrapMPIDs.add(element.mpID);
+      case THXTherionImageInsertConfig _:
+        _imageMPIDs.add(element.mpID);
+        mpLocator.mpGeneralController
+            .getTH2FileEditControllerIfExists(
+              filename,
+            )
+            ?.updateShowImages();
     }
   }
 
@@ -414,7 +422,13 @@ class THFile
         _drawableElementMPIDs.remove(element.mpID);
       case THScrap _:
         _scrapMPIDs.remove(element.mpID);
-      default:
+      case THXTherionImageInsertConfig _:
+        _imageMPIDs.remove(element.mpID);
+        mpLocator.mpGeneralController
+            .getTH2FileEditControllerIfExists(
+              filename,
+            )
+            ?.updateShowImages();
     }
 
     element.parent(this).removeElementFromParent(this, element);
@@ -596,6 +610,18 @@ class THFile
     _scrapMPIDs.clear();
     _mpIDByTHID.clear();
     _thIDByMPID.clear();
+    _areasMPIDs.clear();
+    _linesMPIDs.clear();
+    _pointsMPIDs.clear();
+    _imageMPIDs.clear();
+    mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(
+          filename,
+        )
+        ?.updateShowImages();
+    _drawableElementMPIDs.clear();
+    _areaMPIDByLineMPID = null;
+    _areaMPIDByLineTHID = null;
     filename = '';
     encoding = thDefaultEncoding;
     clearBoundingBox();
@@ -625,6 +651,10 @@ class THFile
     return _pointsMPIDs;
   }
 
+  Set<int> get imageMPIDs {
+    return _imageMPIDs;
+  }
+
   Iterable<THScrap> getScraps() {
     return _scrapMPIDs.map((int mpID) => scrapByMPID(mpID));
   }
@@ -639,6 +669,11 @@ class THFile
 
   Iterable<THPoint> getPoints() {
     return _pointsMPIDs.map((int mpID) => pointByMPID(mpID));
+  }
+
+  Iterable<THXTherionImageInsertConfig> getImages() {
+    return _imageMPIDs
+        .map((int mpID) => elementByMPID(mpID) as THXTherionImageInsertConfig);
   }
 
   void _updateAreaXLineInfo() {

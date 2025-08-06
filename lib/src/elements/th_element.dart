@@ -9,9 +9,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/interfaces/th_point_interface.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -21,9 +23,13 @@ import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
+import 'package:path/path.dart' as p;
 
+part 'mixins/th_has_options_mixin.dart';
+part 'mixins/th_has_platype_mixin.dart';
 part 'th_area_border_thid.dart';
 part 'th_area.dart';
 part 'th_bezier_curve_line_segment.dart';
@@ -34,8 +40,6 @@ part 'th_endarea.dart';
 part 'th_endcomment.dart';
 part 'th_endline.dart';
 part 'th_endscrap.dart';
-part 'mixins/th_has_options_mixin.dart';
-part 'mixins/th_has_platype_mixin.dart';
 part 'th_line_segment.dart';
 part 'th_line.dart';
 part 'th_multiline_comment_content.dart';
@@ -121,7 +125,9 @@ abstract class THElement {
 
   @protected
   bool equalsBase(Object other) {
-    return (other as THElement).mpID == mpID &&
+    return other is THElement &&
+        other.elementType == elementType &&
+        other.mpID == mpID &&
         other.parentMPID == parentMPID &&
         other.sameLineComment == sameLineComment &&
         other.originalLineInTH2File == originalLineInTH2File;

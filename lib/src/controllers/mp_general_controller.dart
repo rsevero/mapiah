@@ -38,6 +38,10 @@ class MPGeneralController {
     _t2hFileEditControllers.clear();
   }
 
+  TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {
+    return _t2hFileEditControllers[filename];
+  }
+
   TH2FileEditController getTH2FileEditController({
     required String filename,
     final Uint8List? fileBytes,

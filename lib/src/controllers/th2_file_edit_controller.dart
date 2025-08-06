@@ -208,6 +208,9 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   double _selectionHandleLineThicknessOnCanvas = thSelectionHandleLineThickness;
 
+  @readonly
+  bool _shouldShowImages = true;
+
   @computed
   Paint get selectionHandlePaint => thSelectionHandleFillPaint
     ..strokeWidth = _selectionHandleLineThicknessOnCanvas;
@@ -219,6 +222,9 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showEditLineSegment => _isEditLineMode;
+
+  @readonly
+  bool _showImages = false;
 
   @computed
   bool get showMultipleElementsClickedHighlight =>
@@ -557,6 +563,16 @@ abstract class TH2FileEditControllerBase with Store {
       disposer();
     }
     _disposers.clear();
+  }
+
+  @action
+  void updateShowImages() {
+    _showImages = _shouldShowImages && _thFile.getImages().isNotEmpty;
+  }
+
+  void setShouldShowImages(bool shouldShow) {
+    _shouldShowImages = shouldShow;
+    updateShowImages();
   }
 
   @action

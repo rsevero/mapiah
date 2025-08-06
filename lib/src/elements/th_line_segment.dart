@@ -86,7 +86,10 @@ abstract class THLineSegment extends THElement
 
   @override
   bool equalsBase(Object other) {
-    return endPoint == (other as THLineSegment).endPoint &&
+    if (!super.equalsBase(other)) return false;
+
+    return other is THLineSegment &&
+        endPoint == other.endPoint &&
         mapEquals(optionsMap, other.optionsMap);
   }
 
