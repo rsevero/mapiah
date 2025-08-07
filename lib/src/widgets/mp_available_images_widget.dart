@@ -10,6 +10,7 @@ import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
+import 'package:path/path.dart' as p;
 
 class MPAvailableImagesWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -58,12 +59,15 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
               padding: mpOverlayWindowBlockEdgeInsets,
               children: [
                 Builder(builder: (blockContext) {
+                  final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (images.isNotEmpty)
                         ...images.map((image) {
                           final bool isVisible = image.isVisible;
+                          final String name = p.basename(image.filename);
 
                           return Row(
                             children: [
@@ -72,21 +76,17 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 onChanged: (bool? value) {
                                   _imageVisibilityChanged(image.mpID, value);
                                 },
-                                checkColor:
-                                    Theme.of(context).colorScheme.onSurface,
+                                checkColor: colorScheme.onSurface,
                                 side: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: colorScheme.onSurface,
                                   width: 2,
                                 ),
                                 fillColor: WidgetStateProperty.all(
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHighest,
+                                  colorScheme.surfaceContainerHighest,
                                 ),
                               ),
                               Expanded(
-                                child: Text(image.filename),
+                                child: Text(name),
                               ),
                             ],
                           );
