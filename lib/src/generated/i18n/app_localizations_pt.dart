@@ -861,6 +861,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageChangeActiveScrapTitle => 'Alterar croqui ativo';
 
   @override
+  String get th2FileEditPageChangeImageTitle => 'Alterar imagens';
+
+  @override
+  String get th2FileEditPageChangeImageTool => 'Alterar imagem (Alt+I)';
+
+  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage =>
       'Nenhum elemento selecionado';
 

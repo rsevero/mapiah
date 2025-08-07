@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -50,6 +48,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
         Observer(
           builder: (_) {
             th2FileEditController.activeScrapID;
+
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
               padding: mpOverlayWindowBlockEdgeInsets,

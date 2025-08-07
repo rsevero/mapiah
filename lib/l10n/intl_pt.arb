@@ -267,6 +267,8 @@
   "th2FileEditPageAddPointStatusBarMessage": "Clique para criar um ponto do tipo {type}",
   "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo (Alt+C)",
   "th2FileEditPageChangeActiveScrapTitle": "Alterar croqui ativo",
+  "th2FileEditPageChangeImageTitle": "Alterar imagens",
+  "th2FileEditPageChangeImageTool": "Alterar imagem (Alt+I)",
   "th2FileEditPageEmptySelectionStatusBarMessage": "Nenhum elemento selecionado",
   "th2FileEditPageLoadingFile": "Lendo arquivo {filename} ...",
   "th2FileEditPageNodeEditTool": "Editar nós (N)",

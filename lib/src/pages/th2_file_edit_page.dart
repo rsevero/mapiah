@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
@@ -222,7 +222,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
         isSelectMode = th2FileEditController.isSelectMode;
 
-        // generalActionButtons.addAll(_changeImageButton());
+        generalActionButtons.addAll(_changeImageButton());
         generalActionButtons.addAll(_changeScrapButton());
         generalActionButtons.addAll(_editElementButtons());
         generalActionButtons.addAll(_addElementButtons());
@@ -328,6 +328,45 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     ];
   }
 
+  List<Widget> _changeImageButton() {
+    return [
+      SizedBox(height: mpButtonSpace),
+      Observer(
+        builder: (_) {
+          final bool isChangeImageButtonPressed = th2FileEditController
+              .overlayWindowController.showChangeImageOverlayWindow;
+
+          return Padding(
+            padding: isChangeImageButtonPressed
+                ? const EdgeInsets.only(left: mpButtonSpace)
+                : EdgeInsets.zero,
+            child: FloatingActionButton(
+              key: th2FileEditController
+                      .overlayWindowController.globalKeyWidgetKeyByType[
+                  MPGlobalKeyWidgetType.changeImageButton]!,
+              heroTag: 'change_image_tool',
+              onPressed: _onChangeImageButtonPressed,
+              tooltip:
+                  mpLocator.appLocalizations.th2FileEditPageChangeImageTool,
+              child: Image.asset(
+                'assets/icons/change-image-tool.png',
+                width: thFloatingActionIconSize,
+                height: thFloatingActionIconSize,
+                color: isChangeImageButtonPressed
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSecondaryContainer,
+              ),
+              backgroundColor: isChangeImageButtonPressed
+                  ? colorScheme.primary
+                  : colorScheme.secondaryContainer,
+              elevation: isChangeImageButtonPressed ? 0 : null,
+            ),
+          );
+        },
+      ),
+    ];
+  }
+
   List<Widget> _changeScrapButton() {
     return [
       SizedBox(height: mpButtonSpace),
@@ -337,8 +376,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               .overlayWindowController.showChangeScrapOverlayWindow;
 
           return Padding(
-            padding: th2FileEditController
-                    .overlayWindowController.showChangeScrapOverlayWindow
+            padding: isChangeScrapButtonPressed
                 ? const EdgeInsets.only(left: mpButtonSpace)
                 : EdgeInsets.zero,
             child: FloatingActionButton(
@@ -419,13 +457,20 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     th2FileEditController.stateController.onButtonPressed(type);
   }
 
+  void _onChangeImageButtonPressed() {
+    th2FileEditController.overlayWindowController.toggleOverlayWindow(
+      MPWindowType.changeImage,
+    );
+  }
+
   void _onChangeScrapButtonPressed() {
     if (th2FileEditController.hasMultipleScraps) {
       th2FileEditController.overlayWindowController.toggleOverlayWindow(
         MPWindowType.availableScraps,
       );
     } else {
-      final Offset anchorPosition = MPInteractionAux.getScrapsButtonOuterAnchor(
+      final Offset anchorPosition = MPInteractionAux.getButtonOuterAnchor(
+        MPGlobalKeyWidgetType.changeScrapButton,
         th2FileEditController,
       );
 

@@ -1024,6 +1024,25 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_redrawTriggerImagesAtom = Atom(
+      name: 'TH2FileEditControllerBase._redrawTriggerImages', context: context);
+
+  int get redrawTriggerImages {
+    _$_redrawTriggerImagesAtom.reportRead();
+    return super._redrawTriggerImages;
+  }
+
+  @override
+  int get _redrawTriggerImages => redrawTriggerImages;
+
+  @override
+  set _redrawTriggerImages(int value) {
+    _$_redrawTriggerImagesAtom.reportWrite(value, super._redrawTriggerImages,
+        () {
+      super._redrawTriggerImages = value;
+    });
+  }
+
   late final _$_redrawTriggerNewLineAtom = Atom(
       name: 'TH2FileEditControllerBase._redrawTriggerNewLine',
       context: context);
@@ -1312,6 +1331,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
             name: 'TH2FileEditControllerBase.triggerOptionsListRedraw');
     try {
       return super.triggerOptionsListRedraw();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerImagesRedraw() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.triggerImagesRedraw');
+    try {
+      return super.triggerImagesRedraw();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

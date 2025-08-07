@@ -601,6 +601,21 @@ class THFile
     return element;
   }
 
+  THXTherionImageInsertConfig imageByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THXTherionImageInsertConfig) {
+      throw THCustomException(
+          "Element with MPID '$mpID' is not an image in THFile.imageByMPID.");
+    }
+
+    return element;
+  }
+
   THElement elementByPosition(int position) {
     return _elementByMPID.values.elementAt(position);
   }

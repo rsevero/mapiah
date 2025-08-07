@@ -855,6 +855,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeActiveScrapTitle => 'Change active scrap';
 
   @override
+  String get th2FileEditPageChangeImageTitle => 'Change images';
+
+  @override
+  String get th2FileEditPageChangeImageTool => 'Change image (Alt+I)';
+
+  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';
 
   @override

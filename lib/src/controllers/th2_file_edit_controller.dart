@@ -343,6 +343,9 @@ abstract class TH2FileEditControllerBase with Store {
   int _redrawTriggerNonSelectedElements = 0;
 
   @readonly
+  int _redrawTriggerImages = 0;
+
+  @readonly
   int _redrawTriggerNewLine = 0;
 
   @readonly
@@ -751,6 +754,11 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void triggerOptionsListRedraw() {
     _redrawTriggerOptionsList++;
+  }
+
+  @action
+  void triggerImagesRedraw() {
+    _redrawTriggerImages++;
   }
 
   void _setCanvasCenterFromCurrent() {

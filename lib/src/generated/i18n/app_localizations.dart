@@ -1700,6 +1700,18 @@ abstract class AppLocalizations {
   /// **'Change active scrap'**
   String get th2FileEditPageChangeActiveScrapTitle;
 
+  /// The title for the change image dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Change images'**
+  String get th2FileEditPageChangeImageTitle;
+
+  /// The label for the change image tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Change image (Alt+I)'**
+  String get th2FileEditPageChangeImageTool;
+
   /// The status bar message for the empty selection
   ///
   /// In en, this message translates to:

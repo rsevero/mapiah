@@ -19,6 +19,15 @@ mixin _$TH2FileEditOverlayWindowController
               name:
                   'TH2FileEditOverlayWindowControllerBase.showChangeScrapOverlayWindow'))
           .value;
+  Computed<bool>? _$showChangeImageOverlayWindowComputed;
+
+  @override
+  bool get showChangeImageOverlayWindow =>
+      (_$showChangeImageOverlayWindowComputed ??= Computed<bool>(
+              () => super.showChangeImageOverlayWindow,
+              name:
+                  'TH2FileEditOverlayWindowControllerBase.showChangeImageOverlayWindow'))
+          .value;
 
   late final _$_thFileAtom = Atom(
       name: 'TH2FileEditOverlayWindowControllerBase._thFile', context: context);
@@ -290,7 +299,8 @@ mixin _$TH2FileEditOverlayWindowController
   @override
   String toString() {
     return '''
-showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow}
+showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow},
+showChangeImageOverlayWindow: ${showChangeImageOverlayWindow}
     ''';
   }
 }

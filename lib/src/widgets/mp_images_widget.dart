@@ -29,6 +29,7 @@ class MPImagesWidget extends StatelessWidget {
     return Observer(
       builder: (_) {
         th2FileEditController.redrawTriggerNonSelectedElements;
+        th2FileEditController.redrawTriggerImages;
 
         final List<CustomPainter> painters = [];
         final Iterable<THXTherionImageInsertConfig> images =

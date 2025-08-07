@@ -1,5 +1,6 @@
 enum MPWindowType {
   availableScraps,
+  changeImage,
   commandOptions,
   lineSegmentOptions,
   lineSegmentTypes,

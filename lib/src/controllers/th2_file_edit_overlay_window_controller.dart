@@ -54,11 +54,16 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool get showChangeScrapOverlayWindow =>
       _isOverlayWindowShown[MPWindowType.availableScraps]!;
 
+  @computed
+  bool get showChangeImageOverlayWindow =>
+      _isOverlayWindowShown[MPWindowType.changeImage]!;
+
   @readonly
   bool _isAutoDismissWindowOpen = false;
 
   final autoDismissOverlayWindowTypes = {
     MPWindowType.availableScraps,
+    MPWindowType.changeImage,
     MPWindowType.commandOptions,
     MPWindowType.lineSegmentOptions,
     MPWindowType.lineSegmentTypes,
@@ -173,7 +178,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   void _hideOverlayWindow(MPWindowType type) {
     if (_isAutoDismissWindowOpen) {
-      /// Is there still an auto dismmisable overlay window open?
+      /// Is there still an auto dismissable overlay window open?
       bool autoDismiss = false;
 
       for (MPWindowType autoDismissType in autoDismissOverlayWindowTypes) {
@@ -333,7 +338,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     if (context == null) {
       throw StateError(
-          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showPLATypeOverlayWindow().");
+        "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showPLATypeOverlayWindow().",
+      );
     }
 
     Overlay.of(context, rootOverlay: true)

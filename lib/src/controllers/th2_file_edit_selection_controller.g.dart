@@ -541,6 +541,19 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void setImageVisibility(int imageMPID, bool isVisible) {
+    final _$actionInfo =
+        _$TH2FileEditSelectionControllerBaseActionController.startAction(
+            name: 'TH2FileEditSelectionControllerBase.setImageVisibility');
+    try {
+      return super.setImageVisibility(imageMPID, isVisible);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

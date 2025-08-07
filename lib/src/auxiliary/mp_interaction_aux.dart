@@ -158,25 +158,23 @@ class MPInteractionAux {
     widgetsList.add(newWidget);
   }
 
-  static Offset getScrapsButtonOuterAnchor(
+  static Offset getButtonOuterAnchor(
+    MPGlobalKeyWidgetType buttonType,
     TH2FileEditController th2FileEditController,
   ) {
-    Offset outerAnchorPosition = Offset.zero;
-
-    final GlobalKey changeScrapButtonGlobalKey = th2FileEditController
-        .overlayWindowController
-        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
-    final Rect? changeScrapButtonBoundingBox =
-        MPInteractionAux.getWidgetRectFromGlobalKey(
-      widgetGlobalKey: changeScrapButtonGlobalKey,
+    final GlobalKey buttonGlobalKey = th2FileEditController
+        .overlayWindowController.globalKeyWidgetKeyByType[buttonType]!;
+    final Rect? buttonBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
+      widgetGlobalKey: buttonGlobalKey,
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
     );
+    final Offset outerAnchorPosition = (buttonBoundingBox == null)
+        ? Offset.zero
+        : Offset(
+            buttonBoundingBox.left - mpButtonSpace,
+            buttonBoundingBox.center.dy,
+          );
 
-    if (changeScrapButtonBoundingBox != null) {
-      outerAnchorPosition = Offset(
-          changeScrapButtonBoundingBox.left - mpButtonSpace,
-          changeScrapButtonBoundingBox.center.dy);
-    }
     return outerAnchorPosition;
   }
 

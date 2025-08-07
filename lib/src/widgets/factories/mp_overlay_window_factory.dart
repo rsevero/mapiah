@@ -6,9 +6,11 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/widgets/mp_available_images_widget.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_id_option_widget.dart';
 import 'package:mapiah/src/widgets/mp_line_segment_options_edit_overlay_window_widget.dart';
@@ -60,12 +62,24 @@ class MPOverlayWindowFactory {
 
     switch (type) {
       case MPWindowType.availableScraps:
-        outerAnchorPosition = MPInteractionAux.getScrapsButtonOuterAnchor(
+        outerAnchorPosition = MPInteractionAux.getButtonOuterAnchor(
+          MPGlobalKeyWidgetType.changeScrapButton,
           th2FileEditController,
         );
 
         overlayWindowWidget = MPAvailableScrapsWidget(
           key: ValueKey("MPAvailableScrapsWidget|$thFileMPID"),
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+        );
+      case MPWindowType.changeImage:
+        outerAnchorPosition = MPInteractionAux.getButtonOuterAnchor(
+          MPGlobalKeyWidgetType.changeImageButton,
+          th2FileEditController,
+        );
+
+        overlayWindowWidget = MPAvailableImagesWidget(
+          key: ValueKey("MPAvailableImagesWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
         );

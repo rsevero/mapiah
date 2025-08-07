@@ -1353,6 +1353,16 @@
     "description": "The title for the change active scrap dialog",
     "type": "text"
   },
+  "th2FileEditPageChangeImageTitle": "Change images",
+  "@th2FileEditPageChangeImageTitle": {
+    "description": "The title for the change image dialog",
+    "type": "text"
+  },
+  "th2FileEditPageChangeImageTool": "Change image (Alt+I)",
+  "@th2FileEditPageChangeImageTool": {
+    "description": "The label for the change image tool button",
+    "type": "text"
+  },
   "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
   "@th2FileEditPageEmptySelectionStatusBarMessage": {
     "description": "The status bar message for the empty selection",
