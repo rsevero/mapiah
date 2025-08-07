@@ -72,6 +72,18 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 onChanged: (bool? value) {
                                   _imageVisibilityChanged(image.mpID, value);
                                 },
+                                checkColor:
+                                    Theme.of(context).colorScheme.onSurface,
+                                side: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  width: 2,
+                                ),
+                                fillColor: WidgetStateProperty.all(
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest,
+                                ),
                               ),
                               Expanded(
                                 child: Text(image.filename),
