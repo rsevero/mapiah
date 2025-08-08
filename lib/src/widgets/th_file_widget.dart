@@ -174,16 +174,34 @@ class THFileWidget extends StatelessWidget {
                   Positioned(
                     bottom: 32,
                     left: 16,
-                    child: Observer(
-                      builder: (_) => Text(
-                        'Mouse Position: (x: ${th2FileEditController.mousePosition.dx.toStringAsFixed(1)}, y: ${th2FileEditController.mousePosition.dy.toStringAsFixed(1)})',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    child: Observer(builder: (_) {
+                      final Offset screenPosition =
+                          th2FileEditController.mousePosition;
+                      final Offset canvasPosition = th2FileEditController
+                          .offsetScreenToCanvas(screenPosition);
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Mouse Screen Position: (x: ${screenPosition.dx.toStringAsFixed(1)}, y: ${screenPosition.dy.toStringAsFixed(1)})',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Mouse Canvas Position: (x: ${canvasPosition.dx.toStringAsFixed(2)}, y: ${canvasPosition.dy.toStringAsFixed(2)})',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
                   ),
               ],
             ),
