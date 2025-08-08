@@ -94,7 +94,7 @@ class THDoublePart extends THPart {
 
     final int dotPosition = valueString.indexOf(thDecimalSeparator);
 
-    _decimalPositions =
+    decimalPositions =
         (dotPosition > 0) ? valueString.length - (dotPosition + 1) : 0;
   }
 

@@ -45,6 +45,15 @@ class MPNumericAux {
   }
 
   static String doubleToString(double value, int decimalPositions) {
+    /// Adapted from https://stackoverflow.com/a/67497099/11754455
+    if (decimalPositions > 0) {
+      if (value < 0) {
+        value = nextDown(value);
+      } else {
+        value = nextUp(value);
+      }
+    }
+
     final String valueString = value.toStringAsFixed(decimalPositions);
 
     return removeTrailingZeros(valueString);

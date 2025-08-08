@@ -998,8 +998,7 @@ endscrap
         'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap U23-U28 -projection plan -scale [ -128 -2644 3414 -2644 0 0 \
-    89.96680000000001 0 m ]
+scrap U23-U28 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.9668 0 m ]
   point 2311 -1386 u:brokenstal -scale xs
 endscrap
 ''',
