@@ -66,6 +66,18 @@ class MPGeneralController {
     return createdController;
   }
 
+  void renameFileController({
+    required String oldFilename,
+    required String newFilename,
+  }) {
+    if (_t2hFileEditControllers.containsKey(oldFilename)) {
+      final TH2FileEditController controller =
+          _t2hFileEditControllers.remove(oldFilename)!;
+
+      _t2hFileEditControllers[newFilename] = controller;
+    }
+  }
+
   void removeFileController({required String filename}) {
     if (_t2hFileEditControllers.containsKey(filename)) {
       _t2hFileEditControllers.remove(filename);

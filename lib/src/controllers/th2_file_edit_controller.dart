@@ -960,6 +960,10 @@ abstract class TH2FileEditControllerBase with Store {
     );
 
     if (filePath != null) {
+      mpLocator.mpGeneralController.renameFileController(
+        oldFilename: _thFile.filename,
+        newFilename: filePath,
+      );
       _thFile.filename = filePath;
 
       String directoryPath = p.dirname(filePath);
