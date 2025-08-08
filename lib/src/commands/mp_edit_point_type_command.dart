@@ -65,7 +65,7 @@ class MPEditPointTypeCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPEditPointTypeCommand copyWith({
     int? pointMPID,
     THPointType? newPointType,
     String? originalLineInTH2File,

@@ -47,7 +47,7 @@ class MPAddPointCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPAddPointCommand copyWith({
     THPoint? newPoint,
     MPCommandDescriptionType? descriptionType,
   }) {

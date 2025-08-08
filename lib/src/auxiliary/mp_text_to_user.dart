@@ -294,6 +294,9 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addPoint] =
         localizations.mpCommandDescriptionAddPoint;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.addXTherionImageInsertConfig] =
+        localizations.mpCommandDescriptionAddXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreasType] =
         localizations.mpCommandDescriptionEditAreasType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreaType] =
@@ -361,6 +364,9 @@ class MPTextToUser {
         localizations.mpCommandDescriptionRemoveOptionFromElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removePoint] =
         localizations.mpCommandDescriptionRemovePoint;
+    _commandDescriptionTypeAsString[
+            MPCommandDescriptionType.removeXTherionImageInsertConfig] =
+        localizations.mpCommandDescriptionRemoveXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[
             MPCommandDescriptionType.setOptionToElement] =
         localizations.mpCommandDescriptionSetOptionToElement;

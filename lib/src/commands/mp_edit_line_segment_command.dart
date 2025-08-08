@@ -56,7 +56,7 @@ class MPEditLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPEditLineSegmentCommand copyWith({
     THLineSegment? originalLineSegment,
     THLineSegment? newLineSegment,
     String? originalLineInTH2File,

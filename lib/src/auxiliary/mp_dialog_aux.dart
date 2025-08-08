@@ -8,20 +8,80 @@ import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:path/path.dart' as p;
 
 class MPDialogAux {
-  static bool _isFilePickerOpen = false;
+  static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
+    for (var type in MPFilePickerType.values) type: false,
+  };
+
+  static Future<String> pickImageFile(BuildContext context) async {
+    if (_isFilePickerOpen[MPFilePickerType.image] == true) {
+      return '';
+    }
+
+    _isFilePickerOpen[MPFilePickerType.image] = true;
+
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle: mpLocator.appLocalizations.th2FilePickSelectImageFile,
+        type: FileType.custom,
+        allowedExtensions: [
+          'gif',
+          'GIF',
+          'jpeg',
+          'JPEG',
+          'jpg',
+          'JPG',
+          'png',
+          'PNG',
+          'pnm',
+          'PNM',
+          'ppm',
+          'PPM',
+          'xvi',
+          'XVI',
+        ],
+        lockParentWindow: true,
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+                ? (kDebugMode ? thDebugPath : './')
+                : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+
+      if (result != null) {
+        String? pickedFilePath = result.files.single.path;
+
+        if (pickedFilePath == null) {
+          return '';
+        }
+
+        mpLocator.mpGeneralController.lastAccessedDirectory =
+            p.dirname(pickedFilePath);
+
+        return pickedFilePath;
+      } else {
+        mpLocator.mpLog.i('No file selected.');
+      }
+    } catch (e) {
+      mpLocator.mpLog.e('Error picking file', error: e);
+    } finally {
+      _isFilePickerOpen[MPFilePickerType.image] = false;
+    }
+
+    return '';
+  }
 
   static void pickTH2File(BuildContext context) async {
-    if (_isFilePickerOpen) {
+    if (_isFilePickerOpen[MPFilePickerType.th2] == true) {
       return;
     }
 
-    _isFilePickerOpen = true;
+    _isFilePickerOpen[MPFilePickerType.th2] = true;
 
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2', 'TH2'],
+        lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
                 ? (kDebugMode ? thDebugPath : './')
@@ -74,7 +134,7 @@ class MPDialogAux {
     } catch (e) {
       mpLocator.mpLog.e('Error picking file', error: e);
     } finally {
-      _isFilePickerOpen = false;
+      _isFilePickerOpen[MPFilePickerType.th2] = false;
     }
   }
 
@@ -91,4 +151,9 @@ class MPDialogAux {
       ),
     );
   }
+}
+
+enum MPFilePickerType {
+  image,
+  th2,
 }

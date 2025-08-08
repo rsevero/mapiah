@@ -58,7 +58,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPAddLineSegmentCommand copyWith({
     THLineSegment? newLineSegment,
     int? beforeLineSegmentMPID,
     bool makeBeforeLineSegmentMPIDNull = false,

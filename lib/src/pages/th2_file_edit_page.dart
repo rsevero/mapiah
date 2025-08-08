@@ -179,15 +179,15 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           ),
           bottomNavigationBar: BottomAppBar(
             height: 40,
-            color: Theme.of(context).colorScheme.secondary,
+            color: colorScheme.secondary,
             child: Observer(
               builder: (_) {
                 final TextStyle statusBarTextStyle = TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
+                  color: colorScheme.onSecondary,
                   fontStyle: FontStyle.italic,
                 );
                 final TextStyle statusBarInfoStyle = TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
+                  color: colorScheme.onSecondary,
                 );
 
                 return Row(
@@ -247,6 +247,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }) {
     final String typeName = type.name;
     final String heroTag = 'add_element_$typeName';
+    final String buttonIcon = 'assets/icons/add_element-$typeName.png';
     final bool isPressedButton =
         th2FileEditController.isAddElementMode && !isTypeButton;
     late String tooltip;
@@ -272,7 +273,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         onPressed: () => _onAddElementButtonPressed(type),
         tooltip: tooltip,
         child: Image.asset(
-          'assets/icons/add_element-$typeName.png',
+          buttonIcon,
           width: thFloatingActionIconSize,
           height: thFloatingActionIconSize,
           color: isPressedButton

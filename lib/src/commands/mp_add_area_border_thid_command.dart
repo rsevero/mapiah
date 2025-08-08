@@ -48,7 +48,7 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPAddAreaBorderTHIDCommand copyWith({
     THAreaBorderTHID? newAreaBorderTHID,
     MPCommandDescriptionType? descriptionType,
   }) {

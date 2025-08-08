@@ -64,7 +64,7 @@ class MPEditAreaTypeCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPEditAreaTypeCommand copyWith({
     int? areaBorderTHIDMPID,
     THAreaType? newAreaType,
     String? originalLineInTH2File,

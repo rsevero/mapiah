@@ -11,7 +11,15 @@ class THXTherionImageInsertConfig extends THElement {
 
   // Field names gotten from XTherion me.imgs.tcl file
   THDoublePart xx;
-  THDoublePart vsb;
+  // vsb in xTherion is the per-image visibility/state flag:
+  // * 1 shows and drives redraw/rescan;
+  // * 0 hides and skips heavy work;
+  // * negative values denote “failed to load” placeholders to be safely skipped
+  //   until an automatic refresh reconstructs and restores the intended 0/1
+  //   visibility. They are produced subtracting 2 from the original vsb value
+  //   on load failure and adding 2 on load success.
+  // In Mapiah it is converted to 'isVisible' as a simple bool.
+  bool isVisible;
   THDoublePart igamma;
   THDoublePart yy;
   String xviRoot;
@@ -20,9 +28,6 @@ class THXTherionImageInsertConfig extends THElement {
   String xData;
   bool xImage;
   bool isXVI;
-
-  /// Mapped support fields
-  bool isVisible;
 
   /// Non-mapped support fileds
   XVIFile? _xviFile;
@@ -36,7 +41,7 @@ class THXTherionImageInsertConfig extends THElement {
     super.sameLineComment,
     required this.filename,
     required this.xx,
-    required this.vsb,
+    required this.isVisible,
     required this.igamma,
     required this.yy,
     required this.xviRoot,
@@ -45,28 +50,45 @@ class THXTherionImageInsertConfig extends THElement {
     required this.xData,
     required this.xImage,
     required this.isXVI,
-    required this.isVisible,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
+
+  THXTherionImageInsertConfig.fromString({
+    required super.parentMPID,
+    required this.filename,
+    required String xx,
+    String vsb = '1',
+    String igamma = '1.0',
+    required String yy,
+    this.xviRoot = '',
+    this.iidx = 0,
+    this.imgx = '',
+    this.xData = '',
+    this.xImage = false,
+    super.originalLineInTH2File = '',
+  })  : xx = THDoublePart.fromString(valueString: xx),
+        isVisible = (int.tryParse(vsb) ?? 1) > 0,
+        igamma = THDoublePart.fromString(valueString: igamma),
+        yy = THDoublePart.fromString(valueString: yy),
+        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+        super.addToParent();
 
   THXTherionImageInsertConfig({
     required super.parentMPID,
     required this.filename,
-    required String xx,
-    required String vsb,
-    required String igamma,
-    required String yy,
-    required this.xviRoot,
-    required this.iidx,
-    required this.imgx,
-    required this.xData,
-    required this.xImage,
+    required this.xx,
     this.isVisible = true,
+    THDoublePart? igamma,
+    required this.yy,
+    this.xviRoot = '',
+    this.iidx = 0,
+    this.imgx = '',
+    this.xData = '',
+    this.xImage = false,
     super.originalLineInTH2File = '',
-  })  : xx = THDoublePart.fromString(valueString: xx),
-        vsb = THDoublePart.fromString(valueString: vsb),
-        igamma = THDoublePart.fromString(valueString: igamma),
-        yy = THDoublePart.fromString(valueString: yy),
+  })  : igamma = (igamma == null)
+            ? THDoublePart.fromString(valueString: '1.0')
+            : igamma,
         isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
         super.addToParent();
 
@@ -78,17 +100,16 @@ class THXTherionImageInsertConfig extends THElement {
     return {
       ...super.toMap(),
       'filename': filename,
-      'xx': xx,
-      'vsb': vsb,
-      'igamma': igamma,
-      'yy': yy,
+      'xx': xx.toMap(),
+      'isVisible': isVisible,
+      'igamma': igamma.toMap(),
+      'yy': yy.toMap(),
       'xviRoot': xviRoot,
       'iidx': iidx,
       'imgx': imgx,
       'xData': xData,
       'xImage': xImage,
       'isXVI': isXVI,
-      'isVisible': isVisible,
     };
   }
 
@@ -99,7 +120,7 @@ class THXTherionImageInsertConfig extends THElement {
       sameLineComment: map['sameLineComment'],
       filename: map['filename'],
       xx: THDoublePart.fromMap(map['xx']),
-      vsb: THDoublePart.fromMap(map['vsb']),
+      isVisible: map['isVisible'],
       igamma: THDoublePart.fromMap(map['igamma']),
       yy: THDoublePart.fromMap(map['yy']),
       xviRoot: map['xviRoot'],
@@ -108,7 +129,6 @@ class THXTherionImageInsertConfig extends THElement {
       xData: map['xData'],
       xImage: map['xImage'],
       isXVI: map['isXVI'],
-      isVisible: map['isVisible'],
       originalLineInTH2File: map['originalLineInTH2File'],
     );
   }
@@ -124,7 +144,7 @@ class THXTherionImageInsertConfig extends THElement {
     bool makeSameLineCommentNull = false,
     String? filename,
     THDoublePart? xx,
-    THDoublePart? vsb,
+    bool? isVisible,
     THDoublePart? igamma,
     THDoublePart? yy,
     String? xviRoot,
@@ -133,7 +153,6 @@ class THXTherionImageInsertConfig extends THElement {
     String? xData,
     bool? xImage,
     bool? isXVI,
-    bool? isVisible,
     String? originalLineInTH2File,
   }) {
     return THXTherionImageInsertConfig.forCWJM(
@@ -144,7 +163,7 @@ class THXTherionImageInsertConfig extends THElement {
           : (sameLineComment ?? this.sameLineComment),
       filename: filename ?? this.filename,
       xx: xx ?? this.xx,
-      vsb: vsb ?? this.vsb,
+      isVisible: isVisible ?? this.isVisible,
       igamma: igamma ?? this.igamma,
       yy: yy ?? this.yy,
       xviRoot: xviRoot ?? this.xviRoot,
@@ -153,7 +172,6 @@ class THXTherionImageInsertConfig extends THElement {
       xData: xData ?? this.xData,
       xImage: xImage ?? this.xImage,
       isXVI: isXVI ?? this.isXVI,
-      isVisible: isVisible ?? this.isVisible,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
     );
@@ -167,7 +185,7 @@ class THXTherionImageInsertConfig extends THElement {
 
     return filename == other.filename &&
         xx == other.xx &&
-        vsb == other.vsb &&
+        isVisible == other.isVisible &&
         igamma == other.igamma &&
         yy == other.yy &&
         xviRoot == other.xviRoot &&
@@ -175,8 +193,7 @@ class THXTherionImageInsertConfig extends THElement {
         imgx == other.imgx &&
         xData == other.xData &&
         xImage == other.xImage &&
-        isXVI == other.isXVI &&
-        isVisible == other.isVisible;
+        isXVI == other.isXVI;
   }
 
   @override
@@ -185,7 +202,7 @@ class THXTherionImageInsertConfig extends THElement {
       Object.hash(
         filename,
         xx,
-        vsb,
+        isVisible,
         igamma,
         yy,
         xviRoot,
@@ -194,7 +211,6 @@ class THXTherionImageInsertConfig extends THElement {
         xData,
         xImage,
         isXVI,
-        isVisible,
       );
 
   @override

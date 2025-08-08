@@ -12,6 +12,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -20,6 +21,7 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mobx/mobx.dart';
+import 'package:path/path.dart' as p;
 
 part 'th2_file_edit_element_edit_controller.g.dart';
 
@@ -940,6 +942,27 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.selectionController
         .updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  void addImage(String imagePath) {
+    final String relativeImagePath = p.relative(
+      imagePath,
+      from: p.dirname(_thFile.filename),
+    );
+    final Rect fileBoundingBox = _thFile.getBoundingBox(_th2FileEditController);
+    final THXTherionImageInsertConfig newImage = THXTherionImageInsertConfig(
+      parentMPID: _thFile.mpID,
+      filename: relativeImagePath,
+      xx: THDoublePart(value: fileBoundingBox.left),
+      yy: THDoublePart(value: fileBoundingBox.bottom),
+    );
+    final MPAddXTherionImageInsertConfigCommand addImageCommand =
+        MPAddXTherionImageInsertConfigCommand(
+      newImageInsertConfig: newImage,
+    );
+
+    _th2FileEditController.execute(addImageCommand);
+    _th2FileEditController.triggerImagesRedraw();
   }
 }
 

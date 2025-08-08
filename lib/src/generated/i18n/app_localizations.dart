@@ -374,6 +374,12 @@ abstract class AppLocalizations {
   /// **'Add point'**
   String get mpCommandDescriptionAddPoint;
 
+  /// The description for the add XTherion image insert config command
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get mpCommandDescriptionAddXTherionImageInsertConfig;
+
   /// The description for the edit areas type command
   ///
   /// In en, this message translates to:
@@ -547,6 +553,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove point'**
   String get mpCommandDescriptionRemovePoint;
+
+  /// The description for the remove XTherion image insert config command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove image'**
+  String get mpCommandDescriptionRemoveXTherionImageInsertConfig;
 
   /// The description for the set option command
   ///
@@ -1664,6 +1676,12 @@ abstract class AppLocalizations {
   /// **'Add element'**
   String get th2FileEditPageAddElementOptions;
 
+  /// The label for the add image button
+  ///
+  /// In en, this message translates to:
+  /// **'Add image (Ctrl+Alt+I)'**
+  String get th2FileEditPageAddImageButton;
+
   /// The label for the add line button
   ///
   /// In en, this message translates to:
@@ -1852,6 +1870,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zoom to selection (2)'**
   String get th2FileEditPageZoomToSelection;
+
+  /// The label for the image file selection dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Select an image file'**
+  String get th2FilePickSelectImageFile;
 
   /// The label for the TH2 file selection dialog
   ///

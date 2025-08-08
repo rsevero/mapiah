@@ -12,6 +12,21 @@ class MPNumericAux {
   static RegExp endingZeroes = RegExp(r'0*$');
   static RegExp endingDot = RegExp(r'\.$');
 
+  // Adapted from https://github.com/Ephenodrom/Dart-Basic-Utils/blob/master/lib/src/MathUtils.dart
+  static double round(double value, int decimals) {
+    final double magnitude = math.pow(10.0, decimals).toDouble();
+
+    return (value * magnitude).round() / magnitude;
+  }
+
+  static int getMinimumNumberOfDecimals(double value) {
+    String valueString = value.toStringAsFixed(thMaxDecimalPositions);
+
+    valueString = removeTrailingZeros(valueString);
+
+    return valueString.contains('.') ? valueString.split('.')[1].length : 0;
+  }
+
   static THDoublePart fromString(String valueString) {
     valueString = valueString.trim();
 
@@ -30,13 +45,6 @@ class MPNumericAux {
   }
 
   static String doubleToString(double value, int decimalPositions) {
-    /// Adapted from https://stackoverflow.com/a/67497099/11754455
-    if (value < 0) {
-      value = nextDown(value);
-    } else {
-      value = nextUp(value);
-    }
-
     final String valueString = value.toStringAsFixed(decimalPositions);
 
     return removeTrailingZeros(valueString);
@@ -49,6 +57,7 @@ class MPNumericAux {
       // Remove the decimal point if it is the last character
       valueString = valueString.replaceAll(endingDot, '');
     }
+
     return valueString;
   }
 

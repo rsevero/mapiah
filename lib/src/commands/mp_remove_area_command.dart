@@ -50,7 +50,7 @@ class MPRemoveAreaCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPRemoveAreaCommand copyWith({
     int? areaMPID,
     MPCommandDescriptionType? descriptionType,
   }) {

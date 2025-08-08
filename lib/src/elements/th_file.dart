@@ -601,7 +601,7 @@ class THFile
     return element;
   }
 
-  THXTherionImageInsertConfig imageByMPID(int mpID) {
+  THXTherionImageInsertConfig xtherionImageInsertConfigByMPID(int mpID) {
     if (!_elementByMPID.containsKey(mpID)) {
       throw THNoElementByMPIDException(filename, mpID);
     }

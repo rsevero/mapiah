@@ -53,7 +53,7 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPRemoveAreaBorderTHIDCommand copyWith({
     int? areaBorderTHIDMPID,
     MPCommandDescriptionType? descriptionType,
   }) {

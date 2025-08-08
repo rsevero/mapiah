@@ -162,6 +162,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddPoint => 'Add point';
 
   @override
+  String get mpCommandDescriptionAddXTherionImageInsertConfig => 'Add image';
+
+  @override
   String get mpCommandDescriptionEditAreasType => 'Edit multiple areas type';
 
   @override
@@ -253,6 +256,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Remove point';
+
+  @override
+  String get mpCommandDescriptionRemoveXTherionImageInsertConfig =>
+      'Remove image';
 
   @override
   String get mpCommandDescriptionSetOptionToElement => 'Set option';
@@ -832,6 +839,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageAddElementOptions => 'Add element';
 
   @override
+  String get th2FileEditPageAddImageButton => 'Add image (Ctrl+Alt+I)';
+
+  @override
   String get th2FileEditPageAddLine => 'Add line (L)';
 
   @override
@@ -943,6 +953,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageZoomToSelection => 'Zoom to selection (2)';
+
+  @override
+  String get th2FilePickSelectImageFile => 'Select an image file';
 
   @override
   String get th2FilePickSelectTH2File => 'Select a TH2 file';

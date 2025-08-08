@@ -37,7 +37,6 @@ class MPRemovePointCommand extends MPCommand {
   ) {
     final THPoint originalPoint =
         th2FileEditController.thFile.pointByMPID(pointMPID);
-
     final MPCommand oppositeCommand = MPAddPointCommand(
       newPoint: originalPoint,
       descriptionType: descriptionType,
@@ -50,7 +49,7 @@ class MPRemovePointCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPRemovePointCommand copyWith({
     int? pointMPID,
     MPCommandDescriptionType? descriptionType,
   }) {

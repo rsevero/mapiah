@@ -72,7 +72,7 @@ class MPAddAreaCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPAddAreaCommand copyWith({
     THArea? newArea,
     MPCommand? addAreaTHIDsCommand,
     MPCommandDescriptionType? descriptionType,

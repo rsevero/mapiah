@@ -64,7 +64,7 @@ class MPEditLineTypeCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPEditLineTypeCommand copyWith({
     int? lineMPID,
     THLineType? newLineType,
     String? originalLineInTH2File,

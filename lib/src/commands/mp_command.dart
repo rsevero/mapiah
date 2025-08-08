@@ -18,11 +18,12 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
-part 'mp_add_area_command.dart';
 part 'mp_add_area_border_thid_command.dart';
+part 'mp_add_area_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
+part 'mp_add_xtherion_image_insert_config_command.dart';
 part 'mp_edit_area_type_command.dart';
 part 'mp_edit_line_segment_command.dart';
 part 'mp_edit_line_type_command.dart';
@@ -33,12 +34,13 @@ part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
 part 'mp_multiple_elements_command.dart';
-part 'mp_remove_area_command.dart';
 part 'mp_remove_area_border_thid_command.dart';
+part 'mp_remove_area_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
 part 'mp_remove_point_command.dart';
+part 'mp_remove_xtherion_image_insert_config_command.dart';
 part 'mp_set_option_to_element_command.dart';
 part 'types/mp_command_type.dart';
 
@@ -132,6 +134,8 @@ abstract class MPCommand {
         return MPAddLineSegmentCommand.fromMap(map);
       case MPCommandType.addPoint:
         return MPAddPointCommand.fromMap(map);
+      case MPCommandType.addXTherionImageInsertConfig:
+        return MPAddXTherionImageInsertConfigCommand.fromMap(map);
       case MPCommandType.editAreaType:
         return MPEditAreaTypeCommand.fromMap(map);
       case MPCommandType.editLineSegment:
@@ -164,6 +168,8 @@ abstract class MPCommand {
         return MPRemoveOptionFromElementCommand.fromMap(map);
       case MPCommandType.removePoint:
         return MPRemovePointCommand.fromMap(map);
+      case MPCommandType.removeXTherionImageInsertConfig:
+        return MPRemoveXTherionImageInsertConfigCommand.fromMap(map);
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
     }

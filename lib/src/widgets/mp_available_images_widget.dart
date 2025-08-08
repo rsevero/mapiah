@@ -1,10 +1,12 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
@@ -41,9 +43,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     final THFile thFile = th2FileEditController.thFile;
     final List<THXTherionImageInsertConfig> images =
         thFile.getImages().toList();
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return MPOverlayWindowWidget(
-      title: mpLocator.appLocalizations.th2FileEditPageChangeImageTitle,
+      title: appLocalizations.th2FileEditPageChangeImageTitle,
       overlayWindowType: MPOverlayWindowType.primary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: MPWidgetPositionType.centerRight,
@@ -91,10 +94,12 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                             ],
                           );
                         }),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: mpButtonSpace),
                       ElevatedButton(
-                        onPressed: _onAddImage,
-                        child: Text('Add image'),
+                        onPressed: () => _onPressedAddImage(context),
+                        child: Text(
+                          appLocalizations.th2FileEditPageAddImageButton,
+                        ),
                       ),
                     ],
                   );
@@ -114,8 +119,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     );
   }
 
-  void _onAddImage() {
-    // TODO: Implement image addition logic (e.g., open file picker, update model, etc.)
-    // You can call a method on th2FileEditController or show a dialog as needed.
+  void _onPressedAddImage(BuildContext context) async {
+    final String imagePath = await MPDialogAux.pickImageFile(context);
+
+    th2FileEditController.elementEditController.addImage(imagePath);
   }
 }

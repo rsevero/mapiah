@@ -9,9 +9,10 @@ class THDoublePart extends THPart {
   late final double _value;
   late final int _decimalPositions;
 
-  THDoublePart({required double value, required int decimalPositions}) {
-    _value = value;
-    this.decimalPositions = decimalPositions;
+  THDoublePart({required double value, int? decimalPositions})
+      : _value = value {
+    this.decimalPositions =
+        decimalPositions ?? MPNumericAux.getMinimumNumberOfDecimals(value);
   }
 
   THDoublePart.fromString({required String valueString}) {

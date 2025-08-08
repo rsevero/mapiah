@@ -982,7 +982,7 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('endarea').map((value) => [value]);
 
   /// xtherion config
-  Parser xtherionConfig() => (stringIgnoreCase('##XTHERION##').trim() &
+  Parser xtherionConfig() => (stringIgnoreCase(xTherionConfigID).trim() &
           (keyword() & any().plus().flatten().trim()))
       .map((value) => [value]);
 }

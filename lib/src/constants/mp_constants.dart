@@ -30,7 +30,7 @@ const String thIndentation = '  ';
 
 const int thMaxEncodingLength = 20;
 const int thMaxFileLineLength = 80;
-const int thMaxDecimalPositions = 6;
+const int thMaxDecimalPositions = 12;
 const int thDefaultDecimalPositions = 4;
 const int mpDefaultDecimalPositionsAzimuth = 1;
 
@@ -268,3 +268,4 @@ const String mpLicenseURL =
 
 const String xTherionImageInsertConfigID = 'xth_me_image_insert';
 const String mpXVIExtension = '.xvi';
+const String xTherionConfigID = '##XTHERION##';

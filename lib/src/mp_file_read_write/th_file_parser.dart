@@ -512,7 +512,7 @@ class THFileParser {
       xData = splitData[1];
     }
 
-    _currentElement = THXTherionImageInsertConfig(
+    _currentElement = THXTherionImageInsertConfig.fromString(
       parentMPID: _currentParentMPID,
       filename: filename,
       xx: xx,

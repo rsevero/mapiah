@@ -76,7 +76,7 @@ class MPAddLineCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPAddLineCommand copyWith({
     THLine? newLine,
     List<THElement>? lineChildren,
     Offset? lineStartScreenPosition,

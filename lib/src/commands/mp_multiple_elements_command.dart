@@ -401,7 +401,7 @@ class MPMultipleElementsCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPMultipleElementsCommand copyWith({
     List<MPCommand>? commandsList,
     MPMultipleElementsCommandCompletionType? completionType,
     MPCommandDescriptionType? descriptionType,

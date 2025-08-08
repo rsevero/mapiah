@@ -5,6 +5,7 @@ enum MPCommandDescriptionType {
   addLine,
   addLineSegment,
   addPoint,
+  addXTherionImageInsertConfig,
   editAreasType,
   editAreaType,
   editBezierCurve,
@@ -34,6 +35,7 @@ enum MPCommandDescriptionType {
   removeOptionFromElement,
   removeOptionFromElements,
   removePoint,
+  removeXTherionImageInsertConfig,
   setOptionToElement,
   setOptionToElements;
 
@@ -51,6 +53,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeLineSegment;
       case MPCommandDescriptionType.addPoint:
         return MPCommandDescriptionType.removePoint;
+      case MPCommandDescriptionType.addXTherionImageInsertConfig:
+        return MPCommandDescriptionType.removeXTherionImageInsertConfig;
       case MPCommandDescriptionType.removeArea:
         return MPCommandDescriptionType.addArea;
       case MPCommandDescriptionType.removeElements:
@@ -65,6 +69,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.setOptionToElements;
       case MPCommandDescriptionType.removePoint:
         return MPCommandDescriptionType.addPoint;
+      case MPCommandDescriptionType.removeXTherionImageInsertConfig:
+        return MPCommandDescriptionType.addXTherionImageInsertConfig;
       case MPCommandDescriptionType.setOptionToElement:
         return MPCommandDescriptionType.removeOptionFromElement;
       default:

@@ -63,7 +63,7 @@ class MPRemoveLineCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPRemoveLineCommand copyWith({
     int? lineMPID,
     MPCommandDescriptionType? descriptionType,
   }) {

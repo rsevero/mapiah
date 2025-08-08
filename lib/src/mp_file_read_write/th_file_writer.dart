@@ -106,7 +106,9 @@ class THFileWriter {
       final THXTherionConfig xTC = thElement as THXTherionConfig;
 
       asString =
-          "##XTHERION## ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
+          "$xTherionConfigID ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
+    } else {
+      asString += _lineEnding;
     }
 
     return asString;
@@ -118,12 +120,15 @@ class THFileWriter {
     if (asString.isEmpty) {
       final THXTherionImageInsertConfig xTIIC =
           thElement as THXTherionImageInsertConfig;
-      final String xx = "${xTIIC.xx} ${xTIIC.vsb} ${xTIIC.igamma}";
+      final String xx =
+          "${xTIIC.xx} ${xTIIC.isVisible ? '1' : '0'} ${xTIIC.igamma}";
       final String yy = "${xTIIC.yy} ${xTIIC.xviRoot}";
       final String imgx = "${xTIIC.imgx} ${xTIIC.xData}";
 
       asString =
-          """##XTHERION $xTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
+          """$xTherionConfigID $xTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
+    } else {
+      asString += _lineEnding;
     }
 
     return asString;

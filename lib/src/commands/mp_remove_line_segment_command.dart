@@ -55,7 +55,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
   }
 
   @override
-  MPCommand copyWith({
+  MPRemoveLineSegmentCommand copyWith({
     THLineSegment? lineSegment,
     MPCommandDescriptionType? descriptionType,
   }) {

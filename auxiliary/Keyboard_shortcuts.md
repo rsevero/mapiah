@@ -3,6 +3,7 @@
 | Function                                        | Shortcut                     |
 | ----------------------------------------------- | ---------------------------- |
 | Add line segment between selected line segments | /                            |
+| Add image                                       | Ctrl+Alt+I                   |
 | Change active scrap                             | Alt+C                        |
 | Change images                                   | Alt+I                        |
 | Create area                                     | A                            |
