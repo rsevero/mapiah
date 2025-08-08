@@ -94,8 +94,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  Icons.delete_outline,
-                                  color: colorScheme.error,
+                                  Icons.delete_outline_rounded,
+                                  color: colorScheme.onSecondary,
                                 ),
                                 tooltip: appLocalizations
                                     .th2FileEditPageDeleteImageButton,
