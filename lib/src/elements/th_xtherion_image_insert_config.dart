@@ -7,7 +7,7 @@ part of 'th_element.dart';
 /// * PNM/PPM
 /// * XVI
 class THXTherionImageInsertConfig extends THElement {
-  String filename;
+  final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file
   THDoublePart xx;
@@ -91,6 +91,49 @@ class THXTherionImageInsertConfig extends THElement {
             : igamma,
         isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
         super.addToParent();
+
+  THXTherionImageInsertConfig.adjustPosition({
+    required super.parentMPID,
+    required this.filename,
+    required this.xx,
+    this.isVisible = true,
+    THDoublePart? igamma,
+    required this.yy,
+    this.xviRoot = '',
+    this.iidx = 0,
+    this.imgx = '',
+    this.xData = '',
+    this.xImage = false,
+    super.originalLineInTH2File = '',
+    required TH2FileEditController th2FileEditController,
+  })  : igamma = (igamma == null)
+            ? THDoublePart.fromString(valueString: '1.0')
+            : igamma,
+        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+        super.addToParent() {
+    if (isXVI) {
+      final XVIFile? xviFile = getXVIFile(th2FileEditController);
+
+      if (xviFile == null) {
+        throw Exception(
+          'THXTherionImageInsertConfig.adjustPosition: XVI file could not be loaded for image insert config: $filename',
+        );
+      }
+
+      final XVIGrid grid = xviFile.grid;
+
+      /// Not including:
+      ///
+      /// (grid.ngx.value * grid.gxy.value)
+      ///
+      /// in xviHeight so the top left corner of the grid always matches the top
+      /// left corner of the drawing even if the grid is vertically screwed.
+      final double xviHeight = grid.ngy.value * grid.gyy.value;
+
+      yy = yy.copyWith(value: yy.value - xviHeight);
+      _fixXVIRoot();
+    }
+  }
 
   @override
   THElementType get elementType => THElementType.xTherionImageInsertConfig;
@@ -248,12 +291,12 @@ class THXTherionImageInsertConfig extends THElement {
 
   /// Implementation of xth_me_imgs_set_root from me_imgs.tcl xTherion.
   void _fixXVIRoot() {
+    _xviRootedXX = xx.value;
+    _xviRootedYY = yy.value;
+
     if (!isXVI || xviRoot.isEmpty) {
       return;
     }
-
-    _xviRootedXX = xx.value;
-    _xviRootedYY = yy.value;
 
     if (_xviFile == null) {
       return;

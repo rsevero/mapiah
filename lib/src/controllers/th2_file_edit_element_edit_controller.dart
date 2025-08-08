@@ -950,11 +950,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       from: p.dirname(_thFile.filename),
     );
     final Rect fileBoundingBox = _thFile.getBoundingBox(_th2FileEditController);
-    final THXTherionImageInsertConfig newImage = THXTherionImageInsertConfig(
+    final THXTherionImageInsertConfig newImage =
+        THXTherionImageInsertConfig.adjustPosition(
       parentMPID: _thFile.mpID,
       filename: relativeImagePath,
       xx: THDoublePart(value: fileBoundingBox.left),
+      // For Flutter's canvas, the top is 0 and positive values of Y go down but
+      // in the TH2 format, the top is the maximum Y value.
+      // That's why Flutter calls the maximum Y value "bottom" and despite being
+      // called *bottom*, we use it to align the new image to the *top* left
+      // point of the current drawing.
       yy: THDoublePart(value: fileBoundingBox.bottom),
+      th2FileEditController: _th2FileEditController,
     );
     final MPAddXTherionImageInsertConfigCommand addImageCommand =
         MPAddXTherionImageInsertConfigCommand(

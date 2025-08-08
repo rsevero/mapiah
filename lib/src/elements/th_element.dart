@@ -24,6 +24,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
+import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';

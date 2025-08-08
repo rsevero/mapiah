@@ -70,6 +70,8 @@ Version 0.3
 [ ] - Support XVI images
 [ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style
 [ ] - Properly present lines with partial subtypes
+[ ] - Manually edit position of points
+[ ] - Manually edit position of end and control points in line segments
 
 Version 0.4
 [ ] - Open multiple files simultaneously
