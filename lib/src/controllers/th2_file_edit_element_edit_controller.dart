@@ -971,6 +971,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.execute(addImageCommand);
     _th2FileEditController.triggerImagesRedraw();
   }
+
+  void removeImage(int mpID) {
+    final MPRemoveXTherionImageInsertConfigCommand removeImageCommand =
+        MPRemoveXTherionImageInsertConfigCommand(
+      xtherionImageInsertConfigMPID: mpID,
+    );
+
+    _th2FileEditController.execute(removeImageCommand);
+    _th2FileEditController.triggerImagesRedraw();
+  }
 }
 
 class MPTypeUsed {

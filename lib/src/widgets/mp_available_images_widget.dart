@@ -41,8 +41,6 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   @override
   Widget build(BuildContext context) {
     final THFile thFile = th2FileEditController.thFile;
-    final List<THXTherionImageInsertConfig> images =
-        thFile.getImages().toList();
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return MPOverlayWindowWidget(
@@ -56,6 +54,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
         Observer(
           builder: (_) {
             th2FileEditController.redrawTriggerImages;
+
+            final Iterable<THXTherionImageInsertConfig> images =
+                thFile.getImages();
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -91,6 +92,16 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                               Expanded(
                                 child: Text(name),
                               ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.delete_outline,
+                                  color: colorScheme.error,
+                                ),
+                                tooltip: appLocalizations
+                                    .th2FileEditPageDeleteImageButton,
+                                onPressed: () =>
+                                    _onPressedRemoveImage(image.mpID),
+                              ),
                             ],
                           );
                         }),
@@ -123,5 +134,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     final String imagePath = await MPDialogAux.pickImageFile(context);
 
     th2FileEditController.elementEditController.addImage(imagePath);
+  }
+
+  void _onPressedRemoveImage(int imageMPID) {
+    th2FileEditController.elementEditController.removeImage(imageMPID);
   }
 }

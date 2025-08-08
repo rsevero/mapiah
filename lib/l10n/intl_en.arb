@@ -1378,6 +1378,11 @@
     "description": "The label for the change image tool button",
     "type": "text"
   },
+  "th2FileEditPageDeleteImageButton": "Delete image (Del)",
+  "@th2FileEditPageDeleteImageButton": {
+    "description": "The label for the delete image button",
+    "type": "text"
+  },
   "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
   "@th2FileEditPageEmptySelectionStatusBarMessage": {
     "description": "The status bar message for the empty selection",

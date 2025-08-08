@@ -871,6 +871,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeImageTool => 'Change image (Alt+I)';
 
   @override
+  String get th2FileEditPageDeleteImageButton => 'Delete image (Del)';
+
+  @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';
 
   @override

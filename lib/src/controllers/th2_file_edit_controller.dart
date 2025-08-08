@@ -334,25 +334,25 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @readonly
-  int _redrawTriggerSelectedElementsListChanged = 0;
+  int _redrawTriggerSelectedElementsListChanged = mpMinimumInt;
 
   @readonly
-  int _redrawTriggerSelectedElements = 0;
+  int _redrawTriggerSelectedElements = mpMinimumInt;
 
   @readonly
-  int _redrawTriggerNonSelectedElements = 0;
+  int _redrawTriggerNonSelectedElements = mpMinimumInt;
 
   @readonly
-  int _redrawTriggerImages = 0;
+  int _redrawTriggerImages = mpMinimumInt;
 
   @readonly
-  int _redrawTriggerNewLine = 0;
+  int _redrawTriggerNewLine = mpMinimumInt;
 
   @readonly
-  int _redrawTriggerEditLine = 0;
+  int _redrawTriggerEditLine = mpMinimumInt;
 
   @readonly
-  int _redrawTriggerOptionsList = 0;
+  int _redrawTriggerOptionsList = mpMinimumInt;
 
   @readonly
   Offset _mousePosition = Offset.zero;

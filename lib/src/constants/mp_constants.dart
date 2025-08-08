@@ -50,6 +50,8 @@ const double thCanvasRoundFactor = 25.0;
 const double mpEpsilon = 2.220446049250313e-16;
 const double mpPositiveEpsilonFactor = 1.0 + mpEpsilon;
 const double mpNegativeEpsilonFactor = 1.0 - mpEpsilon;
+const int mpMinimumInt = -0x7fffffffffffffff - 1;
+const int mpMaximumInt = 0x7fffffffffffffff;
 
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;

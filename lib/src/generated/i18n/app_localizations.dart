@@ -1730,6 +1730,12 @@ abstract class AppLocalizations {
   /// **'Change image (Alt+I)'**
   String get th2FileEditPageChangeImageTool;
 
+  /// The label for the delete image button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete image (Del)'**
+  String get th2FileEditPageDeleteImageButton;
+
   /// The status bar message for the empty selection
   ///
   /// In en, this message translates to:
