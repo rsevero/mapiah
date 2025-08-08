@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
@@ -50,8 +49,13 @@ const double thCanvasRoundFactor = 25.0;
 const double mpEpsilon = 2.220446049250313e-16;
 const double mpPositiveEpsilonFactor = 1.0 + mpEpsilon;
 const double mpNegativeEpsilonFactor = 1.0 - mpEpsilon;
-const int mpMinimumInt = -0x7fffffffffffffff - 1;
-const int mpMaximumInt = 0x7fffffffffffffff;
+
+/// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
+/// web version. The higher limits
+/// [-0x7fffffffffffffff - 1,  0x7fffffffffffffff] are only supported by the
+/// desktop versions of Flutter apps.
+const int mpMinimumInt = -2 ^ 53 + 1;
+const int mpMaximumInt = 2 ^ 53 - 1;
 
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;

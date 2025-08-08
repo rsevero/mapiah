@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.10 - 2025-08-08
+* Web: fixed min and max int constants for web compatibility
+
 ## 0.2.9 - 2025-08-08
 * Web release: automated
 * xth_me_image_insert support for XVI, jpg, png, gif, etc
