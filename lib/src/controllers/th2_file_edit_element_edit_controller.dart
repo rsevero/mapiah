@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -9,6 +10,7 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
@@ -944,7 +946,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
-  void addImage(String imagePath) {
+  void addImage() async {
+    final BuildContext? currentContext = _th2FileEditController
+        .overlayWindowController
+        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeImageButton]!
+        .currentContext;
+
+    if (currentContext == null) {
+      return;
+    }
+
+    final String imagePath = await MPDialogAux.pickImageFile(currentContext);
+
     final String relativeImagePath = p.relative(
       imagePath,
       from: p.dirname(_thFile.filename),

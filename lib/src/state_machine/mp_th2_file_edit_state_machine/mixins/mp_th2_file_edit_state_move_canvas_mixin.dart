@@ -31,6 +31,16 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         } else if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
           selectionController.setSelectionState();
         }
+      case LogicalKeyboardKey.keyI:
+        if (isAltPressed && !isShiftPressed) {
+          if (isCtrlPressed) {
+            th2FileEditController.elementEditController.addImage();
+          } else {
+            th2FileEditController.overlayWindowController.toggleOverlayWindow(
+              MPWindowType.changeImage,
+            );
+          }
+        }
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
           th2FileEditController.stateController

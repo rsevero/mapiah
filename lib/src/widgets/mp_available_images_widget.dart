@@ -1,7 +1,6 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -98,7 +97,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                   color: colorScheme.onSecondary,
                                 ),
                                 tooltip: appLocalizations
-                                    .th2FileEditPageDeleteImageButton,
+                                    .th2FileEditPageRemoveImageButton,
                                 onPressed: () =>
                                     _onPressedRemoveImage(image.mpID),
                               ),
@@ -130,10 +129,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     );
   }
 
-  void _onPressedAddImage(BuildContext context) async {
-    final String imagePath = await MPDialogAux.pickImageFile(context);
-
-    th2FileEditController.elementEditController.addImage(imagePath);
+  void _onPressedAddImage(BuildContext context) {
+    th2FileEditController.elementEditController.addImage();
   }
 
   void _onPressedRemoveImage(int imageMPID) {
