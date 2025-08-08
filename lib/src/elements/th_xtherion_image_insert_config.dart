@@ -267,10 +267,10 @@ class THXTherionImageInsertConfig extends THElement {
       final XVIFile xviFile;
       final bool isSuccessful;
       final List<String> errors;
-      final String referenceFilename = th2FileEditController.thFile.filename;
-      final String resolvedPath = p.normalize(p.isAbsolute(filename)
-          ? filename
-          : p.join(p.dirname(referenceFilename), filename));
+      final String resolvedPath = MPDirectoryAux.getResolvedPath(
+        th2FileEditController.thFile.filename,
+        filename,
+      );
 
       (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
 

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 class MPDirectoryAux {
   static Directory _rootDirectory = Directory('');
@@ -53,5 +54,13 @@ class MPDirectoryAux {
     } else {
       return '\n'; // Linux and macOS
     }
+  }
+
+  static String getResolvedPath(String referencePath, String filename) {
+    final String resolvedPath = p.normalize(p.isAbsolute(filename)
+        ? filename
+        : p.join(p.dirname(referencePath), filename));
+
+    return resolvedPath;
   }
 }

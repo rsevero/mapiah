@@ -919,11 +919,13 @@ abstract class TH2FileEditControllerBase with Store {
     // );
   }
 
-  void transformCanvas(Canvas canvas) {
+  void transformCanvas(Canvas canvas, {bool invert = true}) {
     /// Transformations are applied on the order they are defined.
     canvas.scale(_canvasScale);
     canvas.translate(_canvasTranslation.dx, _canvasTranslation.dy);
-    canvas.scale(1, -1);
+    if (invert) {
+      canvas.scale(1, -1);
+    }
   }
 
   Uint8List _encodedFileContents() {
