@@ -7,6 +7,7 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_web_file_saver.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
@@ -948,19 +949,21 @@ abstract class TH2FileEditControllerBase with Store {
 
   Future<void> saveAsTH2File() async {
     final String filename = _thFile.filename;
+    final MPGeneralController mpGeneralController =
+        mpLocator.mpGeneralController;
     final String? initialDirectory =
-        mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+        mpGeneralController.lastAccessedDirectory.isEmpty
             ? (filename.isEmpty ? null : p.dirname(_thFile.filename))
-            : mpLocator.mpGeneralController.lastAccessedDirectory;
+            : mpGeneralController.lastAccessedDirectory;
 
     String? filePath = await FilePicker.platform.saveFile(
-      dialogTitle: 'Please select an output file:',
+      dialogTitle: mpLocator.appLocalizations.th2FileEditPageSaveAsDialogTitle,
       fileName: _thFile.filename,
       initialDirectory: initialDirectory,
     );
 
     if (filePath != null) {
-      mpLocator.mpGeneralController.renameFileController(
+      mpGeneralController.renameFileController(
         oldFilename: _thFile.filename,
         newFilename: filePath,
       );
@@ -968,7 +971,7 @@ abstract class TH2FileEditControllerBase with Store {
 
       String directoryPath = p.dirname(filePath);
 
-      mpLocator.mpGeneralController.lastAccessedDirectory = directoryPath;
+      mpGeneralController.lastAccessedDirectory = directoryPath;
 
       final File file = File(filePath);
 

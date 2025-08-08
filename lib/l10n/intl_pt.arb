@@ -286,6 +286,7 @@
   "th2FileEditPageRemoveImageButton": "Remover imagem",
   "th2FileEditPageSave": "Salvar (Ctrl+S)",
   "th2FileEditPageSaveAs": "Salvar como (Shift+Ctrl+S)",
+  "th2FileEditPageSaveAsDialogTitle": "Salvar arquivo TH2 como",
   "th2FileEditPageRedo": "Refazer '{redoDescription}' (Ctrl+Y)",
   "th2FileEditPageSelectTool": "Selecionar (C)",
   "th2FileEditPageUndo": "Desfazer '{undoDescription}' (Ctrl+Z)",

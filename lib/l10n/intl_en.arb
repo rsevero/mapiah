@@ -1461,6 +1461,11 @@
     "description": "The label for the save as button",
     "type": "text"
   },
+  "th2FileEditPageSaveAsDialogTitle": "Save TH2 file as",
+  "@th2FileEditPageSaveAsDialogTitle": {
+    "description": "The title for the save as dialog",
+    "type": "text"
+  },
   "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Y)",
   "@th2FileEditPageRedo": {
     "description": "The label for the redo shortcut",

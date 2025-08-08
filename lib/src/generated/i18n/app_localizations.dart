@@ -1817,6 +1817,12 @@ abstract class AppLocalizations {
   /// **'Save as (Shift+Ctrl+S)'**
   String get th2FileEditPageSaveAs;
 
+  /// The title for the save as dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Save TH2 file as'**
+  String get th2FileEditPageSaveAsDialogTitle;
+
   /// The label for the redo shortcut
   ///
   /// In en, this message translates to:

@@ -924,6 +924,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSaveAs => 'Save as (Shift+Ctrl+S)';
 
   @override
+  String get th2FileEditPageSaveAsDialogTitle => 'Save TH2 file as';
+
+  @override
   String th2FileEditPageRedo(Object redoDescription) {
     return 'Redo \'$redoDescription\' (Ctrl+Y)';
   }
