@@ -67,7 +67,8 @@ Version 0.3
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
 [ ] - Implement F1 shortcut to help page
 [ ] - Implement default option values
-[ ] - Support XVI images
+[X] - Support XVI images
+[X] - Support xth_me_image_insert additional formats
 [ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style
 [ ] - Properly present lines with partial subtypes
 [ ] - Manually edit position of points

@@ -1,7 +1,11 @@
 # Changelog
 
-## 0.2.9 - not yet released
+## 0.2.9 - 2025-08-08
 * Web release: automated
+* xth_me_image_insert support for XVI, jpg, png, gif, etc
+* Fixed 'on opening edited file after saveAs, the old file opened with the changes that should be only on the saveAs file'
+* Flutter upgrade to 3.32.8
+* Included canvas position in mouse position debug
 
 ## 0.2.8 - 2025-07-01
 * Web release: fixed 'save not working' [reported by CaverBruce]
