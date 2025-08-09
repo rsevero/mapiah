@@ -11,7 +11,15 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 
 final MPLocator mpLocator = MPLocator();
 
-void main() {
+void main(List<String> arguments) {
+  String? filePath;
+
+  // Parse command line arguments
+  for (var arg in arguments) {
+    filePath = arg;
+    break;
+  }
+
   // /// For mobx debugging with spy().
   // mainContext.config = mainContext.config.clone(
   //   isSpyEnabled: true,
@@ -43,11 +51,13 @@ void main() {
   if (kIsWeb) {
     suppressContextMenu();
   }
-  runApp(MapiahApp());
+  runApp(MapiahApp(mainFilePath: filePath));
 }
 
 class MapiahApp extends StatelessWidget {
-  const MapiahApp({super.key});
+  final String? mainFilePath;
+
+  const MapiahApp({super.key, this.mainFilePath});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +86,7 @@ class MapiahApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         locale: mpLocator.mpSettingsController.locale,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: MapiahHome(),
+        home: MapiahHome(mainFilePath: mainFilePath),
       ),
     );
   }
