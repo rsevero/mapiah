@@ -17,7 +17,6 @@ import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 import 'package:mapiah/src/mp_file_read_write/th_grammar.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/debug.dart';
@@ -41,6 +40,7 @@ class THFileParser {
   final List<MPParseableLine> _splittedContents = [];
   String _currentOriginalLine = '';
   String _currentParseableLine = '';
+  String _continuationDelimiter = '';
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
   late THIsParentMixin _currentParent;
@@ -2197,6 +2197,7 @@ class THFileParser {
 
   void _splitContents(String contents) {
     _splittedContents.clear();
+    _continuationDelimiter = '';
 
     while (contents.isNotEmpty) {
       var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
@@ -2217,7 +2218,16 @@ class THFileParser {
       String currentLine = contents.substring(0, lineBreakIndex);
       String newContentOriginal =
           contents.substring(0, lineBreakIndex + lineBreakLength);
-      String newContentToParse = currentLine;
+      updateContinuationDelimiter(currentLine);
+
+      /// If the line is ending with an open double qoute (") or square bracket
+      /// (]) the line break should be kept as part of the delimited content.
+      /// Otherwise, the line break shouldn't be included in the content to
+      /// parse.
+      String newContentToParse =
+          (_continuationDelimiter == '"' || _continuationDelimiter == ']')
+              ? newContentOriginal
+              : currentLine;
 
       contents = contents.substring(lineBreakIndex + lineBreakLength);
       if (currentLine.isEmpty) {
@@ -2231,11 +2241,9 @@ class THFileParser {
         continue;
       }
 
-      String continuationDelimiter = THFileAux.lineContinues(currentLine);
-
-      /// Joining lines that don´t end, i.e., that have an open double quuote or
+      /// Joining lines that didn´t end, i.e., that have an open double quote or
       /// square bracket or that ends with a backslash.
-      while (continuationDelimiter.isNotEmpty && contents.isNotEmpty) {
+      while (_continuationDelimiter.isNotEmpty && contents.isNotEmpty) {
         (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
 
         if (lineBreakIndex == -1) {
@@ -2247,25 +2255,29 @@ class THFileParser {
         }
 
         currentLine = contents.substring(0, lineBreakIndex);
-        newContentOriginal +=
+        String currentContentOriginal =
             contents.substring(0, lineBreakIndex + lineBreakLength);
-        if (continuationDelimiter == '\\') {
+        newContentOriginal += currentContentOriginal;
+        if (_continuationDelimiter == '\\') {
           newContentToParse = newContentToParse.trimRight();
           newContentToParse =
               newContentToParse.substring(0, newContentToParse.length - 1);
         }
-        newContentToParse += currentLine;
 
         contents = contents.substring(lineBreakIndex + lineBreakLength);
         if (currentLine.isEmpty) {
-          if (continuationDelimiter == '\\') {
+          if (_continuationDelimiter == '\\') {
             break;
           }
 
           continue;
         }
 
-        continuationDelimiter = THFileAux.lineContinues(currentLine);
+        updateContinuationDelimiter(currentLine);
+        newContentToParse +=
+            (_continuationDelimiter == '"' || _continuationDelimiter == ']')
+                ? currentContentOriginal
+                : currentLine;
       }
 
       _splittedContents.add(
@@ -2275,6 +2287,52 @@ class THFileParser {
         ),
       );
     }
+  }
+
+  /// Returns the reason why the line continues:
+  /// * " for double quotes;
+  /// * ] for square brackets;
+  /// * \ for backslash.
+  ///
+  /// Returns an empty string if the line does not continue.
+  String updateContinuationDelimiter(String text) {
+    if (_continuationDelimiter == '\\') {
+      _continuationDelimiter = '';
+    }
+
+    for (int i = 0; i < text.length; i++) {
+      final String currentChar = text[i];
+
+      if (_continuationDelimiter.isEmpty) {
+        if (currentChar == '"') {
+          _continuationDelimiter = '"';
+        } else if (currentChar == '[') {
+          _continuationDelimiter = ']';
+        } else if (currentChar == '\\') {
+          if (i == text.trimRight().length - 1) {
+            _continuationDelimiter = '\\';
+
+            break;
+          }
+        }
+      } else {
+        if (_continuationDelimiter == '"') {
+          if (currentChar == '"') {
+            if ((i + 1 < text.length) && (text[i + 1] == '"')) {
+              i++;
+            } else {
+              _continuationDelimiter = '';
+            }
+          }
+        } else if (_continuationDelimiter == ']') {
+          if (currentChar == ']') {
+            _continuationDelimiter = '';
+          }
+        }
+      }
+    }
+
+    return _continuationDelimiter;
   }
 }
 

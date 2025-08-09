@@ -3,7 +3,6 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
-import '0450-th_point_command_cwjm_test.dart';
 import 'th_test_aux.dart';
 
 void main() {
@@ -23,12 +22,36 @@ endscrap
 ''',
       },
       {
-        'file': '2025-08-09-mutiple_backslashes.th2',
+        'file': '2025-08-09-001-mutiple_backslashes.th2',
         'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test -projection plan
   point 1.2 3.4 u:testwrap
+endscrap
+''',
+      },
+      {
+        'file': '2025-08-09-002-double_quote_content_with_line_break.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1.2 3.4 label -text "First line
+   Second line"
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-08-09-003-double_quote_content_with_multiple_line_breaks.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1.2 3.4 label -text "First line
+   Second line
+Third line"
 endscrap
 ''',
       },
@@ -65,7 +88,7 @@ endscrap
 ''',
       },
       {
-        'file': '2025-08-09-mutiple_backslashes.th2',
+        'file': '2025-08-09-001-mutiple_backslashes.th2',
         'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding utf-8
@@ -73,6 +96,30 @@ scrap test -projection plan
   point \
     1.2 3.4 \
     u:testwrap
+endscrap
+''',
+      },
+      {
+        'file': '2025-08-09-002-double_quote_content_with_line_break.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding  utf-8
+scrap test
+point 1.2 3.4 label -text "First line
+   Second line"
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-08-09-003-double_quote_content_with_multiple_line_breaks.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding  utf-8
+scrap test
+point 1.2 3.4 label -text "First line
+   Second line
+Third line"
 endscrap
 ''',
       },
