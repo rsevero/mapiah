@@ -1,3 +1,5 @@
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
@@ -5,11 +7,10 @@ import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 import 'th_test_aux.dart';
 
+final MPLocator mpLocator = MPLocator();
+
 void main() {
   group('point', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00070-point_only.th2',
@@ -41,6 +42,8 @@ scrap test
    Second line"
 endscrap
 ''',
+        'quoted_content': r'''First line
+   Second line''',
       },
       {
         'file':
@@ -50,21 +53,38 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap test
   point 1.2 3.4 label -text "First line
-   Second line
+  Second line
 Third line"
 endscrap
 ''',
+        'quoted_content': r'''First line
+  Second line
+Third line''',
       },
     ];
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
+        if (success.containsKey('quoted_content')) {
+          final THPoint point = file.pointByMPID(3);
+
+          expect(
+            (point.optionByType(THCommandOptionType.text)
+                    as THTextCommandOption)
+                .text
+                .content,
+            success['quoted_content'],
+          );
+        }
 
         final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
@@ -73,9 +93,6 @@ endscrap
   });
 
   group('point original representation', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00070-point_only.th2',
@@ -118,7 +135,7 @@ endscrap
         'asFile': r'''encoding  utf-8
 scrap test
 point 1.2 3.4 label -text "First line
-   Second line
+  Second line
 Third line"
 endscrap
 ''',
@@ -127,6 +144,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
