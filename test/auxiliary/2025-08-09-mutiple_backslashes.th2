@@ -1,0 +1,6 @@
+encoding utf-8
+scrap test -projection plan
+  point \
+    1.2 3.4 \
+    u:testwrap
+endscrap

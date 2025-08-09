@@ -239,7 +239,9 @@ class THFile
 
   void registerMPIDWithTHID(int mpID, String thID) {
     if (_mpIDByTHID.containsKey(thID) && (_mpIDByTHID[thID] != mpID)) {
-      throw THCustomException("Duplicate thID: '$thID'.");
+      throw THCustomException(
+        "At THFile.registerMPIDWithTHID: duplicate thID: '$thID'.",
+      );
     }
 
     _mpIDByTHID[thID] = mpID;
@@ -248,7 +250,9 @@ class THFile
 
   void registerElementWithTHID(THElement element, String thID) {
     if (_mpIDByTHID.containsKey(thID)) {
-      throw THCustomException("Duplicate thID: '$thID'.");
+      throw THCustomException(
+        "At THFile.registerElementWithTHID: duplicate thID: '$thID'.",
+      );
     }
 
     final int mpID = element.mpID;

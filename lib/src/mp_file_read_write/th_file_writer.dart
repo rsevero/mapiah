@@ -56,8 +56,6 @@ class THFileWriter {
 
     if (newLine.isEmpty) {
       newLine = _prepareLine(newText, thElement);
-    } else {
-      newLine += _lineEnding;
     }
 
     return newLine;
@@ -66,6 +64,7 @@ class THFileWriter {
   String _serializeComment(THElement thElement) {
     final THComment thComment = thElement as THComment;
     final String newLine = '# ${thComment.content}';
+
     return _prepareLineWithOriginalRepresentation(newLine, thElement);
   }
 
@@ -76,6 +75,7 @@ class THFileWriter {
   String _serializeMultiLineCommmentContent(THElement thElement) {
     final String newLine =
         '${(thElement as THMultilineCommentContent).content}$_lineEnding';
+
     return newLine;
   }
 
@@ -87,9 +87,8 @@ class THFileWriter {
     if (asString.isEmpty) {
       final String scrapOptions = thScrap.optionsAsString();
       final String newLine = "scrap ${thScrap.thID} $scrapOptions".trim();
+
       asString = _prepareLine(newLine, thScrap);
-    } else {
-      asString += _lineEnding;
     }
 
     _increasePrefix();
@@ -107,8 +106,6 @@ class THFileWriter {
 
       asString =
           "$xTherionConfigID ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
-    } else {
-      asString += _lineEnding;
     }
 
     return asString;
@@ -127,8 +124,6 @@ class THFileWriter {
 
       asString =
           """$xTherionConfigID $xTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
-    } else {
-      asString += _lineEnding;
     }
 
     return asString;
@@ -232,9 +227,8 @@ class THFileWriter {
       newLine += " ${thArea.optionsAsString()}";
       newLine = newLine.trim();
       asString = _prepareLine(newLine, thArea);
-    } else {
-      asString += _lineEnding;
     }
+
     _increasePrefix();
 
     asString += _childrenAsString(thArea);
@@ -244,6 +238,7 @@ class THFileWriter {
 
   String _serializeLine(THElement thElement) {
     final THLine thLine = thElement as THLine;
+
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
@@ -256,9 +251,8 @@ class THFileWriter {
       newLine += " ${thLine.optionsAsString()}";
       newLine = newLine.trim();
       asString = _prepareLine(newLine, thLine);
-    } else {
-      asString += _lineEnding;
     }
+
     _increasePrefix();
 
     asString += _childrenAsString(thLine);
@@ -281,8 +275,6 @@ class THFileWriter {
       newLine += " ${thPoint.optionsAsString()}";
       newLine = newLine.trim();
       asString = _prepareLine(newLine, thPoint);
-    } else {
-      asString += _lineEnding;
     }
 
     return asString;
@@ -290,6 +282,7 @@ class THFileWriter {
 
   String _serializeLineSegment(THElement thElement) {
     final THElementType type = thElement.elementType;
+
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
@@ -315,7 +308,6 @@ class THFileWriter {
           );
       }
     } else {
-      asString += _lineEnding;
       asString += _linePointOptionsAsString(thElement as THLineSegment);
     }
 
@@ -444,13 +436,13 @@ class THFileWriter {
     for (THCommandOptionType linePointOptionType in optionTypeList) {
       final THCommandOption option =
           thHasOptions.optionByType(linePointOptionType)!;
+
       String newLine = _commandOptionOriginalLineRepresentation(option);
+
       if (newLine.isEmpty) {
         newLine = "${option.typeToFile()} ";
         newLine += option.specToFile().trim();
         asString += "$_prefix${newLine.trim()}$_lineEnding";
-      } else {
-        asString += "$newLine$_lineEnding";
       }
     }
 

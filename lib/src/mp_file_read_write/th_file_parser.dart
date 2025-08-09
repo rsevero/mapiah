@@ -38,8 +38,9 @@ class THFileParser {
   late Parser _rootParser;
   late Parser _currentParser;
 
-  final List<String> _splittedContents = [];
-  late String _currentLine;
+  final List<MPParseableLine> _splittedContents = [];
+  String _currentOriginalLine = '';
+  String _currentParseableLine = '';
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
   late THIsParentMixin _currentParent;
@@ -127,24 +128,31 @@ class THFileParser {
   void _injectContents() {
     bool isFirst = true;
 
-    for (_currentLine in _splittedContents) {
-      if (_currentLine.trim().isEmpty) {
+    for (MPParseableLine currentMPParseableLine in _splittedContents) {
+      _currentOriginalLine = currentMPParseableLine.originalContent;
+      _currentParseableLine = currentMPParseableLine.toParse;
+
+      if (_currentParseableLine.trim().isEmpty) {
         _injectEmptyLine();
         continue;
       }
       if (_runTraceParser) {
-        trace(_currentParser).parse(_currentLine);
+        trace(_currentParser).parse(_currentParseableLine);
       }
 
-      _parsedContents = _currentParser.parse(_currentLine);
+      _parsedContents = _currentParser.parse(_currentParseableLine);
 
       if (isFirst) {
         isFirst = false;
         _resetParsersLineage();
       }
       if (_parsedContents is Failure) {
-        _addError('petitparser returned a "Failure"', '_injectContents()',
-            'Line being parsed: "$_currentLine"');
+        _addError(
+          'petitparser returned a "Failure"',
+          '_injectContents()',
+          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+        );
+
         continue;
       }
 
@@ -153,9 +161,14 @@ class THFileParser {
       /// 'element' holds the the 'command' part of the parsed line, i.e., the
       /// content minus the eventual comment.
       final element = _parsedContents.value[0];
+
       if (element.isEmpty) {
-        _addError('element.isEmpty', '_injectContents()',
-            'Line being parsed: "$_currentLine"');
+        _addError(
+          'element.isEmpty',
+          '_injectContents()',
+          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+        );
+
         continue;
       }
 
@@ -232,7 +245,7 @@ class THFileParser {
   void _injectEmptyLine() {
     _currentElement = THEmptyLine(
       parentMPID: _currentParentMPID,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -245,7 +258,7 @@ class THFileParser {
     _currentElement = THMultilineCommentContent(
       parentMPID: _currentParentMPID,
       content: content,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -266,7 +279,7 @@ class THFileParser {
   void _injectStartMultiLineComment() {
     _currentElement = THMultiLineComment(
       parentMPID: _currentParentMPID,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -287,7 +300,7 @@ class THFileParser {
     _currentElement = THEncoding(
       parentMPID: _currentParentMPID,
       encoding: element[1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -314,7 +327,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       name: xTherionConfigID,
       value: element[1][1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
 
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -431,8 +444,11 @@ class THFileParser {
     _xTherionContent = element[1][1].toString().trim();
 
     if (_xTherionContent.isEmpty) {
-      _addError('Content is empty', '_injectXTherionImageInsertConfig',
-          'Line being parsed: "$_currentLine"');
+      _addError(
+        'Content is empty',
+        '_injectXTherionImageInsertConfig',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+      );
       return;
     }
 
@@ -442,7 +458,7 @@ class THFileParser {
       _addError(
         'xxContent is empty',
         '_injectXTherionImageInsertConfig',
-        'Line being parsed: "$_currentLine"',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
       );
 
       return;
@@ -454,7 +470,7 @@ class THFileParser {
       _addError(
         'yyContent is empty',
         '_injectXTherionImageInsertConfig',
-        'Line being parsed: "$_currentLine"',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
       );
 
       return;
@@ -466,7 +482,7 @@ class THFileParser {
       _addError(
         'filename is empty',
         '_injectXTherionImageInsertConfig',
-        'Line being parsed: "$_currentLine"',
+        'Line being parsed: "$_currentOriginalLine"',
       );
 
       return;
@@ -524,7 +540,7 @@ class THFileParser {
       imgx: imgx,
       xData: xData,
       xImage: xImage,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
 
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -557,7 +573,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       pointDataList: element[1],
       pointTypeString: element[2][0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newPoint,
@@ -615,7 +631,7 @@ class THFileParser {
       controlPoint1: controlPoint1,
       controlPoint2: controlPoint2,
       endPoint: endPoint,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newBezierCurveLineSegment,
@@ -648,7 +664,7 @@ class THFileParser {
     final THAreaBorderTHID newElement = THAreaBorderTHID(
       parentMPID: _currentParentMPID,
       thID: areaBorderID,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
 
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -679,7 +695,7 @@ class THFileParser {
         THStraightLineSegment.fromString(
       parentMPID: _currentParentMPID,
       pointDataList: endPoint,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newStraightLineSegment,
@@ -703,7 +719,7 @@ class THFileParser {
     final THScrap newScrap = THScrap(
       parentMPID: _currentParentMPID,
       thID: element[1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newScrap,
@@ -721,7 +737,7 @@ class THFileParser {
   void _injectEndscrap() {
     _currentElement = THEndscrap(
       parentMPID: _currentParentMPID,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -791,7 +807,7 @@ class THFileParser {
     final THArea newArea = THArea.fromString(
       parentMPID: _currentParentMPID,
       areaTypeString: element[1][0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newArea,
@@ -827,7 +843,7 @@ class THFileParser {
     final THLine newLine = THLine.fromString(
       parentMPID: _currentParentMPID,
       lineTypeString: element[1][0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newLine,
@@ -854,7 +870,7 @@ class THFileParser {
   void _injectEndarea() {
     _currentElement = THEndarea(
       parentMPID: _currentParentMPID,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -867,7 +883,7 @@ class THFileParser {
   void _injectEndline() {
     _currentElement = THEndline(
       parentMPID: _currentParentMPID,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: _currentElement,
@@ -908,7 +924,7 @@ class THFileParser {
         final THElement newElement = THComment(
           parentMPID: _currentParentMPID,
           content: element[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
         _th2FileElementEditController
             .addElementWithParentWithoutSelectableElement(
@@ -1202,13 +1218,13 @@ class THFileParser {
         THLinePointDirectionCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'gradient':
         THLinePointGradientCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       default:
         throw UnimplementedError();
@@ -1238,103 +1254,103 @@ class THFileParser {
         THAdjustCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'align':
         THAlignCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'anchors':
         THAnchorsCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'border':
         THBorderCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'clip':
         THClipCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'close':
         THCloseCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'direction':
         THLineDirectionCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'flip':
         THFlipCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'gradient':
         THLineGradientCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'head':
         THHeadCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'outline':
         THOutlineCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'place':
         THPlaceCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'rebelays':
         THRebelaysCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'reverse':
         THReverseCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'smooth':
         THSmoothCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'visibility':
         THVisibilityCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'walls':
         THWallsCommandOption.fromString(
           optionParent: _currentHasOptions,
           choice: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       default:
         throw UnimplementedError();
@@ -1352,14 +1368,14 @@ class THFileParser {
         THDistCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 2:
         THDistCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
           unit: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       default:
         throw THCustomException(
@@ -1378,14 +1394,14 @@ class THFileParser {
         THExploredCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 2:
         THExploredCommandOption.fromString(
           optionParent: _currentHasOptions,
           distance: _currentSpec[0],
           unit: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       default:
         throw THCustomException(
@@ -1402,7 +1418,7 @@ class THFileParser {
     THLineHeightCommandOption.fromString(
       optionParent: _currentHasOptions,
       height: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1416,7 +1432,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       elementType: _currentSpec[0],
       symbolType: _currentSpec[1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1429,7 +1445,7 @@ class THFileParser {
     THFromCommandOption(
       optionParent: _currentHasOptions,
       station: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1445,7 +1461,7 @@ class THFileParser {
       THExtendCommandOption(
         optionParent: _currentHasOptions,
         station: _currentSpec[0],
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     }
   }
@@ -1470,7 +1486,7 @@ class THFileParser {
     THNameCommandOption(
       optionParent: _currentHasOptions,
       reference: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1492,7 +1508,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       filename: filename,
       pointList: _currentSpec[1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1506,7 +1522,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       prefix: _currentSpec[0],
       suffix: _currentSpec[1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1525,7 +1541,7 @@ class THFileParser {
     THStationsCommandOption(
       optionParent: _currentHasOptions,
       stations: stations,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1539,7 +1555,7 @@ class THFileParser {
     THLSizeCommandOption.fromString(
       optionParent: _currentHasOptions,
       number: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1553,7 +1569,7 @@ class THFileParser {
     THMarkCommandOption(
       optionParent: _currentHasOptions,
       mark: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1567,7 +1583,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       datetime: _currentSpec[0],
       person: _currentSpec[1],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1580,7 +1596,7 @@ class THFileParser {
     THSubtypeCommandOption(
       optionParent: _currentHasOptions,
       subtype: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1595,13 +1611,13 @@ class THFileParser {
         THPLScaleCommandOption.sizeAsNumberFromString(
           optionParent: _currentHasOptions,
           numericScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'multiplechoice':
         THPLScaleCommandOption.sizeAsNamed(
           optionParent: _currentHasOptions,
           textScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       default:
         throw THCustomException(
@@ -1620,13 +1636,13 @@ class THFileParser {
         THPLScaleCommandOption.sizeAsNumberFromString(
           optionParent: _currentHasOptions,
           numericScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       case 'multiplechoice':
         THPLScaleCommandOption.sizeAsNamed(
           optionParent: _currentHasOptions,
           textScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
       default:
         throw THCustomException(
@@ -1643,7 +1659,7 @@ class THFileParser {
     THScrapCommandOption(
       optionParent: _currentHasOptions,
       reference: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1656,7 +1672,7 @@ class THFileParser {
     THOrientationCommandOption.fromString(
       optionParent: _currentHasOptions,
       azimuth: _currentSpec[0],
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1672,7 +1688,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       datetime: _currentSpec[0],
       copyrightMessage: message,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1685,7 +1701,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       csString: _currentSpec[0],
       forOutputOnly: false,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1702,7 +1718,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       nameText: name,
       valueText: value,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1717,7 +1733,7 @@ class THFileParser {
     THTitleCommandOption(
       optionParent: _currentHasOptions,
       titleText: stringContent,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1732,7 +1748,7 @@ class THFileParser {
     THTextCommandOption(
       optionParent: _currentHasOptions,
       textContent: stringContent,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1768,7 +1784,7 @@ class THFileParser {
     if (hyphenPointRegex.hasMatch(specs) || nanRegex.hasMatch(specs)) {
       THAltitudeCommandOption.fromNan(
         optionParent: _currentHasOptions,
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else if (fixNumberLengthUnitRegex.hasMatch(specs)) {
       final bool isFix = specs.trim().toLowerCase().startsWith('fix');
@@ -1785,7 +1801,7 @@ class THFileParser {
         height: number,
         isFix: isFix,
         unit: match.group(3),
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     }
   }
@@ -1796,7 +1812,7 @@ class THFileParser {
     if (hyphenPointRegex.hasMatch(specs) || nanRegex.hasMatch(specs)) {
       THAltitudeValueCommandOption.fromNan(
         optionParent: _currentHasOptions,
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else if (fixNumberLengthUnitRegex.hasMatch(specs)) {
       final bool isFix = specs.trim().toLowerCase().startsWith('fix');
@@ -1813,7 +1829,7 @@ class THFileParser {
         height: height,
         isFix: isFix,
         unit: match.group(3),
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else {
       throw THCustomException(
@@ -1834,7 +1850,7 @@ class THFileParser {
         THDateValueCommandOption.fromString(
           optionParent: _currentHasOptions,
           datetime: specs,
-          originalLineInTH2File: _currentLine,
+          originalLineInTH2File: _currentOriginalLine,
         );
         return;
       }
@@ -1856,7 +1872,7 @@ class THFileParser {
         above: match.group(1)!,
         below: match.group(2)!,
         unit: match.group(3),
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else {
       throw THCustomException(
@@ -1877,7 +1893,7 @@ class THFileParser {
         height: number,
         isPresumed: match.group(3) != null,
         unit: match.group(4),
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else {
       throw THCustomException(
@@ -1898,7 +1914,7 @@ class THFileParser {
         plusNumber: number,
         minusNumber: '',
         unit: match.group(3),
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else if (plusMinusNumbersWithOptionalUnitRegex.hasMatch(specs)) {
       final RegExpMatch match =
@@ -1908,7 +1924,7 @@ class THFileParser {
         plusNumber: match.group(1)!,
         minusNumber: match.group(2)!,
         unit: match.group(3),
-        originalLineInTH2File: _currentLine,
+        originalLineInTH2File: _currentOriginalLine,
       );
     } else {
       throw THCustomException(
@@ -1965,7 +1981,7 @@ class THFileParser {
       optionParent: _currentHasOptions,
       numericSpecifications: values,
       unitPart: unit,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -1997,7 +2013,7 @@ class THFileParser {
               (_currentSpec[3] != null))
           ? _currentSpec[3]
           : null,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
   }
 
@@ -2005,7 +2021,7 @@ class THFileParser {
     final THElement newElement = THUnrecognizedCommand(
       parentMPID: _currentParentMPID,
       value: element,
-      originalLineInTH2File: _currentLine,
+      originalLineInTH2File: _currentOriginalLine,
     );
 
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
@@ -2107,7 +2123,7 @@ class THFileParser {
     Uint8List? fileBytes,
     Parser? alternateStartParser,
     bool trace = false,
-    bool forceNewController = false,
+    bool forceNewController = true,
   }) async {
     if (alternateStartParser == null) {
       _newRootParser(_th2FileFirstLineParser);
@@ -2165,65 +2181,106 @@ class THFileParser {
 
   (int index, int length) _findLineBreak(String content) {
     final int windowsResult = content.indexOf(thWindowsLineBreak);
-    if (windowsResult != -1) return (windowsResult, 2);
+
+    if (windowsResult != -1) {
+      return (windowsResult, 2);
+    }
 
     final int unixResult = content.indexOf(thUnixLineBreak);
-    if (unixResult != -1) return (unixResult, 1);
+
+    if (unixResult != -1) {
+      return (unixResult, 1);
+    }
 
     return (-1, 0);
   }
 
   void _splitContents(String contents) {
-    String lastLine = '';
-
     _splittedContents.clear();
+
     while (contents.isNotEmpty) {
       var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
 
       if (lineBreakIndex == -1) {
-        lastLine += contents;
+        _splittedContents.add(
+          MPParseableLine(
+            toParse: contents,
+            originalContent: contents,
+          ),
+        );
+
+        contents = '';
+
         break;
       }
 
-      String newLine = contents.substring(0, lineBreakIndex);
+      String currentLine = contents.substring(0, lineBreakIndex);
+      String newContentOriginal =
+          contents.substring(0, lineBreakIndex + lineBreakLength);
+      String newContentToParse = currentLine;
 
       contents = contents.substring(lineBreakIndex + lineBreakLength);
-      if (newLine.isEmpty) {
-        _splittedContents.add("$lastLine$newLine");
-        lastLine = '';
+      if (currentLine.isEmpty) {
+        _splittedContents.add(
+          MPParseableLine(
+            toParse: newContentToParse,
+            originalContent: newContentOriginal,
+          ),
+        );
+
         continue;
       }
 
-      int quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
+      String continuationDelimiter = THFileAux.lineContinues(currentLine);
 
-      // Joining lines that end with a line break inside a quoted string, i.e.,
-      // the line break belongs to the string content.
-      while (quoteCount.isOdd && contents.isNotEmpty) {
+      /// Joining lines that don´t end, i.e., that have an open double quuote or
+      /// square bracket or that ends with a backslash.
+      while (continuationDelimiter.isNotEmpty && contents.isNotEmpty) {
         (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
+
         if (lineBreakIndex == -1) {
-          newLine += contents;
+          newContentOriginal += contents;
+          newContentToParse += contents;
+          contents = '';
+
           break;
         }
-        newLine += contents.substring(0, lineBreakIndex);
+
+        currentLine = contents.substring(0, lineBreakIndex);
+        newContentOriginal +=
+            contents.substring(0, lineBreakIndex + lineBreakLength);
+        if (continuationDelimiter == '\\') {
+          newContentToParse = newContentToParse.trimRight();
+          newContentToParse =
+              newContentToParse.substring(0, newContentToParse.length - 1);
+        }
+        newContentToParse += currentLine;
+
         contents = contents.substring(lineBreakIndex + lineBreakLength);
-        quoteCount = THFileAux.countCharOccurrences(newLine, thDoubleQuote);
+        if (currentLine.isEmpty) {
+          if (continuationDelimiter == '\\') {
+            break;
+          }
+
+          continue;
+        }
+
+        continuationDelimiter = THFileAux.lineContinues(currentLine);
       }
 
-      // Joining next line if this line ends with a backslash.
-      final String lastChar = newLine.substring(newLine.length - 1);
-
-      if (lastChar == thBackslash) {
-        lastLine = newLine.substring(0, newLine.length - 1);
-      } else {
-        _splittedContents.add("$lastLine$newLine");
-        lastLine = '';
-      }
-    }
-
-    // Dealing with files that don´t finish with a line break or with
-    // unterminated quoted strings.
-    if (lastLine.isNotEmpty) {
-      _splittedContents.add(lastLine);
+      _splittedContents.add(
+        MPParseableLine(
+          toParse: newContentToParse,
+          originalContent: newContentOriginal,
+        ),
+      );
     }
   }
+}
+
+class MPParseableLine {
+  final String toParse;
+  final String originalContent;
+
+  MPParseableLine({required this.toParse, required this.originalContent});
 }

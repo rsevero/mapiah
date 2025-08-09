@@ -3,6 +3,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
+import '0450-th_point_command_cwjm_test.dart';
 import 'th_test_aux.dart';
 
 void main() {
@@ -21,6 +22,16 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': '2025-08-09-mutiple_backslashes.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test -projection plan
+  point 1.2 3.4 u:testwrap
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -33,6 +44,47 @@ endscrap
         expect(file.countElements(), success['length']);
 
         final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('point original representation', () {
+    final parser = THFileParser();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': 'th_file_parser-00070-point_only.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+point 296.0 468.0 debris
+endscrap
+''',
+      },
+      {
+        'file': '2025-08-09-mutiple_backslashes.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap test -projection plan
+  point \
+    1.2 3.4 \
+    u:testwrap
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) =
+            await parser.parse(THTestAux.testPath(success['file'] as String));
+        expect(isSuccessful, true);
+
+        final asFile = writer.serialize(file, useOriginalRepresentation: true);
         expect(asFile, success['asFile']);
       });
     }
