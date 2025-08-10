@@ -25,11 +25,19 @@ mixin THHasOptionsMixin on THElement {
   }
 
   bool removeOption(THCommandOptionType type) {
-    if (!hasOption(type)) {
+    if (!hasOption(type) || (type == THCommandOptionType.attr)) {
       return false;
     }
 
     return (_optionsMap.remove(type) != null);
+  }
+
+  bool hasAttrOption(String name) {
+    return _attrOptionsMap.containsKey(name);
+  }
+
+  String? getAttrOption(String name) {
+    return _attrOptionsMap[name]?.value.content;
   }
 
   String optionsAsString() {
@@ -43,10 +51,19 @@ mixin THHasOptionsMixin on THElement {
       if (type == THCommandOptionType.subtype) {
         continue;
       }
+
       final THCommandOption option = optionByType(type)!;
       final String typeToFile = option.typeToFile();
       final String spec = option.specToFile();
+
       asString += " -$typeToFile $spec";
+    }
+
+    for (THAttrCommandOption attrOption in _attrOptionsMap.values) {
+      final String name = attrOption.name.content;
+      final String value = attrOption.value.content;
+
+      asString += " -attr $name \"$value\"";
     }
 
     asString = asString.trim();

@@ -1,0 +1,5 @@
+encoding  utf-8
+scrap test
+point 1.2 3.4 u:test -attr foo "the foo value" \
+                       -attr bar "the bar value"
+endscrap

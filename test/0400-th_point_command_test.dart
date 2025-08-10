@@ -201,14 +201,14 @@ endscrap
   });
 
   group('point failures', () {
-    final parser = THFileParser();
-
     const failures = [
       'th_file_parser-00074-point_invalid_type_failure.th2',
     ];
 
     for (var failure in failures) {
       test(failure, () async {
+        final parser = THFileParser();
+        mpLocator.mpGeneralController.reset();
         final (_, isSuccessful, error) =
             await parser.parse(THTestAux.testPath(failure));
         expect(isSuccessful, false);
@@ -217,9 +217,6 @@ endscrap
   });
 
   group('point -align', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-02200-point_with_align_main_choice_option.th2',
@@ -246,6 +243,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) =
             await parser.parse(THTestAux.testPath(success['file'] as String));
         expect(isSuccessful, true);
@@ -260,9 +260,6 @@ endscrap
   });
 
   group('point -attr', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': '2025-06-16-002-point_with_attr_option.th2',
@@ -270,14 +267,32 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap 343-plan1.1
-  point 1327.1991 139.7524 u:mappe -attr text 35
+  point 1327.1991 139.7524 u:mappe -attr text "35"
 endscrap
 ''',
+        'attrs': {'text': '35'},
+      },
+      {
+        'file': '2025-08-10-004-point_with_multiple_attr_options.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1.2 3.4 u:test -attr foo "the foo value" -attr bar "the bar value"
+endscrap
+''',
+        'attrs': {
+          'foo': 'the foo value',
+          'bar': 'the bar value',
+        },
       },
     ];
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
           // trace: true,
@@ -286,6 +301,17 @@ endscrap
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
+        if (success.containsKey('attrs')) {
+          final THPoint point = file.pointByMPID(3);
+
+          for (var entry in (success['attrs'] as Map<String, String>).entries) {
+            final String name = entry.key;
+            final String value = entry.value;
+            final String? readValue = point.getAttrOption(name);
+
+            expect(readValue, value);
+          }
+        }
 
         final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
