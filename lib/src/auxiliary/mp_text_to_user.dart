@@ -1056,38 +1056,68 @@ class MPTextToUser {
         : type.name;
   }
 
-  static removeDiacritics(String text) {
+  static String removeDiacritics(String text) {
     const Map<String, String> diacritics = {
       'á': 'a',
       'à': 'a',
       'ã': 'a',
       'â': 'a',
       'ä': 'a',
+      'å': 'a',
+      'ą': 'a',
+      'ā': 'a',
+      'ă': 'a',
+      'ç': 'c',
+      'ć': 'c',
+      'č': 'c',
+      'đ': 'd',
       'é': 'e',
       'è': 'e',
       'ẽ': 'e',
       'ê': 'e',
       'ë': 'e',
+      'ę': 'e',
+      'ē': 'e',
+      'ĕ': 'e',
       'í': 'i',
       'ì': 'i',
       'î': 'i',
       'ĩ': 'i',
       'ï': 'i',
+      'ī': 'i',
+      'ł': 'l',
+      'ń': 'n',
+      'ñ': 'n',
       'ó': 'o',
       'ò': 'o',
       'ô': 'o',
       'õ': 'o',
       'ö': 'o',
+      'ō': 'o',
+      'ő': 'o',
+      'ø': 'o',
       'ú': 'u',
       'ù': 'u',
       'û': 'u',
       'ũ': 'u',
       'ü': 'u',
-      'ç': 'c',
+      'ū': 'u',
+      'ű': 'u',
+      'ś': 's',
+      'š': 's',
+      'ź': 'z',
+      'ż': 'z',
+      'ž': 'z',
     };
 
-    for (final entry in diacritics.entries) {
-      text = text.replaceAll(entry.key, entry.value);
+    for (int i = 0; i < text.length; i++) {
+      final String char = text[i];
+
+      if (diacritics.containsKey(char)) {
+        final String diacriticSubstitution = diacritics[char]!;
+
+        text = text.replaceAll(char, diacriticSubstitution);
+      }
     }
 
     return text;

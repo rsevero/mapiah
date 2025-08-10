@@ -28,6 +28,9 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   Map<THCommandOptionType, MPOptionInfo> _optionStateMap = {};
 
   @readonly
+  Map<String, MPOptionInfo> _optionAttrStateMap = {};
+
+  @readonly
   THCommandOptionType? _currentOptionType;
 
   @readonly
@@ -49,7 +52,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
     }
 
-    _optionStateMap = _getOptionStateMap(selectedElements);
+    _getOptionStateMap(selectedElements);
     _th2FileEditController.triggerOptionsListRedraw();
   }
 
@@ -61,7 +64,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           'Element with MPID $mpID does not support options at TH2FileEditOptionEditController.getElementOptionMapByMPID()');
     }
 
-    _optionStateMap = _getOptionStateMap([element]);
+    _getOptionStateMap([element]);
 
     _th2FileEditController.triggerOptionsListRedraw();
   }
@@ -80,15 +83,14 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       selectedLineSegments.add(lineSegment);
     }
 
-    _optionStateMap = _getOptionStateMap(selectedLineSegments);
+    _getOptionStateMap(selectedLineSegments);
 
     _th2FileEditController.triggerOptionsListRedraw();
   }
 
-  Map<THCommandOptionType, MPOptionInfo> _getOptionStateMap(
-    Iterable<THHasOptionsMixin> selectedElements,
-  ) {
+  void _getOptionStateMap(Iterable<THHasOptionsMixin> selectedElements) {
     final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
+    final Map<String, MPOptionInfo> optionsAttrInfo = {};
 
     if (selectedElements.isEmpty) {
       for (final optionType in THCommandOptionType.values) {
@@ -159,17 +161,55 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           }
         }
       }
+
+      /// Looking for attr options.
+      for (final THHasOptionsMixin selectedElement in selectedElements) {
+        final Iterable<String> attrNames = selectedElement.getSetAttrOptions();
+
+        for (final String attrName in attrNames) {
+          if (optionsAttrInfo.containsKey(attrName)) {
+            if (optionsAttrInfo[attrName]!.state == MPOptionStateType.set) {
+              final String thisAttrValue =
+                  selectedElement.getAttrOption(attrName)!;
+
+              if (optionsAttrInfo[attrName]!.currentChoice != thisAttrValue) {
+                optionsAttrInfo[attrName] = MPOptionInfo(
+                  type: THCommandOptionType.attr,
+                  state: MPOptionStateType.setMixed,
+                  defaultChoice: null,
+                  currentChoice: null,
+                  option: null,
+                );
+              }
+            }
+          } else {
+            optionsAttrInfo[attrName] = MPOptionInfo(
+              type: THCommandOptionType.attr,
+              state: MPOptionStateType.set,
+              defaultChoice: null,
+              currentChoice: selectedElement.getAttrOption(attrName),
+              option: null,
+            );
+          }
+        }
+      }
     }
 
     final List<THCommandOptionType> orderedOptionTypesList =
-        MPCommandOptionAux.getOrderedList(optionsInfo.keys);
-    final Map<THCommandOptionType, MPOptionInfo> optionStateMap = {};
+        MPCommandOptionAux.getTHCommandOptionTypeOrderedList(optionsInfo.keys);
 
+    _optionStateMap.clear();
     for (final optionType in orderedOptionTypesList) {
-      optionStateMap[optionType] = optionsInfo[optionType]!;
+      _optionStateMap[optionType] = optionsInfo[optionType]!;
     }
 
-    return optionStateMap;
+    final List<String> orderedAttrNamesList =
+        MPCommandOptionAux.getStringOrderedList(optionsAttrInfo.keys);
+
+    _optionAttrStateMap.clear();
+    for (final attrName in orderedAttrNamesList) {
+      _optionAttrStateMap[attrName] = optionsAttrInfo[attrName]!;
+    }
   }
 
   @action

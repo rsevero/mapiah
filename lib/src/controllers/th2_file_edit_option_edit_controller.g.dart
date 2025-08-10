@@ -67,6 +67,25 @@ mixin _$TH2FileEditOptionEditController
     });
   }
 
+  late final _$_optionAttrStateMapAtom = Atom(
+      name: 'TH2FileEditOptionEditControllerBase._optionAttrStateMap',
+      context: context);
+
+  Map<String, MPOptionInfo> get optionAttrStateMap {
+    _$_optionAttrStateMapAtom.reportRead();
+    return super._optionAttrStateMap;
+  }
+
+  @override
+  Map<String, MPOptionInfo> get _optionAttrStateMap => optionAttrStateMap;
+
+  @override
+  set _optionAttrStateMap(Map<String, MPOptionInfo> value) {
+    _$_optionAttrStateMapAtom.reportWrite(value, super._optionAttrStateMap, () {
+      super._optionAttrStateMap = value;
+    });
+  }
+
   late final _$_currentOptionTypeAtom = Atom(
       name: 'TH2FileEditOptionEditControllerBase._currentOptionType',
       context: context);

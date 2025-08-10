@@ -40,6 +40,10 @@ mixin THHasOptionsMixin on THElement {
     return _attrOptionsMap[name]?.value.content;
   }
 
+  Iterable<String> getSetAttrOptions() {
+    return _attrOptionsMap.keys;
+  }
+
   String optionsAsString() {
     String asString = '';
 

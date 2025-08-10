@@ -235,7 +235,7 @@ class MPCommandOptionAux {
     return commonOptions;
   }
 
-  static List<THCommandOptionType> getOrderedList(
+  static List<THCommandOptionType> getTHCommandOptionTypeOrderedList(
     Iterable<THCommandOptionType> unorderedList,
   ) {
     final List<THCommandOptionType> orderedList = List.from(unorderedList);
@@ -245,6 +245,16 @@ class MPCommandOptionAux {
         MPTextToUser.getCommandOptionType(a),
         MPTextToUser.getCommandOptionType(b),
       );
+    });
+
+    return orderedList;
+  }
+
+  static List<String> getStringOrderedList(Iterable<String> unorderedList) {
+    final List<String> orderedList = List.from(unorderedList);
+
+    orderedList.sort((a, b) {
+      return MPTextToUser.compareStringsUsingLocale(a, b);
     });
 
     return orderedList;
