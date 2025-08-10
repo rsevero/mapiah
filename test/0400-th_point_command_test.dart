@@ -61,6 +61,39 @@ endscrap
   Second line
 Third line''',
       },
+      {
+        'file': '2025-08-10-001-double_quote_inside_double_quotes.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1.2 3.4 label -text "First ""line"""
+endscrap
+''',
+        'quoted_content': r'''First "line"''',
+      },
+      {
+        'file': '2025-08-10-002-double_quote_inside_square_brackets.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1.2 3.4 label -text "First ""line"""
+endscrap
+''',
+        'quoted_content': r'''First "line"''',
+      },
+      {
+        'file': '2025-08-10-003-square_braket_inside_double_quotes.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 1.2 3.4 label -text "First [line]"
+endscrap
+''',
+        'quoted_content': r'''First [line]''',
+      },
     ];
 
     for (var success in successes) {
@@ -137,6 +170,16 @@ scrap test
 point 1.2 3.4 label -text "First line
   Second line
 Third line"
+endscrap
+''',
+      },
+      {
+        'file': '2025-08-10-002-double_quote_inside_square_brackets.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding  utf-8
+scrap test
+point 1.2 3.4 label -text [First "line"]
 endscrap
 ''',
       },
