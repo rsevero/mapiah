@@ -220,7 +220,7 @@ class THFileWriter {
 
     if (asString.isEmpty) {
       String newLine = "area ${thArea.areaType.toFileString()}";
-      if (thArea.optionIsSet(THCommandOptionType.subtype)) {
+      if (thArea.hasOption(THCommandOptionType.subtype)) {
         newLine +=
             ":${thArea.optionByType(THCommandOptionType.subtype)!.specToFile()}";
       }
@@ -244,7 +244,7 @@ class THFileWriter {
     if (asString.isEmpty) {
       String newLine = "line ${thLine.lineType.toFileString()}";
 
-      if (thLine.optionIsSet(THCommandOptionType.subtype)) {
+      if (thLine.hasOption(THCommandOptionType.subtype)) {
         newLine +=
             ":${thLine.optionByType(THCommandOptionType.subtype)!.specToFile()}";
       }
@@ -268,7 +268,7 @@ class THFileWriter {
     if (asString.isEmpty) {
       String newLine =
           "point ${thPoint.position.toString()} ${thPoint.pointType.toFileString()}";
-      if (thPoint.optionIsSet(THCommandOptionType.subtype)) {
+      if (thPoint.hasOption(THCommandOptionType.subtype)) {
         newLine +=
             ":${thPoint.optionByType(THCommandOptionType.subtype)!.specToFile()}";
       }

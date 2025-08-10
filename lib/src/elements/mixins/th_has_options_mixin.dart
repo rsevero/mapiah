@@ -3,21 +3,25 @@ part of '../th_element.dart';
 mixin THHasOptionsMixin on THElement {
   final LinkedHashMap<THCommandOptionType, THCommandOption> _optionsMap =
       LinkedHashMap<THCommandOptionType, THCommandOption>();
+  final LinkedHashMap<String, THAttrCommandOption> _attrOptionsMap =
+      LinkedHashMap<String, THAttrCommandOption>();
 
   void addUpdateOption(THCommandOption option) {
-    _optionsMap[option.type] = option;
+    if (option is THAttrCommandOption) {
+      _attrOptionsMap[option.name.content] = option;
+    } else {
+      _optionsMap[option.type] = option;
+    }
   }
 
   bool hasOption(THCommandOptionType type) {
-    return _optionsMap.containsKey(type);
-  }
-
-  bool optionIsSet(THCommandOptionType type) {
-    return _optionsMap.containsKey(type);
+    return (type == THCommandOptionType.attr)
+        ? _attrOptionsMap.isNotEmpty
+        : _optionsMap.containsKey(type);
   }
 
   THCommandOption? optionByType(THCommandOptionType type) {
-    return _optionsMap[type];
+    return (type == THCommandOptionType.attr) ? null : _optionsMap[type];
   }
 
   bool removeOption(THCommandOptionType type) {
