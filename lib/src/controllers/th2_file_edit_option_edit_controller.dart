@@ -52,7 +52,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
     }
 
-    _getOptionStateMap(selectedElements);
+    _updateOptionsStateMaps(selectedElements);
     _th2FileEditController.triggerOptionsListRedraw();
   }
 
@@ -64,7 +64,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           'Element with MPID $mpID does not support options at TH2FileEditOptionEditController.getElementOptionMapByMPID()');
     }
 
-    _getOptionStateMap([element]);
+    _updateOptionsStateMaps([element]);
 
     _th2FileEditController.triggerOptionsListRedraw();
   }
@@ -83,12 +83,12 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       selectedLineSegments.add(lineSegment);
     }
 
-    _getOptionStateMap(selectedLineSegments);
+    _updateOptionsStateMaps(selectedLineSegments);
 
     _th2FileEditController.triggerOptionsListRedraw();
   }
 
-  void _getOptionStateMap(Iterable<THHasOptionsMixin> selectedElements) {
+  void _updateOptionsStateMaps(Iterable<THHasOptionsMixin> selectedElements) {
     final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
     final Map<String, MPOptionInfo> optionsAttrInfo = {};
 

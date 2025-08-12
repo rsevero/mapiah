@@ -34,16 +34,12 @@ class MPAttrOptionWidget extends StatefulWidget {
 }
 
 class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
-  late String _selectedChoice;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _valueController = TextEditingController();
-  final FocusNode _nameFocusNode = FocusNode();
+  late final TH2FileEditController th2FileEditController;
+  late final Map<String, MPOptionInfo> attrOptions;
+  final List<MPAttrEdit> _attrs = [];
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
-  late final String _initialName;
-  late final String _initialValue;
-  late final String _initialSelectedChoice;
-  String _nameWarningMessage = '';
-  String _valueWarningMessage = '';
+  final Map<String, String> _initials = {};
+  final Map<String, String> _initialSelectedChoices = {};
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
@@ -52,26 +48,37 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
   void initState() {
     super.initState();
 
-    switch (widget.optionInfo.state) {
-      case MPOptionStateType.set:
-        final THAttrCommandOption currentOption =
-            widget.optionInfo.option! as THAttrCommandOption;
+    th2FileEditController = widget.th2FileEditController;
+    attrOptions = th2FileEditController.optionEditController.optionAttrStateMap;
 
-        _nameController.text = currentOption.name.content;
-        _valueController.text = currentOption.value.content;
-        _selectedChoice = mpNonMultipleChoiceSetID;
-      case MPOptionStateType.setMixed:
-      case MPOptionStateType.setUnsupported:
-        _selectedChoice = '';
-      case MPOptionStateType.unset:
-        _selectedChoice = mpUnsetOptionID;
+    for (final entry in attrOptions.entries) {
+      final String attrName = entry.key;
+      final MPOptionInfo optionInfo = entry.value;
+      final TextEditingController nameController = TextEditingController();
+      final TextEditingController valueController = TextEditingController();
+      final FocusNode nameFocusNode = FocusNode();
+      final FocusNode valueFocusNode = FocusNode();
+
+      switch (optionInfo.state) {
+        case MPOptionStateType.set:
+          final THAttrCommandOption currentOption =
+              optionInfo.option! as THAttrCommandOption;
+
+          nameController.text = currentOption.name.content;
+          valueController.text = currentOption.value.content;
+        case MPOptionStateType.setMixed:
+        case MPOptionStateType.setUnsupported:
+          nameController.text = '';
+        case MPOptionStateType.unset:
+      }
+
+      _initials[attrName] = nameController.text;
+      _attrs.add(MPAttrEdit(
+        nameController: nameController,
+        valueController: valueController,
+      ));
+      _updateIsValid(_attrs.length - 1);
     }
-
-    _initialName = _nameController.text;
-    _initialValue = _valueController.text;
-    _initialSelectedChoice = _selectedChoice;
-
-    _updateIsValid();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
@@ -83,59 +90,73 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _valueController.dispose();
-    _nameFocusNode.dispose();
+    for (final attr in _attrs) {
+      attr.nameController.dispose();
+      attr.valueController.dispose();
+      attr.nameFocusNode.dispose();
+      attr.valueFocusNode.dispose();
+    }
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
-    if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _nameFocusNode.requestFocus();
+    if (_attrs.isNotEmpty) {
+      _attrs.first.nameFocusNode.requestFocus();
     }
   }
 
-  void _okButtonPressed() {
+  void _saveButtonPressed(int attrPosition) {
+    if (attrPosition < 0 || attrPosition >= _attrs.length) {
+      return;
+    }
+
     THCommandOption? newOption;
 
-    if (_selectedChoice == mpNonMultipleChoiceSetID) {
+    if (_selectedChoices[name] == mpNonMultipleChoiceSetID) {
       newOption = THAttrCommandOption.forCWJM(
-        parentMPID: widget.th2FileEditController.thFileMPID,
+        parentMPID: th2FileEditController.thFileMPID,
         originalLineInTH2File: '',
-        name: THStringPart(content: _nameController.text.trim()),
-        value: THStringPart(content: _valueController.text.trim()),
+        name: THStringPart(content: _nameControllers[name]!.text.trim()),
+        value: THStringPart(content: _valueControllers[name]!.text.trim()),
       );
     }
 
-    widget.th2FileEditController.userInteractionController.prepareSetOption(
+    th2FileEditController.userInteractionController.prepareSetOption(
       option: newOption,
-      optionType: widget.optionInfo.type,
+      optionType: THCommandOptionType.attr,
     );
   }
 
   void _cancelButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
     );
   }
 
-  void _updateIsValid() {
-    switch (_selectedChoice) {
+  void _updateIsValid(int namePosition) {
+    if (namePosition < 0 || namePosition >= names.length) {
+      return;
+    }
+
+    final String name = names[namePosition];
+
+    switch (_selectedChoices) {
       case mpUnsetOptionID:
         _isValid = true;
       case mpNonMultipleChoiceSetID:
         _isValid = true;
-        _nameWarningMessage = _nameController.text.trim().isNotEmpty
-            ? (RegExp(r'^[a-zA-Z0-9]+$').hasMatch(_nameController.text)
+        _nameWarningMessages = _nameControllers.text.trim().isNotEmpty
+            ? (RegExp(r'^[a-zA-Z0-9]+$').hasMatch(_nameControllers.text)
                 ? ''
                 : appLocalizations.mpAttrNameInvalid)
             : appLocalizations.mpAttrNameEmpty;
-        _valueWarningMessage = _valueController.text.trim().isNotEmpty
+        _valueWarningMessages = _valueControllers.text.trim().isNotEmpty
             ? ''
             : appLocalizations.mpAttrValueEmpty;
 
-        _isValid = _nameWarningMessage.isEmpty && _valueWarningMessage.isEmpty;
+        _isValid =
+            _nameWarningMessages.isEmpty && _valueWarningMessages.isEmpty;
       default:
         _isValid = false;
     }
@@ -144,10 +165,10 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
-        ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            (_nameController.text.trim() != _initialName ||
-                _valueController.text.trim() != _initialValue)));
+    final bool isChanged = ((_selectedChoices != _initialSelectedChoices) ||
+        ((_selectedChoices == mpNonMultipleChoiceSetID) &&
+            (_nameControllers.text.trim() != _initials ||
+                _valueControllers.text.trim() != _initialValue)));
 
     setState(
       () {
@@ -163,7 +184,6 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
@@ -173,11 +193,11 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
             RadioListTile<String>(
               title: Text(appLocalizations.mpChoiceUnset),
               value: mpUnsetOptionID,
-              groupValue: _selectedChoice,
+              groupValue: _selectedChoices,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 if (value != null) {
-                  _selectedChoice = value;
+                  _selectedChoices = value;
                   _updateIsValid();
                 }
               },
@@ -185,18 +205,18 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
             RadioListTile<String>(
               title: Text(appLocalizations.mpChoiceSet),
               value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
+              groupValue: _selectedChoices,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 if (value != null) {
-                  _selectedChoice = value;
+                  _selectedChoices = value;
                   _updateIsValid();
                 }
               },
             ),
 
             // Additional Inputs for "Set" Option
-            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+            if (_selectedChoices == mpNonMultipleChoiceSetID) ...[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -205,8 +225,8 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
                     children: [
                       Expanded(
                         child: MPTextFieldInputWidget(
-                          controller: _nameController,
-                          errorText: _nameWarningMessage,
+                          controller: _nameControllers,
+                          errorText: _nameWarningMessages,
                           labelText: appLocalizations.mpAttrNameLabel,
                           onChanged: (value) {
                             _updateIsValid();
@@ -220,8 +240,8 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
                     children: [
                       Expanded(
                         child: MPTextFieldInputWidget(
-                          controller: _valueController,
-                          errorText: _valueWarningMessage,
+                          controller: _valueControllers,
+                          errorText: _valueWarningMessages,
                           labelText: appLocalizations.mpAttrValueLabel,
                           onChanged: (value) {
                             _updateIsValid();
@@ -239,7 +259,7 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+              onPressed: _isOkButtonEnabled ? _saveButtonPressed : null,
               style: ElevatedButton.styleFrom(
                 elevation: _isOkButtonEnabled ? null : 0.0,
               ),
@@ -255,4 +275,22 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
       ],
     );
   }
+}
+
+class MPAttrEdit {
+  final TextEditingController nameController;
+  final TextEditingController valueController;
+  final FocusNode nameFocusNode;
+  final FocusNode valueFocusNode;
+  String nameWarningMessage = '';
+  String valueWarningMessage = '';
+  bool isValid = false;
+
+  MPAttrEdit({
+    required this.nameController,
+    required this.valueController,
+    this.nameWarningMessage = '',
+    this.valueWarningMessage = '',
+  })  : nameFocusNode = FocusNode(),
+        valueFocusNode = FocusNode();
 }
