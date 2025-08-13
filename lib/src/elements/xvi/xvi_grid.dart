@@ -55,6 +55,16 @@ class XVIGrid {
         ngx = THDoublePart.fromString(valueString: values[6]),
         ngy = THDoublePart.fromString(valueString: values[7]);
 
+  XVIGrid.fromList(List<double> values)
+      : gx = THDoublePart(value: values[0]),
+        gy = THDoublePart(value: values[1]),
+        gxx = THDoublePart(value: values[2]),
+        gxy = THDoublePart(value: values[3]),
+        gyx = THDoublePart(value: values[4]),
+        gyy = THDoublePart(value: values[5]),
+        ngx = THDoublePart(value: values[6]),
+        ngy = THDoublePart(value: values[7]);
+
   /// Returns a map representation of this XVIGrid instance
   Map<String, dynamic> toMap() {
     return {
@@ -136,4 +146,9 @@ class XVIGrid {
         ngx,
         ngy,
       );
+
+  @override
+  String toString() {
+    return 'XVIGrid(gx: $gx(${gx.decimalPositions}), gy: $gy(${gy.decimalPositions}), gxx: $gxx(${gxx.decimalPositions}), gxy: $gxy(${gxy.decimalPositions}), gyx: $gyx(${gyx.decimalPositions}), gyy: $gyy(${gyy.decimalPositions}), ngx: $ngx(${ngx.decimalPositions}), ngy: $ngy(${ngy.decimalPositions}))';
+  }
 }

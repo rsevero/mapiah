@@ -54,10 +54,11 @@ class THDoublePart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THDoublePart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other._value == _value &&
+    return other is THDoublePart &&
+        other._value == _value &&
         other._decimalPositions == _decimalPositions;
   }
 

@@ -25,15 +25,15 @@ void main() {
       '2025-07-04-003-xvi-xvigrid_without_ending_empty_line',
     ];
 
-    final XVIGrid xviGridResult = XVIGrid.fromList([
-      -5043.25302884,
-      -6120.73899649,
-      78.7401574803,
-      0.0,
-      0.0,
-      78.7401574803,
-      85.0,
-      88.0,
+    final XVIGrid xviGridResult = XVIGrid.fromStringList([
+      '-5043.25302884',
+      '-6120.73899649',
+      '78.7401574803',
+      '0.0',
+      '0.0',
+      '78.7401574803',
+      '85.0',
+      '88.0',
     ]);
 
     for (final fileName in fileNames) {
@@ -45,6 +45,8 @@ void main() {
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
+        print('xviGridResult: $xviGridResult');
+        print('file.grid: ${file.grid}');
         expect(file.grid, xviGridResult);
       });
     }
@@ -391,15 +393,15 @@ void main() {
       unit: THLengthUnitType.meter,
     );
 
-    final XVIGrid xviGridResult = XVIGrid.fromList([
-      -5043.25302884,
-      -6120.73899649,
-      78.7401574803,
-      0.0,
-      0.0,
-      78.7401574803,
-      85.0,
-      88.0,
+    final XVIGrid xviGridResult = XVIGrid.fromStringList([
+      '-5043.25302884',
+      '-6120.73899649',
+      '78.7401574803',
+      '0.0',
+      '0.0',
+      '78.7401574803',
+      '85.0',
+      '88.0',
     ]);
 
     test('XVIGrammar parses $fileName', () {
@@ -425,15 +427,15 @@ void main() {
       unit: THLengthUnitType.meter,
     );
 
-    final XVIGrid xviGridResult = XVIGrid.fromList([
-      -5043.25302884,
-      -6120.73899649,
-      78.7401574803,
-      0.0,
-      0.0,
-      78.7401574803,
-      85.0,
-      88.0,
+    final XVIGrid xviGridResult = XVIGrid.fromStringList([
+      '-5043.25302884',
+      '-6120.73899649',
+      '78.7401574803',
+      '0.0',
+      '0.0',
+      '78.7401574803',
+      '85.0',
+      '88.0',
     ]);
 
     final List<XVIStation> expectedStations = [
