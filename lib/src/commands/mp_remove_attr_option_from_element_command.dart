@@ -6,7 +6,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   final String newOriginalLineInTH2File;
   final String currentOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.removeAttrOptionFromElement;
+      MPCommandDescriptionType.removeOptionFromElement;
 
   MPRemoveAttrOptionFromElementCommand.forCWJM({
     required this.attrName,

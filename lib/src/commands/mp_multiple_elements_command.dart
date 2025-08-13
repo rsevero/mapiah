@@ -40,6 +40,30 @@ class MPMultipleElementsCommand extends MPCommand {
     }
   }
 
+  MPMultipleElementsCommand.removeAttrOption({
+    required String attrName,
+    required List<int> parentMPIDs,
+    required THFile thFile,
+    super.descriptionType = MPCommandDescriptionType.removeOptionFromElements,
+  })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
+        super() {
+    commandsList = [];
+
+    for (final int parentMPID in parentMPIDs) {
+      final MPRemoveAttrOptionFromElementCommand
+          removeAttrOptionFromElementCommand =
+          MPRemoveAttrOptionFromElementCommand(
+        attrName: attrName,
+        parentMPID: parentMPID,
+        currentOriginalLineInTH2File:
+            thFile.elementByMPID(parentMPID).originalLineInTH2File,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(removeAttrOptionFromElementCommand);
+    }
+  }
+
   MPMultipleElementsCommand.removeOption({
     required THCommandOptionType optionType,
     required List<int> parentMPIDs,

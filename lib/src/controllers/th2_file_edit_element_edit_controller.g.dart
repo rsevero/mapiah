@@ -398,6 +398,26 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void applyRemoveAttrOptionFromElement(
+      {required String attrName,
+      required int parentMPID,
+      required String newOriginalLineInTH2File}) {
+    final _$actionInfo =
+        _$TH2FileEditElementEditControllerBaseActionController.startAction(
+            name:
+                'TH2FileEditElementEditControllerBase.applyRemoveAttrOptionFromElement');
+    try {
+      return super.applyRemoveAttrOptionFromElement(
+          attrName: attrName,
+          parentMPID: parentMPID,
+          newOriginalLineInTH2File: newOriginalLineInTH2File);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void applyRemoveOptionFromElement(
       {required THCommandOptionType optionType,
       required int parentMPID,
