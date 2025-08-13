@@ -42,6 +42,7 @@ part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
 part 'mp_remove_point_command.dart';
 part 'mp_remove_xtherion_image_insert_config_command.dart';
+part 'mp_set_attr_option_to_element_command.dart';
 part 'mp_set_option_to_element_command.dart';
 part 'types/mp_command_type.dart';
 
@@ -173,6 +174,8 @@ abstract class MPCommand {
         return MPRemovePointCommand.fromMap(map);
       case MPCommandType.removeXTherionImageInsertConfig:
         return MPRemoveXTherionImageInsertConfigCommand.fromMap(map);
+      case MPCommandType.setAttrOptionToElement:
+        return MPSetAttrOptionToElementCommand.fromMap(map);
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
     }

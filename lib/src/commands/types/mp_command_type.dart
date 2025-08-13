@@ -25,5 +25,6 @@ enum MPCommandType {
   removeOptionFromElement,
   removePoint,
   removeXTherionImageInsertConfig,
+  setAttrOptionToElement,
   setOptionToElement;
 }

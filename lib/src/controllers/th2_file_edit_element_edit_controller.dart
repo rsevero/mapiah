@@ -713,22 +713,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyRemoveAttrOptionFromElement({
-    required String attrName,
-    required int parentMPID,
-    required String newOriginalLineInTH2File,
-  }) {
-    final THHasOptionsMixin parentElement =
-        _th2FileEditController.thFile.hasOptionByMPID(parentMPID);
-
-    parentElement.removeAttrOption(attrName);
-    _thFile.substituteElement(parentElement.copyWith(
-      originalLineInTH2File: newOriginalLineInTH2File,
-    ));
-    updateOptionEdited();
-  }
-
-  @action
   void applyRemoveOptionFromElement({
     required THCommandOptionType optionType,
     required int parentMPID,
@@ -742,6 +726,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     parentElement.removeOption(optionType);
+    _thFile.substituteElement(parentElement.copyWith(
+      originalLineInTH2File: newOriginalLineInTH2File,
+    ));
+    updateOptionEdited();
+  }
+
+  @action
+  void applyRemoveAttrOptionFromElement({
+    required String attrName,
+    required int parentMPID,
+    required String newOriginalLineInTH2File,
+  }) {
+    final THHasOptionsMixin parentElement =
+        _th2FileEditController.thFile.hasOptionByMPID(parentMPID);
+
+    parentElement.removeAttrOption(attrName);
     _thFile.substituteElement(parentElement.copyWith(
       originalLineInTH2File: newOriginalLineInTH2File,
     ));

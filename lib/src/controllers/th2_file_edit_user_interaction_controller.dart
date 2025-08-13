@@ -76,10 +76,19 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         return;
       }
 
-      final MPCommand setOptionCommand = MPSetOptionToElementCommand(
-        option: option.copyWith(parentMPID: selectedElement.mpID),
-        currentOriginalLineInTH2File: selectedElement.originalLineInTH2File,
-      );
+      final MPCommand setOptionCommand =
+          (option.type == THCommandOptionType.attr)
+              ? MPSetAttrOptionToElementCommand(
+                  option: option.copyWith(parentMPID: selectedElement.mpID)
+                      as THAttrCommandOption,
+                  currentOriginalLineInTH2File:
+                      selectedElement.originalLineInTH2File,
+                )
+              : MPSetOptionToElementCommand(
+                  option: option.copyWith(parentMPID: selectedElement.mpID),
+                  currentOriginalLineInTH2File:
+                      selectedElement.originalLineInTH2File,
+                );
 
       _th2FileEditController.execute(setOptionCommand);
     } else {
@@ -100,11 +109,17 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (actualElementsForNewOption.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
-            MPMultipleElementsCommand.setOption(
-          elements: actualElementsForNewOption,
-          option: option,
-          thFile: _th2FileEditController.thFile,
-        );
+            (option.type == THCommandOptionType.attr)
+                ? MPMultipleElementsCommand.setAttrOption(
+                    elements: actualElementsForNewOption,
+                    option: option as THAttrCommandOption,
+                    thFile: _th2FileEditController.thFile,
+                  )
+                : MPMultipleElementsCommand.setOption(
+                    elements: actualElementsForNewOption,
+                    option: option,
+                    thFile: _th2FileEditController.thFile,
+                  );
 
         _th2FileEditController.execute(addOptionCommand);
       }
