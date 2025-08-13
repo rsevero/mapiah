@@ -119,4 +119,37 @@ mixin THHasOptionsMixin on THElement {
       addUpdateOption(optionsMap[type]!);
     }
   }
+
+  static Map<String, dynamic> attrOptionsMapToMap(
+    LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+  ) =>
+      attrOptionsMap.map(
+        (key, value) => MapEntry(
+          key,
+          value.toMap(),
+        ),
+      );
+
+  static LinkedHashMap<String, THAttrCommandOption> attrOptionsMapFromMap(
+    Map<String, dynamic> map,
+  ) =>
+      LinkedHashMap<String, THAttrCommandOption>.from(
+        map.map(
+          (key, value) => MapEntry(
+            key,
+            THAttrCommandOption.fromMap(value),
+          ),
+        ),
+      );
+
+  LinkedHashMap<String, THAttrCommandOption> get attrOptionsMap =>
+      _attrOptionsMap;
+
+  void addAttrOptionsMap(
+    Map<String, THAttrCommandOption> attrOptionsMap,
+  ) {
+    for (final String name in attrOptionsMap.keys) {
+      addUpdateOption(attrOptionsMap[name]!);
+    }
+  }
 }

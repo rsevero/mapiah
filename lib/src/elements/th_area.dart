@@ -39,9 +39,11 @@ class THArea extends THElement
     required this.areaType,
     required List<int> childrenMPID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
+    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
+    addAttrOptionsMap(attrOptionsMap);
   }
 
   THArea({
@@ -68,6 +70,7 @@ class THArea extends THElement
       'areaType': areaType.name,
       'childrenMPID': childrenMPID.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
+      'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
 
     return map;
@@ -82,6 +85,8 @@ class THArea extends THElement
       areaType: THAreaType.values.byName(map['areaType']),
       childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
+      attrOptionsMap:
+          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
     );
   }
 
@@ -99,6 +104,7 @@ class THArea extends THElement
     THAreaType? areaType,
     List<int>? childrenMPID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THArea.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -111,6 +117,7 @@ class THArea extends THElement
       areaType: areaType ?? this.areaType,
       childrenMPID: childrenMPID ?? this.childrenMPID,
       optionsMap: optionsMap ?? this.optionsMap,
+      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
   }
 
@@ -124,7 +131,8 @@ class THArea extends THElement
 
     return other.areaType == areaType &&
         deepEq(other.childrenMPID, childrenMPID) &&
-        deepEq(other.optionsMap, optionsMap);
+        deepEq(other.optionsMap, optionsMap) &&
+        deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
@@ -134,6 +142,7 @@ class THArea extends THElement
         areaType,
         childrenMPID,
         optionsMap,
+        attrOptionsMap,
       );
 
   static bool hasAreaType(String areaType) {

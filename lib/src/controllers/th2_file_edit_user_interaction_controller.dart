@@ -427,6 +427,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             parentMPID: currentLineSegment.parentMPID,
             endPoint: currentLineSegment.endPoint,
             optionsMap: currentLineSegment.optionsMap,
+            attrOptionsMap: currentLineSegment.attrOptionsMap,
             originalLineInTH2File: '',
           );
 

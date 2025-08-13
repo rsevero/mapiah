@@ -35,11 +35,13 @@ class THScrap extends THElement
     required String thID,
     required List<int> childrenMPID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
+    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _thID = thID;
     this.childrenMPID.addAll(childrenMPID);
     addOptionsMap(optionsMap);
+    addAttrOptionsMap(attrOptionsMap);
   }
 
   THScrap({
@@ -61,6 +63,7 @@ class THScrap extends THElement
       'thID': _thID,
       'childrenMPID': childrenMPID.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
+      'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
 
     return map;
@@ -75,6 +78,8 @@ class THScrap extends THElement
       thID: map['thID'],
       childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
+      attrOptionsMap:
+          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
     );
   }
 
@@ -92,6 +97,7 @@ class THScrap extends THElement
     String? thID,
     List<int>? childrenMPID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THScrap.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -104,6 +110,7 @@ class THScrap extends THElement
       thID: thID ?? _thID,
       childrenMPID: childrenMPID ?? this.childrenMPID,
       optionsMap: optionsMap ?? this.optionsMap,
+      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
   }
 
@@ -117,7 +124,8 @@ class THScrap extends THElement
 
     return other._thID == _thID &&
         deepEq(other.childrenMPID, childrenMPID) &&
-        deepEq(other.optionsMap, optionsMap);
+        deepEq(other.optionsMap, optionsMap) &&
+        deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
@@ -127,6 +135,7 @@ class THScrap extends THElement
         _thID,
         childrenMPID,
         optionsMap,
+        attrOptionsMap,
       );
 
   @override

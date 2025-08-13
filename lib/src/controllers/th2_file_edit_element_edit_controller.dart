@@ -504,6 +504,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           decimalPositions: currentDecimalPositions,
         ),
         optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>(),
+        attrOptionsMap: LinkedHashMap<String, THAttrCommandOption>(),
         originalLineInTH2File: '',
         sameLineComment: '',
       );
@@ -841,6 +842,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           controlPoint2: nextLineSegmentBezier.controlPoint2,
           endPoint: nextLineSegmentBezier.endPoint,
           optionsMap: nextLineSegmentBezier.optionsMap,
+          attrOptionsMap: nextLineSegmentBezier.attrOptionsMap,
           originalLineInTH2File: '',
         );
 

@@ -8,6 +8,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     super.sameLineComment,
     required super.endPoint,
     required super.optionsMap,
+    required super.attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
@@ -38,6 +39,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
       originalLineInTH2File: map['originalLineInTH2File'],
       endPoint: THPositionPart.fromMap(map['endPoint']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
+      attrOptionsMap:
+          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
     );
   }
 
@@ -54,6 +57,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     String? originalLineInTH2File,
     THPositionPart? endPoint,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THStraightLineSegment.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -65,6 +69,7 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
           originalLineInTH2File ?? this.originalLineInTH2File,
       endPoint: endPoint ?? this.endPoint,
       optionsMap: optionsMap ?? this.optionsMap,
+      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
   }
 

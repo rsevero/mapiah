@@ -61,11 +61,13 @@ class THLine extends THElement
     required List<int> childrenMPID,
     required List<int> lineSegmentMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
+    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   })  : _lineSegmentMPIDs = lineSegmentMPIDs,
         super.forCWJM() {
     this.childrenMPID.addAll(childrenMPID);
     addOptionsMap(optionsMap);
+    addAttrOptionsMap(attrOptionsMap);
   }
 
   THLine.fromString({
@@ -101,6 +103,7 @@ class THLine extends THElement
       'childrenMPID': childrenMPID.toList(),
       'lineSegmentMPIDs': _lineSegmentMPIDs,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
+      'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
 
     return map;
@@ -116,6 +119,8 @@ class THLine extends THElement
       childrenMPID: List<int>.from(map['childrenMPID']),
       lineSegmentMPIDs: List<int>.from(map['lineSegmentMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
+      attrOptionsMap:
+          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
     );
   }
 
@@ -134,6 +139,7 @@ class THLine extends THElement
     List<int>? childrenMPID,
     List<int>? lineSegmentMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THLine.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -147,6 +153,7 @@ class THLine extends THElement
       childrenMPID: childrenMPID ?? this.childrenMPID,
       lineSegmentMPIDs: lineSegmentMPIDs ?? _lineSegmentMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
+      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
   }
 
@@ -161,7 +168,8 @@ class THLine extends THElement
     return other.lineType == lineType &&
         deepEq(other.childrenMPID, childrenMPID) &&
         deepEq(other.lineSegmentMPIDs, _lineSegmentMPIDs) &&
-        deepEq(other.optionsMap, optionsMap);
+        deepEq(other.optionsMap, optionsMap) &&
+        deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
@@ -172,6 +180,7 @@ class THLine extends THElement
         childrenMPID,
         _lineSegmentMPIDs,
         optionsMap,
+        attrOptionsMap,
       );
 
   @override

@@ -160,9 +160,11 @@ class THPoint extends THElement
     required this.position,
     required this.pointType,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
+    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
+    addAttrOptionsMap(attrOptionsMap);
   }
 
   THPoint({
@@ -194,6 +196,7 @@ class THPoint extends THElement
       'position': position.toMap(),
       'pointType': pointType.name,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
+      'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
 
     return map;
@@ -208,6 +211,8 @@ class THPoint extends THElement
       position: THPositionPart.fromMap(map['position']),
       pointType: THPointType.values.byName(map['pointType']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
+      attrOptionsMap:
+          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
     );
   }
 
@@ -225,6 +230,7 @@ class THPoint extends THElement
     THPositionPart? position,
     THPointType? pointType,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THPoint.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -237,6 +243,7 @@ class THPoint extends THElement
       position: position ?? this.position,
       pointType: pointType ?? this.pointType,
       optionsMap: optionsMap ?? this.optionsMap,
+      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
   }
 
@@ -246,9 +253,12 @@ class THPoint extends THElement
     if (other is! THPoint) return false;
     if (!super.equalsBase(other)) return false;
 
+    final Function deepEq = const DeepCollectionEquality().equals;
+
     return other.position == position &&
         other.pointType == pointType &&
-        const DeepCollectionEquality().equals(other.optionsMap, optionsMap);
+        deepEq(other.optionsMap, optionsMap) &&
+        deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
@@ -258,6 +268,7 @@ class THPoint extends THElement
         position,
         pointType,
         optionsMap,
+        attrOptionsMap,
       );
 
   static bool hasPointType(String pointType) {

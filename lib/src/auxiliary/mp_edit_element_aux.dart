@@ -32,6 +32,7 @@ class MPEditElementAux {
         decimalPositions: decimalPositions,
       ),
       optionsMap: straightLineSegment.optionsMap,
+      attrOptionsMap: straightLineSegment.attrOptionsMap,
       originalLineInTH2File: '',
     );
   }

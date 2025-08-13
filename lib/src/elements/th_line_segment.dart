@@ -12,9 +12,11 @@ abstract class THLineSegment extends THElement
     super.sameLineComment,
     required this.endPoint,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
+    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
+    addAttrOptionsMap(attrOptionsMap);
   }
 
   THLineSegment.withEndPoint({
@@ -54,6 +56,7 @@ abstract class THLineSegment extends THElement
     map.addAll({
       'endPoint': endPoint.toMap(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
+      'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
 
     return map;
@@ -82,6 +85,7 @@ abstract class THLineSegment extends THElement
     String? originalLineInTH2File,
     THPositionPart? endPoint,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
+    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   });
 
   @override
@@ -90,7 +94,8 @@ abstract class THLineSegment extends THElement
 
     return other is THLineSegment &&
         endPoint == other.endPoint &&
-        mapEquals(optionsMap, other.optionsMap);
+        mapEquals(optionsMap, other.optionsMap) &&
+        mapEquals(attrOptionsMap, other.attrOptionsMap);
   }
 
   @override
@@ -99,7 +104,9 @@ abstract class THLineSegment extends THElement
     if (other is! THLineSegment) return false;
     if (!super.equalsBase(other)) return false;
 
-    return equalsBase(other);
+    return other.endPoint == endPoint &&
+        mapEquals(other.optionsMap, optionsMap) &&
+        mapEquals(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
@@ -108,6 +115,7 @@ abstract class THLineSegment extends THElement
       Object.hash(
         endPoint,
         optionsMap,
+        attrOptionsMap,
       );
 
   Rect getBoundingBox(Offset startPoint) {
