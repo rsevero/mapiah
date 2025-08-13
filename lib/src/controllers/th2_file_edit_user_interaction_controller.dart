@@ -111,6 +111,60 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
   }
 
+  void prepareUnsetAttrOption({required String attrName}) {
+    final List<THElement> candidateElementsForNewOption = [];
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<MPSelectedElement> selectedElements =
+        _th2FileEditController.optionEditController.optionsEditForLineSegments
+            ? selectionController.selectedEndControlPoints.values
+            : selectionController.mpSelectedElementsLogical.values;
+
+    for (final selectedElement in selectedElements) {
+      candidateElementsForNewOption.add(selectedElement.originalElementClone);
+    }
+
+    if (candidateElementsForNewOption.isEmpty) {
+      return;
+    } else if (candidateElementsForNewOption.length == 1) {
+      final THElement selectedElement = candidateElementsForNewOption.first;
+
+      if ((selectedElement is! THHasOptionsMixin) ||
+          (!selectedElement.hasAttrOption(attrName))) {
+        return;
+      }
+
+      final MPRemoveAttrOptionFromElementCommand removeOptionCommand =
+          MPRemoveAttrOptionFromElementCommand(
+        attrName: attrName,
+        parentMPID: selectedElement.mpID,
+        currentOriginalLineInTH2File:
+            _thFile.elementByMPID(selectedElement.mpID).originalLineInTH2File,
+      );
+
+      _th2FileEditController.execute(removeOptionCommand);
+    } else {
+      final List<int> parentMPIDs = [];
+
+      for (final element in candidateElementsForNewOption) {
+        if ((element is THHasOptionsMixin) && element.hasAttrOption(attrName)) {
+          parentMPIDs.add(element.mpID);
+        }
+      }
+
+      if (parentMPIDs.isNotEmpty) {
+        final MPMultipleElementsCommand removeOptionCommand =
+            MPMultipleElementsCommand.removeAttrOption(
+          attrName: attrName,
+          parentMPIDs: parentMPIDs,
+          thFile: _th2FileEditController.thFile,
+        );
+
+        _th2FileEditController.execute(removeOptionCommand);
+      }
+    }
+  }
+
   void _prepareUnsetOption(THCommandOptionType optionType) {
     final List<THElement> candidateElementsForNewOption = [];
     final TH2FileEditSelectionController selectionController =
