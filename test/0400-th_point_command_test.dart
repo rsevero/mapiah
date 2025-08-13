@@ -307,7 +307,7 @@ endscrap
           for (var entry in (success['attrs'] as Map<String, String>).entries) {
             final String name = entry.key;
             final String value = entry.value;
-            final String? readValue = point.getAttrOption(name);
+            final String? readValue = point.getAttrOptionValue(name);
 
             expect(readValue, value);
           }

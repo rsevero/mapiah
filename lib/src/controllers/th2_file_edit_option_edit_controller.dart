@@ -105,6 +105,10 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
       /// Defining the state of each shared option.
       for (final optionType in optionTypesList) {
+        if (optionType == THCommandOptionType.attr) {
+          continue;
+        }
+
         MPOptionStateType optionStateType = MPOptionStateType.unset;
         String? optionValue;
         THCommandOption? option;
@@ -163,14 +167,26 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       }
 
       /// Looking for attr options.
-      for (final THHasOptionsMixin selectedElement in selectedElements) {
-        final Iterable<String> attrNames = selectedElement.getSetAttrOptions();
+      final Set<String> selectedElementsAttrNames =
+          getSetAttrNames(selectedElements);
 
-        for (final String attrName in attrNames) {
-          if (optionsAttrInfo.containsKey(attrName)) {
+      for (final THHasOptionsMixin selectedElement in selectedElements) {
+        final Iterable<String> attrNames =
+            selectedElement.getSetAttrOptionNames();
+
+        for (final String attrName in selectedElementsAttrNames) {
+          if (!attrNames.contains(attrName)) {
+            optionsAttrInfo[attrName] = MPOptionInfo(
+              type: THCommandOptionType.attr,
+              state: MPOptionStateType.setMixed,
+              defaultChoice: null,
+              currentChoice: null,
+              option: null,
+            );
+          } else if (optionsAttrInfo.containsKey(attrName)) {
             if (optionsAttrInfo[attrName]!.state == MPOptionStateType.set) {
               final String thisAttrValue =
-                  selectedElement.getAttrOption(attrName)!;
+                  selectedElement.getAttrOptionValue(attrName)!;
 
               if (optionsAttrInfo[attrName]!.currentChoice != thisAttrValue) {
                 optionsAttrInfo[attrName] = MPOptionInfo(
@@ -187,12 +203,34 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
               type: THCommandOptionType.attr,
               state: MPOptionStateType.set,
               defaultChoice: null,
-              currentChoice: selectedElement.getAttrOption(attrName),
-              option: null,
+              currentChoice: selectedElement.getAttrOptionValue(attrName),
+              option: selectedElement.getAttrOption(attrName),
             );
           }
         }
       }
+
+      MPOptionStateType attrState = MPOptionStateType.unset;
+      for (final optionAttrInfo in optionsAttrInfo.values) {
+        if (attrState == MPOptionStateType.unset) {
+          if (optionAttrInfo.state == MPOptionStateType.set) {
+            attrState = MPOptionStateType.set;
+          } else if (optionAttrInfo.state == MPOptionStateType.setMixed) {
+            attrState = MPOptionStateType.setMixed;
+          }
+        } else if (attrState == MPOptionStateType.set) {
+          if (optionAttrInfo.state == MPOptionStateType.setMixed) {
+            attrState = MPOptionStateType.setMixed;
+          }
+        }
+      }
+      optionsInfo[THCommandOptionType.attr] = MPOptionInfo(
+        type: THCommandOptionType.attr,
+        state: attrState,
+        defaultChoice: null,
+        currentChoice: null,
+        option: null,
+      );
     }
 
     final List<THCommandOptionType> orderedOptionTypesList =
@@ -210,6 +248,16 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     for (final attrName in orderedAttrNamesList) {
       _optionAttrStateMap[attrName] = optionsAttrInfo[attrName]!;
     }
+  }
+
+  Set<String> getSetAttrNames(Iterable<THHasOptionsMixin> selectedElements) {
+    final Set<String> attrNames = {};
+
+    for (final THHasOptionsMixin selectedElement in selectedElements) {
+      attrNames.addAll(selectedElement.getSetAttrOptionNames());
+    }
+
+    return attrNames;
   }
 
   @action
@@ -262,9 +310,14 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 class MPOptionInfo {
   final THCommandOptionType type;
   final MPOptionStateType state;
+
+  /// The default choice is set for just a few options that actually have a
+  /// default choice.
+  final dynamic defaultChoice;
+
+  /// These parameters are only used for MPOptionStateType.set
   final THCommandOption? option;
   final dynamic currentChoice;
-  final dynamic defaultChoice;
 
   MPOptionInfo({
     required this.type,

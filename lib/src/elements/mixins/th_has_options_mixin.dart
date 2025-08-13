@@ -48,11 +48,15 @@ mixin THHasOptionsMixin on THElement {
     return _attrOptionsMap.containsKey(name);
   }
 
-  String? getAttrOption(String name) {
+  String? getAttrOptionValue(String name) {
     return _attrOptionsMap[name]?.value.content;
   }
 
-  Iterable<String> getSetAttrOptions() {
+  THAttrCommandOption? getAttrOption(String name) {
+    return _attrOptionsMap[name];
+  }
+
+  Iterable<String> getSetAttrOptionNames() {
     return _attrOptionsMap.keys;
   }
 
