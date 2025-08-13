@@ -40,8 +40,6 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final Map<String, String> _initials = {};
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  bool _isValid = false;
-  bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
@@ -69,14 +67,17 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
         case MPOptionStateType.unset:
       }
 
-      _initials[attrName] = nameController.text;
+      _initials[attrName] = valueController.text;
       _attrs.add(
         MPAttrEdit(
           nameController: nameController,
           valueController: valueController,
         ),
       );
-      _updateIsValid(_attrs.length - 1);
+    }
+
+    for (int i = 0; i < _attrs.length; i++) {
+      _updateIsValid(i);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -156,7 +157,6 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
     final String name = attr.nameController.text;
     final String value = attr.valueController.text;
 
-    _isValid = true;
     attr.nameWarningMessage = name.trim().isNotEmpty
         ? (RegExp(r'^[a-zA-Z][a-zA-Z0-9]*$').hasMatch(name)
             ? ''
@@ -165,26 +165,14 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
     attr.valueWarningMessage =
         value.trim().isNotEmpty ? '' : appLocalizations.mpAttrValueEmpty;
 
-    _isValid =
+    final bool isValid =
         attr.nameWarningMessage.isEmpty && attr.valueWarningMessage.isEmpty;
-
-    _updateIsOkButtonEnabled(namePosition);
-  }
-
-  void _updateIsOkButtonEnabled(int namePosition) {
-    if (namePosition < 0 || namePosition >= _attrs.length) {
-      return;
-    }
-
-    final MPAttrEdit attr = _attrs[namePosition];
-    final String name = attr.nameController.text;
-    final String value = attr.valueController.text;
     final bool isChanged =
         (!_initials.containsKey(name) || (_initials[name] != value));
 
     setState(
       () {
-        _isOkButtonEnabled = _isValid && isChanged;
+        attr.isSaveButtonEnabled = isValid && isChanged;
       },
     );
   }
@@ -232,8 +220,9 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
                   IconButton(
                     icon: const Icon(Icons.save),
                     tooltip: appLocalizations.mpButtonOK,
-                    onPressed:
-                        _isOkButtonEnabled ? () => _saveButtonPressed(i) : null,
+                    onPressed: _attrs[i].isSaveButtonEnabled
+                        ? () => _saveButtonPressed(i)
+                        : null,
                   ),
                   IconButton(
                     icon: const Icon(Icons.delete),
@@ -266,7 +255,7 @@ class MPAttrEdit {
   final FocusNode valueFocusNode;
   String nameWarningMessage = '';
   String valueWarningMessage = '';
-  bool isValid = false;
+  bool isSaveButtonEnabled = false;
 
   MPAttrEdit({
     required this.nameController,
