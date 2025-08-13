@@ -24,12 +24,24 @@ mixin THHasOptionsMixin on THElement {
     return (type == THCommandOptionType.attr) ? null : _optionsMap[type];
   }
 
+  THAttrCommandOption? attrOptionByName(String name) {
+    return (_attrOptionsMap.containsKey(name)) ? _attrOptionsMap[name] : null;
+  }
+
   bool removeOption(THCommandOptionType type) {
     if (!hasOption(type) || (type == THCommandOptionType.attr)) {
       return false;
     }
 
     return (_optionsMap.remove(type) != null);
+  }
+
+  bool removeAttrOption(String name) {
+    if (!hasAttrOption(name)) {
+      return false;
+    }
+
+    return (_attrOptionsMap.remove(name) != null);
   }
 
   bool hasAttrOption(String name) {

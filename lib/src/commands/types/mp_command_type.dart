@@ -19,6 +19,7 @@ enum MPCommandType {
   multipleElements,
   removeArea,
   removeAreaBorderTHID,
+  removeAttrOptionFromElement,
   removeLine,
   removeLineSegment,
   removeOptionFromElement,

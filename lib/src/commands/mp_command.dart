@@ -36,6 +36,7 @@ part 'mp_move_straight_line_segment_command.dart';
 part 'mp_multiple_elements_command.dart';
 part 'mp_remove_area_border_thid_command.dart';
 part 'mp_remove_area_command.dart';
+part 'mp_remove_attr_option_from_element_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
@@ -156,6 +157,8 @@ abstract class MPCommand {
         return MPMoveStraightLineSegmentCommand.fromMap(map);
       case MPCommandType.multipleElements:
         return MPMultipleElementsCommand.fromMap(map);
+      case MPCommandType.removeAttrOptionFromElement:
+        return MPRemoveAttrOptionFromElementCommand.fromMap(map);
       case MPCommandType.removeArea:
         return MPRemoveAreaCommand.fromMap(map);
       case MPCommandType.removeAreaBorderTHID:

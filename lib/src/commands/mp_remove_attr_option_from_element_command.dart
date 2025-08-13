@@ -1,23 +1,23 @@
 part of 'mp_command.dart';
 
-class MPRemoveOptionFromElementCommand extends MPCommand {
+class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   final int parentMPID;
-  final THCommandOptionType optionType;
+  final String attrName;
   final String newOriginalLineInTH2File;
   final String currentOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.removeOptionFromElement;
+      MPCommandDescriptionType.removeAttrOptionFromElement;
 
-  MPRemoveOptionFromElementCommand.forCWJM({
-    required this.optionType,
+  MPRemoveAttrOptionFromElementCommand.forCWJM({
+    required this.attrName,
     required this.parentMPID,
     required this.newOriginalLineInTH2File,
     required this.currentOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPRemoveOptionFromElementCommand({
-    required this.optionType,
+  MPRemoveAttrOptionFromElementCommand({
+    required this.attrName,
     required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
     this.currentOriginalLineInTH2File = '',
@@ -25,7 +25,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.removeOptionFromElement;
+  MPCommandType get type => MPCommandType.removeAttrOptionFromElement;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -36,8 +36,9 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applyRemoveOptionFromElement(
-      optionType: optionType,
+    th2FileEditController.elementEditController
+        .applyRemoveAttrOptionFromElement(
+      attrName: attrName,
       parentMPID: parentMPID,
       newOriginalLineInTH2File: keepOriginalLineTH2File
           ? currentOriginalLineInTH2File
@@ -52,11 +53,12 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     final THHasOptionsMixin parentElement =
         th2FileEditController.thFile.hasOptionByMPID(parentMPID);
 
-    final THCommandOption? option = parentElement.optionByType(optionType);
+    final THAttrCommandOption? option =
+        parentElement.attrOptionByName(attrName);
 
     if (option == null) {
       throw StateError(
-          'Parent element does not have option of type $optionType');
+          'Parent element does not have attr option with name $attrName');
     }
 
     final MPCommand oppositeCommand = MPSetOptionToElementCommand.forCWJM(
@@ -73,15 +75,15 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   }
 
   @override
-  MPRemoveOptionFromElementCommand copyWith({
-    THCommandOptionType? attrName,
+  MPRemoveAttrOptionFromElementCommand copyWith({
+    String? attrName,
     int? parentMPID,
     String? newOriginalLineInTH2File,
     String? currentOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPRemoveOptionFromElementCommand.forCWJM(
-      optionType: attrName ?? this.optionType,
+    return MPRemoveAttrOptionFromElementCommand.forCWJM(
+      attrName: attrName ?? this.attrName,
       parentMPID: parentMPID ?? this.parentMPID,
       newOriginalLineInTH2File:
           newOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
@@ -91,9 +93,10 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     );
   }
 
-  factory MPRemoveOptionFromElementCommand.fromMap(Map<String, dynamic> map) {
-    return MPRemoveOptionFromElementCommand.forCWJM(
-      optionType: THCommandOptionType.values.byName(map['optionType']),
+  factory MPRemoveAttrOptionFromElementCommand.fromMap(
+      Map<String, dynamic> map) {
+    return MPRemoveAttrOptionFromElementCommand.forCWJM(
+      attrName: map['attrName'],
       parentMPID: map['parentMPID'],
       newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
       currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
@@ -102,8 +105,8 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     );
   }
 
-  factory MPRemoveOptionFromElementCommand.fromJson(String jsonString) {
-    return MPRemoveOptionFromElementCommand.fromMap(jsonDecode(jsonString));
+  factory MPRemoveAttrOptionFromElementCommand.fromJson(String jsonString) {
+    return MPRemoveAttrOptionFromElementCommand.fromMap(jsonDecode(jsonString));
   }
 
   @override
@@ -111,7 +114,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'optionType': optionType.name,
+      'attrName': attrName,
       'parentMPID': parentMPID,
       'newOriginalLineInTH2File': newOriginalLineInTH2File,
       'currentOriginalLineInTH2File': currentOriginalLineInTH2File,
@@ -124,8 +127,8 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPRemoveOptionFromElementCommand &&
-        other.optionType == optionType &&
+    return other is MPRemoveAttrOptionFromElementCommand &&
+        other.attrName == attrName &&
         other.parentMPID == parentMPID &&
         other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
         other.currentOriginalLineInTH2File == currentOriginalLineInTH2File &&
@@ -136,7 +139,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   int get hashCode =>
       super.hashCode ^
       Object.hash(
-        optionType,
+        attrName,
         parentMPID,
         newOriginalLineInTH2File,
         currentOriginalLineInTH2File,

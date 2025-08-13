@@ -28,6 +28,7 @@ enum MPCommandDescriptionType {
   multipleElements,
   removeArea,
   removeAreaBorderTHID,
+  removeAttrOptionFromElement,
   removeElements,
   removeLine,
   removeLineSegment,
@@ -55,6 +56,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removePoint;
       case MPCommandDescriptionType.addXTherionImageInsertConfig:
         return MPCommandDescriptionType.removeXTherionImageInsertConfig;
+      case MPCommandDescriptionType.removeAttrOptionFromElement:
+        return MPCommandDescriptionType.setOptionToElement;
       case MPCommandDescriptionType.removeArea:
         return MPCommandDescriptionType.addArea;
       case MPCommandDescriptionType.removeElements:
