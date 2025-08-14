@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -187,51 +188,57 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
       th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
-        MPOverlayWindowBlockWidget(
-          overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
-          padding: mpOverlayWindowBlockEdgeInsets,
-          children: [
-            for (int i = 0; i < _attrs.length; i++)
-              Row(
-                children: [
-                  Expanded(
-                    child: MPTextFieldInputWidget(
-                      controller: _attrs[i].nameController,
-                      errorText: _attrs[i].nameWarningMessage,
-                      labelText: appLocalizations.mpAttrNameLabel,
-                      focusNode: _attrs[i].nameFocusNode,
-                      onChanged: (value) {
-                        _updateIsValid(i);
-                      },
-                    ),
+        Observer(
+          builder: (_) {
+            th2FileEditController.redrawTriggerOptionsList;
+
+            return MPOverlayWindowBlockWidget(
+              overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
+              padding: mpOverlayWindowBlockEdgeInsets,
+              children: [
+                for (int i = 0; i < _attrs.length; i++)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: MPTextFieldInputWidget(
+                          controller: _attrs[i].nameController,
+                          errorText: _attrs[i].nameWarningMessage,
+                          labelText: appLocalizations.mpAttrNameLabel,
+                          focusNode: _attrs[i].nameFocusNode,
+                          onChanged: (value) {
+                            _updateIsValid(i);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: mpButtonSpace),
+                      Expanded(
+                        child: MPTextFieldInputWidget(
+                          controller: _attrs[i].valueController,
+                          errorText: _attrs[i].valueWarningMessage,
+                          labelText: appLocalizations.mpAttrValueLabel,
+                          focusNode: _attrs[i].valueFocusNode,
+                          onChanged: (value) {
+                            _updateIsValid(i);
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.save),
+                        tooltip: appLocalizations.mpButtonOK,
+                        onPressed: _attrs[i].isSaveButtonEnabled
+                            ? () => _saveButtonPressed(i)
+                            : null,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        tooltip: 'Delete',
+                        onPressed: () => _deleteButtonPressed(i),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: mpButtonSpace),
-                  Expanded(
-                    child: MPTextFieldInputWidget(
-                      controller: _attrs[i].valueController,
-                      errorText: _attrs[i].valueWarningMessage,
-                      labelText: appLocalizations.mpAttrValueLabel,
-                      focusNode: _attrs[i].valueFocusNode,
-                      onChanged: (value) {
-                        _updateIsValid(i);
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.save),
-                    tooltip: appLocalizations.mpButtonOK,
-                    onPressed: _attrs[i].isSaveButtonEnabled
-                        ? () => _saveButtonPressed(i)
-                        : null,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    tooltip: 'Delete',
-                    onPressed: () => _deleteButtonPressed(i),
-                  ),
-                ],
-              ),
-          ],
+              ],
+            );
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

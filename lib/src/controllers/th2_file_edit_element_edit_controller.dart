@@ -676,13 +676,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.updateUndoRedoStatus();
   }
 
-  void updateOptionEdited() {
+  void updateOptionEdited({bool attrOptionEdited = true}) {
     _th2FileEditController.optionEditController.clearCurrentOptionType();
     _th2FileEditController.selectionController.updateSelectedElementsClones();
-    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
-      MPWindowType.optionChoices,
-      false,
-    );
+
+    if (attrOptionEdited) {
+      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        MPWindowType.optionChoices,
+        false,
+      );
+    }
 
     if (_th2FileEditController
         .optionEditController.optionsEditForLineSegments) {
@@ -709,7 +712,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       ));
     }
 
-    updateOptionEdited();
+    updateOptionEdited(
+      attrOptionEdited: option.type != THCommandOptionType.attr,
+    );
   }
 
   @action
@@ -745,7 +750,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _thFile.substituteElement(parentElement.copyWith(
       originalLineInTH2File: newOriginalLineInTH2File,
     ));
-    updateOptionEdited();
+    updateOptionEdited(attrOptionEdited: false);
   }
 
   @action
