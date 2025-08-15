@@ -36,7 +36,7 @@ class MPAttrOptionWidget extends StatefulWidget {
 
 class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
   late final TH2FileEditController th2FileEditController;
-  late final Map<String, MPOptionInfo> attrOptions;
+  Map<String, MPOptionInfo> attrOptions = {};
   final List<MPAttrEdit> _attrs = [];
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   final Map<String, String> _initials = {};
@@ -47,7 +47,20 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
     super.initState();
 
     th2FileEditController = widget.th2FileEditController;
+
+    _updateAttrs();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_hasExecutedSingleRunOfPostFrameCallback) {
+        _hasExecutedSingleRunOfPostFrameCallback = true;
+        _executeOnceAfterBuild();
+      }
+    });
+  }
+
+  void _updateAttrs() {
     attrOptions = th2FileEditController.optionEditController.optionAttrStateMap;
+    _attrs.clear();
 
     for (final entry in attrOptions.entries) {
       final String attrName = entry.key;
@@ -80,13 +93,6 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
     for (int i = 0; i < _attrs.length; i++) {
       _updateIsValid(i);
     }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_hasExecutedSingleRunOfPostFrameCallback) {
-        _hasExecutedSingleRunOfPostFrameCallback = true;
-        _executeOnceAfterBuild();
-      }
-    });
   }
 
   @override
@@ -128,6 +134,8 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
         optionType: THCommandOptionType.attr,
       );
     }
+
+    _updateAttrs();
   }
 
   void _deleteButtonPressed(int attrPosition) {
@@ -140,6 +148,8 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
     th2FileEditController.userInteractionController.prepareUnsetAttrOption(
       attrName: name,
     );
+
+    _updateAttrs();
   }
 
   void _closeButtonPressed() {
@@ -160,22 +170,21 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
 
     attr.nameWarningMessage = name.trim().isNotEmpty
         ? (RegExp(r'^[a-zA-Z][a-zA-Z0-9]*$').hasMatch(name)
-            ? ''
-            : appLocalizations.mpAttrNameInvalid)
+              ? ''
+              : appLocalizations.mpAttrNameInvalid)
         : appLocalizations.mpAttrNameEmpty;
-    attr.valueWarningMessage =
-        value.trim().isNotEmpty ? '' : appLocalizations.mpAttrValueEmpty;
+    attr.valueWarningMessage = value.trim().isNotEmpty
+        ? ''
+        : appLocalizations.mpAttrValueEmpty;
 
     final bool isValid =
         attr.nameWarningMessage.isEmpty && attr.valueWarningMessage.isEmpty;
     final bool isChanged =
         (!_initials.containsKey(name) || (_initials[name] != value));
 
-    setState(
-      () {
-        attr.isSaveButtonEnabled = isValid && isChanged;
-      },
-    );
+    setState(() {
+      attr.isSaveButtonEnabled = isValid && isChanged;
+    });
   }
 
   @override
@@ -269,6 +278,6 @@ class MPAttrEdit {
     required this.valueController,
     this.nameWarningMessage = '',
     this.valueWarningMessage = '',
-  })  : nameFocusNode = FocusNode(),
-        valueFocusNode = FocusNode();
+  }) : nameFocusNode = FocusNode(),
+       valueFocusNode = FocusNode();
 }
