@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.11 - 2025-08-15
+* Flutter upgrade to 3.35.1
+* pub upgrade
+* Temporarily fixed file_picker version to 10.2.1 as 10.3.1 won´t show any files if I set allowedExtensions.
+
 ## 0.2.10 - 2025-08-08
 * Web: fixed min and max int constants for web compatibility
 
