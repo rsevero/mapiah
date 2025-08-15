@@ -200,6 +200,7 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
         Observer(
           builder: (_) {
             th2FileEditController.redrawTriggerOptionsList;
+            final bool disableAddButton = _hasIncompleteRow();
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
@@ -245,6 +246,21 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
                       ),
                     ],
                   ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6,
+                        horizontal: 8,
+                      ),
+                    ),
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add attribute'),
+                    onPressed: disableAddButton ? null : _onAddAttributePressed,
+                  ),
+                ),
               ],
             );
           },
@@ -261,6 +277,37 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
         ),
       ],
     );
+  }
+
+  void _onAddAttributePressed() {
+    setState(() {
+      final nameController = TextEditingController();
+      final valueController = TextEditingController();
+
+      _attrs.add(
+        MPAttrEdit(
+          nameController: nameController,
+          valueController: valueController,
+        ),
+      );
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_attrs.isNotEmpty) {
+        _attrs.last.nameFocusNode.requestFocus();
+      }
+    });
+  }
+
+  bool _hasIncompleteRow() {
+    for (final attr in _attrs) {
+      if (attr.nameController.text.trim().isEmpty ||
+          attr.valueController.text.trim().isEmpty) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
