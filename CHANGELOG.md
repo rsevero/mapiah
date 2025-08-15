@@ -4,6 +4,9 @@
 * Flutter upgrade to 3.35.1
 * pub upgrade
 * Temporarily fixed file_picker version to 10.2.1 as 10.3.1 won´t show any files if I set allowedExtensions.
+* Fixed issue #8: 'Fails to parse more than one backslash' reported by speleo3
+* Fixed issue #9: 'Support more than one custom attribute' reported by speleo3
+* Fixed 'quoted (and bracket) contents with line breaks inside should retain the line breaks'
 
 ## 0.2.10 - 2025-08-08
 * Web: fixed min and max int constants for web compatibility

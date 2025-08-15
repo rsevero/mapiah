@@ -2,7 +2,7 @@ workflows:
   build-macos:
     name: Build MacOS
     environment:
-      flutter: 3.32.8
+      flutter: 3.35.1
       xcode: latest
       cocoapods: default
       groups:
