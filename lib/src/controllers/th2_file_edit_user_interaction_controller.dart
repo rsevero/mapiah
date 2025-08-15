@@ -32,7 +32,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditUserInteractionControllerBase(this._th2FileEditController)
-      : _thFile = _th2FileEditController.thFile;
+    : _thFile = _th2FileEditController.thFile;
 
   @action
   void prepareSetOption({
@@ -53,8 +53,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
         _th2FileEditController.optionEditController.optionsEditForLineSegments
-            ? selectionController.selectedEndControlPoints.values
-            : selectionController.mpSelectedElementsLogical.values;
+        ? selectionController.selectedEndControlPoints.values
+        : selectionController.mpSelectedElementsLogical.values;
 
     for (final MPSelectedElement selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
@@ -72,23 +72,25 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
                 option.type,
               )) ||
           (selectedElement.hasOption(option.type) &&
+              (option.type != THCommandOptionType.attr) &&
               selectedElement.optionByType(option.type) == option)) {
         return;
       }
 
       final MPCommand setOptionCommand =
           (option.type == THCommandOptionType.attr)
-              ? MPSetAttrOptionToElementCommand(
-                  option: option.copyWith(parentMPID: selectedElement.mpID)
+          ? MPSetAttrOptionToElementCommand(
+              option:
+                  option.copyWith(parentMPID: selectedElement.mpID)
                       as THAttrCommandOption,
-                  currentOriginalLineInTH2File:
-                      selectedElement.originalLineInTH2File,
-                )
-              : MPSetOptionToElementCommand(
-                  option: option.copyWith(parentMPID: selectedElement.mpID),
-                  currentOriginalLineInTH2File:
-                      selectedElement.originalLineInTH2File,
-                );
+              currentOriginalLineInTH2File:
+                  selectedElement.originalLineInTH2File,
+            )
+          : MPSetOptionToElementCommand(
+              option: option.copyWith(parentMPID: selectedElement.mpID),
+              currentOriginalLineInTH2File:
+                  selectedElement.originalLineInTH2File,
+            );
 
       _th2FileEditController.execute(setOptionCommand);
     } else {
@@ -110,16 +112,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (actualElementsForNewOption.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
             (option.type == THCommandOptionType.attr)
-                ? MPMultipleElementsCommand.setAttrOption(
-                    elements: actualElementsForNewOption,
-                    option: option as THAttrCommandOption,
-                    thFile: _th2FileEditController.thFile,
-                  )
-                : MPMultipleElementsCommand.setOption(
-                    elements: actualElementsForNewOption,
-                    option: option,
-                    thFile: _th2FileEditController.thFile,
-                  );
+            ? MPMultipleElementsCommand.setAttrOption(
+                elements: actualElementsForNewOption,
+                option: option as THAttrCommandOption,
+                thFile: _th2FileEditController.thFile,
+              )
+            : MPMultipleElementsCommand.setOption(
+                elements: actualElementsForNewOption,
+                option: option,
+                thFile: _th2FileEditController.thFile,
+              );
 
         _th2FileEditController.execute(addOptionCommand);
       }
@@ -132,8 +134,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
         _th2FileEditController.optionEditController.optionsEditForLineSegments
-            ? selectionController.selectedEndControlPoints.values
-            : selectionController.mpSelectedElementsLogical.values;
+        ? selectionController.selectedEndControlPoints.values
+        : selectionController.mpSelectedElementsLogical.values;
 
     for (final selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
@@ -151,11 +153,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       final MPRemoveAttrOptionFromElementCommand removeOptionCommand =
           MPRemoveAttrOptionFromElementCommand(
-        attrName: attrName,
-        parentMPID: selectedElement.mpID,
-        currentOriginalLineInTH2File:
-            _thFile.elementByMPID(selectedElement.mpID).originalLineInTH2File,
-      );
+            attrName: attrName,
+            parentMPID: selectedElement.mpID,
+            currentOriginalLineInTH2File: _thFile
+                .elementByMPID(selectedElement.mpID)
+                .originalLineInTH2File,
+          );
 
       _th2FileEditController.execute(removeOptionCommand);
     } else {
@@ -170,10 +173,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
             MPMultipleElementsCommand.removeAttrOption(
-          attrName: attrName,
-          parentMPIDs: parentMPIDs,
-          thFile: _th2FileEditController.thFile,
-        );
+              attrName: attrName,
+              parentMPIDs: parentMPIDs,
+              thFile: _th2FileEditController.thFile,
+            );
 
         _th2FileEditController.execute(removeOptionCommand);
       }
@@ -186,8 +189,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
         _th2FileEditController.optionEditController.optionsEditForLineSegments
-            ? selectionController.selectedEndControlPoints.values
-            : selectionController.mpSelectedElementsLogical.values;
+        ? selectionController.selectedEndControlPoints.values
+        : selectionController.mpSelectedElementsLogical.values;
 
     for (final selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
@@ -206,8 +209,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
         optionType: optionType,
         parentMPID: selectedElement.mpID,
-        currentOriginalLineInTH2File:
-            _thFile.elementByMPID(selectedElement.mpID).originalLineInTH2File,
+        currentOriginalLineInTH2File: _thFile
+            .elementByMPID(selectedElement.mpID)
+            .originalLineInTH2File,
       );
 
       _th2FileEditController.execute(removeOptionCommand);
@@ -223,10 +227,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
             MPMultipleElementsCommand.removeOption(
-          optionType: optionType,
-          parentMPIDs: parentMPIDs,
-          thFile: _th2FileEditController.thFile,
-        );
+              optionType: optionType,
+              parentMPIDs: parentMPIDs,
+              thFile: _th2FileEditController.thFile,
+            );
 
         _th2FileEditController.execute(removeOptionCommand);
       }
@@ -259,7 +263,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   ) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final mpSelectedElements = _th2FileEditController
-        .selectionController.mpSelectedElementsLogical.values;
+        .selectionController
+        .mpSelectedElementsLogical
+        .values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -313,14 +319,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (elements.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
             MPMultipleElementsCommand.setOption(
-          elements: elements,
-          option: THCommandOption.byType(
-            optionParent: elements.first as THHasOptionsMixin,
-            type: optionType,
-            value: choice,
-          ),
-          thFile: _th2FileEditController.thFile,
-        );
+              elements: elements,
+              option: THCommandOption.byType(
+                optionParent: elements.first as THHasOptionsMixin,
+                type: optionType,
+                value: choice,
+              ),
+              thFile: _th2FileEditController.thFile,
+            );
 
         _th2FileEditController.execute(addOptionCommand);
       }
@@ -329,7 +335,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void _prepareUnsetMultipleOptionChoice(THCommandOptionType optionType) {
     final mpSelectedElements = _th2FileEditController
-        .selectionController.mpSelectedElementsLogical.values;
+        .selectionController
+        .mpSelectedElementsLogical
+        .values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -345,8 +353,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
           optionType: optionType,
           parentMPID: selectedElement.mpID,
-          currentOriginalLineInTH2File:
-              _thFile.elementByMPID(selectedElement.mpID).originalLineInTH2File,
+          currentOriginalLineInTH2File: _thFile
+              .elementByMPID(selectedElement.mpID)
+              .originalLineInTH2File,
         );
 
         _th2FileEditController.execute(removeOptionCommand);
@@ -365,10 +374,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
             MPMultipleElementsCommand.removeOption(
-          optionType: optionType,
-          parentMPIDs: parentMPIDs,
-          thFile: _th2FileEditController.thFile,
-        );
+              optionType: optionType,
+              parentMPIDs: parentMPIDs,
+              thFile: _th2FileEditController.thFile,
+            );
 
         _th2FileEditController.execute(removeOptionCommand);
       }
@@ -386,19 +395,20 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
         _th2FileEditController
-            .selectionController.selectedEndControlPoints.values;
+            .selectionController
+            .selectedEndControlPoints
+            .values;
     final Set<THLineSegment> willChangeLineSegments = {};
-    final THElementType elementType = selectedLineSegmentType ==
+    final THElementType elementType =
+        selectedLineSegmentType ==
             MPSelectedLineSegmentType.bezierCurveLineSegment
         ? THElementType.bezierCurveLineSegment
         : THElementType.straightLineSegment;
 
     for (final MPSelectedEndControlPoint selectedEndControlPoint
         in selectedEndControlPoints) {
-      final THLineSegment lineSegment =
-          _th2FileEditController.thFile.lineSegmentByMPID(
-        selectedEndControlPoint.mpID,
-      );
+      final THLineSegment lineSegment = _th2FileEditController.thFile
+          .lineSegmentByMPID(selectedEndControlPoint.mpID);
 
       if (lineSegment.elementType != elementType) {
         willChangeLineSegments.add(lineSegment);
@@ -427,10 +437,11 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           );
           final THBezierCurveLineSegment newLineSegment =
               MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
-            start: previousLineSegment.endPoint.coordinates,
-            straightLineSegment: (currentLineSegment as THStraightLineSegment),
-            decimalPositions: decimalPositions,
-          );
+                start: previousLineSegment.endPoint.coordinates,
+                straightLineSegment:
+                    (currentLineSegment as THStraightLineSegment),
+                decimalPositions: decimalPositions,
+              );
 
           newLineSegments.add(newLineSegment);
         }
@@ -438,13 +449,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         for (final THLineSegment currentLineSegment in willChangeLineSegments) {
           final THStraightLineSegment newLineSegment =
               THStraightLineSegment.forCWJM(
-            mpID: currentLineSegment.mpID,
-            parentMPID: currentLineSegment.parentMPID,
-            endPoint: currentLineSegment.endPoint,
-            optionsMap: currentLineSegment.optionsMap,
-            attrOptionsMap: currentLineSegment.attrOptionsMap,
-            originalLineInTH2File: '',
-          );
+                mpID: currentLineSegment.mpID,
+                parentMPID: currentLineSegment.parentMPID,
+                endPoint: currentLineSegment.endPoint,
+                optionsMap: currentLineSegment.optionsMap,
+                attrOptionsMap: currentLineSegment.attrOptionsMap,
+                originalLineInTH2File: '',
+              );
 
           newLineSegments.add(newLineSegment);
         }
@@ -467,16 +478,17 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       setLineSegmentTypeCommand =
           MPMultipleElementsCommand.editLinesSegmentType(
-        thFile: _th2FileEditController.thFile,
-        newLineSegments: newLineSegments,
-      );
+            thFile: _th2FileEditController.thFile,
+            newLineSegments: newLineSegments,
+          );
 
       _th2FileEditController.execute(setLineSegmentTypeCommand);
     }
 
     _th2FileEditController.execute(setLineSegmentTypeCommand);
-    _th2FileEditController.selectionController
-        .setSelectedEndPoints(newLineSegments);
+    _th2FileEditController.selectionController.setSelectedEndPoints(
+      newLineSegments,
+    );
     _th2FileEditController.selectionController
         .updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
@@ -489,7 +501,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     required String newType,
   }) {
     final mpSelectedElements = _th2FileEditController
-        .selectionController.mpSelectedElementsLogical.values;
+        .selectionController
+        .mpSelectedElementsLogical
+        .values;
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
 

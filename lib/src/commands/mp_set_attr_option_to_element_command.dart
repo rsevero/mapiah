@@ -33,23 +33,23 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applySetOptionToElement(
-      option,
-    );
+    th2FileEditController.elementEditController.applySetOptionToElement(option);
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement =
-        option.optionParent(th2FileEditController.thFile);
+    final THHasOptionsMixin parentElement = option.optionParent(
+      th2FileEditController.thFile,
+    );
 
     MPCommand oppositeCommand;
 
-    if (parentElement.hasOption(option.type)) {
-      final THAttrCommandOption currentOption =
-          parentElement.getAttrOption(option.name.content)!;
+    if (parentElement.hasAttrOption(option.name.content)) {
+      final THAttrCommandOption currentOption = parentElement.getAttrOption(
+        option.name.content,
+      )!;
 
       oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
         option: currentOption,
@@ -95,8 +95,9 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
       option: THAttrCommandOption.fromMap(map['option']),
       newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
       currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
