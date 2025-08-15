@@ -10,8 +10,9 @@ part of 'th2_file_edit_state_controller.dart';
 
 mixin _$TH2FileEditStateController on TH2FileEditStateControllerBase, Store {
   late final _$_th2FileEditControllerAtom = Atom(
-      name: 'TH2FileEditStateControllerBase._th2FileEditController',
-      context: context);
+    name: 'TH2FileEditStateControllerBase._th2FileEditController',
+    context: context,
+  );
 
   TH2FileEditController get th2FileEditController {
     _$_th2FileEditControllerAtom.reportRead();
@@ -23,14 +24,19 @@ mixin _$TH2FileEditStateController on TH2FileEditStateControllerBase, Store {
 
   @override
   set _th2FileEditController(TH2FileEditController value) {
-    _$_th2FileEditControllerAtom
-        .reportWrite(value, super._th2FileEditController, () {
-      super._th2FileEditController = value;
-    });
+    _$_th2FileEditControllerAtom.reportWrite(
+      value,
+      super._th2FileEditController,
+      () {
+        super._th2FileEditController = value;
+      },
+    );
   }
 
-  late final _$_stateAtom =
-      Atom(name: 'TH2FileEditStateControllerBase._state', context: context);
+  late final _$_stateAtom = Atom(
+    name: 'TH2FileEditStateControllerBase._state',
+    context: context,
+  );
 
   MPTH2FileEditState get state {
     _$_stateAtom.reportRead();
@@ -49,7 +55,9 @@ mixin _$TH2FileEditStateController on TH2FileEditStateControllerBase, Store {
 
   late final _$TH2FileEditStateControllerBaseActionController =
       ActionController(
-          name: 'TH2FileEditStateControllerBase', context: context);
+        name: 'TH2FileEditStateControllerBase',
+        context: context,
+      );
 
   @override
   bool setState(MPTH2FileEditStateType type) {

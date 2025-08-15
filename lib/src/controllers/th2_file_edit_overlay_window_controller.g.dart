@@ -15,22 +15,24 @@ mixin _$TH2FileEditOverlayWindowController
   @override
   bool get showChangeScrapOverlayWindow =>
       (_$showChangeScrapOverlayWindowComputed ??= Computed<bool>(
-              () => super.showChangeScrapOverlayWindow,
-              name:
-                  'TH2FileEditOverlayWindowControllerBase.showChangeScrapOverlayWindow'))
-          .value;
+        () => super.showChangeScrapOverlayWindow,
+        name:
+            'TH2FileEditOverlayWindowControllerBase.showChangeScrapOverlayWindow',
+      )).value;
   Computed<bool>? _$showChangeImageOverlayWindowComputed;
 
   @override
   bool get showChangeImageOverlayWindow =>
       (_$showChangeImageOverlayWindowComputed ??= Computed<bool>(
-              () => super.showChangeImageOverlayWindow,
-              name:
-                  'TH2FileEditOverlayWindowControllerBase.showChangeImageOverlayWindow'))
-          .value;
+        () => super.showChangeImageOverlayWindow,
+        name:
+            'TH2FileEditOverlayWindowControllerBase.showChangeImageOverlayWindow',
+      )).value;
 
   late final _$_thFileAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._thFile', context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._thFile',
+    context: context,
+  );
 
   THFile get thFile {
     _$_thFileAtom.reportRead();
@@ -48,8 +50,9 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   late final _$_th2FileEditControllerAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._th2FileEditController',
-      context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._th2FileEditController',
+    context: context,
+  );
 
   TH2FileEditController get th2FileEditController {
     _$_th2FileEditControllerAtom.reportRead();
@@ -61,38 +64,47 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   set _th2FileEditController(TH2FileEditController value) {
-    _$_th2FileEditControllerAtom
-        .reportWrite(value, super._th2FileEditController, () {
-      super._th2FileEditController = value;
-    });
+    _$_th2FileEditControllerAtom.reportWrite(
+      value,
+      super._th2FileEditController,
+      () {
+        super._th2FileEditController = value;
+      },
+    );
   }
 
   late final _$_globalKeyWidgetKeyByTypeAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._globalKeyWidgetKeyByType',
-      context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._globalKeyWidgetKeyByType',
+    context: context,
+  );
 
   Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>>
-      get globalKeyWidgetKeyByType {
+  get globalKeyWidgetKeyByType {
     _$_globalKeyWidgetKeyByTypeAtom.reportRead();
     return super._globalKeyWidgetKeyByType;
   }
 
   @override
   Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>>
-      get _globalKeyWidgetKeyByType => globalKeyWidgetKeyByType;
+  get _globalKeyWidgetKeyByType => globalKeyWidgetKeyByType;
 
   @override
   set _globalKeyWidgetKeyByType(
-      Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>> value) {
-    _$_globalKeyWidgetKeyByTypeAtom
-        .reportWrite(value, super._globalKeyWidgetKeyByType, () {
-      super._globalKeyWidgetKeyByType = value;
-    });
+    Map<MPGlobalKeyWidgetType, GlobalKey<State<StatefulWidget>>> value,
+  ) {
+    _$_globalKeyWidgetKeyByTypeAtom.reportWrite(
+      value,
+      super._globalKeyWidgetKeyByType,
+      () {
+        super._globalKeyWidgetKeyByType = value;
+      },
+    );
   }
 
   late final _$_isOverlayWindowShownAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._isOverlayWindowShown',
-      context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._isOverlayWindowShown',
+    context: context,
+  );
 
   ObservableMap<MPWindowType, bool> get isOverlayWindowShown {
     _$_isOverlayWindowShownAtom.reportRead();
@@ -105,15 +117,19 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   set _isOverlayWindowShown(ObservableMap<MPWindowType, bool> value) {
-    _$_isOverlayWindowShownAtom.reportWrite(value, super._isOverlayWindowShown,
-        () {
-      super._isOverlayWindowShown = value;
-    });
+    _$_isOverlayWindowShownAtom.reportWrite(
+      value,
+      super._isOverlayWindowShown,
+      () {
+        super._isOverlayWindowShown = value;
+      },
+    );
   }
 
   late final _$_activeWindowAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._activeWindow',
-      context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._activeWindow',
+    context: context,
+  );
 
   MPWindowType get activeWindow {
     _$_activeWindowAtom.reportRead();
@@ -131,8 +147,9 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   late final _$_overlayWindowsAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._overlayWindows',
-      context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._overlayWindows',
+    context: context,
+  );
 
   ObservableMap<MPWindowType, OverlayEntry> get overlayWindows {
     _$_overlayWindowsAtom.reportRead();
@@ -151,9 +168,10 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   late final _$_secondLevelOptionOpenedOverlayWindowAtom = Atom(
-      name:
-          'TH2FileEditOverlayWindowControllerBase._secondLevelOptionOpenedOverlayWindow',
-      context: context);
+    name:
+        'TH2FileEditOverlayWindowControllerBase._secondLevelOptionOpenedOverlayWindow',
+    context: context,
+  );
 
   MPWindowType? get secondLevelOptionOpenedOverlayWindow {
     _$_secondLevelOptionOpenedOverlayWindowAtom.reportRead();
@@ -166,15 +184,19 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   set _secondLevelOptionOpenedOverlayWindow(MPWindowType? value) {
-    _$_secondLevelOptionOpenedOverlayWindowAtom
-        .reportWrite(value, super._secondLevelOptionOpenedOverlayWindow, () {
-      super._secondLevelOptionOpenedOverlayWindow = value;
-    });
+    _$_secondLevelOptionOpenedOverlayWindowAtom.reportWrite(
+      value,
+      super._secondLevelOptionOpenedOverlayWindow,
+      () {
+        super._secondLevelOptionOpenedOverlayWindow = value;
+      },
+    );
   }
 
   late final _$_isAutoDismissWindowOpenAtom = Atom(
-      name: 'TH2FileEditOverlayWindowControllerBase._isAutoDismissWindowOpen',
-      context: context);
+    name: 'TH2FileEditOverlayWindowControllerBase._isAutoDismissWindowOpen',
+    context: context,
+  );
 
   bool get isAutoDismissWindowOpen {
     _$_isAutoDismissWindowOpenAtom.reportRead();
@@ -186,46 +208,65 @@ mixin _$TH2FileEditOverlayWindowController
 
   @override
   set _isAutoDismissWindowOpen(bool value) {
-    _$_isAutoDismissWindowOpenAtom
-        .reportWrite(value, super._isAutoDismissWindowOpen, () {
-      super._isAutoDismissWindowOpen = value;
-    });
+    _$_isAutoDismissWindowOpenAtom.reportWrite(
+      value,
+      super._isAutoDismissWindowOpen,
+      () {
+        super._isAutoDismissWindowOpen = value;
+      },
+    );
   }
 
   late final _$TH2FileEditOverlayWindowControllerBaseActionController =
       ActionController(
-          name: 'TH2FileEditOverlayWindowControllerBase', context: context);
+        name: 'TH2FileEditOverlayWindowControllerBase',
+        context: context,
+      );
 
   @override
-  void showOptionChoicesOverlayWindow(
-      {required Offset outerAnchorPosition, required MPOptionInfo optionInfo}) {
+  void showOptionChoicesOverlayWindow({
+    required Offset outerAnchorPosition,
+    required MPOptionInfo optionInfo,
+  }) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.showOptionChoicesOverlayWindow');
+          name:
+              'TH2FileEditOverlayWindowControllerBase.showOptionChoicesOverlayWindow',
+        );
     try {
       return super.showOptionChoicesOverlayWindow(
-          outerAnchorPosition: outerAnchorPosition, optionInfo: optionInfo);
+        outerAnchorPosition: outerAnchorPosition,
+        optionInfo: optionInfo,
+      );
     } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void setShowOverlayWindow(MPWindowType type, bool show,
-      {Offset? outerAnchorPosition, MPWidgetPositionType? innerAnchorType}) {
+  void setShowOverlayWindow(
+    MPWindowType type,
+    bool show, {
+    Offset? outerAnchorPosition,
+    MPWidgetPositionType? innerAnchorType,
+  }) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow');
+          name: 'TH2FileEditOverlayWindowControllerBase.setShowOverlayWindow',
+        );
     try {
-      return super.setShowOverlayWindow(type, show,
-          outerAnchorPosition: outerAnchorPosition,
-          innerAnchorType: innerAnchorType);
+      return super.setShowOverlayWindow(
+        type,
+        show,
+        outerAnchorPosition: outerAnchorPosition,
+        innerAnchorType: innerAnchorType,
+      );
     } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
@@ -233,13 +274,15 @@ mixin _$TH2FileEditOverlayWindowController
   void closeAutoDismissOverlayWindows() {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.closeAutoDismissOverlayWindows');
+          name:
+              'TH2FileEditOverlayWindowControllerBase.closeAutoDismissOverlayWindows',
+        );
     try {
       return super.closeAutoDismissOverlayWindows();
     } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
@@ -247,52 +290,62 @@ mixin _$TH2FileEditOverlayWindowController
   void clearOverlayWindows() {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name: 'TH2FileEditOverlayWindowControllerBase.clearOverlayWindows');
+          name: 'TH2FileEditOverlayWindowControllerBase.clearOverlayWindows',
+        );
     try {
       return super.clearOverlayWindows();
     } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void performToggleShowPLATypeOverlayWindow(
-      {required Offset outerAnchorPosition,
-      required THElementType elementType,
-      required String? selectedType}) {
+  void performToggleShowPLATypeOverlayWindow({
+    required Offset outerAnchorPosition,
+    required THElementType elementType,
+    required String? selectedType,
+  }) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.performToggleShowPLATypeOverlayWindow');
+          name:
+              'TH2FileEditOverlayWindowControllerBase.performToggleShowPLATypeOverlayWindow',
+        );
     try {
       return super.performToggleShowPLATypeOverlayWindow(
-          outerAnchorPosition: outerAnchorPosition,
-          elementType: elementType,
-          selectedType: selectedType);
+        outerAnchorPosition: outerAnchorPosition,
+        elementType: elementType,
+        selectedType: selectedType,
+      );
     } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void showPLATypeOverlayWindow(
-      {required Offset outerAnchorPosition,
-      required THElementType elementType,
-      required String? selectedType}) {
+  void showPLATypeOverlayWindow({
+    required Offset outerAnchorPosition,
+    required THElementType elementType,
+    required String? selectedType,
+  }) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOverlayWindowControllerBase.showPLATypeOverlayWindow');
+          name:
+              'TH2FileEditOverlayWindowControllerBase.showPLATypeOverlayWindow',
+        );
     try {
       return super.showPLATypeOverlayWindow(
-          outerAnchorPosition: outerAnchorPosition,
-          elementType: elementType,
-          selectedType: selectedType);
+        outerAnchorPosition: outerAnchorPosition,
+        elementType: elementType,
+        selectedType: selectedType,
+      );
     } finally {
-      _$TH2FileEditOverlayWindowControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 

@@ -11,8 +11,9 @@ part of 'th2_file_edit_user_interaction_controller.dart';
 mixin _$TH2FileEditUserInteractionController
     on TH2FileEditUserInteractionControllerBase, Store {
   late final _$_thFileAtom = Atom(
-      name: 'TH2FileEditUserInteractionControllerBase._thFile',
-      context: context);
+    name: 'TH2FileEditUserInteractionControllerBase._thFile',
+    context: context,
+  );
 
   THFile get thFile {
     _$_thFileAtom.reportRead();
@@ -30,8 +31,9 @@ mixin _$TH2FileEditUserInteractionController
   }
 
   late final _$_th2FileEditControllerAtom = Atom(
-      name: 'TH2FileEditUserInteractionControllerBase._th2FileEditController',
-      context: context);
+    name: 'TH2FileEditUserInteractionControllerBase._th2FileEditController',
+    context: context,
+  );
 
   TH2FileEditController get th2FileEditController {
     _$_th2FileEditControllerAtom.reportRead();
@@ -43,74 +45,96 @@ mixin _$TH2FileEditUserInteractionController
 
   @override
   set _th2FileEditController(TH2FileEditController value) {
-    _$_th2FileEditControllerAtom
-        .reportWrite(value, super._th2FileEditController, () {
-      super._th2FileEditController = value;
-    });
+    _$_th2FileEditControllerAtom.reportWrite(
+      value,
+      super._th2FileEditController,
+      () {
+        super._th2FileEditController = value;
+      },
+    );
   }
 
   late final _$TH2FileEditUserInteractionControllerBaseActionController =
       ActionController(
-          name: 'TH2FileEditUserInteractionControllerBase', context: context);
+        name: 'TH2FileEditUserInteractionControllerBase',
+        context: context,
+      );
 
   @override
-  void prepareSetOption(
-      {required THCommandOption? option,
-      required THCommandOptionType optionType}) {
+  void prepareSetOption({
+    required THCommandOption? option,
+    required THCommandOptionType optionType,
+  }) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
-            name: 'TH2FileEditUserInteractionControllerBase.prepareSetOption');
+          name: 'TH2FileEditUserInteractionControllerBase.prepareSetOption',
+        );
     try {
       return super.prepareSetOption(option: option, optionType: optionType);
     } finally {
-      _$TH2FileEditUserInteractionControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void prepareSetMultipleOptionChoice(
-      {required THCommandOptionType optionType, required String choice}) {
+  void prepareSetMultipleOptionChoice({
+    required THCommandOptionType optionType,
+    required String choice,
+  }) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditUserInteractionControllerBase.prepareSetMultipleOptionChoice');
+          name:
+              'TH2FileEditUserInteractionControllerBase.prepareSetMultipleOptionChoice',
+        );
     try {
       return super.prepareSetMultipleOptionChoice(
-          optionType: optionType, choice: choice);
+        optionType: optionType,
+        choice: choice,
+      );
     } finally {
-      _$TH2FileEditUserInteractionControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void prepareSetLineSegmentType(
-      {required MPSelectedLineSegmentType selectedLineSegmentType}) {
+  void prepareSetLineSegmentType({
+    required MPSelectedLineSegmentType selectedLineSegmentType,
+  }) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditUserInteractionControllerBase.prepareSetLineSegmentType');
+          name:
+              'TH2FileEditUserInteractionControllerBase.prepareSetLineSegmentType',
+        );
     try {
       return super.prepareSetLineSegmentType(
-          selectedLineSegmentType: selectedLineSegmentType);
+        selectedLineSegmentType: selectedLineSegmentType,
+      );
     } finally {
-      _$TH2FileEditUserInteractionControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void prepareSetPLAType(
-      {required THElementType plaType, required String newType}) {
+  void prepareSetPLAType({
+    required THElementType plaType,
+    required String newType,
+  }) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
-            name: 'TH2FileEditUserInteractionControllerBase.prepareSetPLAType');
+          name: 'TH2FileEditUserInteractionControllerBase.prepareSetPLAType',
+        );
     try {
       return super.prepareSetPLAType(plaType: plaType, newType: newType);
     } finally {
-      _$TH2FileEditUserInteractionControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 

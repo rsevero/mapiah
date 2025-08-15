@@ -11,7 +11,9 @@ part of 'th2_file_edit_option_edit_controller.dart';
 mixin _$TH2FileEditOptionEditController
     on TH2FileEditOptionEditControllerBase, Store {
   late final _$_thFileAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._thFile', context: context);
+    name: 'TH2FileEditOptionEditControllerBase._thFile',
+    context: context,
+  );
 
   THFile get thFile {
     _$_thFileAtom.reportRead();
@@ -29,8 +31,9 @@ mixin _$TH2FileEditOptionEditController
   }
 
   late final _$_th2FileEditControllerAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._th2FileEditController',
-      context: context);
+    name: 'TH2FileEditOptionEditControllerBase._th2FileEditController',
+    context: context,
+  );
 
   TH2FileEditController get th2FileEditController {
     _$_th2FileEditControllerAtom.reportRead();
@@ -42,15 +45,19 @@ mixin _$TH2FileEditOptionEditController
 
   @override
   set _th2FileEditController(TH2FileEditController value) {
-    _$_th2FileEditControllerAtom
-        .reportWrite(value, super._th2FileEditController, () {
-      super._th2FileEditController = value;
-    });
+    _$_th2FileEditControllerAtom.reportWrite(
+      value,
+      super._th2FileEditController,
+      () {
+        super._th2FileEditController = value;
+      },
+    );
   }
 
   late final _$_optionStateMapAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._optionStateMap',
-      context: context);
+    name: 'TH2FileEditOptionEditControllerBase._optionStateMap',
+    context: context,
+  );
 
   Map<THCommandOptionType, MPOptionInfo> get optionStateMap {
     _$_optionStateMapAtom.reportRead();
@@ -68,8 +75,9 @@ mixin _$TH2FileEditOptionEditController
   }
 
   late final _$_optionAttrStateMapAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._optionAttrStateMap',
-      context: context);
+    name: 'TH2FileEditOptionEditControllerBase._optionAttrStateMap',
+    context: context,
+  );
 
   Map<String, MPOptionInfo> get optionAttrStateMap {
     _$_optionAttrStateMapAtom.reportRead();
@@ -87,8 +95,9 @@ mixin _$TH2FileEditOptionEditController
   }
 
   late final _$_currentOptionTypeAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._currentOptionType',
-      context: context);
+    name: 'TH2FileEditOptionEditControllerBase._currentOptionType',
+    context: context,
+  );
 
   THCommandOptionType? get currentOptionType {
     _$_currentOptionTypeAtom.reportRead();
@@ -106,8 +115,9 @@ mixin _$TH2FileEditOptionEditController
   }
 
   late final _$_optionsScrapMPIDAtom = Atom(
-      name: 'TH2FileEditOptionEditControllerBase._optionsScrapMPID',
-      context: context);
+    name: 'TH2FileEditOptionEditControllerBase._optionsScrapMPID',
+    context: context,
+  );
 
   int get optionsScrapMPID {
     _$_optionsScrapMPIDAtom.reportRead();
@@ -126,75 +136,89 @@ mixin _$TH2FileEditOptionEditController
 
   late final _$TH2FileEditOptionEditControllerBaseActionController =
       ActionController(
-          name: 'TH2FileEditOptionEditControllerBase', context: context);
+        name: 'TH2FileEditOptionEditControllerBase',
+        context: context,
+      );
 
   @override
   void updateOptionStateMap() {
-    final _$actionInfo =
-        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditOptionEditControllerBase.updateOptionStateMap');
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditOptionEditControllerBase.updateOptionStateMap',
+        );
     try {
       return super.updateOptionStateMap();
     } finally {
-      _$TH2FileEditOptionEditControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
   void setOptionsScrapMPID(int mpID) {
-    final _$actionInfo =
-        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditOptionEditControllerBase.setOptionsScrapMPID');
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditOptionEditControllerBase.setOptionsScrapMPID',
+        );
     try {
       return super.setOptionsScrapMPID(mpID);
     } finally {
-      _$TH2FileEditOptionEditControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
-  void performToggleOptionShownStatus(
-      {required THCommandOptionType optionType,
-      required Offset outerAnchorPosition}) {
-    final _$actionInfo =
-        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOptionEditControllerBase.performToggleOptionShownStatus');
+  void performToggleOptionShownStatus({
+    required THCommandOptionType optionType,
+    required Offset outerAnchorPosition,
+  }) {
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditOptionEditControllerBase.performToggleOptionShownStatus',
+        );
     try {
       return super.performToggleOptionShownStatus(
-          optionType: optionType, outerAnchorPosition: outerAnchorPosition);
+        optionType: optionType,
+        outerAnchorPosition: outerAnchorPosition,
+      );
     } finally {
-      _$TH2FileEditOptionEditControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
   void clearCurrentOptionType() {
-    final _$actionInfo =
-        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditOptionEditControllerBase.clearCurrentOptionType');
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditOptionEditControllerBase.clearCurrentOptionType',
+        );
     try {
       return super.clearCurrentOptionType();
     } finally {
-      _$TH2FileEditOptionEditControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 
   @override
   void showOptionsOverlayWindow() {
-    final _$actionInfo =
-        _$TH2FileEditOptionEditControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditOptionEditControllerBase.showOptionsOverlayWindow');
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditOptionEditControllerBase.showOptionsOverlayWindow',
+        );
     try {
       return super.showOptionsOverlayWindow();
     } finally {
-      _$TH2FileEditOptionEditControllerBaseActionController
-          .endAction(_$actionInfo);
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
     }
   }
 

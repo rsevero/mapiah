@@ -46,15 +46,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String languageName(String language) {
-    String _temp0 = intl.Intl.selectLogic(
-      language,
-      {
-        'sys': 'System',
-        'en': 'English',
-        'pt': 'Português',
-        'other': 'Unknown',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(language, {
+      'sys': 'System',
+      'en': 'English',
+      'pt': 'Português',
+      'other': 'Unknown',
+    });
     return '$_temp0';
   }
 
@@ -883,19 +880,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
-      Object amount) {
+    Object amount,
+  ) {
     return '$amount line(s) selected';
   }
 
   @override
   String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
-      Object amount) {
+    Object amount,
+  ) {
     return '$amount point(s) selected';
   }
 
   @override
   String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
-      Object pointsAmount, Object linesAmount) {
+    Object pointsAmount,
+    Object linesAmount,
+  ) {
     return '$pointsAmount point(s) and $linesAmount line(s) selected';
   }
 

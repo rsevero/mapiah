@@ -6,7 +6,7 @@ repository: https://github.com/rsevero/mapiah.git
 issue_tracker: https://github.com/rsevero/mapiah/issues
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
+  sdk: '^3.9.0'
 
 # Add regular dependencies here.
 dependencies:

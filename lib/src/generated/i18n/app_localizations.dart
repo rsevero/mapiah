@@ -63,7 +63,7 @@ import 'app_localizations_pt.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('pt')
+    Locale('pt'),
   ];
 
   /// The label for the changelog section in the About dialog
@@ -1753,21 +1753,25 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{amount} line(s) selected'**
   String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
-      Object amount);
+    Object amount,
+  );
 
   /// The label for only points selected status bar messagee
   ///
   /// In en, this message translates to:
   /// **'{amount} point(s) selected'**
   String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
-      Object amount);
+    Object amount,
+  );
 
   /// The label for points and lines selected status bar messagee
   ///
   /// In en, this message translates to:
   /// **'{pointsAmount} point(s) and {linesAmount} line(s) selected'**
   String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
-      Object pointsAmount, Object linesAmount);
+    Object pointsAmount,
+    Object linesAmount,
+  );
 
   /// The label for the no undo available message
   ///
@@ -3543,8 +3547,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

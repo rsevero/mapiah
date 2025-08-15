@@ -14,188 +14,195 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   @override
   String get canvasScaleAsPercentageText =>
       (_$canvasScaleAsPercentageTextComputed ??= Computed<String>(
-              () => super.canvasScaleAsPercentageText,
-              name: 'TH2FileEditControllerBase.canvasScaleAsPercentageText'))
-          .value;
+        () => super.canvasScaleAsPercentageText,
+        name: 'TH2FileEditControllerBase.canvasScaleAsPercentageText',
+      )).value;
   Computed<String>? _$filenameAndScrapComputed;
 
   @override
-  String get filenameAndScrap => (_$filenameAndScrapComputed ??=
-          Computed<String>(() => super.filenameAndScrap,
-              name: 'TH2FileEditControllerBase.filenameAndScrap'))
-      .value;
+  String get filenameAndScrap =>
+      (_$filenameAndScrapComputed ??= Computed<String>(
+        () => super.filenameAndScrap,
+        name: 'TH2FileEditControllerBase.filenameAndScrap',
+      )).value;
   Computed<MPButtonType>? _$activeAddElementButtonComputed;
 
   @override
   MPButtonType get activeAddElementButton =>
       (_$activeAddElementButtonComputed ??= Computed<MPButtonType>(
-              () => super.activeAddElementButton,
-              name: 'TH2FileEditControllerBase.activeAddElementButton'))
-          .value;
+        () => super.activeAddElementButton,
+        name: 'TH2FileEditControllerBase.activeAddElementButton',
+      )).value;
   Computed<Paint>? _$selectionWindowBorderPaintCompleteComputed;
 
   @override
   Paint get selectionWindowBorderPaintComplete =>
       (_$selectionWindowBorderPaintCompleteComputed ??= Computed<Paint>(
-              () => super.selectionWindowBorderPaintComplete,
-              name:
-                  'TH2FileEditControllerBase.selectionWindowBorderPaintComplete'))
-          .value;
+        () => super.selectionWindowBorderPaintComplete,
+        name: 'TH2FileEditControllerBase.selectionWindowBorderPaintComplete',
+      )).value;
   Computed<double>? _$selectionWindowBorderPaintDashIntervalOnCanvasComputed;
 
   @override
   double get selectionWindowBorderPaintDashIntervalOnCanvas =>
-      (_$selectionWindowBorderPaintDashIntervalOnCanvasComputed ??= Computed<
-                  double>(
-              () => super.selectionWindowBorderPaintDashIntervalOnCanvas,
-              name:
-                  'TH2FileEditControllerBase.selectionWindowBorderPaintDashIntervalOnCanvas'))
-          .value;
+      (_$selectionWindowBorderPaintDashIntervalOnCanvasComputed ??= Computed<double>(
+        () => super.selectionWindowBorderPaintDashIntervalOnCanvas,
+        name:
+            'TH2FileEditControllerBase.selectionWindowBorderPaintDashIntervalOnCanvas',
+      )).value;
   Computed<Paint>? _$selectionHandlePaintComputed;
 
   @override
-  Paint get selectionHandlePaint => (_$selectionHandlePaintComputed ??=
-          Computed<Paint>(() => super.selectionHandlePaint,
-              name: 'TH2FileEditControllerBase.selectionHandlePaint'))
-      .value;
+  Paint get selectionHandlePaint =>
+      (_$selectionHandlePaintComputed ??= Computed<Paint>(
+        () => super.selectionHandlePaint,
+        name: 'TH2FileEditControllerBase.selectionHandlePaint',
+      )).value;
   Computed<bool>? _$showAddLineComputed;
 
   @override
-  bool get showAddLine =>
-      (_$showAddLineComputed ??= Computed<bool>(() => super.showAddLine,
-              name: 'TH2FileEditControllerBase.showAddLine'))
-          .value;
+  bool get showAddLine => (_$showAddLineComputed ??= Computed<bool>(
+    () => super.showAddLine,
+    name: 'TH2FileEditControllerBase.showAddLine',
+  )).value;
   Computed<bool>? _$showEditLineSegmentComputed;
 
   @override
-  bool get showEditLineSegment => (_$showEditLineSegmentComputed ??=
-          Computed<bool>(() => super.showEditLineSegment,
-              name: 'TH2FileEditControllerBase.showEditLineSegment'))
-      .value;
+  bool get showEditLineSegment =>
+      (_$showEditLineSegmentComputed ??= Computed<bool>(
+        () => super.showEditLineSegment,
+        name: 'TH2FileEditControllerBase.showEditLineSegment',
+      )).value;
   Computed<bool>? _$showMultipleElementsClickedHighlightComputed;
 
   @override
   bool get showMultipleElementsClickedHighlight =>
       (_$showMultipleElementsClickedHighlightComputed ??= Computed<bool>(
-              () => super.showMultipleElementsClickedHighlight,
-              name:
-                  'TH2FileEditControllerBase.showMultipleElementsClickedHighlight'))
-          .value;
+        () => super.showMultipleElementsClickedHighlight,
+        name: 'TH2FileEditControllerBase.showMultipleElementsClickedHighlight',
+      )).value;
   Computed<bool>? _$showMultipleEndControlPointsClickedHighlightComputed;
 
   @override
   bool get showMultipleEndControlPointsClickedHighlight =>
-      (_$showMultipleEndControlPointsClickedHighlightComputed ??= Computed<
-                  bool>(
-              () => super.showMultipleEndControlPointsClickedHighlight,
-              name:
-                  'TH2FileEditControllerBase.showMultipleEndControlPointsClickedHighlight'))
-          .value;
+      (_$showMultipleEndControlPointsClickedHighlightComputed ??= Computed<bool>(
+        () => super.showMultipleEndControlPointsClickedHighlight,
+        name:
+            'TH2FileEditControllerBase.showMultipleEndControlPointsClickedHighlight',
+      )).value;
   Computed<bool>? _$showOptionsEditComputed;
 
   @override
-  bool get showOptionsEdit =>
-      (_$showOptionsEditComputed ??= Computed<bool>(() => super.showOptionsEdit,
-              name: 'TH2FileEditControllerBase.showOptionsEdit'))
-          .value;
+  bool get showOptionsEdit => (_$showOptionsEditComputed ??= Computed<bool>(
+    () => super.showOptionsEdit,
+    name: 'TH2FileEditControllerBase.showOptionsEdit',
+  )).value;
   Computed<bool>? _$showRemoveButtonComputed;
 
   @override
   bool get showRemoveButton => (_$showRemoveButtonComputed ??= Computed<bool>(
-          () => super.showRemoveButton,
-          name: 'TH2FileEditControllerBase.showRemoveButton'))
-      .value;
+    () => super.showRemoveButton,
+    name: 'TH2FileEditControllerBase.showRemoveButton',
+  )).value;
   Computed<bool>? _$showScrapScaleComputed;
 
   @override
-  bool get showScrapScale =>
-      (_$showScrapScaleComputed ??= Computed<bool>(() => super.showScrapScale,
-              name: 'TH2FileEditControllerBase.showScrapScale'))
-          .value;
+  bool get showScrapScale => (_$showScrapScaleComputed ??= Computed<bool>(
+    () => super.showScrapScale,
+    name: 'TH2FileEditControllerBase.showScrapScale',
+  )).value;
   Computed<bool>? _$showSelectedElementsComputed;
 
   @override
-  bool get showSelectedElements => (_$showSelectedElementsComputed ??=
-          Computed<bool>(() => super.showSelectedElements,
-              name: 'TH2FileEditControllerBase.showSelectedElements'))
-      .value;
+  bool get showSelectedElements =>
+      (_$showSelectedElementsComputed ??= Computed<bool>(
+        () => super.showSelectedElements,
+        name: 'TH2FileEditControllerBase.showSelectedElements',
+      )).value;
   Computed<bool>? _$showSelectionHandlesComputed;
 
   @override
-  bool get showSelectionHandles => (_$showSelectionHandlesComputed ??=
-          Computed<bool>(() => super.showSelectionHandles,
-              name: 'TH2FileEditControllerBase.showSelectionHandles'))
-      .value;
+  bool get showSelectionHandles =>
+      (_$showSelectionHandlesComputed ??= Computed<bool>(
+        () => super.showSelectionHandles,
+        name: 'TH2FileEditControllerBase.showSelectionHandles',
+      )).value;
   Computed<bool>? _$showSelectionWindowComputed;
 
   @override
-  bool get showSelectionWindow => (_$showSelectionWindowComputed ??=
-          Computed<bool>(() => super.showSelectionWindow,
-              name: 'TH2FileEditControllerBase.showSelectionWindow'))
-      .value;
+  bool get showSelectionWindow =>
+      (_$showSelectionWindowComputed ??= Computed<bool>(
+        () => super.showSelectionWindow,
+        name: 'TH2FileEditControllerBase.showSelectionWindow',
+      )).value;
   Computed<bool>? _$showUndoRedoButtonsComputed;
 
   @override
-  bool get showUndoRedoButtons => (_$showUndoRedoButtonsComputed ??=
-          Computed<bool>(() => super.showUndoRedoButtons,
-              name: 'TH2FileEditControllerBase.showUndoRedoButtons'))
-      .value;
+  bool get showUndoRedoButtons =>
+      (_$showUndoRedoButtonsComputed ??= Computed<bool>(
+        () => super.showUndoRedoButtons,
+        name: 'TH2FileEditControllerBase.showUndoRedoButtons',
+      )).value;
   Computed<bool>? _$enableRemoveButtonComputed;
 
   @override
-  bool get enableRemoveButton => (_$enableRemoveButtonComputed ??=
-          Computed<bool>(() => super.enableRemoveButton,
-              name: 'TH2FileEditControllerBase.enableRemoveButton'))
-      .value;
+  bool get enableRemoveButton =>
+      (_$enableRemoveButtonComputed ??= Computed<bool>(
+        () => super.enableRemoveButton,
+        name: 'TH2FileEditControllerBase.enableRemoveButton',
+      )).value;
   Computed<bool>? _$enableSaveButtonComputed;
 
   @override
   bool get enableSaveButton => (_$enableSaveButtonComputed ??= Computed<bool>(
-          () => super.enableSaveButton,
-          name: 'TH2FileEditControllerBase.enableSaveButton'))
-      .value;
+    () => super.enableSaveButton,
+    name: 'TH2FileEditControllerBase.enableSaveButton',
+  )).value;
   Computed<bool>? _$scrapHasScaleOptionComputed;
 
   @override
-  bool get scrapHasScaleOption => (_$scrapHasScaleOptionComputed ??=
-          Computed<bool>(() => super.scrapHasScaleOption,
-              name: 'TH2FileEditControllerBase.scrapHasScaleOption'))
-      .value;
+  bool get scrapHasScaleOption =>
+      (_$scrapHasScaleOptionComputed ??= Computed<bool>(
+        () => super.scrapHasScaleOption,
+        name: 'TH2FileEditControllerBase.scrapHasScaleOption',
+      )).value;
   Computed<THLengthUnitType>? _$scrapLengthUnitTypeComputed;
 
   @override
-  THLengthUnitType get scrapLengthUnitType => (_$scrapLengthUnitTypeComputed ??=
-          Computed<THLengthUnitType>(() => super.scrapLengthUnitType,
-              name: 'TH2FileEditControllerBase.scrapLengthUnitType'))
-      .value;
+  THLengthUnitType get scrapLengthUnitType =>
+      (_$scrapLengthUnitTypeComputed ??= Computed<THLengthUnitType>(
+        () => super.scrapLengthUnitType,
+        name: 'TH2FileEditControllerBase.scrapLengthUnitType',
+      )).value;
   Computed<double>? _$scrapLengthUnitsPerPointComputed;
 
   @override
-  double get scrapLengthUnitsPerPoint => (_$scrapLengthUnitsPerPointComputed ??=
-          Computed<double>(() => super.scrapLengthUnitsPerPoint,
-              name: 'TH2FileEditControllerBase.scrapLengthUnitsPerPoint'))
-      .value;
+  double get scrapLengthUnitsPerPoint =>
+      (_$scrapLengthUnitsPerPointComputed ??= Computed<double>(
+        () => super.scrapLengthUnitsPerPoint,
+        name: 'TH2FileEditControllerBase.scrapLengthUnitsPerPoint',
+      )).value;
   Computed<double>? _$scrapLengthUnitsOnGraphicalScaleComputed;
 
   @override
   double get scrapLengthUnitsOnGraphicalScale =>
       (_$scrapLengthUnitsOnGraphicalScaleComputed ??= Computed<double>(
-              () => super.scrapLengthUnitsOnGraphicalScale,
-              name:
-                  'TH2FileEditControllerBase.scrapLengthUnitsOnGraphicalScale'))
-          .value;
+        () => super.scrapLengthUnitsOnGraphicalScale,
+        name: 'TH2FileEditControllerBase.scrapLengthUnitsOnGraphicalScale',
+      )).value;
   Computed<double>? _$scrapLengthUnitsPerPointOnScreenComputed;
 
   @override
   double get scrapLengthUnitsPerPointOnScreen =>
       (_$scrapLengthUnitsPerPointOnScreenComputed ??= Computed<double>(
-              () => super.scrapLengthUnitsPerPointOnScreen,
-              name:
-                  'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen'))
-          .value;
+        () => super.scrapLengthUnitsPerPointOnScreen,
+        name: 'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen',
+      )).value;
 
-  late final _$_screenSizeAtom =
-      Atom(name: 'TH2FileEditControllerBase._screenSize', context: context);
+  late final _$_screenSizeAtom = Atom(
+    name: 'TH2FileEditControllerBase._screenSize',
+    context: context,
+  );
 
   Size get screenSize {
     _$_screenSizeAtom.reportRead();
@@ -212,8 +219,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_canvasSizeAtom =
-      Atom(name: 'TH2FileEditControllerBase._canvasSize', context: context);
+  late final _$_canvasSizeAtom = Atom(
+    name: 'TH2FileEditControllerBase._canvasSize',
+    context: context,
+  );
 
   Size get canvasSize {
     _$_canvasSizeAtom.reportRead();
@@ -230,8 +239,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_canvasScaleAtom =
-      Atom(name: 'TH2FileEditControllerBase._canvasScale', context: context);
+  late final _$_canvasScaleAtom = Atom(
+    name: 'TH2FileEditControllerBase._canvasScale',
+    context: context,
+  );
 
   double get canvasScale {
     _$_canvasScaleAtom.reportRead();
@@ -249,7 +260,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_canvasTranslationAtom = Atom(
-      name: 'TH2FileEditControllerBase._canvasTranslation', context: context);
+    name: 'TH2FileEditControllerBase._canvasTranslation',
+    context: context,
+  );
 
   Offset get canvasTranslation {
     _$_canvasTranslationAtom.reportRead();
@@ -267,7 +280,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_canvasBoundingBoxAtom = Atom(
-      name: 'TH2FileEditControllerBase._canvasBoundingBox', context: context);
+    name: 'TH2FileEditControllerBase._canvasBoundingBox',
+    context: context,
+  );
 
   Rect get canvasBoundingBox {
     _$_canvasBoundingBoxAtom.reportRead();
@@ -285,7 +300,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_screenBoundingBoxAtom = Atom(
-      name: 'TH2FileEditControllerBase._screenBoundingBox', context: context);
+    name: 'TH2FileEditControllerBase._screenBoundingBox',
+    context: context,
+  );
 
   Rect get screenBoundingBox {
     _$_screenBoundingBoxAtom.reportRead();
@@ -302,8 +319,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isLoadingAtom =
-      Atom(name: 'TH2FileEditControllerBase._isLoading', context: context);
+  late final _$_isLoadingAtom = Atom(
+    name: 'TH2FileEditControllerBase._isLoading',
+    context: context,
+  );
 
   bool get isLoading {
     _$_isLoadingAtom.reportRead();
@@ -320,8 +339,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_thFileAtom =
-      Atom(name: 'TH2FileEditControllerBase._thFile', context: context);
+  late final _$_thFileAtom = Atom(
+    name: 'TH2FileEditControllerBase._thFile',
+    context: context,
+  );
 
   THFile get thFile {
     _$_thFileAtom.reportRead();
@@ -335,15 +356,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _thFile(THFile value) {
-    _$_thFileAtom
-        .reportWrite(value, __thFileIsInitialized ? super._thFile : null, () {
-      super._thFile = value;
-      __thFileIsInitialized = true;
-    });
+    _$_thFileAtom.reportWrite(
+      value,
+      __thFileIsInitialized ? super._thFile : null,
+      () {
+        super._thFile = value;
+        __thFileIsInitialized = true;
+      },
+    );
   }
 
-  late final _$_thFileMPIDAtom =
-      Atom(name: 'TH2FileEditControllerBase._thFileMPID', context: context);
+  late final _$_thFileMPIDAtom = Atom(
+    name: 'TH2FileEditControllerBase._thFileMPID',
+    context: context,
+  );
 
   int get thFileMPID {
     _$_thFileMPIDAtom.reportRead();
@@ -358,14 +384,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   @override
   set _thFileMPID(int value) {
     _$_thFileMPIDAtom.reportWrite(
-        value, __thFileMPIDIsInitialized ? super._thFileMPID : null, () {
-      super._thFileMPID = value;
-      __thFileMPIDIsInitialized = true;
-    });
+      value,
+      __thFileMPIDIsInitialized ? super._thFileMPID : null,
+      () {
+        super._thFileMPID = value;
+        __thFileMPIDIsInitialized = true;
+      },
+    );
   }
 
-  late final _$_hasUndoAtom =
-      Atom(name: 'TH2FileEditControllerBase._hasUndo', context: context);
+  late final _$_hasUndoAtom = Atom(
+    name: 'TH2FileEditControllerBase._hasUndo',
+    context: context,
+  );
 
   bool get hasUndo {
     _$_hasUndoAtom.reportRead();
@@ -382,8 +413,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_hasRedoAtom =
-      Atom(name: 'TH2FileEditControllerBase._hasRedo', context: context);
+  late final _$_hasRedoAtom = Atom(
+    name: 'TH2FileEditControllerBase._hasRedo',
+    context: context,
+  );
 
   bool get hasRedo {
     _$_hasRedoAtom.reportRead();
@@ -401,7 +434,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_undoDescriptionAtom = Atom(
-      name: 'TH2FileEditControllerBase._undoDescription', context: context);
+    name: 'TH2FileEditControllerBase._undoDescription',
+    context: context,
+  );
 
   String get undoDescription {
     _$_undoDescriptionAtom.reportRead();
@@ -419,7 +454,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_redoDescriptionAtom = Atom(
-      name: 'TH2FileEditControllerBase._redoDescription', context: context);
+    name: 'TH2FileEditControllerBase._redoDescription',
+    context: context,
+  );
 
   String get redoDescription {
     _$_redoDescriptionAtom.reportRead();
@@ -437,7 +474,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_isAddElementModeAtom = Atom(
-      name: 'TH2FileEditControllerBase._isAddElementMode', context: context);
+    name: 'TH2FileEditControllerBase._isAddElementMode',
+    context: context,
+  );
 
   bool get isAddElementMode {
     _$_isAddElementModeAtom.reportRead();
@@ -454,8 +493,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isEditLineModeAtom =
-      Atom(name: 'TH2FileEditControllerBase._isEditLineMode', context: context);
+  late final _$_isEditLineModeAtom = Atom(
+    name: 'TH2FileEditControllerBase._isEditLineMode',
+    context: context,
+  );
 
   bool get isEditLineMode {
     _$_isEditLineModeAtom.reportRead();
@@ -473,8 +514,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_enableNodeEditButtonAtom = Atom(
-      name: 'TH2FileEditControllerBase._enableNodeEditButton',
-      context: context);
+    name: 'TH2FileEditControllerBase._enableNodeEditButton',
+    context: context,
+  );
 
   bool get enableNodeEditButton {
     _$_enableNodeEditButtonAtom.reportRead();
@@ -486,14 +528,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _enableNodeEditButton(bool value) {
-    _$_enableNodeEditButtonAtom.reportWrite(value, super._enableNodeEditButton,
-        () {
-      super._enableNodeEditButton = value;
-    });
+    _$_enableNodeEditButtonAtom.reportWrite(
+      value,
+      super._enableNodeEditButton,
+      () {
+        super._enableNodeEditButton = value;
+      },
+    );
   }
 
   late final _$_isOptionEditModeAtom = Atom(
-      name: 'TH2FileEditControllerBase._isOptionEditMode', context: context);
+    name: 'TH2FileEditControllerBase._isOptionEditMode',
+    context: context,
+  );
 
   bool get isOptionEditMode {
     _$_isOptionEditModeAtom.reportRead();
@@ -510,8 +557,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_isSelectModeAtom =
-      Atom(name: 'TH2FileEditControllerBase._isSelectMode', context: context);
+  late final _$_isSelectModeAtom = Atom(
+    name: 'TH2FileEditControllerBase._isSelectMode',
+    context: context,
+  );
 
   bool get isSelectMode {
     _$_isSelectModeAtom.reportRead();
@@ -529,8 +578,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_isZoomButtonsHoveredAtom = Atom(
-      name: 'TH2FileEditControllerBase._isZoomButtonsHovered',
-      context: context);
+    name: 'TH2FileEditControllerBase._isZoomButtonsHovered',
+    context: context,
+  );
 
   bool get isZoomButtonsHovered {
     _$_isZoomButtonsHoveredAtom.reportRead();
@@ -542,15 +592,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _isZoomButtonsHovered(bool value) {
-    _$_isZoomButtonsHoveredAtom.reportWrite(value, super._isZoomButtonsHovered,
-        () {
-      super._isZoomButtonsHovered = value;
-    });
+    _$_isZoomButtonsHoveredAtom.reportWrite(
+      value,
+      super._isZoomButtonsHovered,
+      () {
+        super._isZoomButtonsHovered = value;
+      },
+    );
   }
 
   late final _$_isAddElementButtonsHoveredAtom = Atom(
-      name: 'TH2FileEditControllerBase._isAddElementButtonsHovered',
-      context: context);
+    name: 'TH2FileEditControllerBase._isAddElementButtonsHovered',
+    context: context,
+  );
 
   bool get isAddElementButtonsHovered {
     _$_isAddElementButtonsHoveredAtom.reportRead();
@@ -562,15 +616,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _isAddElementButtonsHovered(bool value) {
-    _$_isAddElementButtonsHoveredAtom
-        .reportWrite(value, super._isAddElementButtonsHovered, () {
-      super._isAddElementButtonsHovered = value;
-    });
+    _$_isAddElementButtonsHoveredAtom.reportWrite(
+      value,
+      super._isAddElementButtonsHovered,
+      () {
+        super._isAddElementButtonsHovered = value;
+      },
+    );
   }
 
   late final _$_currentDecimalPositionsAtom = Atom(
-      name: 'TH2FileEditControllerBase._currentDecimalPositions',
-      context: context);
+    name: 'TH2FileEditControllerBase._currentDecimalPositions',
+    context: context,
+  );
 
   int get currentDecimalPositions {
     _$_currentDecimalPositionsAtom.reportRead();
@@ -582,14 +640,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _currentDecimalPositions(int value) {
-    _$_currentDecimalPositionsAtom
-        .reportWrite(value, super._currentDecimalPositions, () {
-      super._currentDecimalPositions = value;
-    });
+    _$_currentDecimalPositionsAtom.reportWrite(
+      value,
+      super._currentDecimalPositions,
+      () {
+        super._currentDecimalPositions = value;
+      },
+    );
   }
 
-  late final _$_activeScrapIDAtom =
-      Atom(name: 'TH2FileEditControllerBase._activeScrapID', context: context);
+  late final _$_activeScrapIDAtom = Atom(
+    name: 'TH2FileEditControllerBase._activeScrapID',
+    context: context,
+  );
 
   int get activeScrapID {
     _$_activeScrapIDAtom.reportRead();
@@ -607,7 +670,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_hasMultipleScrapsAtom = Atom(
-      name: 'TH2FileEditControllerBase._hasMultipleScraps', context: context);
+    name: 'TH2FileEditControllerBase._hasMultipleScraps',
+    context: context,
+  );
 
   bool get hasMultipleScraps {
     _$_hasMultipleScrapsAtom.reportRead();
@@ -625,8 +690,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_lineThicknessOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._lineThicknessOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._lineThicknessOnCanvas',
+    context: context,
+  );
 
   double get lineThicknessOnCanvas {
     _$_lineThicknessOnCanvasAtom.reportRead();
@@ -638,15 +704,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _lineThicknessOnCanvas(double value) {
-    _$_lineThicknessOnCanvasAtom
-        .reportWrite(value, super._lineThicknessOnCanvas, () {
-      super._lineThicknessOnCanvas = value;
-    });
+    _$_lineThicknessOnCanvasAtom.reportWrite(
+      value,
+      super._lineThicknessOnCanvas,
+      () {
+        super._lineThicknessOnCanvas = value;
+      },
+    );
   }
 
   late final _$_controlLineThicknessOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._controlLineThicknessOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._controlLineThicknessOnCanvas',
+    context: context,
+  );
 
   double get controlLineThicknessOnCanvas {
     _$_controlLineThicknessOnCanvasAtom.reportRead();
@@ -658,15 +728,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _controlLineThicknessOnCanvas(double value) {
-    _$_controlLineThicknessOnCanvasAtom
-        .reportWrite(value, super._controlLineThicknessOnCanvas, () {
-      super._controlLineThicknessOnCanvas = value;
-    });
+    _$_controlLineThicknessOnCanvasAtom.reportWrite(
+      value,
+      super._controlLineThicknessOnCanvas,
+      () {
+        super._controlLineThicknessOnCanvas = value;
+      },
+    );
   }
 
   late final _$_xviLineThicknessOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._xviLineThicknessOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._xviLineThicknessOnCanvas',
+    context: context,
+  );
 
   double get xviLineThicknessOnCanvas {
     _$_xviLineThicknessOnCanvasAtom.reportRead();
@@ -678,15 +752,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _xviLineThicknessOnCanvas(double value) {
-    _$_xviLineThicknessOnCanvasAtom
-        .reportWrite(value, super._xviLineThicknessOnCanvas, () {
-      super._xviLineThicknessOnCanvas = value;
-    });
+    _$_xviLineThicknessOnCanvasAtom.reportWrite(
+      value,
+      super._xviLineThicknessOnCanvas,
+      () {
+        super._xviLineThicknessOnCanvas = value;
+      },
+    );
   }
 
   late final _$_lineDirectionTickLengthOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._lineDirectionTickLengthOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._lineDirectionTickLengthOnCanvas',
+    context: context,
+  );
 
   double get lineDirectionTickLengthOnCanvas {
     _$_lineDirectionTickLengthOnCanvasAtom.reportRead();
@@ -699,14 +777,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _lineDirectionTickLengthOnCanvas(double value) {
-    _$_lineDirectionTickLengthOnCanvasAtom
-        .reportWrite(value, super._lineDirectionTickLengthOnCanvas, () {
-      super._lineDirectionTickLengthOnCanvas = value;
-    });
+    _$_lineDirectionTickLengthOnCanvasAtom.reportWrite(
+      value,
+      super._lineDirectionTickLengthOnCanvas,
+      () {
+        super._lineDirectionTickLengthOnCanvas = value;
+      },
+    );
   }
 
   late final _$_pointRadiusOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._pointRadiusOnCanvas', context: context);
+    name: 'TH2FileEditControllerBase._pointRadiusOnCanvas',
+    context: context,
+  );
 
   double get pointRadiusOnCanvas {
     _$_pointRadiusOnCanvasAtom.reportRead();
@@ -718,15 +801,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _pointRadiusOnCanvas(double value) {
-    _$_pointRadiusOnCanvasAtom.reportWrite(value, super._pointRadiusOnCanvas,
-        () {
-      super._pointRadiusOnCanvas = value;
-    });
+    _$_pointRadiusOnCanvasAtom.reportWrite(
+      value,
+      super._pointRadiusOnCanvas,
+      () {
+        super._pointRadiusOnCanvas = value;
+      },
+    );
   }
 
   late final _$_selectionToleranceOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionToleranceOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionToleranceOnCanvas',
+    context: context,
+  );
 
   double get selectionToleranceOnCanvas {
     _$_selectionToleranceOnCanvasAtom.reportRead();
@@ -738,15 +825,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionToleranceOnCanvas(double value) {
-    _$_selectionToleranceOnCanvasAtom
-        .reportWrite(value, super._selectionToleranceOnCanvas, () {
-      super._selectionToleranceOnCanvas = value;
-    });
+    _$_selectionToleranceOnCanvasAtom.reportWrite(
+      value,
+      super._selectionToleranceOnCanvas,
+      () {
+        super._selectionToleranceOnCanvas = value;
+      },
+    );
   }
 
   late final _$_selectionToleranceSquaredOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionToleranceSquaredOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionToleranceSquaredOnCanvas',
+    context: context,
+  );
 
   double get selectionToleranceSquaredOnCanvas {
     _$_selectionToleranceSquaredOnCanvasAtom.reportRead();
@@ -759,15 +850,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionToleranceSquaredOnCanvas(double value) {
-    _$_selectionToleranceSquaredOnCanvasAtom
-        .reportWrite(value, super._selectionToleranceSquaredOnCanvas, () {
-      super._selectionToleranceSquaredOnCanvas = value;
-    });
+    _$_selectionToleranceSquaredOnCanvasAtom.reportWrite(
+      value,
+      super._selectionToleranceSquaredOnCanvas,
+      () {
+        super._selectionToleranceSquaredOnCanvas = value;
+      },
+    );
   }
 
   late final _$_canvasScaleTranslationUndefinedAtom = Atom(
-      name: 'TH2FileEditControllerBase._canvasScaleTranslationUndefined',
-      context: context);
+    name: 'TH2FileEditControllerBase._canvasScaleTranslationUndefined',
+    context: context,
+  );
 
   bool get canvasScaleTranslationUndefined {
     _$_canvasScaleTranslationUndefinedAtom.reportRead();
@@ -779,15 +874,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _canvasScaleTranslationUndefined(bool value) {
-    _$_canvasScaleTranslationUndefinedAtom
-        .reportWrite(value, super._canvasScaleTranslationUndefined, () {
-      super._canvasScaleTranslationUndefined = value;
-    });
+    _$_canvasScaleTranslationUndefinedAtom.reportWrite(
+      value,
+      super._canvasScaleTranslationUndefined,
+      () {
+        super._canvasScaleTranslationUndefined = value;
+      },
+    );
   }
 
   late final _$_selectionWindowFillPaintAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionWindowFillPaint',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionWindowFillPaint',
+    context: context,
+  );
 
   Paint get selectionWindowFillPaint {
     _$_selectionWindowFillPaintAtom.reportRead();
@@ -799,15 +898,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionWindowFillPaint(Paint value) {
-    _$_selectionWindowFillPaintAtom
-        .reportWrite(value, super._selectionWindowFillPaint, () {
-      super._selectionWindowFillPaint = value;
-    });
+    _$_selectionWindowFillPaintAtom.reportWrite(
+      value,
+      super._selectionWindowFillPaint,
+      () {
+        super._selectionWindowFillPaint = value;
+      },
+    );
   }
 
   late final _$_selectionWindowBorderPaintAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionWindowBorderPaint',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionWindowBorderPaint',
+    context: context,
+  );
 
   Paint get selectionWindowBorderPaint {
     _$_selectionWindowBorderPaintAtom.reportRead();
@@ -819,15 +922,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionWindowBorderPaint(Paint value) {
-    _$_selectionWindowBorderPaintAtom
-        .reportWrite(value, super._selectionWindowBorderPaint, () {
-      super._selectionWindowBorderPaint = value;
-    });
+    _$_selectionWindowBorderPaintAtom.reportWrite(
+      value,
+      super._selectionWindowBorderPaint,
+      () {
+        super._selectionWindowBorderPaint = value;
+      },
+    );
   }
 
   late final _$_selectionWindowBorderPaintDashIntervalAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionWindowBorderPaintDashInterval',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionWindowBorderPaintDashInterval',
+    context: context,
+  );
 
   double get selectionWindowBorderPaintDashInterval {
     _$_selectionWindowBorderPaintDashIntervalAtom.reportRead();
@@ -840,15 +947,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionWindowBorderPaintDashInterval(double value) {
-    _$_selectionWindowBorderPaintDashIntervalAtom
-        .reportWrite(value, super._selectionWindowBorderPaintDashInterval, () {
-      super._selectionWindowBorderPaintDashInterval = value;
-    });
+    _$_selectionWindowBorderPaintDashIntervalAtom.reportWrite(
+      value,
+      super._selectionWindowBorderPaintDashInterval,
+      () {
+        super._selectionWindowBorderPaintDashInterval = value;
+      },
+    );
   }
 
   late final _$_selectionHandleSizeOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionHandleSizeOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionHandleSizeOnCanvas',
+    context: context,
+  );
 
   double get selectionHandleSizeOnCanvas {
     _$_selectionHandleSizeOnCanvasAtom.reportRead();
@@ -860,15 +971,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionHandleSizeOnCanvas(double value) {
-    _$_selectionHandleSizeOnCanvasAtom
-        .reportWrite(value, super._selectionHandleSizeOnCanvas, () {
-      super._selectionHandleSizeOnCanvas = value;
-    });
+    _$_selectionHandleSizeOnCanvasAtom.reportWrite(
+      value,
+      super._selectionHandleSizeOnCanvas,
+      () {
+        super._selectionHandleSizeOnCanvas = value;
+      },
+    );
   }
 
   late final _$_selectionHandleDistanceOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionHandleDistanceOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionHandleDistanceOnCanvas',
+    context: context,
+  );
 
   double get selectionHandleDistanceOnCanvas {
     _$_selectionHandleDistanceOnCanvasAtom.reportRead();
@@ -881,15 +996,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionHandleDistanceOnCanvas(double value) {
-    _$_selectionHandleDistanceOnCanvasAtom
-        .reportWrite(value, super._selectionHandleDistanceOnCanvas, () {
-      super._selectionHandleDistanceOnCanvas = value;
-    });
+    _$_selectionHandleDistanceOnCanvasAtom.reportWrite(
+      value,
+      super._selectionHandleDistanceOnCanvas,
+      () {
+        super._selectionHandleDistanceOnCanvas = value;
+      },
+    );
   }
 
   late final _$_selectionHandleLineThicknessOnCanvasAtom = Atom(
-      name: 'TH2FileEditControllerBase._selectionHandleLineThicknessOnCanvas',
-      context: context);
+    name: 'TH2FileEditControllerBase._selectionHandleLineThicknessOnCanvas',
+    context: context,
+  );
 
   double get selectionHandleLineThicknessOnCanvas {
     _$_selectionHandleLineThicknessOnCanvasAtom.reportRead();
@@ -902,14 +1021,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _selectionHandleLineThicknessOnCanvas(double value) {
-    _$_selectionHandleLineThicknessOnCanvasAtom
-        .reportWrite(value, super._selectionHandleLineThicknessOnCanvas, () {
-      super._selectionHandleLineThicknessOnCanvas = value;
-    });
+    _$_selectionHandleLineThicknessOnCanvasAtom.reportWrite(
+      value,
+      super._selectionHandleLineThicknessOnCanvas,
+      () {
+        super._selectionHandleLineThicknessOnCanvas = value;
+      },
+    );
   }
 
   late final _$_shouldShowImagesAtom = Atom(
-      name: 'TH2FileEditControllerBase._shouldShowImages', context: context);
+    name: 'TH2FileEditControllerBase._shouldShowImages',
+    context: context,
+  );
 
   bool get shouldShowImages {
     _$_shouldShowImagesAtom.reportRead();
@@ -926,8 +1050,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_showImagesAtom =
-      Atom(name: 'TH2FileEditControllerBase._showImages', context: context);
+  late final _$_showImagesAtom = Atom(
+    name: 'TH2FileEditControllerBase._showImages',
+    context: context,
+  );
 
   bool get showImages {
     _$_showImagesAtom.reportRead();
@@ -945,7 +1071,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_statusBarMessageAtom = Atom(
-      name: 'TH2FileEditControllerBase._statusBarMessage', context: context);
+    name: 'TH2FileEditControllerBase._statusBarMessage',
+    context: context,
+  );
 
   String get statusBarMessage {
     _$_statusBarMessageAtom.reportRead();
@@ -963,9 +1091,9 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   late final _$_redrawTriggerSelectedElementsListChangedAtom = Atom(
-      name:
-          'TH2FileEditControllerBase._redrawTriggerSelectedElementsListChanged',
-      context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerSelectedElementsListChanged',
+    context: context,
+  );
 
   int get redrawTriggerSelectedElementsListChanged {
     _$_redrawTriggerSelectedElementsListChangedAtom.reportRead();
@@ -979,14 +1107,18 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   @override
   set _redrawTriggerSelectedElementsListChanged(int value) {
     _$_redrawTriggerSelectedElementsListChangedAtom.reportWrite(
-        value, super._redrawTriggerSelectedElementsListChanged, () {
-      super._redrawTriggerSelectedElementsListChanged = value;
-    });
+      value,
+      super._redrawTriggerSelectedElementsListChanged,
+      () {
+        super._redrawTriggerSelectedElementsListChanged = value;
+      },
+    );
   }
 
   late final _$_redrawTriggerSelectedElementsAtom = Atom(
-      name: 'TH2FileEditControllerBase._redrawTriggerSelectedElements',
-      context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerSelectedElements',
+    context: context,
+  );
 
   int get redrawTriggerSelectedElements {
     _$_redrawTriggerSelectedElementsAtom.reportRead();
@@ -998,15 +1130,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _redrawTriggerSelectedElements(int value) {
-    _$_redrawTriggerSelectedElementsAtom
-        .reportWrite(value, super._redrawTriggerSelectedElements, () {
-      super._redrawTriggerSelectedElements = value;
-    });
+    _$_redrawTriggerSelectedElementsAtom.reportWrite(
+      value,
+      super._redrawTriggerSelectedElements,
+      () {
+        super._redrawTriggerSelectedElements = value;
+      },
+    );
   }
 
   late final _$_redrawTriggerNonSelectedElementsAtom = Atom(
-      name: 'TH2FileEditControllerBase._redrawTriggerNonSelectedElements',
-      context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerNonSelectedElements',
+    context: context,
+  );
 
   int get redrawTriggerNonSelectedElements {
     _$_redrawTriggerNonSelectedElementsAtom.reportRead();
@@ -1018,14 +1154,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _redrawTriggerNonSelectedElements(int value) {
-    _$_redrawTriggerNonSelectedElementsAtom
-        .reportWrite(value, super._redrawTriggerNonSelectedElements, () {
-      super._redrawTriggerNonSelectedElements = value;
-    });
+    _$_redrawTriggerNonSelectedElementsAtom.reportWrite(
+      value,
+      super._redrawTriggerNonSelectedElements,
+      () {
+        super._redrawTriggerNonSelectedElements = value;
+      },
+    );
   }
 
   late final _$_redrawTriggerImagesAtom = Atom(
-      name: 'TH2FileEditControllerBase._redrawTriggerImages', context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerImages',
+    context: context,
+  );
 
   int get redrawTriggerImages {
     _$_redrawTriggerImagesAtom.reportRead();
@@ -1037,15 +1178,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _redrawTriggerImages(int value) {
-    _$_redrawTriggerImagesAtom.reportWrite(value, super._redrawTriggerImages,
-        () {
-      super._redrawTriggerImages = value;
-    });
+    _$_redrawTriggerImagesAtom.reportWrite(
+      value,
+      super._redrawTriggerImages,
+      () {
+        super._redrawTriggerImages = value;
+      },
+    );
   }
 
   late final _$_redrawTriggerNewLineAtom = Atom(
-      name: 'TH2FileEditControllerBase._redrawTriggerNewLine',
-      context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerNewLine',
+    context: context,
+  );
 
   int get redrawTriggerNewLine {
     _$_redrawTriggerNewLineAtom.reportRead();
@@ -1057,15 +1202,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _redrawTriggerNewLine(int value) {
-    _$_redrawTriggerNewLineAtom.reportWrite(value, super._redrawTriggerNewLine,
-        () {
-      super._redrawTriggerNewLine = value;
-    });
+    _$_redrawTriggerNewLineAtom.reportWrite(
+      value,
+      super._redrawTriggerNewLine,
+      () {
+        super._redrawTriggerNewLine = value;
+      },
+    );
   }
 
   late final _$_redrawTriggerEditLineAtom = Atom(
-      name: 'TH2FileEditControllerBase._redrawTriggerEditLine',
-      context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerEditLine',
+    context: context,
+  );
 
   int get redrawTriggerEditLine {
     _$_redrawTriggerEditLineAtom.reportRead();
@@ -1077,15 +1226,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _redrawTriggerEditLine(int value) {
-    _$_redrawTriggerEditLineAtom
-        .reportWrite(value, super._redrawTriggerEditLine, () {
-      super._redrawTriggerEditLine = value;
-    });
+    _$_redrawTriggerEditLineAtom.reportWrite(
+      value,
+      super._redrawTriggerEditLine,
+      () {
+        super._redrawTriggerEditLine = value;
+      },
+    );
   }
 
   late final _$_redrawTriggerOptionsListAtom = Atom(
-      name: 'TH2FileEditControllerBase._redrawTriggerOptionsList',
-      context: context);
+    name: 'TH2FileEditControllerBase._redrawTriggerOptionsList',
+    context: context,
+  );
 
   int get redrawTriggerOptionsList {
     _$_redrawTriggerOptionsListAtom.reportRead();
@@ -1097,14 +1250,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   set _redrawTriggerOptionsList(int value) {
-    _$_redrawTriggerOptionsListAtom
-        .reportWrite(value, super._redrawTriggerOptionsList, () {
-      super._redrawTriggerOptionsList = value;
-    });
+    _$_redrawTriggerOptionsListAtom.reportWrite(
+      value,
+      super._redrawTriggerOptionsList,
+      () {
+        super._redrawTriggerOptionsList = value;
+      },
+    );
   }
 
-  late final _$_mousePositionAtom =
-      Atom(name: 'TH2FileEditControllerBase._mousePosition', context: context);
+  late final _$_mousePositionAtom = Atom(
+    name: 'TH2FileEditControllerBase._mousePosition',
+    context: context,
+  );
 
   Offset get mousePosition {
     _$_mousePositionAtom.reportRead();
@@ -1121,8 +1279,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_canvasCenterXAtom =
-      Atom(name: 'TH2FileEditControllerBase._canvasCenterX', context: context);
+  late final _$_canvasCenterXAtom = Atom(
+    name: 'TH2FileEditControllerBase._canvasCenterX',
+    context: context,
+  );
 
   double get canvasCenterX {
     _$_canvasCenterXAtom.reportRead();
@@ -1139,8 +1299,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_canvasCenterYAtom =
-      Atom(name: 'TH2FileEditControllerBase._canvasCenterY', context: context);
+  late final _$_canvasCenterYAtom = Atom(
+    name: 'TH2FileEditControllerBase._canvasCenterY',
+    context: context,
+  );
 
   double get canvasCenterY {
     _$_canvasCenterYAtom.reportRead();
@@ -1157,8 +1319,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$TH2FileEditControllerBaseActionController =
-      ActionController(name: 'TH2FileEditControllerBase', context: context);
+  late final _$TH2FileEditControllerBaseActionController = ActionController(
+    name: 'TH2FileEditControllerBase',
+    context: context,
+  );
 
   @override
   void updateShowImages() {
@@ -1173,9 +1337,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void performSetZoomButtonsHovered(bool isHovered) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.performSetZoomButtonsHovered');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.performSetZoomButtonsHovered',
+        );
     try {
       return super.performSetZoomButtonsHovered(isHovered);
     } finally {
@@ -1185,10 +1350,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void performSetAddElementButtonsHovered(bool isHovered) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditControllerBase.performSetAddElementButtonsHovered');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.performSetAddElementButtonsHovered',
+        );
     try {
       return super.performSetAddElementButtonsHovered(isHovered);
     } finally {
@@ -1220,9 +1385,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void toggleToNextAvailableScrap() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.toggleToNextAvailableScrap');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.toggleToNextAvailableScrap',
+        );
     try {
       return super.toggleToNextAvailableScrap();
     } finally {
@@ -1243,10 +1409,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name:
-                'TH2FileEditControllerBase.onPointerMoveUpdateMoveCanvasMode');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.onPointerMoveUpdateMoveCanvasMode',
+        );
     try {
       return super.onPointerMoveUpdateMoveCanvasMode(event);
     } finally {
@@ -1256,9 +1422,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void triggerAllElementsRedraw() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.triggerAllElementsRedraw');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerAllElementsRedraw',
+        );
     try {
       return super.triggerAllElementsRedraw();
     } finally {
@@ -1268,9 +1435,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void triggerSelectedElementsRedraw({bool setState = false}) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.triggerSelectedElementsRedraw');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerSelectedElementsRedraw',
+        );
     try {
       return super.triggerSelectedElementsRedraw(setState: setState);
     } finally {
@@ -1280,9 +1448,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void triggerNonSelectedElementsRedraw() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.triggerNonSelectedElementsRedraw');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerNonSelectedElementsRedraw',
+        );
     try {
       return super.triggerNonSelectedElementsRedraw();
     } finally {
@@ -1292,9 +1461,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void triggerSelectedListChanged() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.triggerSelectedListChanged');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerSelectedListChanged',
+        );
     try {
       return super.triggerSelectedListChanged();
     } finally {
@@ -1326,9 +1496,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void triggerOptionsListRedraw() {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.triggerOptionsListRedraw');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerOptionsListRedraw',
+        );
     try {
       return super.triggerOptionsListRedraw();
     } finally {
@@ -1470,9 +1641,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
 
   @override
   void executeAndSubstituteLastUndo(MPCommand command) {
-    final _$actionInfo =
-        _$TH2FileEditControllerBaseActionController.startAction(
-            name: 'TH2FileEditControllerBase.executeAndSubstituteLastUndo');
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.executeAndSubstituteLastUndo',
+        );
     try {
       return super.executeAndSubstituteLastUndo(command);
     } finally {
@@ -1514,8 +1686,10 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void applyMPCommandList(List<MPCommand> commandList,
-      MPMultipleElementsCommandCompletionType completionType) {
+  void applyMPCommandList(
+    List<MPCommand> commandList,
+    MPMultipleElementsCommandCompletionType completionType,
+  ) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.applyMPCommandList');
     try {
