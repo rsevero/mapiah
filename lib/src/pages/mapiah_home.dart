@@ -5,19 +5,38 @@ import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatefulWidget {
-  const MapiahHome({super.key}) : super();
+  final String? mainFilePath;
+
+  const MapiahHome({super.key, this.mainFilePath}) : super();
 
   @override
   State<MapiahHome> createState() => _MapiahHomeState();
 }
 
 class _MapiahHomeState extends State<MapiahHome> {
+  @override
+  void initState() {
+    super.initState();
+
+    // If a TH2 file path is provided, navigate to edit page after frame builds
+    if (widget.mainFilePath != null) {
+      if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _openTH2FileFromPath(widget.mainFilePath!);
+        });
+      } else {
+        mpLocator.mpLog.e('Invalid file extension: ${widget.mainFilePath}');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
@@ -122,6 +141,22 @@ class _MapiahHomeState extends State<MapiahHome> {
   void initializeMPCommandLocalizations(BuildContext context) {
     mpLocator.resetAppLocalizations(context);
     MPTextToUser.initialize();
+  }
+
+  void _openTH2FileFromPath(String filePath) async {
+    try {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TH2FileEditPage(
+            key: ValueKey("TH2FileEditPage|$filePath"),
+            filename: filePath,
+          ),
+        ),
+      );
+    } catch (e) {
+      mpLocator.mpLog.e('Error opening file: $e');
+    }
   }
 
   void showAboutDialog(BuildContext context) async {
