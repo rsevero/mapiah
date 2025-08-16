@@ -12,30 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.removeLineSegmentWithSubstitution({
-    required int lineSegmentMPID,
-    required THLineSegment lineSegmentSubstitution,
-    required THFile thFile,
-    super.descriptionType = MPCommandDescriptionType.removeLineSegment,
-  }) : completionType =
-           MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
-       super() {
-    commandsList = [];
-
-    final MPCommand removeLineSegmentCommand = MPRemoveLineSegmentCommand(
-      lineSegment: thFile.lineSegmentByMPID(lineSegmentMPID),
-    );
-    final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
-      originalLineSegment: thFile.lineSegmentByMPID(
-        lineSegmentSubstitution.mpID,
-      ),
-      newLineSegment: lineSegmentSubstitution,
-    );
-
-    commandsList.add(removeLineSegmentCommand);
-    commandsList.add(editLineSegmentCommand);
-  }
-
   MPMultipleElementsCommand.removeLineSegments({
     required Iterable<int> lineSegmentMPIDs,
     required TH2FileEditController th2FileEditController,

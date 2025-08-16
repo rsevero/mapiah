@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -858,7 +859,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               originalLineInTH2File: '',
             );
 
-        return MPMultipleElementsCommand.removeLineSegmentWithSubstitution(
+        return MPMultipleElementsCommandFactory.removeLineSegmentWithSubstitution(
           lineSegmentMPID: lineSegmentMPID,
           lineSegmentSubstitution: lineSegmentSubstitution,
           thFile: _th2FileEditController.thFile,

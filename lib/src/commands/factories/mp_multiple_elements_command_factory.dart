@@ -169,4 +169,33 @@ class MPMultipleElementsCommandFactory {
       descriptionType: descriptionType,
     );
   }
+
+  static MPMultipleElementsCommand removeLineSegmentWithSubstitution({
+    required int lineSegmentMPID,
+    required THLineSegment lineSegmentSubstitution,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeLineSegment,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    final MPCommand removeLineSegmentCommand = MPRemoveLineSegmentCommand(
+      lineSegment: thFile.lineSegmentByMPID(lineSegmentMPID),
+    );
+    final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
+      originalLineSegment: thFile.lineSegmentByMPID(
+        lineSegmentSubstitution.mpID,
+      ),
+      newLineSegment: lineSegmentSubstitution,
+    );
+
+    commandsList.add(removeLineSegmentCommand);
+    commandsList.add(editLineSegmentCommand);
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
 }
