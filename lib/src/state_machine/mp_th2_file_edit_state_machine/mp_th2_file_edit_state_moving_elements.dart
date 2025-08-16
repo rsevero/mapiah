@@ -24,13 +24,11 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final List<THElement> clickedElements =
         (await selectionController.getSelectableElementsClickedWithDialog(
-      screenCoordinates: event.localPosition,
-      selectionType: THSelectionType.pla,
-      canBeMultiple: true,
-      presentMultipleElementsClickedWidget: true,
-    ))
-            .values
-            .toList();
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.pla,
+          canBeMultiple: true,
+          presentMultipleElementsClickedWidget: true,
+        )).values.toList();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
 
     selectionController.clearClickedElementsAtPointerDown();
@@ -69,8 +67,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     } else {
       if (!shiftPressed) {
         selectionController.clearSelectedElements();
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.selectEmptySelection);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.selectEmptySelection,
+        );
       }
     }
 
@@ -80,8 +79,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController
-        .moveSelectedElementsToScreenCoordinates(event.localPosition);
+    selectionController.moveSelectedElementsToScreenCoordinates(
+      event.localPosition,
+    );
   }
 
   /// 1. Records an MPCommand that moves the entire selection by the distance
@@ -95,12 +95,13 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         selectionController.mpSelectedElementsLogical.length;
     final Offset panDeltaOnCanvas =
         th2FileEditController.offsetScreenToCanvas(event.localPosition) -
-            selectionController.dragStartCanvasCoordinates;
+        selectionController.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
     if (selectedCount == 0) {
-      th2FileEditController.stateController
-          .setState(MPTH2FileEditStateType.selectEmptySelection);
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectEmptySelection,
+      );
       return;
     } else if (selectedCount == 1) {
       final MPSelectedElement selected =
