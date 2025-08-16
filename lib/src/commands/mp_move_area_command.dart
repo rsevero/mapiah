@@ -19,12 +19,13 @@ class MPMoveAreaCommand extends MPCommand {
     required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
-    linesMoveCommand = MPMultipleElementsCommand.moveLinesFromDeltaOnCanvas(
-      lines: originalLines,
-      deltaOnCanvas: deltaOnCanvas,
-      decimalPositions: decimalPositions,
-      descriptionType: descriptionType,
-    );
+    linesMoveCommand =
+        MPMultipleElementsCommandFactory.moveLinesFromDeltaOnCanvas(
+          lines: originalLines,
+          deltaOnCanvas: deltaOnCanvas,
+          decimalPositions: decimalPositions,
+          descriptionType: descriptionType,
+        );
   }
 
   @override

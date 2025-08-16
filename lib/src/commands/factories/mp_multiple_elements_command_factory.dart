@@ -394,4 +394,32 @@ class MPMultipleElementsCommandFactory {
       descriptionType: descriptionType,
     );
   }
+
+  static MPMultipleElementsCommand moveLinesFromDeltaOnCanvas({
+    required Iterable<MPSelectedLine> lines,
+    required Offset deltaOnCanvas,
+    required int decimalPositions,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveLines,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final MPSelectedLine line in lines) {
+      final MPCommand moveLineCommand = MPMoveLineCommand.fromDeltaOnCanvas(
+        lineMPID: line.mpID,
+        originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+        deltaOnCanvas: deltaOnCanvas,
+        decimalPositions: decimalPositions,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(moveLineCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
 }
