@@ -12,49 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.moveLineSegments({
-    required LinkedHashMap<int, THLineSegment> originalElementsMap,
-    required LinkedHashMap<int, THLineSegment> modifiedElementsMap,
-    super.descriptionType = MPCommandDescriptionType.moveLineSegments,
-  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-       super() {
-    commandsList = [];
-
-    for (final entry in originalElementsMap.entries) {
-      final int originalElementMPID = entry.key;
-      final THLineSegment originalElement = entry.value;
-      final THLineSegment modifiedElement =
-          modifiedElementsMap[originalElementMPID]!;
-      final MPCommand moveLineSegmentCommand;
-
-      switch (originalElement) {
-        case THStraightLineSegment _:
-          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            modifiedEndPointPosition: modifiedElement.endPoint,
-          );
-        case THBezierCurveLineSegment _:
-          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            modifiedEndPointPosition: modifiedElement.endPoint,
-            originalControlPoint1Position: originalElement.controlPoint1,
-            modifiedControlPoint1Position:
-                (modifiedElement as THBezierCurveLineSegment).controlPoint1,
-            originalControlPoint2Position: originalElement.controlPoint2,
-            modifiedControlPoint2Position: modifiedElement.controlPoint2,
-          );
-        default:
-          throw ArgumentError(
-            'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',
-          );
-      }
-
-      commandsList.add(moveLineSegmentCommand);
-    }
-  }
-
   MPMultipleElementsCommand.moveLineSegmentsFromDeltaOnCanvas({
     required LinkedHashMap<int, THLineSegment> originalElementsMap,
     required Offset deltaOnCanvas,

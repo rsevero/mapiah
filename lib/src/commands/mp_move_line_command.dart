@@ -21,7 +21,7 @@ class MPMoveLineCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
-    lineSegmentsMoveCommand = MPMultipleElementsCommand.moveLineSegments(
+    lineSegmentsMoveCommand = MPMultipleElementsCommandFactory.moveLineSegments(
       originalElementsMap: originalLineSegmentsMap,
       modifiedElementsMap: modifiedLineSegmentsMap,
       descriptionType: descriptionType,
