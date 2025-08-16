@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -49,9 +50,9 @@ abstract class MPTH2FileEditState {
   MPTH2FileEditStateType get type;
 
   MPTH2FileEditState({required this.th2FileEditController})
-      : elementEditController = th2FileEditController.elementEditController,
-        selectionController = th2FileEditController.selectionController,
-        thFile = th2FileEditController.thFile;
+    : elementEditController = th2FileEditController.elementEditController,
+      selectionController = th2FileEditController.selectionController,
+      thFile = th2FileEditController.thFile;
 
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,
@@ -146,27 +147,32 @@ abstract class MPTH2FileEditState {
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
       case MPButtonType.addArea:
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.addArea);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.addArea,
+        );
         return true;
       case MPButtonType.addLine:
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.addLine);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.addLine,
+        );
         return true;
       case MPButtonType.addPoint:
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.addPoint);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.addPoint,
+        );
         return true;
       case MPButtonType.changeScrap:
         th2FileEditController.toggleToNextAvailableScrap();
         return true;
       case MPButtonType.nodeEdit:
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.editSingleLine);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.editSingleLine,
+        );
         return true;
       case MPButtonType.optionsEdit:
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.optionsEdit);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.optionsEdit,
+        );
         return true;
       case MPButtonType.redo:
         th2FileEditController.redo();
@@ -199,7 +205,8 @@ abstract class MPTH2FileEditState {
         return true;
       case MPButtonType.zoomSelection:
         th2FileEditController.zoomToFit(
-            zoomFitToType: MPZoomToFitType.selection);
+          zoomFitToType: MPZoomToFitType.selection,
+        );
         return true;
       default:
         return false;
