@@ -173,7 +173,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommand.removeAttrOption(
+            MPMultipleElementsCommandFactory.removeAttrOptionFromElements(
               attrName: attrName,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,

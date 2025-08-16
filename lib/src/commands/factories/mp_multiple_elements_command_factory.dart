@@ -104,4 +104,34 @@ class MPMultipleElementsCommandFactory {
       descriptionType: descriptionType,
     );
   }
+
+  static MPMultipleElementsCommand removeAttrOptionFromElements({
+    required String attrName,
+    required List<int> parentMPIDs,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeOptionFromElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final int parentMPID in parentMPIDs) {
+      final MPRemoveAttrOptionFromElementCommand
+      removeAttrOptionFromElementCommand = MPRemoveAttrOptionFromElementCommand(
+        attrName: attrName,
+        parentMPID: parentMPID,
+        currentOriginalLineInTH2File: thFile
+            .elementByMPID(parentMPID)
+            .originalLineInTH2File,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(removeAttrOptionFromElementCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
 }
