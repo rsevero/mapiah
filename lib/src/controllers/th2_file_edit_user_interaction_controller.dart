@@ -478,7 +478,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       );
     } else {
       setLineSegmentTypeCommand =
-          MPMultipleElementsCommand.editLinesSegmentType(
+          MPMultipleElementsCommandFactory.editLinesSegmentType(
             thFile: _th2FileEditController.thFile,
             newLineSegments: newLineSegments,
           );

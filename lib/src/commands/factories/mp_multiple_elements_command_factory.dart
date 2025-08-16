@@ -369,4 +369,29 @@ class MPMultipleElementsCommandFactory {
       descriptionType: descriptionType,
     );
   }
+
+  static MPMultipleElementsCommand editLinesSegmentType({
+    required List<THLineSegment> newLineSegments,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.editLineSegmentsType,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final THLineSegment newLineSegment in newLineSegments) {
+      final MPCommand setLineSegmentTypeCommand = MPEditLineSegmentCommand(
+        originalLineSegment: thFile.lineSegmentByMPID(newLineSegment.mpID),
+        newLineSegment: newLineSegment,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(setLineSegmentTypeCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
 }

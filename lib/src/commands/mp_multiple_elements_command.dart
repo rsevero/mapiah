@@ -12,25 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.editLinesSegmentType({
-    required List<THLineSegment> newLineSegments,
-    required THFile thFile,
-    super.descriptionType = MPCommandDescriptionType.editLineSegmentsType,
-  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-       super() {
-    commandsList = [];
-
-    for (final THLineSegment newLineSegment in newLineSegments) {
-      final MPCommand setLineSegmentTypeCommand = MPEditLineSegmentCommand(
-        originalLineSegment: thFile.lineSegmentByMPID(newLineSegment.mpID),
-        newLineSegment: newLineSegment,
-        descriptionType: descriptionType,
-      );
-
-      commandsList.add(setLineSegmentTypeCommand);
-    }
-  }
-
   MPMultipleElementsCommand.moveLinesFromDeltaOnCanvas({
     required Iterable<MPSelectedLine> lines,
     required Offset deltaOnCanvas,
