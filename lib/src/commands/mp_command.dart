@@ -5,10 +5,10 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -54,9 +54,7 @@ abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
   MPUndoRedoCommand? _undoRedoCommand;
 
-  MPCommand.forCWJM({
-    required this.descriptionType,
-  });
+  MPCommand.forCWJM({required this.descriptionType});
 
   MPCommand({required this.descriptionType});
 
@@ -95,19 +93,14 @@ abstract class MPCommand {
     required bool keepOriginalLineTH2File,
   });
 
-  MPCommand copyWith({
-    MPCommandDescriptionType? descriptionType,
-  });
+  MPCommand copyWith({MPCommandDescriptionType? descriptionType});
 
   String toJson() {
     return jsonEncode(toMap());
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'commandType': type.name,
-      'descriptionType': descriptionType.name,
-    };
+    return {'commandType': type.name, 'descriptionType': descriptionType.name};
   }
 
   static MPCommand fromJson(String jsonString) {
