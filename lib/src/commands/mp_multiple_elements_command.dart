@@ -12,45 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas({
-    required Offset deltaOnCanvas,
-    required int decimalPositions,
-    required Iterable<MPSelectedElement> mpSelectedElements,
-    super.descriptionType = MPCommandDescriptionType.moveElements,
-  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-       super() {
-    commandsList = [];
-
-    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-      final THElement element = mpSelectedElement.originalElementClone;
-      final MPCommand moveCommand;
-
-      switch (element) {
-        case THPoint _:
-          moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
-            pointMPID: element.mpID,
-            originalPosition: element.position,
-            deltaOnCanvas: deltaOnCanvas,
-            decimalPositions: decimalPositions,
-          );
-        case THLine _:
-          moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
-            lineMPID: element.mpID,
-            originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
-                .originalLineSegmentsMapClone,
-            deltaOnCanvas: deltaOnCanvas,
-            decimalPositions: decimalPositions,
-          );
-        default:
-          throw ArgumentError(
-            'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',
-          );
-      }
-
-      commandsList.add(moveCommand);
-    }
-  }
-
   MPMultipleElementsCommand.moveLineSegments({
     required LinkedHashMap<int, THLineSegment> originalElementsMap,
     required LinkedHashMap<int, THLineSegment> modifiedElementsMap,

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -5,6 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 
 class MPMultipleElementsCommandFactory {
   static MPMultipleElementsCommand createSetOptionOnElements({
@@ -216,6 +218,51 @@ class MPMultipleElementsCommandFactory {
           .getRemoveLineSegmentCommand(lineSegmentMPID);
 
       commandsList.add(removeLineSegmentCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPMultipleElementsCommand moveElementsFromDeltaOnCanvas({
+    required Offset deltaOnCanvas,
+    required int decimalPositions,
+    required Iterable<MPSelectedElement> mpSelectedElements,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      final THElement element = mpSelectedElement.originalElementClone;
+      final MPCommand moveCommand;
+
+      switch (element) {
+        case THPoint _:
+          moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
+            pointMPID: element.mpID,
+            originalPosition: element.position,
+            deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
+          );
+        case THLine _:
+          moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
+            lineMPID: element.mpID,
+            originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+                .originalLineSegmentsMapClone,
+            deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
+          );
+        default:
+          throw ArgumentError(
+            'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',
+          );
+      }
+
+      commandsList.add(moveCommand);
     }
 
     return MPMultipleElementsCommand.forCWJM(
