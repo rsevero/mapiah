@@ -1,6 +1,7 @@
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -117,7 +118,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
                 option: option as THAttrCommandOption,
                 thFile: _th2FileEditController.thFile,
               )
-            : MPMultipleElementsCommand.setOption(
+            : MPMultipleElementsCommandFactory.createSetOptionForElements(
                 elements: actualElementsForNewOption,
                 option: option,
                 thFile: _th2FileEditController.thFile,
@@ -318,7 +319,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (elements.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
-            MPMultipleElementsCommand.setOption(
+            MPMultipleElementsCommandFactory.createSetOptionForElements(
               elements: elements,
               option: THCommandOption.byType(
                 optionParent: elements.first as THHasOptionsMixin,
