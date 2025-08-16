@@ -17,8 +17,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<THElement> elements,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.setOptionToElements,
-  })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
+       super() {
     commandsList = [];
 
     for (final THElement element in elements) {
@@ -30,11 +30,12 @@ class MPMultipleElementsCommand extends MPCommand {
 
       final MPSetOptionToElementCommand setOptionToElementCommand =
           MPSetOptionToElementCommand(
-        option: option.copyWith(parentMPID: element.mpID),
-        descriptionType: descriptionType,
-        currentOriginalLineInTH2File:
-            thFile.elementByMPID(element.mpID).originalLineInTH2File,
-      );
+            option: option.copyWith(parentMPID: element.mpID),
+            descriptionType: descriptionType,
+            currentOriginalLineInTH2File: thFile
+                .elementByMPID(element.mpID)
+                .originalLineInTH2File,
+          );
 
       commandsList.add(setOptionToElementCommand);
     }
@@ -45,19 +46,20 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<int> parentMPIDs,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.removeOptionFromElements,
-  })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
+       super() {
     commandsList = [];
 
     for (final int parentMPID in parentMPIDs) {
       final MPRemoveOptionFromElementCommand removeOptionFromElementCommand =
           MPRemoveOptionFromElementCommand(
-        optionType: optionType,
-        parentMPID: parentMPID,
-        currentOriginalLineInTH2File:
-            thFile.elementByMPID(parentMPID).originalLineInTH2File,
-        descriptionType: descriptionType,
-      );
+            optionType: optionType,
+            parentMPID: parentMPID,
+            currentOriginalLineInTH2File: thFile
+                .elementByMPID(parentMPID)
+                .originalLineInTH2File,
+            descriptionType: descriptionType,
+          );
 
       commandsList.add(removeOptionFromElementCommand);
     }
@@ -68,8 +70,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<THElement> elements,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.setOptionToElements,
-  })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
+       super() {
     commandsList = [];
 
     for (final THElement element in elements) {
@@ -81,11 +83,12 @@ class MPMultipleElementsCommand extends MPCommand {
 
       final MPSetAttrOptionToElementCommand setOptionToElementCommand =
           MPSetAttrOptionToElementCommand(
-        option: option.copyWith(parentMPID: element.mpID),
-        descriptionType: descriptionType,
-        currentOriginalLineInTH2File:
-            thFile.elementByMPID(element.mpID).originalLineInTH2File,
-      );
+            option: option.copyWith(parentMPID: element.mpID),
+            descriptionType: descriptionType,
+            currentOriginalLineInTH2File: thFile
+                .elementByMPID(element.mpID)
+                .originalLineInTH2File,
+          );
 
       commandsList.add(setOptionToElementCommand);
     }
@@ -96,18 +99,18 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<int> parentMPIDs,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.removeOptionFromElements,
-  })  : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
+       super() {
     commandsList = [];
 
     for (final int parentMPID in parentMPIDs) {
       final MPRemoveAttrOptionFromElementCommand
-          removeAttrOptionFromElementCommand =
-          MPRemoveAttrOptionFromElementCommand(
+      removeAttrOptionFromElementCommand = MPRemoveAttrOptionFromElementCommand(
         attrName: attrName,
         parentMPID: parentMPID,
-        currentOriginalLineInTH2File:
-            thFile.elementByMPID(parentMPID).originalLineInTH2File,
+        currentOriginalLineInTH2File: thFile
+            .elementByMPID(parentMPID)
+            .originalLineInTH2File,
         descriptionType: descriptionType,
       );
 
@@ -119,9 +122,9 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<int> mpIDs,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.removeElements,
-  })  : completionType =
-            MPMultipleElementsCommandCompletionType.elementsListChanged,
-        super() {
+  }) : completionType =
+           MPMultipleElementsCommandCompletionType.elementsListChanged,
+       super() {
     commandsList = [];
 
     for (final int mpID in mpIDs) {
@@ -150,9 +153,9 @@ class MPMultipleElementsCommand extends MPCommand {
     required THLineSegment lineSegmentSubstitution,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.removeLineSegment,
-  })  : completionType =
-            MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
-        super() {
+  }) : completionType =
+           MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+       super() {
     commandsList = [];
 
     final MPCommand removeLineSegmentCommand = MPRemoveLineSegmentCommand(
@@ -173,18 +176,16 @@ class MPMultipleElementsCommand extends MPCommand {
     required Iterable<int> lineSegmentMPIDs,
     required TH2FileEditController th2FileEditController,
     super.descriptionType = MPCommandDescriptionType.removeLineSegments,
-  })  : completionType =
-            MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
-        super() {
+  }) : completionType =
+           MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+       super() {
     commandsList = [];
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      final MPCommand removeLineSegmentCommand =
-          elementEditController.getRemoveLineSegmentCommand(
-        lineSegmentMPID,
-      );
+      final MPCommand removeLineSegmentCommand = elementEditController
+          .getRemoveLineSegmentCommand(lineSegmentMPID);
 
       commandsList.add(removeLineSegmentCommand);
     }
@@ -195,8 +196,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required int decimalPositions,
     required Iterable<MPSelectedElement> mpSelectedElements,
     super.descriptionType = MPCommandDescriptionType.moveElements,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
@@ -233,8 +234,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required LinkedHashMap<int, THLineSegment> originalElementsMap,
     required LinkedHashMap<int, THLineSegment> modifiedElementsMap,
     super.descriptionType = MPCommandDescriptionType.moveLineSegments,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final entry in originalElementsMap.entries) {
@@ -277,8 +278,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required Offset deltaOnCanvas,
     required int decimalPositions,
     super.descriptionType = MPCommandDescriptionType.moveLineSegments,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final entry in originalElementsMap.entries) {
@@ -317,8 +318,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<THLineSegment> newLineSegments,
     required THFile thFile,
     super.descriptionType = MPCommandDescriptionType.editLineSegmentsType,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final THLineSegment newLineSegment in newLineSegments) {
@@ -337,8 +338,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required Offset deltaOnCanvas,
     required int decimalPositions,
     super.descriptionType = MPCommandDescriptionType.moveLines,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final MPSelectedLine line in lines) {
@@ -358,8 +359,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<int> areaMPIDs,
     required THAreaType newAreaType,
     super.descriptionType = MPCommandDescriptionType.editAreasType,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final int areaMPID in areaMPIDs) {
@@ -377,8 +378,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<int> lineMPIDs,
     required THLineType newLineType,
     super.descriptionType = MPCommandDescriptionType.editLinesType,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final int lineMPID in lineMPIDs) {
@@ -396,8 +397,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required List<int> pointMPIDs,
     required THPointType newPointType,
     super.descriptionType = MPCommandDescriptionType.editPointsType,
-  })  : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-        super() {
+  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
+       super() {
     commandsList = [];
 
     for (final int pointMPID in pointMPIDs) {
@@ -470,10 +471,12 @@ class MPMultipleElementsCommand extends MPCommand {
       commandsList: (map['commandsList'] as List)
           .map((commandMap) => MPCommand.fromMap(commandMap))
           .toList(),
-      completionType: MPMultipleElementsCommandCompletionType.values
-          .byName(map['completionType']),
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      completionType: MPMultipleElementsCommandCompletionType.values.byName(
+        map['completionType'],
+      ),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -499,8 +502,10 @@ class MPMultipleElementsCommand extends MPCommand {
 
     return other is MPMultipleElementsCommand &&
         other.completionType == completionType &&
-        const ListEquality<MPCommand>()
-            .equals(other.commandsList, commandsList) &&
+        const ListEquality<MPCommand>().equals(
+          other.commandsList,
+          commandsList,
+        ) &&
         other.descriptionType == descriptionType;
   }
 
