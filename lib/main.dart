@@ -12,12 +12,14 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 final MPLocator mpLocator = MPLocator();
 
 void main(List<String> arguments) {
-  String? filePath;
+  String? fileToRead;
 
-  // Parse command line arguments
+  // Parse command line arguments: first arg not starting with '-'
   for (var arg in arguments) {
-    filePath = arg;
-    break;
+    if (!arg.startsWith('-')) {
+      fileToRead = arg;
+      break;
+    }
   }
 
   // /// For mobx debugging with spy().
@@ -51,13 +53,13 @@ void main(List<String> arguments) {
   if (kIsWeb) {
     suppressContextMenu();
   }
-  runApp(MapiahApp(mainFilePath: filePath));
+  runApp(MapiahApp(fileToRead: fileToRead));
 }
 
 class MapiahApp extends StatelessWidget {
-  final String? mainFilePath;
+  final String? fileToRead;
 
-  const MapiahApp({super.key, this.mainFilePath});
+  const MapiahApp({super.key, this.fileToRead});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,7 @@ class MapiahApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         locale: mpLocator.mpSettingsController.locale,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: MapiahHome(mainFilePath: mainFilePath),
+        home: MapiahHome(mainFilePath: fileToRead),
       ),
     );
   }
