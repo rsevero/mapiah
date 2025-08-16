@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 
 class MPMultipleElementsCommandFactory {
-  static MPMultipleElementsCommand createSetOptionToElements({
+  static MPMultipleElementsCommand createSetOptionOnElements({
     required THCommandOption option,
     required List<THElement> elements,
     required THFile thFile,
@@ -61,6 +61,41 @@ class MPMultipleElementsCommandFactory {
           );
 
       commandsList.add(removeOptionFromElementCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPMultipleElementsCommand setAttrOptionOnElements({
+    required THAttrCommandOption option,
+    required List<THElement> elements,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.setOptionToElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final THElement element in elements) {
+      if (element is! THHasOptionsMixin) {
+        throw ArgumentError(
+          'Element with MPID ${element.parentMPID} does not support options',
+        );
+      }
+
+      final MPSetAttrOptionToElementCommand setOptionToElementCommand =
+          MPSetAttrOptionToElementCommand(
+            option: option.copyWith(parentMPID: element.mpID),
+            descriptionType: descriptionType,
+            currentOriginalLineInTH2File: thFile
+                .elementByMPID(element.mpID)
+                .originalLineInTH2File,
+          );
+
+      commandsList.add(setOptionToElementCommand);
     }
 
     return MPMultipleElementsCommand.forCWJM(

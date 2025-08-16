@@ -113,12 +113,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (actualElementsForNewOption.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
             (option.type == THCommandOptionType.attr)
-            ? MPMultipleElementsCommand.setAttrOption(
+            ? MPMultipleElementsCommandFactory.setAttrOptionOnElements(
                 elements: actualElementsForNewOption,
                 option: option as THAttrCommandOption,
                 thFile: _th2FileEditController.thFile,
               )
-            : MPMultipleElementsCommandFactory.createSetOptionToElements(
+            : MPMultipleElementsCommandFactory.createSetOptionOnElements(
                 elements: actualElementsForNewOption,
                 option: option,
                 thFile: _th2FileEditController.thFile,
@@ -319,7 +319,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (elements.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
-            MPMultipleElementsCommandFactory.createSetOptionToElements(
+            MPMultipleElementsCommandFactory.createSetOptionOnElements(
               elements: elements,
               option: THCommandOption.byType(
                 optionParent: elements.first as THHasOptionsMixin,

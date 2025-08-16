@@ -12,35 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.setAttrOption({
-    required THAttrCommandOption option,
-    required List<THElement> elements,
-    required THFile thFile,
-    super.descriptionType = MPCommandDescriptionType.setOptionToElements,
-  }) : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
-       super() {
-    commandsList = [];
-
-    for (final THElement element in elements) {
-      if (element is! THHasOptionsMixin) {
-        throw ArgumentError(
-          'Element with MPID ${element.parentMPID} does not support options',
-        );
-      }
-
-      final MPSetAttrOptionToElementCommand setOptionToElementCommand =
-          MPSetAttrOptionToElementCommand(
-            option: option.copyWith(parentMPID: element.mpID),
-            descriptionType: descriptionType,
-            currentOriginalLineInTH2File: thFile
-                .elementByMPID(element.mpID)
-                .originalLineInTH2File,
-          );
-
-      commandsList.add(setOptionToElementCommand);
-    }
-  }
-
   MPMultipleElementsCommand.removeAttrOption({
     required String attrName,
     required List<int> parentMPIDs,
