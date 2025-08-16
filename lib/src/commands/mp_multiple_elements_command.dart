@@ -12,25 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.editLinesType({
-    required List<int> lineMPIDs,
-    required THLineType newLineType,
-    super.descriptionType = MPCommandDescriptionType.editLinesType,
-  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-       super() {
-    commandsList = [];
-
-    for (final int lineMPID in lineMPIDs) {
-      final MPCommand editLineTypeCommand = MPEditLineTypeCommand(
-        lineMPID: lineMPID,
-        newLineType: newLineType,
-        descriptionType: descriptionType,
-      );
-
-      commandsList.add(editLineTypeCommand);
-    }
-  }
-
   MPMultipleElementsCommand.editPointsType({
     required List<int> pointMPIDs,
     required THPointType newPointType,

@@ -563,7 +563,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             newLineType: THLineType.values.byName(newType),
           );
         } else {
-          setPLATypeCommand = MPMultipleElementsCommand.editLinesType(
+          setPLATypeCommand = MPMultipleElementsCommandFactory.editLinesType(
             newLineType: THLineType.values.byName(newType),
             lineMPIDs: mpIDs,
           );
