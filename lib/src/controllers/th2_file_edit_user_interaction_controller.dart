@@ -535,7 +535,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             newAreaType: THAreaType.values.byName(newType),
           );
         } else {
-          setPLATypeCommand = MPMultipleElementsCommand.editAreasType(
+          setPLATypeCommand = MPMultipleElementsCommandFactory.editAreasType(
             newAreaType: THAreaType.values.byName(newType),
             areaMPIDs: mpIDs,
           );
