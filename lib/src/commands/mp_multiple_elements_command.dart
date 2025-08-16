@@ -12,25 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.removeLineSegments({
-    required Iterable<int> lineSegmentMPIDs,
-    required TH2FileEditController th2FileEditController,
-    super.descriptionType = MPCommandDescriptionType.removeLineSegments,
-  }) : completionType =
-           MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
-       super() {
-    commandsList = [];
-    final TH2FileEditElementEditController elementEditController =
-        th2FileEditController.elementEditController;
-
-    for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      final MPCommand removeLineSegmentCommand = elementEditController
-          .getRemoveLineSegmentCommand(lineSegmentMPID);
-
-      commandsList.add(removeLineSegmentCommand);
-    }
-  }
-
   MPMultipleElementsCommand.moveElementsFromDeltaOnCanvas({
     required Offset deltaOnCanvas,
     required int decimalPositions,

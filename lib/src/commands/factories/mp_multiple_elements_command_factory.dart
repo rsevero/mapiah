@@ -1,5 +1,7 @@
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -191,6 +193,30 @@ class MPMultipleElementsCommandFactory {
 
     commandsList.add(removeLineSegmentCommand);
     commandsList.add(editLineSegmentCommand);
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPMultipleElementsCommand removeLineSegments({
+    required Iterable<int> lineSegmentMPIDs,
+    required TH2FileEditController th2FileEditController,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeLineSegments,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
+
+    for (final int lineSegmentMPID in lineSegmentMPIDs) {
+      final MPCommand removeLineSegmentCommand = elementEditController
+          .getRemoveLineSegmentCommand(lineSegmentMPID);
+
+      commandsList.add(removeLineSegmentCommand);
+    }
 
     return MPMultipleElementsCommand.forCWJM(
       commandsList: commandsList,
