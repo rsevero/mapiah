@@ -16,10 +16,8 @@ class MPCommandOptionAux {
   ];
 
   static const Map<THAreaType, List<THCommandOptionType>>
-      _supportedAreaOptions = {
-    THAreaType.u: [
-      THCommandOptionType.subtype,
-    ],
+  _supportedAreaOptions = {
+    THAreaType.u: [THCommandOptionType.subtype],
   };
 
   static const List<THCommandOptionType> _supportLineSegmentsOptionsForAll = [
@@ -46,47 +44,26 @@ class MPCommandOptionAux {
   ];
 
   static const Map<THLineType, List<THCommandOptionType>>
-      _supportedLineOptions = {
-    THLineType.arrow: [
-      THCommandOptionType.head,
-    ],
-    THLineType.border: [
-      THCommandOptionType.subtype,
-    ],
-    THLineType.contour: [
-      THCommandOptionType.lineGradient,
-    ],
-    THLineType.label: [
-      THCommandOptionType.plScale,
-      THCommandOptionType.text,
-    ],
-    THLineType.pit: [
-      THCommandOptionType.lineHeight,
-    ],
+  _supportedLineOptions = {
+    THLineType.arrow: [THCommandOptionType.head],
+    THLineType.border: [THCommandOptionType.subtype],
+    THLineType.contour: [THCommandOptionType.lineGradient],
+    THLineType.label: [THCommandOptionType.plScale, THCommandOptionType.text],
+    THLineType.pit: [THCommandOptionType.lineHeight],
     THLineType.rope: [
       THCommandOptionType.anchors,
       THCommandOptionType.rebelays,
     ],
-    THLineType.section: [
-      THCommandOptionType.lineDirection,
-    ],
-    THLineType.slope: [
-      THCommandOptionType.border,
-    ],
-    THLineType.survey: [
-      THCommandOptionType.subtype,
-    ],
-    THLineType.u: [
-      THCommandOptionType.subtype,
-    ],
+    THLineType.section: [THCommandOptionType.lineDirection],
+    THLineType.slope: [THCommandOptionType.border],
+    THLineType.survey: [THCommandOptionType.subtype],
+    THLineType.u: [THCommandOptionType.subtype],
     THLineType.wall: [
       THCommandOptionType.altitude,
       THCommandOptionType.lineHeight,
       THCommandOptionType.subtype,
     ],
-    THLineType.waterFlow: [
-      THCommandOptionType.subtype,
-    ],
+    THLineType.waterFlow: [THCommandOptionType.subtype],
   };
 
   static const List<THCommandOptionType> _supportPointOptionsForAll = [
@@ -102,53 +79,28 @@ class MPCommandOptionAux {
   ];
 
   static const Map<THPointType, List<THCommandOptionType>>
-      _supportedPointOptions = {
-    THPointType.airDraught: [
-      THCommandOptionType.subtype,
-    ],
-    THPointType.altitude: [
-      THCommandOptionType.altitudeValue,
-    ],
+  _supportedPointOptions = {
+    THPointType.airDraught: [THCommandOptionType.subtype],
+    THPointType.altitude: [THCommandOptionType.altitudeValue],
     THPointType.continuation: [
       THCommandOptionType.explored,
       THCommandOptionType.text,
     ],
-    THPointType.date: [
-      THCommandOptionType.dateValue,
-    ],
-    THPointType.dimensions: [
-      THCommandOptionType.dimensionsValue,
-    ],
-    THPointType.extra: [
-      THCommandOptionType.dist,
-      THCommandOptionType.from,
-    ],
-    THPointType.height: [
-      THCommandOptionType.pointHeightValue,
-    ],
-    THPointType.label: [
-      THCommandOptionType.text,
-    ],
-    THPointType.passageHeight: [
-      THCommandOptionType.passageHeightValue,
-    ],
-    THPointType.remark: [
-      THCommandOptionType.text,
-    ],
-    THPointType.section: [
-      THCommandOptionType.scrap,
-    ],
+    THPointType.date: [THCommandOptionType.dateValue],
+    THPointType.dimensions: [THCommandOptionType.dimensionsValue],
+    THPointType.extra: [THCommandOptionType.dist, THCommandOptionType.from],
+    THPointType.height: [THCommandOptionType.pointHeightValue],
+    THPointType.label: [THCommandOptionType.text],
+    THPointType.passageHeight: [THCommandOptionType.passageHeightValue],
+    THPointType.remark: [THCommandOptionType.text],
+    THPointType.section: [THCommandOptionType.scrap],
     THPointType.station: [
       THCommandOptionType.extend,
       THCommandOptionType.name,
       THCommandOptionType.subtype,
     ],
-    THPointType.u: [
-      THCommandOptionType.subtype,
-    ],
-    THPointType.waterFlow: [
-      THCommandOptionType.subtype,
-    ],
+    THPointType.u: [THCommandOptionType.subtype],
+    THPointType.waterFlow: [THCommandOptionType.subtype],
   };
 
   static const List<THCommandOptionType> _supportScrapOptionsForAll = [
@@ -224,12 +176,14 @@ class MPCommandOptionAux {
       return [];
     }
 
-    Set<THCommandOptionType> commonOptions =
-        getSupportedOptionsForElement(elements.first).toSet();
+    Set<THCommandOptionType> commonOptions = getSupportedOptionsForElement(
+      elements.first,
+    ).toSet();
 
     for (THHasOptionsMixin element in elements.skip(1)) {
-      commonOptions = commonOptions
-          .intersection(getSupportedOptionsForElement(element).toSet());
+      commonOptions = commonOptions.intersection(
+        getSupportedOptionsForElement(element).toSet(),
+      );
     }
 
     return commonOptions;
@@ -279,8 +233,8 @@ class MPCommandOptionAux {
   static String? getSubtype(THHasOptionsMixin element) {
     return element.hasOption(THCommandOptionType.subtype)
         ? (element.optionByType(THCommandOptionType.subtype)
-                as THSubtypeCommandOption)
-            .subtype
+                  as THSubtypeCommandOption)
+              .subtype
         : null;
   }
 
@@ -297,46 +251,25 @@ class MPCommandOptionAux {
     'point': {
       'air-draught': {
         'default': 'undefined',
-        'subtypes': <String>{
-          'winter',
-          'summer',
-          'undefined',
-        },
+        'subtypes': <String>{'winter', 'summer', 'undefined'},
       },
       'station': {
         'default': 'temporary',
-        'subtypes': <String>{
-          'temporary',
-          'painted',
-          'natural',
-          'fixed',
-        },
+        'subtypes': <String>{'temporary', 'painted', 'natural', 'fixed'},
       },
       'water-flow': {
         'default': 'permanent',
-        'subtypes': <String>{
-          'permanent',
-          'intermittent',
-          'paleo',
-        },
+        'subtypes': <String>{'permanent', 'intermittent', 'paleo'},
       },
     },
     'line': {
       'border': {
         'default': 'visible',
-        'subtypes': <String>{
-          'invisible',
-          'presumed',
-          'temporary',
-          'visible',
-        },
+        'subtypes': <String>{'invisible', 'presumed', 'temporary', 'visible'},
       },
       'survey': {
         'default': 'cave',
-        'subtypes': <String>{
-          'cave',
-          'surface',
-        },
+        'subtypes': <String>{'cave', 'surface'},
       },
       'wall': {
         'default': 'bedrock',
@@ -360,11 +293,7 @@ class MPCommandOptionAux {
       },
       'water-flow': {
         'default': 'permanent',
-        'subtypes': <String>{
-          'permanent',
-          'conjectural',
-          'intermittent',
-        },
+        'subtypes': <String>{'permanent', 'conjectural', 'intermittent'},
       },
     },
   };
