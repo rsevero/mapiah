@@ -214,24 +214,27 @@ class MPCommandOptionAux {
     return orderedList;
   }
 
-  static bool isSmooth(THHasOptionsMixin element) {
-    return element.hasOption(THCommandOptionType.smooth) &&
+  static bool isSmooth(THElement element) {
+    return (element is THHasOptionsMixin) &&
+        element.hasOption(THCommandOptionType.smooth) &&
         (element.optionByType(THCommandOptionType.smooth)
                     as THSmoothCommandOption)
                 .choice ==
             THOptionChoicesOnOffAutoType.on;
   }
 
-  static bool isReverse(THHasOptionsMixin element) {
-    return element.hasOption(THCommandOptionType.reverse) &&
+  static bool isReverse(THElement element) {
+    return (element is THHasOptionsMixin) &&
+        element.hasOption(THCommandOptionType.reverse) &&
         (element.optionByType(THCommandOptionType.reverse)
                     as THReverseCommandOption)
                 .choice ==
             THOptionChoicesOnOffType.on;
   }
 
-  static String? getSubtype(THHasOptionsMixin element) {
-    return element.hasOption(THCommandOptionType.subtype)
+  static String? getSubtype(THElement element) {
+    return (element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.subtype)
         ? (element.optionByType(THCommandOptionType.subtype)
                   as THSubtypeCommandOption)
               .subtype
