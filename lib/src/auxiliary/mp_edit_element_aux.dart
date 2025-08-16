@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
 class MPEditElementAux {
   static THBezierCurveLineSegment
-      getBezierCurveLineSegmentFromStraightLineSegment({
+  getBezierCurveLineSegmentFromStraightLineSegment({
     required Offset start,
     required THStraightLineSegment straightLineSegment,
     required int decimalPositions,
@@ -45,5 +45,13 @@ class MPEditElementAux {
   static bool isControlPoint(MPEndControlPointType type) {
     return ((type == MPEndControlPointType.controlPoint1) ||
         (type == MPEndControlPointType.controlPoint2));
+  }
+
+  static THBezierCurveLineSegment? moveMirrorControlPoint({
+    required THBezierCurveLineSegment referenceLineSegment,
+    required MPEndControlPointType controlPointType,
+    THLineSegment? previousLineSegment,
+  }) {
+    return null;
   }
 }

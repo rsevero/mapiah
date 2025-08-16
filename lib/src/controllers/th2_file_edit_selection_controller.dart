@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
@@ -1275,7 +1276,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     switch (selectedControlPoint.type) {
       case MPEndControlPointType.controlPoint1:
-        modifiedLineSegments[controlPointLineSegmentMPID] =
+        final THLine line = _thFile.lineByMPID(
+          controlPointLineSegment.parentMPID,
+        );
+        final THLineSegment originalPreviousLineSegment = line
+            .getPreviousLineSegment(controlPointLineSegment, _thFile);
+        final THBezierCurveLineSegment modifiedLineSegment =
             originalControlPointLineSegment.copyWith(
               controlPoint1: THPositionPart(
                 coordinates:
@@ -1286,6 +1292,22 @@ abstract class TH2FileEditSelectionControllerBase with Store {
               originalLineInTH2File: '',
               makeSameLineCommentNull: true,
             );
+
+        modifiedLineSegments[controlPointLineSegmentMPID] = modifiedLineSegment;
+
+        if (MPCommandOptionAux.isSmooth(originalPreviousLineSegment)) {
+          final THBezierCurveLineSegment? modifiedPreviousLineSegment =
+              MPEditElementAux.moveMirrorControlPoint(
+                referenceLineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint1,
+                previousLineSegment: originalPreviousLineSegment,
+              );
+
+          if (modifiedPreviousLineSegment != null) {
+            modifiedLineSegments[modifiedPreviousLineSegment.mpID] =
+                modifiedPreviousLineSegment;
+          }
+        }
       case MPEndControlPointType.controlPoint2:
         modifiedLineSegments[controlPointLineSegmentMPID] =
             originalControlPointLineSegment.copyWith(
@@ -1298,6 +1320,19 @@ abstract class TH2FileEditSelectionControllerBase with Store {
               originalLineInTH2File: '',
               makeSameLineCommentNull: true,
             );
+
+        if (MPCommandOptionAux.isSmooth(originalControlPointLineSegment)) {
+          final THBezierCurveLineSegment? modifiedNextLineSegment =
+              MPEditElementAux.moveMirrorControlPoint(
+                referenceLineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint2,
+              );
+
+          if (modifiedNextLineSegment != null) {
+            modifiedLineSegments[modifiedNextLineSegment.mpID] =
+                modifiedNextLineSegment;
+          }
+        }
       default:
         throw Exception(
           'TH2FileEditSelectionController.moveSelectedControlPointToCanvasCoordinates() called with invalid end/control point type: ${selectedControlPoint.type}',
