@@ -52,8 +52,9 @@ class MPMoveAreaCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeLinesMoveCommand =
-        linesMoveCommand.getUndoRedoCommand(th2FileEditController).undoCommand;
+    final MPCommand oppositeLinesMoveCommand = linesMoveCommand
+        .getUndoRedoCommand(th2FileEditController)
+        .undoCommand;
     final MPCommand oppositeCommand = MPMoveAreaCommand.forCWJM(
       areaMPID: areaMPID,
       linesMoveCommand: oppositeLinesMoveCommand,
@@ -84,8 +85,9 @@ class MPMoveAreaCommand extends MPCommand {
       linesMoveCommand: MPMultipleElementsCommand.fromMap(
         map['linesMoveCommand'],
       ),
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -112,16 +114,13 @@ class MPMoveAreaCommand extends MPCommand {
 
     return other is MPMoveAreaCommand &&
         other.areaMPID == areaMPID &&
-        const DeepCollectionEquality()
-            .equals(other.linesMoveCommand, linesMoveCommand) &&
+        const DeepCollectionEquality().equals(
+          other.linesMoveCommand,
+          linesMoveCommand,
+        ) &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        areaMPID,
-        linesMoveCommand,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(areaMPID, linesMoveCommand);
 }
