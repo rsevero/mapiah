@@ -5,7 +5,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 
 class MPMultipleElementsCommandFactory {
-  static MPMultipleElementsCommand createSetOptionForElements({
+  static MPMultipleElementsCommand createSetOptionToElements({
     required THCommandOption option,
     required List<THElement> elements,
     required THFile thFile,
@@ -31,6 +31,36 @@ class MPMultipleElementsCommandFactory {
           );
 
       commandsList.add(setOptionToElementCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPMultipleElementsCommand createRemoveOptionFromElements({
+    required THCommandOptionType optionType,
+    required List<int> parentMPIDs,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeOptionFromElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final int parentMPID in parentMPIDs) {
+      final MPRemoveOptionFromElementCommand removeOptionFromElementCommand =
+          MPRemoveOptionFromElementCommand(
+            optionType: optionType,
+            parentMPID: parentMPID,
+            currentOriginalLineInTH2File: thFile
+                .elementByMPID(parentMPID)
+                .originalLineInTH2File,
+            descriptionType: descriptionType,
+          );
+
+      commandsList.add(removeOptionFromElementCommand);
     }
 
     return MPMultipleElementsCommand.forCWJM(

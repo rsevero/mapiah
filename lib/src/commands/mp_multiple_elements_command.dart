@@ -12,30 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.removeOption({
-    required THCommandOptionType optionType,
-    required List<int> parentMPIDs,
-    required THFile thFile,
-    super.descriptionType = MPCommandDescriptionType.removeOptionFromElements,
-  }) : completionType = MPMultipleElementsCommandCompletionType.optionsEdited,
-       super() {
-    commandsList = [];
-
-    for (final int parentMPID in parentMPIDs) {
-      final MPRemoveOptionFromElementCommand removeOptionFromElementCommand =
-          MPRemoveOptionFromElementCommand(
-            optionType: optionType,
-            parentMPID: parentMPID,
-            currentOriginalLineInTH2File: thFile
-                .elementByMPID(parentMPID)
-                .originalLineInTH2File,
-            descriptionType: descriptionType,
-          );
-
-      commandsList.add(removeOptionFromElementCommand);
-    }
-  }
-
   MPMultipleElementsCommand.setAttrOption({
     required THAttrCommandOption option,
     required List<THElement> elements,

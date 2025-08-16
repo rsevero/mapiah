@@ -118,7 +118,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
                 option: option as THAttrCommandOption,
                 thFile: _th2FileEditController.thFile,
               )
-            : MPMultipleElementsCommandFactory.createSetOptionForElements(
+            : MPMultipleElementsCommandFactory.createSetOptionToElements(
                 elements: actualElementsForNewOption,
                 option: option,
                 thFile: _th2FileEditController.thFile,
@@ -227,7 +227,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommand.removeOption(
+            MPMultipleElementsCommandFactory.createRemoveOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,
@@ -319,7 +319,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (elements.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
-            MPMultipleElementsCommandFactory.createSetOptionForElements(
+            MPMultipleElementsCommandFactory.createSetOptionToElements(
               elements: elements,
               option: THCommandOption.byType(
                 optionParent: elements.first as THHasOptionsMixin,
@@ -374,7 +374,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommand.removeOption(
+            MPMultipleElementsCommandFactory.createRemoveOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,
