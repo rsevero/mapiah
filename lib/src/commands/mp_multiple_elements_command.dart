@@ -12,47 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.moveLineSegmentsFromDeltaOnCanvas({
-    required LinkedHashMap<int, THLineSegment> originalElementsMap,
-    required Offset deltaOnCanvas,
-    required int decimalPositions,
-    super.descriptionType = MPCommandDescriptionType.moveLineSegments,
-  }) : completionType = MPMultipleElementsCommandCompletionType.elementsEdited,
-       super() {
-    commandsList = [];
-
-    for (final entry in originalElementsMap.entries) {
-      final int originalElementMPID = entry.key;
-      final THLineSegment originalElement = entry.value;
-      final MPCommand moveLineSegmentCommand;
-
-      switch (originalElement) {
-        case THStraightLineSegment _:
-          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand.fromDelta(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            deltaOnCanvas: deltaOnCanvas,
-            decimalPositions: decimalPositions,
-          );
-        case THBezierCurveLineSegment _:
-          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand.fromDelta(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            originalControlPoint1Position: originalElement.controlPoint1,
-            originalControlPoint2Position: originalElement.controlPoint2,
-            deltaOnCanvas: deltaOnCanvas,
-            decimalPositions: decimalPositions,
-          );
-        default:
-          throw ArgumentError(
-            'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',
-          );
-      }
-
-      commandsList.add(moveLineSegmentCommand);
-    }
-  }
-
   MPMultipleElementsCommand.editLinesSegmentType({
     required List<THLineSegment> newLineSegments,
     required THFile thFile,
