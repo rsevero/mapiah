@@ -134,4 +134,39 @@ class MPMultipleElementsCommandFactory {
       descriptionType: descriptionType,
     );
   }
+
+  static MPMultipleElementsCommand removeElements({
+    required List<int> mpIDs,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final int mpID in mpIDs) {
+      final MPCommand removeCommand;
+
+      switch (thFile.getElementTypeByMPID(mpID)) {
+        case THElementType.point:
+          removeCommand = MPRemovePointCommand(pointMPID: mpID);
+        case THElementType.line:
+          removeCommand = MPRemoveLineCommand(
+            lineMPID: mpID,
+            isInteractiveLineCreation: false,
+          );
+        default:
+          throw ArgumentError(
+            'Unsupported element type in MPMultipleElementsCommand.removeElements',
+          );
+      }
+
+      commandsList.add(removeCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
 }

@@ -12,36 +12,6 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPMultipleElementsCommand.removeElements({
-    required List<int> mpIDs,
-    required THFile thFile,
-    super.descriptionType = MPCommandDescriptionType.removeElements,
-  }) : completionType =
-           MPMultipleElementsCommandCompletionType.elementsListChanged,
-       super() {
-    commandsList = [];
-
-    for (final int mpID in mpIDs) {
-      final MPCommand removeCommand;
-
-      switch (thFile.getElementTypeByMPID(mpID)) {
-        case THElementType.point:
-          removeCommand = MPRemovePointCommand(pointMPID: mpID);
-        case THElementType.line:
-          removeCommand = MPRemoveLineCommand(
-            lineMPID: mpID,
-            isInteractiveLineCreation: false,
-          );
-        default:
-          throw ArgumentError(
-            'Unsupported element type in MPMultipleElementsCommand.removeElements',
-          );
-      }
-
-      commandsList.add(removeCommand);
-    }
-  }
-
   MPMultipleElementsCommand.removeLineSegmentWithSubstitution({
     required int lineSegmentMPID,
     required THLineSegment lineSegmentSubstitution,
