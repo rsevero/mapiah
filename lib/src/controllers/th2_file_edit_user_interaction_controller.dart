@@ -591,7 +591,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             newPointType: THPointType.values.byName(newType),
           );
         } else {
-          setPLATypeCommand = MPMultipleElementsCommand.editPointsType(
+          setPLATypeCommand = MPMultipleElementsCommandFactory.editPointsType(
             newPointType: THPointType.values.byName(newType),
             pointMPIDs: mpIDs,
           );

@@ -10,6 +10,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
 class MPMultipleElementsCommandFactory {
@@ -466,6 +467,31 @@ class MPMultipleElementsCommandFactory {
       );
 
       commandsList.add(editLineTypeCommand);
+    }
+
+    return MPMultipleElementsCommand.forCWJM(
+      commandsList: commandsList,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPMultipleElementsCommand editPointsType({
+    required List<int> pointMPIDs,
+    required THPointType newPointType,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.editPointsType,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final int pointMPID in pointMPIDs) {
+      final MPCommand editPointTypeCommand = MPEditPointTypeCommand(
+        pointMPID: pointMPID,
+        newPointType: newPointType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editPointTypeCommand);
     }
 
     return MPMultipleElementsCommand.forCWJM(

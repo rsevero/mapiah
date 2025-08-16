@@ -2,6 +2,7 @@
 
 ## 0.2.12 - not yet released
 * Open th2 file from command line [proposed and implemented by Thomas Holder]
+* Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
 
 ## 0.2.11 - 2025-08-15
 * Flutter upgrade to 3.35.1
