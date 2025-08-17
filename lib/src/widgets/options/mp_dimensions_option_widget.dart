@@ -137,8 +137,9 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text(appLocalizations.mpDimensionsInvalidValueErrorMessage),
+            content: Text(
+              appLocalizations.mpDimensionsInvalidValueErrorMessage,
+            ),
           ),
         );
         return;
@@ -163,7 +164,8 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
     final String belowText = _belowController.text.trim();
     final bool isValidAbove = (double.tryParse(aboveText) != null);
     final bool isValidBelow = (double.tryParse(belowText) != null);
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((aboveText != _initialAbove) ||
                 (belowText != _initialBelow) ||
@@ -247,10 +249,11 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                     label: Text(appLocalizations.thCommandOptionLengthUnit),
                     initialSelection: _selectedUnit,
                     menuStyle: MenuStyle(
-                        alignment: Alignment(
-                      -1.0,
-                      -_unitMap.entries.length.toDouble(),
-                    )),
+                      alignment: Alignment(
+                        -1.0,
+                        -_unitMap.entries.length.toDouble(),
+                      ),
+                    ),
                     dropdownMenuEntries: _unitMap.entries.map((entry) {
                       return DropdownMenuEntry<String>(
                         value: entry.key,
@@ -262,8 +265,9 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
                       _updateOkButtonEnabled();
                     },
                     searchCallback: (entries, query) {
-                      final index =
-                          entries.indexWhere((entry) => entry.label == query);
+                      final index = entries.indexWhere(
+                        (entry) => entry.label == query,
+                      );
 
                       return index >= 0 ? index : null;
                     },
