@@ -55,55 +55,58 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
               children: [
                 Builder(
                   builder: (blockContext) {
-                    return Column(
-                      children: th2FileEditController
-                          .availableScraps()
-                          .entries
-                          .map((entry) {
-                            final int scrapID = entry.key;
-                            final String scrapName = entry.value;
+                    return RadioGroup(
+                      groupValue: th2FileEditController.activeScrapID,
+                      onChanged: (int? value) {
+                        if (value != null) {
+                          _onTapSelectScrap(value);
+                        }
+                      },
+                      child: Column(
+                        children: th2FileEditController
+                            .availableScraps()
+                            .entries
+                            .map((entry) {
+                              final int scrapID = entry.key;
+                              final String scrapName = entry.value;
 
-                            return Builder(
-                              builder: (listenerContext) {
-                                return Listener(
-                                  onPointerDown: (PointerDownEvent event) {
-                                    if (event.kind == PointerDeviceKind.mouse &&
-                                        event.buttons ==
-                                            kSecondaryMouseButton) {
-                                      _onRightClickSelectScrap(
-                                        listenerContext,
-                                        scrapID,
-                                      );
-                                    }
-                                  },
-                                  child: RadioListTile<int>(
-                                    title: Text(
-                                      scrapName,
-                                      style: DefaultTextStyle.of(
-                                        blockContext,
-                                      ).style,
-                                    ),
-                                    value: scrapID,
-                                    groupValue:
-                                        th2FileEditController.activeScrapID,
-                                    contentPadding: EdgeInsets.zero,
-                                    activeColor: IconTheme.of(
-                                      blockContext,
-                                    ).color,
-                                    dense: true,
-                                    visualDensity:
-                                        VisualDensity.adaptivePlatformDensity,
-                                    onChanged: (int? value) {
-                                      if (value != null) {
-                                        _onTapSelectScrap(value);
+                              return Builder(
+                                builder: (listenerContext) {
+                                  return Listener(
+                                    onPointerDown: (PointerDownEvent event) {
+                                      if (event.kind ==
+                                              PointerDeviceKind.mouse &&
+                                          event.buttons ==
+                                              kSecondaryMouseButton) {
+                                        _onRightClickSelectScrap(
+                                          listenerContext,
+                                          scrapID,
+                                        );
                                       }
                                     },
-                                  ),
-                                );
-                              },
-                            );
-                          })
-                          .toList(),
+                                    child: RadioListTile<int>(
+                                      title: Text(
+                                        scrapName,
+                                        style: DefaultTextStyle.of(
+                                          blockContext,
+                                        ).style,
+                                      ),
+                                      value: scrapID,
+
+                                      contentPadding: EdgeInsets.zero,
+                                      activeColor: IconTheme.of(
+                                        blockContext,
+                                      ).color,
+                                      dense: true,
+                                      visualDensity:
+                                          VisualDensity.adaptivePlatformDensity,
+                                    ),
+                                  );
+                                },
+                              );
+                            })
+                            .toList(),
+                      ),
                     );
                   },
                 ),
