@@ -54,8 +54,9 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap =
-        MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
+    _unitMap = MPTextToUser.getOrderedChoices(
+      MPTextToUser.getLengthUnitsChoices(),
+    );
 
     for (int i = 0; i < mpScrapScaleMaxValues; i++) {
       _lengthControllers.add(TextEditingController());
@@ -130,7 +131,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
         return 8;
       default:
         throw Exception(
-            'Invalid choice "$_selectedChoice" at MPScrapScaleOptionWidget._getRefCount()');
+          'Invalid choice "$_selectedChoice" at MPScrapScaleOptionWidget._getRefCount()',
+        );
     }
   }
 
@@ -151,7 +153,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
         refsCount = 8;
       default:
         throw Exception(
-            'Invalid choice "$_selectedChoice" at MPScrapScaleOptionWidget._updateIsValid()');
+          'Invalid choice "$_selectedChoice" at MPScrapScaleOptionWidget._updateIsValid()',
+        );
     }
 
     for (int i = 0; i < refsCount; i++) {
@@ -180,7 +183,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
       }
     }
 
-    final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        (_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice != mpUnsetOptionID) &&
             (isRefsChanged || (_selectedUnit != _initialUnit)));
 
@@ -194,10 +198,10 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
       return DropdownMenu<String>(
         initialSelection: _selectedUnit,
         dropdownMenuEntries: _unitMap.entries
-            .map((unit) => DropdownMenuEntry<String>(
-                  value: unit.key,
-                  label: unit.value,
-                ))
+            .map(
+              (unit) =>
+                  DropdownMenuEntry<String>(value: unit.key, label: unit.value),
+            )
             .toList(),
         onSelected: (newUnit) {
           if (newUnit != null) {
@@ -366,7 +370,8 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
         );
       default:
         throw Exception(
-            'Invalid choice "$option" at MPScrapScaleOptionWidget._buildFormForOption()');
+          'Invalid choice "$option" at MPScrapScaleOptionWidget._buildFormForOption()',
+        );
     }
   }
 
@@ -388,9 +393,7 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
 
           if (value != null) {
             numericSpecifications.add(
-              THDoublePart.fromString(
-                valueString: _lengthControllers[i].text,
-              ),
+              THDoublePart.fromString(valueString: _lengthControllers[i].text),
             );
           } else {
             throw Exception(
