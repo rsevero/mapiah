@@ -53,49 +53,60 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
               padding: mpOverlayWindowBlockEdgeInsets,
               children: [
-                Builder(builder: (blockContext) {
-                  return Column(
-                    children:
-                        th2FileEditController.availableScraps().entries.map(
-                      (entry) {
-                        final int scrapID = entry.key;
-                        final String scrapName = entry.value;
+                Builder(
+                  builder: (blockContext) {
+                    return Column(
+                      children: th2FileEditController
+                          .availableScraps()
+                          .entries
+                          .map((entry) {
+                            final int scrapID = entry.key;
+                            final String scrapName = entry.value;
 
-                        return Builder(builder: (listenerContext) {
-                          return Listener(
-                            onPointerDown: (PointerDownEvent event) {
-                              if (event.kind == PointerDeviceKind.mouse &&
-                                  event.buttons == kSecondaryMouseButton) {
-                                _onRightClickSelectScrap(
-                                  listenerContext,
-                                  scrapID,
+                            return Builder(
+                              builder: (listenerContext) {
+                                return Listener(
+                                  onPointerDown: (PointerDownEvent event) {
+                                    if (event.kind == PointerDeviceKind.mouse &&
+                                        event.buttons ==
+                                            kSecondaryMouseButton) {
+                                      _onRightClickSelectScrap(
+                                        listenerContext,
+                                        scrapID,
+                                      );
+                                    }
+                                  },
+                                  child: RadioListTile<int>(
+                                    title: Text(
+                                      scrapName,
+                                      style: DefaultTextStyle.of(
+                                        blockContext,
+                                      ).style,
+                                    ),
+                                    value: scrapID,
+                                    groupValue:
+                                        th2FileEditController.activeScrapID,
+                                    contentPadding: EdgeInsets.zero,
+                                    activeColor: IconTheme.of(
+                                      blockContext,
+                                    ).color,
+                                    dense: true,
+                                    visualDensity:
+                                        VisualDensity.adaptivePlatformDensity,
+                                    onChanged: (int? value) {
+                                      if (value != null) {
+                                        _onTapSelectScrap(value);
+                                      }
+                                    },
+                                  ),
                                 );
-                              }
-                            },
-                            child: RadioListTile<int>(
-                              title: Text(
-                                scrapName,
-                                style: DefaultTextStyle.of(blockContext).style,
-                              ),
-                              value: scrapID,
-                              groupValue: th2FileEditController.activeScrapID,
-                              contentPadding: EdgeInsets.zero,
-                              activeColor: IconTheme.of(blockContext).color,
-                              dense: true,
-                              visualDensity:
-                                  VisualDensity.adaptivePlatformDensity,
-                              onChanged: (int? value) {
-                                if (value != null) {
-                                  _onTapSelectScrap(value);
-                                }
                               },
-                            ),
-                          );
-                        });
-                      },
-                    ).toList(),
-                  );
-                }),
+                            );
+                          })
+                          .toList(),
+                    );
+                  },
+                ),
               ],
             );
           },
@@ -123,13 +134,13 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     /// option) widget as the outer anchor position for the option edit window.
     final Offset anchorPosition =
         (thisBoundingBox == null) || (childBoundingBox == null)
-            ? th2FileEditController.screenBoundingBox.center
-            : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
+        ? th2FileEditController.screenBoundingBox.center
+        : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
 
     th2FileEditController.overlayWindowController
         .perfomToggleScrapOptionsOverlayWindow(
-      scrapMPID: scrapID,
-      outerAnchorPosition: anchorPosition,
-    );
+          scrapMPID: scrapID,
+          outerAnchorPosition: anchorPosition,
+        );
   }
 }
