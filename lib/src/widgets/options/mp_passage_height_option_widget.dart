@@ -56,8 +56,9 @@ class _MPPassageHeightOptionWidgetState
   @override
   void initState() {
     super.initState();
-    _unitMap =
-        MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
+    _unitMap = MPTextToUser.getOrderedChoices(
+      MPTextToUser.getLengthUnitsChoices(),
+    );
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -113,20 +114,23 @@ class _MPPassageHeightOptionWidgetState
         final double? height = double.tryParse(_heightController.text);
 
         _isValid = (height != null) && (_selectedUnit.isNotEmpty);
-        _heigthWarningMessage =
-            _isValid ? null : appLocalizations.mpPassageHeightHeightWarning;
+        _heigthWarningMessage = _isValid
+            ? null
+            : appLocalizations.mpPassageHeightHeightWarning;
       case 'depth':
         final double? depth = double.tryParse(_depthController.text);
 
         _isValid = (depth != null) && (_selectedUnit.isNotEmpty);
-        _depthWarningMessage =
-            _isValid ? null : appLocalizations.mpPassageHeightDepthWarning;
+        _depthWarningMessage = _isValid
+            ? null
+            : appLocalizations.mpPassageHeightDepthWarning;
       case 'distanceBetweenFloorAndCeiling':
         final double? height = double.tryParse(_heightController.text);
 
         _isValid = (height != null) && (_selectedUnit.isNotEmpty);
-        _heigthWarningMessage =
-            _isValid ? null : appLocalizations.mpPassageHeightHeightWarning;
+        _heigthWarningMessage = _isValid
+            ? null
+            : appLocalizations.mpPassageHeightHeightWarning;
       case 'distanceToCeilingAndDistanceToFloor':
         final double? height = double.tryParse(_heightController.text);
         final double? depth = double.tryParse(_depthController.text);
@@ -136,18 +140,21 @@ class _MPPassageHeightOptionWidgetState
         _heigthWarningMessage = height != null
             ? null
             : appLocalizations.mpPassageHeightHeightWarning;
-        _depthWarningMessage =
-            depth != null ? null : appLocalizations.mpPassageHeightDepthWarning;
+        _depthWarningMessage = depth != null
+            ? null
+            : appLocalizations.mpPassageHeightDepthWarning;
       default:
         throw Exception(
-            'Invalid choice "$_selectedChoice" at MPPassageHeightOptionWidget._updateIsValid()');
+          'Invalid choice "$_selectedChoice" at MPPassageHeightOptionWidget._updateIsValid()',
+        );
     }
 
     _updateOkButtonEnabled();
   }
 
   void _updateOkButtonEnabled() {
-    final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        (_selectedChoice != _initialSelectedChoice) ||
         (((_selectedChoice == 'height') ||
                 (_selectedChoice == 'distanceBetweenFloorAndCeiling')) &&
             ((_selectedUnit != _initialUnit) ||
@@ -170,10 +177,10 @@ class _MPPassageHeightOptionWidgetState
       return DropdownMenu<String>(
         initialSelection: _selectedUnit,
         dropdownMenuEntries: _unitMap.entries
-            .map((unit) => DropdownMenuEntry<String>(
-                  value: unit.key,
-                  label: unit.value,
-                ))
+            .map(
+              (unit) =>
+                  DropdownMenuEntry<String>(value: unit.key, label: unit.value),
+            )
             .toList(),
         onSelected: (newUnit) {
           if (newUnit != null) {
@@ -311,7 +318,8 @@ class _MPPassageHeightOptionWidgetState
         );
       default:
         throw Exception(
-            'Invalid choice "$_selectedChoice" at MPPassageHeightOptionWidget._okButtonPressed()');
+          'Invalid choice "$_selectedChoice" at MPPassageHeightOptionWidget._okButtonPressed()',
+        );
     }
 
     widget.th2FileEditController.userInteractionController.prepareSetOption(
