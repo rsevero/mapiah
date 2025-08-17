@@ -135,38 +135,39 @@ class _MPMultipleElementsClickedWidgetState
           children: [
             Builder(
               builder: (blockContext) {
-                return Column(
-                  children: options.entries.map((entry) {
-                    final int choiceID = entry.key;
-                    final String choiceName = entry.value;
+                return RadioGroup(
+                  groupValue: selectionController.multipleElementsClickedChoice,
+                  onChanged: (int? value) {
+                    if (value != null) {
+                      _onTapSelectedElement(value);
+                    }
+                  },
+                  child: Column(
+                    children: options.entries.map((entry) {
+                      final int choiceID = entry.key;
+                      final String choiceName = entry.value;
 
-                    return MouseRegion(
-                      onEnter: (_) {
-                        _onMouseEnter(choiceID);
-                      },
-                      onExit: (_) {
-                        _onMouseExit(choiceID);
-                      },
-                      child: RadioListTile<int>(
-                        title: Text(
-                          choiceName,
-                          style: DefaultTextStyle.of(blockContext).style,
-                        ),
-                        value: choiceID,
-                        groupValue:
-                            selectionController.multipleElementsClickedChoice,
-                        contentPadding: EdgeInsets.zero,
-                        activeColor: IconTheme.of(blockContext).color,
-                        dense: true,
-                        visualDensity: VisualDensity.adaptivePlatformDensity,
-                        onChanged: (int? value) {
-                          if (value != null) {
-                            _onTapSelectedElement(value);
-                          }
+                      return MouseRegion(
+                        onEnter: (_) {
+                          _onMouseEnter(choiceID);
                         },
-                      ),
-                    );
-                  }).toList(),
+                        onExit: (_) {
+                          _onMouseExit(choiceID);
+                        },
+                        child: RadioListTile<int>(
+                          title: Text(
+                            choiceName,
+                            style: DefaultTextStyle.of(blockContext).style,
+                          ),
+                          value: choiceID,
+                          contentPadding: EdgeInsets.zero,
+                          activeColor: IconTheme.of(blockContext).color,
+                          dense: true,
+                          visualDensity: VisualDensity.adaptivePlatformDensity,
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 );
               },
             ),
