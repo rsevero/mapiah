@@ -156,16 +156,15 @@ class _MPStationNamesOptionWidgetState
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_prefixController.text != _initialPrefix) ||
                 (_suffixController.text != _initialSuffix))));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   @override
