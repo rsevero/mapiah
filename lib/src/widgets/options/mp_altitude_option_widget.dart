@@ -229,6 +229,9 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               onChanged: (String? value) {
                 _selectedChoice = value!;
                 _updateIsValid();
+                if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                  _textFieldFocusNode.requestFocus();
+                }
               },
               child: Column(
                 children: [
