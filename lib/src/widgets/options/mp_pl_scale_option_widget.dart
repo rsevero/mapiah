@@ -102,25 +102,28 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
 
         return Padding(
           padding: const EdgeInsets.only(left: mpButtonSpace),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: namedScaleOptions.entries.map((entry) {
-              final String value = entry.key;
-              final String label = entry.value;
+          child: RadioGroup<String>(
+            groupValue: _sizeAsNamed,
+            onChanged: (String? newValue) {
+              setState(() {
+                _sizeAsNamed = newValue!;
+              });
+              _updateIsValid();
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: namedScaleOptions.entries.map((entry) {
+                final String value = entry.key;
+                final String label = entry.value;
 
-              return RadioListTile<String>(
-                title: Text(label),
-                value: value,
-                groupValue: _sizeAsNamed,
-                dense: true,
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    _sizeAsNamed = newValue;
-                  }
-                  _updateIsValid();
-                },
-              );
-            }).toList(),
+                return RadioListTile<String>(
+                  title: Text(label),
+                  value: value,
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                );
+              }).toList(),
+            ),
           ),
         );
       case 'numeric':
@@ -205,12 +208,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
       RadioListTile<String>(
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
-        groupValue: _selectedChoice,
         contentPadding: EdgeInsets.zero,
-        onChanged: (value) {
-          _selectedChoice = mpUnsetOptionID;
-          _updateIsValid();
-        },
       ),
     );
 
@@ -222,12 +220,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
         RadioListTile<String>(
           title: Text(entry.value),
           value: entry.key,
-          groupValue: _selectedChoice,
           contentPadding: EdgeInsets.zero,
-          onChanged: (value) {
-            _selectedChoice = value ?? '';
-            _updateIsValid();
-          },
         ),
       );
       if (_selectedChoice == entry.key) {
@@ -246,7 +239,16 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: optionWidgets,
+          children: [
+            RadioGroup(
+              groupValue: _selectedChoice,
+              onChanged: (value) {
+                _selectedChoice = value ?? '';
+                _updateIsValid();
+              },
+              child: Column(children: optionWidgets),
+            ),
+          ],
         ),
         const SizedBox(height: mpButtonSpace),
         Row(
