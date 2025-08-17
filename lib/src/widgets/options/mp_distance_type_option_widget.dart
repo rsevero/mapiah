@@ -210,30 +210,31 @@ class _MPDistanceTypeOptionWidgetState
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup<String>(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                if (value != null) {
-                  _selectedChoice = value;
+                setState(() {
+                  _selectedChoice = value!;
+                  _updateOkButtonEnabled();
+                });
+                if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                  _lengthTextFieldFocusNode.requestFocus();
                 }
-                _updateOkButtonEnabled();
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                if (value != null) {
-                  _selectedChoice = value;
-                }
-                _updateOkButtonEnabled();
-                _lengthTextFieldFocusNode.requestFocus();
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
