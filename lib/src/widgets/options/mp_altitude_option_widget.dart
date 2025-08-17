@@ -53,8 +53,9 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap =
-        MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
+    _unitMap = MPTextToUser.getOrderedChoices(
+      MPTextToUser.getLengthUnitsChoices(),
+    );
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -174,39 +175,33 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
 
   void _updateIsValid() {
     if (_selectedChoice == mpUnsetOptionID) {
-      setState(
-        () {
-          _warningMessage = null;
-          _isValid = true;
-          _updateOkButtonEnabled();
-        },
-      );
+      setState(() {
+        _warningMessage = null;
+        _isValid = true;
+        _updateOkButtonEnabled();
+      });
     } else {
       final double? altitude = double.tryParse(_altitudeController.text);
 
       if (altitude == null) {
-        setState(
-          () {
-            _warningMessage =
-                appLocalizations.mpAltitudeInvalidValueErrorMessage;
-            _isValid = false;
-            _updateOkButtonEnabled();
-          },
-        );
+        setState(() {
+          _warningMessage = appLocalizations.mpAltitudeInvalidValueErrorMessage;
+          _isValid = false;
+          _updateOkButtonEnabled();
+        });
       } else {
-        setState(
-          () {
-            _warningMessage = null;
-            _isValid = true;
-            _updateOkButtonEnabled();
-          },
-        );
+        setState(() {
+          _warningMessage = null;
+          _isValid = true;
+          _updateOkButtonEnabled();
+        });
       }
     }
   }
 
   void _updateOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_altitudeController.text != _initialAltitude) ||
                 (_isFixed != _initialIsFixed) ||
@@ -289,10 +284,11 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
                 label: Text(appLocalizations.thCommandOptionLengthUnit),
                 initialSelection: _selectedUnit,
                 menuStyle: MenuStyle(
-                    alignment: Alignment(
-                  -1.0,
-                  -_unitMap.entries.length.toDouble(),
-                )),
+                  alignment: Alignment(
+                    -1.0,
+                    -_unitMap.entries.length.toDouble(),
+                  ),
+                ),
                 dropdownMenuEntries: _unitMap.entries.map((entry) {
                   return DropdownMenuEntry<String>(
                     value: entry.key,
@@ -304,8 +300,9 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
                   _updateIsValid();
                 },
                 searchCallback: (entries, query) {
-                  final int index =
-                      entries.indexWhere((entry) => entry.label == query);
+                  final int index = entries.indexWhere(
+                    (entry) => entry.label == query,
+                  );
 
                   return index >= 0 ? index : null;
                 },
