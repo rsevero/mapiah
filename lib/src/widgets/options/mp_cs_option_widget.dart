@@ -80,16 +80,19 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
       switch (_selectedChoice) {
         case 'EPSG':
         case 'ESRI':
-          _isValid = (_eptgESRIETRSIdentifier >= mpEPSGESRIMin) &&
+          _isValid =
+              (_eptgESRIETRSIdentifier >= mpEPSGESRIMin) &&
               (_eptgESRIETRSIdentifier <= mpEPSGESRIMax);
         case 'ETRS':
-          _isValid = ((_eptgESRIETRSIdentifier >= mpETRSMin) &&
+          _isValid =
+              ((_eptgESRIETRSIdentifier >= mpETRSMin) &&
                   (_eptgESRIETRSIdentifier <= mpETRSMax) ||
               (_eptgESRIETRSIdentifier == 0));
         case 'OSGB':
           _isValid = _osgbMajor.isNotEmpty && _osgbMinor.isNotEmpty;
         case 'UTM':
-          _isValid = (_utmZone >= mpUTMMin) &&
+          _isValid =
+              (_utmZone >= mpUTMMin) &&
               (_utmZone <= mpUTMMax) &&
               ((_utmHemisphere == 'N') || (_utmHemisphere == 'S'));
         case 'iJTSK':
@@ -244,14 +247,11 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                   Text(appLocalizations.mpCSOSGBMinorLabel),
                   DropdownMenu<String>(
                     initialSelection: _osgbMinor,
-                    dropdownMenuEntries: List.generate(
-                      26,
-                      (index) {
-                        final char = String.fromCharCode(65 + index);
-                        if (char == 'I') return null; // Skip 'I'
-                        return DropdownMenuEntry(value: char, label: char);
-                      },
-                    ).whereType<DropdownMenuEntry<String>>().toList(),
+                    dropdownMenuEntries: List.generate(26, (index) {
+                      final char = String.fromCharCode(65 + index);
+                      if (char == 'I') return null; // Skip 'I'
+                      return DropdownMenuEntry(value: char, label: char);
+                    }).whereType<DropdownMenuEntry<String>>().toList(),
                     onSelected: (value) {
                       if (value != null && value.isNotEmpty) {
                         _osgbMinor = value;
@@ -385,16 +385,15 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice != mpUnsetOptionID) &&
                 (_initialCurrentValue != _currentValue) ||
             (_initialForOutput != _forOutput)));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   @override
