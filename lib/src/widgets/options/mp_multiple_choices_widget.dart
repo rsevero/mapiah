@@ -43,37 +43,43 @@ class MPMultipleChoicesWidget extends StatelessWidget {
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: choices.entries.map((entry) {
-            final String value = entry.key;
-            final String label = entry.value;
-
-            return RadioListTile<String>(
-              value: value,
+          children: [
+            RadioGroup<String>(
               groupValue: selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              title: Row(
-                children: [
-                  Text(label),
-                  if (value == optionInfo.defaultChoice)
-                    Padding(
-                      padding: const EdgeInsets.only(left: mpButtonSpace),
-                      child: Text(
-                        '*',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   _onChoiceSelected(context, newValue);
                 }
               },
-            );
-          }).toList(),
+              child: Column(
+                children: choices.entries.map((entry) {
+                  final String value = entry.key;
+                  final String label = entry.value;
+
+                  return RadioListTile<String>(
+                    value: value,
+                    contentPadding: EdgeInsets.zero,
+                    title: Row(
+                      children: [
+                        Text(label),
+                        if (value == optionInfo.defaultChoice)
+                          Padding(
+                            padding: const EdgeInsets.only(left: mpButtonSpace),
+                            child: Text(
+                              '*',
+                              style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
         ),
       ],
     );
