@@ -54,9 +54,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         final THIDCommandOption currentOption =
             (widget.optionInfo.option! as THIDCommandOption);
 
-        _thIDController = TextEditingController(
-          text: currentOption.thID,
-        );
+        _thIDController = TextEditingController(text: currentOption.thID);
 
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
@@ -134,49 +132,44 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
 
   void _updateIsValid() {
     if (_selectedChoice == mpUnsetOptionID) {
-      setState(
-        () {
+      setState(() {
+        _warningMessage = null;
+        _isValid = true;
+        _updateOkButtonEnabled();
+      });
+    } else if (MPInteractionAux.isValidID(_thIDController.text)) {
+      if ((widget.th2FileEditController.thFile.hasElementByTHID(
+            _thIDController.text,
+          )) &&
+          ((widget.optionInfo.option == null) ||
+              (widget.th2FileEditController.thFile.mpIDByTHID(
+                    _thIDController.text,
+                  ) !=
+                  widget.optionInfo.option!.parentMPID))) {
+        setState(() {
+          _warningMessage = appLocalizations.mpIDNonUniqueValueErrorMessage;
+          _isValid = false;
+          _updateOkButtonEnabled();
+        });
+      } else {
+        setState(() {
           _warningMessage = null;
           _isValid = true;
           _updateOkButtonEnabled();
-        },
-      );
-    } else if (MPInteractionAux.isValidID(_thIDController.text)) {
-      if ((widget.th2FileEditController.thFile
-              .hasElementByTHID(_thIDController.text)) &&
-          ((widget.optionInfo.option == null) ||
-              (widget.th2FileEditController.thFile
-                      .mpIDByTHID(_thIDController.text) !=
-                  widget.optionInfo.option!.parentMPID))) {
-        setState(
-          () {
-            _warningMessage = appLocalizations.mpIDNonUniqueValueErrorMessage;
-            _isValid = false;
-            _updateOkButtonEnabled();
-          },
-        );
-      } else {
-        setState(
-          () {
-            _warningMessage = null;
-            _isValid = true;
-            _updateOkButtonEnabled();
-          },
-        );
+        });
       }
     } else {
-      setState(
-        () {
-          _warningMessage = appLocalizations.mpIDInvalidValueErrorMessage;
-          _isValid = false;
-          _updateOkButtonEnabled();
-        },
-      );
+      setState(() {
+        _warningMessage = appLocalizations.mpIDInvalidValueErrorMessage;
+        _isValid = false;
+        _updateOkButtonEnabled();
+      });
     }
   }
 
   void _updateOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (_thIDController.text != _initialID)));
 
