@@ -111,7 +111,8 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(appLocalizations.mpAuthorInvalidValueErrorMessage)),
+            content: Text(appLocalizations.mpAuthorInvalidValueErrorMessage),
+          ),
         );
         return;
       }
@@ -143,15 +144,14 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_date != _initialDate) || (_person != _initialPerson))));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isDateValid && _isPersonValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isDateValid && _isPersonValid && isChanged;
+    });
   }
 
   @override
@@ -174,14 +174,12 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(
-                  () {
-                    if (value != null) {
-                      _selectedChoice = value;
-                    }
-                    _updateIsOkButtonEnabled();
-                  },
-                );
+                setState(() {
+                  if (value != null) {
+                    _selectedChoice = value;
+                  }
+                  _updateIsOkButtonEnabled();
+                });
               },
             ),
             RadioListTile<String>(
@@ -190,14 +188,12 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
               groupValue: _selectedChoice,
               contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                setState(
-                  () {
-                    if (value != null) {
-                      _selectedChoice = value;
-                    }
-                    _updateIsOkButtonEnabled();
-                  },
-                );
+                setState(() {
+                  if (value != null) {
+                    _selectedChoice = value;
+                  }
+                  _updateIsOkButtonEnabled();
+                });
               },
             ),
 
