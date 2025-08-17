@@ -194,6 +194,9 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
               onChanged: (String? value) {
                 _selectedChoice = value!;
                 _updateIsValid();
+                if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                  _idTextFieldFocusNode.requestFocus();
+                }
               },
               groupValue: _selectedChoice,
               child: Column(
