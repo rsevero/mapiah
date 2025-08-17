@@ -54,8 +54,9 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap =
-        MPTextToUser.getOrderedChoices(MPTextToUser.getAngleUnitTypeChoices());
+    _unitMap = MPTextToUser.getOrderedChoices(
+      MPTextToUser.getAngleUnitTypeChoices(),
+    );
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -109,22 +110,26 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       case 'elevation':
         final double? angle = double.tryParse(_angleController.text);
 
-        _isValid = _angleController.text.isEmpty ||
+        _isValid =
+            _angleController.text.isEmpty ||
             ((angle != null) &&
                 (_selectedUnit.isNotEmpty) &&
                 ((angle >= 0) && (angle < 360)));
-        _angleWarningMessage =
-            _isValid ? null : appLocalizations.mpProjectionAngleWarning;
+        _angleWarningMessage = _isValid
+            ? null
+            : appLocalizations.mpProjectionAngleWarning;
       default:
         throw Exception(
-            'Invalid choice "$_selectedChoice" at MPProjectionOptionWidget._updateIsValid()');
+          'Invalid choice "$_selectedChoice" at MPProjectionOptionWidget._updateIsValid()',
+        );
     }
 
     _updateOkButtonEnabled();
   }
 
   void _updateOkButtonEnabled() {
-    final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        (_selectedChoice != _initialSelectedChoice) ||
         (((_selectedChoice == 'extended') || (_selectedChoice == 'plan')) &&
             (_indexController.text != _initialIndex)) ||
         ((_selectedChoice == 'elevation') &&
@@ -142,10 +147,10 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       return DropdownMenu<String>(
         initialSelection: _selectedUnit,
         dropdownMenuEntries: _unitMap.entries
-            .map((unit) => DropdownMenuEntry<String>(
-                  value: unit.key,
-                  label: unit.value,
-                ))
+            .map(
+              (unit) =>
+                  DropdownMenuEntry<String>(value: unit.key, label: unit.value),
+            )
             .toList(),
         onSelected: (newUnit) {
           if (newUnit != null) {
@@ -167,7 +172,8 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
         return const SizedBox.shrink();
       default:
         throw Exception(
-            'Invalid choice "$option" at MPProjectionOptionWidget._buildFormForOption()');
+          'Invalid choice "$option" at MPProjectionOptionWidget._buildFormForOption()',
+        );
     }
 
     return Row(
