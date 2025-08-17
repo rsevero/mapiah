@@ -115,20 +115,14 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
             children: [
               if (selectedTypeNotNull != '') ...[
                 const SizedBox(height: mpButtonSpace),
-                MPOverlayWindowBlockWidget(
-                  title: mpLocator.appLocalizations.mpPLATypeCurrent,
-                  overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
-                  padding: mpOverlayWindowBlockEdgeInsets,
-                  children: [
-                    MPPLATypeOptionWidget(
-                      value: selectedTypeNotNull,
-                      label: choices[selectedTypeNotNull]!,
-
-                      isSelected: true,
-                      plaType: plaType,
-                      th2FileEditController: th2FileEditController,
-                    ),
-                  ],
+                SizedBox(
+                  width: double.infinity,
+                  child: MPOverlayWindowBlockWidget(
+                    title: mpLocator.appLocalizations.mpPLATypeCurrent,
+                    overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
+                    padding: mpOverlayWindowBlockEdgeInsets,
+                    children: [Text(selectedTypeNotNull)],
+                  ),
                 ),
               ],
               if (lastUsedChoicesReduced.isNotEmpty) ...[
