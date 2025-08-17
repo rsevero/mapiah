@@ -81,9 +81,9 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
           child: Text(
             title!,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ...children,
@@ -96,18 +96,12 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
       child: Material(
         color: tileColor,
         elevation: elevation,
-        borderRadius: BorderRadius.circular(
-          mpOverlayWindowBlockCornerRadius,
-        ),
+        borderRadius: BorderRadius.circular(mpOverlayWindowBlockCornerRadius),
         clipBehavior: Clip.antiAlias,
         child: DefaultTextStyle.merge(
-          style: TextStyle(
-            color: textColor,
-          ),
+          style: TextStyle(color: textColor),
           child: IconTheme(
-            data: IconThemeData(
-              color: iconColor,
-            ),
+            data: IconThemeData(color: iconColor),
             child: Padding(
               padding: padding ?? const EdgeInsets.all(0),
               child: Column(
