@@ -110,17 +110,16 @@ class _MPDateValueOptionWidgetState extends State<MPDateValueOptionWidget> {
   }
 
   void _onDateChanged(String value, bool isValid) {
-    setState(
-      () {
-        _date = value;
-        _isDateValid = isValid;
-        _updateIsOkButtonEnabled();
-      },
-    );
+    setState(() {
+      _date = value;
+      _isDateValid = isValid;
+      _updateIsOkButtonEnabled();
+    });
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (_date != _initialDate)));
 
