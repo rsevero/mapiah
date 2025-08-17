@@ -29,8 +29,9 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
       MPTextToUser.getLineSegmentTypeChoices(),
     );
     final String title = mpLocator.appLocalizations.mpLineSegmentTypeTypesTitle;
-    final MPSelectedLineSegmentType selectedType =
-        th2FileEditController.selectionController.getSelectedLineSegmentsType();
+    final MPSelectedLineSegmentType selectedType = th2FileEditController
+        .selectionController
+        .getSelectedLineSegmentsType();
     final String groupValue = selectedType.name;
 
     return MPOverlayWindowWidget(
@@ -45,26 +46,24 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
           overlayWindowBlockType: MPOverlayWindowBlockType.choices,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            ...choices.entries.map(
-              (MapEntry<String, String> entry) {
-                return RadioListTile<String>(
-                  title: Text(entry.value),
-                  value: entry.key,
-                  groupValue: groupValue,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      _onChanged(
-                        context,
-                        MPSelectedLineSegmentType.values.byName(newValue),
-                      );
-                    }
-                  },
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                );
-              },
-            ),
+            ...choices.entries.map((MapEntry<String, String> entry) {
+              return RadioListTile<String>(
+                title: Text(entry.value),
+                value: entry.key,
+                groupValue: groupValue,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    _onChanged(
+                      context,
+                      MPSelectedLineSegmentType.values.byName(newValue),
+                    );
+                  }
+                },
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+              );
+            }),
           ],
         ),
       ],
