@@ -198,26 +198,31 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup<String>(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                _selectedChoice = value!;
-                _updateOkButtonEnabled();
+                setState(() {
+                  _selectedChoice = value!;
+                  _updateOkButtonEnabled();
+                });
+                if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                  _doubleTextFieldFocusNode.requestFocus();
+                }
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                _selectedChoice = value!;
-                _updateOkButtonEnabled();
-                _doubleTextFieldFocusNode.requestFocus();
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
