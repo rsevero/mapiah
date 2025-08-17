@@ -21,10 +21,10 @@ abstract class TH2FileEditStateControllerBase
   MPTH2FileEditState _state;
 
   TH2FileEditStateControllerBase(this._th2FileEditController)
-      : _state = MPTH2FileEditState.getState(
-          type: MPTH2FileEditStateType.selectEmptySelection,
-          th2FileEditController: _th2FileEditController,
-        );
+    : _state = MPTH2FileEditState.getState(
+        type: MPTH2FileEditStateType.selectEmptySelection,
+        th2FileEditController: _th2FileEditController,
+      );
 
   @action
   bool setState(MPTH2FileEditStateType type) {
