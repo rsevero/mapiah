@@ -270,29 +270,31 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup<String>(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
-                if (value != null) {
-                  _selectedChoice = value;
+                setState(() {
+                  _selectedChoice = value!;
                   _updateIsValid();
+                });
+                if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                  _subtypeFieldFocusNode.requestFocus();
                 }
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                if (value != null) {
-                  _selectedChoice = value;
-                  _updateIsValid();
-                }
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
