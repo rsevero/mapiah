@@ -129,10 +129,10 @@ class _MPMultipleEndControlPointsClickedWidgetState
           overlayWindowBlockType: MPOverlayWindowBlockType.main,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            Builder(builder: (blockContext) {
-              return Column(
-                children: options.entries.map(
-                  (entry) {
+            Builder(
+              builder: (blockContext) {
+                return Column(
+                  children: options.entries.map((entry) {
                     final int choiceID = entry.key;
                     final String choiceName = entry.value;
 
@@ -161,10 +161,10 @@ class _MPMultipleEndControlPointsClickedWidgetState
                         },
                       ),
                     );
-                  },
-                ).toList(),
-              );
-            }),
+                  }).toList(),
+                );
+              },
+            ),
           ],
         ),
       ],
