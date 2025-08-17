@@ -97,11 +97,7 @@ class _MPMultipleElementsClickedWidgetState
           }
 
           if (!options.containsKey(lineMPID)) {
-            options[lineMPID] = getLineName(
-              thFile.lineByMPID(
-                lineMPID,
-              ),
-            );
+            options[lineMPID] = getLineName(thFile.lineByMPID(lineMPID));
           }
         case THLine _:
           final int lineMPID = element.mpID;
@@ -117,9 +113,7 @@ class _MPMultipleElementsClickedWidgetState
         case THArea _:
           if (!options.containsKey(element.mpID)) {
             options[element.mpID] = getAreaName(
-              thFile.areaByMPID(
-                element.mpID,
-              ),
+              thFile.areaByMPID(element.mpID),
             );
           }
         default:
@@ -139,10 +133,10 @@ class _MPMultipleElementsClickedWidgetState
           overlayWindowBlockType: MPOverlayWindowBlockType.main,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            Builder(builder: (blockContext) {
-              return Column(
-                children: options.entries.map(
-                  (entry) {
+            Builder(
+              builder: (blockContext) {
+                return Column(
+                  children: options.entries.map((entry) {
                     final int choiceID = entry.key;
                     final String choiceName = entry.value;
 
@@ -172,10 +166,10 @@ class _MPMultipleElementsClickedWidgetState
                         },
                       ),
                     );
-                  },
-                ).toList(),
-              );
-            }),
+                  }).toList(),
+                );
+              },
+            ),
           ],
         ),
       ],
@@ -183,9 +177,7 @@ class _MPMultipleElementsClickedWidgetState
   }
 
   void _onTapSelectedElement(int choiceID) {
-    selectionController.performMultipleElementsClickedChoosen(
-      choiceID,
-    );
+    selectionController.performMultipleElementsClickedChoosen(choiceID);
   }
 
   void _onMouseEnter(int choiceID) {
