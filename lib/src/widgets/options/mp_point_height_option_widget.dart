@@ -234,12 +234,7 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
       RadioListTile<String>(
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
-        groupValue: _selectedChoice,
         contentPadding: EdgeInsets.zero,
-        onChanged: (value) {
-          _selectedChoice = mpUnsetOptionID;
-          _updateIsValid();
-        },
       ),
     );
 
@@ -253,12 +248,7 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
         RadioListTile<String>(
           title: Text(label),
           value: value,
-          groupValue: _selectedChoice,
           contentPadding: EdgeInsets.zero,
-          onChanged: (value) {
-            _selectedChoice = value!;
-            _updateIsValid();
-          },
         ),
       );
       if (_selectedChoice == value) {
@@ -277,7 +267,16 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: optionWidgets,
+          children: [
+            RadioGroup(
+              groupValue: _selectedChoice,
+              onChanged: (value) {
+                _selectedChoice = value ?? '';
+                _updateIsValid();
+              },
+              child: Column(children: optionWidgets),
+            ),
+          ],
         ),
         const SizedBox(height: mpButtonSpace),
         Row(
