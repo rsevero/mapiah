@@ -80,7 +80,8 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
   void _updateIsValid() {
     switch (_selectedChoice) {
       case 'named':
-        _isValid = (_sizeAsNamed.isNotEmpty &&
+        _isValid =
+            (_sizeAsNamed.isNotEmpty &&
             THScaleMultipleChoicePart.isChoice(_sizeAsNamed));
       case 'numeric':
         _isValid = (double.tryParse(_numericController.text) != null);
@@ -164,9 +165,9 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
         case 'numeric':
           newOption =
               THPLScaleCommandOption.sizeAsNumberFromStringWithParentMPID(
-            parentMPID: widget.th2FileEditController.thFileMPID,
-            numericScaleSize: _numericController.text,
-          );
+                parentMPID: widget.th2FileEditController.thFileMPID,
+                numericScaleSize: _numericController.text,
+              );
       }
     }
 
@@ -184,17 +185,16 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         (((_selectedChoice == 'named') &&
                 (_sizeAsNamed != _initialSizeAsNamed)) ||
             ((_selectedChoice == 'numeric') &&
                 (_numericController.text != _initialSizeAsNumeric))));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   @override
