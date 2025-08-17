@@ -224,25 +224,26 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 _selectedChoice = value!;
                 _updateIsValid();
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                _selectedChoice = value!;
-                _updateIsValid();
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
@@ -308,22 +309,22 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
                 },
               ),
             ],
-          ],
-        ),
-        const SizedBox(height: mpButtonSpace),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
-              style: ElevatedButton.styleFrom(
-                elevation: _isOkButtonEnabled ? null : 0.0,
-              ),
-              child: Text(appLocalizations.mpButtonOK),
-            ),
-            const SizedBox(width: mpButtonSpace),
-            ElevatedButton(
-              onPressed: _cancelButtonPressed,
-              child: Text(appLocalizations.mpButtonCancel),
+            const SizedBox(height: mpButtonSpace),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
+                  style: ElevatedButton.styleFrom(
+                    elevation: _isOkButtonEnabled ? null : 0.0,
+                  ),
+                  child: Text(appLocalizations.mpButtonOK),
+                ),
+                const SizedBox(width: mpButtonSpace),
+                ElevatedButton(
+                  onPressed: _cancelButtonPressed,
+                  child: Text(appLocalizations.mpButtonCancel),
+                ),
+              ],
             ),
           ],
         ),
