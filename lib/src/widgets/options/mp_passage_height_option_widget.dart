@@ -336,12 +336,7 @@ class _MPPassageHeightOptionWidgetState
       RadioListTile<String>(
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
-        groupValue: _selectedChoice,
         contentPadding: EdgeInsets.zero,
-        onChanged: (value) {
-          _selectedChoice = mpUnsetOptionID;
-          _updateIsValid();
-        },
       ),
     );
 
@@ -355,12 +350,7 @@ class _MPPassageHeightOptionWidgetState
         RadioListTile<String>(
           title: Text(label),
           value: value,
-          groupValue: _selectedChoice,
           contentPadding: EdgeInsets.zero,
-          onChanged: (value) {
-            _selectedChoice = value!;
-            _updateIsValid();
-          },
         ),
       );
       if (_selectedChoice == value) {
@@ -379,7 +369,16 @@ class _MPPassageHeightOptionWidgetState
         MPOverlayWindowBlockWidget(
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
-          children: optionWidgets,
+          children: [
+            RadioGroup(
+              groupValue: _selectedChoice,
+              onChanged: (value) {
+                _selectedChoice = mpUnsetOptionID;
+                _updateIsValid();
+              },
+              child: Column(children: optionWidgets),
+            ),
+          ],
         ),
         const SizedBox(height: mpButtonSpace),
         Row(
