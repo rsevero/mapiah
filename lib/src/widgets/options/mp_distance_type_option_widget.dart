@@ -165,7 +165,8 @@ class _MPDistanceTypeOptionWidgetState
   void _updateOkButtonEnabled() {
     final String distanceText = _distanceController.text.trim();
     final bool isValidDistance = (double.tryParse(distanceText) != null);
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((distanceText != _initialDistance) ||
                 (_selectedUnit != _initialUnit))));
@@ -257,10 +258,11 @@ class _MPDistanceTypeOptionWidgetState
                     label: Text(appLocalizations.thCommandOptionLengthUnit),
                     initialSelection: _selectedUnit,
                     menuStyle: MenuStyle(
-                        alignment: Alignment(
-                      -1.0,
-                      -_unitMap.entries.length.toDouble(),
-                    )),
+                      alignment: Alignment(
+                        -1.0,
+                        -_unitMap.entries.length.toDouble(),
+                      ),
+                    ),
                     dropdownMenuEntries: _unitMap.entries.map((entry) {
                       return DropdownMenuEntry<String>(
                         value: entry.key,
@@ -272,8 +274,9 @@ class _MPDistanceTypeOptionWidgetState
                       _updateOkButtonEnabled();
                     },
                     searchCallback: (entries, query) {
-                      final index =
-                          entries.indexWhere((entry) => entry.label == query);
+                      final index = entries.indexWhere(
+                        (entry) => entry.label == query,
+                      );
 
                       return index >= 0 ? index : null;
                     },
