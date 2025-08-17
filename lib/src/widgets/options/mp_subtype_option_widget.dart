@@ -130,8 +130,9 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
         _isValid = true;
       case mpNonMultipleChoiceSetID:
         _isValid = _subtypeController.text.trim().isNotEmpty;
-        _subtypeWarningMessage =
-            _isValid ? null : appLocalizations.mpSubtypeEmpty;
+        _subtypeWarningMessage = _isValid
+            ? null
+            : appLocalizations.mpSubtypeEmpty;
 
       default:
         _isValid = false;
@@ -140,15 +141,14 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (_subtypeController.text != _initialSubtype)));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   Widget _buildTextFieldInput() {
@@ -166,7 +166,9 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
 
   Widget _buildOptionInput() {
     final mpSelectedElements = widget
-        .th2FileEditController.selectionController.mpSelectedElementsLogical;
+        .th2FileEditController
+        .selectionController
+        .mpSelectedElementsLogical;
 
     if (mpSelectedElements.length == 1) {
       final THElement selectedElement =
