@@ -263,10 +263,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     String choice,
   ) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final mpSelectedElements = _th2FileEditController
-        .selectionController
-        .mpSelectedElementsLogical
-        .values;
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController.optionEditController.optionsEditForLineSegments
+        ? selectionController.selectedEndControlPoints.values
+        : selectionController.mpSelectedElementsLogical.values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
@@ -335,10 +337,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   void _prepareUnsetMultipleOptionChoice(THCommandOptionType optionType) {
-    final mpSelectedElements = _th2FileEditController
-        .selectionController
-        .mpSelectedElementsLogical
-        .values;
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController.optionEditController.optionsEditForLineSegments
+        ? selectionController.selectedEndControlPoints.values
+        : selectionController.mpSelectedElementsLogical.values;
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
