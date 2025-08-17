@@ -46,24 +46,29 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
           overlayWindowBlockType: MPOverlayWindowBlockType.choices,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            ...choices.entries.map((MapEntry<String, String> entry) {
-              return RadioListTile<String>(
-                title: Text(entry.value),
-                value: entry.key,
-                groupValue: groupValue,
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    _onChanged(
-                      context,
-                      MPSelectedLineSegmentType.values.byName(newValue),
-                    );
-                  }
-                },
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-              );
-            }),
+            RadioGroup(
+              groupValue: groupValue,
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  _onChanged(
+                    context,
+                    MPSelectedLineSegmentType.values.byName(newValue),
+                  );
+                }
+              },
+              child: Column(
+                children: choices.entries.map((MapEntry<String, String> entry) {
+                  return RadioListTile<String>(
+                    title: Text(entry.value),
+                    value: entry.key,
+
+                    visualDensity: VisualDensity.adaptivePlatformDensity,
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ),
       ],
