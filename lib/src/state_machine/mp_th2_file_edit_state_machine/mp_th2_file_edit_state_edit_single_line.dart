@@ -123,10 +123,17 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           .isSelected[clickedLineSegment.parentMPID]!
           .value) {
         final THLine line = thFile.lineByMPID(clickedLineSegment.parentMPID);
-        final THLineSegment previousLineSegment = line.getPreviousLineSegment(
+        final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
           clickedLineSegment,
           thFile,
         );
+
+        if (previousLineSegment == null) {
+          throw Exception(
+            'Error: previousLineSegment is null at TH2FileEditElementEditController.getRemoveLineSegmentCommand().',
+          );
+        }
+
         final bool isPreviousLineSegmentSelected = selectionController
             .isElementSelected(previousLineSegment);
         final bool isLineSegmentSelected = selectionController

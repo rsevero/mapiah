@@ -436,10 +436,15 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             _th2FileEditController.currentDecimalPositions;
 
         for (final THLineSegment currentLineSegment in willChangeLineSegments) {
-          final THLineSegment previousLineSegment = line.getPreviousLineSegment(
-            currentLineSegment,
-            thFile,
-          );
+          final THLineSegment? previousLineSegment = line
+              .getPreviousLineSegment(currentLineSegment, thFile);
+
+          if (previousLineSegment == null) {
+            throw Exception(
+              'Error: previousLineSegment is null at TH2FileEditElementEditController.getRemoveLineSegmentCommand().',
+            );
+          }
+
           final THBezierCurveLineSegment newLineSegment =
               MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
                 start: previousLineSegment.endPoint.coordinates,

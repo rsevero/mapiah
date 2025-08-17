@@ -260,7 +260,7 @@ class THLine extends THElement
     return _lineSegmentMPIDs[indexLineSegmentMPID + 1];
   }
 
-  int getPreviousLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
+  int? getPreviousLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
     int? previousLineSegmentMPID;
 
     for (final int childMPID in childrenMPID) {
@@ -270,10 +270,6 @@ class THLine extends THElement
 
       if ((childElementType != THElementType.bezierCurveLineSegment) &&
           (childElementType != THElementType.straightLineSegment)) {
-        continue;
-      }
-      if (previousLineSegmentMPID == null) {
-        previousLineSegmentMPID = childMPID;
         continue;
       }
 
@@ -289,16 +285,29 @@ class THLine extends THElement
     );
   }
 
-  THLineSegment getPreviousLineSegment(
+  THLineSegment? getPreviousLineSegment(
     THLineSegment lineSegment,
     THFile thFile,
   ) {
-    final int previousLineSegmentMPID = getPreviousLineSegmentMPID(
+    final int? previousLineSegmentMPID = getPreviousLineSegmentMPID(
       lineSegment.mpID,
       thFile,
     );
 
-    return thFile.elementByMPID(previousLineSegmentMPID) as THLineSegment;
+    return previousLineSegmentMPID == null
+        ? null
+        : thFile.elementByMPID(previousLineSegmentMPID) as THLineSegment;
+  }
+
+  THLineSegment? getNextLineSegment(THLineSegment lineSegment, THFile thFile) {
+    final int? nextLineSegmentMPID = getNextLineSegmentMPID(
+      lineSegment.mpID,
+      thFile,
+    );
+
+    return nextLineSegmentMPID == null
+        ? null
+        : thFile.elementByMPID(nextLineSegmentMPID) as THLineSegment;
   }
 
   @override

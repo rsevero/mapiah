@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
@@ -1322,30 +1321,36 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       //   }
       // }
       case MPEndControlPointType.controlPoint2:
-        modifiedLineSegments[controlPointLineSegmentMPID] =
-            originalControlPointLineSegment.copyWith(
-              controlPoint2: THPositionPart(
-                coordinates:
-                    originalControlPointLineSegment.controlPoint2.coordinates +
-                    localDeltaPositionOnCanvas,
-                decimalPositions: currentDecimalPositions,
-              ),
-              originalLineInTH2File: '',
-              makeSameLineCommentNull: true,
-            );
+        THBezierCurveLineSegment modifiedLineSegment;
 
-        if (MPCommandOptionAux.isSmooth(originalControlPointLineSegment)) {
-          final THBezierCurveLineSegment? modifiedNextLineSegment =
-              MPEditElementAux.moveMirrorControlPoint(
-                referenceLineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint2,
-              );
+        if (moveControlPointSmoothInfo.isSmooth &&
+            moveControlPointSmoothInfo.isAdjacentStraight!) {
+          final Offset newPosition = MPEditElementAux.moveControlPointInLine(
+            moveControlPointSmoothInfo,
+            canvasCoordinatesFinalPosition,
+          );
 
-          if (modifiedNextLineSegment != null) {
-            modifiedLineSegments[modifiedNextLineSegment.mpID] =
-                modifiedNextLineSegment;
-          }
+          modifiedLineSegment = originalControlPointLineSegment.copyWith(
+            controlPoint2: THPositionPart(
+              coordinates: newPosition,
+              decimalPositions: currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+          );
+        } else {
+          modifiedLineSegment = originalControlPointLineSegment.copyWith(
+            controlPoint2: THPositionPart(
+              coordinates:
+                  originalControlPointLineSegment.controlPoint2.coordinates +
+                  localDeltaPositionOnCanvas,
+              decimalPositions: currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+          );
         }
+
+        modifiedLineSegments[controlPointLineSegmentMPID] = modifiedLineSegment;
+
       default:
         throw Exception(
           'TH2FileEditSelectionController.moveSelectedControlPointToCanvasCoordinates() called with invalid end/control point type: ${selectedControlPoint.type}',

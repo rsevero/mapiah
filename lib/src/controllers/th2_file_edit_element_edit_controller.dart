@@ -829,13 +829,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
         return MPRemoveLineSegmentCommand(lineSegment: lineSegment);
       } else {
+        final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
+          lineSegment,
+          _thFile,
+        );
+
+        if (previousLineSegment == null) {
+          throw Exception(
+            'Error: previousLineSegment is null at TH2FileEditElementEditController.getRemoveLineSegmentCommand().',
+          );
+        }
+
         final THBezierCurveLineSegment deletedLineSegmentBezier =
             deletedLineSegmentIsStraight
             ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
-                start: line
-                    .getPreviousLineSegment(lineSegment, _thFile)
-                    .endPoint
-                    .coordinates,
+                start: previousLineSegment.endPoint.coordinates,
                 straightLineSegment: lineSegment,
                 decimalPositions:
                     _th2FileEditController.currentDecimalPositions,
@@ -1050,28 +1058,38 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         final THLine line = _thFile.lineByMPID(
           controlPointLineSegment.parentMPID,
         );
-        final THLineSegment originalPreviousLineSegment = line
+        final THLineSegment? originalPreviousLineSegment = line
             .getPreviousLineSegment(controlPointLineSegment, _thFile);
 
-        if (MPCommandOptionAux.isSmooth(originalPreviousLineSegment)) {
+        if ((originalPreviousLineSegment != null) &&
+            MPCommandOptionAux.isSmooth(originalPreviousLineSegment)) {
           if (originalPreviousLineSegment is THStraightLineSegment) {
-            final THLineSegment originalSecondPreviousLineSegment = line
+            final THLineSegment? originalSecondPreviousLineSegment = line
                 .getPreviousLineSegment(originalPreviousLineSegment, _thFile);
-            final Offset segmentStart =
-                originalSecondPreviousLineSegment.endPoint.coordinates;
-            final Offset segmentEnd =
-                originalPreviousLineSegment.endPoint.coordinates;
-            final Offset segment = segmentEnd - segmentStart;
 
-            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-              isSmooth: true,
-              isAdjacentStraight: true,
-              lineSegment: originalControlPointLineSegment,
-              controlPointType: MPEndControlPointType.controlPoint1,
-              straightStart: segmentStart,
-              straightEnd: segmentEnd,
-              straightLine: segment,
-            );
+            if (originalSecondPreviousLineSegment == null) {
+              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+                isSmooth: false,
+                lineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint1,
+              );
+            } else {
+              final Offset segmentStart =
+                  originalSecondPreviousLineSegment.endPoint.coordinates;
+              final Offset segmentEnd =
+                  originalPreviousLineSegment.endPoint.coordinates;
+              final Offset segment = segmentEnd - segmentStart;
+
+              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+                isSmooth: true,
+                isAdjacentStraight: true,
+                lineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint1,
+                straightStart: segmentStart,
+                straightEnd: segmentEnd,
+                straightLine: segment,
+              );
+            }
           } else {
             moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
               isSmooth: true,
@@ -1087,6 +1105,47 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             isSmooth: false,
             lineSegment: originalControlPointLineSegment,
             controlPointType: MPEndControlPointType.controlPoint1,
+          );
+        }
+      case MPEndControlPointType.controlPoint2:
+        if (MPCommandOptionAux.isSmooth(controlPointLineSegment)) {
+          final THLine line = _thFile.lineByMPID(
+            controlPointLineSegment.parentMPID,
+          );
+          final THLineSegment? originalNextLineSegment = line
+              .getNextLineSegment(controlPointLineSegment, _thFile);
+
+          if (originalNextLineSegment is THStraightLineSegment) {
+            final Offset segmentStart =
+                originalNextLineSegment.endPoint.coordinates;
+            final Offset segmentEnd =
+                controlPointLineSegment.endPoint.coordinates;
+            final Offset segment = segmentEnd - segmentStart;
+
+            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+              isSmooth: true,
+              isAdjacentStraight: true,
+              lineSegment: originalControlPointLineSegment,
+              controlPointType: MPEndControlPointType.controlPoint2,
+              straightStart: segmentStart,
+              straightEnd: segmentEnd,
+              straightLine: segment,
+            );
+          } else {
+            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+              isSmooth: true,
+              isAdjacentStraight: false,
+              lineSegment: originalControlPointLineSegment,
+              controlPointType: MPEndControlPointType.controlPoint2,
+              adjacentLineSegment:
+                  originalNextLineSegment as THBezierCurveLineSegment,
+            );
+          }
+        } else {
+          moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+            isSmooth: false,
+            lineSegment: originalControlPointLineSegment,
+            controlPointType: MPEndControlPointType.controlPoint2,
           );
         }
       default:
