@@ -168,11 +168,8 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 setState(() {
                   if (value != null) {
@@ -181,20 +178,20 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
                   _updateIsOkButtonEnabled();
                 });
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                setState(() {
-                  if (value != null) {
-                    _selectedChoice = value;
-                  }
-                  _updateIsOkButtonEnabled();
-                });
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
