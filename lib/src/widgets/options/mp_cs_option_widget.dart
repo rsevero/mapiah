@@ -285,34 +285,31 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               ),
               const SizedBox(width: mpButtonSpace),
               Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RadioListTile<String>(
-                      title: Text(appLocalizations.mpAzimuthNorth),
-                      value: 'N',
-                      groupValue: _utmHemisphere,
-                      dense: true,
-                      onChanged: (value) {
-                        if (value != null) {
-                          _utmHemisphere = value;
-                        }
-                        _updateIsValid();
-                      },
-                    ),
-                    RadioListTile<String>(
-                      title: Text(appLocalizations.mpAzimuthSouth),
-                      value: 'S',
-                      groupValue: _utmHemisphere,
-                      dense: true,
-                      onChanged: (value) {
-                        if (value != null) {
-                          _utmHemisphere = value;
-                        }
-                        _updateIsValid();
-                      },
-                    ),
-                  ],
+                child: RadioGroup<String>(
+                  groupValue: _utmHemisphere,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value != null) {
+                        _utmHemisphere = value;
+                      }
+                      _updateIsValid();
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RadioListTile<String>(
+                        title: Text(appLocalizations.mpAzimuthNorth),
+                        value: 'N',
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      RadioListTile<String>(
+                        title: Text(appLocalizations.mpAzimuthSouth),
+                        value: 'S',
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -449,13 +446,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           RadioListTile<String>(
             title: Text(option),
             value: option,
-            groupValue: _selectedChoice,
             contentPadding: EdgeInsets.zero,
-            onChanged: (value) {
-              _selectedChoice = value ?? '';
-              _eptgESRIETRSIdentifier = 0;
-              _updateIsValid();
-            },
           ),
         );
         if (_selectedChoice == option) {
@@ -476,31 +467,43 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (value) {
-                _selectedChoice = mpUnsetOptionID;
+                _selectedChoice = value ?? '';
                 _updateIsValid();
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: isSet ? mpNonMultipleChoiceSetID : _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (value) {
-                _selectedChoice = mpNonMultipleChoiceSetID;
-                _updateIsValid();
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
             if (isSet)
               MPOverlayWindowBlockWidget(
                 overlayWindowBlockType: MPOverlayWindowBlockType.secondarySet,
                 padding: mpOverlayWindowBlockEdgeInsets,
-                children: optionWidgets,
+                children: [
+                  RadioGroup(
+                    groupValue: _selectedChoice,
+                    onChanged: (value) {
+                      _selectedChoice = value ?? '';
+                      _eptgESRIETRSIdentifier = 0;
+                      _updateIsValid();
+                    },
+                    child: Column(children: optionWidgets),
+                  ),
+                ],
               ),
           ],
         ),
