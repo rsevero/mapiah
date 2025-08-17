@@ -1273,41 +1273,55 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         LinkedHashMap<int, THLineSegment>();
     final int currentDecimalPositions =
         _th2FileEditController.currentDecimalPositions;
+    final MPMoveControlPointSmoothInfo moveControlPointSmoothInfo =
+        _th2FileEditController.elementEditController.moveControlPointSmoothInfo;
 
     switch (selectedControlPoint.type) {
       case MPEndControlPointType.controlPoint1:
-        final THLine line = _thFile.lineByMPID(
-          controlPointLineSegment.parentMPID,
-        );
-        final THLineSegment originalPreviousLineSegment = line
-            .getPreviousLineSegment(controlPointLineSegment, _thFile);
-        final THBezierCurveLineSegment modifiedLineSegment =
-            originalControlPointLineSegment.copyWith(
-              controlPoint1: THPositionPart(
-                coordinates:
-                    originalControlPointLineSegment.controlPoint1.coordinates +
-                    localDeltaPositionOnCanvas,
-                decimalPositions: currentDecimalPositions,
-              ),
-              originalLineInTH2File: '',
-              makeSameLineCommentNull: true,
-            );
+        THBezierCurveLineSegment modifiedLineSegment;
 
-        modifiedLineSegments[controlPointLineSegmentMPID] = modifiedLineSegment;
+        if (moveControlPointSmoothInfo.isSmooth &&
+            moveControlPointSmoothInfo.isAdjacentStraight!) {
+          final Offset newPosition = MPEditElementAux.moveControlPointInLine(
+            moveControlPointSmoothInfo,
+            canvasCoordinatesFinalPosition,
+          );
 
-        if (MPCommandOptionAux.isSmooth(originalPreviousLineSegment)) {
-          final THBezierCurveLineSegment? modifiedPreviousLineSegment =
-              MPEditElementAux.moveMirrorControlPoint(
-                referenceLineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint1,
-                previousLineSegment: originalPreviousLineSegment,
-              );
+          modifiedLineSegment = originalControlPointLineSegment.copyWith(
+            controlPoint1: THPositionPart(
+              coordinates: newPosition,
+              decimalPositions: currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+          );
+        } else {
+          modifiedLineSegment = originalControlPointLineSegment.copyWith(
+            controlPoint1: THPositionPart(
+              coordinates:
+                  originalControlPointLineSegment.controlPoint1.coordinates +
+                  localDeltaPositionOnCanvas,
+              decimalPositions: currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+          );
 
-          if (modifiedPreviousLineSegment != null) {
-            modifiedLineSegments[modifiedPreviousLineSegment.mpID] =
-                modifiedPreviousLineSegment;
-          }
+          modifiedLineSegments[controlPointLineSegmentMPID] =
+              modifiedLineSegment;
         }
+
+      // if (moveControlPointSmoothInfo.isSmooth) {
+      //   final THBezierCurveLineSegment? modifiedPreviousLineSegment =
+      //       MPEditElementAux.moveMirrorControlPoint(
+      //         referenceLineSegment: originalControlPointLineSegment,
+      //         controlPointType: MPEndControlPointType.controlPoint1,
+      //         previousLineSegment: originalPreviousLineSegment,
+      //       );
+
+      //   if (modifiedPreviousLineSegment != null) {
+      //     modifiedLineSegments[modifiedPreviousLineSegment.mpID] =
+      //         modifiedPreviousLineSegment;
+      //   }
+      // }
       case MPEndControlPointType.controlPoint2:
         modifiedLineSegments[controlPointLineSegmentMPID] =
             originalControlPointLineSegment.copyWith(

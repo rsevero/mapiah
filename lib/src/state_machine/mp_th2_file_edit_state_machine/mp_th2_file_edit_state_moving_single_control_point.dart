@@ -9,6 +9,11 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
   });
 
   @override
+  void onStateEnter(MPTH2FileEditState previousState) {
+    th2FileEditController.elementEditController.updateControlPointSmoothInfo();
+  }
+
+  @override
   void onStateExit(MPTH2FileEditState nextState) {
     final MPTH2FileEditStateType nextStateType = nextState.type;
 

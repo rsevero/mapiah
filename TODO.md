@@ -61,6 +61,7 @@ Version 0.3
 [ ] - Properly present lines with partial subtypes
 [ ] - Manually edit position of points
 [ ] - Manually edit position of end and control points in line segments
+[ ] - Opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
 
 Version 0.4
 [ ] - Open multiple files simultaneously

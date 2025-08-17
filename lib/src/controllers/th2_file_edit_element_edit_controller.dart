@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -19,6 +19,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -71,6 +72,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   THArea? _newArea;
 
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
+
+  late MPMoveControlPointSmoothInfo moveControlPointSmoothInfo;
 
   final List<String> _lastUsedAreaTypes = [];
   final List<String> _lastUsedLineTypes = [];
@@ -1024,6 +1027,70 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _th2FileEditController.execute(removeImageCommand);
     _th2FileEditController.triggerImagesRedraw();
+  }
+
+  void updateControlPointSmoothInfo() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final LinkedHashMap<int, THLineSegment> originalLineSegments =
+        (selectionController.mpSelectedElementsLogical.values.first
+                as MPSelectedLine)
+            .originalLineSegmentsMapClone;
+    final MPSelectedEndControlPoint selectedControlPoint =
+        selectionController.selectedEndControlPoints.values.first;
+    final THBezierCurveLineSegment controlPointLineSegment =
+        selectedControlPoint.originalElementClone as THBezierCurveLineSegment;
+    final int controlPointLineSegmentMPID = controlPointLineSegment.mpID;
+    final THBezierCurveLineSegment originalControlPointLineSegment =
+        originalLineSegments[controlPointLineSegmentMPID]
+            as THBezierCurveLineSegment;
+
+    switch (selectedControlPoint.type) {
+      case MPEndControlPointType.controlPoint1:
+        final THLine line = _thFile.lineByMPID(
+          controlPointLineSegment.parentMPID,
+        );
+        final THLineSegment originalPreviousLineSegment = line
+            .getPreviousLineSegment(controlPointLineSegment, _thFile);
+
+        if (MPCommandOptionAux.isSmooth(originalPreviousLineSegment)) {
+          if (originalPreviousLineSegment is THStraightLineSegment) {
+            final THLineSegment originalSecondPreviousLineSegment = line
+                .getPreviousLineSegment(originalPreviousLineSegment, _thFile);
+            final Offset segmentStart =
+                originalSecondPreviousLineSegment.endPoint.coordinates;
+            final Offset segmentEnd =
+                originalPreviousLineSegment.endPoint.coordinates;
+            final Offset segment = segmentEnd - segmentStart;
+
+            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+              isSmooth: true,
+              isAdjacentStraight: true,
+              lineSegment: originalControlPointLineSegment,
+              controlPointType: MPEndControlPointType.controlPoint1,
+              straightStart: segmentStart,
+              straightEnd: segmentEnd,
+              straightLine: segment,
+            );
+          } else {
+            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+              isSmooth: true,
+              isAdjacentStraight: false,
+              lineSegment: originalControlPointLineSegment,
+              controlPointType: MPEndControlPointType.controlPoint1,
+              adjacentLineSegment:
+                  originalPreviousLineSegment as THBezierCurveLineSegment,
+            );
+          }
+        } else {
+          moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+            isSmooth: false,
+            lineSegment: originalControlPointLineSegment,
+            controlPointType: MPEndControlPointType.controlPoint1,
+          );
+        }
+      default:
+    }
   }
 }
 
