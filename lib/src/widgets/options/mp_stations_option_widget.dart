@@ -57,10 +57,7 @@ class _MPStationsOptionWidgetState extends State<MPStationsOptionWidget> {
             .map((name) => TextEditingController(text: name.trim()))
             .toList();
         _stationNameFocusNodes.addAll(
-          List.generate(
-            _stationNameControllers.length,
-            (_) => FocusNode(),
-          ),
+          List.generate(_stationNameControllers.length, (_) => FocusNode()),
         );
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
@@ -136,15 +133,17 @@ class _MPStationsOptionWidgetState extends State<MPStationsOptionWidget> {
         _stationNameWarningMessages = List.generate(
           _stationNameControllers.length,
           (index) {
-            final isValid =
-                _stationNameControllers[index].text.trim().isNotEmpty;
+            final isValid = _stationNameControllers[index].text
+                .trim()
+                .isNotEmpty;
 
             return isValid ? null : appLocalizations.mpStationsNameEmpty;
           },
         );
 
-        _isValid =
-            _stationNameWarningMessages.every((message) => message == null);
+        _isValid = _stationNameWarningMessages.every(
+          (message) => message == null,
+        );
       default:
         _isValid = false;
     }
@@ -153,17 +152,18 @@ class _MPStationsOptionWidgetState extends State<MPStationsOptionWidget> {
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_stationNameControllers.length != _initialStationNames.length) ||
-                !_stationNameControllers.every((controller) =>
-                    _initialStationNames.contains(controller.text)))));
+                !_stationNameControllers.every(
+                  (controller) =>
+                      _initialStationNames.contains(controller.text),
+                ))));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   void _addStationNameField() {
