@@ -162,7 +162,7 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   double _controlLineThicknessOnCanvas =
       mpLocator.mpSettingsController.lineThickness *
-          thControlLineThicknessFactor;
+      thControlLineThicknessFactor;
 
   @readonly
   double _xviLineThicknessOnCanvas = mpXVILineThickness;
@@ -180,7 +180,7 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   double _selectionToleranceSquaredOnCanvas =
       (mpLocator.mpSettingsController.selectionTolerance *
-          mpLocator.mpSettingsController.selectionTolerance);
+      mpLocator.mpSettingsController.selectionTolerance);
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -192,8 +192,9 @@ abstract class TH2FileEditControllerBase with Store {
   Paint _selectionWindowBorderPaint = thSelectionWindowBorderPaint;
 
   @computed
-  Paint get selectionWindowBorderPaintComplete => _selectionWindowBorderPaint
-    ..strokeWidth = thSelectionWindowBorderPaintStrokeWidth / _canvasScale;
+  Paint get selectionWindowBorderPaintComplete =>
+      _selectionWindowBorderPaint
+        ..strokeWidth = thSelectionWindowBorderPaintStrokeWidth / _canvasScale;
 
   @readonly
   double _selectionWindowBorderPaintDashInterval =
@@ -216,8 +217,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool _shouldShowImages = true;
 
   @computed
-  Paint get selectionHandlePaint => thSelectionHandleFillPaint
-    ..strokeWidth = _selectionHandleLineThicknessOnCanvas;
+  Paint get selectionHandlePaint =>
+      thSelectionHandleFillPaint
+        ..strokeWidth = _selectionHandleLineThicknessOnCanvas;
 
   @computed
   bool get showAddLine =>
@@ -237,7 +239,8 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   bool get showMultipleEndControlPointsClickedHighlight =>
       selectionController
-          .multipleEndControlPointsClickedHighlightedChoice.type !=
+          .multipleEndControlPointsClickedHighlightedChoice
+          .type !=
       MPMultipleEndControlPointsClickedType.none;
 
   @computed
@@ -319,7 +322,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   double get scrapLengthUnitsOnGraphicalScale {
-    double scrapLengthUnitsOnScreen = scrapLengthUnitsPerPointOnScreen *
+    double scrapLengthUnitsOnScreen =
+        scrapLengthUnitsPerPointOnScreen *
         thDesiredGraphicalScaleScreenPointLength;
 
     scrapLengthUnitsOnScreen = MPNumericAux.roundNumber(
@@ -372,10 +376,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   /// This is a factory constructor that creates a new instance of
   /// TH2FileEditController with an empty THFile.
-  static TH2FileEditController create(
-    String filename, {
-    Uint8List? fileBytes,
-  }) {
+  static TH2FileEditController create(String filename, {Uint8List? fileBytes}) {
     final TH2FileEditController th2FileEditController =
         TH2FileEditController._create();
     final THFile thFile = THFile();
@@ -391,19 +392,24 @@ abstract class TH2FileEditControllerBase with Store {
 
   void _basicInitialization(THFile file) {
     _thFile = file;
-    elementEditController =
-        TH2FileEditElementEditController(this as TH2FileEditController);
-    optionEditController =
-        TH2FileEditOptionEditController(this as TH2FileEditController);
-    overlayWindowController =
-        TH2FileEditOverlayWindowController(this as TH2FileEditController);
-    selectionController =
-        TH2FileEditSelectionController(this as TH2FileEditController);
+    elementEditController = TH2FileEditElementEditController(
+      this as TH2FileEditController,
+    );
+    optionEditController = TH2FileEditOptionEditController(
+      this as TH2FileEditController,
+    );
+    overlayWindowController = TH2FileEditOverlayWindowController(
+      this as TH2FileEditController,
+    );
+    selectionController = TH2FileEditSelectionController(
+      this as TH2FileEditController,
+    );
     stateController = TH2FileEditStateController(this as TH2FileEditController);
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
     visualController = MPVisualController(this as TH2FileEditController);
-    userInteractionController =
-        TH2FileEditUserInteractionController(this as TH2FileEditController);
+    userInteractionController = TH2FileEditUserInteractionController(
+      this as TH2FileEditController,
+    );
     _thFileMPID = _thFile.mpID;
   }
 
@@ -459,113 +465,155 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void _initializeReactions() {
-    _disposers.add(autorun((_) {
-      final double magnitude = MPNumericAux.log10(_canvasScale);
-      final int newDecimalPositions = magnitude.ceil() + 1;
+    _disposers.add(
+      autorun((_) {
+        final double magnitude = MPNumericAux.log10(_canvasScale);
+        final int newDecimalPositions = magnitude.ceil() + 1;
 
-      _currentDecimalPositions =
-          newDecimalPositions < 0 ? 0 : newDecimalPositions;
-    }));
+        _currentDecimalPositions = newDecimalPositions < 0
+            ? 0
+            : newDecimalPositions;
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _screenBoundingBox = MPNumericAux.orderedRectFromLTWH(
-        top: 0,
-        left: 0,
-        width: _screenSize.width,
-        height: _screenSize.height,
-      );
-    }));
+    _disposers.add(
+      autorun((_) {
+        _screenBoundingBox = MPNumericAux.orderedRectFromLTWH(
+          top: 0,
+          left: 0,
+          width: _screenSize.width,
+          height: _screenSize.height,
+        );
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      final Offset topLeft = _canvasTranslation;
-      final Offset bottomRight =
-          topLeft + Offset(_canvasSize.width, _canvasSize.height);
+    _disposers.add(
+      autorun((_) {
+        final Offset topLeft = _canvasTranslation;
+        final Offset bottomRight =
+            topLeft + Offset(_canvasSize.width, _canvasSize.height);
 
-      _canvasBoundingBox = MPNumericAux.orderedRectFromPoints(
-        point1: topLeft,
-        point2: bottomRight,
-      );
-    }));
+        _canvasBoundingBox = MPNumericAux.orderedRectFromPoints(
+          point1: topLeft,
+          point2: bottomRight,
+        );
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      final MPTH2FileEditState state = stateController.state;
+    _disposers.add(
+      autorun((_) {
+        final MPTH2FileEditState state = stateController.state;
 
-      _isAddElementMode = ((state is MPTH2FileEditStateAddArea) ||
-          (state is MPTH2FileEditStateAddLine) ||
-          (state is MPTH2FileEditStateAddPoint));
-    }));
+        _isAddElementMode =
+            ((state is MPTH2FileEditStateAddArea) ||
+            (state is MPTH2FileEditStateAddLine) ||
+            (state is MPTH2FileEditStateAddPoint));
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      final MPTH2FileEditState state = stateController.state;
+    _disposers.add(
+      autorun((_) {
+        final MPTH2FileEditState state = stateController.state;
 
-      _isEditLineMode = ((state is MPTH2FileEditStateEditSingleLine) ||
-          (state is MPTH2FileEditStateMovingEndControlPoints) ||
-          (state is MPTH2FileEditStateMovingSingleControlPoint));
-    }));
+        _isEditLineMode =
+            ((state is MPTH2FileEditStateEditSingleLine) ||
+            (state is MPTH2FileEditStateMovingEndControlPoints) ||
+            (state is MPTH2FileEditStateMovingSingleControlPoint));
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _enableNodeEditButton =
-          (selectionController.mpSelectedElementsLogical.length == 1) &&
-              (selectionController.mpSelectedElementsLogical[selectionController
-                  .mpSelectedElementsLogical.keys.first] is MPSelectedLine);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _enableNodeEditButton =
+            (selectionController.mpSelectedElementsLogical.length == 1) &&
+            (selectionController.mpSelectedElementsLogical[selectionController
+                    .mpSelectedElementsLogical
+                    .keys
+                    .first]
+                is MPSelectedLine);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _isOptionEditMode = stateController.state is MPTH2FileEditStateOptionEdit;
-    }));
+    _disposers.add(
+      autorun((_) {
+        _isOptionEditMode =
+            stateController.state is MPTH2FileEditStateOptionEdit;
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      final MPTH2FileEditState state = stateController.state;
+    _disposers.add(
+      autorun((_) {
+        final MPTH2FileEditState state = stateController.state;
 
-      _isSelectMode = ((state is MPTH2FileEditStateSelectEmptySelection) ||
-          (state is MPTH2FileEditStateSelectNonEmptySelection) ||
-          (state is MPTH2FileEditStateMovingElements));
-    }));
+        _isSelectMode =
+            ((state is MPTH2FileEditStateSelectEmptySelection) ||
+            (state is MPTH2FileEditStateSelectNonEmptySelection) ||
+            (state is MPTH2FileEditStateMovingElements));
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _lineThicknessOnCanvas = mpLocator.mpSettingsController.lineThickness /
-          (_canvasScale * devicePixelRatio);
-      _lineDirectionTickLengthOnCanvas =
-          mpLineDirectionTickLength / (_canvasScale * devicePixelRatio);
-      _xviLineThicknessOnCanvas =
-          mpXVILineThickness / (_canvasScale * devicePixelRatio);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _lineThicknessOnCanvas =
+            mpLocator.mpSettingsController.lineThickness /
+            (_canvasScale * devicePixelRatio);
+        _lineDirectionTickLengthOnCanvas =
+            mpLineDirectionTickLength / (_canvasScale * devicePixelRatio);
+        _xviLineThicknessOnCanvas =
+            mpXVILineThickness / (_canvasScale * devicePixelRatio);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _controlLineThicknessOnCanvas =
-          _lineThicknessOnCanvas * thControlLineThicknessFactor;
-    }));
+    _disposers.add(
+      autorun((_) {
+        _controlLineThicknessOnCanvas =
+            _lineThicknessOnCanvas * thControlLineThicknessFactor;
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _pointRadiusOnCanvas = mpLocator.mpSettingsController.pointRadius /
-          (_canvasScale * devicePixelRatio);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _pointRadiusOnCanvas =
+            mpLocator.mpSettingsController.pointRadius /
+            (_canvasScale * devicePixelRatio);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _selectionToleranceOnCanvas =
-          mpLocator.mpSettingsController.selectionTolerance /
-              (_canvasScale * devicePixelRatio);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _selectionToleranceOnCanvas =
+            mpLocator.mpSettingsController.selectionTolerance /
+            (_canvasScale * devicePixelRatio);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _selectionToleranceSquaredOnCanvas =
-          (_selectionToleranceOnCanvas * _selectionToleranceOnCanvas);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _selectionToleranceSquaredOnCanvas =
+            (_selectionToleranceOnCanvas * _selectionToleranceOnCanvas);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _selectionHandleSizeOnCanvas =
-          thSelectionHandleSize / (_canvasScale * devicePixelRatio);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _selectionHandleSizeOnCanvas =
+            thSelectionHandleSize / (_canvasScale * devicePixelRatio);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _selectionHandleDistanceOnCanvas =
-          thSelectionHandleDistance / (_canvasScale * devicePixelRatio);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _selectionHandleDistanceOnCanvas =
+            thSelectionHandleDistance / (_canvasScale * devicePixelRatio);
+      }),
+    );
 
-    _disposers.add(autorun((_) {
-      _selectionHandleLineThicknessOnCanvas =
-          thSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
-    }));
+    _disposers.add(
+      autorun((_) {
+        _selectionHandleLineThicknessOnCanvas =
+            thSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
+      }),
+    );
   }
 
   void _disposeReactions() {
@@ -666,13 +714,17 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   Offset offsetScaleScreenToCanvas(Offset screenCoordinate) {
-    return Offset(screenCoordinate.dx / _canvasScale,
-        screenCoordinate.dy / (-_canvasScale));
+    return Offset(
+      screenCoordinate.dx / _canvasScale,
+      screenCoordinate.dy / (-_canvasScale),
+    );
   }
 
   Offset offsetScaleCanvasToScreen(Offset canvasCoordinate) {
-    return Offset(canvasCoordinate.dx * _canvasScale,
-        canvasCoordinate.dy * (-_canvasScale));
+    return Offset(
+      canvasCoordinate.dx * _canvasScale,
+      canvasCoordinate.dy * (-_canvasScale),
+    );
   }
 
   Offset offsetScreenToCanvas(Offset screenCoordinate) {
@@ -785,22 +837,26 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void zoomIn({bool fineZoom = false}) {
-    setCanvasScale(MPNumericAux.calculateNextZoomLevel(
-      scale: _canvasScale,
-      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
-      isIncrease: true,
-    ));
+    setCanvasScale(
+      MPNumericAux.calculateNextZoomLevel(
+        scale: _canvasScale,
+        factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+        isIncrease: true,
+      ),
+    );
 
     _changedCanvasTransform();
   }
 
   @action
   void zoomOut({bool fineZoom = false}) {
-    setCanvasScale(MPNumericAux.calculateNextZoomLevel(
-      scale: _canvasScale,
-      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
-      isIncrease: false,
-    ));
+    setCanvasScale(
+      MPNumericAux.calculateNextZoomLevel(
+        scale: _canvasScale,
+        factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+        isIncrease: false,
+      ),
+    );
 
     _changedCanvasTransform();
   }
@@ -825,9 +881,11 @@ abstract class TH2FileEditControllerBase with Store {
         (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
 
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
-    setCanvasScale(MPNumericAux.roundScale(
-      (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
-    ));
+    setCanvasScale(
+      MPNumericAux.roundScale(
+        (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
+      ),
+    );
 
     _changedCanvasTransform();
   }
@@ -845,8 +903,9 @@ abstract class TH2FileEditControllerBase with Store {
   void close() {
     overlayWindowController.close();
     _disposeReactions();
-    mpLocator.mpGeneralController
-        .removeFileController(filename: _thFile.filename);
+    mpLocator.mpGeneralController.removeFileController(
+      filename: _thFile.filename,
+    );
   }
 
   @action
@@ -898,8 +957,9 @@ abstract class TH2FileEditControllerBase with Store {
       case MPZoomToFitType.file:
         return _thFile.getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.scrap:
-        return (_thFile.scrapByMPID(_activeScrapID))
-            .getBoundingBox(this as TH2FileEditController);
+        return (_thFile.scrapByMPID(
+          _activeScrapID,
+        )).getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.selection:
         return selectionController.getSelectedElementsBoundingBoxOnCanvas();
     }
@@ -956,8 +1016,8 @@ abstract class TH2FileEditControllerBase with Store {
         mpLocator.mpGeneralController;
     final String? initialDirectory =
         mpGeneralController.lastAccessedDirectory.isEmpty
-            ? (filename.isEmpty ? null : p.dirname(_thFile.filename))
-            : mpGeneralController.lastAccessedDirectory;
+        ? (filename.isEmpty ? null : p.dirname(_thFile.filename))
+        : mpGeneralController.lastAccessedDirectory;
 
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: mpLocator.appLocalizations.th2FileEditPageSaveAsDialogTitle,
@@ -1018,10 +1078,12 @@ abstract class TH2FileEditControllerBase with Store {
   void updateUndoRedoStatus() {
     _hasUndo = undoRedoController.hasUndo;
     _hasRedo = undoRedoController.hasRedo;
-    _undoDescription = mpLocator.appLocalizations
-        .th2FileEditPageUndo(undoRedoController.undoDescription);
-    _redoDescription = mpLocator.appLocalizations
-        .th2FileEditPageRedo(undoRedoController.redoDescription);
+    _undoDescription = mpLocator.appLocalizations.th2FileEditPageUndo(
+      undoRedoController.undoDescription,
+    );
+    _redoDescription = mpLocator.appLocalizations.th2FileEditPageRedo(
+      undoRedoController.redoDescription,
+    );
   }
 
   @action
@@ -1070,8 +1132,5 @@ class TH2FileEditControllerCreateResult {
   final bool isSuccessful;
   final List<String> errors;
 
-  TH2FileEditControllerCreateResult(
-    this.isSuccessful,
-    this.errors,
-  );
+  TH2FileEditControllerCreateResult(this.isSuccessful, this.errors);
 }
