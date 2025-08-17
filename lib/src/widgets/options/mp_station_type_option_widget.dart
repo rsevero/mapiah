@@ -211,28 +211,30 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup<String>(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 setState(() {
                   _selectedChoice = value!;
                 });
+                if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                  _stationTextFieldFocusNode.requestFocus();
+                }
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
-                _stationTextFieldFocusNode.requestFocus();
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
