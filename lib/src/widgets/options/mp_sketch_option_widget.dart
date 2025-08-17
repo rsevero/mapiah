@@ -142,27 +142,28 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget> {
     final double? x = double.tryParse(_xController.text);
     final double? y = double.tryParse(_yController.text);
 
-    _xWarningMessage =
-        (x == null) ? appLocalizations.mpSketchCoordinateInvalid : null;
-    _yWarningMessage =
-        (y == null) ? appLocalizations.mpSketchCoordinateInvalid : null;
+    _xWarningMessage = (x == null)
+        ? appLocalizations.mpSketchCoordinateInvalid
+        : null;
+    _yWarningMessage = (y == null)
+        ? appLocalizations.mpSketchCoordinateInvalid
+        : null;
     _isValid = (_xWarningMessage == null) && (_yWarningMessage == null);
 
     _updateIsOkButtonEnabled();
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_filename != _initialFilename) ||
                 (_xController.text != _initialX) ||
                 (_yController.text != _initialY))));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   Widget _buildCoordinateTextField({
@@ -246,9 +247,7 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget> {
                   ElevatedButton(
                     onPressed: () async {
                       final String? pickedFile = await FilePicker.platform
-                          .pickFiles(
-                            type: FileType.image,
-                          )
+                          .pickFiles(type: FileType.image)
                           .then((result) => result?.files.single.path);
 
                       if (pickedFile != null) {
@@ -258,9 +257,7 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget> {
                         });
                       }
                     },
-                    child: Text(
-                      appLocalizations.mpSketchChooseFileButtonLabel,
-                    ),
+                    child: Text(appLocalizations.mpSketchChooseFileButtonLabel),
                   ),
                 ],
               ),
