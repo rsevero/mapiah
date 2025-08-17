@@ -50,8 +50,10 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _thisFileScrapIDs =
-        widget.th2FileEditController.availableScraps().values.toList();
+    _thisFileScrapIDs = widget.th2FileEditController
+        .availableScraps()
+        .values
+        .toList();
     _hasFromFileOption = _thisFileScrapIDs.length > 1;
 
     if (widget.optionInfo.state == MPOptionStateType.set) {
@@ -82,14 +84,16 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
 
   void _updateIsValid() {
     _isValid = _selectedChoice.isNotEmpty;
-    _freeTextScrapIDWarningMessage =
-        _isValid ? null : appLocalizations.mpScrapWarning;
+    _freeTextScrapIDWarningMessage = _isValid
+        ? null
+        : appLocalizations.mpScrapWarning;
 
     _updateOkButtonEnabled();
   }
 
   void _updateOkButtonEnabled() {
-    final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        (_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice != mpUnsetOptionID) &&
             (_initialScrapTHID != _freeTextScrapIDController.text));
 
@@ -119,10 +123,10 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
         return DropdownMenu<String>(
           initialSelection: _freeTextScrapIDController.text,
           dropdownMenuEntries: _thisFileScrapIDs
-              .map((scrapID) => DropdownMenuEntry<String>(
-                    value: scrapID,
-                    label: scrapID,
-                  ))
+              .map(
+                (scrapID) =>
+                    DropdownMenuEntry<String>(value: scrapID, label: scrapID),
+              )
               .toList(),
           onSelected: (value) {
             if (value != null) {
@@ -135,7 +139,8 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
         );
       default:
         throw Exception(
-            'Invalid choice "$option" at MPProjectionOptionWidget._buildFormForOption()');
+          'Invalid choice "$option" at MPProjectionOptionWidget._buildFormForOption()',
+        );
     }
   }
 
