@@ -130,8 +130,9 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text(appLocalizations.mpLineHeightInvalidValueErrorMessage),
+            content: Text(
+              appLocalizations.mpLineHeightInvalidValueErrorMessage,
+            ),
           ),
         );
         return;
@@ -154,7 +155,8 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
   void _updateOkButtonEnabled() {
     final String doubleText = _doubleController.text.trim();
     final bool isValid = (double.tryParse(doubleText) != null);
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (doubleText != _initialDouble)));
 
