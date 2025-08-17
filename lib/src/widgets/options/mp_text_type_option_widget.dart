@@ -173,23 +173,23 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
         _isValid = true;
       case mpNonMultipleChoiceSetID:
         _isValid = text.isNotEmpty;
-        _warningMessage =
-            _isValid ? null : appLocalizations.mpTextTypeOptionWarning;
+        _warningMessage = _isValid
+            ? null
+            : appLocalizations.mpTextTypeOptionWarning;
     }
 
     _updateIsOkButtonEnabled();
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (_textController.text != _initialText)));
 
-    setState(
-      () {
-        _isOkButtonEnabled = _isValid && isChanged;
-      },
-    );
+    setState(() {
+      _isOkButtonEnabled = _isValid && isChanged;
+    });
   }
 
   @override
