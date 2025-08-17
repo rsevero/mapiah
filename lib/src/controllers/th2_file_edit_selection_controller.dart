@@ -1304,10 +1304,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             ),
             originalLineInTH2File: '',
           );
-
-          modifiedLineSegments[controlPointLineSegmentMPID] =
-              modifiedLineSegment;
         }
+
+        modifiedLineSegments[controlPointLineSegmentMPID] = modifiedLineSegment;
 
       // if (moveControlPointSmoothInfo.isSmooth) {
       //   final THBezierCurveLineSegment? modifiedPreviousLineSegment =

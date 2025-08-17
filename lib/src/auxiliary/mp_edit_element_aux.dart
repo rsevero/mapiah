@@ -67,15 +67,10 @@ class MPEditElementAux {
         (toPoint.dx * line.dx + toPoint.dy * line.dy) /
         (line.dx * line.dx + line.dy * line.dy);
 
-    // If t > 1, the projection is beyond the end point; otherwise, place it at the end and extend in the line direction
     if (t > 1.0) {
       return start + line * t;
     } else {
-      // Place the point beyond the end by the distance from end to point, in the line direction
-      final double extend = (point - end).distance;
-      final Offset direction = (line / line.distance);
-
-      return end + direction * extend;
+      return end;
     }
   }
 }

@@ -234,16 +234,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       switch (selectionController
           .getCurrentSelectedEndControlPointPointType()) {
         case MPSelectedEndControlPointPointType.controlPoint:
-          selectionController.moveSelectedControlPointToScreenCoordinates(
-            event.localPosition,
-          );
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.movingSingleControlPoint,
           );
         case MPSelectedEndControlPointPointType.endPoint:
-          selectionController.moveSelectedEndControlPointsToScreenCoordinates(
-            event.localPosition,
-          );
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.movingEndControlPoints,
           );
