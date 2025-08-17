@@ -176,6 +176,10 @@ class _MPAuthorOptionWidgetState extends State<MPAuthorOptionWidget> {
                     _selectedChoice = value;
                   }
                   _updateIsOkButtonEnabled();
+
+                  if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                    _personFocusNode.requestFocus();
+                  }
                 });
               },
               child: Column(
