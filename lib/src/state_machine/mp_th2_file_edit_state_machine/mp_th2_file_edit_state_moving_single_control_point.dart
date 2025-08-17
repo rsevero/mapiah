@@ -4,8 +4,9 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingSingleControlPoint(
-      {required super.th2FileEditController});
+  MPTH2FileEditStateMovingSingleControlPoint({
+    required super.th2FileEditController,
+  });
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
@@ -13,8 +14,9 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
-      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes
-          .contains(nextStateType)) {
+      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
+        nextStateType,
+      )) {
         selectionController.clearSelectedLineSegments();
       }
       return;
@@ -26,14 +28,16 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController
-        .moveSelectedControlPointToScreenCoordinates(event.localPosition);
+    selectionController.moveSelectedControlPointToScreenCoordinates(
+      event.localPosition,
+    );
   }
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final MPSelectedLine selected = selectionController
-        .mpSelectedElementsLogical.values.first as MPSelectedLine;
+    final MPSelectedLine selected =
+        selectionController.mpSelectedElementsLogical.values.first
+            as MPSelectedLine;
     final THLine selectedLine = selected.originalElementClone as THLine;
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
         selected.originalLineSegmentsMapClone;
@@ -49,8 +53,8 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     for (final int selectedLineSegmentMPID
         in selectedControlPointLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] =
-            thFile.lineSegmentByMPID(selectedLineSegmentMPID);
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = thFile
+            .lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
