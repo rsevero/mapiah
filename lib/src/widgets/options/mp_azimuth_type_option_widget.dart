@@ -143,7 +143,8 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
   void _updateOkButtonEnabled() {
     final String azimuthText = _azimuthController.text.trim();
     final bool isValidAzimuth = (_currentAzimuth != null);
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             (azimuthText != _initialAzimuth)));
 
