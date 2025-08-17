@@ -112,15 +112,13 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
   void _onElementTypeChanged(String value, bool isValid) {
     if ((value != _elementType) || (_isElementTypeValid != isValid)) {
       {
-        setState(
-          () {
-            _elementType = value;
-            _isElementTypeValid = isValid;
-            _plaType = '';
-            _isPLATypeValid = false;
-            _updateIsOkButtonEnabled();
-          },
-        );
+        setState(() {
+          _elementType = value;
+          _isElementTypeValid = isValid;
+          _plaType = '';
+          _isPLATypeValid = false;
+          _updateIsOkButtonEnabled();
+        });
       }
     }
   }
@@ -128,19 +126,18 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
   void _onPLATypeChanged(String value, bool isValid) {
     if ((value != _plaType) || (_isPLATypeValid != isValid)) {
       {
-        setState(
-          () {
-            _plaType = value;
-            _isPLATypeValid = isValid;
-            _updateIsOkButtonEnabled();
-          },
-        );
+        setState(() {
+          _plaType = value;
+          _isPLATypeValid = isValid;
+          _updateIsOkButtonEnabled();
+        });
       }
     }
   }
 
   void _updateIsOkButtonEnabled() {
-    final bool isChanged = ((_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
             ((_elementType != _initialElementType) ||
                 (_plaType != _initialPLAType))));
@@ -162,27 +159,27 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceUnset),
-              value: mpUnsetOptionID,
+            RadioGroup<String>(
               groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
               onChanged: (String? value) {
                 setState(() {
                   _selectedChoice = value!;
                 });
               },
-            ),
-            RadioListTile<String>(
-              title: Text(appLocalizations.mpChoiceSet),
-              value: mpNonMultipleChoiceSetID,
-              groupValue: _selectedChoice,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
-              },
+              child: Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceUnset),
+                    value: mpUnsetOptionID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile<String>(
+                    title: Text(appLocalizations.mpChoiceSet),
+                    value: mpNonMultipleChoiceSetID,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
             ),
 
             // Additional Inputs for "Set" Option
