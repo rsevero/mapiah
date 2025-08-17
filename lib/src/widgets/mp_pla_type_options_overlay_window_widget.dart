@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -35,6 +36,9 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
     late List<String> mostUsedChoices;
     final List<String> mostUsedChoicesReduced = [];
     late String title;
+    final String selectedTypeNotNull = selectedType == null
+        ? ''
+        : selectedType!;
 
     switch (plaType) {
       case THElementType.area:
@@ -69,7 +73,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
     }
 
     for (final String choice in lastUsedChoices) {
-      if (choice == selectedType) {
+      if (choice == selectedTypeNotNull) {
         continue;
       }
 
@@ -81,7 +85,8 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
     }
 
     for (final String choice in mostUsedChoices) {
-      if (lastUsedChoicesReduced.contains(choice) || (choice == selectedType)) {
+      if (lastUsedChoicesReduced.contains(choice) ||
+          (choice == selectedTypeNotNull)) {
         continue;
       }
 
@@ -99,83 +104,103 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
       innerAnchorType: innerAnchorType,
       th2FileEditController: th2FileEditController,
       children: [
-        if (selectedType != null) ...[
-          const SizedBox(height: mpButtonSpace),
-          MPOverlayWindowBlockWidget(
-            title: mpLocator.appLocalizations.mpPLATypeCurrent,
-            overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
-            padding: mpOverlayWindowBlockEdgeInsets,
+        RadioGroup(
+          groupValue: selectedTypeNotNull,
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              _onChanged(context, newValue);
+            }
+          },
+          child: Column(
             children: [
-              MPPLATypeOptionWidget(
-                value: selectedType!,
-                label: choices[selectedType]!,
-                groupValue: selectedType!,
-                isSelected: true,
-                plaType: plaType,
-                th2FileEditController: th2FileEditController,
+              if (selectedTypeNotNull != '') ...[
+                const SizedBox(height: mpButtonSpace),
+                MPOverlayWindowBlockWidget(
+                  title: mpLocator.appLocalizations.mpPLATypeCurrent,
+                  overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
+                  padding: mpOverlayWindowBlockEdgeInsets,
+                  children: [
+                    MPPLATypeOptionWidget(
+                      value: selectedTypeNotNull,
+                      label: choices[selectedTypeNotNull]!,
+
+                      isSelected: true,
+                      plaType: plaType,
+                      th2FileEditController: th2FileEditController,
+                    ),
+                  ],
+                ),
+              ],
+              if (lastUsedChoicesReduced.isNotEmpty) ...[
+                const SizedBox(height: mpButtonSpace),
+                MPOverlayWindowBlockWidget(
+                  title: mpLocator.appLocalizations.mpPLATypeLastUsed,
+                  overlayWindowBlockType: MPOverlayWindowBlockType.choices,
+                  padding: mpOverlayWindowBlockEdgeInsets,
+                  children: [
+                    ...lastUsedChoicesReduced.map((String choice) {
+                      return MPPLATypeOptionWidget(
+                        value: choice,
+                        label: choices[choice]!,
+                        isSelected: choice == selectedTypeNotNull,
+                        plaType: plaType,
+                        th2FileEditController: th2FileEditController,
+                      );
+                    }),
+                  ],
+                ),
+              ],
+              if (mostUsedChoicesReduced.isNotEmpty) ...[
+                const SizedBox(height: mpButtonSpace),
+                MPOverlayWindowBlockWidget(
+                  title: mpLocator.appLocalizations.mpPLATypeMostUsed,
+                  overlayWindowBlockType: MPOverlayWindowBlockType.choices,
+                  padding: mpOverlayWindowBlockEdgeInsets,
+                  children: [
+                    ...mostUsedChoicesReduced.map((String choice) {
+                      return MPPLATypeOptionWidget(
+                        value: choice,
+                        label: choices[choice]!,
+                        isSelected: choice == selectedTypeNotNull,
+                        plaType: plaType,
+                        th2FileEditController: th2FileEditController,
+                      );
+                    }),
+                  ],
+                ),
+              ],
+              const SizedBox(height: mpButtonSpace),
+              MPOverlayWindowBlockWidget(
+                title: mpLocator.appLocalizations.mpPLATypeAll,
+                overlayWindowBlockType: MPOverlayWindowBlockType.choices,
+                padding: mpOverlayWindowBlockEdgeInsets,
+                children: [
+                  ...choices.entries.map((MapEntry<String, String> entry) {
+                    return MPPLATypeOptionWidget(
+                      value: entry.key,
+                      label: entry.value,
+                      isSelected: entry.key == selectedTypeNotNull,
+                      plaType: plaType,
+                      th2FileEditController: th2FileEditController,
+                    );
+                  }),
+                ],
               ),
             ],
           ),
-        ],
-        if (lastUsedChoicesReduced.isNotEmpty) ...[
-          const SizedBox(height: mpButtonSpace),
-          MPOverlayWindowBlockWidget(
-            title: mpLocator.appLocalizations.mpPLATypeLastUsed,
-            overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-            padding: mpOverlayWindowBlockEdgeInsets,
-            children: [
-              ...lastUsedChoicesReduced.map((String choice) {
-                return MPPLATypeOptionWidget(
-                  value: choice,
-                  label: choices[choice]!,
-                  groupValue: selectedType == null ? '' : selectedType!,
-                  isSelected: choice == selectedType,
-                  plaType: plaType,
-                  th2FileEditController: th2FileEditController,
-                );
-              }),
-            ],
-          ),
-        ],
-        if (mostUsedChoicesReduced.isNotEmpty) ...[
-          const SizedBox(height: mpButtonSpace),
-          MPOverlayWindowBlockWidget(
-            title: mpLocator.appLocalizations.mpPLATypeMostUsed,
-            overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-            padding: mpOverlayWindowBlockEdgeInsets,
-            children: [
-              ...mostUsedChoicesReduced.map((String choice) {
-                return MPPLATypeOptionWidget(
-                  value: choice,
-                  label: choices[choice]!,
-                  groupValue: selectedType == null ? '' : selectedType!,
-                  isSelected: choice == selectedType,
-                  plaType: plaType,
-                  th2FileEditController: th2FileEditController,
-                );
-              }),
-            ],
-          ),
-        ],
-        const SizedBox(height: mpButtonSpace),
-        MPOverlayWindowBlockWidget(
-          title: mpLocator.appLocalizations.mpPLATypeAll,
-          overlayWindowBlockType: MPOverlayWindowBlockType.choices,
-          padding: mpOverlayWindowBlockEdgeInsets,
-          children: [
-            ...choices.entries.map((MapEntry<String, String> entry) {
-              return MPPLATypeOptionWidget(
-                value: entry.key,
-                label: entry.value,
-                groupValue: selectedType == null ? '' : selectedType!,
-                isSelected: entry.key == selectedType,
-                plaType: plaType,
-                th2FileEditController: th2FileEditController,
-              );
-            }),
-          ],
         ),
       ],
+    );
+  }
+
+  void _onChanged(BuildContext context, String newValue) {
+    th2FileEditController.userInteractionController.prepareSetPLAType(
+      plaType: plaType,
+      newType: newValue,
+    );
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPWindowType.plaTypes,
+      false,
     );
   }
 }
