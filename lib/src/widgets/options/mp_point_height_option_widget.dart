@@ -54,8 +54,9 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap =
-        MPTextToUser.getOrderedChoices(MPTextToUser.getLengthUnitsChoices());
+    _unitMap = MPTextToUser.getOrderedChoices(
+      MPTextToUser.getLengthUnitsChoices(),
+    );
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -106,18 +107,21 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
         final double? length = double.tryParse(_lengthController.text);
 
         _isValid = (length != null) && (_selectedUnit.isNotEmpty);
-        _lengthWarningMessage =
-            _isValid ? null : appLocalizations.mpPointHeightLengthWarning;
+        _lengthWarningMessage = _isValid
+            ? null
+            : appLocalizations.mpPointHeightLengthWarning;
       default:
         throw Exception(
-            'Invalid choice "$_selectedChoice" at MPPointHeightOptionWidget._updateIsValid()');
+          'Invalid choice "$_selectedChoice" at MPPointHeightOptionWidget._updateIsValid()',
+        );
     }
 
     _updateOkButtonEnabled();
   }
 
   void _updateOkButtonEnabled() {
-    final bool isChanged = (_selectedChoice != _initialSelectedChoice) ||
+    final bool isChanged =
+        (_selectedChoice != _initialSelectedChoice) ||
         (((_selectedChoice == 'chimney') ||
                 (_selectedChoice == 'pit') ||
                 (_selectedChoice == 'step')) &&
@@ -135,10 +139,10 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
       return DropdownMenu<String>(
         initialSelection: _selectedUnit,
         dropdownMenuEntries: _unitMap.entries
-            .map((unit) => DropdownMenuEntry<String>(
-                  value: unit.key,
-                  label: unit.value,
-                ))
+            .map(
+              (unit) =>
+                  DropdownMenuEntry<String>(value: unit.key, label: unit.value),
+            )
             .toList(),
         onSelected: (newUnit) {
           if (newUnit != null) {
@@ -164,7 +168,8 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
         labelText = appLocalizations.mpPointHeightValueStepLabel;
       default:
         throw Exception(
-            'Invalid choice "$option" at MPPointHeightOptionWidget._buildFormForOption()');
+          'Invalid choice "$option" at MPPointHeightOptionWidget._buildFormForOption()',
+        );
     }
 
     return Column(
