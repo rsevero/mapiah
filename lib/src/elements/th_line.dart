@@ -63,8 +63,8 @@ class THLine extends THElement
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
-  })  : _lineSegmentMPIDs = lineSegmentMPIDs,
-        super.forCWJM() {
+  }) : _lineSegmentMPIDs = lineSegmentMPIDs,
+       super.forCWJM() {
     this.childrenMPID.addAll(childrenMPID);
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
@@ -75,17 +75,17 @@ class THLine extends THElement
     required String lineTypeString,
     super.sameLineComment,
     super.originalLineInTH2File = '',
-  })  : lineType = THLineType.fromFileString(lineTypeString),
-        _lineSegmentMPIDs = [],
-        super.addToParent();
+  }) : lineType = THLineType.fromFileString(lineTypeString),
+       _lineSegmentMPIDs = [],
+       super.addToParent();
 
   THLine({
     required super.parentMPID,
     required this.lineType,
     super.sameLineComment,
     super.originalLineInTH2File = '',
-  })  : _lineSegmentMPIDs = [],
-        super.addToParent();
+  }) : _lineSegmentMPIDs = [],
+       super.addToParent();
 
   static bool hasLineType(String aLineType) {
     return _lineTypes.contains(aLineType);
@@ -119,8 +119,9 @@ class THLine extends THElement
       childrenMPID: List<int>.from(map['childrenMPID']),
       lineSegmentMPIDs: List<int>.from(map['lineSegmentMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
-      attrOptionsMap:
-          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
+      attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
+        map['attrOptionsMap'],
+      ),
     );
   }
 
@@ -292,8 +293,10 @@ class THLine extends THElement
     THLineSegment lineSegment,
     THFile thFile,
   ) {
-    final int previousLineSegmentMPID =
-        getPreviousLineSegmentMPID(lineSegment.mpID, thFile);
+    final int previousLineSegmentMPID = getPreviousLineSegmentMPID(
+      lineSegment.mpID,
+      thFile,
+    );
 
     return thFile.elementByMPID(previousLineSegmentMPID) as THLineSegment;
   }
@@ -360,8 +363,9 @@ class THLine extends THElement
     THLineSegment lineSegment,
     int beforeLineSegmentMPID,
   ) {
-    final int childrenMPIDIndex =
-        getLineSegmentIndexByMPID(beforeLineSegmentMPID);
+    final int childrenMPIDIndex = getLineSegmentIndexByMPID(
+      beforeLineSegmentMPID,
+    );
 
     if (childrenMPIDIndex == -1) {
       throw Exception(
@@ -371,8 +375,9 @@ class THLine extends THElement
 
     childrenMPID.insert(childrenMPIDIndex, lineSegment.mpID);
 
-    final int lineSegmentsMPIDsIndex =
-        getLineSegmentIndexByMPID(beforeLineSegmentMPID);
+    final int lineSegmentsMPIDsIndex = getLineSegmentIndexByMPID(
+      beforeLineSegmentMPID,
+    );
 
     if (lineSegmentsMPIDsIndex == -1) {
       throw Exception(
