@@ -60,9 +60,7 @@ class _MPPLATypeRadioButtonWidgetState
         RadioListTile<String>(
           title: Text(plaTypeText),
           value: elementTypeText,
-          groupValue: _selectedOption,
           dense: true,
-          onChanged: _onOptionChanged,
         ),
       );
 
@@ -77,9 +75,13 @@ class _MPPLATypeRadioButtonWidgetState
       }
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: radioButtons,
+    return RadioGroup(
+      groupValue: _selectedOption,
+      onChanged: _onOptionChanged,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: radioButtons,
+      ),
     );
   }
 }
