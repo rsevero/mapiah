@@ -3,11 +3,15 @@
 ## 0.2.12 - not yet released
 * Open th2 file from command line [proposed and implemented by Thomas Holder]
 * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
+* Fixed 'seting multiple option option in line segments not working'.
+* Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign
+* Moving control points in smooth line segments should move the other control point visually attached to the same end point.
+* When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.
 
 ## 0.2.11 - 2025-08-15
 * Flutter upgrade to 3.35.1
 * pub upgrade
-* Temporarily fixed file_picker version to 10.2.1 as 10.3.1 won´t show any files if I set allowedExtensions.
+* Temporarily fixed file_picker version to 10.2.1 as 10.3.1 won´t show any files if allowedExtensions is set.
 * Fixed issue [Fails to parse more than one backslash](https://github.com/rsevero/mapiah/issues/8) [reported by speleo3]
 * Fixed issue [Support more than one custom attribute](https://github.com/rsevero/mapiah/issues/9) [reported by speleo3]
 * Fixed 'quoted (and bracket) contents with line breaks inside should retain the line breaks'

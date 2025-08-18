@@ -22,7 +22,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditOptionEditControllerBase(this._th2FileEditController)
-      : _thFile = _th2FileEditController.thFile;
+    : _thFile = _th2FileEditController.thFile;
 
   @readonly
   Map<THCommandOptionType, MPOptionInfo> _optionStateMap = {};
@@ -41,15 +41,23 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   /// selected line segments options.
   bool optionsEditForLineSegments = false;
 
+  final Set<THCommandOptionType> optionsThatTriggerRedraw = {
+    THCommandOptionType.reverse,
+    THCommandOptionType.smooth,
+  };
+
   @action
   void updateOptionStateMap() {
     final mpSelectedElements = _th2FileEditController
-        .selectionController.mpSelectedElementsLogical.values;
+        .selectionController
+        .mpSelectedElementsLogical
+        .values;
     final Set<THHasOptionsMixin> selectedElements = {};
 
     for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-      selectedElements
-          .add(mpSelectedElement.originalElementClone as THHasOptionsMixin);
+      selectedElements.add(
+        mpSelectedElement.originalElementClone as THHasOptionsMixin,
+      );
     }
 
     _updateOptionsStateMaps(selectedElements);
@@ -61,7 +69,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
     if (element is! THHasOptionsMixin) {
       throw Exception(
-          'Element with MPID $mpID does not support options at TH2FileEditOptionEditController.getElementOptionMapByMPID()');
+        'Element with MPID $mpID does not support options at TH2FileEditOptionEditController.getElementOptionMapByMPID()',
+      );
     }
 
     _updateOptionsStateMaps([element]);
@@ -72,13 +81,16 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   void updateElementOptionMapForLineSegments() {
     final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
         _th2FileEditController
-            .selectionController.selectedEndControlPoints.values;
+            .selectionController
+            .selectedEndControlPoints
+            .values;
     final List<THLineSegment> selectedLineSegments = [];
 
     for (final MPSelectedEndControlPoint selectedEndControlPoint
         in selectedEndControlPoints) {
-      final THLineSegment lineSegment =
-          _thFile.lineSegmentByMPID(selectedEndControlPoint.mpID);
+      final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
+        selectedEndControlPoint.mpID,
+      );
 
       selectedLineSegments.add(lineSegment);
     }
@@ -121,8 +133,9 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
                 option = selectedElement.optionByType(optionType)!;
                 optionValue = option.specToFile();
               case MPOptionStateType.set:
-                final String newOptionValue =
-                    selectedElement.optionByType(optionType)!.specToFile();
+                final String newOptionValue = selectedElement
+                    .optionByType(optionType)!
+                    .specToFile();
 
                 if (optionValue != newOptionValue) {
                   optionStateType = MPOptionStateType.setMixed;
@@ -167,12 +180,13 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       }
 
       /// Looking for attr options.
-      final Set<String> selectedElementsAttrNames =
-          getSetAttrNames(selectedElements);
+      final Set<String> selectedElementsAttrNames = getSetAttrNames(
+        selectedElements,
+      );
 
       for (final THHasOptionsMixin selectedElement in selectedElements) {
-        final Iterable<String> attrNames =
-            selectedElement.getSetAttrOptionNames();
+        final Iterable<String> attrNames = selectedElement
+            .getSetAttrOptionNames();
 
         for (final String attrName in selectedElementsAttrNames) {
           if (!attrNames.contains(attrName)) {
@@ -185,8 +199,9 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
             );
           } else if (optionsAttrInfo.containsKey(attrName)) {
             if (optionsAttrInfo[attrName]!.state == MPOptionStateType.set) {
-              final String thisAttrValue =
-                  selectedElement.getAttrOptionValue(attrName)!;
+              final String thisAttrValue = selectedElement.getAttrOptionValue(
+                attrName,
+              )!;
 
               if (optionsAttrInfo[attrName]!.currentChoice != thisAttrValue) {
                 optionsAttrInfo[attrName] = MPOptionInfo(
@@ -288,9 +303,9 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
       _th2FileEditController.overlayWindowController
           .showOptionChoicesOverlayWindow(
-        outerAnchorPosition: outerAnchorPosition,
-        optionInfo: optionInfo,
-      );
+            outerAnchorPosition: outerAnchorPosition,
+            optionInfo: optionInfo,
+          );
     }
   }
 
@@ -302,8 +317,9 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @action
   void showOptionsOverlayWindow() {
     updateOptionStateMap();
-    _th2FileEditController.overlayWindowController
-        .toggleOverlayWindow(MPWindowType.commandOptions);
+    _th2FileEditController.overlayWindowController.toggleOverlayWindow(
+      MPWindowType.commandOptions,
+    );
   }
 }
 
