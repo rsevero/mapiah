@@ -82,14 +82,16 @@ final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 
 // ext keyword . keyword that can also contain +*.,’ characters, but not on the first
 // position.
-final RegExp thExtKeywordRegex =
-    RegExp(r'''^[a-zA-Z0-9_][a-zA-Z0-9_+*.,'-]*$''');
+final RegExp thExtKeywordRegex = RegExp(
+  r'''^[a-zA-Z0-9_][a-zA-Z0-9_+*.,'-]*$''',
+);
 
 // date . a date (or a time interval) specification in the format
 // YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]
 // or ‘-’ to leave a date unspecified.
 final RegExp thDatetimeRegex = RegExp(
-    r'^(?<year>\d{4}(\.(?<month>(0[1-9]|1[0-2]))(\.(?<day>(0[1-9]|[12][0-9]|3[01]))(\@(?<hour>(0[0-9]|1[0-9]|2[0-4]))(\:(?<minute>(0[0-9]|[1-5][0-9]))(\:(?<second>(0[0-9]|[1-5][0-9]))(\.(?<fractional>(0[0-9]|[1-5][0-9])))?)?)?)?)?)?)$');
+  r'^(?<year>\d{4}(\.(?<month>(0[1-9]|1[0-2]))(\.(?<day>(0[1-9]|[12][0-9]|3[01]))(\@(?<hour>(0[0-9]|1[0-9]|2[0-4]))(\:(?<minute>(0[0-9]|[1-5][0-9]))(\:(?<second>(0[0-9]|[1-5][0-9]))(\.(?<fractional>(0[0-9]|[1-5][0-9])))?)?)?)?)?)?)$',
+);
 
 const String thConfigDirectory = 'Config';
 const String thMainDirectory = 'Mapiah';
@@ -204,7 +206,7 @@ const double thInchToYard = 1 / thYardToInch;
 const double thFeetToYard = 1 / thYardToFeet;
 
 const Map<THLengthUnitType, Map<THLengthUnitType, double>>
-    lengthConversionFactors = {
+lengthConversionFactors = {
   THLengthUnitType.centimeter: {
     THLengthUnitType.feet: thCentimeterToFeet,
     THLengthUnitType.inch: thCentimeterToInch,
