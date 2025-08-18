@@ -227,6 +227,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           )) {
             _dragShouldMovePoints = true;
             break;
+          } else {
+            selectionController.addSelectedEndControlPoint(
+              clickedEndControlPoint,
+            );
           }
         }
       }
