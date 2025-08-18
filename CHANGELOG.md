@@ -9,6 +9,7 @@
 * When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.
 * Fixed 'clicking in another controlpoint after moving a control point would unselect everything'.
 * Making selection tolerance and point radius the same to avoid clicking near the border of a point and not selecting it.
+* Fixed 'when selecting a control point 1 the control points of the adjacent line segments weren't properly selected'.
 
 ## 0.2.11 - 2025-08-15
 * Flutter upgrade to 3.35.1

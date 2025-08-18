@@ -819,17 +819,37 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           ),
         );
         isFirst = false;
-        previousLineSegmentSelected = _selectedEndControlPoints.containsKey(
-          lineSegment.mpID,
-        );
+
+        final int lineSegmentMPID = lineSegment.mpID;
+
+        previousLineSegmentSelected =
+            _selectedEndControlPoints.containsKey(lineSegmentMPID) &&
+            (_selectedEndControlPoints[lineSegmentMPID]!.type !=
+                MPEndControlPointType.controlPoint1);
         continue;
       }
 
       final int lineSegmentMPID = lineSegment.mpID;
       final bool currentLineSegmentSelected = _selectedEndControlPoints
           .containsKey(lineSegmentMPID);
+
+      bool nextLineSegmentSelected = false;
+
+      if (lineSegments.length > lineSegments.indexOf(lineSegment) + 1) {
+        final int nextLineSegmentMPID =
+            lineSegments[lineSegments.indexOf(lineSegment) + 1].mpID;
+
+        if (_selectedEndControlPoints.containsKey(nextLineSegmentMPID) &&
+            _selectedEndControlPoints[nextLineSegmentMPID]!.type ==
+                MPEndControlPointType.controlPoint1) {
+          nextLineSegmentSelected = true;
+        }
+      }
+
       final bool addControlPoints =
-          (previousLineSegmentSelected || currentLineSegmentSelected) &&
+          (previousLineSegmentSelected ||
+              currentLineSegmentSelected ||
+              nextLineSegmentSelected) &&
           (lineSegment is THBezierCurveLineSegment);
 
       if (addControlPoints) {
@@ -864,7 +884,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           ),
         );
       }
-      previousLineSegmentSelected = currentLineSegmentSelected;
+      previousLineSegmentSelected =
+          currentLineSegmentSelected &&
+          (_selectedEndControlPoints[lineSegment.mpID]!.type !=
+              MPEndControlPointType.controlPoint1);
     }
   }
 
