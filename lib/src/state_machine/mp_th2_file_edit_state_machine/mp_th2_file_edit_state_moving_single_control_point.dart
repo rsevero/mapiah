@@ -81,6 +81,20 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
       // }
     }
 
+    final MPMoveControlPointSmoothInfo moveControlPointSmoothInfo =
+        elementEditController.moveControlPointSmoothInfo;
+
+    if (moveControlPointSmoothInfo.shouldSmooth &&
+        !moveControlPointSmoothInfo.isAdjacentStraight!) {
+      final int smoothedLineSegmentMPID =
+          moveControlPointSmoothInfo.adjacentLineSegment!.mpID;
+
+      modifiedLineSegmentsMap[smoothedLineSegmentMPID] = thFile
+          .lineSegmentByMPID(smoothedLineSegmentMPID);
+      originalLineSegmentsMap[smoothedLineSegmentMPID] =
+          originalLineSegmentsMapClone[smoothedLineSegmentMPID]!;
+    }
+
     final MPCommand lineEditCommand = MPMoveLineCommand(
       lineMPID: selectedLine.mpID,
       originalLineSegmentsMap: originalLineSegmentsMap,

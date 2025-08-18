@@ -299,6 +299,24 @@ class THLine extends THElement
         : thFile.elementByMPID(previousLineSegmentMPID) as THLineSegment;
   }
 
+  bool isFirstLineSegment(THLineSegment lineSegment, THFile thFile) {
+    final int? previousLineSegmentMPID = getPreviousLineSegmentMPID(
+      lineSegment.mpID,
+      thFile,
+    );
+
+    return previousLineSegmentMPID == null;
+  }
+
+  bool isLastLineSegment(THLineSegment lineSegment, THFile thFile) {
+    final int? nextLineSegmentMPID = getNextLineSegmentMPID(
+      lineSegment.mpID,
+      thFile,
+    );
+
+    return nextLineSegmentMPID == null;
+  }
+
   THLineSegment? getNextLineSegment(THLineSegment lineSegment, THFile thFile) {
     final int? nextLineSegmentMPID = getNextLineSegmentMPID(
       lineSegment.mpID,

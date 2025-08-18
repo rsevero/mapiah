@@ -1052,98 +1052,122 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THBezierCurveLineSegment originalControlPointLineSegment =
         originalLineSegments[controlPointLineSegmentMPID]
             as THBezierCurveLineSegment;
+    final THLine line = _thFile.lineByMPID(controlPointLineSegment.parentMPID);
 
     switch (selectedControlPoint.type) {
       case MPEndControlPointType.controlPoint1:
-        final THLine line = _thFile.lineByMPID(
-          controlPointLineSegment.parentMPID,
-        );
         final THLineSegment? originalPreviousLineSegment = line
             .getPreviousLineSegment(controlPointLineSegment, _thFile);
 
         if ((originalPreviousLineSegment != null) &&
-            MPCommandOptionAux.isSmooth(originalPreviousLineSegment)) {
+            MPCommandOptionAux.isSmooth(originalPreviousLineSegment) &&
+            !line.isFirstLineSegment(originalPreviousLineSegment, _thFile)) {
+          final Offset junction =
+              originalPreviousLineSegment.endPoint.coordinates;
+
           if (originalPreviousLineSegment is THStraightLineSegment) {
             final THLineSegment? originalSecondPreviousLineSegment = line
                 .getPreviousLineSegment(originalPreviousLineSegment, _thFile);
 
             if (originalSecondPreviousLineSegment == null) {
               moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                isSmooth: false,
+                shouldSmooth: false,
                 lineSegment: originalControlPointLineSegment,
                 controlPointType: MPEndControlPointType.controlPoint1,
               );
             } else {
               final Offset segmentStart =
                   originalSecondPreviousLineSegment.endPoint.coordinates;
-              final Offset segmentEnd =
-                  originalPreviousLineSegment.endPoint.coordinates;
-              final Offset segment = segmentEnd - segmentStart;
+              final Offset segment = junction - segmentStart;
 
               moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                isSmooth: true,
+                shouldSmooth: true,
                 isAdjacentStraight: true,
                 lineSegment: originalControlPointLineSegment,
                 controlPointType: MPEndControlPointType.controlPoint1,
                 straightStart: segmentStart,
-                straightEnd: segmentEnd,
+                junction: junction,
                 straightLine: segment,
               );
             }
-          } else {
-            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-              isSmooth: true,
-              isAdjacentStraight: false,
-              lineSegment: originalControlPointLineSegment,
-              controlPointType: MPEndControlPointType.controlPoint1,
-              adjacentLineSegment:
-                  originalPreviousLineSegment as THBezierCurveLineSegment,
-            );
+          } else if (originalPreviousLineSegment is THBezierCurveLineSegment) {
+            final double currentLengthMirrorControlPoint =
+                (originalPreviousLineSegment.controlPoint2.coordinates -
+                        junction)
+                    .distance;
+
+            if (currentLengthMirrorControlPoint == 0) {
+              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+                shouldSmooth: false,
+                lineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint1,
+              );
+            } else {
+              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+                shouldSmooth: true,
+                isAdjacentStraight: false,
+                lineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint1,
+                adjacentLineSegment: originalPreviousLineSegment,
+                adjacentControlPointLength: currentLengthMirrorControlPoint,
+                junction: junction,
+              );
+            }
           }
         } else {
           moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-            isSmooth: false,
+            shouldSmooth: false,
             lineSegment: originalControlPointLineSegment,
             controlPointType: MPEndControlPointType.controlPoint1,
           );
         }
       case MPEndControlPointType.controlPoint2:
-        if (MPCommandOptionAux.isSmooth(controlPointLineSegment)) {
-          final THLine line = _thFile.lineByMPID(
-            controlPointLineSegment.parentMPID,
-          );
+        if (MPCommandOptionAux.isSmooth(controlPointLineSegment) &&
+            !line.isLastLineSegment(controlPointLineSegment, _thFile)) {
           final THLineSegment? originalNextLineSegment = line
               .getNextLineSegment(controlPointLineSegment, _thFile);
+          final Offset junction = controlPointLineSegment.endPoint.coordinates;
 
           if (originalNextLineSegment is THStraightLineSegment) {
             final Offset segmentStart =
                 originalNextLineSegment.endPoint.coordinates;
-            final Offset segmentEnd =
-                controlPointLineSegment.endPoint.coordinates;
-            final Offset segment = segmentEnd - segmentStart;
+            final Offset segment = junction - segmentStart;
 
             moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-              isSmooth: true,
+              shouldSmooth: true,
               isAdjacentStraight: true,
               lineSegment: originalControlPointLineSegment,
               controlPointType: MPEndControlPointType.controlPoint2,
               straightStart: segmentStart,
-              straightEnd: segmentEnd,
+              junction: junction,
               straightLine: segment,
             );
-          } else {
-            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-              isSmooth: true,
-              isAdjacentStraight: false,
-              lineSegment: originalControlPointLineSegment,
-              controlPointType: MPEndControlPointType.controlPoint2,
-              adjacentLineSegment:
-                  originalNextLineSegment as THBezierCurveLineSegment,
-            );
+          } else if (originalNextLineSegment is THBezierCurveLineSegment) {
+            final double currentLengthMirrorControlPoint =
+                (originalNextLineSegment.controlPoint1.coordinates - junction)
+                    .distance;
+
+            if (currentLengthMirrorControlPoint == 0) {
+              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+                shouldSmooth: false,
+                lineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint2,
+              );
+            } else {
+              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
+                shouldSmooth: true,
+                isAdjacentStraight: false,
+                lineSegment: originalControlPointLineSegment,
+                controlPointType: MPEndControlPointType.controlPoint2,
+                adjacentLineSegment: originalNextLineSegment,
+                adjacentControlPointLength: currentLengthMirrorControlPoint,
+                junction: junction,
+              );
+            }
           }
         } else {
           moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-            isSmooth: false,
+            shouldSmooth: false,
             lineSegment: originalControlPointLineSegment,
             controlPointType: MPEndControlPointType.controlPoint2,
           );

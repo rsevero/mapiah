@@ -46,7 +46,7 @@ Version 0.3
 [X] - Release automation Windows
 [X] - Release automation MacOS
 [X] - Release automation for Web
-[ ] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
+[X] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
 [ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
 [ ] - Show (and edit) orientation and lsize on the line points during edit
 [ ] - Snap points

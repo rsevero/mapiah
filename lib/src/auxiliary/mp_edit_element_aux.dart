@@ -47,12 +47,28 @@ class MPEditElementAux {
         (type == MPEndControlPointType.controlPoint2));
   }
 
-  static THBezierCurveLineSegment? moveMirrorControlPoint({
-    required THBezierCurveLineSegment referenceLineSegment,
-    required MPEndControlPointType controlPointType,
-    THLineSegment? previousLineSegment,
-  }) {
-    return null;
+  static Offset? moveMirrorControlPoint(
+    MPMoveControlPointSmoothInfo moveControlPointSmoothInfo,
+    Offset point,
+  ) {
+    final Offset junction = moveControlPointSmoothInfo.junction!;
+    final Offset newDirectionVector = point - junction;
+    final double newDirectionVectorDistance = newDirectionVector.distance;
+
+    if (newDirectionVectorDistance == 0) {
+      return null;
+    }
+
+    final Offset newUnitDirection = Offset(
+      newDirectionVector.dx / newDirectionVectorDistance,
+      newDirectionVector.dy / newDirectionVectorDistance,
+    );
+    final double currentLength =
+        moveControlPointSmoothInfo.adjacentControlPointLength!;
+    final Offset newAdjacentControlPointPosition =
+        junction - newUnitDirection * currentLength;
+
+    return newAdjacentControlPointPosition;
   }
 
   static Offset moveControlPointInLine(
@@ -60,49 +76,51 @@ class MPEditElementAux {
     Offset point,
   ) {
     final Offset start = moveControlPointSmoothInfo.straightStart!;
-    final Offset end = moveControlPointSmoothInfo.straightEnd!;
+    final Offset junction = moveControlPointSmoothInfo.junction!;
     final Offset line = moveControlPointSmoothInfo.straightLine!;
     final Offset toPoint = point - start;
+    final double lineDx = line.dx;
+    final double lineDy = line.dy;
     final double t =
-        (toPoint.dx * line.dx + toPoint.dy * line.dy) /
-        (line.dx * line.dx + line.dy * line.dy);
+        (toPoint.dx * lineDx + toPoint.dy * lineDy) /
+        (lineDx * lineDx + lineDy * lineDy);
+    final Offset newPosition = (t > 1.0) ? start + line * t : junction;
 
-    if (t > 1.0) {
-      return start + line * t;
-    } else {
-      return end;
-    }
+    return newPosition;
   }
 }
 
 class MPMoveControlPointSmoothInfo {
-  final bool isSmooth;
+  final bool shouldSmooth;
   final bool? isAdjacentStraight;
   final THBezierCurveLineSegment? adjacentLineSegment;
   final THBezierCurveLineSegment lineSegment;
   final MPEndControlPointType controlPointType;
   final Offset? straightLine;
   final Offset? straightStart;
-  final Offset? straightEnd;
+  final Offset? junction;
+  final double? adjacentControlPointLength;
 
   MPMoveControlPointSmoothInfo({
-    required this.isSmooth,
+    required this.shouldSmooth,
     this.isAdjacentStraight,
     this.adjacentLineSegment,
     required this.lineSegment,
     required this.controlPointType,
     this.straightLine,
     this.straightStart,
-    this.straightEnd,
+    this.junction,
+    this.adjacentControlPointLength,
   }) {
-    if (isSmooth) {
+    if (shouldSmooth) {
       assert(isAdjacentStraight != null);
+      assert(junction != null);
       if (isAdjacentStraight!) {
         assert(straightLine != null);
         assert(straightStart != null);
-        assert(straightEnd != null);
       } else {
         assert(adjacentLineSegment != null);
+        assert(adjacentControlPointLength != null);
       }
     }
   }
