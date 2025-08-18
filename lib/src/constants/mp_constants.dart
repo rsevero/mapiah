@@ -138,8 +138,8 @@ const int mpDefaultZOrderIncrement = 1000;
 const double thClickDragThreshold = 2.0;
 const double thClickDragThresholdSquared =
     thClickDragThreshold * thClickDragThreshold;
-const double thDefaultSelectionTolerance = 6.0;
-const double thDefaultPointRadius = 8.0;
+const double thDefaultSelectionTolerance = 7.0;
+const double thDefaultPointRadius = 7.0;
 const double thDefaultLineThickness = 2.0;
 const double thControlLineThicknessFactor = 0.5;
 const double thControlPointRadiusFactor = 1.5;
