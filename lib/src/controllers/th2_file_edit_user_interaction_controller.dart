@@ -255,6 +255,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     if (_th2FileEditController.optionEditController.optionsThatTriggerRedraw
         .contains(optionType)) {
+      _th2FileEditController.selectionController
+          .updateSelectableEndAndControlPoints();
       _th2FileEditController.triggerSelectedElementsRedraw();
       _th2FileEditController.triggerEditLineRedraw();
     }
@@ -326,19 +328,21 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           ),
         );
       }
-    }
 
-    if (addOptionCommands.isNotEmpty) {
-      final MPCommand addOptionFinalCommand = (addOptionCommands.length == 1)
-          ? addOptionCommands.first
-          : MPMultipleElementsCommand.forCWJM(
-              commandsList: addOptionCommands,
-              completionType:
-                  MPMultipleElementsCommandCompletionType.optionsEdited,
-              descriptionType: MPCommandDescriptionType.setOptionToElements,
-            );
+      if (addOptionCommands.isNotEmpty) {
+        final MPCommand addOptionFinalCommand = (addOptionCommands.length == 1)
+            ? addOptionCommands.first
+            : MPMultipleElementsCommand.forCWJM(
+                commandsList: addOptionCommands,
+                completionType:
+                    MPMultipleElementsCommandCompletionType.optionsEdited,
+                descriptionType: elements.length == 1
+                    ? MPCommandDescriptionType.setOptionToElement
+                    : MPCommandDescriptionType.setOptionToElements,
+              );
 
-      _th2FileEditController.execute(addOptionFinalCommand);
+        _th2FileEditController.execute(addOptionFinalCommand);
+      }
     }
   }
 
