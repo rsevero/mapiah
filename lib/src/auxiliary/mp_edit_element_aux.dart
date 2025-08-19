@@ -176,6 +176,32 @@ class MPEditElementAux {
       newNextControlPoint1: newC1,
     );
   }
+
+  static Offset? getControlPointAlignedToStraight({
+    required Offset controlPoint,
+    required Offset startStraightLineSegment,
+    required Offset junction,
+    required THFile thFile,
+  }) {
+    final Offset straightLineVector = junction - startStraightLineSegment;
+    final Offset controlPointVector = controlPoint - junction;
+    final double straightLineDistance = straightLineVector.distance;
+    final double controlPointDistance = controlPointVector.distance;
+
+    if (straightLineDistance == 0 || controlPointDistance == 0) {
+      return null;
+    }
+
+    final Offset straightLineDirection = Offset(
+      straightLineVector.dx / straightLineDistance,
+      straightLineVector.dy / straightLineDistance,
+    );
+
+    final Offset newControlPoint =
+        junction + straightLineDirection * controlPointDistance;
+
+    return newControlPoint;
+  }
 }
 
 class MPAlignedBezierHandlesWeightedResult {

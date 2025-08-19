@@ -1213,6 +1213,67 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             modifiedElementsMap: smoothedSegmentsMap,
           );
         }
+      } else {
+        final THBezierCurveLineSegment unalignedBezierLineSegment;
+        final THBezierCurveLineSegment alignedBezierLineSegment;
+
+        if (isLineSegmentBezier) {
+          unalignedBezierLineSegment = lineSegment as THBezierCurveLineSegment;
+
+          final Offset? alignedControlPoint =
+              MPEditElementAux.getControlPointAlignedToStraight(
+                controlPoint: lineSegment.controlPoint2.coordinates,
+                junction: lineSegment.endPoint.coordinates,
+                startStraightLineSegment: nextLineSegment.endPoint.coordinates,
+                thFile: thFile,
+              );
+
+          if (alignedControlPoint == null) {
+            return null;
+          }
+          alignedBezierLineSegment = lineSegment.copyWith(
+            controlPoint2: THPositionPart(
+              coordinates: alignedControlPoint,
+              decimalPositions: mpCalculatedDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+          );
+        } else {
+          final THLineSegment? previousLineSegment = line
+              .getPreviousLineSegment(lineSegment, thFile);
+
+          if (previousLineSegment == null) {
+            return null;
+          }
+
+          unalignedBezierLineSegment =
+              nextLineSegment as THBezierCurveLineSegment;
+
+          final Offset? alignedControlPoint =
+              MPEditElementAux.getControlPointAlignedToStraight(
+                controlPoint: nextLineSegment.controlPoint1.coordinates,
+                junction: lineSegment.endPoint.coordinates,
+                startStraightLineSegment:
+                    previousLineSegment.endPoint.coordinates,
+                thFile: thFile,
+              );
+
+          if (alignedControlPoint == null) {
+            return null;
+          }
+          alignedBezierLineSegment = nextLineSegment.copyWith(
+            controlPoint1: THPositionPart(
+              coordinates: alignedControlPoint,
+              decimalPositions: mpCalculatedDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+          );
+        }
+
+        return MPMoveBezierLineSegmentCommand.fromLineSegments(
+          originalLineSegment: unalignedBezierLineSegment,
+          modifiedLineSegment: alignedBezierLineSegment,
+        );
       }
     }
 
