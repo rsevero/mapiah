@@ -22,8 +22,9 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
           selectionController.selectAllElements();
         } else if (!isAltPressed && !isShiftPressed) {
-          th2FileEditController.stateController
-              .setState(MPTH2FileEditStateType.addArea);
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.addArea,
+          );
         }
       case LogicalKeyboardKey.keyC:
         if (isAltPressed && !isCtrlPressed && !isShiftPressed) {
@@ -43,37 +44,44 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         }
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          th2FileEditController.stateController
-              .setState(MPTH2FileEditStateType.addLine);
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.addLine,
+          );
         }
       case LogicalKeyboardKey.keyN:
         if (!isAltPressed &&
             !isCtrlPressed &&
             !isShiftPressed &&
             (th2FileEditController
-                    .selectionController.mpSelectedElementsLogical.length ==
+                    .selectionController
+                    .mpSelectedElementsLogical
+                    .length ==
                 1) &&
             (th2FileEditController
-                .selectionController.mpSelectedElementsLogical.values
-                .toList()
-                .first is MPSelectedLine)) {
-          th2FileEditController.stateController
-              .setState(MPTH2FileEditStateType.editSingleLine);
+                    .selectionController
+                    .mpSelectedElementsLogical
+                    .values
+                    .toList()
+                    .first
+                is MPSelectedLine)) {
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.editSingleLine,
+          );
         }
       case LogicalKeyboardKey.keyO:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          th2FileEditController.stateController
-              .setState(MPTH2FileEditStateType.optionsEdit);
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.optionsEdit,
+          );
         }
       case LogicalKeyboardKey.keyP:
         if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          th2FileEditController.stateController
-              .setState(MPTH2FileEditStateType.addPoint);
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.addPoint,
+          );
         }
       case LogicalKeyboardKey.keyS:
-        print(
-          'DEBUG (Mapiah): S pressed.',
-        );
+        print('DEBUG (Mapiah): S pressed.');
         if (isCtrlPressed &&
             !isAltPressed &&
             th2FileEditController.enableSaveButton) {
@@ -105,8 +113,9 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         selectionController.removeSelected();
       case LogicalKeyboardKey.escape:
         selectionController.deselectAllElements();
-        th2FileEditController.stateController
-            .setState(MPTH2FileEditStateType.selectEmptySelection);
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.selectEmptySelection,
+        );
     }
 
     switch (event.character) {
@@ -115,7 +124,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
       case '2':
         if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
           th2FileEditController.zoomToFit(
-              zoomFitToType: MPZoomToFitType.selection);
+            zoomFitToType: MPZoomToFitType.selection,
+          );
         }
       case '3':
         th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
@@ -139,7 +149,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
 
     if (isShiftPressed) {
       th2FileEditController.moveCanvasHorizontally(
-          left: event.scrollDelta.dy < 0);
+        left: event.scrollDelta.dy < 0,
+      );
     } else if (isCtrlPressed) {
       th2FileEditController.moveCanvasVertically(up: event.scrollDelta.dy < 0);
     } else {

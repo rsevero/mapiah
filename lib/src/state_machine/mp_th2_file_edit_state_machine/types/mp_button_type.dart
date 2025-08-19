@@ -18,5 +18,5 @@ enum MPButtonType {
   zoomOneToOne,
   zoomOptions,
   zoomOut,
-  zoomSelection;
+  zoomSelection,
 }

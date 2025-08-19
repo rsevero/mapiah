@@ -14,8 +14,8 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
       right: endSelectionWindow.dx,
       bottom: endSelectionWindow.dy,
     );
-    final List<THElement> elementsInsideSelectionWindow =
-        selectionController.selectableElementsInsideWindow(selectionWindow);
+    final List<THElement> elementsInsideSelectionWindow = selectionController
+        .selectableElementsInsideWindow(selectionWindow);
 
     return elementsInsideSelectionWindow;
   }

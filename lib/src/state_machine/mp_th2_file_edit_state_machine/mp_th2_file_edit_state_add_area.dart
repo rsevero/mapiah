@@ -6,9 +6,11 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    th2FileEditController.setStatusBarMessage(mpLocator.appLocalizations
-        .th2FileEditPageAddAreaStatusBarMessage(
-            elementEditController.lastUsedAreaType.name));
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.th2FileEditPageAddAreaStatusBarMessage(
+        elementEditController.lastUsedAreaType.name,
+      ),
+    );
   }
 
   @override
@@ -18,13 +20,13 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    final Map<int, THElement> clickedLines =
-        await selectionController.getSelectableElementsClickedWithDialog(
-      screenCoordinates: event.localPosition,
-      selectionType: THSelectionType.line,
-      canBeMultiple: false,
-      presentMultipleElementsClickedWidget: true,
-    );
+    final Map<int, THElement> clickedLines = await selectionController
+        .getSelectableElementsClickedWithDialog(
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.line,
+          canBeMultiple: false,
+          presentMultipleElementsClickedWidget: true,
+        );
 
     if (clickedLines.isEmpty) {
       return Future.value();

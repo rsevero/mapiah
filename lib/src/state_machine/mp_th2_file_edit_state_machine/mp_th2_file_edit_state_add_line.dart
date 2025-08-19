@@ -6,9 +6,11 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    th2FileEditController.setStatusBarMessage(mpLocator.appLocalizations
-        .th2FileEditPageAddLineStatusBarMessage(
-            elementEditController.lastUsedLineType.name));
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.th2FileEditPageAddLineStatusBarMessage(
+        elementEditController.lastUsedLineType.name,
+      ),
+    );
   }
 
   @override

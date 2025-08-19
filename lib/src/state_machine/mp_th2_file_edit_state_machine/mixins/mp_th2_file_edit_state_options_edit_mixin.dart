@@ -4,7 +4,9 @@ mixin MPTH2FileEditStateOptionsEditMixin on MPTH2FileEditState {
   @override
   void onSecondaryButtonClick(PointerUpEvent event) {
     if (th2FileEditController
-        .selectionController.mpSelectedElementsLogical.isNotEmpty) {
+        .selectionController
+        .mpSelectedElementsLogical
+        .isNotEmpty) {
       th2FileEditController.optionEditController.showOptionsOverlayWindow();
     }
   }

@@ -6,16 +6,18 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateOptionsEditMixin {
-  MPTH2FileEditStateSelectEmptySelection(
-      {required super.th2FileEditController});
+  MPTH2FileEditStateSelectEmptySelection({
+    required super.th2FileEditController,
+  });
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.clearSelectedElements();
     selectionController.clearSelectedEndControlPoints();
     selectionController.clearSelectedLineSegments();
-    th2FileEditController.setStatusBarMessage(mpLocator
-        .appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage);
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage,
+    );
   }
 
   /// 1. Clicked on an object?
@@ -23,13 +25,13 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// 1.2. If no, do nothing.
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    final Map<int, THElement> clickedElements =
-        await selectionController.getSelectableElementsClickedWithDialog(
-      screenCoordinates: event.localPosition,
-      selectionType: THSelectionType.pla,
-      canBeMultiple: true,
-      presentMultipleElementsClickedWidget: true,
-    );
+    final Map<int, THElement> clickedElements = await selectionController
+        .getSelectableElementsClickedWithDialog(
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.pla,
+          canBeMultiple: true,
+          presentMultipleElementsClickedWidget: true,
+        );
 
     selectionController.clearClickedElementsAtPointerDown();
 
@@ -52,8 +54,9 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// Draws the selection window.
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController
-        .setSelectionWindowScreenEndCoordinates(event.localPosition);
+    selectionController.setSelectionWindowScreenEndCoordinates(
+      event.localPosition,
+    );
   }
 
   /// 1. Create a list of objects inside the selection window.
