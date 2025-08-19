@@ -47,21 +47,21 @@ Version 0.3
 [X] - Release automation MacOS
 [X] - Release automation for Web
 [X] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
-[ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
-[ ] - Show (and edit) orientation and lsize on the line points during edit
 [ ] - Snap points
 [ ] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
-[ ] - When clicking and dragging in non-selected control point, drag the control point
+[ ] - Support unknown point, line and area types
 [ ] - Implement Ctrl+O (open file) keyboard shortcut
 [ ] - Implement F1 shortcut to help page
 [X] - Support XVI images
 [X] - Support xth_me_image_insert additional formats
 [ ] - Properly present lines with partial subtypes
+[ ] - Show (and edit) orientation and lsize on the line points during edit
+[ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
 [ ] - Manually edit position of points
 [ ] - Manually edit position of end and control points in line segments
-[ ] - Opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
+[ ] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
 
 Version 0.4
 [ ] - Open multiple files simultaneously
