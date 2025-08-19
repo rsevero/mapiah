@@ -13,6 +13,7 @@
 * When setting 'smooth' option on on line segments, the bezier curve line segments should be smoothed.
 * Fixed 'changing first point of a line to bezier curve throws an exception'.
 * Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
+* Fixed 'file_picker version 10.3.1 won´t show any files if 'allowedExtensions' is set'.
 
 ## 0.2.11 - 2025-08-15
 * Flutter upgrade to 3.35.1
