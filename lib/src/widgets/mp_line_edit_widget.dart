@@ -118,8 +118,13 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
             case MPEndControlPointType.endPointBezierCurve:
             case MPEndControlPointType.endPointStraight:
               final THLineSegment lineSegment = point.element as THLineSegment;
+
+              /// End points should only be painted as selected when end points
+              /// are being selected. If there is a control point selected, it
+              /// takes precedence.
               final THPointPaint pointPaint =
-                  selectionController.getIsLineSegmentSelected(lineSegment)
+                  ((selectedControlPoint == null) &&
+                      selectionController.getIsLineSegmentSelected(lineSegment))
                   ? selectedEndPointPaint
                   : unselectedEndPointPaint;
               final THEndPointPainter endPointPainter = THEndPointPainter(

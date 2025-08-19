@@ -12,6 +12,7 @@
 * Fixed 'when selecting a control point 1 the control points of the adjacent line segments weren't properly selected'.
 * When setting 'smooth' option on on line segments, the bezier curve line segments should be smoothed.
 * Fixed 'changing first point of a line to bezier curve throws an exception'.
+* Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
 
 ## 0.2.11 - 2025-08-15
 * Flutter upgrade to 3.35.1
