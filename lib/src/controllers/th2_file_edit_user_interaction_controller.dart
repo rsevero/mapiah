@@ -450,9 +450,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               .getPreviousLineSegment(currentLineSegment, thFile);
 
           if (previousLineSegment == null) {
-            throw Exception(
-              'Error: previousLineSegment is null at TH2FileEditElementEditController.getRemoveLineSegmentCommand().',
-            );
+            continue;
           }
 
           final THBezierCurveLineSegment newLineSegment =
