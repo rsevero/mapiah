@@ -13,6 +13,7 @@
   * Fixed 'when selecting a control point 1 the control points of the adjacent line segments weren't properly selected'.
   * Fixed 'changing first point of a line to bezier curve throws an exception'.
   * Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
+  * Fixed 'when multiple elements are selected and the user asks for the options window, options that were set on the last selected element would be shown as if it were selected for all elements'.
 * Infrastructure maintanance:
   * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
   * Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign

@@ -124,14 +124,19 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
         MPOptionStateType optionStateType = MPOptionStateType.unset;
         String? optionValue;
         THCommandOption? option;
+        bool isFirst = true;
 
         for (final THHasOptionsMixin selectedElement in selectedElements) {
           if (selectedElement.hasOption(optionType)) {
             switch (optionStateType) {
               case MPOptionStateType.unset:
-                optionStateType = MPOptionStateType.set;
-                option = selectedElement.optionByType(optionType)!;
-                optionValue = option.specToFile();
+                if (isFirst) {
+                  optionStateType = MPOptionStateType.set;
+                  option = selectedElement.optionByType(optionType)!;
+                  optionValue = option.specToFile();
+                } else {
+                  optionStateType = MPOptionStateType.setMixed;
+                }
               case MPOptionStateType.set:
                 final String newOptionValue = selectedElement
                     .optionByType(optionType)!
@@ -149,6 +154,8 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
             option = null;
             optionValue = null;
           }
+
+          isFirst = false;
 
           if (optionStateType == MPOptionStateType.setMixed) {
             break;
