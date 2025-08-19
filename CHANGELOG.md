@@ -1,19 +1,22 @@
 # Changelog
 
 ## 0.2.12 - not yet released
-* Open th2 file from command line [proposed and implemented by Thomas Holder]
-* Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
-* Fixed 'setting multiple option options in line segments not working'.
-* Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign
-* Moving control points in smooth line segments should move the other control point visually attached to the same end point.
-* When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.
-* Fixed 'clicking in another controlpoint after moving a control point would unselect everything'.
-* Making selection tolerance and point radius the same to avoid clicking near the border of a point and not selecting it.
-* Fixed 'when selecting a control point 1 the control points of the adjacent line segments weren't properly selected'.
-* When setting 'smooth' option on on line segments, the bezier curve line segments should be smoothed.
-* Fixed 'changing first point of a line to bezier curve throws an exception'.
-* Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
-* Fixed 'file_picker version 10.3.1 won´t show any files if 'allowedExtensions' is set'.
+* New features:
+  * Open th2 file from command line [proposed and implemented by Thomas Holder]
+  * Moving control points in smooth line segments should move the other control point visually attached to the same end point.
+  * When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.
+  * When setting 'smooth' option to on on line segments, the bezier curve line segments should be smoothed.
+* Fixed bugs:
+  * Fixed 'setting multiple option options in line segments not working'.
+  * Fixed 'clicking in another controlpoint after moving a control point would unselect everything'.
+  * Making selection tolerance and point radius the same to avoid clicking near the border of a point and not selecting it.
+  * Fixed 'when selecting a control point 1 the control points of the adjacent line segments weren't properly selected'.
+  * Fixed 'changing first point of a line to bezier curve throws an exception'.
+  * Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
+* Infrastructure maintanance:
+  * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
+  * Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign
+  * Fixed 'file_picker version 10.3.1 won´t show any files if 'allowedExtensions' is set'.
 
 ## 0.2.11 - 2025-08-15
 * Flutter upgrade to 3.35.1
