@@ -34,13 +34,13 @@ part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
-part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
 part 'mp_th2_file_edit_state_options_edit.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
+part 'mp_th2_file_edit_state_single_line_edit.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
@@ -73,7 +73,7 @@ abstract class MPTH2FileEditState {
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:
-        return MPTH2FileEditStateEditSingleLine(
+        return MPTH2FileEditStateSingleLineEdit(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.movingElements:

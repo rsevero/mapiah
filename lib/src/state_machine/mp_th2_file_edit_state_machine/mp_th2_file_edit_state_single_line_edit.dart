@@ -1,6 +1,6 @@
 part of 'mp_th2_file_edit_state.dart';
 
-class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
+class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
@@ -14,7 +14,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     MPTH2FileEditStateType.movingEndControlPoints,
   };
 
-  MPTH2FileEditStateEditSingleLine({required super.th2FileEditController});
+  MPTH2FileEditStateSingleLineEdit({required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
