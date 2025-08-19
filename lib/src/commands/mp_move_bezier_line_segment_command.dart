@@ -36,6 +36,20 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }) : originalLineInTH2File = '',
        super();
 
+  MPMoveBezierLineSegmentCommand.fromLineSegments({
+    required THBezierCurveLineSegment originalLineSegment,
+    required THBezierCurveLineSegment modifiedLineSegment,
+    super.descriptionType = _defaultDescriptionType,
+  }) : lineSegmentMPID = originalLineSegment.mpID,
+       originalEndPointPosition = originalLineSegment.endPoint,
+       modifiedEndPointPosition = modifiedLineSegment.endPoint,
+       originalControlPoint1Position = originalLineSegment.controlPoint1,
+       modifiedControlPoint1Position = modifiedLineSegment.controlPoint1,
+       originalControlPoint2Position = originalLineSegment.controlPoint2,
+       modifiedControlPoint2Position = modifiedLineSegment.controlPoint2,
+       originalLineInTH2File = '',
+       super();
+
   MPMoveBezierLineSegmentCommand.fromDelta({
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
@@ -164,7 +178,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   MPMoveBezierLineSegmentCommand copyWith({
-    int? lineSegment,
+    int? lineSegmentMPID,
     THPositionPart? originalEndPointPosition,
     THPositionPart? modifiedEndPointPosition,
     THPositionPart? originalControlPoint1Position,
@@ -175,7 +189,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
-      lineSegmentMPID: lineSegment ?? this.lineSegmentMPID,
+      lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
       originalEndPointPosition:
           originalEndPointPosition ?? this.originalEndPointPosition,
       modifiedEndPointPosition:
