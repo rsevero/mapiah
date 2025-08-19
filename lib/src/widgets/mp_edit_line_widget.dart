@@ -22,10 +22,8 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
 
-  MPEditLineWidget({
-    required this.th2FileEditController,
-    required super.key,
-  }) : selectionController = th2FileEditController.selectionController;
+  MPEditLineWidget({required this.th2FileEditController, required super.key})
+    : selectionController = th2FileEditController.selectionController;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +38,13 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
           return SizedBox.shrink();
         }
 
-        final THPointPaint selectedEndPointPaint =
-            th2FileEditController.visualController.getSelectedEndPointPaint();
+        final THPointPaint selectedEndPointPaint = th2FileEditController
+            .visualController
+            .getSelectedEndPointPaint();
 
-        final THPointPaint unselectedEndPointPaint =
-            th2FileEditController.visualController.getUnselectedEndPointPaint();
+        final THPointPaint unselectedEndPointPaint = th2FileEditController
+            .visualController
+            .getUnselectedEndPointPaint();
 
         final THPointPaint unselectedControlPointPaint = th2FileEditController
             .visualController
@@ -54,11 +54,12 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
             .visualController
             .getSelectedControlPointPaint();
 
-        final Paint controlPointLinePaint =
-            th2FileEditController.visualController.getControlPointLinePaint();
+        final Paint controlPointLinePaint = th2FileEditController
+            .visualController
+            .getControlPointLinePaint();
 
-        final THLinePaint linePaint =
-            th2FileEditController.visualController.getEditLinePaint();
+        final THLinePaint linePaint = th2FileEditController.visualController
+            .getEditLinePaint();
 
         final MPSelectedEndControlPoint? selectedControlPoint;
 
@@ -68,7 +69,8 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
           final MPEndControlPointType selectEndControlPointType =
               selectEndControlPoint.type;
 
-          selectedControlPoint = ((selectEndControlPointType ==
+          selectedControlPoint =
+              ((selectEndControlPointType ==
                       MPEndControlPointType.controlPoint1) ||
                   (selectEndControlPointType ==
                       MPEndControlPointType.controlPoint2))
@@ -79,8 +81,13 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
         }
         final List<CustomPainter> painters = [];
 
-        final THLine line = selectionController.mpSelectedElementsLogical.values
-            .first.originalElementClone as THLine;
+        final THLine line =
+            selectionController
+                    .mpSelectedElementsLogical
+                    .values
+                    .first
+                    .originalElementClone
+                as THLine;
 
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
@@ -113,8 +120,8 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
               final THLineSegment lineSegment = point.element as THLineSegment;
               final THPointPaint pointPaint =
                   selectionController.getIsLineSegmentSelected(lineSegment)
-                      ? selectedEndPointPaint
-                      : unselectedEndPointPaint;
+                  ? selectedEndPointPaint
+                  : unselectedEndPointPaint;
               final THEndPointPainter endPointPainter = THEndPointPainter(
                 position: point.position,
                 pointPaint: pointPaint,
@@ -126,20 +133,21 @@ class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
               lastEndpoint = point;
             case MPEndControlPointType.controlPoint1:
             case MPEndControlPointType.controlPoint2:
-              final bool isSelected = (selectedControlPoint != null) &&
+              final bool isSelected =
+                  (selectedControlPoint != null) &&
                   (point.element.mpID ==
                       selectedControlPoint.originalElementClone.mpID) &&
                   (point.type == selectedControlPoint.type);
               final THControlPointPainter controlPointPainter =
                   THControlPointPainter(
-                controlPointPosition: point.position,
-                endPointPosition: lastEndpoint.position,
-                pointPaint: isSelected
-                    ? selectedControlPointPaint
-                    : unselectedControlPointPaint,
-                controlLinePaint: controlPointLinePaint,
-                th2FileEditController: th2FileEditController,
-              );
+                    controlPointPosition: point.position,
+                    endPointPosition: lastEndpoint.position,
+                    pointPaint: isSelected
+                        ? selectedControlPointPaint
+                        : unselectedControlPointPaint,
+                    controlLinePaint: controlPointLinePaint,
+                    th2FileEditController: th2FileEditController,
+                  );
 
               painters.add(controlPointPainter);
           }
