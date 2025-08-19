@@ -118,7 +118,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
                 option: option as THAttrCommandOption,
                 thFile: _th2FileEditController.thFile,
               )
-            : MPMultipleElementsCommandFactory.createSetOptionOnElements(
+            : MPMultipleElementsCommandFactory.setOptionOnElements(
                 elements: actualElementsForNewOption,
                 option: option,
                 thFile: _th2FileEditController.thFile,
@@ -227,7 +227,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommandFactory.createRemoveOptionFromElements(
+            MPMultipleElementsCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,
@@ -272,33 +272,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
+    List<MPCommand> addOptionCommands = [];
+
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
-    } else if (mpSelectedElements.length == 1) {
-      final THElement selectedElement =
-          mpSelectedElements.first.originalElementClone;
-
-      if (selectedElement is! THHasOptionsMixin) {
-        return;
-      }
-
-      if (isCtrlPressed ||
-          MPCommandOptionAux.elementTypeSupportsOptionType(
-            selectedElement,
-            optionType,
-          )) {
-        final THCommandOption option = THCommandOption.byType(
-          optionParent: selectedElement,
-          type: optionType,
-          value: choice,
-        );
-        final MPCommand addOptionCommand = MPSetOptionToElementCommand(
-          option: option,
-          currentOriginalLineInTH2File: selectedElement.originalLineInTH2File,
-        );
-
-        _th2FileEditController.execute(addOptionCommand);
-      }
     } else {
       final List<THElement> elements = [];
 
@@ -318,23 +295,50 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
                         .name !=
                     choice))) {
           elements.add(element);
+
+          /// If the user is turning on the smooth option for some segments,
+          /// they should be smoothed.
+          if ((optionType == THCommandOptionType.smooth) &&
+              (choice == 'on') &&
+              (element is THLineSegment)) {
+            final MPCommand? smoothCommand = _th2FileEditController
+                .elementEditController
+                .getSmoothLineSegmentsCommand(element);
+
+            if (smoothCommand != null) {
+              addOptionCommands.add(smoothCommand);
+            }
+          }
         }
       }
 
       if (elements.isNotEmpty) {
-        final MPMultipleElementsCommand addOptionCommand =
-            MPMultipleElementsCommandFactory.createSetOptionOnElements(
-              elements: elements,
-              option: THCommandOption.byType(
-                optionParent: elements.first as THHasOptionsMixin,
-                type: optionType,
-                value: choice,
-              ),
-              thFile: _th2FileEditController.thFile,
+        addOptionCommands.insert(
+          0,
+          MPMultipleElementsCommandFactory.setOptionOnElements(
+            elements: elements,
+            option: THCommandOption.byType(
+              optionParent: elements.first as THHasOptionsMixin,
+              type: optionType,
+              value: choice,
+            ),
+            thFile: _th2FileEditController.thFile,
+          ),
+        );
+      }
+    }
+
+    if (addOptionCommands.isNotEmpty) {
+      final MPCommand addOptionFinalCommand = (addOptionCommands.length == 1)
+          ? addOptionCommands.first
+          : MPMultipleElementsCommand.forCWJM(
+              commandsList: addOptionCommands,
+              completionType:
+                  MPMultipleElementsCommandCompletionType.optionsEdited,
+              descriptionType: MPCommandDescriptionType.setOptionToElements,
             );
 
-        _th2FileEditController.execute(addOptionCommand);
-      }
+      _th2FileEditController.execute(addOptionFinalCommand);
     }
   }
 
@@ -380,7 +384,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommandFactory.createRemoveOptionFromElements(
+            MPMultipleElementsCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,

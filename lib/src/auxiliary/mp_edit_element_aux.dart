@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
 class MPEditElementAux {
@@ -88,6 +90,102 @@ class MPEditElementAux {
 
     return newPosition;
   }
+
+  static List<THBezierCurveLineSegment> getSmoothedBezierLineSegments({
+    required THBezierCurveLineSegment lineSegment,
+    required THBezierCurveLineSegment nextLineSegment,
+    required THFile thFile,
+  }) {
+    final List<THBezierCurveLineSegment> smoothedSegments = [];
+    final Offset junction = lineSegment.endPoint.coordinates;
+    final MPAlignedBezierHandlesWeightedResult? result =
+        alignAdjacentBezierHandlesWeighted(
+          junction: junction,
+          currentControlPoint2: lineSegment.controlPoint2.coordinates,
+          nextControlPoint1: nextLineSegment.controlPoint1.coordinates,
+        );
+
+    // If unchanged (either length zero), return empty list of modified line
+    // segments.
+    if (result == null) {
+      return smoothedSegments;
+    }
+
+    final THBezierCurveLineSegment newLineSegment = lineSegment.copyWith(
+      controlPoint2: THPositionPart(
+        coordinates: result.newCurrentControlPoint2,
+        decimalPositions: thMaxDecimalPositions,
+      ),
+      originalLineInTH2File: '',
+    );
+    final THBezierCurveLineSegment newNextLineSegment = nextLineSegment
+        .copyWith(
+          controlPoint1: THPositionPart(
+            coordinates: result.newNextControlPoint1,
+            decimalPositions: thMaxDecimalPositions,
+          ),
+          originalLineInTH2File: '',
+        );
+
+    smoothedSegments.add(newLineSegment);
+    smoothedSegments.add(newNextLineSegment);
+
+    return smoothedSegments;
+  }
+
+  /// Separate helper: returns null if either handle length is zero (no change),
+  /// otherwise a result with the re-aligned control points using
+  /// length-weighted direction.
+  static MPAlignedBezierHandlesWeightedResult?
+  alignAdjacentBezierHandlesWeighted({
+    required Offset junction,
+    required Offset currentControlPoint2,
+    required Offset nextControlPoint1,
+    double epsilon = mpComparisonEpsilon,
+  }) {
+    final Offset vCurrentControlPoint2 =
+        currentControlPoint2 -
+        junction; // Outgoing from junction (left segment)
+    final Offset vNextControlPoint1 =
+        junction - nextControlPoint1; // Outgoing from junction (right segment)
+    final double lenCurrentControlPoint2 = vCurrentControlPoint2.distance;
+    final double lenNextControlPoint1 = vNextControlPoint1.distance;
+
+    if (lenCurrentControlPoint2 == 0 || lenNextControlPoint1 == 0) {
+      return null;
+    }
+
+    Offset dirVector =
+        vCurrentControlPoint2 +
+        vNextControlPoint1; // Weighted by length inherently.
+    double dirLen = dirVector.distance;
+
+    if (dirLen < epsilon) {
+      dirVector = (lenCurrentControlPoint2 >= lenNextControlPoint1)
+          ? vCurrentControlPoint2
+          : vNextControlPoint1;
+      dirLen = dirVector.distance;
+    }
+
+    final Offset dir = Offset(dirVector.dx / dirLen, dirVector.dy / dirLen);
+    final Offset newC2 = junction + dir * lenCurrentControlPoint2;
+    final Offset newC1 = junction - dir * lenNextControlPoint1;
+
+    return MPAlignedBezierHandlesWeightedResult(
+      newCurrentControlPoint2: newC2,
+      newNextControlPoint1: newC1,
+    );
+  }
+}
+
+class MPAlignedBezierHandlesWeightedResult {
+  final Offset newCurrentControlPoint2;
+  final Offset newNextControlPoint1;
+
+  const MPAlignedBezierHandlesWeightedResult({
+    required this.newCurrentControlPoint2,
+    required this.newNextControlPoint1,
+  });
 }
 
 class MPMoveControlPointSmoothInfo {

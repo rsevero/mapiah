@@ -46,9 +46,10 @@ const double thFineZoomFactor = thRoundToFactor / 2 + 1;
 const double thCanvasMovementFactor = 0.1;
 const double thCanvasRoundFactor = 25.0;
 
-const double mpEpsilon = 2.220446049250313e-16;
-const double mpPositiveEpsilonFactor = 1.0 + mpEpsilon;
-const double mpNegativeEpsilonFactor = 1.0 - mpEpsilon;
+const double mpNextEpsilon = 2.220446049250313e-16;
+const double mpPositiveNextEpsilonFactor = 1.0 + mpNextEpsilon;
+const double mpNegativeNextEpsilonFactor = 1.0 - mpNextEpsilon;
+const double mpComparisonEpsilon = 1e-9;
 
 /// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
 /// web version. The higher limits

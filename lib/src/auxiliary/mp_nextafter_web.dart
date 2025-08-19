@@ -7,7 +7,7 @@ double nextUpReal(double x) {
   if (x == 0.0 || x == -0.0) return double.minPositive;
 
   final double absX = x.abs();
-  final double next = absX * mpPositiveEpsilonFactor;
+  final double next = absX * mpPositiveNextEpsilonFactor;
 
   return x > 0 ? next : -next;
 }
@@ -19,7 +19,7 @@ double nextDownReal(double x) {
   if (x == 0.0 || x == -0.0) return -double.minPositive;
 
   final double absX = x.abs();
-  final double next = absX * mpNegativeEpsilonFactor;
+  final double next = absX * mpNegativeNextEpsilonFactor;
 
   return x > 0 ? next : -next;
 }

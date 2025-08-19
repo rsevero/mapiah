@@ -3,7 +3,7 @@
 ## 0.2.12 - not yet released
 * Open th2 file from command line [proposed and implemented by Thomas Holder]
 * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
-* Fixed 'seting multiple option option in line segments not working'.
+* Fixed 'setting multiple option options in line segments not working'.
 * Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign
 * Moving control points in smooth line segments should move the other control point visually attached to the same end point.
 * When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.

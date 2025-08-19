@@ -14,7 +14,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
 class MPMultipleElementsCommandFactory {
-  static MPMultipleElementsCommand createSetOptionOnElements({
+  static MPMultipleElementsCommand setOptionOnElements({
     required THCommandOption option,
     required List<THElement> elements,
     required THFile thFile,
@@ -49,7 +49,7 @@ class MPMultipleElementsCommandFactory {
     );
   }
 
-  static MPMultipleElementsCommand createRemoveOptionFromElements({
+  static MPMultipleElementsCommand removeOptionFromElements({
     required THCommandOptionType optionType,
     required List<int> parentMPIDs,
     required THFile thFile,
@@ -278,8 +278,8 @@ class MPMultipleElementsCommandFactory {
   }
 
   static MPMultipleElementsCommand moveLineSegments({
-    required LinkedHashMap<int, THLineSegment> originalElementsMap,
-    required LinkedHashMap<int, THLineSegment> modifiedElementsMap,
+    required Map<int, THLineSegment> originalElementsMap,
+    required Map<int, THLineSegment> modifiedElementsMap,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveLineSegments,
   }) {

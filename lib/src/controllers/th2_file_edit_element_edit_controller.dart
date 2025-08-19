@@ -1175,6 +1175,48 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       default:
     }
   }
+
+  MPCommand? getSmoothLineSegmentsCommand(THLineSegment lineSegment) {
+    final bool isLineSegmentBezier =
+        lineSegment.elementType == THElementType.bezierCurveLineSegment;
+    final THFile thFile = _th2FileEditController.thFile;
+    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
+    final THLineSegment? nextLineSegment = line.getNextLineSegment(
+      lineSegment,
+      thFile,
+    );
+    final bool isNextLineSegmentBezier =
+        nextLineSegment?.elementType == THElementType.bezierCurveLineSegment;
+
+    if ((isLineSegmentBezier || isNextLineSegmentBezier) &&
+        (nextLineSegment != null)) {
+      if (isLineSegmentBezier && isNextLineSegmentBezier) {
+        final List<THBezierCurveLineSegment> smoothedBezierSegments =
+            MPEditElementAux.getSmoothedBezierLineSegments(
+              lineSegment: lineSegment as THBezierCurveLineSegment,
+              nextLineSegment: nextLineSegment as THBezierCurveLineSegment,
+              thFile: thFile,
+            );
+
+        if (smoothedBezierSegments.isNotEmpty) {
+          final Map<int, THLineSegment> originalSegmentsMap = {
+            lineSegment.mpID: lineSegment,
+            nextLineSegment.mpID: nextLineSegment,
+          };
+          final Map<int, THLineSegment> smoothedSegmentsMap = {
+            for (final segment in smoothedBezierSegments) segment.mpID: segment,
+          };
+
+          return MPMultipleElementsCommandFactory.moveLineSegments(
+            originalElementsMap: originalSegmentsMap,
+            modifiedElementsMap: smoothedSegmentsMap,
+          );
+        }
+      }
+    }
+
+    return null;
+  }
 }
 
 class MPTypeUsed {
