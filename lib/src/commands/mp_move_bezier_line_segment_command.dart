@@ -33,8 +33,8 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint2Position,
     required this.modifiedControlPoint2Position,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+  }) : originalLineInTH2File = '',
+       super();
 
   MPMoveBezierLineSegmentCommand.fromDelta({
     required this.lineSegmentMPID,
@@ -44,22 +44,20 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required Offset deltaOnCanvas,
     required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
-  })  : modifiedEndPointPosition = originalEndPointPosition.copyWith(
-          coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
-          decimalPositions: decimalPositions,
-        ),
-        modifiedControlPoint1Position = originalControlPoint1Position.copyWith(
-          coordinates:
-              originalControlPoint1Position.coordinates + deltaOnCanvas,
-          decimalPositions: decimalPositions,
-        ),
-        modifiedControlPoint2Position = originalControlPoint2Position.copyWith(
-          coordinates:
-              originalControlPoint2Position.coordinates + deltaOnCanvas,
-          decimalPositions: decimalPositions,
-        ),
-        originalLineInTH2File = '',
-        super();
+  }) : modifiedEndPointPosition = originalEndPointPosition.copyWith(
+         coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
+         decimalPositions: decimalPositions,
+       ),
+       modifiedControlPoint1Position = originalControlPoint1Position.copyWith(
+         coordinates: originalControlPoint1Position.coordinates + deltaOnCanvas,
+         decimalPositions: decimalPositions,
+       ),
+       modifiedControlPoint2Position = originalControlPoint2Position.copyWith(
+         coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
+         decimalPositions: decimalPositions,
+       ),
+       originalLineInTH2File = '',
+       super();
 
   @override
   MPCommandType get type => MPCommandType.moveBezierLineSegment;
@@ -76,13 +74,13 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     final THBezierCurveLineSegment originalLineSegment = th2FileEditController
         .thFile
         .bezierCurveLineSegmentByMPID(lineSegmentMPID);
-    final THBezierCurveLineSegment newLineSegment =
-        originalLineSegment.copyWith(
-      endPoint: modifiedEndPointPosition,
-      controlPoint1: modifiedControlPoint1Position,
-      controlPoint2: modifiedControlPoint2Position,
-      originalLineInTH2File: keepOriginalLineTH2File ? null : '',
-    );
+    final THBezierCurveLineSegment newLineSegment = originalLineSegment
+        .copyWith(
+          endPoint: modifiedEndPointPosition,
+          controlPoint1: modifiedControlPoint1Position,
+          controlPoint2: modifiedControlPoint2Position,
+          originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+        );
 
     th2FileEditController.elementEditController
         .substituteElementWithoutAddSelectableElement(newLineSegment);
@@ -154,8 +152,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         map['modifiedControlPoint2Position'],
       ),
       originalLineInTH2File: map['originalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
