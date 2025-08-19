@@ -31,13 +31,15 @@ class THFileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mpLocator.mpLog.finer("THFileWidget.build()");
-    th2FileEditController.devicePixelRatio =
-        MediaQuery.of(context).devicePixelRatio;
+    th2FileEditController.devicePixelRatio = MediaQuery.of(
+      context,
+    ).devicePixelRatio;
 
     return LayoutBuilder(
       builder: (context, constraints) {
         th2FileEditController.updateScreenSize(
-            Size(constraints.maxWidth, constraints.maxHeight));
+          Size(constraints.maxWidth, constraints.maxHeight),
+        );
 
         if (th2FileEditController.canvasScaleTranslationUndefined) {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
@@ -148,7 +150,8 @@ class THFileWidget extends StatelessWidget {
                         .showMultipleElementsClickedHighlight) {
                       return MPMultipleElementsClickedHighlightWidget(
                         key: ValueKey(
-                            "MPMultipleElementsClickedHighlightWidget|$thFileMPID"),
+                          "MPMultipleElementsClickedHighlightWidget|$thFileMPID",
+                        ),
                         th2FileEditController: th2FileEditController,
                       );
                     } else {
@@ -162,7 +165,8 @@ class THFileWidget extends StatelessWidget {
                         .showMultipleEndControlPointsClickedHighlight) {
                       return MPMultipleEndControlPointsClickedHighlightWidget(
                         key: ValueKey(
-                            "MPMultipleEndControlPointsClickedHighlightWidget|$thFileMPID"),
+                          "MPMultipleEndControlPointsClickedHighlightWidget|$thFileMPID",
+                        ),
                         th2FileEditController: th2FileEditController,
                       );
                     } else {
@@ -174,34 +178,36 @@ class THFileWidget extends StatelessWidget {
                   Positioned(
                     bottom: 32,
                     left: 16,
-                    child: Observer(builder: (_) {
-                      final Offset screenPosition =
-                          th2FileEditController.mousePosition;
-                      final Offset canvasPosition = th2FileEditController
-                          .offsetScreenToCanvas(screenPosition);
+                    child: Observer(
+                      builder: (_) {
+                        final Offset screenPosition =
+                            th2FileEditController.mousePosition;
+                        final Offset canvasPosition = th2FileEditController
+                            .offsetScreenToCanvas(screenPosition);
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Mouse Screen Position: (x: ${screenPosition.dx.toStringAsFixed(1)}, y: ${screenPosition.dy.toStringAsFixed(1)})',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Mouse Screen Position: (x: ${screenPosition.dx.toStringAsFixed(1)}, y: ${screenPosition.dy.toStringAsFixed(1)})',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Mouse Canvas Position: (x: ${canvasPosition.dx.toStringAsFixed(2)}, y: ${canvasPosition.dy.toStringAsFixed(2)})',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              'Mouse Canvas Position: (x: ${canvasPosition.dx.toStringAsFixed(2)}, y: ${canvasPosition.dy.toStringAsFixed(2)})',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    }),
+                          ],
+                        );
+                      },
+                    ),
                   ),
               ],
             ),
