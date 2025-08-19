@@ -42,8 +42,8 @@ class MPDialogAux {
         lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-                ? (kDebugMode ? thDebugPath : './')
-                : mpLocator.mpGeneralController.lastAccessedDirectory,
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
       if (result != null) {
@@ -53,8 +53,9 @@ class MPDialogAux {
           return '';
         }
 
-        mpLocator.mpGeneralController.lastAccessedDirectory =
-            p.dirname(pickedFilePath);
+        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+          pickedFilePath,
+        );
 
         return pickedFilePath;
       } else {
@@ -84,8 +85,8 @@ class MPDialogAux {
         lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-                ? (kDebugMode ? thDebugPath : './')
-                : mpLocator.mpGeneralController.lastAccessedDirectory,
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
       if (result != null) {
@@ -115,8 +116,9 @@ class MPDialogAux {
             return;
           }
 
-          mpLocator.mpGeneralController.lastAccessedDirectory =
-              p.dirname(pickedFilePath);
+          mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+            pickedFilePath,
+          );
 
           Navigator.push(
             context,
@@ -145,15 +147,10 @@ class MPDialogAux {
   ) {
     showDialog(
       context: context,
-      builder: (context) => MPHelpDialogWidget(
-        helpPage: helpPage,
-        title: title,
-      ),
+      builder: (context) =>
+          MPHelpDialogWidget(helpPage: helpPage, title: title),
     );
   }
 }
 
-enum MPFilePickerType {
-  image,
-  th2,
-}
+enum MPFilePickerType { image, th2 }
