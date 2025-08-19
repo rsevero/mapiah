@@ -1310,7 +1310,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           modifiedLineSegment = originalControlPointLineSegment.copyWith(
             controlPoint1: THPositionPart(
               coordinates: newPosition,
-              decimalPositions: currentDecimalPositions,
+              decimalPositions: mpCalculatedDecimalPositions,
             ),
             originalLineInTH2File: '',
           );
@@ -1338,7 +1338,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                 moveControlPointSmoothInfo.adjacentLineSegment!.copyWith(
                   controlPoint2: THPositionPart(
                     coordinates: newPosition,
-                    decimalPositions: currentDecimalPositions,
+                    decimalPositions: mpCalculatedDecimalPositions,
                   ),
                   originalLineInTH2File: '',
                 );
@@ -1360,7 +1360,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           modifiedLineSegment = originalControlPointLineSegment.copyWith(
             controlPoint2: THPositionPart(
               coordinates: newPosition,
-              decimalPositions: currentDecimalPositions,
+              decimalPositions: mpCalculatedDecimalPositions,
             ),
             originalLineInTH2File: '',
           );
@@ -1388,7 +1388,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                 moveControlPointSmoothInfo.adjacentLineSegment!.copyWith(
                   controlPoint1: THPositionPart(
                     coordinates: newPosition,
-                    decimalPositions: currentDecimalPositions,
+                    decimalPositions: mpCalculatedDecimalPositions,
                   ),
                   originalLineInTH2File: '',
                 );
