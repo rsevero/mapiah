@@ -7,7 +7,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
-import 'package:mapiah/src/widgets/mp_edit_line_widget.dart';
+import 'package:mapiah/src/widgets/mp_line_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_images_widget.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_highlight_widget.dart';
@@ -111,7 +111,7 @@ class THFileWidget extends StatelessWidget {
                 Observer(
                   builder: (_) {
                     if (th2FileEditController.showEditLineSegment) {
-                      return MPEditLineWidget(
+                      return MPLineEditWidget(
                         key: ValueKey("MPEditLineWidget|$thFileMPID"),
                         th2FileEditController: th2FileEditController,
                       );

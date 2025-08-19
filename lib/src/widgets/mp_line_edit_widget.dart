@@ -18,11 +18,11 @@ import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
-class MPEditLineWidget extends StatelessWidget with MPLinePaintingMixin {
+class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
 
-  MPEditLineWidget({required this.th2FileEditController, required super.key})
+  MPLineEditWidget({required this.th2FileEditController, required super.key})
     : selectionController = th2FileEditController.selectionController;
 
   @override
