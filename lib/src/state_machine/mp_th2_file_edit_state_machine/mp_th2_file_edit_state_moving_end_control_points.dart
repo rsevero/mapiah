@@ -4,8 +4,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingEndControlPoints(
-      {required super.th2FileEditController});
+  MPTH2FileEditStateMovingEndControlPoints({
+    required super.th2FileEditController,
+  });
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
@@ -13,8 +14,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
-      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes
-          .contains(nextStateType)) {
+      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
+        nextStateType,
+      )) {
         selectionController.clearSelectedLineSegments();
       }
       return;
@@ -25,21 +27,25 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController
-        .moveSelectedEndControlPointsToScreenCoordinates(event.localPosition);
+    selectionController.moveSelectedEndControlPointsToScreenCoordinates(
+      event.localPosition,
+    );
   }
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final MPSelectedLine selected = selectionController
-        .mpSelectedElementsLogical.values.first as MPSelectedLine;
+    final MPSelectedLine selected =
+        selectionController.mpSelectedElementsLogical.values.first
+            as MPSelectedLine;
     final THLine selectedLine = selected.originalElementClone as THLine;
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
         selected.originalLineSegmentsMapClone;
-    final List<int> lineLineSegmentsMPIDs =
-        selectionController.getSelectedLineLineSegmentsMPIDs();
-    final List<int> selectedLineSegmentMPIDs =
-        selectionController.selectedEndControlPoints.keys.toList();
+    final List<int> lineLineSegmentsMPIDs = selectionController
+        .getSelectedLineLineSegmentsMPIDs();
+    final List<int> selectedLineSegmentMPIDs = selectionController
+        .selectedEndControlPoints
+        .keys
+        .toList();
     final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
@@ -47,20 +53,23 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] =
-            thFile.lineSegmentByMPID(selectedLineSegmentMPID);
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = thFile
+            .lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
 
-      final int? nextLineSegmentMPID =
-          selectionController.getNextLineSegmentMPID(
-              selectedLineSegmentMPID, lineLineSegmentsMPIDs);
+      final int? nextLineSegmentMPID = selectionController
+          .getNextLineSegmentMPID(
+            selectedLineSegmentMPID,
+            lineLineSegmentsMPIDs,
+          );
 
       if ((nextLineSegmentMPID != null) &&
           !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
-        final THLineSegment nextLineSegment =
-            thFile.lineSegmentByMPID(nextLineSegmentMPID);
+        final THLineSegment nextLineSegment = thFile.lineSegmentByMPID(
+          nextLineSegmentMPID,
+        );
 
         if (nextLineSegment is THBezierCurveLineSegment) {
           modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
