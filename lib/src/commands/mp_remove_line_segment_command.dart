@@ -68,8 +68,9 @@ class MPRemoveLineSegmentCommand extends MPCommand {
   factory MPRemoveLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveLineSegmentCommand.forCWJM(
       lineSegment: THLineSegment.fromMap(map['lineSegment']),
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -81,9 +82,7 @@ class MPRemoveLineSegmentCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'lineSegment': lineSegment.toMap(),
-    });
+    map.addAll({'lineSegment': lineSegment.toMap()});
 
     return map;
   }
