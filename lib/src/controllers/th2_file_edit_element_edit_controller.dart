@@ -1189,7 +1189,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         nextLineSegment?.elementType == THElementType.bezierCurveLineSegment;
 
     if ((isLineSegmentBezier || isNextLineSegmentBezier) &&
-        (nextLineSegment != null)) {
+        (nextLineSegment != null) &&
+        (!line.isFirstLineSegment(lineSegment, thFile))) {
       if (isLineSegmentBezier && isNextLineSegmentBezier) {
         final List<THBezierCurveLineSegment> smoothedBezierSegments =
             MPEditElementAux.getSmoothedBezierLineSegments(
