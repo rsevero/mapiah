@@ -80,3 +80,4 @@ Version 0.4
 [ ] - Include options and point/line count in multiple elements clicked dialog box
 [ ] - Implement default option values
 [ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style
+[ ] - Control which scraps are visible in Mapiah (that is not a Therion setting).
