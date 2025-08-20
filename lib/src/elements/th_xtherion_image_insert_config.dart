@@ -66,12 +66,12 @@ class THXTherionImageInsertConfig extends THElement {
     this.xData = '',
     this.xImage = false,
     super.originalLineInTH2File = '',
-  })  : xx = THDoublePart.fromString(valueString: xx),
-        isVisible = (int.tryParse(vsb) ?? 1) > 0,
-        igamma = THDoublePart.fromString(valueString: igamma),
-        yy = THDoublePart.fromString(valueString: yy),
-        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-        super.addToParent();
+  }) : xx = THDoublePart.fromString(valueString: xx),
+       isVisible = (int.tryParse(vsb) ?? 1) > 0,
+       igamma = THDoublePart.fromString(valueString: igamma),
+       yy = THDoublePart.fromString(valueString: yy),
+       isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+       super.addToParent();
 
   THXTherionImageInsertConfig({
     required super.parentMPID,
@@ -86,11 +86,11 @@ class THXTherionImageInsertConfig extends THElement {
     this.xData = '',
     this.xImage = false,
     super.originalLineInTH2File = '',
-  })  : igamma = (igamma == null)
-            ? THDoublePart.fromString(valueString: '1.0')
-            : igamma,
-        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-        super.addToParent();
+  }) : igamma = (igamma == null)
+           ? THDoublePart.fromString(valueString: '1.0')
+           : igamma,
+       isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+       super.addToParent();
 
   THXTherionImageInsertConfig.adjustPosition({
     required super.parentMPID,
@@ -106,11 +106,11 @@ class THXTherionImageInsertConfig extends THElement {
     this.xImage = false,
     super.originalLineInTH2File = '',
     required TH2FileEditController th2FileEditController,
-  })  : igamma = (igamma == null)
-            ? THDoublePart.fromString(valueString: '1.0')
-            : igamma,
-        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-        super.addToParent() {
+  }) : igamma = (igamma == null)
+           ? THDoublePart.fromString(valueString: '1.0')
+           : igamma,
+       isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+       super.addToParent() {
     if (isXVI) {
       final XVIFile? xviFile = getXVIFile(th2FileEditController);
 
@@ -264,7 +264,7 @@ class THXTherionImageInsertConfig extends THElement {
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
     if (_xviFile == null && isXVI) {
       final XVIFileParser parser = XVIFileParser();
-      final XVIFile xviFile;
+      final XVIFile? xviFile;
       final bool isSuccessful;
       final List<String> errors;
       final String resolvedPath = MPDirectoryAux.getResolvedPath(
@@ -274,7 +274,7 @@ class THXTherionImageInsertConfig extends THElement {
 
       (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
 
-      if (isSuccessful) {
+      if (isSuccessful && (xviFile != null)) {
         _xviFile = xviFile;
 
         _fixXVIRoot();

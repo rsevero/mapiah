@@ -95,8 +95,9 @@ class THFile
       'encoding': encoding,
       'mpID': _mpID,
       'childrenMPID': childrenMPID.toSet(),
-      'elementByMPID':
-          _elementByMPID.map((key, value) => MapEntry(key, value.toMap())),
+      'elementByMPID': _elementByMPID.map(
+        (key, value) => MapEntry(key, value.toMap()),
+      ),
     };
   }
 
@@ -106,8 +107,9 @@ class THFile
       encoding: map['encoding'],
       mpID: map['mpID'],
       elementByMPID: LinkedHashMap<int, THElement>.from(
-        map['elementByMPID']
-            .map((key, value) => MapEntry(key, THElement.fromMap(value))),
+        map['elementByMPID'].map(
+          (key, value) => MapEntry(key, THElement.fromMap(value)),
+        ),
       ),
     );
   }
@@ -146,12 +148,7 @@ class THFile
   }
 
   @override
-  int get hashCode => Object.hash(
-        filename,
-        encoding,
-        _mpID,
-        _elementByMPID,
-      );
+  int get hashCode => Object.hash(filename, encoding, _mpID, _elementByMPID);
 
   Map<int, THElement> get elements {
     return _elementByMPID;
@@ -172,7 +169,8 @@ class THFile
   String thidByMPID(int mpID) {
     if (!_thIDByMPID.containsKey(mpID)) {
       throw THCustomException(
-          "Element with mpID '$mpID' has no registered thID.");
+        "Element with mpID '$mpID' has no registered thID.",
+      );
     }
 
     return _thIDByMPID[mpID]!;
@@ -187,14 +185,16 @@ class THFile
   void unregisterElementTHIDByMPID(int mpID) {
     if (!_thIDByMPID.containsKey(mpID)) {
       throw THCustomException(
-          "Element with MPID '$mpID' has no registered thID.");
+        "Element with MPID '$mpID' has no registered thID.",
+      );
     }
 
     final String thID = _thIDByMPID[mpID]!;
 
     if (!_mpIDByTHID.containsKey(thID)) {
       throw THCustomException(
-          "thID '$thID' gotten from element with Mapiah ID '$mpID' is not registered.");
+        "thID '$thID' gotten from element with Mapiah ID '$mpID' is not registered.",
+      );
     }
 
     _thIDByMPID.remove(mpID);
@@ -319,7 +319,8 @@ class THFile
       }
       if (_mpIDByTHID.containsKey(newTHID)) {
         throw THCustomException(
-            "Duplicate thID in _elementByTHID: '$newTHID'.");
+          "Duplicate thID in _elementByTHID: '$newTHID'.",
+        );
       }
 
       _mpIDByTHID[newTHID] = mpID;
@@ -367,9 +368,7 @@ class THFile
       case THXTherionImageInsertConfig _:
         _imageMPIDs.add(element.mpID);
         mpLocator.mpGeneralController
-            .getTH2FileEditControllerIfExists(
-              filename,
-            )
+            .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
     }
   }
@@ -384,7 +383,8 @@ class THFile
         area = element;
       default:
         throw THCustomException(
-            "Element is not a THArea or THAreaBorderTHID in THFile._clearAreaXLineInfo.");
+          "Element is not a THArea or THAreaBorderTHID in THFile._clearAreaXLineInfo.",
+        );
     }
 
     area.clearAreaXLineInfo();
@@ -400,8 +400,9 @@ class THFile
 
   void removeElement(THElement element) {
     if (element is THIsParentMixin) {
-      final List<int> childrenMPIDsCopy =
-          (element as THIsParentMixin).childrenMPID.toList();
+      final List<int> childrenMPIDsCopy = (element as THIsParentMixin)
+          .childrenMPID
+          .toList();
 
       for (final int childMPID in childrenMPIDsCopy) {
         removeElement(elementByMPID(childMPID));
@@ -429,9 +430,7 @@ class THFile
       case THXTherionImageInsertConfig _:
         _imageMPIDs.remove(element.mpID);
         mpLocator.mpGeneralController
-            .getTH2FileEditControllerIfExists(
-              filename,
-            )
+            .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
     }
 
@@ -464,7 +463,8 @@ class THFile
 
     if (element is! THHasOptionsMixin) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a THHasOptionsMixin in THFile.hasOptionByMPID.");
+        "Element with MPID '$mpID' is not a THHasOptionsMixin in THFile.hasOptionByMPID.",
+      );
     }
 
     return element;
@@ -479,7 +479,8 @@ class THFile
 
     if (element is! THIsParentMixin) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a parent in THFile.parentByMPID.");
+        "Element with MPID '$mpID' is not a parent in THFile.parentByMPID.",
+      );
     }
 
     return (element as THIsParentMixin);
@@ -494,7 +495,8 @@ class THFile
 
     if (element is! THPoint) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a point in THFile.pointByMPID.");
+        "Element with MPID '$mpID' is not a point in THFile.pointByMPID.",
+      );
     }
 
     return element;
@@ -509,7 +511,8 @@ class THFile
 
     if (element is! THLine) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a line in THFile.lineByMPID.");
+        "Element with MPID '$mpID' is not a line in THFile.lineByMPID.",
+      );
     }
 
     return element;
@@ -524,7 +527,8 @@ class THFile
 
     if (element is! THArea) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not an area in THFile.areaByMPID.");
+        "Element with MPID '$mpID' is not an area in THFile.areaByMPID.",
+      );
     }
 
     return element;
@@ -539,7 +543,8 @@ class THFile
 
     if (element is! THAreaBorderTHID) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not an area border in THFile.areaBorderByMPID.");
+        "Element with MPID '$mpID' is not an area border in THFile.areaBorderByMPID.",
+      );
     }
 
     return element;
@@ -554,7 +559,8 @@ class THFile
 
     if (element is! THScrap) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a scrap in THFile.scrapByMPID.");
+        "Element with MPID '$mpID' is not a scrap in THFile.scrapByMPID.",
+      );
     }
 
     return element;
@@ -569,7 +575,8 @@ class THFile
 
     if (element is! THLineSegment) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a line segment in THFile.lineSegmentByMPID.");
+        "Element with MPID '$mpID' is not a line segment in THFile.lineSegmentByMPID.",
+      );
     }
 
     return element;
@@ -584,7 +591,8 @@ class THFile
 
     if (element is! THBezierCurveLineSegment) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a bezier curve line segment in THFile.bezierCurveLineSegmentByMPID.");
+        "Element with MPID '$mpID' is not a bezier curve line segment in THFile.bezierCurveLineSegmentByMPID.",
+      );
     }
 
     return element;
@@ -599,7 +607,8 @@ class THFile
 
     if (element is! THStraightLineSegment) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not a straight line segment in THFile.straightLineSegmentByMPID.");
+        "Element with MPID '$mpID' is not a straight line segment in THFile.straightLineSegmentByMPID.",
+      );
     }
 
     return element;
@@ -614,7 +623,8 @@ class THFile
 
     if (element is! THXTherionImageInsertConfig) {
       throw THCustomException(
-          "Element with MPID '$mpID' is not an image in THFile.imageByMPID.");
+        "Element with MPID '$mpID' is not an image in THFile.imageByMPID.",
+      );
     }
 
     return element;
@@ -634,9 +644,7 @@ class THFile
     _pointsMPIDs.clear();
     _imageMPIDs.clear();
     mpLocator.mpGeneralController
-        .getTH2FileEditControllerIfExists(
-          filename,
-        )
+        .getTH2FileEditControllerIfExists(filename)
         ?.updateShowImages();
     _drawableElementMPIDs.clear();
     _areaMPIDByLineMPID = null;
@@ -690,9 +698,10 @@ class THFile
     return _pointsMPIDs.map((int mpID) => pointByMPID(mpID));
   }
 
-  Iterable<THXTherionImageInsertConfig> getImages() {
-    return _imageMPIDs
-        .map((int mpID) => elementByMPID(mpID) as THXTherionImageInsertConfig);
+  Iterable<THXTherionImageInsertConfig> getXTherionImageInsertConfigs() {
+    return _imageMPIDs.map(
+      (int mpID) => elementByMPID(mpID) as THXTherionImageInsertConfig,
+    );
   }
 
   void _updateAreaXLineInfo() {

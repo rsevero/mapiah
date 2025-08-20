@@ -15,6 +15,7 @@
   * Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
   * Fixed 'when multiple elements are selected and the user asks for the options window, options that were set on the last selected element would be shown as if it were selected for all elements'.
   * Fixed 'right clicking anywhere when a control point is selected raises an exception'.
+  * Fixed 'opening a TH2 file that calls for a non existent XVI file should not hang Mapiah'.
 * Infrastructure maintanance:
   * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
   * Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign
