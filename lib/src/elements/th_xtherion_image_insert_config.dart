@@ -264,7 +264,7 @@ class THXTherionImageInsertConfig extends THElement {
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
     if (_xviFile == null && isXVI) {
       final XVIFileParser parser = XVIFileParser();
-      final XVIFile xviFile;
+      final XVIFile? xviFile;
       final bool isSuccessful;
       final List<String> errors;
       final String resolvedPath = MPDirectoryAux.getResolvedPath(
@@ -274,7 +274,7 @@ class THXTherionImageInsertConfig extends THElement {
 
       (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
 
-      if (isSuccessful) {
+      if (isSuccessful && (xviFile != null)) {
         _xviFile = xviFile;
 
         _fixXVIRoot();

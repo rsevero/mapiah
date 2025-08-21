@@ -19,7 +19,7 @@ class MPImagesWidget extends StatelessWidget {
 
         final List<Widget> widgets = [];
         final Iterable<THXTherionImageInsertConfig> images =
-            th2FileEditController.thFile.getImages();
+            th2FileEditController.thFile.getXTherionImageInsertConfigs();
 
         for (final THXTherionImageInsertConfig image in images) {
           if (!image.isVisible) continue;

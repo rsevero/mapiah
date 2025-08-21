@@ -698,7 +698,7 @@ class THFile
     return _pointsMPIDs.map((int mpID) => pointByMPID(mpID));
   }
 
-  Iterable<THXTherionImageInsertConfig> getImages() {
+  Iterable<THXTherionImageInsertConfig> getXTherionImageInsertConfigs() {
     return _imageMPIDs.map(
       (int mpID) => elementByMPID(mpID) as THXTherionImageInsertConfig,
     );

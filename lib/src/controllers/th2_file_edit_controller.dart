@@ -625,7 +625,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void updateShowImages() {
-    _showImages = _shouldShowImages && _thFile.getImages().isNotEmpty;
+    _showImages =
+        _shouldShowImages && _thFile.getXTherionImageInsertConfigs().isNotEmpty;
   }
 
   void setShouldShowImages(bool shouldShow) {

@@ -27,12 +27,12 @@ class XVIFileParser {
     _xviFileParser = _grammar.buildFrom(_grammar.xviFileStart());
   }
 
-  (XVIFile, bool, List<String>) parse(
-    String name, {
+  (XVIFile?, bool, List<String>) parse(
+    String filename, {
     Uint8List? fileBytes,
     bool runTraceParser = false,
   }) {
-    final File file = File(name);
+    final File file = File(filename);
 
     _runTraceParser = runTraceParser;
     _errors.clear();
@@ -41,7 +41,9 @@ class XVIFileParser {
       if (file.existsSync()) {
         _fileBytes = file.readAsBytesSync();
       } else {
-        throw Exception('File does not exist: $name');
+        _errors.add("File '$filename' not found.");
+
+        return (null, false, _errors);
       }
     } else {
       _fileBytes = fileBytes;
