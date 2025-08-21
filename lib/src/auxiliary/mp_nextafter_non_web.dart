@@ -54,7 +54,8 @@ double nextDownReal(double x) {
   final int sign = bytes.getUint8(0) >> 7;
   final int exponent =
       ((bytes.getUint8(0) & 0x7F) << 4) | ((bytes.getUint8(1) >> 4));
-  final int precision = ((bytes.getUint8(1) & 0x0F) << 48) +
+  final int precision =
+      ((bytes.getUint8(1) & 0x0F) << 48) +
       (bytes.getUint32(2) << 16) +
       (bytes.getUint16(6));
   return (sign, exponent, precision);

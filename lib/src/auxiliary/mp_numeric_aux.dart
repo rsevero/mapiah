@@ -33,13 +33,16 @@ class MPNumericAux {
     final double? doubleValue = double.tryParse(valueString);
     if (doubleValue == null) {
       throw THConvertFromStringException(
-          'THDoublePart fromString', valueString);
+        'THDoublePart fromString',
+        valueString,
+      );
     }
     final double value = doubleValue;
 
     final int dotPosition = valueString.indexOf(thDecimalSeparator);
-    final int decimalPositions =
-        (dotPosition > 0) ? valueString.length - (dotPosition + 1) : 0;
+    final int decimalPositions = (dotPosition > 0)
+        ? valueString.length - (dotPosition + 1)
+        : 0;
 
     return THDoublePart(value: value, decimalPositions: decimalPositions);
   }
@@ -70,10 +73,7 @@ class MPNumericAux {
     return valueString;
   }
 
-  static bool isRect1InsideRect2({
-    required Rect rect1,
-    required Rect rect2,
-  }) {
+  static bool isRect1InsideRect2({required Rect rect1, required Rect rect2}) {
     return rect2.contains(rect1.topLeft) && rect2.contains(rect1.bottomRight);
   }
 
@@ -140,9 +140,7 @@ class MPNumericAux {
     );
   }
 
-  static Rect orderedRectSmallestAroundPoint({
-    required Offset center,
-  }) {
+  static Rect orderedRectSmallestAroundPoint({required Offset center}) {
     return orderedRectFromLTRB(
       left: nextDown(center.dx),
       top: nextDown(center.dy),
@@ -203,7 +201,11 @@ class MPNumericAux {
     final double bottom = center.dy + radius;
 
     return orderedRectFromLTRB(
-        left: left, top: top, right: right, bottom: bottom);
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom,
+    );
   }
 
   /// In Flutter, the Rect.fromPoints() method is the only method that actually
@@ -253,10 +255,8 @@ class MPNumericAux {
   static double roundScale(double scale) {
     final double scaleMagnitude = (log10(scale) - 2).floorToDouble();
     final double scaleQuanta = math.pow(10, scaleMagnitude) as double;
-    final double rounded = floorTo(
-          value: scale / scaleQuanta,
-          factor: thCanvasRoundFactor,
-        ) *
+    final double rounded =
+        floorTo(value: scale / scaleQuanta, factor: thCanvasRoundFactor) *
         scaleQuanta;
 
     return rounded;
@@ -267,8 +267,9 @@ class MPNumericAux {
     final double scaleMagnitudeInt = scaleMagnitude.floorToDouble();
     final double roundTo = math.pow(10, scaleMagnitudeInt - 2) as double;
     final double scaleInt = roundToFives(scale / roundTo) * roundTo * 100;
-    final int fractionalDigits =
-        (scaleMagnitude >= 0) ? 0 : scaleMagnitude.abs().floor();
+    final int fractionalDigits = (scaleMagnitude >= 0)
+        ? 0
+        : scaleMagnitude.abs().floor();
     return "${scaleInt.toStringAsFixed(fractionalDigits)}%";
   }
 
@@ -283,8 +284,9 @@ class MPNumericAux {
   static String roundNumberForScreen(double value) {
     final double rounded = roundNumber(value);
     final double valueMagnitude = (log10(value) - 1).floorToDouble();
-    final int fractionalDigits =
-        (valueMagnitude >= 0) ? 0 : valueMagnitude.abs().floor();
+    final int fractionalDigits = (valueMagnitude >= 0)
+        ? 0
+        : valueMagnitude.abs().floor();
     String asString = rounded.toStringAsFixed(fractionalDigits);
 
     if (fractionalDigits > 0) {
@@ -304,8 +306,8 @@ class MPNumericAux {
     final double magnitudeFactorMax = initialMagnitude.ceilToDouble();
     final double magnitudeFactor =
         ((initialMagnitude - magnitudeFactorMin).abs() > 0.5)
-            ? magnitudeFactorMax
-            : magnitudeFactorMin;
+        ? magnitudeFactorMax
+        : magnitudeFactorMin;
     final double finalQuanta = math.pow(10, magnitudeFactor) as double;
 
     return finalQuanta;

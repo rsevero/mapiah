@@ -11,8 +11,11 @@ import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
 class MPInteractionAux {
-  static const Map<MPPointShapeType,
-      void Function(Canvas, Offset, double, Paint)> _pointShapeDrawMethods = {
+  static const Map<
+    MPPointShapeType,
+    void Function(Canvas, Offset, double, Paint)
+  >
+  _pointShapeDrawMethods = {
     MPPointShapeType.arrow: _drawArrowPoint,
     MPPointShapeType.asterisk: _drawAsteriskPoint,
     MPPointShapeType.circle: _drawCirclePoint,
@@ -32,24 +35,30 @@ class MPInteractionAux {
   };
 
   static bool isShiftPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.shiftLeft) ||
-        HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.shiftRight);
+    return HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftLeft,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftRight,
+        );
   }
 
   static bool isCtrlPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.controlLeft) ||
-        HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.controlRight);
+    return HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.controlLeft,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.controlRight,
+        );
   }
 
   static bool isAltPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.altLeft) ||
-        HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.altRight);
+    return HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.altLeft,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.altRight,
+        );
   }
 
   static Rect? getWidgetRectFromGlobalKey({
@@ -70,8 +79,8 @@ class MPInteractionAux {
     required BuildContext widgetContext,
     GlobalKey? ancestorGlobalKey,
   }) {
-    final RenderObject? ancestor =
-        ancestorGlobalKey?.currentContext?.findRenderObject();
+    final RenderObject? ancestor = ancestorGlobalKey?.currentContext
+        ?.findRenderObject();
 
     final RenderBox renderBox = widgetContext.findRenderObject() as RenderBox;
     final Offset position = renderBox.localToGlobal(
@@ -153,7 +162,9 @@ class MPInteractionAux {
   }
 
   static void addWidgetWithTopSpace(
-      List<Widget> widgetsList, Widget newWidget) {
+    List<Widget> widgetsList,
+    Widget newWidget,
+  ) {
     widgetsList.add(const SizedBox(height: mpButtonSpace));
     widgetsList.add(newWidget);
   }
@@ -163,7 +174,8 @@ class MPInteractionAux {
     TH2FileEditController th2FileEditController,
   ) {
     final GlobalKey buttonGlobalKey = th2FileEditController
-        .overlayWindowController.globalKeyWidgetKeyByType[buttonType]!;
+        .overlayWindowController
+        .globalKeyWidgetKeyByType[buttonType]!;
     final Rect? buttonBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
       widgetGlobalKey: buttonGlobalKey,
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
@@ -185,8 +197,8 @@ class MPInteractionAux {
   }) {
     final void Function(Canvas, Offset, double, Paint) customDrawMethod =
         _pointShapeDrawMethods.containsKey(pointPaint.type)
-            ? _pointShapeDrawMethods[pointPaint.type]!
-            : _drawCirclePoint;
+        ? _pointShapeDrawMethods[pointPaint.type]!
+        : _drawCirclePoint;
 
     _drawPoint(
       canvas: canvas,
@@ -404,21 +416,11 @@ class MPInteractionAux {
     required void Function(Canvas, Offset, double, Paint) customDrawMethod,
   }) {
     if (pointPaint.fill != null) {
-      customDrawMethod(
-        canvas,
-        position,
-        pointPaint.radius,
-        pointPaint.fill!,
-      );
+      customDrawMethod(canvas, position, pointPaint.radius, pointPaint.fill!);
     }
 
     if (pointPaint.border != null) {
-      customDrawMethod(
-        canvas,
-        position,
-        pointPaint.radius,
-        pointPaint.border!,
-      );
+      customDrawMethod(canvas, position, pointPaint.radius, pointPaint.border!);
     }
   }
 

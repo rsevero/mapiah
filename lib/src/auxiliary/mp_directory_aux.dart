@@ -18,8 +18,9 @@ class MPDirectoryAux {
 
   static Future<Directory> config() async {
     final Directory rootDir = await rootDirectory;
-    final Directory configDirectory =
-        Directory('${rootDir.path}/$thMainDirectory/$thConfigDirectory/');
+    final Directory configDirectory = Directory(
+      '${rootDir.path}/$thMainDirectory/$thConfigDirectory/',
+    );
 
     await configDirectory.create(recursive: true);
 
@@ -28,8 +29,9 @@ class MPDirectoryAux {
 
   static Future<Directory> main() async {
     final Directory rootDir = await rootDirectory;
-    final Directory mainDirectory =
-        Directory('${rootDir.path}/$thMainDirectory/');
+    final Directory mainDirectory = Directory(
+      '${rootDir.path}/$thMainDirectory/',
+    );
 
     await mainDirectory.create(recursive: true);
 
@@ -38,8 +40,9 @@ class MPDirectoryAux {
 
   static Future<Directory> projects() async {
     final Directory rootDir = await rootDirectory;
-    final Directory projectsDirectory =
-        Directory('${rootDir.path}/$thMainDirectory/$thProjectsDirectory/');
+    final Directory projectsDirectory = Directory(
+      '${rootDir.path}/$thMainDirectory/$thProjectsDirectory/',
+    );
 
     await projectsDirectory.create(recursive: true);
 
@@ -57,9 +60,11 @@ class MPDirectoryAux {
   }
 
   static String getResolvedPath(String referencePath, String filename) {
-    final String resolvedPath = p.normalize(p.isAbsolute(filename)
-        ? filename
-        : p.join(p.dirname(referencePath), filename));
+    final String resolvedPath = p.normalize(
+      p.isAbsolute(filename)
+          ? filename
+          : p.join(p.dirname(referencePath), filename),
+    );
 
     return resolvedPath;
   }

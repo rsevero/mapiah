@@ -14,43 +14,43 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPTextToUser {
   static final Map<MPCommandDescriptionType, String>
-      _commandDescriptionTypeAsString = {};
+  _commandDescriptionTypeAsString = {};
   static final Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
   static final Map<THLengthUnitType, String>
-      _lengthUnitTypeAbbreviationAsString = {};
+  _lengthUnitTypeAbbreviationAsString = {};
   static final Map<THElementType, String> _elementTypeAsString = {};
   static final Map<THPointType, String> _pointTypeAsString = {};
   static final Map<THLineType, String> _lineTypeAsString = {};
   static final Map<THAreaType, String> _areaTypeAsString = {};
   static final Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
   static final Map<THOptionChoicesAdjustType, String>
-      _multipleChoiceAdjustChoiceAsString = {};
+  _multipleChoiceAdjustChoiceAsString = {};
   static final Map<THOptionChoicesAlignType, String>
-      _multipleChoiceAlignChoiceAsString = {};
+  _multipleChoiceAlignChoiceAsString = {};
   static final Map<THOptionChoicesOnOffType, String>
-      _multipleChoiceOnOffChoiceAsString = {};
+  _multipleChoiceOnOffChoiceAsString = {};
   static final Map<THOptionChoicesOnOffAutoType, String>
-      _multipleChoiceOnOffAutoChoiceAsString = {};
+  _multipleChoiceOnOffAutoChoiceAsString = {};
   static final Map<THOptionChoicesFlipType, String>
-      _multipleChoiceFlipChoiceAsString = {};
+  _multipleChoiceFlipChoiceAsString = {};
   static final Map<THOptionChoicesArrowPositionType, String>
-      _multipleChoiceArrowPositionChoiceAsString = {};
+  _multipleChoiceArrowPositionChoiceAsString = {};
   static final Map<THOptionChoicesLineGradientType, String>
-      _multipleChoiceLineGradientChoiceAsString = {};
+  _multipleChoiceLineGradientChoiceAsString = {};
   static final Map<THOptionChoicesLinePointDirectionType, String>
-      _multipleChoiceLinePointDirectionChoiceAsString = {};
+  _multipleChoiceLinePointDirectionChoiceAsString = {};
   static final Map<THOptionChoicesLinePointGradientType, String>
-      _multipleChoiceLinePointGradientChoiceAsString = {};
+  _multipleChoiceLinePointGradientChoiceAsString = {};
   static final Map<THOptionChoicesOutlineType, String>
-      _multipleChoiceOutlineChoiceAsString = {};
+  _multipleChoiceOutlineChoiceAsString = {};
   static final Map<THOptionChoicesPlaceType, String>
-      _multipleChoicePlaceChoiceAsString = {};
+  _multipleChoicePlaceChoiceAsString = {};
   static final Map<THPLScaleCommandOptionType, String>
-      _plScaleCommandOptionTypeAsString = {};
+  _plScaleCommandOptionTypeAsString = {};
   static final Map<THPassageHeightModes, String>
-      _passageHeightModesChoiceAsString = {};
+  _passageHeightModesChoiceAsString = {};
   static final Map<THPointHeightValueMode, String>
-      _pointHeightValueModeAsString = {};
+  _pointHeightValueModeAsString = {};
   static final Map<THProjectionModeType, String> _projectionModeTypeAsString =
       {};
   static final Map<THAngleUnitType, String> _angleUnitTypeAsString = {};
@@ -175,9 +175,7 @@ class MPTextToUser {
         localizations.mpProjectionModePlan;
   }
 
-  static String getProjectionModeType(
-    THProjectionModeType projectionModeType,
-  ) {
+  static String getProjectionModeType(THProjectionModeType projectionModeType) {
     return _projectionModeTypeAsString.containsKey(projectionModeType)
         ? _projectionModeTypeAsString[projectionModeType]!
         : projectionModeType.name;
@@ -225,11 +223,11 @@ class MPTextToUser {
 
     _passageHeightModesChoiceAsString[THPassageHeightModes.depth] =
         localizations.mpPassageHeightDepth;
-    _passageHeightModesChoiceAsString[
-            THPassageHeightModes.distanceBetweenFloorAndCeiling] =
+    _passageHeightModesChoiceAsString[THPassageHeightModes
+            .distanceBetweenFloorAndCeiling] =
         localizations.mpPassageHeightDistanceBetweenFloorAndCeiling;
-    _passageHeightModesChoiceAsString[
-            THPassageHeightModes.distanceToCeilingAndDistanceToFloor] =
+    _passageHeightModesChoiceAsString[THPassageHeightModes
+            .distanceToCeilingAndDistanceToFloor] =
         localizations.mpPassageHeightDistanceToCeilingAndDistanceToFloor;
     _passageHeightModesChoiceAsString[THPassageHeightModes.height] =
         localizations.mpPassageHeightHeight;
@@ -253,9 +251,11 @@ class MPTextToUser {
   }
 
   static String getPLScaleCommandOptionType(
-      THPLScaleCommandOptionType plScaleCommandOptionType) {
-    return _plScaleCommandOptionTypeAsString
-            .containsKey(plScaleCommandOptionType)
+    THPLScaleCommandOptionType plScaleCommandOptionType,
+  ) {
+    return _plScaleCommandOptionTypeAsString.containsKey(
+          plScaleCommandOptionType,
+        )
         ? _plScaleCommandOptionTypeAsString[plScaleCommandOptionType]!
         : plScaleCommandOptionType.name;
   }
@@ -283,8 +283,8 @@ class MPTextToUser {
 
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addArea] =
         localizations.mpCommandDescriptionAddArea;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.addAreaBorderTHID] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .addAreaBorderTHID] =
         localizations.mpCommandDescriptionAddAreaBorderTHID;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addElements] =
         localizations.mpCommandDescriptionAddElements;
@@ -294,8 +294,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addPoint] =
         localizations.mpCommandDescriptionAddPoint;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.addXTherionImageInsertConfig] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .addXTherionImageInsertConfig] =
         localizations.mpCommandDescriptionAddXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreasType] =
         localizations.mpCommandDescriptionEditAreasType;
@@ -307,11 +307,11 @@ class MPTextToUser {
         localizations.mpCommandDescriptionEditLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLineSegment] =
         localizations.mpCommandDescriptionEditLineSegment;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.editLineSegmentsType] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .editLineSegmentsType] =
         localizations.mpCommandDescriptionEditLineSegmentsType;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.editLineSegmentType] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .editLineSegmentType] =
         localizations.mpCommandDescriptionEditLineSegmentType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editLinesType] =
         localizations.mpCommandDescriptionEditLinesType;
@@ -323,8 +323,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionEditPointType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.moveArea] =
         localizations.mpCommandDescriptionMoveArea;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.moveBezierLineSegment] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .moveBezierLineSegment] =
         localizations.mpCommandDescriptionMoveBezierLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.moveElements] =
         localizations.mpCommandDescriptionMoveElements;
@@ -336,47 +336,48 @@ class MPTextToUser {
         localizations.mpCommandDescriptionMoveLineSegments;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.movePoint] =
         localizations.mpCommandDescriptionMovePoint;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.moveStraightLineSegment] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .moveStraightLineSegment] =
         localizations.mpCommandDescriptionMoveStraightLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.multipleElements] =
         localizations.mpCommandDescriptionMultipleElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeArea] =
         localizations.mpCommandDescriptionRemoveArea;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.removeAreaBorderTHID] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeAreaBorderTHID] =
         localizations.mpCommandDescriptionRemoveAreaBorderTHID;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeElements] =
         localizations.mpCommandDescriptionRemoveElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =
         localizations.mpCommandDescriptionRemoveLine;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.removeLineSegment] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeLineSegment] =
         localizations.mpCommandDescriptionRemoveLineSegment;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.removeLineSegments] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeLineSegments] =
         localizations.mpCommandDescriptionRemoveLineSegments;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.removeOptionFromElement] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeOptionFromElement] =
         localizations.mpCommandDescriptionRemoveOptionFromElement;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.removeOptionFromElements] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeOptionFromElements] =
         localizations.mpCommandDescriptionRemoveOptionFromElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removePoint] =
         localizations.mpCommandDescriptionRemovePoint;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.removeXTherionImageInsertConfig] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeXTherionImageInsertConfig] =
         localizations.mpCommandDescriptionRemoveXTherionImageInsertConfig;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.setOptionToElement] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .setOptionToElement] =
         localizations.mpCommandDescriptionSetOptionToElement;
-    _commandDescriptionTypeAsString[
-            MPCommandDescriptionType.setOptionToElements] =
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .setOptionToElements] =
         localizations.mpCommandDescriptionSetOptionToElements;
   }
 
   static String getCommandDescription(
-      MPCommandDescriptionType commandDescriptionType) {
+    MPCommandDescriptionType commandDescriptionType,
+  ) {
     return _commandDescriptionTypeAsString.containsKey(commandDescriptionType)
         ? _commandDescriptionTypeAsString[commandDescriptionType]!
         : commandDescriptionType.name;
@@ -941,13 +942,17 @@ class MPTextToUser {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
     _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
-        .begin] = localizations.thMultipleChoiceArrowPositionBegin;
+            .begin] =
+        localizations.thMultipleChoiceArrowPositionBegin;
     _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
-        .both] = localizations.thMultipleChoiceArrowPositionBoth;
+            .both] =
+        localizations.thMultipleChoiceArrowPositionBoth;
     _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
-        .end] = localizations.thMultipleChoiceArrowPositionEnd;
+            .end] =
+        localizations.thMultipleChoiceArrowPositionEnd;
     _multipleChoiceArrowPositionChoiceAsString[THOptionChoicesArrowPositionType
-        .none] = localizations.thMultipleChoiceFlipNone;
+            .none] =
+        localizations.thMultipleChoiceFlipNone;
   }
 
   static String getMultipleChoiceArrowPositionChoice(
@@ -962,9 +967,11 @@ class MPTextToUser {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
     _multipleChoiceLineGradientChoiceAsString[THOptionChoicesLineGradientType
-        .center] = localizations.thMultipleChoiceAlignCenter;
+            .center] =
+        localizations.thMultipleChoiceAlignCenter;
     _multipleChoiceLineGradientChoiceAsString[THOptionChoicesLineGradientType
-        .none] = localizations.thMultipleChoiceFlipNone;
+            .none] =
+        localizations.thMultipleChoiceFlipNone;
   }
 
   static String getMultipleChoiceLineGradientChoice(
@@ -978,17 +985,17 @@ class MPTextToUser {
   static void _initializeMultipleChoiceLinePointDirectionChoiceAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
-    _multipleChoiceLinePointDirectionChoiceAsString[
-            THOptionChoicesLinePointDirectionType.begin] =
+    _multipleChoiceLinePointDirectionChoiceAsString[THOptionChoicesLinePointDirectionType
+            .begin] =
         localizations.thMultipleChoiceArrowPositionBegin;
-    _multipleChoiceLinePointDirectionChoiceAsString[
-            THOptionChoicesLinePointDirectionType.both] =
+    _multipleChoiceLinePointDirectionChoiceAsString[THOptionChoicesLinePointDirectionType
+            .both] =
         localizations.thMultipleChoiceArrowPositionBoth;
-    _multipleChoiceLinePointDirectionChoiceAsString[
-            THOptionChoicesLinePointDirectionType.end] =
+    _multipleChoiceLinePointDirectionChoiceAsString[THOptionChoicesLinePointDirectionType
+            .end] =
         localizations.thMultipleChoiceArrowPositionEnd;
-    _multipleChoiceLinePointDirectionChoiceAsString[
-            THOptionChoicesLinePointDirectionType.none] =
+    _multipleChoiceLinePointDirectionChoiceAsString[THOptionChoicesLinePointDirectionType
+            .none] =
         localizations.thMultipleChoiceFlipNone;
   }
 
@@ -1003,19 +1010,20 @@ class MPTextToUser {
   static void _initializeMultipleChoiceLinePointGradientChoiceAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
-    _multipleChoiceLinePointGradientChoiceAsString[
-            THOptionChoicesLinePointGradientType.center] =
+    _multipleChoiceLinePointGradientChoiceAsString[THOptionChoicesLinePointGradientType
+            .center] =
         localizations.thMultipleChoiceAlignCenter;
-    _multipleChoiceLinePointGradientChoiceAsString[
-            THOptionChoicesLinePointGradientType.none] =
+    _multipleChoiceLinePointGradientChoiceAsString[THOptionChoicesLinePointGradientType
+            .none] =
         localizations.thMultipleChoiceFlipNone;
-    _multipleChoiceLinePointGradientChoiceAsString[
-            THOptionChoicesLinePointGradientType.point] =
+    _multipleChoiceLinePointGradientChoiceAsString[THOptionChoicesLinePointGradientType
+            .point] =
         localizations.thMultipleChoiceLinePointGradientPoint;
   }
 
   static String getMultipleChoiceLinePointGradientChoice(
-      THOptionChoicesLinePointGradientType type) {
+    THOptionChoicesLinePointGradientType type,
+  ) {
     return _multipleChoiceLinePointGradientChoiceAsString.containsKey(type)
         ? _multipleChoiceLinePointGradientChoiceAsString[type]!
         : type.name;
@@ -1033,7 +1041,8 @@ class MPTextToUser {
   }
 
   static String getMultipleChoiceOutlineChoice(
-      THOptionChoicesOutlineType type) {
+    THOptionChoicesOutlineType type,
+  ) {
     return _multipleChoiceOutlineChoiceAsString.containsKey(type)
         ? _multipleChoiceOutlineChoiceAsString[type]!
         : type.name;
@@ -1152,10 +1161,7 @@ class MPTextToUser {
     return aNoDiacritic.compareTo(bNoDiacritic);
   }
 
-  static int compareStringsUsingLocale(
-    final String a,
-    final String b,
-  ) {
+  static int compareStringsUsingLocale(final String a, final String b) {
     switch (_locale.toLanguageTag()) {
       default:
         return compareStringsNoDiacritics(a, b);
@@ -1327,8 +1333,9 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final choiceType in THOptionChoicesArrowPositionType.values) {
-      choices[choiceType.name] =
-          getMultipleChoiceArrowPositionChoice(choiceType);
+      choices[choiceType.name] = getMultipleChoiceArrowPositionChoice(
+        choiceType,
+      );
     }
 
     return choices;
@@ -1338,8 +1345,9 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final choiceType in THOptionChoicesLineGradientType.values) {
-      choices[choiceType.name] =
-          getMultipleChoiceLineGradientChoice(choiceType);
+      choices[choiceType.name] = getMultipleChoiceLineGradientChoice(
+        choiceType,
+      );
     }
 
     return choices;
@@ -1349,8 +1357,9 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final choiceType in THOptionChoicesLinePointDirectionType.values) {
-      choices[choiceType.name] =
-          getMultipleChoiceLinePointDirectionChoice(choiceType);
+      choices[choiceType.name] = getMultipleChoiceLinePointDirectionChoice(
+        choiceType,
+      );
     }
 
     return choices;
@@ -1360,8 +1369,9 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final choiceType in THOptionChoicesLinePointGradientType.values) {
-      choices[choiceType.name] =
-          getMultipleChoiceLinePointGradientChoice(choiceType);
+      choices[choiceType.name] = getMultipleChoiceLinePointGradientChoice(
+        choiceType,
+      );
     }
 
     return choices;
@@ -1402,10 +1412,9 @@ class MPTextToUser {
 
   static Map<String, String> getOrderedChoices(Map<String, String> choices) {
     final List<MapEntry<String, String>> orderedChoices =
-        choices.entries.toList()
-          ..sort(
-            (a, b) => MPTextToUser.compareStringsUsingLocale(a.value, b.value),
-          );
+        choices.entries.toList()..sort(
+          (a, b) => MPTextToUser.compareStringsUsingLocale(a.value, b.value),
+        );
 
     return Map.fromEntries(orderedChoices);
   }

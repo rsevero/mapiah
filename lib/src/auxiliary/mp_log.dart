@@ -43,14 +43,14 @@ enum MPLogLevel {
 
 class MPLog extends Logger {
   MPLog._()
-      : super(
-          filter: null,
-          printer: PrettyPrinter(
-            dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
-            printEmojis: true,
-            colors: true,
-          ),
-        );
+    : super(
+        filter: null,
+        printer: PrettyPrinter(
+          dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+          printEmojis: true,
+          colors: true,
+        ),
+      );
 
   static final instance = MPLog._();
 
@@ -100,7 +100,8 @@ class MPLog extends Logger {
 
   /// Log a message at level [MPLogLevel.fine].
   @Deprecated(
-      "MPLog.t() exists only to mask Logger.t(). There are 3 options to use instead: for [MPLogLevel.fine] use fine() instead, for [MPLogLevel.finer] use finer() instead, for [MPLogLevel.finest] use finset() instead.")
+    "MPLog.t() exists only to mask Logger.t(). There are 3 options to use instead: for [MPLogLevel.fine] use fine() instead, for [MPLogLevel.finer] use finer() instead, for [MPLogLevel.finest] use finset() instead.",
+  )
   @override
   void t(
     dynamic message, {
@@ -141,8 +142,12 @@ class MPLog extends Logger {
 
   /// Log a message at level [MPLogLevel.warning].
   @override
-  void w(dynamic message,
-      {Object? error, StackTrace? stackTrace, DateTime? time}) {
+  void w(
+    dynamic message, {
+    Object? error,
+    StackTrace? stackTrace,
+    DateTime? time,
+  }) {
     if (_shouldLog(MPLogLevel.warning)) {
       super.w(message, error: error, stackTrace: stackTrace, time: time);
     }
