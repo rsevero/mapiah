@@ -54,9 +54,7 @@ void main() {
 
   group('XVIGridSize', () {
     final XVIFileParser parser = XVIFileParser();
-    final List<String> fileNames = [
-      '2025-07-09-001-xvi-xvigridsize',
-    ];
+    final List<String> fileNames = ['2025-07-09-001-xvi-xvigridsize'];
 
     final double gridSizeLength = 1.0;
     final THLengthUnitPart gridSizeUnit = THLengthUnitPart(
@@ -97,15 +95,15 @@ void main() {
     final List<Map> testFiles = [
       {
         'file': '2025-07-09-002-xvi-xvistations',
-        'stations': [stationA1]
+        'stations': [stationA1],
       },
       {
         'file': '2025-07-09-004-xvi-xvistations',
-        'stations': [stationA1]
+        'stations': [stationA1],
       },
       {
         'file': '2025-07-09-005-xvi-xvistations',
-        'stations': [stationA1]
+        'stations': [stationA1],
       },
       {
         'file': '2025-07-09-006-xvi-xvistations',
@@ -153,11 +151,11 @@ void main() {
     final List<Map<String, dynamic>> testFiles = [
       {
         'file': '2025-07-10-001-xvi-xvishots',
-        'shots': [shot1]
+        'shots': [shot1],
       },
       {
         'file': '2025-07-10-002-xvi-xvishots',
-        'shots': [shot1, shot2]
+        'shots': [shot1, shot2],
       },
     ];
 
@@ -212,22 +210,10 @@ void main() {
         yAsString: '-841.18',
       ),
       points: [
-        THPositionPart.fromStrings(
-          xAsString: '-1392.76',
-          yAsString: '-852.99',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1392.76',
-          yAsString: '-876.61',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1386.85',
-          yAsString: '-906.14',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1386.85',
-          yAsString: '-941.57',
-        ),
+        THPositionPart.fromStrings(xAsString: '-1392.76', yAsString: '-852.99'),
+        THPositionPart.fromStrings(xAsString: '-1392.76', yAsString: '-876.61'),
+        THPositionPart.fromStrings(xAsString: '-1386.85', yAsString: '-906.14'),
+        THPositionPart.fromStrings(xAsString: '-1386.85', yAsString: '-941.57'),
       ],
     );
     // {black -1062.05 -687.64 -1097.48 -705.35 -1109.29 -705.35 -1156.54 -717.17 -1180.16 -711.26 -1191.97 -711.26 -1197.87 -699.45 -1197.87 -575.43 -1203.78 -563.62 -1203.78 -534.09 -1221.5 -475.04 -1227.4 -463.23 -1227.4 -475.04 -1245.12 -498.66 -1245.12 -510.47 -1256.93 -534.09 -1256.93 -569.53 -1262.83 -599.06 -1262.83 -634.49 -1321.89 -699.45 -1333.7 -699.45 -1339.61 -711.26 -1351.42 -711.26 -1357.32 -723.07 -1369.13 -723.07 -1392.76 -758.5 -1404.57 -764.41 -1416.38 -788.03 -1422.28 -776.22}
@@ -238,118 +224,34 @@ void main() {
         yAsString: '-687.64',
       ),
       points: [
-        THPositionPart.fromStrings(
-          xAsString: '-1097.48',
-          yAsString: '-705.35',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1109.29',
-          yAsString: '-705.35',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1156.54',
-          yAsString: '-717.17',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1180.16',
-          yAsString: '-711.26',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1191.97',
-          yAsString: '-711.26',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1197.87',
-          yAsString: '-699.45',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1197.87',
-          yAsString: '-575.43',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1203.78',
-          yAsString: '-563.62',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1203.78',
-          yAsString: '-534.09',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1221.5',
-          yAsString: '-475.04',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1227.4',
-          yAsString: '-463.23',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1227.4',
-          yAsString: '-475.04',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1245.12',
-          yAsString: '-498.66',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1245.12',
-          yAsString: '-510.47',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1256.93',
-          yAsString: '-534.09',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1256.93',
-          yAsString: '-569.53',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1262.83',
-          yAsString: '-599.06',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1262.83',
-          yAsString: '-634.49',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1321.89',
-          yAsString: '-699.45',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1333.7',
-          yAsString: '-699.45',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1339.61',
-          yAsString: '-711.26',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1351.42',
-          yAsString: '-711.26',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1357.32',
-          yAsString: '-723.07',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1369.13',
-          yAsString: '-723.07',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1392.76',
-          yAsString: '-758.5',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1404.57',
-          yAsString: '-764.41',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1416.38',
-          yAsString: '-788.03',
-        ),
-        THPositionPart.fromStrings(
-          xAsString: '-1422.28',
-          yAsString: '-776.22',
-        ),
+        THPositionPart.fromStrings(xAsString: '-1097.48', yAsString: '-705.35'),
+        THPositionPart.fromStrings(xAsString: '-1109.29', yAsString: '-705.35'),
+        THPositionPart.fromStrings(xAsString: '-1156.54', yAsString: '-717.17'),
+        THPositionPart.fromStrings(xAsString: '-1180.16', yAsString: '-711.26'),
+        THPositionPart.fromStrings(xAsString: '-1191.97', yAsString: '-711.26'),
+        THPositionPart.fromStrings(xAsString: '-1197.87', yAsString: '-699.45'),
+        THPositionPart.fromStrings(xAsString: '-1197.87', yAsString: '-575.43'),
+        THPositionPart.fromStrings(xAsString: '-1203.78', yAsString: '-563.62'),
+        THPositionPart.fromStrings(xAsString: '-1203.78', yAsString: '-534.09'),
+        THPositionPart.fromStrings(xAsString: '-1221.5', yAsString: '-475.04'),
+        THPositionPart.fromStrings(xAsString: '-1227.4', yAsString: '-463.23'),
+        THPositionPart.fromStrings(xAsString: '-1227.4', yAsString: '-475.04'),
+        THPositionPart.fromStrings(xAsString: '-1245.12', yAsString: '-498.66'),
+        THPositionPart.fromStrings(xAsString: '-1245.12', yAsString: '-510.47'),
+        THPositionPart.fromStrings(xAsString: '-1256.93', yAsString: '-534.09'),
+        THPositionPart.fromStrings(xAsString: '-1256.93', yAsString: '-569.53'),
+        THPositionPart.fromStrings(xAsString: '-1262.83', yAsString: '-599.06'),
+        THPositionPart.fromStrings(xAsString: '-1262.83', yAsString: '-634.49'),
+        THPositionPart.fromStrings(xAsString: '-1321.89', yAsString: '-699.45'),
+        THPositionPart.fromStrings(xAsString: '-1333.7', yAsString: '-699.45'),
+        THPositionPart.fromStrings(xAsString: '-1339.61', yAsString: '-711.26'),
+        THPositionPart.fromStrings(xAsString: '-1351.42', yAsString: '-711.26'),
+        THPositionPart.fromStrings(xAsString: '-1357.32', yAsString: '-723.07'),
+        THPositionPart.fromStrings(xAsString: '-1369.13', yAsString: '-723.07'),
+        THPositionPart.fromStrings(xAsString: '-1392.76', yAsString: '-758.5'),
+        THPositionPart.fromStrings(xAsString: '-1404.57', yAsString: '-764.41'),
+        THPositionPart.fromStrings(xAsString: '-1416.38', yAsString: '-788.03'),
+        THPositionPart.fromStrings(xAsString: '-1422.28', yAsString: '-776.22'),
       ],
     );
     final List<Map<String, dynamic>> testFiles = [
@@ -457,20 +359,11 @@ void main() {
 
     final List<XVIShot> expectedShots = [
       XVIShot(
-        start: THPositionPart.fromStrings(
-          xAsString: '0.0',
-          yAsString: '0.0',
-        ),
-        end: THPositionPart.fromStrings(
-          xAsString: '0.0',
-          yAsString: '0.0',
-        ),
+        start: THPositionPart.fromStrings(xAsString: '0.0', yAsString: '0.0'),
+        end: THPositionPart.fromStrings(xAsString: '0.0', yAsString: '0.0'),
       ),
       XVIShot(
-        start: THPositionPart.fromStrings(
-          xAsString: '0.0',
-          yAsString: '0.0',
-        ),
+        start: THPositionPart.fromStrings(xAsString: '0.0', yAsString: '0.0'),
         end: THPositionPart.fromStrings(
           xAsString: '-80.25',
           yAsString: '-448.11',

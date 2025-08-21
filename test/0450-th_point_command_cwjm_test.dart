@@ -40,8 +40,9 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         mpLocator.mpGeneralController.reset();
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
         expect(isSuccessful, true);
 
         THElement expected = file.elementByMPID(3);
@@ -81,8 +82,9 @@ endscrap
     for (var success in successes) {
       test(success, () async {
         mpLocator.mpGeneralController.reset();
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
         expect(isSuccessful, true);
 
         THElement expected = file.elementByMPID(3);

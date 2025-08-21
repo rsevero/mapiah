@@ -60,8 +60,9 @@ endscrap
 
     for (var success in successes) {
       test(success['file'], () async {
-        final (file, isSuccessful, errors) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, errors) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
@@ -105,8 +106,9 @@ endscrap
 
     for (var success in successes) {
       test(success['file'], () async {
-        final (file, isSuccessful, errors) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, errors) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
@@ -190,8 +192,9 @@ endcomment
 
     test("${success['file']} in parts", () async {
       mpLocator.mpGeneralController.reset();
-      final (file, isSuccessful, errors) =
-          await parser.parse(THTestAux.testPath(success['file'] as String));
+      final (file, isSuccessful, errors) = await parser.parse(
+        THTestAux.testPath(success['file'] as String),
+      );
       expect(isSuccessful, true);
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
@@ -216,8 +219,10 @@ endcomment
 
       var countRemovedElements = 1;
       file.removeElement(pointGuano);
-      expect(file.countElements(),
-          (success['countElements'] as int) - countRemovedElements);
+      expect(
+        file.countElements(),
+        (success['countElements'] as int) - countRemovedElements,
+      );
       asFile = writer.serialize(file);
       expect(asFile, success['asFile2']);
 
@@ -227,16 +232,20 @@ endcomment
       countRemovedElements +=
           (multilineComment as THMultiLineComment).childrenMPID.length + 1;
       file.removeElement(multilineComment);
-      expect(file.countElements(),
-          (success['countElements'] as int) - countRemovedElements);
+      expect(
+        file.countElements(),
+        (success['countElements'] as int) - countRemovedElements,
+      );
       asFile = writer.serialize(file);
       expect(asFile, success['asFile3']);
 
       var scrap = file.elementByTHID('poco_surubim_SCP01');
       countRemovedElements += (scrap as THScrap).childrenMPID.length + 1;
       file.removeElementByTHID('poco_surubim_SCP01');
-      expect(file.countElements(),
-          (success['countElements'] as int) - countRemovedElements);
+      expect(
+        file.countElements(),
+        (success['countElements'] as int) - countRemovedElements,
+      );
 
       file.clear();
       expect(file.countElements(), 0);

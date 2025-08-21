@@ -165,8 +165,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse(THTestAux.testPath(success['file'] as String));
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -187,8 +188,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -217,8 +219,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -240,8 +243,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -360,8 +364,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -411,8 +416,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -434,8 +440,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -463,8 +470,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -486,8 +494,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -529,8 +538,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -552,8 +562,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -581,8 +592,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -604,8 +616,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -633,8 +646,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -655,8 +669,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -684,8 +699,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -706,8 +722,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -735,8 +752,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -757,8 +775,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -786,8 +805,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -808,8 +828,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -837,8 +858,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -872,8 +894,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -907,8 +930,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -929,8 +953,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1002,8 +1027,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, errors) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, errors) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1025,8 +1051,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1067,8 +1094,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1115,8 +1143,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1137,8 +1166,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1179,8 +1209,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1195,14 +1226,13 @@ endscrap
   group('line -id failures', () {
     final parser = THFileParser();
 
-    const failures = [
-      'th_file_parser-03192-line_with_invalid_id-failure.th2',
-    ];
+    const failures = ['th_file_parser-03192-line_with_invalid_id-failure.th2'];
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1245,8 +1275,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1267,8 +1298,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1297,8 +1329,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1319,8 +1352,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1365,8 +1399,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1388,8 +1423,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1430,8 +1466,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1452,8 +1489,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1494,8 +1532,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1516,8 +1555,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1558,8 +1598,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1606,8 +1647,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1642,8 +1684,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1665,8 +1708,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1720,8 +1764,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1743,8 +1788,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1834,8 +1880,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1859,8 +1906,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1901,8 +1949,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
@@ -1925,8 +1974,9 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final (_, isSuccessful, error) =
-            await parser.parse(THTestAux.testPath(failure));
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
         expect(isSuccessful, false);
       });
     }
@@ -1967,8 +2017,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) =
-            await parser.parse((THTestAux.testPath(success['file'] as String)));
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));

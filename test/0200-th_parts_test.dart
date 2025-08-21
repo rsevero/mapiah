@@ -22,16 +22,17 @@ void main() {
     var id = 1;
     for (var success in successes) {
       test(
-          "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
-          () {
-        THDoublePart thDoublePart = THDoublePart(
-          value: success['value'] as double,
-          decimalPositions: success['decimalPositions'] as int,
-        );
-        expect(thDoublePart.value, success['value']);
-        expect(thDoublePart.decimalPositions, success['decimalPositions']);
-        expect(thDoublePart.toString(), success['asString']);
-      });
+        "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
+        () {
+          THDoublePart thDoublePart = THDoublePart(
+            value: success['value'] as double,
+            decimalPositions: success['decimalPositions'] as int,
+          );
+          expect(thDoublePart.value, success['value']);
+          expect(thDoublePart.decimalPositions, success['decimalPositions']);
+          expect(thDoublePart.toString(), success['asString']);
+        },
+      );
       id++;
     }
   });
@@ -50,14 +51,16 @@ void main() {
     var id = 1;
     for (var success in successes) {
       test(
-          "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
-          () {
-        var aTHDoublePart =
-            THDoublePart.fromString(valueString: success['asString'] as String);
-        expect(aTHDoublePart.value, success['value']);
-        expect(aTHDoublePart.decimalPositions, success['decimalPositions']);
-        expect(aTHDoublePart.toString(), success['asString']);
-      });
+        "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
+        () {
+          var aTHDoublePart = THDoublePart.fromString(
+            valueString: success['asString'] as String,
+          );
+          expect(aTHDoublePart.value, success['value']);
+          expect(aTHDoublePart.decimalPositions, success['decimalPositions']);
+          expect(aTHDoublePart.toString(), success['asString']);
+        },
+      );
       id++;
     }
   });

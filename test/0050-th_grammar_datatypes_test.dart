@@ -122,9 +122,7 @@ void main() {
     final grammar = THGrammar();
     final parser = grammar.buildFrom(grammar.noDateTime()).end();
 
-    const successes = {
-      '-': '-',
-    };
+    const successes = {'-': '-'};
 
     for (var success in successes.keys) {
       test(success, () {
@@ -134,13 +132,7 @@ void main() {
       });
     }
 
-    const failures = [
-      '+',
-      '.',
-      ',',
-      "'",
-      "*",
-    ];
+    const failures = ['+', '.', ',', "'", "*"];
 
     for (var failure in failures) {
       test(failure, () {
@@ -192,8 +184,9 @@ void main() {
 
   group('dateTime', () {
     final grammar = THGrammar();
-    final parser =
-        grammar.buildFrom(grammar.dateTimeRange().flatten().trim().end());
+    final parser = grammar.buildFrom(
+      grammar.dateTimeRange().flatten().trim().end(),
+    );
     const successes = {
       '2022.02.13@11:27:32 - 2022.02.13@11:58:00':
           '2022.02.13@11:27:32 - 2022.02.13@11:58:00',
@@ -234,9 +227,7 @@ void main() {
     final grammar = THGrammar();
     final parser = grammar.buildFrom(grammar.dateTimeAllVariations().end());
 
-    const successes = {
-      '-': '-',
-    };
+    const successes = {'-': '-'};
 
     for (var success in successes.keys) {
       test(success, () {
@@ -246,13 +237,7 @@ void main() {
       });
     }
 
-    const failures = [
-      '+',
-      '.',
-      ',',
-      "'",
-      "*",
-    ];
+    const failures = ['+', '.', ',', "'", "*"];
 
     for (var failure in failures) {
       test(failure, () {
@@ -297,7 +282,7 @@ void main() {
     const successes = {
       '"blaus"': 'blaus',
       '""': '',
-      '"""Obs"" hein?"': '""Obs"" hein?'
+      '"""Obs"" hein?"': '""Obs"" hein?',
     };
 
     for (var success in successes.keys) {
@@ -308,11 +293,7 @@ void main() {
       });
     }
 
-    const failures = [
-      '"""Obs"" hein?',
-      'blaus"',
-      '"blaus',
-    ];
+    const failures = ['"""Obs"" hein?', 'blaus"', '"blaus'];
 
     for (var failure in failures) {
       test(failure, () {
@@ -329,7 +310,7 @@ void main() {
     const successes = {
       '[blaus]': 'blaus',
       '[]': '',
-      '[""Obs"" hein?]': '""Obs"" hein?'
+      '[""Obs"" hein?]': '""Obs"" hein?',
     };
 
     for (var success in successes.keys) {
@@ -340,11 +321,7 @@ void main() {
       });
     }
 
-    const failures = [
-      '"""Obs"" hein?',
-      'blaus"',
-      '"blaus',
-    ];
+    const failures = ['"""Obs"" hein?', 'blaus"', '"blaus'];
 
     for (var failure in failures) {
       test(failure, () {
@@ -389,9 +366,7 @@ void main() {
       });
     }
 
-    const failures = [
-      'inchs',
-    ];
+    const failures = ['inchs'];
 
     for (var failure in failures) {
       test(failure, () {
@@ -426,12 +401,7 @@ void main() {
       });
     }
 
-    const failures = [
-      'degre',
-      'M',
-      'percent',
-      'percentage',
-    ];
+    const failures = ['degre', 'M', 'percent', 'percentage'];
 
     for (var failure in failures) {
       test(failure, () {
@@ -468,10 +438,7 @@ void main() {
       });
     }
 
-    const failures = [
-      'degre',
-      'M',
-    ];
+    const failures = ['degre', 'M'];
 
     for (var failure in failures) {
       test(failure, () {
@@ -512,13 +479,7 @@ void main() {
       });
     }
 
-    const failures = [
-      'EPSP-43356',
-      'OSGB:HI',
-      'JTSK,',
-      'ETRS21',
-      'ETRS43',
-    ];
+    const failures = ['EPSP-43356', 'OSGB:HI', 'JTSK,', 'ETRS21', 'ETRS43'];
 
     for (var failure in failures) {
       test(failure, () {
