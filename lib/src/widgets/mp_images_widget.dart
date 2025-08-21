@@ -8,7 +8,10 @@ import 'package:mapiah/src/widgets/mp_xvi_image_widget.dart';
 class MPImagesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 
-  const MPImagesWidget({super.key, required this.th2FileEditController});
+  const MPImagesWidget({
+    super.key,
+    required this.th2FileEditController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class MPImagesWidget extends StatelessWidget {
 
         final List<Widget> widgets = [];
         final Iterable<THXTherionImageInsertConfig> images =
-            th2FileEditController.thFile.getXTherionImageInsertConfigs();
+            th2FileEditController.thFile.getImages();
 
         for (final THXTherionImageInsertConfig image in images) {
           if (!image.isVisible) continue;
@@ -37,7 +40,9 @@ class MPImagesWidget extends StatelessWidget {
           );
         }
 
-        return RepaintBoundary(child: Stack(children: widgets));
+        return RepaintBoundary(
+          child: Stack(children: widgets),
+        );
       },
     );
   }
