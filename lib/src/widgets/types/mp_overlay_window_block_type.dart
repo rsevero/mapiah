@@ -7,5 +7,5 @@ enum MPOverlayWindowBlockType {
   secondarySet,
   secondarySetMixed,
   secondarySetUnsupported,
-  secondaryUnset;
+  secondaryUnset,
 }

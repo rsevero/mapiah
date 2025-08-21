@@ -45,9 +45,7 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
       _value = null;
     }
 
-    _controller = TextEditingController(
-      text: _value?.toString() ?? '',
-    );
+    _controller = TextEditingController(text: _value?.toString() ?? '');
   }
 
   @override
@@ -111,10 +109,7 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
         Text(widget.label),
         Row(
           children: [
-            IconButton(
-              icon: const Icon(Icons.remove),
-              onPressed: _decrement,
-            ),
+            IconButton(icon: const Icon(Icons.remove), onPressed: _decrement),
             SizedBox(
               width: MPInteractionAux.calculateTextFieldWidth(
                 MPInteractionAux.insideRange(
@@ -135,10 +130,7 @@ class _MPIntRangeInputWidgetState extends State<MPIntRangeInputWidget> {
                 onChanged: _validateInput,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: _increment,
-            ),
+            IconButton(icon: const Icon(Icons.add), onPressed: _increment),
           ],
         ),
       ],

@@ -92,17 +92,20 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
         GestureDetector(
           onPanUpdate: (details) {
             final renderBox = context.findRenderObject() as RenderBox;
-            final localPosition =
-                renderBox.globalToLocal(details.globalPosition);
+            final localPosition = renderBox.globalToLocal(
+              details.globalPosition,
+            );
             final angle = _calculateAngle(
               Offset(compassSize / 2, compassSize / 2),
               localPosition,
             );
-            final bool isCtrlPressed = HardwareKeyboard
-                    .instance.logicalKeysPressed
-                    .contains(LogicalKeyboardKey.controlLeft) ||
-                HardwareKeyboard.instance.logicalKeysPressed
-                    .contains(LogicalKeyboardKey.controlRight);
+            final bool isCtrlPressed =
+                HardwareKeyboard.instance.logicalKeysPressed.contains(
+                  LogicalKeyboardKey.controlLeft,
+                ) ||
+                HardwareKeyboard.instance.logicalKeysPressed.contains(
+                  LogicalKeyboardKey.controlRight,
+                );
 
             double adjustedAngle = angle;
 
@@ -115,19 +118,22 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
           },
           onTapDown: (details) {
             final renderBox = context.findRenderObject() as RenderBox;
-            final localPosition =
-                renderBox.globalToLocal(details.globalPosition);
+            final localPosition = renderBox.globalToLocal(
+              details.globalPosition,
+            );
             final angle = _calculateAngle(
               Offset(compassSize / 2, compassSize / 2),
               localPosition,
             );
 
             // Check if the Ctrl key is pressed
-            final bool isCtrlPressed = HardwareKeyboard
-                    .instance.logicalKeysPressed
-                    .contains(LogicalKeyboardKey.controlLeft) ||
-                HardwareKeyboard.instance.logicalKeysPressed
-                    .contains(LogicalKeyboardKey.controlRight);
+            final bool isCtrlPressed =
+                HardwareKeyboard.instance.logicalKeysPressed.contains(
+                  LogicalKeyboardKey.controlLeft,
+                ) ||
+                HardwareKeyboard.instance.logicalKeysPressed.contains(
+                  LogicalKeyboardKey.controlRight,
+                );
 
             double adjustedAngle = angle;
 
@@ -183,10 +189,7 @@ class _CompassPainter extends CustomPainter {
   final double azimuth;
   final double markerSize;
 
-  _CompassPainter({
-    required this.azimuth,
-    required this.markerSize,
-  });
+  _CompassPainter({required this.azimuth, required this.markerSize});
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -1,4 +1,1 @@
-enum MPOverlayWindowType {
-  primary,
-  secondary;
-}
+enum MPOverlayWindowType { primary, secondary }

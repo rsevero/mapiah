@@ -46,13 +46,11 @@ class _MPPersonNameInputWidgetState extends State<MPPersonNameInputWidget> {
     );
 
     _isValid = namePattern.hasMatch(_nameController.text);
-    setState(
-      () {
-        _warningMessage = _isValid
-            ? null
-            : mpLocator.appLocalizations.mpPersonNameInvalidFormatErrorMessage;
-      },
-    );
+    setState(() {
+      _warningMessage = _isValid
+          ? null
+          : mpLocator.appLocalizations.mpPersonNameInvalidFormatErrorMessage;
+    });
   }
 
   void _onNameChanged() {

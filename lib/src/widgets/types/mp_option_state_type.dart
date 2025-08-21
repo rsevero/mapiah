@@ -1,6 +1,1 @@
-enum MPOptionStateType {
-  set,
-  setMixed,
-  setUnsupported,
-  unset;
-}
+enum MPOptionStateType { set, setMixed, setUnsupported, unset }

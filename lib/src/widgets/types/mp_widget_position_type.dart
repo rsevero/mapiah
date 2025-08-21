@@ -7,5 +7,5 @@ enum MPWidgetPositionType {
   centerRight,
   topCenter,
   topLeft,
-  topRight;
+  topRight,
 }

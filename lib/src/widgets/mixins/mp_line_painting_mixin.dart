@@ -10,8 +10,9 @@ import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 mixin MPLinePaintingMixin {
   (
     LinkedHashMap<int, THLinePainterLineSegment>,
-    LinkedHashMap<int, THLineSegment>
-  ) getLineSegmentsAndEndpointsMaps({
+    LinkedHashMap<int, THLineSegment>,
+  )
+  getLineSegmentsAndEndpointsMaps({
     required THLine line,
     required THFile thFile,
     required bool returnLineSegments,
@@ -74,8 +75,10 @@ mixin MPLinePaintingMixin {
     required bool showLineDirectionTicks,
     required TH2FileEditController th2FileEditController,
   }) {
-    final (LinkedHashMap<int, THLinePainterLineSegment> segmentsMap, _) =
-        getLineSegmentsAndEndpointsMaps(
+    final (
+      LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
+      _,
+    ) = getLineSegmentsAndEndpointsMaps(
       line: line,
       thFile: th2FileEditController.thFile,
       returnLineSegments: false,

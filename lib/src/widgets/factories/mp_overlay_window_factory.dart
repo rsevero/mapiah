@@ -91,7 +91,8 @@ class MPOverlayWindowFactory {
           innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
         );
       case MPWindowType.lineSegmentOptions:
-        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+        outerAnchorPosition =
+            th2FileEditController.offsetCanvasToScreen(
               selectionController
                   .getClickedEndControlPointsBoundingBoxOnCanvas()
                   .centerRight,
@@ -125,7 +126,8 @@ class MPOverlayWindowFactory {
           'The main TH file edit window is automatically created when opening a TH2File.',
         );
       case MPWindowType.multipleElementsClicked:
-        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+        outerAnchorPosition =
+            th2FileEditController.offsetCanvasToScreen(
               th2FileEditController.selectionController
                   .getClickedElementsBoundingBoxOnCanvas()
                   .centerRight,
@@ -137,7 +139,8 @@ class MPOverlayWindowFactory {
           outerAnchorPosition: outerAnchorPosition,
         );
       case MPWindowType.multipleEndControlPointsClicked:
-        outerAnchorPosition = th2FileEditController.offsetCanvasToScreen(
+        outerAnchorPosition =
+            th2FileEditController.offsetCanvasToScreen(
               th2FileEditController.selectionController
                   .getClickedEndControlPointsBoundingBoxOnCanvas()
                   .centerRight,
@@ -402,7 +405,8 @@ class MPOverlayWindowFactory {
           );
         default:
           throw Exception(
-              'Unsupported non-multiple choice option type: $optionType at MPOverlayWindowFactory.createOptionChoices');
+            'Unsupported non-multiple choice option type: $optionType at MPOverlayWindowFactory.createOptionChoices',
+          );
       }
     }
 

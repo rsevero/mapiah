@@ -80,14 +80,13 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     );
 
     _isStartDateValid = startDatePattern.hasMatch(_startDateController.text);
-    setState(
-      () {
-        _startDateWarningMessage = _isStartDateValid
-            ? null
-            : mpLocator.appLocalizations
+    setState(() {
+      _startDateWarningMessage = _isStartDateValid
+          ? null
+          : mpLocator
+                .appLocalizations
                 .mpDateIntervalInvalidStartDateFormatErrorMessage;
-      },
-    );
+    });
   }
 
   void _validateEndDate() {
@@ -97,14 +96,13 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
     );
 
     _isEndDateValid = endDatePattern.hasMatch(_endDateController.text);
-    setState(
-      () {
-        _endDateWarningMessage = _isEndDateValid
-            ? null
-            : mpLocator.appLocalizations
+    setState(() {
+      _endDateWarningMessage = _isEndDateValid
+          ? null
+          : mpLocator
+                .appLocalizations
                 .mpDateIntervalInvalidEndDateFormatErrorMessage;
-      },
-    );
+    });
   }
 
   void _onFieldChanged() {
@@ -141,11 +139,9 @@ class _MPDateIntervalInputWidgetState extends State<MPDateIntervalInputWidget> {
                 Switch(
                   value: _isInterval,
                   onChanged: (value) {
-                    setState(
-                      () {
-                        _isInterval = value;
-                      },
-                    );
+                    setState(() {
+                      _isInterval = value;
+                    });
                     _onFieldChanged();
                   },
                 ),
