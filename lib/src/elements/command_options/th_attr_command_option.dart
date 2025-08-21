@@ -19,9 +19,9 @@ class THAttrCommandOption extends THCommandOption {
     required String nameText,
     required String valueText,
     super.originalLineInTH2File = '',
-  })  : name = THStringPart(content: nameText),
-        value = THStringPart(content: valueText),
-        super();
+  }) : name = THStringPart(content: nameText),
+       value = THStringPart(content: valueText),
+       super();
 
   @override
   THCommandOptionType get type => THCommandOptionType.attr;
@@ -30,10 +30,7 @@ class THAttrCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'name': name.toMap(),
-      'value': value.toMap(),
-    });
+    map.addAll({'name': name.toMap(), 'value': value.toMap()});
 
     return map;
   }

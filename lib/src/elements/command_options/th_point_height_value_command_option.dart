@@ -134,14 +134,7 @@ class THPointHeightValueCommandOption extends THCommandOption
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        length,
-        isPresumed,
-        mode,
-        unit,
-        unitSet,
-      );
+      super.hashCode ^ Object.hash(length, isPresumed, mode, unit, unitSet);
 
   @override
   String specToFile() {
@@ -168,8 +161,4 @@ class THPointHeightValueCommandOption extends THCommandOption
   }
 }
 
-enum THPointHeightValueMode {
-  chimney,
-  pit,
-  step,
-}
+enum THPointHeightValueMode { chimney, pit, step }

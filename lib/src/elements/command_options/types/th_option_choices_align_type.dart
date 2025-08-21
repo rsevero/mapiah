@@ -9,5 +9,5 @@ enum THOptionChoicesAlignType {
   right,
   top,
   topLeft,
-  topRight;
+  topRight,
 }

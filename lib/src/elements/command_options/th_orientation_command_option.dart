@@ -34,9 +34,7 @@ class THOrientationCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'azimuth': azimuth.toMap(),
-    });
+    map.addAll({'azimuth': azimuth.toMap()});
 
     return map;
   }

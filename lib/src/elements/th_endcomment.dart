@@ -8,10 +8,8 @@ class THEndcomment extends THElement {
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
-  THEndcomment({
-    required super.parentMPID,
-    super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  THEndcomment({required super.parentMPID, super.originalLineInTH2File = ''})
+    : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.endcomment;

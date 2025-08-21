@@ -3,12 +3,7 @@ import 'dart:convert';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
-enum THAngleUnitType {
-  degree,
-  grad,
-  mil,
-  minute,
-}
+enum THAngleUnitType { degree, grad, mil, minute }
 
 class THAngleUnitPart extends THPart {
   late THAngleUnitType unit;
@@ -44,16 +39,11 @@ class THAngleUnitPart extends THPart {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'partType': type.name,
-      'unit': unitToString[unit],
-    };
+    return {'partType': type.name, 'unit': unitToString[unit]};
   }
 
   factory THAngleUnitPart.fromMap(Map<String, dynamic> map) {
-    return THAngleUnitPart(
-      unit: stringToUnit[map['unit']]!,
-    );
+    return THAngleUnitPart(unit: stringToUnit[map['unit']]!);
   }
 
   factory THAngleUnitPart.fromJson(String jsonString) {
@@ -61,12 +51,8 @@ class THAngleUnitPart extends THPart {
   }
 
   @override
-  THAngleUnitPart copyWith({
-    THAngleUnitType? unit,
-  }) {
-    return THAngleUnitPart(
-      unit: unit ?? this.unit,
-    );
+  THAngleUnitPart copyWith({THAngleUnitType? unit}) {
+    return THAngleUnitPart(unit: unit ?? this.unit);
   }
 
   @override

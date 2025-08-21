@@ -44,16 +44,11 @@ class THLengthUnitPart extends THPart {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'partType': type.name,
-      'unit': lengthUnitToString[unit],
-    };
+    return {'partType': type.name, 'unit': lengthUnitToString[unit]};
   }
 
   factory THLengthUnitPart.fromMap(Map<String, dynamic> map) {
-    return THLengthUnitPart(
-      unit: stringToLengthUnit[map['unit']]!,
-    );
+    return THLengthUnitPart(unit: stringToLengthUnit[map['unit']]!);
   }
 
   factory THLengthUnitPart.fromJson(String jsonString) {
@@ -61,12 +56,8 @@ class THLengthUnitPart extends THPart {
   }
 
   @override
-  THLengthUnitPart copyWith({
-    THLengthUnitType? unit,
-  }) {
-    return THLengthUnitPart(
-      unit: unit ?? this.unit,
-    );
+  THLengthUnitPart copyWith({THLengthUnitType? unit}) {
+    return THLengthUnitPart(unit: unit ?? this.unit);
   }
 
   @override

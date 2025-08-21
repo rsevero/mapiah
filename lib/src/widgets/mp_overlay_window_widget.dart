@@ -58,77 +58,75 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
       if (renderBox != null) {
         final Size size = renderBox.size;
 
-        setState(
-          () {
-            Offset newPosition = widget.outerAnchorPosition;
+        setState(() {
+          Offset newPosition = widget.outerAnchorPosition;
 
-            switch (widget.innerAnchorType) {
-              case MPWidgetPositionType.bottomCenter:
-                newPosition = widget.outerAnchorPosition -
-                    Offset(size.width / 2, size.height);
-              case MPWidgetPositionType.bottomLeft:
-                newPosition =
-                    widget.outerAnchorPosition - Offset(0, size.height);
-              case MPWidgetPositionType.bottomRight:
-                newPosition = widget.outerAnchorPosition -
-                    Offset(size.width, size.height);
-              case MPWidgetPositionType.center:
-                newPosition = widget.outerAnchorPosition -
-                    (Offset(size.width, size.height) / 2);
-              case MPWidgetPositionType.centerLeft:
-                newPosition =
-                    widget.outerAnchorPosition - Offset(0, size.height / 2);
-              case MPWidgetPositionType.centerRight:
-                newPosition = widget.outerAnchorPosition -
-                    Offset(size.width, size.height / 2);
-              case MPWidgetPositionType.topCenter:
-                newPosition =
-                    widget.outerAnchorPosition - Offset(size.width / 2, 0);
-              case MPWidgetPositionType.topLeft:
-                newPosition = widget.outerAnchorPosition;
-              case MPWidgetPositionType.topRight:
-                newPosition =
-                    widget.outerAnchorPosition - Offset(size.width, 0);
-            }
+          switch (widget.innerAnchorType) {
+            case MPWidgetPositionType.bottomCenter:
+              newPosition =
+                  widget.outerAnchorPosition -
+                  Offset(size.width / 2, size.height);
+            case MPWidgetPositionType.bottomLeft:
+              newPosition = widget.outerAnchorPosition - Offset(0, size.height);
+            case MPWidgetPositionType.bottomRight:
+              newPosition =
+                  widget.outerAnchorPosition - Offset(size.width, size.height);
+            case MPWidgetPositionType.center:
+              newPosition =
+                  widget.outerAnchorPosition -
+                  (Offset(size.width, size.height) / 2);
+            case MPWidgetPositionType.centerLeft:
+              newPosition =
+                  widget.outerAnchorPosition - Offset(0, size.height / 2);
+            case MPWidgetPositionType.centerRight:
+              newPosition =
+                  widget.outerAnchorPosition -
+                  Offset(size.width, size.height / 2);
+            case MPWidgetPositionType.topCenter:
+              newPosition =
+                  widget.outerAnchorPosition - Offset(size.width / 2, 0);
+            case MPWidgetPositionType.topLeft:
+              newPosition = widget.outerAnchorPosition;
+            case MPWidgetPositionType.topRight:
+              newPosition = widget.outerAnchorPosition - Offset(size.width, 0);
+          }
 
-            Rect? thFileBoundingBox =
-                MPInteractionAux.getWidgetRectFromGlobalKey(
-              widgetGlobalKey: th2FileEditController.thFileWidgetKey,
+          Rect? thFileBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
+            widgetGlobalKey: th2FileEditController.thFileWidgetKey,
+          );
+
+          thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
+
+          /// Up to here newPosition is the position inside the THFileWidget
+          /// window. Adjusting it to global coordinates as overlay windows
+          /// are positioned in global coordinates.
+          newPosition += thFileBoundingBox.topLeft;
+
+          if (thFileBoundingBox.bottom < (newPosition.dy + size.height)) {
+            newPosition = Offset(
+              newPosition.dx,
+              thFileBoundingBox.bottom - size.height,
             );
+          }
 
-            thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
+          if (newPosition.dy < thFileBoundingBox.top) {
+            newPosition = Offset(newPosition.dx, thFileBoundingBox.top);
+          }
 
-            /// Up to here newPosition is the position inside the THFileWidget
-            /// window. Adjusting it to global coordinates as overlay windows
-            /// are positioned in global coordinates.
-            newPosition += thFileBoundingBox.topLeft;
+          if (thFileBoundingBox.right < (newPosition.dx + size.width)) {
+            newPosition = Offset(
+              thFileBoundingBox.right - size.width,
+              newPosition.dy,
+            );
+          }
 
-            if (thFileBoundingBox.bottom < (newPosition.dy + size.height)) {
-              newPosition = Offset(
-                newPosition.dx,
-                thFileBoundingBox.bottom - size.height,
-              );
-            }
+          if (newPosition.dx < thFileBoundingBox.left) {
+            newPosition = Offset(thFileBoundingBox.left, newPosition.dy);
+          }
 
-            if (newPosition.dy < thFileBoundingBox.top) {
-              newPosition = Offset(newPosition.dx, thFileBoundingBox.top);
-            }
-
-            if (thFileBoundingBox.right < (newPosition.dx + size.width)) {
-              newPosition = Offset(
-                thFileBoundingBox.right - size.width,
-                newPosition.dy,
-              );
-            }
-
-            if (newPosition.dx < thFileBoundingBox.left) {
-              newPosition = Offset(thFileBoundingBox.left, newPosition.dy);
-            }
-
-            position = newPosition;
-            _initialPositionSet = true;
-          },
-        );
+          position = newPosition;
+          _initialPositionSet = true;
+        });
       }
     }
   }
@@ -152,28 +150,30 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
               minWidth: mpOverlayWindowMinWidth,
             ),
             child: IntrinsicWidth(
-                child: Padding(
-              padding: const EdgeInsets.all(mpOverlayWindowPadding),
-              child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(mpOverlayWindowPadding),
+                child: SingleChildScrollView(
                   child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                      Text(
-                        widget.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                              color:
-                                  Theme.of(context).colorScheme.onPrimaryFixed,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ] +
-                    widget.children,
-              )),
-            )),
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                        <Widget>[
+                          Text(
+                            widget.title,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryFixed,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ] +
+                        widget.children,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -186,7 +186,8 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
 
     if (renderBox == null) {
       throw Exception(
-          'No render box found for THFileWidget in MPOverlayWindowWidget.getMaxHeightForOverlayWindows()');
+        'No render box found for THFileWidget in MPOverlayWindowWidget.getMaxHeightForOverlayWindows()',
+      );
     }
 
     return renderBox.size.height;

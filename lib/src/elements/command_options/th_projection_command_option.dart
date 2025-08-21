@@ -1,11 +1,6 @@
 part of 'th_command_option.dart';
 
-enum THProjectionModeType {
-  elevation,
-  extended,
-  none,
-  plan,
-}
+enum THProjectionModeType { elevation, extended, none, plan }
 
 // projection <specification> . specifies the drawing projection. Each
 // projection is identified by a type and optionally by an index in the form
@@ -41,19 +36,21 @@ class THProjectionCommandOption extends THCommandOption {
     String? elevationAngle,
     String? elevationUnit,
     super.originalLineInTH2File = '',
-  })  : mode = THProjectionModeType.values.byName(projectionType),
-        super() {
+  }) : mode = THProjectionModeType.values.byName(projectionType),
+       super() {
     if (elevationAngle == null) {
       this.elevationAngle = null;
     } else {
-      this.elevationAngle =
-          THDoublePart.fromString(valueString: elevationAngle);
+      this.elevationAngle = THDoublePart.fromString(
+        valueString: elevationAngle,
+      );
     }
     if (elevationUnit == null) {
       this.elevationUnit = null;
     } else {
-      this.elevationUnit =
-          THAngleUnitPart.fromString(unitString: elevationUnit);
+      this.elevationUnit = THAngleUnitPart.fromString(
+        unitString: elevationUnit,
+      );
     }
   }
 
@@ -68,14 +65,16 @@ class THProjectionCommandOption extends THCommandOption {
     if (elevationAngle == null) {
       this.elevationAngle = null;
     } else {
-      this.elevationAngle =
-          THDoublePart.fromString(valueString: elevationAngle);
+      this.elevationAngle = THDoublePart.fromString(
+        valueString: elevationAngle,
+      );
     }
     if (elevationUnit == null) {
       this.elevationUnit = null;
     } else {
-      this.elevationUnit =
-          THAngleUnitPart.fromString(unitString: elevationUnit);
+      this.elevationUnit = THAngleUnitPart.fromString(
+        unitString: elevationUnit,
+      );
     }
   }
 
@@ -86,10 +85,7 @@ class THProjectionCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'mode': mode.name,
-      'index': index,
-    });
+    map.addAll({'mode': mode.name, 'index': index});
 
     if (elevationAngle != null) {
       map['elevationAngle'] = elevationAngle!.toMap();
@@ -140,8 +136,9 @@ class THProjectionCommandOption extends THCommandOption {
       elevationAngle: makeElevationAngleNull
           ? null
           : (elevationAngle ?? this.elevationAngle),
-      elevationUnit:
-          makeElevationUnitNull ? null : (elevationUnit ?? this.elevationUnit),
+      elevationUnit: makeElevationUnitNull
+          ? null
+          : (elevationUnit ?? this.elevationUnit),
     );
   }
 
@@ -159,13 +156,7 @@ class THProjectionCommandOption extends THCommandOption {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        mode,
-        index,
-        elevationAngle,
-        elevationUnit,
-      );
+      super.hashCode ^ Object.hash(mode, index, elevationAngle, elevationUnit);
 
   @override
   String specToFile() {

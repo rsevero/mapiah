@@ -67,8 +67,9 @@ class THPassageHeightValueCommandOption extends THCommandOption {
     if ((unit != null) && (unit.isNotEmpty)) {
       this.unit = THLengthUnitPart.fromString(unitString: unit);
     } else {
-      this.unit =
-          THLengthUnitPart.fromString(unitString: thDefaultLengthUnitAsString);
+      this.unit = THLengthUnitPart.fromString(
+        unitString: thDefaultLengthUnitAsString,
+      );
     }
   }
 
@@ -97,8 +98,9 @@ class THPassageHeightValueCommandOption extends THCommandOption {
           ? THDoublePart.fromMap(map['minusNumber'])
           : null,
       unit: THLengthUnitPart.fromMap(map['unit']),
-      mode: THPassageHeightModes.values
-          .firstWhere((e) => e.toString() == map['mode']),
+      mode: THPassageHeightModes.values.firstWhere(
+        (e) => e.toString() == map['mode'],
+      ),
     );
   }
 
@@ -122,8 +124,9 @@ class THPassageHeightValueCommandOption extends THCommandOption {
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       plusNumber: makePlusNumberNull ? null : (plusNumber ?? this.plusNumber),
-      minusNumber:
-          makeMinusNumberNull ? null : (minusNumber ?? this.minusNumber),
+      minusNumber: makeMinusNumberNull
+          ? null
+          : (minusNumber ?? this.minusNumber),
       unit: unit ?? this.unit,
       mode: mode ?? this.mode,
     );
@@ -143,19 +146,14 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        plusNumber,
-        minusNumber,
-        unit,
-        mode,
-      );
+      super.hashCode ^ Object.hash(plusNumber, minusNumber, unit, mode);
 
   void _setMode() {
     if (plusNumber == null) {
       if (minusNumber == null) {
         throw THCustomException(
-            "Passage-height command option must have at least one number.");
+          "Passage-height command option must have at least one number.",
+        );
       } else {
         mode = THPassageHeightModes.depth;
       }
@@ -191,7 +189,8 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
       if (plusNumber!.value < 0) {
         throw THCustomException(
-            "Plus number in passage-height command option must be positive.");
+          "Plus number in passage-height command option must be positive.",
+        );
       }
     }
 
@@ -202,7 +201,8 @@ class THPassageHeightValueCommandOption extends THCommandOption {
 
       if (minusNumber!.value > 0) {
         throw THCustomException(
-            "Minus number in passage-height command option must be negative.");
+          "Minus number in passage-height command option must be negative.",
+        );
       }
     }
 

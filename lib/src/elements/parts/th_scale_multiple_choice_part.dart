@@ -18,9 +18,7 @@ class THScaleMultipleChoicePart extends THPart {
     },
   };
 
-  THScaleMultipleChoicePart({
-    required String choice,
-  }) : super() {
+  THScaleMultipleChoicePart({required String choice}) : super() {
     this.choice = isAlternateChoice(choice)
         ? (_choices['alternateChoices'] as Map<String, String>)[choice]!
         : choice;
@@ -31,16 +29,11 @@ class THScaleMultipleChoicePart extends THPart {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'partType': type.name,
-      'choice': choice,
-    };
+    return {'partType': type.name, 'choice': choice};
   }
 
   factory THScaleMultipleChoicePart.fromMap(Map<String, dynamic> map) {
-    return THScaleMultipleChoicePart(
-      choice: map['choice'],
-    );
+    return THScaleMultipleChoicePart(choice: map['choice']);
   }
 
   factory THScaleMultipleChoicePart.fromJson(String jsonString) {
@@ -52,9 +45,7 @@ class THScaleMultipleChoicePart extends THPart {
     String? multipleChoiceName,
     String? choice,
   }) {
-    return THScaleMultipleChoicePart(
-      choice: choice ?? this.choice,
-    );
+    return THScaleMultipleChoicePart(choice: choice ?? this.choice);
   }
 
   @override
@@ -73,8 +64,9 @@ class THScaleMultipleChoicePart extends THPart {
   }
 
   static bool isAlternateChoice(String choice) {
-    return (_choices['alternateChoices'] as Map<String, String>)
-        .containsKey(choice);
+    return (_choices['alternateChoices'] as Map<String, String>).containsKey(
+      choice,
+    );
   }
 
   static List<String> get choices {

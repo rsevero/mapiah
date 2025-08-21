@@ -22,8 +22,8 @@ abstract class THArrowPositionCommandOption
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  })  : choice = THOptionChoicesArrowPositionType.values.byName(choice),
-        super();
+  }) : choice = THOptionChoicesArrowPositionType.values.byName(choice),
+       super();
 
   @override
   String specToFile() {
@@ -34,9 +34,7 @@ abstract class THArrowPositionCommandOption
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'choice': specToFile(),
-    });
+    map.addAll({'choice': specToFile()});
 
     return map;
   }

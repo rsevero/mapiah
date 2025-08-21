@@ -36,9 +36,7 @@ class THDateValueCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'datetime': datetime.toMap(),
-    });
+    map.addAll({'datetime': datetime.toMap()});
 
     return map;
   }

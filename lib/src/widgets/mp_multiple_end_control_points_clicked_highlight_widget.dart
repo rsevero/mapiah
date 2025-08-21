@@ -41,9 +41,9 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
 
           final List<MPSelectableEndControlPoint> highlightedPoints =
               (highlightedChoice.type ==
-                      MPMultipleEndControlPointsClickedType.all)
-                  ? selectionController.clickedEndControlPoints.toList()
-                  : [highlightedChoice.endControlPoint!];
+                  MPMultipleEndControlPointsClickedType.all)
+              ? selectionController.clickedEndControlPoints.toList()
+              : [highlightedChoice.endControlPoint!];
 
           final List<CustomPainter> painters = [];
 
@@ -69,7 +69,8 @@ class MPMultipleEndControlPointsClickedHighlightWidget extends StatelessWidget
                     position: highlightedPoint.position,
                     pointPaint: pointPaint,
                     rotate: !MPCommandOptionAux.isSmooth(
-                        highlightedPoint.element as THHasOptionsMixin),
+                      highlightedPoint.element as THHasOptionsMixin,
+                    ),
                     th2FileEditController: th2FileEditController,
                   ),
                 );

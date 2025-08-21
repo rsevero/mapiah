@@ -26,7 +26,8 @@ class MPTileWidget extends StatefulWidget {
     EdgeInsetsGeometry? contentPadding,
     this.dense = false,
   }) : super() {
-    this.contentPadding = contentPadding ??
+    this.contentPadding =
+        contentPadding ??
         EdgeInsets.symmetric(
           horizontal: mpTileWidgetEdgeInset,
           vertical: dense ? mpTileWidgetEdgeInsetDense : mpTileWidgetEdgeInset,
@@ -44,7 +45,7 @@ class _MPTileWidgetState extends State<MPTileWidget> {
   Widget build(BuildContext context) {
     final Color hoverColor =
         widget.backgroundColor?.withAlpha(mpTileWidgetOnHoverAlpha) ??
-            Colors.grey.withAlpha(mpTileWidgetOnHoverAlpha);
+        Colors.grey.withAlpha(mpTileWidgetOnHoverAlpha);
 
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
@@ -98,7 +99,7 @@ class _MPTileWidgetState extends State<MPTileWidget> {
                         : null,
                   ),
                 ),
-              ]
+              ],
             ],
           ),
         ),

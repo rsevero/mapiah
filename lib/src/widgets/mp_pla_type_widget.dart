@@ -43,10 +43,7 @@ class MPPLATypeWidget extends StatelessWidget {
         return SizedBox.shrink();
     }
 
-    return MPTileWidget(
-      title: title,
-      onTap: () => _onPLATypeTap(context),
-    );
+    return MPTileWidget(title: title, onTap: () => _onPLATypeTap(context));
   }
 
   void _onPLATypeTap(BuildContext context) {
@@ -61,9 +58,9 @@ class MPPLATypeWidget extends StatelessWidget {
 
     th2FileEditController.overlayWindowController
         .performToggleShowPLATypeOverlayWindow(
-      elementType: type,
-      outerAnchorPosition: outerAnchorPosition,
-      selectedType: selectedPLAType,
-    );
+          elementType: type,
+          outerAnchorPosition: outerAnchorPosition,
+          selectedType: selectedPLAType,
+        );
   }
 }

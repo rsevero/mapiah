@@ -46,10 +46,7 @@ class THAuthorCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'datetime': datetime.toMap(),
-      'person': person.toMap(),
-    });
+    map.addAll({'datetime': datetime.toMap(), 'person': person.toMap()});
 
     return map;
   }
@@ -93,12 +90,7 @@ class THAuthorCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        datetime,
-        person,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(datetime, person);
 
   @override
   String specToFile() {

@@ -22,9 +22,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'value': value,
-    });
+    map.addAll({'value': value});
 
     return map;
   }

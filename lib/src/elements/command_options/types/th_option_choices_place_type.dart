@@ -6,5 +6,5 @@ enum THOptionChoicesPlaceType {
   /// option 'default' needs a different name because 'default' is a reserved
   /// keyword in Dart.
   defaultChoice,
-  top;
+  top,
 }

@@ -27,10 +27,7 @@ class THXTherionConfig extends THElement {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'name': name,
-      'value': value,
-    });
+    map.addAll({'name': name, 'value': value});
 
     return map;
   }
@@ -83,12 +80,7 @@ class THXTherionConfig extends THElement {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        name,
-        value,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(name, value);
 
   @override
   bool isSameClass(Object object) {

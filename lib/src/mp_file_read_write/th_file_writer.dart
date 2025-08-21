@@ -138,20 +138,14 @@ class THFileWriter {
         asString += _serializeArea(thElement);
       case THElementType.areaBorderTHID:
         final String newLine = (thElement as THAreaBorderTHID).thID;
-        asString += _prepareLineWithOriginalRepresentation(
-          newLine,
-          thElement,
-        );
+        asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
       case THElementType.comment:
         asString += _serializeComment(thElement);
       case THElementType.emptyLine:
         asString += _serializeEmptyLine(thElement);
       case THElementType.encoding:
         final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
-        asString += _prepareLineWithOriginalRepresentation(
-          newLine,
-          thElement,
-        );
+        asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
       case THElementType.endarea:
         _reducePrefix();
         asString += _prepareLineWithOriginalRepresentation(
@@ -333,15 +327,19 @@ class THFileWriter {
   }
 
   String _encodeDoubleQuotes(String aString) {
-    final String encoded =
-        aString.replaceAll(_doubleQuotePairRegex, thDoubleQuotePairEncoded);
+    final String encoded = aString.replaceAll(
+      _doubleQuotePairRegex,
+      thDoubleQuotePairEncoded,
+    );
 
     return encoded;
   }
 
   String _decodeDoubleQuotes(String aString) {
-    final String decoded =
-        aString.replaceAll(_doubleQuotePairEncodedRegex, thDoubleQuotePair);
+    final String decoded = aString.replaceAll(
+      _doubleQuotePairEncodedRegex,
+      thDoubleQuotePair,
+    );
 
     return decoded;
   }
@@ -434,8 +432,9 @@ class THFileWriter {
     _increasePrefix();
 
     for (THCommandOptionType linePointOptionType in optionTypeList) {
-      final THCommandOption option =
-          thHasOptions.optionByType(linePointOptionType)!;
+      final THCommandOption option = thHasOptions.optionByType(
+        linePointOptionType,
+      )!;
 
       String newLine = _commandOptionOriginalLineRepresentation(option);
 

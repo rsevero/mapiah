@@ -12,8 +12,8 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   THMultipleChoiceCommandOption({
     required super.optionParent,
     super.originalLineInTH2File = '',
-  })  : parentElementType = optionParent.elementType,
-        super();
+  }) : parentElementType = optionParent.elementType,
+       super();
 
   Enum get choice;
 
@@ -38,9 +38,7 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'parentElementType': parentElementType.name,
-    });
+    map.addAll({'parentElementType': parentElementType.name});
 
     return map;
   }

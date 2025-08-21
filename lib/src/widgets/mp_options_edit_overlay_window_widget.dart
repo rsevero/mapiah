@@ -50,7 +50,9 @@ class _MPOptionsEditOverlayWindowWidgetState
         th2FileEditController.redrawTriggerOptionsList;
 
         final mpSelectedElements = th2FileEditController
-            .selectionController.mpSelectedElementsLogical.values;
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
 
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
         final List<Widget> widgets = [];
@@ -146,7 +148,8 @@ class _MPOptionsEditOverlayWindowWidgetState
               hasPoint = true;
             default:
               throw Exception(
-                  'Unsupported element type: $mpSelectedElement in MPOptionsEditWidget');
+                'Unsupported element type: $mpSelectedElement in MPOptionsEditWidget',
+              );
           }
         }
 
@@ -169,10 +172,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                  selectedPLAType: selectedPointPLAType?.name,
-                  selectedPLATypeToUser: pointType,
-                  type: THElementType.point,
-                  th2FileEditController: th2FileEditController),
+                selectedPLAType: selectedPointPLAType?.name,
+                selectedPLATypeToUser: pointType,
+                type: THElementType.point,
+                th2FileEditController: th2FileEditController,
+              ),
             );
           }
 
@@ -192,10 +196,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                  selectedPLAType: selectedLinePLAType?.name,
-                  selectedPLATypeToUser: lineType,
-                  type: THElementType.line,
-                  th2FileEditController: th2FileEditController),
+                selectedPLAType: selectedLinePLAType?.name,
+                selectedPLATypeToUser: lineType,
+                type: THElementType.line,
+                th2FileEditController: th2FileEditController,
+              ),
             );
           }
 
@@ -215,10 +220,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                  selectedPLAType: selectedAreaPLAType?.name,
-                  selectedPLATypeToUser: areaType,
-                  type: THElementType.area,
-                  th2FileEditController: th2FileEditController),
+                selectedPLAType: selectedAreaPLAType?.name,
+                selectedPLATypeToUser: areaType,
+                type: THElementType.area,
+                th2FileEditController: th2FileEditController,
+              ),
             );
           }
 
@@ -286,8 +292,8 @@ class _MPOptionsEditOverlayWindowWidgetState
     /// option) widget as the outer anchor position for the option edit window.
     final Offset outerAnchorPosition =
         (thisBoundingBox == null) || (childBoundingBox == null)
-            ? th2FileEditController.screenBoundingBox.center
-            : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
+        ? th2FileEditController.screenBoundingBox.center
+        : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
 
     th2FileEditController.optionEditController.performToggleOptionShownStatus(
       optionType: type,

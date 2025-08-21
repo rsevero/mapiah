@@ -14,8 +14,8 @@ class MPSelectionHandlesWidget extends StatelessWidget {
   MPSelectionHandlesWidget({
     required this.th2FileEditController,
     required super.key,
-  })  : selectionController = th2FileEditController.selectionController,
-        thFileMPID = th2FileEditController.thFileMPID;
+  }) : selectionController = th2FileEditController.selectionController,
+       thFileMPID = th2FileEditController.thFileMPID;
 
   @override
   Widget build(Object context) {

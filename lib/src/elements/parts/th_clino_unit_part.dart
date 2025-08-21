@@ -2,13 +2,7 @@ import 'dart:convert';
 
 import 'package:mapiah/src/elements/parts/th_part.dart';
 
-enum THClinoUnit {
-  degree,
-  grad,
-  mil,
-  minute,
-  percent,
-}
+enum THClinoUnit { degree, grad, mil, minute, percent }
 
 class THClinoUnitPart extends THPart {
   late final THClinoUnit unit;
@@ -51,16 +45,11 @@ class THClinoUnitPart extends THPart {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'partType': type.name,
-      'unit': unitToString[unit],
-    };
+    return {'partType': type.name, 'unit': unitToString[unit]};
   }
 
   factory THClinoUnitPart.fromMap(Map<String, dynamic> map) {
-    return THClinoUnitPart(
-      unit: stringToUnit[map['unit']]!,
-    );
+    return THClinoUnitPart(unit: stringToUnit[map['unit']]!);
   }
 
   factory THClinoUnitPart.fromJson(String jsonString) {
@@ -68,12 +57,8 @@ class THClinoUnitPart extends THPart {
   }
 
   @override
-  THClinoUnitPart copyWith({
-    THClinoUnit? unit,
-  }) {
-    return THClinoUnitPart(
-      unit: unit ?? this.unit,
-    );
+  THClinoUnitPart copyWith({THClinoUnit? unit}) {
+    return THClinoUnitPart(unit: unit ?? this.unit);
   }
 
   @override

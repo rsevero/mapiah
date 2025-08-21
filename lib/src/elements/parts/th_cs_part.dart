@@ -7,19 +7,22 @@ class THCSPart extends THPart {
   late final String name;
   late final bool forOutputOnly;
 
-  THCSPart({
-    required this.name,
-    required this.forOutputOnly,
-  });
+  THCSPart({required this.name, required this.forOutputOnly});
 
   @override
   THPartType get type => THPartType.cs;
 
-  static final HashSet<String> csList =
-      HashSet<String>.from(['lat-long', 'long-lat', 'S-MERC']);
+  static final HashSet<String> csList = HashSet<String>.from([
+    'lat-long',
+    'long-lat',
+    'S-MERC',
+  ]);
 
-  static final HashSet<String> csNotForOutput =
-      HashSet<String>.from(['lat-long', 'long-lat', 'JTSK']);
+  static final HashSet<String> csNotForOutput = HashSet<String>.from([
+    'lat-long',
+    'long-lat',
+    'JTSK',
+  ]);
 
   static final Map<String, RegExp> csRegexes = {
     'EPSG': RegExp(r'^(EPSG:\d+)$', caseSensitive: false),
@@ -72,10 +75,7 @@ class THCSPart extends THPart {
   }
 
   factory THCSPart.fromMap(Map<String, dynamic> map) {
-    return THCSPart(
-      name: map['name'],
-      forOutputOnly: map['forOutputOnly'],
-    );
+    return THCSPart(name: map['name'], forOutputOnly: map['forOutputOnly']);
   }
 
   factory THCSPart.fromJson(String jsonString) {
@@ -83,10 +83,7 @@ class THCSPart extends THPart {
   }
 
   @override
-  THCSPart copyWith({
-    String? name,
-    bool? forOutputOnly,
-  }) {
+  THCSPart copyWith({String? name, bool? forOutputOnly}) {
     return THCSPart(
       name: name ?? this.name,
       forOutputOnly: forOutputOnly ?? this.forOutputOnly,

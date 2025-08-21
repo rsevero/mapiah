@@ -54,66 +54,68 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
           builder: (_) {
             th2FileEditController.redrawTriggerImages;
 
-            final Iterable<THXTherionImageInsertConfig> images =
-                thFile.getImages();
+            final Iterable<THXTherionImageInsertConfig> images = thFile
+                .getImages();
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
               padding: mpOverlayWindowBlockEdgeInsets,
               children: [
-                Builder(builder: (blockContext) {
-                  final ColorScheme colorScheme = Theme.of(context).colorScheme;
+                Builder(
+                  builder: (blockContext) {
+                    final ColorScheme colorScheme = Theme.of(
+                      context,
+                    ).colorScheme;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (images.isNotEmpty)
-                        ...images.map((image) {
-                          final bool isVisible = image.isVisible;
-                          final String name = p.basename(image.filename);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (images.isNotEmpty)
+                          ...images.map((image) {
+                            final bool isVisible = image.isVisible;
+                            final String name = p.basename(image.filename);
 
-                          return Row(
-                            children: [
-                              Checkbox(
-                                value: isVisible,
-                                onChanged: (bool? value) {
-                                  _imageVisibilityChanged(image.mpID, value);
-                                },
-                                checkColor: colorScheme.onSurface,
-                                side: BorderSide(
-                                  color: colorScheme.onSurface,
-                                  width: 2,
+                            return Row(
+                              children: [
+                                Checkbox(
+                                  value: isVisible,
+                                  onChanged: (bool? value) {
+                                    _imageVisibilityChanged(image.mpID, value);
+                                  },
+                                  checkColor: colorScheme.onSurface,
+                                  side: BorderSide(
+                                    color: colorScheme.onSurface,
+                                    width: 2,
+                                  ),
+                                  fillColor: WidgetStateProperty.all(
+                                    colorScheme.surfaceContainerHighest,
+                                  ),
                                 ),
-                                fillColor: WidgetStateProperty.all(
-                                  colorScheme.surfaceContainerHighest,
+                                Expanded(child: Text(name)),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.delete_outline_rounded,
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                  tooltip: appLocalizations
+                                      .th2FileEditPageRemoveImageButton,
+                                  onPressed: () =>
+                                      _onPressedRemoveImage(image.mpID),
                                 ),
-                              ),
-                              Expanded(
-                                child: Text(name),
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.delete_outline_rounded,
-                                  color: colorScheme.onSecondary,
-                                ),
-                                tooltip: appLocalizations
-                                    .th2FileEditPageRemoveImageButton,
-                                onPressed: () =>
-                                    _onPressedRemoveImage(image.mpID),
-                              ),
-                            ],
-                          );
-                        }),
-                      const SizedBox(height: mpButtonSpace),
-                      ElevatedButton(
-                        onPressed: () => _onPressedAddImage(context),
-                        child: Text(
-                          appLocalizations.th2FileEditPageAddImageButton,
+                              ],
+                            );
+                          }),
+                        const SizedBox(height: mpButtonSpace),
+                        ElevatedButton(
+                          onPressed: () => _onPressedAddImage(context),
+                          child: Text(
+                            appLocalizations.th2FileEditPageAddImageButton,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
+                      ],
+                    );
+                  },
+                ),
               ],
             );
           },

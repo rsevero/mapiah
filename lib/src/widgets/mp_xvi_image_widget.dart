@@ -70,11 +70,8 @@ class MPXVIImageWidget extends StatelessWidget {
     // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
     // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
     // These original xTherion variables are used to calculate imageGridOffset.
-    final Offset imageGridOffset = imageOffset -
-        Offset(
-          xviFile.grid.gx.value,
-          xviFile.grid.gy.value,
-        );
+    final Offset imageGridOffset =
+        imageOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
 
     setXVIGridPainters(
       xviFile: xviFile,
@@ -110,7 +107,7 @@ class MPXVIImageWidget extends StatelessWidget {
 
     for (final XVISketchLine sketchLine in xviFile.sketchLines) {
       final List<Offset> coordinates = [
-        sketchLine.start.coordinates + imageGridOffset
+        sketchLine.start.coordinates + imageGridOffset,
       ];
       THLinePaint sketchLinePaint;
       THPointPaint pointPaint;
@@ -122,8 +119,9 @@ class MPXVIImageWidget extends StatelessWidget {
       if (xviSketchLinesPaints.containsKey(sketchLine.color)) {
         sketchLinePaint = xviSketchLinesPaints[sketchLine.color]!;
       } else {
-        sketchLinePaint =
-            visualController.getXVISketchLinePaint(sketchLine.color);
+        sketchLinePaint = visualController.getXVISketchLinePaint(
+          sketchLine.color,
+        );
         xviSketchLinesPaints[sketchLine.color] = sketchLinePaint;
       }
 
@@ -149,8 +147,8 @@ class MPXVIImageWidget extends StatelessWidget {
     required Offset imageGridOffset,
     required List<CustomPainter> painters,
   }) {
-    final THPointPaint xviStationPaint =
-        th2FileEditController.visualController.getXVIStationPointPaint();
+    final THPointPaint xviStationPaint = th2FileEditController.visualController
+        .getXVIStationPointPaint();
 
     for (final XVIStation station in xviFile.stations) {
       final Offset stationPosition =
@@ -171,19 +169,15 @@ class MPXVIImageWidget extends StatelessWidget {
     required Offset imageGridOffset,
     required List<CustomPainter> painters,
   }) {
-    final THLinePaint xviShotPaint =
-        th2FileEditController.visualController.getXVIShotLinePaint();
+    final THLinePaint xviShotPaint = th2FileEditController.visualController
+        .getXVIShotLinePaint();
 
     for (final XVIShot shot in xviFile.shots) {
       final Offset start = shot.start.coordinates + imageGridOffset;
       final Offset end = shot.end.coordinates + imageGridOffset;
 
       painters.add(
-        XVILinePainter(
-          start: start,
-          end: end,
-          linePaint: xviShotPaint,
-        ),
+        XVILinePainter(start: start, end: end, linePaint: xviShotPaint),
       );
     }
   }
@@ -210,8 +204,8 @@ class MPXVIImageWidget extends StatelessWidget {
         repetitionOnYAxis * xIncForYRepetition;
     final double yIncForVerticalGridLine =
         repetitionOnYAxis * yIncForYRepetition;
-    final THLinePaint xviGridLinePaint =
-        th2FileEditController.visualController.getXVIGridLinePaint();
+    final THLinePaint xviGridLinePaint = th2FileEditController.visualController
+        .getXVIGridLinePaint();
 
     /// Horizontal grid lines
     for (int i = 0; i <= repetitionOnYAxis; i++) {
@@ -222,14 +216,8 @@ class MPXVIImageWidget extends StatelessWidget {
 
       painters.add(
         XVILinePainter(
-          start: Offset(
-            leftX,
-            leftY,
-          ),
-          end: Offset(
-            rightX,
-            rightY,
-          ),
+          start: Offset(leftX, leftY),
+          end: Offset(rightX, rightY),
           linePaint: xviGridLinePaint,
         ),
       );
@@ -244,14 +232,8 @@ class MPXVIImageWidget extends StatelessWidget {
 
       painters.add(
         XVILinePainter(
-          start: Offset(
-            topX,
-            topY,
-          ),
-          end: Offset(
-            bottomX,
-            bottomY,
-          ),
+          start: Offset(topX, topY),
+          end: Offset(bottomX, bottomY),
           linePaint: xviGridLinePaint,
         ),
       );

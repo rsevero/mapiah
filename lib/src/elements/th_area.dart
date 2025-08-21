@@ -56,8 +56,8 @@ class THArea extends THElement
     required super.parentMPID,
     required String areaTypeString,
     super.originalLineInTH2File = '',
-  })  : areaType = THAreaType.fromFileString(areaTypeString),
-        super.addToParent();
+  }) : areaType = THAreaType.fromFileString(areaTypeString),
+       super.addToParent();
 
   @override
   THElementType get elementType => THElementType.area;
@@ -85,8 +85,9 @@ class THArea extends THElement
       areaType: THAreaType.values.byName(map['areaType']),
       childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
-      attrOptionsMap:
-          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
+      attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
+        map['attrOptionsMap'],
+      ),
     );
   }
 
@@ -138,12 +139,7 @@ class THArea extends THElement
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        areaType,
-        childrenMPID,
-        optionsMap,
-        attrOptionsMap,
-      );
+      Object.hash(areaType, childrenMPID, optionsMap, attrOptionsMap);
 
   static bool hasAreaType(String areaType) {
     return _areaTypes.contains(areaType);
@@ -219,8 +215,10 @@ class THArea extends THElement
     for (final lineMPID in lineMPIDs) {
       final THLine line = thFile.lineByMPID(lineMPID);
 
-      boundingBox = boundingBox
-              ?.expandToInclude(line.getBoundingBox(th2FileEditController)) ??
+      boundingBox =
+          boundingBox?.expandToInclude(
+            line.getBoundingBox(th2FileEditController),
+          ) ??
           line.getBoundingBox(th2FileEditController);
     }
 

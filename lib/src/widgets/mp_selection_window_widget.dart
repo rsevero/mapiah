@@ -20,7 +20,9 @@ class MPSelectionWindowWidget extends StatelessWidget {
           painter: MPSelectionWindowPainter(
             th2FileEditController: th2FileEditController,
             selectionWindowPosition: th2FileEditController
-                .selectionController.selectionWindowCanvasCoordinates.value,
+                .selectionController
+                .selectionWindowCanvasCoordinates
+                .value,
             fillPaint: th2FileEditController.selectionWindowFillPaint,
             borderPaint:
                 th2FileEditController.selectionWindowBorderPaintComplete,

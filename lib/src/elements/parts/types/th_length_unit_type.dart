@@ -1,7 +1,1 @@
-enum THLengthUnitType {
-  centimeter,
-  feet,
-  inch,
-  meter,
-  yard,
-}
+enum THLengthUnitType { centimeter, feet, inch, meter, yard }

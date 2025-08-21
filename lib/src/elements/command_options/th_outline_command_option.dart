@@ -24,8 +24,8 @@ class THOutlineCommandOption extends THMultipleChoiceCommandOption {
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  })  : choice = _setChoiceFromString(choice),
-        super();
+  }) : choice = _setChoiceFromString(choice),
+       super();
 
   @override
   THCommandOptionType get type => THCommandOptionType.outline;
@@ -45,9 +45,7 @@ class THOutlineCommandOption extends THMultipleChoiceCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'choice': specToFile(),
-    });
+    map.addAll({'choice': specToFile()});
 
     return map;
   }

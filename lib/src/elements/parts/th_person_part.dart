@@ -14,7 +14,8 @@ class THPersonPart extends THPart {
       final List<String> names = name.split('/');
       if (names.length != 2) {
         throw THCustomException(
-            "Only one slash ('/') allowed in person name at THPersonPart: '$name'");
+          "Only one slash ('/') allowed in person name at THPersonPart: '$name'",
+        );
       }
       firstname = names[0].trim();
       surname = names[1].trim();
@@ -24,16 +25,19 @@ class THPersonPart extends THPart {
       surname = name.substring(last + 1).trim();
     } else {
       throw THCustomException(
-          "Only one space (' ') required in person name at THPersonPart: '$name'");
+        "Only one space (' ') required in person name at THPersonPart: '$name'",
+      );
     }
 
     if (firstname.isEmpty) {
       throw THCustomException(
-          "firstname can´t be empty at THPersonPart: '$name'");
+        "firstname can´t be empty at THPersonPart: '$name'",
+      );
     }
     if (surname.isEmpty) {
       throw THCustomException(
-          "surname can´t be empty at THPersonPart: '$name'");
+        "surname can´t be empty at THPersonPart: '$name'",
+      );
     }
   }
 
@@ -42,18 +46,11 @@ class THPersonPart extends THPart {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'partType': type.name,
-      'firstname': firstname,
-      'surname': surname,
-    };
+    return {'partType': type.name, 'firstname': firstname, 'surname': surname};
   }
 
   factory THPersonPart.fromMap(Map<String, dynamic> map) {
-    return THPersonPart(
-      firstname: map['firstname'],
-      surname: map['surname'],
-    );
+    return THPersonPart(firstname: map['firstname'], surname: map['surname']);
   }
 
   factory THPersonPart.fromJson(String jsonString) {
@@ -61,10 +58,7 @@ class THPersonPart extends THPart {
   }
 
   @override
-  THPersonPart copyWith({
-    String? firstname,
-    String? surname,
-  }) {
+  THPersonPart copyWith({String? firstname, String? surname}) {
     return THPersonPart(
       firstname: firstname ?? this.firstname,
       surname: surname ?? this.surname,

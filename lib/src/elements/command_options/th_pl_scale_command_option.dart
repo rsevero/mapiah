@@ -1,9 +1,6 @@
 part of 'th_command_option.dart';
 
-enum THPLScaleCommandOptionType {
-  named,
-  numeric,
-}
+enum THPLScaleCommandOptionType { named, numeric }
 
 /// Therion Book says for lines:
 /// scale . scale for labels, can be: tiny (xs), small (s), normal (m), large
@@ -34,9 +31,7 @@ class THPLScaleCommandOption extends THCommandOption {
     required String textScaleSize,
     super.originalLineInTH2File = '',
   }) : super() {
-    namedSize = THScaleMultipleChoicePart(
-      choice: textScaleSize,
-    );
+    namedSize = THScaleMultipleChoicePart(choice: textScaleSize);
     scaleType = THPLScaleCommandOptionType.named;
     numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
   }
@@ -46,9 +41,7 @@ class THPLScaleCommandOption extends THCommandOption {
     required String textScaleSize,
     super.originalLineInTH2File = '',
   }) : super.forCWJM() {
-    namedSize = THScaleMultipleChoicePart(
-      choice: textScaleSize,
-    );
+    namedSize = THScaleMultipleChoicePart(choice: textScaleSize);
     scaleType = THPLScaleCommandOptionType.named;
     numericSize = THDoublePart(value: 0.0, decimalPositions: 0);
   }
@@ -57,8 +50,8 @@ class THPLScaleCommandOption extends THCommandOption {
     required super.optionParent,
     required THDoublePart numericScaleSize,
     super.originalLineInTH2File = '',
-  })  : numericSize = numericScaleSize,
-        super() {
+  }) : numericSize = numericScaleSize,
+       super() {
     scaleType = THPLScaleCommandOptionType.numeric;
     namedSize = THScaleMultipleChoicePart(choice: '');
   }
@@ -147,12 +140,7 @@ class THPLScaleCommandOption extends THCommandOption {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        namedSize,
-        numericSize,
-        scaleType,
-      );
+      super.hashCode ^ Object.hash(namedSize, numericSize, scaleType);
 
   dynamic get size {
     switch (scaleType) {

@@ -39,8 +39,9 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
       originalLineInTH2File: map['originalLineInTH2File'],
       endPoint: THPositionPart.fromMap(map['endPoint']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
-      attrOptionsMap:
-          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
+      attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
+        map['attrOptionsMap'],
+      ),
     );
   }
 

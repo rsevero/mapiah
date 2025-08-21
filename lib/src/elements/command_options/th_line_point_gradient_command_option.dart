@@ -26,8 +26,8 @@ class THLinePointGradientCommandOption extends THMultipleChoiceCommandOption {
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  })  : choice = THOptionChoicesLinePointGradientType.values.byName(choice),
-        super();
+  }) : choice = THOptionChoicesLinePointGradientType.values.byName(choice),
+       super();
 
   @override
   THCommandOptionType get type => THCommandOptionType.linePointGradient;
@@ -46,9 +46,7 @@ class THLinePointGradientCommandOption extends THMultipleChoiceCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'choice': specToFile(),
-    });
+    map.addAll({'choice': specToFile()});
 
     return map;
   }

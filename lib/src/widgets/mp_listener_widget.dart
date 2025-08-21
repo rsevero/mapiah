@@ -71,9 +71,10 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             if (isPrimaryButtonDragging) {
               widget.actuator.onPrimaryButtonDragUpdate(event);
             } else {
-              final double distanceSquared = (event.localPosition -
-                      primaryButtonDragStartScreenCoordinates)
-                  .distanceSquared;
+              final double distanceSquared =
+                  (event.localPosition -
+                          primaryButtonDragStartScreenCoordinates)
+                      .distanceSquared;
 
               if (distanceSquared > thClickDragThresholdSquared) {
                 isPrimaryButtonDragging = true;
@@ -84,9 +85,10 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             if (isSecondaryButtonDragging) {
               widget.actuator.onSecondaryButtonDragUpdate(event);
             } else {
-              final double distanceSquared = (event.localPosition -
-                      secondaryButtonDragStartScreenCoordinates)
-                  .distanceSquared;
+              final double distanceSquared =
+                  (event.localPosition -
+                          secondaryButtonDragStartScreenCoordinates)
+                      .distanceSquared;
 
               if (distanceSquared > thClickDragThresholdSquared) {
                 isSecondaryButtonDragging = true;
@@ -97,9 +99,10 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             if (isTertiaryButtonDragging) {
               widget.actuator.onTertiaryButtonDragUpdate(event);
             } else {
-              final double distanceSquared = (event.localPosition -
-                      tertiaryButtonDragStartScreenCoordinates)
-                  .distanceSquared;
+              final double distanceSquared =
+                  (event.localPosition -
+                          tertiaryButtonDragStartScreenCoordinates)
+                      .distanceSquared;
 
               if (distanceSquared > thClickDragThresholdSquared) {
                 isTertiaryButtonDragging = true;

@@ -29,9 +29,7 @@ class THMarkCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'mark': mark,
-    });
+    map.addAll({'mark': mark});
 
     return map;
   }

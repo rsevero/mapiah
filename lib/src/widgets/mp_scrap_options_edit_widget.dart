@@ -45,8 +45,9 @@ class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
 
         final int scrapMPID =
             th2FileEditController.optionEditController.optionsScrapMPID;
-        final THScrap scrap =
-            th2FileEditController.thFile.scrapByMPID(scrapMPID);
+        final THScrap scrap = th2FileEditController.thFile.scrapByMPID(
+          scrapMPID,
+        );
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
         final List<Widget> widgets = [];
         final TH2FileEditOptionEditController optionEditController =
@@ -120,8 +121,8 @@ class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
     /// option) widget as the outer anchor position for the option edit window.
     final Offset anchorPosition =
         (thisBoundingBox == null) || (childBoundingBox == null)
-            ? th2FileEditController.screenBoundingBox.center
-            : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
+        ? th2FileEditController.screenBoundingBox.center
+        : Offset(thisBoundingBox.left, childBoundingBox.center.dy);
 
     th2FileEditController.optionEditController.performToggleOptionShownStatus(
       optionType: type,

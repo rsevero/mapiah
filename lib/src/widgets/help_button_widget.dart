@@ -7,22 +7,14 @@ class MPHelpButtonWidget extends StatelessWidget {
   final String helpPage;
   final String title;
 
-  MPHelpButtonWidget(
-    this.context,
-    this.helpPage,
-    this.title,
-  );
+  MPHelpButtonWidget(this.context, this.helpPage, this.title);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.help_outline),
       color: Theme.of(context).colorScheme.onSecondaryContainer,
-      onPressed: () => MPDialogAux.showHelpDialog(
-        context,
-        helpPage,
-        title,
-      ),
+      onPressed: () => MPDialogAux.showHelpDialog(context, helpPage, title),
       tooltip: AppLocalizations.of(context).helpDialogTooltip,
     );
   }

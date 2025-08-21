@@ -47,9 +47,7 @@ class XVIFileParser {
       _fileBytes = fileBytes;
     }
 
-    _xviFile = XVIFile(
-      filename: file.path,
-    );
+    _xviFile = XVIFile(filename: file.path);
 
     final String contents = utf8.decode(_fileBytes);
 
@@ -119,11 +117,9 @@ class XVIFileParser {
         points.add(positionFromList(coordinates));
       }
 
-      sketchlines.add(XVISketchLine(
-        color: color,
-        start: start,
-        points: points,
-      ));
+      sketchlines.add(
+        XVISketchLine(color: color, start: start, points: points),
+      );
     }
 
     _xviFile.sketchLines = sketchlines;
@@ -185,8 +181,8 @@ class XVIFileParser {
   }
 
   void _injectXVIGridSize(dynamic contentValue) {
-    final List<String> gridSizeValues =
-        (contentValue as List<dynamic>).cast<String>();
+    final List<String> gridSizeValues = (contentValue as List<dynamic>)
+        .cast<String>();
     if (gridSizeValues.length != 2) {
       _addError(
         'Invalid grid size format',
@@ -206,8 +202,8 @@ class XVIFileParser {
   }
 
   void _injectXVIGrid(dynamic contentValue) {
-    final List<String> gridValues =
-        (contentValue as List<dynamic>).cast<String>();
+    final List<String> gridValues = (contentValue as List<dynamic>)
+        .cast<String>();
 
     _xviFile.grid = XVIGrid.fromStringList(gridValues);
   }

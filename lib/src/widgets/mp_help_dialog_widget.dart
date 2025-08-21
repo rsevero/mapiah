@@ -52,10 +52,7 @@ class MPHelpDialogWidget extends StatelessWidget {
         return AlertDialog(
           title: Text(title),
           content: SingleChildScrollView(
-            child: MarkdownBlock(
-              data: snapshot.data ?? '',
-              selectable: false,
-            ),
+            child: MarkdownBlock(data: snapshot.data ?? '', selectable: false),
           ),
           actions: [
             TextButton(

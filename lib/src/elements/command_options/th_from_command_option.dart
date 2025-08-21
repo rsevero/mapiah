@@ -29,9 +29,7 @@ class THFromCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'station': station,
-    });
+    map.addAll({'station': station});
 
     return map;
   }

@@ -5,17 +5,11 @@ class XVIStation {
   final THPositionPart position;
   final String name;
 
-  XVIStation({
-    required this.position,
-    required this.name,
-  });
+  XVIStation({required this.position, required this.name});
 
   /// Returns a map representation of this XVIStation instance
   Map<String, dynamic> toMap() {
-    return {
-      'position': position.toMap(),
-      'name': name,
-    };
+    return {'position': position.toMap(), 'name': name};
   }
 
   /// Creates an XVIStation instance from a map
@@ -33,10 +27,7 @@ class XVIStation {
   String toJson() => jsonEncode(toMap());
 
   /// Creates a copy of this XVIStation with the given fields replaced with new values
-  XVIStation copyWith({
-    THPositionPart? position,
-    String? name,
-  }) {
+  XVIStation copyWith({THPositionPart? position, String? name}) {
     return XVIStation(
       position: position ?? this.position,
       name: name ?? this.name,

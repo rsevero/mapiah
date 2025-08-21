@@ -19,10 +19,8 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditElementEditController elementEditController;
 
-  MPAddLineWidget({
-    required this.th2FileEditController,
-    required super.key,
-  }) : elementEditController = th2FileEditController.elementEditController;
+  MPAddLineWidget({required this.th2FileEditController, required super.key})
+    : elementEditController = th2FileEditController.elementEditController;
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +28,20 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
       builder: (_) {
         th2FileEditController.redrawTriggerNewLine;
 
-        final THPointPaint pointPaint =
-            th2FileEditController.visualController.getNewLinePointPaint();
+        final THPointPaint pointPaint = th2FileEditController.visualController
+            .getNewLinePointPaint();
 
-        final THLinePaint linePaint =
-            th2FileEditController.visualController.getNewLinePaint();
+        final THLinePaint linePaint = th2FileEditController.visualController
+            .getNewLinePaint();
 
         final List<CustomPainter> painters = [];
 
         if (elementEditController.newLine == null) {
           if (elementEditController.lineStartScreenPosition != null) {
-            final Offset startPoint =
-                th2FileEditController.offsetScreenToCanvas(
-                    elementEditController.lineStartScreenPosition!);
+            final Offset startPoint = th2FileEditController
+                .offsetScreenToCanvas(
+                  elementEditController.lineStartScreenPosition!,
+                );
 
             final painter = THEndPointPainter(
               position: startPoint,
@@ -79,8 +78,9 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
           if ((lineSegments.length >= 2) &&
               (lastSegment is THBezierCurveLineSegment)) {
-            final Paint controlLinePaint =
-                th2FileEditController.visualController.getControlLinePaint();
+            final Paint controlLinePaint = th2FileEditController
+                .visualController
+                .getControlLinePaint();
             final List<int> keys = lineSegments.keys.toList();
             final Offset secondToLastSegmentPosition =
                 lineSegments[keys.elementAt(keys.length - 2)]!
@@ -89,22 +89,22 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
             final THControlPointPainter controlPoint1Painter =
                 THControlPointPainter(
-              controlPointPosition: lastSegment.controlPoint1.coordinates,
-              endPointPosition: secondToLastSegmentPosition,
-              pointPaint: pointPaint,
-              controlLinePaint: controlLinePaint,
-              th2FileEditController: th2FileEditController,
-            );
+                  controlPointPosition: lastSegment.controlPoint1.coordinates,
+                  endPointPosition: secondToLastSegmentPosition,
+                  pointPaint: pointPaint,
+                  controlLinePaint: controlLinePaint,
+                  th2FileEditController: th2FileEditController,
+                );
             painters.add(controlPoint1Painter);
 
             final THControlPointPainter controlPoint2Painter =
                 THControlPointPainter(
-              controlPointPosition: lastSegment.controlPoint2.coordinates,
-              endPointPosition: lastSegment.endPoint.coordinates,
-              pointPaint: pointPaint,
-              controlLinePaint: controlLinePaint,
-              th2FileEditController: th2FileEditController,
-            );
+                  controlPointPosition: lastSegment.controlPoint2.coordinates,
+                  endPointPosition: lastSegment.endPoint.coordinates,
+                  pointPaint: pointPaint,
+                  controlLinePaint: controlLinePaint,
+                  th2FileEditController: th2FileEditController,
+                );
             painters.add(controlPoint2Painter);
           }
 

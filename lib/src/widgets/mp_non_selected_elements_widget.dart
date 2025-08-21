@@ -20,8 +20,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
   MPNonSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
-  })  : selectionController = th2FileEditController.selectionController,
-        thFile = th2FileEditController.thFile;
+  }) : selectionController = th2FileEditController.selectionController,
+       thFile = th2FileEditController.thFile;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
 
           switch (element) {
             case THPoint _:
-              final THPointPaint pointPaint =
-                  visualController.getUnselectedPointPaint(element);
+              final THPointPaint pointPaint = visualController
+                  .getUnselectedPointPaint(element);
 
               painters.add(
                 THPointPainter(

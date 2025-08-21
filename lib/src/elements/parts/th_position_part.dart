@@ -11,10 +11,7 @@ class THPositionPart extends THPart {
   late final Offset coordinates;
   late final int decimalPositions;
 
-  THPositionPart({
-    required this.coordinates,
-    required this.decimalPositions,
-  });
+  THPositionPart({required this.coordinates, required this.decimalPositions});
 
   THPositionPart.fromStrings({
     required String xAsString,
@@ -38,10 +35,7 @@ class THPositionPart extends THPart {
   Map<String, dynamic> toMap() {
     return {
       'partType': type.name,
-      'coordinates': {
-        'dx': coordinates.dx,
-        'dy': coordinates.dy,
-      },
+      'coordinates': {'dx': coordinates.dx, 'dy': coordinates.dy},
       'decimalPositions': decimalPositions,
     };
   }
@@ -58,10 +52,7 @@ class THPositionPart extends THPart {
   }
 
   @override
-  THPositionPart copyWith({
-    Offset? coordinates,
-    int? decimalPositions,
-  }) {
+  THPositionPart copyWith({Offset? coordinates, int? decimalPositions}) {
     return THPositionPart(
       coordinates: coordinates ?? this.coordinates,
       decimalPositions: decimalPositions ?? this.decimalPositions,
@@ -80,16 +71,18 @@ class THPositionPart extends THPart {
   int get hashCode => Object.hash(coordinates, decimalPositions);
 
   void _fromStrings(String xAsString, String yAsString) {
-    final THDoublePart xDoublePart =
-        THDoublePart.fromString(valueString: xAsString);
-    final THDoublePart yDoublePart =
-        THDoublePart.fromString(valueString: yAsString);
+    final THDoublePart xDoublePart = THDoublePart.fromString(
+      valueString: xAsString,
+    );
+    final THDoublePart yDoublePart = THDoublePart.fromString(
+      valueString: yAsString,
+    );
 
     coordinates = Offset(xDoublePart.value, yDoublePart.value);
     decimalPositions =
         (xDoublePart.decimalPositions > yDoublePart.decimalPositions)
-            ? xDoublePart.decimalPositions
-            : yDoublePart.decimalPositions;
+        ? xDoublePart.decimalPositions
+        : yDoublePart.decimalPositions;
   }
 
   @override

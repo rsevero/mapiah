@@ -51,5 +51,5 @@ enum THCommandOptionType {
   title,
   unrecognizedCommandOption,
   visibility,
-  walls;
+  walls,
 }

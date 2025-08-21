@@ -41,8 +41,8 @@ class THTextCommandOption extends THCommandOption {
     required super.optionParent,
     required String textContent,
     super.originalLineInTH2File = '',
-  })  : text = THStringPart(content: textContent),
-        super();
+  }) : text = THStringPart(content: textContent),
+       super();
 
   @override
   THCommandOptionType get type => THCommandOptionType.text;
@@ -51,9 +51,7 @@ class THTextCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'text': text.toMap(),
-    });
+    map.addAll({'text': text.toMap()});
 
     return map;
   }

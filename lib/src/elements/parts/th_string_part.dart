@@ -15,16 +15,11 @@ class THStringPart extends THPart {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'partType': type.name,
-      'content': content,
-    };
+    return {'partType': type.name, 'content': content};
   }
 
   factory THStringPart.fromMap(Map<String, dynamic> map) {
-    return THStringPart(
-      content: map['content'] ?? '',
-    );
+    return THStringPart(content: map['content'] ?? '');
   }
 
   factory THStringPart.fromJson(String jsonString) {
@@ -32,12 +27,8 @@ class THStringPart extends THPart {
   }
 
   @override
-  THStringPart copyWith({
-    String? content,
-  }) {
-    return THStringPart(
-      content: content ?? this.content,
-    );
+  THStringPart copyWith({String? content}) {
+    return THStringPart(content: content ?? this.content);
   }
 
   @override

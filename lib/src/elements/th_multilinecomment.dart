@@ -23,9 +23,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'childrenMPID': childrenMPID.toList(),
-    });
+    map.addAll({'childrenMPID': childrenMPID.toList()});
 
     return map;
   }
@@ -71,8 +69,10 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     if (other is! THMultiLineComment) return false;
     if (!super.equalsBase(other)) return false;
 
-    return const DeepCollectionEquality()
-        .equals(other.childrenMPID, childrenMPID);
+    return const DeepCollectionEquality().equals(
+      other.childrenMPID,
+      childrenMPID,
+    );
   }
 
   @override

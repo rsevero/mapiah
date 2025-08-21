@@ -8,10 +8,8 @@ class THEndline extends THElement {
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
-  THEndline({
-    required super.parentMPID,
-    super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  THEndline({required super.parentMPID, super.originalLineInTH2File = ''})
+    : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.endline;

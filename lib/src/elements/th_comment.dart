@@ -24,9 +24,7 @@ class THComment extends THElement {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'content': content,
-    });
+    map.addAll({'content': content});
 
     return map;
   }

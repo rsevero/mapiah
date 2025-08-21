@@ -39,9 +39,7 @@ class THLSizeCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'number': number.toMap(),
-    });
+    map.addAll({'number': number.toMap()});
 
     return map;
   }

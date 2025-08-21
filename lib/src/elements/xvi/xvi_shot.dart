@@ -5,17 +5,11 @@ class XVIShot {
   final THPositionPart start;
   final THPositionPart end;
 
-  XVIShot({
-    required this.start,
-    required this.end,
-  });
+  XVIShot({required this.start, required this.end});
 
   /// Returns a map representation of this XVIShot instance
   Map<String, dynamic> toMap() {
-    return {
-      'start': start.toMap(),
-      'end': end.toMap(),
-    };
+    return {'start': start.toMap(), 'end': end.toMap()};
   }
 
   /// Creates an XVIShot instance from a map
@@ -33,14 +27,8 @@ class XVIShot {
   String toJson() => jsonEncode(toMap());
 
   /// Creates a copy of this XVIShot with the given fields replaced with new values
-  XVIShot copyWith({
-    THPositionPart? start,
-    THPositionPart? end,
-  }) {
-    return XVIShot(
-      start: start ?? this.start,
-      end: end ?? this.end,
-    );
+  XVIShot copyWith({THPositionPart? start, THPositionPart? end}) {
+    return XVIShot(start: start ?? this.start, end: end ?? this.end);
   }
 
   @override

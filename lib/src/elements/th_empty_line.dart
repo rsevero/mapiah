@@ -8,10 +8,8 @@ class THEmptyLine extends THElement {
     required super.originalLineInTH2File,
   }) : super.forCWJM();
 
-  THEmptyLine({
-    required super.parentMPID,
-    super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  THEmptyLine({required super.parentMPID, super.originalLineInTH2File = ''})
+    : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.emptyLine;

@@ -10,7 +10,7 @@ class THDoublePart extends THPart {
   late final int _decimalPositions;
 
   THDoublePart({required double value, int? decimalPositions})
-      : _value = value {
+    : _value = value {
     this.decimalPositions =
         decimalPositions ?? MPNumericAux.getMinimumNumberOfDecimals(value);
   }
@@ -43,10 +43,7 @@ class THDoublePart extends THPart {
   }
 
   @override
-  THDoublePart copyWith({
-    double? value,
-    int? decimalPositions,
-  }) {
+  THDoublePart copyWith({double? value, int? decimalPositions}) {
     return THDoublePart(
       value: value ?? _value,
       decimalPositions: decimalPositions ?? _decimalPositions,
@@ -95,8 +92,9 @@ class THDoublePart extends THPart {
 
     final int dotPosition = valueString.indexOf(thDecimalSeparator);
 
-    decimalPositions =
-        (dotPosition > 0) ? valueString.length - (dotPosition + 1) : 0;
+    decimalPositions = (dotPosition > 0)
+        ? valueString.length - (dotPosition + 1)
+        : 0;
   }
 
   void fromValue(double value, int decimalPositions) {

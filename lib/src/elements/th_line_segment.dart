@@ -63,8 +63,9 @@ abstract class THLineSegment extends THElement
   }
 
   static THLineSegment fromMap(Map<String, dynamic> map) {
-    final THElementType elementType =
-        THElementType.values.byName(map['elementType']);
+    final THElementType elementType = THElementType.values.byName(
+      map['elementType'],
+    );
 
     switch (elementType) {
       case THElementType.straightLineSegment:
@@ -111,12 +112,7 @@ abstract class THLineSegment extends THElement
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        endPoint,
-        optionsMap,
-        attrOptionsMap,
-      );
+      super.hashCode ^ Object.hash(endPoint, optionsMap, attrOptionsMap);
 
   Rect getBoundingBox(Offset startPoint) {
     _boundingBox ??= _calculateBoundingBox(startPoint);

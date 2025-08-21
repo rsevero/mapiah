@@ -13,18 +13,16 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 class MPLineSegmentTypeWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 
-  MPLineSegmentTypeWidget({
-    super.key,
-    required this.th2FileEditController,
-  });
+  MPLineSegmentTypeWidget({super.key, required this.th2FileEditController});
 
   @override
   Widget build(BuildContext context) {
     final String title;
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
-    final MPSelectedLineSegmentType lineSegmentsType =
-        th2FileEditController.selectionController.getSelectedLineSegmentsType();
+    final MPSelectedLineSegmentType lineSegmentsType = th2FileEditController
+        .selectionController
+        .getSelectedLineSegmentsType();
 
     switch (lineSegmentsType) {
       case MPSelectedLineSegmentType.bezierCurveLineSegment:
@@ -34,17 +32,12 @@ class MPLineSegmentTypeWidget extends StatelessWidget {
       case MPSelectedLineSegmentType.straightLineSegment:
         title = appLocalizations.thElementStraightLineSegment;
       default:
-        throw Exception(
-          'Unknown line segment type: $lineSegmentsType',
-        );
+        throw Exception('Unknown line segment type: $lineSegmentsType');
     }
 
     return MPOverlayWindowBlockWidget(
       children: [
-        MPTileWidget(
-          title: title,
-          onTap: () => _onLineSegmentTypeTap(context),
-        ),
+        MPTileWidget(title: title, onTap: () => _onLineSegmentTypeTap(context)),
       ],
       overlayWindowBlockType: MPOverlayWindowBlockType.main,
     );
@@ -62,7 +55,7 @@ class MPLineSegmentTypeWidget extends StatelessWidget {
 
     th2FileEditController.overlayWindowController
         .perfomToggleLineSegmentTypeOptionsOverlayWindow(
-      outerAnchorPosition: outerAnchorPosition,
-    );
+          outerAnchorPosition: outerAnchorPosition,
+        );
   }
 }

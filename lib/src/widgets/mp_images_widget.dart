@@ -8,10 +8,7 @@ import 'package:mapiah/src/widgets/mp_xvi_image_widget.dart';
 class MPImagesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 
-  const MPImagesWidget({
-    super.key,
-    required this.th2FileEditController,
-  });
+  const MPImagesWidget({super.key, required this.th2FileEditController});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +37,7 @@ class MPImagesWidget extends StatelessWidget {
           );
         }
 
-        return RepaintBoundary(
-          child: Stack(children: widgets),
-        );
+        return RepaintBoundary(child: Stack(children: widgets));
       },
     );
   }

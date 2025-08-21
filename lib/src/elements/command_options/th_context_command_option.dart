@@ -37,10 +37,7 @@ class THContextCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'elementType': elementType,
-      'symbolType': symbolType,
-    });
+    map.addAll({'elementType': elementType, 'symbolType': symbolType});
 
     return map;
   }
@@ -84,12 +81,7 @@ class THContextCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        elementType,
-        symbolType,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(elementType, symbolType);
 
   // set elementType(String aElementType) {
   //   if (!_supportedElementTypes.contains(aElementType)) {

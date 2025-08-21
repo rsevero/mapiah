@@ -19,8 +19,8 @@ class MPSelectedElementsWidget extends StatelessWidget
   MPSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
-  })  : thFile = th2FileEditController.thFile,
-        visualController = th2FileEditController.visualController;
+  }) : thFile = th2FileEditController.thFile,
+       visualController = th2FileEditController.visualController;
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +31,19 @@ class MPSelectedElementsWidget extends StatelessWidget
 
         final List<CustomPainter> painters = [];
         final mpSelectedElements = th2FileEditController
-            .selectionController.mpSelectedElementsLogical.values;
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
 
         for (final mpSelectedElement in mpSelectedElements) {
-          final THElement element =
-              thFile.elementByMPID(mpSelectedElement.mpID);
+          final THElement element = thFile.elementByMPID(
+            mpSelectedElement.mpID,
+          );
 
           switch (element) {
             case THPoint _:
-              final THPointPaint pointPaint =
-                  visualController.getSelectedPointPaint(element);
+              final THPointPaint pointPaint = visualController
+                  .getSelectedPointPaint(element);
 
               painters.add(
                 THPointPainter(
@@ -50,8 +53,8 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
-              final THLinePaint linePaint =
-                  visualController.getSelectedLinePaint(element);
+              final THLinePaint linePaint = visualController
+                  .getSelectedLinePaint(element);
 
               painters.add(
                 getLinePainter(
@@ -63,8 +66,8 @@ class MPSelectedElementsWidget extends StatelessWidget
               );
             case THArea _:
               final Set<int> areaLineMPIDs = element.getLineMPIDs(thFile);
-              final THLinePaint areaPaint =
-                  visualController.getSelectedAreaPaint(element);
+              final THLinePaint areaPaint = visualController
+                  .getSelectedAreaPaint(element);
 
               for (final int areaLineMPID in areaLineMPIDs) {
                 final THLine line = thFile.lineByMPID(areaLineMPID);

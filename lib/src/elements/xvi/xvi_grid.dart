@@ -36,34 +36,34 @@ class XVIGrid {
     THDoublePart? gyy,
     THDoublePart? ngx,
     THDoublePart? ngy,
-  })  : gx = gx ?? THDoublePart.fromString(valueString: '0.0'),
-        gy = gy ?? THDoublePart.fromString(valueString: '0.0'),
-        gxx = gxx ?? THDoublePart.fromString(valueString: '0.0'),
-        gxy = gxy ?? THDoublePart.fromString(valueString: '0.0'),
-        gyx = gyx ?? THDoublePart.fromString(valueString: '0.0'),
-        gyy = gyy ?? THDoublePart.fromString(valueString: '0.0'),
-        ngx = ngx ?? THDoublePart.fromString(valueString: '0.0'),
-        ngy = ngy ?? THDoublePart.fromString(valueString: '0.0');
+  }) : gx = gx ?? THDoublePart.fromString(valueString: '0.0'),
+       gy = gy ?? THDoublePart.fromString(valueString: '0.0'),
+       gxx = gxx ?? THDoublePart.fromString(valueString: '0.0'),
+       gxy = gxy ?? THDoublePart.fromString(valueString: '0.0'),
+       gyx = gyx ?? THDoublePart.fromString(valueString: '0.0'),
+       gyy = gyy ?? THDoublePart.fromString(valueString: '0.0'),
+       ngx = ngx ?? THDoublePart.fromString(valueString: '0.0'),
+       ngy = ngy ?? THDoublePart.fromString(valueString: '0.0');
 
   XVIGrid.fromStringList(List<String> values)
-      : gx = THDoublePart.fromString(valueString: values[0]),
-        gy = THDoublePart.fromString(valueString: values[1]),
-        gxx = THDoublePart.fromString(valueString: values[2]),
-        gxy = THDoublePart.fromString(valueString: values[3]),
-        gyx = THDoublePart.fromString(valueString: values[4]),
-        gyy = THDoublePart.fromString(valueString: values[5]),
-        ngx = THDoublePart.fromString(valueString: values[6]),
-        ngy = THDoublePart.fromString(valueString: values[7]);
+    : gx = THDoublePart.fromString(valueString: values[0]),
+      gy = THDoublePart.fromString(valueString: values[1]),
+      gxx = THDoublePart.fromString(valueString: values[2]),
+      gxy = THDoublePart.fromString(valueString: values[3]),
+      gyx = THDoublePart.fromString(valueString: values[4]),
+      gyy = THDoublePart.fromString(valueString: values[5]),
+      ngx = THDoublePart.fromString(valueString: values[6]),
+      ngy = THDoublePart.fromString(valueString: values[7]);
 
   XVIGrid.fromList(List<double> values)
-      : gx = THDoublePart(value: values[0]),
-        gy = THDoublePart(value: values[1]),
-        gxx = THDoublePart(value: values[2]),
-        gxy = THDoublePart(value: values[3]),
-        gyx = THDoublePart(value: values[4]),
-        gyy = THDoublePart(value: values[5]),
-        ngx = THDoublePart(value: values[6]),
-        ngy = THDoublePart(value: values[7]);
+    : gx = THDoublePart(value: values[0]),
+      gy = THDoublePart(value: values[1]),
+      gxx = THDoublePart(value: values[2]),
+      gxy = THDoublePart(value: values[3]),
+      gyx = THDoublePart(value: values[4]),
+      gyy = THDoublePart(value: values[5]),
+      ngx = THDoublePart(value: values[6]),
+      ngy = THDoublePart(value: values[7]);
 
   /// Returns a map representation of this XVIGrid instance
   Map<String, dynamic> toMap() {
@@ -136,16 +136,7 @@ class XVIGrid {
           ngy == other.ngy;
 
   @override
-  int get hashCode => Object.hash(
-        gx,
-        gy,
-        gxx,
-        gxy,
-        gyx,
-        gyy,
-        ngx,
-        ngy,
-      );
+  int get hashCode => Object.hash(gx, gy, gxx, gxy, gyx, gyy, ngx, ngy);
 
   @override
   String toString() {

@@ -15,8 +15,8 @@ class THDimensionsValueCommandOption extends THCommandOption {
     required this.below,
     required THLengthUnitPart unit,
     required this.unitSet,
-  })  : _unit = unit,
-        super.forCWJM();
+  }) : _unit = unit,
+       super.forCWJM();
 
   THDimensionsValueCommandOption.fromString({
     required super.optionParent,
@@ -110,22 +110,16 @@ class THDimensionsValueCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        above,
-        below,
-        unit,
-        unitSet,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(above, below, unit, unitSet);
 
   void unitFromString(String? unit) {
     if ((unit != null) && (unit.isNotEmpty)) {
       _unit = THLengthUnitPart.fromString(unitString: unit);
       unitSet = true;
     } else {
-      _unit =
-          THLengthUnitPart.fromString(unitString: thDefaultLengthUnitAsString);
+      _unit = THLengthUnitPart.fromString(
+        unitString: thDefaultLengthUnitAsString,
+      );
       unitSet = false;
     }
   }

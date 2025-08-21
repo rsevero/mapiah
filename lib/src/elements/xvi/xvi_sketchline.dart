@@ -63,9 +63,6 @@ class XVISketchLine {
   }
 
   @override
-  int get hashCode => Object.hash(
-        color,
-        start,
-        const ListEquality().hash(points),
-      );
+  int get hashCode =>
+      Object.hash(color, start, const ListEquality().hash(points));
 }

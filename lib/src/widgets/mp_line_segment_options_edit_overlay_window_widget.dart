@@ -60,9 +60,7 @@ class _MPLineSegmentOptionsEditOverlayWindowWidgetState
         optionEditController.optionsEditForLineSegments = true;
 
         widgets.add(
-          MPLineSegmentTypeWidget(
-            th2FileEditController: th2FileEditController,
-          ),
+          MPLineSegmentTypeWidget(th2FileEditController: th2FileEditController),
         );
 
         List<Widget> blockWidgets = [];
@@ -123,8 +121,8 @@ class _MPLineSegmentOptionsEditOverlayWindowWidgetState
     /// option) widget as the outer anchor position for the option edit window.
     final Offset outerAnchorPosition =
         (thisBoundingBox == null) || (childBoundingBox == null)
-            ? th2FileEditController.screenBoundingBox.center
-            : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
+        ? th2FileEditController.screenBoundingBox.center
+        : Offset(thisBoundingBox.right, childBoundingBox.center.dy);
 
     th2FileEditController.optionEditController.performToggleOptionShownStatus(
       optionType: type,

@@ -152,8 +152,9 @@ abstract class THCommandOption {
   THCommandOption copyWith({int? parentMPID, String? originalLineInTH2File});
 
   static THCommandOption fromMap(Map<String, dynamic> map) {
-    final THCommandOptionType type =
-        THCommandOptionType.values.byName(map['optionType']);
+    final THCommandOptionType type = THCommandOptionType.values.byName(
+      map['optionType'],
+    );
 
     switch (type) {
       case THCommandOptionType.adjust:
@@ -520,11 +521,7 @@ abstract class THCommandOption {
   }
 
   @override
-  int get hashCode => Object.hash(
-        type,
-        parentMPID,
-        originalLineInTH2File,
-      );
+  int get hashCode => Object.hash(type, parentMPID, originalLineInTH2File);
 
   THHasOptionsMixin optionParent(THFile thFile) =>
       thFile.hasOptionByMPID(parentMPID);

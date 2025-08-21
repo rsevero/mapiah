@@ -43,10 +43,7 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'length': length.toMap(),
-      'unit': unit,
-    });
+    map.addAll({'length': length.toMap(), 'unit': unit});
 
     return map;
   }
@@ -98,11 +95,5 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        length,
-        unit,
-        unitSet,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(length, unit, unitSet);
 }

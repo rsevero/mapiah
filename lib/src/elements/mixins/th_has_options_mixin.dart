@@ -93,32 +93,23 @@ mixin THHasOptionsMixin on THElement {
 
   static Map<String, dynamic> optionsMapToMap(
     LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
-  ) =>
-      optionsMap.map(
-        (key, value) => MapEntry(
-          key.name,
-          value.toMap(),
-        ),
-      );
+  ) => optionsMap.map((key, value) => MapEntry(key.name, value.toMap()));
 
   static LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapFromMap(
     Map<String, dynamic> map,
-  ) =>
-      LinkedHashMap<THCommandOptionType, THCommandOption>.from(
-        map.map(
-          (key, value) => MapEntry(
-            THCommandOptionType.values.byName(key),
-            THCommandOption.fromMap(value),
-          ),
-        ),
-      );
+  ) => LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+    map.map(
+      (key, value) => MapEntry(
+        THCommandOptionType.values.byName(key),
+        THCommandOption.fromMap(value),
+      ),
+    ),
+  );
 
   LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
       _optionsMap;
 
-  void addOptionsMap(
-    Map<THCommandOptionType, THCommandOption> optionsMap,
-  ) {
+  void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
     for (final THCommandOptionType type in optionsMap.keys) {
       addUpdateOption(optionsMap[type]!);
     }
@@ -126,32 +117,18 @@ mixin THHasOptionsMixin on THElement {
 
   static Map<String, dynamic> attrOptionsMapToMap(
     LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
-  ) =>
-      attrOptionsMap.map(
-        (key, value) => MapEntry(
-          key,
-          value.toMap(),
-        ),
-      );
+  ) => attrOptionsMap.map((key, value) => MapEntry(key, value.toMap()));
 
   static LinkedHashMap<String, THAttrCommandOption> attrOptionsMapFromMap(
     Map<String, dynamic> map,
-  ) =>
-      LinkedHashMap<String, THAttrCommandOption>.from(
-        map.map(
-          (key, value) => MapEntry(
-            key,
-            THAttrCommandOption.fromMap(value),
-          ),
-        ),
-      );
+  ) => LinkedHashMap<String, THAttrCommandOption>.from(
+    map.map((key, value) => MapEntry(key, THAttrCommandOption.fromMap(value))),
+  );
 
   LinkedHashMap<String, THAttrCommandOption> get attrOptionsMap =>
       _attrOptionsMap;
 
-  void addAttrOptionsMap(
-    Map<String, THAttrCommandOption> attrOptionsMap,
-  ) {
+  void addAttrOptionsMap(Map<String, THAttrCommandOption> attrOptionsMap) {
     for (final String name in attrOptionsMap.keys) {
       addUpdateOption(attrOptionsMap[name]!);
     }

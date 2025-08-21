@@ -184,9 +184,9 @@ class THPoint extends THElement
     required List<dynamic> pointDataList,
     required String pointTypeString,
     super.originalLineInTH2File = '',
-  })  : position = THPositionPart.fromStringList(list: pointDataList),
-        pointType = THPointType.fromFileString(pointTypeString),
-        super.addToParent();
+  }) : position = THPositionPart.fromStringList(list: pointDataList),
+       pointType = THPointType.fromFileString(pointTypeString),
+       super.addToParent();
 
   @override
   Map<String, dynamic> toMap() {
@@ -211,8 +211,9 @@ class THPoint extends THElement
       position: THPositionPart.fromMap(map['position']),
       pointType: THPointType.values.byName(map['pointType']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
-      attrOptionsMap:
-          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
+      attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
+        map['attrOptionsMap'],
+      ),
     );
   }
 
@@ -264,12 +265,7 @@ class THPoint extends THElement
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        position,
-        pointType,
-        optionsMap,
-        attrOptionsMap,
-      );
+      Object.hash(position, pointType, optionsMap, attrOptionsMap);
 
   static bool hasPointType(String pointType) {
     return _pointTypes.contains(pointType);

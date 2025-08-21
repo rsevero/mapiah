@@ -21,8 +21,8 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  })  : choice = THOptionChoicesOnOffAutoType.values.byName(choice),
-        super();
+  }) : choice = THOptionChoicesOnOffAutoType.values.byName(choice),
+       super();
 
   @override
   String specToFile() {
@@ -33,9 +33,7 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'choice': specToFile(),
-    });
+    map.addAll({'choice': specToFile()});
 
     return map;
   }

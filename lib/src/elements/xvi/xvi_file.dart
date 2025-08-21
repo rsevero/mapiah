@@ -24,11 +24,9 @@ class XVIFile {
     this.shots = const [],
     this.sketchLines = const [],
     XVIGrid? grid,
-  })  : gridSizeUnit = gridSizeUnit ??
-            THLengthUnitPart(
-              unit: THLengthUnitType.meter,
-            ),
-        grid = grid ?? XVIGrid();
+  }) : gridSizeUnit =
+           gridSizeUnit ?? THLengthUnitPart(unit: THLengthUnitType.meter),
+       grid = grid ?? XVIGrid();
 
   /// Returns a map representation of this XVIFile instance
   Map<String, dynamic> toMap() {
@@ -38,8 +36,9 @@ class XVIFile {
       'gridSizeUnit': gridSizeUnit.toMap(),
       'stations': stations.map((station) => station.toMap()).toList(),
       'shots': shots.map((shot) => shot.toMap()).toList(),
-      'sketchLines':
-          sketchLines.map((sketchLine) => sketchLine.toMap()).toList(),
+      'sketchLines': sketchLines
+          .map((sketchLine) => sketchLine.toMap())
+          .toList(),
       'grid': grid.toMap(),
     };
   }
@@ -54,18 +53,18 @@ class XVIFile {
           : null,
       stations: map['stations'] != null
           ? (map['stations'] as List<dynamic>)
-              .map((station) => XVIStation.fromMap(station))
-              .toList()
+                .map((station) => XVIStation.fromMap(station))
+                .toList()
           : const [],
       shots: map['shots'] != null
           ? (map['shots'] as List<dynamic>)
-              .map((shot) => XVIShot.fromMap(shot))
-              .toList()
+                .map((shot) => XVIShot.fromMap(shot))
+                .toList()
           : const [],
       sketchLines: map['sketchLines'] != null
           ? (map['sketchLines'] as List<dynamic>)
-              .map((sketchLine) => XVISketchLine.fromMap(sketchLine))
-              .toList()
+                .map((sketchLine) => XVISketchLine.fromMap(sketchLine))
+                .toList()
           : const [],
       grid: map['grid'] != null ? XVIGrid.fromMap(map['grid']) : null,
     );
@@ -92,8 +91,9 @@ class XVIFile {
     return XVIFile(
       filename: filename ?? this.filename,
       gridSizeLength: gridSizeLength ?? this.gridSizeLength,
-      gridSizeUnit:
-          makeGridSizeUnitNull ? null : (gridSizeUnit ?? this.gridSizeUnit),
+      gridSizeUnit: makeGridSizeUnitNull
+          ? null
+          : (gridSizeUnit ?? this.gridSizeUnit),
       stations: stations ?? this.stations,
       shots: shots ?? this.shots,
       sketchLines: sketchLines ?? this.sketchLines,
@@ -117,12 +117,12 @@ class XVIFile {
 
   @override
   int get hashCode => Object.hash(
-        filename,
-        gridSizeLength,
-        gridSizeUnit,
-        const ListEquality().hash(stations),
-        const ListEquality().hash(shots),
-        const ListEquality().hash(sketchLines),
-        grid,
-      );
+    filename,
+    gridSizeLength,
+    gridSizeUnit,
+    const ListEquality().hash(stations),
+    const ListEquality().hash(shots),
+    const ListEquality().hash(sketchLines),
+    grid,
+  );
 }

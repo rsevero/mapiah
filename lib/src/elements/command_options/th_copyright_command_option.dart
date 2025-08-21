@@ -18,16 +18,16 @@ class THCopyrightCommandOption extends THCommandOption {
     required this.datetime,
     required String copyrightMessage,
     super.originalLineInTH2File = '',
-  })  : copyright = THStringPart(content: copyrightMessage),
-        super();
+  }) : copyright = THStringPart(content: copyrightMessage),
+       super();
 
   THCopyrightCommandOption.fromString({
     required super.optionParent,
     required String datetime,
     required String copyrightMessage,
     super.originalLineInTH2File = '',
-  })  : copyright = THStringPart(content: copyrightMessage),
-        super() {
+  }) : copyright = THStringPart(content: copyrightMessage),
+       super() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
 
@@ -36,8 +36,8 @@ class THCopyrightCommandOption extends THCommandOption {
     required String datetime,
     required String copyrightMessage,
     super.originalLineInTH2File = '',
-  })  : copyright = THStringPart(content: copyrightMessage),
-        super.forCWJM() {
+  }) : copyright = THStringPart(content: copyrightMessage),
+       super.forCWJM() {
     this.datetime = THDatetimePart.fromString(datetime: datetime);
   }
 
@@ -48,10 +48,7 @@ class THCopyrightCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'datetime': datetime.toMap(),
-      'copyright': copyright.toMap(),
-    });
+    map.addAll({'datetime': datetime.toMap(), 'copyright': copyright.toMap()});
 
     return map;
   }
@@ -95,12 +92,7 @@ class THCopyrightCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        datetime,
-        copyright,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(datetime, copyright);
 
   @override
   String specToFile() {

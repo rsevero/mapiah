@@ -21,7 +21,7 @@ enum THPartType {
   person,
   position,
   scaleChoices,
-  string;
+  string,
 }
 
 abstract class THPart {

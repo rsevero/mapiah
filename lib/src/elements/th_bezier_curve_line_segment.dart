@@ -66,8 +66,9 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
       controlPoint2: THPositionPart.fromMap(map['controlPoint2']),
       endPoint: THPositionPart.fromMap(map['endPoint']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
-      attrOptionsMap:
-          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
+      attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
+        map['attrOptionsMap'],
+      ),
     );
   }
 
@@ -116,11 +117,7 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        controlPoint1,
-        controlPoint2,
-      );
+      super.hashCode ^ Object.hash(controlPoint1, controlPoint2);
 
   @override
   bool isSameClass(Object object) {
@@ -236,7 +233,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     }
 
     // Cubic Bezier: Calculate extrema
-    double a = -3 * points[0].dx +
+    double a =
+        -3 * points[0].dx +
         9 * points[1].dx -
         9 * points[2].dx +
         3 * points[3].dx;
@@ -245,7 +243,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
 
     List<double> xt = solveQuadratic(a, b, c);
 
-    a = -3 * points[0].dy +
+    a =
+        -3 * points[0].dy +
         9 * points[1].dy -
         9 * points[2].dy +
         3 * points[3].dy;

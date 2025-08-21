@@ -73,7 +73,7 @@ enum THElementType {
   straightLineSegment,
   unrecognizedCommand,
   xTherionConfig,
-  xTherionImageInsertConfig;
+  xTherionImageInsertConfig,
 }
 
 /// Base class for all elements that form a THFile, including THFile itself.
@@ -144,19 +144,16 @@ abstract class THElement {
   }
 
   @override
-  int get hashCode => Object.hash(
-        mpID,
-        parentMPID,
-        sameLineComment,
-        originalLineInTH2File,
-      );
+  int get hashCode =>
+      Object.hash(mpID, parentMPID, sameLineComment, originalLineInTH2File);
 
-  THElement copyWith(
-      {int? mpID,
-      int? parentMPID,
-      String? sameLineComment,
-      bool makeSameLineCommentNull = false,
-      String? originalLineInTH2File});
+  THElement copyWith({
+    int? mpID,
+    int? parentMPID,
+    String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? originalLineInTH2File,
+  });
 
   static THElement fromMap(Map<String, dynamic> map) {
     final THElementType type = THElementType.values.byName(map['elementType']);
@@ -186,7 +183,8 @@ abstract class THElement {
         return THLine.fromMap(map);
       case THElementType.lineSegment:
         throw THCustomException(
-            'THElementType.lineSegment should not by instantiated by THElementfromMap().');
+          'THElementType.lineSegment should not by instantiated by THElementfromMap().',
+        );
       case THElementType.multilineCommentContent:
         return THMultilineCommentContent.fromMap(map);
       case THElementType.multilineComment:

@@ -78,8 +78,9 @@ class THScrap extends THElement
       thID: map['thID'],
       childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
-      attrOptionsMap:
-          THHasOptionsMixin.attrOptionsMapFromMap(map['attrOptionsMap']),
+      attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
+        map['attrOptionsMap'],
+      ),
     );
   }
 
@@ -131,12 +132,7 @@ class THScrap extends THElement
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        _thID,
-        childrenMPID,
-        optionsMap,
-        attrOptionsMap,
-      );
+      Object.hash(_thID, childrenMPID, optionsMap, attrOptionsMap);
 
   @override
   bool isSameClass(Object object) {

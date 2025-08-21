@@ -152,12 +152,5 @@ class THAltitudeValueCommandOption extends THCommandOption
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        length,
-        isFix,
-        isNan,
-        unit,
-        unitSet,
-      );
+      super.hashCode ^ Object.hash(length, isFix, isNan, unit, unitSet);
 }

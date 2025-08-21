@@ -49,8 +49,9 @@ class THScrapScaleCommandOption extends THCommandOption {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'numericSpecifications':
-          numericSpecifications.map((e) => e.toMap()).toList(),
+      'numericSpecifications': numericSpecifications
+          .map((e) => e.toMap())
+          .toList(),
       'unit': unitPart.toMap(),
     });
 
@@ -62,7 +63,8 @@ class THScrapScaleCommandOption extends THCommandOption {
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       numericSpecifications: List<THDoublePart>.from(
-          map['numericSpecifications'].map((e) => THDoublePart.fromMap(e))),
+        map['numericSpecifications'].map((e) => THDoublePart.fromMap(e)),
+      ),
       unitPart: THLengthUnitPart.fromMap(map['unit']),
     );
   }
@@ -100,11 +102,7 @@ class THScrapScaleCommandOption extends THCommandOption {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        numericSpecifications,
-        unitPart,
-      );
+      super.hashCode ^ Object.hash(numericSpecifications, unitPart);
 
   double get lengthUnitsPerPoint {
     switch (numericSpecifications.length) {
@@ -136,7 +134,8 @@ class THScrapScaleCommandOption extends THCommandOption {
         return realSize / pointSize;
       default:
         throw THCustomException(
-            'THScrapScaleCommandOption.lengthUnitsPerPoint');
+          'THScrapScaleCommandOption.lengthUnitsPerPoint',
+        );
     }
   }
 

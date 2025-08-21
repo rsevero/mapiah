@@ -21,10 +21,12 @@ class MPScrapScaleWidget extends StatelessWidget {
       builder: (_) {
         final double graphicalScaleLengthUnitsLength =
             th2FileEditController.scrapLengthUnitsOnGraphicalScale;
-        final String scaleLength =
-            MPNumericAux.roundNumberForScreen(graphicalScaleLengthUnitsLength);
+        final String scaleLength = MPNumericAux.roundNumberForScreen(
+          graphicalScaleLengthUnitsLength,
+        );
         final String scaleUnit = MPTextToUser.getLengthUnitTypeAbbreviation(
-            th2FileEditController.scrapLengthUnitType);
+          th2FileEditController.scrapLengthUnitType,
+        );
         final String scaleText = "$scaleLength $scaleUnit";
 
         return CustomPaint(

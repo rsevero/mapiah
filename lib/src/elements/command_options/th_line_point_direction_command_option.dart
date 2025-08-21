@@ -25,8 +25,8 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
     required super.optionParent,
     required String choice,
     super.originalLineInTH2File = '',
-  })  : choice = THOptionChoicesLinePointDirectionType.values.byName(choice),
-        super();
+  }) : choice = THOptionChoicesLinePointDirectionType.values.byName(choice),
+       super();
 
   @override
   THCommandOptionType get type => THCommandOptionType.linePointDirection;
@@ -45,9 +45,7 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'choice': specToFile(),
-    });
+    map.addAll({'choice': specToFile()});
 
     return map;
   }
@@ -57,8 +55,9 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       parentElementType: THElementType.values.byName(map['parentElementType']),
-      choice:
-          THOptionChoicesLinePointDirectionType.values.byName(map['choice']),
+      choice: THOptionChoicesLinePointDirectionType.values.byName(
+        map['choice'],
+      ),
     );
   }
 

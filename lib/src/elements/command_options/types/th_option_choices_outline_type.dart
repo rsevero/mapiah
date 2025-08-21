@@ -5,5 +5,5 @@ enum THOptionChoicesOutlineType {
   /// Dart.
   inChoice,
   out,
-  none;
+  none,
 }

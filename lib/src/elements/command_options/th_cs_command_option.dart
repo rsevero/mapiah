@@ -38,9 +38,7 @@ class THCSCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'cs': cs.toMap(),
-    });
+    map.addAll({'cs': cs.toMap()});
 
     return map;
   }

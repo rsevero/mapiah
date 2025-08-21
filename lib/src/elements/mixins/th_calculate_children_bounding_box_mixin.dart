@@ -25,8 +25,9 @@ mixin THCalculateChildrenBoundingBoxMixin {
         case THLine _:
         case THPoint _:
         case THScrap _:
-          childBoundingBox =
-              (child as MPBoundingBox).getBoundingBox(th2FileEditController);
+          childBoundingBox = (child as MPBoundingBox).getBoundingBox(
+            th2FileEditController,
+          );
         default:
           continue;
       }

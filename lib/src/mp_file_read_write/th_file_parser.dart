@@ -60,13 +60,17 @@ class THFileParser {
   final List<String> _parseErrors = [];
 
   final RegExp _doubleQuoteRegex = RegExp(thDoubleQuotePair);
-  final RegExp _encodingRegex =
-      RegExp(r'^\s*encoding\s+([a-zA-Z0-9-]+)', caseSensitive: false);
+  final RegExp _encodingRegex = RegExp(
+    r'^\s*encoding\s+([a-zA-Z0-9-]+)',
+    caseSensitive: false,
+  );
   final RegExp _isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
   final RegExp singleDateTimeRegex = RegExp(
-      r'^(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?$');
+    r'^(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?$',
+  );
   final RegExp dateTimeRangeRegex = RegExp(
-      r'^(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?(?:\s*-\s*(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?)?$');
+    r'^(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?(?:\s*-\s*(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?)?$',
+  );
   final RegExp hyphenRegex = RegExp(r'^\s*-\s*$');
   final RegExp lenghtUnitRegex = RegExp(
     r'^(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd)$',
@@ -98,11 +102,13 @@ class THFileParser {
   THFileParser() {
     _areaContentParser = _grammar.buildFrom(_grammar.areaStart());
     _lineContentParser = _grammar.buildFrom(_grammar.lineStart());
-    _multiLineCommentContentParser =
-        _grammar.buildFrom(_grammar.multiLineCommentStart());
+    _multiLineCommentContentParser = _grammar.buildFrom(
+      _grammar.multiLineCommentStart(),
+    );
     _scrapContentParser = _grammar.buildFrom(_grammar.scrapStart());
-    _th2FileFirstLineParser =
-        _grammar.buildFrom(_grammar.th2FileFirstLineStart());
+    _th2FileFirstLineParser = _grammar.buildFrom(
+      _grammar.th2FileFirstLineStart(),
+    );
     _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
   }
 
@@ -172,7 +178,8 @@ class THFileParser {
         continue;
       }
 
-      _commentContentToParse = ((_parsedContents.value is List) &&
+      _commentContentToParse =
+          ((_parsedContents.value is List) &&
               ((_parsedContents.value as List).length > 1))
           ? _parsedContents.value[1]
           : null;
@@ -336,10 +343,7 @@ class THFileParser {
     );
   }
 
-  String _getEnclosedContent(
-    String openDelimiter,
-    String closeDelimiter,
-  ) {
+  String _getEnclosedContent(String openDelimiter, String closeDelimiter) {
     _xTherionContent = _xTherionContent.trim();
     if (!_xTherionContent.startsWith(openDelimiter)) {
       return '';
@@ -358,8 +362,10 @@ class THFileParser {
       }
 
       if (closingIndex != -1) {
-        final String enclosedContent =
-            _xTherionContent.substring(1, closingIndex);
+        final String enclosedContent = _xTherionContent.substring(
+          1,
+          closingIndex,
+        );
 
         _xTherionContent = _xTherionContent.substring(closingIndex + 1).trim();
 
@@ -384,8 +390,10 @@ class THFileParser {
       }
 
       if (closingIndex != -1) {
-        final String enclosedContent =
-            _xTherionContent.substring(1, closingIndex);
+        final String enclosedContent = _xTherionContent.substring(
+          1,
+          closingIndex,
+        );
 
         _xTherionContent = _xTherionContent.substring(closingIndex + 1).trim();
 
@@ -397,8 +405,9 @@ class THFileParser {
   }
 
   String _getFirstElement(String delimiterRegexPattern) {
-    final List<String> parts =
-        _xTherionContent.split(RegExp(delimiterRegexPattern));
+    final List<String> parts = _xTherionContent.split(
+      RegExp(delimiterRegexPattern),
+    );
 
     if (parts.isEmpty) {
       return '';
@@ -410,8 +419,9 @@ class THFileParser {
       return '';
     }
 
-    _xTherionContent =
-        _xTherionContent.substring(firstElement.length + 1).trim();
+    _xTherionContent = _xTherionContent
+        .substring(firstElement.length + 1)
+        .trim();
 
     return firstElement;
   }
@@ -693,10 +703,10 @@ class THFileParser {
 
     final THStraightLineSegment newStraightLineSegment =
         THStraightLineSegment.fromString(
-      parentMPID: _currentParentMPID,
-      pointDataList: endPoint,
-      originalLineInTH2File: _currentOriginalLine,
-    );
+          parentMPID: _currentParentMPID,
+          pointDataList: endPoint,
+          originalLineInTH2File: _currentOriginalLine,
+        );
     _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
       newElement: newStraightLineSegment,
       parent: _currentParent,
@@ -905,12 +915,14 @@ class THFileParser {
 
     if (element[0] is! String) {
       throw THCustomException(
-          "Need string as comment type. Received '${element[0]}'.");
+        "Need string as comment type. Received '${element[0]}'.",
+      );
     }
 
     if (element[1] is! String) {
       throw THCustomException(
-          "Need string as comment content. Received '${element[1]}'.");
+        "Need string as comment content. Received '${element[1]}'.",
+      );
     }
 
     if (element[1].indexOf('# ') == 0) {
@@ -928,9 +940,9 @@ class THFileParser {
         );
         _th2FileElementEditController
             .addElementWithParentWithoutSelectableElement(
-          newElement: newElement,
-          parent: _currentParent,
-        );
+              newElement: newElement,
+              parent: _currentParent,
+            );
         break;
       case 'samelinecomment':
         if ((_currentElement.sameLineComment == null) ||
@@ -948,9 +960,9 @@ class THFileParser {
         );
         _th2FileElementEditController
             .addElementWithParentWithoutSelectableElement(
-          newElement: newElement,
-          parent: _currentParent,
-        );
+              newElement: newElement,
+              parent: _currentParent,
+            );
     }
   }
 
@@ -991,16 +1003,22 @@ class THFileParser {
         if (kDebugMode) assert(false, errorMessage);
         throw UnsupportedError(errorMessage);
       } catch (e, s) {
-        _addError("$e\n\nTrace:\n\n$s", '_optionFromElement',
-            _currentOptions.toString());
+        _addError(
+          "$e\n\nTrace:\n\n$s",
+          '_optionFromElement',
+          _currentOptions.toString(),
+        );
       }
     }
   }
 
   void _optionParentAsTHLineSegment() {
     if (_lastLineSegment == null) {
-      _addError("Line segment option without a line segment.",
-          '_optionParentAsTHLineSegment', _currentElement.toString());
+      _addError(
+        "Line segment option without a line segment.",
+        '_optionParentAsTHLineSegment',
+        _currentElement.toString(),
+      );
       return;
     }
 
@@ -1194,17 +1212,17 @@ class THFileParser {
     _currentParentMPID = parent.mpID;
   }
 
-  void _injectMultipleChoiceWithPointChoiceCommandOption(
-    String optionType,
-  ) {
+  void _injectMultipleChoiceWithPointChoiceCommandOption(String optionType) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'");
+        "One string parameter required to create a '$optionType' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     if (_currentSpec[0] == 'point') {
@@ -1234,19 +1252,23 @@ class THFileParser {
   void _checkParsedListAsPoint(List<dynamic> list) {
     if (list.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec[1]);
+        '== 2',
+        _currentSpec[1],
+      );
     }
   }
 
   void _injectMultipleChoiceCommandOption(String type) {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a '$type' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a '$type' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     if (_currentSpec[0] is! String) {
       throw THCustomException(
-          "One string parameter required to create a '$type' option for a '${_currentHasOptions.elementType}'");
+        "One string parameter required to create a '$type' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     switch (type) {
@@ -1360,7 +1382,8 @@ class THFileParser {
   void _injectDistCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     switch (_currentSpec.length) {
@@ -1379,14 +1402,16 @@ class THFileParser {
         );
       default:
         throw THCustomException(
-            "Unsupported parameters for a 'point' 'dist' option: '${_currentSpec[0]}'.");
+          "Unsupported parameters for a 'point' 'dist' option: '${_currentSpec[0]}'.",
+        );
     }
   }
 
   void _injectExploredCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'explored' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'explored' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     switch (_currentSpec.length) {
@@ -1405,14 +1430,16 @@ class THFileParser {
         );
       default:
         throw THCustomException(
-            "Unsupported parameters for a 'point' 'explored' option: '${_currentSpec[0]}'.");
+          "Unsupported parameters for a 'point' 'explored' option: '${_currentSpec[0]}'.",
+        );
     }
   }
 
   void _injectHeightCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'height' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'height' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     THLineHeightCommandOption.fromString(
@@ -1425,7 +1452,8 @@ class THFileParser {
   void _injectContextCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCustomException(
-          "Two parameteres are required to create a 'context' option for a '${_currentHasOptions.elementType}'");
+        "Two parameteres are required to create a 'context' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     THContextCommandOption(
@@ -1439,7 +1467,8 @@ class THFileParser {
   void _injectFromCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'dist' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     THFromCommandOption(
@@ -1452,7 +1481,8 @@ class THFileParser {
   void _injectExtendCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'extend' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'extend' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     if (_currentSpec[0] == null) {
@@ -1469,18 +1499,22 @@ class THFileParser {
   void _injectIDCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'id' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'id' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     THIDCommandOption(optionParent: _currentHasOptions, thID: _currentSpec[0]);
     _th2FileElementEditController.registerElementWithTHID(
-        _currentHasOptions, _currentSpec[0]);
+      _currentHasOptions,
+      _currentSpec[0],
+    );
   }
 
   void _injectNameCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'name' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'name' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     THNameCommandOption(
@@ -1493,7 +1527,9 @@ class THFileParser {
   void _injectSketchCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     if (_currentSpec[0] == null) {
@@ -1515,7 +1551,9 @@ class THFileParser {
   void _injectStationNamesCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     THStationNamesCommandOption(
@@ -1529,7 +1567,9 @@ class THFileParser {
   void _injectStationsCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 1', _currentSpec);
+        '== 1',
+        _currentSpec,
+      );
     }
 
     final stations = _currentSpec[0].toString().split(',');
@@ -1548,7 +1588,9 @@ class THFileParser {
   void _injectLSizeCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     _optionParentAsTHLineSegment();
@@ -1562,7 +1604,9 @@ class THFileParser {
   void _injectMarkCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     _optionParentAsTHLineSegment();
@@ -1576,7 +1620,9 @@ class THFileParser {
   void _injectAuthorCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     THAuthorCommandOption.fromString(
@@ -1590,7 +1636,9 @@ class THFileParser {
   void _injectSubtypeCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 1', _currentSpec);
+        '== 1',
+        _currentSpec,
+      );
     }
 
     THSubtypeCommandOption(
@@ -1603,7 +1651,9 @@ class THFileParser {
   void _injectPointScaleCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     switch (_currentSpec[0]) {
@@ -1621,14 +1671,17 @@ class THFileParser {
         );
       default:
         throw THCustomException(
-            "Unknown point scale mode '${_currentSpec[0]}'");
+          "Unknown point scale mode '${_currentSpec[0]}'",
+        );
     }
   }
 
   void _injectLineScaleCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     switch (_currentSpec[0]) {
@@ -1646,14 +1699,16 @@ class THFileParser {
         );
       default:
         throw THCustomException(
-            "Unknown point scale mode '${_currentSpec[0]}'");
+          "Unknown point scale mode '${_currentSpec[0]}'",
+        );
     }
   }
 
   void _injectScrapCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
-          "One parameter required to create a 'scrap' option for a '${_currentHasOptions.elementType}'");
+        "One parameter required to create a 'scrap' option for a '${_currentHasOptions.elementType}'",
+      );
     }
 
     THScrapCommandOption(
@@ -1666,7 +1721,9 @@ class THFileParser {
   void _injectOrientationCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 1', _currentSpec);
+        '== 1',
+        _currentSpec,
+      );
     }
 
     THOrientationCommandOption.fromString(
@@ -1679,7 +1736,9 @@ class THFileParser {
   void _injectCopyrightCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     final String message = _parseTHString(_currentSpec[1]);
@@ -1708,7 +1767,9 @@ class THFileParser {
   void _injectAttrCommandOption() {
     if (_currentSpec.length != 2) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 2', _currentSpec);
+        '== 2',
+        _currentSpec,
+      );
     }
 
     final String name = _parseTHString(_currentSpec[0]);
@@ -1725,7 +1786,9 @@ class THFileParser {
   void _injectTitleCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 1', _currentSpec);
+        '== 1',
+        _currentSpec,
+      );
     }
 
     final String stringContent = _parseTHString(_currentSpec[0]);
@@ -1740,7 +1803,9 @@ class THFileParser {
   void _injectTextCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '== 1', _currentSpec);
+        '== 1',
+        _currentSpec,
+      );
     }
 
     final String stringContent = _parseTHString(_currentSpec[0]);
@@ -1755,7 +1820,9 @@ class THFileParser {
   void _injectValueCommandOption() {
     if (_currentSpec.length != 1) {
       throw THCreateObjectFromListWithWrongLengthException(
-          '!= 1', _currentSpec);
+        '!= 1',
+        _currentSpec,
+      );
     }
 
     final THPointType pointType = (_currentHasOptions as THPoint).pointType;
@@ -1773,7 +1840,8 @@ class THFileParser {
         _injectPassageHeightValueCommandOption();
       default:
         throw THCustomException(
-            "Unsupported point type '$pointType' for option 'value'.");
+          "Unsupported point type '$pointType' for option 'value'.",
+        );
     }
   }
 
@@ -1833,7 +1901,8 @@ class THFileParser {
       );
     } else {
       throw THCustomException(
-          "Unsuported parse specs '$specs' in '_injectAltitudeValueCommandOption'.");
+        "Unsuported parse specs '$specs' in '_injectAltitudeValueCommandOption'.",
+      );
     }
   }
 
@@ -1857,15 +1926,17 @@ class THFileParser {
     }
 
     throw THCustomException(
-        "Unsuported value '$specs' in '_injectDateValueCommandOption'.");
+      "Unsuported value '$specs' in '_injectDateValueCommandOption'.",
+    );
   }
 
   void _injectDimensionsValueCommandOption() {
     final String specs = _currentSpec[0].toString().trim();
 
     if (twoNumbersWithOptionalUnitRegex.hasMatch(specs)) {
-      final RegExpMatch match =
-          twoNumbersWithOptionalUnitRegex.firstMatch(specs)!;
+      final RegExpMatch match = twoNumbersWithOptionalUnitRegex.firstMatch(
+        specs,
+      )!;
 
       THDimensionsValueCommandOption.fromString(
         optionParent: _currentHasOptions,
@@ -1876,7 +1947,8 @@ class THFileParser {
       );
     } else {
       throw THCustomException(
-          "Unsuported parse specs '$specs' in '_injectDimensionsValueCommandOption'.");
+        "Unsuported parse specs '$specs' in '_injectDimensionsValueCommandOption'.",
+      );
     }
   }
 
@@ -1884,8 +1956,9 @@ class THFileParser {
     final String specs = _currentSpec[0].toString().trim();
 
     if (signedNumberPresumedUnitRegex.hasMatch(specs)) {
-      final RegExpMatch match =
-          signedNumberPresumedUnitRegex.firstMatch(specs)!;
+      final RegExpMatch match = signedNumberPresumedUnitRegex.firstMatch(
+        specs,
+      )!;
       final String number = "${match.group(1)!}${match.group(2)!}";
 
       THPointHeightValueCommandOption.fromString(
@@ -1897,7 +1970,8 @@ class THFileParser {
       );
     } else {
       throw THCustomException(
-          "Unsuported parse specs '$specs' in '_injectHeightValueCommandOption'.");
+        "Unsuported parse specs '$specs' in '_injectHeightValueCommandOption'.",
+      );
     }
   }
 
@@ -1905,8 +1979,9 @@ class THFileParser {
     final String specs = _currentSpec[0].toString().trim();
 
     if (signedNumberWithOptionalUnitRegex.hasMatch(specs)) {
-      final RegExpMatch match =
-          signedNumberWithOptionalUnitRegex.firstMatch(specs)!;
+      final RegExpMatch match = signedNumberWithOptionalUnitRegex.firstMatch(
+        specs,
+      )!;
       final String number = "${match.group(1)!}${match.group(2)!}";
 
       THPassageHeightValueCommandOption.fromString(
@@ -1917,8 +1992,8 @@ class THFileParser {
         originalLineInTH2File: _currentOriginalLine,
       );
     } else if (plusMinusNumbersWithOptionalUnitRegex.hasMatch(specs)) {
-      final RegExpMatch match =
-          plusMinusNumbersWithOptionalUnitRegex.firstMatch(specs)!;
+      final RegExpMatch match = plusMinusNumbersWithOptionalUnitRegex
+          .firstMatch(specs)!;
       THPassageHeightValueCommandOption.fromString(
         optionParent: _currentHasOptions,
         plusNumber: match.group(1)!,
@@ -1928,13 +2003,16 @@ class THFileParser {
       );
     } else {
       throw THCustomException(
-          "Unsupported parse specs '$specs' in '_injectPassageHeightValueCommandOption'.");
+        "Unsupported parse specs '$specs' in '_injectPassageHeightValueCommandOption'.",
+      );
     }
   }
 
   String _parseTHString(String stringToParse) {
-    final String parsed =
-        stringToParse.replaceAll(_doubleQuoteRegex, thDoubleQuote);
+    final String parsed = stringToParse.replaceAll(
+      _doubleQuoteRegex,
+      thDoubleQuote,
+    );
 
     return parsed;
   }
@@ -1942,7 +2020,8 @@ class THFileParser {
   // ignore: unused_element
   void _injectUnrecognizedCommandOption() {
     throw THCustomException(
-        "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${_currentSpec.toString()}'\n\n");
+      "Creating THUnrecognizedCommandOption!!. Parameters available:\n\n'${_currentSpec.toString()}'\n\n",
+    );
     // THUnrecognizedCommandOption(_currentHasOptions, aSpec.toString());
   }
 
@@ -1969,7 +2048,8 @@ class THFileParser {
       if (newDouble == null) {
         if (values.isEmpty) {
           throw THCustomException(
-              "Can´t create THScaleCommandOption object without any value.");
+            "Can´t create THScaleCommandOption object without any value.",
+          );
         }
         unit = THLengthUnitPart.fromString(unitString: value);
       } else {
@@ -2003,12 +2083,14 @@ class THFileParser {
       index: (currentLengthOnePlus && (_currentSpec[1] != null))
           ? _currentSpec[1]
           : '',
-      elevationAngle: (currentLengthOnePlus &&
+      elevationAngle:
+          (currentLengthOnePlus &&
               projectionTypeElevation &&
               (_currentSpec[2] != null))
           ? _currentSpec[2]
           : null,
-      elevationUnit: (currentLengthOnePlus &&
+      elevationUnit:
+          (currentLengthOnePlus &&
               projectionTypeElevation &&
               (_currentSpec[3] != null))
           ? _currentSpec[3]
@@ -2069,9 +2151,11 @@ class THFileParser {
     String priorChar = '';
     int charsRead = 0;
 
-    for (int i = 0;
-        ((i < fileContentRaw.length) && (charsRead < thMaxEncodingLength));
-        i++) {
+    for (
+      int i = 0;
+      ((i < fileContentRaw.length) && (charsRead < thMaxEncodingLength));
+      i++
+    ) {
       byte = fileContentRaw[i];
 
       if (byte == -1) {
@@ -2135,11 +2219,11 @@ class THFileParser {
     }
     _runTraceParser = trace;
 
-    _th2FileEditController =
-        mpLocator.mpGeneralController.getTH2FileEditController(
-      filename: filename,
-      forceNewController: forceNewController,
-    );
+    _th2FileEditController = mpLocator.mpGeneralController
+        .getTH2FileEditController(
+          filename: filename,
+          forceNewController: forceNewController,
+        );
     _th2FileElementEditController =
         _th2FileEditController.elementEditController;
     _parsedTHFile = _th2FileEditController.thFile;
@@ -2168,14 +2252,17 @@ class THFileParser {
 
     if (!(_parsedTHFile).isSameClass(_currentParent) ||
         (_currentParent != _parsedTHFile)) {
-      _addError('Multiline commmands left open at end of file', 'parse',
-          'Unclosed multiline command: "${_currentParent.toString()}"');
+      _addError(
+        'Multiline commmands left open at end of file',
+        'parse',
+        'Unclosed multiline command: "${_currentParent.toString()}"',
+      );
     }
 
     return (
       _th2FileElementEditController.thFile,
       _parseErrors.isEmpty,
-      _parseErrors
+      _parseErrors,
     );
   }
 
@@ -2204,10 +2291,7 @@ class THFileParser {
 
       if (lineBreakIndex == -1) {
         _splittedContents.add(
-          MPParseableLine(
-            toParse: contents,
-            originalContent: contents,
-          ),
+          MPParseableLine(toParse: contents, originalContent: contents),
         );
 
         contents = '';
@@ -2216,8 +2300,10 @@ class THFileParser {
       }
 
       String currentLine = contents.substring(0, lineBreakIndex);
-      String newContentOriginal =
-          contents.substring(0, lineBreakIndex + lineBreakLength);
+      String newContentOriginal = contents.substring(
+        0,
+        lineBreakIndex + lineBreakLength,
+      );
       updateContinuationDelimiter(currentLine);
 
       /// If the line is ending with an open double qoute (") or square bracket
@@ -2226,8 +2312,8 @@ class THFileParser {
       /// parse.
       String newContentToParse =
           (_continuationDelimiter == '"' || _continuationDelimiter == ']')
-              ? newContentOriginal
-              : currentLine;
+          ? newContentOriginal
+          : currentLine;
 
       contents = contents.substring(lineBreakIndex + lineBreakLength);
       if (currentLine.isEmpty) {
@@ -2255,13 +2341,17 @@ class THFileParser {
         }
 
         currentLine = contents.substring(0, lineBreakIndex);
-        String currentContentOriginal =
-            contents.substring(0, lineBreakIndex + lineBreakLength);
+        String currentContentOriginal = contents.substring(
+          0,
+          lineBreakIndex + lineBreakLength,
+        );
         newContentOriginal += currentContentOriginal;
         if (_continuationDelimiter == '\\') {
           newContentToParse = newContentToParse.trimRight();
-          newContentToParse =
-              newContentToParse.substring(0, newContentToParse.length - 1);
+          newContentToParse = newContentToParse.substring(
+            0,
+            newContentToParse.length - 1,
+          );
         }
 
         contents = contents.substring(lineBreakIndex + lineBreakLength);
@@ -2276,8 +2366,8 @@ class THFileParser {
         updateContinuationDelimiter(currentLine);
         newContentToParse +=
             (_continuationDelimiter == '"' || _continuationDelimiter == ']')
-                ? currentContentOriginal
-                : currentLine;
+            ? currentContentOriginal
+            : currentLine;
       }
 
       _splittedContents.add(

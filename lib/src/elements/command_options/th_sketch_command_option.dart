@@ -46,10 +46,7 @@ class THSketchCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'filename': _filename.toMap(),
-      'point': point.toMap(),
-    });
+    map.addAll({'filename': _filename.toMap(), 'point': point.toMap()});
 
     return map;
   }
@@ -93,12 +90,7 @@ class THSketchCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        _filename,
-        point,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(_filename, point);
 
   String get filename {
     return _filename.content;

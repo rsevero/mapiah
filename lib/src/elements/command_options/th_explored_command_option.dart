@@ -99,11 +99,5 @@ class THExploredCommandOption extends THCommandOption with THHasLengthMixin {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        length,
-        unit,
-        unitSet,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(length, unit, unitSet);
 }

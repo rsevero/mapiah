@@ -51,11 +51,7 @@ class THDatetimePart extends THPart {
   }
 
   @override
-  THDatetimePart copyWith({
-    String? datetime,
-    bool? isRange,
-    bool? isEmpty,
-  }) {
+  THDatetimePart copyWith({String? datetime, bool? isRange, bool? isEmpty}) {
     return THDatetimePart(
       datetime: datetime ?? _datetime,
       isRange: isRange ?? this.isRange,
@@ -95,21 +91,24 @@ class THDatetimePart extends THPart {
       parts[0] = parts[0].trim();
       if (!thDatetimeRegex.hasMatch(parts[0])) {
         throw THCustomException(
-            "Can´t parse start of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'");
+          "Can´t parse start of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'",
+        );
       }
       newDatetime = parts[0];
       if (parts.length == 2) {
         parts[1] = parts[1].trim();
         if (!thDatetimeRegex.hasMatch(parts[1])) {
           throw THCustomException(
-              "Can´t parse end of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'");
+            "Can´t parse end of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'",
+          );
         }
         newDatetime += ' - ${parts[1]}';
         tempIsRange = true;
       }
     } else {
       throw THCustomException(
-          "Can´t parse datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]) from '$date'");
+        "Can´t parse datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]) from '$date'",
+      );
     }
 
     isRange = tempIsRange;

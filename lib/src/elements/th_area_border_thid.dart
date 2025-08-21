@@ -30,9 +30,7 @@ class THAreaBorderTHID extends THElement {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'thID': thID,
-    });
+    map.addAll({'thID': thID});
 
     return map;
   }

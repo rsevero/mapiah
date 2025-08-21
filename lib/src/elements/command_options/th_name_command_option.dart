@@ -30,9 +30,7 @@ class THNameCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'reference': reference,
-    });
+    map.addAll({'reference': reference});
 
     return map;
   }

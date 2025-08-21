@@ -14,8 +14,8 @@ class THTitleCommandOption extends THCommandOption {
     required super.optionParent,
     required String titleText,
     super.originalLineInTH2File = '',
-  })  : title = THStringPart(content: titleText),
-        super();
+  }) : title = THStringPart(content: titleText),
+       super();
 
   @override
   THCommandOptionType get type => THCommandOptionType.title;
@@ -24,9 +24,7 @@ class THTitleCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'title': title.toMap(),
-    });
+    map.addAll({'title': title.toMap()});
 
     return map;
   }

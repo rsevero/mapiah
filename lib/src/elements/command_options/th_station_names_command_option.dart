@@ -30,10 +30,7 @@ class THStationNamesCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'prefix': prefix,
-      'suffix': suffix,
-    });
+    map.addAll({'prefix': prefix, 'suffix': suffix});
 
     return map;
   }
@@ -77,12 +74,7 @@ class THStationNamesCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        prefix,
-        suffix,
-      );
+  int get hashCode => super.hashCode ^ Object.hash(prefix, suffix);
 
   // set preffix(String preffix) {
   //   if (preffix.contains(' ')) {

@@ -24,8 +24,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
   MPMultipleElementsClickedHighlightWidget({
     required super.key,
     required this.th2FileEditController,
-  })  : thFile = th2FileEditController.thFile,
-        visualController = th2FileEditController.visualController;
+  }) : thFile = th2FileEditController.thFile,
+       visualController = th2FileEditController.visualController;
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +47,14 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
 
           final List<CustomPainter> painters = [];
 
-          final THLinePaint areaPaint =
-              visualController.getMultipleElementsClickedHighlightedFillPaint();
+          final THLinePaint areaPaint = visualController
+              .getMultipleElementsClickedHighlightedFillPaint();
 
           for (final highlightedElement in highlightedElements) {
             switch (highlightedElement) {
               case THPoint _:
-                final THPointPaint pointPaint =
-                    visualController.getSelectedPointPaint(highlightedElement);
+                final THPointPaint pointPaint = visualController
+                    .getSelectedPointPaint(highlightedElement);
 
                 painters.add(
                   THPointPainter(
@@ -81,7 +81,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
               case THLine _:
                 final (
                   LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
-                  _
+                  _,
                 ) = getLineSegmentsAndEndpointsMaps(
                   line: highlightedElement,
                   thFile: thFile,
@@ -89,7 +89,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                 );
                 final THLinePaint linePaint = visualController
                     .getMultipleElementsClickedHighlightedBorderPaint(
-                        highlightedElement);
+                      highlightedElement,
+                    );
 
                 painters.add(
                   THLinePainter(
@@ -101,14 +102,15 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   ),
                 );
               case THArea _:
-                final Set<int> areaLineMPIDs =
-                    highlightedElement.getLineMPIDs(thFile);
+                final Set<int> areaLineMPIDs = highlightedElement.getLineMPIDs(
+                  thFile,
+                );
 
                 for (final int lineMPID in areaLineMPIDs) {
                   final THLine highlightedElement = thFile.lineByMPID(lineMPID);
                   final (
                     LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
-                    _
+                    _,
                   ) = getLineSegmentsAndEndpointsMaps(
                     line: highlightedElement,
                     thFile: thFile,
