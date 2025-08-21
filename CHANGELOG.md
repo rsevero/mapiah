@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.2.13 - not yet released
+
 ## 0.2.12 - 2025-08-21
 * New features:
   * Open th2 file from command line [proposed and implemented by Thomas Holder]
