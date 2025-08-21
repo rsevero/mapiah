@@ -11,48 +11,6 @@ class THLine extends THElement
   final THLineType lineType;
   final List<int> _lineSegmentMPIDs;
 
-  static final _lineTypes = <String>{
-    'abyss-entrance',
-    'arrow',
-    'border',
-    'ceiling-meander',
-    'ceiling-step',
-    'chimney',
-    'contour',
-    'dripline',
-    'fault',
-    'fixed-ladder',
-    'floor-meander',
-    'floor-step',
-    'flowstone',
-    'gradient',
-    'handrail',
-    'joint',
-    'label',
-    'low-ceiling',
-    'map-connection',
-    'moonmilk',
-    'overhang',
-    'pit',
-    'pit-chimney',
-    'pitch',
-    'rimstone-dam',
-    'rimstone-pool',
-    'rock-border',
-    'rock-edge',
-    'rope',
-    'rope-ladder',
-    'section',
-    'slope',
-    'steps',
-    'survey',
-    'u',
-    'via-ferrata',
-    'walk-way',
-    'wall',
-    'water-flow',
-  };
-
   THLine.forCWJM({
     required super.mpID,
     required super.parentMPID,
@@ -86,10 +44,6 @@ class THLine extends THElement
     super.originalLineInTH2File = '',
   }) : _lineSegmentMPIDs = [],
        super.addToParent();
-
-  static bool hasLineType(String aLineType) {
-    return _lineTypes.contains(aLineType);
-  }
 
   @override
   THElementType get elementType => THElementType.line;

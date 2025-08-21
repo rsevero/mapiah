@@ -5,30 +5,6 @@ class THArea extends THElement
     implements THHasPLATypeMixin {
   final THAreaType areaType;
 
-  static final _areaTypes = <String>{
-    'bedrock',
-    'blocks',
-    'clay',
-    'debris',
-    'flowstone',
-    'ice',
-    'moonmilk',
-    'mudcrack',
-    'pebbles',
-    'pillar',
-    'pillar-with-curtains',
-    'pillars',
-    'pillars-with-curtains',
-    'sand',
-    'snow',
-    'stalactite',
-    'stalactite-stalagmite',
-    'stalagmite',
-    'sump',
-    'u',
-    'water',
-  };
-
   Set<String>? _lineTHIDs;
   Set<int>? _lineMPIDs;
 
@@ -141,13 +117,9 @@ class THArea extends THElement
       super.hashCode ^
       Object.hash(areaType, childrenMPID, optionsMap, attrOptionsMap);
 
-  static bool hasAreaType(String areaType) {
-    return _areaTypes.contains(areaType);
-  }
-
   @override
   String get plaType {
-    return areaType.name;
+    return areaType.toFileString();
   }
 
   @override
