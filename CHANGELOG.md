@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.12 - not yet released
+## 0.2.12 - 2025-08-21
 * New features:
   * Open th2 file from command line [proposed and implemented by Thomas Holder]
   * Moving control points in smooth line segments should move the other control point visually attached to the same end point.
