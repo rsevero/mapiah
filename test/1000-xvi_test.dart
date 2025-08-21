@@ -45,9 +45,9 @@ void main() {
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
-        print('xviGridResult: $xviGridResult');
-        print('file.grid: ${file.grid}');
-        expect(file.grid, xviGridResult);
+        if (file is XVIFile) {
+          expect(file.grid, xviGridResult);
+        }
       });
     }
   });
@@ -70,8 +70,10 @@ void main() {
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
-        expect(file.gridSizeLength, gridSizeLength);
-        expect(file.gridSizeUnit, gridSizeUnit);
+        if (file is XVIFile) {
+          expect(file.gridSizeLength, gridSizeLength);
+          expect(file.gridSizeUnit, gridSizeUnit);
+        }
       });
     }
   });
@@ -120,8 +122,10 @@ void main() {
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
-        expect(file.stations.length, testFile['stations'].length);
-        expect(file.stations, testFile['stations']);
+        if (file is XVIFile) {
+          expect(file.stations.length, testFile['stations'].length);
+          expect(file.stations, testFile['stations']);
+        }
       });
     }
   });
@@ -168,8 +172,10 @@ void main() {
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
-        expect(file.shots.length, (testFile['shots'] as List).length);
-        expect(file.shots, testFile['shots']);
+        if (file is XVIFile) {
+          expect(file.shots.length, (testFile['shots'] as List).length);
+          expect(file.shots, testFile['shots']);
+        }
       });
     }
   });
@@ -277,11 +283,13 @@ void main() {
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
-        expect(
-          file.sketchLines.length,
-          (testFile['sketchLines'] as List).length,
-        );
-        expect(file.sketchLines, testFile['sketchLines']);
+        if (file is XVIFile) {
+          expect(
+            file.sketchLines.length,
+            (testFile['sketchLines'] as List).length,
+          );
+          expect(file.sketchLines, testFile['sketchLines']);
+        }
       });
     }
   });
@@ -314,9 +322,11 @@ void main() {
 
       expect(isSuccessful, true);
       expect(file, isA<XVIFile>());
-      expect(file.gridSizeLength, gridSizeLength);
-      expect(file.gridSizeUnit, gridSizeUnit);
-      expect(file.grid, xviGridResult);
+      if (file is XVIFile) {
+        expect(file.gridSizeLength, gridSizeLength);
+        expect(file.gridSizeUnit, gridSizeUnit);
+        expect(file.grid, xviGridResult);
+      }
     });
   });
 
@@ -410,52 +420,54 @@ void main() {
       expect(isSuccessful, true);
       expect(file, isA<XVIFile>());
 
-      // Test grid size
-      expect(file.gridSizeLength, gridSizeLength);
-      expect(file.gridSizeUnit, gridSizeUnit);
+      if (file is XVIFile) {
+        // Test grid size
+        expect(file.gridSizeLength, gridSizeLength);
+        expect(file.gridSizeUnit, gridSizeUnit);
 
-      // Test grid
-      expect(file.grid, xviGridResult);
+        // Test grid
+        expect(file.grid, xviGridResult);
 
-      // Test stations
-      expect(file.stations.length, 2);
-      expect(file.stations, expectedStations);
+        // Test stations
+        expect(file.stations.length, 2);
+        expect(file.stations, expectedStations);
 
-      // Test shots
-      expect(file.shots.length, 5);
-      expect(file.shots, expectedShots);
+        // Test shots
+        expect(file.shots.length, 5);
+        expect(file.shots, expectedShots);
 
-      // Test sketch lines - there should be 10 sketch lines (including connect lines)
-      expect(file.sketchLines.length, 10);
+        // Test sketch lines - there should be 10 sketch lines (including connect lines)
+        expect(file.sketchLines.length, 10);
 
-      // Test specific sketch lines from the file
-      // First line: {gray -1097.48 -1886.46 -1091.57 -1898.27 -1079.76 -1898.27 -1067.95 -1904.17 -1050.24 -1904.17}
-      final firstSketchLine = file.sketchLines[0];
-      expect(firstSketchLine.start.x, -1097.48);
-      expect(firstSketchLine.start.y, -1886.46);
-      expect(firstSketchLine.points.length, 4);
-      expect(firstSketchLine.points[0].x, -1091.57);
-      expect(firstSketchLine.points[0].y, -1898.27);
-      expect(firstSketchLine.points[3].x, -1050.24);
-      expect(firstSketchLine.points[3].y, -1904.17);
+        // Test specific sketch lines from the file
+        // First line: {gray -1097.48 -1886.46 -1091.57 -1898.27 -1079.76 -1898.27 -1067.95 -1904.17 -1050.24 -1904.17}
+        final firstSketchLine = file.sketchLines[0];
+        expect(firstSketchLine.start.x, -1097.48);
+        expect(firstSketchLine.start.y, -1886.46);
+        expect(firstSketchLine.points.length, 4);
+        expect(firstSketchLine.points[0].x, -1091.57);
+        expect(firstSketchLine.points[0].y, -1898.27);
+        expect(firstSketchLine.points[3].x, -1050.24);
+        expect(firstSketchLine.points[3].y, -1904.17);
 
-      // Second line: {green -1386.85 -941.57 -1351.42 -971.1 -1345.51 -982.91}
-      final secondSketchLine = file.sketchLines[1];
-      expect(secondSketchLine.start.x, -1386.85);
-      expect(secondSketchLine.start.y, -941.57);
-      expect(secondSketchLine.points.length, 2);
-      expect(secondSketchLine.points[0].x, -1351.42);
-      expect(secondSketchLine.points[0].y, -971.1);
-      expect(secondSketchLine.points[1].x, -1345.51);
-      expect(secondSketchLine.points[1].y, -982.91);
+        // Second line: {green -1386.85 -941.57 -1351.42 -971.1 -1345.51 -982.91}
+        final secondSketchLine = file.sketchLines[1];
+        expect(secondSketchLine.start.x, -1386.85);
+        expect(secondSketchLine.start.y, -941.57);
+        expect(secondSketchLine.points.length, 2);
+        expect(secondSketchLine.points[0].x, -1351.42);
+        expect(secondSketchLine.points[0].y, -971.1);
+        expect(secondSketchLine.points[1].x, -1345.51);
+        expect(secondSketchLine.points[1].y, -982.91);
 
-      // Last line should be a connect line: {connect 175.75 -524.25 43.22 -769.44}
-      final lastSketchLine = file.sketchLines[9];
-      expect(lastSketchLine.start.x, 175.75);
-      expect(lastSketchLine.start.y, -524.25);
-      expect(lastSketchLine.points.length, 1);
-      expect(lastSketchLine.points[0].x, 43.22);
-      expect(lastSketchLine.points[0].y, -769.44);
+        // Last line should be a connect line: {connect 175.75 -524.25 43.22 -769.44}
+        final lastSketchLine = file.sketchLines[9];
+        expect(lastSketchLine.start.x, 175.75);
+        expect(lastSketchLine.start.y, -524.25);
+        expect(lastSketchLine.points.length, 1);
+        expect(lastSketchLine.points[0].x, 43.22);
+        expect(lastSketchLine.points[0].y, -769.44);
+      }
     });
   });
 }
