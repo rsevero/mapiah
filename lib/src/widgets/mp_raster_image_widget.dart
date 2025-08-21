@@ -1,8 +1,8 @@
+import 'dart:io' show File;
 import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:io' show File;
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';

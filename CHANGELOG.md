@@ -6,6 +6,7 @@
   * Moving control points in smooth line segments should move the other control point visually attached to the same end point.
   * When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.
   * When setting 'smooth' option to on on line segments, the bezier curve line segments should be smoothed.
+  * Consider XVI and raster image files bounding boxes when calculating THFile bounding box.
 * Fixed bugs:
   * Fixed 'setting multiple option options in line segments not working'.
   * Fixed 'clicking in another controlpoint after moving a control point would unselect everything'.

@@ -6,7 +6,7 @@ part of 'th_element.dart';
 /// * GIF
 /// * PNM/PPM
 /// * XVI
-class THXTherionImageInsertConfig extends THElement {
+class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
   final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file
@@ -31,6 +31,8 @@ class THXTherionImageInsertConfig extends THElement {
 
   /// Non-mapped support fileds
   XVIFile? _xviFile;
+  Future<ui.Image>? _rasterImage;
+  ui.Image? _decodedRasterImage;
 
   double _xviRootedXX = 0.0;
   double _xviRootedYY = 0.0;
@@ -317,4 +319,62 @@ class THXTherionImageInsertConfig extends THElement {
   double get xviRootedXX => _xviRootedXX;
 
   double get xviRootedYY => _xviRootedYY;
+
+  Future<ui.Image> getRasterImageFrameInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
+    _rasterImage ??=
+        MPEditElementAux.getRasterImageFrameInfo(
+          th2FileEditController,
+          filename,
+        ).then((img) {
+          _decodedRasterImage = img;
+
+          return img;
+        });
+
+    return _rasterImage!;
+  }
+
+  @override
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    return isXVI
+        ? _calculateXVIBoundingBox(th2FileEditController)
+        : _calculateRasterImageBoundingBox(th2FileEditController);
+  }
+
+  Rect _calculateRasterImageBoundingBox(
+    TH2FileEditController th2FileEditController,
+  ) {
+    // Ensure loading has been triggered (will cache when done)
+    getRasterImageFrameInfo(th2FileEditController);
+
+    final ui.Image? rasterImage = _decodedRasterImage;
+
+    return (rasterImage == null)
+        ? MPNumericAux.orderedRectSmallestAroundPoint(
+            center: Offset(xx.value, yy.value),
+          )
+        : Rect.fromLTWH(
+            xx.value,
+            yy.value,
+            rasterImage.width.toDouble(),
+            rasterImage.height.toDouble(),
+          );
+  }
+
+  Rect _calculateXVIBoundingBox(TH2FileEditController th2FileEditController) {
+    final XVIFile? xviFile = getXVIFile(th2FileEditController);
+
+    if (xviFile == null) {
+      return MPNumericAux.orderedRectSmallestAroundPoint(center: Offset.zero);
+    }
+
+    final Rect boundingBox = xviFile.getBoundingBox(th2FileEditController);
+    final Offset xviOffset =
+        Offset(xviRootedXX, xviRootedYY) -
+        Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+
+    return MPNumericAux.orderedRectFromRect(boundingBox.shift(xviOffset));
+  }
 }

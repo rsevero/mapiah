@@ -123,6 +123,15 @@ class MPNumericAux {
     return Rect.fromLTRB(rectLeft, rectTop, rectRight, rectBottom);
   }
 
+  static Rect orderedRectFromRect(Rect rect) {
+    return orderedRectFromLTRB(
+      left: rect.left,
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+    );
+  }
+
   /// In Flutter, the Rect.fromLTWH() method does not check if the width is
   /// negative or if the height is negative so I am providing this method to
   /// ensure that the Rect is ordered according to Flutter expectations.
@@ -604,5 +613,32 @@ class MPNumericAux {
     );
 
     return [firstSegment, secondSegment];
+  }
+
+  static Rect boundingBoxFromOffsets(List<Offset> points) {
+    if (points.isEmpty) {
+      return Rect.zero;
+    }
+
+    double minX = points.first.dx;
+    double maxX = points.first.dx;
+    double minY = points.first.dy;
+    double maxY = points.first.dy;
+
+    for (int i = 1; i < points.length; i++) {
+      final Offset p = points[i];
+
+      if (p.dx < minX) minX = p.dx;
+      if (p.dx > maxX) maxX = p.dx;
+      if (p.dy < minY) minY = p.dy;
+      if (p.dy > maxY) maxY = p.dy;
+    }
+
+    return MPNumericAux.orderedRectFromLTRB(
+      left: minX,
+      top: minY,
+      right: maxX,
+      bottom: maxY,
+    );
   }
 }

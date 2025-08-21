@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:collection/collection.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
 import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 
-class XVIFile {
+class XVIFile with MPBoundingBox {
   String filename;
   double gridSizeLength;
   THLengthUnitPart gridSizeUnit;
@@ -125,4 +130,31 @@ class XVIFile {
     const ListEquality().hash(sketchLines),
     grid,
   );
+
+  @override
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    final List<Offset> points = [];
+
+    for (final XVIStation station in stations) {
+      points.add(station.position.coordinates);
+    }
+
+    for (final XVIShot shot in shots) {
+      points.add(shot.start.coordinates);
+      points.add(shot.end.coordinates);
+    }
+
+    for (final XVISketchLine sketchLine in sketchLines) {
+      for (final THPositionPart point in sketchLine.points) {
+        points.add(point.coordinates);
+      }
+    }
+
+    final Rect contentRect = MPNumericAux.boundingBoxFromOffsets(points);
+    final Rect gridRect = grid.calculateBoundingBox(th2FileEditController);
+
+    return MPNumericAux.orderedRectFromRect(
+      contentRect.expandToInclude(gridRect),
+    );
+  }
 }

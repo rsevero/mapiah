@@ -1,5 +1,9 @@
+import 'dart:io' show File;
+import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -201,6 +205,36 @@ class MPEditElementAux {
         junction + straightLineDirection * controlPointDistance;
 
     return newControlPoint;
+  }
+
+  static Future<ui.Image> getRasterImageFrameInfo(
+    TH2FileEditController th2FileEditController,
+    String imageFilename,
+  ) {
+    final String resolvedPath = MPDirectoryAux.getResolvedPath(
+      th2FileEditController.thFile.filename,
+      imageFilename,
+    );
+
+    final File file = File(resolvedPath);
+
+    if (file.existsSync()) {
+      final Uint8List bytes = file.readAsBytesSync();
+
+      return ui
+          .instantiateImageCodec(bytes)
+          .then((ui.Codec codec) => codec.getNextFrame())
+          .then((ui.FrameInfo frame) => frame.image);
+    } else {
+      return rootBundle
+          .load('assets/images/image_not_found.png')
+          .then(
+            (ByteData assetData) =>
+                ui.instantiateImageCodec(assetData.buffer.asUint8List()),
+          )
+          .then((ui.Codec codec) => codec.getNextFrame())
+          .then((ui.FrameInfo frame) => frame.image);
+    }
   }
 }
 

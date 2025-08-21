@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 /// The only really obscure data is XVIgrid. XVIgrid has 8 Values, e.g.
@@ -17,7 +21,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 /// * gyy: Y increment for moving one step along the grid's Y direction
 /// * ngx: number of grid elements in x direction
 /// * ngy: number of grid elements in y direction
-class XVIGrid {
+class XVIGrid with MPBoundingBox {
   THDoublePart gx;
   THDoublePart gy;
   THDoublePart gxx;
@@ -141,5 +145,50 @@ class XVIGrid {
   @override
   String toString() {
     return 'XVIGrid(gx: $gx(${gx.decimalPositions}), gy: $gy(${gy.decimalPositions}), gxx: $gxx(${gxx.decimalPositions}), gxy: $gxy(${gxy.decimalPositions}), gyx: $gyx(${gyx.decimalPositions}), gyy: $gyy(${gyy.decimalPositions}), ngx: $ngx(${ngx.decimalPositions}), ngy: $ngy(${ngy.decimalPositions}))';
+  }
+
+  @override
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    final double ox = gx.value;
+    final double oy = gy.value;
+
+    final double nx = ngx.value;
+    final double ny = ngy.value;
+
+    final double vxX = gxx.value;
+    final double vxY = gxy.value;
+
+    final double vyX = gyx.value;
+    final double vyY = gyy.value;
+
+    final double vxXnx = vxX * nx;
+    final double vxYnx = vxY * nx;
+    final double vyXny = vyX * ny;
+    final double vyYny = vyY * ny;
+
+    // Corner points of the (possibly skewed) grid parallelogram
+    final double x0 = ox;
+    final double y0 = oy;
+
+    final double x1 = ox + vxXnx;
+    final double y1 = oy + vxYnx;
+
+    final double x2 = ox + vyXny;
+    final double y2 = oy + vyYny;
+
+    final double x3 = ox + vxXnx + vyXny;
+    final double y3 = oy + vxYnx + vyYny;
+
+    final double minX = [x0, x1, x2, x3].reduce((a, b) => a < b ? a : b);
+    final double maxX = [x0, x1, x2, x3].reduce((a, b) => a > b ? a : b);
+    final double minY = [y0, y1, y2, y3].reduce((a, b) => a < b ? a : b);
+    final double maxY = [y0, y1, y2, y3].reduce((a, b) => a > b ? a : b);
+
+    return MPNumericAux.orderedRectFromLTRB(
+      left: minX,
+      top: minY,
+      right: maxX,
+      bottom: maxY,
+    );
   }
 }

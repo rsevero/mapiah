@@ -25,6 +25,7 @@ mixin THCalculateChildrenBoundingBoxMixin {
         case THLine _:
         case THPoint _:
         case THScrap _:
+        case THXTherionImageInsertConfig _:
           childBoundingBox = (child as MPBoundingBox).getBoundingBox(
             th2FileEditController,
           );
