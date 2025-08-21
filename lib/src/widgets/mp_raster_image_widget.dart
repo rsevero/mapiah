@@ -77,14 +77,21 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
       imagePath,
     );
 
-    final file = File(resolvedPath);
-    if (!await file.exists()) {
-      throw FlutterError('Image file not found or unreadable: "$resolvedPath"');
+    final File file = File(resolvedPath);
+
+    Uint8List bytes;
+    if (await file.exists()) {
+      bytes = await file.readAsBytes();
+    } else {
+      final ByteData assetData = await rootBundle.load(
+        'assets/images/image_not_found.png',
+      );
+
+      bytes = assetData.buffer.asUint8List();
     }
 
-    final Uint8List bytes = await file.readAsBytes();
-    final codec = await ui.instantiateImageCodec(bytes);
-    final frame = await codec.getNextFrame();
+    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+    final ui.FrameInfo frame = await codec.getNextFrame();
 
     return frame.image;
   }
