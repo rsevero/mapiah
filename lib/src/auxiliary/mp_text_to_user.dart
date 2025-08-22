@@ -635,7 +635,8 @@ class MPTextToUser {
   }
 
   static String getPointType(THPointType pointType) {
-    return _pointTypeAsString.containsKey(pointType)
+    return (_pointTypeAsString.containsKey(pointType) &&
+            pointType != THPointType.userDefined)
         ? _pointTypeAsString[pointType]!
         : pointType.name;
   }
@@ -690,7 +691,8 @@ class MPTextToUser {
   }
 
   static String getLineType(THLineType lineType) {
-    return _lineTypeAsString.containsKey(lineType)
+    return (_lineTypeAsString.containsKey(lineType) &&
+            lineType != THLineType.userDefined)
         ? _lineTypeAsString[lineType]!
         : lineType.name;
   }
@@ -725,7 +727,8 @@ class MPTextToUser {
   }
 
   static String getAreaType(THAreaType areaType) {
-    return _areaTypeAsString.containsKey(areaType)
+    return (_areaTypeAsString.containsKey(areaType) &&
+            (areaType != THAreaType.userDefined))
         ? _areaTypeAsString[areaType]!
         : areaType.name;
   }
