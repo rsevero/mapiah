@@ -56,10 +56,7 @@ class MPGeneralController {
     }
 
     final TH2FileEditController createdController =
-        TH2FileEditControllerBase.create(
-      filename,
-      fileBytes: fileBytes,
-    );
+        TH2FileEditControllerBase.create(filename, fileBytes: fileBytes);
 
     _t2hFileEditControllers[filename] = createdController;
 
@@ -71,8 +68,9 @@ class MPGeneralController {
     required String newFilename,
   }) {
     if (_t2hFileEditControllers.containsKey(oldFilename)) {
-      final TH2FileEditController controller =
-          _t2hFileEditControllers.remove(oldFilename)!;
+      final TH2FileEditController controller = _t2hFileEditControllers.remove(
+        oldFilename,
+      )!;
 
       _t2hFileEditControllers[newFilename] = controller;
     }

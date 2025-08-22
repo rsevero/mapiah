@@ -27,8 +27,8 @@ abstract class MPVisualControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   MPVisualControllerBase(TH2FileEditController th2FileEditController)
-      : _th2FileEditController = th2FileEditController,
-        _thFile = th2FileEditController.thFile;
+    : _th2FileEditController = th2FileEditController,
+      _thFile = th2FileEditController.thFile;
 
   static final Map<THPointType, THPointPaint> pointTypePaints = {
     THPointType.altar: THPointPaint(
@@ -978,9 +978,9 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THPointPaint getSelectedPointPaint(THPoint point) {
-    THPointPaint pointPaint = getDefaultPointPaint(point).copyWith(
-      radius: _th2FileEditController.pointRadiusOnCanvas,
-    );
+    THPointPaint pointPaint = getDefaultPointPaint(
+      point,
+    ).copyWith(radius: _th2FileEditController.pointRadiusOnCanvas);
 
     if (pointPaint.border != null) {
       pointPaint = pointPaint.copyWith(
@@ -989,9 +989,7 @@ abstract class MPVisualControllerBase with Store {
       );
     }
     if (pointPaint.fill != null) {
-      pointPaint = pointPaint.copyWith(
-        fill: THPaint.thPaint1001,
-      );
+      pointPaint = pointPaint.copyWith(fill: THPaint.thPaint1001);
     }
     return pointPaint;
   }
@@ -1045,9 +1043,9 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THPointPaint getUnselectedPointPaint(THPoint point) {
-    THPointPaint pointPaint = getDefaultPointPaint(point).copyWith(
-      radius: _th2FileEditController.pointRadiusOnCanvas,
-    );
+    THPointPaint pointPaint = getDefaultPointPaint(
+      point,
+    ).copyWith(radius: _th2FileEditController.pointRadiusOnCanvas);
 
     if (!_th2FileEditController.isFromActiveScrap(point)) {
       if (pointPaint.border != null) {
@@ -1058,9 +1056,7 @@ abstract class MPVisualControllerBase with Store {
       }
 
       if (pointPaint.fill != null) {
-        pointPaint = pointPaint.copyWith(
-          fill: THPaint.thPaint1015,
-        );
+        pointPaint = pointPaint.copyWith(fill: THPaint.thPaint1015);
       }
     }
 
@@ -1105,19 +1101,22 @@ abstract class MPVisualControllerBase with Store {
     } else {
       final String pointSubtype = point.hasOption(THCommandOptionType.subtype)
           ? (point.optionByType(THCommandOptionType.subtype)
-                  as THSubtypeCommandOption)
-              .subtype
+                    as THSubtypeCommandOption)
+                .subtype
           : mpNoSubtypeID;
 
       switch (pointType) {
         case THPointType.airDraught:
-          pointPaint = airDraughtSubtypesPaints[pointSubtype] ??
+          pointPaint =
+              airDraughtSubtypesPaints[pointSubtype] ??
               airDraughtSubtypesPaints[mpNoSubtypeID]!;
         case THPointType.station:
-          pointPaint = stationSubtypesPaints[pointSubtype] ??
+          pointPaint =
+              stationSubtypesPaints[pointSubtype] ??
               stationSubtypesPaints[mpNoSubtypeID]!;
         case THPointType.waterFlow:
-          pointPaint = waterFlowPointSubtypesPaints[pointSubtype] ??
+          pointPaint =
+              waterFlowPointSubtypesPaints[pointSubtype] ??
               waterFlowPointSubtypesPaints[mpNoSubtypeID]!;
         default:
           pointPaint = THPointPaint(
@@ -1147,26 +1146,31 @@ abstract class MPVisualControllerBase with Store {
     } else {
       final String lineSubtype = line.hasOption(THCommandOptionType.subtype)
           ? (line.optionByType(THCommandOptionType.subtype)
-                  as THSubtypeCommandOption)
-              .subtype
+                    as THSubtypeCommandOption)
+                .subtype
           : mpNoSubtypeID;
 
       switch (lineType) {
         case THLineType.border:
-          linePaint = borderSubtypesPaints[lineSubtype] ??
+          linePaint =
+              borderSubtypesPaints[lineSubtype] ??
               borderSubtypesPaints[mpNoSubtypeID]!;
         case THLineType.survey:
-          linePaint = surveySubtypesPaints[lineSubtype] ??
+          linePaint =
+              surveySubtypesPaints[lineSubtype] ??
               surveySubtypesPaints[mpNoSubtypeID]!;
         case THLineType.wall:
-          linePaint = wallSubtypesPaints[lineSubtype] ??
+          linePaint =
+              wallSubtypesPaints[lineSubtype] ??
               wallSubtypesPaints[mpNoSubtypeID]!;
         case THLineType.waterFlow:
-          linePaint = waterFlowLineSubtypesPaints[lineSubtype] ??
+          linePaint =
+              waterFlowLineSubtypesPaints[lineSubtype] ??
               waterFlowLineSubtypesPaints[mpNoSubtypeID]!;
         default:
           throw Exception(
-              'Line type $lineType not found in lineTypePaints map.');
+            'Line type $lineType not found in lineTypePaints map.',
+          );
       }
     }
 
@@ -1183,14 +1187,15 @@ abstract class MPVisualControllerBase with Store {
     final THLinePaint linePaint = lineDirectionTickPaints[reverse]!;
     final double lineThickness =
         _th2FileEditController.selectionController.isSelected[line.mpID]!.value
-            ? _th2FileEditController.lineThicknessOnCanvas * 2
-            : _th2FileEditController.lineThicknessOnCanvas;
+        ? _th2FileEditController.lineThicknessOnCanvas * 2
+        : _th2FileEditController.lineThicknessOnCanvas;
 
     return linePaint.copyWith(
-      primaryPaint: (_th2FileEditController.isFromActiveScrap(line)
-          ? linePaint.primaryPaint!
-          : THPaint.thPaint15)
-        ..strokeWidth = lineThickness,
+      primaryPaint:
+          (_th2FileEditController.isFromActiveScrap(line)
+                ? linePaint.primaryPaint!
+                : THPaint.thPaint15)
+            ..strokeWidth = lineThickness,
       makeSecondaryPaintNull: true,
     );
   }
@@ -1203,11 +1208,11 @@ abstract class MPVisualControllerBase with Store {
         primaryPaint: linePaint.primaryPaint == null
             ? null
             : (linePaint.primaryPaint!
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
+                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
         secondaryPaint: linePaint.secondaryPaint == null
             ? null
             : (linePaint.secondaryPaint!
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
+                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
       );
     } else {
       return linePaint.copyWith(
@@ -1241,7 +1246,8 @@ abstract class MPVisualControllerBase with Store {
 
   THPointPaint getSelectedControlPointPaint() {
     return THPointPaint(
-      radius: _th2FileEditController.pointRadiusOnCanvas *
+      radius:
+          _th2FileEditController.pointRadiusOnCanvas *
           thControlPointRadiusFactor *
           thSelectedEndControlPointFactor,
       border: THPaint.thPaintBlackBackground,
@@ -1250,7 +1256,8 @@ abstract class MPVisualControllerBase with Store {
 
   THPointPaint getUnselectedControlPointPaint() {
     return THPointPaint(
-      radius: _th2FileEditController.pointRadiusOnCanvas *
+      radius:
+          _th2FileEditController.pointRadiusOnCanvas *
           thControlPointRadiusFactor,
       border: THPaint.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
@@ -1259,7 +1266,8 @@ abstract class MPVisualControllerBase with Store {
 
   THPointPaint getSelectedEndPointPaint() {
     return THPointPaint(
-      radius: _th2FileEditController.pointRadiusOnCanvas *
+      radius:
+          _th2FileEditController.pointRadiusOnCanvas *
           thSelectedEndControlPointFactor,
       border: THPaint.thPaintBlackBackground,
     );

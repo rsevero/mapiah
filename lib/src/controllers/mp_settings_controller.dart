@@ -49,12 +49,12 @@ abstract class MPSettingsControllerBase with Store {
 
       final Map<String, dynamic> mainConfig =
           config.containsKey(thMainConfigSection)
-              ? config[thMainConfigSection] as Map<String, dynamic>
-              : {};
+          ? config[thMainConfigSection] as Map<String, dynamic>
+          : {};
       final Map<String, dynamic> fileEditConfig =
           config.containsKey(thFileEditConfigSection)
-              ? config[thFileEditConfigSection] as Map<String, dynamic>
-              : {};
+          ? config[thFileEditConfigSection] as Map<String, dynamic>
+          : {};
 
       String localeID = thDefaultLocaleID;
       double selectionTolerance = thDefaultSelectionTolerance;

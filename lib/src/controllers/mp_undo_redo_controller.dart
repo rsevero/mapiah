@@ -19,8 +19,8 @@ abstract class MPUndoRedoControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   MPUndoRedoControllerBase(TH2FileEditController th2FileEditController)
-      : _th2FileEditController = th2FileEditController,
-        _thFile = th2FileEditController.thFile;
+    : _th2FileEditController = th2FileEditController,
+      _thFile = th2FileEditController.thFile;
 
   final List<MPUndoRedoCommand> _undos = [];
   final List<MPUndoRedoCommand> _redos = [];
@@ -29,8 +29,9 @@ abstract class MPUndoRedoControllerBase with Store {
   bool get hasRedo => _redos.isNotEmpty;
 
   void add(MPCommand command) {
-    final MPUndoRedoCommand undo =
-        command.getUndoRedoCommand(_th2FileEditController);
+    final MPUndoRedoCommand undo = command.getUndoRedoCommand(
+      _th2FileEditController,
+    );
 
     if (_redos.isNotEmpty) {
       final int redoLastIndex = _redos.length - 1;
@@ -58,8 +59,8 @@ abstract class MPUndoRedoControllerBase with Store {
               .copyWith(
                 descriptionType:
                     MPCommandDescriptionType.getOppositeDescription(
-                  redoCommandOriginal.descriptionType,
-                ),
+                      redoCommandOriginal.descriptionType,
+                    ),
               )
               .toMap(),
         );
@@ -93,8 +94,9 @@ abstract class MPUndoRedoControllerBase with Store {
       return;
     }
 
-    final MPUndoRedoCommand undo =
-        command.getUndoRedoCommand(_th2FileEditController);
+    final MPUndoRedoCommand undo = command.getUndoRedoCommand(
+      _th2FileEditController,
+    );
 
     command.execute(_th2FileEditController);
 
