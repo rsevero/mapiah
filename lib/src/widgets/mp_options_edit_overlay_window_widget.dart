@@ -174,7 +174,7 @@ class _MPOptionsEditOverlayWindowWidgetState
               MPPLATypeWidget(
                 selectedPLAType: selectedPointPLAType?.name,
                 selectedPLATypeToUser: pointType,
-                type: THElementType.point,
+                elementType: THElementType.point,
                 th2FileEditController: th2FileEditController,
               ),
             );
@@ -198,7 +198,7 @@ class _MPOptionsEditOverlayWindowWidgetState
               MPPLATypeWidget(
                 selectedPLAType: selectedLinePLAType?.name,
                 selectedPLATypeToUser: lineType,
-                type: THElementType.line,
+                elementType: THElementType.line,
                 th2FileEditController: th2FileEditController,
               ),
             );
@@ -222,7 +222,7 @@ class _MPOptionsEditOverlayWindowWidgetState
               MPPLATypeWidget(
                 selectedPLAType: selectedAreaPLAType?.name,
                 selectedPLATypeToUser: areaType,
-                type: THElementType.area,
+                elementType: THElementType.area,
                 th2FileEditController: th2FileEditController,
               ),
             );

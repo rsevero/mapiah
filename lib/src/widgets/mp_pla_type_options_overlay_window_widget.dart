@@ -13,19 +13,19 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
 class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
-  final THElementType plaType;
+  final THElementType elementType;
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
-  final String? selectedType;
+  final String? selectedPLAType;
 
   MPPLATypeOptionsOverlayWindowWidget({
     super.key,
-    required this.plaType,
+    required this.elementType,
     required this.th2FileEditController,
     required this.outerAnchorPosition,
     required this.innerAnchorType,
-    required this.selectedType,
+    required this.selectedPLAType,
   });
 
   @override
@@ -36,11 +36,11 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
     late List<String> mostUsedChoices;
     final List<String> mostUsedChoicesReduced = [];
     late String title;
-    final String selectedTypeNotNull = selectedType == null
+    final String selectedPLATypeNotNull = selectedPLAType == null
         ? ''
-        : selectedType!;
+        : selectedPLAType!;
 
-    switch (plaType) {
+    switch (elementType) {
       case THElementType.area:
         title = mpLocator.appLocalizations.mpPLATypeAreaTitle;
         choices = MPTextToUser.getOrderedChoices(
@@ -73,7 +73,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
     }
 
     for (final String choice in lastUsedChoices) {
-      if (choice == selectedTypeNotNull) {
+      if (choice == selectedPLATypeNotNull) {
         continue;
       }
 
@@ -86,7 +86,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
 
     for (final String choice in mostUsedChoices) {
       if (lastUsedChoicesReduced.contains(choice) ||
-          (choice == selectedTypeNotNull)) {
+          (choice == selectedPLATypeNotNull)) {
         continue;
       }
 
@@ -105,7 +105,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
       th2FileEditController: th2FileEditController,
       children: [
         RadioGroup(
-          groupValue: selectedTypeNotNull,
+          groupValue: selectedPLATypeNotNull,
           onChanged: (String? newValue) {
             if (newValue != null) {
               _onChanged(context, newValue);
@@ -113,7 +113,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
           },
           child: Column(
             children: [
-              if (selectedTypeNotNull != '') ...[
+              if (selectedPLATypeNotNull != '') ...[
                 const SizedBox(height: mpButtonSpace),
                 SizedBox(
                   width: double.infinity,
@@ -121,7 +121,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                     title: mpLocator.appLocalizations.mpPLATypeCurrent,
                     overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
                     padding: mpOverlayWindowBlockEdgeInsets,
-                    children: [Text(selectedTypeNotNull)],
+                    children: [Text(selectedPLATypeNotNull)],
                   ),
                 ),
               ],
@@ -136,8 +136,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                       return MPPLATypeOptionWidget(
                         value: choice,
                         label: choices[choice]!,
-                        isSelected: choice == selectedTypeNotNull,
-                        plaType: plaType,
+                        isSelected: choice == selectedPLATypeNotNull,
                         th2FileEditController: th2FileEditController,
                       );
                     }),
@@ -155,8 +154,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                       return MPPLATypeOptionWidget(
                         value: choice,
                         label: choices[choice]!,
-                        isSelected: choice == selectedTypeNotNull,
-                        plaType: plaType,
+                        isSelected: choice == selectedPLATypeNotNull,
                         th2FileEditController: th2FileEditController,
                       );
                     }),
@@ -173,8 +171,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                     return MPPLATypeOptionWidget(
                       value: entry.key,
                       label: entry.value,
-                      isSelected: entry.key == selectedTypeNotNull,
-                      plaType: plaType,
+                      isSelected: entry.key == selectedPLATypeNotNull,
                       th2FileEditController: th2FileEditController,
                     );
                   }),
@@ -189,7 +186,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
 
   void _onChanged(BuildContext context, String newValue) {
     th2FileEditController.userInteractionController.prepareSetPLAType(
-      plaType: plaType,
+      plaType: elementType,
       newType: newValue,
     );
     th2FileEditController.overlayWindowController.setShowOverlayWindow(

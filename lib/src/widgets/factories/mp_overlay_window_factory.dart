@@ -417,7 +417,7 @@ class MPOverlayWindowFactory {
     required TH2FileEditController th2FileEditController,
     required Offset outerAnchorPosition,
     required THElementType elementType,
-    required String? selectedType,
+    required String? selectedPLAType,
   }) {
     final int thFileMPID = th2FileEditController.thFileMPID;
     final TH2FileEditOverlayWindowController overlayWindowController =
@@ -438,8 +438,8 @@ class MPOverlayWindowFactory {
       builder: (context) => MPPLATypeOptionsOverlayWindowWidget(
         th2FileEditController: th2FileEditController,
         key: ValueKey("MPPLATypeOptionsWidget|$thFileMPID"),
-        plaType: elementType,
-        selectedType: selectedType,
+        elementType: elementType,
+        selectedPLAType: selectedPLAType,
         outerAnchorPosition: outerAnchorPosition,
         innerAnchorType: MPWidgetPositionType.centerLeft,
       ),

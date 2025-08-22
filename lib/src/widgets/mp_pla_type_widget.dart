@@ -11,14 +11,14 @@ import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 class MPPLATypeWidget extends StatelessWidget {
   final String? selectedPLAType;
   final String? selectedPLATypeToUser;
-  final THElementType type;
+  final THElementType elementType;
   final TH2FileEditController th2FileEditController;
 
   MPPLATypeWidget({
     super.key,
     required this.selectedPLAType,
     required this.selectedPLATypeToUser,
-    required this.type,
+    required this.elementType,
     required this.th2FileEditController,
   });
 
@@ -26,7 +26,7 @@ class MPPLATypeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String title;
 
-    switch (type) {
+    switch (elementType) {
       case THElementType.area:
         title = selectedPLATypeToUser == null
             ? mpLocator.appLocalizations.mpPLATypeAreaTitle
@@ -58,9 +58,9 @@ class MPPLATypeWidget extends StatelessWidget {
 
     th2FileEditController.overlayWindowController
         .performToggleShowPLATypeOverlayWindow(
-          elementType: type,
+          elementType: elementType,
           outerAnchorPosition: outerAnchorPosition,
-          selectedType: selectedPLAType,
+          selectedPLAType: selectedPLAType,
         );
   }
 }

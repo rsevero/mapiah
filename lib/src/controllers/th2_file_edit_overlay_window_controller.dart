@@ -23,7 +23,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditOverlayWindowControllerBase(this._th2FileEditController)
-      : _thFile = _th2FileEditController.thFile {
+    : _thFile = _th2FileEditController.thFile {
     for (MPWindowType type in MPWindowType.values) {
       _isOverlayWindowShown[type] = false;
     }
@@ -77,7 +77,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   THElementType? _currentPLATypeShown;
 
   void setSecondLevelOptionOpenedOverlayWindow(
-      MPWindowType? secondLevelOptionOpenedOverlayWindow) {
+    MPWindowType? secondLevelOptionOpenedOverlayWindow,
+  ) {
     _secondLevelOptionOpenedOverlayWindow =
         secondLevelOptionOpenedOverlayWindow;
   }
@@ -131,7 +132,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     if (context == null) {
       throw StateError(
-          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController._showOverlayWindow().");
+        "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController._showOverlayWindow().",
+      );
     }
 
     Overlay.of(context, rootOverlay: true).insert(_overlayWindows[type]!);
@@ -154,10 +156,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     _overlayWindows[overlayWindowType] =
         MPOverlayWindowFactory.createOptionChoices(
-      th2FileEditController: _th2FileEditController,
-      outerAnchorPosition: outerAnchorPosition,
-      optionInfo: optionInfo,
-    );
+          th2FileEditController: _th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+          optionInfo: optionInfo,
+        );
 
     _activeWindow = overlayWindowType;
     _isAutoDismissWindowOpen = true;
@@ -169,11 +171,14 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     if (context == null) {
       throw StateError(
-          "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().");
+        "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().",
+      );
     }
 
-    Overlay.of(context, rootOverlay: true)
-        .insert(_overlayWindows[overlayWindowType]!);
+    Overlay.of(
+      context,
+      rootOverlay: true,
+    ).insert(_overlayWindows[overlayWindowType]!);
   }
 
   void _hideOverlayWindow(MPWindowType type) {
@@ -208,7 +213,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     if (((type == MPWindowType.multipleElementsClicked) ||
             (type == MPWindowType.multipleEndControlPointsClicked)) &&
         (!_th2FileEditController
-            .selectionController.multipleClickedSemaphore.isCompleted)) {
+            .selectionController
+            .multipleClickedSemaphore
+            .isCompleted)) {
       _th2FileEditController.selectionController.multipleClickedSemaphore
           .complete();
     }
@@ -253,7 +260,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   Offset getPositionFromSelectedElements() {
     if (_th2FileEditController
-        .selectionController.mpSelectedElementsLogical.isEmpty) {
+        .selectionController
+        .mpSelectedElementsLogical
+        .isEmpty) {
       return _th2FileEditController.screenBoundingBox.center;
     } else {
       final Rect selectedElementsBoundingBoxOnCanvas = _th2FileEditController
@@ -261,9 +270,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
           .getSelectionHandlesBoundingBox();
       final Offset selectedElementsCenterOnScreen =
           _th2FileEditController.offsetCanvasToScreen(
-                selectedElementsBoundingBoxOnCanvas.centerRight,
-              ) +
-              Offset(mpOverlayWindowOuterAnchorMargin, 0);
+            selectedElementsBoundingBoxOnCanvas.centerRight,
+          ) +
+          Offset(mpOverlayWindowOuterAnchorMargin, 0);
 
       return selectedElementsCenterOnScreen;
     }
@@ -294,7 +303,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   void performToggleShowPLATypeOverlayWindow({
     required Offset outerAnchorPosition,
     required THElementType elementType,
-    required String? selectedType,
+    required String? selectedPLAType,
   }) {
     if (elementType == _currentPLATypeShown) {
       _currentPLATypeShown = null;
@@ -304,7 +313,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       showPLATypeOverlayWindow(
         outerAnchorPosition: outerAnchorPosition,
         elementType: elementType,
-        selectedType: selectedType,
+        selectedPLAType: selectedPLAType,
       );
     }
   }
@@ -313,7 +322,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   void showPLATypeOverlayWindow({
     required Offset outerAnchorPosition,
     required THElementType elementType,
-    required String? selectedType,
+    required String? selectedPLAType,
   }) {
     const MPWindowType overlayWindowType = MPWindowType.plaTypes;
 
@@ -323,11 +332,11 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     _overlayWindows[overlayWindowType] =
         MPOverlayWindowFactory.createPLATypeOptions(
-      th2FileEditController: _th2FileEditController,
-      outerAnchorPosition: outerAnchorPosition,
-      elementType: elementType,
-      selectedType: selectedType,
-    );
+          th2FileEditController: _th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+          elementType: elementType,
+          selectedPLAType: selectedPLAType,
+        );
 
     _activeWindow = overlayWindowType;
     _isAutoDismissWindowOpen = true;
@@ -342,8 +351,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       );
     }
 
-    Overlay.of(context, rootOverlay: true)
-        .insert(_overlayWindows[overlayWindowType]!);
+    Overlay.of(
+      context,
+      rootOverlay: true,
+    ).insert(_overlayWindows[overlayWindowType]!);
   }
 
   void perfomToggleScrapOptionsOverlayWindow({
@@ -354,8 +365,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         !_isOverlayWindowShown[MPWindowType.scrapOptions]!;
 
     if (shouldShowScrapOptions) {
-      _th2FileEditController.optionEditController
-          .setOptionsScrapMPID(scrapMPID);
+      _th2FileEditController.optionEditController.setOptionsScrapMPID(
+        scrapMPID,
+      );
       _th2FileEditController.optionEditController.updateElementOptionMapByMPID(
         scrapMPID,
       );
