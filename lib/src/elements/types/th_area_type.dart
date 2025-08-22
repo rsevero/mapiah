@@ -22,7 +22,7 @@ enum THAreaType {
   stalagmite,
   sump,
   u,
-  unknown,
+  userDefined,
   water;
 
   static final Set<String> nameSet = {
@@ -42,9 +42,13 @@ enum THAreaType {
   }
 
   static THAreaType fromFileString(String value) {
-    value = MPTypeAux.convertHyphenatedToCamelCase(value);
+    if (hasAreaType(value)) {
+      value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
-    return THAreaType.values.byName(value);
+      return THAreaType.values.byName(value);
+    } else {
+      return THAreaType.userDefined;
+    }
   }
 
   String toFileString() {

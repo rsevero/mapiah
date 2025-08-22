@@ -213,7 +213,8 @@ class THFileWriter {
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      String newLine = "area ${thArea.areaType.toFileString()}";
+      String newLine = "area ${thArea.plaType}";
+
       if (thArea.hasOption(THCommandOptionType.subtype)) {
         newLine +=
             ":${thArea.optionByType(THCommandOptionType.subtype)!.specToFile()}";
@@ -236,7 +237,7 @@ class THFileWriter {
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      String newLine = "line ${thLine.lineType.toFileString()}";
+      String newLine = "line ${thLine.plaType}";
 
       if (thLine.hasOption(THCommandOptionType.subtype)) {
         newLine +=
@@ -261,7 +262,8 @@ class THFileWriter {
 
     if (asString.isEmpty) {
       String newLine =
-          "point ${thPoint.position.toString()} ${thPoint.pointType.toFileString()}";
+          "point ${thPoint.position.toString()} ${thPoint.plaType}";
+
       if (thPoint.hasOption(THCommandOptionType.subtype)) {
         newLine +=
             ":${thPoint.optionByType(THCommandOptionType.subtype)!.specToFile()}";

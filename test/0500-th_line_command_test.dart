@@ -1,8 +1,11 @@
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:test/test.dart';
 import 'th_test_aux.dart';
+
+final MPLocator mpLocator = MPLocator();
 
 void main() {
   group('line', () {
@@ -179,19 +182,36 @@ endscrap
     }
   });
 
-  group('line failures', () {
-    final parser = THFileParser();
-
-    const failures = [
-      'th_file_parser-00082-line_with_invalid_type-failure.th2',
+  group('line user defined type', () {
+    const successes = [
+      {
+        'file': 'th_file_parser-00082-line_with_user_defined_type.th2',
+        'length': 5,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line cable
+  endline
+endscrap
+''',
+      },
     ];
 
-    for (var failure in failures) {
-      test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(
-          THTestAux.testPath(failure),
+    for (var success in successes) {
+      test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, false);
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
       });
     }
   });

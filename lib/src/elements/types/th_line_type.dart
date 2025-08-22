@@ -37,7 +37,7 @@ enum THLineType {
   steps,
   survey,
   u,
-  unknown,
+  userDefined,
   viaFerrata,
   walkWay,
   wall,
@@ -60,9 +60,13 @@ enum THLineType {
   }
 
   static THLineType fromFileString(String value) {
-    value = MPTypeAux.convertHyphenatedToCamelCase(value);
+    if (hasLineType(value)) {
+      value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
-    return THLineType.values.byName(value);
+      return THLineType.values.byName(value);
+    } else {
+      return THLineType.userDefined;
+    }
   }
 
   String toFileString() {

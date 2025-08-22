@@ -109,7 +109,7 @@ enum THPointType {
   traverse,
   treeTrunk,
   u,
-  unknown,
+  userDefined,
   vegetableDebris,
   viaFerrata,
   volcano,
@@ -137,9 +137,13 @@ enum THPointType {
   }
 
   static THPointType fromFileString(String value) {
-    value = MPTypeAux.convertHyphenatedToCamelCase(value);
+    if (hasPointType(value)) {
+      value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
-    return THPointType.values.byName(value);
+      return THPointType.values.byName(value);
+    } else {
+      return THPointType.userDefined;
+    }
   }
 
   String toFileString() {

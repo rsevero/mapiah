@@ -4,6 +4,7 @@ class THArea extends THElement
     with THHasOptionsMixin, THIsParentMixin, MPBoundingBox
     implements THHasPLATypeMixin {
   final THAreaType areaType;
+  final String? _userDefinedPLAType;
 
   Set<String>? _lineTHIDs;
   Set<int>? _lineMPIDs;
@@ -13,11 +14,13 @@ class THArea extends THElement
     required super.parentMPID,
     required super.sameLineComment,
     required this.areaType,
+    String? userDefinedPLAType,
     required List<int> childrenMPID,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
-  }) : super.forCWJM() {
+  }) : _userDefinedPLAType = userDefinedPLAType,
+       super.forCWJM() {
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
@@ -25,14 +28,19 @@ class THArea extends THElement
   THArea({
     required super.parentMPID,
     required this.areaType,
+    String? userDefinedPLAType,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : _userDefinedPLAType = userDefinedPLAType,
+       super.addToParent();
 
   THArea.fromString({
     required super.parentMPID,
     required String areaTypeString,
     super.originalLineInTH2File = '',
   }) : areaType = THAreaType.fromFileString(areaTypeString),
+       _userDefinedPLAType = (THAreaType.hasAreaType(areaTypeString))
+           ? null
+           : areaTypeString,
        super.addToParent();
 
   @override
@@ -44,6 +52,8 @@ class THArea extends THElement
 
     map.addAll({
       'areaType': areaType.name,
+      if (_userDefinedPLAType != null)
+        'userDefinedPLAType': _userDefinedPLAType,
       'childrenMPID': childrenMPID.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
@@ -59,6 +69,9 @@ class THArea extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       areaType: THAreaType.values.byName(map['areaType']),
+      userDefinedPLAType: (map.containsKey('userDefinedPLAType'))
+          ? map['userDefinedPLAType']
+          : null,
       childrenMPID: List<int>.from(map['childrenMPID']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
@@ -79,6 +92,8 @@ class THArea extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THAreaType? areaType,
+    String? userDefinedPLAType,
+    bool makeUserDefinedPLATypeNull = false,
     List<int>? childrenMPID,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
@@ -92,6 +107,9 @@ class THArea extends THElement
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       areaType: areaType ?? this.areaType,
+      userDefinedPLAType: makeUserDefinedPLATypeNull
+          ? null
+          : (userDefinedPLAType ?? this.userDefinedPLAType),
       childrenMPID: childrenMPID ?? this.childrenMPID,
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
@@ -107,6 +125,7 @@ class THArea extends THElement
     final Function deepEq = const DeepCollectionEquality().equals;
 
     return other.areaType == areaType &&
+        other.userDefinedPLAType == _userDefinedPLAType &&
         deepEq(other.childrenMPID, childrenMPID) &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
@@ -115,11 +134,20 @@ class THArea extends THElement
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(areaType, childrenMPID, optionsMap, attrOptionsMap);
+      Object.hash(
+        areaType,
+        _userDefinedPLAType,
+        childrenMPID,
+        optionsMap,
+        attrOptionsMap,
+      );
 
   @override
   String get plaType {
-    return areaType.toFileString();
+    return ((areaType == THAreaType.userDefined) &&
+            (_userDefinedPLAType != null))
+        ? _userDefinedPLAType
+        : areaType.toFileString();
   }
 
   @override
@@ -195,5 +223,10 @@ class THArea extends THElement
     }
 
     return boundingBox ?? Rect.zero;
+  }
+
+  @override
+  String? get userDefinedPLAType {
+    return (areaType == THAreaType.userDefined) ? _userDefinedPLAType : null;
   }
 }

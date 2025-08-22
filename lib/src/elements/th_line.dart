@@ -10,23 +10,36 @@ class THLine extends THElement
     implements THHasPLATypeMixin {
   final THLineType lineType;
   final List<int> _lineSegmentMPIDs;
+  final String? _userDefinedPLAType;
 
   THLine.forCWJM({
     required super.mpID,
     required super.parentMPID,
     required super.sameLineComment,
     required this.lineType,
+    String? userDefinedPLAType,
     required List<int> childrenMPID,
     required List<int> lineSegmentMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : _lineSegmentMPIDs = lineSegmentMPIDs,
+       _userDefinedPLAType = userDefinedPLAType,
        super.forCWJM() {
     this.childrenMPID.addAll(childrenMPID);
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
+
+  THLine({
+    required super.parentMPID,
+    required this.lineType,
+    String? userDefinedPLAType,
+    super.sameLineComment,
+    super.originalLineInTH2File = '',
+  }) : _lineSegmentMPIDs = [],
+       _userDefinedPLAType = userDefinedPLAType,
+       super.addToParent();
 
   THLine.fromString({
     required super.parentMPID,
@@ -34,15 +47,10 @@ class THLine extends THElement
     super.sameLineComment,
     super.originalLineInTH2File = '',
   }) : lineType = THLineType.fromFileString(lineTypeString),
+       _userDefinedPLAType = (THLineType.hasLineType(lineTypeString))
+           ? null
+           : lineTypeString,
        _lineSegmentMPIDs = [],
-       super.addToParent();
-
-  THLine({
-    required super.parentMPID,
-    required this.lineType,
-    super.sameLineComment,
-    super.originalLineInTH2File = '',
-  }) : _lineSegmentMPIDs = [],
        super.addToParent();
 
   @override
@@ -54,6 +62,8 @@ class THLine extends THElement
 
     map.addAll({
       'lineType': lineType.name,
+      if (_userDefinedPLAType != null)
+        'userDefinedPLAType': _userDefinedPLAType,
       'childrenMPID': childrenMPID.toList(),
       'lineSegmentMPIDs': _lineSegmentMPIDs,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
@@ -70,6 +80,9 @@ class THLine extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       lineType: THLineType.values.byName(map['lineType']),
+      userDefinedPLAType: (map.containsKey('userDefinedPLAType'))
+          ? map['userDefinedPLAType']
+          : null,
       childrenMPID: List<int>.from(map['childrenMPID']),
       lineSegmentMPIDs: List<int>.from(map['lineSegmentMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
@@ -91,6 +104,8 @@ class THLine extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THLineType? lineType,
+    String? userDefinedPLAType,
+    bool makeUserDefinedPLATypeNull = false,
     List<int>? childrenMPID,
     List<int>? lineSegmentMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
@@ -105,6 +120,9 @@ class THLine extends THElement
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       lineType: lineType ?? this.lineType,
+      userDefinedPLAType: makeUserDefinedPLATypeNull
+          ? null
+          : (userDefinedPLAType ?? this.userDefinedPLAType),
       childrenMPID: childrenMPID ?? this.childrenMPID,
       lineSegmentMPIDs: lineSegmentMPIDs ?? _lineSegmentMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
@@ -121,6 +139,7 @@ class THLine extends THElement
     final Function deepEq = const DeepCollectionEquality().equals;
 
     return other.lineType == lineType &&
+        other.userDefinedPLAType == _userDefinedPLAType &&
         deepEq(other.childrenMPID, childrenMPID) &&
         deepEq(other.lineSegmentMPIDs, _lineSegmentMPIDs) &&
         deepEq(other.optionsMap, optionsMap) &&
@@ -132,6 +151,7 @@ class THLine extends THElement
       super.hashCode ^
       Object.hash(
         lineType,
+        _userDefinedPLAType,
         childrenMPID,
         _lineSegmentMPIDs,
         optionsMap,
@@ -284,7 +304,10 @@ class THLine extends THElement
 
   @override
   String get plaType {
-    return lineType.name;
+    return ((lineType == THLineType.userDefined) &&
+            (_userDefinedPLAType != null))
+        ? _userDefinedPLAType
+        : lineType.toFileString();
   }
 
   void addLineSegmentMPID(int lineSegmentMPID) {
@@ -368,5 +391,10 @@ class THLine extends THElement
 
     _lineSegmentMPIDs.insert(lineSegmentsMPIDsIndex, lineSegment.mpID);
     clearBoundingBox();
+  }
+
+  @override
+  String? get userDefinedPLAType {
+    return (lineType == THLineType.userDefined) ? _userDefinedPLAType : null;
   }
 }
