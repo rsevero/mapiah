@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.2.13 - not yet released
+* Included 'add image' button in 'add elements' button options.
 
 ## 0.2.12 - 2025-08-21
 * New features:

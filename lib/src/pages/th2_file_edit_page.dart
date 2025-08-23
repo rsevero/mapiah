@@ -310,9 +310,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (th2FileEditController.isAddElementButtonsHovered) ...[
-                  _imageButton(
+                  _imageAssetButton(
                     isPressed: false,
                     onPressed: _onAddImageButtonPressed,
+                    imageAssetPath: mpXTherionImageInsertButtonImagePath,
                     tooltip: mpLocator
                         .appLocalizations
                         .th2FileEditPageAddImageButton,
@@ -352,10 +353,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               .overlayWindowController
               .showChangeImageOverlayWindow;
 
-          return _imageButton(
+          return _imageAssetButton(
             isPressed: isChangeImageButtonPressed,
             onPressed: _onChangeImageButtonPressed,
             tooltip: mpLocator.appLocalizations.th2FileEditPageChangeImageTool,
+            imageAssetPath: mpXTherionImageInsertButtonImagePath,
             heroTag: 'change_image_tool',
             key:
                 th2FileEditController
@@ -368,9 +370,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     ];
   }
 
-  Widget _imageButton({
+  Widget _imageAssetButton({
     required bool isPressed,
     required void Function()? onPressed,
+    required String imageAssetPath,
     String? tooltip,
     Object? heroTag,
     Key? key,
@@ -385,7 +388,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         onPressed: onPressed,
         tooltip: tooltip,
         child: Image.asset(
-          'assets/icons/change-image-tool.png',
+          imageAssetPath,
           width: thFloatingActionIconSize,
           height: thFloatingActionIconSize,
           color: isPressed
@@ -409,34 +412,18 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               .overlayWindowController
               .showChangeScrapOverlayWindow;
 
-          return Padding(
-            padding: isChangeScrapButtonPressed
-                ? const EdgeInsets.only(left: mpButtonSpace)
-                : EdgeInsets.zero,
-            child: FloatingActionButton(
-              key:
-                  th2FileEditController
-                      .overlayWindowController
-                      .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
-                      .changeScrapButton]!,
-              heroTag: 'change_active_scrap_tool',
-              onPressed: _onChangeScrapButtonPressed,
-              tooltip: mpLocator
-                  .appLocalizations
-                  .th2FileEditPageChangeActiveScrapTool,
-              child: Image.asset(
-                'assets/icons/change-scrap-tool.png',
-                width: thFloatingActionIconSize,
-                height: thFloatingActionIconSize,
-                color: isChangeScrapButtonPressed
-                    ? colorScheme.onPrimary
-                    : colorScheme.onSecondaryContainer,
-              ),
-              backgroundColor: isChangeScrapButtonPressed
-                  ? colorScheme.primary
-                  : colorScheme.secondaryContainer,
-              elevation: isChangeScrapButtonPressed ? 0 : null,
-            ),
+          return _imageAssetButton(
+            isPressed: isChangeScrapButtonPressed,
+            onPressed: _onChangeScrapButtonPressed,
+            tooltip:
+                mpLocator.appLocalizations.th2FileEditPageChangeActiveScrapTool,
+            imageAssetPath: mpScrapButtonImagePath,
+            heroTag: 'change_active_scrap_tool',
+            key:
+                th2FileEditController
+                    .overlayWindowController
+                    .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
+                    .changeScrapButton]!,
           );
         },
       ),

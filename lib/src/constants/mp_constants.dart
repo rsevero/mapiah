@@ -279,3 +279,7 @@ const String mpLicenseURL =
 const String xTherionImageInsertConfigID = 'xth_me_image_insert';
 const String mpXVIExtension = '.xvi';
 const String xTherionConfigID = '##XTHERION##';
+
+const String mpXTherionImageInsertButtonImagePath =
+    'assets/icons/change-image-tool.png';
+const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
