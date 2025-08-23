@@ -356,7 +356,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpIDIDLabel => 'ID';
 
   @override
-  String get mpIDInvalidValueErrorMessage => 'Invalid ID';
+  String get mpIDInvalidValueErrorMessage =>
+      'Invalid ID: must be a sequence of characters A-Z, a-z, 0-9 and _-/ (not starting with ‘-’).';
+
+  @override
+  String get mpIDMissingErrorMessage => 'ID is required';
 
   @override
   String get mpIDNonUniqueValueErrorMessage => 'ID must be unique';
@@ -853,6 +857,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String th2FileEditPageAddPointStatusBarMessage(Object type) {
     return 'Click to add a $type point';
   }
+
+  @override
+  String get th2FileEditPageAddScrapButton => 'Add scrap (S)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTool =>

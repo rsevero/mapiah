@@ -135,13 +135,12 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       th2FileEditController.execute(moveCommand);
       selectionController.updateSelectedElementClone(selectedElement.mpID);
     } else if (selectedCount > 1) {
-      moveCommand =
-          MPMultipleElementsCommandFactory.moveElementsFromDeltaOnCanvas(
-            deltaOnCanvas: panDeltaOnCanvas,
-            mpSelectedElements:
-                selectionController.mpSelectedElementsLogical.values,
-            decimalPositions: th2FileEditController.currentDecimalPositions,
-          );
+      moveCommand = MPCommandFactory.moveElementsFromDeltaOnCanvas(
+        deltaOnCanvas: panDeltaOnCanvas,
+        mpSelectedElements:
+            selectionController.mpSelectedElementsLogical.values,
+        decimalPositions: th2FileEditController.currentDecimalPositions,
+      );
 
       th2FileEditController.execute(moveCommand);
       selectionController.updateSelectedElementsClones();

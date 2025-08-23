@@ -4,6 +4,7 @@ enum MPButtonType {
   addImage,
   addLine,
   addPoint,
+  addScrap,
   addXTherionImageInsertConfig,
   changeScrap,
   nodeEdit,

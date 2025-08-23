@@ -118,6 +118,26 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
+  late final _$_newScrapAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._newScrap',
+    context: context,
+  );
+
+  THScrap? get newScrap {
+    _$_newScrapAtom.reportRead();
+    return super._newScrap;
+  }
+
+  @override
+  THScrap? get _newScrap => newScrap;
+
+  @override
+  set _newScrap(THScrap? value) {
+    _$_newScrapAtom.reportWrite(value, super._newScrap, () {
+      super._newScrap = value;
+    });
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
@@ -146,13 +166,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applyAddElement({required THElement newElement}) {
+  void applyAddElement({
+    required THElement newElement,
+    bool positionInsideParent = true,
+  }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name: 'TH2FileEditElementEditControllerBase.applyAddElement',
         );
     try {
-      return super.applyAddElement(newElement: newElement);
+      return super.applyAddElement(
+        newElement: newElement,
+        positionInsideParent: positionInsideParent,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
@@ -269,6 +295,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void createScrap(String id) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.createScrap');
+    try {
+      return super.createScrap(id);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -369,6 +408,29 @@ mixin _$TH2FileEditElementEditController
       return super.applyAddLine(
         newLine: newLine,
         lineChildren: lineChildren,
+        lineStartScreenPosition: lineStartScreenPosition,
+      );
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void applyAddScrap({
+    required THScrap newScrap,
+    required Iterable<THElement> scrapChildren,
+    Offset? lineStartScreenPosition,
+  }) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.applyAddScrap',
+        );
+    try {
+      return super.applyAddScrap(
+        newScrap: newScrap,
+        scrapChildren: scrapChildren,
         lineStartScreenPosition: lineStartScreenPosition,
       );
     } finally {

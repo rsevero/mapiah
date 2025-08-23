@@ -743,8 +743,14 @@ abstract class AppLocalizations {
   /// The error message for invalid ID value
   ///
   /// In en, this message translates to:
-  /// **'Invalid ID'**
+  /// **'Invalid ID: must be a sequence of characters A-Z, a-z, 0-9 and _-/ (not starting with ‘-’).'**
   String get mpIDInvalidValueErrorMessage;
+
+  /// The error message for missing ID value
+  ///
+  /// In en, this message translates to:
+  /// **'ID is required'**
+  String get mpIDMissingErrorMessage;
 
   /// The error message for non-unique ID value
   ///
@@ -1705,6 +1711,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Click to add a {type} point'**
   String th2FileEditPageAddPointStatusBarMessage(Object type);
+
+  /// The label for the add scrap button
+  ///
+  /// In en, this message translates to:
+  /// **'Add scrap (S)'**
+  String get th2FileEditPageAddScrapButton;
 
   /// The label for the change active scrap tool button
   ///

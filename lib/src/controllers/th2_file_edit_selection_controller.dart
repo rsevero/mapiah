@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -248,7 +248,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     } else {
       final List<int> selectedMPIDs = _mpSelectedElementsLogical.keys.toList();
 
-      mpCommand = MPMultipleElementsCommandFactory.removeElements(
+      mpCommand = MPCommandFactory.removeElements(
         mpIDs: selectedMPIDs,
         thFile: _thFile,
       );

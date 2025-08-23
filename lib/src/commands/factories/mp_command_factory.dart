@@ -13,7 +13,7 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
-class MPMultipleElementsCommandFactory {
+class MPCommandFactory {
   static MPMultipleElementsCommand setOptionOnElements({
     required THCommandOption option,
     required List<THElement> elements,
@@ -499,5 +499,33 @@ class MPMultipleElementsCommandFactory {
       completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
       descriptionType: descriptionType,
     );
+  }
+
+  static MPCommand? addElement({
+    required THElement element,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    switch (element) {
+      case THPoint _:
+        return MPAddPointCommand(newPoint: element);
+      case THLine _:
+        return MPAddLineCommand(
+          newLine: element,
+          lineChildren: element
+              .getChildren(th2FileEditController.thFile)
+              .toList(),
+        );
+      case THArea _:
+        return MPAddAreaCommand(
+          newArea: element,
+          th2FileEditController: th2FileEditController,
+        );
+      case THEndscrap _:
+        return null;
+      default:
+        throw ArgumentError(
+          "At MPCommandFactory.addElementCommand: unknown element type '${element.runtimeType}'",
+        );
+    }
   }
 }

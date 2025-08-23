@@ -319,6 +319,15 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         .th2FileEditPageAddImageButton,
                   ),
                   SizedBox(width: mpButtonSpace),
+                  _imageAssetButton(
+                    isPressed: false,
+                    onPressed: _onAddScrapButtonPressed,
+                    imageAssetPath: mpScrapButtonImagePath,
+                    tooltip: mpLocator
+                        .appLocalizations
+                        .th2FileEditPageAddScrapButton,
+                  ),
+                  SizedBox(width: mpButtonSpace),
                   ..._addElementButton(
                     type: MPButtonType.addArea,
                     isTypeButton: true,
@@ -485,6 +494,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   void _onAddImageButtonPressed() {
     th2FileEditController.stateController.onButtonPressed(
       MPButtonType.addImage,
+    );
+  }
+
+  void _onAddScrapButtonPressed() {
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.addScrap,
     );
   }
 

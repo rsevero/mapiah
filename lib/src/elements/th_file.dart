@@ -742,8 +742,8 @@ class THFile
         : null;
   }
 
-  String getNewTHID({required THElement element, String prefix = ''}) {
-    if (prefix == '') {
+  String getNewTHID({THElement? element, String prefix = ''}) {
+    if ((prefix == '') && (element != null)) {
       prefix = element.elementType.name;
     }
 

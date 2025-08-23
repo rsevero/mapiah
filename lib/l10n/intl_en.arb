@@ -544,9 +544,14 @@
     "description": "The label for the ID type",
     "type": "text"
   },
-  "mpIDInvalidValueErrorMessage": "Invalid ID",
+  "mpIDInvalidValueErrorMessage": "Invalid ID: must be a sequence of characters A-Z, a-z, 0-9 and _-/ (not starting with ‘-’).",
   "@mpIDInvalidValueErrorMessage": {
     "description": "The error message for invalid ID value",
+    "type": "text"
+  },
+  "mpIDMissingErrorMessage": "ID is required",
+  "@mpIDMissingErrorMessage": {
+    "description": "The error message for missing ID value",
     "type": "text"
   },
   "mpIDNonUniqueValueErrorMessage": "ID must be unique",
@@ -1357,6 +1362,11 @@
     "placeholders": {
       "type": {}
     }
+  },
+  "th2FileEditPageAddScrapButton": "Add scrap (S)",
+  "@th2FileEditPageAddScrapButton": {
+    "description": "The label for the add scrap button",
+    "type": "text"
   },
   "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+S)",
   "@th2FileEditPageChangeActiveScrapTool": {

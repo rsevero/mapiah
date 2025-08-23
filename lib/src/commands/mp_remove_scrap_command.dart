@@ -1,22 +1,22 @@
 part of "mp_command.dart";
 
-class MPRemoveAreaCommand extends MPCommand {
-  final int areaMPID;
+class MPRemoveScrapCommand extends MPCommand {
+  final int scrapMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
-      MPCommandDescriptionType.removeArea;
+      MPCommandDescriptionType.removeScrap;
 
-  MPRemoveAreaCommand.forCWJM({
-    required this.areaMPID,
+  MPRemoveScrapCommand.forCWJM({
+    required this.scrapMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPRemoveAreaCommand({
-    required this.areaMPID,
+  MPRemoveScrapCommand({
+    required this.scrapMPID,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
-  MPCommandType get type => MPCommandType.removeArea;
+  MPCommandType get type => MPCommandType.removeScrap;
 
   @override
   MPCommandDescriptionType get defaultDescriptionType =>
@@ -28,7 +28,7 @@ class MPRemoveAreaCommand extends MPCommand {
     required bool keepOriginalLineTH2File,
   }) {
     th2FileEditController.elementEditController.applyRemoveElementByMPID(
-      areaMPID,
+      scrapMPID,
     );
   }
 
@@ -37,11 +37,14 @@ class MPRemoveAreaCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final THArea originalArea = thFile.areaByMPID(areaMPID);
+    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
+    final Iterable<THElement> originalScrapChildren = originalScrap.getChildren(
+      thFile,
+    );
 
-    final MPCommand oppositeCommand = MPAddAreaCommand(
-      newArea: originalArea,
-      th2FileEditController: th2FileEditController,
+    final MPCommand oppositeCommand = MPAddScrapCommand(
+      newScrap: originalScrap,
+      scrapChildren: originalScrapChildren,
       descriptionType: descriptionType,
     );
 
@@ -52,34 +55,34 @@ class MPRemoveAreaCommand extends MPCommand {
   }
 
   @override
-  MPRemoveAreaCommand copyWith({
+  MPRemoveScrapCommand copyWith({
     int? scrapMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPRemoveAreaCommand.forCWJM(
-      areaMPID: scrapMPID ?? this.areaMPID,
+    return MPRemoveScrapCommand.forCWJM(
+      scrapMPID: scrapMPID ?? this.scrapMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPRemoveAreaCommand.fromMap(Map<String, dynamic> map) {
-    return MPRemoveAreaCommand.forCWJM(
-      areaMPID: map['areaMPID'],
+  factory MPRemoveScrapCommand.fromMap(Map<String, dynamic> map) {
+    return MPRemoveScrapCommand.forCWJM(
+      scrapMPID: map['scrapMPID'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
     );
   }
 
-  factory MPRemoveAreaCommand.fromJson(String source) {
-    return MPRemoveAreaCommand.fromMap(jsonDecode(source));
+  factory MPRemoveScrapCommand.fromJson(String source) {
+    return MPRemoveScrapCommand.fromMap(jsonDecode(source));
   }
 
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'areaMPID': areaMPID});
+    map.addAll({'scrapMPID': scrapMPID});
 
     return map;
   }
@@ -88,11 +91,11 @@ class MPRemoveAreaCommand extends MPCommand {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPRemoveAreaCommand &&
-        other.areaMPID == areaMPID &&
+    return other is MPRemoveScrapCommand &&
+        other.scrapMPID == scrapMPID &&
         other.descriptionType == descriptionType;
   }
 
   @override
-  int get hashCode => super.hashCode ^ areaMPID.hashCode;
+  int get hashCode => super.hashCode ^ scrapMPID.hashCode;
 }

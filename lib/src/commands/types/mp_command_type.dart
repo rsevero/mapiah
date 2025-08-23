@@ -6,6 +6,7 @@ enum MPCommandType {
   addLine,
   addLineSegment,
   addPoint,
+  addScrap,
   addXTherionImageInsertConfig,
   editAreaType,
   editLineSegment,
@@ -24,7 +25,8 @@ enum MPCommandType {
   removeLineSegment,
   removeOptionFromElement,
   removePoint,
+  removeScrap,
   removeXTherionImageInsertConfig,
   setAttrOptionToElement,
-  setOptionToElement;
+  setOptionToElement,
 }

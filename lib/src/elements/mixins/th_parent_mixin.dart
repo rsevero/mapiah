@@ -30,5 +30,9 @@ mixin THIsParentMixin {
     }
   }
 
+  Iterable<THElement> getChildren(THFile thFile) {
+    return childrenMPID.map((mpID) => thFile.elementByMPID(mpID));
+  }
+
   int get mpID;
 }

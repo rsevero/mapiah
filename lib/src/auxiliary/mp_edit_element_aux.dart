@@ -236,6 +236,26 @@ class MPEditElementAux {
           .then((ui.FrameInfo frame) => frame.image);
     }
   }
+
+  /// Normalizes a string to be a valid THID (matching /^[a-zA-Z0-9_][a-zA-Z0-9_\-]*$/).
+  /// - Removes invalid leading characters.
+  /// - Replaces invalid characters with '_'.
+  static String normalizeToTHID(String input) {
+    if (input.isEmpty) return '';
+
+    // Remove invalid leading characters
+    String normalized = input.replaceFirst(RegExp(r'^[^a-zA-Z0-9_]+'), '');
+
+    // Replace invalid characters in the rest of the string with '_'
+    normalized = normalized.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_');
+
+    return normalized;
+  }
+
+  static String getFilenameFromPath(String path) {
+    // Handles both '/' and '\' as separators
+    return path.split(RegExp(r'[\\/]+')).last;
+  }
 }
 
 class MPAlignedBezierHandlesWeightedResult {

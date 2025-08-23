@@ -9,7 +9,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -164,6 +164,9 @@ abstract class MPTH2FileEditState {
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.addPoint,
         );
+        return true;
+      case MPButtonType.addScrap:
+        th2FileEditController.elementEditController.addScrap();
         return true;
       case MPButtonType.changeScrap:
         th2FileEditController.toggleToNextAvailableScrap();

@@ -5,7 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -24,6 +24,8 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
+import 'package:mapiah/src/widgets/mp_new_scrap_dialog_widget.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -70,6 +72,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @readonly
   THArea? _newArea;
+
+  @readonly
+  THScrap? _newScrap;
 
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
@@ -295,17 +300,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyAddElement({required THElement newElement}) {
+  void applyAddElement({
+    required THElement newElement,
+    bool positionInsideParent = true,
+  }) {
     _thFile.addElement(newElement);
 
     final int parentMPID = newElement.parentMPID;
 
     if (parentMPID < 0) {
-      _thFile.addElementToParent(newElement);
+      _thFile.addElementToParent(
+        newElement,
+        positionInsideParent: positionInsideParent,
+      );
     } else {
       final THIsParentMixin parent = _thFile.parentByMPID(parentMPID);
 
-      parent.addElementToParent(newElement);
+      parent.addElementToParent(
+        newElement,
+        positionInsideParent: positionInsideParent,
+      );
     }
 
     _th2FileEditController.selectionController.addSelectableElement(newElement);
@@ -401,6 +415,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void createScrap(String id) {
+    final MPCommand addScrapCommand = _createAddScrapCommandForNewScrap(id);
+
+    _th2FileEditController.execute(addScrapCommand);
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+    _th2FileEditController.triggerSelectedElementsRedraw();
+  }
+
+  @action
   void setNewLineStartScreenPosition(Offset lineStartScreenPosition) {
     _lineStartScreenPosition = lineStartScreenPosition;
   }
@@ -443,6 +466,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     newArea.addElementToParent(endarea, positionInsideParent: false);
 
     return newArea;
+  }
+
+  MPCommand _createAddScrapCommandForNewScrap(String thID) {
+    final THScrap newScrap = THScrap(parentMPID: _thFile.mpID, thID: thID);
+    final THEndscrap endScrap = THEndscrap(parentMPID: newScrap.mpID);
+
+    // newScrap.addElementToParent(endScrap, positionInsideParent: false);
+
+    final MPCommand addScrapCommandForNewScrap = MPAddScrapCommand(
+      newScrap: newScrap,
+      scrapChildren: [endScrap],
+    );
+
+    // _thFile.addElementToParent(newScrap);
+
+    return addScrapCommandForNewScrap;
   }
 
   void addAutomaticTHIDOption({
@@ -639,6 +678,33 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.selectionController.addSelectableElement(newLine);
+  }
+
+  @action
+  void applyAddScrap({
+    required THScrap newScrap,
+    required Iterable<THElement> scrapChildren,
+    Offset? lineStartScreenPosition,
+  }) {
+    final TH2FileEditElementEditController elementEditController =
+        _th2FileEditController.elementEditController;
+
+    /// newScrap is included with _thFile.addElement instead of with
+    /// elementEditController.applyAddElement as are the scraps children because
+    /// on creation they were already added to their respective parents
+    /// (addElementToParent) which is the extra step
+    /// elementEditController.applyAddElement does in comparison with
+    /// _thFile.addElement.
+    elementEditController.applyAddElement(newElement: newScrap);
+
+    for (final THElement child in scrapChildren) {
+      elementEditController.applyAddElement(
+        newElement: child,
+        positionInsideParent: false,
+      );
+    }
+
+    _th2FileEditController.setActiveScrap(newScrap.mpID);
   }
 
   @action
@@ -870,7 +936,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               originalLineInTH2File: '',
             );
 
-        return MPMultipleElementsCommandFactory.removeLineSegmentWithSubstitution(
+        return MPCommandFactory.removeLineSegmentWithSubstitution(
           lineSegmentMPID: lineSegmentMPID,
           lineSegmentSubstitution: lineSegmentSubstitution,
           thFile: _th2FileEditController.thFile,
@@ -990,7 +1056,32 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
-  void addScrap() {}
+  void addScrap() {
+    final BuildContext? currentContext =
+        _th2FileEditController.thFileWidgetKey.currentContext;
+
+    if (currentContext == null) {
+      return;
+    }
+
+    final String filename = MPEditElementAux.getFilenameFromPath(
+      _thFile.filename,
+    );
+    final String normalizedFilename = MPEditElementAux.normalizeToTHID(
+      filename,
+    );
+    final String thIDPrefix = '$normalizedFilename-scrap';
+    final String initialScrapTHID = _thFile.getNewTHID(prefix: thIDPrefix);
+
+    MPModalOverlayWidget.show(
+      context: currentContext,
+      childBuilder: (onPressedClose) => MPNewScrapDialogWidget(
+        initialScrapTHID: initialScrapTHID,
+        onPressedClose: onPressedClose,
+        fileEditController: _th2FileEditController,
+      ),
+    );
+  }
 
   void addImage() async {
     final BuildContext? currentContext = _th2FileEditController
@@ -1214,7 +1305,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             for (final segment in smoothedBezierSegments) segment.mpID: segment,
           };
 
-          return MPMultipleElementsCommandFactory.moveLineSegments(
+          return MPCommandFactory.moveLineSegments(
             originalElementsMap: originalSegmentsMap,
             modifiedElementsMap: smoothedSegmentsMap,
           );

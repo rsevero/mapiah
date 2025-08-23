@@ -97,9 +97,7 @@ class MPAddLineCommand extends MPCommand {
     return MPAddLineCommand.forCWJM(
       newLine: THLine.fromMap(map['newLine']),
       lineChildren: List<THElement>.from(
-        map['lineChildren'].map(
-          (x) => THElement.fromMap(x),
-        ),
+        map['lineChildren'].map((x) => THElement.fromMap(x)),
       ),
       lineStartScreenPosition: map.containsKey('lineStartScreenPosition')
           ? Offset(
@@ -107,8 +105,9 @@ class MPAddLineCommand extends MPCommand {
               map['lineStartScreenPosition']['y'],
             )
           : null,
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -143,8 +142,10 @@ class MPAddLineCommand extends MPCommand {
 
     return other is MPAddLineCommand &&
         other.newLine == newLine &&
-        const DeepCollectionEquality()
-            .equals(other.lineChildren, lineChildren) &&
+        const DeepCollectionEquality().equals(
+          other.lineChildren,
+          lineChildren,
+        ) &&
         other.lineStartScreenPosition == lineStartScreenPosition &&
         other.descriptionType == descriptionType;
   }

@@ -365,6 +365,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'ID inválido: deve ser uma sequência de caracteres A-Z, a-z, 0-9 e _-/ (não começando com ‘-’).';
 
   @override
+  String get mpIDMissingErrorMessage => 'ID é obrigatório.';
+
+  @override
   String get mpIDNonUniqueValueErrorMessage => 'IDs devem ser únicos.';
 
   @override
@@ -860,6 +863,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String th2FileEditPageAddPointStatusBarMessage(Object type) {
     return 'Clique para criar um ponto do tipo $type';
   }
+
+  @override
+  String get th2FileEditPageAddScrapButton => 'Adicionar croqui (S)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTool =>

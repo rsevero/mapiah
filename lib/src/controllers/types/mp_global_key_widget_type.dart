@@ -1,4 +1,5 @@
 enum MPGlobalKeyWidgetType {
   changeImageButton,
-  changeScrapButton;
+  changeScrapButton,
+  thFileWidget,
 }

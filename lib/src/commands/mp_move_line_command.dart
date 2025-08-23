@@ -21,7 +21,7 @@ class MPMoveLineCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
-    lineSegmentsMoveCommand = MPMultipleElementsCommandFactory.moveLineSegments(
+    lineSegmentsMoveCommand = MPCommandFactory.moveLineSegments(
       originalElementsMap: originalLineSegmentsMap,
       modifiedElementsMap: modifiedLineSegmentsMap,
       descriptionType: descriptionType,
@@ -37,7 +37,7 @@ class MPMoveLineCommand extends MPCommand {
   }) : originalLineInTH2File = '',
        super() {
     lineSegmentsMoveCommand =
-        MPMultipleElementsCommandFactory.moveLineSegmentsFromDeltaOnCanvas(
+        MPCommandFactory.moveLineSegmentsFromDeltaOnCanvas(
           originalElementsMap: originalLineSegmentsMap,
           deltaOnCanvas: deltaOnCanvas,
           decimalPositions: decimalPositions,

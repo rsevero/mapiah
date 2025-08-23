@@ -1,7 +1,7 @@
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
-import 'package:mapiah/src/commands/factories/mp_multiple_elements_command_factory.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -113,12 +113,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (actualElementsForNewOption.isNotEmpty) {
         final MPMultipleElementsCommand addOptionCommand =
             (option.type == THCommandOptionType.attr)
-            ? MPMultipleElementsCommandFactory.setAttrOptionOnElements(
+            ? MPCommandFactory.setAttrOptionOnElements(
                 elements: actualElementsForNewOption,
                 option: option as THAttrCommandOption,
                 thFile: _th2FileEditController.thFile,
               )
-            : MPMultipleElementsCommandFactory.setOptionOnElements(
+            : MPCommandFactory.setOptionOnElements(
                 elements: actualElementsForNewOption,
                 option: option,
                 thFile: _th2FileEditController.thFile,
@@ -173,7 +173,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommandFactory.removeAttrOptionFromElements(
+            MPCommandFactory.removeAttrOptionFromElements(
               attrName: attrName,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,
@@ -227,7 +227,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommandFactory.removeOptionFromElements(
+            MPCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,
@@ -317,7 +317,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       if (elements.isNotEmpty) {
         addOptionCommands.insert(
           0,
-          MPMultipleElementsCommandFactory.setOptionOnElements(
+          MPCommandFactory.setOptionOnElements(
             elements: elements,
             option: THCommandOption.byType(
               optionParent: elements.first as THHasOptionsMixin,
@@ -388,7 +388,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       if (parentMPIDs.isNotEmpty) {
         final MPMultipleElementsCommand removeOptionCommand =
-            MPMultipleElementsCommandFactory.removeOptionFromElements(
+            MPCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
               thFile: _th2FileEditController.thFile,
@@ -494,11 +494,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         descriptionType: MPCommandDescriptionType.editLineSegmentType,
       );
     } else {
-      setLineSegmentTypeCommand =
-          MPMultipleElementsCommandFactory.editLinesSegmentType(
-            thFile: _th2FileEditController.thFile,
-            newLineSegments: newLineSegments,
-          );
+      setLineSegmentTypeCommand = MPCommandFactory.editLinesSegmentType(
+        thFile: _th2FileEditController.thFile,
+        newLineSegments: newLineSegments,
+      );
 
       _th2FileEditController.execute(setLineSegmentTypeCommand);
     }
@@ -552,7 +551,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             newAreaType: THAreaType.values.byName(newType),
           );
         } else {
-          setPLATypeCommand = MPMultipleElementsCommandFactory.editAreasType(
+          setPLATypeCommand = MPCommandFactory.editAreasType(
             newAreaType: THAreaType.values.byName(newType),
             areaMPIDs: mpIDs,
           );
@@ -580,7 +579,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             newLineType: THLineType.values.byName(newType),
           );
         } else {
-          setPLATypeCommand = MPMultipleElementsCommandFactory.editLinesType(
+          setPLATypeCommand = MPCommandFactory.editLinesType(
             newLineType: THLineType.values.byName(newType),
             lineMPIDs: mpIDs,
           );
@@ -608,7 +607,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             newPointType: THPointType.values.byName(newType),
           );
         } else {
-          setPLATypeCommand = MPMultipleElementsCommandFactory.editPointsType(
+          setPLATypeCommand = MPCommandFactory.editPointsType(
             newPointType: THPointType.values.byName(newType),
             pointMPIDs: mpIDs,
           );

@@ -73,13 +73,13 @@ class MPAddAreaCommand extends MPCommand {
 
   @override
   MPAddAreaCommand copyWith({
-    THArea? newArea,
-    MPCommand? addAreaTHIDsCommand,
+    THArea? newScrap,
+    MPCommand? scrapChildren,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddAreaCommand.forCWJM(
-      newArea: newArea ?? this.newArea,
-      addAreaTHIDsCommand: addAreaTHIDsCommand ?? this.addAreaTHIDsCommand,
+      newArea: newScrap ?? this.newArea,
+      addAreaTHIDsCommand: scrapChildren ?? this.addAreaTHIDsCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -88,8 +88,9 @@ class MPAddAreaCommand extends MPCommand {
     return MPAddAreaCommand.forCWJM(
       newArea: THArea.fromMap(map['newArea']),
       addAreaTHIDsCommand: MPCommand.fromMap(map['addAreaTHIDsCommand']),
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -121,9 +122,5 @@ class MPAddAreaCommand extends MPCommand {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        newArea,
-        addAreaTHIDsCommand,
-      );
+      super.hashCode ^ Object.hash(newArea, addAreaTHIDsCommand);
 }

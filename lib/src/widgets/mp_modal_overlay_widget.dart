@@ -49,7 +49,9 @@ class MPModalOverlayWidget {
                 child: Material(
                   elevation: 12,
                   color: Theme.of(ctx).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(
+                    mpOverlayWindowCornerRadius,
+                  ),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: 280),
                     child: IntrinsicWidth(
