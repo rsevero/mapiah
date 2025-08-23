@@ -136,7 +136,6 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                       return MPPLATypeOptionWidget(
                         value: choice,
                         label: choices[choice]!,
-                        isSelected: choice == selectedPLATypeNotNull,
                         th2FileEditController: th2FileEditController,
                       );
                     }),
@@ -154,7 +153,6 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                       return MPPLATypeOptionWidget(
                         value: choice,
                         label: choices[choice]!,
-                        isSelected: choice == selectedPLATypeNotNull,
                         th2FileEditController: th2FileEditController,
                       );
                     }),
@@ -171,7 +169,6 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
                     return MPPLATypeOptionWidget(
                       value: entry.key,
                       label: entry.value,
-                      isSelected: entry.key == selectedPLATypeNotNull,
                       th2FileEditController: th2FileEditController,
                     );
                   }),
