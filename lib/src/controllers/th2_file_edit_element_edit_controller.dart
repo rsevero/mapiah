@@ -990,6 +990,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
+  void addScrap() {}
+
   void addImage() async {
     final BuildContext? currentContext = _th2FileEditController
         .overlayWindowController

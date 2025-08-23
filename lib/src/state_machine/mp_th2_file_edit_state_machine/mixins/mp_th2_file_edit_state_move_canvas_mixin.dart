@@ -27,9 +27,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           );
         }
       case LogicalKeyboardKey.keyC:
-        if (isAltPressed && !isCtrlPressed && !isShiftPressed) {
-          th2FileEditController.toggleToNextAvailableScrap();
-        } else if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
           selectionController.setSelectionState();
         }
       case LogicalKeyboardKey.keyI:
@@ -81,17 +79,19 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           );
         }
       case LogicalKeyboardKey.keyS:
-        print('DEBUG (Mapiah): S pressed.');
-        if (isCtrlPressed &&
-            !isAltPressed &&
-            th2FileEditController.enableSaveButton) {
-          print(
-            'DEBUG (Mapiah): Ctrl-S pressed. Saving TH2 file: ${thFile.filename}',
-          );
-          if (isShiftPressed && !kIsWeb) {
-            th2FileEditController.saveAsTH2File();
+        if (isCtrlPressed && !isAltPressed) {
+          if (th2FileEditController.enableSaveButton) {
+            if (isShiftPressed && !kIsWeb) {
+              th2FileEditController.saveAsTH2File();
+            } else {
+              th2FileEditController.saveTH2File();
+            }
+          }
+        } else if (!isCtrlPressed && !isShiftPressed) {
+          if (isAltPressed) {
+            th2FileEditController.toggleToNextAvailableScrap();
           } else {
-            th2FileEditController.saveTH2File();
+            th2FileEditController.elementEditController.addScrap();
           }
         }
       case LogicalKeyboardKey.keyY:

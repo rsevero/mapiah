@@ -4,11 +4,12 @@
 | ----------------------------------------------- | ---------------------------- |
 | Add line segment between selected line segments | /                            |
 | Add image                                       | I                            |
-| Change active scrap                             | Alt+C                        |
+| Change active scrap                             | Alt+S                        |
 | Change images                                   | Alt+I                        |
 | Create area                                     | A                            |
 | Create line                                     | L                            |
 | Create point                                    | P                            |
+| Create scrap                                    | S                            |
 | Delete point, line, area or line segment        | Del or Backspace             |
 | Force option setting on non-supporting types    | Ctrl+click on option setting |
 | Open file                                       | Ctrl+O                       |

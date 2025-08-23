@@ -1709,7 +1709,7 @@ abstract class AppLocalizations {
   /// The label for the change active scrap tool button
   ///
   /// In en, this message translates to:
-  /// **'Change active scrap (Alt+C)'**
+  /// **'Change active scrap (Alt+S)'**
   String get th2FileEditPageChangeActiveScrapTool;
 
   /// The title for the change active scrap dialog

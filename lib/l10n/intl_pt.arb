@@ -268,7 +268,7 @@
   "th2FileEditPageAddLineStatusBarMessage": "Clique para criar uma linha do tipo {type}",
   "th2FileEditPageAddPoint": "Criar ponto (P)",
   "th2FileEditPageAddPointStatusBarMessage": "Clique para criar um ponto do tipo {type}",
-  "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo (Alt+C)",
+  "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo (Alt+S)",
   "th2FileEditPageChangeActiveScrapTitle": "Alterar croqui ativo",
   "th2FileEditPageChangeImageTitle": "Alterar imagens",
   "th2FileEditPageChangeImageTool": "Alterar imagem (Alt+I)",
