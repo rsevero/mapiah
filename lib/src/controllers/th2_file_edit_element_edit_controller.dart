@@ -1002,6 +1002,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     final String imagePath = await MPDialogAux.pickImageFile(currentContext);
 
+    if (imagePath.isEmpty) {
+      return;
+    }
+
     final String relativeImagePath = p.relative(
       imagePath,
       from: p.dirname(_thFile.filename),
