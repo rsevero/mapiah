@@ -372,7 +372,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
   Widget _imageAssetButton({
     required bool isPressed,
-    required void Function()? onPressed,
+    required VoidCallback? onPressed,
     required String imageAssetPath,
     String? tooltip,
     Object? heroTag,

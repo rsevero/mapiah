@@ -7,11 +7,13 @@ import 'package:markdown_widget/markdown_widget.dart';
 class MPHelpDialogWidget extends StatelessWidget {
   final String helpPage;
   final String title;
+  final VoidCallback onPressedClose;
 
   const MPHelpDialogWidget({
     super.key,
     required this.helpPage,
     required this.title,
+    required this.onPressedClose,
   });
 
   Future<String> _loadMarkdown(BuildContext context) async {
@@ -43,7 +45,7 @@ class MPHelpDialogWidget extends StatelessWidget {
             content: Text(mpLocator.appLocalizations.helpDialogFailureToLoad),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: onPressedClose,
                 child: Text(mpLocator.appLocalizations.buttonClose),
               ),
             ],
@@ -56,7 +58,7 @@ class MPHelpDialogWidget extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: onPressedClose,
               child: Text(mpLocator.appLocalizations.buttonClose),
             ),
           ],

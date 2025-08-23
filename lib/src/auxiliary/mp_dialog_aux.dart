@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
+import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:path/path.dart' as p;
 
 class MPDialogAux {
@@ -145,10 +146,13 @@ class MPDialogAux {
     String helpPage,
     String title,
   ) {
-    showDialog(
+    MPModalOverlayWidget.show(
       context: context,
-      builder: (context) =>
-          MPHelpDialogWidget(helpPage: helpPage, title: title),
+      childBuilder: (onPressedClose) => MPHelpDialogWidget(
+        helpPage: helpPage,
+        title: title,
+        onPressedClose: onPressedClose,
+      ),
     );
   }
 }

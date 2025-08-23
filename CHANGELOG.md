@@ -1,7 +1,10 @@
 # Changelog
 
 ## 0.2.13 - not yet released
-* Included 'add image' button in 'add elements' button options.
+* New features:
+  * Included 'add image' button in 'add elements' button options.
+* Fixed bugs:
+  * Opening the help with a dialog on display the dialog did not close [reported by Marco Corvi].
 
 ## 0.2.12 - 2025-08-21
 * New features:
@@ -11,16 +14,16 @@
   * When setting 'smooth' option to on on line segments, the bezier curve line segments should be smoothed.
   * Consider XVI and raster image files bounding boxes when calculating THFile bounding box.
 * Fixed bugs:
-  * Fixed 'setting multiple option options in line segments not working'.
-  * Fixed 'clicking in another controlpoint after moving a control point would unselect everything'.
+  * Setting multiple option options in line segments not working.
+  * Clicking in another controlpoint after moving a control point would unselect everything.
   * Making selection tolerance and point radius the same to avoid clicking near the border of a point and not selecting it.
-  * Fixed 'when selecting a control point 1 the control points of the adjacent line segments weren't properly selected'.
-  * Fixed 'changing first point of a line to bezier curve throws an exception'.
-  * Fixed 'when a Bèzier control point is selected, an end point appears as selected also'.
-  * Fixed 'when multiple elements are selected and the user asks for the options window, options that were set on the last selected element would be shown as if it were selected for all elements'.
-  * Fixed 'right clicking anywhere when a control point is selected raises an exception'.
-  * Fixed 'opening a TH2 file that calls for a non existent XVI file should not hang Mapiah'.
-  * Fixed 'opening a TH2 file that calls for an non existent raster image should not raise an exception'.
+  * When selecting a control point 1 the control points of the adjacent line segments weren't properly selected.
+  * Changing first point of a line to bezier curve throws an exception.
+  * When a Bèzier control point is selected, an end point appears as selected also.
+  * When multiple elements are selected and the user asks for the options window, options that were set on the last selected element would be shown as if it were selected for all elements.
+  * Right clicking anywhere when a control point is selected raises an exception.
+  * Opening a TH2 file that calls for a non existent XVI file should not hang Mapiah.
+  * Opening a TH2 file that calls for an non existent raster image should not raise an exception.
 * Infrastructure maintanance:
   * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
   * Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign

@@ -112,6 +112,7 @@ const double mpOverlayWindowCornerRadius = 18;
 const double mpOverlayWindowBlockPadding = 12;
 const double mpOverlayWindowBlockCornerRadius = 14;
 const double mpOverlayWindowBlockElevation = 2;
+const double mpOverlayWindowOutsidePadding = 32;
 const double mpSwitchScaleFactor = 0.7;
 const int mpTileWidgetOnHoverAlpha = 50;
 const double mpTileWidgetEdgeInset = 12;
