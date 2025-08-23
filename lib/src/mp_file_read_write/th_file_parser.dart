@@ -579,31 +579,41 @@ class THFileParser {
       assert(element[2][0] is String);
     }
 
-    final THPoint newPoint = THPoint.fromString(
-      parentMPID: _currentParentMPID,
-      pointDataList: element[1],
-      pointTypeString: element[2][0],
-      originalLineInTH2File: _currentOriginalLine,
-    );
-    _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
-      newElement: newPoint,
-      parent: _currentParent,
-    );
-
-    _currentElement = newPoint;
-    // _parsedOptions.clear();
-
     try {
-      // Including subtype defined with type (type:subtype).
-      if (element[2][1] != null) {
-        THSubtypeCommandOption(optionParent: newPoint, subtype: element[2][1]);
-        // _parsedOptions.add('subtype');
+      final THPoint newPoint = THPoint.fromString(
+        parentMPID: _currentParentMPID,
+        pointDataList: element[1],
+        pointTypeString: element[2][0],
+        originalLineInTH2File: _currentOriginalLine,
+      );
+      _th2FileElementEditController
+          .addElementWithParentWithoutSelectableElement(
+            newElement: newPoint,
+            parent: _currentParent,
+          );
+
+      _currentElement = newPoint;
+
+      try {
+        // Including subtype defined with type (type:subtype).
+        if (element[2][1] != null) {
+          THSubtypeCommandOption(
+            optionParent: newPoint,
+            subtype: element[2][1],
+          );
+        }
+      } catch (e, s) {
+        _addError(
+          "$e\n\nTrace:\n\n$s",
+          '_injectLine',
+          element[2][1].toString(),
+        );
       }
+
+      _optionFromElement(element[3], _pointRegularOptions);
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[2][1].toString());
     }
-
-    _optionFromElement(element[3], _pointRegularOptions);
   }
 
   void _injectBezierCurveLineSegment(List<dynamic> element) {
@@ -814,30 +824,39 @@ class THFileParser {
       assert(element[1][0] is String);
     }
 
-    final THArea newArea = THArea.fromString(
-      parentMPID: _currentParentMPID,
-      areaTypeString: element[1][0],
-      originalLineInTH2File: _currentOriginalLine,
-    );
-    _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
-      newElement: newArea,
-      parent: _currentParent,
-    );
-
-    _currentElement = newArea;
-    setCurrentParent(newArea);
-
     try {
-      // Including subtype defined with type (type:subtype).
-      if ((element[1][1] != null) && (element[1][0] == 'u')) {
-        THSubtypeCommandOption(optionParent: newArea, subtype: element[1][1]);
+      final THArea newArea = THArea.fromString(
+        parentMPID: _currentParentMPID,
+        areaTypeString: element[1][0],
+        originalLineInTH2File: _currentOriginalLine,
+      );
+      _th2FileElementEditController
+          .addElementWithParentWithoutSelectableElement(
+            newElement: newArea,
+            parent: _currentParent,
+          );
+
+      _currentElement = newArea;
+      setCurrentParent(newArea);
+
+      try {
+        // Including subtype defined with type (type:subtype).
+        if ((element[1][1] != null) && (element[1][0] == 'u')) {
+          THSubtypeCommandOption(optionParent: newArea, subtype: element[1][1]);
+        }
+      } catch (e, s) {
+        _addError(
+          "$e\n\nTrace:\n\n$s",
+          '_injectArea',
+          element[1][1].toString(),
+        );
       }
+
+      _optionFromElement(element[2], _areaRegularOptions);
+      _addChildParser(_areaContentParser);
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_injectArea', element[1][1].toString());
     }
-
-    _optionFromElement(element[2], _areaRegularOptions);
-    _addChildParser(_areaContentParser);
   }
 
   void _injectLine(List<dynamic> element) {
@@ -850,31 +869,40 @@ class THFileParser {
       assert(element[1][0] is String);
     }
 
-    final THLine newLine = THLine.fromString(
-      parentMPID: _currentParentMPID,
-      lineTypeString: element[1][0],
-      originalLineInTH2File: _currentOriginalLine,
-    );
-    _th2FileElementEditController.addElementWithParentWithoutSelectableElement(
-      newElement: newLine,
-      parent: _currentParent,
-    );
-
-    _currentElement = newLine;
-    setCurrentParent(newLine);
-
     try {
-      // Including subtype defined with type (type:subtype).
-      if (element[1][1] != null) {
-        THSubtypeCommandOption(optionParent: newLine, subtype: element[1][1]);
+      final THLine newLine = THLine.fromString(
+        parentMPID: _currentParentMPID,
+        lineTypeString: element[1][0],
+        originalLineInTH2File: _currentOriginalLine,
+      );
+      _th2FileElementEditController
+          .addElementWithParentWithoutSelectableElement(
+            newElement: newLine,
+            parent: _currentParent,
+          );
+
+      _currentElement = newLine;
+      setCurrentParent(newLine);
+
+      try {
+        // Including subtype defined with type (type:subtype).
+        if (element[1][1] != null) {
+          THSubtypeCommandOption(optionParent: newLine, subtype: element[1][1]);
+        }
+      } catch (e, s) {
+        _addError(
+          "$e\n\nTrace:\n\n$s",
+          '_injectLine',
+          element[1][1].toString(),
+        );
       }
+
+      _optionFromElement(element[2], _lineRegularOptions);
+      _addChildParser(_lineContentParser);
+      _lastLineSegment = null;
     } catch (e, s) {
       _addError("$e\n\nTrace:\n\n$s", '_injectLine', element[1][1].toString());
     }
-
-    _optionFromElement(element[2], _lineRegularOptions);
-    _addChildParser(_lineContentParser);
-    _lastLineSegment = null;
   }
 
   void _injectEndarea() {

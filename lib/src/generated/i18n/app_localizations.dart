@@ -2139,12 +2139,6 @@ abstract class AppLocalizations {
   /// **'XTherion config'**
   String get thElementXTherionConfig;
 
-  /// The label for the user defined PLA type
-  ///
-  /// In en, this message translates to:
-  /// **'User defined'**
-  String get thPLAUserDefined;
-
   /// The label for the air draught point type
   ///
   /// In en, this message translates to:

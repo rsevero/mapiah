@@ -1,5 +1,4 @@
 import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 
 enum THLineType {
   abyssEntrance,
@@ -37,7 +36,6 @@ enum THLineType {
   steps,
   survey,
   u,
-  userDefined,
   viaFerrata,
   walkWay,
   wall,
@@ -48,10 +46,6 @@ enum THLineType {
   };
 
   static bool hasLineType(String lineType) {
-    if (lineType == thUnknownPLAType) {
-      return false;
-    }
-
     final String normalizedPLAType = MPTypeAux.convertHyphenatedToCamelCase(
       lineType,
     );
@@ -60,13 +54,15 @@ enum THLineType {
   }
 
   static THLineType fromFileString(String value) {
-    if (hasLineType(value)) {
-      value = MPTypeAux.convertHyphenatedToCamelCase(value);
-
-      return THLineType.values.byName(value);
-    } else {
-      return THLineType.userDefined;
+    if (!hasLineType(value)) {
+      throw ArgumentError(
+        'At THLineType.fromFileString: Invalid line type: $value',
+      );
     }
+
+    value = MPTypeAux.convertHyphenatedToCamelCase(value);
+
+    return THLineType.values.byName(value);
   }
 
   String toFileString() {

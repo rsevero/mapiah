@@ -182,36 +182,18 @@ endscrap
     }
   });
 
-  group('line user defined type', () {
-    const successes = [
-      {
-        'file': 'th_file_parser-00082-line_with_user_defined_type.th2',
-        'length': 5,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  line cable
-  endline
-endscrap
-''',
-      },
-    ];
+  group('line unknown type failure', () {
+    const failures = ['th_file_parser-00082-line_unknown_type-failure.th2'];
 
-    for (var success in successes) {
-      test(success, () async {
+    for (var failure in failures) {
+      test(failure, () async {
         final parser = THFileParser();
-        final writer = THFileWriter();
-        mpLocator.mpGeneralController.reset();
-        final (file, isSuccessful, _) = await parser.parse(
-          THTestAux.testPath(success['file'] as String),
-        );
-        expect(isSuccessful, true);
-        expect(file, isA<THFile>());
-        expect(file.encoding, (success['encoding'] as String));
-        expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
-        expect(asFile, success['asFile']);
+        mpLocator.mpGeneralController.reset();
+        final (_, isSuccessful, error) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
+        expect(isSuccessful, false);
       });
     }
   });

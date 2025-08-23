@@ -33,7 +33,6 @@ class THPoint extends THElement
     implements THHasPLATypeMixin, THPointInterface {
   final THPositionPart position;
   final THPointType pointType;
-  final String? _userDefinedPLAType;
 
   THPoint.forCWJM({
     required super.mpID,
@@ -41,12 +40,10 @@ class THPoint extends THElement
     super.sameLineComment,
     required this.position,
     required this.pointType,
-    String? userDefinedPLAType,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
-  }) : _userDefinedPLAType = userDefinedPLAType,
-       super.forCWJM() {
+  }) : super.forCWJM() {
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
@@ -56,10 +53,9 @@ class THPoint extends THElement
     super.sameLineComment,
     required this.position,
     required this.pointType,
-    String? userDefinedPLAType,
+
     super.originalLineInTH2File = '',
-  }) : _userDefinedPLAType = userDefinedPLAType,
-       super.addToParent();
+  }) : super.addToParent();
 
   @override
   THElementType get elementType => THElementType.point;
@@ -72,9 +68,7 @@ class THPoint extends THElement
     super.originalLineInTH2File = '',
   }) : position = THPositionPart.fromStringList(list: pointDataList),
        pointType = THPointType.fromFileString(pointTypeString),
-       _userDefinedPLAType = (THPointType.hasPointType(pointTypeString))
-           ? null
-           : pointTypeString,
+
        super.addToParent();
 
   @override
@@ -84,8 +78,6 @@ class THPoint extends THElement
     map.addAll({
       'position': position.toMap(),
       'pointType': pointType.name,
-      if (_userDefinedPLAType != null)
-        'userDefinedPLAType': _userDefinedPLAType,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
@@ -101,9 +93,6 @@ class THPoint extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
       pointType: THPointType.values.byName(map['pointType']),
-      userDefinedPLAType: map.containsKey('userDefinedPLAType')
-          ? map['userDefinedPLAType']
-          : null,
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
         map['attrOptionsMap'],
@@ -124,8 +113,6 @@ class THPoint extends THElement
     String? originalLineInTH2File,
     THPositionPart? position,
     THPointType? pointType,
-    String? userDefinedPLAType,
-    bool makeUserDefinedPLATypeNull = false,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
@@ -139,9 +126,6 @@ class THPoint extends THElement
           originalLineInTH2File ?? this.originalLineInTH2File,
       position: position ?? this.position,
       pointType: pointType ?? this.pointType,
-      userDefinedPLAType: makeUserDefinedPLATypeNull
-          ? null
-          : (userDefinedPLAType ?? this.userDefinedPLAType),
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
@@ -157,7 +141,6 @@ class THPoint extends THElement
 
     return other.position == position &&
         other.pointType == pointType &&
-        other.userDefinedPLAType == _userDefinedPLAType &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
   }
@@ -165,13 +148,7 @@ class THPoint extends THElement
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        position,
-        pointType,
-        userDefinedPLAType,
-        optionsMap,
-        attrOptionsMap,
-      );
+      Object.hash(position, pointType, optionsMap, attrOptionsMap);
 
   @override
   bool isSameClass(Object object) {
@@ -187,10 +164,7 @@ class THPoint extends THElement
 
   @override
   String get plaType {
-    return ((pointType == THPointType.userDefined) &&
-            (_userDefinedPLAType != null))
-        ? _userDefinedPLAType
-        : pointType.toFileString();
+    return pointType.toFileString();
   }
 
   @override
@@ -205,10 +179,5 @@ class THPoint extends THElement
 
   int get decimalPositions {
     return position.decimalPositions;
-  }
-
-  @override
-  String? get userDefinedPLAType {
-    return (pointType == THPointType.userDefined) ? _userDefinedPLAType : null;
   }
 }

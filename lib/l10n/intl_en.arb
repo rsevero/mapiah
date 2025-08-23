@@ -1732,11 +1732,6 @@
     "description": "The label for the XTherion config element type",
     "type": "text"
   },
-  "thPLAUserDefined": "User defined",
-  "@thPLAUserDefined": {
-    "description": "The label for the user defined PLA type",
-    "type": "text"
-  },
   "thPointAirDraught": "Air draught",
   "@thPointAirDraught": {
     "description": "The label for the air draught point type",

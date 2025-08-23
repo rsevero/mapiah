@@ -1088,9 +1088,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thElementXTherionConfig => 'XTherion config';
 
   @override
-  String get thPLAUserDefined => 'User defined';
-
-  @override
   String get thPointAirDraught => 'Air draught';
 
   @override

@@ -6,8 +6,8 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 
 /// Presented in PLA options overlay window. By taping on it the user is
-/// presented with a list of available PLA types at the MPPLATypeOptionsWidget
-/// overlay window.
+/// presented with a list of available PLA types at the
+/// MPPLATypeOptionsOverlayWindowWidget overlay window.
 class MPPLATypeWidget extends StatelessWidget {
   final String? selectedPLAType;
   final String? selectedPLATypeToUser;

@@ -270,7 +270,6 @@ const int mpMaxLastUsedTypes = 5;
 const int mpMaxMostUsedTypes = 5;
 
 const String mpNoSubtypeID = 'NO_SUBTYPE';
-const String thUnknownPLAType = 'unknown';
 
 const String mpChangelogURL =
     'https://github.com/rsevero/mapiah/blob/main/CHANGELOG.md';
