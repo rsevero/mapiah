@@ -843,7 +843,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddElementOptions => 'Criar elemento';
 
   @override
-  String get th2FileEditPageAddImageButton => 'Adicionar imagem (Ctrl+Alt+I)';
+  String get th2FileEditPageAddImageButton => 'Adicionar imagem (I)';
 
   @override
   String get th2FileEditPageAddLine => 'Criar linha (L)';

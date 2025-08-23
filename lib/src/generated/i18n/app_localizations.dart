@@ -1679,7 +1679,7 @@ abstract class AppLocalizations {
   /// The label for the add image button
   ///
   /// In en, this message translates to:
-  /// **'Add image (Ctrl+Alt+I)'**
+  /// **'Add image (I)'**
   String get th2FileEditPageAddImageButton;
 
   /// The label for the add line button

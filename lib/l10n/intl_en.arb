@@ -1327,7 +1327,7 @@
     "description": "The label for the add element options button",
     "type": "text"
   },
-  "th2FileEditPageAddImageButton": "Add image (Ctrl+Alt+I)",
+  "th2FileEditPageAddImageButton": "Add image (I)",
   "@th2FileEditPageAddImageButton": {
     "description": "The label for the add image button",
     "type": "text"

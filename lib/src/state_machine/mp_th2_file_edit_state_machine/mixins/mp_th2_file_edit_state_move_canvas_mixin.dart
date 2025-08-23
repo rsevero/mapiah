@@ -33,13 +33,13 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           selectionController.setSelectionState();
         }
       case LogicalKeyboardKey.keyI:
-        if (isAltPressed && !isShiftPressed) {
-          if (isCtrlPressed) {
-            th2FileEditController.elementEditController.addImage();
-          } else {
+        if (!isShiftPressed && !isCtrlPressed) {
+          if (isAltPressed) {
             th2FileEditController.overlayWindowController.toggleOverlayWindow(
               MPWindowType.changeImage,
             );
+          } else {
+            th2FileEditController.elementEditController.addImage();
           }
         }
       case LogicalKeyboardKey.keyL:
