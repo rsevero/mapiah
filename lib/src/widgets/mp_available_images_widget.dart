@@ -6,6 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
@@ -132,7 +133,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   }
 
   void _onPressedAddImage(BuildContext context) {
-    th2FileEditController.elementEditController.addImage();
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.addImage,
+    );
   }
 
   void _onPressedRemoveImage(int imageMPID) {

@@ -152,6 +152,9 @@ abstract class MPTH2FileEditState {
           MPTH2FileEditStateType.addArea,
         );
         return true;
+      case MPButtonType.addImage:
+        th2FileEditController.elementEditController.addImage();
+        return true;
       case MPButtonType.addLine:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.addLine,

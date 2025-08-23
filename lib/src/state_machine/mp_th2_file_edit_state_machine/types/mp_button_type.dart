@@ -1,6 +1,7 @@
 enum MPButtonType {
   addArea,
   addElement,
+  addImage,
   addLine,
   addPoint,
   addXTherionImageInsertConfig,
