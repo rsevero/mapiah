@@ -619,6 +619,8 @@ class MPTextToUser {
     _pointTypeAsString[THPointType.traverse] = localizations.thPointTraverse;
     _pointTypeAsString[THPointType.treeTrunk] = localizations.thPointTreeTrunk;
     _pointTypeAsString[THPointType.u] = localizations.thPointU;
+    _pointTypeAsString[THPointType.userDefined] =
+        localizations.thPLAUserDefined;
     _pointTypeAsString[THPointType.vegetableDebris] =
         localizations.thPointVegetableDebris;
     _pointTypeAsString[THPointType.viaFerrata] =
@@ -635,8 +637,7 @@ class MPTextToUser {
   }
 
   static String getPointType(THPointType pointType) {
-    return (_pointTypeAsString.containsKey(pointType) &&
-            pointType != THPointType.userDefined)
+    return _pointTypeAsString.containsKey(pointType)
         ? _pointTypeAsString[pointType]!
         : pointType.name;
   }
@@ -684,6 +685,7 @@ class MPTextToUser {
     _lineTypeAsString[THLineType.steps] = localizations.thLineSteps;
     _lineTypeAsString[THLineType.survey] = localizations.thLineSurvey;
     _lineTypeAsString[THLineType.u] = localizations.thLineU;
+    _lineTypeAsString[THLineType.userDefined] = localizations.thPLAUserDefined;
     _lineTypeAsString[THLineType.viaFerrata] = localizations.thLineViaFerrata;
     _lineTypeAsString[THLineType.walkWay] = localizations.thLineWalkWay;
     _lineTypeAsString[THLineType.wall] = localizations.thLineWall;
@@ -691,8 +693,7 @@ class MPTextToUser {
   }
 
   static String getLineType(THLineType lineType) {
-    return (_lineTypeAsString.containsKey(lineType) &&
-            lineType != THLineType.userDefined)
+    return _lineTypeAsString.containsKey(lineType)
         ? _lineTypeAsString[lineType]!
         : lineType.name;
   }
@@ -723,12 +724,12 @@ class MPTextToUser {
     _areaTypeAsString[THAreaType.stalagmite] = localizations.thAreaStalagmite;
     _areaTypeAsString[THAreaType.sump] = localizations.thAreaSump;
     _areaTypeAsString[THAreaType.u] = localizations.thAreaU;
+    _areaTypeAsString[THAreaType.userDefined] = localizations.thPLAUserDefined;
     _areaTypeAsString[THAreaType.water] = localizations.thAreaWater;
   }
 
   static String getAreaType(THAreaType areaType) {
-    return (_areaTypeAsString.containsKey(areaType) &&
-            (areaType != THAreaType.userDefined))
+    return _areaTypeAsString.containsKey(areaType)
         ? _areaTypeAsString[areaType]!
         : areaType.name;
   }

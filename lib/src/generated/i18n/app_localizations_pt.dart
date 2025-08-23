@@ -1097,6 +1097,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thElementXTherionConfig => 'Configuração XTherion';
 
   @override
+  String get thPLAUserDefined => 'Definido pelo usuário';
+
+  @override
   String get thPointAirDraught => 'Corrente de ar';
 
   @override
