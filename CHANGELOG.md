@@ -5,6 +5,7 @@
   * Included 'add image' button in 'add elements' button options.
 * Fixed bugs:
   * Opening the help with a dialog on display the dialog did not close [reported by Marco Corvi].
+  * An saveAs suggested filename included the original path.
 
 ## 0.2.12 - 2025-08-21
 * New features:

@@ -1019,10 +1019,13 @@ abstract class TH2FileEditControllerBase with Store {
         mpGeneralController.lastAccessedDirectory.isEmpty
         ? (filename.isEmpty ? null : p.dirname(_thFile.filename))
         : mpGeneralController.lastAccessedDirectory;
+    final String? initialFileName = filename.isEmpty
+        ? null
+        : p.basename(filename);
 
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: mpLocator.appLocalizations.th2FileEditPageSaveAsDialogTitle,
-      fileName: _thFile.filename,
+      fileName: initialFileName,
       initialDirectory: initialDirectory,
     );
 
