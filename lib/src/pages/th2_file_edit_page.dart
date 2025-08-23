@@ -311,7 +311,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               children: [
                 if (th2FileEditController.isAddElementButtonsHovered) ...[
                   ..._addElementButton(
-                    type: MPButtonType.addPoint,
+                    type: MPButtonType.addArea,
                     isTypeButton: true,
                   ),
                   ..._addElementButton(
@@ -319,7 +319,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     isTypeButton: true,
                   ),
                   ..._addElementButton(
-                    type: MPButtonType.addArea,
+                    type: MPButtonType.addPoint,
                     isTypeButton: true,
                   ),
                 ],
