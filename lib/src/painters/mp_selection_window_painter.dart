@@ -28,8 +28,10 @@ class MPSelectionWindowPainter extends CustomPainter {
     canvas.drawPath(
       dashPath(
         dashedPath,
-        dashArray:
-            CircularIntervalList<double>(<double>[dashInterval, dashInterval]),
+        dashArray: CircularIntervalList<double>(<double>[
+          dashInterval,
+          dashInterval,
+        ]),
       ),
       borderPaint,
     );

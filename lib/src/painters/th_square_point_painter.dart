@@ -34,17 +34,11 @@ class THSquarePointPainter extends CustomPainter {
     }
 
     if (pointPaint.fill != null) {
-      canvas.drawRect(
-        squareRect,
-        pointPaint.fill!,
-      );
+      canvas.drawRect(squareRect, pointPaint.fill!);
     }
 
     if (pointPaint.border != null) {
-      canvas.drawRect(
-        squareRect,
-        pointPaint.border!,
-      );
+      canvas.drawRect(squareRect, pointPaint.border!);
     }
 
     if (rotate) {

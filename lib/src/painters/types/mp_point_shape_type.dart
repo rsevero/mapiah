@@ -13,5 +13,5 @@ enum MPPointShapeType {
   triangle, // Can be filled
   triangleWithCenterCircle,
   verticalDiamond, // Can be filled
-  x;
+  x,
 }

@@ -2,17 +2,11 @@ abstract class THLinePainterLineSegment {
   double x;
   double y;
 
-  THLinePainterLineSegment({
-    required this.x,
-    required this.y,
-  });
+  THLinePainterLineSegment({required this.x, required this.y});
 }
 
 class THLinePainterStraightLineSegment extends THLinePainterLineSegment {
-  THLinePainterStraightLineSegment({
-    required super.x,
-    required super.y,
-  });
+  THLinePainterStraightLineSegment({required super.x, required super.y});
 }
 
 class THLinePainterBezierCurveLineSegment extends THLinePainterLineSegment {

@@ -18,15 +18,13 @@ class MPDashedPathProperties {
   double _remainingDashLength = 0.0;
   double _remainingDashGapLength = 0.0;
 
-  MPDashedPathProperties({
-    required this.dashLengths,
-    this.invert = false,
-  })  : assert(
-          dashLengths.length > 1,
-          'dashLengths must have more than 1 element',
-        ),
-        assert(dashLengths.length.isEven, 'dashLengths length must be even'),
-        _dashLimit = dashLengths.length - 1 {
+  MPDashedPathProperties({required this.dashLengths, this.invert = false})
+    : assert(
+        dashLengths.length > 1,
+        'dashLengths must have more than 1 element',
+      ),
+      assert(dashLengths.length.isEven, 'dashLengths length must be even'),
+      _dashLimit = dashLengths.length - 1 {
     if (dashLengths[0] > 0) {
       _dashLength = dashLengths[0];
       _remainingDashLength = dashLengths[0];

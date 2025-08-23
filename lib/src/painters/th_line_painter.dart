@@ -30,23 +30,23 @@ class THLinePainter extends CustomPainter {
 
   static final Map<MPLinePaintType, List<int>> linePaintTypeToDashLengths =
       <MPLinePaintType, List<int>>{
-    MPLinePaintType.dot: <int>[2, -6],
-    MPLinePaintType.long: <int>[18, -6],
-    MPLinePaintType.long2Dots: <int>[18, -6, 2, -6, 2, -6],
-    MPLinePaintType.long3Dots: <int>[18, -6, 2, -6, 2, -6, 2, -6],
-    MPLinePaintType.longDot: <int>[18, -6, 2, -6],
-    MPLinePaintType.shortLongShort: <int>[6, -6, 18, -6, 6, -12],
-    MPLinePaintType.medium: <int>[12, -6],
-    MPLinePaintType.medium2Dots: <int>[12, -6, 2, -6, 2, -6],
-    MPLinePaintType.medium3Dots: <int>[12, -6, 2, -6, 2, -6, 2, -6],
-    MPLinePaintType.mediumDot: <int>[12, -6, 2, -6],
-    MPLinePaintType.mediumLongMedium: <int>[12, -6, 18, -6, 12, -12],
-    MPLinePaintType.short: <int>[6, -6],
-    MPLinePaintType.short2Dots: <int>[6, -6, 2, -6, 2, -6],
-    MPLinePaintType.short3Dots: <int>[6, -6, 2, -6, 2, -6, 2, -6],
-    MPLinePaintType.shortDot: <int>[6, -6, 2, -6],
-    MPLinePaintType.shortMediumShort: <int>[6, -6, 12, -6, 6, -12],
-  };
+        MPLinePaintType.dot: <int>[2, -6],
+        MPLinePaintType.long: <int>[18, -6],
+        MPLinePaintType.long2Dots: <int>[18, -6, 2, -6, 2, -6],
+        MPLinePaintType.long3Dots: <int>[18, -6, 2, -6, 2, -6, 2, -6],
+        MPLinePaintType.longDot: <int>[18, -6, 2, -6],
+        MPLinePaintType.shortLongShort: <int>[6, -6, 18, -6, 6, -12],
+        MPLinePaintType.medium: <int>[12, -6],
+        MPLinePaintType.medium2Dots: <int>[12, -6, 2, -6, 2, -6],
+        MPLinePaintType.medium3Dots: <int>[12, -6, 2, -6, 2, -6, 2, -6],
+        MPLinePaintType.mediumDot: <int>[12, -6, 2, -6],
+        MPLinePaintType.mediumLongMedium: <int>[12, -6, 18, -6, 12, -12],
+        MPLinePaintType.short: <int>[6, -6],
+        MPLinePaintType.short2Dots: <int>[6, -6, 2, -6, 2, -6],
+        MPLinePaintType.short3Dots: <int>[6, -6, 2, -6, 2, -6, 2, -6],
+        MPLinePaintType.shortDot: <int>[6, -6, 2, -6],
+        MPLinePaintType.shortMediumShort: <int>[6, -6, 12, -6, 6, -12],
+      };
 
   @override
   @override
@@ -61,7 +61,8 @@ class THLinePainter extends CustomPainter {
 
     final bool addLineDirectionTicks =
         showLineDirectionTicks && th2FileEditController.isFromActiveScrap(line);
-    final bool addIntermediateLineDirectionTicks = addLineDirectionTicks &&
+    final bool addIntermediateLineDirectionTicks =
+        addLineDirectionTicks &&
         (lineSegmentsCount > mpLineSegmentsPerDirectionTick * 2);
     late final THLinePaint lineDirectionTicksPaint;
     late final bool reverse;
@@ -114,17 +115,17 @@ class THLinePainter extends CustomPainter {
       if (metrics.isNotEmpty) {
         final PathMetric metric = metrics.first;
         final double metricLength = metric.length;
-        final double tickLength = th2FileEditController
-                .selectionController.isSelected[line.mpID]!.value
+        final double tickLength =
+            th2FileEditController
+                .selectionController
+                .isSelected[line.mpID]!
+                .value
             ? th2FileEditController.lineDirectionTickLengthOnCanvas * 1.5
             : th2FileEditController.lineDirectionTickLengthOnCanvas;
 
         reverse = MPCommandOptionAux.isReverse(line);
-        lineDirectionTicksPaint =
-            th2FileEditController.visualController.getLineDirectionTickPaint(
-          line: line,
-          reverse: reverse,
-        );
+        lineDirectionTicksPaint = th2FileEditController.visualController
+            .getLineDirectionTickPaint(line: line, reverse: reverse);
 
         for (int i = 0; i < points.length; i++) {
           final Offset point = points[i];
@@ -142,10 +143,12 @@ class THLinePainter extends CustomPainter {
 
             tangentAtPoint = tangentAt;
           } else {
-            final Tangent? tangentBefore =
-                metric.getTangentForOffset(distance - mpAverageTangentDelta);
-            final Tangent? tangentAfter =
-                metric.getTangentForOffset(distance + mpAverageTangentDelta);
+            final Tangent? tangentBefore = metric.getTangentForOffset(
+              distance - mpAverageTangentDelta,
+            );
+            final Tangent? tangentAfter = metric.getTangentForOffset(
+              distance + mpAverageTangentDelta,
+            );
 
             if ((tangentBefore != null) && (tangentAfter != null)) {
               // Calculate the average tangent direction
@@ -170,8 +173,10 @@ class THLinePainter extends CustomPainter {
                 continue;
               }
             } else {
-              final Offset? tangentAtDistance =
-                  _getTangentAtDistance(metric, distance);
+              final Offset? tangentAtDistance = _getTangentAtDistance(
+                metric,
+                distance,
+              );
 
               if (tangentAtDistance == null) {
                 continue;
@@ -220,8 +225,10 @@ class THLinePainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return linePaint != oldDelegate.linePaint ||
-        !const MapEquality<int, THLinePainterLineSegment>()
-            .equals(lineSegmentsMap, oldDelegate.lineSegmentsMap);
+        !const MapEquality<int, THLinePainterLineSegment>().equals(
+          lineSegmentsMap,
+          oldDelegate.lineSegmentsMap,
+        );
   }
 
   /// Dash code inspired by https://stackoverflow.com/a/71099304/11754455
@@ -241,26 +248,18 @@ class THLinePainter extends CustomPainter {
     if (linePaint.secondaryPaint != null) {
       final MPDashedPathProperties dashedPathProperties =
           MPDashedPathProperties(
-        dashLengths: dashLengthsOnCanvas,
-        invert: true,
-      );
-      final Path dashedPath = _getDashedPath(
-        path,
-        dashedPathProperties,
-      );
+            dashLengths: dashLengthsOnCanvas,
+            invert: true,
+          );
+      final Path dashedPath = _getDashedPath(path, dashedPathProperties);
 
       canvas.drawPath(dashedPath, linePaint.secondaryPaint!);
     }
 
     if (linePaint.primaryPaint != null) {
       final MPDashedPathProperties dashedPathProperties =
-          MPDashedPathProperties(
-        dashLengths: dashLengthsOnCanvas,
-      );
-      final Path dashedPath = _getDashedPath(
-        path,
-        dashedPathProperties,
-      );
+          MPDashedPathProperties(dashLengths: dashLengthsOnCanvas);
+      final Path dashedPath = _getDashedPath(path, dashedPathProperties);
 
       canvas.drawPath(dashedPath, linePaint.primaryPaint!);
     }
@@ -270,8 +269,9 @@ class THLinePainter extends CustomPainter {
     Path originalPath,
     MPDashedPathProperties dashedPathProperties,
   ) {
-    final Iterator<PathMetric> metricsIterator =
-        originalPath.computeMetrics().iterator;
+    final Iterator<PathMetric> metricsIterator = originalPath
+        .computeMetrics()
+        .iterator;
 
     while (metricsIterator.moveNext()) {
       final PathMetric metric = metricsIterator.current;

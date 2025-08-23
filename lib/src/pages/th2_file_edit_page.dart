@@ -18,7 +18,7 @@ class TH2FileEditPage extends StatefulWidget {
   final Uint8List? fileBytes;
 
   TH2FileEditPage({required this.filename, super.key, this.fileBytes})
-      : assert(filename.isNotEmpty, 'Filename cannot be empty');
+    : assert(filename.isNotEmpty, 'Filename cannot be empty');
 
   @override
   State<TH2FileEditPage> createState() => _TH2FileEditPageState();
@@ -27,7 +27,7 @@ class TH2FileEditPage extends StatefulWidget {
 class _TH2FileEditPageState extends State<TH2FileEditPage> {
   late final TH2FileEditController th2FileEditController;
   late final Future<TH2FileEditControllerCreateResult>
-      th2FileEditControllerCreateResult;
+  th2FileEditControllerCreateResult;
   bool _th2FileEditControllerLoaded = false;
   late ColorScheme colorScheme;
   bool isSelectMode = false;
@@ -35,11 +35,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   @override
   void initState() {
     super.initState();
-    th2FileEditController =
-        mpLocator.mpGeneralController.getTH2FileEditController(
-      filename: widget.filename,
-      fileBytes: widget.fileBytes,
-    );
+    th2FileEditController = mpLocator.mpGeneralController
+        .getTH2FileEditController(
+          filename: widget.filename,
+          fileBytes: widget.fileBytes,
+        );
     th2FileEditControllerCreateResult = th2FileEditController.load();
   }
 
@@ -50,168 +50,176 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     colorScheme = Theme.of(context).colorScheme;
     return FutureBuilder<TH2FileEditControllerCreateResult>(
       future: th2FileEditControllerCreateResult,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<TH2FileEditControllerCreateResult> snapshot,
-      ) {
-        final bool fileReady =
-            (snapshot.connectionState == ConnectionState.done) &&
+      builder:
+          (
+            BuildContext context,
+            AsyncSnapshot<TH2FileEditControllerCreateResult> snapshot,
+          ) {
+            final bool fileReady =
+                (snapshot.connectionState == ConnectionState.done) &&
                 snapshot.hasData &&
                 snapshot.data!.isSuccessful;
 
-        if (fileReady && !_th2FileEditControllerLoaded) {
-          _th2FileEditControllerLoaded = true;
-        }
+            if (fileReady && !_th2FileEditControllerLoaded) {
+              _th2FileEditControllerLoaded = true;
+            }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(appLocalizations.fileEditWindowWindowTitle),
-            elevation: 4,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: colorScheme.onSecondaryContainer,
-              ),
-              onPressed: _onLeavePage,
-            ),
-            actions: <Widget>[
-              if (fileReady) ...[
-                Observer(
-                  builder: (context) => IconButton(
-                    icon: Icon(
-                      Icons.save_outlined,
-                      color: th2FileEditController.enableSaveButton
-                          ? colorScheme.onSecondaryContainer
-                          : colorScheme.onSecondaryContainer.withAlpha(100),
-                    ),
-                    onPressed: th2FileEditController.enableSaveButton
-                        ? () => th2FileEditController.saveTH2File()
-                        : null,
-                    tooltip: appLocalizations.th2FileEditPageSave,
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(appLocalizations.fileEditWindowWindowTitle),
+                elevation: 4,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: colorScheme.onSecondaryContainer,
                   ),
+                  onPressed: _onLeavePage,
                 ),
-                if (!kIsWeb)
+                actions: <Widget>[
+                  if (fileReady) ...[
+                    Observer(
+                      builder: (context) => IconButton(
+                        icon: Icon(
+                          Icons.save_outlined,
+                          color: th2FileEditController.enableSaveButton
+                              ? colorScheme.onSecondaryContainer
+                              : colorScheme.onSecondaryContainer.withAlpha(100),
+                        ),
+                        onPressed: th2FileEditController.enableSaveButton
+                            ? () => th2FileEditController.saveTH2File()
+                            : null,
+                        tooltip: appLocalizations.th2FileEditPageSave,
+                      ),
+                    ),
+                    if (!kIsWeb)
+                      IconButton(
+                        icon: Icon(
+                          Icons.save_as_outlined,
+                          color: colorScheme.onSecondaryContainer,
+                        ),
+                        onPressed: () => th2FileEditController.saveAsTH2File(),
+                        tooltip: appLocalizations.th2FileEditPageSaveAs,
+                      ),
+                  ],
+                  MPHelpButtonWidget(
+                    context,
+                    'th2_file_edit_page_help',
+                    appLocalizations.th2FileEditPageHelpDialogTitle,
+                  ),
                   IconButton(
                     icon: Icon(
-                      Icons.save_as_outlined,
+                      Icons.close,
                       color: colorScheme.onSecondaryContainer,
                     ),
-                    onPressed: () => th2FileEditController.saveAsTH2File(),
-                    tooltip: appLocalizations.th2FileEditPageSaveAs,
+                    onPressed: _onLeavePage,
                   ),
-              ],
-              MPHelpButtonWidget(
-                context,
-                'th2_file_edit_page_help',
-                appLocalizations.th2FileEditPageHelpDialogTitle,
+                ],
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: colorScheme.onSecondaryContainer,
-                ),
-                onPressed: _onLeavePage,
-              ),
-            ],
-          ),
-          body: FutureBuilder<TH2FileEditControllerCreateResult>(
-            future: th2FileEditControllerCreateResult,
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<TH2FileEditControllerCreateResult> snapshot,
-            ) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Text(appLocalizations
-                      .th2FileEditPageLoadingFile(widget.filename)),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else if (snapshot.hasData) {
-                final List<String> errorMessages = snapshot.data!.errors;
-
-                if (snapshot.data!.isSuccessful) {
-                  if (mpDebugMousePosition) {
-                    return MouseRegion(
-                      onHover: (event) => th2FileEditController
-                          .performSetMousePosition(event.localPosition),
-                      child: Stack(
-                        children: [
-                          THFileWidget(
-                            key: th2FileEditController.thFileWidgetKey,
-                            th2FileEditController: th2FileEditController,
+              body: FutureBuilder<TH2FileEditControllerCreateResult>(
+                future: th2FileEditControllerCreateResult,
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<TH2FileEditControllerCreateResult> snapshot,
+                    ) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: Text(
+                            appLocalizations.th2FileEditPageLoadingFile(
+                              widget.filename,
+                            ),
                           ),
-                          _stateActionButtons(),
-                          _actionButtons(),
-                        ],
-                      ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData) {
+                        final List<String> errorMessages =
+                            snapshot.data!.errors;
+
+                        if (snapshot.data!.isSuccessful) {
+                          if (mpDebugMousePosition) {
+                            return MouseRegion(
+                              onHover: (event) => th2FileEditController
+                                  .performSetMousePosition(event.localPosition),
+                              child: Stack(
+                                children: [
+                                  THFileWidget(
+                                    key: th2FileEditController.thFileWidgetKey,
+                                    th2FileEditController:
+                                        th2FileEditController,
+                                  ),
+                                  _stateActionButtons(),
+                                  _actionButtons(),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Stack(
+                              children: [
+                                THFileWidget(
+                                  key: th2FileEditController.thFileWidgetKey,
+                                  th2FileEditController: th2FileEditController,
+                                ),
+                                _stateActionButtons(),
+                                _actionButtons(),
+                              ],
+                            );
+                          }
+                        } else {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return MPErrorDialog(
+                                  errorMessages: errorMessages,
+                                );
+                              },
+                            );
+                          });
+                          return Container();
+                        }
+                      } else {
+                        throw Exception(
+                          'Unexpected snapshot state: ${snapshot.connectionState}',
+                        );
+                      }
+                    },
+              ),
+              bottomNavigationBar: BottomAppBar(
+                height: 40,
+                color: colorScheme.secondary,
+                child: Observer(
+                  builder: (_) {
+                    final TextStyle statusBarTextStyle = TextStyle(
+                      color: colorScheme.onSecondary,
+                      fontStyle: FontStyle.italic,
                     );
-                  } else {
-                    return Stack(
+                    final TextStyle statusBarInfoStyle = TextStyle(
+                      color: colorScheme.onSecondary,
+                    );
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        THFileWidget(
-                          key: th2FileEditController.thFileWidgetKey,
-                          th2FileEditController: th2FileEditController,
+                        Text(
+                          th2FileEditController.filenameAndScrap,
+                          style: statusBarInfoStyle,
                         ),
-                        _stateActionButtons(),
-                        _actionButtons(),
+                        Text(
+                          th2FileEditController.statusBarMessage,
+                          style: statusBarTextStyle,
+                        ),
+                        Text(
+                          "🔍 ${th2FileEditController.canvasScaleAsPercentageText}",
+                          style: statusBarInfoStyle,
+                        ),
                       ],
                     );
-                  }
-                } else {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return MPErrorDialog(errorMessages: errorMessages);
-                      },
-                    );
-                  });
-                  return Container();
-                }
-              } else {
-                throw Exception(
-                    'Unexpected snapshot state: ${snapshot.connectionState}');
-              }
-            },
-          ),
-          bottomNavigationBar: BottomAppBar(
-            height: 40,
-            color: colorScheme.secondary,
-            child: Observer(
-              builder: (_) {
-                final TextStyle statusBarTextStyle = TextStyle(
-                  color: colorScheme.onSecondary,
-                  fontStyle: FontStyle.italic,
-                );
-                final TextStyle statusBarInfoStyle = TextStyle(
-                  color: colorScheme.onSecondary,
-                );
-
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      th2FileEditController.filenameAndScrap,
-                      style: statusBarInfoStyle,
-                    ),
-                    Text(
-                      th2FileEditController.statusBarMessage,
-                      style: statusBarTextStyle,
-                    ),
-                    Text(
-                      "🔍 ${th2FileEditController.canvasScaleAsPercentageText}",
-                      style: statusBarInfoStyle,
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        );
-      },
+                  },
+                ),
+              ),
+            );
+          },
     );
   }
 
@@ -262,9 +270,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       case MPButtonType.addPoint:
         tooltip = mpLocator.appLocalizations.th2FileEditPageAddPoint;
       default:
-        return [
-          SizedBox.shrink(),
-        ];
+        return [SizedBox.shrink()];
     }
 
     return [
@@ -325,7 +331,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             );
           },
         ),
-      )
+      ),
     ];
   }
 
@@ -335,16 +341,19 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       Observer(
         builder: (_) {
           final bool isChangeImageButtonPressed = th2FileEditController
-              .overlayWindowController.showChangeImageOverlayWindow;
+              .overlayWindowController
+              .showChangeImageOverlayWindow;
 
           return Padding(
             padding: isChangeImageButtonPressed
                 ? const EdgeInsets.only(left: mpButtonSpace)
                 : EdgeInsets.zero,
             child: FloatingActionButton(
-              key: th2FileEditController
-                      .overlayWindowController.globalKeyWidgetKeyByType[
-                  MPGlobalKeyWidgetType.changeImageButton]!,
+              key:
+                  th2FileEditController
+                      .overlayWindowController
+                      .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
+                      .changeImageButton]!,
               heroTag: 'change_image_tool',
               onPressed: _onChangeImageButtonPressed,
               tooltip:
@@ -374,20 +383,24 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       Observer(
         builder: (_) {
           final bool isChangeScrapButtonPressed = th2FileEditController
-              .overlayWindowController.showChangeScrapOverlayWindow;
+              .overlayWindowController
+              .showChangeScrapOverlayWindow;
 
           return Padding(
             padding: isChangeScrapButtonPressed
                 ? const EdgeInsets.only(left: mpButtonSpace)
                 : EdgeInsets.zero,
             child: FloatingActionButton(
-              key: th2FileEditController
-                      .overlayWindowController.globalKeyWidgetKeyByType[
-                  MPGlobalKeyWidgetType.changeScrapButton]!,
+              key:
+                  th2FileEditController
+                      .overlayWindowController
+                      .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
+                      .changeScrapButton]!,
               heroTag: 'change_active_scrap_tool',
               onPressed: _onChangeScrapButtonPressed,
               tooltip: mpLocator
-                  .appLocalizations.th2FileEditPageChangeActiveScrapTool,
+                  .appLocalizations
+                  .th2FileEditPageChangeActiveScrapTool,
               child: Image.asset(
                 'assets/icons/change-scrap-tool.png',
                 width: thFloatingActionIconSize,
@@ -426,8 +439,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               ? colorScheme.onPrimary
               : colorScheme.onSecondaryContainer,
         ),
-        backgroundColor:
-            isSelectMode ? colorScheme.primary : colorScheme.secondaryContainer,
+        backgroundColor: isSelectMode
+            ? colorScheme.primary
+            : colorScheme.secondaryContainer,
         elevation: isSelectMode ? 0 : null,
       ),
       SizedBox(height: mpButtonSpace),
@@ -440,14 +454,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
           size: thFloatingActionIconSize,
           color: enableNodeEditButton
               ? (isEditLineMode
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSecondaryContainer)
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSecondaryContainer)
               : colorScheme.surfaceContainerHighest,
         ),
         backgroundColor: enableNodeEditButton
             ? (isEditLineMode
-                ? colorScheme.primary
-                : colorScheme.secondaryContainer)
+                  ? colorScheme.primary
+                  : colorScheme.secondaryContainer)
             : colorScheme.surfaceContainerLowest,
         elevation: isEditLineMode ? 0 : null,
       ),
@@ -477,9 +491,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
       th2FileEditController.overlayWindowController
           .perfomToggleScrapOptionsOverlayWindow(
-        scrapMPID: th2FileEditController.activeScrapID,
-        outerAnchorPosition: anchorPosition,
-      );
+            scrapMPID: th2FileEditController.activeScrapID,
+            outerAnchorPosition: anchorPosition,
+          );
     }
   }
 
@@ -493,8 +507,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void _onNodeEditToolPressed() {
-    th2FileEditController.stateController
-        .onButtonPressed(MPButtonType.nodeEdit);
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.nodeEdit,
+    );
   }
 
   void onRedoPressed() {
@@ -547,11 +562,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   tooltip: hasUndo
                       ? th2FileEditController.undoDescription
                       : mpLocator
-                          .appLocalizations.th2FileEditPageNoUndoAvailable,
-                  backgroundColor:
-                      hasUndo ? null : colorScheme.surfaceContainerLowest,
-                  foregroundColor:
-                      hasUndo ? null : colorScheme.surfaceContainerHighest,
+                            .appLocalizations
+                            .th2FileEditPageNoUndoAvailable,
+                  backgroundColor: hasUndo
+                      ? null
+                      : colorScheme.surfaceContainerLowest,
+                  foregroundColor: hasUndo
+                      ? null
+                      : colorScheme.surfaceContainerHighest,
                   onPressed: hasUndo ? onUndoPressed : null,
                   elevation: hasUndo ? 6.0 : 3.0,
                   child: const Icon(Icons.undo),
@@ -563,11 +581,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   tooltip: hasRedo
                       ? th2FileEditController.redoDescription
                       : mpLocator
-                          .appLocalizations.th2FileEditPageNoRedoAvailable,
-                  backgroundColor:
-                      hasRedo ? null : colorScheme.surfaceContainerLowest,
-                  foregroundColor:
-                      hasRedo ? null : colorScheme.surfaceContainerHighest,
+                            .appLocalizations
+                            .th2FileEditPageNoRedoAvailable,
+                  backgroundColor: hasRedo
+                      ? null
+                      : colorScheme.surfaceContainerLowest,
+                  foregroundColor: hasRedo
+                      ? null
+                      : colorScheme.surfaceContainerHighest,
                   onPressed: hasRedo ? onRedoPressed : null,
                   elevation: hasRedo ? 6.0 : 3.0,
                   child: const Icon(Icons.redo),
@@ -599,7 +620,9 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 }
 
                 final bool selectedElementsEmpty = th2FileEditController
-                    .selectionController.mpSelectedElementsLogical.isEmpty;
+                    .selectionController
+                    .mpSelectedElementsLogical
+                    .isEmpty;
 
                 return Row(
                   children: [
@@ -620,7 +643,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       heroTag: 'zoom_1_1',
                       onPressed: zoomOneToOne,
                       tooltip: mpLocator
-                          .appLocalizations.th2FileEditPageZoomOneToOne,
+                          .appLocalizations
+                          .th2FileEditPageZoomOneToOne,
                       child: Image.asset(
                         'assets/icons/zoom_one_to_one.png',
                         width: thFloatingActionZoomIconSize,
@@ -634,7 +658,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       heroTag: 'zoom_selection',
                       onPressed: selectedElementsEmpty ? null : zoomSelection,
                       tooltip: mpLocator
-                          .appLocalizations.th2FileEditPageZoomToSelection,
+                          .appLocalizations
+                          .th2FileEditPageZoomToSelection,
                       child: Image.asset(
                         'assets/icons/zoom_selection.png',
                         width: thFloatingActionZoomIconSize,
@@ -665,7 +690,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           ? zoomAllScrapPressed
                           : null,
                       tooltip: mpLocator
-                          .appLocalizations.th2FileEditPageZoomOutScrap,
+                          .appLocalizations
+                          .th2FileEditPageZoomOutScrap,
                       child: Image.asset(
                         'assets/icons/zoom-out-scrap.png',
                         width: thFloatingActionZoomIconSize,
@@ -709,7 +735,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             ),
           ],
         ),
-      )
+      ),
     ];
   }
 
@@ -718,13 +744,15 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void zoomAllFilePressed() {
-    th2FileEditController.stateController
-        .onButtonPressed(MPButtonType.zoomAllFile);
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.zoomAllFile,
+    );
   }
 
   void zoomAllScrapPressed() {
-    th2FileEditController.stateController
-        .onButtonPressed(MPButtonType.zoomAllScrap);
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.zoomAllScrap,
+    );
   }
 
   void zoomOutPressed() {
@@ -732,12 +760,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void zoomOneToOne() {
-    th2FileEditController.stateController
-        .onButtonPressed(MPButtonType.zoomOneToOne);
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.zoomOneToOne,
+    );
   }
 
   void zoomSelection() {
-    th2FileEditController.stateController
-        .onButtonPressed(MPButtonType.zoomSelection);
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.zoomSelection,
+    );
   }
 }

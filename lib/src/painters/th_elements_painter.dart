@@ -25,7 +25,9 @@ class THElementsPainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return painters.length != oldDelegate.painters.length ||
-        !const ListEquality<CustomPainter>()
-            .equals(painters, oldDelegate.painters);
+        !const ListEquality<CustomPainter>().equals(
+          painters,
+          oldDelegate.painters,
+        );
   }
 }

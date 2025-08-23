@@ -71,11 +71,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          appLocalizations.initialPagePresentation,
-        ),
-      ),
+      body: Center(child: Text(appLocalizations.initialPagePresentation)),
     );
   }
 
@@ -103,10 +99,7 @@ class _MapiahHomeState extends State<MapiahHome> {
                     children: [
                       if (localeID ==
                           mpLocator.mpSettingsController.localeID) ...[
-                        Icon(
-                          Icons.check,
-                          color: colorScheme.primary,
-                        ),
+                        Icon(Icons.check, color: colorScheme.primary),
                         const SizedBox(width: 8),
                       ] else
                         const SizedBox(width: 32),
@@ -122,10 +115,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.language,
-                  color: colorScheme.onSecondaryContainer,
-                ),
+                Icon(Icons.language, color: colorScheme.onSecondaryContainer),
                 Icon(
                   Icons.arrow_drop_down,
                   color: colorScheme.onSecondaryContainer,

@@ -22,11 +22,7 @@ class MPScrapScalePainter extends CustomPainter {
     final double right = left + lengthUnits / lengthUnitsPerScreenPoint;
     final double bottom = size.height - thGraphicalScalePadding;
 
-    canvas.drawLine(
-      Offset(left, bottom),
-      Offset(right, bottom),
-      linePaint,
-    );
+    canvas.drawLine(Offset(left, bottom), Offset(right, bottom), linePaint);
     canvas.drawLine(
       Offset(left, bottom - thGraphicalScaleUptickLength),
       Offset(left, bottom),
@@ -40,10 +36,7 @@ class MPScrapScalePainter extends CustomPainter {
 
     final TextSpan textSpan = TextSpan(
       text: scaleText,
-      style: TextStyle(
-        color: textColor,
-        fontSize: 16,
-      ),
+      style: TextStyle(color: textColor, fontSize: 16),
     );
 
     final TextPainter textPainter = TextPainter(

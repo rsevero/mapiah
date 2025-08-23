@@ -39,7 +39,10 @@ class THControlPointPainter extends CustomPainter {
 
     if (pointPaint.border != null) {
       canvas.drawCircle(
-          controlPointPosition, pointPaint.radius, pointPaint.border!);
+        controlPointPosition,
+        pointPaint.radius,
+        pointPaint.border!,
+      );
     }
   }
 
