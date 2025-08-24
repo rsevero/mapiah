@@ -139,7 +139,6 @@ abstract class THElement {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! THElement) return false;
 
     return equalsBase(other);
   }

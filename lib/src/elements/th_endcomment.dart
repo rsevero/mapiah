@@ -52,7 +52,7 @@ class THEndcomment extends THElement {
     if (identical(this, other)) return true;
     if (other is! THEndcomment) return false;
 
-    return equalsBase(other);
+    return super.equalsBase(other);
   }
 
   @override

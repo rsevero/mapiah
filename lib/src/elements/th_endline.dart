@@ -52,7 +52,7 @@ class THEndline extends THElement {
     if (identical(this, other)) return true;
     if (other is! THEndline) return false;
 
-    return equalsBase(other);
+    return super.equalsBase(other);
   }
 
   @override
