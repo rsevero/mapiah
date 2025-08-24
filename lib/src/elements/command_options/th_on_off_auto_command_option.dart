@@ -42,13 +42,12 @@ abstract class THOnOffAutoCommandOption extends THMultipleChoiceCommandOption {
   bool equalsBase(Object other) {
     if (!super.equalsBase(other)) return false;
 
-    return (other as THOnOffAutoCommandOption).choice == choice;
+    return other is THOnOffAutoCommandOption && other.choice == choice;
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! THOnOffAutoCommandOption) return false;
 
     return equalsBase(other);
   }

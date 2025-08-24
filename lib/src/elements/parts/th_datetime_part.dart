@@ -60,10 +60,11 @@ class THDatetimePart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THDatetimePart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other._datetime == _datetime &&
+    return other is THDatetimePart &&
+        other._datetime == _datetime &&
         other.isRange == isRange &&
         other.isEmpty == isEmpty;
   }

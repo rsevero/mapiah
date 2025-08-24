@@ -43,13 +43,12 @@ abstract class THArrowPositionCommandOption
   bool equalsBase(Object other) {
     if (!super.equalsBase(other)) return false;
 
-    return (other as THArrowPositionCommandOption).choice == choice;
+    return other is THArrowPositionCommandOption && other.choice == choice;
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! THArrowPositionCommandOption) return false;
 
     return equalsBase(other);
   }

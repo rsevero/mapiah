@@ -61,10 +61,10 @@ class THLengthUnitPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THLengthUnitPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.unit == unit;
+    return other is THLengthUnitPart && other.unit == unit;
   }
 
   @override

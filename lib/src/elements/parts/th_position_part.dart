@@ -60,10 +60,11 @@ class THPositionPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THPositionPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.coordinates == coordinates &&
+    return other is THPositionPart &&
+        other.coordinates == coordinates &&
         other.decimalPositions == decimalPositions;
   }
 

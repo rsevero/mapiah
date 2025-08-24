@@ -62,10 +62,10 @@ class THClinoUnitPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THClinoUnitPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.unit == unit;
+    return other is THClinoUnitPart && other.unit == unit;
   }
 
   @override

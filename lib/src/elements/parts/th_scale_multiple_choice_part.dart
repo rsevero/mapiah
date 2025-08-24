@@ -49,10 +49,10 @@ class THScaleMultipleChoicePart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THScaleMultipleChoicePart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.choice == choice;
+    return other is THScaleMultipleChoicePart && other.choice == choice;
   }
 
   @override

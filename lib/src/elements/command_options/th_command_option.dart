@@ -507,7 +507,8 @@ abstract class THCommandOption {
 
   @protected
   bool equalsBase(Object other) {
-    return (other as THCommandOption).parentMPID == parentMPID &&
+    return other is THCommandOption &&
+        other.parentMPID == parentMPID &&
         other.type == type &&
         other.originalLineInTH2File == originalLineInTH2File;
   }
@@ -515,7 +516,6 @@ abstract class THCommandOption {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! THCommandOption) return false;
 
     return equalsBase(other);
   }

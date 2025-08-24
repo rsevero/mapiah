@@ -66,10 +66,12 @@ class THPersonPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THPersonPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.firstname == firstname && other.surname == surname;
+    return other is THPersonPart &&
+        other.firstname == firstname &&
+        other.surname == surname;
   }
 
   @override

@@ -32,10 +32,10 @@ class THStringPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THStringPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.content == content;
+    return other is THStringPart && other.content == content;
   }
 
   @override

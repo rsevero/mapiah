@@ -129,15 +129,15 @@ class XVIGrid with MPBoundingBox {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is XVIGrid &&
-          gx == other.gx &&
-          gy == other.gy &&
-          gxx == other.gxx &&
-          gxy == other.gxy &&
-          gyx == other.gyx &&
-          gyy == other.gyy &&
-          ngx == other.ngx &&
-          ngy == other.ngy;
+      (other is XVIGrid &&
+          (gx == other.gx) &&
+          (gy == other.gy) &&
+          (gxx == other.gxx) &&
+          (gxy == other.gxy) &&
+          (gyx == other.gyx) &&
+          (gyy == other.gyy) &&
+          (ngx == other.ngx) &&
+          (ngy == other.ngy));
 
   @override
   int get hashCode => Object.hash(gx, gy, gxx, gxy, gyx, gyy, ngx, ngy);

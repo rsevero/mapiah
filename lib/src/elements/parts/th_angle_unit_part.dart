@@ -56,10 +56,10 @@ class THAngleUnitPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THAngleUnitPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.unit == unit;
+    return other is THAngleUnitPart && other.unit == unit;
   }
 
   @override

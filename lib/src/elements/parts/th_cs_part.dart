@@ -91,10 +91,12 @@ class THCSPart extends THPart {
   }
 
   @override
-  bool operator ==(covariant THCSPart other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.name == name && other.forOutputOnly == forOutputOnly;
+    return other is THCSPart &&
+        other.name == name &&
+        other.forOutputOnly == forOutputOnly;
   }
 
   @override
