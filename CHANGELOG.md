@@ -4,6 +4,7 @@
 * New features:
   * Included 'add image' button in 'add elements' button options.
   * Create new scrap [requested by Marco Corvi].
+  * Remove scrap.
 * Fixed bugs:
   * Opening the help with a dialog on display the dialog did not close [reported by Marco Corvi].
   * An saveAs suggested filename included the original path.

@@ -8,12 +8,16 @@ class MPRemoveScrapCommand extends MPCommand {
   MPRemoveScrapCommand.forCWJM({
     required this.scrapMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    assert(scrapMPID > 0);
+  }
 
   MPRemoveScrapCommand({
     required this.scrapMPID,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    assert(scrapMPID > 0);
+  }
 
   @override
   MPCommandType get type => MPCommandType.removeScrap;
@@ -30,6 +34,7 @@ class MPRemoveScrapCommand extends MPCommand {
     th2FileEditController.elementEditController.applyRemoveElementByMPID(
       scrapMPID,
     );
+    th2FileEditController.triggerAllElementsRedraw();
   }
 
   @override
@@ -37,10 +42,10 @@ class MPRemoveScrapCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
-    final Iterable<THElement> originalScrapChildren = originalScrap.getChildren(
-      thFile,
-    );
+    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID).copyWith();
+    final List<THElement> originalScrapChildren = originalScrap
+        .getChildren(thFile)
+        .toList();
 
     final MPCommand oppositeCommand = MPAddScrapCommand(
       newScrap: originalScrap,
@@ -90,10 +95,9 @@ class MPRemoveScrapCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
-    return other is MPRemoveScrapCommand &&
-        other.scrapMPID == scrapMPID &&
-        other.descriptionType == descriptionType;
+    return other is MPRemoveScrapCommand && other.scrapMPID == scrapMPID;
   }
 
   @override

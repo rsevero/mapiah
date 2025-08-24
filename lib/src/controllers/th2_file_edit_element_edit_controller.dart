@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
@@ -361,6 +360,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
+    if (element is THIsParentMixin) {
+      final List<int> childrenMPIDList = (element as THIsParentMixin)
+          .childrenMPID
+          .toList();
+
+      for (final int childMPID in childrenMPIDList) {
+        removeElement(_thFile.elementByMPID(childMPID));
+      }
+    }
+
     _thFile.removeElement(element);
     selectionController.removeSelectableElement(element.mpID);
     selectionController.removeSelectedElement(element, setState: setState);
@@ -419,7 +428,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPCommand addScrapCommand = _createAddScrapCommandForNewScrap(id);
 
     _th2FileEditController.execute(addScrapCommand);
-    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   @action
@@ -470,15 +478,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   MPCommand _createAddScrapCommandForNewScrap(String thID) {
     final THScrap newScrap = THScrap(parentMPID: _thFile.mpID, thID: thID);
     final THEndscrap endScrap = THEndscrap(parentMPID: newScrap.mpID);
-
-    // newScrap.addElementToParent(endScrap, positionInsideParent: false);
-
     final MPCommand addScrapCommandForNewScrap = MPAddScrapCommand(
       newScrap: newScrap,
       scrapChildren: [endScrap],
     );
-
-    // _thFile.addElementToParent(newScrap);
 
     return addScrapCommandForNewScrap;
   }
@@ -704,6 +707,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.setActiveScrap(newScrap.mpID);
+    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   @action
@@ -1158,7 +1162,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.execute(removeScrapCommand);
-    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   void updateControlPointSmoothInfo() {

@@ -103,7 +103,7 @@ abstract class TH2FileEditControllerBase with Store {
   String get filenameAndScrap {
     String filename = p.basename(_thFile.filename);
 
-    if (_hasMultipleScraps) {
+    if (_hasMultipleScraps && _activeScrapID > 0) {
       final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
       filename += ' | ${scrap.thID}';
@@ -288,6 +288,10 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get scrapHasScaleOption {
+    if (_activeScrapID <= 0) {
+      return false;
+    }
+
     final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
     return scrap.hasOption(THCommandOptionType.scrapScale);
@@ -958,9 +962,11 @@ abstract class TH2FileEditControllerBase with Store {
       case MPZoomToFitType.file:
         return _thFile.getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.scrap:
-        return (_thFile.scrapByMPID(
-          _activeScrapID,
-        )).getBoundingBox(this as TH2FileEditController);
+        return (_activeScrapID > 0)
+            ? (_thFile.scrapByMPID(
+                _activeScrapID,
+              )).getBoundingBox(this as TH2FileEditController)
+            : _thFile.getBoundingBox(this as TH2FileEditController);
       case MPZoomToFitType.selection:
         return selectionController.getSelectedElementsBoundingBoxOnCanvas();
     }

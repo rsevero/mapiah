@@ -2,7 +2,7 @@ part of 'mp_command.dart';
 
 class MPAddScrapCommand extends MPCommand {
   final THScrap newScrap;
-  late final Iterable<THElement> scrapChildren;
+  late final List<THElement> scrapChildren;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addScrap;
 
@@ -54,7 +54,7 @@ class MPAddScrapCommand extends MPCommand {
   @override
   MPAddScrapCommand copyWith({
     THScrap? newScrap,
-    Iterable<THElement>? scrapChildren,
+    List<THElement>? scrapChildren,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddScrapCommand.forCWJM(
@@ -86,7 +86,7 @@ class MPAddScrapCommand extends MPCommand {
 
     map.addAll({
       'newScrap': newScrap.toMap(),
-      'scrapChildren': scrapChildren.map((e) => e.toMap()),
+      'scrapChildren': scrapChildren.map((e) => e.toMap()).toList(),
     });
 
     return map;
@@ -95,11 +95,11 @@ class MPAddScrapCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPAddScrapCommand &&
         other.newScrap == newScrap &&
-        other.scrapChildren == scrapChildren &&
-        other.descriptionType == descriptionType;
+        other.scrapChildren == scrapChildren;
   }
 
   @override

@@ -1,6 +1,5 @@
-import 'dart:collection';
 import 'dart:async';
-
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -147,11 +146,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void _updateMPSelectableElements() {
+    _mpSelectableElements = {};
+
+    if (_th2FileEditController.activeScrapID <= 0) {
+      return;
+    }
+
     final THScrap scrap = _thFile.scrapByMPID(
       _th2FileEditController.activeScrapID,
     );
-
-    _mpSelectableElements = {};
 
     for (final int elementMPID in scrap.childrenMPID) {
       final THElement element = _thFile.elementByMPID(elementMPID);
@@ -342,6 +345,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void selectAllElements() {
+    if (_th2FileEditController.activeScrapID <= 0) {
+      return;
+    }
+
     final THScrap scrap = _thFile.scrapByMPID(
       _th2FileEditController.activeScrapID,
     );
@@ -382,15 +389,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   bool removeSelectedElement(THElement element, {bool setState = false}) {
     _mpSelectedElementsLogical.remove(element.mpID);
-    if (element is THArea) {
-      final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
+    _selectedElementsDrawable.remove(element.mpID);
 
-      for (final int lineMPID in lineMPIDs) {
-        _selectedElementsDrawable.remove(lineMPID);
-      }
-    } else {
-      _selectedElementsDrawable.remove(element.mpID);
-    }
     if (_isSelected.containsKey(element.mpID)) {
       _isSelected[element.mpID]!.value = false;
     }
