@@ -191,6 +191,11 @@
     "description": "The label for the cancel button",
     "type": "text"
   },
+  "mpButtonCreate": "Create",
+  "@mpButtonCreate": {
+    "description": "The label for the create button",
+    "type": "text"
+  },
   "mpButtonOK": "OK",
   "@mpButtonOK": {
     "description": "The label for the OK button",
@@ -234,6 +239,11 @@
   "mpCommandDescriptionAddPoint": "Add point",
   "@mpCommandDescriptionAddPoint": {
     "description": "The description for the add point command",
+    "type": "text"
+  },
+  "mpCommandDescriptionAddScrap": "Add scrap",
+  "@mpCommandDescriptionAddScrap": {
+    "description": "The description for the add scrap command",
     "type": "text"
   },
   "mpCommandDescriptionAddXTherionImageInsertConfig": "Add image",
@@ -384,6 +394,11 @@
   "mpCommandDescriptionRemovePoint": "Remove point",
   "@mpCommandDescriptionRemovePoint": {
     "description": "The description for the remove point command",
+    "type": "text"
+  },
+  "mpCommandDescriptionRemoveScrap": "Remove scrap",
+  "@mpCommandDescriptionRemoveScrap": {
+    "description": "The description for the remove scrap command",
     "type": "text"
   },
   "mpCommandDescriptionRemoveXTherionImageInsertConfig": "Remove image",
@@ -692,6 +707,21 @@
   "mpNameStationLabel": "Station",
   "@mpNameStationLabel": {
     "description": "The label for the name station type",
+    "type": "text"
+  },
+  "mpNewScrapDialogCreateNewScrap": "Create new scrap",
+  "@mpNewScrapDialogCreateNewScrap": {
+    "description": "The label for the create new scrap action in the new scrap dialog",
+    "type": "text"
+  },
+  "mpNewScrapDialogCreateScrapIDLabel": "Scrap ID",
+  "@mpNewScrapDialogCreateScrapIDLabel": {
+    "description": "The label for the scrap ID input field in the new scrap dialog",
+    "type": "text"
+  },
+  "mpNewScrapDialogCreateScrapIDHint": "Enter the scrap identifier",
+  "@mpNewScrapDialogCreateScrapIDHint": {
+    "description": "The hint text for the scrap ID input field in the new scrap dialog",
     "type": "text"
   },
   "mpOptionsEditLineSegmentTypes": "Line segments types",
@@ -1459,6 +1489,11 @@
   "th2FileEditPageRemoveImageButton": "Remove image",
   "@th2FileEditPageRemoveImageButton": {
     "description": "The label for the remove image button",
+    "type": "text"
+  },
+  "th2FileEditPageRemoveScrapButton": "Remove scrap",
+  "@th2FileEditPageRemoveScrapButton": {
+    "description": "The label for the remove scrap button",
     "type": "text"
   },
   "th2FileEditPageSave": "Save (Ctrl+S)",

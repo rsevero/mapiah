@@ -132,6 +132,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpButtonCancel => 'Cancelar';
 
   @override
+  String get mpButtonCreate => 'Criar';
+
+  @override
   String get mpButtonOK => 'OK';
 
   @override
@@ -158,6 +161,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionAddPoint => 'Adicionar ponto';
+
+  @override
+  String get mpCommandDescriptionAddScrap => 'Adicionar croqui';
 
   @override
   String get mpCommandDescriptionAddXTherionImageInsertConfig =>
@@ -256,6 +262,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Apagar ponto';
+
+  @override
+  String get mpCommandDescriptionRemoveScrap => 'Remover croqui';
 
   @override
   String get mpCommandDescriptionRemoveXTherionImageInsertConfig =>
@@ -450,6 +459,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpNameStationLabel => 'Base';
+
+  @override
+  String get mpNewScrapDialogCreateNewScrap => 'Criar novo croqui';
+
+  @override
+  String get mpNewScrapDialogCreateScrapIDLabel => 'ID do croqui';
+
+  @override
+  String get mpNewScrapDialogCreateScrapIDHint =>
+      'Digite o identificador do croqui';
 
   @override
   String get mpOptionsEditLineSegmentTypes => 'Tipos de segmentos de linha';
@@ -931,6 +950,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPageRemoveImageButton => 'Remover imagem';
+
+  @override
+  String get th2FileEditPageRemoveScrapButton => 'Remover croqui';
 
   @override
   String get th2FileEditPageSave => 'Salvar (Ctrl+S)';

@@ -132,6 +132,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpButtonCancel => 'Cancel';
 
   @override
+  String get mpButtonCreate => 'Create';
+
+  @override
   String get mpButtonOK => 'OK';
 
   @override
@@ -157,6 +160,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionAddPoint => 'Add point';
+
+  @override
+  String get mpCommandDescriptionAddScrap => 'Add scrap';
 
   @override
   String get mpCommandDescriptionAddXTherionImageInsertConfig => 'Add image';
@@ -253,6 +259,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemovePoint => 'Remove point';
+
+  @override
+  String get mpCommandDescriptionRemoveScrap => 'Remove scrap';
 
   @override
   String get mpCommandDescriptionRemoveXTherionImageInsertConfig =>
@@ -446,6 +455,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpNameStationLabel => 'Station';
+
+  @override
+  String get mpNewScrapDialogCreateNewScrap => 'Create new scrap';
+
+  @override
+  String get mpNewScrapDialogCreateScrapIDLabel => 'Scrap ID';
+
+  @override
+  String get mpNewScrapDialogCreateScrapIDHint => 'Enter the scrap identifier';
 
   @override
   String get mpOptionsEditLineSegmentTypes => 'Line segments types';
@@ -924,6 +942,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageRemoveImageButton => 'Remove image';
+
+  @override
+  String get th2FileEditPageRemoveScrapButton => 'Remove scrap';
 
   @override
   String get th2FileEditPageSave => 'Save (Ctrl+S)';

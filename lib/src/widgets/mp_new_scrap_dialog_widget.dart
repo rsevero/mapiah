@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
@@ -70,13 +71,18 @@ class _MPNewScrapDialogWidgetState extends State<MPNewScrapDialogWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Create New Scrap', style: theme.textTheme.titleMedium),
-        const SizedBox(height: 16),
+        Text(
+          appLocalizations.mpNewScrapDialogCreateNewScrap,
+          style: theme.textTheme.titleMedium,
+        ),
+        const SizedBox(height: mpButtonSpace),
         TextField(
           controller: _idController,
           autofocus: true,
@@ -85,9 +91,9 @@ class _MPNewScrapDialogWidgetState extends State<MPNewScrapDialogWidget> {
             if (_isValid) _onCreatePressed();
           },
           decoration: InputDecoration(
-            labelText: 'Scrap ID',
+            labelText: appLocalizations.mpNewScrapDialogCreateScrapIDLabel,
             errorText: _error,
-            hintText: 'Enter scrap identifier',
+            hintText: appLocalizations.mpNewScrapDialogCreateScrapIDHint,
           ),
         ),
         const SizedBox(height: 8),
@@ -96,12 +102,12 @@ class _MPNewScrapDialogWidgetState extends State<MPNewScrapDialogWidget> {
           children: [
             TextButton(
               onPressed: widget.onPressedClose,
-              child: const Text('Cancel'),
+              child: Text(appLocalizations.mpButtonCancel),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: mpButtonSpace),
             ElevatedButton(
               onPressed: _isValid ? _onCreatePressed : null,
-              child: const Text('Create'),
+              child: Text(appLocalizations.mpButtonCreate),
             ),
           ],
         ),

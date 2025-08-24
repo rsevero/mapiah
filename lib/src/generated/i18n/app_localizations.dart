@@ -320,6 +320,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get mpButtonCancel;
 
+  /// The label for the create button
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get mpButtonCreate;
+
   /// The label for the OK button
   ///
   /// In en, this message translates to:
@@ -373,6 +379,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add point'**
   String get mpCommandDescriptionAddPoint;
+
+  /// The description for the add scrap command
+  ///
+  /// In en, this message translates to:
+  /// **'Add scrap'**
+  String get mpCommandDescriptionAddScrap;
 
   /// The description for the add XTherion image insert config command
   ///
@@ -553,6 +565,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove point'**
   String get mpCommandDescriptionRemovePoint;
+
+  /// The description for the remove scrap command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove scrap'**
+  String get mpCommandDescriptionRemoveScrap;
 
   /// The description for the remove XTherion image insert config command
   ///
@@ -919,6 +937,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Station'**
   String get mpNameStationLabel;
+
+  /// The label for the create new scrap action in the new scrap dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Create new scrap'**
+  String get mpNewScrapDialogCreateNewScrap;
+
+  /// The label for the scrap ID input field in the new scrap dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap ID'**
+  String get mpNewScrapDialogCreateScrapIDLabel;
+
+  /// The hint text for the scrap ID input field in the new scrap dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the scrap identifier'**
+  String get mpNewScrapDialogCreateScrapIDHint;
 
   /// The label for the line segment types in the options edit dialog
   ///
@@ -1820,6 +1856,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove image'**
   String get th2FileEditPageRemoveImageButton;
+
+  /// The label for the remove scrap button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove scrap'**
+  String get th2FileEditPageRemoveScrapButton;
 
   /// The label for the save button
   ///

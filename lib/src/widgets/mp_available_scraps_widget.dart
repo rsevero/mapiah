@@ -127,7 +127,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                                 color: colorScheme.onSecondary,
                                               ),
                                               tooltip: appLocalizations
-                                                  .th2FileEditPageRemoveImageButton,
+                                                  .th2FileEditPageRemoveScrapButton,
                                               onPressed: () =>
                                                   _onPressedRemoveScrap(
                                                     scrapID,
