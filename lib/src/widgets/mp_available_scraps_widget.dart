@@ -40,6 +40,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return MPOverlayWindowWidget(
       title: appLocalizations.th2FileEditPageChangeActiveScrapTitle,
@@ -51,7 +52,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
         const SizedBox(height: mpButtonSpace),
         Observer(
           builder: (_) {
-            th2FileEditController.activeScrapID;
+            final int activeScrapID = th2FileEditController.activeScrapID;
+
+            th2FileEditController.redrawTriggerNonSelectedElements;
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -61,9 +64,10 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                   builder: (blockContext) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         RadioGroup(
-                          groupValue: th2FileEditController.activeScrapID,
+                          groupValue: activeScrapID,
                           onChanged: (int? value) {
                             if (value != null) {
                               _onTapSelectScrap(value);
@@ -92,22 +96,44 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                                 );
                                               }
                                             },
-                                        child: RadioListTile<int>(
-                                          title: Text(
-                                            scrapName,
-                                            style: DefaultTextStyle.of(
-                                              blockContext,
-                                            ).style,
-                                          ),
-                                          value: scrapID,
-
-                                          contentPadding: EdgeInsets.zero,
-                                          activeColor: IconTheme.of(
-                                            blockContext,
-                                          ).color,
-                                          dense: true,
-                                          visualDensity: VisualDensity
-                                              .adaptivePlatformDensity,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Expanded(
+                                              child: RadioListTile<int>(
+                                                title: Text(
+                                                  scrapName,
+                                                  style: DefaultTextStyle.of(
+                                                    blockContext,
+                                                  ).style,
+                                                ),
+                                                value: scrapID,
+                                                contentPadding: EdgeInsets.zero,
+                                                activeColor: IconTheme.of(
+                                                  blockContext,
+                                                ).color,
+                                                dense: true,
+                                                visualDensity: VisualDensity
+                                                    .adaptivePlatformDensity,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.delete_outline_rounded,
+                                                color: colorScheme.onSecondary,
+                                              ),
+                                              tooltip: appLocalizations
+                                                  .th2FileEditPageRemoveImageButton,
+                                              onPressed: () =>
+                                                  _onPressedRemoveScrap(
+                                                    scrapID,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
                                       );
                                     },
@@ -168,5 +194,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     th2FileEditController.stateController.onButtonPressed(
       MPButtonType.addScrap,
     );
+  }
+
+  void _onPressedRemoveScrap(int scrapID) {
+    th2FileEditController.elementEditController.removeScrap(scrapID);
   }
 }

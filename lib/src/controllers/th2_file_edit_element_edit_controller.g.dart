@@ -596,6 +596,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void removeScrap(int scrapID) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.removeScrap');
+    try {
+      return super.removeScrap(scrapID);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

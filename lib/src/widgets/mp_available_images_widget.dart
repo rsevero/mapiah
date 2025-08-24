@@ -42,6 +42,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   Widget build(BuildContext context) {
     final THFile thFile = th2FileEditController.thFile;
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return MPOverlayWindowWidget(
       title: appLocalizations.th2FileEditPageChangeImageTitle,
@@ -64,10 +65,6 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
               children: [
                 Builder(
                   builder: (blockContext) {
-                    final ColorScheme colorScheme = Theme.of(
-                      context,
-                    ).colorScheme;
-
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -419,8 +419,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPCommand addScrapCommand = _createAddScrapCommandForNewScrap(id);
 
     _th2FileEditController.execute(addScrapCommand);
-    _th2FileEditController.triggerNonSelectedElementsRedraw();
-    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   @action
@@ -1132,6 +1131,34 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _th2FileEditController.execute(removeImageCommand);
     _th2FileEditController.triggerImagesRedraw();
+  }
+
+  @action
+  void removeScrap(int scrapID) {
+    final MPRemoveScrapCommand removeScrapCommand = MPRemoveScrapCommand(
+      scrapMPID: scrapID,
+    );
+    final int currentScrapMPID = _th2FileEditController.activeScrapID;
+
+    if (currentScrapMPID == scrapID) {
+      final List<THScrap> availableScraps = _thFile.getScraps().toList();
+
+      if (availableScraps.length == 1) {
+        _th2FileEditController.setActiveScrap(0);
+      } else {
+        final int currentIndex = availableScraps.indexWhere(
+          (s) => s.mpID == scrapID,
+        );
+        final int newIndex = (currentIndex < availableScraps.length - 1)
+            ? currentIndex + 1
+            : currentIndex - 1;
+
+        _th2FileEditController.setActiveScrap(availableScraps[newIndex].mpID);
+      }
+    }
+
+    _th2FileEditController.execute(removeScrapCommand);
+    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   void updateControlPointSmoothInfo() {
