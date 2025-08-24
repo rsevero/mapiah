@@ -24,8 +24,9 @@ class THLinePaint {
     bool makeFillPaintNull = false,
   }) {
     return THLinePaint(
-      primaryPaint:
-          makePrimaryPaintNull ? null : (primaryPaint ?? this.primaryPaint),
+      primaryPaint: makePrimaryPaintNull
+          ? null
+          : (primaryPaint ?? this.primaryPaint),
       secondaryPaint: makeSecondaryPaintNull
           ? null
           : (secondaryPaint ?? this.secondaryPaint),

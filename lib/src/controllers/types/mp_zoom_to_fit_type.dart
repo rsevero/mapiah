@@ -1,5 +1,1 @@
-enum MPZoomToFitType {
-  file,
-  scrap,
-  selection;
-}
+enum MPZoomToFitType { file, scrap, selection }

@@ -13,9 +13,11 @@ class THPointPaint {
     this.type = MPPointShapeType.circle,
     this.border,
     this.fill,
-  })  : assert(radius > 0, "Radius must be greater than 0"),
-        assert((border != null) || (fill != null),
-            "At least one of border or fill must be provided");
+  }) : assert(radius > 0, "Radius must be greater than 0"),
+       assert(
+         (border != null) || (fill != null),
+         "At least one of border or fill must be provided",
+       );
 
   THPointPaint copyWith({
     double? radius,

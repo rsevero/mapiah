@@ -9,5 +9,5 @@ enum MPWindowType {
   multipleEndControlPointsClicked,
   optionChoices,
   plaTypes,
-  scrapOptions;
+  scrapOptions,
 }
