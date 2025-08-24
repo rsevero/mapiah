@@ -1,10 +1,12 @@
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
@@ -37,8 +39,10 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
     return MPOverlayWindowWidget(
-      title: mpLocator.appLocalizations.th2FileEditPageChangeActiveScrapTitle,
+      title: appLocalizations.th2FileEditPageChangeActiveScrapTitle,
       overlayWindowType: MPOverlayWindowType.primary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: MPWidgetPositionType.centerRight,
@@ -55,58 +59,71 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
               children: [
                 Builder(
                   builder: (blockContext) {
-                    return RadioGroup(
-                      groupValue: th2FileEditController.activeScrapID,
-                      onChanged: (int? value) {
-                        if (value != null) {
-                          _onTapSelectScrap(value);
-                        }
-                      },
-                      child: Column(
-                        children: th2FileEditController
-                            .availableScraps()
-                            .entries
-                            .map((entry) {
-                              final int scrapID = entry.key;
-                              final String scrapName = entry.value;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RadioGroup(
+                          groupValue: th2FileEditController.activeScrapID,
+                          onChanged: (int? value) {
+                            if (value != null) {
+                              _onTapSelectScrap(value);
+                            }
+                          },
+                          child: Column(
+                            children: th2FileEditController
+                                .availableScraps()
+                                .entries
+                                .map((entry) {
+                                  final int scrapID = entry.key;
+                                  final String scrapName = entry.value;
 
-                              return Builder(
-                                builder: (listenerContext) {
-                                  return Listener(
-                                    onPointerDown: (PointerDownEvent event) {
-                                      if (event.kind ==
-                                              PointerDeviceKind.mouse &&
-                                          event.buttons ==
-                                              kSecondaryMouseButton) {
-                                        _onRightClickSelectScrap(
-                                          listenerContext,
-                                          scrapID,
-                                        );
-                                      }
+                                  return Builder(
+                                    builder: (listenerContext) {
+                                      return Listener(
+                                        onPointerDown:
+                                            (PointerDownEvent event) {
+                                              if (event.kind ==
+                                                      PointerDeviceKind.mouse &&
+                                                  event.buttons ==
+                                                      kSecondaryMouseButton) {
+                                                _onRightClickSelectScrap(
+                                                  listenerContext,
+                                                  scrapID,
+                                                );
+                                              }
+                                            },
+                                        child: RadioListTile<int>(
+                                          title: Text(
+                                            scrapName,
+                                            style: DefaultTextStyle.of(
+                                              blockContext,
+                                            ).style,
+                                          ),
+                                          value: scrapID,
+
+                                          contentPadding: EdgeInsets.zero,
+                                          activeColor: IconTheme.of(
+                                            blockContext,
+                                          ).color,
+                                          dense: true,
+                                          visualDensity: VisualDensity
+                                              .adaptivePlatformDensity,
+                                        ),
+                                      );
                                     },
-                                    child: RadioListTile<int>(
-                                      title: Text(
-                                        scrapName,
-                                        style: DefaultTextStyle.of(
-                                          blockContext,
-                                        ).style,
-                                      ),
-                                      value: scrapID,
-
-                                      contentPadding: EdgeInsets.zero,
-                                      activeColor: IconTheme.of(
-                                        blockContext,
-                                      ).color,
-                                      dense: true,
-                                      visualDensity:
-                                          VisualDensity.adaptivePlatformDensity,
-                                    ),
                                   );
-                                },
-                              );
-                            })
-                            .toList(),
-                      ),
+                                })
+                                .toList(),
+                          ),
+                        ),
+                        const SizedBox(height: mpButtonSpace),
+                        ElevatedButton(
+                          onPressed: () => _onPressedAddScrap(context),
+                          child: Text(
+                            appLocalizations.th2FileEditPageAddScrapButton,
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -145,5 +162,11 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
           scrapMPID: scrapID,
           outerAnchorPosition: anchorPosition,
         );
+  }
+
+  void _onPressedAddScrap(BuildContext context) {
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.addScrap,
+    );
   }
 }

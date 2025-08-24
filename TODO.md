@@ -48,7 +48,7 @@ Version 0.3
 [X] - Release automation for Web
 [X] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
 [ ] - Create new file
-[ ] - Create new scrap [requested by Marco Corvi]
+[X] - Create new scrap [requested by Marco Corvi]
 [ ] - Snap points
 [ ] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
