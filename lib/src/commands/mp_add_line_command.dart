@@ -139,6 +139,7 @@ class MPAddLineCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPAddLineCommand &&
         other.newLine == newLine &&
@@ -146,8 +147,7 @@ class MPAddLineCommand extends MPCommand {
           other.lineChildren,
           lineChildren,
         ) &&
-        other.lineStartScreenPosition == lineStartScreenPosition &&
-        other.descriptionType == descriptionType;
+        other.lineStartScreenPosition == lineStartScreenPosition;
   }
 
   @override

@@ -109,11 +109,15 @@ abstract class MPCommand {
     return fromMap(jsonDecode(jsonString));
   }
 
+  bool equalsBase(Object other) {
+    return other is MPCommand && other.descriptionType == descriptionType;
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MPCommand && other.descriptionType == descriptionType;
+    return equalsBase(other);
   }
 
   @override

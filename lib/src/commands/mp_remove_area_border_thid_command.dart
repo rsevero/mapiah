@@ -66,8 +66,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   factory MPRemoveAreaBorderTHIDCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveAreaBorderTHIDCommand.forCWJM(
       areaBorderTHIDMPID: map['areaBorderTHIDMPID'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -79,9 +80,7 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'areaBorderTHIDMPID': areaBorderTHIDMPID,
-    });
+    map.addAll({'areaBorderTHIDMPID': areaBorderTHIDMPID});
 
     return map;
   }
@@ -89,10 +88,10 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveAreaBorderTHIDCommand &&
-        other.areaBorderTHIDMPID == areaBorderTHIDMPID &&
-        other.descriptionType == descriptionType;
+        other.areaBorderTHIDMPID == areaBorderTHIDMPID;
   }
 
   @override

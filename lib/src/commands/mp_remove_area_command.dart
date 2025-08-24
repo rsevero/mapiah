@@ -87,10 +87,9 @@ class MPRemoveAreaCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
-    return other is MPRemoveAreaCommand &&
-        other.areaMPID == areaMPID &&
-        other.descriptionType == descriptionType;
+    return other is MPRemoveAreaCommand && other.areaMPID == areaMPID;
   }
 
   @override

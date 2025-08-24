@@ -21,8 +21,8 @@ class MPMovePointCommand extends MPCommand {
     required this.originalPosition,
     required this.modifiedPosition,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+  }) : originalLineInTH2File = '',
+       super();
 
   MPMovePointCommand.fromDeltaOnCanvas({
     required this.pointMPID,
@@ -30,8 +30,8 @@ class MPMovePointCommand extends MPCommand {
     required Offset deltaOnCanvas,
     required int decimalPositions,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super() {
+  }) : originalLineInTH2File = '',
+       super() {
     modifiedPosition = originalPosition.copyWith(
       coordinates: originalPosition.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,
@@ -50,15 +50,17 @@ class MPMovePointCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    final THPoint originalPoint =
-        th2FileEditController.thFile.pointByMPID(pointMPID);
+    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
+      pointMPID,
+    );
     final THPoint modifiedPoint = originalPoint.copyWith(
       position: modifiedPosition,
       originalLineInTH2File: keepOriginalLineTH2File ? null : '',
     );
 
-    th2FileEditController.elementEditController
-        .substituteElement(modifiedPoint);
+    th2FileEditController.elementEditController.substituteElement(
+      modifiedPoint,
+    );
     th2FileEditController.triggerSelectedElementsRedraw();
   }
 
@@ -104,8 +106,9 @@ class MPMovePointCommand extends MPCommand {
       originalPosition: THPositionPart.fromMap(map['originalPosition']),
       modifiedPosition: THPositionPart.fromMap(map['modifiedPosition']),
       originalLineInTH2File: map['originalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -134,13 +137,13 @@ class MPMovePointCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPMovePointCommand &&
         other.pointMPID == pointMPID &&
         other.originalPosition == originalPosition &&
         other.modifiedPosition == modifiedPosition &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override

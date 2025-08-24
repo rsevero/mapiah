@@ -140,13 +140,13 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPMoveStraightLineSegmentCommand &&
         other.lineSegmentMPID == lineSegmentMPID &&
         other.originalEndPointPosition == originalEndPointPosition &&
         other.modifiedEndPointPosition == modifiedEndPointPosition &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override

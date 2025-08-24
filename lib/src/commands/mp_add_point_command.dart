@@ -27,8 +27,9 @@ class MPAddPointCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .applyAddElement(newElement: newPoint);
+    th2FileEditController.elementEditController.applyAddElement(
+      newElement: newPoint,
+    );
   }
 
   @override
@@ -60,8 +61,9 @@ class MPAddPointCommand extends MPCommand {
   factory MPAddPointCommand.fromMap(Map<String, dynamic> map) {
     return MPAddPointCommand.forCWJM(
       newPoint: THPoint.fromMap(map['newPoint']),
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -73,9 +75,7 @@ class MPAddPointCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'newPoint': newPoint.toMap(),
-    });
+    map.addAll({'newPoint': newPoint.toMap()});
 
     return map;
   }
@@ -83,10 +83,9 @@ class MPAddPointCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
-    return other is MPAddPointCommand &&
-        other.newPoint == newPoint &&
-        other.descriptionType == descriptionType;
+    return other is MPAddPointCommand && other.newPoint == newPoint;
   }
 
   @override

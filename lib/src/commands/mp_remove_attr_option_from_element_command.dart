@@ -38,27 +38,29 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   }) {
     th2FileEditController.elementEditController
         .applyRemoveAttrOptionFromElement(
-      attrName: attrName,
-      parentMPID: parentMPID,
-      newOriginalLineInTH2File: keepOriginalLineTH2File
-          ? currentOriginalLineInTH2File
-          : newOriginalLineInTH2File,
-    );
+          attrName: attrName,
+          parentMPID: parentMPID,
+          newOriginalLineInTH2File: keepOriginalLineTH2File
+              ? currentOriginalLineInTH2File
+              : newOriginalLineInTH2File,
+        );
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement =
-        th2FileEditController.thFile.hasOptionByMPID(parentMPID);
+    final THHasOptionsMixin parentElement = th2FileEditController.thFile
+        .hasOptionByMPID(parentMPID);
 
-    final THAttrCommandOption? option =
-        parentElement.attrOptionByName(attrName);
+    final THAttrCommandOption? option = parentElement.attrOptionByName(
+      attrName,
+    );
 
     if (option == null) {
       throw StateError(
-          'Parent element does not have attr option with name $attrName');
+        'Parent element does not have attr option with name $attrName',
+      );
     }
 
     final MPCommand oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
@@ -94,14 +96,16 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   }
 
   factory MPRemoveAttrOptionFromElementCommand.fromMap(
-      Map<String, dynamic> map) {
+    Map<String, dynamic> map,
+  ) {
     return MPRemoveAttrOptionFromElementCommand.forCWJM(
       attrName: map['attrName'],
       parentMPID: map['parentMPID'],
       newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
       currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -126,13 +130,13 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveAttrOptionFromElementCommand &&
         other.attrName == attrName &&
         other.parentMPID == parentMPID &&
         other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
   }
 
   @override

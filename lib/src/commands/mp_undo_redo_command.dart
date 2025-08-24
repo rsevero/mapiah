@@ -6,23 +6,14 @@ class MPUndoRedoCommand {
   final Map<String, dynamic> mapUndo;
   final Map<String, dynamic> mapRedo;
 
-  MPUndoRedoCommand({
-    required this.mapUndo,
-    required this.mapRedo,
-  });
+  MPUndoRedoCommand({required this.mapUndo, required this.mapRedo});
 
   Map<String, dynamic> toMap() {
-    return {
-      'mapUndo': mapUndo,
-      'mapRedo': mapRedo,
-    };
+    return {'mapUndo': mapUndo, 'mapRedo': mapRedo};
   }
 
   factory MPUndoRedoCommand.fromMap(Map<String, dynamic> map) {
-    return MPUndoRedoCommand(
-      mapUndo: map['mapUndo'],
-      mapRedo: map['mapRedo'],
-    );
+    return MPUndoRedoCommand(mapUndo: map['mapUndo'], mapRedo: map['mapRedo']);
   }
 
   factory MPUndoRedoCommand.fromJson(String jsonString) {
@@ -40,17 +31,16 @@ class MPUndoRedoCommand {
   }
 
   @override
-  bool operator ==(covariant MPUndoRedoCommand other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.mapUndo == mapUndo && other.mapRedo == mapRedo;
+    return other is MPUndoRedoCommand &&
+        other.mapUndo == mapUndo &&
+        other.mapRedo == mapRedo;
   }
 
   @override
-  int get hashCode => Object.hash(
-        mapUndo,
-        mapRedo,
-      );
+  int get hashCode => Object.hash(mapUndo, mapRedo);
 
   MPCommand get undoCommand {
     return MPCommand.fromMap(mapUndo);

@@ -99,14 +99,14 @@ class MPMultipleElementsCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPMultipleElementsCommand &&
         other.completionType == completionType &&
         const ListEquality<MPCommand>().equals(
           other.commandsList,
           commandsList,
-        ) &&
-        other.descriptionType == descriptionType;
+        );
   }
 
   @override

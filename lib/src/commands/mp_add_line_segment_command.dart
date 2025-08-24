@@ -77,8 +77,9 @@ class MPAddLineSegmentCommand extends MPCommand {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
       beforeLineSegmentMPID: map['beforeLineSegmentMPID'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -101,18 +102,14 @@ class MPAddLineSegmentCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPAddLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
-        other.beforeLineSegmentMPID == beforeLineSegmentMPID &&
-        other.descriptionType == descriptionType;
+        other.beforeLineSegmentMPID == beforeLineSegmentMPID;
   }
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        newLineSegment,
-        beforeLineSegmentMPID,
-      );
+      super.hashCode ^ Object.hash(newLineSegment, beforeLineSegmentMPID);
 }

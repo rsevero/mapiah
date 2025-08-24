@@ -18,8 +18,8 @@ class MPEditPointTypeCommand extends MPCommand {
     required this.pointMPID,
     required this.newPointType,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+  }) : originalLineInTH2File = '',
+       super();
 
   @override
   MPCommandType get type => MPCommandType.editPointType;
@@ -33,12 +33,14 @@ class MPEditPointTypeCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    final THPoint newPoint =
-        th2FileEditController.thFile.pointByMPID(pointMPID).copyWith(
-              pointType: newPointType,
-              originalLineInTH2File:
-                  keepOriginalLineTH2File ? originalLineInTH2File : '',
-            );
+    final THPoint newPoint = th2FileEditController.thFile
+        .pointByMPID(pointMPID)
+        .copyWith(
+          pointType: newPointType,
+          originalLineInTH2File: keepOriginalLineTH2File
+              ? originalLineInTH2File
+              : '',
+        );
 
     th2FileEditController.elementEditController.substituteElement(newPoint);
     th2FileEditController.optionEditController.updateOptionStateMap();
@@ -48,8 +50,9 @@ class MPEditPointTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THPoint originalPoint =
-        th2FileEditController.thFile.pointByMPID(pointMPID);
+    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
+      pointMPID,
+    );
 
     final MPCommand oppositeCommand = MPEditPointTypeCommand.forCWJM(
       pointMPID: pointMPID,
@@ -85,8 +88,9 @@ class MPEditPointTypeCommand extends MPCommand {
       pointMPID: map['pointMPID'] as int,
       newPointType: THPointType.values.byName(map['newPointType']),
       originalLineInTH2File: map['originalLineInTH2File'] as String,
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -110,20 +114,16 @@ class MPEditPointTypeCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPEditPointTypeCommand &&
         other.pointMPID == pointMPID &&
         other.newPointType == newPointType &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        pointMPID,
-        newPointType,
-        originalLineInTH2File,
-      );
+      Object.hash(pointMPID, newPointType, originalLineInTH2File);
 }

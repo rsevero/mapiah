@@ -113,11 +113,11 @@ class MPAddAreaCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPAddAreaCommand &&
         other.newArea == newArea &&
-        other.addAreaTHIDsCommand == addAreaTHIDsCommand &&
-        other.descriptionType == descriptionType;
+        other.addAreaTHIDsCommand == addAreaTHIDsCommand;
   }
 
   @override

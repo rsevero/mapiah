@@ -121,12 +121,12 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPSetAttrOptionToElementCommand &&
         other.option == option &&
         other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
   }
 
   @override

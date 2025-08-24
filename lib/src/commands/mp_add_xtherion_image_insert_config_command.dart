@@ -27,8 +27,9 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .applyAddElement(newElement: newImageInsertConfig);
+    th2FileEditController.elementEditController.applyAddElement(
+      newElement: newImageInsertConfig,
+    );
   }
 
   @override
@@ -58,7 +59,8 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand {
   }
 
   factory MPAddXTherionImageInsertConfigCommand.fromMap(
-      Map<String, dynamic> map) {
+    Map<String, dynamic> map,
+  ) {
     return MPAddXTherionImageInsertConfigCommand.forCWJM(
       newImageInsertConfig: THXTherionImageInsertConfig.fromMap(
         map['newImageInsertConfig'],
@@ -77,9 +79,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'newImageInsertConfig': newImageInsertConfig.toMap(),
-    });
+    map.addAll({'newImageInsertConfig': newImageInsertConfig.toMap()});
 
     return map;
   }
@@ -87,10 +87,10 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPAddXTherionImageInsertConfigCommand &&
-        other.newImageInsertConfig == newImageInsertConfig &&
-        other.descriptionType == descriptionType;
+        other.newImageInsertConfig == newImageInsertConfig;
   }
 
   @override

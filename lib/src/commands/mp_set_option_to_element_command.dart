@@ -33,23 +33,23 @@ class MPSetOptionToElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applySetOptionToElement(
-      option,
-    );
+    th2FileEditController.elementEditController.applySetOptionToElement(option);
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement =
-        option.optionParent(th2FileEditController.thFile);
+    final THHasOptionsMixin parentElement = option.optionParent(
+      th2FileEditController.thFile,
+    );
 
     MPCommand oppositeCommand;
 
     if (parentElement.hasOption(option.type)) {
-      final THCommandOption currentOption =
-          parentElement.optionByType(option.type)!;
+      final THCommandOption currentOption = parentElement.optionByType(
+        option.type,
+      )!;
 
       oppositeCommand = MPSetOptionToElementCommand.forCWJM(
         option: currentOption,
@@ -95,8 +95,9 @@ class MPSetOptionToElementCommand extends MPCommand {
       option: THCommandOption.fromMap(map['option']),
       newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
       currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -120,12 +121,12 @@ class MPSetOptionToElementCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPSetOptionToElementCommand &&
         other.option == option &&
         other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
   }
 
   @override

@@ -111,14 +111,14 @@ class MPMoveAreaCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPMoveAreaCommand &&
         other.areaMPID == areaMPID &&
         const DeepCollectionEquality().equals(
           other.linesMoveCommand,
           linesMoveCommand,
-        ) &&
-        other.descriptionType == descriptionType;
+        );
   }
 
   @override

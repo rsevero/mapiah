@@ -27,16 +27,18 @@ class MPRemovePointCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .applyRemoveElementByMPID(pointMPID);
+    th2FileEditController.elementEditController.applyRemoveElementByMPID(
+      pointMPID,
+    );
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THPoint originalPoint =
-        th2FileEditController.thFile.pointByMPID(pointMPID);
+    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
+      pointMPID,
+    );
     final MPCommand oppositeCommand = MPAddPointCommand(
       newPoint: originalPoint,
       descriptionType: descriptionType,
@@ -62,8 +64,9 @@ class MPRemovePointCommand extends MPCommand {
   factory MPRemovePointCommand.fromMap(Map<String, dynamic> map) {
     return MPRemovePointCommand.forCWJM(
       pointMPID: map['pointMPID'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -75,9 +78,7 @@ class MPRemovePointCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'pointMPID': pointMPID,
-    });
+    map.addAll({'pointMPID': pointMPID});
 
     return map;
   }
@@ -85,10 +86,9 @@ class MPRemovePointCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
-    return other is MPRemovePointCommand &&
-        other.pointMPID == pointMPID &&
-        other.descriptionType == descriptionType;
+    return other is MPRemovePointCommand && other.pointMPID == pointMPID;
   }
 
   @override

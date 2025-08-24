@@ -78,8 +78,9 @@ class MPRemoveLineCommand extends MPCommand {
     return MPRemoveLineCommand.forCWJM(
       lineMPID: map['lineMPID'],
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -102,18 +103,14 @@ class MPRemoveLineCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveLineCommand &&
         other.lineMPID == lineMPID &&
-        other.isInteractiveLineCreation == isInteractiveLineCreation &&
-        other.descriptionType == descriptionType;
+        other.isInteractiveLineCreation == isInteractiveLineCreation;
   }
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        lineMPID,
-        isInteractiveLineCreation,
-      );
+      super.hashCode ^ Object.hash(lineMPID, isInteractiveLineCreation);
 }

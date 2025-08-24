@@ -18,8 +18,8 @@ class MPEditLineSegmentCommand extends MPCommand {
     required this.originalLineSegment,
     required this.newLineSegment,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+  }) : originalLineInTH2File = '',
+       super();
 
   @override
   MPCommandType get type => MPCommandType.editLineSegment;
@@ -33,8 +33,9 @@ class MPEditLineSegmentCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .substituteElement(newLineSegment);
+    th2FileEditController.elementEditController.substituteElement(
+      newLineSegment,
+    );
     th2FileEditController.triggerNewLineRedraw();
   }
 
@@ -76,8 +77,9 @@ class MPEditLineSegmentCommand extends MPCommand {
       originalLineSegment: THLineSegment.fromMap(map['originalLineSegment']),
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
       originalLineInTH2File: map['originalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -101,20 +103,16 @@ class MPEditLineSegmentCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPEditLineSegmentCommand &&
         other.originalLineSegment == originalLineSegment &&
         other.newLineSegment == newLineSegment &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        originalLineSegment,
-        newLineSegment,
-        originalLineInTH2File,
-      );
+      Object.hash(originalLineSegment, newLineSegment, originalLineInTH2File);
 }

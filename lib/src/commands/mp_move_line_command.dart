@@ -142,6 +142,7 @@ class MPMoveLineCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPMoveLineCommand &&
         other.lineMPID == lineMPID &&
@@ -149,8 +150,7 @@ class MPMoveLineCommand extends MPCommand {
           other.lineSegmentsMoveCommand,
           lineSegmentsMoveCommand,
         ) &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override

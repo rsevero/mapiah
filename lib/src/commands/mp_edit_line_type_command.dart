@@ -18,8 +18,8 @@ class MPEditLineTypeCommand extends MPCommand {
     required this.lineMPID,
     required this.newLineType,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+  }) : originalLineInTH2File = '',
+       super();
 
   @override
   MPCommandType get type => MPCommandType.editLineType;
@@ -33,11 +33,12 @@ class MPEditLineTypeCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    final THLine newLine =
-        th2FileEditController.thFile.lineByMPID(lineMPID).copyWith(
-              lineType: newLineType,
-              originalLineInTH2File: keepOriginalLineTH2File ? null : '',
-            );
+    final THLine newLine = th2FileEditController.thFile
+        .lineByMPID(lineMPID)
+        .copyWith(
+          lineType: newLineType,
+          originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+        );
 
     th2FileEditController.elementEditController.substituteElement(newLine);
     th2FileEditController.optionEditController.updateOptionStateMap();
@@ -47,8 +48,9 @@ class MPEditLineTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THLine originalLine =
-        th2FileEditController.thFile.lineByMPID(lineMPID);
+    final THLine originalLine = th2FileEditController.thFile.lineByMPID(
+      lineMPID,
+    );
 
     final MPCommand oppositeCommand = MPEditLineTypeCommand.forCWJM(
       lineMPID: lineMPID,
@@ -84,8 +86,9 @@ class MPEditLineTypeCommand extends MPCommand {
       lineMPID: map['lineMPID'] as int,
       newLineType: THLineType.values.byName(map['newLineType']),
       originalLineInTH2File: map['originalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -109,20 +112,16 @@ class MPEditLineTypeCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPEditLineTypeCommand &&
         other.lineMPID == lineMPID &&
         other.newLineType == newLineType &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        lineMPID,
-        newLineType,
-        originalLineInTH2File,
-      );
+      Object.hash(lineMPID, newLineType, originalLineInTH2File);
 }

@@ -49,14 +49,15 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement =
-        th2FileEditController.thFile.hasOptionByMPID(parentMPID);
+    final THHasOptionsMixin parentElement = th2FileEditController.thFile
+        .hasOptionByMPID(parentMPID);
 
     final THCommandOption? option = parentElement.optionByType(optionType);
 
     if (option == null) {
       throw StateError(
-          'Parent element does not have option of type $optionType');
+        'Parent element does not have option of type $optionType',
+      );
     }
 
     final MPCommand oppositeCommand = MPSetOptionToElementCommand.forCWJM(
@@ -97,8 +98,9 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
       parentMPID: map['parentMPID'],
       newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
       currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -123,13 +125,13 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveOptionFromElementCommand &&
         other.optionType == optionType &&
         other.parentMPID == parentMPID &&
         other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
   }
 
   @override

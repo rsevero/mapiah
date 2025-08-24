@@ -27,8 +27,9 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController
-        .applyRemoveElementByMPID(xtherionImageInsertConfigMPID);
+    th2FileEditController.elementEditController.applyRemoveElementByMPID(
+      xtherionImageInsertConfigMPID,
+    );
   }
 
   @override
@@ -62,11 +63,13 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   }
 
   factory MPRemoveXTherionImageInsertConfigCommand.fromMap(
-      Map<String, dynamic> map) {
+    Map<String, dynamic> map,
+  ) {
     return MPRemoveXTherionImageInsertConfigCommand.forCWJM(
       xtherionImageInsertConfigMPID: map['xtherionImageInsertConfigMPID'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -88,10 +91,10 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveXTherionImageInsertConfigCommand &&
-        other.xtherionImageInsertConfigMPID == xtherionImageInsertConfigMPID &&
-        other.descriptionType == descriptionType;
+        other.xtherionImageInsertConfigMPID == xtherionImageInsertConfigMPID;
   }
 
   @override

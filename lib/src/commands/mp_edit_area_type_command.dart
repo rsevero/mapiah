@@ -18,8 +18,8 @@ class MPEditAreaTypeCommand extends MPCommand {
     required this.areaMPID,
     required this.newAreaType,
     super.descriptionType = _defaultDescriptionType,
-  })  : originalLineInTH2File = '',
-        super();
+  }) : originalLineInTH2File = '',
+       super();
 
   @override
   MPCommandType get type => MPCommandType.editAreaType;
@@ -33,11 +33,12 @@ class MPEditAreaTypeCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    final THArea newArea =
-        th2FileEditController.thFile.areaByMPID(areaMPID).copyWith(
-              areaType: newAreaType,
-              originalLineInTH2File: keepOriginalLineTH2File ? null : '',
-            );
+    final THArea newArea = th2FileEditController.thFile
+        .areaByMPID(areaMPID)
+        .copyWith(
+          areaType: newAreaType,
+          originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+        );
 
     th2FileEditController.elementEditController.substituteElement(newArea);
     th2FileEditController.optionEditController.updateOptionStateMap();
@@ -47,8 +48,9 @@ class MPEditAreaTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THArea originalArea =
-        th2FileEditController.thFile.areaByMPID(areaMPID);
+    final THArea originalArea = th2FileEditController.thFile.areaByMPID(
+      areaMPID,
+    );
 
     final MPCommand oppositeCommand = MPEditAreaTypeCommand.forCWJM(
       areaMPID: areaMPID,
@@ -84,8 +86,9 @@ class MPEditAreaTypeCommand extends MPCommand {
       areaMPID: map['areaMPID'] as int,
       newAreaType: THAreaType.values.byName(map['newAreaType']),
       originalLineInTH2File: map['originalLineInTH2File'],
-      descriptionType:
-          MPCommandDescriptionType.values.byName(map['descriptionType']),
+      descriptionType: MPCommandDescriptionType.values.byName(
+        map['descriptionType'],
+      ),
     );
   }
 
@@ -109,20 +112,16 @@ class MPEditAreaTypeCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPEditAreaTypeCommand &&
         other.areaMPID == areaMPID &&
         other.newAreaType == newAreaType &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
   int get hashCode =>
       super.hashCode ^
-      Object.hash(
-        areaMPID,
-        newAreaType,
-        originalLineInTH2File,
-      );
+      Object.hash(areaMPID, newAreaType, originalLineInTH2File);
 }

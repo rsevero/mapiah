@@ -211,6 +211,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    if (!super.equalsBase(other)) return false;
 
     return other is MPMoveBezierLineSegmentCommand &&
         other.lineSegmentMPID == lineSegmentMPID &&
@@ -220,8 +221,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         other.modifiedControlPoint1Position == modifiedControlPoint1Position &&
         other.originalControlPoint2Position == originalControlPoint2Position &&
         other.modifiedControlPoint2Position == modifiedControlPoint2Position &&
-        other.originalLineInTH2File == originalLineInTH2File &&
-        other.descriptionType == descriptionType;
+        other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
