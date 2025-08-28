@@ -289,7 +289,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void updateAfterAddElement(THElement element) {
     addSelectableElement(element);
     updateSelectedElementClone(element.parentMPID);
-    resetSelectableElements();
+    // resetSelectableElements();
   }
 
   @action
@@ -508,6 +508,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void addSelectableElement(THElement element) {
+    if (_mpSelectableElements == null) {
+      _updateMPSelectableElements();
+      return;
+    }
+
     switch (element) {
       case THPoint _:
         _addPointSelectableElement(element);
@@ -527,15 +532,20 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void _addPointSelectableElement(THPoint point) {
+    if (_mpSelectableElements == null) {
+      throw Exception(
+        'At TH2FileEditSelectionController._addPointSelectableElement: selectable elements map is not initialized',
+      );
+    }
+
     final MPSelectablePoint selectablePoint = MPSelectablePoint(
       point: point,
       th2fileEditController: _th2FileEditController,
     );
 
     final int pointMPID = point.mpID;
-    final Map<int, MPSelectable> selectableElements = getMPSelectableElements();
 
-    selectableElements[pointMPID] = selectablePoint;
+    _mpSelectableElements![pointMPID] = selectablePoint;
 
     if (!_isSelected.containsKey(pointMPID)) {
       _isSelected[pointMPID] = Observable(false);
@@ -543,15 +553,19 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void _addLineSelectableElement(THLine line) {
+    if (_mpSelectableElements == null) {
+      throw Exception(
+        'At TH2FileEditSelectionController._addLineSelectableElement: selectable elements map is not initialized',
+      );
+    }
+
     final MPSelectableLine selectableLine = MPSelectableLine(
       line: line,
       th2fileEditController: _th2FileEditController,
     );
-
     final int lineMPID = line.mpID;
-    final Map<int, MPSelectable> selectableElements = getMPSelectableElements();
 
-    selectableElements[lineMPID] = selectableLine;
+    _mpSelectableElements![lineMPID] = selectableLine;
     if (!_isSelected.containsKey(lineMPID)) {
       _isSelected[lineMPID] = Observable(false);
     }
@@ -559,6 +573,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     /// Adding line segments as selectable elements so on 'single line edit
     /// mode' its possible to select end point clicking on line segments.
     final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+
     Offset? startPoint;
 
     for (final THLineSegment lineSegment in lineSegments) {
@@ -588,7 +603,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           );
       }
 
-      selectableElements[lineSegment.mpID] = selectableLineSegment;
+      _mpSelectableElements![lineSegment.mpID] = selectableLineSegment;
       startPoint = lineSegment.endPoint.coordinates;
     }
   }

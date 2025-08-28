@@ -18,6 +18,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -672,10 +673,29 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void setActiveScrap(int scrapMPID) {
+    if (scrapMPID == _activeScrapID) {
+      return;
+    }
+
     _activeScrapID = scrapMPID;
     selectionController.clearSelectedElements();
     selectionController.resetSelectableElements();
     triggerAllElementsRedraw();
+  }
+
+  void setActiveScrapByChildElement(THElement element) {
+    THIsParentMixin parent = (element is THIsParentMixin)
+        ? element as THIsParentMixin
+        : element.parent(_thFile);
+
+    while (parent is THElement) {
+      if (parent is THScrap) {
+        setActiveScrap(parent.mpID);
+        return;
+      }
+
+      parent = (parent as THElement).parent(_thFile);
+    }
   }
 
   Map<int, String> availableScraps() {

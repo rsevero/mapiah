@@ -204,6 +204,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void afterAddPoint(THPoint newPoint) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.afterAddPoint',
+        );
+    try {
+      return super.afterAddPoint(newPoint);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void removeElement(THElement element, {bool setState = false}) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(

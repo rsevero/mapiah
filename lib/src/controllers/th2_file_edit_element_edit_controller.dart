@@ -245,17 +245,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void substituteElement(THElement modifiedElement) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+
     _thFile.substituteElement(modifiedElement);
-    _th2FileEditController.selectionController.addSelectableElement(
-      modifiedElement,
-    );
-    _th2FileEditController.selectionController.updateSelectedElementClone(
-      modifiedElement.mpID,
-    );
+    selectionController.addSelectableElement(modifiedElement);
+    selectionController.updateSelectedElementClone(modifiedElement.mpID);
     if (modifiedElement is THLineSegment) {
-      _th2FileEditController.selectionController.updateSelectedLineSegment(
-        modifiedElement,
-      );
+      selectionController.updateSelectedLineSegment(modifiedElement);
     }
   }
 
@@ -323,6 +320,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       newElement,
       elementPositionInParent: childPositionInParent,
     );
+  }
+
+  @action
+  void afterAddPoint(THPoint newPoint) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+
+    _th2FileEditController.setActiveScrapByChildElement(newPoint);
+    selectionController.addSelectableElement(newPoint);
+    selectionController.updateSelectedElementClone(newPoint.mpID);
+    _th2FileEditController.triggerAllElementsRedraw();
   }
 
   @action
@@ -710,6 +718,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void afterAddElement(THElement newElement) {
+    _th2FileEditController.setActiveScrapByChildElement(newElement);
     _th2FileEditController.selectionController.updateAfterAddElement(
       newElement,
     );
