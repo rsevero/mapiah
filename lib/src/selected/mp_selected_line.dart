@@ -21,8 +21,9 @@ class MPSelectedLine extends MPSelectedElement {
     originalLineSegmentsMapClone.clear();
 
     for (final int mpID in lineSegmentMPIDs) {
-      final THElement element =
-          th2FileEditController.thFile.elementByMPID(mpID);
+      final THElement element = th2FileEditController.thFile.elementByMPID(
+        mpID,
+      );
 
       if (element is! THLineSegment) {
         continue;
@@ -56,8 +57,9 @@ class MPSelectedLine extends MPSelectedElement {
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THLine updatedOriginalLine =
-        th2FileEditController.thFile.lineByMPID(mpID);
+    final THLine updatedOriginalLine = th2FileEditController.thFile.lineByMPID(
+      mpID,
+    );
 
     _createClone(updatedOriginalLine, th2FileEditController);
   }

@@ -12,7 +12,9 @@ class MPSelectedArea extends MPSelectedElement {
   }
 
   void _createClone(
-      THArea originalArea, TH2FileEditController th2FileEditController) {
+    THArea originalArea,
+    TH2FileEditController th2FileEditController,
+  ) {
     final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
         LinkedHashMap<THCommandOptionType, THCommandOption>();
 
@@ -22,16 +24,18 @@ class MPSelectedArea extends MPSelectedElement {
 
     originalAreaClone = originalArea.copyWith(optionsMap: optionsMapClone);
 
-    final Set<int> lineMPIDs =
-        originalArea.getLineMPIDs(th2FileEditController.thFile);
-    final mpSelectableElements =
-        th2FileEditController.selectionController.getMPSelectableElements();
+    final Set<int> lineMPIDs = originalArea.getLineMPIDs(
+      th2FileEditController.thFile,
+    );
+    final mpSelectableElements = th2FileEditController.selectionController
+        .getMPSelectableElements();
 
     for (final int lineMPID in lineMPIDs) {
       originalLines.add(
         MPSelectedLine(
-          originalLine: (mpSelectableElements[lineMPID] as MPSelectableLine)
-              .element as THLine,
+          originalLine:
+              (mpSelectableElements[lineMPID] as MPSelectableLine).element
+                  as THLine,
           th2FileEditController: th2FileEditController,
         ),
       );
@@ -40,8 +44,9 @@ class MPSelectedArea extends MPSelectedElement {
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THArea updatedOriginalArea =
-        th2FileEditController.thFile.areaByMPID(mpID);
+    final THArea updatedOriginalArea = th2FileEditController.thFile.areaByMPID(
+      mpID,
+    );
 
     _createClone(updatedOriginalArea, th2FileEditController);
   }

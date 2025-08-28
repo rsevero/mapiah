@@ -19,14 +19,16 @@ class MPSelectedEndControlPoint extends MPSelectedElement {
       optionsMapClone[key] = value.copyWith();
     });
 
-    originalLineSegmentClone =
-        originalLineSegment.copyWith(optionsMap: optionsMapClone);
+    originalLineSegmentClone = originalLineSegment.copyWith(
+      optionsMap: optionsMapClone,
+    );
   }
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THLineSegment updatedOriginalLineSegment =
-        th2FileEditController.thFile.lineSegmentByMPID(mpID);
+    final THLineSegment updatedOriginalLineSegment = th2FileEditController
+        .thFile
+        .lineSegmentByMPID(mpID);
 
     _createClone(updatedOriginalLineSegment);
   }

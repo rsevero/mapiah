@@ -20,8 +20,8 @@ class MPSelectedPoint extends MPSelectedElement {
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THPoint updatedOriginalPoint =
-        th2FileEditController.thFile.pointByMPID(mpID);
+    final THPoint updatedOriginalPoint = th2FileEditController.thFile
+        .pointByMPID(mpID);
 
     _createClone(updatedOriginalPoint);
   }
