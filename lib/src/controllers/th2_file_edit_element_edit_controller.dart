@@ -644,7 +644,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     int scrapPositionAtParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
     applyAddElement(
-      newElement: newScrap,
+      newElement: newScrap.copyWith(childrenMPID: []),
       childPositionInParent: scrapPositionAtParent,
     );
 
@@ -682,7 +682,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     Offset? lineStartScreenPosition,
   }) {
     applyAddElement(
-      newElement: newLine,
+      newElement: newLine.copyWith(childrenMPID: []),
       childPositionInParent: linePositionInParent,
     );
 
@@ -723,7 +723,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     int areaPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
     applyAddElement(
-      newElement: newArea,
+      newElement: newArea.copyWith(childrenMPID: []),
       childPositionInParent: areaPositionInParent,
     );
     for (final THElement child in areaChildren) {
