@@ -122,6 +122,5 @@ class MPEditLineTypeCommand extends MPCommand {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(lineMPID, newLineType, originalLineInTH2File);
+      Object.hash(super.hashCode, lineMPID, newLineType, originalLineInTH2File);
 }

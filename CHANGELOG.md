@@ -8,6 +8,8 @@
 * Fixed bugs:
   * Opening the help with a dialog on display the dialog did not close [reported by Marco Corvi].
   * An saveAs suggested filename included the original path.
+* Infrastructure maintanance:
+  * Refactored MPAdd elements commands to improve readbility and facilitate recursive-like use.
 
 ## 0.2.12 - 2025-08-21
 * New features:

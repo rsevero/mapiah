@@ -150,12 +150,11 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        lineSegmentMPID,
-        originalEndPointPosition,
-        modifiedEndPointPosition,
-        originalLineInTH2File,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    lineSegmentMPID,
+    originalEndPointPosition,
+    modifiedEndPointPosition,
+    originalLineInTH2File,
+  );
 }

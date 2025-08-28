@@ -2,18 +2,34 @@ part of 'mp_command.dart';
 
 class MPAddAreaBorderTHIDCommand extends MPCommand {
   final THAreaBorderTHID newAreaBorderTHID;
+  final int areaBorderTHIDPositionInParent;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addAreaBorderTHID;
 
   MPAddAreaBorderTHIDCommand.forCWJM({
     required this.newAreaBorderTHID,
+    required this.areaBorderTHIDPositionInParent,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddAreaBorderTHIDCommand({
     required this.newAreaBorderTHID,
+    this.areaBorderTHIDPositionInParent =
+        mpAddChildAtEndMinusOneOfParentChildrenList,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super.forCWJM();
+
+  MPAddAreaBorderTHIDCommand.fromExisting({
+    required this.newAreaBorderTHID,
+    int? areaBorderTHIDPositionInParent,
+    required TH2FileEditController th2FileEditController,
+    super.descriptionType = _defaultDescriptionType,
+  }) : areaBorderTHIDPositionInParent =
+           areaBorderTHIDPositionInParent ??
+           newAreaBorderTHID
+               .parent(th2FileEditController.thFile)
+               .getChildPosition(newAreaBorderTHID),
+       super();
 
   @override
   MPCommandType get type => MPCommandType.addAreaBorderTHID;
@@ -29,7 +45,10 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   }) {
     th2FileEditController.elementEditController.applyAddElement(
       newElement: newAreaBorderTHID,
+      childPositionInParent: areaBorderTHIDPositionInParent,
     );
+    th2FileEditController.triggerNonSelectedElementsRedraw();
+    th2FileEditController.triggerSelectedElementsRedraw();
   }
 
   @override
@@ -50,10 +69,13 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   @override
   MPAddAreaBorderTHIDCommand copyWith({
     THAreaBorderTHID? newAreaBorderTHID,
+    int? areaPositionInParent,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddAreaBorderTHIDCommand.forCWJM(
       newAreaBorderTHID: newAreaBorderTHID ?? this.newAreaBorderTHID,
+      areaBorderTHIDPositionInParent:
+          areaPositionInParent ?? this.areaBorderTHIDPositionInParent,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -61,6 +83,7 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   factory MPAddAreaBorderTHIDCommand.fromMap(Map<String, dynamic> map) {
     return MPAddAreaBorderTHIDCommand.forCWJM(
       newAreaBorderTHID: THAreaBorderTHID.fromMap(map['newAreaBorderTHID']),
+      areaBorderTHIDPositionInParent: map['elementPositionInParent'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -75,7 +98,10 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'newAreaBorderTHID': newAreaBorderTHID.toMap()});
+    map.addAll({
+      'newAreaBorderTHID': newAreaBorderTHID.toMap(),
+      'elementPositionInParent': areaBorderTHIDPositionInParent,
+    });
 
     return map;
   }
@@ -86,9 +112,14 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
     if (!super.equalsBase(other)) return false;
 
     return other is MPAddAreaBorderTHIDCommand &&
-        other.newAreaBorderTHID == newAreaBorderTHID;
+        other.newAreaBorderTHID == newAreaBorderTHID &&
+        other.areaBorderTHIDPositionInParent == areaBorderTHIDPositionInParent;
   }
 
   @override
-  int get hashCode => super.hashCode ^ newAreaBorderTHID.hashCode;
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newAreaBorderTHID,
+    areaBorderTHIDPositionInParent,
+  );
 }

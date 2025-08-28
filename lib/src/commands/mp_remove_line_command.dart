@@ -39,20 +39,11 @@ class MPRemoveLineCommand extends MPCommand {
   ) {
     final THFile thFile = th2FileEditController.thFile;
     final THLine originalLine = thFile.lineByMPID(lineMPID);
-    final List<THElement> lineChildren = [];
-    final List<int> lineChildrenMPIDs = originalLine.childrenMPID;
-
-    for (final int childMPID in lineChildrenMPIDs) {
-      final THElement childElement = thFile.elementByMPID(childMPID);
-
-      lineChildren.add(childElement);
-    }
-
-    final MPCommand oppositeCommand = MPAddLineCommand(
-      newLine: originalLine,
-      lineChildren: lineChildren,
+    final MPCommand oppositeCommand = MPAddLineCommand.fromExisting(
+      existingLine: originalLine,
       lineStartScreenPosition:
           th2FileEditController.elementEditController.lineStartScreenPosition,
+      th2FileEditController: th2FileEditController,
       descriptionType: descriptionType,
     );
 
@@ -112,5 +103,5 @@ class MPRemoveLineCommand extends MPCommand {
 
   @override
   int get hashCode =>
-      super.hashCode ^ Object.hash(lineMPID, isInteractiveLineCreation);
+      Object.hash(super.hashCode, lineMPID, isInteractiveLineCreation);
 }

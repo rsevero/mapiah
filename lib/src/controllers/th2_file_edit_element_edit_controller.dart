@@ -277,86 +277,60 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyInsertLineSegment({
+  void applyAddLineSegment({
     required THLineSegment newLineSegment,
-    required int beforeLineSegmentMPID,
+    required int lineSegmentPositionInParent,
   }) {
-    final THLine line = _thFile.lineByMPID(newLineSegment.parentMPID);
+    applyAddElement(
+      newElement: newLineSegment,
+      childPositionInParent: lineSegmentPositionInParent,
+    );
+  }
 
-    line.insertLineSegmentBefore(newLineSegment, beforeLineSegmentMPID);
-    _thFile.addElement(newLineSegment);
-    _thFile.substituteElement(line);
-    _th2FileEditController.selectionController.addSelectableElement(
-      newLineSegment,
-    );
-    _th2FileEditController.selectionController.updateSelectedElementClone(
-      newLineSegment.mpID,
-    );
-    _th2FileEditController.selectionController.updateSelectedElementClone(
-      newLineSegment.parentMPID,
-    );
-    _th2FileEditController.selectionController.resetSelectableElements();
+  @action
+  void afterAddLineSegment(THLineSegment newLineSegment) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+
+    selectionController.updateSelectedElementClone(newLineSegment.mpID);
+    selectionController.updateSelectedElementClone(newLineSegment.parentMPID);
+    selectionController.resetSelectableElements();
+    (newLineSegment.parent(_thFile) as THLine).clearBoundingBox();
   }
 
   @action
   void applyAddElement({
     required THElement newElement,
-    bool positionInsideParent = true,
+    THIsParentMixin? parent,
+    int childPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
-    _thFile.addElement(newElement);
+    final int parentMPID;
+    final THIsParentMixin parentElement;
 
-    final int parentMPID = newElement.parentMPID;
-
-    if (parentMPID < 0) {
-      _thFile.addElementToParent(
-        newElement,
-        positionInsideParent: positionInsideParent,
-      );
+    if (parent == null) {
+      parentMPID = newElement.parentMPID;
+      parentElement = (parentMPID < 0)
+          ? _thFile
+          : _thFile.parentByMPID(parentMPID);
     } else {
-      final THIsParentMixin parent = _thFile.parentByMPID(parentMPID);
-
-      parent.addElementToParent(
-        newElement,
-        positionInsideParent: positionInsideParent,
-      );
+      parentMPID = parent.mpID;
+      parentElement = parent;
     }
 
-    _th2FileEditController.selectionController.addSelectableElement(newElement);
-    _th2FileEditController.selectionController.updateSelectedElementClone(
-      newElement.parentMPID,
-    );
-    _th2FileEditController.selectionController.resetSelectableElements();
-
-    if (newElement is THScrap) {
-      _th2FileEditController.updateHasMultipleScraps();
-    }
-  }
-
-  void addElementWithParentMPIDWithoutSelectableElement({
-    required THElement newElement,
-    required int parentMPID,
-  }) {
-    addElementWithParentWithoutSelectableElement(
-      newElement: newElement,
-      parent: _thFile.parentByMPID(parentMPID),
-    );
-  }
-
-  @action
-  void addElementWithParentWithoutSelectableElement({
-    required THElement newElement,
-    required THIsParentMixin parent,
-  }) {
     _thFile.addElement(newElement);
-    parent.addElementToParent(newElement, positionInsideParent: false);
 
-    if (newElement is THScrap) {
-      _th2FileEditController.updateHasMultipleScraps();
-    }
+    parentElement.addElementToParent(
+      newElement,
+      elementPositionInParent: childPositionInParent,
+    );
   }
 
   @action
   void removeElement(THElement element, {bool setState = false}) {
+    _removeElement(element, setState: setState);
+  }
+
+  void _removeElement(THElement element, {bool setState = false}) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
@@ -366,7 +340,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           .toList();
 
       for (final int childMPID in childrenMPIDList) {
-        removeElement(_thFile.elementByMPID(childMPID));
+        final THElement child = _thFile.elementByMPID(childMPID);
+
+        _removeElement(child);
       }
     }
 
@@ -377,9 +353,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (element is THLineSegment) {
       selectionController.removeSelectedLineSegment(element);
       selectionController.resetSelectableElements();
-    }
-
-    if (element is THScrap) {
+    } else if (element is THScrap) {
       _th2FileEditController.updateHasMultipleScraps();
     }
   }
@@ -454,7 +428,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THEndline endline = THEndline(parentMPID: newLine.mpID);
 
     _thFile.addElement(endline);
-    newLine.addElementToParent(endline, positionInsideParent: false);
+    newLine.addElementToParent(
+      endline,
+      elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
+    );
 
     return newLine;
   }
@@ -466,11 +443,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
-    _thFile.addElement(newArea);
-    _thFile.addElementToParent(newArea);
+    applyAddArea(newArea: newArea, areaChildren: [endarea]);
     addAutomaticTHIDOption(parent: newArea, prefix: mpAreaTHIDPrefix);
-    _thFile.addElement(endarea);
-    newArea.addElementToParent(endarea, positionInsideParent: false);
 
     return newArea;
   }
@@ -493,6 +467,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final String newTHID = _thFile.getNewTHID(element: parent, prefix: prefix);
 
     THIDCommandOption(optionParent: parent, thID: newTHID);
+
     registerElementWithTHID(parent, newTHID);
   }
 
@@ -606,7 +581,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   ) {
     final Offset endPointCanvasCoordinates = _th2FileEditController
         .offsetScreenToCanvas(endpoint);
-
     final THStraightLineSegment lineSegment = THStraightLineSegment(
       parentMPID: lineMPID,
       endPoint: THPositionPart(
@@ -619,25 +593,29 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
+  void addNewLineLineSegment(Offset endPointScreenCoordinates) {
     if (_newLine == null) {
       if (_lineStartScreenPosition == null) {
-        _lineStartScreenPosition = enPointScreenCoordinates;
+        _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
         final THLine newLine = getNewLine();
         final int lineMPID = newLine.mpID;
-        final List<THElement> lineSegments = <THElement>[];
+        final List<THElement> lineChildren = newLine
+            .getChildren(_thFile)
+            .toList();
 
-        lineSegments.add(
-          _createStraightLineSegment(_lineStartScreenPosition!, lineMPID),
+        lineChildren.insert(
+          0,
+          _createStraightLineSegment(endPointScreenCoordinates, lineMPID),
         );
-        lineSegments.add(
-          _createStraightLineSegment(enPointScreenCoordinates, lineMPID),
+        lineChildren.insert(
+          0,
+          _createStraightLineSegment(_lineStartScreenPosition!, lineMPID),
         );
 
         final MPAddLineCommand command = MPAddLineCommand(
           newLine: newLine,
-          lineChildren: lineSegments,
+          lineChildren: lineChildren,
           lineStartScreenPosition: _lineStartScreenPosition,
         );
 
@@ -646,7 +624,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     } else {
       final int lineMPID = getNewLine().mpID;
       final THStraightLineSegment newLineSegment = _createStraightLineSegment(
-        enPointScreenCoordinates,
+        endPointScreenCoordinates,
         lineMPID,
       );
       final MPAddLineSegmentCommand command = MPAddLineSegmentCommand(
@@ -660,18 +638,66 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void applyAddScrap({
+    required THScrap newScrap,
+    required List<Object> scrapChildren,
+    int scrapPositionAtParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+  }) {
+    applyAddElement(
+      newElement: newScrap,
+      childPositionInParent: scrapPositionAtParent,
+    );
+
+    for (final Object child in scrapChildren) {
+      if (child is THElement) {
+        applyAddElement(
+          newElement: child,
+          parent: newScrap,
+          childPositionInParent: mpAddChildAtEndOfParentChildrenList,
+        );
+      } else if (child is MPCommand) {
+        child.execute(_th2FileEditController);
+      } else {
+        throw Exception(
+          'At TH2FileEditElementEditController.applyAddScrap: invalid scrap child type: ${child.runtimeType}',
+        );
+      }
+    }
+
+    afterAddScrap(newScrap);
+  }
+
+  void afterAddScrap(THScrap newScrap) {
+    newScrap.clearBoundingBox();
+    _th2FileEditController.setActiveScrap(newScrap.mpID);
+    _th2FileEditController.updateHasMultipleScraps();
+    afterAddElement(newScrap);
+  }
+
+  @action
   void applyAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,
+    int linePositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     Offset? lineStartScreenPosition,
   }) {
-    final TH2FileEditElementEditController elementEditController =
-        _th2FileEditController.elementEditController;
-
-    elementEditController.applyAddElement(newElement: newLine);
+    applyAddElement(
+      newElement: newLine,
+      childPositionInParent: linePositionInParent,
+    );
 
     for (final THElement child in lineChildren) {
-      elementEditController.applyAddElement(newElement: child);
+      if (child is THLineSegment) {
+        applyAddLineSegment(
+          newLineSegment: child,
+          lineSegmentPositionInParent: mpAddChildAtEndOfParentChildrenList,
+        );
+      } else {
+        applyAddElement(
+          newElement: child,
+          childPositionInParent: mpAddChildAtEndOfParentChildrenList,
+        );
+      }
     }
 
     if (lineStartScreenPosition != null) {
@@ -679,42 +705,44 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       setNewLineStartScreenPosition(lineStartScreenPosition);
     }
 
-    _th2FileEditController.selectionController.addSelectableElement(newLine);
+    newLine.clearBoundingBox();
+    afterAddElement(newLine);
   }
 
-  @action
-  void applyAddScrap({
-    required THScrap newScrap,
-    required Iterable<THElement> scrapChildren,
-    Offset? lineStartScreenPosition,
-  }) {
-    final TH2FileEditElementEditController elementEditController =
-        _th2FileEditController.elementEditController;
-
-    /// newScrap is included with _thFile.addElement instead of with
-    /// elementEditController.applyAddElement as are the scraps children because
-    /// on creation they were already added to their respective parents
-    /// (addElementToParent) which is the extra step
-    /// elementEditController.applyAddElement does in comparison with
-    /// _thFile.addElement.
-    elementEditController.applyAddElement(newElement: newScrap);
-
-    for (final THElement child in scrapChildren) {
-      elementEditController.applyAddElement(
-        newElement: child,
-        positionInsideParent: false,
-      );
-    }
-
-    _th2FileEditController.setActiveScrap(newScrap.mpID);
+  void afterAddElement(THElement newElement) {
+    _th2FileEditController.selectionController.updateAfterAddElement(
+      newElement,
+    );
     _th2FileEditController.triggerAllElementsRedraw();
   }
 
   @action
-  void applyRemoveArea(int areaMPID) {
-    _th2FileEditController.elementEditController.applyRemoveElementByMPID(
-      areaMPID,
+  void applyAddArea({
+    required THArea newArea,
+    required List<THElement> areaChildren,
+    int areaPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+  }) {
+    applyAddElement(
+      newElement: newArea,
+      childPositionInParent: areaPositionInParent,
     );
+    for (final THElement child in areaChildren) {
+      applyAddElement(
+        newElement: child,
+        childPositionInParent: mpAddChildAtEndOfParentChildrenList,
+      );
+    }
+  }
+
+  @action
+  void afterAddArea(THArea newArea) {
+    newArea.clearBoundingBox();
+    afterAddElement(newArea);
+  }
+
+  @action
+  void applyRemoveArea(int areaMPID) {
+    applyRemoveElementByMPID(areaMPID);
   }
 
   @action
@@ -722,9 +750,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if ((_newLine != null) && (_newLine!.mpID == lineMPID)) {
       clearNewLine();
     }
-    _th2FileEditController.elementEditController.applyRemoveElementByMPID(
-      lineMPID,
-    );
+    applyRemoveElementByMPID(lineMPID);
   }
 
   @action
@@ -991,6 +1017,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (lineSegmentPos == previousLineSegmentPos + 1) {
         final THLineSegment lineSegment =
             selectedLineSegmentsPosMap[lineSegmentPos]!;
+        final int lineSegmentPositionInParent = line.getChildPosition(
+          lineSegment,
+        );
         final THLineSegment previousLineSegment =
             selectedLineSegmentsPosMap[previousLineSegmentPos]!;
 
@@ -1010,7 +1039,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           addLineSegmentsCommands.add(
             MPAddLineSegmentCommand(
               newLineSegment: newLineSegment,
-              beforeLineSegmentMPID: lineSegment.mpID,
+              lineSegmentPositionInParent: lineSegmentPositionInParent,
             ),
           );
         } else {
@@ -1029,7 +1058,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           addLineSegmentsCommands.add(
             MPAddLineSegmentCommand(
               newLineSegment: newLineSegments[0],
-              beforeLineSegmentMPID: lineSegment.mpID,
+              lineSegmentPositionInParent: lineSegmentPositionInParent,
             ),
           );
           addLineSegmentsCommands.add(
@@ -1121,7 +1150,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       th2FileEditController: _th2FileEditController,
     );
     final MPAddXTherionImageInsertConfigCommand addImageCommand =
-        MPAddXTherionImageInsertConfigCommand(newImageInsertConfig: newImage);
+        MPAddXTherionImageInsertConfigCommand.fromExisting(
+          existingImageInsertConfig: newImage,
+          th2FileEditController: _th2FileEditController,
+        );
 
     _th2FileEditController.execute(addImageCommand);
     _th2FileEditController.triggerImagesRedraw();

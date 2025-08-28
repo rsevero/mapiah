@@ -135,12 +135,11 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        optionType,
-        parentMPID,
-        newOriginalLineInTH2File,
-        currentOriginalLineInTH2File,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    optionType,
+    parentMPID,
+    newOriginalLineInTH2File,
+    currentOriginalLineInTH2File,
+  );
 }

@@ -122,6 +122,5 @@ class MPEditAreaTypeCommand extends MPCommand {
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(areaMPID, newAreaType, originalLineInTH2File);
+      Object.hash(super.hashCode, areaMPID, newAreaType, originalLineInTH2File);
 }

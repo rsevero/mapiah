@@ -123,7 +123,10 @@ class MPEditPointTypeCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(pointMPID, newPointType, originalLineInTH2File);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    pointMPID,
+    newPointType,
+    originalLineInTH2File,
+  );
 }

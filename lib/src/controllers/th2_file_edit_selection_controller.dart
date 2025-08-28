@@ -286,6 +286,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
+  void updateAfterAddElement(THElement element) {
+    addSelectableElement(element);
+    updateSelectedElementClone(element.parentMPID);
+    resetSelectableElements();
+  }
+
   @action
   bool addSelectedElement(THElement element, {bool setState = false}) {
     switch (element) {
@@ -389,7 +395,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   bool removeSelectedElement(THElement element, {bool setState = false}) {
     _mpSelectedElementsLogical.remove(element.mpID);
-    _selectedElementsDrawable.remove(element.mpID);
+
+    if (element is THArea) {
+      final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
+
+      for (final int lineMPID in lineMPIDs) {
+        _selectedElementsDrawable.remove(lineMPID);
+      }
+    } else {
+      _selectedElementsDrawable.remove(element.mpID);
+    }
 
     if (_isSelected.containsKey(element.mpID)) {
       _isSelected[element.mpID]!.value = false;

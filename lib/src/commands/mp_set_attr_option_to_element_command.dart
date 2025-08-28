@@ -130,11 +130,10 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        option,
-        newOriginalLineInTH2File,
-        currentOriginalLineInTH2File,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    option,
+    newOriginalLineInTH2File,
+    currentOriginalLineInTH2File,
+  );
 }

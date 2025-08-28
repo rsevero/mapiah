@@ -2,6 +2,7 @@ part of 'mp_command.dart';
 
 class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   final int xtherionImageInsertConfigMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeXTherionImageInsertConfig;
 
@@ -39,10 +40,12 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
     final THXTherionImageInsertConfig originalElement = th2FileEditController
         .thFile
         .xtherionImageInsertConfigByMPID(xtherionImageInsertConfigMPID);
-    final MPCommand oppositeCommand = MPAddXTherionImageInsertConfigCommand(
-      newImageInsertConfig: originalElement,
-      descriptionType: descriptionType,
-    );
+    final MPCommand oppositeCommand =
+        MPAddXTherionImageInsertConfigCommand.fromExisting(
+          existingImageInsertConfig: originalElement,
+          th2FileEditController: th2FileEditController,
+          descriptionType: descriptionType,
+        );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),

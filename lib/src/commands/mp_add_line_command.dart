@@ -1,14 +1,16 @@
 part of 'mp_command.dart';
 
 class MPAddLineCommand extends MPCommand {
-  late final THLine newLine;
-  late final List<THElement> lineChildren;
-  late final Offset? lineStartScreenPosition;
+  final THLine newLine;
+  final int linePositionInParent;
+  final List<THElement> lineChildren;
+  final Offset? lineStartScreenPosition;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLine;
 
   MPAddLineCommand.forCWJM({
     required this.newLine,
+    required this.linePositionInParent,
     required this.lineChildren,
     this.lineStartScreenPosition,
     super.descriptionType = _defaultDescriptionType,
@@ -16,29 +18,28 @@ class MPAddLineCommand extends MPCommand {
 
   MPAddLineCommand({
     required this.newLine,
+    this.linePositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     required this.lineChildren,
     this.lineStartScreenPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
-  MPAddLineCommand.fromLineMPID({
-    required int lineMPID,
+  MPAddLineCommand.fromExisting({
+    required THLine existingLine,
+    int? linePositionInParent,
+    this.lineStartScreenPosition,
     required TH2FileEditController th2FileEditController,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
-    final THFile thFile = th2FileEditController.thFile;
-
-    newLine = thFile.lineByMPID(lineMPID);
-    lineChildren = [];
-
-    final List<int> childrenMPIDs = newLine.childrenMPID;
-
-    for (final int childMPID in childrenMPIDs) {
-      lineChildren.add(thFile.elementByMPID(childMPID));
-    }
-
-    lineStartScreenPosition = null;
-  }
+  }) : newLine = existingLine,
+       linePositionInParent =
+           linePositionInParent ??
+           existingLine
+               .parent(th2FileEditController.thFile)
+               .getChildPosition(existingLine),
+       lineChildren = existingLine
+           .getChildren(th2FileEditController.thFile)
+           .toList(),
+       super();
 
   @override
   MPCommandType get type => MPCommandType.addLine;
@@ -52,8 +53,12 @@ class MPAddLineCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applyAddLine(
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
+
+    elementEditController.applyAddLine(
       newLine: newLine,
+      linePositionInParent: linePositionInParent,
       lineChildren: lineChildren,
       lineStartScreenPosition: lineStartScreenPosition,
     );
@@ -78,6 +83,7 @@ class MPAddLineCommand extends MPCommand {
   @override
   MPAddLineCommand copyWith({
     THLine? newLine,
+    int? linePositionInParent,
     List<THElement>? lineChildren,
     Offset? lineStartScreenPosition,
     bool makeLineStartScreenPositionNull = false,
@@ -85,6 +91,7 @@ class MPAddLineCommand extends MPCommand {
   }) {
     return MPAddLineCommand.forCWJM(
       newLine: newLine ?? this.newLine,
+      linePositionInParent: linePositionInParent ?? this.linePositionInParent,
       lineChildren: lineChildren ?? this.lineChildren,
       lineStartScreenPosition: makeLineStartScreenPositionNull
           ? null
@@ -96,6 +103,7 @@ class MPAddLineCommand extends MPCommand {
   factory MPAddLineCommand.fromMap(Map<String, dynamic> map) {
     return MPAddLineCommand.forCWJM(
       newLine: THLine.fromMap(map['newLine']),
+      linePositionInParent: map['linePositionInParent'],
       lineChildren: List<THElement>.from(
         map['lineChildren'].map((x) => THElement.fromMap(x)),
       ),
@@ -121,6 +129,7 @@ class MPAddLineCommand extends MPCommand {
 
     map.addAll({
       'newLine': newLine.toMap(),
+      'linePositionInParent': linePositionInParent,
       'lineChildren': lineChildren.map((x) => x.toMap()).toList(),
     });
 
@@ -143,19 +152,17 @@ class MPAddLineCommand extends MPCommand {
 
     return other is MPAddLineCommand &&
         other.newLine == newLine &&
-        const DeepCollectionEquality().equals(
-          other.lineChildren,
-          lineChildren,
-        ) &&
-        other.lineStartScreenPosition == lineStartScreenPosition;
+        other.linePositionInParent == linePositionInParent &&
+        other.lineStartScreenPosition == lineStartScreenPosition &&
+        const DeepCollectionEquality().equals(other.lineChildren, lineChildren);
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        newLine,
-        Object.hashAll(lineChildren),
-        lineStartScreenPosition,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newLine,
+    linePositionInParent,
+    lineStartScreenPosition,
+    Object.hashAll(lineChildren),
+  );
 }

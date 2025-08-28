@@ -122,5 +122,5 @@ class MPMoveAreaCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => super.hashCode ^ Object.hash(areaMPID, linesMoveCommand);
+  int get hashCode => Object.hash(super.hashCode, areaMPID, linesMoveCommand);
 }

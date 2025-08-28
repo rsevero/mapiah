@@ -326,11 +326,11 @@ class THLine extends THElement
   @override
   void addElementToParent(
     THElement element, {
-    bool positionInsideParent = true,
+    int elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
     super.addElementToParent(
       element,
-      positionInsideParent: positionInsideParent,
+      elementPositionInParent: elementPositionInParent,
     );
 
     if (element is THLineSegment) {

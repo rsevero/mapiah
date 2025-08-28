@@ -1,3 +1,4 @@
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -9,15 +10,51 @@ mixin THIsParentMixin {
   // Here are registered all children mapiah IDs.
   final List<int> childrenMPID = [];
 
+  /// The elementPositionInParent parameter determines the position at which the
+  /// new element will be inserted in the parent's children list:
+  /// >= 0 => indicates the specific position in the list;
+  /// = -1 => indicates the element should be added to the last minus 1 position
+  ///         at the end of the list so it gets just before the
+  ///         THEnd[line|area|scrap] element;
+  /// = -2 => indicates the element should be added to the end of the list;
   void addElementToParent(
     THElement element, {
-    bool positionInsideParent = true,
+    int elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
-    if (positionInsideParent && (element.parentMPID > 0)) {
-      childrenMPID.insert(childrenMPID.length - 1, element.mpID);
-    } else {
+    if (elementPositionInParent == mpAddChildAtEndOfParentChildrenList) {
       childrenMPID.add(element.mpID);
+    } else if (elementPositionInParent ==
+        mpAddChildAtEndMinusOneOfParentChildrenList) {
+      if (element.parentMPID > 0) {
+        childrenMPID.insert(childrenMPID.length - 1, element.mpID);
+      } else {
+        childrenMPID.add(element.mpID);
+      }
+    } else if (elementPositionInParent >= 0) {
+      if (elementPositionInParent > childrenMPID.length) {
+        throw THCustomException(
+          "At THIsParentMixin.addElementToParent too big 'childPositionInParent' value : '$elementPositionInParent'.",
+        );
+      }
+
+      childrenMPID.insert(elementPositionInParent, element.mpID);
+    } else {
+      throw THCustomException(
+        "At THIsParentMixin.addElementToParent unsupported 'childPositionInParent' value : '$elementPositionInParent'.",
+      );
     }
+  }
+
+  int getChildPosition(THElement element) {
+    final int index = childrenMPID.indexOf(element.mpID);
+
+    if (index < 0) {
+      throw THCustomException(
+        "At THIsParentMixin.getChildPosition: '$element' not found.",
+      );
+    }
+
+    return index;
   }
 
   void removeElementFromParent(THFile thFile, THElement element) {

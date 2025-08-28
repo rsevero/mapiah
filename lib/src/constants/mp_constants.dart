@@ -284,3 +284,6 @@ const String xTherionConfigID = '##XTHERION##';
 const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';
 const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
+
+const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
+const int mpAddChildAtEndOfParentChildrenList = -2;

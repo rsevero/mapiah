@@ -38,9 +38,8 @@ class MPRemoveAreaCommand extends MPCommand {
   ) {
     final THFile thFile = th2FileEditController.thFile;
     final THArea originalArea = thFile.areaByMPID(areaMPID);
-
-    final MPCommand oppositeCommand = MPAddAreaCommand(
-      newArea: originalArea,
+    final MPCommand oppositeCommand = MPAddAreaCommand.fromExisting(
+      existingArea: originalArea,
       th2FileEditController: th2FileEditController,
       descriptionType: descriptionType,
     );

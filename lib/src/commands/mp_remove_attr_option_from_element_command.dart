@@ -140,12 +140,11 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        attrName,
-        parentMPID,
-        newOriginalLineInTH2File,
-        currentOriginalLineInTH2File,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    attrName,
+    parentMPID,
+    newOriginalLineInTH2File,
+    currentOriginalLineInTH2File,
+  );
 }

@@ -2,41 +2,33 @@ part of 'mp_command.dart';
 
 class MPAddAreaCommand extends MPCommand {
   final THArea newArea;
-  late final MPCommand addAreaTHIDsCommand;
+  final int areaPositionInParent;
+  final List<THElement> areaChildren;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addArea;
 
   MPAddAreaCommand.forCWJM({
     required this.newArea,
-    required this.addAreaTHIDsCommand,
+    required this.areaPositionInParent,
+    required this.areaChildren,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
-  MPAddAreaCommand({
-    required this.newArea,
+  MPAddAreaCommand.fromExisting({
+    required THArea existingArea,
+    int? areaPositionInParent,
     required TH2FileEditController th2FileEditController,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
-    final List<MPCommand> addAreaTHIDCommands = [];
-    final THFile thFile = th2FileEditController.thFile;
-    final Set<int> lineMPIDs = newArea.getLineMPIDs(thFile);
-
-    for (final int lineMPID in lineMPIDs) {
-      addAreaTHIDCommands.add(
-        MPAddLineCommand.fromLineMPID(
-          lineMPID: lineMPID,
-          th2FileEditController: th2FileEditController,
-        ),
-      );
-    }
-
-    addAreaTHIDsCommand = MPMultipleElementsCommand.forCWJM(
-      commandsList: addAreaTHIDCommands,
-      completionType:
-          MPMultipleElementsCommandCompletionType.elementsListChanged,
-      descriptionType: descriptionType,
-    );
-  }
+  }) : newArea = existingArea,
+       areaPositionInParent =
+           areaPositionInParent ??
+           existingArea
+               .parent(th2FileEditController.thFile)
+               .getChildPosition(existingArea),
+       areaChildren = existingArea
+           .getChildren(th2FileEditController.thFile)
+           .toList(),
+       super();
 
   @override
   MPCommandType get type => MPCommandType.addArea;
@@ -50,10 +42,15 @@ class MPAddAreaCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    addAreaTHIDsCommand.execute(th2FileEditController);
-    th2FileEditController.elementEditController.applyAddElement(
-      newElement: newArea,
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
+
+    elementEditController.applyAddArea(
+      newArea: newArea,
+      areaChildren: areaChildren,
+      areaPositionInParent: areaPositionInParent,
     );
+    elementEditController.afterAddArea(newArea);
   }
 
   @override
@@ -73,13 +70,15 @@ class MPAddAreaCommand extends MPCommand {
 
   @override
   MPAddAreaCommand copyWith({
-    THArea? newScrap,
-    MPCommand? scrapChildren,
+    THArea? newArea,
+    int? areaPositionInParent,
+    List<THElement>? areaChildren,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddAreaCommand.forCWJM(
-      newArea: newScrap ?? this.newArea,
-      addAreaTHIDsCommand: scrapChildren ?? this.addAreaTHIDsCommand,
+      newArea: newArea ?? this.newArea,
+      areaPositionInParent: areaPositionInParent ?? this.areaPositionInParent,
+      areaChildren: areaChildren ?? this.areaChildren,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -87,7 +86,10 @@ class MPAddAreaCommand extends MPCommand {
   factory MPAddAreaCommand.fromMap(Map<String, dynamic> map) {
     return MPAddAreaCommand.forCWJM(
       newArea: THArea.fromMap(map['newArea']),
-      addAreaTHIDsCommand: MPCommand.fromMap(map['addAreaTHIDsCommand']),
+      areaPositionInParent: map['areaPositionInParent'],
+      areaChildren: List<THElement>.from(
+        map['areaChildren'].map((x) => THElement.fromMap(x)),
+      ),
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -104,7 +106,8 @@ class MPAddAreaCommand extends MPCommand {
 
     map.addAll({
       'newArea': newArea.toMap(),
-      'addAreaTHIDsCommand': addAreaTHIDsCommand.toMap(),
+      'areaPositionInParent': areaPositionInParent,
+      'areaChildren': areaChildren.map((e) => e.toMap()).toList(),
     });
 
     return map;
@@ -117,10 +120,15 @@ class MPAddAreaCommand extends MPCommand {
 
     return other is MPAddAreaCommand &&
         other.newArea == newArea &&
-        other.addAreaTHIDsCommand == addAreaTHIDsCommand;
+        other.areaPositionInParent == areaPositionInParent &&
+        const DeepCollectionEquality().equals(other.areaChildren, areaChildren);
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^ Object.hash(newArea, addAreaTHIDsCommand);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newArea,
+    areaPositionInParent,
+    Object.hashAll(areaChildren),
+  );
 }

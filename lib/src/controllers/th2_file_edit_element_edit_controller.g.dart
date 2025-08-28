@@ -145,19 +145,34 @@ mixin _$TH2FileEditElementEditController
       );
 
   @override
-  void applyInsertLineSegment({
+  void applyAddLineSegment({
     required THLineSegment newLineSegment,
-    required int beforeLineSegmentMPID,
+    required int lineSegmentPositionInParent,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
-          name: 'TH2FileEditElementEditControllerBase.applyInsertLineSegment',
+          name: 'TH2FileEditElementEditControllerBase.applyAddLineSegment',
         );
     try {
-      return super.applyInsertLineSegment(
+      return super.applyAddLineSegment(
         newLineSegment: newLineSegment,
-        beforeLineSegmentMPID: beforeLineSegmentMPID,
+        lineSegmentPositionInParent: lineSegmentPositionInParent,
       );
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void afterAddLineSegment(THLineSegment newLineSegment) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.afterAddLineSegment',
+        );
+    try {
+      return super.afterAddLineSegment(newLineSegment);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
@@ -168,7 +183,8 @@ mixin _$TH2FileEditElementEditController
   @override
   void applyAddElement({
     required THElement newElement,
-    bool positionInsideParent = true,
+    THIsParentMixin? parent,
+    int childPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -177,29 +193,8 @@ mixin _$TH2FileEditElementEditController
     try {
       return super.applyAddElement(
         newElement: newElement,
-        positionInsideParent: positionInsideParent,
-      );
-    } finally {
-      _$TH2FileEditElementEditControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
-  void addElementWithParentWithoutSelectableElement({
-    required THElement newElement,
-    required THIsParentMixin parent,
-  }) {
-    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(
-          name:
-              'TH2FileEditElementEditControllerBase.addElementWithParentWithoutSelectableElement',
-        );
-    try {
-      return super.addElementWithParentWithoutSelectableElement(
-        newElement: newElement,
         parent: parent,
+        childPositionInParent: childPositionInParent,
       );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
@@ -382,13 +377,36 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void addNewLineLineSegment(Offset enPointScreenCoordinates) {
+  void addNewLineLineSegment(Offset endPointScreenCoordinates) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name: 'TH2FileEditElementEditControllerBase.addNewLineLineSegment',
         );
     try {
-      return super.addNewLineLineSegment(enPointScreenCoordinates);
+      return super.addNewLineLineSegment(endPointScreenCoordinates);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void applyAddScrap({
+    required THScrap newScrap,
+    required List<Object> scrapChildren,
+    int scrapPositionAtParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+  }) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.applyAddScrap',
+        );
+    try {
+      return super.applyAddScrap(
+        newScrap: newScrap,
+        scrapChildren: scrapChildren,
+        scrapPositionAtParent: scrapPositionAtParent,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
@@ -400,6 +418,7 @@ mixin _$TH2FileEditElementEditController
   void applyAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,
+    int linePositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     Offset? lineStartScreenPosition,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
@@ -408,6 +427,7 @@ mixin _$TH2FileEditElementEditController
       return super.applyAddLine(
         newLine: newLine,
         lineChildren: lineChildren,
+        linePositionInParent: linePositionInParent,
         lineStartScreenPosition: lineStartScreenPosition,
       );
     } finally {
@@ -418,21 +438,32 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applyAddScrap({
-    required THScrap newScrap,
-    required Iterable<THElement> scrapChildren,
-    Offset? lineStartScreenPosition,
+  void applyAddArea({
+    required THArea newArea,
+    required List<THElement> areaChildren,
+    int areaPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(
-          name: 'TH2FileEditElementEditControllerBase.applyAddScrap',
-        );
+        .startAction(name: 'TH2FileEditElementEditControllerBase.applyAddArea');
     try {
-      return super.applyAddScrap(
-        newScrap: newScrap,
-        scrapChildren: scrapChildren,
-        lineStartScreenPosition: lineStartScreenPosition,
+      return super.applyAddArea(
+        newArea: newArea,
+        areaChildren: areaChildren,
+        areaPositionInParent: areaPositionInParent,
       );
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void afterAddArea(THArea newArea) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.afterAddArea');
+    try {
+      return super.afterAddArea(newArea);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

@@ -2,21 +2,64 @@ part of 'mp_command.dart';
 
 class MPAddScrapCommand extends MPCommand {
   final THScrap newScrap;
-  late final List<THElement> scrapChildren;
+  final int scrapPositionInParent;
+  late final List<Object> scrapChildren;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addScrap;
 
   MPAddScrapCommand.forCWJM({
     required this.newScrap,
+    required this.scrapPositionInParent,
     required this.scrapChildren,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddScrapCommand({
     required this.newScrap,
+    this.scrapPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     required this.scrapChildren,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  MPAddScrapCommand.fromExisting({
+    required THScrap existingScrap,
+    required TH2FileEditController th2FileEditController,
+    super.descriptionType = _defaultDescriptionType,
+  }) : newScrap = existingScrap,
+       scrapPositionInParent = existingScrap
+           .parent(th2FileEditController.thFile)
+           .getChildPosition(existingScrap),
+       super() {
+    final THFile thFile = th2FileEditController.thFile;
+    final List<THElement> scrapChildrenAsElements = existingScrap
+        .getChildren(thFile)
+        .toList();
+
+    scrapChildren = [];
+
+    for (final THElement child in scrapChildrenAsElements) {
+      switch (child) {
+        case THLine _:
+          scrapChildren.add(
+            MPAddLineCommand.fromExisting(
+              existingLine: child,
+              linePositionInParent: mpAddChildAtEndOfParentChildrenList,
+              th2FileEditController: th2FileEditController,
+            ),
+          );
+        case THArea _:
+          scrapChildren.add(
+            MPAddAreaCommand.fromExisting(
+              existingArea: child,
+              areaPositionInParent: mpAddChildAtEndOfParentChildrenList,
+              th2FileEditController: th2FileEditController,
+            ),
+          );
+        default:
+          scrapChildren.add(child);
+      }
+    }
+  }
 
   @override
   MPCommandType get type => MPCommandType.addScrap;
@@ -32,6 +75,7 @@ class MPAddScrapCommand extends MPCommand {
   }) {
     th2FileEditController.elementEditController.applyAddScrap(
       newScrap: newScrap,
+      scrapPositionAtParent: scrapPositionInParent,
       scrapChildren: scrapChildren,
     );
   }
@@ -54,22 +98,49 @@ class MPAddScrapCommand extends MPCommand {
   @override
   MPAddScrapCommand copyWith({
     THScrap? newScrap,
-    List<THElement>? scrapChildren,
+    int? scrapPositionInParent,
+    List<Object>? scrapChildren,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddScrapCommand.forCWJM(
       newScrap: newScrap ?? this.newScrap,
+      scrapPositionInParent:
+          scrapPositionInParent ?? this.scrapPositionInParent,
       scrapChildren: scrapChildren ?? this.scrapChildren,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   factory MPAddScrapCommand.fromMap(Map<String, dynamic> map) {
+    final List<Object> parsedScrapChildren = [];
+    final dynamic rawChildren = map['scrapChildren'];
+
+    if (rawChildren is List) {
+      for (final dynamic rawChild in rawChildren) {
+        if (rawChild is Map) {
+          final childMap = Map<String, dynamic>.from(rawChild);
+
+          if (childMap.containsKey('commandType')) {
+            parsedScrapChildren.add(MPCommand.fromMap(childMap));
+          } else if (childMap.containsKey('elementType')) {
+            parsedScrapChildren.add(THElement.fromMap(childMap));
+          } else {
+            throw ArgumentError(
+              "At MPAddScrapCommand.fromMap: unrecognized scrapChildren entry (missing 'commandType' / 'elementType'): $childMap",
+            );
+          }
+        } else {
+          throw ArgumentError(
+            "At MPAddScrapCommand.fromMap: invalid scrapChildren entry type (expected Map): $rawChild",
+          );
+        }
+      }
+    }
+
     return MPAddScrapCommand.forCWJM(
       newScrap: THScrap.fromMap(map['newScrap']),
-      scrapChildren: List<THElement>.from(
-        map['scrapChildren'].map((x) => THElement.fromMap(x)),
-      ),
+      scrapPositionInParent: map['scrapPositionInParent'],
+      scrapChildren: parsedScrapChildren,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -82,11 +153,18 @@ class MPAddScrapCommand extends MPCommand {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = super.toMap();
+    final map = super.toMap();
 
     map.addAll({
       'newScrap': newScrap.toMap(),
-      'scrapChildren': scrapChildren.map((e) => e.toMap()).toList(),
+      'scrapPositionInParent': scrapPositionInParent,
+      'scrapChildren': scrapChildren.map((obj) {
+        if (obj is MPCommand) return obj.toMap();
+        if (obj is THElement) return obj.toMap();
+        throw ArgumentError(
+          "At MPAddScrapCommand.toMap: unsupported scrapChildren object: $obj",
+        );
+      }).toList(),
     });
 
     return map;
@@ -99,9 +177,15 @@ class MPAddScrapCommand extends MPCommand {
 
     return other is MPAddScrapCommand &&
         other.newScrap == newScrap &&
+        other.scrapPositionInParent == scrapPositionInParent &&
         other.scrapChildren == scrapChildren;
   }
 
   @override
-  int get hashCode => super.hashCode ^ Object.hash(newScrap, scrapChildren);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newScrap,
+    scrapPositionInParent,
+    scrapChildren,
+  );
 }

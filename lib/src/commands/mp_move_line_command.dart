@@ -154,7 +154,10 @@ class MPMoveLineCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(lineMPID, lineSegmentsMoveCommand, originalLineInTH2File);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    lineMPID,
+    lineSegmentsMoveCommand,
+    originalLineInTH2File,
+  );
 }

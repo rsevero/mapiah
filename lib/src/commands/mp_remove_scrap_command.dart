@@ -2,6 +2,7 @@ part of "mp_command.dart";
 
 class MPRemoveScrapCommand extends MPCommand {
   final int scrapMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeScrap;
 
@@ -42,14 +43,11 @@ class MPRemoveScrapCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID).copyWith();
-    final List<THElement> originalScrapChildren = originalScrap
-        .getChildren(thFile)
-        .toList();
+    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
 
-    final MPCommand oppositeCommand = MPAddScrapCommand(
-      newScrap: originalScrap,
-      scrapChildren: originalScrapChildren,
+    final MPCommand oppositeCommand = MPAddScrapCommand.fromExisting(
+      existingScrap: originalScrap,
+      th2FileEditController: th2FileEditController,
       descriptionType: descriptionType,
     );
 

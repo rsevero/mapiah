@@ -36,11 +36,10 @@ class MPRemovePointCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
-      pointMPID,
-    );
-    final MPCommand oppositeCommand = MPAddPointCommand(
-      newPoint: originalPoint,
+    final THFile thFile = th2FileEditController.thFile;
+    final MPCommand oppositeCommand = MPAddPointCommand.fromExisting(
+      existingPoint: thFile.pointByMPID(pointMPID),
+      thFile: thFile,
       descriptionType: descriptionType,
     );
 

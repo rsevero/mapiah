@@ -225,16 +225,15 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        lineSegmentMPID,
-        originalEndPointPosition,
-        modifiedEndPointPosition,
-        originalControlPoint1Position,
-        modifiedControlPoint1Position,
-        originalControlPoint2Position,
-        modifiedControlPoint2Position,
-        originalLineInTH2File,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    lineSegmentMPID,
+    originalEndPointPosition,
+    modifiedEndPointPosition,
+    originalControlPoint1Position,
+    modifiedControlPoint1Position,
+    originalControlPoint2Position,
+    modifiedControlPoint2Position,
+    originalLineInTH2File,
+  );
 }

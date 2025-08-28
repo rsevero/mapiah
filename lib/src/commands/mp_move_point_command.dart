@@ -147,12 +147,11 @@ class MPMovePointCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        pointMPID,
-        originalPosition,
-        modifiedPosition,
-        originalLineInTH2File,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    pointMPID,
+    originalPosition,
+    modifiedPosition,
+    originalLineInTH2File,
+  );
 }
