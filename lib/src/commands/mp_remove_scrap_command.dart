@@ -32,6 +32,7 @@ class MPRemoveScrapCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
+    th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
     th2FileEditController.elementEditController.applyRemoveElementByMPID(
       scrapMPID,
     );

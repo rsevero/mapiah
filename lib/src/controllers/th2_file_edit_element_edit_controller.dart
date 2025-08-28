@@ -669,8 +669,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
       }
     }
-
-    afterAddScrap(newScrap);
   }
 
   void afterAddScrap(THScrap newScrap) {
@@ -1181,25 +1179,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPRemoveScrapCommand removeScrapCommand = MPRemoveScrapCommand(
       scrapMPID: scrapID,
     );
-    final int currentScrapMPID = _th2FileEditController.activeScrapID;
 
-    if (currentScrapMPID == scrapID) {
-      final List<THScrap> availableScraps = _thFile.getScraps().toList();
-
-      if (availableScraps.length == 1) {
-        _th2FileEditController.setActiveScrap(0);
-      } else {
-        final int currentIndex = availableScraps.indexWhere(
-          (s) => s.mpID == scrapID,
-        );
-        final int newIndex = (currentIndex < availableScraps.length - 1)
-            ? currentIndex + 1
-            : currentIndex - 1;
-
-        _th2FileEditController.setActiveScrap(availableScraps[newIndex].mpID);
-      }
-    }
-
+    _th2FileEditController.setActiveScrapForScrapRemoval(scrapID);
     _th2FileEditController.execute(removeScrapCommand);
   }
 

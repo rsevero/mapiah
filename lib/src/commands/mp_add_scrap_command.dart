@@ -73,11 +73,15 @@ class MPAddScrapCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applyAddScrap(
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
+
+    elementEditController.applyAddScrap(
       newScrap: newScrap,
       scrapPositionAtParent: scrapPositionInParent,
       scrapChildren: scrapChildren,
     );
+    elementEditController.afterAddScrap(newScrap);
   }
 
   @override

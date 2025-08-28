@@ -10,6 +10,7 @@
   * An saveAs suggested filename included the original path.
   * Point not selectable after undoing delete.
   * Points weren't removed when redoing scrap remove.
+  * Undoing a scrap removal should make the restored scrap active.
 * Infrastructure maintanance:
   * Refactored MPAdd elements commands to improve readbility and facilitate recursive-like use.
 

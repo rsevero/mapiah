@@ -698,6 +698,27 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
+  void setActiveScrapForScrapRemoval(int removedScrapMPID) {
+    if (_activeScrapID != removedScrapMPID) {
+      return;
+    }
+
+    final List<THScrap> availableScraps = _thFile.getScraps().toList();
+
+    if (availableScraps.length == 1) {
+      setActiveScrap(0);
+    } else {
+      final int currentIndex = availableScraps.indexWhere(
+        (s) => s.mpID == removedScrapMPID,
+      );
+      final int newIndex = (currentIndex < availableScraps.length - 1)
+          ? currentIndex + 1
+          : currentIndex - 1;
+
+      setActiveScrap(availableScraps[newIndex].mpID);
+    }
+  }
+
   Map<int, String> availableScraps() {
     final Map<int, String> scraps = {};
 
