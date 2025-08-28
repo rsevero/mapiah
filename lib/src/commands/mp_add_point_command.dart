@@ -45,6 +45,7 @@ class MPAddPointCommand extends MPCommand {
       newElement: newPoint,
       childPositionInParent: pointPositionInParent,
     );
+    th2FileEditController.elementEditController.afterAddElement(newPoint);
   }
 
   @override
