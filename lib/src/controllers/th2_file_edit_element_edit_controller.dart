@@ -360,7 +360,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (element is THLineSegment) {
       selectionController.removeSelectedLineSegment(element);
-      selectionController.resetSelectableElements();
     } else if (element is THScrap) {
       _th2FileEditController.updateHasMultipleScraps();
     }
@@ -660,7 +659,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (child is THElement) {
         applyAddElement(
           newElement: child,
-          parent: newScrap,
           childPositionInParent: mpAddChildAtEndOfParentChildrenList,
         );
       } else if (child is MPCommand) {

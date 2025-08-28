@@ -8,6 +8,8 @@
 * Fixed bugs:
   * Opening the help with a dialog on display the dialog did not close [reported by Marco Corvi].
   * An saveAs suggested filename included the original path.
+  * Point not selectable after undoing delete.
+  * Points weren't removed when redoing scrap remove.
 * Infrastructure maintanance:
   * Refactored MPAdd elements commands to improve readbility and facilitate recursive-like use.
 

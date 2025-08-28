@@ -678,8 +678,8 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     _activeScrapID = scrapMPID;
-    selectionController.clearSelectedElements();
     selectionController.resetSelectableElements();
+    selectionController.clearSelectedElements();
     triggerAllElementsRedraw();
   }
 
