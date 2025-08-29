@@ -13,6 +13,8 @@
   * Undoing a scrap removal should make the restored scrap active.
 * Infrastructure maintanance:
   * Refactored MPAdd elements commands to improve readbility and facilitate recursive-like use.
+  * Flutter upgraded to 3.35.2.
+  * Flutter pub upgrade
 
 ## 0.2.12 - 2025-08-21
 * New features:

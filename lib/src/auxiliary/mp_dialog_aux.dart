@@ -25,20 +25,15 @@ class MPDialogAux {
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectImageFile,
         type: FileType.custom,
         allowedExtensions: [
-          '*.gif',
-          '*.GIF',
-          '*.jpeg',
-          '*.JPEG',
-          '*.jpg',
-          '*.JPG',
-          '*.png',
-          '*.PNG',
-          '*.pnm',
-          '*.PNM',
-          '*.ppm',
-          '*.PPM',
-          '*.xvi',
-          '*.XVI',
+          'gif',
+          'jpeg',
+          'jpg',
+          'png',
+          'pnm',
+          'ppm',
+          'PPM',
+          'xvi',
+          'XVI',
         ],
         lockParentWindow: true,
         initialDirectory:
@@ -82,7 +77,7 @@ class MPDialogAux {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
-        allowedExtensions: ['*.th2', '*.TH2'],
+        allowedExtensions: ['th2', 'TH2'],
         lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
