@@ -1186,7 +1186,9 @@ abstract class MPVisualControllerBase with Store {
   }) {
     final THLinePaint linePaint = lineDirectionTickPaints[reverse]!;
     final double lineThickness =
-        _th2FileEditController.selectionController.isSelected[line.mpID]!.value
+        _th2FileEditController.selectionController.isSelected.contains(
+          line.mpID,
+        )
         ? _th2FileEditController.lineThicknessOnCanvas * 2
         : _th2FileEditController.lineThicknessOnCanvas;
 

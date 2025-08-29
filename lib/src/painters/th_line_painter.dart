@@ -116,10 +116,9 @@ class THLinePainter extends CustomPainter {
         final PathMetric metric = metrics.first;
         final double metricLength = metric.length;
         final double tickLength =
-            th2FileEditController
-                .selectionController
-                .isSelected[line.mpID]!
-                .value
+            th2FileEditController.selectionController.isSelected.contains(
+              line.mpID,
+            )
             ? th2FileEditController.lineDirectionTickLengthOnCanvas * 1.5
             : th2FileEditController.lineDirectionTickLengthOnCanvas;
 

@@ -119,9 +119,9 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
       final THLineSegment clickedLineSegment =
           clickedElements.values.first as THLineSegment;
 
-      if (selectionController
-          .isSelected[clickedLineSegment.parentMPID]!
-          .value) {
+      if (selectionController.isSelected.contains(
+        clickedLineSegment.parentMPID,
+      )) {
         final THLine line = thFile.lineByMPID(clickedLineSegment.parentMPID);
         final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
           clickedLineSegment,

@@ -59,16 +59,16 @@ mixin _$TH2FileEditSelectionController
     context: context,
   );
 
-  Map<int, Observable<bool>> get isSelected {
+  Set<int> get isSelected {
     _$_isSelectedAtom.reportRead();
     return super._isSelected;
   }
 
   @override
-  Map<int, Observable<bool>> get _isSelected => isSelected;
+  Set<int> get _isSelected => isSelected;
 
   @override
-  set _isSelected(Map<int, Observable<bool>> value) {
+  set _isSelected(Set<int> value) {
     _$_isSelectedAtom.reportWrite(value, super._isSelected, () {
       super._isSelected = value;
     });

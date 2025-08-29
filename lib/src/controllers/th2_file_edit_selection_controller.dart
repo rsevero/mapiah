@@ -37,7 +37,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       _thFile = th2FileEditController.thFile;
 
   @readonly
-  Map<int, Observable<bool>> _isSelected = <int, Observable<bool>>{};
+  Set<int> _isSelected = {};
 
   @readonly
   ObservableMap<int, MPSelectedElement> _mpSelectedElementsLogical =
@@ -319,7 +319,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           _selectedElementsDrawable[lineMPID] = line;
         }
     }
-    _isSelected[element.mpID]!.value = true;
+    _isSelected.add(element.mpID);
     _th2FileEditController.triggerSelectedListChanged();
 
     if (setState) {
@@ -405,10 +405,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       _selectedElementsDrawable.remove(element.mpID);
     }
 
-    if (_isSelected.containsKey(element.mpID)) {
-      _isSelected[element.mpID]!.value = false;
-    }
-
+    _isSelected.remove(element.mpID);
     _th2FileEditController.triggerSelectedListChanged();
 
     if (setState) {
@@ -525,9 +522,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void _addAreaSelectableElement(THArea area) {
     final int areaMPID = area.mpID;
 
-    if (!_isSelected.containsKey(areaMPID)) {
-      _isSelected[areaMPID] = Observable(false);
-    }
+    _isSelected.remove(areaMPID);
   }
 
   void _addPointSelectableElement(THPoint point) {
@@ -546,9 +541,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     _mpSelectableElements![pointMPID] = selectablePoint;
 
-    if (!_isSelected.containsKey(pointMPID)) {
-      _isSelected[pointMPID] = Observable(false);
-    }
+    _isSelected.remove(pointMPID);
   }
 
   void _addLineSelectableElement(THLine line) {
@@ -565,9 +558,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final int lineMPID = line.mpID;
 
     _mpSelectableElements![lineMPID] = selectableLine;
-    if (!_isSelected.containsKey(lineMPID)) {
-      _isSelected[lineMPID] = Observable(false);
-    }
+    _isSelected.remove(lineMPID);
 
     /// Adding line segments as selectable elements so on 'single line edit
     /// mode' its possible to select end point clicking on line segments.
@@ -1537,14 +1528,18 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _isSelected.clear();
   }
 
-  void setIsSelected(int mpID, bool value) {
-    _isSelected[mpID] = Observable(value);
+  void setIsSelected(int mpID, bool isSelected) {
+    if (isSelected) {
+      _isSelected.add(mpID);
+    } else {
+      _isSelected.remove(mpID);
+    }
   }
 
   void _clearSelectedElementsWithoutResettingRedrawTriggers() {
     _mpSelectedElementsLogical.clear();
     _selectedElementsDrawable.clear();
-    _isSelected.forEach((key, value) => value.value = false);
+    _isSelected.clear();
     clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
   }
 
