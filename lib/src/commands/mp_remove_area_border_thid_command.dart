@@ -42,8 +42,8 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
       areaBorderTHIDMPID,
     );
     final MPCommand oppositeCommand = MPAddAreaBorderTHIDCommand.fromExisting(
-      newAreaBorderTHID: originalAreaBorderTHID,
-      th2FileEditController: th2FileEditController,
+      existingAreaBorderTHID: originalAreaBorderTHID,
+      thFile: thFile,
       descriptionType: descriptionType,
     );
 

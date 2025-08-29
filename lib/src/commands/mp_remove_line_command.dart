@@ -30,6 +30,29 @@ class MPRemoveLineCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
+    final THFile thFile = th2FileEditController.thFile;
+    final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
+
+    if (areaMPID != null) {
+      final THArea area = thFile.areaByMPID(areaMPID);
+      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
+        lineMPID,
+        thFile,
+      );
+
+      if (areaTHID != null) {
+        final MPCommand removeAreaTHIDCommand =
+            MPRemoveAreaBorderTHIDCommand.forCWJM(
+              areaBorderTHIDMPID: areaTHID.mpID,
+            );
+
+        removeAreaTHIDCommand.execute(
+          th2FileEditController,
+          keepOriginalLineTH2File: keepOriginalLineTH2File,
+        );
+      }
+    }
+
     th2FileEditController.elementEditController.applyRemoveLine(lineMPID);
   }
 

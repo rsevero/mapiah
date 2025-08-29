@@ -20,15 +20,16 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   }) : super.forCWJM();
 
   MPAddAreaBorderTHIDCommand.fromExisting({
-    required this.newAreaBorderTHID,
+    required THAreaBorderTHID existingAreaBorderTHID,
     int? areaBorderTHIDPositionInParent,
-    required TH2FileEditController th2FileEditController,
+    required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
-  }) : areaBorderTHIDPositionInParent =
+  }) : newAreaBorderTHID = existingAreaBorderTHID,
+       areaBorderTHIDPositionInParent =
            areaBorderTHIDPositionInParent ??
-           newAreaBorderTHID
-               .parent(th2FileEditController.thFile)
-               .getChildPosition(newAreaBorderTHID),
+           existingAreaBorderTHID
+               .parent(thFile)
+               .getChildPosition(existingAreaBorderTHID),
        super();
 
   @override

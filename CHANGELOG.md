@@ -5,12 +5,14 @@
   * Included 'add image' button in 'add elements' button options.
   * Create new scrap [requested by Marco Corvi].
   * Remove scrap.
+  * Undoing a scrap removal should make the restored scrap active.
+  * Removing a line that defines a border of an area removes the link between the line and the area.
 * Fixed bugs:
   * Opening the help with a dialog on display the dialog did not close [reported by Marco Corvi].
-  * An saveAs suggested filename included the original path.
+  * saveAs suggested filename included the original path.
   * Point not selectable after undoing delete.
   * Points weren't removed when redoing scrap remove.
-  * Undoing a scrap removal should make the restored scrap active.
+  * Add area status message not removed after leaving add area state.
 * Infrastructure maintanance:
   * Refactored MPAdd elements commands to improve readbility and facilitate recursive-like use.
   * Flutter upgraded to 3.35.2.

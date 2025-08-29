@@ -47,7 +47,6 @@ class THArea extends THElement
 
     map.addAll({
       'areaType': areaType.name,
-
       'childrenMPIDs': childrenMPIDs.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
@@ -180,6 +179,39 @@ class THArea extends THElement
 
   bool hasLineMPID(int mpID, THFile thFile) {
     return getLineMPIDs(thFile).contains(mpID);
+  }
+
+  THAreaBorderTHID? areaBorderByLineMPID(int lineMPID, THFile thFile) {
+    if (!hasLineMPID(lineMPID, thFile)) {
+      return null;
+    }
+
+    final THLine line = thFile.lineByMPID(lineMPID);
+
+    if (!line.hasOption(THCommandOptionType.id)) {
+      return null;
+    }
+
+    final String lineTHID =
+        (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
+
+    return areaBorderByLineTHID(lineTHID, thFile);
+  }
+
+  THAreaBorderTHID? areaBorderByLineTHID(String lineTHID, THFile thFile) {
+    if (!hasLineTHID(lineTHID, thFile)) {
+      return null;
+    }
+
+    for (final int childMPID in childrenMPIDs) {
+      final THElement element = thFile.elementByMPID(childMPID);
+
+      if (element is THAreaBorderTHID && (element.thID == lineTHID)) {
+        return element;
+      }
+    }
+
+    return null;
   }
 
   void clearAreaXLineInfo() {
