@@ -44,7 +44,7 @@ class MPAddScrapCommand extends MPCommand {
             MPAddLineCommand.fromExisting(
               existingLine: child,
               linePositionInParent: mpAddChildAtEndOfParentChildrenList,
-              th2FileEditController: th2FileEditController,
+              thFile: thFile,
             ),
           );
         case THArea _:

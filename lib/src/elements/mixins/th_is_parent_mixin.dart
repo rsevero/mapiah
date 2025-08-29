@@ -21,14 +21,22 @@ mixin THIsParentMixin {
     THElement element, {
     int elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
+    final int elementMPID = element.mpID;
+
+    if (childrenMPID.contains(elementMPID)) {
+      throw THCustomException(
+        "At THIsParentMixin.addElementToParent: '$element' already a child.",
+      );
+    }
+
     if (elementPositionInParent == mpAddChildAtEndOfParentChildrenList) {
-      childrenMPID.add(element.mpID);
+      childrenMPID.add(elementMPID);
     } else if (elementPositionInParent ==
         mpAddChildAtEndMinusOneOfParentChildrenList) {
       if (element.parentMPID > 0) {
-        childrenMPID.insert(childrenMPID.length - 1, element.mpID);
+        childrenMPID.insert(childrenMPID.length - 1, elementMPID);
       } else {
-        childrenMPID.add(element.mpID);
+        childrenMPID.add(elementMPID);
       }
     } else if (elementPositionInParent >= 0) {
       if (elementPositionInParent > childrenMPID.length) {
@@ -37,7 +45,7 @@ mixin THIsParentMixin {
         );
       }
 
-      childrenMPID.insert(elementPositionInParent, element.mpID);
+      childrenMPID.insert(elementPositionInParent, elementMPID);
     } else {
       throw THCustomException(
         "At THIsParentMixin.addElementToParent unsupported 'childPositionInParent' value : '$elementPositionInParent'.",

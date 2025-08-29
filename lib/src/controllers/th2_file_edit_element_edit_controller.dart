@@ -650,8 +650,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required List<Object> scrapChildren,
     int scrapPositionAtParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
+    /// The childrenMPIDs list of the scrap will be the one resultant of
+    /// scrapChildren.
+    newScrap.childrenMPID.clear();
     applyAddElement(
-      newElement: newScrap.copyWith(childrenMPID: []),
+      newElement: newScrap,
       childPositionInParent: scrapPositionAtParent,
     );
 
@@ -685,8 +688,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     int linePositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     Offset? lineStartScreenPosition,
   }) {
+    /// The childrenMPIDs list of the line will be the one resultant of
+    /// lineChildren.
+    newLine.childrenMPID.clear();
     applyAddElement(
-      newElement: newLine.copyWith(childrenMPID: []),
+      newElement: newLine,
       childPositionInParent: linePositionInParent,
     );
 
@@ -702,11 +708,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           childPositionInParent: mpAddChildAtEndOfParentChildrenList,
         );
       }
-    }
-
-    if (lineStartScreenPosition != null) {
-      setNewLine(newLine);
-      setNewLineStartScreenPosition(lineStartScreenPosition);
     }
 
     newLine.clearBoundingBox();
@@ -727,8 +728,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required List<THElement> areaChildren,
     int areaPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
   }) {
+    /// The childrenMPIDs list of the area will be the one resultant of
+    /// areaChildren.
+    newArea.childrenMPID.clear();
     applyAddElement(
-      newElement: newArea.copyWith(childrenMPID: []),
+      newElement: newArea,
       childPositionInParent: areaPositionInParent,
     );
     for (final THElement child in areaChildren) {

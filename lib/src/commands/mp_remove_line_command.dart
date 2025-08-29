@@ -43,7 +43,7 @@ class MPRemoveLineCommand extends MPCommand {
       existingLine: originalLine,
       lineStartScreenPosition:
           th2FileEditController.elementEditController.lineStartScreenPosition,
-      th2FileEditController: th2FileEditController,
+      thFile: thFile,
       descriptionType: descriptionType,
     );
 

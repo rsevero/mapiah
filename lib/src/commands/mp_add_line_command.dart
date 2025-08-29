@@ -28,17 +28,13 @@ class MPAddLineCommand extends MPCommand {
     required THLine existingLine,
     int? linePositionInParent,
     this.lineStartScreenPosition,
-    required TH2FileEditController th2FileEditController,
+    required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
   }) : newLine = existingLine,
        linePositionInParent =
            linePositionInParent ??
-           existingLine
-               .parent(th2FileEditController.thFile)
-               .getChildPosition(existingLine),
-       lineChildren = existingLine
-           .getChildren(th2FileEditController.thFile)
-           .toList(),
+           existingLine.parent(thFile).getChildPosition(existingLine),
+       lineChildren = existingLine.getChildren(thFile).toList(),
        super();
 
   @override
