@@ -1709,7 +1709,7 @@ abstract class AppLocalizations {
   /// The status bar message for the add area tool
   ///
   /// In en, this message translates to:
-  /// **'Click to add a {type} area'**
+  /// **'Select a line to be included as border of a new {type} area'**
   String th2FileEditPageAddAreaStatusBarMessage(Object type);
 
   /// The label for the add element options button

@@ -289,7 +289,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void updateAfterAddElement(THElement element) {
     addSelectableElement(element);
     updateSelectedElementClone(element.parentMPID);
-    // resetSelectableElements();
   }
 
   @action

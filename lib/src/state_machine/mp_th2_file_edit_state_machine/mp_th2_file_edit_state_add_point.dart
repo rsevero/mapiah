@@ -14,6 +14,11 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
   }
 
   @override
+  void onStateExit(MPTH2FileEditState nextState) {
+    th2FileEditController.setStatusBarMessage('');
+  }
+
+  @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) {
     final THPoint newPoint = THPoint(
       parentMPID: th2FileEditController.activeScrapID,

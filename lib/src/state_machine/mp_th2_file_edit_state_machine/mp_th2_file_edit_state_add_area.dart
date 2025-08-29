@@ -16,6 +16,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     elementEditController.finalizeNewAreaCreation();
+    th2FileEditController.setStatusBarMessage('');
   }
 
   @override
@@ -38,7 +39,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
     if (!line.hasOption(THCommandOptionType.id)) {
       if (!area.hasOption(THCommandOptionType.id)) {
         elementEditController.addAutomaticTHIDOption(
-          parent: area,
+          element: area,
           prefix: mpAreaTHIDPrefix,
         );
       }
@@ -48,7 +49,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       final String lineTHIDPrefix = '$areaTHID-$mpLineTHIDPrefix';
 
       elementEditController.addAutomaticTHIDOption(
-        parent: line,
+        element: line,
         prefix: lineTHIDPrefix,
       );
     }
@@ -64,7 +65,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
     );
 
     th2FileEditController.execute(command);
-    th2FileEditController.triggerNonSelectedElementsRedraw();
+    th2FileEditController.triggerAllElementsRedraw();
 
     return Future.value();
   }
@@ -79,7 +80,10 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       case LogicalKeyboardKey.enter:
       case LogicalKeyboardKey.numpadEnter:
         if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
-          elementEditController.finalizeNewAreaCreation();
+          selectionController.setSelectedElements([
+            elementEditController.getNewArea(),
+          ], setState: true);
+
           return;
         }
     }

@@ -439,7 +439,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
     applyAddArea(newArea: newArea, areaChildren: [endarea]);
-    addAutomaticTHIDOption(parent: newArea, prefix: mpAreaTHIDPrefix);
+    addAutomaticTHIDOption(element: newArea, prefix: mpAreaTHIDPrefix);
 
     return newArea;
   }
@@ -456,14 +456,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void addAutomaticTHIDOption({
-    required THHasOptionsMixin parent,
+    required THHasOptionsMixin element,
     String prefix = '',
   }) {
-    final String newTHID = _thFile.getNewTHID(element: parent, prefix: prefix);
+    final String newTHID = _thFile.getNewTHID(element: element, prefix: prefix);
 
-    THIDCommandOption(optionParent: parent, thID: newTHID);
+    THIDCommandOption(optionParent: element, thID: newTHID);
 
-    registerElementWithTHID(parent, newTHID);
+    registerElementWithTHID(element, newTHID);
   }
 
   @action
@@ -774,14 +774,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void finalizeNewAreaCreation() {
     if (_newArea != null) {
-      _th2FileEditController.selectionController.addSelectableElement(
-        _newArea!,
-      );
+      final TH2FileEditSelectionController selectionController =
+          _th2FileEditController.selectionController;
+
+      selectionController.addSelectableElement(_newArea!);
     }
 
     clearNewArea();
-    _th2FileEditController.triggerNonSelectedElementsRedraw();
-    _th2FileEditController.triggerNewLineRedraw();
+    _th2FileEditController.triggerAllElementsRedraw();
     _th2FileEditController.updateUndoRedoStatus();
   }
 

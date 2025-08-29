@@ -1349,7 +1349,7 @@
     "description": "The label for the add area button",
     "type": "text"
   },
-  "th2FileEditPageAddAreaStatusBarMessage": "Click to add a {type} area",
+  "th2FileEditPageAddAreaStatusBarMessage": "Select a line to be included as border of a new {type} area",
   "@th2FileEditPageAddAreaStatusBarMessage": {
     "description": "The status bar message for the add area tool",
     "type": "text",

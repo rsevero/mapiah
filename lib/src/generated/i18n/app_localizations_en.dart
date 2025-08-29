@@ -851,7 +851,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String th2FileEditPageAddAreaStatusBarMessage(Object type) {
-    return 'Click to add a $type area';
+    return 'Select a line to be included as border of a new $type area';
   }
 
   @override
