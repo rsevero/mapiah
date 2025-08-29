@@ -230,7 +230,7 @@ endcomment
       expect(multilineComment, isA<THMultiLineComment>());
 
       countRemovedElements +=
-          (multilineComment as THMultiLineComment).childrenMPID.length + 1;
+          (multilineComment as THMultiLineComment).childrenMPIDs.length + 1;
       file.removeElement(multilineComment);
       expect(
         file.countElements(),
@@ -240,7 +240,7 @@ endcomment
       expect(asFile, success['asFile3']);
 
       var scrap = file.elementByTHID('poco_surubim_SCP01');
-      countRemovedElements += (scrap as THScrap).childrenMPID.length + 1;
+      countRemovedElements += (scrap as THScrap).childrenMPIDs.length + 1;
       file.removeElementByTHID('poco_surubim_SCP01');
       expect(
         file.countElements(),

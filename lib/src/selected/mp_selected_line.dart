@@ -16,7 +16,7 @@ class MPSelectedLine extends MPSelectedElement {
     THLine originalLine,
     TH2FileEditController th2FileEditController,
   ) {
-    final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPID;
+    final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPIDs;
 
     originalLineSegmentsMapClone.clear();
 
@@ -41,7 +41,7 @@ class MPSelectedLine extends MPSelectedElement {
       );
     }
 
-    final List<int> childrenMPIDsClone = originalLine.childrenMPID.toList();
+    final List<int> childrenMPIDsClone = originalLine.childrenMPIDs.toList();
 
     final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
         LinkedHashMap<THCommandOptionType, THCommandOption>();
@@ -50,7 +50,7 @@ class MPSelectedLine extends MPSelectedElement {
     });
 
     originalLineClone = originalLine.copyWith(
-      childrenMPID: childrenMPIDsClone,
+      childrenMPIDs: childrenMPIDsClone,
       optionsMap: optionsMapClone,
     );
   }

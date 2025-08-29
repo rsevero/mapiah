@@ -13,12 +13,12 @@ class THArea extends THElement
     required super.parentMPID,
     required super.sameLineComment,
     required this.areaType,
-
-    required List<int> childrenMPID,
+    required List<int> childrenMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
+    this.childrenMPIDs.addAll(childrenMPIDs);
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
@@ -48,7 +48,7 @@ class THArea extends THElement
     map.addAll({
       'areaType': areaType.name,
 
-      'childrenMPID': childrenMPID.toList(),
+      'childrenMPIDs': childrenMPIDs.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
@@ -63,8 +63,7 @@ class THArea extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       areaType: THAreaType.values.byName(map['areaType']),
-
-      childrenMPID: List<int>.from(map['childrenMPID']),
+      childrenMPIDs: List<int>.from(map['childrenMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
         map['attrOptionsMap'],
@@ -84,8 +83,7 @@ class THArea extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THAreaType? areaType,
-
-    List<int>? childrenMPID,
+    List<int>? childrenMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
@@ -99,7 +97,7 @@ class THArea extends THElement
           originalLineInTH2File ?? this.originalLineInTH2File,
       areaType: areaType ?? this.areaType,
 
-      childrenMPID: childrenMPID ?? this.childrenMPID,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
@@ -114,15 +112,19 @@ class THArea extends THElement
     final Function deepEq = const DeepCollectionEquality().equals;
 
     return other.areaType == areaType &&
-        deepEq(other.childrenMPID, childrenMPID) &&
+        deepEq(other.childrenMPIDs, childrenMPIDs) &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(areaType, childrenMPID, optionsMap, attrOptionsMap);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    areaType,
+    childrenMPIDs,
+    optionsMap,
+    attrOptionsMap,
+  );
 
   @override
   String get plaType {
@@ -135,14 +137,14 @@ class THArea extends THElement
   }
 
   bool isTHIDChild(String thID) {
-    return childrenMPID.contains(int.parse(thID));
+    return childrenMPIDs.contains(int.parse(thID));
   }
 
   void _updateAreaXLineInfo(THFile thFile) {
     _lineTHIDs = <String>{};
     _lineMPIDs = <int>{};
 
-    for (final int childMPID in childrenMPID) {
+    for (final int childMPID in childrenMPIDs) {
       final THElement element = thFile.elementByMPID(childMPID);
 
       if (element is! THAreaBorderTHID) {

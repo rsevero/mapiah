@@ -156,7 +156,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       _th2FileEditController.activeScrapID,
     );
 
-    for (final int elementMPID in scrap.childrenMPID) {
+    for (final int elementMPID in scrap.childrenMPIDs) {
       final THElement element = _thFile.elementByMPID(elementMPID);
 
       addSelectableElement(element);
@@ -358,7 +358,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final THScrap scrap = _thFile.scrapByMPID(
       _th2FileEditController.activeScrapID,
     );
-    final List<int> elementMPIDs = scrap.childrenMPID;
+    final List<int> elementMPIDs = scrap.childrenMPIDs;
 
     for (final int elementMPID in elementMPIDs) {
       final THElement element = _thFile.elementByMPID(elementMPID);
@@ -1446,7 +1446,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                         as MPSelectedLine)
                     .originalElementClone
                 as THLine)
-            .childrenMPID
+            .childrenMPIDs
             .where((childMPID) {
               return _thFile.elementByMPID(childMPID) is THLineSegment;
             })

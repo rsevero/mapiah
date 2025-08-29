@@ -21,7 +21,7 @@ mixin MPLinePaintingMixin {
         LinkedHashMap<int, THLinePainterLineSegment>();
     final LinkedHashMap<int, THLineSegment> lineEndpointsMap =
         LinkedHashMap<int, THLineSegment>();
-    final List<int> lineChildrenMPIDs = line.childrenMPID;
+    final List<int> lineChildrenMPIDs = line.childrenMPIDs;
     bool isFirst = true;
 
     for (int lineChildMPID in lineChildrenMPIDs) {

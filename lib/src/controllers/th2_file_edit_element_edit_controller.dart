@@ -215,7 +215,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required bool clone,
   }) {
     final List<THLineSegment> lineSegments = <THLineSegment>[];
-    final List<int> lineSegmentMPIDs = line.childrenMPID;
+    final List<int> lineSegmentMPIDs = line.childrenMPIDs;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
       final THElement lineSegment = _thFile.elementByMPID(lineSegmentMPID);
@@ -231,7 +231,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   LinkedHashMap<int, THLineSegment> getLineSegmentsMap(THLine line) {
     final LinkedHashMap<int, THLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
-    final List<int> lineSegmentMPIDs = line.childrenMPID;
+    final List<int> lineSegmentMPIDs = line.childrenMPIDs;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
       final THElement lineSegment = _thFile.elementByMPID(lineSegmentMPID);
@@ -344,7 +344,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (element is THIsParentMixin) {
       final List<int> childrenMPIDList = (element as THIsParentMixin)
-          .childrenMPID
+          .childrenMPIDs
           .toList();
 
       for (final int childMPID in childrenMPIDList) {
@@ -487,7 +487,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void updateBezierLineSegment(
     Offset quadraticControlPointPositionScreenCoordinates,
   ) {
-    if ((_newLine == null) || (_newLine!.childrenMPID.length < 2)) {
+    if ((_newLine == null) || (_newLine!.childrenMPIDs.length < 2)) {
       return;
     }
 
@@ -652,7 +652,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     /// The childrenMPIDs list of the scrap will be the one resultant of
     /// scrapChildren.
-    newScrap.childrenMPID.clear();
+    newScrap.childrenMPIDs.clear();
     applyAddElement(
       newElement: newScrap,
       childPositionInParent: scrapPositionAtParent,
@@ -690,7 +690,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     /// The childrenMPIDs list of the line will be the one resultant of
     /// lineChildren.
-    newLine.childrenMPID.clear();
+    newLine.childrenMPIDs.clear();
     applyAddElement(
       newElement: newLine,
       childPositionInParent: linePositionInParent,
@@ -730,7 +730,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     /// The childrenMPIDs list of the area will be the one resultant of
     /// areaChildren.
-    newArea.childrenMPID.clear();
+    newArea.childrenMPIDs.clear();
     applyAddElement(
       newElement: newArea,
       childPositionInParent: areaPositionInParent,

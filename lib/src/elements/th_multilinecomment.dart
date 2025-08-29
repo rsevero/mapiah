@@ -4,11 +4,11 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment.forCWJM({
     required super.mpID,
     required super.parentMPID,
-    required List<int> childrenMPID,
+    required List<int> childrenMPIDs,
     super.sameLineComment,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
-    this.childrenMPID.addAll(childrenMPID);
+    this.childrenMPIDs.addAll(childrenMPIDs);
   }
 
   THMultiLineComment({
@@ -23,7 +23,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'childrenMPID': childrenMPID.toList()});
+    map.addAll({'childrenMPIDs': childrenMPIDs.toList()});
 
     return map;
   }
@@ -32,7 +32,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     return THMultiLineComment.forCWJM(
       mpID: map['mpID'],
       parentMPID: map['parentMPID'],
-      childrenMPID: List<int>.from(map['childrenMPID']),
+      childrenMPIDs: List<int>.from(map['childrenMPIDs']),
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
     );
@@ -46,7 +46,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment copyWith({
     int? mpID,
     int? parentMPID,
-    List<int>? childrenMPID,
+    List<int>? childrenMPIDs,
     String? sameLineComment,
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
@@ -54,7 +54,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     return THMultiLineComment.forCWJM(
       mpID: mpID ?? this.mpID,
       parentMPID: parentMPID ?? this.parentMPID,
-      childrenMPID: childrenMPID ?? this.childrenMPID,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),
@@ -70,13 +70,13 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     if (!super.equalsBase(other)) return false;
 
     return const DeepCollectionEquality().equals(
-      other.childrenMPID,
-      childrenMPID,
+      other.childrenMPIDs,
+      childrenMPIDs,
     );
   }
 
   @override
-  int get hashCode => super.hashCode ^ childrenMPID.hashCode;
+  int get hashCode => super.hashCode ^ Object.hashAll(childrenMPIDs);
 
   @override
   bool isSameClass(Object object) {

@@ -8,7 +8,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 /// Mixin that provides parenting capabilities.
 mixin THIsParentMixin {
   // Here are registered all children mapiah IDs.
-  final List<int> childrenMPID = [];
+  final List<int> childrenMPIDs = [];
 
   /// The elementPositionInParent parameter determines the position at which the
   /// new element will be inserted in the parent's children list:
@@ -23,29 +23,29 @@ mixin THIsParentMixin {
   }) {
     final int elementMPID = element.mpID;
 
-    if (childrenMPID.contains(elementMPID)) {
+    if (childrenMPIDs.contains(elementMPID)) {
       throw THCustomException(
         "At THIsParentMixin.addElementToParent: '$element' already a child.",
       );
     }
 
     if (elementPositionInParent == mpAddChildAtEndOfParentChildrenList) {
-      childrenMPID.add(elementMPID);
+      childrenMPIDs.add(elementMPID);
     } else if (elementPositionInParent ==
         mpAddChildAtEndMinusOneOfParentChildrenList) {
       if (element.parentMPID > 0) {
-        childrenMPID.insert(childrenMPID.length - 1, elementMPID);
+        childrenMPIDs.insert(childrenMPIDs.length - 1, elementMPID);
       } else {
-        childrenMPID.add(elementMPID);
+        childrenMPIDs.add(elementMPID);
       }
     } else if (elementPositionInParent >= 0) {
-      if (elementPositionInParent > childrenMPID.length) {
+      if (elementPositionInParent > childrenMPIDs.length) {
         throw THCustomException(
           "At THIsParentMixin.addElementToParent too big 'childPositionInParent' value : '$elementPositionInParent'.",
         );
       }
 
-      childrenMPID.insert(elementPositionInParent, elementMPID);
+      childrenMPIDs.insert(elementPositionInParent, elementMPID);
     } else {
       throw THCustomException(
         "At THIsParentMixin.addElementToParent unsupported 'childPositionInParent' value : '$elementPositionInParent'.",
@@ -54,7 +54,7 @@ mixin THIsParentMixin {
   }
 
   int getChildPosition(THElement element) {
-    final int index = childrenMPID.indexOf(element.mpID);
+    final int index = childrenMPIDs.indexOf(element.mpID);
 
     if (index < 0) {
       throw THCustomException(
@@ -66,7 +66,7 @@ mixin THIsParentMixin {
   }
 
   void removeElementFromParent(THFile thFile, THElement element) {
-    if (!childrenMPID.remove(element.mpID)) {
+    if (!childrenMPIDs.remove(element.mpID)) {
       throw THCustomException("'$element' not found.");
     }
 
@@ -76,7 +76,7 @@ mixin THIsParentMixin {
   }
 
   Iterable<THElement> getChildren(THFile thFile) {
-    return childrenMPID.map((mpID) => thFile.elementByMPID(mpID));
+    return childrenMPIDs.map((mpID) => thFile.elementByMPID(mpID));
   }
 
   int get mpID;

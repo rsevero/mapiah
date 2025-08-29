@@ -63,8 +63,10 @@ class THFile
     required this.encoding,
     required int mpID,
     required LinkedHashMap<int, THElement> elementByMPID,
+    required List<int> childrenMPIDs,
   }) : _mpID = mpID {
     _elementByMPID.addAll(elementByMPID);
+    this.childrenMPIDs.addAll(childrenMPIDs);
     _initializeSupportMaps();
   }
 
@@ -77,7 +79,7 @@ class THFile
 
     for (final THElement element in elements) {
       if (element.parentMPID == _mpID) {
-        childrenMPID.add(element.mpID);
+        childrenMPIDs.add(element.mpID);
       }
 
       _updateSupportMaps(element);
@@ -93,7 +95,7 @@ class THFile
       'filename': filename,
       'encoding': encoding,
       'mpID': _mpID,
-      'childrenMPID': childrenMPID.toSet(),
+      'childrenMPIDs': childrenMPIDs.toList(),
       'elementByMPID': _elementByMPID.map(
         (key, value) => MapEntry(key, value.toMap()),
       ),
@@ -110,6 +112,7 @@ class THFile
           (key, value) => MapEntry(key, THElement.fromMap(value)),
         ),
       ),
+      childrenMPIDs: List<int>.from(map['childrenMPIDs']),
     );
   }
 
@@ -119,17 +122,19 @@ class THFile
 
   THFile copyWith({
     String? filename,
+    bool makeFilenameNull = false,
     String? encoding,
+    bool makeEncodingNull = false,
     int? mpID,
     LinkedHashMap<int, THElement>? elementByMPID,
-    bool makeFilenameNull = false,
-    bool makeEncodingNull = false,
+    List<int>? childrenMPIDs,
   }) {
     return THFile.forCWJM(
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mpID: mpID ?? _mpID,
       elementByMPID: elementByMPID ?? _elementByMPID,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
     );
   }
 
@@ -143,11 +148,13 @@ class THFile
     return other.filename == filename &&
         other.encoding == encoding &&
         other._mpID == _mpID &&
-        deepEq(other._elementByMPID, _elementByMPID);
+        deepEq(other._elementByMPID, _elementByMPID) &&
+        deepEq(other.childrenMPIDs, childrenMPIDs);
   }
 
   @override
-  int get hashCode => Object.hash(filename, encoding, _mpID, _elementByMPID);
+  int get hashCode =>
+      Object.hash(filename, encoding, _mpID, _elementByMPID, childrenMPIDs);
 
   Map<int, THElement> get elements {
     return _elementByMPID;
@@ -210,7 +217,7 @@ class THFile
 
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    return calculateChildrenBoundingBox(th2FileEditController, childrenMPID);
+    return calculateChildrenBoundingBox(th2FileEditController, childrenMPIDs);
   }
 
   /// Updates the thID of a given element of the THFile.
@@ -400,7 +407,7 @@ class THFile
   void removeElement(THElement element) {
     if (element is THIsParentMixin) {
       final List<int> childrenMPIDsCopy = (element as THIsParentMixin)
-          .childrenMPID
+          .childrenMPIDs
           .toList();
 
       for (final int childMPID in childrenMPIDsCopy) {

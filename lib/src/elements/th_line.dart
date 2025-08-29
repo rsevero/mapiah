@@ -16,7 +16,7 @@ class THLine extends THElement
     required super.parentMPID,
     required super.sameLineComment,
     required this.lineType,
-    required List<int> childrenMPID,
+    required List<int> childrenMPIDs,
     required List<int> lineSegmentMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
@@ -24,7 +24,7 @@ class THLine extends THElement
   }) : _lineSegmentMPIDs = lineSegmentMPIDs,
 
        super.forCWJM() {
-    this.childrenMPID.addAll(childrenMPID);
+    this.childrenMPIDs.addAll(childrenMPIDs);
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
@@ -58,8 +58,7 @@ class THLine extends THElement
 
     map.addAll({
       'lineType': lineType.name,
-
-      'childrenMPID': childrenMPID.toList(),
+      'childrenMPIDs': childrenMPIDs.toList(),
       'lineSegmentMPIDs': _lineSegmentMPIDs,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
@@ -75,8 +74,7 @@ class THLine extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       lineType: THLineType.values.byName(map['lineType']),
-
-      childrenMPID: List<int>.from(map['childrenMPID']),
+      childrenMPIDs: List<int>.from(map['childrenMPIDs']),
       lineSegmentMPIDs: List<int>.from(map['lineSegmentMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
@@ -97,7 +95,7 @@ class THLine extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THLineType? lineType,
-    List<int>? childrenMPID,
+    List<int>? childrenMPIDs,
     List<int>? lineSegmentMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
@@ -112,7 +110,7 @@ class THLine extends THElement
           originalLineInTH2File ?? this.originalLineInTH2File,
       lineType: lineType ?? this.lineType,
 
-      childrenMPID: childrenMPID ?? this.childrenMPID,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
       lineSegmentMPIDs: lineSegmentMPIDs ?? _lineSegmentMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
@@ -128,22 +126,21 @@ class THLine extends THElement
     final Function deepEq = const DeepCollectionEquality().equals;
 
     return other.lineType == lineType &&
-        deepEq(other.childrenMPID, childrenMPID) &&
+        deepEq(other.childrenMPIDs, childrenMPIDs) &&
         deepEq(other.lineSegmentMPIDs, _lineSegmentMPIDs) &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        lineType,
-        childrenMPID,
-        _lineSegmentMPIDs,
-        optionsMap,
-        attrOptionsMap,
-      );
+  int get hashCode => Object.hash(
+    super.hashCode,
+    lineType,
+    childrenMPIDs,
+    _lineSegmentMPIDs,
+    optionsMap,
+    attrOptionsMap,
+  );
 
   @override
   bool isSameClass(Object object) {
@@ -152,7 +149,7 @@ class THLine extends THElement
 
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    if (childrenMPID.isEmpty) {
+    if (childrenMPIDs.isEmpty) {
       return Rect.zero;
     }
 
@@ -166,7 +163,7 @@ class THLine extends THElement
     bool isFirst = true;
     Offset startPoint = Offset.zero;
 
-    for (final int childMPID in childrenMPID) {
+    for (final int childMPID in childrenMPIDs) {
       final THElement child = thFile.elementByMPID(childMPID);
 
       if (child is! THLineSegment) {
@@ -224,7 +221,7 @@ class THLine extends THElement
   int? getPreviousLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
     int? previousLineSegmentMPID;
 
-    for (final int childMPID in childrenMPID) {
+    for (final int childMPID in childrenMPIDs) {
       final THElementType childElementType = thFile.getElementTypeByMPID(
         childMPID,
       );
@@ -361,7 +358,7 @@ class THLine extends THElement
       );
     }
 
-    childrenMPID.insert(childrenMPIDIndex, lineSegment.mpID);
+    childrenMPIDs.insert(childrenMPIDIndex, lineSegment.mpID);
 
     final int lineSegmentsMPIDsIndex = getLineSegmentIndexByMPID(
       beforeLineSegmentMPID,

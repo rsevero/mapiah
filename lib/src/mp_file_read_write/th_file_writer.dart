@@ -36,7 +36,7 @@ class THFileWriter {
     String asString = '';
 
     _prefix = '';
-    if (thFile.elementByMPID(thFile.childrenMPID.first) is! THEncoding) {
+    if (thFile.elementByMPID(thFile.childrenMPIDs.first) is! THEncoding) {
       final String newLine = 'encoding ${thFile.encoding}$_lineEnding';
 
       asString += newLine;
@@ -312,7 +312,7 @@ class THFileWriter {
   String _childrenAsString(THIsParentMixin thParent) {
     String asString = '';
 
-    for (final int childMPID in thParent.childrenMPID) {
+    for (final int childMPID in thParent.childrenMPIDs) {
       asString += serializeElement(_thFile.elementByMPID(childMPID));
     }
 

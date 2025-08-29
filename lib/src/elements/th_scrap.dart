@@ -33,13 +33,13 @@ class THScrap extends THElement
     required super.parentMPID,
     super.sameLineComment,
     required String thID,
-    required List<int> childrenMPID,
+    required List<int> childrenMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _thID = thID;
-    this.childrenMPID.addAll(childrenMPID);
+    this.childrenMPIDs.addAll(childrenMPIDs);
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
@@ -61,7 +61,7 @@ class THScrap extends THElement
 
     map.addAll({
       'thID': _thID,
-      'childrenMPID': childrenMPID.toList(),
+      'childrenMPIDs': childrenMPIDs.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
@@ -76,7 +76,7 @@ class THScrap extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       thID: map['thID'],
-      childrenMPID: List<int>.from(map['childrenMPID']),
+      childrenMPIDs: List<int>.from(map['childrenMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
         map['attrOptionsMap'],
@@ -96,7 +96,7 @@ class THScrap extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     String? thID,
-    List<int>? childrenMPID,
+    List<int>? childrenMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
@@ -109,7 +109,7 @@ class THScrap extends THElement
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       thID: thID ?? _thID,
-      childrenMPID: childrenMPID ?? this.childrenMPID,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
@@ -124,15 +124,19 @@ class THScrap extends THElement
     final Function deepEq = const DeepCollectionEquality().equals;
 
     return other._thID == _thID &&
-        deepEq(other.childrenMPID, childrenMPID) &&
+        deepEq(other.childrenMPIDs, childrenMPIDs) &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(_thID, childrenMPID, optionsMap, attrOptionsMap);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    _thID,
+    childrenMPIDs,
+    optionsMap,
+    attrOptionsMap,
+  );
 
   @override
   bool isSameClass(Object object) {
@@ -151,6 +155,6 @@ class THScrap extends THElement
 
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    return calculateChildrenBoundingBox(th2FileEditController, childrenMPID);
+    return calculateChildrenBoundingBox(th2FileEditController, childrenMPIDs);
   }
 }
