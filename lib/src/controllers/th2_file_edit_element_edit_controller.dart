@@ -392,7 +392,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   THLine getNewLine() {
-    _newLine ??= _createNewLine();
+    if (_newLine == null) {
+      throw Exception(
+        'At TH2FileEditElementController.getNewLine(): new line has not been created',
+      );
+    }
 
     return _newLine!;
   }
@@ -425,22 +429,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void clearNewArea() {
     _newArea = null;
-  }
-
-  THLine _createNewLine() {
-    final THLine newLine = THLine(
-      parentMPID: _th2FileEditController.activeScrapID,
-      lineType: lastUsedLineType,
-    );
-    final THEndline endline = THEndline(parentMPID: newLine.mpID);
-
-    _thFile.addElement(endline);
-    newLine.addElementToParent(
-      endline,
-      elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
-    );
-
-    return newLine;
   }
 
   THArea _createNewArea() {
@@ -605,23 +593,30 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
-        final THLine newLine = getNewLine();
-        final int lineMPID = newLine.mpID;
-        final List<THElement> lineChildren = newLine
-            .getChildren(_thFile)
-            .toList();
+        _newLine = THLine(
+          parentMPID: _th2FileEditController.activeScrapID,
+          lineType: lastUsedLineType,
+        );
 
-        lineChildren.insert(
-          0,
-          _createStraightLineSegment(endPointScreenCoordinates, lineMPID),
+        final int newLineMPID = _newLine!.mpID;
+        final List<THElement> lineChildren = [];
+
+        /// The initial lineChildren list is created "by hand" instead of using
+        /// parent.addToParent so the line created by the MPAddLineCommand
+        /// below already includes initial line segments. Otherwise, to include
+        /// these line segments, it would be necessary to add an empty line to
+        /// the file at before creating a strange undo/redo command that would
+        /// deal with an empty line which makes no sense for the user.
+        lineChildren.add(
+          _createStraightLineSegment(_lineStartScreenPosition!, newLineMPID),
         );
-        lineChildren.insert(
-          0,
-          _createStraightLineSegment(_lineStartScreenPosition!, lineMPID),
+        lineChildren.add(
+          _createStraightLineSegment(endPointScreenCoordinates, newLineMPID),
         );
+        lineChildren.add(THEndline(parentMPID: newLineMPID));
 
         final MPAddLineCommand command = MPAddLineCommand(
-          newLine: newLine,
+          newLine: _newLine!,
           lineChildren: lineChildren,
           lineStartScreenPosition: _lineStartScreenPosition,
         );
