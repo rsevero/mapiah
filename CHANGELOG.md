@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.13 - not yet released
+## 0.2.13 - 2025-08-29
 * New features:
   * Included 'add image' button in 'add elements' button options.
   * Create new scrap [requested by Marco Corvi].
