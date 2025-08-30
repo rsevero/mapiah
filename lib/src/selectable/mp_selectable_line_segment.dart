@@ -11,8 +11,9 @@ abstract class MPSelectableLineSegment extends MPSelectableElement {
 
   @override
   Rect _calculateBoundingBox() {
-    final Rect lineBoundingBox =
-        (element as THLineSegment).getBoundingBox(startPoint);
+    final Rect lineBoundingBox = (element as THLineSegment).getBoundingBox(
+      startPoint,
+    );
 
     return MPNumericAux.orderedRectExpandedByDelta(
       rect: lineBoundingBox,

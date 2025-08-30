@@ -21,10 +21,7 @@ sealed class MPSelectable {
   final TH2FileEditController th2fileEditController;
   Rect? _boundingBox;
 
-  MPSelectable({
-    required this.element,
-    required this.th2fileEditController,
-  });
+  MPSelectable({required this.element, required this.th2fileEditController});
 
   bool contains(Offset point);
 

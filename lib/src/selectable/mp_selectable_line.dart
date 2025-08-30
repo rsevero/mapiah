@@ -5,12 +5,10 @@ class MPSelectableLine extends MPSelectableElement {
   final List<MPSelectableLineSegment> _seleactableLineSegments = [];
 
   MPSelectableLine({required THLine line, required super.th2fileEditController})
-      : super(element: line) {
-    final List<THLineSegment> lineSegments =
-        th2fileEditController.elementEditController.getLineSegmentsList(
-      line: line,
-      clone: false,
-    );
+    : super(element: line) {
+    final List<THLineSegment> lineSegments = th2fileEditController
+        .elementEditController
+        .getLineSegmentsList(line: line, clone: false);
     Offset? startPoint;
 
     for (final THLineSegment lineSegment in lineSegments) {
@@ -21,22 +19,27 @@ class MPSelectableLine extends MPSelectableElement {
 
       switch (lineSegment) {
         case THBezierCurveLineSegment _:
-          _seleactableLineSegments.add(MPSelectableBezierCurveLineSegment(
-            bezierCurveLineSegment: lineSegment,
-            startPoint: startPoint,
-            th2fileEditController: th2fileEditController,
-          ));
+          _seleactableLineSegments.add(
+            MPSelectableBezierCurveLineSegment(
+              bezierCurveLineSegment: lineSegment,
+              startPoint: startPoint,
+              th2fileEditController: th2fileEditController,
+            ),
+          );
           break;
         case THStraightLineSegment _:
-          _seleactableLineSegments.add(MPSelectableStraightLineSegment(
-            straightLineSegment: lineSegment,
-            startPoint: startPoint,
-            th2fileEditController: th2fileEditController,
-          ));
+          _seleactableLineSegments.add(
+            MPSelectableStraightLineSegment(
+              straightLineSegment: lineSegment,
+              startPoint: startPoint,
+              th2fileEditController: th2fileEditController,
+            ),
+          );
           break;
         default:
           throw Exception(
-              'Unknown line segment type: ${lineSegment.elementType}');
+            'Unknown line segment type: ${lineSegment.elementType}',
+          );
       }
       startPoint = lineSegment.endPoint.coordinates;
     }
@@ -44,8 +47,9 @@ class MPSelectableLine extends MPSelectableElement {
 
   @override
   Rect _calculateBoundingBox() {
-    final Rect lineBoundingBox =
-        (element as THLine).getBoundingBox(th2fileEditController);
+    final Rect lineBoundingBox = (element as THLine).getBoundingBox(
+      th2fileEditController,
+    );
 
     return MPNumericAux.orderedRectExpandedByDelta(
       rect: lineBoundingBox,

@@ -2,9 +2,10 @@ part of 'mp_selectable.dart';
 
 class MPSelectablePoint extends MPSelectableElement
     with MPSeleactablePointMixin {
-  MPSelectablePoint(
-      {required THPoint point, required super.th2fileEditController})
-      : super(element: point);
+  MPSelectablePoint({
+    required THPoint point,
+    required super.th2fileEditController,
+  }) : super(element: point);
 
   @override
   Rect _calculateBoundingBox() {
