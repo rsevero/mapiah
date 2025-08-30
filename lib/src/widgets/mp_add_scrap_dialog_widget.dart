@@ -21,7 +21,7 @@ class MPAddScrapDialogWidget extends StatefulWidget {
 }
 
 class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
-  late final TextEditingController _idController;
+  late final TextEditingController _scrapTHIDController;
   String? _error;
   bool get _isValid => (_error == null);
   final AppLocalizations _appLocations = mpLocator.appLocalizations;
@@ -29,18 +29,20 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
   @override
   void initState() {
     super.initState();
-    _idController = TextEditingController(text: widget.initialScrapTHID ?? '');
+    _scrapTHIDController = TextEditingController(
+      text: widget.initialScrapTHID ?? '',
+    );
     _validate();
   }
 
   @override
   void dispose() {
-    _idController.dispose();
+    _scrapTHIDController.dispose();
     super.dispose();
   }
 
   void _validate() {
-    final String text = _idController.text.trim();
+    final String text = _scrapTHIDController.text.trim();
     final String? err;
 
     if (text.isEmpty) {
@@ -63,9 +65,9 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
       return;
     }
 
-    final String newScrapID = _idController.text.trim();
+    final String newScrapTHID = _scrapTHIDController.text.trim();
 
-    widget.fileEditController.elementEditController.createScrap(newScrapID);
+    widget.fileEditController.elementEditController.createScrap(newScrapTHID);
     widget.onPressedClose();
   }
 
@@ -84,7 +86,7 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
         ),
         const SizedBox(height: mpButtonSpace),
         TextField(
-          controller: _idController,
+          controller: _scrapTHIDController,
           autofocus: true,
           onChanged: (_) => _validate(),
           onSubmitted: (_) {
