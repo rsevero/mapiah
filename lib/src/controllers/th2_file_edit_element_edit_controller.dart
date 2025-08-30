@@ -23,8 +23,8 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/widgets/mp_add_scrap_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
-import 'package:mapiah/src/widgets/mp_new_scrap_dialog_widget.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -1111,7 +1111,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     MPModalOverlayWidget.show(
       context: currentContext,
-      childBuilder: (onPressedClose) => MPNewScrapDialogWidget(
+      childBuilder: (onPressedClose) => MPAddScrapDialogWidget(
         initialScrapTHID: initialScrapTHID,
         onPressedClose: onPressedClose,
         fileEditController: _th2FileEditController,

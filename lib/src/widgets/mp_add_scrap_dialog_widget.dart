@@ -4,12 +4,12 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
-class MPNewScrapDialogWidget extends StatefulWidget {
+class MPAddScrapDialogWidget extends StatefulWidget {
   final VoidCallback onPressedClose;
   final String? initialScrapTHID;
   final TH2FileEditController fileEditController;
 
-  const MPNewScrapDialogWidget({
+  const MPAddScrapDialogWidget({
     super.key,
     required this.onPressedClose,
     required this.fileEditController,
@@ -17,10 +17,10 @@ class MPNewScrapDialogWidget extends StatefulWidget {
   });
 
   @override
-  State<MPNewScrapDialogWidget> createState() => _MPNewScrapDialogWidgetState();
+  State<MPAddScrapDialogWidget> createState() => _MPAddScrapDialogWidgetState();
 }
 
-class _MPNewScrapDialogWidgetState extends State<MPNewScrapDialogWidget> {
+class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
   late final TextEditingController _idController;
   String? _error;
   bool get _isValid => (_error == null);
