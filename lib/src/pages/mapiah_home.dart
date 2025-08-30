@@ -40,6 +40,7 @@ class _MapiahHomeState extends State<MapiahHome> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     if (!kIsWeb) {
       setWindowTitle(appLocalizations.appTitle);
@@ -52,8 +53,17 @@ class _MapiahHomeState extends State<MapiahHome> {
         title: Text(appLocalizations.appTitle),
         actions: <Widget>[
           IconButton(
+            icon: Icon(Icons.insert_drive_file_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: () {
+              // TODO: Implement new file creation logic here
+              // Example: show a dialog or navigate to a new file creation page
+            },
+            tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
+          ),
+          IconButton(
             icon: Icon(Icons.file_open_outlined),
-            color: Theme.of(context).colorScheme.onSecondaryContainer,
+            color: colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.initialPageOpenFile,
           ),
@@ -65,7 +75,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
           IconButton(
             icon: Icon(Icons.info_outline),
-            color: Theme.of(context).colorScheme.onSecondaryContainer,
+            color: colorScheme.onSecondaryContainer,
             onPressed: () => showAboutDialog(context),
             tooltip: appLocalizations.initialPageAboutMapiahDialog,
           ),

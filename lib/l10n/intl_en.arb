@@ -81,6 +81,11 @@
     "description": "The title for the main page of the help dialog",
     "type": "text"
   },
+  "mapiahHomeNewFileButtonTooltip": "New file (Ctrl+N)",
+  "@mapiahHomeNewFileButtonTooltip": {
+    "description": "The tooltip for the new file button on the main page",
+    "type": "text"
+  },
   "mpAngleUnitDegree": "degree",
   "@mpAngleUnitDegree": {
     "description": "The description for the degree angle unit",

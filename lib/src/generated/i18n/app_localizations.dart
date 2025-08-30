@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Main page'**
   String get mapiahHomeHelpDialogTitle;
 
+  /// The tooltip for the new file button on the main page
+  ///
+  /// In en, this message translates to:
+  /// **'New file (Ctrl+N)'**
+  String get mapiahHomeNewFileButtonTooltip;
+
   /// The description for the degree angle unit
   ///
   /// In en, this message translates to:

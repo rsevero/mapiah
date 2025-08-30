@@ -15,6 +15,7 @@
   "helpDialogFailureToLoad": "Falha ao carregar o conteúdo de ajuda",
   "helpDialogTooltip": "Ajuda",
   "mapiahHomeHelpDialogTitle": "Tela inicial",
+  "mapiahHomeNewFileButtonTooltip": "Novo arquivo (Ctrl+N)",
   "mpAngleUnitDegree": "grau",
   "mpAngleUnitGrad": "grad",
   "mpAngleUnitMil": "mil",

@@ -65,6 +65,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahHomeHelpDialogTitle => 'Tela inicial';
 
   @override
+  String get mapiahHomeNewFileButtonTooltip => 'Novo arquivo (Ctrl+N)';
+
+  @override
   String get mpAngleUnitDegree => 'grau';
 
   @override

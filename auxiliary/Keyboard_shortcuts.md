@@ -7,6 +7,7 @@
 | Change active scrap                             | Alt+S                        |
 | Change images                                   | Alt+I                        |
 | Create area                                     | A                            |
+| Create file                                     | Ctrl+N                       |
 | Create line                                     | L                            |
 | Create point                                    | P                            |
 | Create scrap                                    | S                            |

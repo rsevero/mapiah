@@ -65,6 +65,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahHomeHelpDialogTitle => 'Main page';
 
   @override
+  String get mapiahHomeNewFileButtonTooltip => 'New file (Ctrl+N)';
+
+  @override
   String get mpAngleUnitDegree => 'degree';
 
   @override
