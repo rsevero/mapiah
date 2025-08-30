@@ -5,37 +5,36 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
-import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
-import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
-import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
-import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
-import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
+/// Kernel (re-usable) projection option widget. No overlay specific UI.
 class MPProjectionOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
-  final Offset outerAnchorPosition;
-  final MPWidgetPositionType innerAnchorType;
+  final bool showActionButtons;
+  final VoidCallback? onPressedOk;
+  final VoidCallback? onPressedCancel;
+  final ValueChanged<THProjectionCommandOption?>? onValidOptionChanged;
 
   const MPProjectionOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
-    required this.outerAnchorPosition,
-    required this.innerAnchorType,
+    this.showActionButtons = false,
+    this.onPressedOk,
+    this.onPressedCancel,
+    this.onValidOptionChanged,
   });
 
   @override
   State<MPProjectionOptionWidget> createState() =>
-      _MPProjectionOptionWidgetState();
+      MPProjectionOptionWidgetState();
 }
 
-class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
+class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   String _selectedChoice = '';
   final TextEditingController _indexController = TextEditingController();
   final TextEditingController _angleController = TextEditingController();
@@ -58,28 +57,23 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       MPTextToUser.getAngleUnitTypeChoices(),
     );
 
-    switch (widget.optionInfo.state) {
-      case MPOptionStateType.set:
-        final THProjectionCommandOption currentOption =
-            widget.optionInfo.option as THProjectionCommandOption;
-
-        _indexController.text = currentOption.index;
-        _selectedChoice = currentOption.mode.name;
-        _angleController.text = currentOption.elevationAngle?.toString() ?? '';
-        _selectedUnit = currentOption.elevationUnit == null
-            ? thDefaultAngleUnitAsString
-            : currentOption.elevationUnit!.unit.name;
-      case MPOptionStateType.setMixed:
-      case MPOptionStateType.setUnsupported:
-        _selectedChoice = '';
-        _selectedUnit = thDefaultAngleUnitAsString;
-        _indexController.text = '';
-        _angleController.text = '';
-      case MPOptionStateType.unset:
-        _selectedChoice = mpUnsetOptionID;
-        _selectedUnit = thDefaultAngleUnitAsString;
-        _indexController.text = '';
-        _angleController.text = '';
+    final state = widget.optionInfo.state;
+    if (state == MPOptionStateType.set) {
+      final THProjectionCommandOption currentOption =
+          widget.optionInfo.option as THProjectionCommandOption;
+      _indexController.text = currentOption.index;
+      _selectedChoice = currentOption.mode.name;
+      _angleController.text = currentOption.elevationAngle?.toString() ?? '';
+      _selectedUnit = currentOption.elevationUnit == null
+          ? thDefaultAngleUnitAsString
+          : currentOption.elevationUnit!.unit.name;
+    } else if (state == MPOptionStateType.unset) {
+      _selectedChoice = mpUnsetOptionID;
+      _selectedUnit = thDefaultAngleUnitAsString;
+    } else {
+      // mixed / unsupported
+      _selectedChoice = '';
+      _selectedUnit = thDefaultAngleUnitAsString;
     }
 
     _initialIndex = _indexController.text;
@@ -87,7 +81,7 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     _initialUnit = _selectedUnit;
     _initialSelectedChoice = _selectedChoice;
 
-    _updateIsValid();
+    _updateIsValid(notify: true);
   }
 
   @override
@@ -98,33 +92,40 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     super.dispose();
   }
 
-  void _updateIsValid() {
-    switch (_selectedChoice) {
-      case mpUnsetOptionID:
-      case 'extended':
-      case 'none':
-      case 'plan':
-        _isValid = true;
-      case '':
-        _isValid = false;
-      case 'elevation':
-        final double? angle = double.tryParse(_angleController.text);
-
-        _isValid =
-            _angleController.text.isEmpty ||
-            ((angle != null) &&
-                (_selectedUnit.isNotEmpty) &&
-                ((angle >= 0) && (angle < 360)));
-        _angleWarningMessage = _isValid
-            ? null
-            : appLocalizations.mpProjectionAngleWarning;
-      default:
-        throw Exception(
-          'Invalid choice "$_selectedChoice" at MPProjectionOptionWidget._updateIsValid()',
-        );
+  void _updateIsValid({bool notify = false}) {
+    if (_selectedChoice == mpUnsetOptionID ||
+        _selectedChoice == 'extended' ||
+        _selectedChoice == 'none' ||
+        _selectedChoice == 'plan') {
+      _isValid = true;
+      _angleWarningMessage = null;
+    } else if (_selectedChoice == '') {
+      _isValid = false;
+      _angleWarningMessage = null;
+    } else if (_selectedChoice == 'elevation') {
+      final double? angle = double.tryParse(_angleController.text);
+      _isValid =
+          _angleController.text.isEmpty ||
+          (angle != null &&
+              _selectedUnit.isNotEmpty &&
+              angle >= 0 &&
+              angle < 360);
+      _angleWarningMessage = _isValid
+          ? null
+          : appLocalizations.mpProjectionAngleWarning;
+    } else {
+      throw Exception(
+        'Invalid choice "$_selectedChoice" at MPProjectionOptionWidgetState._updateIsValid()',
+      );
     }
-
     _updateOkButtonEnabled();
+    if (notify) {
+      if (_isValid) {
+        widget.onValidOptionChanged?.call(buildCurrentOption());
+      } else {
+        widget.onValidOptionChanged?.call(null);
+      }
+    }
   }
 
   void _updateOkButtonEnabled() {
@@ -163,17 +164,14 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
 
     late final String labelText;
 
-    switch (option) {
-      case 'elevation':
-      case 'extended':
-      case 'plan':
-        labelText = appLocalizations.mpProjectionIndexLabel;
-      case 'none':
-        return const SizedBox.shrink();
-      default:
-        throw Exception(
-          'Invalid choice "$option" at MPProjectionOptionWidget._buildFormForOption()',
-        );
+    if (option == 'elevation' || option == 'extended' || option == 'plan') {
+      labelText = appLocalizations.mpProjectionIndexLabel;
+    } else if (option == 'none') {
+      return const SizedBox.shrink();
+    } else {
+      throw Exception(
+        'Invalid choice "$option" at MPProjectionOptionWidgetState._buildFormForOption()',
+      );
     }
 
     return Row(
@@ -212,36 +210,35 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     );
   }
 
-  void _okButtonPressed() {
-    THCommandOption? newOption;
-
-    switch (_selectedChoice) {
-      case 'elevation':
-        newOption = THProjectionCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          index: _indexController.text.trim(),
-          mode: THProjectionModeType.values.byName(_selectedChoice),
-          elevationAngle: _angleController.text,
-          elevationUnit: _selectedUnit,
-        );
-      case 'extended':
-      case 'plan':
-        newOption = THProjectionCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          index: _indexController.text.trim(),
-          mode: THProjectionModeType.values.byName(_selectedChoice),
-        );
-      case 'none':
-        newOption = THProjectionCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
-          mode: THProjectionModeType.values.byName(_selectedChoice),
-        );
+  THProjectionCommandOption? buildCurrentOption() {
+    if (!_isValid) return null;
+    if (_selectedChoice == mpUnsetOptionID) return null;
+    if (_selectedChoice == 'elevation') {
+      return THProjectionCommandOption.fromStringWithParentMPID(
+        parentMPID: widget.th2FileEditController.thFileMPID,
+        index: _indexController.text.trim(),
+        mode: THProjectionModeType.values.byName(_selectedChoice),
+        elevationAngle: _angleController.text,
+        elevationUnit: _selectedUnit,
+      );
+    } else if (_selectedChoice == 'extended' || _selectedChoice == 'plan') {
+      return THProjectionCommandOption.fromStringWithParentMPID(
+        parentMPID: widget.th2FileEditController.thFileMPID,
+        index: _indexController.text.trim(),
+        mode: THProjectionModeType.values.byName(_selectedChoice),
+      );
+    } else if (_selectedChoice == 'none') {
+      return THProjectionCommandOption.fromStringWithParentMPID(
+        parentMPID: widget.th2FileEditController.thFileMPID,
+        mode: THProjectionModeType.values.byName(_selectedChoice),
+      );
     }
+    return null;
+  }
 
-    widget.th2FileEditController.userInteractionController.prepareSetOption(
-      option: newOption,
-      optionType: widget.optionInfo.type,
-    );
+  void _internalOkPressed() {
+    if (!_isValid) return;
+    widget.onPressedOk?.call();
   }
 
   @override
@@ -250,69 +247,57 @@ class _MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
 
     optionWidgets.add(
       RadioListTile<String>(
+        key: ValueKey(mpUnsetOptionID),
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
         contentPadding: EdgeInsets.zero,
       ),
     );
 
-    final choices = MPTextToUser.getProjectionModeTypeChoices();
+    final Map<String, String> choices =
+        MPTextToUser.getProjectionModeTypeChoices();
 
     for (final entry in choices.entries) {
-      final String value = entry.key;
-      final String label = entry.value;
-
       optionWidgets.add(
         RadioListTile<String>(
-          title: Text(label),
-          value: value,
+          key: ValueKey(entry.key),
+          title: Text(entry.value),
+          value: entry.key,
           contentPadding: EdgeInsets.zero,
         ),
       );
-      if (_selectedChoice == value) {
+      if (_selectedChoice == entry.key) {
         optionWidgets.add(_buildFormForOption(_selectedChoice));
       }
     }
 
-    return MPOverlayWindowWidget(
-      title: appLocalizations.thPointHeight,
-      overlayWindowType: MPOverlayWindowType.secondary,
-      outerAnchorPosition: widget.outerAnchorPosition,
-      innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: mpButtonSpace),
-        MPOverlayWindowBlockWidget(
-          overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
-          padding: mpOverlayWindowBlockEdgeInsets,
-          children: [
-            RadioGroup(
-              groupValue: _selectedChoice,
-              onChanged: (value) {
-                _selectedChoice = value ?? '';
-                _updateIsValid();
-              },
-              child: Column(children: optionWidgets),
-            ),
-          ],
+        RadioGroup(
+          groupValue: _selectedChoice,
+          onChanged: (value) {
+            _selectedChoice = value ?? '';
+            _updateIsValid(notify: true);
+          },
+          child: Column(children: optionWidgets),
         ),
-        const SizedBox(height: mpButtonSpace),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
-              child: Text(appLocalizations.mpButtonOK),
-            ),
-            const SizedBox(width: mpButtonSpace),
-            ElevatedButton(
-              onPressed: () {
-                widget.th2FileEditController.overlayWindowController
-                    .setShowOverlayWindow(MPWindowType.optionChoices, false);
-              },
-              child: Text(appLocalizations.mpButtonCancel),
-            ),
-          ],
-        ),
+        if (widget.showActionButtons) ...[
+          const SizedBox(height: mpButtonSpace),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: _isOkButtonEnabled ? _internalOkPressed : null,
+                child: Text(appLocalizations.mpButtonOK),
+              ),
+              const SizedBox(width: mpButtonSpace),
+              ElevatedButton(
+                onPressed: widget.onPressedCancel,
+                child: Text(appLocalizations.mpButtonCancel),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }
