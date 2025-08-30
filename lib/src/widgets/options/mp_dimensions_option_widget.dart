@@ -210,11 +210,17 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
               child: Column(
                 children: [
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPDimensionsOptionWidget|RadioListTile|$mpUnsetOptionID",
+                    ),
                     title: Text(appLocalizations.mpChoiceUnset),
                     value: mpUnsetOptionID,
                     contentPadding: EdgeInsets.zero,
                   ),
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPDimensionsOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
+                    ),
                     title: Text(appLocalizations.mpChoiceSet),
                     value: mpNonMultipleChoiceSetID,
                     contentPadding: EdgeInsets.zero,

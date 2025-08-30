@@ -202,12 +202,18 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
               child: Column(
                 children: [
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPIDOptionWidget|RadioListTile|$mpUnsetOptionID",
+                    ),
                     title: Text(appLocalizations.mpChoiceUnset),
                     value: mpUnsetOptionID,
 
                     contentPadding: EdgeInsets.zero,
                   ),
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPIDOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
+                    ),
                     title: Text(appLocalizations.mpChoiceSet),
                     value: mpNonMultipleChoiceSetID,
 

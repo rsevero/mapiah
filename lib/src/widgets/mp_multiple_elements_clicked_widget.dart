@@ -73,7 +73,8 @@ class _MPMultipleElementsClickedWidgetState
   @override
   Widget build(BuildContext context) {
     final Map<int, String> options = {};
-    final clickedElements = selectionController.clickedElements.values;
+    final Iterable<THElement> clickedElements =
+        selectionController.clickedElements.values;
 
     if (selectionController.selectionCanBeMultiple) {
       options[mpMultipleElementsClickedAllChoiceID] =
@@ -155,6 +156,9 @@ class _MPMultipleElementsClickedWidgetState
                           _onMouseExit(choiceID);
                         },
                         child: RadioListTile<int>(
+                          key: ValueKey(
+                            "MPMultipleElementsClickedWidget|RadioListTile|$choiceID",
+                          ),
                           title: Text(
                             choiceName,
                             style: DefaultTextStyle.of(blockContext).style,

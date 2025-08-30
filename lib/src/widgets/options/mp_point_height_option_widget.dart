@@ -232,6 +232,9 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
 
     optionWidgets.add(
       RadioListTile<String>(
+        key: ValueKey(
+          "MPPointHeightOptionWidget|RadioListTile|$mpUnsetOptionID",
+        ),
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
         contentPadding: EdgeInsets.zero,
@@ -246,6 +249,7 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
 
       optionWidgets.add(
         RadioListTile<String>(
+          key: ValueKey("MPPointHeightOptionWidget|RadioListTile|$value"),
           title: Text(label),
           value: value,
           contentPadding: EdgeInsets.zero,

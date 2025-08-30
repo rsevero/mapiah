@@ -151,6 +151,9 @@ class _MPMultipleEndControlPointsClickedWidgetState
                           _onMouseExit(choiceID);
                         },
                         child: RadioListTile<int>(
+                          key: ValueKey(
+                            "MPMultipleElementsClickedWidget|RadioListTile|$choiceID",
+                          ),
                           title: Text(
                             choiceName,
                             style: DefaultTextStyle.of(blockContext).style,

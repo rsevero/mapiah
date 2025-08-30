@@ -167,6 +167,7 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
 
     optionWidgets.add(
       RadioListTile<String>(
+        key: ValueKey("MPScrapOptionWidget|RadioListTile|$mpUnsetOptionID"),
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
         contentPadding: EdgeInsets.zero,
@@ -187,6 +188,7 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
 
       optionWidgets.add(
         RadioListTile<String>(
+          key: ValueKey("MPScrapOptionWidget|RadioListTile|$value"),
           title: Text(label),
           value: value,
           contentPadding: EdgeInsets.zero,

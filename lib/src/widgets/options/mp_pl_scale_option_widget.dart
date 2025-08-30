@@ -117,6 +117,9 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
                 final String label = entry.value;
 
                 return RadioListTile<String>(
+                  key: ValueKey(
+                    "MPPLScaleOptionWidget|NamedRadioListTile|$value",
+                  ),
                   title: Text(label),
                   value: value,
                   dense: true,
@@ -206,6 +209,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
 
     optionWidgets.add(
       RadioListTile<String>(
+        key: ValueKey("MPPLScaleOptionWidget|RadioListTile|$mpUnsetOptionID"),
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
         contentPadding: EdgeInsets.zero,
@@ -218,6 +222,7 @@ class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
     for (final entry in allOptions.entries) {
       optionWidgets.add(
         RadioListTile<String>(
+          key: ValueKey("MPPLScaleOptionWidget|RadioListTile|${entry.key}"),
           title: Text(entry.value),
           value: entry.key,
           contentPadding: EdgeInsets.zero,

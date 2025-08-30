@@ -247,7 +247,9 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
 
     optionWidgets.add(
       RadioListTile<String>(
-        key: ValueKey(mpUnsetOptionID),
+        key: ValueKey(
+          "MPProjectionOptionWidget|RadioListTile|$mpUnsetOptionID",
+        ),
         title: Text(appLocalizations.mpChoiceUnset),
         value: mpUnsetOptionID,
         contentPadding: EdgeInsets.zero,
@@ -260,7 +262,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     for (final entry in choices.entries) {
       optionWidgets.add(
         RadioListTile<String>(
-          key: ValueKey(entry.key),
+          key: ValueKey("MPProjectionOptionWidget|RadioListTile|${entry.key}"),
           title: Text(entry.value),
           value: entry.key,
           contentPadding: EdgeInsets.zero,

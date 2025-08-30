@@ -224,11 +224,17 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
               child: Column(
                 children: [
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPStationTypeOptionWidget|RadioListTile|$mpUnsetOptionID",
+                    ),
                     title: Text(appLocalizations.mpChoiceUnset),
                     value: mpUnsetOptionID,
                     contentPadding: EdgeInsets.zero,
                   ),
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPStationTypeOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
+                    ),
                     title: Text(appLocalizations.mpChoiceSet),
                     value: mpNonMultipleChoiceSetID,
                     contentPadding: EdgeInsets.zero,

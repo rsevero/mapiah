@@ -236,11 +236,17 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
               child: Column(
                 children: [
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPAltitudeOptionWidget|RadioListTile|$mpUnsetOptionID",
+                    ),
                     title: Text(appLocalizations.mpChoiceUnset),
                     value: mpUnsetOptionID,
                     contentPadding: EdgeInsets.zero,
                   ),
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPAltitudeOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
+                    ),
                     title: Text(appLocalizations.mpChoiceSet),
                     value: mpNonMultipleChoiceSetID,
                     contentPadding: EdgeInsets.zero,

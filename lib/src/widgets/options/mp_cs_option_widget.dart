@@ -265,6 +265,8 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
           ),
         );
       case 'UTM':
+        final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
         return Padding(
           padding: const EdgeInsets.only(left: mpButtonSpace),
           child: Row(
@@ -299,13 +301,19 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RadioListTile<String>(
+                        key: ValueKey(
+                          "MPCSOptionWidget|UTMRadioListTile|${appLocalizations.mpAzimuthNorthAbbreviation}",
+                        ),
                         title: Text(appLocalizations.mpAzimuthNorth),
-                        value: 'N',
+                        value: appLocalizations.mpAzimuthNorthAbbreviation,
                         contentPadding: EdgeInsets.zero,
                       ),
                       RadioListTile<String>(
+                        key: ValueKey(
+                          "MPCSOptionWidget|UTMRadioListTile|${appLocalizations.mpAzimuthSouthAbbreviation}",
+                        ),
                         title: Text(appLocalizations.mpAzimuthSouth),
-                        value: 'S',
+                        value: appLocalizations.mpAzimuthSouthAbbreviation,
                         contentPadding: EdgeInsets.zero,
                       ),
                     ],
@@ -444,6 +452,7 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
 
         optionWidgets.add(
           RadioListTile<String>(
+            key: ValueKey("MPCSOptionWidget|MainOptionRadioListTile|$option"),
             title: Text(option),
             value: option,
             contentPadding: EdgeInsets.zero,
@@ -476,12 +485,18 @@ class _MPCSOptionWidgetState extends State<MPCSOptionWidget> {
               child: Column(
                 children: [
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPCSOptionWidget|MainOptionRadioListTile|$mpUnsetOptionID",
+                    ),
                     title: Text(appLocalizations.mpChoiceUnset),
                     value: mpUnsetOptionID,
 
                     contentPadding: EdgeInsets.zero,
                   ),
                   RadioListTile<String>(
+                    key: ValueKey(
+                      "MPCSOptionWidget|MainOptionRadioListTile|$mpNonMultipleChoiceSetID",
+                    ),
                     title: Text(appLocalizations.mpChoiceSet),
                     value: mpNonMultipleChoiceSetID,
                     contentPadding: EdgeInsets.zero,

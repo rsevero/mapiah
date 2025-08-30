@@ -17,6 +17,7 @@ class MPPLATypeOptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RadioListTile<String>(
+      key: ValueKey("MPPLATypeOptionWidget|RadioListTile|$value"),
       title: Text(label),
       value: value,
       visualDensity: VisualDensity.adaptivePlatformDensity,

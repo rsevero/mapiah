@@ -59,9 +59,11 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
               child: Column(
                 children: choices.entries.map((MapEntry<String, String> entry) {
                   return RadioListTile<String>(
+                    key: ValueKey(
+                      "MPLineSegmentTypeOptionsOverlayWindowWidget|RadioListTile|${entry.key}",
+                    ),
                     title: Text(entry.value),
                     value: entry.key,
-
                     visualDensity: VisualDensity.adaptivePlatformDensity,
                     dense: true,
                     contentPadding: EdgeInsets.zero,

@@ -58,6 +58,9 @@ class _MPPLATypeRadioButtonWidgetState
 
       radioButtons.add(
         RadioListTile<String>(
+          key: ValueKey(
+            "MPPLATypeRadioButtonWidget|RadioListTile|$elementTypeText",
+          ),
           title: Text(plaTypeText),
           value: elementTypeText,
           dense: true,

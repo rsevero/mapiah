@@ -105,6 +105,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                           children: [
                                             Expanded(
                                               child: RadioListTile<int>(
+                                                key: ValueKey(
+                                                  "MPAvailableScrapsWidget|RadioListTile|$scrapID",
+                                                ),
                                                 title: Text(
                                                   scrapName,
                                                   style: DefaultTextStyle.of(
