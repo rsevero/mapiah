@@ -11,6 +11,7 @@ part 'mp_selected_area.dart';
 part 'mp_selected_end_control_point.dart';
 part 'mp_selected_line.dart';
 part 'mp_selected_point.dart';
+part 'mp_selected_scrap.dart';
 
 abstract class MPSelectedElement {
   int get mpID => originalElementClone.mpID;

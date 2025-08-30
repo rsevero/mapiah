@@ -1,7 +1,7 @@
 part of 'mp_selectable.dart';
 
 class MPSelectablePoint extends MPSelectableElement
-    with MPSeleactablePointMixin {
+    with MPSelectablePointMixin {
   MPSelectablePoint({
     required THPoint point,
     required super.th2fileEditController,

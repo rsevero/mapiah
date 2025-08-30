@@ -9,6 +9,8 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
@@ -786,23 +788,31 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void updateOptionEdited({bool attrOptionEdited = true}) {
-    _th2FileEditController.optionEditController.clearCurrentOptionType();
+    final TH2FileEditOptionEditController optionEditController =
+        _th2FileEditController.optionEditController;
+    final TH2FileEditOverlayWindowController overlayWindowController =
+        _th2FileEditController.overlayWindowController;
+
+    optionEditController.clearCurrentOptionType();
     _th2FileEditController.selectionController.updateSelectedElementsClones();
 
     if (attrOptionEdited) {
-      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      overlayWindowController.setShowOverlayWindow(
         MPWindowType.optionChoices,
         false,
       );
     }
 
-    if (_th2FileEditController
-        .optionEditController
-        .optionsEditForLineSegments) {
-      _th2FileEditController.optionEditController
-          .updateElementOptionMapForLineSegments();
+    if (optionEditController.optionsEditForLineSegments) {
+      optionEditController.updateElementOptionMapForLineSegments();
+    } else if (overlayWindowController.isOverlayWindowShown.containsKey(
+      MPWindowType.scrapOptions,
+    )) {
+      optionEditController.updateElementOptionMapByMPID(
+        optionEditController.optionsScrapMPID,
+      );
     } else {
-      _th2FileEditController.optionEditController.updateOptionStateMap();
+      optionEditController.updateOptionStateMap();
     }
   }
 

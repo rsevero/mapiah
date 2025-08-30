@@ -52,7 +52,8 @@ class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
         final List<Widget> widgets = [];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
-        final optionsStateMap = optionEditController.optionStateMap.entries;
+        final Iterable<MapEntry<THCommandOptionType, MPOptionInfo>>
+        optionsStateMap = optionEditController.optionStateMap.entries;
 
         MPInteractionAux.addWidgetWithTopSpace(
           widgets,

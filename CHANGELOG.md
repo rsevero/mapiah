@@ -1,6 +1,12 @@
 # Changelog
 
 ## 0.2.14 - not yet released
+* New features:
+* Fixed bugs:
+  * Multiple clicks in radio groups sometimes raised "RadioGroup policy does not support multiple selected items".
+  * Editing scrap multiple options option not working.
+* Infrastructure maintenance:
+  * Separating _mp_projection_option_widget_ in _mp_projection_option_widget_ and _mp_projection_option_overlay_window_widget_ so _mp_projection_option_widget_ can be reused in _mp_add_file_dialog_widget_.
 
 ## 0.2.13 - 2025-08-29
 * New features:
@@ -15,7 +21,7 @@
   * Point not selectable after undoing delete.
   * Points weren't removed when redoing scrap remove.
   * Add area status message not removed after leaving add area state.
-* Infrastructure maintanance:
+* Infrastructure maintenance:
   * Refactored MPAdd elements commands to improve readbility and facilitate recursive-like use.
   * Flutter upgraded to 3.35.2.
   * Flutter pub upgrade
@@ -39,7 +45,7 @@
   * Right clicking anywhere when a control point is selected raises an exception.
   * Opening a TH2 file that calls for a non existent XVI file should not hang Mapiah.
   * Opening a TH2 file that calls for an non existent raster image should not raise an exception.
-* Infrastructure maintanance:
+* Infrastructure maintenance:
   * Migrated MPMultipleElementsCommand constructors to MPMultipleElementsCommandFactory.
   * Adopted RadioGroup: https://docs.flutter.dev/release/breaking-changes/radio-api-redesign
   * Fixed 'file_picker version 10.3.1 won´t show any files if 'allowedExtensions' is set'.

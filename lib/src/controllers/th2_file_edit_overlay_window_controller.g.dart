@@ -106,17 +106,16 @@ mixin _$TH2FileEditOverlayWindowController
     context: context,
   );
 
-  ObservableMap<MPWindowType, bool> get isOverlayWindowShown {
+  Map<MPWindowType, bool> get isOverlayWindowShown {
     _$_isOverlayWindowShownAtom.reportRead();
     return super._isOverlayWindowShown;
   }
 
   @override
-  ObservableMap<MPWindowType, bool> get _isOverlayWindowShown =>
-      isOverlayWindowShown;
+  Map<MPWindowType, bool> get _isOverlayWindowShown => isOverlayWindowShown;
 
   @override
-  set _isOverlayWindowShown(ObservableMap<MPWindowType, bool> value) {
+  set _isOverlayWindowShown(Map<MPWindowType, bool> value) {
     _$_isOverlayWindowShownAtom.reportWrite(
       value,
       super._isOverlayWindowShown,

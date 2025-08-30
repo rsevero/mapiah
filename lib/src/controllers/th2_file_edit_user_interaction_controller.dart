@@ -8,6 +8,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -111,7 +112,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       }
 
       if (actualElementsForNewOption.isNotEmpty) {
-        final MPMultipleElementsCommand addOptionCommand =
+        final MPCommand addOptionCommand =
             (option.type == THCommandOptionType.attr)
             ? MPCommandFactory.setAttrOptionOnElements(
                 elements: actualElementsForNewOption,
@@ -172,7 +173,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       }
 
       if (parentMPIDs.isNotEmpty) {
-        final MPMultipleElementsCommand removeOptionCommand =
+        final MPCommand removeOptionCommand =
             MPCommandFactory.removeAttrOptionFromElements(
               attrName: attrName,
               parentMPIDs: parentMPIDs,
@@ -226,7 +227,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       }
 
       if (parentMPIDs.isNotEmpty) {
-        final MPMultipleElementsCommand removeOptionCommand =
+        final MPCommand removeOptionCommand =
             MPCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
@@ -270,9 +271,20 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> mpSelectedElements =
-        _th2FileEditController.optionEditController.optionsEditForLineSegments
-        ? selectionController.selectedEndControlPoints.values
-        : selectionController.mpSelectedElementsLogical.values;
+        _th2FileEditController.overlayWindowController.isOverlayWindowShown
+            .containsKey(MPWindowType.scrapOptions)
+        ? {
+            MPSelectedScrap(
+              originalScrap: _thFile.scrapByMPID(
+                _th2FileEditController.optionEditController.optionsScrapMPID,
+              ),
+            ),
+          }
+        : (_th2FileEditController
+                  .optionEditController
+                  .optionsEditForLineSegments
+              ? selectionController.selectedEndControlPoints.values
+              : selectionController.mpSelectedElementsLogical.values);
 
     List<MPCommand> addOptionCommands = [];
 
@@ -324,7 +336,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               type: optionType,
               value: choice,
             ),
-            thFile: _th2FileEditController.thFile,
+            thFile: _thFile,
           ),
         );
       }
@@ -387,7 +399,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       }
 
       if (parentMPIDs.isNotEmpty) {
-        final MPMultipleElementsCommand removeOptionCommand =
+        final MPCommand removeOptionCommand =
             MPCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,

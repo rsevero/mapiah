@@ -237,7 +237,8 @@ class _MPOptionsEditOverlayWindowWidgetState
           );
         }
 
-        final optionsStateMap = optionEditController.optionStateMap.entries;
+        final Iterable<MapEntry<THCommandOptionType, MPOptionInfo>>
+        optionsStateMap = optionEditController.optionStateMap.entries;
 
         List<Widget> blockWidgets = [];
 

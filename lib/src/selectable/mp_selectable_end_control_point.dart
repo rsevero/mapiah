@@ -1,7 +1,7 @@
 part of 'mp_selectable.dart';
 
 class MPSelectableEndControlPoint extends MPSelectable
-    with MPSeleactablePointMixin {
+    with MPSelectablePointMixin {
   final Offset position;
   final MPEndControlPointType type;
 

@@ -37,8 +37,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   Map<MPGlobalKeyWidgetType, GlobalKey> _globalKeyWidgetKeyByType = {};
 
   @readonly
-  ObservableMap<MPWindowType, bool> _isOverlayWindowShown =
-      ObservableMap<MPWindowType, bool>();
+  Map<MPWindowType, bool> _isOverlayWindowShown = {};
 
   @readonly
   MPWindowType _activeWindow = MPWindowType.mainTHFileEditWindow;

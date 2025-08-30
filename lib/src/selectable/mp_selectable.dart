@@ -14,6 +14,7 @@ part 'mp_selectable_end_control_point.dart';
 part 'mp_selectable_line_segment.dart';
 part 'mp_selectable_line.dart';
 part 'mp_selectable_point.dart';
+part 'mp_selectable_scrap.dart';
 part 'mp_selectable_straight_line_segment.dart';
 
 sealed class MPSelectable {

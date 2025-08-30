@@ -1,6 +1,6 @@
 part of '../mp_selectable.dart';
 
-mixin MPSeleactablePointMixin on MPSelectable {
+mixin MPSelectablePointMixin on MPSelectable {
   Rect _calculatePointBoundingBox(Offset position) {
     return MPNumericAux.orderedRectFromCenterHalfLength(
       center: position,
