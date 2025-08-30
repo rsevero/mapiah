@@ -22,8 +22,8 @@ class MPAddScrapDialogWidget extends StatefulWidget {
 
 class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
   late final TextEditingController _scrapTHIDController;
-  String? _error;
-  bool get _isValid => (_error == null);
+  String? _scrapTHIDError;
+  bool get _isValid => (_scrapTHIDError == null);
   final AppLocalizations _appLocations = mpLocator.appLocalizations;
 
   @override
@@ -56,7 +56,7 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
     }
 
     setState(() {
-      _error = err;
+      _scrapTHIDError = err;
     });
   }
 
@@ -94,7 +94,7 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
           },
           decoration: InputDecoration(
             labelText: appLocalizations.mpNewScrapDialogCreateScrapIDLabel,
-            errorText: _error,
+            errorText: _scrapTHIDError,
             hintText: appLocalizations.mpNewScrapDialogCreateScrapIDHint,
           ),
         ),
