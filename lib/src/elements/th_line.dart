@@ -37,7 +37,7 @@ class THLine extends THElement
     super.originalLineInTH2File = '',
   }) : _lineSegmentMPIDs = [],
 
-       super.addToParent();
+       super.getMPID();
 
   THLine.fromString({
     required super.parentMPID,
@@ -47,7 +47,7 @@ class THLine extends THElement
   }) : lineType = THLineType.fromFileString(lineTypeString),
 
        _lineSegmentMPIDs = [],
-       super.addToParent();
+       super.getMPID();
 
   @override
   THElementType get elementType => THElementType.line;

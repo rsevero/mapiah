@@ -15,7 +15,7 @@ class THComment extends THElement {
     required super.parentMPID,
     required this.content,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.comment;

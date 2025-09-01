@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:path/path.dart' as p;
@@ -12,6 +13,14 @@ class MPDialogAux {
   static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
     for (var type in MPFilePickerType.values) type: false,
   };
+
+  static void newFile(BuildContext context) async {
+    MPModalOverlayWidget.show(
+      context: context,
+      childBuilder: (onPressedClose) =>
+          MPAddFileDialogWidget(onPressedClose: onPressedClose),
+    );
+  }
 
   static Future<String> pickImageFile(BuildContext context) async {
     if (_isFilePickerOpen[MPFilePickerType.image] == true) {

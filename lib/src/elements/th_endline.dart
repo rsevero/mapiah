@@ -9,7 +9,7 @@ class THEndline extends THElement {
   }) : super.forCWJM();
 
   THEndline({required super.parentMPID, super.originalLineInTH2File = ''})
-    : super.addToParent();
+    : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.endline;

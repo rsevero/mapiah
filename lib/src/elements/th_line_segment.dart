@@ -24,13 +24,13 @@ abstract class THLineSegment extends THElement
     super.sameLineComment,
     required this.endPoint,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   THLineSegment.withoutEndPoint({
     required super.parentMPID,
     super.sameLineComment,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.lineSegment;

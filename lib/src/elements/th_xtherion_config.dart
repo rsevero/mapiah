@@ -18,7 +18,7 @@ class THXTherionConfig extends THElement {
     required this.name,
     required this.value,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.xTherionConfig;

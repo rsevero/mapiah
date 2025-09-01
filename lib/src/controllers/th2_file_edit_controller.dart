@@ -282,7 +282,7 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @computed
-  bool get enableSaveButton => _hasUndo || kIsWeb;
+  bool get enableSaveButton => (_hasUndo && !_thFile.isNewFile) || kIsWeb;
 
   @readonly
   String _statusBarMessage = '';
@@ -388,6 +388,17 @@ abstract class TH2FileEditControllerBase with Store {
 
     thFile.filename = filename;
     thFile.fileBytes = fileBytes;
+    th2FileEditController._basicInitialization(thFile);
+
+    return th2FileEditController;
+  }
+
+  /// This is a factory constructor that creates a new instance of
+  /// TH2FileEditController with an newly created THFile.
+  static TH2FileEditController createFromNewTHFile(THFile thFile) {
+    final TH2FileEditController th2FileEditController =
+        TH2FileEditController._create();
+
     th2FileEditController._basicInitialization(thFile);
 
     return th2FileEditController;
@@ -1056,15 +1067,17 @@ abstract class TH2FileEditControllerBase with Store {
 
       _actualSave(file);
     }
+
+    _thFile.isNewFile = false;
   }
 
   Future<void> saveAsTH2File() async {
-    final String filename = _thFile.filename;
+    final String filename = _thFile.isNewFile ? '' : _thFile.filename;
     final MPGeneralController mpGeneralController =
         mpLocator.mpGeneralController;
     final String? initialDirectory =
         mpGeneralController.lastAccessedDirectory.isEmpty
-        ? (filename.isEmpty ? null : p.dirname(_thFile.filename))
+        ? (filename.isEmpty ? null : p.dirname(filename))
         : mpGeneralController.lastAccessedDirectory;
     final String? initialFileName = filename.isEmpty
         ? null
@@ -1090,6 +1103,8 @@ abstract class TH2FileEditControllerBase with Store {
       final File file = File(filePath);
 
       _actualSave(file);
+
+      _thFile.isNewFile = false;
     }
   }
 

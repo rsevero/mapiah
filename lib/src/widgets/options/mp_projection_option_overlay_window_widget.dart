@@ -35,23 +35,31 @@ class MPProjectionOptionOverlayWindowWidget extends StatefulWidget {
 class _MPProjectionOptionOverlayWindowWidgetState
     extends State<MPProjectionOptionOverlayWindowWidget> {
   final GlobalKey<MPProjectionOptionWidgetState> _kernelKey = GlobalKey();
-  AppLocalizations get _loc => mpLocator.appLocalizations;
+  final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+  late final TH2FileEditController th2FileEditController;
+
+  @override
+  void initState() {
+    super.initState();
+    th2FileEditController = widget.th2FileEditController;
+  }
 
   void _applyAndClose() {
     final state = _kernelKey.currentState;
     final opt = state?.buildCurrentOption();
-    widget.th2FileEditController.userInteractionController.prepareSetOption(
+
+    th2FileEditController.userInteractionController.prepareSetOption(
       option: opt,
       optionType: widget.optionInfo.type,
     );
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
     );
   }
 
   void _cancel() {
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
     );
@@ -60,11 +68,11 @@ class _MPProjectionOptionOverlayWindowWidgetState
   @override
   Widget build(BuildContext context) {
     return MPOverlayWindowWidget(
-      title: _loc.thPointHeight,
+      title: appLocalizations.thProjection,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
+      th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
@@ -73,7 +81,6 @@ class _MPProjectionOptionOverlayWindowWidgetState
           children: [
             MPProjectionOptionWidget(
               key: _kernelKey,
-              th2FileEditController: widget.th2FileEditController,
               optionInfo: widget.optionInfo,
               showActionButtons: true,
               onPressedOk: _applyAndClose,

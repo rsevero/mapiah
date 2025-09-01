@@ -2222,7 +2222,7 @@ class THFileParser {
 
     // mpLocator.mpLog.finer("Encoding object: '$encoding");
 
-    return (encoding == null) ? thDefaultEncoding : encoding[1]!.toUpperCase();
+    return (encoding == null) ? mpDefaultEncoding : encoding[1]!.toUpperCase();
   }
 
   @useResult

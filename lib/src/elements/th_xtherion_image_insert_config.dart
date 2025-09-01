@@ -73,7 +73,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
        igamma = THDoublePart.fromString(valueString: igamma),
        yy = THDoublePart.fromString(valueString: yy),
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-       super.addToParent();
+       super.getMPID();
 
   THXTherionImageInsertConfig({
     required super.parentMPID,
@@ -92,7 +92,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
            ? THDoublePart.fromString(valueString: '1.0')
            : igamma,
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-       super.addToParent();
+       super.getMPID();
 
   THXTherionImageInsertConfig.adjustPosition({
     required super.parentMPID,
@@ -112,7 +112,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
            ? THDoublePart.fromString(valueString: '1.0')
            : igamma,
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-       super.addToParent() {
+       super.getMPID() {
     if (isXVI) {
       final XVIFile? xviFile = getXVIFile(th2FileEditController);
 

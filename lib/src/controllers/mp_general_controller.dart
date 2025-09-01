@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 
 class MPGeneralController {
   int _nextMPIDForElements = thFirstMPIDForElements;
@@ -65,6 +68,54 @@ class MPGeneralController {
 
     final TH2FileEditController createdController =
         TH2FileEditControllerBase.create(filename, fileBytes: fileBytes);
+
+    _t2hFileEditControllers[filename] = createdController;
+
+    return createdController;
+  }
+
+  TH2FileEditController getTH2FileEditControllerForNewFile({
+    required String scrapTHID,
+    required THProjectionCommandOption? projectionOption,
+    required String encoding,
+  }) {
+    final THFile thFile = THFile();
+    final int thFileMPID = thFile.mpID;
+    final String filename = '${mpNewFilePrefix}_${thFile.mpID.abs()}';
+    final THEncoding thEncoding = THEncoding(
+      parentMPID: thFileMPID,
+      encoding: encoding,
+    );
+    final THScrap thScrap = THScrap(parentMPID: thFileMPID, thID: scrapTHID);
+    final int thScrapMPID = thScrap.mpID;
+    final THEndscrap thEndscrap = THEndscrap(parentMPID: thScrapMPID);
+
+    thFile.isNewFile = true;
+    thFile.filename = filename;
+    thFile.addElement(thEncoding);
+    thFile.addElementToParent(thEncoding);
+    thFile.addElement(thScrap);
+    thFile.addElementToParent(thScrap);
+    thFile.addElement(thEndscrap);
+    thScrap.addElementToParent(
+      thEndscrap,
+      elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
+    );
+
+    if (projectionOption != null) {
+      thScrap.addUpdateOption(projectionOption);
+    }
+
+    if (_t2hFileEditControllers.containsKey(filename)) {
+      throw Exception(
+        'At MPGeneralController.getTH2FileEditControllerForNewFile: controller for new file $filename already exists',
+      );
+    }
+
+    final TH2FileEditController createdController =
+        TH2FileEditControllerBase.createFromNewTHFile(thFile);
+
+    createdController.setActiveScrap(thScrapMPID);
 
     _t2hFileEditControllers[filename] = createdController;
 

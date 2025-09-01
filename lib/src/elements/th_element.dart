@@ -98,7 +98,7 @@ abstract class THElement {
   /// Main constructor that sets all essential properties. Any change made here
   /// should eventually be reproduced in the special descendants that don´t use
   /// this constructor but the [Generic private constructor].
-  THElement.addToParent({
+  THElement.getMPID({
     required this.parentMPID,
     this.sameLineComment,
     this.originalLineInTH2File = '',

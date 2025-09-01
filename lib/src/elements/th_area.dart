@@ -28,7 +28,7 @@ class THArea extends THElement
     required this.areaType,
 
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   THArea.fromString({
     required super.parentMPID,
@@ -36,7 +36,7 @@ class THArea extends THElement
     super.originalLineInTH2File = '',
   }) : areaType = THAreaType.fromFileString(areaTypeString),
 
-       super.addToParent();
+       super.getMPID();
 
   @override
   THElementType get elementType => THElementType.area;

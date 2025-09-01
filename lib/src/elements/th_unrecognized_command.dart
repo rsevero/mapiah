@@ -15,7 +15,7 @@ class THUnrecognizedCommand extends THElement {
     required super.parentMPID,
     required this.value,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.unrecognizedCommand;

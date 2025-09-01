@@ -55,10 +55,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           IconButton(
             icon: Icon(Icons.insert_drive_file_outlined),
             color: colorScheme.onSecondaryContainer,
-            onPressed: () {
-              // TODO: Implement new file creation logic here
-              // Example: show a dialog or navigate to a new file creation page
-            },
+            onPressed: () => MPDialogAux.newFile(context),
             tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
           ),
           IconButton(

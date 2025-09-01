@@ -9,7 +9,7 @@ class THEndarea extends THElement {
   }) : super.forCWJM();
 
   THEndarea({required super.parentMPID, super.originalLineInTH2File = ''})
-    : super.addToParent();
+    : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.endarea;

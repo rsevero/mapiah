@@ -15,7 +15,7 @@ class THAreaBorderTHID extends THElement {
     required super.parentMPID,
     required this.thID,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
   //  {
   //   if (parent is! THArea) {
   //     throw THCustomException(

@@ -14,7 +14,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   THMultiLineComment({
     required super.parentMPID,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.multilineComment;

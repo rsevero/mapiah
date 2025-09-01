@@ -48,7 +48,7 @@ class THScrap extends THElement
     required super.parentMPID,
     required String thID,
     super.originalLineInTH2File = '',
-  }) : super.addToParent() {
+  }) : super.getMPID() {
     _thID = thID;
   }
 

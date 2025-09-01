@@ -31,8 +31,9 @@ class THFile
       LinkedHashMap<int, THElement>();
   String filename = '';
   Uint8List? fileBytes;
+  bool isNewFile = false;
 
-  String encoding = thDefaultEncoding;
+  String encoding = mpDefaultEncoding;
   String lineEnding = MPDirectoryAux.getDefaultLineEnding();
 
   late final int _mpID;
@@ -75,7 +76,7 @@ class THFile
   }
 
   void _initializeSupportMaps() {
-    final elements = _elementByMPID.values;
+    final Iterable<THElement> elements = _elementByMPID.values;
 
     for (final THElement element in elements) {
       if (element.parentMPID == _mpID) {
@@ -656,7 +657,7 @@ class THFile
     _areaMPIDByLineMPID = null;
     _areaMPIDByLineTHID = null;
     filename = '';
-    encoding = thDefaultEncoding;
+    encoding = mpDefaultEncoding;
     clearBoundingBox();
   }
 

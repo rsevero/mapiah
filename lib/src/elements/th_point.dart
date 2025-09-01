@@ -55,7 +55,7 @@ class THPoint extends THElement
     required this.pointType,
 
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.point;
@@ -69,7 +69,7 @@ class THPoint extends THElement
   }) : position = THPositionPart.fromStringList(list: pointDataList),
        pointType = THPointType.fromFileString(pointTypeString),
 
-       super.addToParent();
+       super.getMPID();
 
   @override
   Map<String, dynamic> toMap() {

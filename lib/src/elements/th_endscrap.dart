@@ -9,7 +9,7 @@ class THEndscrap extends THElement {
   }) : super.forCWJM();
 
   THEndscrap({required super.parentMPID, super.originalLineInTH2File = ''})
-    : super.addToParent();
+    : super.getMPID();
 
   @override
   THElementType get elementType => THElementType.endscrap;

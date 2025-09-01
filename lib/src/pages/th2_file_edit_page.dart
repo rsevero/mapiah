@@ -14,10 +14,15 @@ import 'package:mapiah/src/widgets/th_file_widget.dart';
 
 class TH2FileEditPage extends StatefulWidget {
   final String filename;
+  final TH2FileEditController? th2FileEditController;
   final Uint8List? fileBytes;
 
-  TH2FileEditPage({required this.filename, super.key, this.fileBytes})
-    : assert(filename.isNotEmpty, 'Filename cannot be empty');
+  TH2FileEditPage({
+    required this.filename,
+    super.key,
+    this.th2FileEditController,
+    this.fileBytes,
+  }) : assert(filename.isNotEmpty, 'Filename cannot be empty');
 
   @override
   State<TH2FileEditPage> createState() => _TH2FileEditPageState();
@@ -34,12 +39,20 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   @override
   void initState() {
     super.initState();
-    th2FileEditController = mpLocator.mpGeneralController
-        .getTH2FileEditController(
-          filename: widget.filename,
-          fileBytes: widget.fileBytes,
-        );
-    th2FileEditControllerCreateResult = th2FileEditController.load();
+
+    if (widget.th2FileEditController == null) {
+      th2FileEditController = mpLocator.mpGeneralController
+          .getTH2FileEditController(
+            filename: widget.filename,
+            fileBytes: widget.fileBytes,
+          );
+      th2FileEditControllerCreateResult = th2FileEditController.load();
+    } else {
+      th2FileEditController = widget.th2FileEditController!;
+      th2FileEditControllerCreateResult = Future.value(
+        TH2FileEditControllerCreateResult(true, []),
+      );
+    }
   }
 
   @override

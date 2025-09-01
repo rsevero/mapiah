@@ -133,14 +133,14 @@ class _MPAltitudeOptionWidgetState extends State<MPAltitudeOptionWidget> {
         switch (widget.optionInfo.type) {
           case THCommandOptionType.altitude:
             newOption = THAltitudeCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceHolder,
               height: _altitudeController.text,
               isFix: _isFixed,
               unit: _selectedUnit,
             );
           case THCommandOptionType.altitudeValue:
             newOption = THAltitudeValueCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceHolder,
               height: _altitudeController.text,
               isFix: _isFixed,
               unit: _selectedUnit,

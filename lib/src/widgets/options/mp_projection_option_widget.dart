@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -12,7 +11,6 @@ import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 
 /// Kernel (re-usable) projection option widget. No overlay specific UI.
 class MPProjectionOptionWidget extends StatefulWidget {
-  final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final bool showActionButtons;
   final VoidCallback? onPressedOk;
@@ -21,7 +19,6 @@ class MPProjectionOptionWidget extends StatefulWidget {
 
   const MPProjectionOptionWidget({
     super.key,
-    required this.th2FileEditController,
     required this.optionInfo,
     this.showActionButtons = false,
     this.onPressedOk,
@@ -215,7 +212,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     if (_selectedChoice == mpUnsetOptionID) return null;
     if (_selectedChoice == 'elevation') {
       return THProjectionCommandOption.fromStringWithParentMPID(
-        parentMPID: widget.th2FileEditController.thFileMPID,
+        parentMPID: mpParentMPIDPlaceHolder,
         index: _indexController.text.trim(),
         mode: THProjectionModeType.values.byName(_selectedChoice),
         elevationAngle: _angleController.text,
@@ -223,13 +220,13 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       );
     } else if (_selectedChoice == 'extended' || _selectedChoice == 'plan') {
       return THProjectionCommandOption.fromStringWithParentMPID(
-        parentMPID: widget.th2FileEditController.thFileMPID,
+        parentMPID: mpParentMPIDPlaceHolder,
         index: _indexController.text.trim(),
         mode: THProjectionModeType.values.byName(_selectedChoice),
       );
     } else if (_selectedChoice == 'none') {
       return THProjectionCommandOption.fromStringWithParentMPID(
-        parentMPID: widget.th2FileEditController.thFileMPID,
+        parentMPID: mpParentMPIDPlaceHolder,
         mode: THProjectionModeType.values.byName(_selectedChoice),
       );
     }

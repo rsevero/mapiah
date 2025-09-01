@@ -19,7 +19,7 @@ class THEncoding extends THElement {
     required String encoding,
     super.originalLineInTH2File = '',
   }) : encoding = encoding.trim().toUpperCase(),
-       super.addToParent() {
+       super.getMPID() {
     mpLocator.mpGeneralController.addAvailableEncoding(encoding);
   }
 

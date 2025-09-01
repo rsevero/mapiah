@@ -34,7 +34,7 @@ const int mpCalculatedDecimalPositions = 6;
 const int thDefaultDecimalPositions = 4;
 const int mpDefaultDecimalPositionsAzimuth = 1;
 
-const String thDefaultEncoding = 'UTF-8';
+const String mpDefaultEncoding = 'UTF-8';
 
 const String thNullValueAsString = '!!! property has null value !!!';
 
@@ -258,6 +258,11 @@ const String mpScrapFreeTextTHID = 'FREE_TEXT';
 
 const String mpAreaTHIDPrefix = 'area';
 const String mpLineTHIDPrefix = 'line';
+const String mpScrapTHIDPrefix = 'scrap';
+
+const String mpNewFilePrefix = 'NEW_TH2_FILE';
+
+const int mpParentMPIDPlaceHolder = 0;
 
 const int mpScrapScaleMaxValues = 8;
 const String mpScrapScale1ValueID = 'ONE_VALUE';
