@@ -124,12 +124,8 @@ class _MPDimensionsOptionWidgetState extends State<MPDimensionsOptionWidget> {
       final double? below = double.tryParse(_belowController.text);
 
       if ((above != null) && (below != null)) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         newOption = THDimensionsValueCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           above: _aboveController.text,
           below: _belowController.text,
           unit: _selectedUnit,

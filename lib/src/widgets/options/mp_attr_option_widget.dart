@@ -123,7 +123,7 @@ class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
 
     if (!_initials.containsKey(name) || (_initials[name] != value)) {
       final THAttrCommandOption newOption = THAttrCommandOption.forCWJM(
-        parentMPID: th2FileEditController.thFileMPID,
+        parentMPID: mpParentMPIDPlaceholder,
         originalLineInTH2File: '',
         name: THStringPart(content: name),
         value: THStringPart(content: value),

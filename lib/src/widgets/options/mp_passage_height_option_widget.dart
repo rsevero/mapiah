@@ -289,28 +289,28 @@ class _MPPassageHeightOptionWidgetState
     switch (_selectedChoice) {
       case 'height':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           plusNumber: _heightController.text,
           mode: THPassageHeightModes.height,
           unit: _selectedUnit,
         );
       case 'depth':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           minusNumber: _depthController.text,
           mode: THPassageHeightModes.depth,
           unit: _selectedUnit,
         );
       case 'distanceBetweenFloorAndCeiling':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           plusNumber: _heightController.text,
           mode: THPassageHeightModes.distanceBetweenFloorAndCeiling,
           unit: _selectedUnit,
         );
       case 'distanceToCeilingAndDistanceToFloor':
         newOption = THPassageHeightValueCommandOption.withParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           plusNumber: _heightController.text,
           minusNumber: _depthController.text,
           mode: THPassageHeightModes.distanceToCeilingAndDistanceToFloor,

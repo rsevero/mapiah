@@ -116,31 +116,27 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget> {
       final String text = _textController.text.trim();
 
       if (text.isNotEmpty) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         switch (widget.optionInfo.type) {
           case THCommandOptionType.mark:
             newOption = THMarkCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               mark: text,
             );
           case THCommandOptionType.text:
             newOption = THTextCommandOption.forCWJM(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               originalLineInTH2File: '',
               text: THStringPart(content: text),
             );
           case THCommandOptionType.title:
             newOption = THTitleCommandOption.forCWJM(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               originalLineInTH2File: '',
               title: THStringPart(content: text),
             );
           case THCommandOptionType.unrecognizedCommandOption:
             newOption = THUnrecognizedCommandOption.forCWJM(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               originalLineInTH2File: '',
               value: text,
             );

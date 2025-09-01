@@ -121,20 +121,16 @@ class _MPDistanceTypeOptionWidgetState
       final double? distance = double.tryParse(_distanceController.text);
 
       if (distance != null) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         switch (widget.optionInfo.type) {
           case THCommandOptionType.dist:
             newOption = THDistCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               distance: distance.toString(),
               unit: _selectedUnit,
             );
           case THCommandOptionType.explored:
             newOption = THExploredCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               distance: distance.toString(),
               unit: _selectedUnit,
             );

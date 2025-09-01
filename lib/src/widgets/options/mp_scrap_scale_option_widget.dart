@@ -402,7 +402,7 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
           }
         }
         newOption = THScrapScaleCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           numericSpecifications: numericSpecifications,
           unitPart: THLengthUnitPart.fromString(unitString: _selectedUnit),
         );

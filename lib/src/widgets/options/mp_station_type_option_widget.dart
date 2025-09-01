@@ -112,24 +112,20 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget> {
       final String station = _stationController.text.trim();
 
       if (station.isNotEmpty) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         switch (widget.optionInfo.type) {
           case THCommandOptionType.extend:
             newOption = THExtendCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               station: station,
             );
           case THCommandOptionType.from:
             newOption = THFromCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               station: station,
             );
           case THCommandOptionType.name:
             newOption = THNameCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               reference: station,
             );
           default:

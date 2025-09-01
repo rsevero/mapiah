@@ -77,12 +77,8 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
       if (_elementType.isNotEmpty && _plaType.isNotEmpty) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         newOption = THContextCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           elementType: _elementType,
           symbolType: _plaType,
         );

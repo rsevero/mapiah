@@ -262,7 +262,7 @@ const String mpScrapTHIDPrefix = 'scrap';
 
 const String mpNewFilePrefix = 'NEW_TH2_FILE';
 
-const int mpParentMPIDPlaceHolder = 0;
+const int mpParentMPIDPlaceholder = 0;
 
 const int mpScrapScaleMaxValues = 8;
 const String mpScrapScale1ValueID = 'ONE_VALUE';

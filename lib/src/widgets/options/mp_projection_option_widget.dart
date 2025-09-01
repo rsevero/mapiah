@@ -212,7 +212,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     if (_selectedChoice == mpUnsetOptionID) return null;
     if (_selectedChoice == 'elevation') {
       return THProjectionCommandOption.fromStringWithParentMPID(
-        parentMPID: mpParentMPIDPlaceHolder,
+        parentMPID: mpParentMPIDPlaceholder,
         index: _indexController.text.trim(),
         mode: THProjectionModeType.values.byName(_selectedChoice),
         elevationAngle: _angleController.text,
@@ -220,13 +220,13 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       );
     } else if (_selectedChoice == 'extended' || _selectedChoice == 'plan') {
       return THProjectionCommandOption.fromStringWithParentMPID(
-        parentMPID: mpParentMPIDPlaceHolder,
+        parentMPID: mpParentMPIDPlaceholder,
         index: _indexController.text.trim(),
         mode: THProjectionModeType.values.byName(_selectedChoice),
       );
     } else if (_selectedChoice == 'none') {
       return THProjectionCommandOption.fromStringWithParentMPID(
-        parentMPID: mpParentMPIDPlaceHolder,
+        parentMPID: mpParentMPIDPlaceholder,
         mode: THProjectionModeType.values.byName(_selectedChoice),
       );
     }

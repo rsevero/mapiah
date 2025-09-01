@@ -105,7 +105,7 @@ class _MPStationsOptionWidgetState extends State<MPStationsOptionWidget> {
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
       newOption = THStationsCommandOption.forCWJM(
-        parentMPID: widget.th2FileEditController.thFileMPID,
+        parentMPID: mpParentMPIDPlaceholder,
         originalLineInTH2File: '',
         stations: _stationNameControllers.map((c) => c.text.trim()).toList(),
       );

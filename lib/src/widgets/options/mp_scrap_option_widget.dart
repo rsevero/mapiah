@@ -149,7 +149,7 @@ class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
 
     if (_selectedChoice != mpUnsetOptionID) {
       newOption = THScrapCommandOption.forCWJM(
-        parentMPID: widget.th2FileEditController.thFileMPID,
+        parentMPID: mpParentMPIDPlaceholder,
         reference: _freeTextScrapIDController.text.trim(),
         originalLineInTH2File: '',
       );

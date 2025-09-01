@@ -107,19 +107,15 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
       final double? doubleValue = double.tryParse(_doubleController.text);
 
       if (doubleValue != null) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         switch (widget.optionInfo.type) {
           case THCommandOptionType.lineHeight:
             newOption = THLineHeightCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               height: _doubleController.text,
             );
           case THCommandOptionType.lSize:
             newOption = THLSizeCommandOption.fromStringWithParentMPID(
-              parentMPID: widget.th2FileEditController.thFileMPID,
+              parentMPID: mpParentMPIDPlaceholder,
               number: _doubleController.text,
             );
           default:

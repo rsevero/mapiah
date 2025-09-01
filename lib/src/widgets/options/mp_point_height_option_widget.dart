@@ -212,7 +212,7 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
       case 'pit':
       case 'step':
         newOption = THPointHeightValueCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           isPresumed: _isPresumed,
           length: _lengthController.text,
           mode: THPointHeightValueMode.values.byName(_selectedChoice),
