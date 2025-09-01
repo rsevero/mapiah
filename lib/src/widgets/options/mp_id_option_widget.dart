@@ -104,7 +104,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
         /// THHasOptionsMixin so it can't actually be the parent of an option,
         /// i.e., is has no options at all.
         newOption = THIDCommandOption.fromStringWithParentMPID(
-          parentMPID: widget.th2FileEditController.thFileMPID,
+          parentMPID: mpParentMPIDPlaceholder,
           thID: thID,
         );
       } else {
