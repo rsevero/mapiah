@@ -806,8 +806,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (optionEditController.optionsEditForLineSegments) {
       optionEditController.updateElementOptionMapForLineSegments();
     } else if (overlayWindowController.isOverlayWindowShown.containsKey(
-      MPWindowType.scrapOptions,
-    )) {
+          MPWindowType.scrapOptions,
+        ) &&
+        (overlayWindowController.isOverlayWindowShown[MPWindowType
+            .scrapOptions]!)) {
       optionEditController.updateElementOptionMapByMPID(
         optionEditController.optionsScrapMPID,
       );
