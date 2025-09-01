@@ -53,7 +53,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap = MPTextToUser.getOrderedChoices(
+    _unitMap = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getAngleUnitTypeChoices(),
     );
 

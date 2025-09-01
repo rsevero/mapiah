@@ -33,15 +33,15 @@ class _MPPLATypeDropdownWidgetState extends State<MPPLATypeDropdownWidget> {
   Map<String, String> _getPLATypes() {
     switch (widget.elementType) {
       case 'point':
-        return MPTextToUser.getOrderedChoices(
+        return MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getPointTypeChoices(),
         );
       case 'line':
-        return MPTextToUser.getOrderedChoices(
+        return MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getLineTypeChoices(),
         );
       case 'area':
-        return MPTextToUser.getOrderedChoices(
+        return MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getAreaTypeChoices(),
         );
       default:

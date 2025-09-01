@@ -54,7 +54,7 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
   @override
   void initState() {
     super.initState();
-    _unitMap = MPTextToUser.getOrderedChoices(
+    _unitMap = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getLengthUnitsChoices(),
     );
 

@@ -2169,13 +2169,13 @@ class THFileParser {
       default:
         // Therion ISO charset names don´t have a hyphen after ISO but
         // charset.dart expects one.
-        final isoResult = _isoRegex.firstMatch(encoding);
+        final RegExpMatch? isoResult = _isoRegex.firstMatch(encoding);
 
         if (isoResult != null) {
           encoding = 'ISO-${isoResult[1]}';
         }
 
-        final encoder = Charset.getByName(encoding);
+        final Encoding? encoder = Charset.getByName(encoding);
 
         if (encoder == null) {
           fileContentDecoded = utf8.decode(fileContentRaw);

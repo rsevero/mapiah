@@ -1,6 +1,8 @@
 import 'dart:collection';
-
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
@@ -14,6 +16,12 @@ class MPGeneralController {
 
   final HashMap<String, TH2FileEditController> _t2hFileEditControllers =
       HashMap<String, TH2FileEditController>();
+
+  List<String> _availableEncodings = ['ASCII', 'UTF-8'];
+
+  MPGeneralController() {
+    updateAvailableEncodingsList();
+  }
 
   set lastAccessedDirectory(String value) {
     if (!value.endsWith('/')) {
@@ -80,5 +88,73 @@ class MPGeneralController {
     if (_t2hFileEditControllers.containsKey(filename)) {
       _t2hFileEditControllers.remove(filename);
     }
+  }
+
+  List<String> getAvailableEncodings() {
+    return _availableEncodings;
+  }
+
+  Future<void> updateAvailableEncodingsList() async {
+    try {
+      final String exe = Platform.isWindows ? 'therion.exe' : 'therion';
+      final ProcessResult result = await Process.run(exe, const [
+        '--print-encodings',
+      ]);
+
+      if (result.exitCode != 0) {
+        return;
+      }
+
+      /// Switch expression doing type pattern matching on result.stdout
+      /// (dynamic):
+      /// * If stdout is already a String (String s => s), use it directly.
+      /// * If it is raw bytes (List<int> bytes => utf8.decode(bytes)), decode
+      ///   as UTF‑8.
+      /// * Otherwise (_ => result.stdout.toString()), fall back to toString().
+      /// Result: stdoutString is a normalized String regardless of the original
+      /// stdout representation on different platforms.
+      final String stdoutString = switch (result.stdout) {
+        String s => s,
+        List<int> bytes => utf8.decode(bytes),
+        _ => result.stdout.toString(),
+      };
+      final List<String> encodings = _extractEncodingsFromTherionOutput(
+        stdoutString,
+      );
+
+      if (encodings.isNotEmpty) {
+        _availableEncodings = encodings;
+      }
+    } catch (_) {
+      // Ignore (therion not installed or not in PATH)
+    }
+  }
+
+  List<String> _extractEncodingsFromTherionOutput(String output) {
+    final Set<String> set = <String>{};
+    final RegExp tokenRegExp = RegExp(r'^[A-Za-z0-9._\-]+$');
+
+    for (final String rawLine in output.split(RegExp(r'[\r\n]+'))) {
+      final String line = rawLine.trim();
+
+      if (line.isEmpty) {
+        continue;
+      }
+
+      for (final String token in line.split(RegExp(r'\s+'))) {
+        final String t = token.trim();
+
+        if (t.isEmpty) {
+          continue;
+        }
+        if (tokenRegExp.hasMatch(t)) {
+          set.add(t);
+        }
+      }
+    }
+
+    final List<String> list = MPTextToUser.getOrderedChoicesList(set);
+
+    return list;
   }
 }

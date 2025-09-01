@@ -1407,19 +1407,27 @@ class MPTextToUser {
     final Map<String, String> choicesWithUnset = {
       mpUnsetOptionID: mpLocator.appLocalizations.mpChoiceUnset,
     };
-    final Map<String, String> orderedChoices = getOrderedChoices(choices);
+    final Map<String, String> orderedChoices = getOrderedChoicesMap(choices);
 
     choicesWithUnset.addAll(orderedChoices);
 
     return choicesWithUnset;
   }
 
-  static Map<String, String> getOrderedChoices(Map<String, String> choices) {
+  static Map<String, String> getOrderedChoicesMap(Map<String, String> choices) {
     final List<MapEntry<String, String>> orderedChoices =
         choices.entries.toList()..sort(
           (a, b) => MPTextToUser.compareStringsUsingLocale(a.value, b.value),
         );
 
     return Map.fromEntries(orderedChoices);
+  }
+
+  static List<String> getOrderedChoicesList(Iterable<String> choices) {
+    final List<String> orderedChoices = List.from(choices);
+
+    orderedChoices.sort((a, b) => MPTextToUser.compareStringsUsingLocale(a, b));
+
+    return orderedChoices;
   }
 }

@@ -52,7 +52,7 @@ class _MPDistanceTypeOptionWidgetState
   @override
   void initState() {
     super.initState();
-    _unitMap = MPTextToUser.getOrderedChoices(
+    _unitMap = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getLengthUnitsChoices(),
     );
 

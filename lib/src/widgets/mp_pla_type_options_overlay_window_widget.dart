@@ -43,7 +43,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
     switch (elementType) {
       case THElementType.area:
         title = mpLocator.appLocalizations.mpPLATypeAreaTitle;
-        choices = MPTextToUser.getOrderedChoices(
+        choices = MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getAreaTypeChoices(),
         );
         lastUsedChoices =
@@ -52,7 +52,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
             th2FileEditController.elementEditController.mostUsedAreaTypes;
       case THElementType.line:
         title = mpLocator.appLocalizations.mpPLATypeLineTitle;
-        choices = MPTextToUser.getOrderedChoices(
+        choices = MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getLineTypeChoices(),
         );
         lastUsedChoices =
@@ -61,7 +61,7 @@ class MPPLATypeOptionsOverlayWindowWidget extends StatelessWidget {
             th2FileEditController.elementEditController.mostUsedLineTypes;
       case THElementType.point:
         title = mpLocator.appLocalizations.mpPLATypePointTitle;
-        choices = MPTextToUser.getOrderedChoices(
+        choices = MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getPointTypeChoices(),
         );
         lastUsedChoices =

@@ -25,7 +25,7 @@ class MPLineSegmentTypeOptionsOverlayWindowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> choices = MPTextToUser.getOrderedChoices(
+    final Map<String, String> choices = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getLineSegmentTypeChoices(),
     );
     final String title = mpLocator.appLocalizations.mpLineSegmentTypeTypesTitle;
