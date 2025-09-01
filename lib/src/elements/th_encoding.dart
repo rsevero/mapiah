@@ -1,21 +1,23 @@
 part of 'th_element.dart';
 
 class THEncoding extends THElement {
-  late final String encoding;
+  final String encoding;
 
   THEncoding.forCWJM({
     required super.mpID,
     required super.parentMPID,
     super.sameLineComment,
-    required this.encoding,
+    required String encoding,
     required super.originalLineInTH2File,
-  }) : super.forCWJM();
+  }) : encoding = encoding.trim().toUpperCase(),
+       super.forCWJM();
 
   THEncoding({
     required super.parentMPID,
-    required this.encoding,
+    required String encoding,
     super.originalLineInTH2File = '',
-  }) : super.addToParent();
+  }) : encoding = encoding.trim().toUpperCase(),
+       super.addToParent();
 
   @override
   THElementType get elementType => THElementType.encoding;
