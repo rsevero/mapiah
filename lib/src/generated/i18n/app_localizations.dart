@@ -746,6 +746,12 @@ abstract class AppLocalizations {
   /// **'Invalid numeric value'**
   String get mpDoubleValueInvalidValueErrorMessage;
 
+  /// The label for the encoding type
+  ///
+  /// In en, this message translates to:
+  /// **'Encoding'**
+  String get mpEncodingLabel;
+
   /// The label for the explored length type
   ///
   /// In en, this message translates to:
@@ -2085,6 +2091,324 @@ abstract class AppLocalizations {
   /// **'Water'**
   String get thAreaWater;
 
+  /// The label for the adjust command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust'**
+  String get thCommandOptionAdjust;
+
+  /// The label for the align command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Align'**
+  String get thCommandOptionAlign;
+
+  /// The label for the altitude command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get thCommandOptionAltitude;
+
+  /// The label for the altitude command option fix choice
+  ///
+  /// In en, this message translates to:
+  /// **'Fix'**
+  String get thCommandOptionAltitudeFix;
+
+  /// The label for the altitude value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get thCommandOptionAltitudeValue;
+
+  /// The label for the anchors command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Anchors'**
+  String get thCommandOptionAnchors;
+
+  /// The label for the custom attribute command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Attribute (custom)'**
+  String get thCommandOptionAttr;
+
+  /// The label for the author command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get thCommandOptionAuthor;
+
+  /// The label for the border command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Border'**
+  String get thCommandOptionBorder;
+
+  /// The label for the clip command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Clip'**
+  String get thCommandOptionClip;
+
+  /// The label for the close command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get thCommandOptionClose;
+
+  /// The label for the context command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Context'**
+  String get thCommandOptionContext;
+
+  /// The label for the copyright command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright'**
+  String get thCommandOptionCopyright;
+
+  /// The label for the Coordinate System command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinate System'**
+  String get thCommandOptionCS;
+
+  /// The label for the date value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get thCommandOptionDateValue;
+
+  /// The label for the dimensions value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Dimensions'**
+  String get thCommandOptionDimensionsValue;
+
+  /// The label for the dist command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get thCommandOptionDist;
+
+  /// The label for the explored command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Explored'**
+  String get thCommandOptionExplored;
+
+  /// The label for the extend command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Extend'**
+  String get thCommandOptionExtend;
+
+  /// The label for the flip command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Flip'**
+  String get thCommandOptionFlip;
+
+  /// The label for the from command option type
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get thCommandOptionFrom;
+
+  /// The label for the head command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Head'**
+  String get thCommandOptionHead;
+
+  /// The label for the ID command option type
+  ///
+  /// In en, this message translates to:
+  /// **'ID'**
+  String get thCommandOptionId;
+
+  /// The label for the length unit command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get thCommandOptionLengthUnit;
+
+  /// The label for the line direction command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Direction'**
+  String get thCommandOptionLineDirection;
+
+  /// The label for the line gradient command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thCommandOptionLineGradient;
+
+  /// The label for the line height command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get thCommandOptionLineHeight;
+
+  /// The label for the line point direction command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Direction'**
+  String get thCommandOptionLinePointDirection;
+
+  /// The label for the line point gradient command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thCommandOptionLinePointGradient;
+
+  /// The label for the L size command option type
+  ///
+  /// In en, this message translates to:
+  /// **'L-Size'**
+  String get thCommandOptionLSize;
+
+  /// The label for the mark command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Mark'**
+  String get thCommandOptionMark;
+
+  /// The label for the station name command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get thCommandOptionName;
+
+  /// The label for the outline command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Outline'**
+  String get thCommandOptionOutline;
+
+  /// The label for the orientation command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Orientation'**
+  String get thCommandOptionOrientation;
+
+  /// The label for the passage height value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Passage Height'**
+  String get thCommandOptionPassageHeightValue;
+
+  /// The label for the place command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get thCommandOptionPlace;
+
+  /// The label for the point height value command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get thCommandOptionPointHeightValue;
+
+  /// The label for the point/line/line segment scale command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get thCommandOptionPLScale;
+
+  /// The label for the projection command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Projection'**
+  String get thCommandOptionProjection;
+
+  /// The label for the rebelays command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Rebelays'**
+  String get thCommandOptionRebelays;
+
+  /// The label for the reverse command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse'**
+  String get thCommandOptionReverse;
+
+  /// The label for the scrap command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap'**
+  String get thCommandOptionScrap;
+
+  /// The label for the scrap scale command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get thCommandOptionScrapScale;
+
+  /// The label for the sketch command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Sketch'**
+  String get thCommandOptionSketch;
+
+  /// The label for the smooth command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Smooth'**
+  String get thCommandOptionSmooth;
+
+  /// The label for the station names command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Station Names'**
+  String get thCommandOptionStationNames;
+
+  /// The label for the stations command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Stations'**
+  String get thCommandOptionStations;
+
+  /// The label for the subtype command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Subtype'**
+  String get thCommandOptionSubtype;
+
+  /// The label for the text command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get thCommandOptionText;
+
+  /// The label for the title command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get thCommandOptionTitle;
+
+  /// The label for the unrecognized command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Unrecognized Command Option'**
+  String get thCommandOptionUnrecognized;
+
+  /// The label for the visibility command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility'**
+  String get thCommandOptionVisibility;
+
+  /// The label for the walls command option type
+  ///
+  /// In en, this message translates to:
+  /// **'Walls'**
+  String get thCommandOptionWalls;
+
   /// The label for the area element type
   ///
   /// In en, this message translates to:
@@ -2198,6 +2522,372 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'XTherion config'**
   String get thElementXTherionConfig;
+
+  /// The label for the abyss entrance line type
+  ///
+  /// In en, this message translates to:
+  /// **'Abyss Entrance'**
+  String get thLineAbyssEntrance;
+
+  /// The label for the arrow line type
+  ///
+  /// In en, this message translates to:
+  /// **'Arrow'**
+  String get thLineArrow;
+
+  /// The label for the border line type
+  ///
+  /// In en, this message translates to:
+  /// **'Border'**
+  String get thLineBorder;
+
+  /// The label for the ceiling meander line type
+  ///
+  /// In en, this message translates to:
+  /// **'Ceiling Meander'**
+  String get thLineCeilingMeander;
+
+  /// The label for the ceiling step line type
+  ///
+  /// In en, this message translates to:
+  /// **'Ceiling Step'**
+  String get thLineCeilingStep;
+
+  /// The label for the chimney line type
+  ///
+  /// In en, this message translates to:
+  /// **'Chimney'**
+  String get thLineChimney;
+
+  /// The label for the contour line type
+  ///
+  /// In en, this message translates to:
+  /// **'Contour'**
+  String get thLineContour;
+
+  /// The label for the dripline line type
+  ///
+  /// In en, this message translates to:
+  /// **'Dripline'**
+  String get thLineDripline;
+
+  /// The label for the fault line type
+  ///
+  /// In en, this message translates to:
+  /// **'Fault'**
+  String get thLineFault;
+
+  /// The label for the fixed ladder line type
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed Ladder'**
+  String get thLineFixedLadder;
+
+  /// The label for the floor meander line type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor Meander'**
+  String get thLineFloorMeander;
+
+  /// The label for the floor step line type
+  ///
+  /// In en, this message translates to:
+  /// **'Floor Step'**
+  String get thLineFloorStep;
+
+  /// The label for the flowstone line type
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone'**
+  String get thLineFlowstone;
+
+  /// The label for the gradient line type
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get thLineGradient;
+
+  /// The label for the handrail line type
+  ///
+  /// In en, this message translates to:
+  /// **'Handrail'**
+  String get thLineHandrail;
+
+  /// The label for the joint line type
+  ///
+  /// In en, this message translates to:
+  /// **'Joint'**
+  String get thLineJoint;
+
+  /// The label for the label line type
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get thLineLabel;
+
+  /// The label for the low ceiling line type
+  ///
+  /// In en, this message translates to:
+  /// **'Low Ceiling'**
+  String get thLineLowCeiling;
+
+  /// The label for the map connection line type
+  ///
+  /// In en, this message translates to:
+  /// **'Map Connection'**
+  String get thLineMapConnection;
+
+  /// The label for the moonmilk line type
+  ///
+  /// In en, this message translates to:
+  /// **'Moonmilk'**
+  String get thLineMoonmilk;
+
+  /// The label for the overhang line type
+  ///
+  /// In en, this message translates to:
+  /// **'Overhang'**
+  String get thLineOverhang;
+
+  /// The label for the pit line type
+  ///
+  /// In en, this message translates to:
+  /// **'Pit'**
+  String get thLinePit;
+
+  /// The label for the pitch line type
+  ///
+  /// In en, this message translates to:
+  /// **'Pitch'**
+  String get thLinePitch;
+
+  /// The label for the pit chimney line type
+  ///
+  /// In en, this message translates to:
+  /// **'Pit Chimney'**
+  String get thLinePitChimney;
+
+  /// The label for the rimstone dam line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rimstone Dam'**
+  String get thLineRimstoneDam;
+
+  /// The label for the rimstone pool line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rimstone Pool'**
+  String get thLineRimstonePool;
+
+  /// The label for the rock border line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rock Border'**
+  String get thLineRockBorder;
+
+  /// The label for the rock edge line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rock Edge'**
+  String get thLineRockEdge;
+
+  /// The label for the rope line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rope'**
+  String get thLineRope;
+
+  /// The label for the rope ladder line type
+  ///
+  /// In en, this message translates to:
+  /// **'Rope Ladder'**
+  String get thLineRopeLadder;
+
+  /// The label for the section line type
+  ///
+  /// In en, this message translates to:
+  /// **'Section'**
+  String get thLineSection;
+
+  /// The label for the slope line type
+  ///
+  /// In en, this message translates to:
+  /// **'Slope'**
+  String get thLineSlope;
+
+  /// The label for the steps line type
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get thLineSteps;
+
+  /// The label for the survey line type
+  ///
+  /// In en, this message translates to:
+  /// **'Survey'**
+  String get thLineSurvey;
+
+  /// The label for the U line type
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get thLineU;
+
+  /// The label for the via ferrata line type
+  ///
+  /// In en, this message translates to:
+  /// **'Via Ferrata'**
+  String get thLineViaFerrata;
+
+  /// The label for the walkway line type
+  ///
+  /// In en, this message translates to:
+  /// **'Walkway'**
+  String get thLineWalkWay;
+
+  /// The label for the wall line type
+  ///
+  /// In en, this message translates to:
+  /// **'Wall'**
+  String get thLineWall;
+
+  /// The label for the water flow line type
+  ///
+  /// In en, this message translates to:
+  /// **'Water Flow'**
+  String get thLineWaterFlow;
+
+  /// The label for the horizontal adjust multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Horizontal'**
+  String get thMultipleChoiceAdjustHorizontal;
+
+  /// The label for the vertical adjust multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Vertical'**
+  String get thMultipleChoiceAdjustVertical;
+
+  /// The label for the bottom align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom'**
+  String get thMultipleChoiceAlignBottom;
+
+  /// The label for the bottom left align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom Left'**
+  String get thMultipleChoiceAlignBottomLeft;
+
+  /// The label for the bottom right align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom Right'**
+  String get thMultipleChoiceAlignBottomRight;
+
+  /// The label for the center align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Center'**
+  String get thMultipleChoiceAlignCenter;
+
+  /// The label for the left align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get thMultipleChoiceAlignLeft;
+
+  /// The label for the right align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get thMultipleChoiceAlignRight;
+
+  /// The label for the top align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Top'**
+  String get thMultipleChoiceAlignTop;
+
+  /// The label for the top left align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Top Left'**
+  String get thMultipleChoiceAlignTopLeft;
+
+  /// The label for the top right align multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Top Right'**
+  String get thMultipleChoiceAlignTopRight;
+
+  /// The label for the off on/off multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get thMultipleChoiceOnOffOff;
+
+  /// The label for the on on/off multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get thMultipleChoiceOnOffOn;
+
+  /// The label for the auto auto/on/off multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get thMultipleChoiceOnOffAutoAuto;
+
+  /// The label for the none flip multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get thMultipleChoiceFlipNone;
+
+  /// The label for the begin arrow position multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Begin'**
+  String get thMultipleChoiceArrowPositionBegin;
+
+  /// The label for the both arrow position multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Both'**
+  String get thMultipleChoiceArrowPositionBoth;
+
+  /// The label for the end arrow position multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get thMultipleChoiceArrowPositionEnd;
+
+  /// The label for the point line point gradient multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Point'**
+  String get thMultipleChoiceLinePointGradientPoint;
+
+  /// The label for the in outline multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'In'**
+  String get thMultipleChoiceOutlineIn;
+
+  /// The label for the out outline multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Out'**
+  String get thMultipleChoiceOutlineOut;
+
+  /// The label for the default place multiple choice type
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get thMultipleChoicePlaceDefault;
 
   /// The label for the air draught point type
   ///
@@ -2895,689 +3585,11 @@ abstract class AppLocalizations {
   /// **'Wheelchair'**
   String get thPointWheelchair;
 
-  /// The label for the abyss entrance line type
-  ///
-  /// In en, this message translates to:
-  /// **'Abyss Entrance'**
-  String get thLineAbyssEntrance;
-
-  /// The label for the arrow line type
-  ///
-  /// In en, this message translates to:
-  /// **'Arrow'**
-  String get thLineArrow;
-
-  /// The label for the border line type
-  ///
-  /// In en, this message translates to:
-  /// **'Border'**
-  String get thLineBorder;
-
-  /// The label for the ceiling meander line type
-  ///
-  /// In en, this message translates to:
-  /// **'Ceiling Meander'**
-  String get thLineCeilingMeander;
-
-  /// The label for the ceiling step line type
-  ///
-  /// In en, this message translates to:
-  /// **'Ceiling Step'**
-  String get thLineCeilingStep;
-
-  /// The label for the chimney line type
-  ///
-  /// In en, this message translates to:
-  /// **'Chimney'**
-  String get thLineChimney;
-
-  /// The label for the contour line type
-  ///
-  /// In en, this message translates to:
-  /// **'Contour'**
-  String get thLineContour;
-
-  /// The label for the dripline line type
-  ///
-  /// In en, this message translates to:
-  /// **'Dripline'**
-  String get thLineDripline;
-
-  /// The label for the fault line type
-  ///
-  /// In en, this message translates to:
-  /// **'Fault'**
-  String get thLineFault;
-
-  /// The label for the fixed ladder line type
-  ///
-  /// In en, this message translates to:
-  /// **'Fixed Ladder'**
-  String get thLineFixedLadder;
-
-  /// The label for the floor meander line type
-  ///
-  /// In en, this message translates to:
-  /// **'Floor Meander'**
-  String get thLineFloorMeander;
-
-  /// The label for the floor step line type
-  ///
-  /// In en, this message translates to:
-  /// **'Floor Step'**
-  String get thLineFloorStep;
-
-  /// The label for the flowstone line type
-  ///
-  /// In en, this message translates to:
-  /// **'Flowstone'**
-  String get thLineFlowstone;
-
-  /// The label for the gradient line type
-  ///
-  /// In en, this message translates to:
-  /// **'Gradient'**
-  String get thLineGradient;
-
-  /// The label for the handrail line type
-  ///
-  /// In en, this message translates to:
-  /// **'Handrail'**
-  String get thLineHandrail;
-
-  /// The label for the joint line type
-  ///
-  /// In en, this message translates to:
-  /// **'Joint'**
-  String get thLineJoint;
-
-  /// The label for the label line type
-  ///
-  /// In en, this message translates to:
-  /// **'Label'**
-  String get thLineLabel;
-
-  /// The label for the low ceiling line type
-  ///
-  /// In en, this message translates to:
-  /// **'Low Ceiling'**
-  String get thLineLowCeiling;
-
-  /// The label for the map connection line type
-  ///
-  /// In en, this message translates to:
-  /// **'Map Connection'**
-  String get thLineMapConnection;
-
-  /// The label for the moonmilk line type
-  ///
-  /// In en, this message translates to:
-  /// **'Moonmilk'**
-  String get thLineMoonmilk;
-
-  /// The label for the overhang line type
-  ///
-  /// In en, this message translates to:
-  /// **'Overhang'**
-  String get thLineOverhang;
-
-  /// The label for the pit line type
-  ///
-  /// In en, this message translates to:
-  /// **'Pit'**
-  String get thLinePit;
-
-  /// The label for the pitch line type
-  ///
-  /// In en, this message translates to:
-  /// **'Pitch'**
-  String get thLinePitch;
-
-  /// The label for the pit chimney line type
-  ///
-  /// In en, this message translates to:
-  /// **'Pit Chimney'**
-  String get thLinePitChimney;
-
-  /// The label for the rimstone dam line type
-  ///
-  /// In en, this message translates to:
-  /// **'Rimstone Dam'**
-  String get thLineRimstoneDam;
-
-  /// The label for the rimstone pool line type
-  ///
-  /// In en, this message translates to:
-  /// **'Rimstone Pool'**
-  String get thLineRimstonePool;
-
-  /// The label for the rock border line type
-  ///
-  /// In en, this message translates to:
-  /// **'Rock Border'**
-  String get thLineRockBorder;
-
-  /// The label for the rock edge line type
-  ///
-  /// In en, this message translates to:
-  /// **'Rock Edge'**
-  String get thLineRockEdge;
-
-  /// The label for the rope line type
-  ///
-  /// In en, this message translates to:
-  /// **'Rope'**
-  String get thLineRope;
-
-  /// The label for the rope ladder line type
-  ///
-  /// In en, this message translates to:
-  /// **'Rope Ladder'**
-  String get thLineRopeLadder;
-
-  /// The label for the section line type
-  ///
-  /// In en, this message translates to:
-  /// **'Section'**
-  String get thLineSection;
-
-  /// The label for the slope line type
-  ///
-  /// In en, this message translates to:
-  /// **'Slope'**
-  String get thLineSlope;
-
-  /// The label for the steps line type
-  ///
-  /// In en, this message translates to:
-  /// **'Steps'**
-  String get thLineSteps;
-
-  /// The label for the survey line type
-  ///
-  /// In en, this message translates to:
-  /// **'Survey'**
-  String get thLineSurvey;
-
-  /// The label for the U line type
-  ///
-  /// In en, this message translates to:
-  /// **'User'**
-  String get thLineU;
-
-  /// The label for the via ferrata line type
-  ///
-  /// In en, this message translates to:
-  /// **'Via Ferrata'**
-  String get thLineViaFerrata;
-
-  /// The label for the walkway line type
-  ///
-  /// In en, this message translates to:
-  /// **'Walkway'**
-  String get thLineWalkWay;
-
-  /// The label for the wall line type
-  ///
-  /// In en, this message translates to:
-  /// **'Wall'**
-  String get thLineWall;
-
-  /// The label for the water flow line type
-  ///
-  /// In en, this message translates to:
-  /// **'Water Flow'**
-  String get thLineWaterFlow;
-
-  /// The label for the adjust command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust'**
-  String get thCommandOptionAdjust;
-
-  /// The label for the align command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Align'**
-  String get thCommandOptionAlign;
-
-  /// The label for the altitude command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Altitude'**
-  String get thCommandOptionAltitude;
-
-  /// The label for the altitude command option fix choice
-  ///
-  /// In en, this message translates to:
-  /// **'Fix'**
-  String get thCommandOptionAltitudeFix;
-
-  /// The label for the altitude value command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Altitude'**
-  String get thCommandOptionAltitudeValue;
-
-  /// The label for the anchors command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Anchors'**
-  String get thCommandOptionAnchors;
-
-  /// The label for the custom attribute command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Attribute (custom)'**
-  String get thCommandOptionAttr;
-
-  /// The label for the author command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Author'**
-  String get thCommandOptionAuthor;
-
-  /// The label for the border command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Border'**
-  String get thCommandOptionBorder;
-
-  /// The label for the clip command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Clip'**
-  String get thCommandOptionClip;
-
-  /// The label for the close command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Close'**
-  String get thCommandOptionClose;
-
-  /// The label for the context command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Context'**
-  String get thCommandOptionContext;
-
-  /// The label for the copyright command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Copyright'**
-  String get thCommandOptionCopyright;
-
-  /// The label for the Coordinate System command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Coordinate System'**
-  String get thCommandOptionCS;
-
-  /// The label for the date value command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Date'**
-  String get thCommandOptionDateValue;
-
-  /// The label for the dimensions value command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Dimensions'**
-  String get thCommandOptionDimensionsValue;
-
-  /// The label for the dist command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Distance'**
-  String get thCommandOptionDist;
-
-  /// The label for the explored command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Explored'**
-  String get thCommandOptionExplored;
-
-  /// The label for the extend command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Extend'**
-  String get thCommandOptionExtend;
-
-  /// The label for the flip command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Flip'**
-  String get thCommandOptionFlip;
-
-  /// The label for the from command option type
-  ///
-  /// In en, this message translates to:
-  /// **'From'**
-  String get thCommandOptionFrom;
-
-  /// The label for the head command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Head'**
-  String get thCommandOptionHead;
-
-  /// The label for the ID command option type
-  ///
-  /// In en, this message translates to:
-  /// **'ID'**
-  String get thCommandOptionId;
-
-  /// The label for the length unit command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Unit'**
-  String get thCommandOptionLengthUnit;
-
-  /// The label for the line direction command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Direction'**
-  String get thCommandOptionLineDirection;
-
-  /// The label for the line gradient command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Gradient'**
-  String get thCommandOptionLineGradient;
-
-  /// The label for the line height command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Height'**
-  String get thCommandOptionLineHeight;
-
-  /// The label for the line point direction command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Direction'**
-  String get thCommandOptionLinePointDirection;
-
-  /// The label for the line point gradient command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Gradient'**
-  String get thCommandOptionLinePointGradient;
-
-  /// The label for the L size command option type
-  ///
-  /// In en, this message translates to:
-  /// **'L-Size'**
-  String get thCommandOptionLSize;
-
-  /// The label for the mark command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Mark'**
-  String get thCommandOptionMark;
-
-  /// The label for the station name command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Station'**
-  String get thCommandOptionName;
-
-  /// The label for the outline command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Outline'**
-  String get thCommandOptionOutline;
-
-  /// The label for the orientation command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Orientation'**
-  String get thCommandOptionOrientation;
-
-  /// The label for the passage height value command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Passage Height'**
-  String get thCommandOptionPassageHeightValue;
-
-  /// The label for the place command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Place'**
-  String get thCommandOptionPlace;
-
-  /// The label for the point height value command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Height'**
-  String get thCommandOptionPointHeightValue;
-
-  /// The label for the point/line/line segment scale command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Scale'**
-  String get thCommandOptionPLScale;
-
-  /// The label for the projection command option type
+  /// The label for the projection line type
   ///
   /// In en, this message translates to:
   /// **'Projection'**
-  String get thCommandOptionProjection;
-
-  /// The label for the rebelays command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Rebelays'**
-  String get thCommandOptionRebelays;
-
-  /// The label for the reverse command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Reverse'**
-  String get thCommandOptionReverse;
-
-  /// The label for the scrap command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Scrap'**
-  String get thCommandOptionScrap;
-
-  /// The label for the scrap scale command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Scale'**
-  String get thCommandOptionScrapScale;
-
-  /// The label for the sketch command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Sketch'**
-  String get thCommandOptionSketch;
-
-  /// The label for the smooth command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Smooth'**
-  String get thCommandOptionSmooth;
-
-  /// The label for the station names command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Station Names'**
-  String get thCommandOptionStationNames;
-
-  /// The label for the stations command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Stations'**
-  String get thCommandOptionStations;
-
-  /// The label for the subtype command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Subtype'**
-  String get thCommandOptionSubtype;
-
-  /// The label for the text command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Text'**
-  String get thCommandOptionText;
-
-  /// The label for the title command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Title'**
-  String get thCommandOptionTitle;
-
-  /// The label for the unrecognized command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Unrecognized Command Option'**
-  String get thCommandOptionUnrecognized;
-
-  /// The label for the visibility command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Visibility'**
-  String get thCommandOptionVisibility;
-
-  /// The label for the walls command option type
-  ///
-  /// In en, this message translates to:
-  /// **'Walls'**
-  String get thCommandOptionWalls;
-
-  /// The label for the horizontal adjust multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Horizontal'**
-  String get thMultipleChoiceAdjustHorizontal;
-
-  /// The label for the vertical adjust multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Vertical'**
-  String get thMultipleChoiceAdjustVertical;
-
-  /// The label for the bottom align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Bottom'**
-  String get thMultipleChoiceAlignBottom;
-
-  /// The label for the bottom left align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Bottom Left'**
-  String get thMultipleChoiceAlignBottomLeft;
-
-  /// The label for the bottom right align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Bottom Right'**
-  String get thMultipleChoiceAlignBottomRight;
-
-  /// The label for the center align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Center'**
-  String get thMultipleChoiceAlignCenter;
-
-  /// The label for the left align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Left'**
-  String get thMultipleChoiceAlignLeft;
-
-  /// The label for the right align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Right'**
-  String get thMultipleChoiceAlignRight;
-
-  /// The label for the top align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Top'**
-  String get thMultipleChoiceAlignTop;
-
-  /// The label for the top left align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Top Left'**
-  String get thMultipleChoiceAlignTopLeft;
-
-  /// The label for the top right align multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Top Right'**
-  String get thMultipleChoiceAlignTopRight;
-
-  /// The label for the off on/off multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Off'**
-  String get thMultipleChoiceOnOffOff;
-
-  /// The label for the on on/off multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'On'**
-  String get thMultipleChoiceOnOffOn;
-
-  /// The label for the auto auto/on/off multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get thMultipleChoiceOnOffAutoAuto;
-
-  /// The label for the none flip multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'None'**
-  String get thMultipleChoiceFlipNone;
-
-  /// The label for the begin arrow position multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Begin'**
-  String get thMultipleChoiceArrowPositionBegin;
-
-  /// The label for the both arrow position multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Both'**
-  String get thMultipleChoiceArrowPositionBoth;
-
-  /// The label for the end arrow position multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'End'**
-  String get thMultipleChoiceArrowPositionEnd;
-
-  /// The label for the point line point gradient multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Point'**
-  String get thMultipleChoiceLinePointGradientPoint;
-
-  /// The label for the in outline multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'In'**
-  String get thMultipleChoiceOutlineIn;
-
-  /// The label for the out outline multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Out'**
-  String get thMultipleChoiceOutlineOut;
-
-  /// The label for the default place multiple choice type
-  ///
-  /// In en, this message translates to:
-  /// **'Default'**
-  String get thMultipleChoicePlaceDefault;
+  String get thProjection;
 }
 
 class _AppLocalizationsDelegate

@@ -549,6 +549,11 @@
     "description": "The error message for invalid double value",
     "type": "text"
   },
+  "mpEncodingLabel": "Encoding",
+  "@mpEncodingLabel": {
+    "description": "The label for the encoding type",
+    "type": "text"
+  },
   "mpExploredLengthLabel": "Length",
   "@mpExploredLengthLabel": {
     "description": "The label for the explored length type",
@@ -1687,6 +1692,271 @@
     "description": "The label for the water area type",
     "type": "text"
   },
+  "thCommandOptionAdjust": "Adjust",
+  "@thCommandOptionAdjust": {
+    "description": "The label for the adjust command option type",
+    "type": "text"
+  },
+  "thCommandOptionAlign": "Align",
+  "@thCommandOptionAlign": {
+    "description": "The label for the align command option type",
+    "type": "text"
+  },
+  "thCommandOptionAltitude": "Altitude",
+  "@thCommandOptionAltitude": {
+    "description": "The label for the altitude command option type",
+    "type": "text"
+  },
+  "thCommandOptionAltitudeFix": "Fix",
+  "@thCommandOptionAltitudeFix": {
+    "description": "The label for the altitude command option fix choice",
+    "type": "text"
+  },
+  "thCommandOptionAltitudeValue": "Altitude",
+  "@thCommandOptionAltitudeValue": {
+    "description": "The label for the altitude value command option type",
+    "type": "text"
+  },
+  "thCommandOptionAnchors": "Anchors",
+  "@thCommandOptionAnchors": {
+    "description": "The label for the anchors command option type",
+    "type": "text"
+  },
+  "thCommandOptionAttr": "Attribute (custom)",
+  "@thCommandOptionAttr": {
+    "description": "The label for the custom attribute command option type",
+    "type": "text"
+  },
+  "thCommandOptionAuthor": "Author",
+  "@thCommandOptionAuthor": {
+    "description": "The label for the author command option type",
+    "type": "text"
+  },
+  "thCommandOptionBorder": "Border",
+  "@thCommandOptionBorder": {
+    "description": "The label for the border command option type",
+    "type": "text"
+  },
+  "thCommandOptionClip": "Clip",
+  "@thCommandOptionClip": {
+    "description": "The label for the clip command option type",
+    "type": "text"
+  },
+  "thCommandOptionClose": "Close",
+  "@thCommandOptionClose": {
+    "description": "The label for the close command option type",
+    "type": "text"
+  },
+  "thCommandOptionContext": "Context",
+  "@thCommandOptionContext": {
+    "description": "The label for the context command option type",
+    "type": "text"
+  },
+  "thCommandOptionCopyright": "Copyright",
+  "@thCommandOptionCopyright": {
+    "description": "The label for the copyright command option type",
+    "type": "text"
+  },
+  "thCommandOptionCS": "Coordinate System",
+  "@thCommandOptionCS": {
+    "description": "The label for the Coordinate System command option type",
+    "type": "text"
+  },
+  "thCommandOptionDateValue": "Date",
+  "@thCommandOptionDateValue": {
+    "description": "The label for the date value command option type",
+    "type": "text"
+  },
+  "thCommandOptionDimensionsValue": "Dimensions",
+  "@thCommandOptionDimensionsValue": {
+    "description": "The label for the dimensions value command option type",
+    "type": "text"
+  },
+  "thCommandOptionDist": "Distance",
+  "@thCommandOptionDist": {
+    "description": "The label for the dist command option type",
+    "type": "text"
+  },
+  "thCommandOptionExplored": "Explored",
+  "@thCommandOptionExplored": {
+    "description": "The label for the explored command option type",
+    "type": "text"
+  },
+  "thCommandOptionExtend": "Extend",
+  "@thCommandOptionExtend": {
+    "description": "The label for the extend command option type",
+    "type": "text"
+  },
+  "thCommandOptionFlip": "Flip",
+  "@thCommandOptionFlip": {
+    "description": "The label for the flip command option type",
+    "type": "text"
+  },
+  "thCommandOptionFrom": "From",
+  "@thCommandOptionFrom": {
+    "description": "The label for the from command option type",
+    "type": "text"
+  },
+  "thCommandOptionHead": "Head",
+  "@thCommandOptionHead": {
+    "description": "The label for the head command option type",
+    "type": "text"
+  },
+  "thCommandOptionId": "ID",
+  "@thCommandOptionId": {
+    "description": "The label for the ID command option type",
+    "type": "text"
+  },
+  "thCommandOptionLengthUnit": "Unit",
+  "@thCommandOptionLengthUnit": {
+    "description": "The label for the length unit command option type",
+    "type": "text"
+  },
+  "thCommandOptionLineDirection": "Direction",
+  "@thCommandOptionLineDirection": {
+    "description": "The label for the line direction command option type",
+    "type": "text"
+  },
+  "thCommandOptionLineGradient": "Gradient",
+  "@thCommandOptionLineGradient": {
+    "description": "The label for the line gradient command option type",
+    "type": "text"
+  },
+  "thCommandOptionLineHeight": "Height",
+  "@thCommandOptionLineHeight": {
+    "description": "The label for the line height command option type",
+    "type": "text"
+  },
+  "thCommandOptionLinePointDirection": "Direction",
+  "@thCommandOptionLinePointDirection": {
+    "description": "The label for the line point direction command option type",
+    "type": "text"
+  },
+  "thCommandOptionLinePointGradient": "Gradient",
+  "@thCommandOptionLinePointGradient": {
+    "description": "The label for the line point gradient command option type",
+    "type": "text"
+  },
+  "thCommandOptionLSize": "L-Size",
+  "@thCommandOptionLSize": {
+    "description": "The label for the L size command option type",
+    "type": "text"
+  },
+  "thCommandOptionMark": "Mark",
+  "@thCommandOptionMark": {
+    "description": "The label for the mark command option type",
+    "type": "text"
+  },
+  "thCommandOptionName": "Station",
+  "@thCommandOptionName": {
+    "description": "The label for the station name command option type",
+    "type": "text"
+  },
+  "thCommandOptionOutline": "Outline",
+  "@thCommandOptionOutline": {
+    "description": "The label for the outline command option type",
+    "type": "text"
+  },
+  "thCommandOptionOrientation": "Orientation",
+  "@thCommandOptionOrientation": {
+    "description": "The label for the orientation command option type",
+    "type": "text"
+  },
+  "thCommandOptionPassageHeightValue": "Passage Height",
+  "@thCommandOptionPassageHeightValue": {
+    "description": "The label for the passage height value command option type",
+    "type": "text"
+  },
+  "thCommandOptionPlace": "Place",
+  "@thCommandOptionPlace": {
+    "description": "The label for the place command option type",
+    "type": "text"
+  },
+  "thCommandOptionPointHeightValue": "Height",
+  "@thCommandOptionPointHeightValue": {
+    "description": "The label for the point height value command option type",
+    "type": "text"
+  },
+  "thCommandOptionPLScale": "Scale",
+  "@thCommandOptionPLScale": {
+    "description": "The label for the point/line/line segment scale command option type",
+    "type": "text"
+  },
+  "thCommandOptionProjection": "Projection",
+  "@thCommandOptionProjection": {
+    "description": "The label for the projection command option type",
+    "type": "text"
+  },
+  "thCommandOptionRebelays": "Rebelays",
+  "@thCommandOptionRebelays": {
+    "description": "The label for the rebelays command option type",
+    "type": "text"
+  },
+  "thCommandOptionReverse": "Reverse",
+  "@thCommandOptionReverse": {
+    "description": "The label for the reverse command option type",
+    "type": "text"
+  },
+  "thCommandOptionScrap": "Scrap",
+  "@thCommandOptionScrap": {
+    "description": "The label for the scrap command option type",
+    "type": "text"
+  },
+  "thCommandOptionScrapScale": "Scale",
+  "@thCommandOptionScrapScale": {
+    "description": "The label for the scrap scale command option type",
+    "type": "text"
+  },
+  "thCommandOptionSketch": "Sketch",
+  "@thCommandOptionSketch": {
+    "description": "The label for the sketch command option type",
+    "type": "text"
+  },
+  "thCommandOptionSmooth": "Smooth",
+  "@thCommandOptionSmooth": {
+    "description": "The label for the smooth command option type",
+    "type": "text"
+  },
+  "thCommandOptionStationNames": "Station Names",
+  "@thCommandOptionStationNames": {
+    "description": "The label for the station names command option type",
+    "type": "text"
+  },
+  "thCommandOptionStations": "Stations",
+  "@thCommandOptionStations": {
+    "description": "The label for the stations command option type",
+    "type": "text"
+  },
+  "thCommandOptionSubtype": "Subtype",
+  "@thCommandOptionSubtype": {
+    "description": "The label for the subtype command option type",
+    "type": "text"
+  },
+  "thCommandOptionText": "Text",
+  "@thCommandOptionText": {
+    "description": "The label for the text command option type",
+    "type": "text"
+  },
+  "thCommandOptionTitle": "Title",
+  "@thCommandOptionTitle": {
+    "description": "The label for the title command option type",
+    "type": "text"
+  },
+  "thCommandOptionUnrecognized": "Unrecognized Command Option",
+  "@thCommandOptionUnrecognized": {
+    "description": "The label for the unrecognized command option type",
+    "type": "text"
+  },
+  "thCommandOptionVisibility": "Visibility",
+  "@thCommandOptionVisibility": {
+    "description": "The label for the visibility command option type",
+    "type": "text"
+  },
+  "thCommandOptionWalls": "Walls",
+  "@thCommandOptionWalls": {
+    "description": "The label for the walls command option type",
+    "type": "text"
+  },
   "thElementArea": "Area",
   "@thElementArea": {
     "description": "The label for the area element type",
@@ -1780,6 +2050,311 @@
   "thElementXTherionConfig": "XTherion config",
   "@thElementXTherionConfig": {
     "description": "The label for the XTherion config element type",
+    "type": "text"
+  },
+  "thLineAbyssEntrance": "Abyss Entrance",
+  "@thLineAbyssEntrance": {
+    "description": "The label for the abyss entrance line type",
+    "type": "text"
+  },
+  "thLineArrow": "Arrow",
+  "@thLineArrow": {
+    "description": "The label for the arrow line type",
+    "type": "text"
+  },
+  "thLineBorder": "Border",
+  "@thLineBorder": {
+    "description": "The label for the border line type",
+    "type": "text"
+  },
+  "thLineCeilingMeander": "Ceiling Meander",
+  "@thLineCeilingMeander": {
+    "description": "The label for the ceiling meander line type",
+    "type": "text"
+  },
+  "thLineCeilingStep": "Ceiling Step",
+  "@thLineCeilingStep": {
+    "description": "The label for the ceiling step line type",
+    "type": "text"
+  },
+  "thLineChimney": "Chimney",
+  "@thLineChimney": {
+    "description": "The label for the chimney line type",
+    "type": "text"
+  },
+  "thLineContour": "Contour",
+  "@thLineContour": {
+    "description": "The label for the contour line type",
+    "type": "text"
+  },
+  "thLineDripline": "Dripline",
+  "@thLineDripline": {
+    "description": "The label for the dripline line type",
+    "type": "text"
+  },
+  "thLineFault": "Fault",
+  "@thLineFault": {
+    "description": "The label for the fault line type",
+    "type": "text"
+  },
+  "thLineFixedLadder": "Fixed Ladder",
+  "@thLineFixedLadder": {
+    "description": "The label for the fixed ladder line type",
+    "type": "text"
+  },
+  "thLineFloorMeander": "Floor Meander",
+  "@thLineFloorMeander": {
+    "description": "The label for the floor meander line type",
+    "type": "text"
+  },
+  "thLineFloorStep": "Floor Step",
+  "@thLineFloorStep": {
+    "description": "The label for the floor step line type",
+    "type": "text"
+  },
+  "thLineFlowstone": "Flowstone",
+  "@thLineFlowstone": {
+    "description": "The label for the flowstone line type",
+    "type": "text"
+  },
+  "thLineGradient": "Gradient",
+  "@thLineGradient": {
+    "description": "The label for the gradient line type",
+    "type": "text"
+  },
+  "thLineHandrail": "Handrail",
+  "@thLineHandrail": {
+    "description": "The label for the handrail line type",
+    "type": "text"
+  },
+  "thLineJoint": "Joint",
+  "@thLineJoint": {
+    "description": "The label for the joint line type",
+    "type": "text"
+  },
+  "thLineLabel": "Label",
+  "@thLineLabel": {
+    "description": "The label for the label line type",
+    "type": "text"
+  },
+  "thLineLowCeiling": "Low Ceiling",
+  "@thLineLowCeiling": {
+    "description": "The label for the low ceiling line type",
+    "type": "text"
+  },
+  "thLineMapConnection": "Map Connection",
+  "@thLineMapConnection": {
+    "description": "The label for the map connection line type",
+    "type": "text"
+  },
+  "thLineMoonmilk": "Moonmilk",
+  "@thLineMoonmilk": {
+    "description": "The label for the moonmilk line type",
+    "type": "text"
+  },
+  "thLineOverhang": "Overhang",
+  "@thLineOverhang": {
+    "description": "The label for the overhang line type",
+    "type": "text"
+  },
+  "thLinePit": "Pit",
+  "@thLinePit": {
+    "description": "The label for the pit line type",
+    "type": "text"
+  },
+  "thLinePitch": "Pitch",
+  "@thLinePitch": {
+    "description": "The label for the pitch line type",
+    "type": "text"
+  },
+  "thLinePitChimney": "Pit Chimney",
+  "@thLinePitChimney": {
+    "description": "The label for the pit chimney line type",
+    "type": "text"
+  },
+  "thLineRimstoneDam": "Rimstone Dam",
+  "@thLineRimstoneDam": {
+    "description": "The label for the rimstone dam line type",
+    "type": "text"
+  },
+  "thLineRimstonePool": "Rimstone Pool",
+  "@thLineRimstonePool": {
+    "description": "The label for the rimstone pool line type",
+    "type": "text"
+  },
+  "thLineRockBorder": "Rock Border",
+  "@thLineRockBorder": {
+    "description": "The label for the rock border line type",
+    "type": "text"
+  },
+  "thLineRockEdge": "Rock Edge",
+  "@thLineRockEdge": {
+    "description": "The label for the rock edge line type",
+    "type": "text"
+  },
+  "thLineRope": "Rope",
+  "@thLineRope": {
+    "description": "The label for the rope line type",
+    "type": "text"
+  },
+  "thLineRopeLadder": "Rope Ladder",
+  "@thLineRopeLadder": {
+    "description": "The label for the rope ladder line type",
+    "type": "text"
+  },
+  "thLineSection": "Section",
+  "@thLineSection": {
+    "description": "The label for the section line type",
+    "type": "text"
+  },
+  "thLineSlope": "Slope",
+  "@thLineSlope": {
+    "description": "The label for the slope line type",
+    "type": "text"
+  },
+  "thLineSteps": "Steps",
+  "@thLineSteps": {
+    "description": "The label for the steps line type",
+    "type": "text"
+  },
+  "thLineSurvey": "Survey",
+  "@thLineSurvey": {
+    "description": "The label for the survey line type",
+    "type": "text"
+  },
+  "thLineU": "User",
+  "@thLineU": {
+    "description": "The label for the U line type",
+    "type": "text"
+  },
+  "thLineViaFerrata": "Via Ferrata",
+  "@thLineViaFerrata": {
+    "description": "The label for the via ferrata line type",
+    "type": "text"
+  },
+  "thLineWalkWay": "Walkway",
+  "@thLineWalkWay": {
+    "description": "The label for the walkway line type",
+    "type": "text"
+  },
+  "thLineWall": "Wall",
+  "@thLineWall": {
+    "description": "The label for the wall line type",
+    "type": "text"
+  },
+  "thLineWaterFlow": "Water Flow",
+  "@thLineWaterFlow": {
+    "description": "The label for the water flow line type",
+    "type": "text"
+  },
+  "thMultipleChoiceAdjustHorizontal": "Horizontal",
+  "@thMultipleChoiceAdjustHorizontal": {
+    "description": "The label for the horizontal adjust multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAdjustVertical": "Vertical",
+  "@thMultipleChoiceAdjustVertical": {
+    "description": "The label for the vertical adjust multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignBottom": "Bottom",
+  "@thMultipleChoiceAlignBottom": {
+    "description": "The label for the bottom align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignBottomLeft": "Bottom Left",
+  "@thMultipleChoiceAlignBottomLeft": {
+    "description": "The label for the bottom left align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignBottomRight": "Bottom Right",
+  "@thMultipleChoiceAlignBottomRight": {
+    "description": "The label for the bottom right align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignCenter": "Center",
+  "@thMultipleChoiceAlignCenter": {
+    "description": "The label for the center align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignLeft": "Left",
+  "@thMultipleChoiceAlignLeft": {
+    "description": "The label for the left align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignRight": "Right",
+  "@thMultipleChoiceAlignRight": {
+    "description": "The label for the right align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignTop": "Top",
+  "@thMultipleChoiceAlignTop": {
+    "description": "The label for the top align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignTopLeft": "Top Left",
+  "@thMultipleChoiceAlignTopLeft": {
+    "description": "The label for the top left align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceAlignTopRight": "Top Right",
+  "@thMultipleChoiceAlignTopRight": {
+    "description": "The label for the top right align multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceOnOffOff": "Off",
+  "@thMultipleChoiceOnOffOff": {
+    "description": "The label for the off on/off multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceOnOffOn": "On",
+  "@thMultipleChoiceOnOffOn": {
+    "description": "The label for the on on/off multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceOnOffAutoAuto": "Auto",
+  "@thMultipleChoiceOnOffAutoAuto": {
+    "description": "The label for the auto auto/on/off multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceFlipNone": "None",
+  "@thMultipleChoiceFlipNone": {
+    "description": "The label for the none flip multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceArrowPositionBegin": "Begin",
+  "@thMultipleChoiceArrowPositionBegin": {
+    "description": "The label for the begin arrow position multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceArrowPositionBoth": "Both",
+  "@thMultipleChoiceArrowPositionBoth": {
+    "description": "The label for the both arrow position multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceArrowPositionEnd": "End",
+  "@thMultipleChoiceArrowPositionEnd": {
+    "description": "The label for the end arrow position multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceLinePointGradientPoint": "Point",
+  "@thMultipleChoiceLinePointGradientPoint": {
+    "description": "The label for the point line point gradient multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceOutlineIn": "In",
+  "@thMultipleChoiceOutlineIn": {
+    "description": "The label for the in outline multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoiceOutlineOut": "Out",
+  "@thMultipleChoiceOutlineOut": {
+    "description": "The label for the out outline multiple choice type",
+    "type": "text"
+  },
+  "thMultipleChoicePlaceDefault": "Default",
+  "@thMultipleChoicePlaceDefault": {
+    "description": "The label for the default place multiple choice type",
     "type": "text"
   },
   "thPointAirDraught": "Air draught",
@@ -2362,574 +2937,9 @@
     "description": "The label for the wheelchair point type",
     "type": "text"
   },
-  "thLineAbyssEntrance": "Abyss Entrance",
-  "@thLineAbyssEntrance": {
-    "description": "The label for the abyss entrance line type",
-    "type": "text"
-  },
-  "thLineArrow": "Arrow",
-  "@thLineArrow": {
-    "description": "The label for the arrow line type",
-    "type": "text"
-  },
-  "thLineBorder": "Border",
-  "@thLineBorder": {
-    "description": "The label for the border line type",
-    "type": "text"
-  },
-  "thLineCeilingMeander": "Ceiling Meander",
-  "@thLineCeilingMeander": {
-    "description": "The label for the ceiling meander line type",
-    "type": "text"
-  },
-  "thLineCeilingStep": "Ceiling Step",
-  "@thLineCeilingStep": {
-    "description": "The label for the ceiling step line type",
-    "type": "text"
-  },
-  "thLineChimney": "Chimney",
-  "@thLineChimney": {
-    "description": "The label for the chimney line type",
-    "type": "text"
-  },
-  "thLineContour": "Contour",
-  "@thLineContour": {
-    "description": "The label for the contour line type",
-    "type": "text"
-  },
-  "thLineDripline": "Dripline",
-  "@thLineDripline": {
-    "description": "The label for the dripline line type",
-    "type": "text"
-  },
-  "thLineFault": "Fault",
-  "@thLineFault": {
-    "description": "The label for the fault line type",
-    "type": "text"
-  },
-  "thLineFixedLadder": "Fixed Ladder",
-  "@thLineFixedLadder": {
-    "description": "The label for the fixed ladder line type",
-    "type": "text"
-  },
-  "thLineFloorMeander": "Floor Meander",
-  "@thLineFloorMeander": {
-    "description": "The label for the floor meander line type",
-    "type": "text"
-  },
-  "thLineFloorStep": "Floor Step",
-  "@thLineFloorStep": {
-    "description": "The label for the floor step line type",
-    "type": "text"
-  },
-  "thLineFlowstone": "Flowstone",
-  "@thLineFlowstone": {
-    "description": "The label for the flowstone line type",
-    "type": "text"
-  },
-  "thLineGradient": "Gradient",
-  "@thLineGradient": {
-    "description": "The label for the gradient line type",
-    "type": "text"
-  },
-  "thLineHandrail": "Handrail",
-  "@thLineHandrail": {
-    "description": "The label for the handrail line type",
-    "type": "text"
-  },
-  "thLineJoint": "Joint",
-  "@thLineJoint": {
-    "description": "The label for the joint line type",
-    "type": "text"
-  },
-  "thLineLabel": "Label",
-  "@thLineLabel": {
-    "description": "The label for the label line type",
-    "type": "text"
-  },
-  "thLineLowCeiling": "Low Ceiling",
-  "@thLineLowCeiling": {
-    "description": "The label for the low ceiling line type",
-    "type": "text"
-  },
-  "thLineMapConnection": "Map Connection",
-  "@thLineMapConnection": {
-    "description": "The label for the map connection line type",
-    "type": "text"
-  },
-  "thLineMoonmilk": "Moonmilk",
-  "@thLineMoonmilk": {
-    "description": "The label for the moonmilk line type",
-    "type": "text"
-  },
-  "thLineOverhang": "Overhang",
-  "@thLineOverhang": {
-    "description": "The label for the overhang line type",
-    "type": "text"
-  },
-  "thLinePit": "Pit",
-  "@thLinePit": {
-    "description": "The label for the pit line type",
-    "type": "text"
-  },
-  "thLinePitch": "Pitch",
-  "@thLinePitch": {
-    "description": "The label for the pitch line type",
-    "type": "text"
-  },
-  "thLinePitChimney": "Pit Chimney",
-  "@thLinePitChimney": {
-    "description": "The label for the pit chimney line type",
-    "type": "text"
-  },
-  "thLineRimstoneDam": "Rimstone Dam",
-  "@thLineRimstoneDam": {
-    "description": "The label for the rimstone dam line type",
-    "type": "text"
-  },
-  "thLineRimstonePool": "Rimstone Pool",
-  "@thLineRimstonePool": {
-    "description": "The label for the rimstone pool line type",
-    "type": "text"
-  },
-  "thLineRockBorder": "Rock Border",
-  "@thLineRockBorder": {
-    "description": "The label for the rock border line type",
-    "type": "text"
-  },
-  "thLineRockEdge": "Rock Edge",
-  "@thLineRockEdge": {
-    "description": "The label for the rock edge line type",
-    "type": "text"
-  },
-  "thLineRope": "Rope",
-  "@thLineRope": {
-    "description": "The label for the rope line type",
-    "type": "text"
-  },
-  "thLineRopeLadder": "Rope Ladder",
-  "@thLineRopeLadder": {
-    "description": "The label for the rope ladder line type",
-    "type": "text"
-  },
-  "thLineSection": "Section",
-  "@thLineSection": {
-    "description": "The label for the section line type",
-    "type": "text"
-  },
-  "thLineSlope": "Slope",
-  "@thLineSlope": {
-    "description": "The label for the slope line type",
-    "type": "text"
-  },
-  "thLineSteps": "Steps",
-  "@thLineSteps": {
-    "description": "The label for the steps line type",
-    "type": "text"
-  },
-  "thLineSurvey": "Survey",
-  "@thLineSurvey": {
-    "description": "The label for the survey line type",
-    "type": "text"
-  },
-  "thLineU": "User",
-  "@thLineU": {
-    "description": "The label for the U line type",
-    "type": "text"
-  },
-  "thLineViaFerrata": "Via Ferrata",
-  "@thLineViaFerrata": {
-    "description": "The label for the via ferrata line type",
-    "type": "text"
-  },
-  "thLineWalkWay": "Walkway",
-  "@thLineWalkWay": {
-    "description": "The label for the walkway line type",
-    "type": "text"
-  },
-  "thLineWall": "Wall",
-  "@thLineWall": {
-    "description": "The label for the wall line type",
-    "type": "text"
-  },
-  "thLineWaterFlow": "Water Flow",
-  "@thLineWaterFlow": {
-    "description": "The label for the water flow line type",
-    "type": "text"
-  },
-  "thCommandOptionAdjust": "Adjust",
-  "@thCommandOptionAdjust": {
-    "description": "The label for the adjust command option type",
-    "type": "text"
-  },
-  "thCommandOptionAlign": "Align",
-  "@thCommandOptionAlign": {
-    "description": "The label for the align command option type",
-    "type": "text"
-  },
-  "thCommandOptionAltitude": "Altitude",
-  "@thCommandOptionAltitude": {
-    "description": "The label for the altitude command option type",
-    "type": "text"
-  },
-  "thCommandOptionAltitudeFix": "Fix",
-  "@thCommandOptionAltitudeFix": {
-    "description": "The label for the altitude command option fix choice",
-    "type": "text"
-  },
-  "thCommandOptionAltitudeValue": "Altitude",
-  "@thCommandOptionAltitudeValue": {
-    "description": "The label for the altitude value command option type",
-    "type": "text"
-  },
-  "thCommandOptionAnchors": "Anchors",
-  "@thCommandOptionAnchors": {
-    "description": "The label for the anchors command option type",
-    "type": "text"
-  },
-  "thCommandOptionAttr": "Attribute (custom)",
-  "@thCommandOptionAttr": {
-    "description": "The label for the custom attribute command option type",
-    "type": "text"
-  },
-  "thCommandOptionAuthor": "Author",
-  "@thCommandOptionAuthor": {
-    "description": "The label for the author command option type",
-    "type": "text"
-  },
-  "thCommandOptionBorder": "Border",
-  "@thCommandOptionBorder": {
-    "description": "The label for the border command option type",
-    "type": "text"
-  },
-  "thCommandOptionClip": "Clip",
-  "@thCommandOptionClip": {
-    "description": "The label for the clip command option type",
-    "type": "text"
-  },
-  "thCommandOptionClose": "Close",
-  "@thCommandOptionClose": {
-    "description": "The label for the close command option type",
-    "type": "text"
-  },
-  "thCommandOptionContext": "Context",
-  "@thCommandOptionContext": {
-    "description": "The label for the context command option type",
-    "type": "text"
-  },
-  "thCommandOptionCopyright": "Copyright",
-  "@thCommandOptionCopyright": {
-    "description": "The label for the copyright command option type",
-    "type": "text"
-  },
-  "thCommandOptionCS": "Coordinate System",
-  "@thCommandOptionCS": {
-    "description": "The label for the Coordinate System command option type",
-    "type": "text"
-  },
-  "thCommandOptionDateValue": "Date",
-  "@thCommandOptionDateValue": {
-    "description": "The label for the date value command option type",
-    "type": "text"
-  },
-  "thCommandOptionDimensionsValue": "Dimensions",
-  "@thCommandOptionDimensionsValue": {
-    "description": "The label for the dimensions value command option type",
-    "type": "text"
-  },
-  "thCommandOptionDist": "Distance",
-  "@thCommandOptionDist": {
-    "description": "The label for the dist command option type",
-    "type": "text"
-  },
-  "thCommandOptionExplored": "Explored",
-  "@thCommandOptionExplored": {
-    "description": "The label for the explored command option type",
-    "type": "text"
-  },
-  "thCommandOptionExtend": "Extend",
-  "@thCommandOptionExtend": {
-    "description": "The label for the extend command option type",
-    "type": "text"
-  },
-  "thCommandOptionFlip": "Flip",
-  "@thCommandOptionFlip": {
-    "description": "The label for the flip command option type",
-    "type": "text"
-  },
-  "thCommandOptionFrom": "From",
-  "@thCommandOptionFrom": {
-    "description": "The label for the from command option type",
-    "type": "text"
-  },
-  "thCommandOptionHead": "Head",
-  "@thCommandOptionHead": {
-    "description": "The label for the head command option type",
-    "type": "text"
-  },
-  "thCommandOptionId": "ID",
-  "@thCommandOptionId": {
-    "description": "The label for the ID command option type",
-    "type": "text"
-  },
-  "thCommandOptionLengthUnit": "Unit",
-  "@thCommandOptionLengthUnit": {
-    "description": "The label for the length unit command option type",
-    "type": "text"
-  },
-  "thCommandOptionLineDirection": "Direction",
-  "@thCommandOptionLineDirection": {
-    "description": "The label for the line direction command option type",
-    "type": "text"
-  },
-  "thCommandOptionLineGradient": "Gradient",
-  "@thCommandOptionLineGradient": {
-    "description": "The label for the line gradient command option type",
-    "type": "text"
-  },
-  "thCommandOptionLineHeight": "Height",
-  "@thCommandOptionLineHeight": {
-    "description": "The label for the line height command option type",
-    "type": "text"
-  },
-  "thCommandOptionLinePointDirection": "Direction",
-  "@thCommandOptionLinePointDirection": {
-    "description": "The label for the line point direction command option type",
-    "type": "text"
-  },
-  "thCommandOptionLinePointGradient": "Gradient",
-  "@thCommandOptionLinePointGradient": {
-    "description": "The label for the line point gradient command option type",
-    "type": "text"
-  },
-  "thCommandOptionLSize": "L-Size",
-  "@thCommandOptionLSize": {
-    "description": "The label for the L size command option type",
-    "type": "text"
-  },
-  "thCommandOptionMark": "Mark",
-  "@thCommandOptionMark": {
-    "description": "The label for the mark command option type",
-    "type": "text"
-  },
-  "thCommandOptionName": "Station",
-  "@thCommandOptionName": {
-    "description": "The label for the station name command option type",
-    "type": "text"
-  },
-  "thCommandOptionOutline": "Outline",
-  "@thCommandOptionOutline": {
-    "description": "The label for the outline command option type",
-    "type": "text"
-  },
-  "thCommandOptionOrientation": "Orientation",
-  "@thCommandOptionOrientation": {
-    "description": "The label for the orientation command option type",
-    "type": "text"
-  },
-  "thCommandOptionPassageHeightValue": "Passage Height",
-  "@thCommandOptionPassageHeightValue": {
-    "description": "The label for the passage height value command option type",
-    "type": "text"
-  },
-  "thCommandOptionPlace": "Place",
-  "@thCommandOptionPlace": {
-    "description": "The label for the place command option type",
-    "type": "text"
-  },
-  "thCommandOptionPointHeightValue": "Height",
-  "@thCommandOptionPointHeightValue": {
-    "description": "The label for the point height value command option type",
-    "type": "text"
-  },
-  "thCommandOptionPLScale": "Scale",
-  "@thCommandOptionPLScale": {
-    "description": "The label for the point/line/line segment scale command option type",
-    "type": "text"
-  },
-  "thCommandOptionProjection": "Projection",
-  "@thCommandOptionProjection": {
-    "description": "The label for the projection command option type",
-    "type": "text"
-  },
-  "thCommandOptionRebelays": "Rebelays",
-  "@thCommandOptionRebelays": {
-    "description": "The label for the rebelays command option type",
-    "type": "text"
-  },
-  "thCommandOptionReverse": "Reverse",
-  "@thCommandOptionReverse": {
-    "description": "The label for the reverse command option type",
-    "type": "text"
-  },
-  "thCommandOptionScrap": "Scrap",
-  "@thCommandOptionScrap": {
-    "description": "The label for the scrap command option type",
-    "type": "text"
-  },
-  "thCommandOptionScrapScale": "Scale",
-  "@thCommandOptionScrapScale": {
-    "description": "The label for the scrap scale command option type",
-    "type": "text"
-  },
-  "thCommandOptionSketch": "Sketch",
-  "@thCommandOptionSketch": {
-    "description": "The label for the sketch command option type",
-    "type": "text"
-  },
-  "thCommandOptionSmooth": "Smooth",
-  "@thCommandOptionSmooth": {
-    "description": "The label for the smooth command option type",
-    "type": "text"
-  },
-  "thCommandOptionStationNames": "Station Names",
-  "@thCommandOptionStationNames": {
-    "description": "The label for the station names command option type",
-    "type": "text"
-  },
-  "thCommandOptionStations": "Stations",
-  "@thCommandOptionStations": {
-    "description": "The label for the stations command option type",
-    "type": "text"
-  },
-  "thCommandOptionSubtype": "Subtype",
-  "@thCommandOptionSubtype": {
-    "description": "The label for the subtype command option type",
-    "type": "text"
-  },
-  "thCommandOptionText": "Text",
-  "@thCommandOptionText": {
-    "description": "The label for the text command option type",
-    "type": "text"
-  },
-  "thCommandOptionTitle": "Title",
-  "@thCommandOptionTitle": {
-    "description": "The label for the title command option type",
-    "type": "text"
-  },
-  "thCommandOptionUnrecognized": "Unrecognized Command Option",
-  "@thCommandOptionUnrecognized": {
-    "description": "The label for the unrecognized command option type",
-    "type": "text"
-  },
-  "thCommandOptionVisibility": "Visibility",
-  "@thCommandOptionVisibility": {
-    "description": "The label for the visibility command option type",
-    "type": "text"
-  },
-  "thCommandOptionWalls": "Walls",
-  "@thCommandOptionWalls": {
-    "description": "The label for the walls command option type",
-    "type": "text"
-  },
-  "thMultipleChoiceAdjustHorizontal": "Horizontal",
-  "@thMultipleChoiceAdjustHorizontal": {
-    "description": "The label for the horizontal adjust multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAdjustVertical": "Vertical",
-  "@thMultipleChoiceAdjustVertical": {
-    "description": "The label for the vertical adjust multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignBottom": "Bottom",
-  "@thMultipleChoiceAlignBottom": {
-    "description": "The label for the bottom align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignBottomLeft": "Bottom Left",
-  "@thMultipleChoiceAlignBottomLeft": {
-    "description": "The label for the bottom left align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignBottomRight": "Bottom Right",
-  "@thMultipleChoiceAlignBottomRight": {
-    "description": "The label for the bottom right align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignCenter": "Center",
-  "@thMultipleChoiceAlignCenter": {
-    "description": "The label for the center align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignLeft": "Left",
-  "@thMultipleChoiceAlignLeft": {
-    "description": "The label for the left align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignRight": "Right",
-  "@thMultipleChoiceAlignRight": {
-    "description": "The label for the right align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignTop": "Top",
-  "@thMultipleChoiceAlignTop": {
-    "description": "The label for the top align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignTopLeft": "Top Left",
-  "@thMultipleChoiceAlignTopLeft": {
-    "description": "The label for the top left align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceAlignTopRight": "Top Right",
-  "@thMultipleChoiceAlignTopRight": {
-    "description": "The label for the top right align multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceOnOffOff": "Off",
-  "@thMultipleChoiceOnOffOff": {
-    "description": "The label for the off on/off multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceOnOffOn": "On",
-  "@thMultipleChoiceOnOffOn": {
-    "description": "The label for the on on/off multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceOnOffAutoAuto": "Auto",
-  "@thMultipleChoiceOnOffAutoAuto": {
-    "description": "The label for the auto auto/on/off multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceFlipNone": "None",
-  "@thMultipleChoiceFlipNone": {
-    "description": "The label for the none flip multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceArrowPositionBegin": "Begin",
-  "@thMultipleChoiceArrowPositionBegin": {
-    "description": "The label for the begin arrow position multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceArrowPositionBoth": "Both",
-  "@thMultipleChoiceArrowPositionBoth": {
-    "description": "The label for the both arrow position multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceArrowPositionEnd": "End",
-  "@thMultipleChoiceArrowPositionEnd": {
-    "description": "The label for the end arrow position multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceLinePointGradientPoint": "Point",
-  "@thMultipleChoiceLinePointGradientPoint": {
-    "description": "The label for the point line point gradient multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceOutlineIn": "In",
-  "@thMultipleChoiceOutlineIn": {
-    "description": "The label for the in outline multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoiceOutlineOut": "Out",
-  "@thMultipleChoiceOutlineOut": {
-    "description": "The label for the out outline multiple choice type",
-    "type": "text"
-  },
-  "thMultipleChoicePlaceDefault": "Default",
-  "@thMultipleChoicePlaceDefault": {
-    "description": "The label for the default place multiple choice type",
+  "thProjection": "Projection",
+  "@thProjection": {
+    "description": "The label for the projection line type",
     "type": "text"
   }
 }

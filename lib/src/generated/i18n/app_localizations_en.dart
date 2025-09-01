@@ -359,6 +359,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDoubleValueInvalidValueErrorMessage => 'Invalid numeric value';
 
   @override
+  String get mpEncodingLabel => 'Encoding';
+
+  @override
   String get mpExploredLengthLabel => 'Length';
 
   @override
@@ -1062,6 +1065,165 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thAreaWater => 'Water';
 
   @override
+  String get thCommandOptionAdjust => 'Adjust';
+
+  @override
+  String get thCommandOptionAlign => 'Align';
+
+  @override
+  String get thCommandOptionAltitude => 'Altitude';
+
+  @override
+  String get thCommandOptionAltitudeFix => 'Fix';
+
+  @override
+  String get thCommandOptionAltitudeValue => 'Altitude';
+
+  @override
+  String get thCommandOptionAnchors => 'Anchors';
+
+  @override
+  String get thCommandOptionAttr => 'Attribute (custom)';
+
+  @override
+  String get thCommandOptionAuthor => 'Author';
+
+  @override
+  String get thCommandOptionBorder => 'Border';
+
+  @override
+  String get thCommandOptionClip => 'Clip';
+
+  @override
+  String get thCommandOptionClose => 'Close';
+
+  @override
+  String get thCommandOptionContext => 'Context';
+
+  @override
+  String get thCommandOptionCopyright => 'Copyright';
+
+  @override
+  String get thCommandOptionCS => 'Coordinate System';
+
+  @override
+  String get thCommandOptionDateValue => 'Date';
+
+  @override
+  String get thCommandOptionDimensionsValue => 'Dimensions';
+
+  @override
+  String get thCommandOptionDist => 'Distance';
+
+  @override
+  String get thCommandOptionExplored => 'Explored';
+
+  @override
+  String get thCommandOptionExtend => 'Extend';
+
+  @override
+  String get thCommandOptionFlip => 'Flip';
+
+  @override
+  String get thCommandOptionFrom => 'From';
+
+  @override
+  String get thCommandOptionHead => 'Head';
+
+  @override
+  String get thCommandOptionId => 'ID';
+
+  @override
+  String get thCommandOptionLengthUnit => 'Unit';
+
+  @override
+  String get thCommandOptionLineDirection => 'Direction';
+
+  @override
+  String get thCommandOptionLineGradient => 'Gradient';
+
+  @override
+  String get thCommandOptionLineHeight => 'Height';
+
+  @override
+  String get thCommandOptionLinePointDirection => 'Direction';
+
+  @override
+  String get thCommandOptionLinePointGradient => 'Gradient';
+
+  @override
+  String get thCommandOptionLSize => 'L-Size';
+
+  @override
+  String get thCommandOptionMark => 'Mark';
+
+  @override
+  String get thCommandOptionName => 'Station';
+
+  @override
+  String get thCommandOptionOutline => 'Outline';
+
+  @override
+  String get thCommandOptionOrientation => 'Orientation';
+
+  @override
+  String get thCommandOptionPassageHeightValue => 'Passage Height';
+
+  @override
+  String get thCommandOptionPlace => 'Place';
+
+  @override
+  String get thCommandOptionPointHeightValue => 'Height';
+
+  @override
+  String get thCommandOptionPLScale => 'Scale';
+
+  @override
+  String get thCommandOptionProjection => 'Projection';
+
+  @override
+  String get thCommandOptionRebelays => 'Rebelays';
+
+  @override
+  String get thCommandOptionReverse => 'Reverse';
+
+  @override
+  String get thCommandOptionScrap => 'Scrap';
+
+  @override
+  String get thCommandOptionScrapScale => 'Scale';
+
+  @override
+  String get thCommandOptionSketch => 'Sketch';
+
+  @override
+  String get thCommandOptionSmooth => 'Smooth';
+
+  @override
+  String get thCommandOptionStationNames => 'Station Names';
+
+  @override
+  String get thCommandOptionStations => 'Stations';
+
+  @override
+  String get thCommandOptionSubtype => 'Subtype';
+
+  @override
+  String get thCommandOptionText => 'Text';
+
+  @override
+  String get thCommandOptionTitle => 'Title';
+
+  @override
+  String get thCommandOptionUnrecognized => 'Unrecognized Command Option';
+
+  @override
+  String get thCommandOptionVisibility => 'Visibility';
+
+  @override
+  String get thCommandOptionWalls => 'Walls';
+
+  @override
   String get thElementArea => 'Area';
 
   @override
@@ -1117,6 +1279,189 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thElementXTherionConfig => 'XTherion config';
+
+  @override
+  String get thLineAbyssEntrance => 'Abyss Entrance';
+
+  @override
+  String get thLineArrow => 'Arrow';
+
+  @override
+  String get thLineBorder => 'Border';
+
+  @override
+  String get thLineCeilingMeander => 'Ceiling Meander';
+
+  @override
+  String get thLineCeilingStep => 'Ceiling Step';
+
+  @override
+  String get thLineChimney => 'Chimney';
+
+  @override
+  String get thLineContour => 'Contour';
+
+  @override
+  String get thLineDripline => 'Dripline';
+
+  @override
+  String get thLineFault => 'Fault';
+
+  @override
+  String get thLineFixedLadder => 'Fixed Ladder';
+
+  @override
+  String get thLineFloorMeander => 'Floor Meander';
+
+  @override
+  String get thLineFloorStep => 'Floor Step';
+
+  @override
+  String get thLineFlowstone => 'Flowstone';
+
+  @override
+  String get thLineGradient => 'Gradient';
+
+  @override
+  String get thLineHandrail => 'Handrail';
+
+  @override
+  String get thLineJoint => 'Joint';
+
+  @override
+  String get thLineLabel => 'Label';
+
+  @override
+  String get thLineLowCeiling => 'Low Ceiling';
+
+  @override
+  String get thLineMapConnection => 'Map Connection';
+
+  @override
+  String get thLineMoonmilk => 'Moonmilk';
+
+  @override
+  String get thLineOverhang => 'Overhang';
+
+  @override
+  String get thLinePit => 'Pit';
+
+  @override
+  String get thLinePitch => 'Pitch';
+
+  @override
+  String get thLinePitChimney => 'Pit Chimney';
+
+  @override
+  String get thLineRimstoneDam => 'Rimstone Dam';
+
+  @override
+  String get thLineRimstonePool => 'Rimstone Pool';
+
+  @override
+  String get thLineRockBorder => 'Rock Border';
+
+  @override
+  String get thLineRockEdge => 'Rock Edge';
+
+  @override
+  String get thLineRope => 'Rope';
+
+  @override
+  String get thLineRopeLadder => 'Rope Ladder';
+
+  @override
+  String get thLineSection => 'Section';
+
+  @override
+  String get thLineSlope => 'Slope';
+
+  @override
+  String get thLineSteps => 'Steps';
+
+  @override
+  String get thLineSurvey => 'Survey';
+
+  @override
+  String get thLineU => 'User';
+
+  @override
+  String get thLineViaFerrata => 'Via Ferrata';
+
+  @override
+  String get thLineWalkWay => 'Walkway';
+
+  @override
+  String get thLineWall => 'Wall';
+
+  @override
+  String get thLineWaterFlow => 'Water Flow';
+
+  @override
+  String get thMultipleChoiceAdjustHorizontal => 'Horizontal';
+
+  @override
+  String get thMultipleChoiceAdjustVertical => 'Vertical';
+
+  @override
+  String get thMultipleChoiceAlignBottom => 'Bottom';
+
+  @override
+  String get thMultipleChoiceAlignBottomLeft => 'Bottom Left';
+
+  @override
+  String get thMultipleChoiceAlignBottomRight => 'Bottom Right';
+
+  @override
+  String get thMultipleChoiceAlignCenter => 'Center';
+
+  @override
+  String get thMultipleChoiceAlignLeft => 'Left';
+
+  @override
+  String get thMultipleChoiceAlignRight => 'Right';
+
+  @override
+  String get thMultipleChoiceAlignTop => 'Top';
+
+  @override
+  String get thMultipleChoiceAlignTopLeft => 'Top Left';
+
+  @override
+  String get thMultipleChoiceAlignTopRight => 'Top Right';
+
+  @override
+  String get thMultipleChoiceOnOffOff => 'Off';
+
+  @override
+  String get thMultipleChoiceOnOffOn => 'On';
+
+  @override
+  String get thMultipleChoiceOnOffAutoAuto => 'Auto';
+
+  @override
+  String get thMultipleChoiceFlipNone => 'None';
+
+  @override
+  String get thMultipleChoiceArrowPositionBegin => 'Begin';
+
+  @override
+  String get thMultipleChoiceArrowPositionBoth => 'Both';
+
+  @override
+  String get thMultipleChoiceArrowPositionEnd => 'End';
+
+  @override
+  String get thMultipleChoiceLinePointGradientPoint => 'Point';
+
+  @override
+  String get thMultipleChoiceOutlineIn => 'In';
+
+  @override
+  String get thMultipleChoiceOutlineOut => 'Out';
+
+  @override
+  String get thMultipleChoicePlaceDefault => 'Default';
 
   @override
   String get thPointAirDraught => 'Air draught';
@@ -1467,344 +1812,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thPointWheelchair => 'Wheelchair';
 
   @override
-  String get thLineAbyssEntrance => 'Abyss Entrance';
-
-  @override
-  String get thLineArrow => 'Arrow';
-
-  @override
-  String get thLineBorder => 'Border';
-
-  @override
-  String get thLineCeilingMeander => 'Ceiling Meander';
-
-  @override
-  String get thLineCeilingStep => 'Ceiling Step';
-
-  @override
-  String get thLineChimney => 'Chimney';
-
-  @override
-  String get thLineContour => 'Contour';
-
-  @override
-  String get thLineDripline => 'Dripline';
-
-  @override
-  String get thLineFault => 'Fault';
-
-  @override
-  String get thLineFixedLadder => 'Fixed Ladder';
-
-  @override
-  String get thLineFloorMeander => 'Floor Meander';
-
-  @override
-  String get thLineFloorStep => 'Floor Step';
-
-  @override
-  String get thLineFlowstone => 'Flowstone';
-
-  @override
-  String get thLineGradient => 'Gradient';
-
-  @override
-  String get thLineHandrail => 'Handrail';
-
-  @override
-  String get thLineJoint => 'Joint';
-
-  @override
-  String get thLineLabel => 'Label';
-
-  @override
-  String get thLineLowCeiling => 'Low Ceiling';
-
-  @override
-  String get thLineMapConnection => 'Map Connection';
-
-  @override
-  String get thLineMoonmilk => 'Moonmilk';
-
-  @override
-  String get thLineOverhang => 'Overhang';
-
-  @override
-  String get thLinePit => 'Pit';
-
-  @override
-  String get thLinePitch => 'Pitch';
-
-  @override
-  String get thLinePitChimney => 'Pit Chimney';
-
-  @override
-  String get thLineRimstoneDam => 'Rimstone Dam';
-
-  @override
-  String get thLineRimstonePool => 'Rimstone Pool';
-
-  @override
-  String get thLineRockBorder => 'Rock Border';
-
-  @override
-  String get thLineRockEdge => 'Rock Edge';
-
-  @override
-  String get thLineRope => 'Rope';
-
-  @override
-  String get thLineRopeLadder => 'Rope Ladder';
-
-  @override
-  String get thLineSection => 'Section';
-
-  @override
-  String get thLineSlope => 'Slope';
-
-  @override
-  String get thLineSteps => 'Steps';
-
-  @override
-  String get thLineSurvey => 'Survey';
-
-  @override
-  String get thLineU => 'User';
-
-  @override
-  String get thLineViaFerrata => 'Via Ferrata';
-
-  @override
-  String get thLineWalkWay => 'Walkway';
-
-  @override
-  String get thLineWall => 'Wall';
-
-  @override
-  String get thLineWaterFlow => 'Water Flow';
-
-  @override
-  String get thCommandOptionAdjust => 'Adjust';
-
-  @override
-  String get thCommandOptionAlign => 'Align';
-
-  @override
-  String get thCommandOptionAltitude => 'Altitude';
-
-  @override
-  String get thCommandOptionAltitudeFix => 'Fix';
-
-  @override
-  String get thCommandOptionAltitudeValue => 'Altitude';
-
-  @override
-  String get thCommandOptionAnchors => 'Anchors';
-
-  @override
-  String get thCommandOptionAttr => 'Attribute (custom)';
-
-  @override
-  String get thCommandOptionAuthor => 'Author';
-
-  @override
-  String get thCommandOptionBorder => 'Border';
-
-  @override
-  String get thCommandOptionClip => 'Clip';
-
-  @override
-  String get thCommandOptionClose => 'Close';
-
-  @override
-  String get thCommandOptionContext => 'Context';
-
-  @override
-  String get thCommandOptionCopyright => 'Copyright';
-
-  @override
-  String get thCommandOptionCS => 'Coordinate System';
-
-  @override
-  String get thCommandOptionDateValue => 'Date';
-
-  @override
-  String get thCommandOptionDimensionsValue => 'Dimensions';
-
-  @override
-  String get thCommandOptionDist => 'Distance';
-
-  @override
-  String get thCommandOptionExplored => 'Explored';
-
-  @override
-  String get thCommandOptionExtend => 'Extend';
-
-  @override
-  String get thCommandOptionFlip => 'Flip';
-
-  @override
-  String get thCommandOptionFrom => 'From';
-
-  @override
-  String get thCommandOptionHead => 'Head';
-
-  @override
-  String get thCommandOptionId => 'ID';
-
-  @override
-  String get thCommandOptionLengthUnit => 'Unit';
-
-  @override
-  String get thCommandOptionLineDirection => 'Direction';
-
-  @override
-  String get thCommandOptionLineGradient => 'Gradient';
-
-  @override
-  String get thCommandOptionLineHeight => 'Height';
-
-  @override
-  String get thCommandOptionLinePointDirection => 'Direction';
-
-  @override
-  String get thCommandOptionLinePointGradient => 'Gradient';
-
-  @override
-  String get thCommandOptionLSize => 'L-Size';
-
-  @override
-  String get thCommandOptionMark => 'Mark';
-
-  @override
-  String get thCommandOptionName => 'Station';
-
-  @override
-  String get thCommandOptionOutline => 'Outline';
-
-  @override
-  String get thCommandOptionOrientation => 'Orientation';
-
-  @override
-  String get thCommandOptionPassageHeightValue => 'Passage Height';
-
-  @override
-  String get thCommandOptionPlace => 'Place';
-
-  @override
-  String get thCommandOptionPointHeightValue => 'Height';
-
-  @override
-  String get thCommandOptionPLScale => 'Scale';
-
-  @override
-  String get thCommandOptionProjection => 'Projection';
-
-  @override
-  String get thCommandOptionRebelays => 'Rebelays';
-
-  @override
-  String get thCommandOptionReverse => 'Reverse';
-
-  @override
-  String get thCommandOptionScrap => 'Scrap';
-
-  @override
-  String get thCommandOptionScrapScale => 'Scale';
-
-  @override
-  String get thCommandOptionSketch => 'Sketch';
-
-  @override
-  String get thCommandOptionSmooth => 'Smooth';
-
-  @override
-  String get thCommandOptionStationNames => 'Station Names';
-
-  @override
-  String get thCommandOptionStations => 'Stations';
-
-  @override
-  String get thCommandOptionSubtype => 'Subtype';
-
-  @override
-  String get thCommandOptionText => 'Text';
-
-  @override
-  String get thCommandOptionTitle => 'Title';
-
-  @override
-  String get thCommandOptionUnrecognized => 'Unrecognized Command Option';
-
-  @override
-  String get thCommandOptionVisibility => 'Visibility';
-
-  @override
-  String get thCommandOptionWalls => 'Walls';
-
-  @override
-  String get thMultipleChoiceAdjustHorizontal => 'Horizontal';
-
-  @override
-  String get thMultipleChoiceAdjustVertical => 'Vertical';
-
-  @override
-  String get thMultipleChoiceAlignBottom => 'Bottom';
-
-  @override
-  String get thMultipleChoiceAlignBottomLeft => 'Bottom Left';
-
-  @override
-  String get thMultipleChoiceAlignBottomRight => 'Bottom Right';
-
-  @override
-  String get thMultipleChoiceAlignCenter => 'Center';
-
-  @override
-  String get thMultipleChoiceAlignLeft => 'Left';
-
-  @override
-  String get thMultipleChoiceAlignRight => 'Right';
-
-  @override
-  String get thMultipleChoiceAlignTop => 'Top';
-
-  @override
-  String get thMultipleChoiceAlignTopLeft => 'Top Left';
-
-  @override
-  String get thMultipleChoiceAlignTopRight => 'Top Right';
-
-  @override
-  String get thMultipleChoiceOnOffOff => 'Off';
-
-  @override
-  String get thMultipleChoiceOnOffOn => 'On';
-
-  @override
-  String get thMultipleChoiceOnOffAutoAuto => 'Auto';
-
-  @override
-  String get thMultipleChoiceFlipNone => 'None';
-
-  @override
-  String get thMultipleChoiceArrowPositionBegin => 'Begin';
-
-  @override
-  String get thMultipleChoiceArrowPositionBoth => 'Both';
-
-  @override
-  String get thMultipleChoiceArrowPositionEnd => 'End';
-
-  @override
-  String get thMultipleChoiceLinePointGradientPoint => 'Point';
-
-  @override
-  String get thMultipleChoiceOutlineIn => 'In';
-
-  @override
-  String get thMultipleChoiceOutlineOut => 'Out';
-
-  @override
-  String get thMultipleChoicePlaceDefault => 'Default';
+  String get thProjection => 'Projection';
 }
