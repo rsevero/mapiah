@@ -10,14 +10,18 @@ class THEncoding extends THElement {
     required String encoding,
     required super.originalLineInTH2File,
   }) : encoding = encoding.trim().toUpperCase(),
-       super.forCWJM();
+       super.forCWJM() {
+    mpLocator.mpGeneralController.addAvailableEncoding(encoding);
+  }
 
   THEncoding({
     required super.parentMPID,
     required String encoding,
     super.originalLineInTH2File = '',
   }) : encoding = encoding.trim().toUpperCase(),
-       super.addToParent();
+       super.addToParent() {
+    mpLocator.mpGeneralController.addAvailableEncoding(encoding);
+  }
 
   @override
   THElementType get elementType => THElementType.encoding;

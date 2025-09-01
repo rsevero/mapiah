@@ -2,6 +2,7 @@
 
 ## 0.2.14 - not yet released
 * New features:
+  * Get list of available encodings from 'therion --print-encodings'.
 * Fixed bugs:
   * Multiple clicks in radio groups sometimes raised "RadioGroup policy does not support multiple selected items".
   * Editing scrap multiple options option not working.

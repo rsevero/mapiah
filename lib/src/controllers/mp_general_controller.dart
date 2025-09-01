@@ -94,7 +94,23 @@ class MPGeneralController {
     return _availableEncodings;
   }
 
+  void addAvailableEncoding(String encoding) {
+    final String newEncoding = encoding.trim().toUpperCase();
+
+    if (newEncoding.isNotEmpty && !_availableEncodings.contains(newEncoding)) {
+      _availableEncodings.add(newEncoding);
+      _availableEncodings = MPTextToUser.getOrderedChoicesList(
+        _availableEncodings,
+      );
+    }
+  }
+
   Future<void> updateAvailableEncodingsList() async {
+    if (kIsWeb ||
+        (!Platform.isWindows && !Platform.isLinux && !Platform.isMacOS)) {
+      return;
+    }
+
     try {
       final String exe = Platform.isWindows ? 'therion.exe' : 'therion';
       final ProcessResult result = await Process.run(exe, const [
