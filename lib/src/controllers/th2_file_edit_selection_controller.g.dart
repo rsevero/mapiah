@@ -448,7 +448,7 @@ mixin _$TH2FileEditSelectionController
 
   @override
   bool setSelectedElements(
-    Iterable<THElement> clickedElements, {
+    Iterable<THElement> selectedElements, {
     bool setState = false,
   }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
@@ -456,7 +456,7 @@ mixin _$TH2FileEditSelectionController
           name: 'TH2FileEditSelectionControllerBase.setSelectedElements',
         );
     try {
-      return super.setSelectedElements(clickedElements, setState: setState);
+      return super.setSelectedElements(selectedElements, setState: setState);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,
@@ -648,6 +648,21 @@ mixin _$TH2FileEditSelectionController
         );
     try {
       return super.setImageVisibility(imageMPID, isVisible);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void setSelectedScrapByMPID(int scrapID) {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.setSelectedScrapByMPID',
+        );
+    try {
+      return super.setSelectedScrapByMPID(scrapID);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,

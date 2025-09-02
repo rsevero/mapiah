@@ -803,18 +803,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
     }
 
-    if (optionEditController.optionsEditForLineSegments) {
-      optionEditController.updateElementOptionMapForLineSegments();
-    } else if (overlayWindowController.isOverlayWindowShown.containsKey(
-          MPWindowType.scrapOptions,
-        ) &&
-        (overlayWindowController.isOverlayWindowShown[MPWindowType
-            .scrapOptions]!)) {
-      optionEditController.updateElementOptionMapByMPID(
-        optionEditController.optionsScrapMPID,
-      );
-    } else {
-      optionEditController.updateOptionStateMap();
+    switch (optionEditController.currentOptionElementsType) {
+      case MPOptionElementType.lineSegment:
+        optionEditController.updateElementOptionMapForLineSegments();
+      case MPOptionElementType.pla:
+      case MPOptionElementType.scrap:
+        optionEditController.updateOptionStateMap();
     }
   }
 

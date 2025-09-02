@@ -49,17 +49,15 @@ class _MPOptionsEditOverlayWindowWidgetState
       builder: (_) {
         th2FileEditController.redrawTriggerOptionsList;
 
-        final mpSelectedElements = th2FileEditController
-            .selectionController
-            .mpSelectedElementsLogical
-            .values;
-
+        final Iterable<MPSelectedElement> mpSelectedElements =
+            th2FileEditController
+                .selectionController
+                .mpSelectedElementsLogical
+                .values;
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
         final List<Widget> widgets = [];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
-
-        optionEditController.optionsEditForLineSegments = false;
 
         bool hasArea = false;
         bool hasLine = false;

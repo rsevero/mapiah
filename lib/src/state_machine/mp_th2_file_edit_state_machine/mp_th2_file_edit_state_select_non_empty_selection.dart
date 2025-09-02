@@ -74,6 +74,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
             setState: true,
           );
         }
+
         if (!stateChanged) {
           _updateStatusBarMessage();
         }
@@ -196,6 +197,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         elementsInsideSelectionWindow,
         setState: true,
       );
+
       if (!stateChanged) {
         _updateStatusBarMessage();
       }
@@ -206,10 +208,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           MPTH2FileEditStateType.selectEmptySelection,
         );
       } else {
-        final stateChanged = selectionController.setSelectedElements(
+        final bool stateChanged = selectionController.setSelectedElements(
           elementsInsideSelectionWindow,
           setState: true,
         );
+
         if (!stateChanged) {
           _updateStatusBarMessage();
         }

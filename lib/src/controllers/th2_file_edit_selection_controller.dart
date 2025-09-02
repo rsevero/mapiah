@@ -7,6 +7,7 @@ import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -319,7 +320,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           _selectedElementsDrawable[lineMPID] = line;
         }
     }
+
     _isSelected.add(element.mpID);
+    _th2FileEditController.optionEditController.setOptionElementsType(
+      MPOptionElementType.pla,
+    );
     _th2FileEditController.triggerSelectedListChanged();
 
     if (setState) {
@@ -370,12 +375,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   bool setSelectedElements(
-    Iterable<THElement> clickedElements, {
+    Iterable<THElement> selectedElements, {
     bool setState = false,
   }) {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
 
-    for (THElement element in clickedElements) {
+    for (THElement element in selectedElements) {
       switch (element) {
         case THPoint _:
         case THLine _:
@@ -429,6 +434,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           originalLineSegment: endControlPoint.lineSegment,
           type: endControlPoint.type,
         );
+    _th2FileEditController.optionEditController.setOptionElementsType(
+      MPOptionElementType.lineSegment,
+    );
   }
 
   void clearSelectedEndControlPoints() {
@@ -923,6 +931,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void addSelectedEndPoint(THLineSegment lineSegment) {
     _selectedEndControlPoints[lineSegment.mpID] =
         getNewMPSelectedEndControlPoint(lineSegment);
+    _th2FileEditController.optionEditController.setOptionElementsType(
+      MPOptionElementType.lineSegment,
+    );
   }
 
   void addSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
@@ -949,6 +960,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       _selectedEndControlPoints[lineSegment.mpID] =
           getNewMPSelectedEndControlPoint(lineSegment);
     }
+    _th2FileEditController.optionEditController.setOptionElementsType(
+      MPOptionElementType.lineSegment,
+    );
   }
 
   void removeSelectedLineSegment(THLineSegment lineSegment) {
@@ -1645,6 +1659,17 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             .isVisible =
         isVisible;
     _th2FileEditController.triggerImagesRedraw();
+  }
+
+  @action
+  void setSelectedScrapByMPID(int scrapID) {
+    final THScrap scrap = _thFile.scrapByMPID(scrapID);
+
+    _clearSelectedElementsWithoutResettingRedrawTriggers();
+    _mpSelectedElementsLogical[scrapID] = MPSelectedScrap(originalScrap: scrap);
+    _th2FileEditController.optionEditController.setOptionElementsType(
+      MPOptionElementType.scrap,
+    );
   }
 }
 

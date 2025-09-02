@@ -169,6 +169,8 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   }
 
   void _onRightClickSelectScrap(BuildContext childContext, int scrapID) {
+    th2FileEditController.selectionController.setSelectedScrapByMPID(scrapID);
+
     Rect? thisBoundingBox = MPInteractionAux.getWidgetRectFromContext(
       widgetContext: context,
       ancestorGlobalKey: th2FileEditController.thFileWidgetKey,

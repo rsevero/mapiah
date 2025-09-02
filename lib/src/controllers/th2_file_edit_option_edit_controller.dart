@@ -36,10 +36,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   @readonly
   int _optionsScrapMPID = -1;
 
-  /// Used to let TH2FileEditUserInteractionController.prepareSetOption() and
-  /// prepareUnsetOption() know if it should change selected elements options or
-  /// selected line segments options.
-  bool optionsEditForLineSegments = false;
+  MPOptionElementType _currentOptionElementsType = MPOptionElementType.pla;
 
   final Set<THCommandOptionType> optionsThatTriggerRedraw = {
     THCommandOptionType.reverse,
@@ -48,10 +45,11 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @action
   void updateOptionStateMap() {
-    final mpSelectedElements = _th2FileEditController
-        .selectionController
-        .mpSelectedElementsLogical
-        .values;
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
     final Set<THHasOptionsMixin> selectedElements = {};
 
     for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
@@ -328,6 +326,13 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
       MPWindowType.commandOptions,
     );
   }
+
+  void setOptionElementsType(MPOptionElementType type) {
+    _currentOptionElementsType = type;
+  }
+
+  MPOptionElementType get currentOptionElementsType =>
+      _currentOptionElementsType;
 }
 
 class MPOptionInfo {
@@ -350,3 +355,5 @@ class MPOptionInfo {
     this.defaultChoice,
   });
 }
+
+enum MPOptionElementType { lineSegment, pla, scrap }

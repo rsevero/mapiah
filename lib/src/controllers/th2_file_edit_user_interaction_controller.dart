@@ -7,8 +7,8 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -54,7 +54,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
-        _th2FileEditController.optionEditController.optionsEditForLineSegments
+        _th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
@@ -135,11 +136,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
-        _th2FileEditController.optionEditController.optionsEditForLineSegments
+        _th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
-    for (final selectedElement in selectedElements) {
+    for (final MPSelectedElement selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
     }
 
@@ -190,11 +192,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
-        _th2FileEditController.optionEditController.optionsEditForLineSegments
+        _th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
-    for (final selectedElement in selectedElements) {
+    for (final MPSelectedElement selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
     }
 
@@ -271,20 +274,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> mpSelectedElements =
-        _th2FileEditController.overlayWindowController.isOverlayWindowShown
-            .containsKey(MPWindowType.scrapOptions)
-        ? {
-            MPSelectedScrap(
-              originalScrap: _thFile.scrapByMPID(
-                _th2FileEditController.optionEditController.optionsScrapMPID,
-              ),
-            ),
-          }
-        : (_th2FileEditController
-                  .optionEditController
-                  .optionsEditForLineSegments
-              ? selectionController.selectedEndControlPoints.values
-              : selectionController.mpSelectedElementsLogical.values);
+        _th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment
+        ? selectionController.selectedEndControlPoints.values
+        : selectionController.mpSelectedElementsLogical.values;
 
     List<MPCommand> addOptionCommands = [];
 
@@ -293,7 +286,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       final List<THElement> elements = [];
 
-      for (final mpSelectedElement in mpSelectedElements) {
+      for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
         if ((element is THHasOptionsMixin) &&
@@ -362,7 +355,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> mpSelectedElements =
-        _th2FileEditController.optionEditController.optionsEditForLineSegments
+        _th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 

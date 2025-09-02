@@ -3,41 +3,37 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
-import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
-import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
-import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
-import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
-import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
+/// Kernel (re-usable) scrap scale option widget (no overlay window chrome).
 class MPScrapScaleOptionWidget extends StatefulWidget {
-  final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
-  final Offset outerAnchorPosition;
-  final MPWidgetPositionType innerAnchorType;
+  final bool showActionButtons;
+  final VoidCallback? onPressedOk;
+  final VoidCallback? onPressedCancel;
+  final ValueChanged<THScrapScaleCommandOption?>? onValidOptionChanged;
 
   const MPScrapScaleOptionWidget({
     super.key,
-    required this.th2FileEditController,
     required this.optionInfo,
-    required this.outerAnchorPosition,
-    required this.innerAnchorType,
+    this.showActionButtons = false,
+    this.onPressedOk,
+    this.onPressedCancel,
+    this.onValidOptionChanged,
   });
 
   @override
   State<MPScrapScaleOptionWidget> createState() =>
-      _MPScrapScaleOptionWidgetState();
+      MPScrapScaleOptionWidgetState();
 }
 
-class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
+class MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
   String _selectedChoice = '';
   final List<TextEditingController> _lengthControllers = [];
   final FocusNode _lengthFocusNode = FocusNode();
@@ -64,40 +60,39 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
       _lengthWarningMessages.add(null);
     }
 
-    switch (widget.optionInfo.state) {
-      case MPOptionStateType.set:
-        final THScrapScaleCommandOption currentOption =
-            widget.optionInfo.option as THScrapScaleCommandOption;
+    final MPOptionStateType state = widget.optionInfo.state;
 
-        int i = 0;
-        for (final numericSpecification
-            in currentOption.numericSpecifications) {
-          _lengthControllers[i].text = numericSpecification.value.toString();
-          i++;
-        }
+    if (state == MPOptionStateType.set) {
+      final THScrapScaleCommandOption currentOption =
+          widget.optionInfo.option as THScrapScaleCommandOption;
 
-        switch (currentOption.numericSpecifications.length) {
-          case 1:
-            _selectedChoice = mpScrapScale1ValueID;
-          case 2:
-            _selectedChoice = mpScrapScale2ValuesID;
-          case 8:
-            _selectedChoice = mpScrapScale8ValuesID;
-          default:
-            throw Exception(
-              'Invalid length "${currentOption.numericSpecifications.length}" at MPScrapScaleOptionWidget.initState()',
-            );
-        }
+      int i = 0;
 
-        _selectedUnit = currentOption.unitPart.unit.name;
+      for (final spec in currentOption.numericSpecifications) {
+        _lengthControllers[i].text = spec.value.toString();
+        i++;
+      }
 
-      case MPOptionStateType.setMixed:
-      case MPOptionStateType.setUnsupported:
-        _selectedChoice = '';
-        _selectedUnit = thDefaultLengthUnitAsString;
-      case MPOptionStateType.unset:
-        _selectedChoice = mpUnsetOptionID;
-        _selectedUnit = thDefaultLengthUnitAsString;
+      final int len = currentOption.numericSpecifications.length;
+
+      if (len == 1) {
+        _selectedChoice = mpScrapScale1ValueID;
+      } else if (len == 2) {
+        _selectedChoice = mpScrapScale2ValuesID;
+      } else if (len == 8) {
+        _selectedChoice = mpScrapScale8ValuesID;
+      } else {
+        throw Exception(
+          'Invalid length "$len" at MPScrapScaleOptionWidgetState.initState()',
+        );
+      }
+      _selectedUnit = currentOption.unitPart.unit.name;
+    } else if (state == MPOptionStateType.unset) {
+      _selectedChoice = mpUnsetOptionID;
+      _selectedUnit = thDefaultLengthUnitAsString;
+    } else {
+      _selectedChoice = '';
+      _selectedUnit = thDefaultLengthUnitAsString;
     }
 
     for (int i = 0; i < mpScrapScaleMaxValues; i++) {
@@ -106,7 +101,7 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
     _initialUnit = _selectedUnit;
     _initialSelectedChoice = _selectedChoice;
 
-    _updateIsValid();
+    _updateIsValid(notify: true);
   }
 
   @override
@@ -115,47 +110,28 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
       _lengthControllers[i].dispose();
     }
     _lengthFocusNode.dispose();
+
     super.dispose();
   }
 
   int _getRefCount() {
-    switch (_selectedChoice) {
-      case mpUnsetOptionID:
-      case '':
-        return 0;
-      case mpScrapScale1ValueID:
-        return 1;
-      case mpScrapScale2ValuesID:
-        return 2;
-      case mpScrapScale8ValuesID:
-        return 8;
-      default:
-        throw Exception(
-          'Invalid choice "$_selectedChoice" at MPScrapScaleOptionWidget._getRefCount()',
-        );
+    if (_selectedChoice == mpScrapScale1ValueID) {
+      return 1;
     }
+    if (_selectedChoice == mpScrapScale2ValuesID) {
+      return 2;
+    }
+    if (_selectedChoice == mpScrapScale8ValuesID) {
+      return 8;
+    }
+
+    return 0; // unset or ''
   }
 
-  void _updateIsValid() {
-    int refsCount = 0;
-    _isValid = true;
+  void _updateIsValid({bool notify = false}) {
+    final int refsCount = _getRefCount();
 
-    switch (_selectedChoice) {
-      case mpUnsetOptionID:
-        _isValid = true;
-      case '':
-        _isValid = false;
-      case mpScrapScale1ValueID:
-        refsCount = 1;
-      case mpScrapScale2ValuesID:
-        refsCount = 2;
-      case mpScrapScale8ValuesID:
-        refsCount = 8;
-      default:
-        throw Exception(
-          'Invalid choice "$_selectedChoice" at MPScrapScaleOptionWidget._updateIsValid()',
-        );
-    }
+    _isValid = _selectedChoice == mpUnsetOptionID || _selectedChoice != '';
 
     for (int i = 0; i < refsCount; i++) {
       final double? value = double.tryParse(_lengthControllers[i].text);
@@ -170,6 +146,13 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
     }
 
     _updateOkButtonEnabled();
+    if (notify) {
+      if (_isValid) {
+        widget.onValidOptionChanged?.call(buildCurrentOption());
+      } else {
+        widget.onValidOptionChanged?.call(null);
+      }
+    }
   }
 
   void _updateOkButtonEnabled() {
@@ -375,43 +358,38 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
     }
   }
 
-  void _okButtonPressed() {
-    THCommandOption? newOption;
-
-    late final int refCounts;
-
-    switch (_selectedChoice) {
-      case mpScrapScale1ValueID:
-      case mpScrapScale2ValuesID:
-      case mpScrapScale8ValuesID:
-        final List<THDoublePart> numericSpecifications = [];
-
-        refCounts = _getRefCount();
-
-        for (int i = 0; i < refCounts; i++) {
-          final double? value = double.tryParse(_lengthControllers[i].text);
-
-          if (value != null) {
-            numericSpecifications.add(
-              THDoublePart.fromString(valueString: _lengthControllers[i].text),
-            );
-          } else {
-            throw Exception(
-              'Invalid value "${_lengthControllers[i].text}" at MPScrapScaleOptionWidget._okButtonPressed()',
-            );
-          }
-        }
-        newOption = THScrapScaleCommandOption.fromStringWithParentMPID(
-          parentMPID: mpParentMPIDPlaceholder,
-          numericSpecifications: numericSpecifications,
-          unitPart: THLengthUnitPart.fromString(unitString: _selectedUnit),
-        );
+  THScrapScaleCommandOption? buildCurrentOption() {
+    if (!_isValid) {
+      return null;
+    }
+    if (_selectedChoice == mpUnsetOptionID) {
+      return null;
     }
 
-    widget.th2FileEditController.userInteractionController.prepareSetOption(
-      option: newOption,
-      optionType: widget.optionInfo.type,
+    final int refCounts = _getRefCount();
+    final List<THDoublePart> numericSpecifications = [];
+
+    for (int i = 0; i < refCounts; i++) {
+      final double? value = double.tryParse(_lengthControllers[i].text);
+
+      if (value == null) {
+        return null;
+      }
+      numericSpecifications.add(
+        THDoublePart.fromString(valueString: _lengthControllers[i].text),
+      );
+    }
+
+    return THScrapScaleCommandOption.fromStringWithParentMPID(
+      parentMPID: mpParentMPIDPlaceholder,
+      numericSpecifications: numericSpecifications,
+      unitPart: THLengthUnitPart.fromString(unitString: _selectedUnit),
     );
+  }
+
+  void _internalOkPressed() {
+    if (!_isValid) return;
+    widget.onPressedOk?.call();
   }
 
   @override
@@ -452,45 +430,33 @@ class _MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
       }
     }
 
-    return MPOverlayWindowWidget(
-      title: appLocalizations.thPointHeight,
-      overlayWindowType: MPOverlayWindowType.secondary,
-      outerAnchorPosition: widget.outerAnchorPosition,
-      innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: mpButtonSpace),
-        MPOverlayWindowBlockWidget(
-          overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
-          padding: mpOverlayWindowBlockEdgeInsets,
-          children: [
-            RadioGroup(
-              groupValue: _selectedChoice,
-              onChanged: (value) {
-                _selectedChoice = value ?? '';
-                _updateIsValid();
-              },
-              child: Column(children: optionWidgets),
-            ),
-          ],
+        RadioGroup(
+          groupValue: _selectedChoice,
+          onChanged: (value) {
+            _selectedChoice = value ?? '';
+            _updateIsValid(notify: true);
+          },
+          child: Column(children: optionWidgets),
         ),
-        const SizedBox(height: mpButtonSpace),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: _isOkButtonEnabled ? _okButtonPressed : null,
-              child: Text(appLocalizations.mpButtonOK),
-            ),
-            const SizedBox(width: mpButtonSpace),
-            ElevatedButton(
-              onPressed: () {
-                widget.th2FileEditController.overlayWindowController
-                    .setShowOverlayWindow(MPWindowType.optionChoices, false);
-              },
-              child: Text(appLocalizations.mpButtonCancel),
-            ),
-          ],
-        ),
+        if (widget.showActionButtons) ...[
+          const SizedBox(height: mpButtonSpace),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: _isOkButtonEnabled ? _internalOkPressed : null,
+                child: Text(appLocalizations.mpButtonOK),
+              ),
+              const SizedBox(width: mpButtonSpace),
+              ElevatedButton(
+                onPressed: widget.onPressedCancel,
+                child: Text(appLocalizations.mpButtonCancel),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }
