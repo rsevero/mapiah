@@ -62,14 +62,14 @@ class THProjectionCommandOption extends THCommandOption {
     String? elevationUnit,
     super.originalLineInTH2File = '',
   }) : super.forCWJM() {
-    if (elevationAngle == null) {
+    if ((elevationAngle == null) || (elevationAngle.isEmpty)) {
       this.elevationAngle = null;
     } else {
       this.elevationAngle = THDoublePart.fromString(
         valueString: elevationAngle,
       );
     }
-    if (elevationUnit == null) {
+    if ((elevationUnit == null) || (elevationUnit.isEmpty)) {
       this.elevationUnit = null;
     } else {
       this.elevationUnit = THAngleUnitPart.fromString(

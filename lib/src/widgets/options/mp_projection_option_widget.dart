@@ -50,14 +50,17 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   @override
   void initState() {
     super.initState();
+
     _unitMap = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getAngleUnitTypeChoices(),
     );
 
-    final state = widget.optionInfo.state;
+    final MPOptionStateType state = widget.optionInfo.state;
+
     if (state == MPOptionStateType.set) {
       final THProjectionCommandOption currentOption =
           widget.optionInfo.option as THProjectionCommandOption;
+
       _indexController.text = currentOption.index;
       _selectedChoice = currentOption.mode.name;
       _angleController.text = currentOption.elevationAngle?.toString() ?? '';
@@ -90,10 +93,10 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   }
 
   void _updateIsValid() {
-    if (_selectedChoice == mpUnsetOptionID ||
-        _selectedChoice == 'extended' ||
-        _selectedChoice == 'none' ||
-        _selectedChoice == 'plan') {
+    if ((_selectedChoice == mpUnsetOptionID) ||
+        (_selectedChoice == 'extended') ||
+        (_selectedChoice == 'none') ||
+        (_selectedChoice == 'plan')) {
       _isValid = true;
       _angleWarningMessage = null;
     } else if (_selectedChoice == '') {
@@ -101,12 +104,13 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       _angleWarningMessage = null;
     } else if (_selectedChoice == 'elevation') {
       final double? angle = double.tryParse(_angleController.text);
+
       _isValid =
           _angleController.text.isEmpty ||
-          (angle != null &&
+          ((angle != null) &&
               _selectedUnit.isNotEmpty &&
-              angle >= 0 &&
-              angle < 360);
+              (angle >= 0) &&
+              (angle < 360));
       _angleWarningMessage = _isValid
           ? null
           : appLocalizations.mpProjectionAngleWarning;
@@ -160,7 +164,9 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
 
     late final String labelText;
 
-    if (option == 'elevation' || option == 'extended' || option == 'plan') {
+    if ((option == 'elevation') ||
+        (option == 'extended') ||
+        (option == 'plan')) {
       labelText = appLocalizations.mpProjectionIndexLabel;
     } else if (option == 'none') {
       return const SizedBox.shrink();
@@ -207,8 +213,12 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   }
 
   THProjectionCommandOption? buildCurrentOption() {
-    if (!_isValid) return null;
-    if (_selectedChoice == mpUnsetOptionID) return null;
+    if (!_isValid) {
+      return null;
+    }
+    if (_selectedChoice == mpUnsetOptionID) {
+      return null;
+    }
     if (_selectedChoice == 'elevation') {
       return THProjectionCommandOption.fromStringWithParentMPID(
         parentMPID: mpParentMPIDPlaceholder,
@@ -217,7 +227,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
         elevationAngle: _angleController.text,
         elevationUnit: _selectedUnit,
       );
-    } else if (_selectedChoice == 'extended' || _selectedChoice == 'plan') {
+    } else if ((_selectedChoice == 'extended') || (_selectedChoice == 'plan')) {
       return THProjectionCommandOption.fromStringWithParentMPID(
         parentMPID: mpParentMPIDPlaceholder,
         index: _indexController.text.trim(),
@@ -255,16 +265,19 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     final Map<String, String> choices =
         MPTextToUser.getProjectionModeTypeChoices();
 
-    for (final entry in choices.entries) {
+    for (final MapEntry<String, String> entry in choices.entries) {
+      final String value = entry.key;
+      final String label = entry.value;
+
       optionWidgets.add(
         RadioListTile<String>(
-          key: ValueKey("MPProjectionOptionWidget|RadioListTile|${entry.key}"),
-          title: Text(entry.value),
-          value: entry.key,
+          key: ValueKey("MPProjectionOptionWidget|RadioListTile|$value"),
+          title: Text(label),
+          value: value,
           contentPadding: EdgeInsets.zero,
         ),
       );
-      if (_selectedChoice == entry.key) {
+      if (_selectedChoice == value) {
         optionWidgets.add(_buildFormForOption(_selectedChoice));
       }
     }
