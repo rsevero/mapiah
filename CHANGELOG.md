@@ -13,6 +13,7 @@
 * Infrastructure maintenance:
   * Separating _mp_projection_option_widget_ in _mp_projection_option_widget_ and _mp_projection_option_overlay_window_widget_ so _mp_projection_option_widget_ can be reused in _mp_add_file_dialog_widget_.
   * Substituting placeholder at THCommandOption creation.
+  * flutter pub upgrade
 
 ## 0.2.13 - 2025-08-29
 * New features:

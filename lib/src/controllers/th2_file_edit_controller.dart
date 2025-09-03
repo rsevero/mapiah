@@ -1090,6 +1090,9 @@ abstract class TH2FileEditControllerBase with Store {
     );
 
     if (filePath != null) {
+      if (!filePath.toLowerCase().endsWith('.th2')) {
+        filePath += '.th2';
+      }
       mpGeneralController.renameFileController(
         oldFilename: _thFile.filename,
         newFilename: filePath,
