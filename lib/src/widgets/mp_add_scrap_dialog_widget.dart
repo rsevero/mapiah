@@ -40,6 +40,8 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
   late final TextEditingController _scrapTHIDController;
   String? _scrapTHIDError;
   bool get _isValidScrapID => _scrapTHIDError == null;
+  bool _isValid = false;
+  bool _pendingValidation = false;
 
   final GlobalKey<MPProjectionOptionWidgetState> _projectionKey = GlobalKey();
   final GlobalKey<MPScrapScaleOptionWidgetState> _scaleKey = GlobalKey();
@@ -82,7 +84,29 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
     }
   }
 
-  bool get _isCreateEnabled => _isValidScrapID;
+  void _validateScrap() {
+    final bool scrapIDValid = _isValidScrapID;
+    final bool projectionValid = _projectionKey.currentState?.isValid ?? true;
+    final bool scaleValid = _scaleKey.currentState?.isValid ?? true;
+    final bool newValid = scrapIDValid && projectionValid && scaleValid;
+
+    if ((newValid == _isValid) || _pendingValidation) {
+      return;
+    }
+
+    _pendingValidation = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _pendingValidation = false;
+      if (!mounted) {
+        return;
+      }
+      if (_isValid != newValid) {
+        setState(() => _isValid = newValid);
+      }
+    });
+  }
+
+  bool get _isCreateEnabled => _isValid;
 
   void _internalCreate() {
     if (!_isCreateEnabled) return;
@@ -113,7 +137,7 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
         TextField(
           controller: _scrapTHIDController,
           autofocus: true,
-          onChanged: (_) => _validateScrapID(),
+          onChanged: (_) => _validateScrap(),
           onSubmitted: (_) {
             if (_isCreateEnabled) _internalCreate();
           },
@@ -136,7 +160,10 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
           key: _scaleKey,
           optionInfo: scaleInfo,
           showActionButtons: false,
-          onValidOptionChanged: widget.onScaleChanged,
+          onValidOptionChanged: (opt) {
+            widget.onScaleChanged?.call(opt);
+            _validateScrap();
+          },
         ),
         const SizedBox(height: mpButtonSpace),
         const Divider(thickness: 1),
@@ -147,7 +174,10 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
           key: _projectionKey,
           optionInfo: projectionInfo,
           showActionButtons: false,
-          onValidOptionChanged: widget.onProjectionChanged,
+          onValidOptionChanged: (opt) {
+            widget.onProjectionChanged?.call(opt);
+            _validateScrap();
+          },
         ),
 
         if (widget.showActionButtons) ...[

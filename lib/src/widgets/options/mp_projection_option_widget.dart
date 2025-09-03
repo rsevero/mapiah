@@ -46,6 +46,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
   late final Map<String, String> _unitMap;
   late String _selectedUnit;
   bool _isValid = false;
+  bool get isValid => _isValid;
 
   @override
   void initState() {

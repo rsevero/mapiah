@@ -46,6 +46,7 @@ class MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
   late final Map<String, String> _unitMap;
   late String _selectedUnit;
   bool _isValid = false;
+  bool get isValid => _isValid;
 
   @override
   void initState() {
